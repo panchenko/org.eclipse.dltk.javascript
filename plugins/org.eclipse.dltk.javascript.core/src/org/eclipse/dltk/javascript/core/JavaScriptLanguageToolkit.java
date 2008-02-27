@@ -30,10 +30,6 @@ public class JavaScriptLanguageToolkit extends AbstractLanguageToolkit {
 		return sInstance;
 	}
 
-	public String getDelimeterReplacerString() {
-		return ".";
-	}
-
 	public String[] getLanguageFileExtensions() {
 		return new String[] { "js" };
 	}
