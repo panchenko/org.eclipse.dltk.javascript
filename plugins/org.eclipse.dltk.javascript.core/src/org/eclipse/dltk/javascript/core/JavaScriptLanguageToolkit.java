@@ -30,10 +30,6 @@ public class JavaScriptLanguageToolkit extends AbstractLanguageToolkit {
 		return sInstance;
 	}
 
-	public String[] getLanguageFileExtensions() {
-		return new String[] { "js" };
-	}
-
 	public String getLanguageName() {
 		return "Javascript";
 	}
@@ -41,5 +37,4 @@ public class JavaScriptLanguageToolkit extends AbstractLanguageToolkit {
 	public String getLanguageContentType() {
 		return "org.eclipse.dltk.javascriptContentType";
 	}
-
 }
