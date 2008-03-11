@@ -19,7 +19,7 @@ import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 public class JavaScriptTemplateCompletionProcessor extends
 		ScriptTemplateCompletionProcessor {
 
-	private static String[] IGNORE = new String[] {".", ":", "@", "$" };
+	private static char[] IGNORE = new char[] {'.', ':', '@', '$' };
 	
 	public JavaScriptTemplateCompletionProcessor(
 			ScriptContentAssistInvocationContext context) {
@@ -36,7 +36,7 @@ public class JavaScriptTemplateCompletionProcessor extends
 	/*
 	 * @see org.eclipse.dltk.ui.templates.ScriptTemplateCompletionProcessor#getIgnore()
 	 */
-	protected String[] getIgnore() {
+	protected char[] getIgnore() {
 		return IGNORE;
 	}
 	
