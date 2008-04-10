@@ -44,6 +44,10 @@ import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.debug.ui.ILaunchGroup;
 import org.eclipse.debug.ui.StringVariableSelectionDialog;
+import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.core.environment.EnvironmentManager;
+import org.eclipse.dltk.core.environment.IExecutionEnvironment;
+import org.eclipse.dltk.core.environment.IFileHandle;
 import org.eclipse.dltk.internal.ui.util.SWTUtil;
 import org.eclipse.dltk.javascript.launching.JavaScriptLaunchingPlugin;
 import org.eclipse.dltk.launching.ScriptLaunchConfigurationConstants;
@@ -92,7 +96,7 @@ import org.eclipse.ui.views.navigator.ResourceSorter;
  * subclassed.
  * </p>
  * 
-	 *
+ * 
  */
 public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 
@@ -153,7 +157,6 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 
 	private Button fWorkspaceBrowse;
 
-
 	private Button fUseDltkRadio;
 	private Button fNotUseDltkRatio;
 
@@ -197,7 +200,7 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 	 * 
 	 * @param parent
 	 *            the parent composite to add this one to
-	 *
+	 * 
 	 */
 	private void createFavoritesComponent(Composite parent) {
 		Group favComp = SWTUtil
@@ -225,7 +228,7 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 	 * 
 	 * @param parent
 	 *            the parent composite to add this component to
-	 *
+	 * 
 	 */
 	private void createSharedConfigComponent(Composite parent) {
 		Group group = SWTUtil.createGroup(parent,
@@ -263,18 +266,15 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 	 * @param parent
 	 *            the parent to add this component to
 	 */
-	
-	private void test(){
-		
+
+	private void test() {
+
 	}
-	
-	
-	
+
 	private void createOutputCaptureComponent(Composite parent) {
-		Group group = SWTUtil.createGroup(parent,
-				"Input and Output", 1, 2,		
+		Group group = SWTUtil.createGroup(parent, "Input and Output", 1, 2,
 				GridData.FILL_HORIZONTAL);
-		
+
 		fUseDltkRadio = createRadioButton(group, "Use DLTK Input and Output");
 		fUseDltkRadio.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -282,17 +282,17 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 			}
 		});
 
-		fNotUseDltkRatio = createRadioButton(group, "Use Standard Input and Output");
+		fNotUseDltkRatio = createRadioButton(group,
+				"Use Standard Input and Output");
 		fNotUseDltkRatio.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				updateLaunchConfigurationDialog();
 			}
 		});
-				
-		Group standardGroup = SWTUtil.createGroup(group,
-				"", 5, 2,
+
+		Group standardGroup = SWTUtil.createGroup(group, "", 5, 2,
 				GridData.FILL_HORIZONTAL);
-				
+
 		fConsoleOutput = createCheckButton(standardGroup,
 				LaunchConfigurationsMessages.CommonTab_5);
 		GridData gd = new GridData(SWT.BEGINNING, SWT.NORMAL, true, false);
@@ -377,7 +377,7 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 			public void widgetSelected(SelectionEvent e) {
 				updateLaunchConfigurationDialog();
 			}
-		});		
+		});
 	}
 
 	/**
@@ -386,7 +386,7 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 	 * 
 	 * @param enable
 	 *            if the output capture widgets should be enabled or not
-	 *
+	 * 
 	 */
 	private void enableOuputCaptureWidgets(boolean enable) {
 		fFileText.setEnabled(enable);
@@ -590,7 +590,9 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 		boolean dltkOutput = false;
 
 		try {
-			dltkOutput = configuration.getAttribute(ScriptLaunchConfigurationConstants.ATTR_USE_DLTK_OUTPUT, false);
+			dltkOutput = configuration.getAttribute(
+					ScriptLaunchConfigurationConstants.ATTR_USE_DLTK_OUTPUT,
+					false);
 
 			outputToConsole = configuration.getAttribute(
 					IDebugUIConstants.ATTR_CAPTURE_IN_CONSOLE, true);
@@ -930,22 +932,34 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 			configuration.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT,
 					(String) null);
 
-			configuration.setAttribute(ScriptLaunchConfigurationConstants.ATTR_DLTK_CONSOLE_ID, Long.toString(System
-					.currentTimeMillis()));
+			configuration.setAttribute(
+					ScriptLaunchConfigurationConstants.ATTR_DLTK_CONSOLE_ID,
+					Long.toString(System.currentTimeMillis()));
 
+			IFileHandle proxyFile;
 			try {
-				configuration.setAttribute("proxy_path", JavaScriptLaunchingPlugin.getDefault().getConsoleProxy().toOSString()
-					);
+				IExecutionEnvironment exeEnv = (IExecutionEnvironment) EnvironmentManager
+						.getLocalEnvironment().getAdapter(
+								IExecutionEnvironment.class);
+				proxyFile = JavaScriptLaunchingPlugin.getDefault()
+						.getConsoleProxy(exeEnv);
+				configuration.setAttribute("environmentId", proxyFile
+						.getEnvironment().getId());
+				configuration.setAttribute("proxy_path", proxyFile
+						.getAbsolutePath());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				if (DLTKCore.DEBUG) {
+					e.printStackTrace();
+				}
 			}
 
 			captureOutput = false;
 			useDltk = true;
-		} 
-		
-		configuration.setAttribute(ScriptLaunchConfigurationConstants.ATTR_USE_DLTK_OUTPUT, useDltk);
+		}
+
+		configuration.setAttribute(
+				ScriptLaunchConfigurationConstants.ATTR_USE_DLTK_OUTPUT,
+				useDltk);
 
 		// Last option
 		if (captureOutput) {
