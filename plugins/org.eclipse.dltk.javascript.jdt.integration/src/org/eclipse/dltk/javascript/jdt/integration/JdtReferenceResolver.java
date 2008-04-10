@@ -27,7 +27,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.CallResultReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NewReference;
-import org.eclipse.dltk.internal.javascript.typeinference.UncknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.CompletionRequestor;
 import org.eclipse.jdt.core.IJavaElement;
@@ -47,7 +47,7 @@ import org.eclipse.jdt.core.search.SearchRequestor;
 public class JdtReferenceResolver implements IExecutableExtension,
 		IReferenceResolver {
 
-	private static final class ClassRef extends UncknownReference implements
+	private static final class ClassRef extends UnknownReference implements
 			IClassReference {
 		private ClassRef(String paramOrVarName, boolean childIsh) {
 			super(paramOrVarName, childIsh);
@@ -120,7 +120,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 													IMethod method = ts[a];
 													if (method.getElementName()
 															.startsWith(string)) {
-														UncknownReference r = new UncknownReference(
+														UnknownReference r = new UnknownReference(
 																method
 																		.getElementName()
 																		.substring(
@@ -134,7 +134,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 															.getElementName()
 															.startsWith(
 																	stringget)) {
-														IReference r = new UncknownReference(
+														IReference r = new UnknownReference(
 																method
 																		.getElementName()
 																		.substring(
@@ -146,7 +146,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 															.getElementName()
 															.startsWith(
 																	stringset)) {
-														IReference r = new UncknownReference(
+														IReference r = new UnknownReference(
 																method
 																		.getElementName()
 																		.substring(
