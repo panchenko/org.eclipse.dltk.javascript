@@ -20,7 +20,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultRefe
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NewReference;
-import org.eclipse.dltk.internal.javascript.typeinference.UncknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
@@ -28,7 +28,7 @@ import org.mozilla.javascript.ScriptableObject;
 
 public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 
-	final static class ClassReference extends UncknownReference implements
+	final static class ClassReference extends UnknownReference implements
 			IClassReference {
 		private ClassReference(String paramOrVarName, boolean childIsh) {
 			super(paramOrVarName, childIsh);
@@ -50,18 +50,18 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						String stringset = "jsSet_";
 						Method method = methods[a];
 						if (method.getName().startsWith(string)) {
-							UncknownReference r = new UncknownReference(method
+							UnknownReference r = new UnknownReference(method
 									.getName().substring(string.length()), true);
 
 							result.add(r);
 							r.setFunctionRef();
 						} else if (method.getName().startsWith(stringget)) {
-							IReference r = new UncknownReference(method
+							IReference r = new UnknownReference(method
 									.getName().substring(stringget.length()),
 									true);
 							result.add(r);
 						} else if (method.getName().startsWith(stringset)) {
-							IReference r = new UncknownReference(method
+							IReference r = new UnknownReference(method
 									.getName().substring(stringset.length()),
 									true);
 							result.add(r);
@@ -228,7 +228,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			while (iterator.hasNext()) {
 				String s = (String) iterator.next();
 				if (s.startsWith(key)) {
-					UncknownReference uref = new ClassReference(s, false);
+					UnknownReference uref = new ClassReference(s, false);
 					rs.add(uref);
 				}
 			}
@@ -259,7 +259,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			String s = (String) iterator.next();
 
 			if (s.startsWith(key)) {
-				UncknownReference uref = new UncknownReference(s, false);
+				UnknownReference uref = new UnknownReference(s, false);
 				Object object = globals.get(s);
 				if (object instanceof IProposalHolder)
 				{
