@@ -29,7 +29,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.ContextReference;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
-import org.eclipse.dltk.internal.javascript.typeinference.UncknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
 
 import com.xored.org.mozilla.javascript.CompilerEnvirons;
 import com.xored.org.mozilla.javascript.ErrorReporter;
@@ -225,8 +225,8 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 					Object o = it.next();
 					if (o instanceof IReference) {
 						IReference ref = (IReference) o;
-						if (ref instanceof UncknownReference) {
-							UncknownReference uref = (UncknownReference) ref;
+						if (ref instanceof UnknownReference) {
+							UnknownReference uref = (UnknownReference) ref;
 							ISourceElementRequestor.FieldInfo fieldInfo1 = new ISourceElementRequestor.FieldInfo();
 							fieldInfo1.name = ref.getName();
 							fieldInfo1.nameSourceStart = uref.getOffset();

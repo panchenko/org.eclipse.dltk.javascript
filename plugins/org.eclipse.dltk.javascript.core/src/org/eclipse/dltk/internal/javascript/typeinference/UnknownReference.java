@@ -16,7 +16,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.internal.core.ModelElement;
 
-public class UncknownReference implements IReference {
+public class UnknownReference implements IReference {
 
 	private String name;
 	private final boolean childIsh;
@@ -35,7 +35,7 @@ public class UncknownReference implements IReference {
 		return length;
 	}
 
-	public UncknownReference(String paramOrVarName, boolean childIsh) {
+	public UnknownReference(String paramOrVarName, boolean childIsh) {
 		this.name = paramOrVarName;
 		this.childIsh = childIsh;
 

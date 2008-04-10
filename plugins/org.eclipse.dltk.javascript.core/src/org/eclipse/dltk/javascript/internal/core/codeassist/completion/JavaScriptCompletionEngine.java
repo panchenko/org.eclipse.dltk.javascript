@@ -42,7 +42,7 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingRe
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.UncknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils.PositionCalculator;
@@ -261,10 +261,10 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		for (Iterator iterator = functions.iterator(); iterator.hasNext();) {
 			IReference name = (IReference) iterator.next();
 			choices[ia] = name.getName().toCharArray();
-			if (name instanceof UncknownReference)
+			if (name instanceof UnknownReference)
 			{
-				parameterNames.put(choices[ia], ((UncknownReference)name).getParameterNames());
-				proposalInfo.put(choices[ia], ((UncknownReference)name).getProposalInfo());
+				parameterNames.put(choices[ia], ((UnknownReference)name).getParameterNames());
+				proposalInfo.put(choices[ia], ((UnknownReference)name).getProposalInfo());
 			}
 			ia++;
 		}
@@ -387,10 +387,10 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				IReference name = (IReference) next;
 				String refa = name.getName();
 				choices[ia] = refa.toCharArray();
-				if (name instanceof UncknownReference)
+				if (name instanceof UnknownReference)
 				{
-					parameterNames.put(choices[ia], ((UncknownReference)name).getParameterNames());
-					proposalInfo.put(choices[ia], ((UncknownReference)name).getProposalInfo());
+					parameterNames.put(choices[ia], ((UnknownReference)name).getParameterNames());
+					proposalInfo.put(choices[ia], ((UnknownReference)name).getProposalInfo());
 				}
 				ia++;
 			}

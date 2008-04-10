@@ -275,7 +275,7 @@ public class TypeInferencer {
 			contexts.push(collection);
 			collection = new HostCollection(collection.getParent());
 			String name = n1.getString();
-			collection.setReference(name, new UncknownReference(name, true));
+			collection.setReference(name, new UnknownReference(name, true));
 			node.getFirstChild();
 			processScriptNode(node, arg);
 			HostCollection pop = (HostCollection) contexts.pop();
@@ -369,7 +369,7 @@ public class TypeInferencer {
 			collection.setName(functionNode.getFunctionName());
 			for (int am = 0; am < functionNode.getParamCount(); am++) {
 				String paramOrVarName = functionNode.getParamOrVarName(am);
-				UncknownReference uncknownReference = new UncknownReference(
+				UnknownReference uncknownReference = new UnknownReference(
 						paramOrVarName, false);
 				uncknownReference.setLocationInformation(module,
 						functionNode.nameStart, functionNode.getFunctionName()
@@ -408,7 +408,7 @@ public class TypeInferencer {
 				IReference evaluateReference = evaluateReference(key,
 						firstChild.getFirstChild(), cs);
 				if (evaluateReference == null) {
-					evaluateReference = new UncknownReference(key, false);
+					evaluateReference = new UnknownReference(key, false);
 				}
 				evaluateReference.setLocationInformation(module, firstChild
 						.getPosition(), key.length());
@@ -458,7 +458,7 @@ public class TypeInferencer {
 			IReference root = (IReference) collection
 					.getReferenceNoParentContext(rootName);
 			if (root == null) {
-				root = new UncknownReference(rootName, true);
+				root = new UnknownReference(rootName, true);
 				root.setLocationInformation(module, node.getPosition(), fieldId
 						.length());
 				HostCollection parent = collection.getParent();
@@ -483,7 +483,7 @@ public class TypeInferencer {
 					field = objId.substring(pos);
 				IReference child = root.getChild(field, false);
 				if (child == null) {
-					child = new UncknownReference(field, true);
+					child = new UnknownReference(field, true);
 
 					child.setLocationInformation(module, node.getPosition(),
 							fieldId.length());
@@ -596,7 +596,7 @@ public class TypeInferencer {
 		IReference internalEvaluate = internalEvaluate(collection, key,
 				expression, module, cs);
 		if (internalEvaluate == null)
-			return new UncknownReference(key, false);
+			return new UnknownReference(key, false);
 		return internalEvaluate;
 	}
 
@@ -612,7 +612,7 @@ public class TypeInferencer {
 					expression.getFirstChild(), parent, cs);
 		case Token.NUMBER: {
 			NewReference newReference = new NewReference(key, "Number", cs);
-			UncknownReference uncknownReference = new UncknownReference(key,
+			UnknownReference uncknownReference = new UnknownReference(key,
 					false);
 			return new OrReferenceWriteSecond(newReference, uncknownReference);
 		}
@@ -620,14 +620,14 @@ public class TypeInferencer {
 // .getDouble());
 		case Token.STRING: {
 			NewReference newReference = new NewReference(key, "String", cs);
-			UncknownReference uncknownReference = new UncknownReference(key,
+			UnknownReference uncknownReference = new UnknownReference(key,
 					false);
 			return new OrReferenceWriteSecond(newReference, uncknownReference);
 		}
 		case Token.TRUE:
 		case Token.FALSE: {
 			NewReference newReference = new NewReference(key, "Boolean", cs);
-			UncknownReference uncknownReference = new UncknownReference(key,
+			UnknownReference uncknownReference = new UnknownReference(key,
 					false);
 			return new OrReferenceWriteSecond(newReference, uncknownReference);
 		}
@@ -669,7 +669,7 @@ public class TypeInferencer {
 		CallResultReference ref = new CallResultReference(collection2, key, id,
 				cs);
 		OrReferenceWriteSecond ws = new OrReferenceWriteSecond(ref,
-				new UncknownReference(key, false));
+				new UnknownReference(key, false));
 		return ws;
 	}
 
@@ -681,7 +681,7 @@ public class TypeInferencer {
 		if (id == null)
 			return null;
 		NewReference ref = new NewReference(key, id, cs);
-		UncknownReference uncknownReference = new UncknownReference(key, false);
+		UnknownReference uncknownReference = new UnknownReference(key, false);
 		if (id.equals("XML")) {
 			try {
 				String string = expression.getLastChild().getString();
@@ -708,25 +708,25 @@ public class TypeInferencer {
 	}
 
 	private static void modifyReferenceXML(
-			final UncknownReference uncknownReference, String string) {
+			final UnknownReference uncknownReference, String string) {
 		try {
 			parser.parse(new ByteArrayInputStream(string.getBytes()),
 					new DefaultHandler() {
 
 						boolean has = false;
-						UncknownReference curReference = uncknownReference;
+						UnknownReference curReference = uncknownReference;
 						Stack stack = new Stack();
 
 						public void endElement(String uri, String localName,
 								String name) throws SAXException {
 							if (!stack.isEmpty())
-								curReference = (UncknownReference) stack.pop();
+								curReference = (UnknownReference) stack.pop();
 						}
 
 						public void startElement(String uri, String localName,
 								String name, Attributes attributes)
 								throws SAXException {
-							UncknownReference uncknownReference2 = new UncknownReference(
+							UnknownReference uncknownReference2 = new UnknownReference(
 									name, true);
 
 							int length = attributes.getLength();
@@ -737,7 +737,7 @@ public class TypeInferencer {
 							}
 							for (int a = 0; a < length; a++) {
 								String val = "@" + attributes.getQName(a);
-								UncknownReference uncknownReference3 = new UncknownReference(
+								UnknownReference uncknownReference3 = new UnknownReference(
 										val, true);
 								curReference.setChild(val, uncknownReference3);
 							}
@@ -764,14 +764,14 @@ public class TypeInferencer {
 		ArrayList positions = (ArrayList) expression
 				.getProp(Node.DESCENDANTS_FLAG);
 		Node child = expression.getFirstChild();
-		UncknownReference uRef = new UncknownReference(key, false);
+		UnknownReference uRef = new UnknownReference(key, false);
 		for (int a = 0; a < ids.length; a++) {
 			if (ids[a] instanceof String) {
 				String name = (String) ids[a];
 				IReference internalEvaluate = internalEvaluate(col, name,
 						child, parent, cs);
 				if (internalEvaluate == null)
-					internalEvaluate = new UncknownReference(name, false);
+					internalEvaluate = new UnknownReference(name, false);
 				internalEvaluate.setLocationInformation(parent,
 						((Integer) positions.get(a)).intValue() - name.length()
 								- 1, name.length());
