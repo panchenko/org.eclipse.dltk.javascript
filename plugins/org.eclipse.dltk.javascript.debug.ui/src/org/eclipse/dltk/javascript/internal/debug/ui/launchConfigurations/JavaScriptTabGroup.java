@@ -10,7 +10,7 @@ import org.eclipse.dltk.javascript.internal.debug.ui.interpreters.JavaScriptInte
 public class JavaScriptTabGroup extends AbstractLaunchConfigurationTabGroup {
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
-				new JavaScriptMainLaunchConfigurationTab(),
+				new JavaScriptMainLaunchConfigurationTab(mode),
 				new JavaScriptArgumentsTab(),
 				new JavaScriptInterpreterTab(),
 				new EnvironmentTab(),

@@ -21,6 +21,10 @@ import org.eclipse.dltk.javascript.internal.debug.JavaScriptDebugPlugin;
 public class JavaScriptMainLaunchConfigurationTab extends
 		MainLaunchConfigurationTab {
 
+	public JavaScriptMainLaunchConfigurationTab(String mode) {
+		super(mode);
+	}
+
 	/*
 	 * @see org.eclipse.dltk.debug.ui.launchConfigurations.ScriptLaunchConfigurationTab#breakOnFirstLinePrefEnabled(org.eclipse.dltk.core.PreferencesLookupDelegate)
 	 */
