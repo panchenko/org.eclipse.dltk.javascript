@@ -591,7 +591,7 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 
 		try {
 			dltkOutput = configuration.getAttribute(
-					ScriptLaunchConfigurationConstants.ATTR_USE_DLTK_OUTPUT,
+					ScriptLaunchConfigurationConstants.ATTR_USE_INTERACTIVE_CONSOLE,
 					false);
 
 			outputToConsole = configuration.getAttribute(
@@ -896,7 +896,7 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 		if (fAltEncodingButton.getSelection()) {
 			encoding = fEncodingCombo.getText();
 		}
-		configuration.setAttribute(IDebugUIConstants.ATTR_CONSOLE_ENCODING,
+		configuration.setAttribute(DebugPlugin.ATTR_CONSOLE_ENCODING,
 				encoding);
 
 		boolean captureOutput = false;
@@ -905,6 +905,9 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 			captureOutput = true;
 			configuration.setAttribute(
 					IDebugUIConstants.ATTR_CAPTURE_IN_CONSOLE, (String) null);
+			configuration.setAttribute(
+					ScriptLaunchConfigurationConstants.ATTR_DLTK_CONSOLE_ID,
+					Long.toString(System.currentTimeMillis()));
 		} else {
 			configuration.setAttribute(
 					IDebugUIConstants.ATTR_CAPTURE_IN_CONSOLE, false);
@@ -932,10 +935,6 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 			configuration.setAttribute(DebugPlugin.ATTR_CAPTURE_OUTPUT,
 					(String) null);
 
-			configuration.setAttribute(
-					ScriptLaunchConfigurationConstants.ATTR_DLTK_CONSOLE_ID,
-					Long.toString(System.currentTimeMillis()));
-
 			IFileHandle proxyFile;
 			try {
 				IExecutionEnvironment exeEnv = (IExecutionEnvironment) EnvironmentManager
@@ -958,7 +957,7 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 		}
 
 		configuration.setAttribute(
-				ScriptLaunchConfigurationConstants.ATTR_USE_DLTK_OUTPUT,
+				ScriptLaunchConfigurationConstants.ATTR_USE_INTERACTIVE_CONSOLE,
 				useDltk);
 
 		// Last option
