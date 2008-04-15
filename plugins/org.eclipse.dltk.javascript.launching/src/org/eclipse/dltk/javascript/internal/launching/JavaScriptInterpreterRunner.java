@@ -19,6 +19,7 @@ import java.net.URL;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -31,6 +32,7 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.dltk.console.ScriptConsoleServer;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IScriptProject;
+import org.eclipse.dltk.javascript.internal.debug.JavaScriptDebugPlugin;
 import org.eclipse.dltk.javascript.launching.IConfigurableRunner;
 import org.eclipse.dltk.javascript.launching.IJavaScriptInterpreterRunnerConfig;
 import org.eclipse.dltk.javascript.launching.JavaScriptLaunchConfigurationConstants;
@@ -120,9 +122,15 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 							VMRunnerConfiguration vmConfig = new VMRunnerConfiguration(
 									iconfig.getRunnerClassName(config, launch,
 											myJavaProject), newClassPath);
+							IPath scriptFilePath = config.getScriptFilePath();
+							if (scriptFilePath == null) {
+								throw new CoreException(new Status(
+										IStatus.ERROR,
+										JavaScriptDebugPlugin.PLUGIN_ID,
+										"Script File name is not specified..."));
+							}
 							String[] strings = new String[] {
-									config.getScriptFilePath()
-											.toPortableString(), host,
+									scriptFilePath.toPortableString(), host,
 									"" + port, sessionId };
 							String[] newStrings = iconfig.getProgramArguments(
 									config, launch, myJavaProject);
