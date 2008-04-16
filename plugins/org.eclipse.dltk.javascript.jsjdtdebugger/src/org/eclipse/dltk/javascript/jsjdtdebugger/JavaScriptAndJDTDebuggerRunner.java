@@ -16,7 +16,7 @@ import org.eclipse.dltk.launching.InterpreterConfig;
 public class JavaScriptAndJDTDebuggerRunner extends DebuggingEngineRunner
 		implements IConfigurableRunner {
 
-	private static String ENGINE_ID = "org.eclipse.dltk.javascript.jsjdtdebugger.preferences.JavaScriptAndJDTDebuggerRunnerFactory";
+	public static String ENGINE_ID = "org.eclipse.dltk.javascript.jsjdtdebugger";
 
 	IJavaScriptInterpreterRunnerConfig runnerconfig = JavaScriptInterpreterRunner.DEFAULT_CONFIG;
 
