@@ -1,6 +1,7 @@
 package org.eclipse.dltk.javascript.console;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.eclipse.dltk.console.ConsoleRequest;
@@ -82,5 +83,9 @@ public class JavaScriptInterpreter implements IScriptInterpreter, ConsoleRequest
 	public void addInitialListenerOperation(Runnable runnable) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public InputStream getInitialOutputStream() {
+		return null;
 	}
 }
