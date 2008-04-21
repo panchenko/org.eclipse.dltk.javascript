@@ -44,8 +44,16 @@ public class JavaScriptAndJDTDebuggerRunner extends DebuggingEngineRunner
 		return ENGINE_ID;
 	}
 
+	/**
+	 * @deprecated Use {@link #addEngineConfig(InterpreterConfig,PreferencesLookupDelegate,ILaunch)} instead
+	 */
 	protected InterpreterConfig addEngineConfig(InterpreterConfig config,
 			PreferencesLookupDelegate delegate) throws CoreException {
+				return addEngineConfig(config, delegate, null);
+			}
+
+	protected InterpreterConfig addEngineConfig(InterpreterConfig config,
+			PreferencesLookupDelegate delegate, ILaunch launch) throws CoreException {
 		return config;
 	}
 
