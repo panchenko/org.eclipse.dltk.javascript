@@ -1,5 +1,6 @@
 package org.eclipse.dltk.javascript.internal.console.ui;
 
+import org.eclipse.debug.core.ILaunch;
 import org.eclipse.dltk.console.IScriptInterpreter;
 import org.eclipse.dltk.console.ScriptConsolePrompt;
 import org.eclipse.dltk.console.ui.IScriptConsoleFactory;
@@ -53,7 +54,7 @@ public class JavaScriptConsoleFactory extends ScriptConsoleFactoryBase implement
 	public JavaScriptConsoleFactory() {
 	}
 
-	public void openConsole(IScriptInterpreter interpreter, String id) {
+	public void openConsole(IScriptInterpreter interpreter, String id, ILaunch launch) {
 		registerAndOpenConsole(createConsoleInstance(interpreter, id));
 	}
 }
