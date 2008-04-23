@@ -72,7 +72,8 @@ public class JavaScriptCallProcessor implements ICallProcessor {
 		};
 
 		SearchPattern pattern = SearchPattern.createPattern(element,
-				IDLTKSearchConstants.REFERENCES|IDLTKSearchConstants.METHOD, GENERICS_AGNOSTIC_MATCH_RULE);
+				IDLTKSearchConstants.REFERENCES | IDLTKSearchConstants.METHOD,
+				GENERICS_AGNOSTIC_MATCH_RULE, scope.getLanguageToolkit());
 		try {
 			searchEngine
 					.search(pattern, new SearchParticipant[] { SearchEngine

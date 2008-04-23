@@ -42,137 +42,134 @@ import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils;
 
 public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 
-	public JavaScriptSelectionEngine(/*Map settings*/) {
-//		super(settings);
+	public JavaScriptSelectionEngine(/* Map settings */) {
+		// super(settings);
 	}
 
 	public IAssistParser getParser() {
 		return null;
 	}
-	
+
 	ISourceModule cu;
 
 	public IModelElement[] select(ISourceModule cu, int offset, int i) {
 		String content = cu.getSourceContents();
 		char[] fileName = cu.getFileName();
-		this.cu=cu;
-		ReferenceResolverContext buildContext2 = AssitUtils.buildContext((org.eclipse.dltk.core.ISourceModule) cu,offset ,
-				content, fileName);
+		this.cu = cu;
+		ReferenceResolverContext buildContext2 = AssitUtils.buildContext(
+				(org.eclipse.dltk.core.ISourceModule) cu, offset, content,
+				fileName);
 		HostCollection buildContext = buildContext2.getHostCollection();
 		AssitUtils.PositionCalculator calc = new AssitUtils.PositionCalculator(
 				content, offset, true);
 		// if (i==offset)i=1;
-		final List result=new ArrayList();
+		final List result = new ArrayList();
 		String selection = calc.getCompletion();
 		if (calc.isMember()) {
 			processMember(buildContext2, calc, result, selection);
 		} else {
 			processGlobals(buildContext2, buildContext, result, selection);
 		}
-		HashSet sm=new HashSet(result);
-		IModelElement[] resultA=new IModelElement[sm.size()];
+		HashSet sm = new HashSet(result);
+		IModelElement[] resultA = new IModelElement[sm.size()];
 		sm.toArray(resultA);
 		return resultA;
 	}
 
-	private void processGlobals(ReferenceResolverContext rc, HostCollection buildContext, final List result,
-			String selection) {
-		if (!(selection.length()==0))
-		{	
-		//local defenitition
-		//global member;					
-		IReference rm= buildContext.getReference(selection);
-		if (rm!=null)
-		{	
-			rm.addModelElements(result);
-		}
-		else{
-			Set resolveGlobals = rc.resolveGlobals(selection);
-			Iterator it=resolveGlobals.iterator();
-			while (it.hasNext()){
-				Object next = it.next();
-				if (it instanceof IReference)
-				{
-				IReference r=(IReference) next;
-				if (r.getName().equals(selection))
-				r.addModelElements(result);
+	private void processGlobals(ReferenceResolverContext rc,
+			HostCollection buildContext, final List result, String selection) {
+		if (!(selection.length() == 0)) {
+			// local defenitition
+			// global member;
+			IReference rm = buildContext.getReference(selection);
+			if (rm != null) {
+				rm.addModelElements(result);
+			} else {
+				Set resolveGlobals = rc.resolveGlobals(selection);
+				Iterator it = resolveGlobals.iterator();
+				while (it.hasNext()) {
+					Object next = it.next();
+					if (it instanceof IReference) {
+						IReference r = (IReference) next;
+						if (r.getName().equals(selection))
+							r.addModelElements(result);
+					}
 				}
 			}
-		}
-		
-		if (result.size()==0)
-		{
-		doCompletionOnFunction(selection, result);
-		doCompletionOnGlobalVariable(selection,result);
-		}
+
+			if (result.size() == 0) {
+				doCompletionOnFunction(selection, result);
+				doCompletionOnGlobalVariable(selection, result);
+			}
 		}
 	}
 
 	private void processMember(ReferenceResolverContext buildContext,
 			AssitUtils.PositionCalculator calc, final List result,
 			String selection) {
-		String core=calc.getCorePart();
-		IReference rm= buildContext.getHostCollection() .queryElement(selection,true);
-		if (rm!=null)
-		rm.addModelElements(result);
-		if (result.size()==0)
-		{
-		IDLTKLanguageToolkit toolkit = null;
-		toolkit = DLTKLanguageManager
-				.getLanguageToolkit(JavaScriptNature.NATURE_ID);
-		Set resolveGlobals = buildContext.resolveGlobals(selection);
-		Iterator it=resolveGlobals.iterator();
-		while (it.hasNext()){
-			IReference r=(IReference) it.next();
-			r.addModelElements(result);
-		}
-		
-		SearchRequestor requestor = new SearchRequestor() {
-
-			public void acceptSearchMatch(SearchMatch match)
-					throws CoreException {
-				FieldReferenceMatch mr = (FieldReferenceMatch) match;
-				ASTNode nm=mr.getNode();
-				if (nm instanceof VaribleDeclarationReference){
-					VaribleDeclarationReference vm=(VaribleDeclarationReference) nm;
-					IReference reference = vm.getReference();
-					if (reference!=null){
-						reference.addModelElements(result);
-					}
-				}
-				
-				
+		String core = calc.getCorePart();
+		IReference rm = buildContext.getHostCollection().queryElement(
+				selection, true);
+		if (rm != null)
+			rm.addModelElements(result);
+		if (result.size() == 0) {
+			IDLTKLanguageToolkit toolkit = null;
+			toolkit = DLTKLanguageManager
+					.getLanguageToolkit(JavaScriptNature.NATURE_ID);
+			Set resolveGlobals = buildContext.resolveGlobals(selection);
+			Iterator it = resolveGlobals.iterator();
+			while (it.hasNext()) {
+				IReference r = (IReference) it.next();
+				r.addModelElements(result);
 			}
 
-		};
-		IDLTKSearchScope scope = SearchEngine.createWorkspaceScope(toolkit);
-		try {
+			SearchRequestor requestor = new SearchRequestor() {
 
-			search(selection , IDLTKSearchConstants.FIELD,
-					IDLTKSearchConstants.REFERENCES, scope, requestor);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+				public void acceptSearchMatch(SearchMatch match)
+						throws CoreException {
+					FieldReferenceMatch mr = (FieldReferenceMatch) match;
+					ASTNode nm = mr.getNode();
+					if (nm instanceof VaribleDeclarationReference) {
+						VaribleDeclarationReference vm = (VaribleDeclarationReference) nm;
+						IReference reference = vm.getReference();
+						if (reference != null) {
+							reference.addModelElements(result);
+						}
+					}
+
+				}
+
+			};
+			IDLTKSearchScope scope = SearchEngine.createWorkspaceScope(toolkit);
+			try {
+
+				search(selection, IDLTKSearchConstants.FIELD,
+						IDLTKSearchConstants.REFERENCES, scope, requestor);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-		
-	private void doCompletionOnFunction(final String startPart,final List modelElements) {
+
+	private void doCompletionOnFunction(final String startPart,
+			final List modelElements) {
 		SearchRequestor requestor = new SearchRequestor() {
 			public void acceptSearchMatch(SearchMatch match)
 					throws CoreException {
 				Object element = match.getElement();
 				if (element instanceof IMethod) {
-					IMethod mn=(IMethod) element;
-					if (mn.getElementName().equals(startPart))
-					{
-					if (!modelElements.isEmpty())return;
-					modelElements.add(element);
+					IMethod mn = (IMethod) element;
+					if (mn.getElementName().equals(startPart)) {
+						if (!modelElements.isEmpty())
+							return;
+						modelElements.add(element);
 					}
 				}
 			}
 		};
 		IDLTKLanguageToolkit toolkit = null;
-		toolkit = DLTKLanguageManager.getLanguageToolkit(JavaScriptNature.NATURE_ID);
+		toolkit = DLTKLanguageManager
+				.getLanguageToolkit(JavaScriptNature.NATURE_ID);
 		IDLTKSearchScope scope = SearchEngine.createWorkspaceScope(toolkit);
 		try {
 			search(startPart, IDLTKSearchConstants.METHOD,
@@ -180,35 +177,36 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 	}
-	
-	private void doCompletionOnGlobalVariable(
-			String startPart, final List methods) {
+
+	private void doCompletionOnGlobalVariable(String startPart,
+			final List methods) {
 		SearchRequestor requestor = new SearchRequestor() {
 			public void acceptSearchMatch(SearchMatch match)
 					throws CoreException {
 				Object element = match.getElement();
 				if (element instanceof IField) {
-					methods.add(element);					
+					methods.add(element);
 				}
 				if (match instanceof FieldReferenceMatch) {
 					FieldReferenceMatch mr = (FieldReferenceMatch) match;
-					
-					//String string = mr.getNode().toString();
-					//if (string.startsWith("!!!"))
-					//	return;
-					//int i = string.indexOf('.');
-					//if (i != -1)
-					//	string = string.substring(0, i);
-					//if (!completedNames.contains(string))
-					//props.add(string);
-					
+
+					// String string = mr.getNode().toString();
+					// if (string.startsWith("!!!"))
+					// return;
+					// int i = string.indexOf('.');
+					// if (i != -1)
+					// string = string.substring(0, i);
+					// if (!completedNames.contains(string))
+					// props.add(string);
+
 				}
 			}
 		};
 		IDLTKLanguageToolkit toolkit = null;
-		toolkit = DLTKLanguageManager.getLanguageToolkit(JavaScriptNature.NATURE_ID);
+		toolkit = DLTKLanguageManager
+				.getLanguageToolkit(JavaScriptNature.NATURE_ID);
 		IDLTKSearchScope scope = SearchEngine.createWorkspaceScope(toolkit);
 		try {
 			search(startPart + "*", IDLTKSearchConstants.FIELD,
@@ -218,9 +216,9 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}				
+		}
 	}
-	
+
 	protected void search(String patternString, int searchFor, int limitTo,
 			IDLTKSearchScope scope, SearchRequestor resultCollector)
 			throws CoreException {
@@ -236,16 +234,15 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 			matchRule |= SearchPattern.R_PATTERN_MATCH;
 		}
 		SearchPattern pattern = SearchPattern.createPattern(patternString,
-				searchFor, limitTo, matchRule);
-		if (pattern==null){
-			pattern = SearchPattern.createPattern(patternString,
-					searchFor, limitTo, matchRule);
+				searchFor, limitTo, matchRule, scope.getLanguageToolkit());
+		if (pattern == null) {
+			pattern = SearchPattern.createPattern(patternString, searchFor,
+					limitTo, matchRule, scope.getLanguageToolkit());
 		}
 		new SearchEngine().search(pattern,
 				new SearchParticipant[] { SearchEngine
 						.getDefaultSearchParticipant() }, scope, requestor,
 				null);
 	}
-	
 
 }

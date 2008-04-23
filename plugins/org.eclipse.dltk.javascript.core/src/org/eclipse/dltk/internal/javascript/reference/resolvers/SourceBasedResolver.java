@@ -36,6 +36,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.VaribleDeclarationReference;
 import org.eclipse.dltk.javascript.core.FunctionDeclarationReference;
+import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.mixin.JavaScriptMixinModel;
 
@@ -161,7 +162,7 @@ public class SourceBasedResolver implements IReferenceResolver,
 			matchRule |= SearchPattern.R_PATTERN_MATCH;
 		}
 		SearchPattern pattern = SearchPattern.createPattern(patternString,
-				searchFor, limitTo, matchRule);
+				searchFor, limitTo, matchRule, JavaScriptLanguageToolkit.getDefault());
 		new SearchEngine().search(pattern,
 				new SearchParticipant[] { SearchEngine
 						.getDefaultSearchParticipant() }, scope, requestor,

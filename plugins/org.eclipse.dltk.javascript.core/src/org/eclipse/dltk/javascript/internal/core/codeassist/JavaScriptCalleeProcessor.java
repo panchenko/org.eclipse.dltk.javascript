@@ -32,46 +32,54 @@ import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.core.search.SearchRequestor;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 
-
 public class JavaScriptCalleeProcessor implements ICalleeProcessor {
-	protected static int EXACT_RULE = SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE;
-	
+	protected static int EXACT_RULE = SearchPattern.R_EXACT_MATCH
+			| SearchPattern.R_CASE_SENSITIVE;
+
 	private Map fSearchResults = new HashMap();
 
 	private IMethod method;
-		
-	//private IDLTKSearchScope scope;
 
-	public JavaScriptCalleeProcessor(IMethod method, IProgressMonitor monitor, IDLTKSearchScope scope) {
+	// private IDLTKSearchScope scope;
+
+	public JavaScriptCalleeProcessor(IMethod method, IProgressMonitor monitor,
+			IDLTKSearchScope scope) {
 		this.method = method;
-		//this.scope = scope;
+		// this.scope = scope;
 	}
+
 	int index;
 
-	private class CaleeSourceElementRequestor implements ISourceElementRequestor {
+	private class CaleeSourceElementRequestor implements
+			ISourceElementRequestor {
 		public void acceptFieldReference(char[] fieldName, int sourcePosition) {
 		}
 
-		public void acceptMethodReference(char[] methodName, int argCount, int sourcePosition, int sourceEndPosition) {
+		public void acceptMethodReference(char[] methodName, int argCount,
+				int sourcePosition, int sourceEndPosition) {
 			String name = new String(methodName);
 			int off = 0;
 			try {
-				off = method.getSourceRange().getOffset()+index;
+				off = method.getSourceRange().getOffset() + index;
 			} catch (ModelException e) {
 				e.printStackTrace();
-			} 
-			//TODO RMOVE HACK
-			SimpleReference ref = new SimpleReference(off + sourcePosition, off + sourceEndPosition+1, name);
-			IMethod[] methods = findMethods(name, argCount, off + sourcePosition);
+			}
+			// TODO RMOVE HACK
+			SimpleReference ref = new SimpleReference(off + sourcePosition, off
+					+ sourceEndPosition + 1, name);
+			IMethod[] methods = findMethods(name, argCount, off
+					+ sourcePosition);
 			fSearchResults.put(ref, methods);
 		}
 
-		public void acceptPackage(int declarationStart, int declarationEnd, char[] name) {
+		public void acceptPackage(int declarationStart, int declarationEnd,
+				char[] name) {
 			// TODO Auto-generated method stub
 
 		}
 
-		public void acceptTypeReference(char[][] typeName, int sourceStart, int sourceEnd) {
+		public void acceptTypeReference(char[][] typeName, int sourceStart,
+				int sourceEnd) {
 			// TODO Auto-generated method stub
 
 		}
@@ -101,12 +109,14 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 
 		}
 
-		public boolean enterMethodWithParentType(MethodInfo info, String parentName, String delimiter) {
+		public boolean enterMethodWithParentType(MethodInfo info,
+				String parentName, String delimiter) {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
-		public boolean enterFieldWithParentType(FieldInfo info, String parentName, String delimiter) {
+
+		public boolean enterFieldWithParentType(FieldInfo info,
+				String parentName, String delimiter) {
 			// TODO Auto-generated method stub
 			return false;
 		}
@@ -121,7 +131,8 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 
 		}
 
-		public boolean enterTypeAppend(TypeInfo info, String fullName, String delimiter) {
+		public boolean enterTypeAppend(TypeInfo info, String fullName,
+				String delimiter) {
 			// TODO Auto-generated method stub
 			return false;
 		}
@@ -146,7 +157,7 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 
 		public void enterModuleRoot() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public boolean enterTypeAppend(String fullName, String delimiter) {
@@ -156,7 +167,7 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 
 		public void exitModuleRoot() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
@@ -164,11 +175,13 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 		try {
 			String methodSource = method.getSource();
 			this.index = methodSource.indexOf('{');
-			methodSource=methodSource.substring(index);
+			methodSource = methodSource.substring(index);
 			CaleeSourceElementRequestor requestor = new CaleeSourceElementRequestor();
-			ISourceElementParser parser = DLTKLanguageManager.getSourceElementParser(JavaScriptNature.NATURE_ID);
+			ISourceElementParser parser = DLTKLanguageManager
+					.getSourceElementParser(JavaScriptNature.NATURE_ID);
 			parser.setRequestor(requestor);
-			parser.parseSourceModule(methodSource.toCharArray(), null, method.getSourceModule().getPath().toString().toCharArray());
+			parser.parseSourceModule(methodSource.toCharArray(), null, method
+					.getSourceModule().getPath().toString().toCharArray());
 
 			return fSearchResults;
 		} catch (ModelException e) {
@@ -180,14 +193,16 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 		}
 		return fSearchResults;
 	}
-	
-	public IMethod[] findMethods(final String methodName, int argCount, int sourcePosition) {
+
+	public IMethod[] findMethods(final String methodName, int argCount,
+			int sourcePosition) {
 		final List methods = new ArrayList();
 		ISourceModule module = this.method.getSourceModule();
 		try {
-			IModelElement[] elements = module.codeSelect(sourcePosition, methodName.length());
-			for( int i = 0; i < elements.length; ++i ) {
-				if( elements[i] instanceof IMethod ) {
+			IModelElement[] elements = module.codeSelect(sourcePosition,
+					methodName.length());
+			for (int i = 0; i < elements.length; ++i) {
+				if (elements[i] instanceof IMethod) {
 					methods.add(elements[i]);
 				}
 			}
@@ -195,86 +210,99 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		final String nsName;
-//		if( methodName.indexOf("::") != -1 ) {
-//			String mmName = methodName;
-//			if( mmName.startsWith("::")) {
-//				mmName = mmName.substring(2);
-//			}
-//			if( mmName.indexOf("::") != -1 ) {
-//				int posb = mmName.indexOf("::");
-//				nsName = mmName.substring(0, posb);
-//			}
-//			else {
-//				nsName = null;
-//			}
-//		}
-//		else {
-//			nsName = null;
-//		}
-//		SearchRequestor requestor = new SearchRequestor() {
-//			public void acceptSearchMatch(SearchMatch match) throws CoreException {
-//				Object element = match.getElement();
-//				if( element instanceof IMethod ) {
-//					IMethod method = (IMethod)element;
-//					String mn = method.getTypeQualifiedName('$', false).replaceAll("\\$", "::");
-//					if( mn.equals(methodName) && !isIgnoredBySearchScope(method) ) {
-//						methods.add(method);
-//					}
-//				}
-//				else {
-//					IType type = (IType) element;
-//					if( !( type.getParent() instanceof ISourceModule )) {						
-//						return;
-//					}
-//					processTypeFunctions(type);
-//				}
-//			}
-//			private void processTypeFunctions(IType type) throws ModelException {				
-//				IMethod[] tmethods = type.getMethods();
-//				for (int i = 0; i < tmethods.length; ++i) {
-//					String mn = tmethods[i].getTypeQualifiedName('$', false).replaceAll("\\$", "::");
-//					if( mn.equals(methodName) && !isIgnoredBySearchScope(tmethods[i]) ) {
-//						methods.add(tmethods[i]);
-//					}
-//				}
-//				IType[] types = type.getTypes();
-//				for( int i = 0; i < types.length; ++i ) {
-//					processTypeFunctions(types[i]);
-//				}
-//			}
-//		};
-//		
-//		try {
-//			String pattern = methodName;
-//			if( pattern.startsWith("::")) {
-//				pattern = pattern.substring(2);
-//			}
-//			if( pattern.indexOf("::")==-1) {
-//				search(pattern, IDLTKSearchConstants.METHOD, IDLTKSearchConstants.DECLARATIONS, scope, requestor);				
-//			}
-//			if( nsName != null ) {				
-//				search(nsName, IDLTKSearchConstants.TYPE, IDLTKSearchConstants.DECLARATIONS, scope, requestor);
-//			}
-//		} catch (CoreException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		return (IMethod[])methods.toArray(new IMethod[methods.size()]);
+		// final String nsName;
+		// if( methodName.indexOf("::") != -1 ) {
+		// String mmName = methodName;
+		// if( mmName.startsWith("::")) {
+		// mmName = mmName.substring(2);
+		// }
+		// if( mmName.indexOf("::") != -1 ) {
+		// int posb = mmName.indexOf("::");
+		// nsName = mmName.substring(0, posb);
+		// }
+		// else {
+		// nsName = null;
+		// }
+		// }
+		// else {
+		// nsName = null;
+		// }
+		// SearchRequestor requestor = new SearchRequestor() {
+		// public void acceptSearchMatch(SearchMatch match) throws CoreException
+		// {
+		// Object element = match.getElement();
+		// if( element instanceof IMethod ) {
+		// IMethod method = (IMethod)element;
+		// String mn = method.getTypeQualifiedName('$', false).replaceAll("\\$",
+		// "::");
+		// if( mn.equals(methodName) && !isIgnoredBySearchScope(method) ) {
+		// methods.add(method);
+		// }
+		// }
+		// else {
+		// IType type = (IType) element;
+		// if( !( type.getParent() instanceof ISourceModule )) {
+		// return;
+		// }
+		// processTypeFunctions(type);
+		// }
+		// }
+		// private void processTypeFunctions(IType type) throws ModelException {
+		// IMethod[] tmethods = type.getMethods();
+		// for (int i = 0; i < tmethods.length; ++i) {
+		// String mn = tmethods[i].getTypeQualifiedName('$',
+		// false).replaceAll("\\$", "::");
+		// if( mn.equals(methodName) && !isIgnoredBySearchScope(tmethods[i]) ) {
+		// methods.add(tmethods[i]);
+		// }
+		// }
+		// IType[] types = type.getTypes();
+		// for( int i = 0; i < types.length; ++i ) {
+		// processTypeFunctions(types[i]);
+		// }
+		// }
+		// };
+		//		
+		// try {
+		// String pattern = methodName;
+		// if( pattern.startsWith("::")) {
+		// pattern = pattern.substring(2);
+		// }
+		// if( pattern.indexOf("::")==-1) {
+		// search(pattern, IDLTKSearchConstants.METHOD,
+		// IDLTKSearchConstants.DECLARATIONS, scope, requestor);
+		// }
+		// if( nsName != null ) {
+		// search(nsName, IDLTKSearchConstants.TYPE,
+		// IDLTKSearchConstants.DECLARATIONS, scope, requestor);
+		// }
+		// } catch (CoreException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
+		return (IMethod[]) methods.toArray(new IMethod[methods.size()]);
 	}
 
-	protected void search(String patternString, int searchFor, int limitTo, IDLTKSearchScope scope, SearchRequestor resultCollector)
+	protected void search(String patternString, int searchFor, int limitTo,
+			IDLTKSearchScope scope, SearchRequestor resultCollector)
 			throws CoreException {
-		search(patternString, searchFor, limitTo, EXACT_RULE, scope, resultCollector);
+		search(patternString, searchFor, limitTo, EXACT_RULE, scope,
+				resultCollector);
 	}
 
-	protected void search(String patternString, int searchFor, int limitTo, int matchRule, IDLTKSearchScope scope, SearchRequestor requestor)
+	protected void search(String patternString, int searchFor, int limitTo,
+			int matchRule, IDLTKSearchScope scope, SearchRequestor requestor)
 			throws CoreException {
-		if (patternString.indexOf('*') != -1 || patternString.indexOf('?') != -1) {
+		if (patternString.indexOf('*') != -1
+				|| patternString.indexOf('?') != -1) {
 			matchRule |= SearchPattern.R_PATTERN_MATCH;
 		}
-		SearchPattern pattern = SearchPattern.createPattern(patternString, searchFor, limitTo, matchRule);
-		new SearchEngine().search(pattern, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope, requestor, null);
+		SearchPattern pattern = SearchPattern.createPattern(patternString,
+				searchFor, limitTo, matchRule, scope.getLanguageToolkit());
+		new SearchEngine().search(pattern,
+				new SearchParticipant[] { SearchEngine
+						.getDefaultSearchParticipant() }, scope, requestor,
+				null);
 	}
 }
