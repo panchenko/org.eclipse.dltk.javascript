@@ -138,7 +138,7 @@ final class TransparentRef implements IReference {
 	}
 
 	public void setLocal(boolean local) {
-		evaluateReference.setLocal(true);
+		evaluateReference.setLocal(local);
 	}
 
 }
