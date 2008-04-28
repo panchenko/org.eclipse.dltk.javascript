@@ -244,6 +244,12 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					globals.clear();
 					fillMap(globals, sc,false);
 				}
+				else if (object == null)
+				{
+					// not at match at all clear it 
+					globals.clear();
+					break;
+				}
 				id = id.substring(pos + 1);
 				pos = id.indexOf('.');
 				key = pos == -1 ? id : id.substring(0, pos);
@@ -267,6 +273,11 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					uref.setParameterNames(fapn.getParameterNames());
 					uref.setProposalInfo(fapn.getProposalInfo());
 					object = fapn.getObject();
+					// if object is null assume that it is a method.
+					if (object == null)
+					{
+						uref.setFunctionRef();
+					}
 				}
 				if (object instanceof Function) {
 					uref.setFunctionRef();
