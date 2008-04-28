@@ -89,6 +89,10 @@ public class OrReference implements IReference {
 			return child2;
 		if (child2 == null)
 			return child;
+		if (child == child2)
+		{
+			return child;
+		}
 		return new OrReference(child, child2);
 	}
 
