@@ -150,6 +150,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 						string);
 				if (mixinElement == null)
 					continue;
+//				Object[] allObjects = mixinElement.getObjects(buildContext.getModule());
 				Object[] allObjects = mixinElement.getAllObjects();
 				if (allObjects.length > 0) {
 					for (int i = 0; i < allObjects.length; i++) {
@@ -362,12 +363,20 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		}
 		char[][] choices = new char[dubR.size() + searchResults.size()][];
 		int ia = 0;
+		HashMap parameterNames = new HashMap();
+		HashMap proposalInfo = new HashMap();
 		for (iterator = dubR.values().iterator(); iterator.hasNext();) {
 			Object next = iterator.next();
 			if (next instanceof IReference) {
 				IReference name = (IReference) next;
 				String refa = name.getName();
-				choices[ia++] = refa.toCharArray();
+				choices[ia] = refa.toCharArray();
+				if (name instanceof UnknownReference)
+				{
+					parameterNames.put(choices[ia], ((UnknownReference)name).getParameterNames());
+					proposalInfo.put(choices[ia], ((UnknownReference)name).getProposalInfo());
+				}
+				ia++;
 			}
 		}
 		for (iterator = searchResults.iterator(); iterator.hasNext();) {
@@ -376,10 +385,10 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			choices[ia++] = refa.toCharArray();
 		}
 		findElements(completionPart.toCharArray(), choices, true, false,
-				CompletionProposal.FIELD_REF, Collections.EMPTY_MAP,Collections.EMPTY_MAP);
+				CompletionProposal.FIELD_REF, parameterNames,proposalInfo);
 		choices = new char[functions.size()][];
-		HashMap parameterNames = new HashMap();
-		HashMap proposalInfo = new HashMap();
+		parameterNames = new HashMap();
+		proposalInfo = new HashMap();
 		ia = 0;
 		for (iterator = functions.values().iterator(); iterator.hasNext();) {
 			Object next = iterator.next();
