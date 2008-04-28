@@ -237,7 +237,7 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 		int of = 0;
 		if (parse instanceof FunctionNode) {
 			FunctionNode n = (FunctionNode) parse;
-			if (n.getType() != FunctionNode.FUNCTION_STATEMENT)
+			if (n.getFunctionType() != FunctionNode.FUNCTION_STATEMENT)
 				of = 1;
 		}
 		for (int i = params.length; i < paramsAndVars.length - of; i++) {
