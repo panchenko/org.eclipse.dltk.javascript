@@ -79,7 +79,25 @@ public class HostCollection {
 		Object object = reference.get(key);
 		if (object == null) {
 			reference.put(key, ref);
-		} else {
+		} else if (object != ref) {
+			if (ref instanceof OrReference)
+			{
+				// Test if those already are referencing each other.
+				if ( ((OrReference)ref).one == object)
+				{
+					reference.put(key, ref);
+					return;
+				}
+			}
+			else if (ref instanceof TransparentRef)
+			{
+				if (((TransparentRef)ref).evaluateReference == object)
+				{
+					reference.put(key, ref);
+					return;
+				}
+			}
+
 			ref = new OrReference((IReference) object, ref);
 			
 			reference.put(key, ref);
