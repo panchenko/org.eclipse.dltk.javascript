@@ -141,7 +141,7 @@ public class JavaScriptMixinParser implements IMixinParser,
 		int of = 0;
 		if (parse instanceof FunctionNode) {
 			FunctionNode n = (FunctionNode) parse;
-			if (n.getType() != FunctionNode.FUNCTION_STATEMENT)
+			if (n.getFunctionType() != FunctionNode.FUNCTION_STATEMENT)
 				of = 1;
 		}
 		// lets report global variables
