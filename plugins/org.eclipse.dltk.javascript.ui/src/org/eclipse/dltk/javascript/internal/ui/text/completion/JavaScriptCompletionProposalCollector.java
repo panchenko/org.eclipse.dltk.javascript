@@ -12,6 +12,7 @@ package org.eclipse.dltk.javascript.internal.ui.text.completion;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.core.CompletionProposal;
@@ -35,6 +36,8 @@ public class JavaScriptCompletionProposalCollector extends
 	protected final static char[] VAR_TRIGGER = new char[] { '\t', ' ', '=',
 			';', '.' };
 	
+	private final HashSet doubleFilter = new HashSet();
+	
 	protected char[] getVarTrigger() {
 		return VAR_TRIGGER;
 	}
@@ -57,7 +60,28 @@ public class JavaScriptCompletionProposalCollector extends
 			}
 		};
 	}
+	
+	/**
+	 * @see org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector#beginReporting()
+	 */
+	public void beginReporting()
+	{
+		super.beginReporting();
+		doubleFilter.clear();
+	}
 
+	
+	/**
+	 * @see org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector#isFiltered(org.eclipse.dltk.core.CompletionProposal)
+	 */
+	protected boolean isFiltered(CompletionProposal proposal)
+	{
+		if (!doubleFilter.add(new String(proposal.getName())))
+		{
+			return true;
+		}
+		return super.isFiltered(proposal);
+	}
 	
 	// Specific proposals creation. May be use factory?
 	protected IScriptCompletionProposal createScriptCompletionProposal(
