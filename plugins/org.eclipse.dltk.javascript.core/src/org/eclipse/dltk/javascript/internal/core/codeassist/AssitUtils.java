@@ -73,7 +73,7 @@ public class AssitUtils {
 			int maxPos = content.length()-1;
 			if (pos<maxPos)
 			{
-			l1:while (pos<maxPos){
+			while (pos<maxPos){
 				pos++;
 				char charAt = content.charAt(pos);
 				if (charAt == ']') {
@@ -88,16 +88,17 @@ public class AssitUtils {
 					continue;
 				if (Character.isWhitespace(charAt)) {
 					
-					continue l1;
+					pos += 1;
+					break;
 				}
 
 
 				if (!needDot && Character.isJavaIdentifierPart(charAt))
-					continue l1;
+					continue;
 				else {
 					pos += 1;
 					// isMember = false;
-					break l1;
+					break;
 				}
 			}
 			position=pos-1;
