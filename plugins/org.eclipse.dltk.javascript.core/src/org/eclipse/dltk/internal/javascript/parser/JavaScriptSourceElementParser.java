@@ -190,8 +190,8 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 				params[i] = paramsAndVars[i];
 			}
 			methodInfo.parameterNames = params;
-			methodInfo.nameSourceStart = functionNode.nameStart;
-			methodInfo.nameSourceEnd = functionNode.nameEnd;
+			methodInfo.nameSourceStart = functionNode.nameStart+1;// +1 because the parser starts with the empty space before the name
+			methodInfo.nameSourceEnd = functionNode.nameEnd+1;// +1 because the parser starts with the empty space before the name
 			fRequestor.enterMethod(methodInfo);
 			processNode(functionNode, function);
 			fRequestor.exitMethod(functionNode.getEncodedSourceEnd());
@@ -204,15 +204,15 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 		int of = 0;
 		if (parse instanceof FunctionNode) {
 			FunctionNode n = (FunctionNode) parse;
-			if (n.getType() != FunctionNode.FUNCTION_STATEMENT)
+			if (n.getFunctionType() != FunctionNode.FUNCTION_STATEMENT)
 				of = 1;
 		}
 		for (int i = params.length; i < paramsAndVars.length - of; i++) {
 			ISourceElementRequestor.FieldInfo fieldInfo = new ISourceElementRequestor.FieldInfo();
 			fieldInfo.name = paramsAndVars[i];
 			Position p = parse.getPosition(i);
-			fieldInfo.nameSourceStart = p.start;
-			fieldInfo.nameSourceEnd = p.start + fieldInfo.name.length();
+			fieldInfo.nameSourceStart = p.start+1; // +1 because the parser starts with the empty space before the name
+			fieldInfo.nameSourceEnd = p.start + fieldInfo.name.length(); // no plus 1 because the end is including not until.
 			fieldInfo.declarationStart = p.start;
 			fRequestor.enterField(fieldInfo);
 			if (collection != null) {
