@@ -35,3 +35,4 @@ Export-Package: org.eclipse.dltk.javascript.internal.console.ui,
  org.eclipse.dltk.javascript.internal.debug.ui.launcher
 Eclipse-LazyStart: true
 Bundle-Activator: org.eclipse.dltk.javascript.internal.debug.ui.JavaScriptDebugUIPlugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
