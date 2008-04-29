@@ -22,6 +22,8 @@ public class FakeField extends SourceField {
 	
 	private int offset;
 	private int length;
+	private String snippet;
+	
 	public FakeField(ModelElement parent, String name,int offset,int length) {
 		super(parent, name);
 		this.offset=offset;
@@ -34,5 +36,13 @@ public class FakeField extends SourceField {
 
 	public ISourceRange getSourceRange() throws ModelException {
 		return new SourceRange(offset,length);
+	}
+
+	public String getSnippet() {
+		return snippet;
+	}
+
+	public void setSnippet(String snippet) {
+		this.snippet = snippet;
 	}
 }
