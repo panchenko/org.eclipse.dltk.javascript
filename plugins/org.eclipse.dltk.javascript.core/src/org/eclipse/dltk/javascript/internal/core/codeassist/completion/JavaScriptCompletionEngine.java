@@ -327,7 +327,10 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 					dubR.put(refa, name);
 				}
 			}
-		} else {
+		} 
+//		else 
+// the dom resolver should always be asked, even if the search did return something.
+		{
 			Set resolveGlobals = buildContext.resolveGlobals(calculator
 					.getCorePart() + '.');
 			Iterator it = resolveGlobals.iterator();
@@ -338,9 +341,9 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 					dubR.put(r.getName(), r);
 				}
 			}
-			long currentTimeMillis = System.currentTimeMillis();
-			String[] findElements = JavaScriptMixinModel.getInstance()
-					.findElements(corePart);
+//			long currentTimeMillis = System.currentTimeMillis();
+//			String[] findElements = JavaScriptMixinModel.getInstance()
+//					.findElements(corePart);
 //			long currentTimeMillis2 = System.currentTimeMillis();
 //			System.out.println(currentTimeMillis2 - currentTimeMillis);
 //			System.out.println(findElements.length);
