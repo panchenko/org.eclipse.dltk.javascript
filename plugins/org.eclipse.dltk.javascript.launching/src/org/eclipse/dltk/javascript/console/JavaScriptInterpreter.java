@@ -10,13 +10,13 @@ import org.eclipse.dltk.console.IScriptInterpreter;
 import org.eclipse.dltk.console.InterpreterResponse;
 import org.eclipse.dltk.console.ShellResponse;
 
-
-public class JavaScriptInterpreter implements IScriptInterpreter, ConsoleRequest {
+public class JavaScriptInterpreter implements IScriptInterpreter,
+		ConsoleRequest {
 
 	private static final String COMPLETE_COMMAND = "complete";
 
 	private static final String DESCRIBE_COMMAND = "describe";
-	
+
 	private static final String CLOSE_COMMAND = "close";
 
 	private IScriptConsoleIO protocol;
@@ -82,10 +82,14 @@ public class JavaScriptInterpreter implements IScriptInterpreter, ConsoleRequest
 
 	public void addInitialListenerOperation(Runnable runnable) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public InputStream getInitialOutputStream() {
 		return null;
+	}
+
+	public boolean isValid() {
+		return protocol != null;
 	}
 }
