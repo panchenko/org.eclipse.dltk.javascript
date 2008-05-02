@@ -41,101 +41,109 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.texteditor.ITextEditorExtension3;
 
-
-
 /**
  * Auto indent strategy sensitive to brackets.
  */
-public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrategy {
+public class JavascriptAutoEditStrategy extends
+		DefaultIndentLineAutoEditStrategy {
 
-	
 	/** The line comment introducer. Value is "{@value}" */
-	private static final String LINE_COMMENT= "//"; //$NON-NLS-1$
+	private static final String LINE_COMMENT = "//"; //$NON-NLS-1$
 
-		private static class CompilationUnitInfo {
+	private static class CompilationUnitInfo {
 
-			char[] buffer;
-			int delta;
+		char[] buffer;
+		int delta;
 
-			CompilationUnitInfo(char[] buffer, int delta) {
-				this.buffer= buffer;
-				this.delta= delta;
-			}
+		CompilationUnitInfo(char[] buffer, int delta) {
+			this.buffer = buffer;
+			this.delta = delta;
 		}
-
+	}
 
 	private boolean fCloseBrace;
 	private boolean fIsSmartMode;
 
 	private String fPartitioning;
 	final IScriptProject fProject;
-	private static IScanner fgScanner= new PublicScanner(false, false, false, 3, null, null, false);
+	private static IScanner fgScanner = new PublicScanner(false, false, false,
+			3, null, null, false);
 
 	/**
-	 * Creates a new Java auto indent strategy for the given document partitioning.
-	 *
-	 * @param partitioning the document partitioning
-	 * @param project the project to get formatting preferences from, or null to use default preferences
+	 * Creates a new Java auto indent strategy for the given document
+	 * partitioning.
+	 * 
+	 * @param partitioning
+	 *            the document partitioning
+	 * @param project
+	 *            the project to get formatting preferences from, or null to use
+	 *            default preferences
 	 */
-	public JavascriptAutoEditStrategy(String partitioning, IScriptProject project) {
-		fPartitioning= partitioning;
-		fProject= project;
-		this.prefs=new JsPreferenceInterpreter(JavaScriptUI.getDefault().getPreferenceStore());
- 	}
+	public JavascriptAutoEditStrategy(String partitioning,
+			IScriptProject project) {
+		fPartitioning = partitioning;
+		fProject = project;
+		this.prefs = new JsPreferenceInterpreter(JavaScriptUI.getDefault()
+				.getPreferenceStore());
+	}
 
-	private int getBracketCount(IDocument d, int startOffset, int endOffset, boolean ignoreCloseBrackets) throws BadLocationException {
+	private int getBracketCount(IDocument d, int startOffset, int endOffset,
+			boolean ignoreCloseBrackets) throws BadLocationException {
 
-		int bracketCount= 0;
+		int bracketCount = 0;
 		while (startOffset < endOffset) {
-			char curr= d.getChar(startOffset);
+			char curr = d.getChar(startOffset);
 			startOffset++;
 			switch (curr) {
-				case '/' :
-					if (startOffset < endOffset) {
-						char next= d.getChar(startOffset);
-						if (next == '*') {
-							// a comment starts, advance to the comment end
-							startOffset= getCommentEnd(d, startOffset + 1, endOffset);
-						} else if (next == '/') {
-							// '//'-comment: nothing to do anymore on this line
-							startOffset= endOffset;
-						}
+			case '/':
+				if (startOffset < endOffset) {
+					char next = d.getChar(startOffset);
+					if (next == '*') {
+						// a comment starts, advance to the comment end
+						startOffset = getCommentEnd(d, startOffset + 1,
+								endOffset);
+					} else if (next == '/') {
+						// '//'-comment: nothing to do anymore on this line
+						startOffset = endOffset;
 					}
-					break;
-				case '*' :
-					if (startOffset < endOffset) {
-						char next= d.getChar(startOffset);
-						if (next == '/') {
-							// we have been in a comment: forget what we read before
-							bracketCount= 0;
-							startOffset++;
-						}
+				}
+				break;
+			case '*':
+				if (startOffset < endOffset) {
+					char next = d.getChar(startOffset);
+					if (next == '/') {
+						// we have been in a comment: forget what we read before
+						bracketCount = 0;
+						startOffset++;
 					}
-					break;
-				case '{' :
-					bracketCount++;
-					ignoreCloseBrackets= false;
-					break;
-				case '}' :
-					if (!ignoreCloseBrackets) {
-						bracketCount--;
-					}
-					break;
-				case '"' :
-				case '\'' :
-					startOffset= getStringEnd(d, startOffset, endOffset, curr);
-					break;
-				default :
-					}
+				}
+				break;
+			case '{':
+				bracketCount++;
+				ignoreCloseBrackets = false;
+				break;
+			case '}':
+				if (!ignoreCloseBrackets) {
+					bracketCount--;
+				}
+				break;
+			case '"':
+			case '\'':
+				startOffset = getStringEnd(d, startOffset, endOffset, curr);
+				break;
+			default:
+			}
 		}
 		return bracketCount;
 	}
 
-	// ----------- bracket counting ------------------------------------------------------
+	// ----------- bracket counting
+	// ------------------------------------------------------
 
-	private int getCommentEnd(IDocument d, int offset, int endOffset) throws BadLocationException {
+	private int getCommentEnd(IDocument d, int offset, int endOffset)
+			throws BadLocationException {
 		while (offset < endOffset) {
-			char curr= d.getChar(offset);
+			char curr = d.getChar(offset);
 			offset++;
 			if (curr == '*') {
 				if (offset < endOffset && d.getChar(offset) == '/') {
@@ -146,20 +154,22 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 		return endOffset;
 	}
 
-	private String getIndentOfLine(IDocument d, int line) throws BadLocationException {
+	private String getIndentOfLine(IDocument d, int line)
+			throws BadLocationException {
 		if (line > -1) {
-			int start= d.getLineOffset(line);
-			int end= start + d.getLineLength(line) - 1;
-			int whiteEnd= findEndOfWhiteSpace(d, start, end);
+			int start = d.getLineOffset(line);
+			int end = start + d.getLineLength(line) - 1;
+			int whiteEnd = findEndOfWhiteSpace(d, start, end);
 			return d.get(start, whiteEnd - start);
 		} else {
 			return ""; //$NON-NLS-1$
 		}
 	}
 
-	private int getStringEnd(IDocument d, int offset, int endOffset, char ch) throws BadLocationException {
+	private int getStringEnd(IDocument d, int offset, int endOffset, char ch)
+			throws BadLocationException {
 		while (offset < endOffset) {
-			char curr= d.getChar(offset);
+			char curr = d.getChar(offset);
 			offset++;
 			if (curr == '\\') {
 				// ignore escaped characters
@@ -176,29 +186,34 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 			return;
 
 		try {
-			int p= (c.offset == d.getLength() ? c.offset - 1 : c.offset);
-			int line= d.getLineOfOffset(p);
-			int start= d.getLineOffset(line);
-			int whiteend= findEndOfWhiteSpace(d, start, c.offset);
+			int p = (c.offset == d.getLength() ? c.offset - 1 : c.offset);
+			int line = d.getLineOfOffset(p);
+			int start = d.getLineOffset(line);
+			int whiteend = findEndOfWhiteSpace(d, start, c.offset);
 
-			JavaHeuristicScanner scanner= new JavaHeuristicScanner(d);
-			JavaIndenter indenter= new JavaIndenter(d, scanner, fProject);
+			JavaHeuristicScanner scanner = new JavaHeuristicScanner(d);
+			JavaIndenter indenter = new JavaIndenter(d, scanner, fProject);
 
-			// shift only when line does not contain any text up to the closing bracket
+			// shift only when line does not contain any text up to the closing
+			// bracket
 			if (whiteend == c.offset) {
-				// evaluate the line with the opening bracket that matches out closing bracket
-				int reference= indenter.findReferencePosition(c.offset, false, true, false, false);
-				int indLine= d.getLineOfOffset(reference);
+				// evaluate the line with the opening bracket that matches out
+				// closing bracket
+				int reference = indenter.findReferencePosition(c.offset, false,
+						true, false, false);
+				int indLine = d.getLineOfOffset(reference);
 				if (indLine != -1 && indLine != line) {
 					// take the indent of the found line
-					StringBuffer replaceText= new StringBuffer(getIndentOfLine(d, indLine));
-					// add the rest of the current line including the just added close bracket
+					StringBuffer replaceText = new StringBuffer(
+							getIndentOfLine(d, indLine));
+					// add the rest of the current line including the just added
+					// close bracket
 					replaceText.append(d.get(whiteend, c.offset - whiteend));
 					replaceText.append(c.text);
 					// modify document command
 					c.length += c.offset - start;
-					c.offset= start;
-					c.text= replaceText.toString();
+					c.offset = start;
+					c.text = replaceText.toString();
 				}
 			}
 		} catch (BadLocationException e) {
@@ -210,35 +225,37 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 		if (c.offset < 1 || d.getLength() == 0)
 			return;
 
-		JavaHeuristicScanner scanner= new JavaHeuristicScanner(d);
+		JavaHeuristicScanner scanner = new JavaHeuristicScanner(d);
 
-		int p= (c.offset == d.getLength() ? c.offset - 1 : c.offset);
+		int p = (c.offset == d.getLength() ? c.offset - 1 : c.offset);
 
 		try {
 			// current line
-			int line= d.getLineOfOffset(p);
-			int lineOffset= d.getLineOffset(line);
+			int line = d.getLineOfOffset(p);
+			int lineOffset = d.getLineOffset(line);
 
 			// make sure we don't have any leading comments etc.
 			if (d.get(lineOffset, p - lineOffset).trim().length() != 0)
 				return;
 
 			// line of last Java code
-			int pos= scanner.findNonWhitespaceBackward(p, JavaHeuristicScanner.UNBOUND);
+			int pos = scanner.findNonWhitespaceBackward(p,
+					JavaHeuristicScanner.UNBOUND);
 			if (pos == -1)
 				return;
-			int lastLine= d.getLineOfOffset(pos);
+			int lastLine = d.getLineOfOffset(pos);
 
-			// only shift if the last java line is further up and is a braceless block candidate
+			// only shift if the last java line is further up and is a braceless
+			// block candidate
 			if (lastLine < line) {
 
-				JavaIndenter indenter= new JavaIndenter(d, scanner, fProject);
-				StringBuffer indent= indenter.computeIndentation(p, true);
-				String toDelete= d.get(lineOffset, c.offset - lineOffset);
+				JavaIndenter indenter = new JavaIndenter(d, scanner, fProject);
+				StringBuffer indent = indenter.computeIndentation(p, true);
+				String toDelete = d.get(lineOffset, c.offset - lineOffset);
 				if (indent != null && !indent.toString().equals(toDelete)) {
-					c.text= indent.append(c.text).toString();
+					c.text = indent.append(c.text).toString();
 					c.length += c.offset - lineOffset;
-					c.offset= lineOffset;
+					c.offset = lineOffset;
 				}
 			}
 
@@ -250,82 +267,88 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 
 	private void smartIndentAfterNewLine(IDocument d, DocumentCommand c) {
 		int indexOf = c.text.indexOf('\t');
-		if (indexOf!=-1)
-		{
-			c.text=c.text.substring(0,indexOf);
+		if (indexOf != -1) {
+			c.text = c.text.substring(0, indexOf);
 		}
 		indexOf = c.text.indexOf(' ');
-		if (indexOf!=-1)
-		{
-			c.text=c.text.substring(0,indexOf);
+		if (indexOf != -1) {
+			c.text = c.text.substring(0, indexOf);
 		}
-		JavaHeuristicScanner scanner= new JavaHeuristicScanner(d);
-		JavaIndenter indenter= new JavaIndenter(d, scanner, fProject);
-		StringBuffer indent= indenter.computeIndentation(c.offset);
+		JavaHeuristicScanner scanner = new JavaHeuristicScanner(d);
+		JavaIndenter indenter = new JavaIndenter(d, scanner, fProject);
+		StringBuffer indent = indenter.computeIndentation(c.offset);
 		if (indent == null)
-			indent= new StringBuffer(); 
+			indent = new StringBuffer();
 
-		int docLength= d.getLength();
+		int docLength = d.getLength();
 		if (c.offset == -1 || docLength == 0)
 			return;
 
 		try {
-			int p= (c.offset == docLength ? c.offset - 1 : c.offset);
-			int line= d.getLineOfOffset(p);
+			int p = (c.offset == docLength ? c.offset - 1 : c.offset);
+			int line = d.getLineOfOffset(p);
 
-			StringBuffer buf= new StringBuffer(c.text + indent);
+			StringBuffer buf = new StringBuffer(c.text + indent);
 
+			IRegion reg = d.getLineInformation(line);
+			int lineEnd = reg.getOffset() + reg.getLength();
 
-			IRegion reg= d.getLineInformation(line);
-			int lineEnd= reg.getOffset() + reg.getLength();
+			int contentStart = findEndOfWhiteSpace(d, c.offset, lineEnd);
+			c.length = Math.max(contentStart - c.offset, 0);
 
-			int contentStart= findEndOfWhiteSpace(d, c.offset, lineEnd);
-			c.length=  Math.max(contentStart - c.offset, 0);
-
-			int start= reg.getOffset();
-			ITypedRegion region= TextUtilities.getPartition(d, fPartitioning, start, true);
+			int start = reg.getOffset();
+			ITypedRegion region = TextUtilities.getPartition(d, fPartitioning,
+					start, true);
 			if (IJavaScriptPartitions.JS_DOC.equals(region.getType()))
-				start= d.getLineInformationOfOffset(region.getOffset()).getOffset();
+				start = d.getLineInformationOfOffset(region.getOffset())
+						.getOffset();
 
 			// insert closing brace on new line after an unclosed opening brace
-			if (getBracketCount(d, start, c.offset, true) > 0 && closeBrace() && 
-					!isClosed(d, c.offset, c.length)) {
-				c.caretOffset= c.offset + buf.length();
-				c.shiftsCaret= false;
+			if (getBracketCount(d, start, c.offset, true) > 0 && closeBrace()
+					&& !isClosed(d, c.offset, c.length)) {
+				c.caretOffset = c.offset + buf.length();
+				c.shiftsCaret = false;
 
 				// copy old content of line behind insertion point to new line
 				// unless we think we are inserting an anonymous type definition
-				if (c.offset == 0 || !(computeAnonymousPosition(d, c.offset - 1, fPartitioning, lineEnd) != -1)) {
+				if (c.offset == 0
+						|| !(computeAnonymousPosition(d, c.offset - 1,
+								fPartitioning, lineEnd) != -1)) {
 					if (lineEnd - contentStart > 0) {
-						c.length=  lineEnd - c.offset;
-						buf.append(d.get(contentStart, lineEnd - contentStart).toCharArray());
+						c.length = lineEnd - c.offset;
+						buf.append(d.get(contentStart, lineEnd - contentStart)
+								.toCharArray());
 					}
 				}
 
 				buf.append(TextUtilities.getDefaultLineDelimiter(d));
-				StringBuffer reference= null;
-				int nonWS= findEndOfWhiteSpace(d, start, lineEnd);
+				StringBuffer reference = null;
+				int nonWS = findEndOfWhiteSpace(d, start, lineEnd);
 				if (nonWS < c.offset && d.getChar(nonWS) == '{')
-					reference= new StringBuffer(d.get(start, nonWS - start));
+					reference = new StringBuffer(d.get(start, nonWS - start));
 				else
-					reference= indenter.getReferenceIndentation(c.offset);
+					reference = indenter.getReferenceIndentation(c.offset);
 				if (reference != null)
 					buf.append(reference);
 				buf.append('}');
 			}
 			// insert extra line upon new line between two braces
-			else if (c.offset > start && contentStart < lineEnd && d.getChar(contentStart) == '}') {
-				int firstCharPos= scanner.findNonWhitespaceBackward(c.offset - 1, start);
-				if (firstCharPos != JavaHeuristicScanner.NOT_FOUND && d.getChar(firstCharPos) == '{') {
-					c.caretOffset= c.offset + buf.length();
-					c.shiftsCaret= false;
+			else if (c.offset > start && contentStart < lineEnd
+					&& d.getChar(contentStart) == '}') {
+				int firstCharPos = scanner.findNonWhitespaceBackward(
+						c.offset - 1, start);
+				if (firstCharPos != JavaHeuristicScanner.NOT_FOUND
+						&& d.getChar(firstCharPos) == '{') {
+					c.caretOffset = c.offset + buf.length();
+					c.shiftsCaret = false;
 
-					StringBuffer reference= null;
-					int nonWS= findEndOfWhiteSpace(d, start, lineEnd);
+					StringBuffer reference = null;
+					int nonWS = findEndOfWhiteSpace(d, start, lineEnd);
 					if (nonWS < c.offset && d.getChar(nonWS) == '{')
-						reference= new StringBuffer(d.get(start, nonWS - start));
+						reference = new StringBuffer(d
+								.get(start, nonWS - start));
 					else
-						reference= indenter.getReferenceIndentation(c.offset);
+						reference = indenter.getReferenceIndentation(c.offset);
 
 					buf.append(TextUtilities.getDefaultLineDelimiter(d));
 
@@ -333,7 +356,7 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 						buf.append(reference);
 				}
 			}
-			c.text= buf.toString();
+			c.text = buf.toString();
 
 		} catch (BadLocationException e) {
 			DLTKUIPlugin.log(e);
@@ -341,68 +364,82 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	private boolean isClosed(IDocument d, int offset, int length) {
-		String sm=d.get();
-		int level=0;
-		boolean qm=false;
-		char charp=0;
-		for (int a=0;a<sm.length();a++){
+		String sm = d.get();
+		int level = 0;
+		boolean qm = false;
+		char charp = 0;
+		for (int a = 0; a < sm.length(); a++) {
 			char charAt = sm.charAt(a);
-			if (!qm) 
-			{
-				if (charAt=='{')level++;
-				if (charAt=='}')level--;
+			if (!qm) {
+				if (charAt == '{')
+					level++;
+				if (charAt == '}')
+					level--;
 			}
-			if (charAt=='"'||charAt=='\'')
-			{			
-				if (charp!='\\')
-				qm=!qm;				
+			if (charAt == '"' || charAt == '\'') {
+				if (charp != '\\')
+					qm = !qm;
 			}
-			charp=charAt;
+			charp = charAt;
 		}
-		return level<=0;
+		return level <= 0;
 	}
 
 	/**
-	 * Computes an insert position for an opening brace if <code>offset</code> maps to a position in
-	 * <code>document</code> with a expression in parenthesis that will take a block after the closing parenthesis.
-	 *
-	 * @param document the document being modified
-	 * @param offset the offset of the caret position, relative to the line start.
-	 * @param partitioning the document partitioning
-	 * @param max the max position
-	 * @return an insert position relative to the line start if <code>line</code> contains a parenthesized expression that can be followed by a block, -1 otherwise
+	 * Computes an insert position for an opening brace if <code>offset</code>
+	 * maps to a position in <code>document</code> with a expression in
+	 * parenthesis that will take a block after the closing parenthesis.
+	 * 
+	 * @param document
+	 *            the document being modified
+	 * @param offset
+	 *            the offset of the caret position, relative to the line start.
+	 * @param partitioning
+	 *            the document partitioning
+	 * @param max
+	 *            the max position
+	 * @return an insert position relative to the line start if
+	 *         <code>line</code> contains a parenthesized expression that can
+	 *         be followed by a block, -1 otherwise
 	 */
-	private static int computeAnonymousPosition(IDocument document, int offset, String partitioning,  int max) {
-		// find the opening parenthesis for every closing parenthesis on the current line after offset
-		// return the position behind the closing parenthesis if it looks like a method declaration
+	private static int computeAnonymousPosition(IDocument document, int offset,
+			String partitioning, int max) {
+		// find the opening parenthesis for every closing parenthesis on the
+		// current line after offset
+		// return the position behind the closing parenthesis if it looks like a
+		// method declaration
 		// or an expression for an if, while, for, catch statement
-		
-		JavaHeuristicScanner scanner= new JavaHeuristicScanner(document);
-		int pos= offset;
-		int length= max;
-		int scanTo= scanner.scanForward(pos, length, '}');
-		if (scanTo == -1)
-			scanTo= length;
 
-		int closingParen= findClosingParenToLeft(scanner, pos) - 1;
+		JavaHeuristicScanner scanner = new JavaHeuristicScanner(document);
+		int pos = offset;
+		int length = max;
+		int scanTo = scanner.scanForward(pos, length, '}');
+		if (scanTo == -1)
+			scanTo = length;
+
+		int closingParen = findClosingParenToLeft(scanner, pos) - 1;
 
 		while (true) {
-			int startScan= closingParen + 1;
-			closingParen= scanner.scanForward(startScan, scanTo, ')');
+			int startScan = closingParen + 1;
+			closingParen = scanner.scanForward(startScan, scanTo, ')');
 			if (closingParen == -1)
 				break;
 
-			int openingParen= scanner.findOpeningPeer(closingParen - 1, '(', ')');
+			int openingParen = scanner.findOpeningPeer(closingParen - 1, '(',
+					')');
 
-			// no way an expression at the beginning of the document can mean anything
+			// no way an expression at the beginning of the document can mean
+			// anything
 			if (openingParen < 1)
 				break;
 
-			// only select insert positions for parenthesis currently embracing the caret
+			// only select insert positions for parenthesis currently embracing
+			// the caret
 			if (openingParen > pos)
 				continue;
 
-			if (looksLikeAnonymousClassDef(document, partitioning, scanner, openingParen - 1))
+			if (looksLikeAnonymousClassDef(document, partitioning, scanner,
+					openingParen - 1))
 				return closingParen + 1;
 
 		}
@@ -411,14 +448,22 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	/**
-	 * Finds a closing parenthesis to the left of <code>position</code> in document, where that parenthesis is only
-	 * separated by whitespace from <code>position</code>. If no such parenthesis can be found, <code>position</code> is returned.
-	 *
-	 * @param scanner the java heuristic scanner set up on the document
-	 * @param position the first character position in <code>document</code> to be considered
-	 * @return the position of a closing parenthesis left to <code>position</code> separated only by whitespace, or <code>position</code> if no parenthesis can be found
+	 * Finds a closing parenthesis to the left of <code>position</code> in
+	 * document, where that parenthesis is only separated by whitespace from
+	 * <code>position</code>. If no such parenthesis can be found,
+	 * <code>position</code> is returned.
+	 * 
+	 * @param scanner
+	 *            the java heuristic scanner set up on the document
+	 * @param position
+	 *            the first character position in <code>document</code> to be
+	 *            considered
+	 * @return the position of a closing parenthesis left to
+	 *         <code>position</code> separated only by whitespace, or
+	 *         <code>position</code> if no parenthesis can be found
 	 */
-	private static int findClosingParenToLeft(JavaHeuristicScanner scanner, int position) {
+	private static int findClosingParenToLeft(JavaHeuristicScanner scanner,
+			int position) {
 		if (position < 1)
 			return position;
 
@@ -428,34 +473,44 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	/**
-	 * Checks whether the content of <code>document</code> in the range (<code>offset</code>, <code>length</code>)
-	 * contains the <code>new</code> keyword.
-	 *
-	 * @param document the document being modified
-	 * @param offset the first character position in <code>document</code> to be considered
-	 * @param length the length of the character range to be considered
-	 * @param partitioning the document partitioning
-	 * @return <code>true</code> if the specified character range contains a <code>new</code> keyword, <code>false</code> otherwise.
+	 * Checks whether the content of <code>document</code> in the range (<code>offset</code>,
+	 * <code>length</code>) contains the <code>new</code> keyword.
+	 * 
+	 * @param document
+	 *            the document being modified
+	 * @param offset
+	 *            the first character position in <code>document</code> to be
+	 *            considered
+	 * @param length
+	 *            the length of the character range to be considered
+	 * @param partitioning
+	 *            the document partitioning
+	 * @return <code>true</code> if the specified character range contains a
+	 *         <code>new</code> keyword, <code>false</code> otherwise.
 	 */
-	private static boolean isNewMatch(IDocument document, int offset, int length, String partitioning) {
+	private static boolean isNewMatch(IDocument document, int offset,
+			int length, String partitioning) {
 		Assert.isTrue(length >= 0);
 		Assert.isTrue(offset >= 0);
 		Assert.isTrue(offset + length < document.getLength() + 1);
 
 		try {
-			String text= document.get(offset, length);
-			int pos= text.indexOf("new"); //$NON-NLS-1$
+			String text = document.get(offset, length);
+			int pos = text.indexOf("new"); //$NON-NLS-1$
 
-			while (pos != -1 && !isDefaultPartition(document, pos + offset, partitioning))
-				pos= text.indexOf("new", pos + 2); //$NON-NLS-1$
+			while (pos != -1
+					&& !isDefaultPartition(document, pos + offset, partitioning))
+				pos = text.indexOf("new", pos + 2); //$NON-NLS-1$
 
 			if (pos < 0)
 				return false;
 
-			if (pos != 0 && Character.isJavaIdentifierPart(text.charAt(pos - 1)))
+			if (pos != 0
+					&& Character.isJavaIdentifierPart(text.charAt(pos - 1)))
 				return false;
 
-			if (pos + 3 < length && Character.isJavaIdentifierPart(text.charAt(pos + 3)))
+			if (pos + 3 < length
+					&& Character.isJavaIdentifierPart(text.charAt(pos + 3)))
 				return false;
 
 			return true;
@@ -466,40 +521,60 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	/**
-	 * Checks whether the content of <code>document</code> at <code>position</code> looks like an
-	 * anonymous class definition. <code>position</code> must be to the left of the opening
-	 * parenthesis of the definition's parameter list.
-	 *
-	 * @param document the document being modified
-	 * @param position the first character position in <code>document</code> to be considered
-	 * @param partitioning the document partitioning
-	 * @return <code>true</code> if the content of <code>document</code> looks like an anonymous class definition, <code>false</code> otherwise
+	 * Checks whether the content of <code>document</code> at
+	 * <code>position</code> looks like an anonymous class definition.
+	 * <code>position</code> must be to the left of the opening parenthesis of
+	 * the definition's parameter list.
+	 * 
+	 * @param document
+	 *            the document being modified
+	 * @param position
+	 *            the first character position in <code>document</code> to be
+	 *            considered
+	 * @param partitioning
+	 *            the document partitioning
+	 * @return <code>true</code> if the content of <code>document</code>
+	 *         looks like an anonymous class definition, <code>false</code>
+	 *         otherwise
 	 */
-	private static boolean looksLikeAnonymousClassDef(IDocument document, String partitioning, JavaHeuristicScanner scanner, int position) {
-		int previousCommaParenEqual= scanner.scanBackward(position - 1, JavaHeuristicScanner.UNBOUND, new char[] {',', '(', '='});
-		if (previousCommaParenEqual == -1 || position < previousCommaParenEqual + 5) // 2 for borders, 3 for "new"
+	private static boolean looksLikeAnonymousClassDef(IDocument document,
+			String partitioning, JavaHeuristicScanner scanner, int position) {
+		int previousCommaParenEqual = scanner.scanBackward(position - 1,
+				JavaHeuristicScanner.UNBOUND, new char[] { ',', '(', '=' });
+		if (previousCommaParenEqual == -1
+				|| position < previousCommaParenEqual + 5) // 2 for borders, 3
+			// for "new"
 			return false;
 
-		if (isNewMatch(document, previousCommaParenEqual + 1, position - previousCommaParenEqual - 2, partitioning))
+		if (isNewMatch(document, previousCommaParenEqual + 1, position
+				- previousCommaParenEqual - 2, partitioning))
 			return true;
 
 		return false;
 	}
 
 	/**
-	 * Checks whether <code>position</code> resides in a default (Java) partition of <code>document</code>.
-	 *
-	 * @param document the document being modified
-	 * @param position the position to be checked
-	 * @param partitioning the document partitioning
-	 * @return <code>true</code> if <code>position</code> is in the default partition of <code>document</code>, <code>false</code> otherwise
+	 * Checks whether <code>position</code> resides in a default (Java)
+	 * partition of <code>document</code>.
+	 * 
+	 * @param document
+	 *            the document being modified
+	 * @param position
+	 *            the position to be checked
+	 * @param partitioning
+	 *            the document partitioning
+	 * @return <code>true</code> if <code>position</code> is in the default
+	 *         partition of <code>document</code>, <code>false</code>
+	 *         otherwise
 	 */
-	private static boolean isDefaultPartition(IDocument document, int position, String partitioning) {
+	private static boolean isDefaultPartition(IDocument document, int position,
+			String partitioning) {
 		Assert.isTrue(position >= 0);
 		Assert.isTrue(position <= document.getLength());
 
 		try {
-			ITypedRegion region= TextUtilities.getPartition(document, partitioning, position, false);
+			ITypedRegion region = TextUtilities.getPartition(document,
+					partitioning, position, false);
 			return region.getType().equals(IDocument.DEFAULT_CONTENT_TYPE);
 
 		} catch (BadLocationException e) {
@@ -508,90 +583,100 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 		return false;
 	}
 
-	
-
 	/**
 	 * Installs a java partitioner with <code>document</code>.
-	 *
-	 * @param document the document
+	 * 
+	 * @param document
+	 *            the document
 	 */
 	private static void installJavaStuff(Document document) {
-		String[] types= new String[] {
-									  IJavaScriptPartitions.JS_DOC,
-									  IJavaScriptPartitions.JS_COMMENT,
-									  IJavaScriptPartitions.JS_PARTITIONING,
-									  IJavaScriptPartitions.JS_STRING,									  
-									  IDocument.DEFAULT_CONTENT_TYPE
-		};
-		FastPartitioner partitioner= new FastPartitioner(new JavascriptPartitionScanner(), types);
+		String[] types = new String[] { IJavaScriptPartitions.JS_DOC,
+				IJavaScriptPartitions.JS_COMMENT,
+				IJavaScriptPartitions.JS_PARTITIONING,
+				IJavaScriptPartitions.JS_STRING, IDocument.DEFAULT_CONTENT_TYPE };
+		FastPartitioner partitioner = new FastPartitioner(
+				new JavascriptPartitionScanner(), types);
 		partitioner.connect(document);
-		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING, partitioner);
+		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING,
+				partitioner);
 	}
 
 	/**
 	 * Installs a java partitioner with <code>document</code>.
-	 *
-	 * @param document the document
+	 * 
+	 * @param document
+	 *            the document
 	 */
 	private static void removeJavaStuff(Document document) {
-		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING, null);
+		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING,
+				null);
 	}
 
 	private void smartPaste(IDocument document, DocumentCommand command) {
-		int newOffset= command.offset;
-		int newLength= command.length;
-		String newText= command.text;
+		int newOffset = command.offset;
+		int newLength = command.length;
+		String newText = command.text;
 
 		try {
-			JavaHeuristicScanner scanner= new JavaHeuristicScanner(document);
-			JavaIndenter indenter= new JavaIndenter(document, scanner, fProject);
-			int offset= newOffset;
+			JavaHeuristicScanner scanner = new JavaHeuristicScanner(document);
+			JavaIndenter indenter = new JavaIndenter(document, scanner,
+					fProject);
+			int offset = newOffset;
 
 			// reference position to get the indent from
-			int refOffset= indenter.findReferencePosition(offset);
+			int refOffset = indenter.findReferencePosition(offset);
 			if (refOffset == JavaHeuristicScanner.NOT_FOUND)
 				return;
-			int peerOffset= getPeerPosition(document, command);
-			peerOffset= indenter.findReferencePosition(peerOffset);
-			refOffset= Math.min(refOffset, peerOffset);
+			int peerOffset = getPeerPosition(document, command);
+			peerOffset = indenter.findReferencePosition(peerOffset);
+			refOffset = Math.min(refOffset, peerOffset);
 
 			// eat any WS before the insertion to the beginning of the line
-			int firstLine= 1; // don't format the first line per default, as it has other content before it
-			IRegion line= document.getLineInformationOfOffset(offset);
-			String notSelected= document.get(line.getOffset(), offset - line.getOffset());
+			int firstLine = 1; // don't format the first line per default, as
+			// it has other content before it
+			IRegion line = document.getLineInformationOfOffset(offset);
+			String notSelected = document.get(line.getOffset(), offset
+					- line.getOffset());
 			if (notSelected.trim().length() == 0) {
 				newLength += notSelected.length();
-				newOffset= line.getOffset();
-				firstLine= 0;
+				newOffset = line.getOffset();
+				firstLine = 0;
 			}
 
 			// prefix: the part we need for formatting but won't paste
-			IRegion refLine= document.getLineInformationOfOffset(refOffset);
-			String prefix= document.get(refLine.getOffset(), newOffset - refLine.getOffset());
+			IRegion refLine = document.getLineInformationOfOffset(refOffset);
+			String prefix = document.get(refLine.getOffset(), newOffset
+					- refLine.getOffset());
 
 			// handle the indentation computation inside a temporary document
-			Document temp= new Document(prefix + newText);
-			DocumentRewriteSession session= temp.startRewriteSession(DocumentRewriteSessionType.STRICTLY_SEQUENTIAL);
-			scanner= new JavaHeuristicScanner(temp);
-			indenter= new JavaIndenter(temp, scanner, fProject);
+			Document temp = new Document(prefix + newText);
+			DocumentRewriteSession session = temp
+					.startRewriteSession(DocumentRewriteSessionType.STRICTLY_SEQUENTIAL);
+			scanner = new JavaHeuristicScanner(temp);
+			indenter = new JavaIndenter(temp, scanner, fProject);
 			installJavaStuff(temp);
 
 			// indent the first and second line
 			// compute the relative indentation difference from the second line
 			// (as the first might be partially selected) and use the value to
 			// indent all other lines.
-			boolean isIndentDetected= false;
-			StringBuffer addition= new StringBuffer();
-			int insertLength= 0;
-			int first= document.computeNumberOfLines(prefix) + firstLine; // don't format first line
-			int lines= temp.getNumberOfLines();
-			int tabLength= getVisualTabLengthPreference();
-			boolean changed= false;
-			for (int l= first; l < lines; l++) { // we don't change the number of lines while adding indents
+			boolean isIndentDetected = false;
+			StringBuffer addition = new StringBuffer();
+			int insertLength = 0;
+			int first = document.computeNumberOfLines(prefix) + firstLine; // don't
+			// format
+			// first
+			// line
+			int lines = temp.getNumberOfLines();
+			int tabLength = getVisualTabLengthPreference();
+			boolean changed = false;
+			for (int l = first; l < lines; l++) { // we don't change the
+				// number of lines while
+				// adding indents
 
-				IRegion r= temp.getLineInformation(l);
-				int lineOffset= r.getOffset();
-				int lineLength= r.getLength();
+				IRegion r = temp.getLineInformation(l);
+				int lineOffset = r.getOffset();
+				int lineLength = r.getLength();
 
 				if (lineLength == 0) // don't modify empty lines
 					continue;
@@ -599,28 +684,32 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 				if (!isIndentDetected) {
 
 					// indent the first pasted line
-					String current= getCurrentIndent(temp, l);
-					StringBuffer correct= indenter.computeIndentation(lineOffset);
+					String current = getCurrentIndent(temp, l);
+					StringBuffer correct = indenter
+							.computeIndentation(lineOffset);
 					if (correct == null)
 						return; // bail out
 
-					insertLength= subtractIndent(correct, current, addition, tabLength);
-					if (l != first && temp.get(lineOffset, lineLength).trim().length() != 0) {
-						isIndentDetected= true;
+					insertLength = subtractIndent(correct, current, addition,
+							tabLength);
+					if (l != first
+							&& temp.get(lineOffset, lineLength).trim().length() != 0) {
+						isIndentDetected = true;
 						if (insertLength == 0) {
-							 // no adjustment needed, bail out
+							// no adjustment needed, bail out
 							if (firstLine == 0) {
 								// but we still need to adjust the first line
-								command.offset= newOffset;
-								command.length= newLength;
+								command.offset = newOffset;
+								command.length = newLength;
 								if (changed)
-									break; // still need to get the leading indent of the first line
+									break; // still need to get the leading
+								// indent of the first line
 							}
 							return;
 						}
 						removeJavaStuff(temp);
 					} else {
-						changed= insertLength != 0;
+						changed = insertLength != 0;
 					}
 				}
 
@@ -633,11 +722,12 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 			}
 
 			temp.stopRewriteSession(session);
-			newText= temp.get(prefix.length(), temp.getLength() - prefix.length());
+			newText = temp.get(prefix.length(), temp.getLength()
+					- prefix.length());
 
-			command.offset= newOffset;
-			command.length= newLength;
-			command.text= newText;
+			command.offset = newOffset;
+			command.length = newLength;
+			command.text = newText;
 
 		} catch (BadLocationException e) {
 			DLTKUIPlugin.log(e);
@@ -646,37 +736,46 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	/**
-	 * Returns the indentation of the line <code>line</code> in <code>document</code>.
-	 * The returned string may contain pairs of leading slashes that are considered
-	 * part of the indentation. The space before the asterisk in a javadoc-like
-	 * comment is not considered part of the indentation.
-	 *
-	 * @param document the document
-	 * @param line the line
+	 * Returns the indentation of the line <code>line</code> in
+	 * <code>document</code>. The returned string may contain pairs of
+	 * leading slashes that are considered part of the indentation. The space
+	 * before the asterisk in a javadoc-like comment is not considered part of
+	 * the indentation.
+	 * 
+	 * @param document
+	 *            the document
+	 * @param line
+	 *            the line
 	 * @return the indentation of <code>line</code> in <code>document</code>
-	 * @throws BadLocationException if the document is changed concurrently
+	 * @throws BadLocationException
+	 *             if the document is changed concurrently
 	 */
-	private static String getCurrentIndent(Document document, int line) throws BadLocationException {
-		IRegion region= document.getLineInformation(line);
-		int from= region.getOffset();
-		int endOffset= region.getOffset() + region.getLength();
+	private static String getCurrentIndent(Document document, int line)
+			throws BadLocationException {
+		IRegion region = document.getLineInformation(line);
+		int from = region.getOffset();
+		int endOffset = region.getOffset() + region.getLength();
 
 		// go behind line comments
-		int to= from;
+		int to = from;
 		while (to < endOffset - 2 && document.get(to, 2).equals(LINE_COMMENT))
 			to += 2;
 
 		while (to < endOffset) {
-			char ch= document.getChar(to);
+			char ch = document.getChar(to);
 			if (!Character.isWhitespace(ch))
 				break;
 			to++;
 		}
 
-		// don't count the space before javadoc like, asterisk-style comment lines
-		if (to > from && to < endOffset - 1 && document.get(to - 1, 2).equals(" *")) { //$NON-NLS-1$
-			String type= TextUtilities.getContentType(document, IJavaScriptPartitions.JS_PARTITIONING, to, true);
-			if (type.equals(IJavaScriptPartitions.JS_DOC) || type.equals(IJavaScriptPartitions.JS_COMMENT))
+		// don't count the space before javadoc like, asterisk-style comment
+		// lines
+		if (to > from && to < endOffset - 1
+				&& document.get(to - 1, 2).equals(" *")) { //$NON-NLS-1$
+			String type = TextUtilities.getContentType(document,
+					IJavaScriptPartitions.JS_PARTITIONING, to, true);
+			if (type.equals(IJavaScriptPartitions.JS_DOC)
+					|| type.equals(IJavaScriptPartitions.JS_COMMENT))
 				to--;
 		}
 
@@ -685,68 +784,84 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 
 	/**
 	 * Computes the difference of two indentations and returns the difference in
-	 * length of current and correct. If the return value is positive, <code>addition</code>
-	 * is initialized with a substring of that length of <code>correct</code>.
-	 *
-	 * @param correct the correct indentation
-	 * @param current the current indentation (might contain non-whitespace)
-	 * @param difference a string buffer - if the return value is positive, it will be cleared and set to the substring of <code>current</code> of that length
-	 * @param tabLength the length of a tab
-	 * @return the difference in length of <code>correct</code> and <code>current</code>
+	 * length of current and correct. If the return value is positive,
+	 * <code>addition</code> is initialized with a substring of that length of
+	 * <code>correct</code>.
+	 * 
+	 * @param correct
+	 *            the correct indentation
+	 * @param current
+	 *            the current indentation (might contain non-whitespace)
+	 * @param difference
+	 *            a string buffer - if the return value is positive, it will be
+	 *            cleared and set to the substring of <code>current</code> of
+	 *            that length
+	 * @param tabLength
+	 *            the length of a tab
+	 * @return the difference in length of <code>correct</code> and
+	 *         <code>current</code>
 	 */
-	private int subtractIndent(CharSequence correct, CharSequence current, StringBuffer difference, int tabLength) {
-		int c1= computeVisualLength(correct, tabLength);
-		int c2= computeVisualLength(current, tabLength);
-		int diff= c1 - c2;
+	private int subtractIndent(CharSequence correct, CharSequence current,
+			StringBuffer difference, int tabLength) {
+		int c1 = computeVisualLength(correct, tabLength);
+		int c2 = computeVisualLength(current, tabLength);
+		int diff = c1 - c2;
 		if (diff <= 0)
 			return diff;
 
 		difference.setLength(0);
-		int len= 0, i= 0;
+		int len = 0, i = 0;
 		while (len < diff) {
-			char c= correct.charAt(i++);
+			char c = correct.charAt(i++);
 			difference.append(c);
 			len += computeVisualLength(c, tabLength);
 		}
-
 
 		return diff;
 	}
 
 	/**
-	 * Indents line <code>line</code> in <code>document</code> with <code>indent</code>.
-	 * Leaves leading comment signs alone.
-	 *
-	 * @param document the document
-	 * @param line the line
-	 * @param indent the indentation to insert
-	 * @param tabLength the length of a tab
-	 * @throws BadLocationException on concurrent document modification
+	 * Indents line <code>line</code> in <code>document</code> with
+	 * <code>indent</code>. Leaves leading comment signs alone.
+	 * 
+	 * @param document
+	 *            the document
+	 * @param line
+	 *            the line
+	 * @param indent
+	 *            the indentation to insert
+	 * @param tabLength
+	 *            the length of a tab
+	 * @throws BadLocationException
+	 *             on concurrent document modification
 	 */
-	private void addIndent(Document document, int line, CharSequence indent, int tabLength) throws BadLocationException {
-		IRegion region= document.getLineInformation(line);
-		int insert= region.getOffset();
-		int endOffset= region.getOffset() + region.getLength();
+	private void addIndent(Document document, int line, CharSequence indent,
+			int tabLength) throws BadLocationException {
+		IRegion region = document.getLineInformation(line);
+		int insert = region.getOffset();
+		int endOffset = region.getOffset() + region.getLength();
 
 		// Compute insert after all leading line comment markers
-		int newInsert= insert;
-		while (newInsert < endOffset - 2 && document.get(newInsert, 2).equals(LINE_COMMENT))
+		int newInsert = insert;
+		while (newInsert < endOffset - 2
+				&& document.get(newInsert, 2).equals(LINE_COMMENT))
 			newInsert += 2;
-		
+
 		// Heuristic to check whether it is commented code or just a comment
 		if (newInsert > insert) {
-			int whitespaceCount= 0;
-			int i= newInsert;
+			int whitespaceCount = 0;
+			int i = newInsert;
 			while (i < endOffset - 1) {
-				 char ch= document.get(i, 1).charAt(0);
-				 if (!Character.isWhitespace(ch))
-					 break;
-				 whitespaceCount= whitespaceCount + computeVisualLength(ch, tabLength);
-				 i++;
+				char ch = document.get(i, 1).charAt(0);
+				if (!Character.isWhitespace(ch))
+					break;
+				whitespaceCount = whitespaceCount
+						+ computeVisualLength(ch, tabLength);
+				i++;
 			}
-			
+
 			if (whitespaceCount != 0 && whitespaceCount >= 4)
-				insert= newInsert;
+				insert = newInsert;
 		}
 
 		// Insert indent
@@ -754,28 +869,35 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	/**
-	 * Cuts the visual equivalent of <code>toDelete</code> characters out of the
-	 * indentation of line <code>line</code> in <code>document</code>. Leaves
-	 * leading comment signs alone.
-	 *
-	 * @param document the document
-	 * @param line the line
-	 * @param toDelete the number of space equivalents to delete
-	 * @param tabLength the length of a tab
-	 * @throws BadLocationException on concurrent document modification
+	 * Cuts the visual equivalent of <code>toDelete</code> characters out of
+	 * the indentation of line <code>line</code> in <code>document</code>.
+	 * Leaves leading comment signs alone.
+	 * 
+	 * @param document
+	 *            the document
+	 * @param line
+	 *            the line
+	 * @param toDelete
+	 *            the number of space equivalents to delete
+	 * @param tabLength
+	 *            the length of a tab
+	 * @throws BadLocationException
+	 *             on concurrent document modification
 	 */
-	private void cutIndent(Document document, int line, int toDelete, int tabLength) throws BadLocationException {
-		IRegion region= document.getLineInformation(line);
-		int from= region.getOffset();
-		int endOffset= region.getOffset() + region.getLength();
+	private void cutIndent(Document document, int line, int toDelete,
+			int tabLength) throws BadLocationException {
+		IRegion region = document.getLineInformation(line);
+		int from = region.getOffset();
+		int endOffset = region.getOffset() + region.getLength();
 
 		// go behind line comments
-		while (from < endOffset - 2 && document.get(from, 2).equals(LINE_COMMENT))
+		while (from < endOffset - 2
+				&& document.get(from, 2).equals(LINE_COMMENT))
 			from += 2;
 
-		int to= from;
+		int to = from;
 		while (toDelete > 0 && to < endOffset) {
-			char ch= document.getChar(to);
+			char ch = document.getChar(to);
 			if (!Character.isWhitespace(ch))
 				break;
 			toDelete -= computeVisualLength(ch, tabLength);
@@ -789,18 +911,20 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	/**
-	 * Returns the visual length of a given <code>CharSequence</code> taking into
-	 * account the visual tabulator length.
-	 *
-	 * @param seq the string to measure
-	 * @param tabLength the length of a tab
+	 * Returns the visual length of a given <code>CharSequence</code> taking
+	 * into account the visual tabulator length.
+	 * 
+	 * @param seq
+	 *            the string to measure
+	 * @param tabLength
+	 *            the length of a tab
 	 * @return the visual length of <code>seq</code>
 	 */
 	private int computeVisualLength(CharSequence seq, int tabLength) {
-		int size= 0;
+		int size = 0;
 
-		for (int i= 0; i < seq.length(); i++) {
-			char ch= seq.charAt(i);
+		for (int i = 0; i < seq.length(); i++) {
+			char ch = seq.charAt(i);
 			if (ch == '\t') {
 				if (tabLength != 0)
 					size += tabLength - size % tabLength;
@@ -813,11 +937,13 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	/**
-	 * Returns the visual length of a given character taking into
-	 * account the visual tabulator length.
-	 *
-	 * @param ch the character to measure
-	 * @param tabLength the length of a tab
+	 * Returns the visual length of a given character taking into account the
+	 * visual tabulator length.
+	 * 
+	 * @param ch
+	 *            the character to measure
+	 * @param tabLength
+	 *            the length of a tab
 	 * @return the visual length of <code>ch</code>
 	 */
 	private int computeVisualLength(char ch, int tabLength) {
@@ -829,7 +955,7 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 
 	/**
 	 * The preference setting for the visual tabulator display.
-	 *
+	 * 
 	 * @return the number of spaces displayed for a tabulator in the editor
 	 */
 	private int getVisualTabLengthPreference() {
@@ -839,20 +965,21 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	private int getPeerPosition(IDocument document, DocumentCommand command) {
 		if (document.getLength() == 0)
 			return 0;
-    	/*
-    	 * Search for scope closers in the pasted text and find their opening peers
-    	 * in the document.
-    	 */
-    	Document pasted= new Document(command.text);
-    	installJavaStuff(pasted);
-    	int firstPeer= command.offset;
+		/*
+		 * Search for scope closers in the pasted text and find their opening
+		 * peers in the document.
+		 */
+		Document pasted = new Document(command.text);
+		installJavaStuff(pasted);
+		int firstPeer = command.offset;
 
-    	JavaHeuristicScanner pScanner= new JavaHeuristicScanner(pasted);
-    	JavaHeuristicScanner dScanner= new JavaHeuristicScanner(document);
+		JavaHeuristicScanner pScanner = new JavaHeuristicScanner(pasted);
+		JavaHeuristicScanner dScanner = new JavaHeuristicScanner(document);
 
-    	// add scope relevant after context to peer search
-    	int afterToken= dScanner.nextToken(command.offset + command.length, JavaHeuristicScanner.UNBOUND);
-    	try {
+		// add scope relevant after context to peer search
+		int afterToken = dScanner.nextToken(command.offset + command.length,
+				JavaHeuristicScanner.UNBOUND);
+		try {
 			switch (afterToken) {
 			case Symbols.TokenRBRACE:
 				pasted.replace(pasted.getLength(), 0, "}"); //$NON-NLS-1$
@@ -869,114 +996,122 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 			Assert.isTrue(false);
 		}
 
-    	int pPos= 0; // paste text position (increasing from 0)
-    	int dPos= Math.max(0, command.offset - 1); // document position (decreasing from paste offset)
-    	while (true) {
-    		int token= pScanner.nextToken(pPos, JavaHeuristicScanner.UNBOUND);
-   			pPos= pScanner.getPosition();
-    		switch (token) {
-    			case Symbols.TokenLBRACE:
-    			case Symbols.TokenLBRACKET:
-    			case Symbols.TokenLPAREN:
-    				pPos= skipScope(pScanner, pPos, token);
-    				if (pPos == JavaHeuristicScanner.NOT_FOUND)
-    					return firstPeer;
-    				break; // closed scope -> keep searching
-    			case Symbols.TokenRBRACE:
-    				int peer= dScanner.findOpeningPeer(dPos, '{', '}');
-    				dPos= peer - 1;
-    				if (peer == JavaHeuristicScanner.NOT_FOUND)
-    					return firstPeer;
-    				firstPeer= peer;
-    				break; // keep searching
-    			case Symbols.TokenRBRACKET:
-    				peer= dScanner.findOpeningPeer(dPos, '[', ']');
-    				dPos= peer - 1;
-    				if (peer == JavaHeuristicScanner.NOT_FOUND)
-    					return firstPeer;
-    				firstPeer= peer;
-    				break; // keep searching
-    			case Symbols.TokenRPAREN:
-    				peer= dScanner.findOpeningPeer(dPos, '(', ')');
-    				dPos= peer - 1;
-    				if (peer == JavaHeuristicScanner.NOT_FOUND)
-    					return firstPeer;
-    				firstPeer= peer;
-    				break; // keep searching
-    			case Symbols.TokenCASE:
-    			case Symbols.TokenDEFAULT:
-    				JavaIndenter indenter= new JavaIndenter(document, dScanner, fProject);
-    				peer= indenter.findReferencePosition(dPos, false, false, false, true);
-    				if (peer == JavaHeuristicScanner.NOT_FOUND)
-    					return firstPeer;
-    				firstPeer= peer;
-    				break; // keep searching
+		int pPos = 0; // paste text position (increasing from 0)
+		int dPos = Math.max(0, command.offset - 1); // document position
+		// (decreasing from paste
+		// offset)
+		while (true) {
+			int token = pScanner.nextToken(pPos, JavaHeuristicScanner.UNBOUND);
+			pPos = pScanner.getPosition();
+			switch (token) {
+			case Symbols.TokenLBRACE:
+			case Symbols.TokenLBRACKET:
+			case Symbols.TokenLPAREN:
+				pPos = skipScope(pScanner, pPos, token);
+				if (pPos == JavaHeuristicScanner.NOT_FOUND)
+					return firstPeer;
+				break; // closed scope -> keep searching
+			case Symbols.TokenRBRACE:
+				int peer = dScanner.findOpeningPeer(dPos, '{', '}');
+				dPos = peer - 1;
+				if (peer == JavaHeuristicScanner.NOT_FOUND)
+					return firstPeer;
+				firstPeer = peer;
+				break; // keep searching
+			case Symbols.TokenRBRACKET:
+				peer = dScanner.findOpeningPeer(dPos, '[', ']');
+				dPos = peer - 1;
+				if (peer == JavaHeuristicScanner.NOT_FOUND)
+					return firstPeer;
+				firstPeer = peer;
+				break; // keep searching
+			case Symbols.TokenRPAREN:
+				peer = dScanner.findOpeningPeer(dPos, '(', ')');
+				dPos = peer - 1;
+				if (peer == JavaHeuristicScanner.NOT_FOUND)
+					return firstPeer;
+				firstPeer = peer;
+				break; // keep searching
+			case Symbols.TokenCASE:
+			case Symbols.TokenDEFAULT:
+				JavaIndenter indenter = new JavaIndenter(document, dScanner,
+						fProject);
+				peer = indenter.findReferencePosition(dPos, false, false,
+						false, true);
+				if (peer == JavaHeuristicScanner.NOT_FOUND)
+					return firstPeer;
+				firstPeer = peer;
+				break; // keep searching
 
-    			case Symbols.TokenEOF:
-    				return firstPeer;
-    			default:
-    				// keep searching
-    		}
-    	}
-    }
+			case Symbols.TokenEOF:
+				return firstPeer;
+			default:
+				// keep searching
+			}
+		}
+	}
 
-    /**
-     * Skips the scope opened by <code>token</code> in <code>document</code>,
-     * returns either the position of the
-     * @param pos
-     * @param token
-     * @return the position after the scope
-     */
-    private static int skipScope(JavaHeuristicScanner scanner, int pos, int token) {
-    	int openToken= token;
-    	int closeToken;
-    	switch (token) {
-    		case Symbols.TokenLPAREN:
-    			closeToken= Symbols.TokenRPAREN;
-    			break;
-    		case Symbols.TokenLBRACKET:
-    			closeToken= Symbols.TokenRBRACKET;
-    			break;
-    		case Symbols.TokenLBRACE:
-    			closeToken= Symbols.TokenRBRACE;
-    			break;
-    		default:
-    			Assert.isTrue(false);
-    			return -1; // dummy
-    	}
+	/**
+	 * Skips the scope opened by <code>token</code> in <code>document</code>,
+	 * returns either the position of the
+	 * 
+	 * @param pos
+	 * @param token
+	 * @return the position after the scope
+	 */
+	private static int skipScope(JavaHeuristicScanner scanner, int pos,
+			int token) {
+		int openToken = token;
+		int closeToken;
+		switch (token) {
+		case Symbols.TokenLPAREN:
+			closeToken = Symbols.TokenRPAREN;
+			break;
+		case Symbols.TokenLBRACKET:
+			closeToken = Symbols.TokenRBRACKET;
+			break;
+		case Symbols.TokenLBRACE:
+			closeToken = Symbols.TokenRBRACE;
+			break;
+		default:
+			Assert.isTrue(false);
+			return -1; // dummy
+		}
 
-    	int depth= 1;
-    	int p= pos;
+		int depth = 1;
+		int p = pos;
 
-    	while (true) {
-    		int tok= scanner.nextToken(p, JavaHeuristicScanner.UNBOUND);
-    		p= scanner.getPosition();
+		while (true) {
+			int tok = scanner.nextToken(p, JavaHeuristicScanner.UNBOUND);
+			p = scanner.getPosition();
 
-    		if (tok == openToken) {
-    			depth++;
-    		} else if (tok == closeToken) {
-    			depth--;
-    			if (depth == 0)
-    				return p + 1;
-    		} else if (tok == Symbols.TokenEOF) {
-    			return JavaHeuristicScanner.NOT_FOUND;
-    		}
-    	}
-    }
+			if (tok == openToken) {
+				depth++;
+			} else if (tok == closeToken) {
+				depth--;
+				if (depth == 0)
+					return p + 1;
+			} else if (tok == Symbols.TokenEOF) {
+				return JavaHeuristicScanner.NOT_FOUND;
+			}
+		}
+	}
 
-    private boolean isLineDelimiter(IDocument document, String text) {
-		String[] delimiters= document.getLegalLineDelimiters();
+	private boolean isLineDelimiter(IDocument document, String text) {
+		String[] delimiters = document.getLegalLineDelimiters();
 		if (delimiters != null)
 			return TextUtilities.startsWith(delimiters, text) > -1;
 		return false;
 	}
-    /**
+
+	/**
 	 * Processes command in work with brackets, strings, etc
 	 * 
 	 * @param d
 	 * @param c
 	 */
-    JsPreferenceInterpreter prefs;
+	JsPreferenceInterpreter prefs;
+
 	private void autoClose(IDocument d, DocumentCommand c) {
 		if (c.offset == -1)
 			return;
@@ -990,7 +1125,8 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 		if ('\'' == c.text.charAt(0) && !prefs.closeStrings())
 			return;
 		if (!prefs.closeBrackets()
-				&& ('[' == c.text.charAt(0) || '(' == c.text.charAt(0) || '{' == c.text.charAt(0)))
+				&& ('[' == c.text.charAt(0) || '(' == c.text.charAt(0) || '{' == c.text
+						.charAt(0)))
 			return;
 		try {
 
@@ -998,17 +1134,22 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 			case '\"':
 			case '\'':
 				// if we close existing quote, do nothing
-				if ('\"' == c.text.charAt(0) && c.offset > 0 && "\"".equals(d.get(c.offset - 1, 1)))
+				if ('\"' == c.text.charAt(0) && c.offset > 0
+						&& "\"".equals(d.get(c.offset - 1, 1)))
 					return;
 
-				if ('\'' == c.text.charAt(0) && c.offset > 0 && "\'".equals(d.get(c.offset - 1, 1)))
+				if ('\'' == c.text.charAt(0) && c.offset > 0
+						&& "\'".equals(d.get(c.offset - 1, 1)))
 					return;
 
-				if (c.offset != d.getLength() && c.text.charAt(0) == d.get(c.offset, 1).charAt(0))
+				if (c.offset != d.getLength()
+						&& c.text.charAt(0) == d.get(c.offset, 1).charAt(0))
 					c.text = "";
 				else {
 					c.text += c.text;
-					c.length = 0;
+					// dont set the length, because of the length > 0 then a
+					// selection has to be replaced
+					// c.length = 0;
 				}
 
 				c.shiftsCaret = false;
@@ -1020,7 +1161,8 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 				// check partition
 				if (AutoEditUtils.getRegionType(d, fPartitioning, c.offset) != IDocument.DEFAULT_CONTENT_TYPE)
 					return;
-				if (c.offset != d.getLength() && c.text.charAt(0) == d.get(c.offset, 1).charAt(0))
+				if (c.offset != d.getLength()
+						&& c.text.charAt(0) == d.get(c.offset, 1).charAt(0))
 					return;
 
 				try { // in class closing
@@ -1028,7 +1170,8 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 					String regex2 = ".*\\(.*\\).*";
 					int start = d.getLineOffset(d.getLineOfOffset(c.offset));
 					String curLine = d.get(start, c.offset - start);
-					if (Pattern.matches(regex, curLine) && !Pattern.matches(regex2, curLine)) {
+					if (Pattern.matches(regex, curLine)
+							&& !Pattern.matches(regex2, curLine)) {
 						c.text = "():";
 						c.shiftsCaret = false;
 						c.caretOffset = c.offset + 1;
@@ -1053,7 +1196,8 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 				if (!prefs.closeBrackets())
 					return;
 				// if we already have bracket we should jump over it
-				if (c.offset != d.getLength() && c.text.charAt(0) == d.get(c.offset, 1).charAt(0)) {
+				if (c.offset != d.getLength()
+						&& c.text.charAt(0) == d.get(c.offset, 1).charAt(0)) {
 					c.text = "";
 					c.shiftsCaret = false;
 					c.caretOffset = c.offset + 1;
@@ -1066,23 +1210,24 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 		}
 	}
 
-	private void smartIndentOnKeypress(IDocument document, DocumentCommand command) {
+	private void smartIndentOnKeypress(IDocument document,
+			DocumentCommand command) {
 		switch (command.text.charAt(0)) {
-			case '}':
-				smartIndentAfterClosingBracket(document, command);
-				break;
-			case '{':
-				smartIndentAfterOpeningBracket(document, command);
-				break;
-			case '\"':
-			case '\'':
-			case '(':
-			case '[':
-				autoClose(document, command);
-				break;
-			case 'e':
-				smartIndentUponE(document, command);
-				break;
+		case '}':
+			smartIndentAfterClosingBracket(document, command);
+			break;
+		case '{':
+			smartIndentAfterOpeningBracket(document, command);
+			break;
+		case '\"':
+		case '\'':
+		case '(':
+		case '[':
+			autoClose(document, command);
+			break;
+		case 'e':
+			smartIndentUponE(document, command);
+			break;
 		}
 	}
 
@@ -1091,39 +1236,43 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 			return;
 
 		try {
-			String content= d.get(c.offset - 3, 3);
+			String content = d.get(c.offset - 3, 3);
 			if (content.equals("els")) { //$NON-NLS-1$
-				JavaHeuristicScanner scanner= new JavaHeuristicScanner(d);
-				int p= c.offset - 3;
+				JavaHeuristicScanner scanner = new JavaHeuristicScanner(d);
+				int p = c.offset - 3;
 
 				// current line
-				int line= d.getLineOfOffset(p);
-				int lineOffset= d.getLineOffset(line);
+				int line = d.getLineOfOffset(p);
+				int lineOffset = d.getLineOffset(line);
 
 				// make sure we don't have any leading comments etc.
 				if (d.get(lineOffset, p - lineOffset).trim().length() != 0)
 					return;
 
 				// line of last Java code
-				int pos= scanner.findNonWhitespaceBackward(p - 1, JavaHeuristicScanner.UNBOUND);
+				int pos = scanner.findNonWhitespaceBackward(p - 1,
+						JavaHeuristicScanner.UNBOUND);
 				if (pos == -1)
 					return;
-				int lastLine= d.getLineOfOffset(pos);
+				int lastLine = d.getLineOfOffset(pos);
 
-				// only shift if the last java line is further up and is a braceless block candidate
+				// only shift if the last java line is further up and is a
+				// braceless block candidate
 				if (lastLine < line) {
 
-					JavaIndenter indenter= new JavaIndenter(d, scanner, fProject);
-					int ref= indenter.findReferencePosition(p, true, false, false, false);
+					JavaIndenter indenter = new JavaIndenter(d, scanner,
+							fProject);
+					int ref = indenter.findReferencePosition(p, true, false,
+							false, false);
 					if (ref == JavaHeuristicScanner.NOT_FOUND)
 						return;
-					int refLine= d.getLineOfOffset(ref);
-					String indent= getIndentOfLine(d, refLine);
+					int refLine = d.getLineOfOffset(ref);
+					String indent = getIndentOfLine(d, refLine);
 
 					if (indent != null) {
-						c.text= indent.toString() + "else"; //$NON-NLS-1$
+						c.text = indent.toString() + "else"; //$NON-NLS-1$
 						c.length += c.offset - lineOffset;
-						c.offset= lineOffset;
+						c.offset = lineOffset;
 					}
 				}
 
@@ -1131,42 +1280,49 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 			}
 
 			if (content.equals("cas")) { //$NON-NLS-1$
-				JavaHeuristicScanner scanner= new JavaHeuristicScanner(d);
-				int p= c.offset - 3;
+				JavaHeuristicScanner scanner = new JavaHeuristicScanner(d);
+				int p = c.offset - 3;
 
 				// current line
-				int line= d.getLineOfOffset(p);
-				int lineOffset= d.getLineOffset(line);
+				int line = d.getLineOfOffset(p);
+				int lineOffset = d.getLineOffset(line);
 
 				// make sure we don't have any leading comments etc.
 				if (d.get(lineOffset, p - lineOffset).trim().length() != 0)
 					return;
 
 				// line of last Java code
-				int pos= scanner.findNonWhitespaceBackward(p - 1, JavaHeuristicScanner.UNBOUND);
+				int pos = scanner.findNonWhitespaceBackward(p - 1,
+						JavaHeuristicScanner.UNBOUND);
 				if (pos == -1)
 					return;
-				int lastLine= d.getLineOfOffset(pos);
+				int lastLine = d.getLineOfOffset(pos);
 
-				// only shift if the last java line is further up and is a braceless block candidate
+				// only shift if the last java line is further up and is a
+				// braceless block candidate
 				if (lastLine < line) {
 
-					JavaIndenter indenter= new JavaIndenter(d, scanner, fProject);
-					int ref= indenter.findReferencePosition(p, false, false, false, true);
+					JavaIndenter indenter = new JavaIndenter(d, scanner,
+							fProject);
+					int ref = indenter.findReferencePosition(p, false, false,
+							false, true);
 					if (ref == JavaHeuristicScanner.NOT_FOUND)
 						return;
-					int refLine= d.getLineOfOffset(ref);
-					int nextToken= scanner.nextToken(ref, JavaHeuristicScanner.UNBOUND);
+					int refLine = d.getLineOfOffset(ref);
+					int nextToken = scanner.nextToken(ref,
+							JavaHeuristicScanner.UNBOUND);
 					String indent;
-					if (nextToken == Symbols.TokenCASE || nextToken == Symbols.TokenDEFAULT)
-						indent= getIndentOfLine(d, refLine);
-					else // at the brace of the switch
-						indent= indenter.computeIndentation(p).toString();
+					if (nextToken == Symbols.TokenCASE
+							|| nextToken == Symbols.TokenDEFAULT)
+						indent = getIndentOfLine(d, refLine);
+					else
+						// at the brace of the switch
+						indent = indenter.computeIndentation(p).toString();
 
 					if (indent != null) {
-						c.text= indent.toString() + "case"; //$NON-NLS-1$
+						c.text = indent.toString() + "case"; //$NON-NLS-1$
 						c.length += c.offset - lineOffset;
-						c.offset= lineOffset;
+						c.offset = lineOffset;
 					}
 				}
 
@@ -1179,11 +1335,12 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	/*
-	 * @see org.eclipse.jface.text.IAutoIndentStrategy#customizeDocumentCommand(org.eclipse.jface.text.IDocument, org.eclipse.jface.text.DocumentCommand)
+	 * @see org.eclipse.jface.text.IAutoIndentStrategy#customizeDocumentCommand(org.eclipse.jface.text.IDocument,
+	 *      org.eclipse.jface.text.DocumentCommand)
 	 */
 	public void customizeDocumentCommand(IDocument d, DocumentCommand c) {
 		if (c.doit == false)
-			return;		
+			return;
 		clearCachedValues();
 		if (!isSmartMode()) {
 			super.customizeDocumentCommand(d, c);
@@ -1193,7 +1350,10 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 			smartIndentAfterNewLine(d, c);
 		else if (c.text.length() == 1)
 			smartIndentOnKeypress(d, c);
-		else if (c.text.length() > 1 && getPreferenceStore().getBoolean(PreferenceConstants.EDITOR_SMART_PASTE))			smartPaste(d, c); // no smart backspace for paste
+		else if (c.text.length() > 1
+				&& getPreferenceStore().getBoolean(
+						PreferenceConstants.EDITOR_SMART_PASTE))
+			smartPaste(d, c); // no smart backspace for paste
 	}
 
 	private static IPreferenceStore getPreferenceStore() {
@@ -1209,41 +1369,44 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 	}
 
 	private void clearCachedValues() {
-        IPreferenceStore preferenceStore= getPreferenceStore();
-		fCloseBrace= true;//preferenceStore.getBoolean(PreferenceConstants.EDITOR_CLOSE_BRACES);
-		fIsSmartMode= computeSmartMode();
+		IPreferenceStore preferenceStore = getPreferenceStore();
+		fCloseBrace = true;// preferenceStore.getBoolean(PreferenceConstants.EDITOR_CLOSE_BRACES);
+		fIsSmartMode = computeSmartMode();
 	}
 
 	private boolean computeSmartMode() {
-		IWorkbenchPage page= DLTKUIPlugin.getActivePage();
-		if (page != null)  {
-			IEditorPart part= page.getActiveEditor();
+		IWorkbenchPage page = DLTKUIPlugin.getActivePage();
+		if (page != null) {
+			IEditorPart part = page.getActiveEditor();
 			if (part instanceof ITextEditorExtension3) {
-				ITextEditorExtension3 extension= (ITextEditorExtension3) part;
+				ITextEditorExtension3 extension = (ITextEditorExtension3) part;
 				return extension.getInsertMode() == ITextEditorExtension3.SMART_INSERT;
 			}
 		}
 		return false;
 	}
 
-	private static CompilationUnitInfo getCompilationUnitForMethod(IDocument document, int offset, String partitioning) {
+	private static CompilationUnitInfo getCompilationUnitForMethod(
+			IDocument document, int offset, String partitioning) {
 		try {
-			JavaHeuristicScanner scanner= new JavaHeuristicScanner(document);
+			JavaHeuristicScanner scanner = new JavaHeuristicScanner(document);
 
-			IRegion sourceRange= scanner.findSurroundingBlock(offset);
+			IRegion sourceRange = scanner.findSurroundingBlock(offset);
 			if (sourceRange == null)
 				return null;
-			String source= document.get(sourceRange.getOffset(), sourceRange.getLength());
+			String source = document.get(sourceRange.getOffset(), sourceRange
+					.getLength());
 
-			StringBuffer contents= new StringBuffer();
+			StringBuffer contents = new StringBuffer();
 			contents.append("class ____C{void ____m()"); //$NON-NLS-1$
-			final int methodOffset= contents.length();
+			final int methodOffset = contents.length();
 			contents.append(source);
 			contents.append('}');
 
-			char[] buffer= contents.toString().toCharArray();
+			char[] buffer = contents.toString().toCharArray();
 
-			return new CompilationUnitInfo(buffer, sourceRange.getOffset() - methodOffset);
+			return new CompilationUnitInfo(buffer, sourceRange.getOffset()
+					- methodOffset);
 
 		} catch (BadLocationException e) {
 			DLTKUIPlugin.log(e);
@@ -1254,28 +1417,30 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 
 	/**
 	 * Returns the block balance, i.e. zero if the blocks are balanced at
-	 * <code>offset</code>, a negative number if there are more closing than opening
-	 * braces, and a positive number if there are more opening than closing braces.
-	 *
+	 * <code>offset</code>, a negative number if there are more closing than
+	 * opening braces, and a positive number if there are more opening than
+	 * closing braces.
+	 * 
 	 * @param document
 	 * @param offset
 	 * @param partitioning
 	 * @return the block balance
 	 */
-	private static int getBlockBalance(IDocument document, int offset, String partitioning) {
+	private static int getBlockBalance(IDocument document, int offset,
+			String partitioning) {
 		if (offset < 1)
 			return -1;
 		if (offset >= document.getLength())
 			return 1;
 
-		int begin= offset;
-		int end= offset - 1;
+		int begin = offset;
+		int end = offset - 1;
 
-		JavaHeuristicScanner scanner= new JavaHeuristicScanner(document);
+		JavaHeuristicScanner scanner = new JavaHeuristicScanner(document);
 
 		while (true) {
-			begin= scanner.findOpeningPeer(begin - 1, '{', '}');
-			end= scanner.findClosingPeer(end + 1, '{', '}');
+			begin = scanner.findOpeningPeer(begin - 1, '{', '}');
+			end = scanner.findClosingPeer(end + 1, '{', '}');
 			if (begin == -1 && end == -1)
 				return 0;
 			if (begin == -1)
@@ -1285,25 +1450,26 @@ public class JavascriptAutoEditStrategy extends DefaultIndentLineAutoEditStrateg
 		}
 	}
 
-	
-
-	private static IRegion getToken(IDocument document, IRegion scanRegion, int tokenId)  {
+	private static IRegion getToken(IDocument document, IRegion scanRegion,
+			int tokenId) {
 
 		try {
 
-			final String source= document.get(scanRegion.getOffset(), scanRegion.getLength());
+			final String source = document.get(scanRegion.getOffset(),
+					scanRegion.getLength());
 
 			fgScanner.setSource(source.toCharArray());
 
-			int id= fgScanner.getNextToken();
+			int id = fgScanner.getNextToken();
 			while (id != ITerminalSymbols.TokenNameEOF && id != tokenId)
-				id= fgScanner.getNextToken();
+				id = fgScanner.getNextToken();
 
 			if (id == ITerminalSymbols.TokenNameEOF)
 				return null;
 
-			int tokenOffset= fgScanner.getCurrentTokenStartPosition();
-			int tokenLength= fgScanner.getCurrentTokenEndPosition() + 1 - tokenOffset; // inclusive end
+			int tokenOffset = fgScanner.getCurrentTokenStartPosition();
+			int tokenLength = fgScanner.getCurrentTokenEndPosition() + 1
+					- tokenOffset; // inclusive end
 			return new Region(tokenOffset + scanRegion.getOffset(), tokenLength);
 
 		} catch (InvalidInputException x) {
