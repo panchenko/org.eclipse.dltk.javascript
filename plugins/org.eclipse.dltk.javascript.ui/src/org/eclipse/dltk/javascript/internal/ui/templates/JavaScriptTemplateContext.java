@@ -32,64 +32,63 @@ import org.eclipse.jface.text.templates.TemplateException;
 
 public class JavaScriptTemplateContext extends ScriptTemplateContext {
 
-	public JavaScriptTemplateContext(TemplateContextType type, IDocument document,
-			int completionOffset, int completionLength,
+	public JavaScriptTemplateContext(TemplateContextType type,
+			IDocument document, int completionOffset, int completionLength,
 			ISourceModule sourceModule) {
 		super(type, document, completionOffset, completionLength, sourceModule);
 	}
-	
-	
 
-	private static class FormattingAstVisitor extends ASTVisitor
-	{	
+	private static class FormattingAstVisitor extends ASTVisitor {
 		private int indentLevel;
-		
+
 		private String text;
-		
-		private void printContent(ASTNode node)
-		{			
+
+		private void printContent(ASTNode node) {
 			int start = node.sourceStart();
 			int end = node.sourceEnd();
-			
+
 			System.out.println("Begin index: " + start);
 			System.out.println("End index: " + end);
 			System.out.println("Real node type: " + node.getClass());
-			
-			if (start >= 0 && start < text.length() && end >= 0 && end < text.length()) {			
+
+			if (start >= 0 && start < text.length() && end >= 0
+					&& end < text.length()) {
 				System.out.println("=== Text ===");
 				System.out.println(text.substring(start, end));
 			}
 		}
-		
-		public FormattingAstVisitor(String text){
+
+		public FormattingAstVisitor(String text) {
 			this.text = text;
 			indentLevel = 0;
 		}
-		
+
 		public boolean visit(Expression s) throws Exception {
-			//System.out.println("FormattingAstVisitor.visit(Expression s)");
-			//indentLevel++;
-			
+			// System.out.println("FormattingAstVisitor.visit(Expression s)");
+			// indentLevel++;
+
 			printContent(s);
-			
+
 			return true;
 		}
 
 		public boolean visit(MethodDeclaration s) throws Exception {
-			//System.out.println("FormattingAstVisitor.visit(MethodDeclaration s)");
-			//indentLevel++;
-			
+			// System.out.println("FormattingAstVisitor.visit(MethodDeclaration
+			// s)");
+			// indentLevel++;
+
 			printContent(s);
-			
+
 			return true;
 		}
 
 		public boolean visit(ModuleDeclaration s) throws Exception {
-			//System.out.println("FormattingAstVisitor.visit(ModuleDeclaration s)");
-			//indentLevel++;
-			
+			// System.out.println("FormattingAstVisitor.visit(ModuleDeclaration
+			// s)");
+			// indentLevel++;
+
 			printContent(s);
-			
+
 			return true;
 		}
 
@@ -100,13 +99,14 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 		}
 
 		public boolean visit(TypeDeclaration s) throws Exception {
-			//int start = s.sourceStart();
-			//int end = s.sourceEnd();			
-			//text.substring(start, end);			
-			//System.out.println("FormattingAstVisitor.visit(TypeDeclaration s)");
-			
+			// int start = s.sourceStart();
+			// int end = s.sourceEnd();
+			// text.substring(start, end);
+			// System.out.println("FormattingAstVisitor.visit(TypeDeclaration
+			// s)");
+
 			printContent(s);
-			
+
 			// TODO Auto-generated method stub
 			return true;
 		}
@@ -114,34 +114,33 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 		public boolean visitGeneral(ASTNode node) throws Exception {
 			return true;
 		}
-	
+
 		public boolean endvisit(Expression s) throws Exception {
-			//--indentLevel;
+			// --indentLevel;
 			return true;
 		}
 
 		public boolean endvisit(MethodDeclaration s) throws Exception {
-			//--indentLevel;
+			// --indentLevel;
 			return true;
 		}
 
 		public boolean endvisit(ModuleDeclaration s) throws Exception {
-			//--indentLevel;
+			// --indentLevel;
 			return true;
 		}
 
 		public boolean endvisit(Statement s) throws Exception {
-			//--indentLevel;
+			// --indentLevel;
 			return true;
 		}
 
 		public boolean endvisit(TypeDeclaration s) throws Exception {
-			//--indentLevel;
+			// --indentLevel;
 			return true;
-		}		
+		}
 	}
 
-	
 	// Just for testing
 	public TemplateBuffer evaluate(Template template)
 			throws BadLocationException, TemplateException {
@@ -150,72 +149,75 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 		}
 
 		String indentTo = calculateIndent(getDocument(), getStart());
-		
-		System.out.println("Indent: |" + indentTo + "|");
 
 		String delimeter = TextUtilities.getDefaultLineDelimiter(getDocument());
 		String lines = template.getPattern();
-		StringBuffer bf=new StringBuffer();
-		
+		StringBuffer bf = new StringBuffer();
+
 		boolean in = false;
-		HashMap qs=new HashMap();
+		HashMap qs = new HashMap();
 		String sp0 = "specialSecret12435Id";
-		String sp=sp0+'0';
-		String cId=null;
-		int r=0;
-		int pos=-1;
-		for (int a=0;a<lines.length();a++){
-			char c=lines.charAt(a);
-			if (c=='$'){
-				if (a<lines.length()-1) if (lines.charAt(a+1)=='{'){
-					in=true;
-					bf.append(sp);
-					pos=a;
-				}
+		String sp = sp0 + '0';
+		String cId = null;
+		int r = 0;
+		int pos = -1;
+		for (int a = 0; a < lines.length(); a++) {
+			char c = lines.charAt(a);
+			if (c == '$') {
+				if (a < lines.length() - 1)
+					if (lines.charAt(a + 1) == '{') {
+						in = true;
+						bf.append(sp);
+						pos = a;
+					}
 			}
-			
-			if (in){
-				if (c=='}'){
-					String tv=lines.substring(pos,a+1);
-					if (tv.equals("${cursor}")){
-						cId=sp;
+
+			if (in) {
+				if (c == '}') {
+					String tv = lines.substring(pos, a + 1);
+					if (tv.equals("${cursor}")) {
+						cId = sp;
 					}
 					qs.put(sp, tv);
 					r++;
-					sp=sp0+r;
-					in=false;
+					sp = sp0 + r;
+					in = false;
 					continue;
 				}
 			}
-			if (!in){
+			if (!in) {
 				bf.append(c);
 			}
 		}
-		OldCodeFormatter formater = new OldCodeFormatter(Collections.EMPTY_MAP);		
-		String string = bf.toString();		
-		String formatted = formater.formatString(string,new StringBuffer());
-		java.util.Iterator it=qs.keySet().iterator();
-		while (it.hasNext()){
-			String key=(String) it.next();
-			String value=(String) qs.get(key);
-			if (key==cId){
-				formatted=replaceSeq(formatted,key+";", value);
-			}
-			else formatted=replaceSeq(formatted,key, value);
-		}		
-		template = new Template(template.getName(), template
-					.getDescription(), template.getContextTypeId(), formatted, template.isAutoInsertable());		
+		OldCodeFormatter formater = new OldCodeFormatter(Collections.EMPTY_MAP);
+		String string = bf.toString();
+		String formatted = formater.formatString(string, new StringBuffer());
+		java.util.Iterator it = qs.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			String value = (String) qs.get(key);
+			if (key == cId) {
+				formatted = replaceSeq(formatted, key + ";", value);
+			} else
+				formatted = replaceSeq(formatted, key, value);
+		}
+		template = new Template(template.getName(), template.getDescription(),
+				template.getContextTypeId(), formatted, template
+						.isAutoInsertable());
 
 		return super.evaluate(template);
 	}
-	private static String replaceSeq(String sq, String target, String replacement) {
-//        return Pattern.compile(target.toString(), Pattern.LITERAL).matcher(
-//            sq).replaceAll(Matcher.quoteReplacement(replacement.toString()));
+
+	private static String replaceSeq(String sq, String target,
+			String replacement) {
+		// return Pattern.compile(target.toString(), Pattern.LITERAL).matcher(
+		// sq).replaceAll(Matcher.quoteReplacement(replacement.toString()));
 		int indexOf = sq.indexOf(target);
-		while (indexOf!=-1){
-			sq=sq.substring(0,indexOf)+replacement+sq.substring(indexOf+target.length());
+		while (indexOf != -1) {
+			sq = sq.substring(0, indexOf) + replacement
+					+ sq.substring(indexOf + target.length());
 			indexOf = sq.indexOf(target);
 		}
 		return sq;
-    }
+	}
 }
