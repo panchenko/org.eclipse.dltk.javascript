@@ -7,8 +7,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.dltk.javascript.launching,
  org.eclipse.dltk.launching,
- org.eclipse.core.variables,
- org.apache.xmlbeans
+ org.eclipse.core.variables
 Eclipse-LazyStart: false
 Export-Package: org.mozilla.classfile,
  org.mozilla.javascript,
