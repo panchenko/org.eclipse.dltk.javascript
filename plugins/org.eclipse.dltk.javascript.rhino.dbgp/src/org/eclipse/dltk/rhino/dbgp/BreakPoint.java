@@ -23,18 +23,17 @@ public class BreakPoint {
 	protected boolean isReturn;
 	protected boolean isWatch;
 	protected boolean isCall;
-	
+
 	protected boolean isModification;
 
 	protected boolean isAccess;
 
 	private String type;
 
-
 	protected BreakPoint(HashMap options) {
 
 		String object = (String) options.get("-t");
-		this.type=object;
+		this.type = object;
 		if (object.equals("call") || object.equals("return")) {
 			method = (String) options.get("-m");
 			this.isReturn = object.equals("return");
@@ -51,16 +50,14 @@ public class BreakPoint {
 			} catch (URISyntaxException e) {
 				throw new RuntimeException();
 			}
-		}
-		else {
+		} else {
 			this.file = "";
 		}
-		
+
 		String line = (String) options.get("-n");
 		if (line != null) {
-			this.line = Integer.parseInt(line) - 1;
-		}
-		else {
+			this.line = Integer.parseInt(line);
+		} else {
 			this.line = -1;
 		}
 
@@ -74,26 +71,31 @@ public class BreakPoint {
 		}
 		String hitCondition = (String) options.get("-o");
 		setHitCondition(hitCondition);
-		expression = (String) options.get("--");
-		
+		String exp = (String) options.get("--");
+
 		String disable = (String) options.get("-s");
 		if (disable.equals("disabled")) {
 			this.setEnabled(false);
 		}
-		if (expression != null) {
-			expression = Base64Helper.decodeString(expression);
-			if (expression!=null)expression=expression.trim();
+		if (exp != null) {
+			try {
+				expression = Base64Helper.decodeString(exp);
+			} catch (DbgpIOException ex) {
+				ex.printStackTrace();
+			}
+			if (expression != null)
+				expression = expression.trim();
 		}
 		if (isWatch) {
 			this.isModification = expression.charAt(expression.length() - 1) == '1';
 			this.isAccess = expression.charAt(expression.length() - 2) == '1';
 			this.expression = expression.substring(0, expression.length() - 2);
-			
+
 		}
 
 		this.id = last_id++;
 	}
-	
+
 	protected void setHitCondition(String hitCondition) {
 		if (hitCondition != null) {
 			if (hitCondition.equals(">=")) {
@@ -151,9 +153,12 @@ public class BreakPoint {
 	}
 
 	public String getHitCondition() {
-		if (hitCondition==1)return ">=";
-		if (hitCondition==2)return "==";
-		if (hitCondition==3)return "%";
+		if (hitCondition == 1)
+			return ">=";
+		if (hitCondition == 2)
+			return "==";
+		if (hitCondition == 3)
+			return "%";
 		return "==";
 	}
 }
