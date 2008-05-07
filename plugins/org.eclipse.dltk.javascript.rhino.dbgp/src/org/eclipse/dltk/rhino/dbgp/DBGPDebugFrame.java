@@ -4,6 +4,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaArray;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.Undefined;
 import org.mozilla.javascript.debug.DebugFrame;
 import org.mozilla.javascript.debug.DebuggableScript;
 import org.mozilla.javascript.debug.Debugger;
@@ -157,6 +158,14 @@ public final class DBGPDebugFrame implements DebugFrame {
 			NativeJavaArray na=(NativeJavaArray) obj;
 			return na.get(parseInt, na);
 		}
-		return ScriptableObject.getProperty(obj, longName);
+		Scriptable parent = obj;
+		while(parent != null)
+		{
+			Object o = ScriptableObject.getProperty(parent, longName);
+			if (o != null && o != Scriptable.NOT_FOUND ) return o;
+			parent = parent.getParentScope();
+				
+		}
+		return null;
 	}
 }
