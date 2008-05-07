@@ -57,7 +57,7 @@ final class StackGetCommand extends DBGPDebugger.Command {
 				+ new File(stackFrame.getSourceName()).toURI()
 						.toASCIIString() + "\"\r\n"
 				+ "           lineno=\""
-				+ (stackFrame.getLineNumber() + 1) + "\"\r\n"
+				+ (stackFrame.getLineNumber()) + "\"\r\n"
 				+ "           where=\"" + stackFrame.getWhere()
 				+ "\"\r\n" + "           cmdbegin=\"1:0\"\r\n"
 				+ "           cmdend=\"" + "1" + ":10\"/>");
