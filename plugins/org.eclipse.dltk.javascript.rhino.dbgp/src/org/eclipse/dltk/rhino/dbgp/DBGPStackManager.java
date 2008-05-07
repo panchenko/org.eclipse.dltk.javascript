@@ -171,7 +171,12 @@ public class DBGPStackManager {
 	}
 
 	public DBGPDebugFrame getStackFrame(int parseInt) {
-		return (DBGPDebugFrame) stack.get(stack.size() - parseInt - 1);
+		int stackCounter = stack.size() - parseInt - 1;
+		if (stackCounter >= 0)
+		{
+			return (DBGPDebugFrame) stack.get(stackCounter);
+		}
+		return null;
 	}
 
 	public int getLineNumber(String level) {
