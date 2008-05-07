@@ -1,38 +1,42 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2007 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ 
+ *******************************************************************************/
 package org.eclipse.dltk.rhino.dbgp;
 
 import java.io.IOException;
-
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import java.io.UnsupportedEncodingException;
 
 public class Base64Helper {
-	private static final BASE64Encoder encoder = new BASE64Encoder();
-
-	private static final BASE64Decoder decoder = new BASE64Decoder();
 
 	public static String encodeString(String s) {
-		if (s==null)return"";
-		return encoder.encode(s.getBytes());
+		try {
+			byte[] encode = Base64.encode(s.getBytes("UTF-8"));
+			return new String(encode).replaceAll("\n", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	public static String decodeString(String base64){
+	public static String decodeString(String base64) throws DbgpIOException {
 		try {
-			if (base64==null)return "";
-			return new String(decoder.decodeBuffer(base64));
+			return new String(Base64.decode(base64.getBytes()), "UTF-8"); //$NON-NLS-1$
 		} catch (IOException e) {
-			throw new RuntimeException();
+			throw new DbgpIOException(e);
 		}
 	}
 
 	public static String encodeBytes(byte[] bytes) {
-		return new String(encoder.encode(bytes));
+		return new String(Base64.encode(bytes));
 	}
 
-	public static byte[] decodeBytes(String base64) throws DbgpIOException {
-		try {
-			return decoder.decodeBuffer(base64);
-		} catch (IOException e) {
-			throw new DbgpIOException(e);
-		}
+	public static byte[] decodeBytes(String base64) {
+		return Base64.decode(base64.getBytes());
 	}
 }
