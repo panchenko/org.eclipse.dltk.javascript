@@ -156,5 +156,14 @@ public class BreakPointManager {
 		return (BreakPoint) ids.get(id);
 	}
 
-
+	/**
+	 * 
+	 */
+	public void removeBreakPoints()
+	{
+		fileMap = new HashMap();
+		ids = new HashMap();
+		returnNames = new HashMap();
+		watchpoints = new HashMap();
+		callNames = new HashMap();	}
 }
