@@ -21,14 +21,7 @@ final class PropertySetCommand extends DBGPDebugger.Command {
 	void parseAndExecute(String command, HashMap options) {
 		String name = ((String) options.get("-n"));
 		int num = Integer.parseInt((String) options.get("-d"));
-		String value = "";
-		try {
-			value = Base64Helper.decodeString((String) options.get("--"));
-		} catch (DbgpIOException ex) {
-			ex.printStackTrace();
-			return; // dont set the value
-		}
-
+		String value = Base64Helper.decodeString((String) options.get("--"));
 		if (num >= 0) {
 			DBGPDebugFrame fr = this.debugger.stackmanager.getStackFrame(num);
 			fr.setValue(name, value);

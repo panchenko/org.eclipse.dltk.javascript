@@ -28,12 +28,7 @@ final class UpdateBreakPointCommand extends DBGPDebugger.Command {
 		String condEString = (String) options.get("--");
 
 		if (condEString != null) {
-			try {
-				condEString = Base64Helper.decodeString(condEString);
-			} catch (DbgpIOException ex) {
-				ex.printStackTrace();
-				return; // dont update the breakpoint
-			}
+			condEString = Base64Helper.decodeString(condEString);
 		}
 
 		this.debugger.stackmanager.updateBreakpoint(id, newState, newLine,

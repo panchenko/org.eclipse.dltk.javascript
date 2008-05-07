@@ -19,14 +19,9 @@ final class EvalCommand extends DBGPDebugger.Command {
 	}
 
 	void parseAndExecute(String command, HashMap options) {
-		String value = null;
-		try {
-			value = Base64Helper.decodeString((String) options.get("--"));
-			if (value.length() == 0)
-				value = "this";
-		} catch (DbgpIOException ex) {
-			ex.printStackTrace();
-		}
+		String value = Base64Helper.decodeString((String) options.get("--"));
+		if (value.length() == 0)
+			value = "this";
 		StringBuffer valueBuffer = new StringBuffer();
 		if (this.debugger.stackmanager.getStackDepth() == 0 || value == null) {
 			this.debugger.printProperty(value, value, "", valueBuffer, 0, true);

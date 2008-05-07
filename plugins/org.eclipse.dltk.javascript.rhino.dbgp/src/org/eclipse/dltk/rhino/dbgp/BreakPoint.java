@@ -78,11 +78,7 @@ public class BreakPoint {
 			this.setEnabled(false);
 		}
 		if (exp != null) {
-			try {
-				expression = Base64Helper.decodeString(exp);
-			} catch (DbgpIOException ex) {
-				ex.printStackTrace();
-			}
+			expression = Base64Helper.decodeString(exp);
 			if (expression != null)
 				expression = expression.trim();
 		}
