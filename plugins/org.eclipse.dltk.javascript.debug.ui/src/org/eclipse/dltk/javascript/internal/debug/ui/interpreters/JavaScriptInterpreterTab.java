@@ -5,13 +5,13 @@ import org.eclipse.dltk.internal.debug.ui.interpreters.AbstractInterpreterComboB
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 
 public class JavaScriptInterpreterTab extends InterpreterTab {
-	
+
 	protected AbstractInterpreterComboBlock getInterpreterBlock() {
-		return new JavaScriptInterpreterComboBlock();
+		return new JavaScriptInterpreterComboBlock(getMainTab());
 	}
 
 	protected String getNature() {
 		return JavaScriptNature.NATURE_ID;
 	}
-	
+
 }

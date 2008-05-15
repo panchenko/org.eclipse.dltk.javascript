@@ -10,14 +10,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.debug.ui.interpreters;
 
-
 import org.eclipse.dltk.internal.debug.ui.interpreters.AbstractInterpreterComboBlock;
 import org.eclipse.dltk.internal.debug.ui.interpreters.AbstractInterpreterContainerWizardPage;
 
-
-public class JavaScriptInterpreterContainerWizardPage extends AbstractInterpreterContainerWizardPage {
+public class JavaScriptInterpreterContainerWizardPage extends
+		AbstractInterpreterContainerWizardPage {
 
 	protected AbstractInterpreterComboBlock getInterpreterBlock() {
-		return new JavaScriptInterpreterComboBlock();
+		return new JavaScriptInterpreterComboBlock(null);
 	}
 }
