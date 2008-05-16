@@ -15,6 +15,7 @@ import org.eclipse.dltk.dbgp.exceptions.DbgpException;
 import org.eclipse.dltk.debug.core.DLTKDebugPlugin;
 import org.eclipse.dltk.debug.core.model.IScriptThread;
 import org.eclipse.dltk.debug.ui.DLTKDebugUIPlugin;
+import org.eclipse.dltk.javascript.internal.debug.JavaScriptDebugConstants;
 import org.eclipse.dltk.javascript.jsjdtdebugger.preferences.IJavaScriptAndJdtDebuggerPreferenceConstants;
 import org.eclipse.dltk.launching.DebuggingEngineRunner;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -26,11 +27,11 @@ import org.osgi.framework.BundleContext;
 public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 		IDebugEventSetListener, IPropertyChangeListener {
 
-	private static final String SUSPEND_ON_ENTRY = "suspendOnEntry";
-	private static final String SUSPEND_ON_EXIT = "suspendOnExit";
+	private static final String SUSPEND_ON_ENTRY = "suspendOnEntry"; //$NON-NLS-1$
+	private static final String SUSPEND_ON_EXIT = "suspendOnExit"; //$NON-NLS-1$
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.dltk.javascript.jsjdtdebugger";
+	public static final String PLUGIN_ID = "org.eclipse.dltk.javascript.jsjdtdebugger"; //$NON-NLS-1$
 
 	// The shared instance
 	private static JavaScriptAndJdtDebuggerPlugin plugin;
@@ -93,13 +94,29 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 	public void handleDebugEvents(DebugEvent[] events) {
 		for (int i = 0; i < events.length; i++) {
 			DebugEvent event = events[i];
-			if (event.getSource() instanceof IScriptThread
-					&& event.getKind() == DebugEvent.CREATE) {
+			if (event.getKind() == DebugEvent.CREATE
+					&& checkThread(event.getSource())) {
 				IScriptThread thread = (IScriptThread) event.getSource();
 				setupBreakOnMethodEntry(thread);
 				setupBreakOnMethodExit(thread);
 			}
 		}
+	}
+
+	/**
+	 * Checks that the specified object is {@link IScriptThread} and its model
+	 * identifier is {@link JavaScriptDebugConstants#DEBUG_MODEL_ID}
+	 * 
+	 * @param source
+	 * @return
+	 */
+	private boolean checkThread(Object source) {
+		if (source instanceof IScriptThread) {
+			final IScriptThread thread = (IScriptThread) source;
+			return JavaScriptDebugConstants.DEBUG_MODEL_ID.equals(thread
+					.getModelIdentifier());
+		}
+		return false;
 	}
 
 	private void setupBreakOnMethodEntry(IScriptThread thread) {
@@ -170,6 +187,9 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 			IDebugTarget target = launch.getDebugTarget();
 			if (target == null)
 				continue;
+			if (!JavaScriptDebugConstants.DEBUG_MODEL_ID.equals(target
+					.getModelIdentifier()))
+				continue;
 
 			IThread[] threads = null;
 			try {
@@ -182,7 +202,7 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 				continue;
 
 			for (int t = 0; t < threads.length; t++) {
-				if (threads[t] instanceof IScriptThread) {
+				if (checkThread(threads[t])) {
 					IScriptThread scriptThread = (IScriptThread) threads[t];
 					visitor.visit(scriptThread);
 				}
