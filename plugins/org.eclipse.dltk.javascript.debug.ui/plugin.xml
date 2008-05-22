@@ -97,10 +97,14 @@
       id="org.eclipse.dltk.javascript.console.ui.objectContribution1"
       nameFilter="*"
       objectClass="org.eclipse.dltk.core.ISourceModule">
+      <filter
+        name="org.eclipse.dltk.ui.nature"
+        value="org.eclipse.dltk.javascript.core.nature">
+      </filter>
       <action
         class="org.eclipse.dltk.javascript.internal.console.ui.actions.PasteJavaScriptToConsole"
         id="org.eclipse.dltk.javascript.console.ui.internal.actions.PasteTclTextToConsoleAction"
-        label="%TclConsole.Actions.PasteToTclConsole" />
+        label="%JavascriptConsole.Actions.PasteToJavascriptConsole" />
     </objectContribution>
 
     <viewerContribution
@@ -113,7 +117,7 @@
         menubarPath="additions"/-->
       <action
         id="org.eclipse.dltk.javascript.console.ui.internal.actions.PasteToTclConsoleAction"
-        label="%TclConsole.Actions.PasteToTclConsole"
+        label="%JavascriptConsole.Actions.PasteToJavascriptConsole"
         menubarPath="additions"
         class="org.eclipse.dltk.javascript.internal.console.ui.actions.PasteJavaScriptTextToConsoleAction">
       </action>
@@ -297,7 +301,7 @@
   <extension point="org.eclipse.ui.console.consoleFactories">
     <consoleFactory
       class="org.eclipse.dltk.javascript.internal.console.ui.JavaScriptConsoleFactory"
-      label="%TclConsole.Console" />
+      label="%JavascriptConsole.Console" />
   </extension>
 
   <extension point="org.eclipse.dltk.console.ui.scriptConsole">
