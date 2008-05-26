@@ -61,11 +61,11 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 	}
 
 	public JavaScriptCompletionEngine(/*
-	 * ISearchableEnvironment
-	 * nameEnvironment, CompletionRequestor
-	 * requestor, Map settings, IScriptProject
-	 * scriptProject
-	 */) {
+										 * ISearchableEnvironment
+										 * nameEnvironment, CompletionRequestor
+										 * requestor, Map settings,
+										 * IScriptProject scriptProject
+										 */) {
 	}
 
 	protected int getEndOfEmptyToken() {
@@ -87,11 +87,11 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 	AssitUtils.PositionCalculator calculator;;
 
 	public void complete(ISourceModule cu, int position, int i) {
-//		System.out.println("Completion position:" + position);
+		// System.out.println("Completion position:" + position);
 		this.actualCompletionPosition = position;
 		this.requestor.beginReporting();
 		String content = cu.getSourceContents();
-		if( position < 0 || position > content.length() ) {
+		if (position < 0 || position > content.length()) {
 			return;
 		}
 		if (position > 0) {
@@ -116,7 +116,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 
 		String startPart = calculator.getCompletion();
 		this.setSourceRange(position - startPart.length(), position);
-//		System.out.println(startPart);
+		// System.out.println(startPart);
 		if (calculator.isMember()) {
 			doCompletionOnMember(buildContext, cu, position, content, position,
 					collection);
@@ -132,12 +132,29 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			String startPart) {
 		HashSet completedNames = new HashSet();
 
-		char[] token = startPart.toCharArray();
+		String completion = startPart;
+		int k = completion.indexOf('[');
+		while (k > 0) {
+			int k1 = completion.indexOf(']');
+			if (k1 == -1) {
+				completion = completion.substring(k + 1);
+			} else {
+				String substring = completion.substring(0, k + 1);
+				completion = substring + completion.substring(k1);
+			}
+			k = completion.indexOf('[');
+			if (k == completion.length() - 1)
+				continue;
+			if (completion.charAt(k + 1) == ']')
+				break;
+		}
+		char[] token = completion.toCharArray();
+
 		if (useEngine) {
-			doCompletionOnKeyword(position, pos, startPart);
+			doCompletionOnKeyword(position, pos, completion);
 			JavaScriptMixinModel instance = JavaScriptMixinModel.getInstance();
 			String[] findElements = instance.findElements(MixinModel.SEPARATOR
-					+ startPart);
+					+ completion);
 
 			ArrayList methods = new ArrayList();
 			ArrayList fields = new ArrayList();
@@ -150,8 +167,9 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 						string);
 				if (mixinElement == null)
 					continue;
-//				Object[] allObjects = mixinElement.getObjects(buildContext.getModule());
-				Object[] allObjects = mixinElement.getAllObjects();
+				Object[] allObjects = mixinElement.getObjects(buildContext
+						.getModule());
+				// Object[] allObjects = mixinElement.getAllObjects();
 				if (allObjects.length > 0) {
 					for (int i = 0; i < allObjects.length; i++) {
 						Object object = allObjects[i];
@@ -184,8 +202,8 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				choices[a] = (char[]) fields.get(a);
 			}
 			findLocalVariables(token, choices, true, false);
-			// doCompletionOnFunction(position, pos, startPart);
-			// doCompletionOnGlobalVariable(position, pos, startPart,
+			// doCompletionOnFunction(position, pos, completion);
+			// doCompletionOnGlobalVariable(position, pos, completion,
 			// completedNames);
 		}
 		// report parameters and local variables
@@ -216,8 +234,8 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			names.put(name, rfs.get(name));
 		}
 		ReferenceResolverContext createResolverContext = buildContext;
-		Set resolveGlobals = createResolverContext.resolveGlobals(calculator
-				.getCompletion());
+
+		Set resolveGlobals = createResolverContext.resolveGlobals(completion);
 		it = resolveGlobals.iterator();
 		HashSet classes = new HashSet();
 		HashSet functions = new HashSet();
@@ -238,7 +256,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			}
 		}
 		names.remove("!!!returnValue");
-		completeFromMap(position, startPart, names);
+		completeFromMap(position, completion, names);
 		char[][] choices = new char[names.size()][];
 		int ia = 0;
 		for (Iterator iterator = names.keySet().iterator(); iterator.hasNext();) {
@@ -254,7 +272,8 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			choices[ia] = name.getName().toCharArray();
 			ia++;
 		}
-		findElements(token, choices, true, false, CompletionProposal.TYPE_REF, Collections.EMPTY_MAP,Collections.EMPTY_MAP);
+		findElements(token, choices, true, false, CompletionProposal.TYPE_REF,
+				Collections.EMPTY_MAP, Collections.EMPTY_MAP);
 		choices = new char[functions.size()][];
 		ia = 0;
 		HashMap parameterNames = new HashMap();
@@ -262,14 +281,16 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		for (Iterator iterator = functions.iterator(); iterator.hasNext();) {
 			IReference name = (IReference) iterator.next();
 			choices[ia] = name.getName().toCharArray();
-			if (name instanceof UnknownReference)
-			{
-				parameterNames.put(choices[ia], ((UnknownReference)name).getParameterNames());
-				proposalInfo.put(choices[ia], ((UnknownReference)name).getProposalInfo());
+			if (name instanceof UnknownReference) {
+				parameterNames.put(choices[ia], ((UnknownReference) name)
+						.getParameterNames());
+				proposalInfo.put(choices[ia], ((UnknownReference) name)
+						.getProposalInfo());
 			}
 			ia++;
 		}
-		findElements(token, choices, true, false, CompletionProposal.METHOD_REF,parameterNames,proposalInfo);
+		findElements(token, choices, true, false,
+				CompletionProposal.METHOD_REF, parameterNames, proposalInfo);
 	}
 
 	private void doCompletionOnMember(ReferenceResolverContext buildContext,
@@ -281,11 +302,15 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		int k = corePart.indexOf('[');
 		while (k > 0) {
 			int k1 = corePart.indexOf(']');
-			String substring = corePart.substring(0, k + 1);
-			corePart = substring + corePart.substring(k1);
+			if (k1 == -1) {
+				corePart = corePart.substring(k + 1);
+			} else {
+				String substring = corePart.substring(0, k + 1);
+				corePart = substring + corePart.substring(k1);
+			}
 			k = corePart.indexOf('[');
 			if (k == corePart.length() - 1)
-				break;
+				continue;
 			if (corePart.charAt(k + 1) == ']')
 				break;
 		}
@@ -327,12 +352,12 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 					dubR.put(refa, name);
 				}
 			}
-		} 
-//		else 
-// the dom resolver should always be asked, even if the search did return something.
+		}
+		// else
+		// the dom resolver should always be asked, even if the search did
+		// return something.
 		{
-			Set resolveGlobals = buildContext.resolveGlobals(calculator
-					.getCorePart() + '.');
+			Set resolveGlobals = buildContext.resolveGlobals(corePart + '.');
 			Iterator it = resolveGlobals.iterator();
 			while (it.hasNext()) {
 				Object o = it.next();
@@ -341,12 +366,12 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 					dubR.put(r.getName(), r);
 				}
 			}
-//			long currentTimeMillis = System.currentTimeMillis();
-//			String[] findElements = JavaScriptMixinModel.getInstance()
-//					.findElements(corePart);
-//			long currentTimeMillis2 = System.currentTimeMillis();
-//			System.out.println(currentTimeMillis2 - currentTimeMillis);
-//			System.out.println(findElements.length);
+			// long currentTimeMillis = System.currentTimeMillis();
+			// String[] findElements = JavaScriptMixinModel.getInstance()
+			// .findElements(corePart);
+			// long currentTimeMillis2 = System.currentTimeMillis();
+			// System.out.println(currentTimeMillis2 - currentTimeMillis);
+			// System.out.println(findElements.length);
 		}
 		completeFromMap(position, completionPart, dubR);
 		HashMap functions = new HashMap();
@@ -374,10 +399,11 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				IReference name = (IReference) next;
 				String refa = name.getName();
 				choices[ia] = refa.toCharArray();
-				if (name instanceof UnknownReference)
-				{
-					parameterNames.put(choices[ia], ((UnknownReference)name).getParameterNames());
-					proposalInfo.put(choices[ia], ((UnknownReference)name).getProposalInfo());
+				if (name instanceof UnknownReference) {
+					parameterNames.put(choices[ia], ((UnknownReference) name)
+							.getParameterNames());
+					proposalInfo.put(choices[ia], ((UnknownReference) name)
+							.getProposalInfo());
 				}
 				ia++;
 			}
@@ -388,7 +414,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			choices[ia++] = refa.toCharArray();
 		}
 		findElements(completionPart.toCharArray(), choices, true, false,
-				CompletionProposal.FIELD_REF, parameterNames,proposalInfo);
+				CompletionProposal.FIELD_REF, parameterNames, proposalInfo);
 		choices = new char[functions.size()][];
 		parameterNames = new HashMap();
 		proposalInfo = new HashMap();
@@ -399,16 +425,17 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				IReference name = (IReference) next;
 				String refa = name.getName();
 				choices[ia] = refa.toCharArray();
-				if (name instanceof UnknownReference)
-				{
-					parameterNames.put(choices[ia], ((UnknownReference)name).getParameterNames());
-					proposalInfo.put(choices[ia], ((UnknownReference)name).getProposalInfo());
+				if (name instanceof UnknownReference) {
+					parameterNames.put(choices[ia], ((UnknownReference) name)
+							.getParameterNames());
+					proposalInfo.put(choices[ia], ((UnknownReference) name)
+							.getProposalInfo());
 				}
 				ia++;
 			}
 		}
 		findElements(completionPart.toCharArray(), choices, true, false,
-				CompletionProposal.METHOD_REF,parameterNames,proposalInfo);
+				CompletionProposal.METHOD_REF, parameterNames, proposalInfo);
 	}
 
 	private void completeFromMap(int position, String completionPart,
