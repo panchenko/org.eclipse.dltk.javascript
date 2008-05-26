@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dbgp Plug-in
 Bundle-SymbolicName: org.eclipse.dltk.javascript.rhino.dbgp
-Bundle-Version: 0.95.0
+Bundle-Version: 0.95.0.qualifier
 Require-Bundle: org.eclipse.dltk.javascript.rhino
