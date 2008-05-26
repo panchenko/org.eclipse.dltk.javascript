@@ -78,7 +78,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						if (construct instanceof ScriptableObject) {
 							ScriptableObject sm = (ScriptableObject) construct;
 							HashMap map = new HashMap();
-							fillMap(map, sm,false);
+							fillMap(map, sm, false);
 							createReferences("", map, result);
 						}
 					}
@@ -152,30 +152,26 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 	private Object[] fillMap(HashMap mp, Scriptable scope, boolean walkParent) {
 		Scriptable prototype = scope.getPrototype();
 		if (prototype != null) {
-			fillMap(mp, prototype,walkParent);
+			fillMap(mp, prototype, walkParent);
 		}
-		if (walkParent)
-		{
+		if (walkParent) {
 			Scriptable parentScope = scope.getParentScope();
 			if (parentScope != null) {
-				fillMap(mp, parentScope,walkParent);
+				fillMap(mp, parentScope, walkParent);
 			}
 		}
 		Object[] allIds = null;
 		for (int a = 0; a < providers.length; a++) {
 			if (providers[a].canResolve(module)) {
 				allIds = providers[a].resolveIds(scope);
-				if (allIds != null) break;
+				if (allIds != null)
+					break;
 			}
 		}
-		if (allIds == null)
-		{
-			if (scope instanceof ScriptableObject)
-			{
-				allIds = ((ScriptableObject)scope).getAllIds();
-			}
-			else
-			{
+		if (allIds == null) {
+			if (scope instanceof ScriptableObject) {
+				allIds = ((ScriptableObject) scope).getAllIds();
+			} else {
 				allIds = scope.getIds();
 			}
 		}
@@ -185,12 +181,12 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 				Object object = null;
 				for (int a = 0; a < providers.length; a++) {
 					if (providers[a].canResolve(module)) {
-						object = providers[a].getProposal(scope,key);
-						if (object != null) break;
+						object = providers[a].getProposal(scope, key);
+						if (object != null)
+							break;
 					}
 				}
-				if (object == null)
-				{
+				if (object == null) {
 					object = scope.get(key, scope);
 				}
 				mp.put(key, object);
@@ -235,24 +231,21 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		} else {
 			while (pos != -1) {
 				Object object = globals.get(key);
-				if (object instanceof IProposalHolder)
-				{
-					object = ((IProposalHolder)object).getObject();
+				if (object instanceof IProposalHolder) {
+					object = ((IProposalHolder) object).getObject();
 				}
 				if (object instanceof Scriptable) {
 					Scriptable sc = (Scriptable) object;
 					globals.clear();
-					fillMap(globals, sc,false);
-				}
-				else if (object == null)
-				{
-					// not at match at all clear it 
+					fillMap(globals, sc, false);
+					id = id.substring(pos + 1);
+					pos = id.indexOf('.');
+					key = pos == -1 ? id : id.substring(0, pos);
+				} else {
+					// not at match at all clear it
 					globals.clear();
 					break;
 				}
-				id = id.substring(pos + 1);
-				pos = id.indexOf('.');
-				key = pos == -1 ? id : id.substring(0, pos);
 			}
 			createReferences(key, globals, rs);
 		}
@@ -267,15 +260,13 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			if (s.startsWith(key)) {
 				UnknownReference uref = new UnknownReference(s, false);
 				Object object = globals.get(s);
-				if (object instanceof IProposalHolder)
-				{
-					IProposalHolder fapn = (IProposalHolder)object;
+				if (object instanceof IProposalHolder) {
+					IProposalHolder fapn = (IProposalHolder) object;
 					uref.setParameterNames(fapn.getParameterNames());
 					uref.setProposalInfo(fapn.getProposalInfo());
 					object = fapn.getObject();
 					// if object is null assume that it is a method.
-					if (object == null)
-					{
+					if (object == null) {
 						uref.setFunctionRef();
 					}
 				}
