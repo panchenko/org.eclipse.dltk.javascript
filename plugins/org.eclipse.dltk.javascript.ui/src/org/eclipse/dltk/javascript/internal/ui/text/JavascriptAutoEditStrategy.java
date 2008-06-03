@@ -365,10 +365,49 @@ public class JavascriptAutoEditStrategy extends
 
 	private boolean isClosed(IDocument d, int offset, int length) {
 		String sm = d.get();
+		int start = sm.lastIndexOf("function ", offset);
+		int lastOpen = sm.lastIndexOf("{", start);
+		if (lastOpen == -1)
+			lastOpen = 0;
+		int lastClosed = sm.lastIndexOf("}", start);
+		if (lastClosed == -1)
+			lastClosed = 0;
+		while (lastOpen > lastClosed) {
+			start = sm.lastIndexOf("function ", lastOpen);
+			lastOpen = sm.lastIndexOf("{", start);
+			if (lastOpen == -1)
+				lastOpen = 0;
+			lastClosed = sm.lastIndexOf("}", start);
+			if (lastClosed == -1)
+				lastClosed = 0;
+
+		}
+
+		int end = sm.indexOf("function ", offset);
+		if (end == -1) {
+			end = sm.length();
+		} else {
+			lastOpen = sm.lastIndexOf("{", end);
+			if (lastOpen == -1)
+				lastOpen = 0;
+			lastClosed = sm.lastIndexOf("}", end);
+			if (lastClosed == -1)
+				lastClosed = 0;
+			while (lastOpen > lastClosed) {
+				end = sm.indexOf("function ", lastOpen);
+				lastOpen = sm.lastIndexOf("{", end);
+				if (lastOpen == -1)
+					lastOpen = 0;
+				lastClosed = sm.lastIndexOf("}", end);
+				if (lastClosed == -1)
+					lastClosed = 0;
+
+			}
+		}
 		int level = 0;
 		boolean qm = false;
 		char charp = 0;
-		for (int a = 0; a < sm.length(); a++) {
+		for (int a = start; a < end; a++) {
 			char charAt = sm.charAt(a);
 			if (!qm) {
 				if (charAt == '{')
@@ -1182,7 +1221,9 @@ public class JavascriptAutoEditStrategy extends
 
 				// add closing peer
 				c.text = c.text + AutoEditUtils.getBracePair(c.text.charAt(0));
-				c.length = 0;
+				// dont set the length, because of the length > 0 then a
+				// selection has to be replaced
+				// c.length = 0;
 
 				c.shiftsCaret = false;
 				c.caretOffset = c.offset + 1;
