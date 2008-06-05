@@ -70,7 +70,7 @@
      </handler>
      <handler
            class="org.eclipse.dltk.javascript.jsjdtdebugger.handler.ToggleSuspendOnException"
-           commandId="org.eclipse.dltk.javascript.jsjdtdebugger.suspendOnExpeption">
+           commandId="org.eclipse.dltk.javascript.jsjdtdebugger.suspendOnException">
      </handler>
   </extension>
   <extension
@@ -90,7 +90,7 @@
                  tooltip="%suspendOnMethodExit.tooltip">
            </command>
            <command
-                 commandId="org.eclipse.dltk.javascript.jsjdtdebugger.suspendOnMethodExit"
+                 commandId="org.eclipse.dltk.javascript.jsjdtdebugger.suspendOnException"
                  style="toggle"
                  tooltip="%suspendOnException.tooltip">
            </command>
