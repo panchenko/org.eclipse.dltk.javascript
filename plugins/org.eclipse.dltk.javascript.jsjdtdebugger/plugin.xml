@@ -40,7 +40,7 @@
       </enabledWhen>
     </page>
   </extension>
-  <extension
+<extension
         point="org.eclipse.ui.commands">
      <command
            description="%suspendOnMethodEntry.description"
@@ -52,6 +52,11 @@
            id="org.eclipse.dltk.javascript.jsjdtdebugger.suspendOnMethodExit"
            name="%suspendOnMethodExit.name">
      </command>
+     <command
+           description="%suspendOnException.description"
+           id="org.eclipse.dltk.javascript.jsjdtdebugger.suspendOnException"
+           name="%suspendOnException.name">
+     </command>
   </extension>
   <extension
         point="org.eclipse.ui.handlers">
@@ -62,6 +67,10 @@
      <handler
            class="org.eclipse.dltk.javascript.jsjdtdebugger.handler.ToggleSuspendOnMethodExit"
            commandId="org.eclipse.dltk.javascript.jsjdtdebugger.suspendOnMethodExit">
+     </handler>
+     <handler
+           class="org.eclipse.dltk.javascript.jsjdtdebugger.handler.ToggleSuspendOnException"
+           commandId="org.eclipse.dltk.javascript.jsjdtdebugger.suspendOnExpeption">
      </handler>
   </extension>
   <extension
@@ -80,8 +89,29 @@
                  style="toggle"
                  tooltip="%suspendOnMethodExit.tooltip">
            </command>
+           <command
+                 commandId="org.eclipse.dltk.javascript.jsjdtdebugger.suspendOnMethodExit"
+                 style="toggle"
+                 tooltip="%suspendOnException.tooltip">
+           </command>
         </menu>
      </menuContribution>
+  </extension> 
+<!-- 
+  <extension
+        point="org.eclipse.ui.viewActions">
+     <viewContribution
+           id="org.eclipse.dltk.javascript.jsjdtdebugger.breakpointsContribution"
+           targetID="org.eclipse.debug.ui.BreakpointView">
+        <action
+              class="org.eclipse.dltk.javascript.jsjdtdebugger.action.JavaScriptMenuAction"
+              id="org.eclipse.dltk.javascript.jsjdtdebugger.javaScriptAction"
+              label="JavaScript"
+              menubarPath="defaultJavaScriptGroup"
+              style="pulldown"
+              tooltip="JavaScript">
+        </action>
+     </viewContribution>
   </extension>
-
+-->
 </plugin>

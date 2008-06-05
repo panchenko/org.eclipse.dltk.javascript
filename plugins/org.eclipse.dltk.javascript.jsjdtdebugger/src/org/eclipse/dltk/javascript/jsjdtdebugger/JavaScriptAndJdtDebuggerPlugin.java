@@ -29,6 +29,7 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 
 	private static final String SUSPEND_ON_ENTRY = "suspendOnEntry"; //$NON-NLS-1$
 	private static final String SUSPEND_ON_EXIT = "suspendOnExit"; //$NON-NLS-1$
+	private static final String SUSPEND_ON_EXCEPTION = "suspendOnException"; //$NON-NLS-1$
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.dltk.javascript.jsjdtdebugger"; //$NON-NLS-1$
@@ -60,6 +61,10 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 	}
 
 	private void resetSuspendProperties(Preferences prefs) {
+		// TODO this shouldnt be done or needed to be done!!
+		// These preferences should be remembered but whatever i try its
+		// impossible (ToggleStates, AbstractHandlerWithState, Action that is
+		// pulldown)
 		prefs
 				.setValue(
 						IJavaScriptAndJdtDebuggerPreferenceConstants.PREF_BREAK_ON_METHOD_ENTRY,
@@ -67,6 +72,10 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 		prefs
 				.setValue(
 						IJavaScriptAndJdtDebuggerPreferenceConstants.PREF_BREAK_ON_METHOD_EXIT,
+						false);
+		prefs
+				.setValue(
+						IJavaScriptAndJdtDebuggerPreferenceConstants.PREF_BREAK_ON_EXCEPTION,
 						false);
 	}
 
@@ -99,6 +108,7 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 				IScriptThread thread = (IScriptThread) event.getSource();
 				setupBreakOnMethodEntry(thread);
 				setupBreakOnMethodExit(thread);
+				setupBreakOnException(thread);
 			}
 		}
 	}
@@ -145,6 +155,19 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 		}
 	}
 
+	private void setupBreakOnException(IScriptThread thread) {
+		IDbgpPropertyCommands propCmds = thread.getDbgpSession()
+				.getCoreCommands();
+		try {
+			Preferences prefs = getPluginPreferences();
+			String suspendOnException = prefs
+					.getString(IJavaScriptAndJdtDebuggerPreferenceConstants.PREF_BREAK_ON_EXCEPTION);
+			propCmds.setProperty(SUSPEND_ON_EXCEPTION, -1, suspendOnException);
+		} catch (DbgpException e) {
+			DLTKDebugPlugin.log(e);
+		}
+	}
+
 	private boolean isThisDebuggerLaunch(ILaunch launch) {
 		String engineId = launch
 				.getAttribute(DebuggingEngineRunner.LAUNCH_ATTR_DEBUGGING_ENGINE_ID);
@@ -169,6 +192,13 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 					setupBreakOnMethodExit(thread);
 				}
 			});
+		} else if (IJavaScriptAndJdtDebuggerPreferenceConstants.PREF_BREAK_ON_EXCEPTION
+				.equals(event.getProperty())) {
+			runForEachDebuggerThread(new IDebuggerThreadVisitor() {
+				public void visit(IScriptThread thread) {
+					setupBreakOnException(thread);
+				}
+			});
 		}
 	}
 
@@ -181,7 +211,7 @@ public class JavaScriptAndJdtDebuggerPlugin extends AbstractUIPlugin implements
 				.getLaunches();
 		for (int i = 0; i < launches.length; i++) {
 			ILaunch launch = launches[i];
-			if (!isThisDebuggerLaunch(launch))
+			if (false && !isThisDebuggerLaunch(launch))
 				continue;
 
 			IDebugTarget target = launch.getDebugTarget();
