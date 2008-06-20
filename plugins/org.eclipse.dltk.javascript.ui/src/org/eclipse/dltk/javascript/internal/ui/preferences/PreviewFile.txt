@@ -19,4 +19,3 @@ dojo.math.factorial = function(/* integer */n){
 	for(var i=1;i<=n;i++){ retVal *= i; }
 	return retVal;	//	integer
 }
-
