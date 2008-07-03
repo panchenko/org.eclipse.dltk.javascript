@@ -28,6 +28,7 @@
     <hover
       label="%javascriptVariabl1eHoverLabel"
       description="%javaVariableHoverDescription"
+      nature="org.eclipse.dltk.javascript.core.nature"
       class="org.eclipse.dltk.javascript.internal.debug.ui.JavaScriptDebugHover"
       id="org.eclipse.dltk.javascript.internal.debug.ui.JavaScriptDebugHover">
     </hover>
