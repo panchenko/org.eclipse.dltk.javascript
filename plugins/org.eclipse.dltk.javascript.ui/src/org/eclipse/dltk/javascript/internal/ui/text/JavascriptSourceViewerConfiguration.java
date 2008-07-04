@@ -232,12 +232,6 @@ public class JavascriptSourceViewerConfiguration extends
 		return null;
 	}
 
-	public IInformationPresenter getOutlinePresenter(ScriptSourceViewer viewer,
-			boolean b) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public IAutoEditStrategy[] getAutoEditStrategies(
 			ISourceViewer sourceViewer, String contentType) {
 		// TODO: check contentType. think, do we really need it? :)
