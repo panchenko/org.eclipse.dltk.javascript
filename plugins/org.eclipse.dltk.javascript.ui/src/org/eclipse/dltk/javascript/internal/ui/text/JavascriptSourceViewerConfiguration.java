@@ -118,7 +118,7 @@ public class JavascriptSourceViewerConfiguration extends
 	/*
 	 * @see org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration#getContentAssistPreference()
 	 */
-	public ContentAssistPreference getContentAssistPreference() {
+	protected ContentAssistPreference getContentAssistPreference() {
 		return JavaScriptContentAssistPreference.getDefault();
 	}
 
