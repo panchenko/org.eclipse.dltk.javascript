@@ -144,6 +144,21 @@
                id="org.eclipse.dltk.ui.actions.AddBlockComment">
          </action>
       </actionSet>
+        <actionSet
+              description="%JavaScriptActionSet.description"
+              id="org.eclipse.dltk.tcl.ui.JavaScriptActionSet"
+              label="%JavaScriptActionSet.label">
+           <action
+                 class="org.eclipse.dltk.javascript.ui.actions.OpenMethodAction"
+                 definitionId="org.eclipse.javascript.ui.navigate.open.method"
+                 icon="icons/ctool16/openmethod.gif"
+                 id="openMethod"
+                 label="%OpenMethodAction.label"
+                 menubarPath="navigate/open.ext2"
+                 toolbarPath="org.eclipse.search.searchActionSet/Search"
+                 tooltip="%OpenMethodAction.tooltip">
+           </action>
+        </actionSet>
  </extension>
    <extension
       id="org.eclipse.dltk.javascript.ui.editor.DocumentSetupParticipant"
@@ -190,7 +205,12 @@
             sequence="ESC CTRL+F"
             contextId="org.eclipse.dltk.ui.javascriptEditorScope"
             commandId="org.eclipse.dltk.ui.edit.text.script.format"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>                   
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="org.eclipse.javascript.ui.navigate.open.method"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+M">
+      </key>                   
  	</extension>
 	<extension
          point="org.eclipse.ui.newWizards">
@@ -328,6 +348,12 @@
             description="%ActionDefinition.quickformat.description"
             categoryId="org.eclipse.dltk.ui.category.source"
             id="org.eclipse.dltk.ui.edit.text.script.quick.format">
+      </command>
+      <command
+            categoryId="org.eclipse.ui.category.navigate"
+            description="%ActionDefinition.OpenMethod.desciption"
+            id="org.eclipse.javascript.ui.navigate.open.method"
+            name="%ActionDefinition.OpenMethod.name">
       </command>      
       
   </extension>
