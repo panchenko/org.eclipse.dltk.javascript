@@ -197,7 +197,11 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 			String key = (String) it.next();
 			String value = (String) qs.get(key);
 			if (key == cId) {
-				formatted = replaceSeq(formatted, key + ";", value);
+				String replaced = replaceSeq(formatted, key + ";", value);
+				if (replaced == formatted) {
+					replaced = replaceSeq(formatted, key, value);
+				}
+				formatted = replaced;
 			} else
 				formatted = replaceSeq(formatted, key, value);
 		}
