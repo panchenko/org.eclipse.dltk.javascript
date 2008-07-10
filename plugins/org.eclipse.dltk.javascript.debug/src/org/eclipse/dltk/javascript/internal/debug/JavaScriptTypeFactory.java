@@ -5,6 +5,7 @@ import org.eclipse.dltk.debug.core.model.AtomicScriptType;
 import org.eclipse.dltk.debug.core.model.ComplexScriptType;
 import org.eclipse.dltk.debug.core.model.IScriptType;
 import org.eclipse.dltk.debug.core.model.IScriptTypeFactory;
+import org.eclipse.dltk.debug.core.model.IScriptValue;
 import org.eclipse.dltk.debug.core.model.StringScriptType;
 
 public class JavaScriptTypeFactory implements IScriptTypeFactory {
@@ -28,6 +29,19 @@ public class JavaScriptTypeFactory implements IScriptTypeFactory {
 		if ("string".equals(type)) {
 			return new StringScriptType("string");
 		}
-		return new ComplexScriptType(type);
+		return new ComplexScriptType(type) {
+			public String formatValue(IScriptValue value) {
+				StringBuffer sb = new StringBuffer();
+				sb.append(value.getRawValue());
+				String id = value.getInstanceId();
+				if (id != null) {
+					sb.append(" (id = " + id + ")"); // TODO add constant
+					// //$NON-NLS-1$
+														// //$NON-NLS-2$
+				}
+
+				return sb.toString();
+			}
+		};
 	}
 }
