@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
@@ -44,25 +43,11 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 	private ISourceElementRequestor fRequestor = null;
 	private IProblemReporter fReporter = null;
 
-	/**
-	 * Python lexer handler helper.
-	 * 
-	 * @param problemReporter
-	 * 
-	 * @param enveronment
-	 */
-
-	public JavaScriptSourceElementParser(/*
-	 * ISourceElementRequestor
-	 * requestor, IProblemReporter
-	 * problemReporter
-	 */) {
-// this.fRequestor = requestor;
-// this.fReporter = problemReporter;
+	public JavaScriptSourceElementParser() {
 	}
 
-	public void parseSourceModule(char[] contents,
-			ISourceModuleInfo info, char[] filename) {
+	public void parseSourceModule(char[] contents, ISourceModuleInfo info,
+			char[] filename) {
 		String content = new String(contents);
 		CompilerEnvirons cenv = new CompilerEnvirons();
 		if (fReporter != null) {
@@ -72,15 +57,11 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 
 			public void error(String arg0, String arg1, int arg2, String arg3,
 					int arg4) {
-				try {
-					if (fReporter != null)
-						fReporter.reportProblem(new DefaultProblem(arg1, arg0,
-								0, new String[] {}, ProblemSeverities.Error,
-								arg4 - (arg3 != null ? arg3.length() : 0),
-								arg4, arg2));
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
+				if (fReporter != null)
+					fReporter.reportProblem(new DefaultProblem(arg1, arg0, 0,
+							new String[] {}, ProblemSeverities.Error, arg4
+									- (arg3 != null ? arg3.length() : 0), arg4,
+							arg2));
 			}
 
 			public EvaluatorException runtimeError(String arg0, String arg1,
@@ -91,21 +72,16 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 
 			public void warning(String arg0, String arg1, int arg2,
 					String arg3, int arg4) {
-				try {
-					if (fReporter != null)
-						fReporter.reportProblem(new DefaultProblem(arg1, arg0,
-								0, new String[] {}, ProblemSeverities.Warning,
-								arg4, arg4 + 1, arg2));
-				} catch (CoreException e) {
-					e.printStackTrace();
-				}
+				if (fReporter != null)
+					fReporter.reportProblem(new DefaultProblem(arg1, arg0, 0,
+							new String[] {}, ProblemSeverities.Warning, arg4,
+							arg4 + 1, arg2));
 			}
 
 		};
 		JavaScriptModuleDeclaration moduleDeclaration = new JavaScriptModuleDeclaration(
 				content.length());
 
-		
 		Parser parser = new Parser(cenv, reporter);
 		try {
 
@@ -190,8 +166,10 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 				params[i] = paramsAndVars[i];
 			}
 			methodInfo.parameterNames = params;
-			methodInfo.nameSourceStart = functionNode.nameStart+1;// +1 because the parser starts with the empty space before the name
-			methodInfo.nameSourceEnd = functionNode.nameEnd+1;// +1 because the parser starts with the empty space before the name
+			methodInfo.nameSourceStart = functionNode.nameStart + 1;
+			// +1 because the parser starts with the empty space before the name
+			methodInfo.nameSourceEnd = functionNode.nameEnd + 1;
+			// +1 because the parser starts with the empty space before the name
 			fRequestor.enterMethod(methodInfo);
 			processNode(functionNode, function);
 			fRequestor.exitMethod(functionNode.getEncodedSourceEnd());
@@ -211,8 +189,10 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 			ISourceElementRequestor.FieldInfo fieldInfo = new ISourceElementRequestor.FieldInfo();
 			fieldInfo.name = paramsAndVars[i];
 			Position p = parse.getPosition(i);
-			fieldInfo.nameSourceStart = p.start+1; // +1 because the parser starts with the empty space before the name
-			fieldInfo.nameSourceEnd = p.start + fieldInfo.name.length(); // no plus 1 because the end is including not until.
+			fieldInfo.nameSourceStart = p.start + 1;
+			// +1 because the parser starts with the empty space before the name
+			fieldInfo.nameSourceEnd = p.start + fieldInfo.name.length();
+			// no plus 1 because the end is including not until.
 			fieldInfo.declarationStart = p.start;
 			fRequestor.enterField(fieldInfo);
 			if (collection != null) {
