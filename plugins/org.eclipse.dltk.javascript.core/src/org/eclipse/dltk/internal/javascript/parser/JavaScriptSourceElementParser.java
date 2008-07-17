@@ -50,9 +50,6 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 			char[] filename) {
 		String content = new String(contents);
 		CompilerEnvirons cenv = new CompilerEnvirons();
-		if (fReporter != null) {
-			fReporter.clearMarkers();
-		}
 		ErrorReporter reporter = new ErrorReporter() {
 
 			public void error(String arg0, String arg1, int arg2, String arg3,
