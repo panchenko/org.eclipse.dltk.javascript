@@ -163,8 +163,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				String string = findElements[a];
 				if (string.lastIndexOf(MixinModel.SEPARATOR) > 0)
 					continue;
-				IMixinElement mixinElement = instance.getRawInstance().get(
-						string);
+				IMixinElement mixinElement = instance.getRawModel().get(string);
 				if (mixinElement == null)
 					continue;
 				Object[] allObjects = mixinElement.getObjects(buildContext
