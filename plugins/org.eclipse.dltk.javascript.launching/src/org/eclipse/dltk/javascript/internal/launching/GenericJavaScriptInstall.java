@@ -12,9 +12,11 @@ import org.eclipse.dltk.launching.IInterpreterRunner;
 
 public class GenericJavaScriptInstall extends AbstractInterpreterInstall {
 
+	private static final String BUILTINS_JS = "builtins.js"; //$NON-NLS-1$
+
 	public String getBuiltinModuleContent(String name) {
 		InputStream stream = GenericJavaScriptInstall.class
-				.getResourceAsStream("builtins.js");
+				.getResourceAsStream(BUILTINS_JS);
 		DataInputStream st = new DataInputStream(stream);
 		StringBuffer buf = new StringBuffer();
 		try {
@@ -27,14 +29,22 @@ public class GenericJavaScriptInstall extends AbstractInterpreterInstall {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// should not happen
 		}
 		return buf.toString();
 	}
 
 	public String[] getBuiltinModules() {
-		return new String[] { "builtins.js" };
+		return new String[] { "builtins.js" }; //$NON-NLS-1$
+	}
+
+	public long lastModified() {
+		try {
+			return GenericJavaScriptInstall.class.getResource(BUILTINS_JS)
+					.openConnection().getLastModified();
+		} catch (IOException e) {
+			return 0;
+		}
 	}
 
 	public GenericJavaScriptInstall(IInterpreterInstallType type, String id) {
