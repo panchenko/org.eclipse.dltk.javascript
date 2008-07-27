@@ -5,6 +5,7 @@
   <extension point="org.eclipse.core.runtime.preferences">
     <initializer
       class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptConsolePreferenceInitializer" />
+    <initializer class="org.eclipse.dltk.javascript.internal.debug.ui.JavaScriptDebugUIPreferenceInitializer" />
   </extension>
   
   <extension point="org.eclipse.ui.viewActions">
@@ -257,6 +258,11 @@
       class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptConsolePreferences"
       id="org.eclipse.dltk.javascript.console.ui.internal.preferences.JavaScriptConsolePreferences"
       name="%Console.PreferencePage" />
+    <page
+      category="org.eclipse.dltk.javascript.preferences.debug"
+      class="org.eclipse.dltk.debug.ui.preferences.ScriptDetailFormattersPreferencePage:org.eclipse.dltk.javascript.core.nature"
+      id="org.eclipse.dltk.javascript.preferences.debug.detailFormatters"
+      name="%DetailFormattersPreferencePage.name" />       
   </extension>
 
   <extension point="org.eclipse.ui.propertyPages">
@@ -399,6 +405,12 @@
     <handler 
       commandId="org.eclipse.dltk.javascript.debug.ui.commands.toggleLocalVariables"
       class="org.eclipse.dltk.javascript.internal.debug.ui.handlers.ToggleLocalVariablesHandler" />      
+  </extension>
+
+  <extension point="org.eclipse.dltk.debug.ui.language">
+    <language
+      class="org.eclipse.dltk.javascript.internal.debug.ui.JavaScriptDebugUILanguageToolkit"
+      nature="org.eclipse.dltk.javascript.core.nature"/>
   </extension>
 
 </plugin>
