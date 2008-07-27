@@ -23,4 +23,9 @@ public class JavaScriptDebugUILanguageToolkit extends
 	public IPreferenceStore getPreferenceStore() {
 		return JavaScriptDebugUIPlugin.getDefault().getPreferenceStore();
 	}
+
+	public String[] getVariablesViewPreferencePages() {
+		return new String[] { "org.eclipse.dltk.javascript.preferences.debug.detailFormatters" };
+	}
+
 }

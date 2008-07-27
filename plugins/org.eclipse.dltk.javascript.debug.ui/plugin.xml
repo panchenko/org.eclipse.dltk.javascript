@@ -11,10 +11,10 @@
   <extension point="org.eclipse.ui.viewActions">
     <viewContribution
       targetID="org.eclipse.debug.ui.VariableView"
-      id="org.eclipse.jdt.debug.ui.VariableViewActions">
+      id="org.eclipse.dltk.javascript.debug.ui.VariableViewActions">
       <action
         style="toggle"
-        id="org.eclipse.jdt.debug.ui.variableViewActions.ShowStatic"
+        id="org.eclipse.dltk.javascript.debug.ui.variableViewActions.ShowStatic"
         class="org.eclipse.dltk.javascript.internal.console.ui.actions.ShowFunctionsAction"
         helpContextId="show_functions_context"
         icon="icons/javascript.gif"
@@ -370,7 +370,11 @@
     <command
       id="org.eclipse.dltk.javascript.debug.ui.commands.toggleLocalVariables"
       description="%showLocalVarsCommand.name"
-      name="%showLocalVarsCommand.description" />      
+      name="%showLocalVarsCommand.description" />
+    <command
+      id="org.eclipse.dltk.javascript.debug.ui.commands.showPreferences"
+      description="%showPreferences.description"
+      name="%showPreferencesCommand.name" />         
   </extension>
 
   <extension point="org.eclipse.ui.menus">
@@ -391,7 +395,9 @@
       <command 
         commandId="org.eclipse.dltk.javascript.debug.ui.commands.toggleLocalVariables"
         tooltip="%showLocalVarsCommand.tooltip" 
-        style="toggle" />                      
+        style="toggle" />    
+      <command
+        commandId="org.eclipse.dltk.javascript.debug.ui.commands.showPreferences" />                          
     </menuContribution>  
   </extension>
 
@@ -405,6 +411,9 @@
     <handler 
       commandId="org.eclipse.dltk.javascript.debug.ui.commands.toggleLocalVariables"
       class="org.eclipse.dltk.javascript.internal.debug.ui.handlers.ToggleLocalVariablesHandler" />      
+    <handler
+      commandId="org.eclipse.dltk.javascript.debug.ui.commands.showPreferences"
+      class="org.eclipse.dltk.debug.ui.handlers.VariablesViewOptionsHandler:org.eclipse.dltk.javascript.core.nature" />
   </extension>
 
   <extension point="org.eclipse.dltk.debug.ui.language">
