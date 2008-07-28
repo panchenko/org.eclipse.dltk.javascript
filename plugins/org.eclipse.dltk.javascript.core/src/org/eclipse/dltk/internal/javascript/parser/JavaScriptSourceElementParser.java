@@ -18,9 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
-import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
-import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.ISourceElementParser;
 import org.eclipse.dltk.core.ISourceModuleInfoCache.ISourceModuleInfo;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
@@ -31,8 +29,6 @@ import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
 import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
 
 import com.xored.org.mozilla.javascript.CompilerEnvirons;
-import com.xored.org.mozilla.javascript.ErrorReporter;
-import com.xored.org.mozilla.javascript.EvaluatorException;
 import com.xored.org.mozilla.javascript.FunctionNode;
 import com.xored.org.mozilla.javascript.Parser;
 import com.xored.org.mozilla.javascript.ScriptOrFnNode;
@@ -50,36 +46,10 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 			char[] filename) {
 		String content = new String(contents);
 		CompilerEnvirons cenv = new CompilerEnvirons();
-		ErrorReporter reporter = new ErrorReporter() {
-
-			public void error(String arg0, String arg1, int arg2, String arg3,
-					int arg4) {
-				if (fReporter != null)
-					fReporter.reportProblem(new DefaultProblem(arg1, arg0, 0,
-							new String[] {}, ProblemSeverities.Error, arg4
-									- (arg3 != null ? arg3.length() : 0), arg4,
-							arg2));
-			}
-
-			public EvaluatorException runtimeError(String arg0, String arg1,
-					int arg2, String arg3, int arg4) {
-				// should never happen;
-				return null;
-			}
-
-			public void warning(String arg0, String arg1, int arg2,
-					String arg3, int arg4) {
-				if (fReporter != null)
-					fReporter.reportProblem(new DefaultProblem(arg1, arg0, 0,
-							new String[] {}, ProblemSeverities.Warning, arg4,
-							arg4 + 1, arg2));
-			}
-
-		};
 		JavaScriptModuleDeclaration moduleDeclaration = new JavaScriptModuleDeclaration(
 				content.length());
 
-		Parser parser = new Parser(cenv, reporter);
+		Parser parser = new Parser(cenv, new JavaScriptErrorReporter(fReporter));
 		try {
 
 			ScriptOrFnNode parse = parser.parse(new CharArrayReader(contents),
