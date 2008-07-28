@@ -26,8 +26,6 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolve
 import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
 
 import com.xored.org.mozilla.javascript.CompilerEnvirons;
-import com.xored.org.mozilla.javascript.ErrorReporter;
-import com.xored.org.mozilla.javascript.EvaluatorException;
 import com.xored.org.mozilla.javascript.FunctionNode;
 import com.xored.org.mozilla.javascript.Parser;
 import com.xored.org.mozilla.javascript.ScriptOrFnNode;
