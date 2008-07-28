@@ -26,24 +26,31 @@ public class JavaScriptErrorReporter implements ErrorReporter {
 		fReporter = reporter;
 	}
 
-	public void error(String arg0, String arg1, int arg2, String arg3, int arg4) {
-		if (fReporter != null)
-			fReporter.reportProblem(new DefaultProblem(arg1, arg0, 0,
-					new String[] {}, ProblemSeverities.Error, arg4
-							- (arg3 != null ? arg3.length() : 0), arg4, arg2));
+	public void error(String message, String sourceName, int line,
+			String lineSource, int offset) {
+		if (fReporter == null) {
+			return;
+		}
+		int startPosition = offset;
+		if (lineSource != null) {
+			startPosition -= lineSource.length();
+		}
+		fReporter.reportProblem(new DefaultProblem(sourceName, message, 0,
+				null, ProblemSeverities.Error, startPosition, offset, line));
 	}
 
-	public EvaluatorException runtimeError(String arg0, String arg1, int arg2,
-			String arg3, int arg4) {
-		// should never happen;
+	public EvaluatorException runtimeError(String message, String sourceName,
+			int line, String lineSource, int lineOffset) {
+		// should never happen
 		return null;
 	}
 
-	public void warning(String arg0, String arg1, int arg2, String arg3,
-			int arg4) {
-		if (fReporter != null)
-			fReporter.reportProblem(new DefaultProblem(arg1, arg0, 0,
-					new String[] {}, ProblemSeverities.Warning, arg4, arg4 + 1,
-					arg2));
+	public void warning(String message, String sourceName, int line,
+			String lineSource, int offset) {
+		if (fReporter == null) {
+			return;
+		}
+		fReporter.reportProblem(new DefaultProblem(sourceName, message, 0,
+				null, ProblemSeverities.Warning, offset, offset + 1, line));
 	}
 }
