@@ -15,21 +15,17 @@ import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ISourceReference;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.ui.actions.FoldingActionGroup;
-import org.eclipse.dltk.internal.ui.editor.DLTKEditorMessages;
 import org.eclipse.dltk.internal.ui.editor.ScriptEditor;
 import org.eclipse.dltk.internal.ui.editor.ScriptOutlinePage;
 import org.eclipse.dltk.internal.ui.editor.ScriptSourceViewer;
-import org.eclipse.dltk.internal.ui.editor.ToggleCommentAction;
 import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.text.JavaScriptPairMatcher;
 import org.eclipse.dltk.javascript.internal.ui.text.folding.JavascriptFoldingStructureProvider;
 import org.eclipse.dltk.javascript.ui.JavascriptPreferenceConstants;
-import org.eclipse.dltk.javascript.ui.actions.AddBlockCommentAction;
-import org.eclipse.dltk.javascript.ui.actions.GenerateActionGroup;
-import org.eclipse.dltk.javascript.ui.actions.IndentAction;
-import org.eclipse.dltk.javascript.ui.actions.RemoveBlockCommentAction;
+import org.eclipse.dltk.javascript.ui.actions.JavaScriptGenerateActionGroup;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
+import org.eclipse.dltk.ui.actions.DLTKActionConstants;
 import org.eclipse.dltk.ui.actions.IScriptEditorActionDefinitionIds;
 import org.eclipse.dltk.ui.text.ScriptTextTools;
 import org.eclipse.dltk.ui.text.folding.IFoldingStructureProvider;
@@ -38,19 +34,17 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
-import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.ITextViewerExtension;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.IUpdate;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
-import org.eclipse.ui.texteditor.TextOperationAction;
 
 public class JavaScriptEditor extends ScriptEditor {
 
@@ -69,6 +63,7 @@ public class JavaScriptEditor extends ScriptEditor {
 		 * @since 3.2
 		 */
 		FormatElementAction() {
+			setText("Format Eleme&nt"); //$NON-NLS-1$
 			setEnabled(isEditorInputModifiable());
 		}
 
@@ -133,6 +128,7 @@ public class JavaScriptEditor extends ScriptEditor {
 
 		/*
 		 * @see org.eclipse.ui.texteditor.IUpdate#update()
+		 * 
 		 * @since 3.2
 		 */
 		public void update() {
@@ -205,8 +201,6 @@ public class JavaScriptEditor extends ScriptEditor {
 	}
 
 	IFoldingStructureProvider fFoldingProvider = null;
-
-	private GenerateActionGroup fGenerateActionGroup;
 
 	protected IFoldingStructureProvider getFoldingStructureProvider() {
 		if (fFoldingProvider == null) {
@@ -305,84 +299,17 @@ public class JavaScriptEditor extends ScriptEditor {
 	protected void createActions() {
 		super.createActions();
 
-		Action action = new TextOperationAction(DLTKEditorMessages
-				.getBundleForConstructedKeys(),
-				"Comment.", this, ITextOperationTarget.PREFIX); //$NON-NLS-1$
-		action.setActionDefinitionId(IScriptEditorActionDefinitionIds.COMMENT);
-		setAction("Comment", action); //$NON-NLS-1$
-		markAsStateDependentAction("Comment", true); //$NON-NLS-1$
-
-		action = new TextOperationAction(DLTKEditorMessages
-				.getBundleForConstructedKeys(),
-				"Uncomment.", this, ITextOperationTarget.STRIP_PREFIX); //$NON-NLS-1$
-		action.setActionDefinitionId(IScriptEditorActionDefinitionIds.UNCOMMENT);
-		setAction("Uncomment", action); //$NON-NLS-1$
-		markAsStateDependentAction("Uncomment", true); //$NON-NLS-1$
-
-		action = new ToggleCommentAction(DLTKEditorMessages
-				.getBundleForConstructedKeys(), "ToggleComment.", this); //$NON-NLS-1$
-		action
-				.setActionDefinitionId(IScriptEditorActionDefinitionIds.TOGGLE_COMMENT);
-		setAction("ToggleComment", action); //$NON-NLS-1$
-		markAsStateDependentAction("ToggleComment", true); //$NON-NLS-1$
-		ISourceViewer sourceViewer = getSourceViewer();
-		SourceViewerConfiguration configuration = getSourceViewerConfiguration();
-		((ToggleCommentAction) action).configure(sourceViewer, configuration);
-		action = new TextOperationAction(DLTKEditorMessages
-				.getBundleForConstructedKeys(),
-				"Format.", this, ISourceViewer.FORMAT); //$NON-NLS-1$
-		action.setActionDefinitionId(IScriptEditorActionDefinitionIds.FORMAT);
-		setAction("Format", action); //$NON-NLS-1$
-		markAsStateDependentAction("Format", true); //$NON-NLS-1$
-		markAsSelectionDependentAction("Format", true); //$NON-NLS-1$
-		// PlatformUI.getWorkbench().getHelpSystem().setHelp(action,
-		// IJavaHelpContextIds.FORMAT_ACTION);
-
-		action = new FormatElementAction();
+		Action action = new FormatElementAction();
 		action
 				.setActionDefinitionId(IScriptEditorActionDefinitionIds.QUICK_FORMAT);
 		setAction("QuickFormat", action); //$NON-NLS-1$
 		markAsStateDependentAction("QuickFormat", true); //$NON-NLS-1$
+		setAction(DLTKActionConstants.FORMAT_ELEMENT, action);
+		markAsStateDependentAction(DLTKActionConstants.FORMAT_ELEMENT, true);
 
-		action = new AddBlockCommentAction(DLTKEditorMessages
-				.getBundleForConstructedKeys(), "AddBlockComment.", this); //$NON-NLS-1$
-		action
-				.setActionDefinitionId(IScriptEditorActionDefinitionIds.ADD_BLOCK_COMMENT);
-		setAction("AddBlockComment", action); //$NON-NLS-1$
-		markAsStateDependentAction("AddBlockComment", true); //$NON-NLS-1$
-		markAsSelectionDependentAction("AddBlockComment", true); //$NON-NLS-1$
-		// PlatformUI.getWorkbench().getHelpSystem().setHelp(action,
-		// IDLTKJavaHelpContextIds.ADD_BLOCK_COMMENT_ACTION);
-
-		action = new RemoveBlockCommentAction(DLTKEditorMessages
-				.getBundleForConstructedKeys(), "RemoveBlockComment.", this); //$NON-NLS-1$
-		action
-				.setActionDefinitionId(IScriptEditorActionDefinitionIds.REMOVE_BLOCK_COMMENT);
-		setAction("RemoveBlockComment", action); //$NON-NLS-1$
-		markAsStateDependentAction("RemoveBlockComment", true); //$NON-NLS-1$
-		markAsSelectionDependentAction("RemoveBlockComment", true); //$NON-NLS-1$
-		// PlatformUI.getWorkbench().getHelpSystem().setHelp(action,
-		// IJavaHelpContextIds.REMOVE_BLOCK_COMMENT_ACTION);
-
-		action = new IndentAction(DLTKEditorMessages
-				.getBundleForConstructedKeys(), "Indent.", this, false); //$NON-NLS-1$
-		action.setActionDefinitionId(IScriptEditorActionDefinitionIds.INDENT);
-		setAction("Indent", action); //$NON-NLS-1$
-		markAsStateDependentAction("Indent", true); //$NON-NLS-1$
-		markAsSelectionDependentAction("Indent", true); //$NON-NLS-1$
-		// PlatformUI.getWorkbench().getHelpSystem().setHelp(action,
-		// IJavaHelpContextIds.INDENT_ACTION);
-
-		fGenerateActionGroup = new GenerateActionGroup(this,
+		ActionGroup generateActions = new JavaScriptGenerateActionGroup(this,
 				ITextEditorActionConstants.GROUP_EDIT);
-		// ActionGroup rg= new RefactorActionGroup(this,
-		// ITextEditorActionConstants.GROUP_EDIT, false);
-		// ActionGroup surroundWith= new SurroundWithActionGroup(this,
-		// ITextEditorActionConstants.GROUP_EDIT);
-
-		fContextMenuGroup.addGroup(fGenerateActionGroup);
-		// fActionGroups.addGroup(rg);
-		// fActionGroups.addGroup(fGenerateActionGroup);
-
+		fActionGroups.addGroup(generateActions);
+		fContextMenuGroup.addGroup(generateActions);
 	}
 }
