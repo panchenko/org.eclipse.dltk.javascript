@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
+   <extension-point id="org.eclipse.dltk.javascript.ui.scriptcolor.provider" name="Script Editor color providers" schema="schema/org.eclipse.dltk.javascript.ui.keywordsprovider.exsd"/>
  <extension
          point="org.eclipse.ui.editors">
       <editor
