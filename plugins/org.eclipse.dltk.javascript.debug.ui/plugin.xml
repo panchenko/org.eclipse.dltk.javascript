@@ -15,12 +15,12 @@
       <action
         style="toggle"
         id="org.eclipse.dltk.javascript.debug.ui.variableViewActions.ShowStatic"
-        class="org.eclipse.dltk.javascript.internal.console.ui.actions.ShowFunctionsAction"
-        helpContextId="show_functions_context"
-        icon="icons/javascript.gif"
-        label="%showStaticAction.label"
-        menubarPath="org.eclipse.dltk.javascript.debug.ui.menu.VariableView/js"
-        tooltip="%showStaticAction.tooltip">
+            class="org.eclipse.dltk.javascript.internal.console.ui.actions.ShowFunctionsAction"
+            helpContextId="show_functions_context"
+            icon="icons/javascript.gif"
+            label="%showFunctionsAction.label"
+            menubarPath="org.eclipse.dltk.javascript.debug.ui.menu.VariableView/js"
+            tooltip="%showFunctionsAction.tooltip">
       </action>
     </viewContribution>
   </extension>
@@ -370,7 +370,7 @@
     <command
       id="org.eclipse.dltk.javascript.debug.ui.commands.toggleLocalVariables"
       description="%showLocalVarsCommand.name"
-      name="%showLocalVarsCommand.description" />
+      name="%showLocalVarsCommand.description" />      
     <command
       id="org.eclipse.dltk.javascript.debug.ui.commands.showPreferences"
       description="%showPreferences.description"
@@ -395,7 +395,7 @@
       <command 
         commandId="org.eclipse.dltk.javascript.debug.ui.commands.toggleLocalVariables"
         tooltip="%showLocalVarsCommand.tooltip" 
-        style="toggle" />    
+        style="toggle" />                      
       <command
         commandId="org.eclipse.dltk.javascript.debug.ui.commands.showPreferences" />                          
     </menuContribution>  
@@ -420,6 +420,35 @@
     <language
       class="org.eclipse.dltk.javascript.internal.debug.ui.JavaScriptDebugUILanguageToolkit"
       nature="org.eclipse.dltk.javascript.core.nature"/>
+  </extension>
+  <extension
+        point="org.eclipse.ui.views">
+     <view
+           category="org.eclipse.debug.ui "
+           class="org.eclipse.dltk.javascript.internal.debug.ui.scriptconsole.DebugScriptingConsole"
+           icon="icons/scriptcons_view.gif"
+           id="org.eclipse.dltk.javascript.debug.ui.scriptconsole"
+           name="Debug Scripting Console">
+     </view>
+  </extension>
+  <extension
+        point="org.eclipse.ui.perspectiveExtensions">
+     <perspectiveExtension
+           targetID="org.eclipse.debug.ui.DebugPerspective">
+        <view
+              id="org.eclipse.dltk.javascript.debug.ui.scriptconsole"
+              ratio="0.5"
+              relationship="stack"
+              relative="org.eclipse.debug.ui.VariableView"
+              visible="true">
+        </view>
+        <showInPart
+              id="org.eclipse.dltk.javascript.debug.ui.scriptconsole">
+        </showInPart>
+        <viewShortcut
+              id="org.eclipse.dltk.javascript.debug.ui.scriptconsole">
+        </viewShortcut>
+     </perspectiveExtension>
   </extension>
 
 </plugin>
