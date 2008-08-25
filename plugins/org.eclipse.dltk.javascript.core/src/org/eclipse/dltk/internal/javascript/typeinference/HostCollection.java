@@ -15,45 +15,50 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-
 public class HostCollection {
 
 	public static final int FUNCTION = 1;
 	public static final int NORMAL = 0;
-	
+
 	private final HostCollection parent;
 	private final HashMap reference = new HashMap();
 	private int type;
 
-	public IReference getReference(String key){
+	public IReference getReference(String key) {
 		IReference reference2 = (IReference) reference.get(key);
-		if (reference2==null)if (parent!=null)return parent.getReference(key);
-		return reference2;		
+		if (reference2 == null)
+			if (parent != null)
+				return parent.getReference(key);
+		return reference2;
 	}
-	
+
 	public Set queryElements(String id, boolean useGlobal) {
 		IReference r = getReference(id);
-		HashSet res=new HashSet();
-		if (r != null)
-		{			
+		HashSet res = new HashSet();
+		if (r != null) {
 			res.add(r);
 			return res;
 		}
-		int pos=id.indexOf('.');
-		if (pos==-1)return res;
-		String rootName=id.substring(0,pos);
-		r=(IReference) getReference(rootName);
-		pos+=1;
+		int pos = id.indexOf('.');
+		if (pos == -1)
+			return res;
+		String rootName = id.substring(0, pos);
+		r = (IReference) getReference(rootName);
+		pos += 1;
 		String field;
-		while (pos!=0){
-			if (r==null)return new HashSet();
-			int k=id.indexOf('.',pos);
-			if (k==-1) field=id.substring(pos);
-			else field=id.substring(pos,k);
-			r=r.getChild(field, useGlobal);			
-			pos=k+1;
+		while (pos != 0) {
+			if (r == null)
+				return new HashSet();
+			int k = id.indexOf('.', pos);
+			if (k == -1)
+				field = id.substring(pos);
+			else
+				field = id.substring(pos, k);
+			r = r.getChild(field, useGlobal);
+			pos = k + 1;
 		}
-		if (r==null)return res;
+		if (r == null)
+			return res;
 		res.add(r);
 		return res;
 	}
@@ -69,7 +74,7 @@ public class HostCollection {
 
 	public void write(String key, IReference ref) {
 		if (ref == null)
-			throw new IllegalArgumentException();		
+			throw new IllegalArgumentException();
 		reference.put(key, ref);
 	}
 
@@ -80,42 +85,58 @@ public class HostCollection {
 		if (object == null) {
 			reference.put(key, ref);
 		} else if (object != ref) {
-			if (ref instanceof OrReference)
-			{
-				// Test if those already are referencing each other.
-				if ( ((OrReference)ref).one == object)
-				{
-					reference.put(key, ref);
-					return;
-				}
-			}
-			else if (ref instanceof TransparentRef)
-			{
-				if (((TransparentRef)ref).evaluateReference == object)
-				{
+			if (object instanceof CombinedOrReference) {
+				((CombinedOrReference) object).addReference(ref);
+				return;
+			} else if (ref instanceof TransparentRef) {
+				if (((TransparentRef) ref).evaluateReference == object) {
 					reference.put(key, ref);
 					return;
 				}
 			}
 
-			ref = new OrReference((IReference) object, ref);
-			
+			if (object instanceof TransparentRef
+					&& ((TransparentRef) object).evaluateReference instanceof CombinedOrReference) {
+				((CombinedOrReference) ((TransparentRef) object).evaluateReference)
+						.addReference(ref);
+				return;
+			} else if (ref instanceof CombinedOrReference) {
+				((CombinedOrReference) ref).addReference((IReference) object);
+			} else {
+				CombinedOrReference cor = new CombinedOrReference();
+				cor.addReference(ref);
+				cor.addReference((IReference) object);
+				ref = cor;
+			}
+
 			reference.put(key, ref);
 		}
 	}
-
-	
 
 	public void oneOf(String key, IReference ref, IReference other) {
 		if (ref == null)
 			throw new IllegalArgumentException();
 		if (other == null)
 			throw new IllegalArgumentException();
-		if (ref.isChildishReference()||other.isChildishReference()){
+		if (ref.isChildishReference() || other.isChildishReference()) {
 			add(key, ref);
 			add(key, other);
+		} else {
+			if (ref instanceof CombinedOrReference) {
+				CombinedOrReference orReference = ((CombinedOrReference) ref);
+				orReference.addReference(other);
+				reference.put(key, ref);
+			} else if (other instanceof CombinedOrReference) {
+				CombinedOrReference orReference = ((CombinedOrReference) other);
+				orReference.addReference(ref);
+				reference.put(key, other);
+			} else {
+				CombinedOrReference cor = new CombinedOrReference();
+				cor.addReference(ref);
+				cor.addReference(other);
+				reference.put(key, cor);
+			}
 		}
-		else reference.put(key, new OrReference(ref, other));
 	}
 
 	public HostCollection getParent() {
@@ -123,23 +144,22 @@ public class HostCollection {
 	}
 
 	public void mergeIf(HostCollection cl) {
-		
+
 		Iterator i = cl.reference.keySet().iterator();
 		while (i.hasNext()) {
-			
+
 			Object next = i.next();
-			if (next instanceof String)
-			{
-			String s = (String) next;
-			IReference rm = (IReference) cl.reference.get(s);
-			add(s, rm);
+			if (next instanceof String) {
+				String s = (String) next;
+				IReference rm = (IReference) cl.reference.get(s);
+				add(s, rm);
 			}
 		}
 		cl.pach(this);
 	}
 
 	public void mergeElseIf(HostCollection cl, HostCollection cl1) {
-				
+
 		HashSet sm = new HashSet(cl.reference.keySet());
 		sm.retainAll(cl1.reference.keySet());
 		Iterator i = sm.iterator();
@@ -165,20 +185,22 @@ public class HostCollection {
 		return (IReference) this.reference.get(rootName);
 	}
 
-	public IReference queryElement(String key1, boolean useGlobal) {		
+	public IReference queryElement(String key1, boolean useGlobal) {
 		Set queryElement = this.queryElements(key1, useGlobal);
-		if (queryElement.isEmpty())return null;
+		if (queryElement.isEmpty())
+			return null;
 		return (IReference) queryElement.iterator().next();
 	}
 
-	HashSet transparent=new HashSet();
+	HashSet transparent = new HashSet();
+
 	public void addTransparent(TransparentRef transparentRef) {
 		transparent.add(transparentRef);
 	}
-	
-	private void pach(HostCollection col){
+
+	private void pach(HostCollection col) {
 		Iterator iterator = transparent.iterator();
-		while (iterator.hasNext()){
+		while (iterator.hasNext()) {
 			TransparentRef next = (TransparentRef) iterator.next();
 			next.patchRef(col);
 		}
@@ -189,11 +211,13 @@ public class HostCollection {
 	}
 
 	private String name;
+
 	public void setName(String functionName) {
-		this.name=functionName;
+		this.name = functionName;
 	}
-	public String getName(){
-		return name; 
+
+	public String getName() {
+		return name;
 	}
 
 	public int getType() {
@@ -203,10 +227,12 @@ public class HostCollection {
 	public void setType(int type) {
 		this.type = type;
 	}
-	public void recordFunction(Object function,HostCollection collection){
+
+	public void recordFunction(Object function, HostCollection collection) {
 		reference.put(function, collection);
 	}
-	public HostCollection getFunction(Object funObject){
+
+	public HostCollection getFunction(Object funObject) {
 		return (HostCollection) reference.get(funObject);
 	}
 }

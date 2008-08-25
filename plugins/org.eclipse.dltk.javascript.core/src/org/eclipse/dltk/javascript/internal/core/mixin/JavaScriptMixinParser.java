@@ -12,6 +12,7 @@ package org.eclipse.dltk.javascript.internal.core.mixin;
 import java.io.CharArrayReader;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -70,11 +71,12 @@ public class JavaScriptMixinParser implements IMixinParser,
 			moduleDeclaration.setCollection(collection);
 			Collection sm = (Collection) collection.getReferences().values();
 			Iterator i = sm.iterator();
+			HashSet hs = new HashSet();
 			while (i.hasNext()) {
 				Object next = i.next();
 				if (next instanceof IReference) {
 					IReference ref = (IReference) next;
-					reportRef(ref, null, 0);
+					reportRef(ref, null, 0, hs);
 				}
 			}
 			Map ms = interferencer.getFunctionMap();
@@ -97,7 +99,8 @@ public class JavaScriptMixinParser implements IMixinParser,
 		}
 	}
 
-	private void reportRef(IReference ref, String sma, int level) {
+	private void reportRef(IReference ref, String sma, int level,
+			HashSet recursive) {
 		Set sm = ref.getChilds(false);
 		String key = ref.getName();
 		if (sma != null)
@@ -107,7 +110,10 @@ public class JavaScriptMixinParser implements IMixinParser,
 			Object next = i.next();
 			if (next instanceof IReference) {
 				IReference refa = (IReference) next;
-				reportRef(refa, key, level + 1);
+				if (!recursive.contains(refa)) {
+					recursive.add(refa);
+					reportRef(refa, key, level + 1, recursive);
+				}
 			}
 		}
 		IMixinRequestor.ElementInfo elementInfo = new IMixinRequestor.ElementInfo();

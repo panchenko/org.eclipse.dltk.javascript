@@ -113,30 +113,28 @@ public class UnknownReference implements IReference {
 	public void setFunctionRef() {
 		fRef = true;
 	}
-	
-	public char[][] getParameterNames()
-	{
+
+	public char[][] getParameterNames() {
 		return parameterNames;
 	}
-	
+
 	/**
-	 * @param parameterNames the parameterNames to set
+	 * @param parameterNames
+	 *            the parameterNames to set
 	 */
-	public void setParameterNames(char[][] parameterNames)
-	{
+	public void setParameterNames(char[][] parameterNames) {
 		this.parameterNames = parameterNames;
 	}
 
-	public Object getProposalInfo()
-	{
+	public Object getProposalInfo() {
 		return proposalInfo;
 	}
 
 	/**
-	 * @param proposalInfo the proposalInfo to set
+	 * @param proposalInfo
+	 *            the proposalInfo to set
 	 */
-	public void setProposalInfo(Object proposalInfo)
-	{
+	public void setProposalInfo(Object proposalInfo) {
 		this.proposalInfo = proposalInfo;
 	}
 
@@ -148,4 +146,16 @@ public class UnknownReference implements IReference {
 		this.local = local;
 	}
 
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj instanceof UnknownReference) {
+			UnknownReference ur = (UnknownReference) obj;
+			return ur.name.equals(name) && childIsh == ur.childIsh
+					&& fRef == ur.fRef && local == ur.local
+					&& ur.offset == offset && length == ur.length;
+		}
+		return false;
+	}
 }

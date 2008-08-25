@@ -90,8 +90,12 @@ final class TransparentRef implements IReference {
 		IReference queryElement = TypeInferencer.internalEvaluate(collection,
 				getName(), node, parent, cs);
 
-		if (queryElement != null && queryElement != this)
+		if (queryElement != null
+				&& queryElement != this
+				&& !(queryElement instanceof CombinedOrReference && ((CombinedOrReference) queryElement)
+						.contains(this))) {
 			this.evaluateReference = queryElement;
+		}
 		Iterator it = s.iterator();
 		// TODO REVIEW IT;
 		while (it.hasNext()) {
@@ -200,9 +204,9 @@ public class TypeInferencer {
 						if (firstChild.getPosition() != 0) {
 							int start = firstChild.getPosition() - length;
 							int end = firstChild.getPosition() - 1;
-//							if (start < 0) {
-//								System.out.println("AA");
-//							}
+							// if (start < 0) {
+							// System.out.println("AA");
+							// }
 							requestor.acceptMethodReference(call.toCharArray(),
 									0, start, end);
 						}
@@ -444,7 +448,7 @@ public class TypeInferencer {
 				if (queryElement != null)
 					queryElement.recordDelete(fieldId);
 			}
-//			System.out.println(objId);
+			// System.out.println(objId);
 			return null;
 		}
 
@@ -467,7 +471,7 @@ public class TypeInferencer {
 				} else {
 					IReference rm = parent.getReference(rootName);
 					if (rm != null) {
-						rm = new OrReferenceWriteSecond(rm, root);
+						rm = new CombinedOrReference(rm, root);
 						collection.setReference(rootName, rm);
 					} else
 						collection.setReference(rootName, root);
@@ -614,22 +618,22 @@ public class TypeInferencer {
 			NewReference newReference = new NewReference(key, "Number", cs);
 			UnknownReference uncknownReference = new UnknownReference(key,
 					false);
-			return new OrReferenceWriteSecond(newReference, uncknownReference);
+			return new CombinedOrReference(newReference, uncknownReference);
 		}
-// return ReferenceFactory.createNumberReference(key, expression
-// .getDouble());
+			// return ReferenceFactory.createNumberReference(key, expression
+			// .getDouble());
 		case Token.STRING: {
 			NewReference newReference = new NewReference(key, "String", cs);
 			UnknownReference uncknownReference = new UnknownReference(key,
 					false);
-			return new OrReferenceWriteSecond(newReference, uncknownReference);
+			return new CombinedOrReference(newReference, uncknownReference);
 		}
 		case Token.TRUE:
 		case Token.FALSE: {
 			NewReference newReference = new NewReference(key, "Boolean", cs);
 			UnknownReference uncknownReference = new UnknownReference(key,
 					false);
-			return new OrReferenceWriteSecond(newReference, uncknownReference);
+			return new CombinedOrReference(newReference, uncknownReference);
 		}
 		case Token.OBJECTLIT:
 			return createObjectLiteral(collection, key, expression, parent, cs);
@@ -668,7 +672,7 @@ public class TypeInferencer {
 			return null;
 		CallResultReference ref = new CallResultReference(collection2, key, id,
 				cs);
-		OrReferenceWriteSecond ws = new OrReferenceWriteSecond(ref,
+		CombinedOrReference ws = new CombinedOrReference(ref,
 				new UnknownReference(key, false));
 		return ws;
 	}
@@ -689,8 +693,7 @@ public class TypeInferencer {
 			} catch (ClassCastException e) {
 			}
 		}
-		OrReferenceWriteSecond ws = new OrReferenceWriteSecond(ref,
-				uncknownReference);
+		CombinedOrReference ws = new CombinedOrReference(ref, uncknownReference);
 		return ws;
 
 	}
@@ -741,11 +744,11 @@ public class TypeInferencer {
 										val, true);
 								curReference.setChild(val, uncknownReference3);
 							}
-// if (has) {
-// curReference.setChild(name, uncknownReference2);
-// curReference = uncknownReference2;
-// stack.push(curReference);
-// }
+							// if (has) {
+							// curReference.setChild(name, uncknownReference2);
+							// curReference = uncknownReference2;
+							// stack.push(curReference);
+							// }
 							has = true;
 						}
 
