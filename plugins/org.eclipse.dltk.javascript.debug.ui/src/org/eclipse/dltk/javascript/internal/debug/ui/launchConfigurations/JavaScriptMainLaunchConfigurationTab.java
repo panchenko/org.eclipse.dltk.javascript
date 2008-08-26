@@ -7,11 +7,9 @@
  ******************************************************************************/
 package org.eclipse.dltk.javascript.internal.debug.ui.launchConfigurations;
 
-import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.dltk.core.PreferencesLookupDelegate;
 import org.eclipse.dltk.debug.core.DLTKDebugPreferenceConstants;
 import org.eclipse.dltk.debug.ui.launchConfigurations.MainLaunchConfigurationTab;
-import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.debug.JavaScriptDebugPlugin;
 
@@ -48,12 +46,4 @@ public class JavaScriptMainLaunchConfigurationTab extends
 	protected String getNatureID() {
 		return JavaScriptNature.NATURE_ID;
 	}
-
-	/*
-	 * @see org.eclipse.dltk.debug.ui.launchConfigurations.ScriptLaunchConfigurationTab#isValidToolkit(org.eclipse.dltk.core.IDLTKLanguageToolkit)
-	 */
-	protected boolean isValidToolkit(IDLTKLanguageToolkit toolkit) {
-		return (toolkit instanceof JavaScriptLanguageToolkit) ? true : false;
-	}
-
 }
