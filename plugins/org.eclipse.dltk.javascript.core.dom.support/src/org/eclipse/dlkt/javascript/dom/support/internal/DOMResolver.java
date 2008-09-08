@@ -19,9 +19,7 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolve
 import org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NewReference;
 import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -40,51 +38,52 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		HashSet result = new HashSet();
 		if (ref instanceof AbstractCallResultReference) {
 			final AbstractCallResultReference cm = (AbstractCallResultReference) ref;
-			if (cm instanceof NewReference) {
-				Class clzz = (Class) classRef.get(cm.getId());
-				if (clzz != null) {
-					Method[] methods = clzz.getMethods();
-					for (int a = 0; a < methods.length; a++) {
-						String string = "jsFunction_";
-						String stringget = "jsGet_";
-						String stringset = "jsSet_";
-						Method method = methods[a];
-						if (method.getName().startsWith(string)) {
-							UnknownReference r = new UnknownReference(method
-									.getName().substring(string.length()), true);
+			// if (cm instanceof NewReference) {
+			Class clzz = (Class) classRef.get(cm.getId());
+			if (clzz != null) {
+				Method[] methods = clzz.getMethods();
+				for (int a = 0; a < methods.length; a++) {
+					String string = "jsFunction_";
+					String stringget = "jsGet_";
+					String stringset = "jsSet_";
+					Method method = methods[a];
+					if (method.getName().startsWith(string)) {
+						UnknownReference r = new UnknownReference(method
+								.getName().substring(string.length()), true);
 
-							result.add(r);
-							r.setFunctionRef();
-						} else if (method.getName().startsWith(stringget)) {
-							IReference r = new UnknownReference(method
-									.getName().substring(stringget.length()),
-									true);
-							result.add(r);
-						} else if (method.getName().startsWith(stringset)) {
-							IReference r = new UnknownReference(method
-									.getName().substring(stringset.length()),
-									true);
-							result.add(r);
-						}
+						result.add(r);
+						r.setFunctionRef();
+					} else if (method.getName().startsWith(stringget)) {
+						IReference r = new UnknownReference(method.getName()
+								.substring(stringget.length()), true);
+						result.add(r);
+					} else if (method.getName().startsWith(stringset)) {
+						IReference r = new UnknownReference(method.getName()
+								.substring(stringset.length()), true);
+						result.add(r);
 					}
-				}
-				Object obj = getGlobalMap().get(cm.getId());
-				if (obj instanceof ScriptableObject) {
-					ScriptableObject sc = (ScriptableObject) obj;
-					if (sc instanceof Function) {
-						Function f = (Function) sc;
-						Scriptable construct = f.construct(Context
-								.getCurrentContext(), sc, new Object[0]);
-						if (construct instanceof ScriptableObject) {
-							ScriptableObject sm = (ScriptableObject) construct;
-							HashMap map = new HashMap();
-							fillMap(map, sm, false);
-							createReferences("", map, result);
-						}
-					}
-
 				}
 			}
+			Set resolveGlobals = resolveGlobals(cm.getId() + ".");
+
+			result.addAll(resolveGlobals);
+			// Object obj = getGlobalMap().get(cm.getId());
+			// if (obj instanceof ScriptableObject) {
+			// ScriptableObject sc = (ScriptableObject) obj;
+			// if (sc instanceof Function) {
+			// Function f = (Function) sc;
+			// Scriptable construct = f.construct(Context
+			// .getCurrentContext(), sc, new Object[0]);
+			// if (construct instanceof ScriptableObject) {
+			// ScriptableObject sm = (ScriptableObject) construct;
+			// HashMap map = new HashMap();
+			// fillMap(map, sm, false);
+			// createReferences("", map, result);
+			// }
+			// }
+			//
+			// }
+			// }
 		}
 		return result;
 	}
@@ -127,14 +126,8 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 	}
 
 	WeakReference classRef;
-	WeakReference scopeRef;
 
-	public HashMap getGlobalMap() {
-		if (scopeRef != null) {
-			HashMap object = (HashMap) scopeRef.get();
-			if (object != null)
-				return object;
-		}
+	private HashMap getGlobalMap(String key) {
 		HashMap mp = new HashMap();
 		for (int a = 0; a < providers.length; a++) {
 			if (providers[a].canResolve(module)) {
@@ -142,28 +135,32 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						.resolveTopLevelScope(module);
 				if (resolveTopLevelScope == null)
 					continue;
-				fillMap(mp, resolveTopLevelScope, true);
+				fillMap(mp, resolveTopLevelScope, true, key);
 			}
 		}
-		scopeRef = new WeakReference(mp);
 		return mp;
 	}
 
-	private Object[] fillMap(HashMap mp, Scriptable scope, boolean walkParent) {
+	void fillMap(HashMap mp, Scriptable scope, boolean walkParent,
+			String idToFind) {
 		Scriptable prototype = scope.getPrototype();
 		if (prototype != null) {
-			fillMap(mp, prototype, walkParent);
+			fillMap(mp, prototype, walkParent, idToFind);
+			if (idToFind != null && mp.size() == 1)
+				return;
 		}
 		if (walkParent) {
 			Scriptable parentScope = scope.getParentScope();
 			if (parentScope != null) {
-				fillMap(mp, parentScope, walkParent);
+				fillMap(mp, parentScope, walkParent, idToFind);
+				if (idToFind != null && mp.size() == 1)
+					return;
 			}
 		}
 		Object[] allIds = null;
 		for (int a = 0; a < providers.length; a++) {
 			if (providers[a].canResolve(module)) {
-				allIds = providers[a].resolveIds(scope);
+				allIds = providers[a].resolveIds(scope, idToFind);
 				if (allIds != null)
 					break;
 			}
@@ -177,6 +174,8 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		}
 		for (int b = 0; b < allIds.length; b++) {
 			String key = allIds[b].toString();
+			if (idToFind != null && !idToFind.equals(key))
+				continue;
 			try {
 				Object object = null;
 				for (int a = 0; a < providers.length; a++) {
@@ -190,13 +189,15 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					object = scope.get(key, scope);
 				}
 				mp.put(key, object);
+				if (idToFind != null)
+					break;
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 
 		}
 
-		return allIds;
+		return;
 	}
 
 	public void init(ReferenceResolverContext owner) {
@@ -210,10 +211,15 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 	}
 
 	public Set resolveGlobals(String id) {
+		int index = id.indexOf("[]");
+		while (index >= 0) {
+			id = id.substring(0, index) + "." + id.substring(index);
+			index = id.indexOf("[]", index + 2);
+		}
 		int pos = id.indexOf('.');
 		String key = pos == -1 ? id : id.substring(0, pos);
 
-		HashMap globals = getGlobalMap();
+		HashMap globals = getGlobalMap(pos == -1 ? null : key);
 		HashMap clss = getClassMap();
 		HashSet rs = new HashSet();
 
@@ -235,15 +241,16 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					object = ((IProposalHolder) object).getObject();
 				}
 				if (object instanceof Scriptable) {
-					Scriptable sc = (Scriptable) object;
-					globals.clear();
-					fillMap(globals, sc, false);
 					id = id.substring(pos + 1);
 					pos = id.indexOf('.');
 					key = pos == -1 ? id : id.substring(0, pos);
+					Scriptable sc = (Scriptable) object;
+					globals = new HashMap();
+					fillMap(globals, sc, false,
+							(pos == -1 && !"[]".equals(key)) ? null : key);
 				} else {
 					// not at match at all clear it
-					globals.clear();
+					globals = new HashMap();
 					break;
 				}
 			}
@@ -252,23 +259,34 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		return rs;
 	}
 
-	private void createReferences(String key, HashMap globals, HashSet rs) {
+	void createReferences(String key, HashMap globals, HashSet rs) {
 		Iterator iterator = globals.keySet().iterator();
 		while (iterator.hasNext()) {
 			String s = (String) iterator.next();
 
 			if (s.startsWith(key)) {
-				UnknownReference uref = new UnknownReference(s, false);
 				Object object = globals.get(s);
+				UnknownReference uref = null;
+				if (object instanceof Scriptable) {
+					uref = new ScriptableScopeReference(s, (Scriptable) object,
+							this);
+					if (object instanceof IProposalHolder) {
+						IProposalHolder fapn = (IProposalHolder) object;
+						uref.setParameterNames(fapn.getParameterNames());
+						uref.setProposalInfo(fapn.getProposalInfo());
+					}
+				} else if (object == String.class) {
+					uref = new UnknownReference(s, false);
+				} else {
+					uref = new UnknownReference(s, false);
+				}
 				if (object instanceof IProposalHolder) {
 					IProposalHolder fapn = (IProposalHolder) object;
 					uref.setParameterNames(fapn.getParameterNames());
 					uref.setProposalInfo(fapn.getProposalInfo());
 					object = fapn.getObject();
-					// if object is null assume that it is a method.
-					if (object == null) {
+					if (fapn.isFunctionRef())
 						uref.setFunctionRef();
-					}
 				}
 				if (object instanceof Function) {
 					uref.setFunctionRef();

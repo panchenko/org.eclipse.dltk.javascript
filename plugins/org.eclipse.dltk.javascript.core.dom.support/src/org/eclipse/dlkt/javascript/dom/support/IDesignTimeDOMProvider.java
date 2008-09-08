@@ -32,17 +32,16 @@ public interface IDesignTimeDOMProvider extends IExecutableExtension {
 	 * @param allIds
 	 * @return
 	 */
-	public Object[] resolveIds(Scriptable scope);
+	public Object[] resolveIds(Scriptable scope, String key);
 
 	/**
-	 * The dom provider can resolve the proposal them selfs by returning
-	 * a {@link IProposalHolder}. That object can hold the parameters for 
-	 * this key or extra proposal info (documentation)
-	 * <br>
-	 * Also if you want lazy lookup then you can return the proposal with
-	 * just the name. So that there isn't a lookup in the scope if that
-	 * is a heavy operation.
-	 *  
+	 * The dom provider can resolve the proposal them selfs by returning a
+	 * {@link IProposalHolder}. That object can hold the parameters for this
+	 * key or extra proposal info (documentation) <br>
+	 * Also if you want lazy lookup then you can return the proposal with just
+	 * the name. So that there isn't a lookup in the scope if that is a heavy
+	 * operation.
+	 * 
 	 * @param scope
 	 * @param key
 	 * @return
