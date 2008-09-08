@@ -19,7 +19,7 @@ public class CombinedOrReference implements IReference {
 
 	private final List lstReadonly;
 	private final List lstReferences;
-	private boolean recursieCheck;
+	private boolean recursiveCheck;
 
 	/**
 	 * 
@@ -183,13 +183,20 @@ public class CombinedOrReference implements IReference {
 	 */
 	public Set getChilds(boolean resolveLocals) {
 		HashSet set = new HashSet();
-		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
-			set.addAll(element.getChilds(resolveLocals));
-		}
-		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
-			set.addAll(element.getChilds(resolveLocals));
+		if (recursiveCheck)
+			return set;
+		try {
+			recursiveCheck = true;
+			for (int i = 0; i < lstReferences.size(); i++) {
+				IReference element = (IReference) lstReferences.get(i);
+				set.addAll(element.getChilds(resolveLocals));
+			}
+			for (int i = 0; i < lstReadonly.size(); i++) {
+				IReference element = (IReference) lstReadonly.get(i);
+				set.addAll(element.getChilds(resolveLocals));
+			}
+		} finally {
+			recursiveCheck = false;
 		}
 		return set;
 	}
