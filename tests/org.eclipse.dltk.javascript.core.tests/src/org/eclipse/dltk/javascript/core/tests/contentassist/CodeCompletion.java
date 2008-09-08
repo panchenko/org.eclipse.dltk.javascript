@@ -84,6 +84,10 @@ public class CodeCompletion extends TestCase {
 			return content;
 		}
 
+		public char[] getContentsAsCharArray() {
+			return content.toCharArray();
+		}
+
 		public char[] getFileName() {
 			return "".toCharArray();
 		}
