@@ -24,7 +24,7 @@ final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
 
 	protected boolean doHighlighting(
 			org.eclipse.dltk.compiler.env.ISourceModule code) throws Exception {
-		char[] sourceAsCharArray = code.getSourceContents().toCharArray();
+		char[] sourceAsCharArray = code.getContentsAsCharArray();
 
 		Parser p = new Parser(new CompilerEnvirons(), new ErrorReporter() {
 
