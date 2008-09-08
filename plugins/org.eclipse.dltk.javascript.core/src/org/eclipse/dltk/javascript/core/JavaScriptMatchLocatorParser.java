@@ -10,6 +10,7 @@
 package org.eclipse.dltk.javascript.core;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -89,11 +90,12 @@ public class JavaScriptMatchLocatorParser extends MatchLocatorParser implements
 		HostCollection collection = md.getCollection();
 		Collection sm = (Collection) collection.getReferences().values();
 		Iterator i = sm.iterator();
+		HashSet hs = new HashSet();
 		while (i.hasNext()) {
 			Object next = i.next();
 			if (next instanceof IReference) {
 				IReference ref = (IReference) next;
-				reportRef(ref, null, 0);
+				reportRef(ref, null, 0, hs);
 			}
 		}
 		Map ms = md.getFunctionMap();
@@ -115,7 +117,8 @@ public class JavaScriptMatchLocatorParser extends MatchLocatorParser implements
 		}
 	}
 
-	private void reportRef(IReference ref, String sma, int level) {
+	private void reportRef(IReference ref, String sma, int level,
+			HashSet recursive) {
 
 		String key = ref.getName();
 		if (sma != null)
@@ -128,7 +131,10 @@ public class JavaScriptMatchLocatorParser extends MatchLocatorParser implements
 				if (next instanceof IReference) {
 
 					IReference refa = (IReference) next;
-					reportRef(refa, key, level + 1);
+					if (!recursive.contains(refa)) {
+						recursive.add(refa);
+						reportRef(refa, key, level + 1, recursive);
+					}
 				}
 			}
 		}

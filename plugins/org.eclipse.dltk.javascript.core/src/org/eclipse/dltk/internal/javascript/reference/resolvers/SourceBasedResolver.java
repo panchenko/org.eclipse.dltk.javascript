@@ -43,6 +43,8 @@ import org.eclipse.dltk.javascript.internal.core.mixin.JavaScriptMixinModel;
 public class SourceBasedResolver implements IReferenceResolver,
 		IExecutableExtension {
 
+	private ISourceModule module;
+
 	public boolean canResolve(ISourceModule module) {
 		return true;
 	}
@@ -185,7 +187,7 @@ public class SourceBasedResolver implements IReferenceResolver,
 				continue;
 			if (mixinElement == null)
 				continue;
-			Object[] allObjects = mixinElement.getAllObjects();
+			Object[] allObjects = mixinElement.getObjects(module);
 
 			for (int i = 0; i < allObjects.length; i++) {
 				result.add(allObjects[i]);
@@ -203,7 +205,7 @@ public class SourceBasedResolver implements IReferenceResolver,
 	}
 
 	public void init(ReferenceResolverContext owner) {
-
+		module = owner.module;
 	}
 
 }

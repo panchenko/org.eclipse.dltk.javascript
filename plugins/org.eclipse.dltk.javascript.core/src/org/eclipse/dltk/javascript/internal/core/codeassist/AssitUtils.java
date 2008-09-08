@@ -25,27 +25,28 @@ import com.xored.org.mozilla.javascript.ScriptOrFnNode;
 
 public class AssitUtils {
 
-	public static ReferenceResolverContext buildContext(ISourceModule module, int position, String content,
-			char[] fileName2) {
-		HashMap settings=new HashMap();
-		ReferenceResolverContext createResolverContext = ResolverManager.createResolverContext(module,settings);
+	public static ReferenceResolverContext buildContext(ISourceModule module,
+			int position, String content, char[] fileName2) {
+		HashMap settings = new HashMap();
+		ReferenceResolverContext createResolverContext = ResolverManager
+				.createResolverContext(module, settings, false);
+		createResolverContext.init();
 		Parser p = new Parser(new CompilerEnvirons(), new NullReporter());
-		ScriptOrFnNode parse = p
-				.parse(content, new String(fileName2), 0);
-		TypeInferencer inf = new TypeInferencer((ModelElement) module,createResolverContext);
+		ScriptOrFnNode parse = p.parse(content, new String(fileName2), 0);
+		TypeInferencer inf = new TypeInferencer((ModelElement) module,
+				createResolverContext);
 		try {
 			inf.doInterferencing(parse, position);
 		} catch (PositionReachedException ex) {
 
-		}	
-		createResolverContext.init();
+		}
 		HostCollection collection = inf.getCollection();
 		createResolverContext.setHostCollection(collection);
 		return createResolverContext;
 	}
-	
-	public static class PositionCalculator{
-		
+
+	public static class PositionCalculator {
+
 		private boolean isMember = false;
 		private boolean needDot = false;
 		private int lastDot = -1;
@@ -53,61 +54,58 @@ public class AssitUtils {
 		private int position;
 		private int pos;
 		private String content;
-		
-		public PositionCalculator(String conString,int pos,boolean bothSides){
-			this.position=pos;
-			this.pos=calculatePos(conString, pos,bothSides);
-			
-			this.content=conString;
-			if (position>conString.length())position=conString.length();
+
+		public PositionCalculator(String conString, int pos, boolean bothSides) {
+			this.position = pos;
+			this.pos = calculatePos(conString, pos, bothSides);
+
+			this.content = conString;
+			if (position > conString.length())
+				position = conString.length();
 		}
-		
-		public String getCompletion(){
+
+		public String getCompletion() {
 			return content.substring(pos, position).trim();
 		}
-		
+
 		private int calculatePos(String content, int pos, boolean bothSides) {
-			int k=pos;
-			if (bothSides)
-			{
-			int maxPos = content.length()-1;
-			if (pos<maxPos)
-			{
-			while (pos<maxPos){
-				pos++;
-				char charAt = content.charAt(pos);
-				if (charAt == ']') {
-					nestLevel++;
-					continue;
-				}
-				if (charAt == '[') {
-					nestLevel--;
-					continue;
-				}
-				if (nestLevel > 0)
-					continue;
-				if (Character.isWhitespace(charAt)) {
-					
-					pos += 1;
-					break;
-				}
+			int k = pos;
+			if (bothSides) {
+				int maxPos = content.length() - 1;
+				if (pos < maxPos) {
+					while (pos < maxPos) {
+						pos++;
+						char charAt = content.charAt(pos);
+						if (charAt == ']') {
+							nestLevel++;
+							continue;
+						}
+						if (charAt == '[') {
+							nestLevel--;
+							continue;
+						}
+						if (nestLevel > 0)
+							continue;
+						if (Character.isWhitespace(charAt)) {
 
+							pos += 1;
+							break;
+						}
 
-				if (!needDot && Character.isJavaIdentifierPart(charAt))
-					continue;
-				else {
-					pos += 1;
-					// isMember = false;
-					break;
-				}
+						if (!needDot && Character.isJavaIdentifierPart(charAt))
+							continue;
+						else {
+							pos += 1;
+							// isMember = false;
+							break;
+						}
+					}
+					position = pos - 1;
+				} else
+					position = pos + 1;
+
 			}
-			position=pos-1;
-			}
-			else
-			position=pos+1;
-			
-			}
-			pos=k;
+			pos = k;
 			l2: while (pos > 0) {
 				pos--;
 				char charAt = content.charAt(pos);
@@ -150,13 +148,12 @@ public class AssitUtils {
 		}
 
 		public String getCorePart() {
-			return content. substring(pos, lastDot - 1).trim();
+			return content.substring(pos, lastDot - 1).trim();
 		}
 
 		public boolean isMember() {
 			return isMember;
 		}
 	}
-	
-	
+
 }

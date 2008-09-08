@@ -18,6 +18,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.ast.references.SimpleReference;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.compiler.env.CompilerSourceCode;
+import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.ICalleeProcessor;
 import org.eclipse.dltk.core.IMethod;
@@ -180,16 +182,12 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 			ISourceElementParser parser = DLTKLanguageManager
 					.getSourceElementParser(JavaScriptNature.NATURE_ID);
 			parser.setRequestor(requestor);
-			parser.parseSourceModule(methodSource.toCharArray(), null, method
-					.getSourceModule().getPath().toString().toCharArray());
-
+			parser
+					.parseSourceModule(new CompilerSourceCode(methodSource),
+							null);
 			return fSearchResults;
 		} catch (ModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			DLTKCore.error("Error parsing methods source: " + method, e);
 		}
 		return fSearchResults;
 	}
@@ -207,8 +205,7 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 				}
 			}
 		} catch (ModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			DLTKCore.error("Error finding methods elements: " + method, e);
 		}
 		// final String nsName;
 		// if( methodName.indexOf("::") != -1 ) {

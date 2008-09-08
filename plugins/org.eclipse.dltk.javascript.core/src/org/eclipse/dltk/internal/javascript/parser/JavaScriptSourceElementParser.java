@@ -9,7 +9,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser;
 
-import java.io.CharArrayReader;
+import java.io.StringReader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,8 +20,10 @@ import java.util.Set;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.ISourceElementParser;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceModuleInfoCache.ISourceModuleInfo;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
+import org.eclipse.dltk.internal.javascript.reference.resolvers.ResolverManager;
 import org.eclipse.dltk.internal.javascript.typeinference.ContextReference;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
@@ -38,13 +40,24 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 
 	private ISourceElementRequestor fRequestor = null;
 	private IProblemReporter fReporter = null;
+	private ISourceModule module;
 
 	public JavaScriptSourceElementParser() {
 	}
 
-	public void parseSourceModule(char[] contents, ISourceModuleInfo info,
-			char[] filename) {
-		String content = new String(contents);
+	/**
+	 * @see org.eclipse.dltk.core.ISourceElementParser#parseSourceModule(org.eclipse.dltk.core.ISourceModule)
+	 */
+	public void parseSourceModule(
+			org.eclipse.dltk.compiler.env.ISourceModule module,
+			ISourceModuleInfo mifo) {
+		if (module instanceof ISourceModule) {
+			this.module = (ISourceModule) module;
+		}
+		parseSourceModule(module.getSourceContents(), mifo);
+	}
+
+	private void parseSourceModule(String content, ISourceModuleInfo info) {
 		CompilerEnvirons cenv = new CompilerEnvirons();
 		JavaScriptModuleDeclaration moduleDeclaration = new JavaScriptModuleDeclaration(
 				content.length());
@@ -52,10 +65,19 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 		Parser parser = new Parser(cenv, new JavaScriptErrorReporter(fReporter));
 		try {
 
-			ScriptOrFnNode parse = parser.parse(new CharArrayReader(contents),
-					"", 0);
+			ScriptOrFnNode parse = parser.parse(new StringReader(content), "",
+					0);
+			ReferenceResolverContext createResolverContext = null;
+			if (module != null) {
+				createResolverContext = ResolverManager.createResolverContext(
+						module, new HashMap(), true);
+				createResolverContext.init();
+			} else {
+				createResolverContext = new ReferenceResolverContext(null,
+						new HashMap());
+			}
 			TypeInferencer interferencer = new TypeInferencer(null,
-					new ReferenceResolverContext(null, new HashMap()));
+					createResolverContext);
 			interferencer.setRequestor(fRequestor);
 			interferencer.doInterferencing(parse, Integer.MAX_VALUE);
 
@@ -82,7 +104,7 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 				fRequestor.acceptFieldReference(("!!!" + next.getName())
 						.toCharArray(), 0);
 			}
-			fRequestor.exitModule(contents.length);
+			fRequestor.exitModule(content.length());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

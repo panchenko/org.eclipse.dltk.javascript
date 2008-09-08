@@ -66,15 +66,16 @@ public abstract class AbstractCallResultReference implements IReference,
 			return hashSet;
 		try {
 			searchIds.add(id);
-			internalGetChilds(resolveLocals);
+			this.hashSet = internalGetChilds(resolveLocals);
 		} finally {
 			searchIds.remove(id);
 		}
 		return hashSet;
 	}
 
-	private void internalGetChilds(boolean resolveLocals) {
-		this.hashSet = cs.resolveChilds(this);
+	protected Set internalGetChilds(boolean resolveLocals) {
+
+		return cs.resolveChilds(this);
 	}
 
 	public abstract String getResultId();

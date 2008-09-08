@@ -648,11 +648,31 @@ public class TypeInferencer {
 		case Token.GETELEM:
 		case Token.GETPROP:
 			String key1 = getObjId(expression);
-			return (IReference) collection.queryElement(key1, false);
+			IReference ref = (IReference) collection.queryElement(key1, true);
+			if (ref == null) {
+				ref = resolveReferenceTree(key, cs, key1, ref);
+			}
+			return ref;
 		default:
 			break;
 		}
 		return null;
+	}
+
+	/**
+	 * @param key
+	 * @param cs
+	 * @param key1
+	 * @param ref
+	 * @return
+	 */
+	private static IReference resolveReferenceTree(String key,
+			ReferenceResolverContext cs, String key1, IReference ref) {
+		Set resolveGlobals = cs.resolveGlobals(key1);
+		if (resolveGlobals.size() > 0) {
+			ref = new AutoCompleteReference(key, key1, cs);
+		}
+		return ref;
 	}
 
 	private static IReference createNewFunctionReference(

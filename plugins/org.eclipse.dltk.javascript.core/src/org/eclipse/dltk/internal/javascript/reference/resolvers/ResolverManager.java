@@ -44,13 +44,15 @@ public class ResolverManager {
 	}
 
 	public static ReferenceResolverContext createResolverContext(
-			ISourceModule module, Map settings) {
+			ISourceModule module, Map settings, boolean skipSourceBased) {
 		ReferenceResolverContext cm = new ReferenceResolverContext(module,
 				settings);
 		for (int a = 0; a < registredResolvers.length; a++) {
 			IReferenceResolver create = registredResolvers[a].create();
 			if (create instanceof SourceBasedResolver) {
-				cm.resolvers.add(0, create);
+				if (!skipSourceBased) {
+					cm.resolvers.add(0, create);
+				}
 			} else if (create.canResolve(module)) {
 				cm.resolvers.add(create);
 			}
