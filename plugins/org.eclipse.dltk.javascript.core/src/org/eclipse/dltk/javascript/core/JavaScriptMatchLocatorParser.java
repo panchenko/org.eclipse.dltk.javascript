@@ -36,27 +36,29 @@ import org.eclipse.dltk.internal.javascript.typeinference.VaribleDeclarationRefe
 
 public class JavaScriptMatchLocatorParser extends MatchLocatorParser implements
 		IMatchLocatorParser {
-	private JavaScriptSourceParser parser ;
+	private JavaScriptSourceParser parser;
 
 	public JavaScriptMatchLocatorParser(MatchLocator locator) {
 		super(locator);
-		
-		
+
 	}
 
 	IModelElement parent;
-	public ModuleDeclaration parse(PossibleMatch possibleMatch) {		
-		parent= possibleMatch.getModelElement();
-		parser=new JavaScriptSourceParser(parent);
-		if (parent instanceof ISourceModule){
-			ISourceModule m=(ISourceModule) parent;
+
+	public ModuleDeclaration parse(PossibleMatch possibleMatch) {
+		parent = possibleMatch.getModelElement();
+		parser = new JavaScriptSourceParser(parent);
+		if (parent instanceof ISourceModule) {
+			ISourceModule m = (ISourceModule) parent;
 			try {
-				return parser.parse(m.getPath().toOSString().toCharArray(), m.getSourceAsCharArray(), null);
+				return parser.parse(m.getPath().toOSString().toCharArray(), m
+						.getSourceAsCharArray(), null);
 			} catch (ModelException e) {
 
 			}
 		}
-		return parser.parse(possibleMatch.getFileName(), possibleMatch.getSourceContents().toCharArray(), null);
+		return parser.parse(possibleMatch.getFileName(), possibleMatch
+				.getContentsAsCharArray(), null);
 	}
 
 	public void parseBodies(ModuleDeclaration unit) {
@@ -89,53 +91,50 @@ public class JavaScriptMatchLocatorParser extends MatchLocatorParser implements
 		Iterator i = sm.iterator();
 		while (i.hasNext()) {
 			Object next = i.next();
-			if (next instanceof IReference)
-			{
-			IReference ref = (IReference) next;
-			reportRef(ref, null, 0);
+			if (next instanceof IReference) {
+				IReference ref = (IReference) next;
+				reportRef(ref, null, 0);
 			}
 		}
 		Map ms = md.getFunctionMap();
 		Iterator ia = ms.values().iterator();
 		PatternLocator locator = getPatternLocator();
-		// contibuting methods 
+		// contibuting methods
 		while (ia.hasNext()) {
 			HostCollection next = (HostCollection) ia.next();
-			Reference node = new FunctionDeclarationReference(0, 0, "!!!"+next
-					.getName(), next);
+			Reference node = new FunctionDeclarationReference(0, 0, "!!!"
+					+ next.getName(), next);
 			locator.match(node, getNodeSet());
 		}
 		Collection references = md.getReferences();
-		ia=references.iterator();
-		while (ia.hasNext()){
-			SimpleReference r=(SimpleReference) ia.next();
-			
+		ia = references.iterator();
+		while (ia.hasNext()) {
+			SimpleReference r = (SimpleReference) ia.next();
+
 			locator.match(r, getNodeSet());
 		}
 	}
 
-	private void reportRef(IReference ref, String sma, int level) {		
-		
+	private void reportRef(IReference ref, String sma, int level) {
+
 		String key = ref.getName();
 		if (sma != null)
 			key = sma + '.' + key;
-		if (!(ref instanceof ContextReference))
-		{
-		Set sm = ref.getChilds(false);
-		Iterator i = sm.iterator();		
-		while (i.hasNext()) {
-			Object next = i.next();
-			if (next instanceof IReference)
-			{
-			
-			IReference refa = (IReference) next;
-			reportRef(refa, key, level + 1);
+		if (!(ref instanceof ContextReference)) {
+			Set sm = ref.getChilds(false);
+			Iterator i = sm.iterator();
+			while (i.hasNext()) {
+				Object next = i.next();
+				if (next instanceof IReference) {
+
+					IReference refa = (IReference) next;
+					reportRef(refa, key, level + 1);
+				}
 			}
-		}
 		}
 		PatternLocator locator = getPatternLocator();
 		// contibuting field to index
-		Reference node = new VaribleDeclarationReference(0, 0, key,ref);
+		Reference node = new VaribleDeclarationReference(0, 0, key, ref);
 		locator.match(node, getNodeSet());
 	}
 }
