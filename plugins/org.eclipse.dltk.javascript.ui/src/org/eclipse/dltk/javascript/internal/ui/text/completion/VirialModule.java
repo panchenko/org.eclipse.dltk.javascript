@@ -353,6 +353,13 @@ public class VirialModule extends ModelElement implements ISourceModule,
 	public char[] getSourceAsCharArray() throws ModelException {
 		return null;	
 	}
+	
+	/*
+	 * @see org.eclipse.dltk.compiler.env.ISourceModule#getContentsAsCharArray()
+	 */
+	public char[] getContentsAsCharArray() {
+		return getSourceContents().toCharArray();
+	}
 
 	public boolean isBuiltin() {
 		// TODO Auto-generated method stub
