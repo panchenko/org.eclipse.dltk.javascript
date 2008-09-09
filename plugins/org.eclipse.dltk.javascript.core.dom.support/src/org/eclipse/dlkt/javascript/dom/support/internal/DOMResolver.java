@@ -2,6 +2,7 @@ package org.eclipse.dlkt.javascript.dom.support.internal;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,6 +20,7 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolve
 import org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
+import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
 import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
@@ -216,6 +218,12 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			id = id.substring(0, index) + "." + id.substring(index);
 			index = id.indexOf("[]", index + 2);
 		}
+		index = id.indexOf('(');
+		while (index != -1) {
+			int index2 = id.indexOf(')', index);
+			id = id.substring(0, index) + id.substring(index2 + 1);
+			index = id.indexOf('(', index);
+		}
 		int pos = id.indexOf('.');
 		String key = pos == -1 ? id : id.substring(0, pos);
 
@@ -240,6 +248,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 				if (object instanceof IProposalHolder) {
 					object = ((IProposalHolder) object).getObject();
 				}
+				object = getObjectReferenceScope(key, object);
 				if (object instanceof Scriptable) {
 					id = id.substring(pos + 1);
 					pos = id.indexOf('.');
@@ -267,7 +276,9 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			if (s.startsWith(key)) {
 				Object object = globals.get(s);
 				UnknownReference uref = null;
-				if (object instanceof Scriptable) {
+				if (object instanceof UnknownReferenceScope) {
+					uref = ((UnknownReferenceScope) object).getReference();
+				} else if (object instanceof Scriptable) {
 					uref = new ScriptableScopeReference(s, (Scriptable) object,
 							this);
 					if (object instanceof IProposalHolder) {
@@ -275,8 +286,6 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						uref.setParameterNames(fapn.getParameterNames());
 						uref.setProposalInfo(fapn.getProposalInfo());
 					}
-				} else if (object == String.class) {
-					uref = new UnknownReference(s, false);
 				} else {
 					uref = new UnknownReference(s, false);
 				}
@@ -284,6 +293,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					IProposalHolder fapn = (IProposalHolder) object;
 					uref.setParameterNames(fapn.getParameterNames());
 					uref.setProposalInfo(fapn.getProposalInfo());
+					uref.setImageUrl(fapn.getImageURL());
 					object = fapn.getObject();
 					if (fapn.isFunctionRef())
 						uref.setFunctionRef();
@@ -294,6 +304,31 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 				rs.add(uref);
 			}
 		}
+	}
+
+	/**
+	 * @param s
+	 * @param object
+	 * @return
+	 */
+	private Object getObjectReferenceScope(String s, Object object) {
+		if (object == null)
+			return null;
+		UnknownReference uref = null;
+		if (object.getClass() == String.class) {
+			uref = ReferenceFactory.createStringReference(s);
+		} else if (object.getClass() == Boolean.class) {
+			uref = ReferenceFactory.createBooleanReference(s);
+		} else if (Date.class.isAssignableFrom(object.getClass())) {
+			uref = ReferenceFactory.createDateReference(s);
+		} else if (Number.class.isAssignableFrom(object.getClass())) {
+			uref = ReferenceFactory.createNumberReference(s);
+		} else if ((object.getClass()).isArray()) {
+			uref = ReferenceFactory.createArrayReference(s);
+		}
+		if (uref != null)
+			return new UnknownReferenceScope(uref);
+		return object;
 	}
 
 	public boolean canResolve(ISourceModule module) {
