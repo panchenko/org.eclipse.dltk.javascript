@@ -16,9 +16,10 @@ import java.util.HashSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.core.CompletionProposal;
-import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.IMember;
+import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider;
 import org.eclipse.dltk.ui.text.completion.AbstractScriptCompletionProposal;
@@ -35,9 +36,9 @@ public class JavaScriptCompletionProposalCollector extends
 
 	protected final static char[] VAR_TRIGGER = new char[] { '\t', ' ', '=',
 			';', '.' };
-	
+
 	private final HashSet doubleFilter = new HashSet();
-	
+
 	protected char[] getVarTrigger() {
 		return VAR_TRIGGER;
 	}
@@ -60,29 +61,25 @@ public class JavaScriptCompletionProposalCollector extends
 			}
 		};
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector#beginReporting()
 	 */
-	public void beginReporting()
-	{
+	public void beginReporting() {
 		super.beginReporting();
 		doubleFilter.clear();
 	}
 
-	
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector#isFiltered(org.eclipse.dltk.core.CompletionProposal)
 	 */
-	protected boolean isFiltered(CompletionProposal proposal)
-	{
-		if (!doubleFilter.add(new String(proposal.getName())))
-		{
+	protected boolean isFiltered(CompletionProposal proposal) {
+		if (!doubleFilter.add(new String(proposal.getName()))) {
 			return true;
 		}
 		return super.isFiltered(proposal);
 	}
-	
+
 	// Specific proposals creation. May be use factory?
 	protected IScriptCompletionProposal createScriptCompletionProposal(
 			CompletionProposal proposal) {
@@ -95,7 +92,10 @@ public class JavaScriptCompletionProposalCollector extends
 		ProposalInfo proposalInfo = new ProposalInfo(null) {
 
 			public String getInfo(IProgressMonitor monitor) {
-				if (ref instanceof IReference) {
+
+				if (ref instanceof SelfCompletingReference) {
+					return ((SelfCompletingReference) ref).getProposalInfo();
+				} else if (ref instanceof IReference) {
 					ArrayList ms = new ArrayList();
 					((IReference) ref).addModelElements(ms);
 					if (ms.size() > 0)
@@ -113,10 +113,8 @@ public class JavaScriptCompletionProposalCollector extends
 						String string = getString(contentReader);
 						return string;
 					}
-				}
-				else if (ref instanceof String)
-				{
-					return (String)ref;
+				} else if (ref instanceof String) {
+					return (String) ref;
 				}
 				return "Documentation not resolved";
 			}
@@ -158,7 +156,7 @@ public class JavaScriptCompletionProposalCollector extends
 				isInDoc);
 		return javaScriptCompletionProposal;
 	}
-	
+
 	protected ScriptCompletionProposal createOverrideCompletionProposal(
 			IScriptProject scriptProject, ISourceModule compilationUnit,
 			String name, String[] paramTypes, int start, int length,
@@ -167,7 +165,7 @@ public class JavaScriptCompletionProposalCollector extends
 				compilationUnit, name, paramTypes, start, length, displayName,
 				completionProposal);
 	}
-	
+
 	protected IScriptCompletionProposal createKeywordProposal(
 			CompletionProposal proposal) {
 		String completion = String.valueOf(proposal.getCompletion());
