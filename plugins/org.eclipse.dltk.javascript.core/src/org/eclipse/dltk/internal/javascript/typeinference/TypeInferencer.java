@@ -648,6 +648,8 @@ public class TypeInferencer {
 		case Token.GETELEM:
 		case Token.GETPROP:
 			String key1 = getObjId(expression);
+			if (key1.endsWith(".e"))
+				key1 = key1.substring(0, key1.length() - 2);
 			IReference ref = (IReference) collection.queryElement(key1, true);
 			if (ref == null) {
 				ref = resolveReferenceTree(key, cs, key1, ref);
@@ -809,6 +811,10 @@ public class TypeInferencer {
 		if (id == null)
 			return "";
 		switch (id.getType()) {
+		case Token.CALL: {
+			Node n = id.getFirstChild();
+			return getObjId(n);
+		}
 		case Token.GETPROP: {
 			Node n = id.getFirstChild();
 			String result = getObjId(n) + '.' + id.getLastChild().getString();

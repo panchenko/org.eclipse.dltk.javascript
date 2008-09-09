@@ -109,11 +109,13 @@ public class AssitUtils {
 			l2: while (pos > 0) {
 				pos--;
 				char charAt = content.charAt(pos);
-				if (charAt == ']') {
+				if (charAt == '\n')
+					break;
+				if (charAt == ']' || charAt == ')') {
 					nestLevel++;
 					continue;
 				}
-				if (charAt == '[') {
+				if (charAt == '[' || charAt == '(') {
 					nestLevel--;
 					continue;
 				}

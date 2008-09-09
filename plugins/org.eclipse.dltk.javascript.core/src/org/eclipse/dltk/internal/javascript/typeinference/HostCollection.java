@@ -33,6 +33,13 @@ public class HostCollection {
 	}
 
 	public Set queryElements(String id, boolean useGlobal) {
+		int index = id.indexOf('(');
+		while (index != -1) {
+			int index2 = id.indexOf(')', index);
+			id = id.substring(0, index) + id.substring(index2 + 1);
+			index = id.indexOf('(', index);
+		}
+
 		IReference r = getReference(id);
 		HashSet res = new HashSet();
 		if (r != null) {

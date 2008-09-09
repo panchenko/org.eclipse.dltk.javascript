@@ -9,20 +9,25 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.typeinference;
 
-
-
-
 public class ReferenceFactory {
 
-	public static IReference createNumberReference( String name,double number){
-		return new UnknownReference(name,false);		
+	public static UnknownReference createNumberReference(String name) {
+		return new NativeNumberReference(name);
 	}
 
-	public static IReference createStringReference(String name,String string) {
-		return new UnknownReference(name,false);
+	public static UnknownReference createStringReference(String name) {
+		return new NativeStringReference(name);
 	}
 
-	public static IReference createBooleanReference(String name,boolean b) {
-		return new UnknownReference(name,false);
+	public static UnknownReference createBooleanReference(String name) {
+		return new NativeBooleanReference(name);
+	}
+
+	public static UnknownReference createArrayReference(String name) {
+		return new NativeArrayReference(name);
+	}
+
+	public static UnknownReference createDateReference(String name) {
+		return new NativeDateReference(name);
 	}
 }

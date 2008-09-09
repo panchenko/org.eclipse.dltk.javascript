@@ -9,19 +9,24 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.reference.resolvers;
 
+import java.net.URL;
+
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 
-public interface SelfCompletingReference extends IReference{
-
-	
+public interface SelfCompletingReference extends IReference {
 
 	int getKind();
-	
-	char[] getSignature();
-	
-	char[] getDeclarationSignature();
+
+	// char[] getSignature();
+	//	
+	// char[] getDeclarationSignature();
 
 	char[][] getParameterNames();
 
-	
+	public String getProposalInfo();
+
+	/**
+	 * @return
+	 */
+	URL getImageURL();
 }

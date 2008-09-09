@@ -42,7 +42,6 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingRe
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils.PositionCalculator;
@@ -150,6 +149,48 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		}
 		char[] token = completion.toCharArray();
 
+		HashMap names = new HashMap();
+		Set resolveGlobals = buildContext.resolveGlobals(completion);
+		Iterator it = resolveGlobals.iterator();
+		HashSet classes = new HashSet();
+		while (it.hasNext()) {
+			Object o = it.next();
+			if (o instanceof IReference) {
+				IReference r = (IReference) o;
+				if (!completedNames.contains(r.getName())) {
+					if (r instanceof IClassReference)
+						classes.add(r);
+					else {
+						names.put(r.getName(), r);
+					}
+				}
+			}
+		}
+		names.remove("!!!returnValue");
+		completeFromMap(position, completion, names);
+		if (names.size() > 0) {
+			char[][] choices = new char[names.size()][];
+			int ia = 0;
+			for (Iterator iterator = names.keySet().iterator(); iterator
+					.hasNext();) {
+				String name = (String) iterator.next();
+				choices[ia] = name.toCharArray();
+				ia++;
+			}
+			findLocalVariables(token, choices, true, false);
+		}
+		if (classes.size() > 0) {
+			char[][] choices = new char[classes.size()][];
+			int ia = 0;
+			for (Iterator iterator = classes.iterator(); iterator.hasNext();) {
+				IReference name = (IReference) iterator.next();
+				choices[ia] = name.getName().toCharArray();
+				ia++;
+			}
+			findElements(token, choices, true, false,
+					CompletionProposal.TYPE_REF);
+		}
+
 		if (useEngine) {
 			doCompletionOnKeyword(position, pos, completion);
 			JavaScriptMixinModel instance = JavaScriptMixinModel.getInstance();
@@ -210,7 +251,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		while (collection.getParent() != null) {
 			collection = collection.getParent();
 			Map m1 = collection.getReferences();
-			Iterator it = m1.keySet().iterator();
+			it = m1.keySet().iterator();
 			while (it.hasNext()) {
 				Object next = it.next();
 				if (!(next instanceof String))
@@ -221,8 +262,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			}
 
 		}
-		HashMap names = new HashMap();
-		Iterator it = rfs.keySet().iterator();
+		it = rfs.keySet().iterator();
 		while (it.hasNext()) {
 			Object next = it.next();
 			if (!(next instanceof String))
@@ -232,64 +272,10 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				continue;
 			names.put(name, rfs.get(name));
 		}
-		ReferenceResolverContext createResolverContext = buildContext;
-
-		Set resolveGlobals = createResolverContext.resolveGlobals(completion);
-		it = resolveGlobals.iterator();
-		HashSet classes = new HashSet();
-		HashSet functions = new HashSet();
-		while (it.hasNext()) {
-			Object o = it.next();
-			if (o instanceof IReference) {
-				IReference r = (IReference) o;
-				if (!completedNames.contains(r.getName())) {
-					if (r instanceof IClassReference)
-						classes.add(r);
-					else {
-						if (r.isFunctionRef())
-							functions.add(r);
-						else
-							names.put(r.getName(), r);
-					}
-				}
-			}
+		if (names.size() > 0) {
+			// should these be reported somehow?
+			// System.err.println(names);
 		}
-		names.remove("!!!returnValue");
-		completeFromMap(position, completion, names);
-		char[][] choices = new char[names.size()][];
-		int ia = 0;
-		for (Iterator iterator = names.keySet().iterator(); iterator.hasNext();) {
-			String name = (String) iterator.next();
-			choices[ia] = name.toCharArray();
-			ia++;
-		}
-		findLocalVariables(token, choices, true, false);
-		choices = new char[classes.size()][];
-		ia = 0;
-		for (Iterator iterator = classes.iterator(); iterator.hasNext();) {
-			IReference name = (IReference) iterator.next();
-			choices[ia] = name.getName().toCharArray();
-			ia++;
-		}
-		findElements(token, choices, true, false, CompletionProposal.TYPE_REF,
-				Collections.EMPTY_MAP, Collections.EMPTY_MAP);
-		choices = new char[functions.size()][];
-		ia = 0;
-		HashMap parameterNames = new HashMap();
-		HashMap proposalInfo = new HashMap();
-		for (Iterator iterator = functions.iterator(); iterator.hasNext();) {
-			IReference name = (IReference) iterator.next();
-			choices[ia] = name.getName().toCharArray();
-			if (name instanceof UnknownReference) {
-				parameterNames.put(choices[ia], ((UnknownReference) name)
-						.getParameterNames());
-				proposalInfo.put(choices[ia], ((UnknownReference) name)
-						.getProposalInfo());
-			}
-			ia++;
-		}
-		findElements(token, choices, true, false,
-				CompletionProposal.METHOD_REF, parameterNames, proposalInfo);
 	}
 
 	private void doCompletionOnMember(ReferenceResolverContext buildContext,
@@ -313,9 +299,19 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			if (corePart.charAt(k + 1) == ']')
 				break;
 		}
-		Set references = collection.queryElements(corePart, true);
-		final HashSet searchResults = new HashSet();
 		final HashMap dubR = new HashMap();
+		Set resolveGlobals = buildContext.resolveGlobals(corePart + '.');
+		Iterator it = resolveGlobals.iterator();
+		while (it.hasNext()) {
+			Object o = it.next();
+			if (o instanceof IReference) {
+				IReference r = (IReference) o;
+				dubR.put(r.getName(), r);
+			}
+		}
+		completeFromMap(position, completionPart, dubR);
+
+		Set references = collection.queryElements(corePart, true);
 		Iterator iterator;
 		if (!references.isEmpty()) {
 			iterator = references.iterator();
@@ -351,96 +347,13 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 					dubR.put(refa, name);
 				}
 			}
+			completeFromMap(position, completionPart, dubR);
 		}
-		// else
-		// the dom resolver should always be asked, even if the search did
-		// return something.
-		{
-			Set resolveGlobals = buildContext.resolveGlobals(corePart + '.');
-			Iterator it = resolveGlobals.iterator();
-			while (it.hasNext()) {
-				Object o = it.next();
-				if (o instanceof IReference) {
-					IReference r = (IReference) o;
-					dubR.put(r.getName(), r);
-				}
-			}
-			// long currentTimeMillis = System.currentTimeMillis();
-			// String[] findElements = JavaScriptMixinModel.getInstance()
-			// .findElements(corePart);
-			// long currentTimeMillis2 = System.currentTimeMillis();
-			// System.out.println(currentTimeMillis2 - currentTimeMillis);
-			// System.out.println(findElements.length);
-		}
-		completeFromMap(position, completionPart, dubR);
-		HashMap functions = new HashMap();
-		for (iterator = dubR.keySet().iterator(); iterator.hasNext();) {
-			Object key = iterator.next();
-			Object next = dubR.get(key);
-			if (next instanceof IReference) {
-				IReference name = (IReference) next;
-				if (name.isFunctionRef()) {
-					functions.put(key, name);
-				}
-			}
-		}
-		for (iterator = functions.keySet().iterator(); iterator.hasNext();) {
-			Object key = iterator.next();
-			dubR.remove(key);
-		}
-		char[][] choices = new char[dubR.size() + searchResults.size()][];
-		int ia = 0;
-		HashMap parameterNames = new HashMap();
-		HashMap proposalInfo = new HashMap();
-		for (iterator = dubR.values().iterator(); iterator.hasNext();) {
-			Object next = iterator.next();
-			if (next instanceof IReference) {
-				IReference name = (IReference) next;
-				String refa = name.getName();
-				choices[ia] = refa.toCharArray();
-				if (name instanceof UnknownReference) {
-					parameterNames.put(choices[ia], ((UnknownReference) name)
-							.getParameterNames());
-					proposalInfo.put(choices[ia], ((UnknownReference) name)
-							.getProposalInfo());
-				}
-				ia++;
-			}
-		}
-		for (iterator = searchResults.iterator(); iterator.hasNext();) {
-			Object next = iterator.next();
-			String refa = (String) next;
-			choices[ia++] = refa.toCharArray();
-		}
-		findElements(completionPart.toCharArray(), choices, true, false,
-				CompletionProposal.FIELD_REF, parameterNames, proposalInfo);
-		choices = new char[functions.size()][];
-		parameterNames = new HashMap();
-		proposalInfo = new HashMap();
-		ia = 0;
-		for (iterator = functions.values().iterator(); iterator.hasNext();) {
-			Object next = iterator.next();
-			if (next instanceof IReference) {
-				IReference name = (IReference) next;
-				String refa = name.getName();
-				choices[ia] = refa.toCharArray();
-				if (name instanceof UnknownReference) {
-					parameterNames.put(choices[ia], ((UnknownReference) name)
-							.getParameterNames());
-					proposalInfo.put(choices[ia], ((UnknownReference) name)
-							.getProposalInfo());
-				}
-				ia++;
-			}
-		}
-		findElements(completionPart.toCharArray(), choices, true, false,
-				CompletionProposal.METHOD_REF, parameterNames, proposalInfo);
 	}
 
 	private void completeFromMap(int position, String completionPart,
 			final HashMap dubR) {
 		Iterator iterator;
-		HashSet rk = new HashSet();
 		this.requestor.acceptContext(new CompletionContext());
 		this.setSourceRange(position - completionPart.length(), position);
 		char[] token = completionPart.toCharArray();
@@ -467,12 +380,27 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 							- this.offset, this.endPosition - this.offset);
 					this.requestor.accept(createProposal);
 				}
-				rk.add(((IReference) next).getName());
+				iterator.remove();
+			} else if (next instanceof IReference) {
+				IReference ref = (IReference) next;
+				int knd = ref.isFunctionRef() ? CompletionProposal.METHOD_REF
+						: CompletionProposal.LOCAL_VARIABLE_REF;
+				char[] name = ref.getName().toCharArray();
+				if (length <= name.length
+						&& CharOperation.prefixEquals(token, name, false)) {
+					CompletionProposal createProposal = this.createProposal(
+							knd, this.actualCompletionPosition);
+					createProposal.setName(name);
+					createProposal.setCompletion(name);
+					// createProposal.setSignature(name);
+					// createProposal.setDeclarationSignature(cm.getDeclarationSignature());
+					// createProposal.setSignature(cm.getSignature());
+					createProposal.setReplaceRange(this.startPosition
+							- this.offset, this.endPosition - this.offset);
+					this.requestor.accept(createProposal);
+				}
+				iterator.remove();
 			}
-
-		}
-		for (iterator = rk.iterator(); iterator.hasNext();) {
-			dubR.remove(iterator.next());
 		}
 	}
 
