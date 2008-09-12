@@ -19,23 +19,24 @@ import org.eclipse.dltk.internal.core.SourceField;
 import org.eclipse.dltk.internal.core.SourceRange;
 
 public class FakeField extends SourceField {
-	
+
 	private int offset;
 	private int length;
 	private String snippet;
-	
-	public FakeField(ModelElement parent, String name,int offset,int length) {
+	private String proposalInfo;
+
+	public FakeField(ModelElement parent, String name, int offset, int length) {
 		super(parent, name);
-		this.offset=offset;
-		this.length=length;
+		this.offset = offset;
+		this.length = length;
 	}
 
 	public ISourceRange getNameRange() throws ModelException {
-		return new SourceRange(offset,length);
+		return new SourceRange(offset, length);
 	}
 
 	public ISourceRange getSourceRange() throws ModelException {
-		return new SourceRange(offset,length);
+		return new SourceRange(offset, length);
 	}
 
 	public String getSnippet() {
@@ -44,5 +45,20 @@ public class FakeField extends SourceField {
 
 	public void setSnippet(String snippet) {
 		this.snippet = snippet;
+	}
+
+	/**
+	 * @param proposalInfo
+	 */
+	public void setProposalInfo(String proposalInfo) {
+		this.proposalInfo = proposalInfo;
+
+	}
+
+	/**
+	 * @return the proposalInfo
+	 */
+	public String getProposalInfo() {
+		return proposalInfo;
 	}
 }
