@@ -108,7 +108,9 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 			UnknownReference ssr = (UnknownReference) ref;
 			ssr.parentRef = this;
 			if (parentRef != null) {
-				IReference child = parentRef.findEqualParent(ref);
+				HashSet set = new HashSet();
+				set.add(parentRef);
+				IReference child = parentRef.findEqualParent(ref, set);
 				if (child != null) {
 					ref = child;
 				}
@@ -121,11 +123,13 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 	 * @param ref
 	 * @return
 	 */
-	private IReference findEqualParent(IReference ref) {
+	private IReference findEqualParent(IReference ref, Set parents) {
 		if (this.equals(ref))
 			return this;
-		if (parentRef != null)
-			return parentRef.findEqualParent(ref);
+		if (parentRef != null && !parents.contains(parentRef)) {
+			parents.add(parentRef);
+			return parentRef.findEqualParent(ref, parents);
+		}
 		return null;
 	}
 
@@ -148,8 +152,11 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 	}
 
 	public void addModelElements(Collection toAdd) {
-		if (parent != null)
-			toAdd.add(new FakeField(parent, name, offset, length));
+		if (parent != null) {
+			FakeField fakeField = new FakeField(parent, name, offset, length);
+			fakeField.setProposalInfo(getProposalInfo());
+			toAdd.add(fakeField);
+		}
 	}
 
 	public boolean isFunctionRef() {
