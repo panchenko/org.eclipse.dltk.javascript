@@ -14,15 +14,20 @@ import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dlkt.javascript.dom.support.IDesignTimeDOMProvider;
 import org.eclipse.dlkt.javascript.dom.support.IProposalHolder;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IReferenceResolver;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableReference;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultReference;
+import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
 import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
 import org.mozilla.javascript.Function;
+import org.mozilla.javascript.MemberBox;
+import org.mozilla.javascript.NativeJavaMethod;
+import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -213,17 +218,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 	}
 
 	public Set resolveGlobals(String id) {
-		int index = id.indexOf("[]");
-		while (index >= 0) {
-			id = id.substring(0, index) + "." + id.substring(index);
-			index = id.indexOf("[]", index + 2);
-		}
-		index = id.indexOf('(');
-		while (index != -1) {
-			int index2 = id.indexOf(')', index);
-			id = id.substring(0, index) + id.substring(index2 + 1);
-			index = id.indexOf('(', index);
-		}
+		id = HostCollection.parseId(id);
 		int pos = id.indexOf('.');
 		String key = pos == -1 ? id : id.substring(0, pos);
 
@@ -286,20 +281,31 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						uref.setParameterNames(fapn.getParameterNames());
 						uref.setProposalInfo(fapn.getProposalInfo());
 					}
-				} else {
-					uref = new UnknownReference(s, false);
-				}
-				if (object instanceof IProposalHolder) {
+				} else if (object instanceof IProposalHolder) {
 					IProposalHolder fapn = (IProposalHolder) object;
+					object = getObjectReferenceScope(s,
+							((IProposalHolder) object).getObject());
+					if (object instanceof UnknownReferenceScope) {
+						uref = ((UnknownReferenceScope) object).getReference();
+					} else {
+						uref = new UnknownReference(s, false);
+					}
 					uref.setParameterNames(fapn.getParameterNames());
 					uref.setProposalInfo(fapn.getProposalInfo());
 					uref.setImageUrl(fapn.getImageURL());
 					object = fapn.getObject();
 					if (fapn.isFunctionRef())
 						uref.setFunctionRef();
+				} else {
+					uref = new UnknownReference(s, false);
 				}
+
 				if (object instanceof Function) {
 					uref.setFunctionRef();
+				}
+				if (module instanceof ModelElement) {
+					uref.setLocationInformation((ModelElement) module, uref
+							.getOffset(), uref.getLength());
 				}
 				rs.add(uref);
 			}
@@ -315,15 +321,28 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		if (object == null)
 			return null;
 		UnknownReference uref = null;
-		if (object.getClass() == String.class) {
+		Class clz = object.getClass();
+		if (object instanceof NativeJavaObject) {
+			clz = ((NativeJavaObject) object).unwrap().getClass();
+		} else if (object instanceof NativeJavaMethod) {
+			MemberBox[] methods = ((NativeJavaMethod) object).getMethods();
+			for (int i = 0; i < methods.length; i++) {
+				if (methods[i].getReturnType() != null) {
+					clz = methods[i].getReturnType();
+					break;
+				}
+			}
+		}
+		if (clz == String.class) {
 			uref = ReferenceFactory.createStringReference(s);
-		} else if (object.getClass() == Boolean.class) {
+		} else if (clz == Boolean.class || clz == boolean.class) {
 			uref = ReferenceFactory.createBooleanReference(s);
-		} else if (Date.class.isAssignableFrom(object.getClass())) {
+		} else if (Date.class.isAssignableFrom(clz)) {
 			uref = ReferenceFactory.createDateReference(s);
-		} else if (Number.class.isAssignableFrom(object.getClass())) {
+			// booleans are just above.
+		} else if (Number.class.isAssignableFrom(clz) || clz.isPrimitive()) {
 			uref = ReferenceFactory.createNumberReference(s);
-		} else if ((object.getClass()).isArray()) {
+		} else if ((clz).isArray()) {
 			uref = ReferenceFactory.createArrayReference(s);
 		}
 		if (uref != null)
