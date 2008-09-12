@@ -36,14 +36,17 @@ public class NewReference extends AbstractCallResultReference {
 			return ReferenceFactory.createStringReference("String").getChilds(
 					resolveLocals);
 		} else if ("Date".equals(getId())) {
-			return ReferenceFactory.createStringReference("Date").getChilds(
+			return ReferenceFactory.createDateReference("Date").getChilds(
 					resolveLocals);
 		} else if ("Array".equals(getId())) {
-			return ReferenceFactory.createStringReference("Array").getChilds(
+			return ReferenceFactory.createArrayReference("Array").getChilds(
 					resolveLocals);
 		} else if ("Number".equals(getId())) {
-			return ReferenceFactory.createStringReference("Number").getChilds(
+			return ReferenceFactory.createNumberReference("Number").getChilds(
 					resolveLocals);
+		} else if ("Boolean".equals(getId())) {
+			return ReferenceFactory.createBooleanReference("Boolean")
+					.getChilds(resolveLocals);
 		}
 		return super.internalGetChilds(resolveLocals);
 	}
