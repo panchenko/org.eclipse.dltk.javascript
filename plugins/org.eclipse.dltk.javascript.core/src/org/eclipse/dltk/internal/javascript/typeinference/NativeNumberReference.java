@@ -9,6 +9,21 @@ package org.eclipse.dltk.internal.javascript.typeinference;
  */
 public class NativeNumberReference extends UnknownReference {
 
+	private static UnknownReference toString = new NativeStringReference(
+			"toString").setFunctionRef();
+	private static UnknownReference toLocaleString = new NativeStringReference(
+			"toLocaleString").setFunctionRef();
+	private static UnknownReference toSource = new NativeStringReference(
+			"toSource").setFunctionRef();
+	private static UnknownReference valueOf = new NativeStringReference(
+			"valueOf").setFunctionRef();
+	private static UnknownReference toFixed = new NativeStringReference(
+			"toFixed").setFunctionRef();
+	private static UnknownReference toExponential = new NativeStringReference(
+			"toExponential").setFunctionRef();
+	private static UnknownReference toPrecision = new NativeStringReference(
+			"toPrecision").setFunctionRef();
+
 	/**
 	 * @param paramOrVarName
 	 * @param childIsh
@@ -21,20 +36,49 @@ public class NativeNumberReference extends UnknownReference {
 	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#createChilds()
 	 */
 	protected void createChilds() {
-		setChild("toString", new NativeStringReference("toString")
-				.setFunctionRef());
-		setChild("toLocaleString", new NativeStringReference("toLocaleString")
-				.setFunctionRef());
-		setChild("toSource", new NativeStringReference("toSource")
-				.setFunctionRef());
-		setChild("valueOf", new NativeStringReference("valueOf")
-				.setFunctionRef());
-		setChild("toFixed", new NativeStringReference("toFixed")
-				.setFunctionRef());
-		setChild("toExponential", new NativeStringReference("toExponential")
-				.setFunctionRef());
-		setChild("toPrecision", new NativeStringReference("toPrecision")
-				.setFunctionRef());
+		setChild("toString", toString);
+		setChild("toLocaleString", toLocaleString);
+		setChild("toSource", toSource);
+		setChild("valueOf", valueOf);
+		setChild("toFixed", toFixed);
+		setChild("toExponential", toExponential);
+		setChild("toPrecision", toPrecision);
 
 	}
+
+	public void setChild(String key, IReference ref) {
+
+		if (ref instanceof UnknownReference) {
+			UnknownReference ur = (UnknownReference) ref;
+			String name = ref.getName();
+			if (name.equals("toString")) {
+				ur.setProposalInfo("Returns a String value for this Number.");
+			} else if (name.equals("toSource")) {
+				ur
+						.setProposalInfo("The toSource() method represents the source code of an object.");
+			} else if (name.equals("valueOf")) {
+				ur
+						.setProposalInfo("Returns the primitive value of a Number object.");
+			} else if (name.equals("toExponential")) {
+				ur
+						.setProposalInfo("Converts the value of the object into an exponential notation.");
+				ur.setParameterNames(new char[][] { "numberOfDecimals"
+						.toCharArray() });
+
+			} else if (name.equals("toFixed")) {
+				ur
+						.setProposalInfo("Formats a number to the specified number of decimals.");
+				ur.setParameterNames(new char[][] { "numberOfDecimals"
+						.toCharArray() });
+			} else if (name.equals("toLocaleString")) {
+			} else if (name.equals("toPrecision")) {
+				ur
+						.setProposalInfo("Converts a number into an exponential notation if it has more digits than specified.");
+				ur.setParameterNames(new char[][] { "numberOfDigits"
+						.toCharArray() });
+			}
+		}
+		super.setChild(key, ref);
+	}
+
 }
