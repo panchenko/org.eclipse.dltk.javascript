@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 public class HostCollection {
 
@@ -32,13 +33,42 @@ public class HostCollection {
 		return reference2;
 	}
 
-	public Set queryElements(String id, boolean useGlobal) {
-		int index = id.indexOf('(');
-		while (index != -1) {
-			int index2 = id.indexOf(')', index);
-			id = id.substring(0, index) + id.substring(index2 + 1);
-			index = id.indexOf('(', index);
+	public static String parseId(String id) {
+		StringBuffer sb = new StringBuffer();
+		int current = 0;
+		Stack inBrackStack = new Stack();
+		for (int i = 0; i < id.length(); i++) {
+			char c = id.charAt(i);
+			if (c == '[' || c == '(') {
+				if (inBrackStack.isEmpty()) {
+					sb.append(id.substring(current, i));
+					if (c == '[') {
+						sb.append(".[]");
+					}
+				}
+				inBrackStack.push(new Integer(i));
+				continue;
+			}
+			if (c == ']' || c == ')') {
+				if (!inBrackStack.isEmpty()) // illegal code
+					inBrackStack.pop();
+				if (inBrackStack.isEmpty()) {
+					current = i + 1;
+				}
+			}
 		}
+		if (sb.length() == 0 && inBrackStack.isEmpty())
+			return id;
+		if (!inBrackStack.isEmpty()) {
+			Integer last = (Integer) inBrackStack.pop();
+			return parseId(id.substring(last.intValue() + 1));
+		}
+		sb.append(id.substring(current));
+		return sb.toString();
+	}
+
+	public Set queryElements(String id, boolean useGlobal) {
+		id = parseId(id);
 
 		IReference r = getReference(id);
 		HashSet res = new HashSet();
