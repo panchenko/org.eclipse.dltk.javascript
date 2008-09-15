@@ -39,6 +39,7 @@ import org.eclipse.dltk.core.mixin.IMixinElement;
 import org.eclipse.dltk.core.mixin.MixinModel;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
+import org.eclipse.dltk.internal.javascript.typeinference.CombinedOrReference;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
@@ -142,12 +143,10 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			Object o = it.next();
 			if (o instanceof IReference) {
 				IReference r = (IReference) o;
-				if (!completedNames.contains(r.getName())) {
-					if (r instanceof IClassReference)
-						classes.add(r);
-					else {
-						names.put(r.getName(), r);
-					}
+				if (r instanceof IClassReference)
+					classes.add(r);
+				else {
+					putAndCheckDuplicateReference(names, r);
 				}
 			}
 		}
@@ -276,7 +275,11 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			Object o = it.next();
 			if (o instanceof IReference) {
 				IReference r = (IReference) o;
-				dubR.put(r.getName(), r);
+				// if (r instanceof IClassReference)
+				// classes.add(r);
+				// else {
+				putAndCheckDuplicateReference(dubR, r);
+				// }
 			}
 		}
 		completeFromMap(position, completionPart, dubR);
@@ -318,6 +321,28 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				}
 			}
 			completeFromMap(position, completionPart, dubR);
+		}
+	}
+
+	/**
+	 * @param dubR
+	 * @param r
+	 */
+	private void putAndCheckDuplicateReference(final HashMap dubR, IReference r) {
+		Object put = dubR.put(r.getName(), r);
+		if (put instanceof IReference) {
+			if (r instanceof CombinedOrReference) {
+				((CombinedOrReference) r)
+						.addReference((IReference) put);
+			} else if (put instanceof CombinedOrReference) {
+				((CombinedOrReference) put).addReference(r);
+				dubR.put(r.getName(), put);
+			} else {
+				CombinedOrReference or = new CombinedOrReference();
+				or.addReference(r);
+				or.addReference((IReference) put);
+				dubR.put(r.getName(), or);
+			}
 		}
 	}
 

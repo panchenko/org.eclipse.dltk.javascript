@@ -3,6 +3,7 @@
  */
 package org.eclipse.dltk.internal.javascript.typeinference;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,12 +11,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.internal.core.ModelElement;
+import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 
 /**
  * @author jcompagner
  * 
  */
-public class CombinedOrReference implements IReference {
+public class CombinedOrReference implements IReference, SelfCompletingReference {
 
 	private final List lstReadonly;
 	private final List lstReferences;
@@ -352,6 +354,90 @@ public class CombinedOrReference implements IReference {
 	 */
 	public boolean contains(IReference ref) {
 		return lstReferences.contains(ref) || lstReadonly.contains(ref);
+	}
+
+	/**
+	 * @see org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference#getImageURL()
+	 */
+	public URL getImageURL() {
+		for (int i = 0; i < lstReferences.size(); i++) {
+			IReference element = (IReference) lstReferences.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getImageURL() != null) {
+				return ((SelfCompletingReference) element).getImageURL();
+			}
+		}
+		for (int i = 0; i < lstReadonly.size(); i++) {
+			IReference element = (IReference) lstReadonly.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getImageURL() != null) {
+				return ((SelfCompletingReference) element).getImageURL();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @see org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference#getKind()
+	 */
+	public int getKind() {
+		for (int i = 0; i < lstReferences.size(); i++) {
+			IReference element = (IReference) lstReferences.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getKind() != 0) {
+				return ((SelfCompletingReference) element).getKind();
+			}
+		}
+		for (int i = 0; i < lstReadonly.size(); i++) {
+			IReference element = (IReference) lstReadonly.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getKind() != 0) {
+				return ((SelfCompletingReference) element).getKind();
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * @see org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference#getParameterNames()
+	 */
+	public char[][] getParameterNames() {
+		for (int i = 0; i < lstReferences.size(); i++) {
+			IReference element = (IReference) lstReferences.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getParameterNames() != null) {
+				return ((SelfCompletingReference) element).getParameterNames();
+			}
+		}
+		for (int i = 0; i < lstReadonly.size(); i++) {
+			IReference element = (IReference) lstReadonly.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getParameterNames() != null) {
+				return ((SelfCompletingReference) element).getParameterNames();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @see org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference#getProposalInfo()
+	 */
+	public String getProposalInfo() {
+		for (int i = 0; i < lstReferences.size(); i++) {
+			IReference element = (IReference) lstReferences.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getProposalInfo() != null) {
+				return ((SelfCompletingReference) element).getProposalInfo();
+			}
+		}
+		for (int i = 0; i < lstReadonly.size(); i++) {
+			IReference element = (IReference) lstReadonly.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getProposalInfo() != null) {
+				return ((SelfCompletingReference) element).getProposalInfo();
+			}
+		}
+		return null;
 	}
 
 }
