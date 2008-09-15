@@ -33,7 +33,8 @@ public class HostCollection {
 		return reference2;
 	}
 
-	public static String parseId(String id) {
+	public static String parseCompletionString(String id,
+			boolean dotBeforeBrackets) {
 		StringBuffer sb = new StringBuffer();
 		int current = 0;
 		Stack inBrackStack = new Stack();
@@ -43,7 +44,12 @@ public class HostCollection {
 				if (inBrackStack.isEmpty()) {
 					sb.append(id.substring(current, i));
 					if (c == '[') {
-						sb.append(".[]");
+						if (dotBeforeBrackets && i > 0
+								&& id.charAt(i - 1) != '.') {
+							sb.append(".[]");
+						} else {
+							sb.append("[]");
+						}
 					}
 				}
 				inBrackStack.push(new Integer(i));
@@ -61,36 +67,37 @@ public class HostCollection {
 			return id;
 		if (!inBrackStack.isEmpty()) {
 			Integer last = (Integer) inBrackStack.pop();
-			return parseId(id.substring(last.intValue() + 1));
+			return parseCompletionString(id.substring(last.intValue() + 1),
+					dotBeforeBrackets);
 		}
 		sb.append(id.substring(current));
 		return sb.toString();
 	}
 
-	public Set queryElements(String id, boolean useGlobal) {
-		id = parseId(id);
+	public Set queryElements(String completion, boolean useGlobal) {
+		completion = parseCompletionString(completion, false);
 
-		IReference r = getReference(id);
+		IReference r = getReference(completion);
 		HashSet res = new HashSet();
 		if (r != null) {
 			res.add(r);
 			return res;
 		}
-		int pos = id.indexOf('.');
+		int pos = completion.indexOf('.');
 		if (pos == -1)
 			return res;
-		String rootName = id.substring(0, pos);
+		String rootName = completion.substring(0, pos);
 		r = (IReference) getReference(rootName);
 		pos += 1;
 		String field;
 		while (pos != 0) {
 			if (r == null)
 				return new HashSet();
-			int k = id.indexOf('.', pos);
+			int k = completion.indexOf('.', pos);
 			if (k == -1)
-				field = id.substring(pos);
+				field = completion.substring(pos);
 			else
-				field = id.substring(pos, k);
+				field = completion.substring(pos, k);
 			r = r.getChild(field, useGlobal);
 			pos = k + 1;
 		}

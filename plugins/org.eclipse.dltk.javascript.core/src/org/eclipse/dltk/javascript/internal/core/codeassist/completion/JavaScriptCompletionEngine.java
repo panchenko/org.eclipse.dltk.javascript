@@ -132,21 +132,6 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		HashSet completedNames = new HashSet();
 
 		String completion = startPart;
-		int k = completion.indexOf('[');
-		while (k > 0) {
-			int k1 = completion.indexOf(']');
-			if (k1 == -1) {
-				completion = completion.substring(k + 1);
-			} else {
-				String substring = completion.substring(0, k + 1);
-				completion = substring + completion.substring(k1);
-			}
-			k = completion.indexOf('[');
-			if (k == completion.length() - 1)
-				continue;
-			if (completion.charAt(k + 1) == ']')
-				break;
-		}
 		char[] token = completion.toCharArray();
 
 		HashMap names = new HashMap();
@@ -272,9 +257,9 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				continue;
 			names.put(name, rfs.get(name));
 		}
+		names.remove("!!!returnValue");
 		if (names.size() > 0) {
-			// should these be reported somehow?
-			// System.err.println(names);
+			completeFromMap(position, completion, names);
 		}
 	}
 
@@ -284,21 +269,6 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 
 		String completionPart = calculator.getCompletionPart();
 		String corePart = calculator.getCorePart();
-		int k = corePart.indexOf('[');
-		while (k > 0) {
-			int k1 = corePart.indexOf(']');
-			if (k1 == -1) {
-				corePart = corePart.substring(k + 1);
-			} else {
-				String substring = corePart.substring(0, k + 1);
-				corePart = substring + corePart.substring(k1);
-			}
-			k = corePart.indexOf('[');
-			if (k == corePart.length() - 1)
-				continue;
-			if (corePart.charAt(k + 1) == ']')
-				break;
-		}
 		final HashMap dubR = new HashMap();
 		Set resolveGlobals = buildContext.resolveGlobals(corePart + '.');
 		Iterator it = resolveGlobals.iterator();
