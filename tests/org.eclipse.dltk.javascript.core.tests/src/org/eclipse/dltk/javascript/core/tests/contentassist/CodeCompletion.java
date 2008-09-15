@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -539,6 +540,7 @@ public class CodeCompletion extends TestCase {
 			}
 			
 		});
+		Arrays.sort(names);
 		Iterator it=results.iterator();
 		int pos=0;
 		while (it.hasNext()){
@@ -607,7 +609,7 @@ public class CodeCompletion extends TestCase {
 	 * dumb completion on function
 	 */
 	public void test4() {
-		String[] names=new String[]{"temperature"};		
+		String[] names=new String[]{"temperature","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};	
 		String module = "test4.js";
 		int position = lastPositionInFile("firstVar.world.", module);
 		basicTest(module, position, names);		
@@ -615,8 +617,8 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test5() {
-		String[] names=new String[]{"world"};
-		String[] names1=new String[]{"temperature"};
+		String[] names=new String[]{"world","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names1=new String[]{"temperature","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		String module = "test5.js";
 		int positionFirst = lastPositionInFile("secondVar.", module);
 		basicTest(module, positionFirst, names);
@@ -627,7 +629,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test6() {
-		String[] names=new String[]{"world"};
+		String[] names=new String[]{"world","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		//String[] names1=new String[]{"temperature"};
 		String module = "test6.js";
 		int position = lastPositionInFile("world.", module);
@@ -636,7 +638,7 @@ public class CodeCompletion extends TestCase {
 		//basicTest(module, 126, names1);
 	}
 	public void test7() {
-		String[] names=new String[]{"world"};
+		String[] names=new String[]{"world","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		//String[] names1=new String[]{"temperature"};
 		String module = "test7.js";
 		int position = lastPositionInFile("world.", module);
@@ -645,7 +647,7 @@ public class CodeCompletion extends TestCase {
 		//basicTest(module, 126, names1);
 	}
 	public void test8() {
-		String[] names=new String[]{"mission","target"};
+		String[] names=new String[]{"mission","target","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		//String[] names1=new String[]{"temperature"};
 		String module = "test8.js";
 		int position = lastPositionInFile("firstVar.", module);
@@ -654,7 +656,7 @@ public class CodeCompletion extends TestCase {
 		//basicTest(module, 126, names1);
 	}
 	public void test9() {
-		String[] names=new String[]{};
+		String[] names=new String[]{"toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		//String[] names1=new String[]{"temperature"};
 		String module = "test9.js";
 		int position = lastPositionInFile("firstVar.", module);
@@ -664,7 +666,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test10() {
-		String[] names=new String[]{"mission","target"};
+		String[] names=new String[]{"mission","target","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		//String[] names1=new String[]{"temperature"};
 		String module = "test10.js";
 //		basicTest(module, 139, names);
@@ -689,14 +691,14 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test13() {
-		String[] names=new String[]{"element"};
+		String[] names=new String[]{"element","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		String module = "test13.js";
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
 	}
 	
 	public void test14() {
-		String[] names=new String[]{"element"};
+		String[] names=new String[]{"element","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		String module = "test14.js";
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
@@ -704,7 +706,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test15() {
-		String[] names=new String[]{};
+		String[] names=new String[]{"toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf"};
 		String module = "test15.js";
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
@@ -736,7 +738,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test19() {
-		String[] names=new String[]{};
+		String[] names=new String[]{"toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf"};
 		String module = "test19.js";
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -744,7 +746,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test20() {
-		String[] names=new String[]{"my"};
+		String[] names=new String[]{"my","toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf"};
 		String module = "test20.js";
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -752,7 +754,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test21() {
-		String[] names=new String[]{"favorite"};
+		String[] names=new String[]{"favorite","toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf"};
 		String module = "test21.js";
 		int position = lastPositionInFile("hello.my.", module);
 		basicTest(module, position, names);
@@ -760,7 +762,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test22() {
-		String[] names=new String[]{};
+		String[] names=new String[]{"toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf"};
 		String module = "test22.js";
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -776,7 +778,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test24() {
-		String[] names=new String[]{"age","wine"};
+		String[] names=new String[]{"age","toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf","wine"};
 		String module = "test24.js";
 		int position = lastPositionInFile("hello.olive.", module);
 		basicTest(module, position, names);
@@ -784,7 +786,8 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test25() {
-		String[] names=new String[]{"age","my","olive","wine"};
+		String[] names=new String[]{"age","my","olive","toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf","wine"};
+
 		String module = "test25.js";
 		int position = lastPositionInFile("hello.olive.", module);
 		basicTest(module, position, names);
@@ -792,7 +795,8 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test26() {
-		String[] names=new String[]{"wine"};
+		String[] names=new String[]{"toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf","wine"};
+
 		String module = "test26.js";
 		int position = lastPositionInFile("hello.olive.", module);
 		basicTest(module, position, names);
@@ -808,7 +812,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test28() {
-		String[] names=new String[]{};
+		String[] names=new String[]{"toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf"};
 		String module = "test28.js";
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -824,7 +828,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test30() {
-		String[] names=new String[]{"xsd"};
+		String[] names=new String[]{"toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf","xsd"};
 		String module = "test30.js";
 		int position = lastPositionInFile("sz.", module);
 		basicTest(module, position, names);
@@ -832,7 +836,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test31() {
-		String[] names=new String[]{"x"};
+		String[] names=new String[]{"x","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		String module = "test31.js";
 		int position = lastPositionInFile("node.", module);
 		basicTest(module, position, names);
@@ -840,7 +844,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test32() {
-		String[] names=new String[]{"x"};
+		String[] names=new String[]{"x","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
 		String module = "test32.js";
 		int position = lastPositionInFile("node.", module);
 		basicTest(module, position, names);
@@ -864,7 +868,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test35() {
-		String[] names=new String[]{"x"};
+		String[] names=new String[]{"toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf","x"};
 		String module = "test35.js";
 		int position = lastPositionInFile("c.", module);
 		basicTest(module, position, names);
@@ -896,7 +900,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test39() {
-		String[] names=new String[]{"er"};
+		String[] names=new String[]{"er","toExponential","toFixed","toLocaleString","toPrecision","toSource","toString","valueOf"};
 		String module = "test39.js";
 		int position = lastPositionInFile("eer.", module);
 		basicTest(module, position, names);

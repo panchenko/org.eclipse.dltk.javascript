@@ -1,4 +1,4 @@
-var firstVar="1"
-var secondVar="2"
-firstVar.world="4"
+var firstVar= new Object();
+var secondVar= new Object();
+firstVar.world= new Object();
 firstVar.
