@@ -4,6 +4,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
+import org.eclipse.dltk.debug.core.DLTKDebugPlugin;
 import org.eclipse.dltk.launching.ScriptLaunchConfigurationConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -18,7 +19,6 @@ import org.eclipse.swt.widgets.Text;
 public class JavaScriptRemoteTab extends AbstractLaunchConfigurationTab {
 	private static final int DEFAULT_PORT = 9000;
 	private static final String DEFAULT_SESSION_ID = "javascript_debug";
-	private static final int DEFAULT_TIMEOUT = 30 * 1000; // 30 min
 
 	private Text portText;
 	private Text sessionIdText;
@@ -125,7 +125,7 @@ public class JavaScriptRemoteTab extends AbstractLaunchConfigurationTab {
 
 		createInstruction(composite, new GridData(GridData.FILL, SWT.NONE,
 				true, false));
-		
+
 		createPathTemplate(composite, new GridData(GridData.FILL, SWT.NONE,
 				true, false));
 	}
@@ -154,8 +154,8 @@ public class JavaScriptRemoteTab extends AbstractLaunchConfigurationTab {
 			int timeout = configuration
 					.getAttribute(
 							ScriptLaunchConfigurationConstants.ATTR_DLTK_DBGP_WAITING_TIMEOUT,
-							-1);
-			setTimeout(timeout != -1 ? timeout : DEFAULT_TIMEOUT);
+							DLTKDebugPlugin.getConnectionTimeout());
+			setTimeout(timeout);
 		} catch (CoreException e) {
 			// TODO: Log this
 		}
@@ -199,6 +199,6 @@ public class JavaScriptRemoteTab extends AbstractLaunchConfigurationTab {
 		configuration
 				.setAttribute(
 						ScriptLaunchConfigurationConstants.ATTR_DLTK_DBGP_WAITING_TIMEOUT,
-						DEFAULT_TIMEOUT);
+						DLTKDebugPlugin.getConnectionTimeout());
 	}
 }
