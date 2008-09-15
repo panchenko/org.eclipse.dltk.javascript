@@ -50,7 +50,7 @@ import java.io.*;
  * @author Igor Bukanov
  */
 
-final class MemberBox implements Serializable
+public final class MemberBox implements Serializable
 {
     static final long serialVersionUID = 6358550398665688245L;
 
@@ -345,5 +345,17 @@ final class MemberBox implements Serializable
 
     private transient Member memberObject;
     transient Class[] argTypes;
+
+	/**
+	 * @return
+	 */
+	public Class getReturnType()
+	{
+		if (memberObject instanceof Method)
+		{
+			return ((Method)memberObject).getReturnType();
+		}
+		return null;
+	}
 }
 

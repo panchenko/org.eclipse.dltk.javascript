@@ -77,6 +77,8 @@ public class NativeJavaMethod extends BaseFunction
     {
         return functionName;
     }
+    
+    
 
     static String scriptSignature(Object[] values)
     {
@@ -475,5 +477,13 @@ public class NativeJavaMethod extends BaseFunction
 
     MemberBox[] methods;
     private String functionName;
+
+	/**
+	 * @return
+	 */
+	public MemberBox[] getMethods()
+	{
+		return methods;
+	}
 }
 
