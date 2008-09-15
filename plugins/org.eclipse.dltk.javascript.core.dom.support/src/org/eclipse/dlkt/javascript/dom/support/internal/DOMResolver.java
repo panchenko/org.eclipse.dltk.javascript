@@ -217,10 +217,10 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 
 	}
 
-	public Set resolveGlobals(String id) {
-		id = HostCollection.parseId(id);
-		int pos = id.indexOf('.');
-		String key = pos == -1 ? id : id.substring(0, pos);
+	public Set resolveGlobals(String completion) {
+		completion = HostCollection.parseCompletionString(completion, true);
+		int pos = completion.indexOf('.');
+		String key = pos == -1 ? completion : completion.substring(0, pos);
 
 		HashMap globals = getGlobalMap(pos == -1 ? null : key);
 		HashMap clss = getClassMap();
@@ -245,9 +245,9 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 				}
 				object = getObjectReferenceScope(key, object);
 				if (object instanceof Scriptable) {
-					id = id.substring(pos + 1);
-					pos = id.indexOf('.');
-					key = pos == -1 ? id : id.substring(0, pos);
+					completion = completion.substring(pos + 1);
+					pos = completion.indexOf('.');
+					key = pos == -1 ? completion : completion.substring(0, pos);
 					Scriptable sc = (Scriptable) object;
 					globals = new HashMap();
 					fillMap(globals, sc, false,
