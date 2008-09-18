@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.dltk.internal.ui.text.SubstitutionTextReader;
-import org.eclipse.dltk.ui.text.completion.HTMLPrinter;
+import org.eclipse.dltk.utils.TextUtils;
 
 
 public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
@@ -216,7 +216,7 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 
 				int i= getParamEndOffset(s);
 				if (i <= s.length()) {
-					buffer.append(HTMLPrinter.convertToHTMLContent(s.substring(0, i)));
+					buffer.append(TextUtils.escapeHTML(s.substring(0, i)));
 					buffer.append("</b>"); //$NON-NLS-1$
 					buffer.append(s.substring(i));
 				} else {
@@ -414,7 +414,7 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 				break;
 			}
 		}
-		return HTMLPrinter.convertToHTMLContent(tagContent.substring(contentStart));
+		return TextUtils.escapeHTML(tagContent.substring(contentStart));
 	}
 
 	/*
