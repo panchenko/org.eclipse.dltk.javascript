@@ -281,6 +281,8 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						uref.setParameterNames(fapn.getParameterNames());
 						uref.setProposalInfo(fapn.getProposalInfo());
 						uref.setImageUrl(fapn.getImageURL());
+						if (fapn.isFunctionRef())
+							uref.setFunctionRef();
 					}
 				} else if (object instanceof IProposalHolder) {
 					IProposalHolder fapn = (IProposalHolder) object;
