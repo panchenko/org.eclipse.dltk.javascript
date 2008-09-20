@@ -36,41 +36,64 @@ public class HostCollection {
 	public static String parseCompletionString(String id,
 			boolean dotBeforeBrackets) {
 		StringBuffer sb = new StringBuffer();
-		int current = 0;
+		int start = 0;
+		int current = id.length();
 		Stack inBrackStack = new Stack();
-		for (int i = 0; i < id.length(); i++) {
+		for (int i = id.length(); --i >= 0;) {
 			char c = id.charAt(i);
-			if (c == '[' || c == '(') {
+			if (c == ']') {
 				if (inBrackStack.isEmpty()) {
-					sb.append(id.substring(current, i));
-					if (c == '[') {
-						if (dotBeforeBrackets && i > 0
-								&& id.charAt(i - 1) != '.') {
-							sb.append(".[]");
-						} else {
-							sb.append("[]");
-						}
+					String brackets = "[]";
+					if (dotBeforeBrackets && i > 0 && id.charAt(i - 2) != '.') {
+						brackets = ".[]";
 					}
+					sb.insert(0, brackets + id.substring(i + 1, current));
 				}
 				inBrackStack.push(new Integer(i));
 				continue;
 			}
-			if (c == ']' || c == ')') {
-				if (!inBrackStack.isEmpty()) // illegal code
-					inBrackStack.pop();
+			if (c == ')') {
 				if (inBrackStack.isEmpty()) {
-					current = i + 1;
+					sb.insert(0, id.substring(i + 1, current));
 				}
+				inBrackStack.push(new Long(i));
+				continue;
+			}
+			if (c == '[' || c == '(') {
+				if (inBrackStack.isEmpty()) {
+					if (i + 1 < id.length() && id.charAt(i + 1) == c) {
+						// illegal code like [[xx]. try best guess
+						id = id.substring(0, i) + id.substring(i + 1);
+						return parseCompletionString(id, dotBeforeBrackets);
+					}
+					return id.substring(i + 1, current) + sb.toString();
+				}
+				Object pop = inBrackStack.pop();
+				if (c == '[' && !(pop instanceof Integer)) {
+					inBrackStack.push(pop);
+				} else if (c == '(' && !(pop instanceof Long)) {
+					inBrackStack.push(pop);
+				} else {
+					current = i;
+				}
+				continue;
+			}
+			if (c != '.'
+					&& (Character.isWhitespace(c) || !Character
+							.isJavaIdentifierPart(c))) {
+				start = i + 1;
+				break;
 			}
 		}
-		if (sb.length() == 0 && inBrackStack.isEmpty())
+		if (start == 0 && current == id.length() && inBrackStack.isEmpty())
 			return id;
-		if (!inBrackStack.isEmpty()) {
-			Integer last = (Integer) inBrackStack.pop();
-			return parseCompletionString(id.substring(last.intValue() + 1),
-					dotBeforeBrackets);
+		if (!inBrackStack.isEmpty()) { // illegal code like []]
+			Number last = (Number) inBrackStack.pop();
+			id = id.substring(start, last.intValue())
+					+ id.substring(last.intValue() + 1, id.length());
+			return parseCompletionString(id, dotBeforeBrackets);
 		}
-		sb.append(id.substring(current));
+		sb.insert(0, id.substring(start, current));
 		return sb.toString();
 	}
 
