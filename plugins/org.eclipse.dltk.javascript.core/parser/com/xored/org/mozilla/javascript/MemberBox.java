@@ -24,6 +24,8 @@
  * Contributor(s):
  *   Igor Bukanov
  *   Felix Meschberger
+ *   Norris Boyd
+ *   Ulrike Mueller <umueller@demandware.com>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * the GNU General Public License Version 2 or later (the "GPL"), in which
@@ -39,14 +41,8 @@
 
 package com.xored.org.mozilla.javascript;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
+import java.io.*;
 
 /**
  * Wrappper class for Method and Constructor instances to cache
@@ -59,6 +55,12 @@ import java.lang.reflect.Modifier;
 final class MemberBox implements Serializable
 {
     static final long serialVersionUID = 6358550398665688245L;
+
+    private transient Member memberObject;
+    transient Class[] argTypes;
+    transient Object delegateTo;
+    transient boolean vararg;
+
 
     MemberBox(Method method)
     {
@@ -74,12 +76,14 @@ final class MemberBox implements Serializable
     {
         this.memberObject = method;
         this.argTypes = method.getParameterTypes();
+        this.vararg = VMBridge.instance.isVarArgs(method);
     }
 
     private void init(Constructor constructor)
     {
         this.memberObject = constructor;
         this.argTypes = constructor.getParameterTypes();
+        this.vararg = VMBridge.instance.isVarArgs(constructor);
     }
 
     Method method()
@@ -316,8 +320,9 @@ final class MemberBox implements Serializable
     outer:
         for (int i=0; i < parms.length; i++) {
             Class parm = parms[i];
-            out.writeBoolean(parm.isPrimitive());
-            if (!parm.isPrimitive()) {
+            boolean primitive = parm.isPrimitive();
+            out.writeBoolean(primitive);
+            if (!primitive) {
                 out.writeObject(parm);
                 continue;
             }
@@ -348,8 +353,5 @@ final class MemberBox implements Serializable
         }
         return result;
     }
-
-    private transient Member memberObject;
-    transient Class[] argTypes;
 }
 

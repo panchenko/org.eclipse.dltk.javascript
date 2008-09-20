@@ -61,7 +61,7 @@ package com.xored.org.mozilla.javascript;
  * These three pieces of functionality are encapsulated in the
  * SecurityController class.
  *
- * @see com.xored.org.mozilla.javascript.Context#setSecurityController(SecurityController)
+ * @see org.mozilla.javascript.Context#setSecurityController(SecurityController)
  * @see java.lang.ClassLoader
  * @since 1.5 Release 4
  */

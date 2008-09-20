@@ -24,6 +24,7 @@
  * Contributor(s):
  *   Mike Ang
  *   Igor Bukanov
+ *   Bob Jervis
  *   Mike McCabe
  *
  * Alternatively, the contents of this file may be used under the terms of
@@ -343,7 +344,6 @@ public class Decompiler {
 				result.append('\n');
 			}
 			indent(indent, result, tChar);
-
 		} else {
 			if (topFunctionType == FunctionNode.FUNCTION_EXPRESSION) {
 				result.append('(');
@@ -352,12 +352,19 @@ public class Decompiler {
 
 		while (i < length) {
 			switch (source.charAt(i)) {
+			case Token.GET:
+			case Token.SET:
+				result.append(source.charAt(i) == Token.GET ? "get " : "set ");
+				++i;
+				i = printSourceString(source, i + 1, false, result);
+				// Now increment one more to get past the FUNCTION token
+				++i;
+				break;
+
 			case Token.NAME:
 			case Token.REGEXP: // re-wrapped in '/'s in parser...
-
 				i = printSourceString(source, i + 1, false, result);
 				continue;
-
 			case Token.LOCAL_LOAD:
 				result.append("//");
 				i = printSourceString(source, i + 1, false, result);
@@ -599,7 +606,6 @@ public class Decompiler {
 				}
 				break;
 			}
-
 			case Token.DOT:
 				result.append('.');
 				break;
@@ -844,6 +850,10 @@ public class Decompiler {
 				result.append("void ");
 				break;
 
+			case Token.CONST:
+				result.append("const ");
+				break;
+
 			case Token.NOT:
 				result.append('!');
 				break;
@@ -906,7 +916,8 @@ public class Decompiler {
 
 			default:
 				// If we don't know how to decompile it, raise an exception.
-				throw new RuntimeException();
+				throw new RuntimeException("Token: "
+						+ Token.name(source.charAt(i)));
 			}
 			++i;
 		}
@@ -923,6 +934,7 @@ public class Decompiler {
 				result.append(')');
 			}
 		}
+
 		int rr = result.length();
 		for (int a = 0; a < result.length(); a++) {
 			char charAt = result.charAt(a);
@@ -1066,20 +1078,16 @@ public class Decompiler {
 		appendString(string);
 		lastBlockComment = string;
 	}
-	
+
 	/**
 	 * 
 	 */
-	public String getLastBlockComment()
-	{
-		if (lastToken == Token.LOCAL_BLOCK)
-		{
+	public String getLastBlockComment() {
+		if (lastToken == Token.LOCAL_BLOCK) {
 			return lastBlockComment;
 		}
 		return null;
 	}
-
-
 
 	StringBuffer indentBuffer = new StringBuffer();
 

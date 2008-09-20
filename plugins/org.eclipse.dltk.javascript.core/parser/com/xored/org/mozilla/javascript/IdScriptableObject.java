@@ -38,10 +38,7 @@
 
 package com.xored.org.mozilla.javascript;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 
 /**
 Base class for native object implementation that uses IdFunctionObject to export its methods to script via <class-name>.prototype object.
@@ -76,7 +73,6 @@ public abstract class IdScriptableObject extends ScriptableObject
         private static final int SLOT_SPAN = 2;
 
         private IdScriptableObject obj;
-        private Object tag;
         private int maxId;
         private volatile Object[] valueArray;
         private volatile short[] attributeArray;
@@ -692,7 +688,7 @@ public abstract class IdScriptableObject extends ScriptableObject
      * </pre>
      * Note that although such function can be implemented universally via
      * java.lang.Class.isInstance(), it would be much more slower.
-     * @param readOnly specify if the function f does not change state of
+     * @param f function that is attempting to convert 'this'
      * object.
      * @return Scriptable object suitable for a check by the instanceof
      * operator.

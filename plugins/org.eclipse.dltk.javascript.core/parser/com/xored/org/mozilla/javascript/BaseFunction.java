@@ -56,7 +56,8 @@ public class BaseFunction extends IdScriptableObject implements Function
     static void init(Scriptable scope, boolean sealed)
     {
         BaseFunction obj = new BaseFunction();
-        obj.isPrototypePropertyImmune = true;
+        // Function.prototype attributes: see ECMA 15.3.3.1 
+        obj.prototypePropertyAttributes = DONTENUM | READONLY | PERMANENT;
         obj.exportAsJSClass(MAX_PROTOTYPE_ID, scope, sealed);
     }
 
@@ -116,7 +117,7 @@ public class BaseFunction extends IdScriptableObject implements Function
     protected int findInstanceIdInfo(String s)
     {
         int id;
-// #generated# Last update: 2001-05-20 00:12:12 GMT+02:00
+// #generated# Last update: 2007-05-09 08:15:15 EDT
         L0: { id = 0; String X = null; int c;
             L: switch (s.length()) {
             case 4: X="name";id=Id_name; break L;
@@ -128,6 +129,7 @@ public class BaseFunction extends IdScriptableObject implements Function
                 break L;
             }
             if (X!=null && X!=s && !X.equals(s)) id = 0;
+            break L0;
         }
 // #/generated#
 // #/string_id_map#
@@ -142,9 +144,7 @@ public class BaseFunction extends IdScriptableObject implements Function
             attr = DONTENUM | READONLY | PERMANENT;
             break;
           case Id_prototype:
-            attr = (isPrototypePropertyImmune)
-                   ? DONTENUM | READONLY | PERMANENT
-                   : DONTENUM;
+            attr = prototypePropertyAttributes;
             break;
           case Id_arguments:
             attr = DONTENUM | PERMANENT;
@@ -181,7 +181,7 @@ public class BaseFunction extends IdScriptableObject implements Function
     protected void setInstanceIdValue(int id, Object value)
     {
         if (id == Id_prototype) {
-            if (!isPrototypePropertyImmune) {
+            if ((prototypePropertyAttributes & READONLY) == 0) {
                 prototypeProperty = (value != null)
                                     ? value : UniqueTag.NULL_VALUE;
             }
@@ -276,11 +276,11 @@ public class BaseFunction extends IdScriptableObject implements Function
      */
     public void setImmunePrototypeProperty(Object value)
     {
-        if (isPrototypePropertyImmune) {
+        if ((prototypePropertyAttributes & READONLY) != 0) {
             throw new IllegalStateException();
         }
         prototypeProperty = (value != null) ? value : UniqueTag.NULL_VALUE;
-        isPrototypePropertyImmune = true;
+        prototypePropertyAttributes = DONTENUM | PERMANENT | READONLY;
     }
 
     protected Scriptable getClassPrototype()
@@ -496,7 +496,7 @@ public class BaseFunction extends IdScriptableObject implements Function
     {
         int id;
 // #string_id_map#
-// #generated# Last update: 2004-03-17 13:23:22 CET
+// #generated# Last update: 2007-05-09 08:15:15 EDT
         L0: { id = 0; String X = null; int c;
             L: switch (s.length()) {
             case 4: X="call";id=Id_call; break L;
@@ -508,6 +508,7 @@ public class BaseFunction extends IdScriptableObject implements Function
             case 11: X="constructor";id=Id_constructor; break L;
             }
             if (X!=null && X!=s && !X.equals(s)) id = 0;
+            break L0;
         }
 // #/generated#
         return id;
@@ -525,6 +526,7 @@ public class BaseFunction extends IdScriptableObject implements Function
 // #/string_id_map#
 
     private Object prototypeProperty;
-    private boolean isPrototypePropertyImmune;
+    // For function object instances, attribute is PERMANENT; see ECMA 15.3.5.2
+    private int prototypePropertyAttributes = PERMANENT;
 }
 

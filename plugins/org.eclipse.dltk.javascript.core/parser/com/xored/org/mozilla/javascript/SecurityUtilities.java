@@ -1,4 +1,6 @@
-/* ***** BEGIN LICENSE BLOCK *****
+/* -*- Mode: java; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+ *
+ * ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -21,8 +23,6 @@
  *
  * Contributor(s):
  *   Norris Boyd
- *   Roger Lawrence
- *   Patrick Beard
  *   Igor Bukanov
  *
  * Alternatively, the contents of this file may be used under the terms of
@@ -39,50 +39,42 @@
 
 package com.xored.org.mozilla.javascript;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.ProtectionDomain;
+
 /**
- * Load generated classes.
- *
- * @author Norris Boyd
+ * @author Attila Szegedi
  */
-public class DefiningClassLoader extends ClassLoader
-    implements GeneratedClassLoader
+public class SecurityUtilities
 {
-    public DefiningClassLoader() {
-        this.parentLoader = getClass().getClassLoader();
-    }
-
-    public DefiningClassLoader(ClassLoader parentLoader) {
-        this.parentLoader = parentLoader;
-    }
-
-    public Class defineClass(String name, byte[] data) {
-        // Use our own protection domain for the generated classes.
-        // TODO: we might want to use a separate protection domain for classes
-        // compiled from scripts, based on where the script was loaded from.
-        return super.defineClass(name, data, 0, data.length, 
-                SecurityUtilities.getProtectionDomain(getClass()));
-    }
-
-    public void linkClass(Class cl) {
-        resolveClass(cl);
-    }
-
-    public Class loadClass(String name, boolean resolve)
-        throws ClassNotFoundException
+    /**
+     * Retrieves a system property within a privileged block. Use it only when
+     * the property is used from within Rhino code and is not passed out of it.
+     * @param name the name of the system property
+     * @return the value of the system property
+     */
+    public static String getSystemProperty(final String name)
     {
-        Class cl = findLoadedClass(name);
-        if (cl == null) {
-            if (parentLoader != null) {
-                cl = parentLoader.loadClass(name);
-            } else {
-                cl = findSystemClass(name);
-            }
-        }
-        if (resolve) {
-            resolveClass(cl);
-        }
-        return cl;
+        return (String)AccessController.doPrivileged(
+            new PrivilegedAction()
+            {
+                public Object run()
+                {
+                    return System.getProperty(name);
+                }
+            });
     }
-
-    private final ClassLoader parentLoader;
+    
+    public static ProtectionDomain getProtectionDomain(final Class clazz)
+    {
+        return (ProtectionDomain)AccessController.doPrivileged(
+                new PrivilegedAction()
+                {
+                    public Object run()
+                    {
+                        return clazz.getProtectionDomain();
+                    }
+                });
+    }
 }

@@ -53,7 +53,7 @@ package com.xored.org.mozilla.javascript;
  * synchronized methods: <code>sync(fun)</code> has the same effect as
  * calling the above constructor.
  *
- * @see com.xored.org.mozilla.javascript.Delegator
+ * @see org.mozilla.javascript.Delegator
  * @author Matthias Radestock
  */
 
@@ -69,7 +69,7 @@ public class Synchronizer extends Delegator {
     }
 
     /**
-     * @see com.xored.org.mozilla.javascript.Function#call
+     * @see org.mozilla.javascript.Function#call
      */
     public Object call(Context cx, Scriptable scope, Scriptable thisObj,
                        Object[] args)

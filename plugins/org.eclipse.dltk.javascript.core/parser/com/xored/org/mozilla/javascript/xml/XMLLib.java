@@ -44,73 +44,90 @@ import com.xored.org.mozilla.javascript.ScriptRuntime;
 import com.xored.org.mozilla.javascript.Scriptable;
 import com.xored.org.mozilla.javascript.ScriptableObject;
 
-public abstract class XMLLib
-{
-    private static final Object XML_LIB_KEY = new Object();
+public abstract class XMLLib {
+	private static final Object XML_LIB_KEY = new Object();
 
-    public static XMLLib extractFromScopeOrNull(Scriptable scope)
-    {
-        ScriptableObject so = ScriptRuntime.getLibraryScopeOrNull(scope);
-        if (so == null) {
-            // If librray is not yet initialized, return null
-            return null;
-        }
+	/**
+	 * An object which specifies an XMLLib implementation to be used at runtime.
+	 * 
+	 * This interface should be considered experimental. It may be better (and
+	 * certainly more flexible) to write an interface that returns an XMLLib
+	 * object rather than a class name, for example. But that would cause many
+	 * more ripple effects in the code, all the way back to
+	 * {@link ScriptRuntime}.
+	 */
+	public static abstract class Factory {
+		public static Factory create(final String className) {
+			return new Factory() {
+				public String getImplementationClassName() {
+					return className;
+				}
+			};
+		}
 
-        // Ensure lazily initialization of real XML library instance
-        // which is done on first access to XML property
-        ScriptableObject.getProperty(so, "XML");
+		public abstract String getImplementationClassName();
+	}
 
-        return (XMLLib)so.getAssociatedValue(XML_LIB_KEY);
-    }
+	public static XMLLib extractFromScopeOrNull(Scriptable scope) {
+		ScriptableObject so = ScriptRuntime.getLibraryScopeOrNull(scope);
+		if (so == null) {
+			// If librray is not yet initialized, return null
+			return null;
+		}
 
-    public static XMLLib extractFromScope(Scriptable scope)
-    {
-        XMLLib lib = extractFromScopeOrNull(scope);
-        if (lib != null) {
-            return lib;
-        }
-        String msg = ScriptRuntime.getMessage0("msg.XML.not.available");
-        throw Context.reportRuntimeError(msg);
-    }
+		// Ensure lazily initialization of real XML library instance
+		// which is done on first access to XML property
+		ScriptableObject.getProperty(so, "XML");
 
-    protected final XMLLib bindToScope(Scriptable scope)
-    {
-        ScriptableObject so = ScriptRuntime.getLibraryScopeOrNull(scope);
-        if (so == null) {
-            // standard library should be initialized at this point
-            throw new IllegalStateException();
-        }
-        return (XMLLib)so.associateValue(XML_LIB_KEY, this);
-    }
+		return (XMLLib) so.getAssociatedValue(XML_LIB_KEY);
+	}
 
-    public abstract boolean isXMLName(Context cx, Object name);
+	public static XMLLib extractFromScope(Scriptable scope) {
+		XMLLib lib = extractFromScopeOrNull(scope);
+		if (lib != null) {
+			return lib;
+		}
+		String msg = ScriptRuntime.getMessage0("msg.XML.not.available");
+		throw Context.reportRuntimeError(msg);
+	}
 
-    public abstract Ref nameRef(Context cx, Object name,
-                                Scriptable scope, int memberTypeFlags);
+	protected final XMLLib bindToScope(Scriptable scope) {
+		ScriptableObject so = ScriptRuntime.getLibraryScopeOrNull(scope);
+		if (so == null) {
+			// standard library should be initialized at this point
+			throw new IllegalStateException();
+		}
+		return (XMLLib) so.associateValue(XML_LIB_KEY, this);
+	}
 
-    public abstract Ref nameRef(Context cx, Object namespace, Object name,
-                                Scriptable scope, int memberTypeFlags);
+	public abstract boolean isXMLName(Context cx, Object name);
 
-    /**
-     * Escapes the reserved characters in a value of an attribute
-     * and surround it by "".
-     *
-     * @param value Unescaped text
-     * @return The escaped text
-     */
-    public abstract String escapeAttributeValue(Object value);
+	public abstract Ref nameRef(Context cx, Object name, Scriptable scope,
+			int memberTypeFlags);
 
-    /**
-     * Escapes the reserved characters in a value of a text node
-     *
-     * @param value Unescaped text
-     * @return The escaped text
-     */
-    public abstract String escapeTextValue(Object value);
+	public abstract Ref nameRef(Context cx, Object namespace, Object name,
+			Scriptable scope, int memberTypeFlags);
 
+	/**
+	 * Escapes the reserved characters in a value of an attribute.
+	 * 
+	 * @param value
+	 *            Unescaped text
+	 * @return The escaped text
+	 */
+	public abstract String escapeAttributeValue(Object value);
 
-    /**
-     * Construct namespace for default xml statement.
-     */
-    public abstract Object toDefaultXmlNamespace(Context cx, Object uriValue);
+	/**
+	 * Escapes the reserved characters in a value of a text node.
+	 * 
+	 * @param value
+	 *            Unescaped text
+	 * @return The escaped text
+	 */
+	public abstract String escapeTextValue(Object value);
+
+	/**
+	 * Construct namespace for default xml statement.
+	 */
+	public abstract Object toDefaultXmlNamespace(Context cx, Object uriValue);
 }

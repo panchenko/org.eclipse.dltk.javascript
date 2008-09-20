@@ -64,7 +64,7 @@ public class Delegator implements Function {
      * This constructor should only be used for creating prototype
      * objects of Delegator.
      *
-     * @see com.xored.org.mozilla.javascript.Delegator#construct
+     * @see org.mozilla.javascript.Delegator#construct
      */
     public Delegator() {
     }
@@ -74,7 +74,7 @@ public class Delegator implements Function {
      * Scriptable object.
      *
      * @param obj the delegee
-     * @see com.xored.org.mozilla.javascript.Scriptable
+     * @see org.mozilla.javascript.Scriptable
      */
     public Delegator(Scriptable obj) {
         this.obj = obj;
@@ -107,91 +107,91 @@ public class Delegator implements Function {
      * Set the delegee.
      *
      * @param obj the delegee
-     * @see com.xored.org.mozilla.javascript.Scriptable
+     * @see org.mozilla.javascript.Scriptable
      */
     public void setDelegee(Scriptable obj) {
         this.obj = obj;
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#getClassName
+     * @see org.mozilla.javascript.Scriptable#getClassName
      */
     public String getClassName() {
         return obj.getClassName();
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#get
+     * @see org.mozilla.javascript.Scriptable#get
      */
     public Object get(String name, Scriptable start) {
         return obj.get(name,start);
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#get
+     * @see org.mozilla.javascript.Scriptable#get
      */
     public Object get(int index, Scriptable start) {
         return obj.get(index,start);
         }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#has
+     * @see org.mozilla.javascript.Scriptable#has
      */
     public boolean has(String name, Scriptable start) {
         return obj.has(name,start);
         }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#has
+     * @see org.mozilla.javascript.Scriptable#has
      */
     public boolean has(int index, Scriptable start) {
         return obj.has(index,start);
         }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#put
+     * @see org.mozilla.javascript.Scriptable#put
      */
     public void put(String name, Scriptable start, Object value) {
         obj.put(name,start,value);
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#put
+     * @see org.mozilla.javascript.Scriptable#put
      */
     public void put(int index, Scriptable start, Object value) {
         obj.put(index,start,value);
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#delete
+     * @see org.mozilla.javascript.Scriptable#delete
      */
     public void delete(String name) {
         obj.delete(name);
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#delete
+     * @see org.mozilla.javascript.Scriptable#delete
      */
     public void delete(int index) {
         obj.delete(index);
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#getPrototype
+     * @see org.mozilla.javascript.Scriptable#getPrototype
      */
     public Scriptable getPrototype() {
         return obj.getPrototype();
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#setPrototype
+     * @see org.mozilla.javascript.Scriptable#setPrototype
      */
     public void setPrototype(Scriptable prototype) {
         obj.setPrototype(prototype);
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#getParentScope
+     * @see org.mozilla.javascript.Scriptable#getParentScope
      */
     public Scriptable getParentScope() {
         return obj.getParentScope();
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#setParentScope
+     * @see org.mozilla.javascript.Scriptable#setParentScope
      */
     public void setParentScope(Scriptable parent) {
         obj.setParentScope(parent);
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#getIds
+     * @see org.mozilla.javascript.Scriptable#getIds
      */
     public Object[] getIds() {
         return obj.getIds();
@@ -206,7 +206,7 @@ public class Delegator implements Function {
      * @param hint the type hint
      * @return the default value
      *
-     * @see com.xored.org.mozilla.javascript.Scriptable#getDefaultValue
+     * @see org.mozilla.javascript.Scriptable#getDefaultValue
      */
     public Object getDefaultValue(Class hint) {
         return (hint == null ||
@@ -215,13 +215,13 @@ public class Delegator implements Function {
             this : obj.getDefaultValue(hint);
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Scriptable#hasInstance
+     * @see org.mozilla.javascript.Scriptable#hasInstance
      */
     public boolean hasInstance(Scriptable instance) {
         return obj.hasInstance(instance);
     }
     /**
-     * @see com.xored.org.mozilla.javascript.Function#call
+     * @see org.mozilla.javascript.Function#call
      */
     public Object call(Context cx, Scriptable scope, Scriptable thisObj,
                        Object[] args)

@@ -50,7 +50,7 @@ package com.xored.org.mozilla.javascript;
  * will call the methods of this class whenever it needs to wrap a value
  * resulting from a call to a Java method or an access to a Java field.
  *
- * @see com.xored.org.mozilla.javascript.Context#setWrapFactory(WrapFactory)
+ * @see org.mozilla.javascript.Context#setWrapFactory(WrapFactory)
  * @since 1.5 Release 4
  */
 public class WrapFactory
@@ -86,7 +86,7 @@ public class WrapFactory
             if (staticType == Void.TYPE)
                 return Undefined.instance;
             if (staticType == Character.TYPE)
-                return new Integer((int) ((Character) obj).charValue());
+                return new Integer(((Character) obj).charValue());
             return obj;
         }
         if (!isJavaPrimitiveWrap()) {

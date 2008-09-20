@@ -45,96 +45,94 @@ import com.xored.org.mozilla.javascript.IdScriptableObject;
 import com.xored.org.mozilla.javascript.Interpreter;
 import com.xored.org.mozilla.javascript.Scriptable;
 
-public final class Continuation extends IdScriptableObject implements Function
-{
-    static final long serialVersionUID = 1794167133757605367L;
+public final class Continuation extends IdScriptableObject implements Function {
+	static final long serialVersionUID = 1794167133757605367L;
 
-    private static final Object FTAG = new Object();
+	private static final Object FTAG = new Object();
 
-    private Object implementation;
+	private Object implementation;
 
-    public static void init(Scriptable scope, boolean sealed)
-    {
-        Continuation obj = new Continuation();
-        obj.exportAsJSClass(MAX_PROTOTYPE_ID, scope, sealed);
-    }
+	public static void init(Scriptable scope, boolean sealed) {
+		Continuation obj = new Continuation();
+		obj.exportAsJSClass(MAX_PROTOTYPE_ID, scope, sealed);
+	}
 
-    public Object getImplementation()
-    {
-        return implementation;
-    }
+	public Object getImplementation() {
+		return implementation;
+	}
 
-    public void initImplementation(Object implementation)
-    {
-        this.implementation = implementation;
-    }
+	public void initImplementation(Object implementation) {
+		this.implementation = implementation;
+	}
 
-    public String getClassName()
-    {
-        return "Continuation";
-    }
+	public String getClassName() {
+		return "Continuation";
+	}
 
-    public Scriptable construct(Context cx, Scriptable scope, Object[] args)
-    {
-        throw Context.reportRuntimeError("Direct call is not supported");
-    }
+	public Scriptable construct(Context cx, Scriptable scope, Object[] args) {
+		throw Context.reportRuntimeError("Direct call is not supported");
+	}
 
-    public Object call(Context cx, Scriptable scope, Scriptable thisObj,
-                       Object[] args)
-    {
-        return Interpreter.restartContinuation(this, cx, scope, args);
-    }
+	public Object call(Context cx, Scriptable scope, Scriptable thisObj,
+			Object[] args) {
+		return Interpreter.restartContinuation(this, cx, scope, args);
+	}
 
-    public static boolean isContinuationConstructor(IdFunctionObject f)
-    {
-        if (f.hasTag(FTAG) && f.methodId() == Id_constructor) {
-            return true;
-        }
-        return false;
-    }
+	public static boolean isContinuationConstructor(IdFunctionObject f) {
+		if (f.hasTag(FTAG) && f.methodId() == Id_constructor) {
+			return true;
+		}
+		return false;
+	}
 
-    protected void initPrototypeId(int id)
-    {
-        String s;
-        int arity;
-        switch (id) {
-          case Id_constructor: arity=0; s="constructor"; break;
-          default: throw new IllegalArgumentException(String.valueOf(id));
-        }
-        initPrototypeMethod(FTAG, id, s, arity);
-    }
+	protected void initPrototypeId(int id) {
+		String s;
+		int arity;
+		switch (id) {
+		case Id_constructor:
+			arity = 0;
+			s = "constructor";
+			break;
+		default:
+			throw new IllegalArgumentException(String.valueOf(id));
+		}
+		initPrototypeMethod(FTAG, id, s, arity);
+	}
 
-    public Object execIdCall(IdFunctionObject f, Context cx, Scriptable scope,
-                             Scriptable thisObj, Object[] args)
-    {
-        if (!f.hasTag(FTAG)) {
-            return super.execIdCall(f, cx, scope, thisObj, args);
-        }
-        int id = f.methodId();
-        switch (id) {
-          case Id_constructor:
-            throw Context.reportRuntimeError("Direct call is not supported");
-        }
-        throw new IllegalArgumentException(String.valueOf(id));
-    }
+	public Object execIdCall(IdFunctionObject f, Context cx, Scriptable scope,
+			Scriptable thisObj, Object[] args) {
+		if (!f.hasTag(FTAG)) {
+			return super.execIdCall(f, cx, scope, thisObj, args);
+		}
+		int id = f.methodId();
+		switch (id) {
+		case Id_constructor:
+			throw Context.reportRuntimeError("Direct call is not supported");
+		}
+		throw new IllegalArgumentException(String.valueOf(id));
+	}
 
-// #string_id_map#
+	// #string_id_map#
 
-    protected int findPrototypeId(String s)
-    {
-        int id;
-// #generated# Last update: 2004-09-08 12:02:41 CEST
-        L0: { id = 0; String X = null;
-            if (s.length()==11) { X="constructor";id=Id_constructor; }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-        }
-// #/generated#
-        return id;
-    }
+	protected int findPrototypeId(String s) {
+		int id;
+		// #generated# Last update: 2007-05-09 08:16:40 EDT
+		L0: {
+			id = 0;
+			String X = null;
+			if (s.length() == 11) {
+				X = "constructor";
+				id = Id_constructor;
+			}
+			if (X != null && X != s && !X.equals(s))
+				id = 0;
+			break L0;
+		}
+		// #/generated#
+		return id;
+	}
 
-    private static final int
-        Id_constructor          = 1,
-        MAX_PROTOTYPE_ID        = 1;
+	private static final int Id_constructor = 1, MAX_PROTOTYPE_ID = 1;
 
-// #/string_id_map#
+	// #/string_id_map#
 }

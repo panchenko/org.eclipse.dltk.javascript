@@ -214,16 +214,16 @@ public class ImporterTopLevel extends IdScriptableObject
 
     private void importPackage(NativeJavaPackage pkg)
     {
+        if(pkg == null) {
+            return;
+        }
         synchronized (importedPackages) {
             for (int j = 0; j != importedPackages.size(); j++) {
-                if (pkg == importedPackages.get(j)) {
-                    pkg = null;
-                    break;
+                if (pkg.equals(importedPackages.get(j))) {
+                    return;
                 }
             }
-            if (pkg != null) {
-                importedPackages.add(pkg);
-            }
+            importedPackages.add(pkg);
         }
     }
 
@@ -289,7 +289,7 @@ public class ImporterTopLevel extends IdScriptableObject
     protected int findPrototypeId(String s)
     {
         int id;
-// #generated# Last update: 2004-06-08 02:03:11 CEST
+// #generated# Last update: 2007-05-09 08:15:24 EDT
         L0: { id = 0; String X = null; int c;
             int s_length = s.length();
             if (s_length==11) {
@@ -299,6 +299,7 @@ public class ImporterTopLevel extends IdScriptableObject
             }
             else if (s_length==13) { X="importPackage";id=Id_importPackage; }
             if (X!=null && X!=s && !X.equals(s)) id = 0;
+            break L0;
         }
 // #/generated#
         return id;

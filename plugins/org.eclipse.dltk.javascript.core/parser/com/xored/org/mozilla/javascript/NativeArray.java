@@ -459,8 +459,6 @@ public class NativeArray extends IdScriptableObject
             return ((NativeString)obj).getLength();
         } else if (obj instanceof NativeArray) {
             return ((NativeArray)obj).getLength();
-        } else if (!(obj instanceof Scriptable)) {
-            return 0;
         }
         return ScriptRuntime.toUint32(
             ScriptRuntime.getObjectProp(obj, "length", cx));
@@ -568,8 +566,7 @@ public class NativeArray extends IdScriptableObject
                         }
 
                     } else {
-                        if (toLocale && elem != Undefined.instance &&
-                            elem != null)
+                        if (toLocale)
                         {
                             Callable fun;
                             Scriptable funThis;
@@ -950,7 +947,6 @@ public class NativeArray extends IdScriptableObject
     private static Object js_unshift(Context cx, Scriptable thisObj,
                                      Object[] args)
     {
-        Object result;
         long length = getLengthProperty(cx, thisObj);
         int argc = args.length;
 

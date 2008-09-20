@@ -71,16 +71,28 @@ final class NativeError extends IdScriptableObject
         obj.setPrototype(proto);
         obj.setParentScope(scope);
 
-        if (args.length >= 1) {
+        int arglen = args.length;
+        if (arglen >= 1) {
             ScriptableObject.putProperty(obj, "message",
-                                         ScriptRuntime.toString(args[0]));
-            if (args.length >= 2) {
+                    ScriptRuntime.toString(args[0]));
+            if (arglen >= 2) {
                 ScriptableObject.putProperty(obj, "fileName", args[1]);
-                if (args.length >= 3) {
+                if (arglen >= 3) {
                     int line = ScriptRuntime.toInt32(args[2]);
                     ScriptableObject.putProperty(obj, "lineNumber",
-                                                 new Integer(line));
+                            new Integer(line));
                 }
+            }
+        }
+        if(arglen < 3 && cx.hasFeature(Context.FEATURE_LOCATION_INFORMATION_IN_ERROR)) {
+            // Fill in fileName and lineNumber automatically when not specified
+            // explicitly, see Bugzilla issue #342807
+            int[] linep = new int[1];
+            String fileName = Context.getSourcePositionFromStack(linep);
+            ScriptableObject.putProperty(obj, "lineNumber", 
+                    new Integer(linep[0]));
+            if(arglen < 2) {
+                ScriptableObject.putProperty(obj, "fileName", fileName);
             }
         }
         return obj;
@@ -188,7 +200,7 @@ final class NativeError extends IdScriptableObject
     {
         int id;
 // #string_id_map#
-// #generated# Last update: 2004-03-17 13:35:15 CET
+// #generated# Last update: 2007-05-09 08:15:45 EDT
         L0: { id = 0; String X = null; int c;
             int s_length = s.length();
             if (s_length==8) {
@@ -198,6 +210,7 @@ final class NativeError extends IdScriptableObject
             }
             else if (s_length==11) { X="constructor";id=Id_constructor; }
             if (X!=null && X!=s && !X.equals(s)) id = 0;
+            break L0;
         }
 // #/generated#
         return id;

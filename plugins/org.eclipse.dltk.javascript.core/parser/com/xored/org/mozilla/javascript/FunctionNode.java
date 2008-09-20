@@ -80,7 +80,6 @@ public class FunctionNode extends ScriptOrFnNode {
     public int getFunctionType() {
         return itsFunctionType;
     }
-
     /**
 	 * @param functionComments the functionComments to set
 	 */
@@ -97,8 +96,8 @@ public class FunctionNode extends ScriptOrFnNode {
 		return functionComments;
 	}
 
-	 String functionName;
-    String functionComments;
+    String functionName;
+    String functionComments;    
     boolean itsNeedsActivation;
     int itsFunctionType;
     boolean itsIgnoreDynamicScope;

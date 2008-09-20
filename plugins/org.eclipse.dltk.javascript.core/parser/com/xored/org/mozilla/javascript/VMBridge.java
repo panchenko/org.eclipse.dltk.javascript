@@ -39,6 +39,8 @@
 
 package com.xored.org.mozilla.javascript;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Member;
 
 public abstract class VMBridge
 {
@@ -48,7 +50,6 @@ public abstract class VMBridge
     private static VMBridge makeInstance()
     {
 		return new VMBridge_jdk13();
-    	
     }
 
     /**
@@ -66,7 +67,7 @@ public abstract class VMBridge
      * Get {@link Context} instance associated with the current thread
      * or null if none.
      *
-     * @param contextHelper The result of {@link getThreadContextHelper()}
+     * @param contextHelper The result of {@link #getThreadContextHelper()}
      *                      called from the current thread.
      */
     protected abstract Context getContext(Object contextHelper);
@@ -75,7 +76,7 @@ public abstract class VMBridge
      * Associate {@link Context} instance with the current thread or remove
      * the current association if <tt>cx</tt> is null.
      *
-     * @param contextHelper The result of {@link getThreadContextHelper()}
+     * @param contextHelper The result of {@link #getThreadContextHelper()}
      *                      called from the current thread.
      */
     protected abstract void setContext(Object contextHelper, Context cx);
@@ -127,7 +128,7 @@ public abstract class VMBridge
      * <tt>proxyHelper</tt>.
      *
      * @param proxyHelper The result of the previous call to
-     *        {@link #getInterfaceProxyHelper(ContextFactory, Class[]).
+     *        {@link #getInterfaceProxyHelper(ContextFactory, Class[])}.
      */
     protected Object newInterfaceProxy(Object proxyHelper,
                                        ContextFactory cf,
@@ -139,4 +140,11 @@ public abstract class VMBridge
             "VMBridge.newInterfaceProxy is not supported");
     }
 
+    /**
+     * Returns whether or not a given member (method or constructor)
+     * has variable arguments.
+     * Variable argument methods have only been supported in Java since
+     * JDK 1.5.
+     */
+    protected abstract boolean isVarArgs(Member member);
 }

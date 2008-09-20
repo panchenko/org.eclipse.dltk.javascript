@@ -23,6 +23,7 @@
  *
  * Contributor(s):
  *   Igor Bukanov
+ *   Bob Jervis
  *   Roger Lawrence
  *
  * Alternatively, the contents of this file may be used under the terms of
@@ -41,170 +42,159 @@ package com.xored.org.mozilla.javascript;
 
 import com.xored.org.mozilla.javascript.debug.DebuggableScript;
 
-final class InterpretedFunction extends NativeFunction implements Script
-{
-    static final long serialVersionUID = 541475680333911468L;
+final class InterpretedFunction extends NativeFunction implements Script {
+	static final long serialVersionUID = 541475680333911468L;
 
-    InterpreterData idata;
-    SecurityController securityController;
-    Object securityDomain;
-    Scriptable[] functionRegExps;
+	InterpreterData idata;
+	SecurityController securityController;
+	Object securityDomain;
+	Scriptable[] functionRegExps;
 
-    private InterpretedFunction(InterpreterData idata,
-                                Object staticSecurityDomain)
-    {
-        this.idata = idata;
+	private InterpretedFunction(InterpreterData idata,
+			Object staticSecurityDomain) {
+		this.idata = idata;
 
-        // Always get Context from the current thread to
-        // avoid security breaches via passing mangled Context instances
-        // with bogus SecurityController
-        Context cx = Context.getContext();
-        SecurityController sc = cx.getSecurityController();
-        Object dynamicDomain;
-        if (sc != null) {
-            dynamicDomain = sc.getDynamicSecurityDomain(staticSecurityDomain);
-        } else {
-            if (staticSecurityDomain != null) {
-                throw new IllegalArgumentException();
-            }
-            dynamicDomain = null;
-        }
+		// Always get Context from the current thread to
+		// avoid security breaches via passing mangled Context instances
+		// with bogus SecurityController
+		Context cx = Context.getContext();
+		SecurityController sc = cx.getSecurityController();
+		Object dynamicDomain;
+		if (sc != null) {
+			dynamicDomain = sc.getDynamicSecurityDomain(staticSecurityDomain);
+		} else {
+			if (staticSecurityDomain != null) {
+				throw new IllegalArgumentException();
+			}
+			dynamicDomain = null;
+		}
 
-        this.securityController = sc;
-        this.securityDomain = dynamicDomain;
-    }
+		this.securityController = sc;
+		this.securityDomain = dynamicDomain;
+	}
 
-    private InterpretedFunction(InterpretedFunction parent, int index)
-    {
-        this.idata = parent.idata.itsNestedFunctions[index];
-        this.securityController = parent.securityController;
-        this.securityDomain = parent.securityDomain;
-    }
+	private InterpretedFunction(InterpretedFunction parent, int index) {
+		this.idata = parent.idata.itsNestedFunctions[index];
+		this.securityController = parent.securityController;
+		this.securityDomain = parent.securityDomain;
+	}
 
-    /**
-     * Create script from compiled bytecode.
-     */
-    static InterpretedFunction createScript(InterpreterData idata,
-                                            Object staticSecurityDomain)
-    {
-        InterpretedFunction f;
-        f = new InterpretedFunction(idata, staticSecurityDomain);
-        return f;
-    }
+	/**
+	 * Create script from compiled bytecode.
+	 */
+	static InterpretedFunction createScript(InterpreterData idata,
+			Object staticSecurityDomain) {
+		InterpretedFunction f;
+		f = new InterpretedFunction(idata, staticSecurityDomain);
+		return f;
+	}
 
-    /**
-     * Create function compiled from Function(...) constructor.
-     */
-    static InterpretedFunction createFunction(Context cx,Scriptable scope,
-                                              InterpreterData idata,
-                                              Object staticSecurityDomain)
-    {
-        InterpretedFunction f;
-        f = new InterpretedFunction(idata, staticSecurityDomain);
-        f.initInterpretedFunction(cx, scope);
-        return f;
-    }
+	/**
+	 * Create function compiled from Function(...) constructor.
+	 */
+	static InterpretedFunction createFunction(Context cx, Scriptable scope,
+			InterpreterData idata, Object staticSecurityDomain) {
+		InterpretedFunction f;
+		f = new InterpretedFunction(idata, staticSecurityDomain);
+		f.initInterpretedFunction(cx, scope);
+		return f;
+	}
 
-    /**
-     * Create function embedded in script or another function.
-     */
-    static InterpretedFunction createFunction(Context cx, Scriptable scope,
-                                              InterpretedFunction  parent,
-                                              int index)
-    {
-        InterpretedFunction f = new InterpretedFunction(parent, index);
-        f.initInterpretedFunction(cx, scope);
-        return f;
-    }
+	/**
+	 * Create function embedded in script or another function.
+	 */
+	static InterpretedFunction createFunction(Context cx, Scriptable scope,
+			InterpretedFunction parent, int index) {
+		InterpretedFunction f = new InterpretedFunction(parent, index);
+		f.initInterpretedFunction(cx, scope);
+		return f;
+	}
 
-    Scriptable[] createRegExpWraps(Context cx, Scriptable scope)
-    {
-        if (idata.itsRegExpLiterals == null) Kit.codeBug();
+	Scriptable[] createRegExpWraps(Context cx, Scriptable scope) {
+		if (idata.itsRegExpLiterals == null)
+			Kit.codeBug();
 
-        RegExpProxy rep = ScriptRuntime.checkRegExpProxy(cx);
-        int N = idata.itsRegExpLiterals.length;
-        Scriptable[] array = new Scriptable[N];
-        for (int i = 0; i != N; ++i) {
-            array[i] = rep.wrapRegExp(cx, scope, idata.itsRegExpLiterals[i]);
-        }
-        return array;
-    }
+		RegExpProxy rep = ScriptRuntime.checkRegExpProxy(cx);
+		int N = idata.itsRegExpLiterals.length;
+		Scriptable[] array = new Scriptable[N];
+		for (int i = 0; i != N; ++i) {
+			array[i] = rep.wrapRegExp(cx, scope, idata.itsRegExpLiterals[i]);
+		}
+		return array;
+	}
 
-    private void initInterpretedFunction(Context cx, Scriptable scope)
-    {
-        initScriptFunction(cx, scope);
-        if (idata.itsRegExpLiterals != null) {
-            functionRegExps = createRegExpWraps(cx, scope);
-        }
-    }
+	private void initInterpretedFunction(Context cx, Scriptable scope) {
+		initScriptFunction(cx, scope);
+		if (idata.itsRegExpLiterals != null) {
+			functionRegExps = createRegExpWraps(cx, scope);
+		}
+	}
 
-    public String getFunctionName()
-    {
-        return (idata.itsName == null) ? "" : idata.itsName;
-    }
+	public String getFunctionName() {
+		return (idata.itsName == null) ? "" : idata.itsName;
+	}
 
-    /**
-     * Calls the function.
-     * @param cx the current context 
-     * @param scope the scope used for the call
-     * @param the value of "this"
-     * @param function arguments. Must not be null. You can use 
-     * {@link ScriptRuntime#emptyArgs} to pass empty arguments.
-     * @return the result of the function call.
-     */
-    public Object call(Context cx, Scriptable scope, Scriptable thisObj,
-                       Object[] args)
-    {
-        if (!ScriptRuntime.hasTopCall(cx)) {
-            return ScriptRuntime.doTopCall(this, cx, scope, thisObj, args);
-        }
-        return Interpreter.interpret(this, cx, scope, thisObj, args);
-    }
+	/**
+	 * Calls the function.
+	 * 
+	 * @param cx
+	 *            the current context
+	 * @param scope
+	 *            the scope used for the call
+	 * @param thisObj
+	 *            the value of "this"
+	 * @param args
+	 *            function arguments. Must not be null. You can use
+	 *            {@link ScriptRuntime#emptyArgs} to pass empty arguments.
+	 * @return the result of the function call.
+	 */
+	public Object call(Context cx, Scriptable scope, Scriptable thisObj,
+			Object[] args) {
+		if (!ScriptRuntime.hasTopCall(cx)) {
+			return ScriptRuntime.doTopCall(this, cx, scope, thisObj, args);
+		}
+		return Interpreter.interpret(this, cx, scope, thisObj, args);
+	}
 
-    public Object exec(Context cx, Scriptable scope)
-    {
-        if (idata.itsFunctionType != 0) {
-            // Can only be applied to scripts
-            throw new IllegalStateException();
-        }
-        if (!ScriptRuntime.hasTopCall(cx)) {
-            // It will go through "call" path. but they are equivalent
-            return ScriptRuntime.doTopCall(
-                this, cx, scope, scope, ScriptRuntime.emptyArgs);
-        }
-        return Interpreter.interpret(
-            this, cx, scope, scope, ScriptRuntime.emptyArgs);
-    }
+	public Object exec(Context cx, Scriptable scope) {
+		if (idata.itsFunctionType != 0) {
+			// Can only be applied to scripts
+			throw new IllegalStateException();
+		}
+		if (!ScriptRuntime.hasTopCall(cx)) {
+			// It will go through "call" path. but they are equivalent
+			return ScriptRuntime.doTopCall(this, cx, scope, scope,
+					ScriptRuntime.emptyArgs);
+		}
+		return Interpreter.interpret(this, cx, scope, scope,
+				ScriptRuntime.emptyArgs);
+	}
 
-    public String getEncodedSource()
-    {
-        return Interpreter.getEncodedSource(idata);
-    }
+	public String getEncodedSource() {
+		return Interpreter.getEncodedSource(idata);
+	}
 
-    public DebuggableScript getDebuggableView()
-    {
-        return idata;
-    }
+	public DebuggableScript getDebuggableView() {
+		return idata;
+	}
 
-    protected int getLanguageVersion()
-    {
-        return idata.languageVersion;
-    }
+	protected int getLanguageVersion() {
+		return idata.languageVersion;
+	}
 
-    protected int getParamCount()
-    {
-        return idata.argCount;
-    }
+	protected int getParamCount() {
+		return idata.argCount;
+	}
 
-    protected int getParamAndVarCount()
-    {
-        return idata.argNames.length;
-    }
+	protected int getParamAndVarCount() {
+		return idata.argNames.length;
+	}
 
-    protected String getParamOrVarName(int index)
-    {
-        return idata.argNames[index];
-    }
+	protected String getParamOrVarName(int index) {
+		return idata.argNames[index];
+	}
 
+	protected boolean getParamOrVarConst(int index) {
+		return idata.argIsConst[index];
+	}
 }
-

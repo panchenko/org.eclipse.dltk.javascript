@@ -84,7 +84,7 @@ public interface ErrorReporter {
      * @param lineOffset the offset into lineSource where problem was detected
      */
     void error(String message, String sourceName, int line,
-               String lineSource, int offset);
+               String lineSource, int lineOffset);
 
     /**
      * Creates an EvaluatorException that may be thrown.

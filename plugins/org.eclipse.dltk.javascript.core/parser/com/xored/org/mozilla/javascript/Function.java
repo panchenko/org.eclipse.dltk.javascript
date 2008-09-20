@@ -44,7 +44,7 @@ package com.xored.org.mozilla.javascript;
  * This is interface that all functions in JavaScript must implement.
  * The interface provides for calling functions and constructors.
  *
- * @see com.xored.org.mozilla.javascript.Scriptable
+ * @see org.mozilla.javascript.Scriptable
  * @author Norris Boyd
  */
 

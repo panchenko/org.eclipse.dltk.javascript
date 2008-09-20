@@ -25,6 +25,7 @@
  *   Roger Lawrence
  *   Mike McCabe
  *   Igor Bukanov
+ *   Bob Jervis
  *   Milen Nankov
  *
  * Alternatively, the contents of this file may be used under the terms of
@@ -47,7 +48,7 @@ package com.xored.org.mozilla.javascript;
  * It is based on the C source files jsscan.c and jsscan.h
  * in the jsref package.
  *
- * @see com.xored.org.mozilla.javascript.Parser
+ * @see org.mozilla.javascript.Parser
  *
  * @author Mike McCabe
  * @author Brendan Eich
@@ -244,7 +245,12 @@ public class Token
         TO_OBJECT      = 145,
         TO_DOUBLE      = 146,
 
-        LAST_TOKEN     = 146;
+        GET            = 147,  // JS 1.5 get pseudo keyword
+        SET            = 148,  // JS 1.5 set pseudo keyword
+        CONST          = 149,
+        SETCONST       = 150,
+        SETCONSTVAR    = 151,
+        LAST_TOKEN     = 152;
 
     public static String name(int token)
     {
@@ -399,6 +405,10 @@ public class Token
           case XMLEND:          return "XMLEND";
           case TO_OBJECT:       return "TO_OBJECT";
           case TO_DOUBLE:       return "TO_DOUBLE";
+          case GET:             return "GET";
+          case SET:             return "SET";
+          case CONST:           return "CONST";
+          case SETCONST:        return "SETCONST";
         }
 
         // Token without name

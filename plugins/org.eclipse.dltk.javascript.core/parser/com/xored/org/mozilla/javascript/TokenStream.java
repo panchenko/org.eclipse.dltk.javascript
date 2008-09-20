@@ -26,6 +26,7 @@
  *   Mike McCabe
  *   Igor Bukanov
  *   Ethan Hugg
+ *   Bob Jervis
  *   Terry Lucas
  *   Milen Nankov
  *
@@ -51,13 +52,13 @@ import java.io.Reader;
  * 
  * It is based on the C source files jsscan.c and jsscan.h in the jsref package.
  * 
- * @see com.xored.org.mozilla.javascript.Parser
+ * @see org.mozilla.javascript.Parser
  * 
  * @author Mike McCabe
  * @author Brendan Eich
  */
 
-public class TokenStream {
+class TokenStream {
 	/*
 	 * For chars - because we need something out-of-range to check. (And
 	 * checking EOF by exception is annoying.) Note distinction from EOF token
@@ -68,7 +69,6 @@ public class TokenStream {
 	public TokenStream(Parser parser, Reader sourceReader, String sourceString,
 			int lineno) {
 		this.parser = parser;
-
 		this.lineno = lineno;
 		if (sourceReader != null) {
 			if (sourceString != null)
@@ -119,7 +119,7 @@ public class TokenStream {
 		final int Id_break = Token.BREAK, Id_case = Token.CASE, Id_continue = Token.CONTINUE, Id_default = Token.DEFAULT, Id_delete = Token.DELPROP, Id_do = Token.DO, Id_else = Token.ELSE, Id_export = Token.EXPORT, Id_false = Token.FALSE, Id_for = Token.FOR, Id_function = Token.FUNCTION, Id_if = Token.IF, Id_in = Token.IN, Id_new = Token.NEW, Id_null = Token.NULL, Id_return = Token.RETURN, Id_switch = Token.SWITCH, Id_this = Token.THIS, Id_true = Token.TRUE, Id_typeof = Token.TYPEOF, Id_var = Token.VAR, Id_void = Token.VOID, Id_while = Token.WHILE, Id_with = Token.WITH,
 
 		// the following are #ifdef RESERVE_JAVA_KEYWORDS in jsscan.c
-		Id_abstract = Token.RESERVED, Id_boolean = Token.RESERVED, Id_byte = Token.RESERVED, Id_catch = Token.CATCH, Id_char = Token.RESERVED, Id_class = Token.RESERVED, Id_const = Token.RESERVED, Id_debugger = Token.RESERVED, Id_double = Token.RESERVED, Id_enum = Token.RESERVED, Id_extends = Token.RESERVED, Id_final = Token.RESERVED, Id_finally = Token.FINALLY, Id_float = Token.RESERVED, Id_goto = Token.RESERVED, Id_implements = Token.RESERVED, Id_import = Token.IMPORT, Id_instanceof = Token.INSTANCEOF, Id_int = Token.RESERVED, Id_interface = Token.RESERVED, Id_long = Token.RESERVED, Id_native = Token.RESERVED, Id_package = Token.RESERVED, Id_private = Token.RESERVED, Id_protected = Token.RESERVED, Id_public = Token.RESERVED, Id_short = Token.RESERVED, Id_static = Token.RESERVED, Id_super = Token.RESERVED, Id_synchronized = Token.RESERVED, Id_throw = Token.THROW, Id_throws = Token.RESERVED, Id_transient = Token.RESERVED, Id_try = Token.TRY, Id_volatile = Token.RESERVED;
+		Id_abstract = Token.RESERVED, Id_boolean = Token.RESERVED, Id_byte = Token.RESERVED, Id_catch = Token.CATCH, Id_char = Token.RESERVED, Id_class = Token.RESERVED, Id_const = Token.CONST, Id_debugger = Token.RESERVED, Id_double = Token.RESERVED, Id_enum = Token.RESERVED, Id_extends = Token.RESERVED, Id_final = Token.RESERVED, Id_finally = Token.FINALLY, Id_float = Token.RESERVED, Id_goto = Token.RESERVED, Id_implements = Token.RESERVED, Id_import = Token.IMPORT, Id_instanceof = Token.INSTANCEOF, Id_int = Token.RESERVED, Id_interface = Token.RESERVED, Id_long = Token.RESERVED, Id_native = Token.RESERVED, Id_package = Token.RESERVED, Id_private = Token.RESERVED, Id_protected = Token.RESERVED, Id_public = Token.RESERVED, Id_short = Token.RESERVED, Id_static = Token.RESERVED, Id_super = Token.RESERVED, Id_synchronized = Token.RESERVED, Id_throw = Token.THROW, Id_throws = Token.RESERVED, Id_transient = Token.RESERVED, Id_try = Token.TRY, Id_volatile = Token.RESERVED;
 
 		int id;
 		String s = name;
@@ -940,10 +940,10 @@ public class TokenStream {
 				}
 				if (matchChar('*')) {
 					boolean lookForSlash = false;
-					StringBuffer bm=new StringBuffer();
+					StringBuffer bm = new StringBuffer();
 					for (;;) {
 						c = getChar();
-						bm.append((char)c);
+						bm.append((char) c);
 						if (c == EOF_CHAR) {
 							parser.addError("msg.unterminated.comment");
 							return Token.ERROR;
@@ -951,13 +951,14 @@ public class TokenStream {
 							lookForSlash = true;
 						} else if (c == '/') {
 							if (lookForSlash) {
-								parser.decompiler.addBlockComment(bm.toString());
+								parser.decompiler
+										.addBlockComment(bm.toString());
 								continue retry;
 							}
 						} else {
 							lookForSlash = false;
 						}
-					}					
+					}
 				}
 
 				if (matchChar('=')) {
@@ -1478,7 +1479,11 @@ public class TokenStream {
 	}
 
 	final int getCursor() {
-		return offset-ungetCursor;
+		return offset - ungetCursor;
+	}
+
+	final int getLineStart() {
+		return lineStart + (offset - sourceCursor);
 	}
 
 	private int offset;
