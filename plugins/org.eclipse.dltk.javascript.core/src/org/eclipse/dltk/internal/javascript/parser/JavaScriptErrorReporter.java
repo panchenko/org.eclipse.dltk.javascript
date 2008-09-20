@@ -33,7 +33,7 @@ public class JavaScriptErrorReporter implements ErrorReporter {
 		}
 		int startPosition = offset;
 		if (lineSource != null) {
-			startPosition -= lineSource.length();
+			offset += lineSource.length();
 		}
 		fReporter.reportProblem(new DefaultProblem(sourceName, message, 0,
 				null, ProblemSeverities.Error, startPosition, offset, line));
