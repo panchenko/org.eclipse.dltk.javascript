@@ -9,8 +9,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core;
 
+import java.io.File;
+
+import org.eclipse.core.resources.IResource;
 import org.eclipse.dltk.core.AbstractLanguageToolkit;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
+import org.eclipse.dltk.core.environment.IFileHandle;
 
 public class JavaScriptLanguageToolkit extends AbstractLanguageToolkit {
 	private static JavaScriptLanguageToolkit sInstance = new JavaScriptLanguageToolkit();
@@ -37,4 +41,17 @@ public class JavaScriptLanguageToolkit extends AbstractLanguageToolkit {
 	public String getLanguageContentType() {
 		return "org.eclipse.dltk.javascriptContentType";
 	}
+
+	public boolean canValidateContent(IResource resource) {
+		return false;
+	}
+
+	public boolean canValidateContent(File file) {
+		return false;
+	}
+
+	public boolean canValidateContent(IFileHandle file) {
+		return false;
+	}
+
 }
