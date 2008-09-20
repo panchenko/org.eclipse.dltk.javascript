@@ -26,9 +26,11 @@
  *   Norris Boyd
  *   Igor Bukanov
  *   Ethan Hugg
+ *   Bob Jervis
  *   Terry Lucas
  *   Roger Lawrence
  *   Milen Nankov
+ *   Hannes Wallnoefer
  *
  * Alternatively, the contents of this file may be used under the terms of
  * the GNU General Public License Version 2 or later (the "GPL"), in which
@@ -46,6 +48,8 @@ package org.mozilla.javascript;
 
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.mozilla.javascript.continuations.Continuation;
 import org.mozilla.javascript.debug.DebugFrame;
@@ -161,8 +165,17 @@ public class Interpreter
        // Clear local to allow GC its context
        Icode_LOCAL_CLEAR                = -56,
 
-    // Last icode
-        MIN_ICODE                       = -56;
+       // Literal get/set
+       Icode_LITERAL_GETTER             = -57,
+       Icode_LITERAL_SETTER             = -58,
+
+       // const
+       Icode_SETCONST                   = -59,
+       Icode_SETCONSTVAR                = -60,
+       Icode_SETCONSTVAR1               = -61,
+
+       // Last icode
+        MIN_ICODE                       = -61;
 
     // data for parsing
 
@@ -225,6 +238,7 @@ public class Interpreter
 // sDbl[i]: if stack[i] is UniqueTag.DOUBLE_MARK, sDbl[i] holds the number value
 
         Object[] stack;
+        int[] stackAttributes;
         double[] sDbl;
         CallFrame varSource; // defaults to this unless continuation frame
         int localShift;
@@ -263,6 +277,7 @@ public class Interpreter
             // from this frame to share variables.
 
             copy.stack = (Object[])stack.clone();
+            copy.stackAttributes = (int[])stackAttributes.clone();
             copy.sDbl = (double[])sDbl.clone();
 
             copy.frozen = false;
@@ -411,6 +426,11 @@ public class Interpreter
           case Icode_LEAVEDQ:          return "LEAVEDQ";
           case Icode_TAIL_CALL:        return "TAIL_CALL";
           case Icode_LOCAL_CLEAR:      return "LOCAL_CLEAR";
+          case Icode_LITERAL_GETTER:   return "LITERAL_GETTER";
+          case Icode_LITERAL_SETTER:   return "LITERAL_SETTER";
+          case Icode_SETCONST:         return "SETCONST";
+          case Icode_SETCONSTVAR:      return "SETCONSTVAR";
+          case Icode_SETCONSTVAR1:     return "SETCONSTVAR1";
         }
 
         // icode without name
@@ -464,19 +484,23 @@ public class Interpreter
         return itsData;
     }
 
-    public Script createScriptObject(Object bytecode,
-                                     Object staticSecurityDomain)
+    public Script createScriptObject(Object bytecode, Object staticSecurityDomain)
     {
-        InterpreterData idata = (InterpreterData)bytecode;
+        if(bytecode != itsData)
+        {
+            Kit.codeBug();
+        }
         return InterpretedFunction.createScript(itsData,
                                                 staticSecurityDomain);
     }
 
-    public Function createFunctionObject(Context cx, Scriptable scope,
-                                         Object bytecode,
-                                         Object staticSecurityDomain)
+    public Function createFunctionObject(Context cx, Scriptable scope, 
+            Object bytecode, Object staticSecurityDomain)
     {
-        InterpreterData idata = (InterpreterData)bytecode;
+        if(bytecode != itsData)
+        {
+            Kit.codeBug();
+        }
         return InterpretedFunction.createFunction(cx, scope, itsData,
                                                   staticSecurityDomain);
     }
@@ -556,6 +580,7 @@ public class Interpreter
                                    + itsData.itsMaxStack;
 
         itsData.argNames = scriptOrFn.getParamAndVarNames();
+        itsData.argIsConst = scriptOrFn.getParamAndVarConst();
         itsData.argCount = scriptOrFn.getParamCount();
 
         itsData.encodedSourceStart = scriptOrFn.getEncodedSourceStart();
@@ -632,17 +657,28 @@ public class Interpreter
                 int fnType = scriptOrFn.getFunctionNode(fnIndex).
                                  getFunctionType();
                 // Only function expressions or function expression
-                // statements needs closure code creating new function
+                // statements need closure code creating new function
                 // object on stack as function statements are initialized
-                // at script/function start
-                // In addition function expression can not present here
-                // at statement level, they must only present as expressions.
+                // at script/function start.
+                // In addition, function expressions can not be present here
+                // at statement level, they must only be present as expressions.
                 if (fnType == FunctionNode.FUNCTION_EXPRESSION_STATEMENT) {
                     addIndexOp(Icode_CLOSURE_STMT, fnIndex);
                 } else {
                     if (fnType != FunctionNode.FUNCTION_STATEMENT) {
                         throw Kit.codeBug();
                     }
+                }
+                // For function statements or function expression statements
+                // in scripts, we need to ensure that the result of the script
+                // is the function if it is the last statement in the script.
+                // For example, eval("function () {}") should return a
+                // function, not undefined.
+                if (!itsInFunctionFlag) {
+                    addIndexOp(Icode_CLOSURE_EXPR, fnIndex);
+                    stackChange(1);
+                    addIcode(Icode_POP_RESULT);
+                    stackChange(-1);
                 }
             }
             break;
@@ -689,7 +725,6 @@ public class Interpreter
             // See comments in IRFactory.createSwitch() for description
             // of SWITCH node
             {
-                Node switchNode = (Node.Jump)node;
                 visitExpression(child, 0);
                 for (Node.Jump caseNode = (Node.Jump)child.getNext();
                      caseNode != null;
@@ -1115,6 +1150,17 @@ public class Interpreter
             }
             break;
 
+          case Token.SETCONST:
+            {
+                String name = child.getString();
+                visitExpression(child, 0);
+                child = child.getNext();
+                visitExpression(child, 0);
+                addStringOp(Icode_SETCONST, name);
+                stackChange(-1);
+            }
+            break;
+
           case Token.TYPEOFNAME:
             {
                 String name = node.getString();
@@ -1195,6 +1241,18 @@ public class Interpreter
                 addVarOp(Token.SETVAR, index);
             }
             break;
+
+          case Token.SETCONSTVAR:
+            {
+                if (itsData.itsNeedsActivation) Kit.codeBug();
+                String name = child.getString();
+                child = child.getNext();
+                visitExpression(child, 0);
+                int index = scriptOrFn.getParamOrVarIndex(name);
+                addVarOp(Token.SETCONSTVAR, index);
+            }
+            break;
+
 
           case Token.NULL:
           case Token.THIS:
@@ -1383,10 +1441,19 @@ public class Interpreter
             throw badTree(node);
         }
         addIndexOp(Icode_LITERAL_NEW, count);
-        stackChange(1);
+        stackChange(2);
         while (child != null) {
-            visitExpression(child, 0);
-            addIcode(Icode_LITERAL_SET);
+            int childType = child.getType();
+            if (childType == Token.GET) {
+                visitExpression(child.getFirstChild(), 0);
+                addIcode(Icode_LITERAL_GETTER);
+            } else if (childType == Token.SET) {
+                visitExpression(child.getFirstChild(), 0);
+                addIcode(Icode_LITERAL_SETTER);
+            } else {
+                visitExpression(child, 0);
+                addIcode(Icode_LITERAL_SET);
+            }
             stackChange(-1);
             child = child.getNext();
         }
@@ -1404,6 +1471,7 @@ public class Interpreter
             itsLiteralIds.add(propertyIds);
             addIndexOp(Token.OBJECTLIT, index);
         }
+        stackChange(-1);
     }
 
     private int getLocalBlockRef(Node node)
@@ -1603,6 +1671,14 @@ public class Interpreter
     private void addVarOp(int op, int varIndex)
     {
         switch (op) {
+          case Token.SETCONSTVAR:
+            if (varIndex < 128) {
+                addIcode(Icode_SETCONSTVAR1);
+                addUint8(varIndex);
+                return;
+            }
+            addIndexOp(Icode_SETCONSTVAR, varIndex);
+            return;
           case Token.GETVAR:
           case Token.SETVAR:
             if (varIndex < 128) {
@@ -1906,7 +1982,6 @@ public class Interpreter
               case Token.NUMBER : {
                 double value = idata.itsDoubleTable[indexReg];
                 out.println(tname + " " + value);
-                pc += 2;
                 break;
               }
               case Icode_LINE : {
@@ -1933,6 +2008,30 @@ public class Interpreter
                 pc += 4;
                 break;
               }
+              case Icode_REG_IND_C0:
+                  indexReg = 0;
+                  out.println(tname);
+                  break;
+              case Icode_REG_IND_C1:
+                  indexReg = 1;
+                  out.println(tname);
+                  break;
+              case Icode_REG_IND_C2:
+                  indexReg = 2;
+                  out.println(tname);
+                  break;
+              case Icode_REG_IND_C3:
+                  indexReg = 3;
+                  out.println(tname);
+                  break;
+              case Icode_REG_IND_C4:
+                  indexReg = 4;
+                  out.println(tname);
+                  break;
+              case Icode_REG_IND_C5:
+                  indexReg = 5;
+                  out.println(tname);
+                  break;
               case Icode_REG_IND1: {
                 indexReg = 0xFF & iCode[pc];
                 out.println(tname+" "+indexReg);
@@ -1953,6 +2052,7 @@ public class Interpreter
               }
               case Icode_GETVAR1:
               case Icode_SETVAR1:
+              case Icode_SETCONSTVAR1:
                 indexReg = iCode[pc];
                 out.println(tname+" "+indexReg);
                 ++pc;
@@ -2052,6 +2152,7 @@ public class Interpreter
 
             case Icode_GETVAR1:
             case Icode_SETVAR1:
+            case Icode_SETCONSTVAR1:
                 // byte var index
                 return 1 + 1;
 
@@ -2155,7 +2256,7 @@ public class Interpreter
     {
         String tag = "org.mozilla.javascript.Interpreter.interpretLoop";
         StringBuffer sb = new StringBuffer(nativeStackTrace.length() + 1000);
-        String lineSeparator = System.getProperty("line.separator");
+        String lineSeparator = SecurityUtilities.getSystemProperty("line.separator");
 
         CallFrame[] array = (CallFrame[])ex.interpreterStackInfo;
         int[] linePC = ex.interpreterLineData;
@@ -2209,6 +2310,48 @@ public class Interpreter
         return sb.toString();
     }
 
+    static List getScriptStack(RhinoException ex)
+    {
+        if (ex.interpreterStackInfo == null) {
+            return null;
+        }
+        
+        List list = new ArrayList();
+        String lineSeparator = SecurityUtilities.getSystemProperty("line.separator");
+
+        CallFrame[] array = (CallFrame[])ex.interpreterStackInfo;
+        int[] linePC = ex.interpreterLineData;
+        int arrayIndex = array.length;
+        int linePCIndex = linePC.length;
+        while (arrayIndex != 0) {
+            --arrayIndex;
+            StringBuffer sb = new StringBuffer();
+            CallFrame frame = array[arrayIndex];
+            while (frame != null) {
+                if (linePCIndex == 0) Kit.codeBug();
+                --linePCIndex;
+                InterpreterData idata = frame.idata;
+                sb.append("\tat ");
+                sb.append(idata.itsSourceFile);
+                int pc = linePC[linePCIndex];
+                if (pc >= 0) {
+                    // Include line info only if available
+                    sb.append(':');
+                    sb.append(getIndex(idata.itsICode, pc));
+                }
+                if (idata.itsName != null && idata.itsName.length() != 0) {
+                    sb.append(" (");
+                    sb.append(idata.itsName);
+                    sb.append(')');
+                }
+                sb.append(lineSeparator);
+                frame = frame.parentFrame;
+            }
+            list.add(sb.toString());
+        }
+        return list;
+    }
+        
     static String getEncodedSource(InterpreterData idata)
     {
         if (idata.encodedSource == null) {
@@ -2405,7 +2548,7 @@ public class Interpreter
                             // the capturedFrame, not branchFrame
                             --enterCount;
                             x = enterFrames[enterCount];
-                            enterFrame(cx, x, ScriptRuntime.emptyArgs);
+                            enterFrame(cx, x, ScriptRuntime.emptyArgs, true);
                         }
 
                         // Continuation jump is almost done: capturedFrame
@@ -2417,9 +2560,6 @@ public class Interpreter
                         // restart the execution
                     }
 
-                    // Should be already cleared
-                    if (throwable != null) Kit.codeBug();
-
                 } else {
                     if (frame.frozen) Kit.codeBug();
                 }
@@ -2430,6 +2570,7 @@ public class Interpreter
                 double[] sDbl = frame.sDbl;
                 Object[] vars = frame.varSource.stack;
                 double[] varDbls = frame.varSource.sDbl;
+                int[] varAttributes = frame.varSource.stackAttributes;
                 byte[] iCode = frame.idata.itsICode;
                 String[] strings = frame.idata.itsStringTable;
 
@@ -2801,6 +2942,14 @@ switch (op) {
                                                 frame.scope, stringReg);
         continue Loop;
     }
+    case Icode_SETCONST: {
+        Object rhs = stack[stackTop];
+        if (rhs == DBL_MRK) rhs = ScriptRuntime.wrapNumber(sDbl[stackTop]);
+        --stackTop;
+        Scriptable lhs = (Scriptable)stack[stackTop];
+        stack[stackTop] = ScriptRuntime.setConst(lhs, rhs, cx, stringReg);
+        continue Loop;
+    }
     case Token.DELPROP : {
         Object rhs = stack[stackTop];
         if (rhs == DBL_MRK) rhs = ScriptRuntime.wrapNumber(sDbl[stackTop]);
@@ -3037,14 +3186,17 @@ switch (op) {
                     // would gain in performance due to potentially
                     // bad iteraction with GC.
                     callParentFrame = frame.parentFrame;
-                }
+                    // Release the current frame. See Bug #344501 to see why
+                    // it is being done here.
+                    // TODO: If using the graphical debugger, tail call 
+                    // optimization will create a "hole" in the context stack. 
+                    // The correct thing to do may be to disable tail call 
+                    // optimization if the code is being debugged.
+                    exitFrame(cx, frame, null);                }
                 initFrame(cx, calleeScope, funThisObj, stack, sDbl,
                           stackTop + 2, indexReg, ifun, callParentFrame,
                           calleeFrame);
-                if (op == Icode_TAIL_CALL) {
-                    // Release the parent
-                    exitFrame(cx, frame, null);
-                } else {
+                if (op != Icode_TAIL_CALL) {
                     frame.savedStackTop = stackTop;
                     frame.savedCallOp = op;
                 }
@@ -3163,16 +3315,45 @@ switch (op) {
         continue Loop;
     case Icode_NAME_INC_DEC :
         stack[++stackTop] = ScriptRuntime.nameIncrDecr(frame.scope, stringReg,
-                                                       iCode[frame.pc]);
+                                                       cx, iCode[frame.pc]);
         ++frame.pc;
+        continue Loop;
+    case Icode_SETCONSTVAR1:
+        indexReg = iCode[frame.pc++];
+        // fallthrough
+    case Token.SETCONSTVAR :
+        if (!frame.useActivation) {
+            if ((varAttributes[indexReg] & ScriptableObject.READONLY) == 0) {
+                throw Context.reportRuntimeError1("msg.var.redecl",
+                                                  frame.idata.argNames[indexReg]);
+            }
+            if ((varAttributes[indexReg] & ScriptableObject.UNINITIALIZED_CONST)
+                != 0)
+            {
+                vars[indexReg] = stack[stackTop];
+                varAttributes[indexReg] &= ~ScriptableObject.UNINITIALIZED_CONST;
+                varDbls[indexReg] = sDbl[stackTop];
+            }
+        } else {
+            Object val = stack[stackTop];
+            if (val == DBL_MRK) val = ScriptRuntime.wrapNumber(sDbl[stackTop]);
+            stringReg = frame.idata.argNames[indexReg];
+            if (frame.scope instanceof ConstProperties) {
+                ConstProperties cp = (ConstProperties)frame.scope;
+                cp.putConst(stringReg, frame.scope, val);
+            } else
+                throw Kit.codeBug();
+        }
         continue Loop;
     case Icode_SETVAR1:
         indexReg = iCode[frame.pc++];
         // fallthrough
     case Token.SETVAR :
         if (!frame.useActivation) {
-            vars[indexReg] = stack[stackTop];
-            varDbls[indexReg] = sDbl[stackTop];
+            if ((varAttributes[indexReg] & ScriptableObject.READONLY) == 0) {
+                vars[indexReg] = stack[stackTop];
+                varDbls[indexReg] = sDbl[stackTop];
+            }
         } else {
             Object val = stack[stackTop];
             if (val == DBL_MRK) val = ScriptRuntime.wrapNumber(sDbl[stackTop]);
@@ -3214,7 +3395,7 @@ switch (op) {
         } else {
             String varName = frame.idata.argNames[indexReg];
             stack[stackTop] = ScriptRuntime.nameIncrDecr(frame.scope, varName,
-                                                         incrDecrMask);
+                                                         cx, incrDecrMask);
         }
         ++frame.pc;
         continue Loop;
@@ -3369,6 +3550,8 @@ switch (op) {
     case Icode_LITERAL_NEW :
         // indexReg: number of values in the literal
         ++stackTop;
+        stack[stackTop] = new int[indexReg];
+        ++stackTop;
         stack[stackTop] = new Object[indexReg];
         sDbl[stackTop] = 0;
         continue Loop;
@@ -3381,14 +3564,35 @@ switch (op) {
         sDbl[stackTop] = i + 1;
         continue Loop;
     }
+    case Icode_LITERAL_GETTER : {
+        Object value = stack[stackTop];
+        --stackTop;
+        int i = (int)sDbl[stackTop];
+        ((Object[])stack[stackTop])[i] = value;
+        ((int[])stack[stackTop - 1])[i] = -1;
+        sDbl[stackTop] = i + 1;
+        continue Loop;
+    }
+    case Icode_LITERAL_SETTER : {
+        Object value = stack[stackTop];
+        --stackTop;
+        int i = (int)sDbl[stackTop];
+        ((Object[])stack[stackTop])[i] = value;
+        ((int[])stack[stackTop - 1])[i] = +1;
+        sDbl[stackTop] = i + 1;
+        continue Loop;
+    }
     case Token.ARRAYLIT :
     case Icode_SPARE_ARRAYLIT :
     case Token.OBJECTLIT : {
         Object[] data = (Object[])stack[stackTop];
+        --stackTop;
+        int[] getterSetters = (int[])stack[stackTop];
         Object val;
         if (op == Token.OBJECTLIT) {
             Object[] ids = (Object[])frame.idata.literalIds[indexReg];
-            val = ScriptRuntime.newObjectLiteral(ids, data, cx, frame.scope);
+            val = ScriptRuntime.newObjectLiteral(ids, data, getterSetters, cx,
+                    frame.scope);
         } else {
             int[] skipIndexces = null;
             if (op == Icode_SPARE_ARRAYLIT) {
@@ -3767,19 +3971,27 @@ switch (op) {
             Kit.codeBug();
 
         Object[] stack;
+        int[] stackAttributes;
         double[] sDbl;
         boolean stackReuse;
         if (frame.stack != null && maxFrameArray <= frame.stack.length) {
             // Reuse stacks from old frame
             stackReuse = true;
             stack = frame.stack;
+            stackAttributes = frame.stackAttributes;
             sDbl = frame.sDbl;
         } else {
             stackReuse = false;
             stack = new Object[maxFrameArray];
+            stackAttributes = new int[maxFrameArray];
             sDbl = new double[maxFrameArray];
         }
 
+        int varCount = idata.getParamAndVarCount();
+        for (int i = 0; i < varCount; i++) {
+            if (idata.getParamOrVarConst(i))
+                stackAttributes[i] = ScriptableObject.CONST;
+        }
         int definedArgs = idata.argCount;
         if (definedArgs > argCount) { definedArgs = argCount; }
 
@@ -3798,6 +4010,7 @@ switch (op) {
         frame.idata = idata;
 
         frame.stack = stack;
+        frame.stackAttributes = stackAttributes;
         frame.sDbl = sDbl;
         frame.varSource = frame;
         frame.localShift = idata.itsMaxVars;
@@ -3835,7 +4048,7 @@ switch (op) {
             }
         }
 
-        enterFrame(cx, frame, args);
+        enterFrame(cx, frame, args, false);
     }
 
     private static boolean isFrameEnterExitRequired(CallFrame frame)
@@ -3843,16 +4056,47 @@ switch (op) {
         return frame.debuggerFrame != null || frame.idata.itsNeedsActivation;
     }
 
-    private static void enterFrame(Context cx, CallFrame frame, Object[] args)
+    private static void enterFrame(Context cx, CallFrame frame, Object[] args, boolean continuationRestart)
     {
-        if (frame.debuggerFrame != null) {
-            frame.debuggerFrame.onEnter(cx, frame.scope, frame.thisObj, args);
-        }
-        if (frame.idata.itsNeedsActivation) {
-            // Enter activation only when itsNeedsActivation true, not when
-            // useActivation holds since debugger should not interfere
-            // with activation chaining
-            ScriptRuntime.enterActivationFunction(cx, frame.scope);
+        boolean usesActivation = frame.idata.itsNeedsActivation; 
+        boolean isDebugged = frame.debuggerFrame != null;
+        if(usesActivation || isDebugged) {
+            Scriptable scope = frame.scope;
+            if(scope == null) {
+                Kit.codeBug();
+            } else if(continuationRestart) {
+                // Walk the parent chain of frame.scope until a NativeCall is 
+                // found. Normally, frame.scope is a NativeCall when called 
+                // from initFrame() for a debugged or activatable function. 
+                // However, when called from interpreterLoop() as part of 
+                // restarting a continuation, it can also be a NativeWith if 
+                // the continuation was captured within a "with" or "catch" 
+                // block ("catch" implicitly uses NativeWith to create a scope 
+                // to expose the exception variable).
+                for(;;) {
+                    if(scope instanceof NativeCall) {
+                        break;
+                    } else {
+                        scope = scope.getParentScope();
+                        if(scope == null || (frame.parentFrame != null && frame.parentFrame.scope == scope)) {
+                            // If we get here, we didn't find a NativeCall in 
+                            // the call chain before reaching parent frame's 
+                            // scope. This should not be possible.
+                            Kit.codeBug();
+                            break; // Never reached, but keeps the static analyzer happy about "scope" not being null 5 lines above.
+                        }
+                    }
+                }
+            }
+            if (isDebugged) {
+                frame.debuggerFrame.onEnter(cx, scope, frame.thisObj, args);
+            }
+            // Enter activation only when itsNeedsActivation true, 
+            // since debugger should not interfere with activation 
+            // chaining
+            if (usesActivation) {
+                ScriptRuntime.enterActivationFunction(cx, scope);
+            }
         }
     }
 
@@ -3929,6 +4173,7 @@ switch (op) {
             for (int i = x.savedStackTop + 1; i != x.stack.length; ++i) {
                 // Allow to GC unused stack space
                 x.stack[i] = null;
+                x.stackAttributes[i] = ScriptableObject.EMPTY;
             }
             if (x.savedCallOp == Token.CALL) {
                 // the call will always overwrite the stack top with the result

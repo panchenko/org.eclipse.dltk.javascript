@@ -112,7 +112,7 @@ public class ClassCompiler
      */
     public Class[] getTargetImplements()
     {
-        return targetImplements;
+        return targetImplements == null ? null : (Class[])targetImplements.clone();
     }
 
     /**
@@ -123,7 +123,7 @@ public class ClassCompiler
      */
     public void setTargetImplements(Class[] implementsClasses)
     {
-        targetImplements = implementsClasses;
+        targetImplements = implementsClasses == null ? null : (Class[])implementsClasses.clone();
     }
 
     /**

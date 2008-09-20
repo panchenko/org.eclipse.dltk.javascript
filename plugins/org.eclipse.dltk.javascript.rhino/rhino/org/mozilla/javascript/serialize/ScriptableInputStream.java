@@ -14,7 +14,7 @@
  * License.
  *
  * The Original Code is Rhino serialization code, released
- * September 25, 2001.
+ * Sept. 25, 2001.
  *
  * The Initial Developer of the Original Code is
  * Norris Boyd.

@@ -285,8 +285,6 @@ public class ClassFileWriter {
      *
      * @param maxLocals the maximum number of local variable slots
      *        (a.k.a. Java registers) used by the method
-     * @param vars the array of the variables for the method,
-     *        or null if none
      */
     public void stopMethod(short maxLocals) {
         if (itsCurrentMethod == null)
@@ -2517,7 +2515,6 @@ public class ClassFileWriter {
     private static final boolean DEBUGSTACK = false;
     private static final boolean DEBUGLABELS = false;
     private static final boolean DEBUGCODE = false;
-    private static final int CodeBufferSize = 128;
 
     private String generatedClassName;
 
@@ -2531,8 +2528,6 @@ public class ClassFileWriter {
     private int itsCodeBufferTop;
 
     private ConstantPool itsConstantPool;
-
-    private short itsSourceFileAttributeIndex;
 
     private ClassFileMethod itsCurrentMethod;
     private short itsStackTop;
@@ -2969,7 +2964,6 @@ final class ConstantPool
     private ObjToIntMap itsUtf8Hash = new ObjToIntMap();
     private ObjToIntMap itsFieldRefHash = new ObjToIntMap();
     private ObjToIntMap itsMethodRefHash = new ObjToIntMap();
-    private UintMap nameAndTypeHash = new UintMap();
     private ObjToIntMap itsClassHash = new ObjToIntMap();
 
     private int itsTop;

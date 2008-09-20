@@ -22,8 +22,11 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
+ *   Peter Annema
  *   Norris Boyd
  *   Mike McCabe
+ *   Ilya Frank
+ *   
  *
  * Alternatively, the contents of this file may be used under the terms of
  * the GNU General Public License Version 2 or later (the "GPL"), in which
@@ -442,11 +445,6 @@ final class NativeDate extends IdScriptableObject
         return lo;
     }
 
-    private static boolean InLeapYear(double t)
-    {
-        return IsLeapYear(YearFromTime(t));
-    }
-
     private static double DayFromMonth(int m, int year)
     {
         int day = m * 30;
@@ -550,7 +548,7 @@ final class NativeDate extends IdScriptableObject
 
     private static double now()
     {
-        return (double) System.currentTimeMillis();
+        return System.currentTimeMillis();
     }
 
     /* Should be possible to determine the need for this dynamically
@@ -750,9 +748,9 @@ final class NativeDate extends IdScriptableObject
         return result;
     }
 
-
+    /* compute the time in msec (unclipped) from the given args */
     private static final int MAXARGS = 7;
-    private static double jsStaticFunction_UTC(Object[] args)
+    private static double date_msecFromArgs(Object[] args)
     {
         double array[] = new double[MAXARGS];
         int loop;
@@ -766,7 +764,11 @@ final class NativeDate extends IdScriptableObject
                 }
                 array[loop] = ScriptRuntime.toInteger(args[loop]);
             } else {
-                array[loop] = 0;
+                if (loop == 2) {
+                    array[loop] = 1; /* Default the date argument to 1. */
+                } else {
+                    array[loop] = 0;
+                }
             }
         }
 
@@ -774,15 +776,13 @@ final class NativeDate extends IdScriptableObject
         if (array[0] >= 0 && array[0] <= 99)
             array[0] += 1900;
 
-            /* if we got a 0 for 'date' (which is out of range)
-             * pretend it's a 1.  (So Date.UTC(1972, 5) works) */
-        if (array[2] < 1)
-            array[2] = 1;
+        return date_msecFromDate(array[0], array[1], array[2],
+                                 array[3], array[4], array[5], array[6]);
+    }
 
-        d = date_msecFromDate(array[0], array[1], array[2],
-                              array[3], array[4], array[5], array[6]);
-        d = TimeClip(d);
-        return d;
+    private static double jsStaticFunction_UTC(Object[] args)
+    {
+        return TimeClip(date_msecFromArgs(args));
     }
 
     private static double date_parseString(String s)
@@ -1052,7 +1052,9 @@ final class NativeDate extends IdScriptableObject
              }
             result.append(" (");
             java.util.Date date = new Date((long) t);
-            result.append(timeZoneFormatter.format(date));
+            synchronized (timeZoneFormatter) {
+                result.append(timeZoneFormatter.format(date));
+            }
             result.append(')');
         }
         return result.toString();
@@ -1087,39 +1089,12 @@ final class NativeDate extends IdScriptableObject
             return obj;
         }
 
-        // multiple arguments; year, month, day etc.
-        double array[] = new double[MAXARGS];
-        int loop;
-        double d;
+        double time = date_msecFromArgs(args);
 
-        for (loop = 0; loop < MAXARGS; loop++) {
-            if (loop < args.length) {
-                d = ScriptRuntime.toNumber(args[loop]);
+        if (!Double.isNaN(time) && !Double.isInfinite(time))
+            time = TimeClip(internalUTC(time));
 
-                if (d != d || Double.isInfinite(d)) {
-                    obj.date = ScriptRuntime.NaN;
-                    return obj;
-                }
-                array[loop] = ScriptRuntime.toInteger(args[loop]);
-            } else {
-                array[loop] = 0;
-            }
-        }
-
-        /* adjust 2-digit years into the 20th century */
-        if (array[0] >= 0 && array[0] <= 99)
-            array[0] += 1900;
-
-        /* if we got a 0 for 'date' (which is out of range)
-         * pretend it's a 1 */
-        if (array[2] < 1)
-            array[2] = 1;
-
-        double day = MakeDay(array[0], array[1], array[2]);
-        double time = MakeTime(array[3], array[4], array[5], array[6]);
-        time = MakeDate(day, time);
-        time = internalUTC(time);
-        obj.date = TimeClip(time);
+        obj.date = time;
 
         return obj;
     }
@@ -1153,7 +1128,9 @@ final class NativeDate extends IdScriptableObject
           default: formatter = null; // unreachable
         }
 
-        return formatter.format(new Date((long) t));
+        synchronized (formatter) {
+            return formatter.format(new Date((long) t));
+        }
     }
 
     private static String js_toUTCString(double date)
@@ -1443,7 +1420,7 @@ final class NativeDate extends IdScriptableObject
     protected int findPrototypeId(String s)
     {
         int id;
-// #generated# Last update: 2004-03-17 13:33:23 CET
+// #generated# Last update: 2007-05-09 08:15:38 EDT
         L0: { id = 0; String X = null; int c;
             L: switch (s.length()) {
             case 6: X="getDay";id=Id_getDay; break L;
@@ -1550,6 +1527,7 @@ final class NativeDate extends IdScriptableObject
                 break L;
             }
             if (X!=null && X!=s && !X.equals(s)) id = 0;
+            break L0;
         }
 // #/generated#
         return id;

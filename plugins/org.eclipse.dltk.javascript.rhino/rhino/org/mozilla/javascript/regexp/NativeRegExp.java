@@ -146,7 +146,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
     {
 
         NativeRegExp proto = new NativeRegExp();
-        proto.re = (RECompiled)compileRE("", null, false);
+        proto.re = (RECompiled)compileRE(cx, "", null, false);
         proto.activatePrototypeMap(MAX_PROTOTYPE_ID);
         proto.setParentScope(scope);
         proto.setPrototype(getObjectPrototype(scope));
@@ -207,7 +207,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
         String global = args.length > 1 && args[1] != Undefined.instance
             ? ScriptRuntime.toString(args[1])
             : null;
-        this.re = (RECompiled)compileRE(s, global, false);
+        this.re = (RECompiled)compileRE(cx, s, global, false);
         this.lastIndex = 0;
         return this;
     }
@@ -270,7 +270,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
         return rval;
     }
 
-    static Object compileRE(String str, String global, boolean flat)
+    static Object compileRE(Context cx, String str, String global, boolean flat)
     {
         RECompiled regexp = new RECompiled();
         regexp.source = str.toCharArray();
@@ -293,7 +293,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
         }
         regexp.flags = flags;
 
-        CompilerState state = new CompilerState(regexp.source, length, flags);
+        CompilerState state = new CompilerState(cx, regexp.source, length, flags);
         if (flat && length > 0) {
 if (debug) {
 System.out.println("flat = \"" + str + "\"");
@@ -504,7 +504,6 @@ if (regexp.anchorCh >= 0) {
         char rangeStart = 0;
         char c;
         int n;
-        int digit;
         int nDigits;
         int i;
         int max = 0;
@@ -759,7 +758,6 @@ if (regexp.anchorCh >= 0) {
         int num, tmp;
         RENode term;
         int termStart;
-        int ocp = state.cp;
 
         switch (c) {
         /* assertions and atoms */
@@ -793,6 +791,7 @@ if (regexp.anchorCh >= 0) {
  * (see http://bugzilla.mozilla.org/show_bug.cgi?id=141078)
  *
  */
+                    reportWarning(state.cx, "msg.bad.backref", "");
                     /* octal escape */
                     num = 0;
                     while (state.cp < state.cpend) {
@@ -822,8 +821,10 @@ if (regexp.anchorCh >= 0) {
                     termStart = state.cp - 1;
                     num = getDecimalValue(c, state, 0xFFFF,
                                           "msg.overlarge.backref");
+                    if (num > state.parenCount)
+                        reportWarning(state.cx, "msg.bad.backref", "");
                     /*
-                     * n > 9 and > count of parentheses,
+                     * n > 9 or > count of parentheses,
                      * then treat as octal instead.
                      */
                     if ((num > 9) && (num > state.parenCount)) {
@@ -894,7 +895,6 @@ if (regexp.anchorCh >= 0) {
                         int i;
                         for (i = 0; (i < nDigits)
                                 && (state.cp < state.cpend); i++) {
-                            int digit;
                             c = src[state.cp++];
                             n = Kit.xDigitToInt(c, n);
                             if (n < 0) {
@@ -1408,7 +1408,7 @@ if (regexp.anchorCh >= 0) {
     private static void
     addCharacterToCharSet(RECharSet cs, char c)
     {
-        int byteIndex = (int)(c / 8);
+        int byteIndex = (c / 8);
         if (c > cs.length)
             throw new RuntimeException();
         cs.bits[byteIndex] |= 1 << (c & 0x7);
@@ -1421,8 +1421,8 @@ if (regexp.anchorCh >= 0) {
     {
         int i;
 
-        int byteIndex1 = (int)(c1 / 8);
-        int byteIndex2 = (int)(c2 / 8);
+        int byteIndex1 = (c1 / 8);
+        int byteIndex2 = (c2 / 8);
 
         if ((c2 > cs.length) || (c1 > c2))
             throw new RuntimeException();
@@ -1431,13 +1431,13 @@ if (regexp.anchorCh >= 0) {
         c2 &= 0x7;
 
         if (byteIndex1 == byteIndex2) {
-            cs.bits[byteIndex1] |= ((int)(0xFF) >> (7 - (c2 - c1))) << c1;
+            cs.bits[byteIndex1] |= ((0xFF) >> (7 - (c2 - c1))) << c1;
         }
         else {
             cs.bits[byteIndex1] |= 0xFF << c1;
             for (i = byteIndex1 + 1; i < byteIndex2; i++)
                 cs.bits[i] = (byte)0xFF;
-            cs.bits[byteIndex2] |= (int)(0xFF) >> (7 - c2);
+            cs.bits[byteIndex2] |= (0xFF) >> (7 - c2);
         }
     }
 
@@ -1574,22 +1574,22 @@ if (regexp.anchorCh >= 0) {
                                                 (char)(charSet.length));
                     continue;
                 case 's':
-                    for (i = (int)(charSet.length); i >= 0; i--)
+                    for (i = charSet.length; i >= 0; i--)
                         if (isREWhiteSpace(i))
                             addCharacterToCharSet(charSet, (char)(i));
                     continue;
                 case 'S':
-                    for (i = (int)(charSet.length); i >= 0; i--)
+                    for (i = charSet.length; i >= 0; i--)
                         if (!isREWhiteSpace(i))
                             addCharacterToCharSet(charSet, (char)(i));
                     continue;
                 case 'w':
-                    for (i = (int)(charSet.length); i >= 0; i--)
+                    for (i = charSet.length; i >= 0; i--)
                         if (isWord((char)i))
                             addCharacterToCharSet(charSet, (char)(i));
                     continue;
                 case 'W':
-                    for (i = (int)(charSet.length); i >= 0; i--)
+                    for (i = charSet.length; i >= 0; i--)
                         if (!isWord((char)i))
                             addCharacterToCharSet(charSet, (char)(i));
                     continue;
@@ -2386,6 +2386,14 @@ System.out.println("Testing at " + gData.cp + ", op = " + op);
         return re.flags;
     }
 
+    private static void reportWarning(Context cx, String messageId, String arg)
+    {
+        if (cx.hasFeature(Context.FEATURE_STRICT_MODE)) {
+            String msg = ScriptRuntime.getMessage1(messageId, arg);
+            Context.reportWarning(msg);
+        }
+    }
+
     private static void reportError(String messageId, String arg)
     {
         String msg = ScriptRuntime.getMessage1(messageId, arg);
@@ -2411,7 +2419,7 @@ System.out.println("Testing at " + gData.cp + ", op = " + op);
     protected int findInstanceIdInfo(String s)
     {
         int id;
-// #generated# Last update: 2001-05-24 12:01:22 GMT+02:00
+// #generated# Last update: 2007-05-09 08:16:24 EDT
         L0: { id = 0; String X = null; int c;
             int s_length = s.length();
             if (s_length==6) {
@@ -2426,6 +2434,7 @@ System.out.println("Testing at " + gData.cp + ", op = " + op);
             }
             else if (s_length==10) { X="ignoreCase";id=Id_ignoreCase; }
             if (X!=null && X!=s && !X.equals(s)) id = 0;
+            break L0;
         }
 // #/generated#
 // #/string_id_map#
@@ -2543,7 +2552,7 @@ System.out.println("Testing at " + gData.cp + ", op = " + op);
     protected int findPrototypeId(String s)
     {
         int id;
-// #generated# Last update: 2004-03-17 13:54:21 CET
+// #generated# Last update: 2007-05-09 08:16:24 EDT
         L0: { id = 0; String X = null; int c;
             L: switch (s.length()) {
             case 4: c=s.charAt(0);
@@ -2558,6 +2567,7 @@ System.out.println("Testing at " + gData.cp + ", op = " + op);
                 break L;
             }
             if (X!=null && X!=s && !X.equals(s)) id = 0;
+            break L0;
         }
 // #/generated#
         return id;
@@ -2629,8 +2639,9 @@ class RENode {
 
 class CompilerState {
 
-    CompilerState(char[] source, int length, int flags)
+    CompilerState(Context cx, char[] source, int length, int flags)
     {
+        this.cx = cx;
         this.cpbegin = source;
         this.cp = 0;
         this.cpend = length;
@@ -2734,7 +2745,7 @@ class REGlobalData {
 
     void set_parens(int i, int index, int length)
     {
-        parens[i] = ((long)index & 0xffffffffL) | ((long)length << 32);
+        parens[i] = (index & 0xffffffffL) | ((long)length << 32);
     }
 
 }

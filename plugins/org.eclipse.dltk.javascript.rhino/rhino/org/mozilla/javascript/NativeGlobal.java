@@ -301,10 +301,7 @@ public class NativeGlobal implements Serializable, IdFunctionCall
     /**
      * The global method parseFloat, as per ECMA-262 15.1.2.3.
      *
-     * @param cx unused
-     * @param thisObj unused
      * @param args the arguments to parseFloat, ignoring args[>=1]
-     * @param funObj unused
      */
     private Object js_parseFloat(Object[] args)
     {
@@ -538,7 +535,7 @@ public class NativeGlobal implements Serializable, IdFunctionCall
 
     /**
      * @deprecated Use
-     * {@link ScriptRuntime#constructError(String,String,String,int,int,String)}
+     * {@link ScriptRuntime#constructError(String,String,String,int,String,int)}
      * instead.
      */
     public static EcmaError constructError(Context cx,

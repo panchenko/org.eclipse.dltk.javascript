@@ -23,8 +23,10 @@
  *   Norris Boyd
  *   Kemal Bayram
  *   Igor Bukanov
+ *   Bob Jervis
  *   Roger Lawrence
  *   Andi Vajda
+ *   Hannes Wallnoefer
  *
  * Alternatively, the contents of this file may be used under the terms of
  * the GNU General Public License Version 2 or later (the "GPL"), in which
@@ -200,7 +202,7 @@ public class Codegen extends Interpreter
         ot.transform(tree);
 
         if (optLevel > 0) {
-            (new Optimizer()).optimize(tree, optLevel);
+            (new Optimizer()).optimize(tree);
         }
     }
 
@@ -263,11 +265,10 @@ public class Codegen extends Interpreter
         }
 
         if (hasScript) {
-            ScriptOrFnNode script = scriptOrFnNodes[0];
             cfw.addInterface("org/mozilla/javascript/Script");
-            generateScriptCtor(cfw, script);
+            generateScriptCtor(cfw);
             generateMain(cfw);
-            generateExecute(cfw, script);
+            generateExecute(cfw);
         }
 
         generateCallMethod(cfw);
@@ -506,7 +507,7 @@ public class Codegen extends Interpreter
         cfw.stopMethod((short)1);
     }
 
-    private void generateExecute(ClassFileWriter cfw, ScriptOrFnNode script)
+    private void generateExecute(ClassFileWriter cfw)
     {
         cfw.startMethod("exec",
                         "(Lorg/mozilla/javascript/Context;"
@@ -537,8 +538,7 @@ public class Codegen extends Interpreter
         cfw.stopMethod((short)3);
     }
 
-    private void generateScriptCtor(ClassFileWriter cfw,
-                                    ScriptOrFnNode script)
+    private void generateScriptCtor(ClassFileWriter cfw)
     {
         cfw.startMethod("<init>", "()V", ClassFileWriter.ACC_PUBLIC);
 
@@ -669,7 +669,8 @@ public class Codegen extends Interpreter
         final int Do_getParamAndVarCount  = 2;
         final int Do_getParamOrVarName    = 3;
         final int Do_getEncodedSource     = 4;
-        final int SWITCH_COUNT            = 5;
+        final int Do_getParamOrVarConst   = 5;
+        final int SWITCH_COUNT            = 6;
 
         for (int methodIndex = 0; methodIndex != SWITCH_COUNT; ++methodIndex) {
             if (methodIndex == Do_getEncodedSource && encodedSource == null) {
@@ -701,6 +702,11 @@ public class Codegen extends Interpreter
               case Do_getParamOrVarName:
                 metodLocals = 1 + 1; // this + paramOrVarIndex
                 cfw.startMethod("getParamOrVarName", "(I)Ljava/lang/String;",
+                                ClassFileWriter.ACC_PUBLIC);
+                break;
+              case Do_getParamOrVarConst:
+                metodLocals = 1 + 1 + 1; // this + paramOrVarName
+                cfw.startMethod("getParamOrVarConst", "(I)Z",
                                 ClassFileWriter.ACC_PUBLIC);
                 break;
               case Do_getEncodedSource:
@@ -801,6 +807,43 @@ public class Codegen extends Interpreter
                         }
                     }
                     break;
+
+                    case Do_getParamOrVarConst:
+                        // Push name of parameter using another switch
+                        // over paramAndVarCount
+                        paramAndVarCount = n.getParamAndVarCount();
+                        boolean [] constness = n.getParamAndVarConst();
+                        if (paramAndVarCount == 0) {
+                            // The runtime should never call the method in this
+                            // case but to make bytecode verifier happy return null
+                            // as throwing execption takes more code
+                            cfw.add(ByteCode.ICONST_0);
+                            cfw.add(ByteCode.IRETURN);
+                        } else if (paramAndVarCount == 1) {
+                            // As above do not check for valid index but always
+                            // return the name of the first param
+                            cfw.addPush(constness[0]);
+                            cfw.add(ByteCode.IRETURN);
+                        } else {
+                            // Do switch over getParamOrVarName
+                            cfw.addILoad(1); // param or var index
+                            // do switch from 1 .. paramAndVarCount - 1 mapping 0
+                            // to the default case
+                            int paramSwitchStart = cfw.addTableSwitch(
+                                                       1, paramAndVarCount - 1);
+                            for (int j = 0; j != paramAndVarCount; ++j) {
+                                if (cfw.getStackTop() != 0) Kit.codeBug();
+                                if (j == 0) {
+                                    cfw.markTableSwitchDefault(paramSwitchStart);
+                                } else {
+                                    cfw.markTableSwitchCase(paramSwitchStart, j - 1,
+                                                            0);
+                                }
+                                cfw.addPush(constness[j]);
+                                cfw.add(ByteCode.IRETURN);
+                            }
+                        }
+                      break;
 
                   case Do_getEncodedSource:
                     // Push number encoded source start and end
@@ -1037,7 +1080,6 @@ public class Codegen extends Interpreter
 
     private static String getStaticConstantWrapperType(double num)
     {
-        String constantType;
         int inum = (int)num;
         if (inum == num) {
             return "Ljava/lang/Integer;";
@@ -1153,9 +1195,6 @@ public class Codegen extends Interpreter
     String mainClassName;
     String mainClassSignature;
 
-    boolean itsUseDynamicScope;
-    int languageVersion;
-
     private double[] itsConstantList;
     private int itsConstantListSize;
 }
@@ -1180,7 +1219,7 @@ class BodyCodegen
         } else {
             treeTop = scriptOrFn;
         }
-        generateStatement(treeTop, null);
+        generateStatement(treeTop);
 
         generateEpilogue();
 
@@ -1314,6 +1353,7 @@ class BodyCodegen
 
             int paramCount = fnCurrent.fnode.getParamCount();
             int varCount = fnCurrent.fnode.getParamAndVarCount();
+            boolean [] constDeclarations = fnCurrent.fnode.getParamAndVarConst();
 
             // REMIND - only need to initialize the vars that don't get a value
             // before the next call and are used in the function
@@ -1329,11 +1369,11 @@ class BodyCodegen
                         cfw.addAStore(reg);
                     }
                 } else if (fnCurrent.isNumberVar(i)) {
-                    reg = getNewWordPairLocal();
+                    reg = getNewWordPairLocal(constDeclarations[i]);
                     cfw.addPush(0.0);
                     cfw.addDStore(reg);
                 } else {
-                    reg = getNewWordLocal();
+                    reg = getNewWordLocal(constDeclarations[i]);
                     if (firstUndefVar == -1) {
                         Codegen.pushUndefined(cfw);
                         firstUndefVar = reg;
@@ -1343,6 +1383,10 @@ class BodyCodegen
                     cfw.addAStore(reg);
                 }
                 if (reg >= 0) {
+                    if (constDeclarations[i]) {
+                        cfw.addPush(0);
+                        cfw.addIStore(reg + (fnCurrent.isNumberVar(i) ? 2 : 1));
+                    }
                     varRegisters[i] = reg;
                 }
 
@@ -1493,7 +1537,7 @@ class BodyCodegen
                                "(Lorg/mozilla/javascript/Context;)V");
     }
 
-    private void generateStatement(Node node, Node parent)
+    private void generateStatement(Node node)
     {
         // System.out.println("gen code for " + node.toString());
 
@@ -1509,7 +1553,7 @@ class BodyCodegen
               case Token.EMPTY:
                 // no-ops.
                 while (child != null) {
-                    generateStatement(child, node);
+                    generateStatement(child);
                     child = child.getNext();
                 }
                 break;
@@ -1518,7 +1562,7 @@ class BodyCodegen
                 int local = getNewWordLocal();
                 node.putIntProp(Node.LOCAL_PROP, local);
                 while (child != null) {
-                    generateStatement(child, node);
+                    generateStatement(child);
                     child = child.getNext();
                 }
                 releaseWordLocal((short)local);
@@ -1658,6 +1702,11 @@ class BodyCodegen
                     load's & pop's */
                     visitSetVar(child, child.getFirstChild(), false);
                 }
+                else if (child.getType() == Token.SETCONSTVAR) {
+                    /* special case this so as to avoid unnecessary
+                    load's & pop's */
+                    visitSetConstVar(child, child.getFirstChild(), false);
+                }
                 else {
                     generateExpression(child, node);
                     if (node.getIntProp(Node.ISNUMBER_PROP, -1) != -1)
@@ -1695,7 +1744,7 @@ class BodyCodegen
                     int finallyRegister = getNewWordLocal();
                     cfw.addAStore(finallyRegister);
                     while (child != null) {
-                        generateStatement(child, node);
+                        generateStatement(child);
                         child = child.getNext();
                     }
                     cfw.add(ByteCode.RET, finallyRegister);
@@ -1923,7 +1972,7 @@ class BodyCodegen
 
               case Token.INC:
               case Token.DEC:
-                visitIncDec(node, false);
+                visitIncDec(node);
                 break;
 
               case Token.OR:
@@ -2113,6 +2162,14 @@ class BodyCodegen
 
               case Token.SETNAME:
                 visitSetName(node, child);
+                break;
+
+              case Token.SETCONST:
+                visitSetConst(node, child);
+                break;
+
+              case Token.SETCONSTVAR:
+                visitSetConstVar(node, child, true);
                 break;
 
               case Token.SETPROP:
@@ -2505,12 +2562,37 @@ class BodyCodegen
         }
         // load array with property values
         addNewObjectArray(count);
+        Node child2 = child;
         for (int i = 0; i != count; ++i) {
             cfw.add(ByteCode.DUP);
             cfw.addPush(i);
-            generateExpression(child, node);
+            int childType = child.getType();
+            if (childType == Token.GET) {
+                generateExpression(child.getFirstChild(), node);
+            } else if (childType == Token.SET) {
+                generateExpression(child.getFirstChild(), node);
+            } else {
+                generateExpression(child, node);
+            }
             cfw.add(ByteCode.AASTORE);
             child = child.getNext();
+        }
+        // load array with getterSetter values
+        cfw.addPush(count);
+        cfw.add(ByteCode.NEWARRAY, ByteCode.T_INT);
+        for (int i = 0; i != count; ++i) {
+            cfw.add(ByteCode.DUP);
+            cfw.addPush(i);
+            int childType = child2.getType();
+            if (childType == Token.GET) {
+                cfw.add(ByteCode.ICONST_M1);
+            } else if (childType == Token.SET) {
+                cfw.add(ByteCode.ICONST_1);
+            } else {
+                cfw.add(ByteCode.ICONST_0);
+            }
+            cfw.add(ByteCode.IASTORE);
+            child2 = child2.getNext();
         }
 
         cfw.addALoad(contextLocal);
@@ -2518,6 +2600,7 @@ class BodyCodegen
         addScriptRuntimeInvoke("newObjectLiteral",
              "([Ljava/lang/Object;"
              +"[Ljava/lang/Object;"
+             +"[I"
              +"Lorg/mozilla/javascript/Context;"
              +"Lorg/mozilla/javascript/Scriptable;"
              +")Lorg/mozilla/javascript/Scriptable;");
@@ -2983,7 +3066,7 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
         cfw.markLabel(startLabel, (short)1);
 
         while (child != null) {
-            generateStatement(child, node);
+            generateStatement(child);
             child = child.getNext();
         }
 
@@ -3045,9 +3128,9 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
         cfw.markLabel(realEnd);
     }
 
-    private final int JAVASCRIPT_EXCEPTION  = 0;
-    private final int EVALUATOR_EXCEPTION   = 1;
-    private final int ECMAERROR_EXCEPTION   = 2;
+    private static final int JAVASCRIPT_EXCEPTION  = 0;
+    private static final int EVALUATOR_EXCEPTION   = 1;
+    private static final int ECMAERROR_EXCEPTION   = 2;
 
     private void generateCatchBlock(int exceptionType,
                                     short savedVariableObject,
@@ -3151,7 +3234,7 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
                                +")Ljava/lang/String;");
     }
 
-    private void visitIncDec(Node node, boolean isInc)
+    private void visitIncDec(Node node)
     {
         int incrDecrMask = node.getExistingIntProp(Node.INCRDECR_PROP);
         Node child = node.getFirstChild();
@@ -3162,7 +3245,8 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
                 boolean post = ((incrDecrMask & Node.POST_FLAG) != 0);
                 int varIndex = fnCurrent.getVarIndex(child);
                 short reg = varRegisters[varIndex];
-                cfw.addDLoad(reg);
+                int offset = varIsDirectCallParameter(varIndex) ? 1 : 0;
+                cfw.addDLoad(reg + offset);
                 if (post) {
                     cfw.add(ByteCode.DUP2);
                 }
@@ -3175,7 +3259,7 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
                 if (!post) {
                     cfw.add(ByteCode.DUP2);
                 }
-                cfw.addDStore(reg);
+                cfw.addDStore(reg + offset);
             } else {
                 boolean post = ((incrDecrMask & Node.POST_FLAG) != 0);
                 int varIndex = fnCurrent.getVarIndex(child);
@@ -3202,10 +3286,12 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
           case Token.NAME:
             cfw.addALoad(variableObjectLocal);
             cfw.addPush(child.getString());          // push name
+            cfw.addALoad(contextLocal);
             cfw.addPush(incrDecrMask);
             addScriptRuntimeInvoke("nameIncrDecr",
                 "(Lorg/mozilla/javascript/Scriptable;"
                 +"Ljava/lang/String;"
+                +"Lorg/mozilla/javascript/Context;"
                 +"I)Ljava/lang/Object;");
             break;
           case Token.GETPROP: {
@@ -3227,12 +3313,21 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
             generateExpression(elemChild.getNext(), node);
             cfw.addALoad(contextLocal);
             cfw.addPush(incrDecrMask);
-            addScriptRuntimeInvoke("elemIncrDecr",
-                                   "(Ljava/lang/Object;"
-                                   +"Ljava/lang/Object;"
-                                   +"Lorg/mozilla/javascript/Context;"
-                                   +"I"
-                                   +")Ljava/lang/Object;");
+            if (elemChild.getNext().getIntProp(Node.ISNUMBER_PROP, -1) != -1) {
+              addOptRuntimeInvoke("elemIncrDecr",
+                  "(Ljava/lang/Object;"
+                  +"D"
+                  +"Lorg/mozilla/javascript/Context;"
+                  +"I"
+                  +")Ljava/lang/Object;");
+            } else {
+              addScriptRuntimeInvoke("elemIncrDecr",
+                  "(Ljava/lang/Object;"
+                  +"Ljava/lang/Object;"
+                  +"Lorg/mozilla/javascript/Context;"
+                  +"I"
+                  +")Ljava/lang/Object;");
+            }
             break;
           }
           case Token.GET_REF: {
@@ -3613,6 +3708,24 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
             +")Ljava/lang/Object;");
     }
 
+    private void visitSetConst(Node node, Node child)
+    {
+        String name = node.getFirstChild().getString();
+        while (child != null) {
+            generateExpression(child, node);
+            child = child.getNext();
+        }
+        cfw.addALoad(contextLocal);
+        cfw.addPush(name);
+        addScriptRuntimeInvoke(
+            "setConst",
+            "(Lorg/mozilla/javascript/Scriptable;"
+            +"Ljava/lang/Object;"
+            +"Lorg/mozilla/javascript/Context;"
+            +"Ljava/lang/String;"
+            +")Ljava/lang/Object;");
+    }
+
     private void visitGetVar(Node node)
     {
         if (!hasVarsInRegs) Kit.codeBug();
@@ -3642,7 +3755,16 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
         generateExpression(child.getNext(), node);
         boolean isNumber = (node.getIntProp(Node.ISNUMBER_PROP, -1) != -1);
         short reg = varRegisters[varIndex];
-        if (varIsDirectCallParameter(varIndex)) {
+        boolean [] constDeclarations = fnCurrent.fnode.getParamAndVarConst();
+        if (constDeclarations[varIndex]) {
+            if (!needValue) {
+                if (isNumber)
+                    cfw.add(ByteCode.POP2);
+                else
+                    cfw.add(ByteCode.POP);
+            }
+        }
+        else if (varIsDirectCallParameter(varIndex)) {
             if (isNumber) {
                 if (needValue) cfw.add(ByteCode.DUP2);
                 cfw.addALoad(reg);
@@ -3667,14 +3789,58 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
             }
         } else {
             if (isNumber) {
-                  cfw.addDStore(reg);
-                  if (needValue) cfw.addDLoad(reg);
+                cfw.addDStore(reg);
+                if (needValue) cfw.addDLoad(reg);
             }
             else {
                 cfw.addAStore(reg);
                 if (needValue) cfw.addALoad(reg);
             }
         }
+    }
+
+    private void visitSetConstVar(Node node, Node child, boolean needValue)
+    {
+        if (!hasVarsInRegs) Kit.codeBug();
+        int varIndex = fnCurrent.getVarIndex(node);
+        generateExpression(child.getNext(), node);
+        boolean isNumber = (node.getIntProp(Node.ISNUMBER_PROP, -1) != -1);
+        short reg = varRegisters[varIndex];
+        int beyond = cfw.acquireLabel();
+        int noAssign = cfw.acquireLabel();
+        if (isNumber) {
+            cfw.addILoad(reg + 2);
+            cfw.add(ByteCode.IFNE, noAssign);
+            short stack = cfw.getStackTop();
+            cfw.addPush(1);
+            cfw.addIStore(reg + 2);
+            cfw.addDStore(reg);
+            if (needValue) {
+                cfw.addDLoad(reg);
+                cfw.markLabel(noAssign, stack);
+            } else {
+                cfw.add(ByteCode.GOTO, beyond);
+                cfw.markLabel(noAssign, stack);
+                cfw.add(ByteCode.POP2);
+            }
+        }
+        else {
+            cfw.addILoad(reg + 1);
+            cfw.add(ByteCode.IFNE, noAssign);
+            short stack = cfw.getStackTop();
+            cfw.addPush(1);
+            cfw.addIStore(reg + 1);
+            cfw.addAStore(reg);
+            if (needValue) {
+                cfw.addALoad(reg);
+                cfw.markLabel(noAssign, stack);
+            } else {
+                cfw.add(ByteCode.GOTO, beyond);
+                cfw.markLabel(noAssign, stack);
+                cfw.add(ByteCode.POP);
+            }
+        }
+        cfw.markLabel(beyond);
     }
 
     private void visitGetProp(Node node, Node child)
@@ -3953,22 +4119,47 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
         addOptRuntimeInvoke("wrapDouble", "(D)Ljava/lang/Double;");
     }
 
-    private short getNewWordPairLocal()
+    /**
+     * Const locals use an extra slot to hold the has-been-assigned-once flag at
+     * runtime.
+     * @param isConst
+     * @return
+     */
+    private short getNewWordPairLocal(boolean isConst)
     {
-        short result = firstFreeLocal;
-        while (true) {
-            if (result >= (MAX_LOCALS - 1))
-                break;
-            if (!locals[result]
-                    && !locals[result + 1])
-                break;
-            result++;
-        }
+        short result = getConsecutiveSlots(2, isConst);
         if (result < (MAX_LOCALS - 1)) {
             locals[result] = true;
             locals[result + 1] = true;
+            if (isConst)
+                locals[result + 2] = true;
             if (result == firstFreeLocal) {
                 for (int i = firstFreeLocal + 2; i < MAX_LOCALS; i++) {
+                    if (!locals[i]) {
+                        firstFreeLocal = (short) i;
+                        if (localsMax < firstFreeLocal)
+                            localsMax = firstFreeLocal;
+                        return result;
+                    }
+                }
+            }
+            else {
+                return result;
+            }
+        }
+        throw Context.reportRuntimeError("Program too complex " +
+                                         "(out of locals)");
+    }
+
+    private short getNewWordLocal(boolean isConst)
+    {
+        short result = getConsecutiveSlots(1, isConst);
+        if (result < (MAX_LOCALS - 1)) {
+            locals[result] = true;
+            if (isConst)
+                locals[result + 1] = true;
+            if (result == firstFreeLocal) {
+                for (int i = firstFreeLocal + 1; i < MAX_LOCALS; i++) {
                     if (!locals[i]) {
                         firstFreeLocal = (short) i;
                         if (localsMax < firstFreeLocal)
@@ -4001,12 +4192,22 @@ Else pass the JS object in the aReg and 0.0 in the dReg.
                                          "(out of locals)");
     }
 
-    private void releaseWordpairLocal(short local)
-    {
-        if (local < firstFreeLocal)
-            firstFreeLocal = local;
-        locals[local] = false;
-        locals[local + 1] = false;
+    private short getConsecutiveSlots(int count, boolean isConst) {
+        if (isConst)
+            count++;
+        short result = firstFreeLocal;
+        while (true) {
+            if (result >= (MAX_LOCALS - 1))
+                break;
+            int i;
+            for (i = 0; i < count; i++)
+                if (locals[result + i])
+                    break;
+            if (i >= count)
+                break;
+            result++;
+        }
+        return result;
     }
 
     private void releaseWordLocal(short local)

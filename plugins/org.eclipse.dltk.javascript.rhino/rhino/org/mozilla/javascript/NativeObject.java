@@ -24,6 +24,7 @@
  * Contributor(s):
  *   Norris Boyd
  *   Igor Bukanov
+ *   Bob Jervis
  *   Mike McCabe
  *
  * Alternatively, the contents of this file may be used under the terms of
@@ -81,6 +82,14 @@ public class NativeObject extends IdScriptableObject
             arity=1; s="propertyIsEnumerable"; break;
           case Id_isPrototypeOf:  arity=1; s="isPrototypeOf";  break;
           case Id_toSource:       arity=0; s="toSource";       break;
+          case Id___defineGetter__:
+            arity=2; s="__defineGetter__";     break;
+          case Id___defineSetter__:
+            arity=2; s="__defineSetter__";     break;
+          case Id___lookupGetter__:
+            arity=1; s="__lookupGetter__";     break;
+          case Id___lookupSetter__:
+            arity=1; s="__lookupSetter__";     break;
           default: throw new IllegalArgumentException(String.valueOf(id));
         }
         initPrototypeMethod(OBJECT_TAG, id, s, arity);
@@ -185,7 +194,64 @@ public class NativeObject extends IdScriptableObject
           case Id_toSource:
             return ScriptRuntime.defaultObjectToSource(cx, scope, thisObj,
                                                        args);
-          default: throw new IllegalArgumentException(String.valueOf(id));
+          case Id___defineGetter__:
+          case Id___defineSetter__:
+            {
+                if (args.length < 2 || !(args[1] instanceof Callable)) {
+                    Object badArg = (args.length >= 2 ? args[1]
+                                     : Undefined.instance);
+                    throw ScriptRuntime.notFunctionError(badArg);
+                }
+                if (!(thisObj instanceof ScriptableObject)) {
+                    throw Context.reportRuntimeError2(
+                        "msg.extend.scriptable",
+                        thisObj.getClass().getName(),
+                        String.valueOf(args[0]));
+                }
+                ScriptableObject so = (ScriptableObject)thisObj;
+                String name = ScriptRuntime.toStringIdOrIndex(cx, args[0]);
+                int index = (name != null ? 0
+                             : ScriptRuntime.lastIndexResult(cx));
+                Callable getterOrSetter = (Callable)args[1];
+                boolean isSetter = (id == Id___defineSetter__);
+                so.setGetterOrSetter(name, index, getterOrSetter, isSetter);
+            }
+            return Undefined.instance;
+
+            case Id___lookupGetter__:
+            case Id___lookupSetter__:
+              {
+                  if (args.length < 1 ||
+                      !(thisObj instanceof ScriptableObject))
+                      return Undefined.instance;
+                  
+                  ScriptableObject so = (ScriptableObject)thisObj;
+                  String name = ScriptRuntime.toStringIdOrIndex(cx, args[0]);
+                  int index = (name != null ? 0
+                               : ScriptRuntime.lastIndexResult(cx));
+                  boolean isSetter = (id == Id___lookupSetter__);
+                  Object gs;
+                  for (;;) {
+                      gs = so.getGetterOrSetter(name, index, isSetter);
+                      if (gs != null)
+                          break;
+                      // If there is no getter or setter for the object itself,
+                      // how about the prototype?
+                      Scriptable v = so.getPrototype();
+                      if (v == null)
+                          break;
+                      if (v instanceof ScriptableObject)
+                          so = (ScriptableObject)v;
+                      else
+                          break;
+                  }
+                  if (gs != null)
+                      return gs;
+              }
+              return Undefined.instance;
+
+          default:
+            throw new IllegalArgumentException(String.valueOf(id));
         }
     }
 
@@ -194,7 +260,7 @@ public class NativeObject extends IdScriptableObject
     protected int findPrototypeId(String s)
     {
         int id;
-// #generated# Last update: 2003-11-11 01:51:40 CET
+// #generated# Last update: 2007-05-09 08:15:55 EDT
         L0: { id = 0; String X = null; int c;
             L: switch (s.length()) {
             case 7: X="valueOf";id=Id_valueOf; break L;
@@ -208,9 +274,22 @@ public class NativeObject extends IdScriptableObject
                 if (c=='h') { X="hasOwnProperty";id=Id_hasOwnProperty; }
                 else if (c=='t') { X="toLocaleString";id=Id_toLocaleString; }
                 break L;
+            case 16: c=s.charAt(2);
+                if (c=='d') {
+                    c=s.charAt(8);
+                    if (c=='G') { X="__defineGetter__";id=Id___defineGetter__; }
+                    else if (c=='S') { X="__defineSetter__";id=Id___defineSetter__; }
+                }
+                else if (c=='l') {
+                    c=s.charAt(8);
+                    if (c=='G') { X="__lookupGetter__";id=Id___lookupGetter__; }
+                    else if (c=='S') { X="__lookupSetter__";id=Id___lookupSetter__; }
+                }
+                break L;
             case 20: X="propertyIsEnumerable";id=Id_propertyIsEnumerable; break L;
             }
             if (X!=null && X!=s && !X.equals(s)) id = 0;
+            break L0;
         }
 // #/generated#
         return id;
@@ -225,7 +304,11 @@ public class NativeObject extends IdScriptableObject
         Id_propertyIsEnumerable  = 6,
         Id_isPrototypeOf         = 7,
         Id_toSource              = 8,
-        MAX_PROTOTYPE_ID         = 8;
+        Id___defineGetter__      = 9,
+        Id___defineSetter__      = 10,
+        Id___lookupGetter__      = 11,
+        Id___lookupSetter__      = 12,
+        MAX_PROTOTYPE_ID         = 12;
 
 // #/string_id_map#
 }

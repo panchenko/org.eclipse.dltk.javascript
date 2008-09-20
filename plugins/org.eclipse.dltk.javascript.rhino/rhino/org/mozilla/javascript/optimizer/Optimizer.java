@@ -50,9 +50,8 @@ class Optimizer
 
     // It is assumed that (NumberType | AnyType) == AnyType
 
-    void optimize(ScriptOrFnNode scriptOrFn, int optLevel)
+    void optimize(ScriptOrFnNode scriptOrFn)
     {
-        itsOptLevel = optLevel;
         //  run on one function at a time for now
         int functionCount = scriptOrFn.getFunctionCount();
         for (int i = 0; i != functionCount; ++i) {
@@ -178,19 +177,20 @@ class Optimizer
 
             case Token.INC :
             case Token.DEC : {
-                    Node child = n.getFirstChild();     // will be a GETVAR or GETPROP
+                    Node child = n.getFirstChild();
+                    // "child" will be GETVAR or GETPROP or GETELEM
                     if (child.getType() == Token.GETVAR) {
-                        int varIndex = theFunction.getVarIndex(child);
-                        if (theFunction.isNumberVar(varIndex)) {
+                        if (rewriteForNumberVariables(child) == NumberType) {
                             n.putIntProp(Node.ISNUMBER_PROP, Node.BOTH);
                             markDCPNumberContext(child);
                             return NumberType;
                         }
-                        else
-                            return NoType;
+                      return NoType;                       
                     }
-                    else
-                        return NoType;
+                    else if (child.getType() == Token.GETELEM) {
+                        return rewriteForNumberVariables(child);
+                    }
+                    return NoType;
                 }
             case Token.SETVAR : {
                     Node lChild = n.getFirstChild();
@@ -504,7 +504,6 @@ class Optimizer
         }
     }
 
-    private int itsOptLevel;
     private boolean inDirectCallFunction;
     OptFunctionNode theFunction;
     private boolean parameterUsedInNumberContext;

@@ -41,10 +41,11 @@
 package org.mozilla.javascript;
 
 /**
- * Factory class that Rhino runtime use to create new {@link Context}
- * instances or to notify about Context execution.
+ * Factory class that Rhino runtime uses to create new {@link Context}
+ * instances.  A <code>ContextFactory</code> can also notify listeners
+ * about context creation and release.
  * <p>
- * When Rhino runtime needs to create new {@link Context} instance during
+ * When the Rhino runtime needs to create new {@link Context} instance during
  * execution of {@link Context#enter()} or {@link Context}, it will call
  * {@link #makeContext()} of the current global ContextFactory.
  * See {@link #getGlobal()} and {@link #initGlobal(ContextFactory)}.
@@ -100,7 +101,7 @@ package org.mozilla.javascript;
  *             case {@link Context#FEATURE_RESERVED_KEYWORD_AS_IDENTIFIER}:
  *                 return true;
  *
- *             case {@link Context#FEATURE_PARENT_PROTO_PROPRTIES}:
+ *             case {@link Context#FEATURE_PARENT_PROTO_PROPERTIES}:
  *                 return false;
  *         }
  *         return super.hasFeature(cx, featureIndex);
@@ -259,7 +260,7 @@ public class ContextFactory
             version = cx.getLanguageVersion();
             return version == Context.VERSION_1_2;
 
-          case Context.FEATURE_PARENT_PROTO_PROPRTIES:
+          case Context.FEATURE_PARENT_PROTO_PROPERTIES:
             return true;
 
           case Context.FEATURE_E4X:
@@ -275,10 +276,62 @@ public class ContextFactory
 
           case Context.FEATURE_STRICT_EVAL:
             return false;
+            
+          case Context.FEATURE_LOCATION_INFORMATION_IN_ERROR:
+            return false;
+            
+          case Context.FEATURE_STRICT_MODE:
+            return false;
+          
+          case Context.FEATURE_WARNING_AS_ERROR:
+            return false;
         }
         // It is a bug to call the method with unknown featureIndex
         throw new IllegalArgumentException(String.valueOf(featureIndex));
     }
+	
+	private boolean isDom3Present() {
+		Class nodeClass = Kit.classOrNull("org.w3c.dom.Node");
+		if (nodeClass == null) return false;
+		//	Check to see whether DOM3 is present; use a new method defined in DOM3 that is vital to our implementation
+		try {
+			nodeClass.getMethod("getUserData", new Class[] { String.class });
+			return true;
+		} catch (NoSuchMethodException e) {
+			return false;
+		}
+	}
+	
+	/**
+		Provides a default {@link org.mozilla.javascript.xml.XMLLib.Factory XMLLib.Factory}
+		to be used by the <code>Context</code> instances produced by this factory.
+	 
+		See {@link Context#getE4xImplementationFactory} for details.
+	 */
+	protected org.mozilla.javascript.xml.XMLLib.Factory getE4xImplementationFactory() {
+		//	Must provide default implementation, rather than abstract method,
+		//	so that past implementors of ContextFactory do not fail at runtime
+		//	upon invocation of this method.
+		
+		//	Note that the default implementation "illegally" returns null if we
+		//	neither have XMLBeans nor a DOM3 implementation present.
+		//
+		//	TODO	More thinking about what to do in the failure scenario
+		
+		//	For now, if XMLBeans is in the classpath, it will be the default.
+		if (Kit.classOrNull("org.apache.xmlbeans.XmlCursor") != null) {
+			return org.mozilla.javascript.xml.XMLLib.Factory.create(
+				"org.mozilla.javascript.xml.impl.xmlbeans.XMLLibImpl"
+			);
+		} else if (isDom3Present()) {
+			return org.mozilla.javascript.xml.XMLLib.Factory.create(
+				"org.mozilla.javascript.xmlimpl.XMLLibImpl"
+			);
+		} else {
+			//	Uh-oh -- results if FEATURE_E4X is true are unknown.
+			return null;
+		}
+	}
 
 
     /**

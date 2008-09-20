@@ -37,6 +37,7 @@
 
 package org.mozilla.javascript.jdk11;
 
+import java.lang.reflect.Member;
 import java.util.Hashtable;
 
 import org.mozilla.javascript.*;
@@ -75,5 +76,9 @@ public class VMBridge_jdk11 extends VMBridge
     protected boolean tryToMakeAccessible(Object accessibleObject)
     {
         return false;
+    }
+    
+    protected boolean isVarArgs(Member member) {
+      return false;
     }
 }

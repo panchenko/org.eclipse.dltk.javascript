@@ -26,6 +26,7 @@
  *   Igor Bukanov
  *   Yuh-Ruey Chen
  *   Ethan Hugg
+ *   Bob Jervis
  *   Terry Lucas
  *   Mike McCabe
  *   Milen Nankov
@@ -93,6 +94,8 @@ public class Parser
     private Hashtable labelSet; // map of label names into nodes
     private ObjArray loopSet;
     private ObjArray loopAndSwitchSet;
+    private boolean hasReturnValue;
+    private int functionEndFlags;
 // end of per function variables
 
     // Exception to unwind
@@ -112,17 +115,36 @@ public class Parser
         return new Decompiler();
     }
 
+    void addStrictWarning(String messageId, String messageArg)
+    {
+        if (compilerEnv.isStrictMode())
+            addWarning(messageId, messageArg);
+    }
+
     void addWarning(String messageId, String messageArg)
     {
         String message = ScriptRuntime.getMessage1(messageId, messageArg);
-        errorReporter.warning(message, sourceURI, ts.getLineno(),
-                              ts.getLine(), ts.getOffset());
+        if (compilerEnv.reportWarningAsError()) {
+            ++syntaxErrorCount;
+            errorReporter.error(message, sourceURI, ts.getLineno(),
+                                ts.getLine(), ts.getOffset());
+        } else
+            errorReporter.warning(message, sourceURI, ts.getLineno(),
+                                  ts.getLine(), ts.getOffset());
     }
 
     void addError(String messageId)
     {
         ++syntaxErrorCount;
         String message = ScriptRuntime.getMessage0(messageId);
+        errorReporter.error(message, sourceURI, ts.getLineno(),
+                            ts.getLine(), ts.getOffset());
+    }
+
+    void addError(String messageId, String messageArg)
+    {
+        ++syntaxErrorCount;
+        String message = ScriptRuntime.getMessage1(messageId, messageArg);
         errorReporter.error(message, sourceURI, ts.getLineno(),
                             ts.getLine(), ts.getOffset());
     }
@@ -261,7 +283,7 @@ public class Parser
         loopAndSwitchSet.pop();
     }
 
-    private Node enterSwitch(Node switchSelector, int lineno, Node switchLabel)
+    private Node enterSwitch(Node switchSelector, int lineno)
     {
         Node switchNode = nf.createSwitch(switchSelector, lineno);
         if (loopAndSwitchSet == null) {
@@ -358,7 +380,7 @@ public class Parser
             }
         } catch (StackOverflowError ex) {
             String msg = ScriptRuntime.getMessage0(
-                "mag.too.deep.parser.recursion");
+                "msg.too.deep.parser.recursion");
             throw Context.reportRuntimeError(msg, sourceURI,
                                              ts.getLineno(), null, 0);
         }
@@ -494,9 +516,10 @@ public class Parser
         loopSet = null;
         ObjArray savedLoopAndSwitchSet = loopAndSwitchSet;
         loopAndSwitchSet = null;
+        boolean savedHasReturnValue = hasReturnValue;
+        int savedFunctionEndFlags = functionEndFlags;
 
         Node body;
-        String source;
         try {
             decompiler.addToken(Token.LP);
             if (!matchToken(Token.RP)) {
@@ -523,26 +546,24 @@ public class Parser
             body = parseFunctionBody();
             mustMatchToken(Token.RC, "msg.no.brace.after.body");
 
+            if (compilerEnv.isStrictMode() && !body.hasConsistentReturnUsage())
+            {
+              String msg = name.length() > 0 ? "msg.no.return.value"
+                                             : "msg.anon.no.return.value";
+              addStrictWarning(msg, name);
+            }
+
             decompiler.addToken(Token.RC);
             functionSourceEnd = decompiler.markFunctionEnd(functionSourceStart);
             if (functionType != FunctionNode.FUNCTION_EXPRESSION) {
-                 if (compilerEnv.getLanguageVersion() >= Context.VERSION_1_2) {
-                    // function f() {} function g() {} is not allowed in 1.2
-                    // or later but for compatibility with old scripts
-                    // the check is done only if language is
-                    // explicitly set.
-                    //  XXX warning needed if version == VERSION_DEFAULT ?
-                    int tt = peekTokenOrEOL();
-                    if (tt == Token.FUNCTION) {
-                         reportError("msg.no.semi.stmt");
-                    }
-                 }
                 // Add EOL only if function is not part of expression
                 // since it gets SEMI + EOL from Statement in that case
                 decompiler.addToken(Token.EOL);
             }
         }
         finally {
+            hasReturnValue = savedHasReturnValue;
+            functionEndFlags = savedFunctionEndFlags;
             loopAndSwitchSet = savedLoopAndSwitchSet;
             loopSet = savedLoopSet;
             labelSet = savedLabelSet;
@@ -554,6 +575,12 @@ public class Parser
         fnNode.setSourceName(sourceURI);
         fnNode.setBaseLineno(baseLineno);
         fnNode.setEndLineno(ts.getLineno());
+
+        if (name != null) {
+          int index = currentScriptOrFn.getParamOrVarIndex(name);
+          if (index >= 0 && index < currentScriptOrFn.getParamCount())
+            addStrictWarning("msg.var.hides.arg", name);
+        }
 
         Node pn = nf.initFunction(fnNode, functionIndex, body, syntheticType);
         if (memberExprNode != null) {
@@ -582,15 +609,20 @@ public class Parser
     private Node condition()
         throws IOException, ParserException
     {
-        Node pn;
         mustMatchToken(Token.LP, "msg.no.paren.cond");
         decompiler.addToken(Token.LP);
-        pn = expr(false);
+        Node pn = expr(false);
         mustMatchToken(Token.RP, "msg.no.paren.after.cond");
         decompiler.addToken(Token.RP);
 
-        // there's a check here in jsparse.c that corrects = to ==
-
+        // Report strict warning on code like "if (a = 7) ...". Suppress the
+        // warning if the condition is parenthesized, like "if ((a = 7)) ...".
+        if (pn.getProp(Node.PARENTHESIZED_PROP) == null &&
+            (pn.getType() == Token.SETNAME || pn.getType() == Token.SETPROP ||
+             pn.getType() == Token.SETELEM))
+        {
+            addStrictWarning("msg.equal.as.assign", "");
+        }
         return pn;
     }
 
@@ -622,6 +654,8 @@ public class Parser
         try {
             Node pn = statementHelper(null);
             if (pn != null) {
+                if (compilerEnv.isStrictMode() && !pn.hasSideEffects())
+                    addStrictWarning("msg.no.side.effects", "");
                 return pn;
             }
         } catch (ParserException e) { }
@@ -684,7 +718,7 @@ public class Parser
             int lineno = ts.getLineno();
             mustMatchToken(Token.LP, "msg.no.paren.switch");
             decompiler.addToken(Token.LP);
-            pn = enterSwitch(expr(false), lineno, statementLabel);
+            pn = enterSwitch(expr(false), lineno);
             try {
                 mustMatchToken(Token.RP, "msg.no.paren.after.switch");
                 decompiler.addToken(Token.RP);
@@ -815,7 +849,7 @@ public class Parser
                     if (tt == Token.VAR) {
                         // set init to a var list or initial
                         consumeToken();    // consume the 'var' token
-                        init = variables(true);
+                        init = variables(Token.FOR);
                     }
                     else {
                         init = expr(true);
@@ -1017,9 +1051,10 @@ public class Parser
             return pn;
           }
 
+          case Token.CONST:
           case Token.VAR: {
             consumeToken();
-            pn = variables(false);
+            pn = variables(tt);
             break;
           }
 
@@ -1044,8 +1079,23 @@ public class Parser
                 break;
               default:
                 retExpr = expr(false);
+                hasReturnValue = true;
             }
             pn = nf.createReturn(retExpr, lineno);
+
+            // see if we need a strict mode warning
+            if (retExpr == null) {
+                if (functionEndFlags == Node.END_RETURNS_VALUE)
+                    addStrictWarning("msg.return.inconsistent", "");
+
+                functionEndFlags |= Node.END_RETURNS;
+            } else {
+                if (functionEndFlags == Node.END_RETURNS)
+                    addStrictWarning("msg.return.inconsistent", "");
+
+                functionEndFlags |= Node.END_RETURNS_VALUE;
+            }
+
             break;
           }
 
@@ -1086,14 +1136,14 @@ public class Parser
             {
                 reportError("msg.bad.namespace");
             }
-            decompiler.addName(ts.getString());
+            decompiler.addName(" xml");
 
             if (!(matchToken(Token.NAME)
                   && ts.getString().equals("namespace")))
             {
                 reportError("msg.bad.namespace");
             }
-            decompiler.addName(ts.getString());
+            decompiler.addName(" namespace");
 
             if (!matchToken(Token.ASSIGN)) {
                 reportError("msg.bad.namespace");
@@ -1181,13 +1231,28 @@ public class Parser
         return pn;
     }
 
-    private Node variables(boolean inForInit)
+    /**
+     * Parse a 'var' or 'const' statement, or a 'var' init list in a for
+     * statement.
+     * @param context A token value: either VAR, CONST or FOR depending on
+     * context.
+     * @return The parsed statement
+     * @throws IOException
+     * @throws ParserException
+     */
+    private Node variables(int context)
         throws IOException, ParserException
     {
-        Node pn = nf.createVariables(ts.getLineno());
+        Node pn;
         boolean first = true;
 
-        decompiler.addToken(Token.VAR);
+        if (context == Token.CONST){
+            pn = nf.createVariables(Token.CONST, ts.getLineno());
+            decompiler.addToken(Token.CONST);
+        } else {
+            pn = nf.createVariables(Token.VAR, ts.getLineno());
+            decompiler.addToken(Token.VAR);
+        }
 
         for (;;) {
             Node name;
@@ -1200,7 +1265,26 @@ public class Parser
             first = false;
 
             decompiler.addName(s);
-            currentScriptOrFn.addVar(s);
+
+            if (context == Token.CONST) {
+                if (!currentScriptOrFn.addConst(s)) {
+                    // We know it's already defined, since addConst passes if
+                    // it's not defined at all.  The addVar call just confirms
+                    // what it is.
+                    if (currentScriptOrFn.addVar(s) != ScriptOrFnNode.DUPLICATE_CONST)
+                        addError("msg.var.redecl", s);
+                    else
+                        addError("msg.const.redecl", s);
+                }
+            } else {
+                int dupState = currentScriptOrFn.addVar(s);
+                if (dupState == ScriptOrFnNode.DUPLICATE_CONST)
+                    addError("msg.const.redecl", s);
+                else if (dupState == ScriptOrFnNode.DUPLICATE_PARAMETER)
+                    addStrictWarning("msg.var.hides.arg", s);
+                else if (dupState == ScriptOrFnNode.DUPLICATE_VAR)
+                    addStrictWarning("msg.var.redecl", s);
+            }
             name = nf.createName(s);
 
             // omitted check for argument hiding
@@ -1208,7 +1292,7 @@ public class Parser
             if (matchToken(Token.ASSIGN)) {
                 decompiler.addToken(Token.ASSIGN);
 
-                init = assignExpr(inForInit);
+                init = assignExpr(context == Token.FOR);
                 nf.addChildToBack(name, init);
             }
             nf.addChildToBack(pn, name);
@@ -1224,6 +1308,8 @@ public class Parser
         Node pn = assignExpr(inForInit);
         while (matchToken(Token.COMMA)) {
             decompiler.addToken(Token.COMMA);
+            if (compilerEnv.isStrictMode() && !pn.hasSideEffects())
+                addStrictWarning("msg.no.side.effects", "");
             pn = nf.createBinary(Token.COMMA, pn, assignExpr(inForInit));
         }
         return pn;
@@ -1247,17 +1333,14 @@ public class Parser
     private Node condExpr(boolean inForInit)
         throws IOException, ParserException
     {
-        Node ifTrue;
-        Node ifFalse;
-
         Node pn = orExpr(inForInit);
 
         if (matchToken(Token.HOOK)) {
             decompiler.addToken(Token.HOOK);
-            ifTrue = assignExpr(false);
+            Node ifTrue = assignExpr(false);
             mustMatchToken(Token.COLON, "msg.no.colon.cond");
             decompiler.addToken(Token.COLON);
-            ifFalse = assignExpr(inForInit);
+            Node ifFalse = assignExpr(inForInit);
             return nf.createCondExpr(pn, ifTrue, ifFalse);
         }
 
@@ -1555,13 +1638,18 @@ public class Parser
                 } else {
                     pn = nf.createBinary(Token.ADD, pn, nf.createString(xml));
                 }
-                int nodeType;
                 if (ts.isXMLAttribute()) {
-                    nodeType = Token.ESCXMLATTR;
+                    /* Need to put the result in double quotes */
+                    expr = nf.createUnary(Token.ESCXMLATTR, expr);
+                    Node prepend = nf.createBinary(Token.ADD,
+                                                   nf.createString("\""),
+                                                   expr);
+                    expr = nf.createBinary(Token.ADD,
+                                           prepend,
+                                           nf.createString("\""));
                 } else {
-                    nodeType = Token.ESCXMLTEXT;
+                    expr = nf.createUnary(Token.ESCXMLTEXT, expr);
                 }
-                expr = nf.createUnary(nodeType, expr);
                 pn = nf.createBinary(Token.ADD, pn, expr);
                 break;
             case Token.XMLEND:
@@ -1892,11 +1980,35 @@ public class Parser
                         // but tell the decompiler the proper type
                         String s = ts.getString();
                         if (tt == Token.NAME) {
+                            if (s.equals("get") &&
+                                peekToken() == Token.NAME) {
+                                decompiler.addToken(Token.GET);
+                                consumeToken();
+                                s = ts.getString();
+                                decompiler.addName(s);
+                                property = ScriptRuntime.getIndexObject(s);
+                                if (!getterSetterProperty(elems, property,
+                                                          true))
+                                    break commaloop;
+                                break;
+                            } else if (s.equals("set") &&
+                                       peekToken() == Token.NAME) {
+                                decompiler.addToken(Token.SET);
+                                consumeToken();
+                                s = ts.getString();
+                                decompiler.addName(s);
+                                property = ScriptRuntime.getIndexObject(s);
+                                if (!getterSetterProperty(elems, property,
+                                                          false))
+                                    break commaloop;
+                                break;
+                            }
                             decompiler.addName(s);
                         } else {
                             decompiler.addString(s);
                         }
                         property = ScriptRuntime.getIndexObject(s);
+                        plainProperty(elems, property);
                         break;
 
                       case Token.NUMBER:
@@ -1904,6 +2016,7 @@ public class Parser
                         double n = ts.getNumber();
                         decompiler.addNumber(n);
                         property = ScriptRuntime.getIndexObject(n);
+                        plainProperty(elems, property);
                         break;
 
                       case Token.RC:
@@ -1913,13 +2026,6 @@ public class Parser
                         reportError("msg.bad.prop");
                         break commaloop;
                     }
-                    mustMatchToken(Token.COLON, "msg.no.colon.prop");
-
-                    // OBJLIT is used as ':' in object literal for
-                    // decompilation to solve spacing ambiguity.
-                    decompiler.addToken(Token.OBJECTLIT);
-                    elems.add(property);
-                    elems.add(assignExpr(false));
                 } while (matchToken(Token.COMMA));
 
                 mustMatchToken(Token.RC, "msg.no.brace.prop");
@@ -1937,6 +2043,7 @@ public class Parser
              * think) in the C IR as 'function call.'  */
             decompiler.addToken(Token.LP);
             pn = expr(false);
+            pn.putProp(Node.PARENTHESIZED_PROP, Boolean.TRUE);
             decompiler.addToken(Token.RP);
             mustMatchToken(Token.RP, "msg.no.paren");
             return pn;
@@ -2017,5 +2124,36 @@ public class Parser
         return null;    // should never reach here
     }
 
-}
+    private void plainProperty(ObjArray elems, Object property)
+            throws IOException {
+        mustMatchToken(Token.COLON, "msg.no.colon.prop");
 
+        // OBJLIT is used as ':' in object literal for
+        // decompilation to solve spacing ambiguity.
+        decompiler.addToken(Token.OBJECTLIT);
+        elems.add(property);
+        elems.add(assignExpr(false));
+    }
+
+    private boolean getterSetterProperty(ObjArray elems, Object property,
+                                         boolean isGetter) throws IOException {
+        Node f = function(FunctionNode.FUNCTION_EXPRESSION);
+        if (f.getType() != Token.FUNCTION) {
+            reportError("msg.bad.prop");
+            return false;
+        }
+        int fnIndex = f.getExistingIntProp(Node.FUNCTION_PROP);
+        FunctionNode fn = currentScriptOrFn.getFunctionNode(fnIndex);
+        if (fn.getFunctionName().length() != 0) {
+            reportError("msg.bad.prop");
+            return false;
+        }
+        elems.add(property);
+        if (isGetter) {
+            elems.add(nf.createUnary(Token.GET, f));
+        } else {
+            elems.add(nf.createUnary(Token.SET, f));
+        }
+        return true;
+    }
+}

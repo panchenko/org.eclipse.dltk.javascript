@@ -67,9 +67,16 @@ public class NativeJavaObject implements Scriptable, Wrapper, Serializable
     public NativeJavaObject(Scriptable scope, Object javaObject,
                             Class staticType)
     {
+        this(scope, javaObject, staticType, false);
+    }
+
+    public NativeJavaObject(Scriptable scope, Object javaObject,
+                            Class staticType, boolean isAdapter)
+    {
         this.parent = scope;
         this.javaObject = javaObject;
         this.staticType = staticType;
+        this.isAdapter = isAdapter;
         initMembers();
     }
 
@@ -80,7 +87,8 @@ public class NativeJavaObject implements Scriptable, Wrapper, Serializable
         } else {
             dynamicType = staticType;
         }
-        members = JavaMembers.lookupClass(parent, dynamicType, staticType);
+        members = JavaMembers.lookupClass(parent, dynamicType, staticType, 
+                                          isAdapter);
         fieldAndMethods
             = members.getFieldAndMethodsObjects(this, javaObject, false);
     }
@@ -595,18 +603,18 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
             break;
 
         case JSTYPE_JAVA_OBJECT:
-        case JSTYPE_JAVA_ARRAY:
+        case JSTYPE_JAVA_ARRAY:              
+            if (value instanceof Wrapper) {
+              value = ((Wrapper)value).unwrap();
+            }
             if (type.isPrimitive()) {
                 if (type == Boolean.TYPE) {
                     reportConversionError(value, type);
                 }
                 return coerceToNumber(type, value);
             }
-            else {
-                if (value instanceof Wrapper) {
-                    value = ((Wrapper)value).unwrap();
-                }
-                if (type == ScriptRuntime.StringClass) {
+            else { 
+              if (type == ScriptRuntime.StringClass) {
                     return value.toString();
                 }
                 else {
@@ -710,8 +718,8 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
             }
             return new Character((char)toInteger(value,
                                                  ScriptRuntime.CharacterClass,
-                                                 (double)Character.MIN_VALUE,
-                                                 (double)Character.MAX_VALUE));
+                                                 Character.MIN_VALUE,
+                                                 Character.MAX_VALUE));
         }
 
         // Double, Float
@@ -734,10 +742,10 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
                 }
                 else {
                     double absNumber = Math.abs(number);
-                    if (absNumber < (double)Float.MIN_VALUE) {
+                    if (absNumber < Float.MIN_VALUE) {
                         return new Float((number > 0.0) ? +0.0 : -0.0);
                     }
-                    else if (absNumber > (double)Float.MAX_VALUE) {
+                    else if (absNumber > Float.MAX_VALUE) {
                         return new Float((number > 0.0) ?
                                          Float.POSITIVE_INFINITY :
                                          Float.NEGATIVE_INFINITY);
@@ -757,16 +765,15 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
             else {
                 return new Integer((int)toInteger(value,
                                                   ScriptRuntime.IntegerClass,
-                                                  (double)Integer.MIN_VALUE,
-                                                  (double)Integer.MAX_VALUE));
+                                                  Integer.MIN_VALUE,
+                                                  Integer.MAX_VALUE));
             }
         }
 
         if (type == ScriptRuntime.LongClass || type == Long.TYPE) {
             if (valueClass == ScriptRuntime.LongClass) {
                 return value;
-            }
-            else {
+            } else {
                 /* Long values cannot be expressed exactly in doubles.
                  * We thus use the largest and smallest double value that
                  * has a value expressible as a long value. We build these
@@ -790,8 +797,8 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
             else {
                 return new Short((short)toInteger(value,
                                                   ScriptRuntime.ShortClass,
-                                                  (double)Short.MIN_VALUE,
-                                                  (double)Short.MAX_VALUE));
+                                                  Short.MIN_VALUE,
+                                                  Short.MAX_VALUE));
             }
         }
 
@@ -802,8 +809,8 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
             else {
                 return new Byte((byte)toInteger(value,
                                                 ScriptRuntime.ByteClass,
-                                                (double)Byte.MIN_VALUE,
-                                                (double)Byte.MAX_VALUE));
+                                                Byte.MIN_VALUE,
+                                                Byte.MAX_VALUE));
             }
         }
 
@@ -831,7 +838,8 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
         else {
             Method meth;
             try {
-                meth = value.getClass().getMethod("doubleValue", null);
+                meth = value.getClass().getMethod("doubleValue", 
+                		                          (Class [])null);
             }
             catch (NoSuchMethodException e) {
                 meth = null;
@@ -841,7 +849,8 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
             }
             if (meth != null) {
                 try {
-                    return ((Number)meth.invoke(value, null)).doubleValue();
+                    return ((Number)meth.invoke(value, 
+                    		                    (Object [])null)).doubleValue();
                 }
                 catch (IllegalAccessException e) {
                     // XXX: ignore, or error message?
@@ -895,25 +904,18 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
     {
         out.defaultWriteObject();
 
-        if (javaObject != null) {
-            Class joClass = javaObject.getClass();
-            if (joClass.getName().startsWith("adapter")) {
-                out.writeBoolean(true);
-                if (adapter_writeAdapterObject == null) {
-                    throw new IOException();
-                }
-                Object[] args = { javaObject, out };
-                try {
-                    adapter_writeAdapterObject.invoke(null, args);
-                } catch (Exception ex) {
-                    throw new IOException();
-                }
-            } else {
-                out.writeBoolean(false);
-                out.writeObject(javaObject);
+        out.writeBoolean(isAdapter);
+        if (isAdapter) {
+            if (adapter_writeAdapterObject == null) {
+                throw new IOException();
+            }
+            Object[] args = { javaObject, out };
+            try {
+                adapter_writeAdapterObject.invoke(null, args);
+            } catch (Exception ex) {
+                throw new IOException();
             }
         } else {
-            out.writeBoolean(false);
             out.writeObject(javaObject);
         }
 
@@ -929,7 +931,8 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
     {
         in.defaultReadObject();
 
-        if (in.readBoolean()) {
+        isAdapter = in.readBoolean();
+        if (isAdapter) {
             if (adapter_readAdapterObject == null)
                 throw new ClassNotFoundException();
             Object[] args = { this, in };
@@ -967,6 +970,7 @@ WrapFactory#wrap(Context cx, Scriptable scope, Object obj, Class)}
     protected transient Class staticType;
     protected transient JavaMembers members;
     private transient Hashtable fieldAndMethods;
+    private transient boolean isAdapter;
 
     private static final Object COERCED_INTERFACE_KEY = new Object();
     private static Method adapter_writeAdapterObject;

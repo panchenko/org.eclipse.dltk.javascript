@@ -22,6 +22,7 @@
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
+ *    Bob Jervis
  *
  * Alternatively, the contents of this file may be used under the terms of
  * the GNU General Public License Version 2 or later (the "GPL"), in which
@@ -39,13 +40,21 @@
 
 package org.mozilla.javascript;
 
-import java.beans.*;
-import java.io.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.CharArrayWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.lang.reflect.*;
-import org.mozilla.javascript.debug.*;
 
+import org.mozilla.javascript.debug.DebuggableScript;
+import org.mozilla.javascript.debug.Debugger;
 import org.mozilla.javascript.xml.XMLLib;
 
 /**
@@ -120,7 +129,7 @@ public class Context
     public static final int VERSION_1_5 =      150;
 
     /**
-     * JavaScript 1.5
+     * JavaScript 1.6
      */
     public static final int VERSION_1_6 =      160;
 
@@ -172,7 +181,7 @@ public class Context
     /**
      * Control if properties <tt>__proto__</tt> and <tt>__parent__</tt>
      * are treated specially.
-     * If <tt>hasFeature(FEATURE_PARENT_PROTO_PROPRTIES)</tt> returns true,
+     * If <tt>hasFeature(FEATURE_PARENT_PROTO_PROPERTIES)</tt> returns true,
      * treat <tt>__parent__</tt> and <tt>__proto__</tt> as special properties.
      * <p>
      * The properties allow to query and set scope and prototype chains for the
@@ -185,15 +194,21 @@ public class Context
      *
      * By default {@link #hasFeature(int)} returns true.
      */
-    public static final int FEATURE_PARENT_PROTO_PROPRTIES = 5;
+    public static final int FEATURE_PARENT_PROTO_PROPERTIES = 5;
 
+	/**
+	 * @deprecated In previous releases, this name was given to
+	 * FEATURE_PARENT_PROTO_PROPERTIES.
+	 */
+    public static final int FEATURE_PARENT_PROTO_PROPRTIES = 5;
+	
     /**
      * Control if support for E4X(ECMAScript for XML) extension is available.
      * If hasFeature(FEATURE_E4X) returns true, the XML syntax is available.
      * <p>
      * By default {@link #hasFeature(int)} returns true if
      * the current JS version is set to {@link #VERSION_DEFAULT}
-     * or is greater then {@link #VERSION_1_6}.
+     * or is at least {@link #VERSION_1_6}.
      * @since 1.6 Release 1
      */
     public static final int FEATURE_E4X = 6;
@@ -239,11 +254,45 @@ public class Context
      */
     public static final int FEATURE_STRICT_EVAL = 9;
 
+    /**
+     * When the feature is on Rhino will add a "fileName" and "lineNumber"
+     * properties to Error objects automatically. When the feature is off, you
+     * have to explicitly pass them as the second and third argument to the
+     * Error constructor. Note that neither behaviour is fully ECMA 262 
+     * compliant (as 262 doesn't specify a three-arg constructor), but keeping 
+     * the feature off results in Error objects that don't have
+     * additional non-ECMA properties when constructed using the ECMA-defined
+     * single-arg constructor and is thus desirable if a stricter ECMA 
+     * compliance is desired, specifically adherence to the point 15.11.5. of
+     * the standard.
+     * <p>
+     * By default {@link #hasFeature(int)} returns false.
+     * @since 1.6 Release 6
+     */
+    public static final int FEATURE_LOCATION_INFORMATION_IN_ERROR = 10;
+
+    /**
+     * Controls whether JS 1.5 'strict mode' is enabled.
+     * When the feature is on, Rhino reports more than a dozen different
+     * warnings.  When the feature is off, these warnings are not generated.
+     * FEATURE_STRICT_MODE implies FEATURE_STRICT_VARS and FEATURE_STRICT_EVAL.
+     * <p>
+     * By default {@link #hasFeature(int)} returns false.
+     * @since 1.6 Release 6
+     */
+    public static final int FEATURE_STRICT_MODE = 11;
+
+    /**
+     * Controls whether a warning should be treated as an error.
+     * @since 1.6 Release 6
+     */
+    public static final int FEATURE_WARNING_AS_ERROR = 12;
+
     public static final String languageVersionProperty = "language version";
     public static final String errorReporterProperty   = "error reporter";
 
     /**
-     * Convinient value to use as zero-length array of objects.
+     * Convenient value to use as zero-length array of objects.
      */
     public static final Object[] emptyArgs = ScriptRuntime.emptyArgs;
 
@@ -848,7 +897,7 @@ public class Context
      * @see java.beans.PropertyChangeEvent
      * @param  property  the bound property
      * @param  oldValue  the old value
-     * @param  newVale   the new value
+     * @param  newValue   the new value
      */
     final void firePropertyChange(String property, Object oldValue,
                                   Object newValue)
@@ -889,8 +938,11 @@ public class Context
                                      int lineOffset)
     {
         Context cx = Context.getContext();
-        cx.getErrorReporter().warning(message, sourceName, lineno,
-                                      lineSource, lineOffset);
+        if (cx.hasFeature(FEATURE_WARNING_AS_ERROR))
+            reportError(message, sourceName, lineno, lineSource, lineOffset);
+        else
+            cx.getErrorReporter().warning(message, sourceName, lineno,
+                                          lineSource, lineOffset);
     }
 
     /**
@@ -904,6 +956,18 @@ public class Context
         int[] linep = { 0 };
         String filename = getSourcePositionFromStack(linep);
         Context.reportWarning(message, filename, linep[0], null, 0);
+    }
+
+    public static void reportWarning(String message, Throwable t)
+    {
+        int[] linep = { 0 };
+        String filename = getSourcePositionFromStack(linep);
+        Writer sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        pw.println(message);
+        t.printStackTrace(pw);
+        pw.flush();
+        Context.reportWarning(sw.toString(), filename, linep[0], null, 0);
     }
 
     /**
@@ -2069,12 +2133,30 @@ public class Context
      * @see #FEATURE_DYNAMIC_SCOPE
      * @see #FEATURE_STRICT_VARS
      * @see #FEATURE_STRICT_EVAL
+     * @see #FEATURE_LOCATION_INFORMATION_IN_ERROR
+     * @see #FEATURE_STRICT_MODE
+     * @see #FEATURE_WARNING_AS_ERROR
      */
     public boolean hasFeature(int featureIndex)
     {
         ContextFactory f = getFactory();
         return f.hasFeature(this, featureIndex);
     }
+	
+	/**
+		Returns an object which specifies an E4X implementation to use within
+		this <code>Context</code>.  Note
+		that the XMLLib.Factory interface should be considered experimental.
+	 
+		The default implementation uses the implementation provided by this
+		<code>Context</code>'s {@link ContextFactory}.
+	 
+		@return An XMLLib.Factory.  Should not return <code>null</code> if
+			{@link #FEATURE_E4X} is enabled.  See {@link #hasFeature}.
+	 */
+	public XMLLib.Factory getE4xImplementationFactory() {
+		return getFactory().getE4xImplementationFactory();
+	}
 
     /**
      * Get/Set threshold of executed instructions counter that triggers call to
@@ -2274,8 +2356,7 @@ public class Context
 
         Object result;
         if (returnFunction) {
-            result = compiler.createFunctionObject(this, scope, bytecode,
-                                                   securityDomain);
+            result = compiler.createFunctionObject(this, scope, bytecode, securityDomain);
         } else {
             result = compiler.createScriptObject(bytecode, securityDomain);
         }

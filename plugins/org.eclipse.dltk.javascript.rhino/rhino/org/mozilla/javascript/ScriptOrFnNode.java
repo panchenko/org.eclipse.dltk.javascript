@@ -23,6 +23,7 @@
  *
  * Contributor(s):
  *   Igor Bukanov
+ *   Bob Jervis
  *
  * Alternatively, the contents of this file may be used under the terms of
  * the GNU General Public License Version 2 or later (the "GPL"), in which
@@ -142,24 +143,71 @@ public class ScriptOrFnNode extends Node {
         return array;
     }
 
+    public final boolean[] getParamAndVarConst() {
+        int N = itsVariables.size();
+        boolean[] array = new boolean[N];
+        for (int i = 0; i < N; i++)
+            if (itsConst.get(i) != null)
+                array[i] = true;
+        return array;
+    }
+
     public final void addParam(String name) {
         // Check addparam is not called after addLocal
         if (varStart != itsVariables.size()) Kit.codeBug();
-        // Allow non-unique parameter names: use the last occurrence
+        // Allow non-unique parameter names: use the last occurrence (parser
+        // will warn about dups)
         int index = varStart++;
         itsVariables.add(name);
+        itsConst.add(null);
         itsVariableNames.put(name, index);
     }
 
-    public final void addVar(String name) {
+    public static final int NO_DUPLICATE = 1;
+    public static final int DUPLICATE_VAR = 0;
+    public static final int DUPLICATE_PARAMETER = -1;
+    public static final int DUPLICATE_CONST = -2;
+
+    /**
+     * This function adds a variable to the set of var declarations for a
+     * function (or script).  This returns an indicator of a duplicate that
+     * overrides a formal parameter (false if this dups a parameter).
+     * @param name variable name
+     * @return 1 if the name is not any form of duplicate, 0 if it duplicates a
+     * non-parameter, -1 if it duplicates a parameter and -2 if it duplicates a
+     * const.
+     */
+    public final int addVar(String name) {
         int vIndex = itsVariableNames.get(name, -1);
         if (vIndex != -1) {
             // There's already a variable or parameter with this name.
-            return;
+            if (vIndex >= varStart) {
+                Object v = itsConst.get(vIndex);
+                if (v != null)
+                    return DUPLICATE_CONST;
+                else
+                    return DUPLICATE_VAR;
+            } else
+                return DUPLICATE_PARAMETER;
         }
         int index = itsVariables.size();
         itsVariables.add(name);
+        itsConst.add(null);
         itsVariableNames.put(name, index);
+        return NO_DUPLICATE;
+    }
+
+    public final boolean addConst(String name) {
+        int vIndex = itsVariableNames.get(name, -1);
+        if (vIndex != -1) {
+            // There's already a variable or parameter with this name.
+            return false;
+        }
+        int index = itsVariables.size();
+        itsVariables.add(name);
+        itsConst.add(name);
+        itsVariableNames.put(name, index);
+        return true;
     }
 
     public final void removeParamOrVar(String name) {
@@ -202,6 +250,7 @@ public class ScriptOrFnNode extends Node {
 
     // a list of the formal parameters and local variables
     private ObjArray itsVariables = new ObjArray();
+    private ObjArray itsConst = new ObjArray();
 
     // mapping from name to index in list
     private ObjToIntMap itsVariableNames = new ObjToIntMap(11);
