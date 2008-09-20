@@ -47,6 +47,14 @@ public class CompletionStringParsing extends TestCase {
 		assertEquals("forms.[]", HostCollection.parseCompletionString(
 				"forms[xxx(1)).yyy]", true));
 		assertEquals("forms.[]", HostCollection.parseCompletionString(
+				"forms[[xxx(1).yyy]", true));
+		assertEquals("forms.[]", HostCollection.parseCompletionString(
+				"forms[xxx((1).yyy]", true));
+		assertEquals("forms.[]", HostCollection.parseCompletionString(
+				"forms[[xxx((1).yyy]", true));
+		assertEquals("forms.[]", HostCollection.parseCompletionString(
+				"forms[xxx((1).yyy]]", true));
+		assertEquals("forms.[]", HostCollection.parseCompletionString(
 				")forms[xxx(1)).yyy]", true));
 
 	}
@@ -93,6 +101,24 @@ public class CompletionStringParsing extends TestCase {
 	{
 		assertEquals("forms.xxx.[].yyy.[]", HostCollection
 				.parseCompletionString("forms.xxx.[].yyy.[]", true));
+
+	}
+	
+	public void testWithLineEnding() throws Exception
+	{
+		assertEquals("forms.xxx.[].yyy.[]", HostCollection
+				.parseCompletionString("someCode\nforms.xxx[xxx].yyy[yyy]", true));
+		assertEquals("", HostCollection
+				.parseCompletionString("someCode\nforms.xxx[xxx].yyy[yyy]\n", true));
+
+	}
+	
+	public void testWithWhiteSpace() throws Exception
+	{
+		assertEquals("forms.xxx.[].yyy.[]", HostCollection
+				.parseCompletionString("someCode forms.xxx[xxx].yyy[yyy]", true));
+		assertEquals("", HostCollection
+				.parseCompletionString("someCode forms.xxx[xxx].yyy[yyy] ", true));
 
 	}
 }
