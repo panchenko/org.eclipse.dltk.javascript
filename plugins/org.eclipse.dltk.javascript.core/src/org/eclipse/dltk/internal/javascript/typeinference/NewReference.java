@@ -47,6 +47,17 @@ public class NewReference extends AbstractCallResultReference {
 		} else if ("Boolean".equals(getId())) {
 			return ReferenceFactory.createBooleanReference("Boolean")
 					.getChilds(resolveLocals);
+		} else if (getId().startsWith("Packages.")) {
+			String className = getId().substring("Packages.".length());
+			try {
+				Class clz = Class.forName(className);
+				NativeObjectReference ref = new NativeObjectReference(
+						className, clz);
+				return ref.getChilds(resolveLocals);
+
+			} catch (Exception e) {
+				// ignore
+			}
 		}
 		return super.internalGetChilds(resolveLocals);
 	}

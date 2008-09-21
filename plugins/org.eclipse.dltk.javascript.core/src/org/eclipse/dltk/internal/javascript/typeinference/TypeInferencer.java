@@ -277,6 +277,7 @@ public class TypeInferencer {
 		public Object processCatchScopeNode(Node node, Object arg) {
 			Node n1 = node.getFirstChild();
 			contexts.push(collection);
+			// TODO this seems wrong!
 			collection = new HostCollection(collection.getParent());
 			String name = n1.getString();
 			collection.setReference(name, new UnknownReference(name, true));
