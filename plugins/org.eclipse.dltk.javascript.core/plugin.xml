@@ -2,6 +2,12 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="resolver" name="Reference Resolver" schema="schema/resolver.exsd"/>
+
+  <extension point="org.eclipse.core.runtime.preferences">
+    <initializer
+      class="org.eclipse.dltk.javascript.internal.core.JavaScriptCorePreferenceInitializer" />
+  </extension>
+
 <extension
          id="nature"
          point="org.eclipse.core.resources.natures">
@@ -93,4 +99,14 @@
             priority="high">
       </content-type>
    </extension>
+
+  <extension
+    point="org.eclipse.dltk.validators.core.validator">
+    <validatorType
+      class="org.eclipse.dltk.internal.javascript.parser.JavaScriptTodoParserType"
+      id="org.eclipse.dltk.javascript.todo"
+      nature="org.eclipse.dltk.javascript.core.nature">
+    </validatorType>
+  </extension>   
+   
 </plugin>
