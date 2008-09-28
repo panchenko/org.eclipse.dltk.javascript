@@ -45,7 +45,11 @@ public final class JavascriptColorConstants {
 	 */
 	public static final String JS_DEFAULT = DLTKColorConstants.DLTK_DEFAULT; //$NON-NLS-1$
 
-	
+	/**
+	 * The color key for TO-DO tasks in comments.
+	 */
+	public static final String JS_TODO_TAG = DLTKColorConstants.TASK_TAG;
+
 	/**
 	 * The color key for Javascript function definition.
 	 */
@@ -54,10 +58,9 @@ public final class JavascriptColorConstants {
 	public static final String JS_XML_TAG_NAME = "XML_TAG_NAME";
 
 	public static final String JS_XML_ATTR_NAME = "XML_ATTR_NAME";
-	
+
 	public static final String JS_XML_COMMENT_NAME = "XML_COMMENT_NAME";
-	
+
 	public static final String JS_XML_ALL = "XML_ALL";
 
-	
 }

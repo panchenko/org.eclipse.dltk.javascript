@@ -96,7 +96,9 @@ public class JavascriptSourceViewerConfiguration extends
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration#alterContentAssistant(org.eclipse.jface.text.contentassist.ContentAssistant)
+	 * @seeorg.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration#
+	 * alterContentAssistant
+	 * (org.eclipse.jface.text.contentassist.ContentAssistant)
 	 */
 	protected void alterContentAssistant(ContentAssistant assistant) {
 		IContentAssistProcessor scriptProcessor = new JavaScriptCompletionProcessor(
@@ -116,14 +118,17 @@ public class JavascriptSourceViewerConfiguration extends
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration#getContentAssistPreference()
+	 * @seeorg.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration#
+	 * getContentAssistPreference()
 	 */
 	protected ContentAssistPreference getContentAssistPreference() {
 		return JavaScriptContentAssistPreference.getDefault();
 	}
 
 	/*
-	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getTabWidth(org.eclipse.jface.text.source.ISourceViewer)
+	 * @see
+	 * org.eclipse.jface.text.source.SourceViewerConfiguration#getTabWidth(org
+	 * .eclipse.jface.text.source.ISourceViewer)
 	 */
 	public int getTabWidth(ISourceViewer sourceViewer) {
 		if (fPreferenceStore == null)
@@ -138,14 +143,21 @@ public class JavascriptSourceViewerConfiguration extends
 				fPreferenceStore);
 		fStringScanner = new JavascriptStringScanner(getColorManager(),
 				fPreferenceStore);
+
+		/*
+		 * TODO: need a 'todo' scanner that supports using //
+		 * 
+		 * the ScriptCommentScanner only supports '#' as the comment prefix,
+		 * which javascript doesn't use. as soon as a scanner is created that
+		 * supports //, replace this line and the markers should appear
+		 */
 		fCommentScanner = new SingleTokenScriptScanner(getColorManager(),
 				fPreferenceStore,
 				JavascriptColorConstants.JS_SINGLE_LINE_COMMENT);
 	}
 
 	/**
-	 * @return <code>true</code> iff the new setup without text tools is in
-	 *         use.
+	 * @return <code>true</code> iff the new setup without text tools is in use.
 	 */
 	private boolean isNewSetup() {
 		return fTextTools == null;

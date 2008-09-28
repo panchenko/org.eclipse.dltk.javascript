@@ -264,6 +264,12 @@
 	          class="org.eclipse.dltk.javascript.internal.ui.preferences.JavascriptEditorSyntaxColoringPreferencePage"
 	          id="org.eclipse.dltk.javascript.ui.editor.SyntaxColoring"
 	          name="Syntax Coloring"/>
+        <page
+              category="org.eclipse.dltk.javascript.ui.javascript"
+              class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptTodoTaskPreferencePage"
+              id="org.eclipse.dltk.javascript.ui.editor.TodoTask"
+              name="%TaskTagsPreferencePage.name"/>
+	          
 	    <page
 	          category="org.eclipse.dltk.javascript.ui.EditorPreferences"
 	          class="org.eclipse.dltk.javascript.internal.ui.preferences.JavascriptSmartTypingPreferencePage"

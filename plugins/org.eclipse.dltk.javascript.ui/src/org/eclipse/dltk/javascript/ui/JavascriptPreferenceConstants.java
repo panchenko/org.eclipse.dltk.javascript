@@ -39,9 +39,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether single line comments are
 	 * rendered in bold.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in bold. If <code>false</code> the are
-	 * rendered using no font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in bold. If <code>false</code> the are rendered
+	 * using no font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_SINGLE_LINE_COMMENT_BOLD = JavascriptColorConstants.JS_SINGLE_LINE_COMMENT
@@ -51,9 +51,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether single line comments are
 	 * rendered in italic.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in italic. If <code>false</code> the are
-	 * rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in italic. If <code>false</code> the are rendered
+	 * using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_SINGLE_LINE_COMMENT_ITALIC = JavascriptColorConstants.JS_SINGLE_LINE_COMMENT
@@ -63,9 +63,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether single line comments are
 	 * rendered in strikethrough.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in strikethrough. If <code>false</code> the
-	 * are rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in strikethrough. If <code>false</code> the are
+	 * rendered using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_SINGLE_LINE_COMMENT_STRIKETHROUGH = JavascriptColorConstants.JS_SINGLE_LINE_COMMENT
@@ -75,8 +75,8 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether single line comments are
 	 * rendered in underline.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in underline. If <code>false</code> the are
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in underline. If <code>false</code> the are
 	 * rendered using no italic font style attribute.
 	 * </p>
 	 * 
@@ -103,9 +103,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	/**
 	 * A named preference that controls whether kwyword are rendered in bold.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in bold. If <code>false</code> the are
-	 * rendered using no font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in bold. If <code>false</code> the are rendered
+	 * using no font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_KEYWORD_BOLD = JavascriptColorConstants.JS_KEYWORD
@@ -114,9 +114,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	/**
 	 * A named preference that controls whether keyword are rendered in italic.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in italic. If <code>false</code> the are
-	 * rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in italic. If <code>false</code> the are rendered
+	 * using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_KEYWORD_ITALIC = JavascriptColorConstants.JS_KEYWORD
@@ -126,9 +126,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether single line comments are
 	 * rendered in strikethrough.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in strikethrough. If <code>false</code> the
-	 * are rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in strikethrough. If <code>false</code> the are
+	 * rendered using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_KEYWORD_STRIKETHROUGH = JavascriptColorConstants.JS_KEYWORD
@@ -138,8 +138,8 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether keyword are rendered in
 	 * underline.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in underline. If <code>false</code> the are
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in underline. If <code>false</code> the are
 	 * rendered using no italic font style attribute.
 	 * </p>
 	 * 
@@ -165,9 +165,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	/**
 	 * A named preference that controls whether kwyword are rendered in bold.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in bold. If <code>false</code> the are
-	 * rendered using no font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in bold. If <code>false</code> the are rendered
+	 * using no font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_KEYWORD_RETURN_BOLD = JavascriptColorConstants.JS_KEYWORD_RETURN
@@ -176,9 +176,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	/**
 	 * A named preference that controls whether keyword are rendered in italic.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in italic. If <code>false</code> the are
-	 * rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in italic. If <code>false</code> the are rendered
+	 * using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_KEYWORD_RETURN_ITALIC = JavascriptColorConstants.JS_KEYWORD_RETURN
@@ -188,9 +188,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether single line comments are
 	 * rendered in strikethrough.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in strikethrough. If <code>false</code> the
-	 * are rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in strikethrough. If <code>false</code> the are
+	 * rendered using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_KEYWORD_RETURN_STRIKETHROUGH = JavascriptColorConstants.JS_KEYWORD_RETURN
@@ -200,8 +200,8 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether keyword are rendered in
 	 * underline.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in underline. If <code>false</code> the are
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in underline. If <code>false</code> the are
 	 * rendered using no italic font style attribute.
 	 * </p>
 	 * 
@@ -228,9 +228,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	/**
 	 * A named preference that controls whether number are rendered in bold.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in bold. If <code>false</code> the are
-	 * rendered using no font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in bold. If <code>false</code> the are rendered
+	 * using no font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_NUMBER_BOLD = JavascriptColorConstants.JS_NUMBER
@@ -239,9 +239,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	/**
 	 * A named preference that controls whether NUMBER are rendered in italic.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in italic. If <code>false</code> the are
-	 * rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in italic. If <code>false</code> the are rendered
+	 * using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_NUMBER_ITALIC = JavascriptColorConstants.JS_NUMBER
@@ -251,9 +251,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether single line comments are
 	 * rendered in strikethrough.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in strikethrough. If <code>false</code> the
-	 * are rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in strikethrough. If <code>false</code> the are
+	 * rendered using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_NUMBER_STRIKETHROUGH = JavascriptColorConstants.JS_NUMBER
@@ -263,8 +263,8 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether NUMBER are rendered in
 	 * underline.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in underline. If <code>false</code> the are
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in underline. If <code>false</code> the are
 	 * rendered using no italic font style attribute.
 	 * </p>
 	 * 
@@ -292,9 +292,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	/**
 	 * A named preference that controls whether STRING are rendered in bold.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in bold. If <code>false</code> the are
-	 * rendered using no font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in bold. If <code>false</code> the are rendered
+	 * using no font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_STRING_BOLD = JavascriptColorConstants.JS_STRING
@@ -303,9 +303,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	/**
 	 * A named preference that controls whether STRING are rendered in italic.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in italic. If <code>false</code> the are
-	 * rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in italic. If <code>false</code> the are rendered
+	 * using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_STRING_ITALIC = JavascriptColorConstants.JS_STRING
@@ -315,9 +315,9 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether single line comments are
 	 * rendered in strikethrough.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in strikethrough. If <code>false</code> the
-	 * are rendered using no italic font style attribute.
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in strikethrough. If <code>false</code> the are
+	 * rendered using no italic font style attribute.
 	 * </p>
 	 */
 	public final static String EDITOR_STRING_STRIKETHROUGH = JavascriptColorConstants.JS_STRING
@@ -327,14 +327,11 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	 * A named preference that controls whether STRING are rendered in
 	 * underline.
 	 * <p>
-	 * Value is of type <code>Boolean</code>. If <code>true</code> single
-	 * line comments are rendered in underline. If <code>false</code> the are
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in underline. If <code>false</code> the are
 	 * rendered using no italic font style attribute.
 	 * </p>
-	 * 
-	 * 
 	 */
-
 	public final static String EDITOR_STRING_UNDERLINE = JavascriptColorConstants.JS_STRING
 			+ EDITOR_UNDERLINE_SUFFIX;
 
@@ -353,6 +350,11 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 
 	private static final String EDITOR_XML_ATTR_NAME_ITALIC = JavascriptColorConstants.JS_XML_ATTR_NAME
 			+ EDITOR_ITALIC_SUFFIX;
+
+	public final static String COMMENT_TASK_TAGS = JavascriptColorConstants.JS_TODO_TAG;
+
+	public final static String COMMENT_TASK_TAGS_BOLD = COMMENT_TASK_TAGS
+			+ EDITOR_BOLD_SUFFIX;
 
 	public static void initializeDefaultValues(IPreferenceStore store) {
 		PreferenceConstants.initializeDefaultValues(store);
@@ -419,9 +421,10 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 
 		// folding
 		store.setDefault(PreferenceConstants.EDITOR_FOLDING_ENABLED, true);
-// store.setDefault(PreferenceConstants.EDITOR_FOLDING_INNERTYPES, false);
-// store.setDefault(PreferenceConstants.EDITOR_FOLDING_METHODS, false);
-// store.setDefault(PreferenceConstants.EDITOR_FOLDING_IMPORTS, true);
+		// store.setDefault(PreferenceConstants.EDITOR_FOLDING_INNERTYPES,
+		// false);
+		// store.setDefault(PreferenceConstants.EDITOR_FOLDING_METHODS, false);
+		// store.setDefault(PreferenceConstants.EDITOR_FOLDING_IMPORTS, true);
 
 		store.setDefault(CodeFormatterConstants.FORMATTER_TAB_CHAR,
 				CodeFormatterConstants.TAB);

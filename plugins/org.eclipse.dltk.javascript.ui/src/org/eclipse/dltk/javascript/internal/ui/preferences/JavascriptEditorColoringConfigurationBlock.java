@@ -41,6 +41,9 @@ public class JavascriptEditorColoringConfigurationBlock extends
 					PreferencesMessages.DLTKEditorPreferencePage_singleLineComment,
 					JavascriptPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR,
 					sCommentsCategory },
+			{ PreferencesMessages.DLTKEditorPreferencePage_CommentTaskTags,
+					JavascriptPreferenceConstants.COMMENT_TASK_TAGS,
+					sCommentsCategory },
 			{ PreferencesMessages.DLTKEditorPreferencePage_keywords,
 					JavascriptPreferenceConstants.EDITOR_KEYWORD_COLOR,
 					sCoreCategory },
@@ -105,7 +108,6 @@ public class JavascriptEditorColoringConfigurationBlock extends
 		JavaScriptDocumentSetupParticipant participant = new JavaScriptDocumentSetupParticipant();
 		participant.setup(document);
 	}
-
 
 	protected InputStream getPreviewContentReader() {
 		return getClass().getResourceAsStream(PREVIEW_FILE_NAME);
