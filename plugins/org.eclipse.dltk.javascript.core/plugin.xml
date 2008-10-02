@@ -101,12 +101,12 @@
    </extension>
 
   <extension
-    point="org.eclipse.dltk.validators.core.validator">
-    <validatorType
+    point="org.eclipse.dltk.core.buildParticipant">
+    <buildParticipant
       class="org.eclipse.dltk.internal.javascript.parser.JavaScriptTodoParserType"
       id="org.eclipse.dltk.javascript.todo"
       nature="org.eclipse.dltk.javascript.core.nature">
-    </validatorType>
+    </buildParticipant>
   </extension>   
    
 </plugin>
