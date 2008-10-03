@@ -105,6 +105,7 @@
     <buildParticipant
       class="org.eclipse.dltk.internal.javascript.parser.JavaScriptTodoParserType"
       id="org.eclipse.dltk.javascript.todo"
+      name="JavaScript TODO task parser"
       nature="org.eclipse.dltk.javascript.core.nature">
     </buildParticipant>
   </extension>   
