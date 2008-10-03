@@ -102,11 +102,20 @@
 
   <extension
     point="org.eclipse.dltk.core.buildParticipant">
+      <buildParticipant
+            class="org.eclipse.dltk.core.builder.ParserBuildParticipantFactory"
+            id="org.eclipse.dltk.javascript.buildParticipant.parser"
+            name="JavaScript parser"
+            nature="org.eclipse.dltk.javascript.core.nature">
+      </buildParticipant>
     <buildParticipant
       class="org.eclipse.dltk.internal.javascript.parser.JavaScriptTodoParserType"
       id="org.eclipse.dltk.javascript.todo"
       name="JavaScript TODO task parser"
       nature="org.eclipse.dltk.javascript.core.nature">
+      <requires
+            id="org.eclipse.dltk.javascript.buildParticipant.parser">
+      </requires>
     </buildParticipant>
   </extension>   
    
