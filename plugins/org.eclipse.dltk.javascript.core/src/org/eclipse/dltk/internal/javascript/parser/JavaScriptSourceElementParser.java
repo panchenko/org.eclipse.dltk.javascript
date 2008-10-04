@@ -118,16 +118,18 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 		if (reportedRefs.contains(ref))
 			return;
 		reportedRefs.add(ref);
-		Set sm = ref.getChilds(false);
 		String key = ref.getName();
 		if (sma != null)
 			key = sma + '.' + key;
-		Iterator i = sm.iterator();
-		while (i.hasNext()) {
-			Object next = i.next();
-			if (next instanceof IReference) {
-				IReference refa = (IReference) next;
-				reportRef(refa, key, level + 1);
+		if (level == 0) {
+			Set sm = ref.getChilds(false);
+			Iterator i = sm.iterator();
+			while (i.hasNext()) {
+				Object next = i.next();
+				if (next instanceof IReference) {
+					IReference refa = (IReference) next;
+					reportRef(refa, key, level + 1);
+				}
 			}
 		}
 		// contibuting field to index
