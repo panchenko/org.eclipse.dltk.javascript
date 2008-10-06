@@ -54,4 +54,8 @@ public class JavaScriptLanguageToolkit extends AbstractLanguageToolkit {
 		return false;
 	}
 
+	public String getPreferenceQualifier() {
+		return JavaScriptPlugin.PLUGIN_ID;
+	}
+
 }
