@@ -12,6 +12,7 @@
       <debugModel
             debugModelId="org.eclipse.dltk.debug.javascriptModel"
             natureId="org.eclipse.dltk.javascript.core.nature"
+            debugToolkit="org.eclipse.dltk.javascript.internal.debug.JavascriptDebugToolkit"
             typeFactory="org.eclipse.dltk.javascript.internal.debug.JavaScriptTypeFactory">
       </debugModel>
    </extension> 
