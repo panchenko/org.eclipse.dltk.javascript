@@ -44,9 +44,18 @@ public abstract class AbstractCallResultReference implements IReference,
 			return null;
 		Iterator i = hashSet.iterator();
 		while (i.hasNext()) {
-			IReference r = (IReference) i.next();
-			if (r.getName().equals(key))
-				return r;
+			Object next = i.next();
+			if (next instanceof IReference) {
+				IReference r = (IReference) next;
+				if (r.getName().equals(key))
+					return r;
+			} else if (next instanceof HostCollection) {
+				HostCollection hc = (HostCollection) next;
+				IReference reference = hc.getReference(key);
+				if (reference != null) {
+					return reference;
+				}
+			}
 		}
 		return null;
 	}
