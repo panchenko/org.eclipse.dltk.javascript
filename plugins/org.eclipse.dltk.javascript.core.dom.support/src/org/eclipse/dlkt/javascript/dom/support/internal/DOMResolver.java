@@ -24,10 +24,12 @@ import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
 import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.MemberBox;
 import org.mozilla.javascript.NativeJavaMethod;
 import org.mozilla.javascript.NativeJavaObject;
+import org.mozilla.javascript.NativeJavaTopPackage;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -150,58 +152,65 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 
 	void fillMap(HashMap mp, Scriptable scope, boolean walkParent,
 			String idToFind) {
-		Scriptable prototype = scope.getPrototype();
-		if (prototype != null) {
-			fillMap(mp, prototype, walkParent, idToFind);
-			if (idToFind != null && mp.size() == 1)
-				return;
-		}
-		if (walkParent) {
-			Scriptable parentScope = scope.getParentScope();
-			if (parentScope != null) {
-				fillMap(mp, parentScope, walkParent, idToFind);
+		try {
+			// some scriptable want to have a context when you get the value or
+			// ids.
+			Context.enter();
+			Scriptable prototype = scope.getPrototype();
+			if (prototype != null) {
+				fillMap(mp, prototype, walkParent, idToFind);
 				if (idToFind != null && mp.size() == 1)
 					return;
 			}
-		}
-		Object[] allIds = null;
-		for (int a = 0; a < providers.length; a++) {
-			if (providers[a].canResolve(module)) {
-				allIds = providers[a].resolveIds(scope, idToFind);
-				if (allIds != null)
-					break;
+			if (walkParent) {
+				Scriptable parentScope = scope.getParentScope();
+				if (parentScope != null) {
+					fillMap(mp, parentScope, walkParent, idToFind);
+					if (idToFind != null && mp.size() == 1)
+						return;
+				}
 			}
-		}
-		if (allIds == null) {
-			if (scope instanceof ScriptableObject) {
-				allIds = ((ScriptableObject) scope).getAllIds();
-			} else {
-				allIds = scope.getIds();
+			Object[] allIds = null;
+			for (int a = 0; a < providers.length; a++) {
+				if (providers[a].canResolve(module)) {
+					allIds = providers[a].resolveIds(scope, idToFind);
+					if (allIds != null)
+						break;
+				}
 			}
-		}
-		for (int b = 0; b < allIds.length; b++) {
-			String key = allIds[b].toString();
-			if (idToFind != null && !idToFind.equals(key))
-				continue;
-			try {
-				Object object = null;
-				for (int a = 0; a < providers.length; a++) {
-					if (providers[a].canResolve(module)) {
-						object = providers[a].getProposal(scope, key);
-						if (object != null)
-							break;
+			if (allIds == null) {
+				if (scope instanceof ScriptableObject) {
+					allIds = ((ScriptableObject) scope).getAllIds();
+				} else {
+					allIds = scope.getIds();
+				}
+			}
+			for (int b = 0; b < allIds.length; b++) {
+				String key = allIds[b].toString();
+				if (idToFind != null && !idToFind.equals(key))
+					continue;
+				try {
+					Object object = null;
+					for (int a = 0; a < providers.length; a++) {
+						if (providers[a].canResolve(module)) {
+							object = providers[a].getProposal(scope, key);
+							if (object != null)
+								break;
+						}
 					}
+					if (object == null) {
+						object = scope.get(key, scope);
+					}
+					mp.put(key, object);
+					if (idToFind != null)
+						break;
+				} catch (Throwable e) {
+					e.printStackTrace();
 				}
-				if (object == null) {
-					object = scope.get(key, scope);
-				}
-				mp.put(key, object);
-				if (idToFind != null)
-					break;
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
 
+			}
+		} finally {
+			Context.exit();
 		}
 
 		return;
@@ -303,7 +312,8 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					uref = new UnknownReference(s, false);
 				}
 
-				if (object instanceof Function) {
+				if (!uref.isFunctionRef() && object instanceof Function
+						&& !(object instanceof NativeJavaTopPackage)) {
 					uref.setFunctionRef();
 				}
 				if (module instanceof ModelElement) {
@@ -334,6 +344,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					clz = methods[i].getReturnType();
 					break;
 				}
+				// TODO param names and method overrides (dup names)
 			}
 		}
 		if (clz == String.class) {
