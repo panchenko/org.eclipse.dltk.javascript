@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.eclipse.dltk.console.ConsoleRequest;
+import org.eclipse.dltk.console.IScriptExecResult;
 import org.eclipse.dltk.console.IScriptConsoleIO;
 import org.eclipse.dltk.console.IScriptInterpreter;
 import org.eclipse.dltk.console.InterpreterResponse;
+import org.eclipse.dltk.console.ScriptExecResult;
 import org.eclipse.dltk.console.ShellResponse;
 
 public class JavaScriptInterpreter implements IScriptInterpreter,
@@ -21,20 +23,14 @@ public class JavaScriptInterpreter implements IScriptInterpreter,
 
 	private IScriptConsoleIO protocol;
 
-	private String content;
-
 	private int state;
 
 	// IScriptInterpreter
-	public void exec(String command) throws IOException {
+	public IScriptExecResult exec(String command) throws IOException {
 		InterpreterResponse response = protocol.execInterpreter(command);
 
-		content = response.getContent();
 		state = response.getState();
-	}
-
-	public String getOutput() {
-		return content;
+		return new ScriptExecResult(response.getContent());
 	}
 
 	public int getState() {
