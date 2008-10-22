@@ -421,6 +421,7 @@
       class="org.eclipse.dltk.javascript.internal.debug.ui.JavaScriptDebugUILanguageToolkit"
       nature="org.eclipse.dltk.javascript.core.nature"/>
   </extension>
+  <!--
   <extension
         point="org.eclipse.ui.views">
      <view
@@ -450,5 +451,5 @@
         </viewShortcut>
      </perspectiveExtension>
   </extension>
-
+-->
 </plugin>
