@@ -121,4 +121,12 @@ public class CompletionStringParsing extends TestCase {
 				.parseCompletionString("someCode forms.xxx[xxx].yyy[yyy] ", true));
 
 	}
+	
+	public void testWithString() throws Exception
+	{
+		assertEquals("forms.xxx.[].yyy.[]", HostCollection
+				.parseCompletionString("forms.xxx['xxx'].yyy[\"yyy\"]", true));
+		assertEquals("", HostCollection
+				.parseCompletionString("forms.xxx['xxx'].yyy[\"yyy\"] ", true));
+	}
 }
