@@ -39,8 +39,20 @@ public class HostCollection {
 		int start = 0;
 		int current = id.length();
 		Stack inBrackStack = new Stack();
+		boolean inString = false;
 		for (int i = id.length(); --i >= 0;) {
 			char c = id.charAt(i);
+			if (c == '\"' || c == '\'') {
+				if (inString) {
+					inString = false;
+					continue;
+				}
+				// end of a string try to skip this.
+				inString = true;
+			}
+			if (inString)
+				continue;
+
 			if (c == ']') {
 				if (inBrackStack.isEmpty()) {
 					String brackets = "[]";
