@@ -2,6 +2,7 @@ package org.eclipse.dltk.javascript.internal.ui.preferences;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Preferences;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.ui.PreferencesAdapter;
 import org.eclipse.dltk.ui.preferences.AbstractConfigurationBlockPropertyAndPreferencePage;
@@ -56,6 +57,10 @@ public class JavaScriptTodoTaskPreferencePage extends
 
 	protected String getProjectHelpId() {
 		return null;
+	}
+
+	protected String getNatureId() {
+		return JavaScriptNature.NATURE_ID;
 	}
 
 	protected void setPreferenceStore() {
