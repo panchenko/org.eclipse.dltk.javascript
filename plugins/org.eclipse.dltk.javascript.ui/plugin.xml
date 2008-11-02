@@ -267,7 +267,7 @@
         <page
               category="org.eclipse.dltk.javascript.ui.javascript"
               class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptTodoTaskPreferencePage"
-              id="org.eclipse.dltk.javascript.ui.editor.TodoTask"
+              id="org.eclipse.dltk.javascript.preferences.todo"
               name="%TaskTagsPreferencePage.name"/>
 	          
 	    <page
@@ -310,7 +310,17 @@
       </enabledWhen>
       <keywordReference id="org.eclipse.dltk.ui.buildpath" />
     </page>    
-    
+    <page
+          category="org.eclipse.dltk.javascript.propertyPage"
+          class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptTodoTaskPreferencePage"
+          id="org.eclipse.dltk.javascript.propertyPage.todo"
+          name="%TaskTagsPropertyPagePage.name">
+      <enabledWhen>
+        <adapt type="org.eclipse.core.resources.IProject">
+          <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.dltk.javascript.core.nature"/>
+        </adapt>         
+      </enabledWhen>
+    </page>    
     <page
       name="%JavaScriptPropertyPage.name"
       class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptPropertyPage"
