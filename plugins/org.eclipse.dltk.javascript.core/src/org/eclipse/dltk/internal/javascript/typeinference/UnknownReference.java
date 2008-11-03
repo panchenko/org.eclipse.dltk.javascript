@@ -17,7 +17,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.core.CompletionProposal;
+import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.core.ModelElement;
+import org.eclipse.dltk.internal.core.SourceMethod;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 
 public class UnknownReference implements IReference, SelfCompletingReference {
@@ -153,9 +155,24 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 
 	public void addModelElements(Collection toAdd) {
 		if (parent != null) {
-			FakeField fakeField = new FakeField(parent, name, offset, length);
-			fakeField.setProposalInfo(getProposalInfo());
-			toAdd.add(fakeField);
+			if (isFunctionRef()) {
+				String[] params = null;
+				char[][] parameterNames = getParameterNames();
+				if (parameterNames != null) {
+					params = new String[parameterNames.length];
+					for (int i = 0; i < parameterNames.length; i++) {
+						params[i] = new String(parameterNames[i]);
+					}
+				}
+				MethodReference method = new MethodReference(parent, name,
+						params, getProposalInfo());
+				toAdd.add(method);
+			} else {
+				FakeField fakeField = new FakeField(parent, name, offset,
+						length);
+				fakeField.setProposalInfo(getProposalInfo());
+				toAdd.add(fakeField);
+			}
 		}
 	}
 
@@ -235,5 +252,50 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 	public int getKind() {
 		return isFunctionRef() ? CompletionProposal.METHOD_REF
 				: CompletionProposal.LOCAL_VARIABLE_REF;
+	}
+
+	private static class MethodReference extends SourceMethod implements
+			IProposalHolder {
+
+		private final String[] parameters;
+		private final String proposalInfo;
+
+		/**
+		 * @param parent
+		 * @param name
+		 */
+		public MethodReference(ModelElement parent, String name,
+				String[] parameters, String proposalInfo) {
+			super(parent, name);
+			this.parameters = parameters;
+			this.proposalInfo = proposalInfo;
+		}
+
+		/**
+		 * @see org.eclipse.dltk.internal.core.SourceMethod#getParameters()
+		 */
+		public String[] getParameters() throws ModelException {
+			if (parameters == null)
+				return new String[0];
+			return parameters;
+		}
+
+		public String getProposalInfo() {
+			return proposalInfo;
+		}
+
+		/**
+		 * @see org.eclipse.dltk.internal.core.SourceMethod#getParameterInitializers()
+		 */
+		public String[] getParameterInitializers() throws ModelException {
+			return null;
+		}
+
+		/**
+		 * @see org.eclipse.dltk.internal.core.ModelElement#exists()
+		 */
+		public boolean exists() {
+			return true;
+		}
 	}
 }

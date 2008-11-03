@@ -160,7 +160,7 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 		for (int i = 0; i < lstReadonly.size(); i++) {
 			IReference element = (IReference) lstReadonly.get(i);
 			IReference child = element.getChild(key, resolveLocals);
-			if (child != null && alReadonly.contains(child))
+			if (child != null && !alReadonly.contains(child))
 				alReadonly.add(child);
 		}
 		if (alReferences.size() == 0 && alReadonly.size() == 0)

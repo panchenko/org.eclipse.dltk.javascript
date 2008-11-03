@@ -18,7 +18,7 @@ import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.core.SourceField;
 import org.eclipse.dltk.internal.core.SourceRange;
 
-public class FakeField extends SourceField {
+public class FakeField extends SourceField implements IProposalHolder {
 
 	private int offset;
 	private int length;
@@ -56,7 +56,7 @@ public class FakeField extends SourceField {
 	}
 
 	/**
-	 * @return the proposalInfo
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.IProposalHolder#getProposalInfo()
 	 */
 	public String getProposalInfo() {
 		return proposalInfo;
