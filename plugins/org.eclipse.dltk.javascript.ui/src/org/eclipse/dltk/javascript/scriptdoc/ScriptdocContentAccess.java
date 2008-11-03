@@ -22,7 +22,7 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.corext.documentation.SingleCharReader;
-import org.eclipse.dltk.internal.javascript.typeinference.FakeField;
+import org.eclipse.dltk.internal.javascript.typeinference.IProposalHolder;
 
 class JavaDocCommentReader extends SingleCharReader {
 
@@ -183,16 +183,16 @@ public class ScriptdocContentAccess {
 	/**
 	 * Gets a reader for an IMember's Javadoc comment content from the source
 	 * attachment. The content does contain only the text from the comment
-	 * without the Javadoc leading star characters. Returns <code>null</code>
-	 * if the member does not contain a Javadoc comment or if no source is
+	 * without the Javadoc leading star characters. Returns <code>null</code> if
+	 * the member does not contain a Javadoc comment or if no source is
 	 * available.
 	 * 
 	 * @param member
 	 *            The member to get the Javadoc of.
 	 * @param allowInherited
 	 *            For methods with no (Javadoc) comment, the comment of the
-	 *            overridden class is returned if <code>allowInherited</code>
-	 *            is <code>true</code>.
+	 *            overridden class is returned if <code>allowInherited</code> is
+	 *            <code>true</code>.
 	 * @return Returns a reader for the Javadoc comment content or
 	 *         <code>null</code> if the member does not contain a Javadoc
 	 *         comment or if no source is available
@@ -259,8 +259,8 @@ public class ScriptdocContentAccess {
 	 *            the member to get the Javadoc of.
 	 * @param allowInherited
 	 *            for methods with no (Javadoc) comment, the comment of the
-	 *            overridden class is returned if <code>allowInherited</code>
-	 *            is <code>true</code>
+	 *            overridden class is returned if <code>allowInherited</code> is
+	 *            <code>true</code>
 	 * @param useAttachedJavadoc
 	 *            if <code>true</code> Javadoc will be extracted from attached
 	 *            Javadoc if there's no source
@@ -287,9 +287,10 @@ public class ScriptdocContentAccess {
 			// if (s != null)
 			// return new StringReader(s);
 		}
-		if (member instanceof FakeField
-				&& ((FakeField) member).getProposalInfo() != null) {
-			return new StringReader(((FakeField) member).getProposalInfo());
+		if (member instanceof IProposalHolder
+				&& ((IProposalHolder) member).getProposalInfo() != null) {
+			return new StringReader(((IProposalHolder) member)
+					.getProposalInfo());
 		}
 		return null;
 	}
@@ -304,8 +305,8 @@ public class ScriptdocContentAccess {
 	 *            The member to get the Javadoc of.
 	 * @param allowInherited
 	 *            For methods with no (Javadoc) comment, the comment of the
-	 *            overridden class is returned if <code>allowInherited</code>
-	 *            is <code>true</code>.
+	 *            overridden class is returned if <code>allowInherited</code> is
+	 *            <code>true</code>.
 	 * @return Returns a reader for the Javadoc comment content in HTML or
 	 *         <code>null</code> if the member does not contain a Javadoc
 	 *         comment or if no source is available
