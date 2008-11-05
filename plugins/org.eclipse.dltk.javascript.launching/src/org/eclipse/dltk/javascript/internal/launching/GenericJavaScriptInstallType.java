@@ -2,19 +2,15 @@ package org.eclipse.dltk.javascript.internal.launching;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.dltk.core.environment.EnvironmentPathUtils;
 import org.eclipse.dltk.core.environment.IDeployment;
 import org.eclipse.dltk.core.environment.IFileHandle;
-import org.eclipse.dltk.core.internal.environment.LocalEnvironment;
 import org.eclipse.dltk.internal.launching.AbstractInterpreterInstallType;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.launching.JavaScriptLaunchingPlugin;
@@ -39,15 +35,15 @@ public class GenericJavaScriptInstallType extends
 	public LibraryLocation[] getDefaultLibraryLocations(
 			IFileHandle installLocation, EnvironmentVariable[] variables,
 			IProgressMonitor monitor) {
-		final List result = new ArrayList();
-		ClasspathUtils.collectClasspath(
-				new String[] { EMBEDDED_RHINO_BUNDLE_ID }, result);
-		if (!result.isEmpty()) {
-			final IPath fullPath = EnvironmentPathUtils.getFullPath(
-					LocalEnvironment.getInstance(), new Path((String) result
-							.get(0)));
-			return new LibraryLocation[] { new LibraryLocation(fullPath) };
-		}
+		// final List result = new ArrayList();
+		// ClasspathUtils.collectClasspath(
+		// new String[] { EMBEDDED_RHINO_BUNDLE_ID }, result);
+		// if (!result.isEmpty()) {
+		// final IPath fullPath = EnvironmentPathUtils.getFullPath(
+		// LocalEnvironment.getInstance(), new Path((String) result
+		// .get(0)));
+		// return new LibraryLocation[] { new LibraryLocation(fullPath) };
+		// }
 		return new LibraryLocation[0];
 	}
 

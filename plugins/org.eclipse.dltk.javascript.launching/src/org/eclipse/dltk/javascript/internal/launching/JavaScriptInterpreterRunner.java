@@ -11,10 +11,7 @@
 package org.eclipse.dltk.javascript.internal.launching;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -176,30 +173,14 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 								GenericJavaScriptInstallType.EMBEDDED_RHINO_BUNDLE_ID,
 								GenericJavaScriptInstallType.DBGP_FOR_RHINO_BUNDLE_ID },
 						result);
-		String[] classPath = null;
 		try {
-			classPath = computeBaseClassPath(myJavaProject);
-		} catch (CoreException e) {
-		}
-		if (classPath != null) {
+			final String[] classPath = computeBaseClassPath(myJavaProject);
 			for (int i = 0; i < classPath.length; ++i) {
 				result.add(classPath[i]);
 			}
+		} catch (CoreException e) {
 		}
 		return (String[]) result.toArray(new String[result.size()]);
-	}
-
-	private static URI toURI(String externalForm) throws MalformedURLException {
-		URL url = new URL(replaceSpaces(externalForm));
-		try {
-			return new URI(url.toString());
-		} catch (URISyntaxException e) {
-			throw new MalformedURLException(e.getMessage());
-		}
-	}
-
-	private static String replaceSpaces(String text) {
-		return text.replaceAll(" ", "%20");
 	}
 
 	protected static String[] computeBaseClassPath(IJavaProject myJavaProject)
