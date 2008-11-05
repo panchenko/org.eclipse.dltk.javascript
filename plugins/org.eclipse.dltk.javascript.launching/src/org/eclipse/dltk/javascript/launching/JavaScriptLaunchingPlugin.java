@@ -3,8 +3,9 @@ package org.eclipse.dltk.javascript.launching;
 import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.dltk.core.environment.IDeployment;
 import org.eclipse.dltk.core.environment.IExecutionEnvironment;
 import org.eclipse.dltk.core.environment.IFileHandle;
@@ -16,11 +17,11 @@ import org.osgi.framework.BundleContext;
 public class JavaScriptLaunchingPlugin extends Plugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.dltk.tcl.launching";
-	
+	public static final String PLUGIN_ID = "org.eclipse.dltk.javascript.launching"; //$NON-NLS-1$
+
 	// The shared instance
 	private static JavaScriptLaunchingPlugin plugin;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -29,16 +30,14 @@ public class JavaScriptLaunchingPlugin extends Plugin {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * @see Plugin#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * @see Plugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -47,7 +46,7 @@ public class JavaScriptLaunchingPlugin extends Plugin {
 
 	/**
 	 * Returns the shared instance
-	 *
+	 * 
 	 * @return the shared instance
 	 */
 	public static JavaScriptLaunchingPlugin getDefault() {
@@ -57,8 +56,15 @@ public class JavaScriptLaunchingPlugin extends Plugin {
 	public static String getUniqueIdentifier() {
 		return PLUGIN_ID;
 	}
-	
-	public IFileHandle getConsoleProxy(IExecutionEnvironment exeEnv) throws IOException {
+
+	public static void error(Throwable t) {
+		plugin.getLog().log(
+				new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, t.toString(),
+						t));
+	}
+
+	public IFileHandle getConsoleProxy(IExecutionEnvironment exeEnv)
+			throws IOException {
 		IDeployment deployment = exeEnv.createDeployment();
 		IPath path = deployment.add(this.getBundle(), "console");
 		path.append("ConsoleProxy.js");
