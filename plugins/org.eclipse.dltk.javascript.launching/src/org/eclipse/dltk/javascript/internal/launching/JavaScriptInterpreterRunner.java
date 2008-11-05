@@ -10,25 +10,25 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.launching;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.console.ScriptConsoleServer;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IScriptProject;
@@ -47,7 +47,6 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
-import org.osgi.framework.Bundle;
 
 public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 		implements IConfigurableRunner {
@@ -170,30 +169,24 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 
 	public static String[] getClassPath(IJavaProject myJavaProject)
 			throws IOException, URISyntaxException {
-		Bundle bundle = Platform
-				.getBundle(GenericJavaScriptInstallType.EMBEDDED_RHINO_BUNDLE_ID);
-
-		Bundle bundle1 = Platform
-				.getBundle(GenericJavaScriptInstallType.DBGP_FOR_RHINO_BUNDLE_ID);
-		URL resolve = FileLocator.toFileURL(bundle1
-				.getResource("RhinoRunner.class"));
-		String externalForm = resolve.toExternalForm();
-		File fl = new File(toURI(externalForm)).getParentFile();
-		URL fileURL = FileLocator.toFileURL(bundle
-				.getResource("org/mozilla/classfile/ByteCode.class"));
-		String externalForm2 = fileURL.toExternalForm();
-		File fl1 = new File(toURI(externalForm2)).getParentFile()
-				.getParentFile().getParentFile().getParentFile();
+		final List result = new ArrayList();
+		ClasspathUtils
+				.collectClasspath(
+						new String[] {
+								GenericJavaScriptInstallType.EMBEDDED_RHINO_BUNDLE_ID,
+								GenericJavaScriptInstallType.DBGP_FOR_RHINO_BUNDLE_ID },
+						result);
 		String[] classPath = null;
 		try {
 			classPath = computeBaseClassPath(myJavaProject);
 		} catch (CoreException e) {
 		}
-		String[] newClassPath = new String[classPath.length + 2];
-		System.arraycopy(classPath, 0, newClassPath, 0, classPath.length);
-		newClassPath[classPath.length] = fl.getAbsolutePath();
-		newClassPath[classPath.length + 1] = fl1.getAbsolutePath();
-		return newClassPath;
+		if (classPath != null) {
+			for (int i = 0; i < classPath.length; ++i) {
+				result.add(classPath[i]);
+			}
+		}
+		return (String[]) result.toArray(new String[result.size()]);
 	}
 
 	private static URI toURI(String externalForm) throws MalformedURLException {
@@ -212,7 +205,7 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 	protected static String[] computeBaseClassPath(IJavaProject myJavaProject)
 			throws CoreException {
 		if (!myJavaProject.exists())
-			return new String[0];
+			return CharOperation.NO_STRINGS;
 		return JavaRuntime.computeDefaultRuntimeClassPath(myJavaProject);
 	}
 

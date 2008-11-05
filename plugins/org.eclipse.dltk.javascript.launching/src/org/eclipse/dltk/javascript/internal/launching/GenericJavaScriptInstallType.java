@@ -1,24 +1,18 @@
 package org.eclipse.dltk.javascript.internal.launching;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.dltk.core.environment.EnvironmentPathUtils;
 import org.eclipse.dltk.core.environment.IDeployment;
-import org.eclipse.dltk.core.environment.IEnvironment;
 import org.eclipse.dltk.core.environment.IFileHandle;
 import org.eclipse.dltk.core.internal.environment.LocalEnvironment;
 import org.eclipse.dltk.internal.launching.AbstractInterpreterInstallType;
@@ -27,49 +21,33 @@ import org.eclipse.dltk.javascript.launching.JavaScriptLaunchingPlugin;
 import org.eclipse.dltk.launching.EnvironmentVariable;
 import org.eclipse.dltk.launching.IInterpreterInstall;
 import org.eclipse.dltk.launching.LibraryLocation;
-import org.osgi.framework.Bundle;
 
 public class GenericJavaScriptInstallType extends
 		AbstractInterpreterInstallType {
 
-	public static final String DBGP_FOR_RHINO_BUNDLE_ID = "org.eclipse.dltk.javascript.rhino.dbgp";
-	public static final String EMBEDDED_RHINO_BUNDLE_ID = "org.eclipse.dltk.javascript.rhino";
+	public static final String DBGP_FOR_RHINO_BUNDLE_ID = "org.eclipse.dltk.javascript.rhino.dbgp"; //$NON-NLS-1$
+	public static final String EMBEDDED_RHINO_BUNDLE_ID = "org.eclipse.dltk.javascript.rhino"; //$NON-NLS-1$
 
 	public String getNatureId() {
 		return JavaScriptNature.NATURE_ID;
 	}
 
 	public String getName() {
-		return "Generic Rhino install";
+		return "Generic Rhino install"; //$NON-NLS-1$
 	}
 
-	public LibraryLocation[] getDefaultLibraryLocations(IFileHandle installLocation,
-			EnvironmentVariable[] variables, IProgressMonitor monitor) {
-		Bundle bundle = Platform.getBundle(EMBEDDED_RHINO_BUNDLE_ID);
-
-		URL resolve;
-		try {
-			resolve = FileLocator.toFileURL(bundle
-					.getResource("/org/mozilla/classfile/ByteCode.class"));
-			try {
-
-				File fl = new File(new URI(resolve.toString())).getParentFile()
-						.getParentFile().getParentFile().getParentFile();				
-				IEnvironment env = LocalEnvironment.getInstance();
-				Path localPath = new Path(fl
-						.getAbsolutePath());
-				IPath fullPath = EnvironmentPathUtils.getFullPath(env, localPath);
-				LibraryLocation location = new LibraryLocation(fullPath);
-				return new LibraryLocation[] { location  };
-			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+	public LibraryLocation[] getDefaultLibraryLocations(
+			IFileHandle installLocation, EnvironmentVariable[] variables,
+			IProgressMonitor monitor) {
+		final List result = new ArrayList();
+		ClasspathUtils.collectClasspath(
+				new String[] { EMBEDDED_RHINO_BUNDLE_ID }, result);
+		if (!result.isEmpty()) {
+			final IPath fullPath = EnvironmentPathUtils.getFullPath(
+					LocalEnvironment.getInstance(), new Path((String) result
+							.get(0)));
+			return new LibraryLocation[] { new LibraryLocation(fullPath) };
 		}
-
 		return new LibraryLocation[0];
 	}
 
