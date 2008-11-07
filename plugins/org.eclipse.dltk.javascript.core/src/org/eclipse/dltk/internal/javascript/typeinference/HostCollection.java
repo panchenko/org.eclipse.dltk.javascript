@@ -39,18 +39,29 @@ public class HostCollection {
 		int start = 0;
 		int current = id.length();
 		Stack inBrackStack = new Stack();
-		boolean inString = false;
+		boolean inStringSingle = false;
+		boolean inStringDouble = false;
 		for (int i = id.length(); --i >= 0;) {
 			char c = id.charAt(i);
-			if (c == '\"' || c == '\'') {
-				if (inString) {
-					inString = false;
+			if (c == '\'') {
+				if (inStringSingle) {
+					inStringSingle = false;
 					continue;
 				}
 				// end of a string try to skip this.
-				inString = true;
+				if (!inStringDouble)
+					inStringSingle = true;
 			}
-			if (inString)
+			if (c == '\"') {
+				if (inStringDouble) {
+					inStringDouble = false;
+					continue;
+				}
+				// end of a string try to skip this.
+				if (!inStringSingle)
+					inStringDouble = true;
+			}
+			if (inStringSingle || inStringDouble)
 				continue;
 
 			if (c == ']') {
@@ -91,6 +102,7 @@ public class HostCollection {
 				continue;
 			}
 			if (c != '.'
+					&& inBrackStack.isEmpty()
 					&& (Character.isWhitespace(c) || !Character
 							.isJavaIdentifierPart(c))) {
 				start = i + 1;
