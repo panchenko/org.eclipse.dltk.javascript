@@ -73,7 +73,7 @@ public class JavascriptSourceViewerConfiguration extends
 	public String[] getIndentPrefixes(ISourceViewer sourceViewer,
 			String contentType) {
 		// XXX: what happens here?.. why " " ?
-		return new String[] { "\t", "    " };
+		return new String[] { "\t", "    ", "" };
 	}
 
 	/*
