@@ -122,11 +122,32 @@ public class CompletionStringParsing extends TestCase {
 
 	}
 	
+	
+	public void testWithMultiplyParams() throws Exception
+	{
+		assertEquals("forms.xxx.[].yyy.[]", HostCollection
+				.parseCompletionString("someCode forms.xxx[xxx,yyy].yyy[xxx,yyy]", true));
+		assertEquals("forms.xxx.[].yyy.[]", HostCollection
+				.parseCompletionString("someCode forms.xxx[xxx , yyy].yyy[xxx , yyy, yyy]", true));
+		assertEquals("a", HostCollection
+				.parseCompletionString("someCode forms.xxx[xxx,yyy].yyy[a", true));
+		assertEquals("a", HostCollection
+				.parseCompletionString("someCode forms.xxx[xxx , yyy].yyy[xxx,a", true));
+		assertEquals("a", HostCollection
+				.parseCompletionString("someCode forms.xxx[xxx , yyy].yyy[xxx , a", true));
+	}
+	
 	public void testWithString() throws Exception
 	{
 		assertEquals("forms.xxx.[].yyy.[]", HostCollection
 				.parseCompletionString("forms.xxx['xxx'].yyy[\"yyy\"]", true));
-		assertEquals("", HostCollection
-				.parseCompletionString("forms.xxx['xxx'].yyy[\"yyy\"] ", true));
+		assertEquals("forms.xxx.[].yyy.[]", HostCollection
+				.parseCompletionString("forms.xxx['xxx yyy'].yyy[\"xxx yyy\"]", true));
+		assertEquals("forms.xxx.[].yyy.[]", HostCollection
+				.parseCompletionString("forms.xxx['xxx yyy'].yyy[\"xxx 'yyy'\"]", true));
+		assertEquals("\"xxx 'yyy'\"", HostCollection
+				.parseCompletionString("\"xxx 'yyy'\"", true));
+		assertEquals("'xxx \"yyy\"'", HostCollection
+				.parseCompletionString("'xxx \"yyy\"'", true));
 	}
 }
