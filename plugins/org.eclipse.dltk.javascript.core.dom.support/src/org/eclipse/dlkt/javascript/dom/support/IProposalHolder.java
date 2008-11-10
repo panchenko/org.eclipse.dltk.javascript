@@ -5,6 +5,8 @@ package org.eclipse.dlkt.javascript.dom.support;
 
 import java.net.URL;
 
+import org.eclipse.core.resources.IFile;
+
 /**
  * This class is a proposal holder around a function object. So that you can
  * give it a help text and parameter names.
@@ -25,4 +27,6 @@ public interface IProposalHolder {
 	public URL getImageURL();
 
 	public boolean isFunctionRef();
+
+	public IFile getSourceFile();
 }

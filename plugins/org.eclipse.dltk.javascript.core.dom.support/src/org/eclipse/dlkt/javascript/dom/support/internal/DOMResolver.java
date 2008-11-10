@@ -8,11 +8,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dlkt.javascript.dom.support.IDesignTimeDOMProvider;
 import org.eclipse.dlkt.javascript.dom.support.IProposalHolder;
+import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IReferenceResolver;
@@ -278,6 +280,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			String s = (String) iterator.next();
 
 			if (s.startsWith(key)) {
+				IFile sourceFile = null;
 				Object object = globals.get(s);
 				UnknownReference uref = null;
 				if (object instanceof UnknownReferenceScope) {
@@ -289,6 +292,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						IProposalHolder fapn = (IProposalHolder) object;
 						uref.setParameterNames(fapn.getParameterNames());
 						uref.setProposalInfo(fapn.getProposalInfo());
+						sourceFile = fapn.getSourceFile();
 						uref.setImageUrl(fapn.getImageURL());
 						if (fapn.isFunctionRef())
 							uref.setFunctionRef();
@@ -305,6 +309,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					uref.setParameterNames(fapn.getParameterNames());
 					uref.setProposalInfo(fapn.getProposalInfo());
 					uref.setImageUrl(fapn.getImageURL());
+					sourceFile = fapn.getSourceFile();
 					object = fapn.getObject();
 					if (fapn.isFunctionRef())
 						uref.setFunctionRef();
@@ -316,7 +321,14 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						&& !(object instanceof NativeJavaTopPackage)) {
 					uref.setFunctionRef();
 				}
-				if (module instanceof ModelElement) {
+
+				if (sourceFile != null) {
+					ISourceModule sourceFileModule = DLTKCore
+							.createSourceModuleFrom(sourceFile);
+					uref.setLocationInformation(
+							(ModelElement) sourceFileModule, uref.getOffset(),
+							uref.getLength());
+				} else if (module instanceof ModelElement) {
 					uref.setLocationInformation((ModelElement) module, uref
 							.getOffset(), uref.getLength());
 				}
