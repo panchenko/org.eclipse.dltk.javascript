@@ -10,7 +10,6 @@
 package org.eclipse.dltk.javascript.internal.core.codeassist.selection;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -75,9 +74,8 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 		} else {
 			processGlobals(buildContext2, buildContext, result, selection);
 		}
-		HashSet sm = new HashSet(result);
-		IModelElement[] resultA = new IModelElement[sm.size()];
-		sm.toArray(resultA);
+		IModelElement[] resultA = new IModelElement[result.size()];
+		result.toArray(resultA);
 		for (int j = 0; j < resultA.length; j++) {
 			if (resultA[j] instanceof IField) {
 				if (resultA[j] instanceof FakeField) {
