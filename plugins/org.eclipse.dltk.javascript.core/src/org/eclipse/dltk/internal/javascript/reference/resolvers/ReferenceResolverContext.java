@@ -10,12 +10,15 @@
 package org.eclipse.dltk.internal.javascript.reference.resolvers;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
+import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 
 public final class ReferenceResolverContext {
 
@@ -44,7 +47,16 @@ public final class ReferenceResolverContext {
 	}
 
 	public Set resolveGlobals(String id) {
-		HashSet sm = new HashSet();
+		TreeSet sm = new TreeSet(new Comparator() {
+
+			public int compare(Object o1, Object o2) {
+				if (o1 instanceof IReference && o2 instanceof IReference) {
+					return ((IReference) o1).getName().compareToIgnoreCase(
+							((IReference) o2).getName());
+				}
+				return 0;
+			}
+		});
 		for (int a = 0; a < resolvers.size(); a++) {
 			IReferenceResolver res = (IReferenceResolver) resolvers.get(a);
 			Set result = res.resolveGlobals(id);
