@@ -416,7 +416,7 @@ public class TypeInferencer {
 					evaluateReference = new UnknownReference(key, false);
 				}
 				evaluateReference.setLocationInformation(module, firstChild
-						.getPosition(), key.length());
+						.getPosition() + 1, key.length());
 				evaluateReference.setLocal(true);
 				collection.write(key, evaluateReference);
 				firstChild = firstChild.getNext();
