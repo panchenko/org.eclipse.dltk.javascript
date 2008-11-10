@@ -104,7 +104,6 @@ public class NativeDateReference extends UnknownReference {
 	 */
 	public NativeDateReference(String paramOrVarName) {
 		super(paramOrVarName, false);
-		setFunctionRef();
 	}
 
 	/**
