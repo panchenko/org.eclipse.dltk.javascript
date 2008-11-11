@@ -103,6 +103,10 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 						IReference r = (IReference) next;
 						if (r.getName().equals(selection))
 							r.addModelElements(result);
+					} else if (next instanceof IModelElement
+							&& ((IModelElement) next).getElementName().equals(
+									selection)) {
+						result.add(next);
 					}
 				}
 			}
