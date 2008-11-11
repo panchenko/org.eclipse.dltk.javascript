@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
@@ -54,12 +55,21 @@ public final class ReferenceResolverContext {
 					return ((IReference) o1).getName().compareToIgnoreCase(
 							((IReference) o2).getName());
 				}
+				if (o1 instanceof IModelElement && o2 instanceof IReference) {
+					return ((IModelElement) o1).getElementName()
+							.compareToIgnoreCase(((IReference) o2).getName());
+				}
+				if (o1 instanceof IReference && o2 instanceof IModelElement) {
+					return ((IReference) o1).getName().compareToIgnoreCase(
+							((IModelElement) o2).getElementName());
+				}
 				return 0;
 			}
 		});
 		for (int a = 0; a < resolvers.size(); a++) {
 			IReferenceResolver res = (IReferenceResolver) resolvers.get(a);
 			Set result = res.resolveGlobals(id);
+			sm.removeAll(result);
 			sm.addAll(result);
 		}
 		return sm;
