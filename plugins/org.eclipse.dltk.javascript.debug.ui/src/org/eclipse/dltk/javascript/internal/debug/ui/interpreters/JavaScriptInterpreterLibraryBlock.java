@@ -10,19 +10,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.debug.ui.interpreters;
 
-
 import org.eclipse.dltk.internal.debug.ui.interpreters.AbstractInterpreterLibraryBlock;
 import org.eclipse.dltk.internal.debug.ui.interpreters.AddScriptInterpreterDialog;
 import org.eclipse.dltk.internal.debug.ui.interpreters.LibraryLabelProvider;
-import org.eclipse.dltk.javascript.internal.debug.ui.JavaScriptDebugUIPlugin;
-import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
-
 
 /**
  * Control used to edit the libraries associated with a Interpreter install
  */
-public class JavaScriptInterpreterLibraryBlock extends AbstractInterpreterLibraryBlock {
+public class JavaScriptInterpreterLibraryBlock extends
+		AbstractInterpreterLibraryBlock {
 
 	public JavaScriptInterpreterLibraryBlock(AddScriptInterpreterDialog d) {
 		super(d);
@@ -30,8 +27,5 @@ public class JavaScriptInterpreterLibraryBlock extends AbstractInterpreterLibrar
 
 	protected IBaseLabelProvider getLabelProvider() {
 		return new LibraryLabelProvider();
-	}
-	protected IDialogSettings getDialogSettions() {
-		return JavaScriptDebugUIPlugin.getDefault().getDialogSettings();
 	}
 }
