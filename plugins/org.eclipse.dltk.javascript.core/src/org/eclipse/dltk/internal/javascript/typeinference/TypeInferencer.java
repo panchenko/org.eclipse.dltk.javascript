@@ -94,6 +94,12 @@ final class TransparentRef implements IReference {
 				&& queryElement != this
 				&& !(queryElement instanceof CombinedOrReference && ((CombinedOrReference) queryElement)
 						.contains(this))) {
+			// make sure that this doesn't become a transparent to a transparent
+			// (because then circular references can happen)
+			// just point to the real reference.
+			while (queryElement instanceof TransparentRef) {
+				queryElement = ((TransparentRef) queryElement).evaluateReference;
+			}
 			this.evaluateReference = queryElement;
 		}
 		Iterator it = s.iterator();
