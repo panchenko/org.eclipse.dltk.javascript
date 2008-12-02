@@ -421,35 +421,24 @@
       class="org.eclipse.dltk.javascript.internal.debug.ui.JavaScriptDebugUILanguageToolkit"
       nature="org.eclipse.dltk.javascript.core.nature"/>
   </extension>
-  <!--
-  <extension
-        point="org.eclipse.ui.views">
-     <view
-           category="org.eclipse.debug.ui "
-           class="org.eclipse.dltk.javascript.internal.debug.ui.scriptconsole.DebugScriptingConsole"
-           icon="icons/scriptcons_view.gif"
-           id="org.eclipse.dltk.javascript.debug.ui.scriptconsole"
-           name="Debug Scripting Console">
-     </view>
-  </extension>
+  
   <extension
         point="org.eclipse.ui.perspectiveExtensions">
      <perspectiveExtension
            targetID="org.eclipse.debug.ui.DebugPerspective">
         <view
-              id="org.eclipse.dltk.javascript.debug.ui.scriptconsole"
+              id="org.eclipse.dltk.debug.ui.ScriptDisplayView"
               ratio="0.5"
               relationship="stack"
               relative="org.eclipse.debug.ui.VariableView"
               visible="true">
         </view>
         <showInPart
-              id="org.eclipse.dltk.javascript.debug.ui.scriptconsole">
+              id="org.eclipse.dltk.debug.ui.ScriptDisplayView">
         </showInPart>
         <viewShortcut
-              id="org.eclipse.dltk.javascript.debug.ui.scriptconsole">
+              id="org.eclipse.dltk.debug.ui.ScriptDisplayView">
         </viewShortcut>
      </perspectiveExtension>
   </extension>
--->
 </plugin>
