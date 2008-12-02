@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Design Time Object Model Support Plug-in
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.dltk.javascript.core.dom.support;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.eclipse.dlkt.javascript.dom.support.internal.Activator
@@ -13,3 +13,4 @@ Require-Bundle: org.eclipse.ui,
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.dlkt.javascript.dom.support
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Bundle-Vendor: %pluginProvider
