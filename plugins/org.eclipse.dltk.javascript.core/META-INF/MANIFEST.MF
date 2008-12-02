@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: JavaScripr Core Plug-in
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.dltk.javascript.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: XORED
+Bundle-Vendor: %pluginProvider
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
