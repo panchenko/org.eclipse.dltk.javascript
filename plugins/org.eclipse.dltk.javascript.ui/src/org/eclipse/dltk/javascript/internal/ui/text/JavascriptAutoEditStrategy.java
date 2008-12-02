@@ -247,7 +247,7 @@ public class JavascriptAutoEditStrategy extends
 
 			// only shift if the last java line is further up and is a braceless
 			// block candidate
-			if (lastLine < line) {
+			if (lastLine <= line) {
 
 				JavaIndenter indenter = new JavaIndenter(d, scanner, fProject);
 				StringBuffer indent = indenter.computeIndentation(p, true);
@@ -441,8 +441,8 @@ public class JavascriptAutoEditStrategy extends
 	 * @param max
 	 *            the max position
 	 * @return an insert position relative to the line start if
-	 *         <code>line</code> contains a parenthesized expression that can
-	 *         be followed by a block, -1 otherwise
+	 *         <code>line</code> contains a parenthesized expression that can be
+	 *         followed by a block, -1 otherwise
 	 */
 	private static int computeAnonymousPosition(IDocument document, int offset,
 			String partitioning, int max) {
@@ -515,8 +515,9 @@ public class JavascriptAutoEditStrategy extends
 	}
 
 	/**
-	 * Checks whether the content of <code>document</code> in the range (<code>offset</code>,
-	 * <code>length</code>) contains the <code>new</code> keyword.
+	 * Checks whether the content of <code>document</code> in the range (
+	 * <code>offset</code>, <code>length</code>) contains the <code>new</code>
+	 * keyword.
 	 * 
 	 * @param document
 	 *            the document being modified
@@ -575,9 +576,8 @@ public class JavascriptAutoEditStrategy extends
 	 *            considered
 	 * @param partitioning
 	 *            the document partitioning
-	 * @return <code>true</code> if the content of <code>document</code>
-	 *         looks like an anonymous class definition, <code>false</code>
-	 *         otherwise
+	 * @return <code>true</code> if the content of <code>document</code> looks
+	 *         like an anonymous class definition, <code>false</code> otherwise
 	 */
 	private static boolean looksLikeAnonymousClassDef(IDocument document,
 			String partitioning, JavaHeuristicScanner scanner, int position) {
@@ -606,8 +606,7 @@ public class JavascriptAutoEditStrategy extends
 	 * @param partitioning
 	 *            the document partitioning
 	 * @return <code>true</code> if <code>position</code> is in the default
-	 *         partition of <code>document</code>, <code>false</code>
-	 *         otherwise
+	 *         partition of <code>document</code>, <code>false</code> otherwise
 	 */
 	private static boolean isDefaultPartition(IDocument document, int position,
 			String partitioning) {
@@ -779,10 +778,10 @@ public class JavascriptAutoEditStrategy extends
 
 	/**
 	 * Returns the indentation of the line <code>line</code> in
-	 * <code>document</code>. The returned string may contain pairs of
-	 * leading slashes that are considered part of the indentation. The space
-	 * before the asterisk in a javadoc-like comment is not considered part of
-	 * the indentation.
+	 * <code>document</code>. The returned string may contain pairs of leading
+	 * slashes that are considered part of the indentation. The space before the
+	 * asterisk in a javadoc-like comment is not considered part of the
+	 * indentation.
 	 * 
 	 * @param document
 	 *            the document
@@ -911,9 +910,9 @@ public class JavascriptAutoEditStrategy extends
 	}
 
 	/**
-	 * Cuts the visual equivalent of <code>toDelete</code> characters out of
-	 * the indentation of line <code>line</code> in <code>document</code>.
-	 * Leaves leading comment signs alone.
+	 * Cuts the visual equivalent of <code>toDelete</code> characters out of the
+	 * indentation of line <code>line</code> in <code>document</code>. Leaves
+	 * leading comment signs alone.
 	 * 
 	 * @param document
 	 *            the document
@@ -1379,8 +1378,9 @@ public class JavascriptAutoEditStrategy extends
 	}
 
 	/*
-	 * @see org.eclipse.jface.text.IAutoIndentStrategy#customizeDocumentCommand(org.eclipse.jface.text.IDocument,
-	 *      org.eclipse.jface.text.DocumentCommand)
+	 * @see
+	 * org.eclipse.jface.text.IAutoIndentStrategy#customizeDocumentCommand(org
+	 * .eclipse.jface.text.IDocument, org.eclipse.jface.text.DocumentCommand)
 	 */
 	public void customizeDocumentCommand(IDocument d, DocumentCommand c) {
 		if (c.doit == false)
