@@ -12,6 +12,7 @@
  */
 package org.eclipse.dltk.internal.javascript.typeinference;
 
+import org.eclipse.dltk.core.IOpenable;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.core.ModelElement;
@@ -66,5 +67,21 @@ public class FakeField extends SourceField implements IProposalHolder {
 	 */
 	public String getProposalInfo() {
 		return proposalInfo;
+	}
+
+	/**
+	 * @see org.eclipse.dltk.internal.core.SourceRefElement#getOpenableParent()
+	 */
+	public IOpenable getOpenableParent() {
+
+		IOpenable openableParent = super.getOpenableParent();
+		try {
+			// test if a buffer can be made, if not then just return null.
+			// Is there a better way? (if it is not a script file)
+			openableParent.getBuffer();
+		} catch (Exception e) {
+			return null;
+		}
+		return openableParent;
 	}
 }
