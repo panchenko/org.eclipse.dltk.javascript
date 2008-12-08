@@ -18,6 +18,7 @@ import org.eclipse.dltk.core.IBuffer;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IOpenable;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
@@ -201,30 +202,35 @@ public class ScriptdocContentAccess {
 	 */
 	public static Reader getContentReader(IMember member, boolean allowInherited)
 			throws ModelException {
-		IBuffer buf = member.getOpenable().getBuffer();
-		if (buf == null) {
-			return null; // no source attachment found
-		}
-		try {
-			ISourceRange javadocRange = getJavadocRange(member);
+		IOpenable openable = member.getOpenable();
+		if (openable != null) {
+			IBuffer buf = openable.getBuffer();
+			if (buf == null) {
+				return null; // no source attachment found
+			}
+			try {
+				ISourceRange javadocRange = getJavadocRange(member);
 
-			if (javadocRange != null) {
-				JavaDocCommentReader reader = new JavaDocCommentReader(buf,
-						javadocRange.getOffset(), javadocRange.getOffset()
-								+ javadocRange.getLength() - 1);
-				if (!containsOnlyInheritDoc(reader, javadocRange.getLength())) {
-					reader.reset();
-					return reader;
+				if (javadocRange != null) {
+					JavaDocCommentReader reader = new JavaDocCommentReader(buf,
+							javadocRange.getOffset(), javadocRange.getOffset()
+									+ javadocRange.getLength() - 1);
+					if (!containsOnlyInheritDoc(reader, javadocRange
+							.getLength())) {
+						reader.reset();
+						return reader;
+					}
 				}
-			}
 
-			if (allowInherited
-					&& (member.getElementType() == IModelElement.METHOD)) {
-				return findDocInHierarchy((IMethod) member);
+				if (allowInherited
+						&& (member.getElementType() == IModelElement.METHOD)) {
+					return findDocInHierarchy((IMethod) member);
+				}
+			} catch (ModelException e) {
+				return null;
 			}
-		} catch (ModelException e) {
-			return null;
 		}
+
 		return null;
 	}
 
@@ -278,7 +284,9 @@ public class ScriptdocContentAccess {
 		if (contentReader != null)
 			return new JavaDoc2HTMLTextReader(contentReader);
 
-		if (useAttachedJavadoc && member.getOpenable().getBuffer() == null) { // only
+		IOpenable openable = member.getOpenable();
+		if (useAttachedJavadoc && openable != null
+				&& openable.getBuffer() == null) { // only
 			// if
 			// no
 			// source
