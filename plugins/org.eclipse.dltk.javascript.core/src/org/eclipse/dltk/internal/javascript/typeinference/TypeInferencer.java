@@ -30,6 +30,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
+import org.eclipse.dltk.utils.TextUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -714,15 +715,15 @@ public class TypeInferencer {
 		if (id == null)
 			return null;
 		NewReference ref = new NewReference(key, id, cs);
-		UnknownReference uncknownReference = new UnknownReference(key, false);
+		UnknownReference unknownReference = new UnknownReference(key, false);
 		if (id.equals("XML")) {
 			try {
 				String string = expression.getLastChild().getString();
-				modifyReferenceXML(uncknownReference, string);
+				modifyReferenceXML(unknownReference, string, cs);
 			} catch (ClassCastException e) {
 			}
 		}
-		CombinedOrReference ws = new CombinedOrReference(ref, uncknownReference);
+		CombinedOrReference ws = new CombinedOrReference(ref, unknownReference);
 		return ws;
 
 	}
@@ -740,44 +741,67 @@ public class TypeInferencer {
 	}
 
 	private static void modifyReferenceXML(
-			final UnknownReference uncknownReference, String string) {
+			final UnknownReference uncknownReference, String string,
+			final ReferenceResolverContext cs) {
 		try {
 			parser.parse(new ByteArrayInputStream(string.getBytes()),
 					new DefaultHandler() {
 
 						boolean has = false;
-						UnknownReference curReference = uncknownReference;
+						IReference curReference = uncknownReference;
 						Stack stack = new Stack();
 
 						public void endElement(String uri, String localName,
 								String name) throws SAXException {
-							if (!stack.isEmpty())
-								curReference = (UnknownReference) stack.pop();
+							if (!stack.isEmpty()) {
+								stack.pop();
+								if (!stack.isEmpty()) {
+									curReference = (IReference) stack.peek();
+								} else {
+									curReference = uncknownReference;
+								}
+							} else {
+								curReference = uncknownReference;
+							}
 						}
 
 						public void startElement(String uri, String localName,
 								String name, Attributes attributes)
 								throws SAXException {
+							if (name.indexOf(':') != -1) {
+								name = TextUtils.replace(name, ':', "::");
+							}
+
+							NewReference elementNewRef = new NewReference(name,
+									"XML", cs);
 							UnknownReference uncknownReference2 = new UnknownReference(
 									name, true);
 
+							CombinedOrReference corf = new CombinedOrReference(
+									elementNewRef, uncknownReference2);
+
 							int length = attributes.getLength();
 							if (has) {
-								curReference.setChild(name, uncknownReference2);
-								curReference = uncknownReference2;
+								curReference.setChild(name, corf);
+								curReference = corf;
 								stack.push(curReference);
 							}
 							for (int a = 0; a < length; a++) {
 								String val = "@" + attributes.getQName(a);
+
+								if (val.indexOf(':') != -1) {
+									val = TextUtils.replace(val, ':', "::");
+								}
+
+								NewReference attrNewRef = new NewReference(val,
+										"XMLATTR", null);
 								UnknownReference uncknownReference3 = new UnknownReference(
 										val, true);
-								curReference.setChild(val, uncknownReference3);
+								CombinedOrReference attrCorf = new CombinedOrReference(
+										attrNewRef, uncknownReference3);
+
+								curReference.setChild(val, attrCorf);
 							}
-							// if (has) {
-							// curReference.setChild(name, uncknownReference2);
-							// curReference = uncknownReference2;
-							// stack.push(curReference);
-							// }
 							has = true;
 						}
 

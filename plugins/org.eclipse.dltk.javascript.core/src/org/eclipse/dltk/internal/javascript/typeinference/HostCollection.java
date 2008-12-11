@@ -102,6 +102,7 @@ public class HostCollection {
 				continue;
 			}
 			if (c != '.'
+					&& c != ':'
 					&& inBrackStack.isEmpty()
 					&& (Character.isWhitespace(c) || !Character
 							.isJavaIdentifierPart(c))) {
