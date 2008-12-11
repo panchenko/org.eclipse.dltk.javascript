@@ -150,4 +150,10 @@ public class CompletionStringParsing extends TestCase {
 		assertEquals("'xxx \"yyy\"'", HostCollection
 				.parseCompletionString("'xxx \"yyy\"'", true));
 	}
+	
+	public void testXMLSyntax() throws Exception
+	{
+		assertEquals("_xml.articulo.art::articulo_catalago.art::articulo_borrador", HostCollection
+				.parseCompletionString("_xml.articulo.art::articulo_catalago.art::articulo_borrador", true));
+	}
 }
