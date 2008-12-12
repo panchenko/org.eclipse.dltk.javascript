@@ -1,5 +1,8 @@
 package org.eclipse.dltk.javascript.internal.debug;
 
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.dltk.debug.core.DLTKDebugPlugin;
 import org.eclipse.dltk.debug.core.model.ArrayScriptType;
 import org.eclipse.dltk.debug.core.model.AtomicScriptType;
 import org.eclipse.dltk.debug.core.model.ComplexScriptType;
@@ -36,10 +39,38 @@ public class JavaScriptTypeFactory implements IScriptTypeFactory {
 				String id = value.getInstanceId();
 				if (id != null) {
 					sb.append(" (id = " + id + ")"); // TODO add constant
-					// //$NON-NLS-1$
-														// //$NON-NLS-2$
 				}
 
+				return sb.toString();
+			}
+
+			/**
+			 * @see org.eclipse.dltk.debug.core.model.ComplexScriptType#formatDetails(org.eclipse.dltk.debug.core.model.IScriptValue)
+			 */
+			public String formatDetails(IScriptValue value) {
+				StringBuffer sb = new StringBuffer();
+				sb.append(value.getRawValue());
+				String id = value.getInstanceId();
+				if (id != null) {
+					sb.append(" (id = " + id + ")");
+				}
+				try {
+					IVariable[] variables = value.getVariables();
+					if (variables.length > 0) {
+						sb.append(" {");
+						for (int i = 0; i < variables.length; i++) {
+							sb.append(variables[i].getName());
+							sb.append(":");
+							sb.append(variables[i].getValue().getValueString());
+							sb.append(",");
+						}
+						sb.setLength(sb.length() - 1);
+						sb.append("}");
+					}
+				} catch (DebugException ex) {
+					DLTKDebugPlugin.logWarning(
+							"error creating variable details", ex);
+				}
 				return sb.toString();
 			}
 		};
