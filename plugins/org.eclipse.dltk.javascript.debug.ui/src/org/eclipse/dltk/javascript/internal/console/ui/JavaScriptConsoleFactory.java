@@ -37,8 +37,8 @@ public class JavaScriptConsoleFactory extends ScriptConsoleFactoryBase implement
 			try {
 				id = "default";
 				interpreter = new JavaScriptInterpreter();
-				JavaScriptConsoleUtil
-						.runDefaultTclInterpreter((JavaScriptInterpreter) interpreter);
+//				JavaScriptConsoleUtil
+//						.runDefaultTclInterpreter((JavaScriptInterpreter) interpreter);
 			} catch (Exception e) {
 				return null;
 			}
