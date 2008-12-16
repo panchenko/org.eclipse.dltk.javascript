@@ -448,6 +448,18 @@
          <part id="org.eclipse.dltk.javascript.ui.editor.JavascriptEditor"/>
 	  </actionSetPartAssociation>  
  </extension>
+ <extension
+       point="org.eclipse.ui.console.consolePatternMatchListeners">
+    <consolePatternMatchListener
+          class="org.eclipse.dltk.javascript.internal.ui.JavaScriptDebugConsoleTracker"
+          id="org.eclipse.dltk.javascript.ui.consolePatternMatchListener"
+          regex="\tat (.*):(\d+)">
+       <enablement>
+          <instanceof
+                value="org.eclipse.dltk.debug.ui.ScriptDebugConsole">
+          </instanceof></enablement>
+    </consolePatternMatchListener>
+ </extension>
  
   
 </plugin>
