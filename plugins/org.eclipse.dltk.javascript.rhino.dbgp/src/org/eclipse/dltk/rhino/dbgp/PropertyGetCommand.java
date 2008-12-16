@@ -27,9 +27,9 @@ final class PropertyGetCommand extends DBGPDebugger.Command {
 		}
 		Object value = null;
 		int shName = longName.indexOf('.');
-		if (shName == -1)
-			shName = longName.length();
-		String shortName = longName.substring(0, shName);
+		String shortName = longName;
+		if (shName != -1)
+			shortName = longName.substring(shName + 1);
 		StringBuffer properties = new StringBuffer();
 		DBGPDebugFrame stackFrame = this.debugger.stackmanager
 				.getStackFrame(level);
