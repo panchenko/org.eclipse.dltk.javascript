@@ -31,8 +31,13 @@ final class EvalCommand extends DBGPDebugger.Command {
 					+ "</response>\r\n" + "");
 			return;
 		}
-		DBGPDebugFrame fr = this.debugger.stackmanager.getStackFrame(0);
-		Object evaluated = fr.eval(value);
+		Object evaluated = "<error evaluating>";
+		try {
+			DBGPDebugFrame fr = this.debugger.stackmanager.getStackFrame(0);
+			evaluated = fr.eval(value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		String shName = value;
 		int k = shName.lastIndexOf('.');
 		if (k != -1) {
