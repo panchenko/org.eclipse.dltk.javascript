@@ -25,6 +25,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.text.JavascriptPartitionScanner;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
+import org.eclipse.dltk.ui.PreferenceConstants;
 import org.eclipse.dltk.ui.text.folding.AbstractASTFoldingStructureProvider;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
@@ -37,23 +38,26 @@ import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 
-public class JavascriptFoldingStructureProvider extends AbstractASTFoldingStructureProvider {
-	
+public class JavascriptFoldingStructureProvider extends
+		AbstractASTFoldingStructureProvider {
+
 	/* preferences */
 	private boolean fInitCollapseComments = true;
 	private boolean fInitCollapseBlocks = true;
 	private boolean fInitCollapseClasses = true;
 	private boolean fFoldNewLines = true;
-	
-	
+
 	protected void initializePreferences(IPreferenceStore store) {
 		super.initializePreferences(store);
 		fFoldNewLines = true;
 		fInitCollapseBlocks = false;
-		fInitCollapseComments = true;
 		fInitCollapseClasses = false;
+
+		fInitCollapseComments = store
+				.getBoolean(PreferenceConstants.EDITOR_COMMENTS_DEFAULT_FOLDED);
+
 	}
-	
+
 	/**
 	 * Installs a partitioner with <code>document</code>.
 	 * 
@@ -61,12 +65,14 @@ public class JavascriptFoldingStructureProvider extends AbstractASTFoldingStruct
 	 *            the document
 	 */
 	private void installDocumentStuff(Document document) {
-		String[] types = new String[] {
-				IJavaScriptPartitions.JS_STRING, IJavaScriptPartitions.JS_COMMENT, IDocument.DEFAULT_CONTENT_TYPE
-		};
-		FastPartitioner partitioner = new FastPartitioner(new JavascriptPartitionScanner(), types);
+		String[] types = new String[] { IJavaScriptPartitions.JS_STRING,
+				IJavaScriptPartitions.JS_COMMENT, IJavaScriptPartitions.JS_DOC,
+				IDocument.DEFAULT_CONTENT_TYPE };
+		FastPartitioner partitioner = new FastPartitioner(
+				new JavascriptPartitionScanner(), types);
 		partitioner.connect(document);
-		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING, partitioner);
+		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING,
+				partitioner);
 	}
 
 	/**
@@ -76,13 +82,16 @@ public class JavascriptFoldingStructureProvider extends AbstractASTFoldingStruct
 	 *            the document
 	 */
 	private void removeDocumentStuff(Document document) {
-		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING, null);
+		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING,
+				null);
 	}
 
-	private ITypedRegion getRegion(IDocument d, int offset) throws BadLocationException {
-		return TextUtilities.getPartition(d, IJavaScriptPartitions.JS_PARTITIONING, offset, true);
+	private ITypedRegion getRegion(IDocument d, int offset)
+			throws BadLocationException {
+		return TextUtilities.getPartition(d,
+				IJavaScriptPartitions.JS_PARTITIONING, offset, true);
 	}
-	
+
 	protected final IRegion[] computeCommentsRanges(String contents) {
 		try {
 			if (contents == null)
@@ -110,22 +119,28 @@ public class JavascriptFoldingStructureProvider extends AbstractASTFoldingStruct
 				region = docRegions[i];
 				boolean multiline = isMultilineRegion(d, region);
 				boolean badStart = false;
-				if (d.getLineOffset(d.getLineOfOffset(region.getOffset())) != region.getOffset()) {
-					int lineStart = d.getLineOffset(d.getLineOfOffset(region.getOffset()));
-					String lineStartStr = d.get(lineStart, region.getOffset() - lineStart);
+				if (d.getLineOffset(d.getLineOfOffset(region.getOffset())) != region
+						.getOffset()) {
+					int lineStart = d.getLineOffset(d.getLineOfOffset(region
+							.getOffset()));
+					String lineStartStr = d.get(lineStart, region.getOffset()
+							- lineStart);
 					if (lineStartStr.trim().length() != 0)
 						badStart = true;
 				}
 				if (!badStart
-						&& (region.getType().equals(IJavaScriptPartitions.JS_COMMENT) 
-								|| (start != -1 && isEmptyRegion(d, region) && multiline && collapseEmptyLines()) || (start != -1
+						&& (region.getType().equals(
+								IJavaScriptPartitions.JS_DOC)
+								|| (start != -1 && isEmptyRegion(d, region)
+										&& multiline && collapseEmptyLines()) || (start != -1
 								&& isEmptyRegion(d, region) && !multiline))) {
 					if (start == -1)
 						start = i;
 				} else {
 					if (start != -1) {
 						int offset0 = docRegions[start].getOffset();
-						int length0 = docRegions[i - 1].getOffset() - offset0 + docRegions[i - 1].getLength() - 1;
+						int length0 = docRegions[i - 1].getOffset() - offset0
+								+ docRegions[i - 1].getLength() - 1;
 						fullRegion = new Region(offset0, length0);
 						if (isMultilineRegion(d, fullRegion)) {
 							regions.add(fullRegion);
@@ -136,7 +151,9 @@ public class JavascriptFoldingStructureProvider extends AbstractASTFoldingStruct
 			}
 			if (start != -1) {
 				int offset0 = docRegions[start].getOffset();
-				int length0 = docRegions[docRegions.length - 1].getOffset() - offset0 + docRegions[docRegions.length - 1].getLength() - 1;
+				int length0 = docRegions[docRegions.length - 1].getOffset()
+						- offset0
+						+ docRegions[docRegions.length - 1].getLength() - 1;
 				fullRegion = new Region(offset0, length0);
 				if (isMultilineRegion(d, fullRegion)) {
 					regions.add(fullRegion);
@@ -151,58 +168,63 @@ public class JavascriptFoldingStructureProvider extends AbstractASTFoldingStruct
 		}
 		return new IRegion[0];
 	}
-	
+
 	protected CodeBlock[] getCodeBlocks(String code) {
 		return computeBlockRanges(0, code);
 	}
 
 	private CodeBlock[] computeBlockRanges(final int offset, String contents) {
 		JavaScriptSourceParser pp = new JavaScriptSourceParser();
-		//TODO: Add support of filename if needed complex paser support.
+		// TODO: Add support of filename if needed complex paser support.
 		ModuleDeclaration md = pp.parse(null, contents.toCharArray(), null);
 		final List result = new ArrayList();
-		ASTVisitor visitor = new ASTVisitor(){
-			public boolean visit(MethodDeclaration s) throws Exception {										
-				result.add(new CodeBlock(s,
-						new Region(offset + s.sourceStart(), s.sourceEnd() - s.sourceStart())));
+		ASTVisitor visitor = new ASTVisitor() {
+			public boolean visit(MethodDeclaration s) throws Exception {
+				result.add(new CodeBlock(s, new Region(
+						offset + s.sourceStart(), s.sourceEnd()
+								- s.sourceStart())));
 				return super.visit(s);
 			}
 
 			public boolean visit(TypeDeclaration s) throws Exception {
-				result.add(new CodeBlock(s,
-						new Region(offset + s.sourceStart(), s.sourceEnd() - s.sourceStart())));
+				result.add(new CodeBlock(s, new Region(
+						offset + s.sourceStart(), s.sourceEnd()
+								- s.sourceStart())));
 				return super.visit(s);
 			}
-			
+
 		};
 		try {
 			md.traverse(visitor);
 		} catch (Exception e) {
-			if( DLTKCore.DEBUG ) {
+			if (DLTKCore.DEBUG) {
 				e.printStackTrace();
 			}
 		}
 		return (CodeBlock[]) result.toArray(new CodeBlock[result.size()]);
 	}
 
-	protected boolean initiallyCollapse(ASTNode s, FoldingStructureComputationContext ctx) {		
-		return false;		
+	protected boolean initiallyCollapse(ASTNode s,
+			FoldingStructureComputationContext ctx) {
+		return false;
 	}
 
-	protected boolean initiallyCollapseComments(FoldingStructureComputationContext ctx) {
+	protected boolean initiallyCollapseComments(
+			FoldingStructureComputationContext ctx) {
 		return ctx.allowCollapsing() && fInitCollapseComments;
 	}
 
-	protected boolean mayCollapse(ASTNode s, FoldingStructureComputationContext ctx) {		
+	protected boolean mayCollapse(ASTNode s,
+			FoldingStructureComputationContext ctx) {
 		return true;
 	}
-	
+
 	protected boolean collapseEmptyLines() {
 		return fFoldNewLines;
 	}
 
 	protected String getCommentPartition() {
-		return IJavaScriptPartitions.JS_COMMENT;
+		return IJavaScriptPartitions.JS_DOC;
 	}
 
 	protected ILog getLog() {

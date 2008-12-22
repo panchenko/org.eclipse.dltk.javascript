@@ -1,5 +1,13 @@
 dojo.provide("dojo.math");
 
+/**
+ * This function solves everything
+ */
+function doEverything()
+{
+   // TODO implement
+}
+
 dojo.math.degToRad = function(/* float */x) {
 	//	summary
 	//	Converts degrees to radians.

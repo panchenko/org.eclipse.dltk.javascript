@@ -26,6 +26,11 @@ public final class JavascriptColorConstants {
 	public static final String JS_SINGLE_LINE_COMMENT = DLTKColorConstants.DLTK_SINGLE_LINE_COMMENT; //$NON-NLS-1$	
 
 	/**
+	 * The color key for Javascript doc.
+	 */
+	public static final String JS_DOC = "JS_DOC"; //$NON-NLS-1$	
+
+	/**
 	 * The color key for Javascript numbers.
 	 */
 	public static final String JS_NUMBER = DLTKColorConstants.DLTK_NUMBER; //$NON-NLS-1$

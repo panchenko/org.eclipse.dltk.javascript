@@ -44,6 +44,8 @@ public class JavascriptEditorColoringConfigurationBlock extends
 			{ PreferencesMessages.DLTKEditorPreferencePage_CommentTaskTags,
 					JavascriptPreferenceConstants.COMMENT_TASK_TAGS,
 					sCommentsCategory },
+			{ "JS Doc", JavascriptPreferenceConstants.JAVASCRIPT_DOC_COLOR,
+					sCommentsCategory },
 			{ PreferencesMessages.DLTKEditorPreferencePage_keywords,
 					JavascriptPreferenceConstants.EDITOR_KEYWORD_COLOR,
 					sCoreCategory },

@@ -23,7 +23,6 @@ import org.eclipse.dltk.javascript.ui.scriptcolor.provider.IScriptColorProvider;
 import org.eclipse.dltk.ui.text.AbstractScriptScanner;
 import org.eclipse.dltk.ui.text.IColorManager;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.text.rules.EndOfLineRule;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.WhitespaceRule;
@@ -87,12 +86,14 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 		List/* <IRule> */rules = new ArrayList/* <IRule> */();
 		IToken keyword = getToken(JavascriptColorConstants.JS_KEYWORD);
 		IToken keywordReturn = getToken(JavascriptColorConstants.JS_KEYWORD_RETURN);
-		IToken comment = getToken(JavascriptColorConstants.JS_SINGLE_LINE_COMMENT);
 		IToken other = getToken(JavascriptColorConstants.JS_DEFAULT);
 		IToken def = getToken(JavascriptColorConstants.JS_FUNCTION_DEFINITION);
 		IToken number = getToken(JavascriptColorConstants.JS_NUMBER);
+		// comments are already done by the TASK scanner...
+		// IToken comment =
+		// getToken(JavascriptColorConstants.JS_SINGLE_LINE_COMMENT);
 		// Add rule for single line comments.
-		rules.add(new EndOfLineRule("//", comment));
+		// rules.add(new EndOfLineRule("//", comment));
 		// Add generic whitespace rule.
 		rules.add(new WhitespaceRule(new JavascriptWhitespaceDetector()));
 		// Add word rule for keywords, types, and constants.

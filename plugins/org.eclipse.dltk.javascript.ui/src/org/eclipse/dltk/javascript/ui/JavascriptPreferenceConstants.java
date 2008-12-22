@@ -86,6 +86,71 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 			+ EDITOR_UNDERLINE_SUFFIX;
 
 	/*
+	 * javascript doc
+	 */
+	/**
+	 * A named preference that holds the color used to render javascript doc
+	 * <p>
+	 * Value is of type <code>String</code>. A RGB color value encoded as a
+	 * string using class <code>PreferenceConverter</code>
+	 * </p>
+	 * 
+	 * @see org.eclipse.jface.resource.StringConverter
+	 * @see org.eclipse.jface.preference.PreferenceConverter
+	 */
+	public final static String JAVASCRIPT_DOC_COLOR = JavascriptColorConstants.JS_DOC;
+
+	/**
+	 * A named preference that controls whether single line comments are
+	 * rendered in bold.
+	 * <p>
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in bold. If <code>false</code> the are rendered
+	 * using no font style attribute.
+	 * </p>
+	 */
+	public final static String JAVASCRIPT_DOC_COLOR_BOLD = JavascriptColorConstants.JS_DOC
+			+ EDITOR_BOLD_SUFFIX;
+
+	/**
+	 * A named preference that controls whether single line comments are
+	 * rendered in italic.
+	 * <p>
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in italic. If <code>false</code> the are rendered
+	 * using no italic font style attribute.
+	 * </p>
+	 */
+	public final static String JAVASCRIPT_DOC_COLOR_ITALIC = JavascriptColorConstants.JS_DOC
+			+ EDITOR_ITALIC_SUFFIX;
+
+	/**
+	 * A named preference that controls whether single line comments are
+	 * rendered in strikethrough.
+	 * <p>
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in strikethrough. If <code>false</code> the are
+	 * rendered using no italic font style attribute.
+	 * </p>
+	 */
+	public final static String JAVASCRIPT_DOC_COLOR_STRIKETHROUGH = JavascriptColorConstants.JS_DOC
+			+ EDITOR_STRIKETHROUGH_SUFFIX;
+
+	/**
+	 * A named preference that controls whether single line comments are
+	 * rendered in underline.
+	 * <p>
+	 * Value is of type <code>Boolean</code>. If <code>true</code> single line
+	 * comments are rendered in underline. If <code>false</code> the are
+	 * rendered using no italic font style attribute.
+	 * </p>
+	 * 
+	 * 
+	 */
+	public final static String JAVASCRIPT_DOC_COLOR_UNDERLINE = JavascriptColorConstants.JS_DOC
+			+ EDITOR_UNDERLINE_SUFFIX;
+
+	/*
 	 * Key worlds
 	 */
 	/**
@@ -360,6 +425,10 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 		PreferenceConstants.initializeDefaultValues(store);
 
 		PreferenceConverter.setDefault(store,
+				JavascriptPreferenceConstants.JAVASCRIPT_DOC_COLOR, new RGB(0,
+						128, 255));
+
+		PreferenceConverter.setDefault(store,
 				JavascriptPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR,
 				new RGB(63, 127, 95));
 		PreferenceConverter.setDefault(store,
@@ -421,6 +490,10 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 
 		// folding
 		store.setDefault(PreferenceConstants.EDITOR_FOLDING_ENABLED, true);
+		store.setDefault(PreferenceConstants.EDITOR_COMMENTS_FOLDING_ENABLED,
+				true);
+		store.setDefault(PreferenceConstants.EDITOR_COMMENTS_DEFAULT_FOLDED,
+				true);
 		// store.setDefault(PreferenceConstants.EDITOR_FOLDING_INNERTYPES,
 		// false);
 		// store.setDefault(PreferenceConstants.EDITOR_FOLDING_METHODS, false);

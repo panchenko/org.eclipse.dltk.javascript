@@ -45,7 +45,8 @@ public class JavascriptTextTools extends ScriptTextTools {
 	private IPartitionTokenScanner fPartitionScanner;
 
 	private final static String[] LEGAL_CONTENT_TYPES = new String[] {
-			IJavaScriptPartitions.JS_STRING, IJavaScriptPartitions.JS_COMMENT };
+			IJavaScriptPartitions.JS_STRING, IJavaScriptPartitions.JS_COMMENT,
+			IJavaScriptPartitions.JS_DOC };
 
 	public JavascriptTextTools(boolean autoDisposeOnDisplayDispose) {
 		super(IJavaScriptPartitions.JS_PARTITIONING, LEGAL_CONTENT_TYPES,
