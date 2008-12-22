@@ -941,6 +941,7 @@ class TokenStream {
 				if (matchChar('*')) {
 					boolean lookForSlash = false;
 					StringBuffer bm = new StringBuffer();
+					bm.append("/*"); // add skipped chars
 					for (;;) {
 						c = getChar();
 						bm.append((char) c);
