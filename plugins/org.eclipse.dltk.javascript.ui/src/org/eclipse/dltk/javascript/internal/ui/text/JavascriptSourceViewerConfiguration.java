@@ -84,7 +84,7 @@ public class JavascriptSourceViewerConfiguration extends
 	}
 
 	public String getCommentPrefix() {
-		return "/**";
+		return "//";
 	}
 
 	public String[] getIndentPrefixes(ISourceViewer sourceViewer,
