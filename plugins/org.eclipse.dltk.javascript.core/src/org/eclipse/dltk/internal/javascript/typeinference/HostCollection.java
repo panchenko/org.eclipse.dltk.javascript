@@ -67,7 +67,8 @@ public class HostCollection {
 			if (c == ']') {
 				if (inBrackStack.isEmpty()) {
 					String brackets = "[]";
-					if (dotBeforeBrackets && i > 0 && id.charAt(i - 2) != '.') {
+					if (dotBeforeBrackets && i > 0
+							&& ((i - 2) < 0 || id.charAt(i - 2) != '.')) {
 						brackets = ".[]";
 					}
 					sb.insert(0, brackets + id.substring(i + 1, current));
