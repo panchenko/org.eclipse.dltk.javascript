@@ -10,7 +10,7 @@ public class BreakPoint {
 	static int last_id = 0;
 
 	protected final String file;
-	protected final int line;
+	protected int line;
 	protected final int id;
 	protected boolean enabled = true;
 	protected boolean isTemporary = false;

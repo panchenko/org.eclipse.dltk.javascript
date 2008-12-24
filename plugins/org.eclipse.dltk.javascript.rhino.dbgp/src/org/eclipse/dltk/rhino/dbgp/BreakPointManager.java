@@ -12,13 +12,56 @@ public class BreakPointManager {
 	private HashMap watchpoints = new HashMap();
 	private HashMap callNames = new HashMap();
 
-	public void removeBreakPoint(String id) {
+	private boolean suspendOnExit;
+
+	private boolean suspendOnEntry;
+
+	private boolean suspendOnException;
+
+	/**
+	 * @return the suspendOnEntry
+	 */
+	public synchronized boolean getSuspendOnEntry() {
+		return suspendOnEntry;
+	}
+
+	/**
+	 * @return the suspendOnExit
+	 */
+	public synchronized boolean getSuspendOnExit() {
+		return suspendOnExit;
+	}
+
+	/**
+	 * @return the suspendOnException
+	 */
+	public synchronized boolean getSuspendOnException() {
+		return suspendOnException;
+	}
+
+	/**
+	 * @param suspendOnException
+	 *            the suspendOnException to set
+	 */
+	public synchronized void setSuspendOnException(boolean suspendOnException) {
+		this.suspendOnException = suspendOnException;
+	}
+
+	public synchronized void setSuspendOnExit(boolean parseBoolean) {
+		this.suspendOnExit = parseBoolean;
+	}
+
+	public synchronized void setSuspendOnEntry(boolean parseBoolean) {
+		this.suspendOnEntry = parseBoolean;
+	}
+
+	public synchronized void removeBreakPoint(String id) {
 		BreakPoint object = (BreakPoint) ids.get(id);
 		if (object != null)
 			removeBreakPoint(object);
 	}
 
-	public final void addBreakPoint(BreakPoint point) {
+	public synchronized final void addBreakPoint(BreakPoint point) {
 		if (point.isReturn) {
 			returnNames.put(point.method, point);
 		}
@@ -44,7 +87,7 @@ public class BreakPointManager {
 		ids.put("p" + point.id, point);
 	}
 
-	public void removeBreakPoint(BreakPoint point) {
+	public synchronized void removeBreakPoint(BreakPoint point) {
 		if (point.isReturn) {
 			returnNames.remove(point.method);
 		}
@@ -63,7 +106,7 @@ public class BreakPointManager {
 		ids.remove("p" + point.id);
 	}
 
-	public BreakPoint hit(String sourcePath, int lineNumber) {
+	public synchronized BreakPoint hit(String sourcePath, int lineNumber) {
 		HashMap q = (HashMap) fileMap.get(sourcePath);
 
 		if (q == null)
@@ -94,8 +137,9 @@ public class BreakPointManager {
 		return point;
 	}
 
-	public void updateBreakpoint(String id, String newState, String newLine,
-			String hitValue, String hitCondition, String condexpression) {
+	public synchronized void updateBreakpoint(String id, String newState,
+			String newLine, String hitValue, String hitCondition,
+			String condexpression) {
 		BreakPoint p = (BreakPoint) ids.get(id);
 		if (p != null) {
 			if (newState != null) {
@@ -117,7 +161,8 @@ public class BreakPointManager {
 					System.out.println("Error");
 				} else {
 					map.remove(nl);
-					map.put(new Integer(Integer.parseInt(newLine)), p);
+					p.line = Integer.parseInt(newLine);
+					map.put(new Integer(p.line), p);
 				}
 			}
 			if (hitValue != null) {
@@ -128,42 +173,44 @@ public class BreakPointManager {
 			}
 			if (!p.isWatch) {
 				p.expression = condexpression;
-			}
-			else
-			{
-				p.isModification = condexpression.charAt(condexpression.length() - 1) == '1';
+			} else {
+				p.isModification = condexpression.charAt(condexpression
+						.length() - 1) == '1';
 				p.isAccess = condexpression.charAt(condexpression.length() - 2) == '1';
-				p.expression = condexpression.substring(0, condexpression.length() - 2);
+				p.expression = condexpression.substring(0, condexpression
+						.length() - 2);
 			}
 
 		}
 	}
 
-
-	public BreakPoint hitEnter(String sn) {
-		return(BreakPoint) callNames.get(sn);
+	public synchronized BreakPoint hitEnter(String sn) {
+		return (BreakPoint) callNames.get(sn);
 	}
-	
-	public BreakPoint hitExit(String sn) {
+
+	public synchronized BreakPoint hitExit(String sn) {
 		return (BreakPoint) returnNames.get(sn);
 	}
 
-	public List getWatchPoints(String property) {
+	public synchronized List getWatchPoints(String property) {
 		return (List) watchpoints.get(property);
 	}
 
-	public BreakPoint getBreakpoint(String id) {
+	public synchronized BreakPoint getBreakpoint(String id) {
 		return (BreakPoint) ids.get(id);
 	}
 
 	/**
 	 * 
 	 */
-	public void removeBreakPoints()
-	{
+	public synchronized void removeBreakPoints() {
 		fileMap = new HashMap();
 		ids = new HashMap();
 		returnNames = new HashMap();
 		watchpoints = new HashMap();
-		callNames = new HashMap();	}
+		callNames = new HashMap();
+		suspendOnEntry = false;
+		suspendOnException = false;
+		suspendOnExit = false;
+	}
 }
