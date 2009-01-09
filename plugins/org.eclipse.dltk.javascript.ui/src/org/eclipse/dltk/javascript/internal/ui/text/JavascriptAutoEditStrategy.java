@@ -298,14 +298,32 @@ public class JavascriptAutoEditStrategy extends
 
 			int start = reg.getOffset();
 			ITypedRegion region = TextUtilities.getPartition(d, fPartitioning,
-					start, true);
-			if (IJavaScriptPartitions.JS_DOC.equals(region.getType()))
-				start = d.getLineInformationOfOffset(region.getOffset())
-						.getOffset();
+					start, false);
+			if (IJavaScriptPartitions.JS_DOC.equals(region.getType())) {
+				IRegion prevLine = d.getLineInformation(line);
+				String str = d.get(prevLine.getOffset(), prevLine.getLength());
+				if (!str.trim().endsWith("*/")) {
+					int index = str.indexOf("/*");
 
+					if (index != -1) {
+						buf.append(str.substring(0, index));
+						buf.append(" * ");
+					} else {
+						for (int i = 0; i < str.length(); i++) {
+							char ch = str.charAt(i);
+							if (Character.isWhitespace(ch)) {
+								buf.append(ch);
+							} else {
+								break;
+							}
+						}
+						buf.append("* ");
+					}
+				}
+			}
 			// insert closing brace on new line after an unclosed opening brace
-			if (getBracketCount(d, start, c.offset, true) > 0 && closeBrace()
-					&& !isClosed(d, c.offset, c.length)) {
+			else if (getBracketCount(d, start, c.offset, true) > 0
+					&& closeBrace() && !isClosed(d, c.offset, c.length)) {
 				c.caretOffset = c.offset + buf.length();
 				c.shiftsCaret = false;
 
