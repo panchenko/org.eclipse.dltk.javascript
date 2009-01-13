@@ -254,6 +254,7 @@ public class ScriptOrFnNode extends Node {
 			return false;
 		}
 		int index = itsVariables.size();
+		variablePositins.add(new Position(0, 0));
 		itsVariables.add(name);
 		itsConst.add(name);
 		itsVariableNames.put(name, index);
