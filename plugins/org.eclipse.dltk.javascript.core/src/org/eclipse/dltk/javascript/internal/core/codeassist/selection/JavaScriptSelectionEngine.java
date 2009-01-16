@@ -74,15 +74,21 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 		} else {
 			processGlobals(buildContext2, buildContext, result, selection);
 		}
-		IModelElement[] resultA = new IModelElement[result.size()];
-		result.toArray(resultA);
-		for (int j = 0; j < resultA.length; j++) {
-			if (resultA[j] instanceof IField) {
-				if (resultA[j] instanceof FakeField) {
-					((FakeField) resultA[j]).setSnippet(selection);
+		String completionPart = calc.getCompletionPart();
+		for (int j = result.size(); --j >= 0;) {
+			IModelElement element = (IModelElement) result.get(j);
+			if (element.getElementName().equals(completionPart)) {
+				if (element instanceof IField) {
+					if (element instanceof FakeField) {
+						((FakeField) element).setSnippet(selection);
+					}
 				}
+			} else {
+				result.remove(j);
 			}
 		}
+		IModelElement[] resultA = new IModelElement[result.size()];
+		result.toArray(resultA);
 		return resultA;
 	}
 
