@@ -93,7 +93,8 @@ public class JavaScriptCompletionProposalCollector extends
 
 			public String getInfo(IProgressMonitor monitor) {
 
-				if (ref instanceof SelfCompletingReference) {
+				if (ref instanceof SelfCompletingReference
+						&& ((SelfCompletingReference) ref).getProposalInfo() != null) {
 					return ((SelfCompletingReference) ref).getProposalInfo();
 				} else if (ref instanceof IReference) {
 					ArrayList ms = new ArrayList();

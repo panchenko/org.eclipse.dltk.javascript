@@ -139,14 +139,16 @@ public class ScriptdocContentAccess {
 			buf = compilationUnit.getBuffer();
 		}
 		int start = range.getOffset();
-		final int length = range.getLength();
+		int length = range.getLength();
 		String sm = buf.getText(0, start);
-		int q = sm.lastIndexOf('}');
-		if (q != -1)
-			sm = sm.substring(q + 1);
-		int pm = sm.lastIndexOf("/*");
+		int q = sm.lastIndexOf("/**");
+		if (q != -1) {
+			start = q;
+			sm = sm.substring(q);
+		}
+		int pm = sm.lastIndexOf("*/");
 		if (pm != -1)
-			start = pm;
+			length = pm + 2;
 		if (length > 0) {
 			IScanner scanner = createScanner(true, false, false, false);
 			scanner.setSource(buf.getText(start, length).toCharArray());
