@@ -47,6 +47,9 @@ public class NewReference extends AbstractCallResultReference {
 		} else if ("Boolean".equals(getId())) {
 			return ReferenceFactory.createBooleanReference("Boolean")
 					.getChilds(resolveLocals);
+		} else if ("XML".equals(getId())) {
+			return ReferenceFactory.createXMLReference("XML").getChilds(
+					resolveLocals);
 		} else if (getId().startsWith("Packages.")) {
 			String className = getId().substring("Packages.".length());
 			try {

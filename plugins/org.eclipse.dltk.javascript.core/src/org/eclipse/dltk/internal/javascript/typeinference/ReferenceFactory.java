@@ -30,4 +30,9 @@ public class ReferenceFactory {
 	public static UnknownReference createDateReference(String name) {
 		return new NativeDateReference(name);
 	}
+
+	public static UnknownReference createXMLReference(String name) {
+		return new NativeXMLReference(name);
+	}
+
 }
