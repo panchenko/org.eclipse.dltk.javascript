@@ -57,19 +57,25 @@ final class ContextGetCommand extends DBGPDebugger.Command {
 					Object value = stackFrame.getValue(a);
 					if (!(value instanceof Function)
 							|| (value instanceof XMLObject)) // HACK because
-					// ShowFunctionsAction
-					// doesnt work
-					// because of
-					// the lazy
-					// behavior of
-					// plugins in
-					// Eclipse
+																// ShowFunctionsAction
+																// doesnt work
+																// because of
+																// the lazy
+																// behavior of
+																// plugins in
+																// Eclipse
 					{
 						this.debugger.printProperty(id, id, value, properties,
 								0, true);
 					}
-
 				}
+
+				Object argsValue = stackFrame.getStackFrameArgs();
+				if (argsValue != null) {
+					this.debugger.printProperty("arguments", "arguments",
+							argsValue, properties, 0, true);
+				}
+
 				sendAllIds(properties, stackFrame, scriptable, doubles, false);
 			}
 		} catch (Throwable t) {
@@ -109,10 +115,10 @@ final class ContextGetCommand extends DBGPDebugger.Command {
 						value = scriptable.get(id.toString(), scriptable);
 					}
 					if (!(value instanceof Function)) // HACK because
-					// ShowFunctionsAction
-					// doesnt work because
-					// of the lazy behavior
-					// of plugins in Eclipse
+														// ShowFunctionsAction
+														// doesnt work because
+														// of the lazy behavior
+														// of plugins in Eclipse
 					{
 						this.debugger.printProperty(id.toString(), id
 								.toString(), value, properties, 0, true);

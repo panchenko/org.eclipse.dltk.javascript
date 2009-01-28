@@ -3,16 +3,19 @@ package org.eclipse.dltk.rhino.dbgp;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.reflect.Array;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.WeakHashMap;
 
+import org.mozilla.javascript.Arguments;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
+import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.NativeJavaArray;
 import org.mozilla.javascript.NativeJavaClass;
 import org.mozilla.javascript.NativeJavaObject;
@@ -20,10 +23,12 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.Undefined;
 import org.mozilla.javascript.UniqueTag;
+import org.mozilla.javascript.Wrapper;
 import org.mozilla.javascript.debug.DebugFrame;
 import org.mozilla.javascript.debug.DebuggableScript;
 import org.mozilla.javascript.debug.Debugger;
 import org.mozilla.javascript.debug.IDeguggerWithWatchPoints;
+import org.mozilla.javascript.xml.XMLObject;
 
 public class DBGPDebugger extends Thread implements Debugger, Observer,
 		IDeguggerWithWatchPoints {
@@ -104,23 +109,13 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 		int numC = 0;
 		String vlEncoded;
 		String name_of_object_class = "";
-		String data_type = "Object";
-		if (value instanceof Function) {
-			data_type = "function";
-		} else if (value instanceof NativeJavaObject) {
-			data_type = "javaobject";
-		} else if (value instanceof NativeJavaClass) {
-			data_type = "javaclass";
-		} else if (value instanceof NativeJavaArray) {
-			data_type = "javaarray";
-		}
+		String data_type = getDataType(value);
+
 		if (value instanceof Scriptable) {
 			hasChilds = true;
 			StringBuffer stringBuffer = new StringBuffer();
 			Scriptable p = (Scriptable) value;
 			value = stringBuffer;
-			Object[] ids = p.getIds();
-			numC = ids.length;
 			String nv = p.getClassName();
 			name_of_object_class = nv;
 			if (p instanceof NativeJavaObject) {
@@ -131,37 +126,89 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 				if (unwrap instanceof Class) {
 					nv = ((Class) unwrap).getName();
 				} else if (unwrap.getClass().isArray()) {
-					String string = unwrap.getClass().getName();
-					int len = Array.getLength(unwrap);
-					int q = string.indexOf('[');
-					if (q != -1)
-						string = string.substring(0, q);
-					int q1 = string.indexOf(']');
-					nv = string + "[" + len + "]";
-					if (q1 != -1)
-						nv += string.substring(q1);
+					nv = "Array";
+					// String string = unwrap.getClass().getName();
+					// int len = Array.getLength(unwrap);
+					// int q = string.indexOf('[');
+					// if (q != -1)
+					// string = string.substring(0, q);
+					// int q1 = string.indexOf(']');
+					// nv = string + "[" + len + "]";
+					// if (q1 != -1)
+					// nv += string.substring(q1);
 				} else {
 					if (unwrap instanceof String) {
 						nv = "JavaString " + '"' + unwrap.toString() + '"';
 					} else {
 						String string = unwrap.toString();
 
-						nv = unwrap.getClass().getName() + "(" + string + ")";
+						nv = string;
+						// nv = unwrap.getClass().getName() + "(" + string +
+						// ")";
 					}
 				}
 
+			} else if (p instanceof Wrapper) {
+				Wrapper wrapper = (Wrapper) p;
+				Object wrapped = wrapper.unwrap();
+
+				if (wrapped == null) {
+					nv = "Undefined";
+				} else if (!wrapped.getClass().isArray()) {
+					// if it is an array let the normal array handling do the
+					// job
+					// now just do toString();
+					nv = wrapped.toString();
+				}
+			} else if (p instanceof XMLObject) {
+				nv = ((XMLObject) p).toString();
+				data_type = "XML";
 			}
 
 			stringBuffer.append(Base64Helper.encodeString(nv));
 			if (addChilds) {
-				for (int a = 0; a < ids.length; a++) {
-					Object pvalue;
-					if (ids[a] instanceof Integer) {
-						pvalue = p.get(((Integer) ids[a]).intValue(), p);
-					} else
-						pvalue = p.get(ids[a].toString(), p);
-					printProperty(ids[a].toString(), fullName + "." + ids[a],
-							pvalue, stringBuffer, level + 1, false);
+				HashSet duplicates = new HashSet();
+				Scriptable prototype = p;
+				while (prototype != null) {
+					numC += createChilds(fullName, level, stringBuffer,
+							prototype, duplicates);
+					prototype = prototype.getPrototype();
+				}
+			} else {
+				HashSet duplicates = new HashSet();
+				Scriptable prototype = p;
+				while (prototype != null) {
+					Object[] ids = null;
+					if (prototype instanceof LazyInitScope) {
+						ids = ((LazyInitScope) prototype).getInitializedIds();
+					} else {
+						ids = prototype.getIds();
+					}
+					for (int a = 0; a < ids.length; a++) {
+						if (!duplicates.add(ids[a]))
+							continue;
+						Object pvalue = null;
+						try {
+							if (ids[a] instanceof Integer) {
+								pvalue = p
+										.get(((Integer) ids[a]).intValue(), p);
+							} else
+								pvalue = p.get(ids[a].toString(), p);
+						} catch (Exception e) {
+							// dont let the debugger crash.
+							e.printStackTrace();
+						}
+
+						if (!(pvalue instanceof Function)) // HACK because
+						// ShowFunctionsAction
+						// doesnt work because of
+						// the lazy behavior of
+						// plugins in Eclipse
+						{
+							numC++;
+						}
+					}
+					prototype = prototype.getPrototype();
 				}
 			}
 			vlEncoded = stringBuffer.toString();
@@ -178,6 +225,8 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 			if (value != null)
 				name_of_object_class = value.getClass().getName();
 		}
+		id = escapeHTML(id);
+		fullName = escapeHTML(fullName);
 
 		properties.append("<property\r\n" + "    name=\"" + id + "\"\r\n"
 				+ "    fullname=\"" + fullName + "\"\r\n" + "    type=\""
@@ -186,6 +235,105 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 				+ "    children=\"" + (hasChilds ? 1 : 0) + "\"\r\n"
 				+ "    encoding=\"base64\"\r\n" + "    numchildren=\"" + numC
 				+ "\">\r\n" + vlEncoded + "</property>\r\n");
+	}
+
+	private static String escapeHTML(String content) {
+		content = replace(content, '&', "&amp;"); //$NON-NLS-1$
+		content = replace(content, '"', "&quot;"); //$NON-NLS-1$
+		content = replace(content, '<', "&lt;"); //$NON-NLS-1$
+		return replace(content, '>', "&gt;"); //$NON-NLS-1$
+	}
+
+	private static String replace(String text, char c, String s) {
+
+		int previous = 0;
+		int current = text.indexOf(c, previous);
+
+		if (current == -1)
+			return text;
+
+		StringBuffer buffer = new StringBuffer();
+		while (current > -1) {
+			buffer.append(text.substring(previous, current));
+			buffer.append(s);
+			previous = current + 1;
+			current = text.indexOf(c, previous);
+		}
+		buffer.append(text.substring(previous));
+
+		return buffer.toString();
+	}
+
+	/**
+	 * @param fullName
+	 * @param level
+	 * @param stringBuffer
+	 * @param p
+	 * @param ids
+	 */
+	private int createChilds(String fullName, int level,
+			StringBuffer stringBuffer, Scriptable p, HashSet duplicates) {
+		Object[] ids = null;
+		if (p instanceof LazyInitScope) {
+			ids = ((LazyInitScope) p).getInitializedIds();
+		} else if (p instanceof Arguments) {
+			ids = ((Arguments) p).getAllIds();
+		} else {
+			ids = p.getIds();
+		}
+		int counter = 0;
+		for (int a = 0; a < ids.length; a++) {
+			if (!duplicates.add(ids[a]))
+				continue;
+			Object pvalue = null;
+			try {
+				if (ids[a] instanceof Integer) {
+					pvalue = p.get(((Integer) ids[a]).intValue(), p);
+				} else
+					pvalue = p.get(ids[a].toString(), p);
+			} catch (Throwable e) {
+				// dont let the debugger crash.
+				e.printStackTrace();
+			}
+			if (!(pvalue instanceof Function)) // HACK because
+			// ShowFunctionsAction
+			// doesnt work because of the lazy
+			// behavior of plugins in Eclipse
+			{
+				counter++;
+				printProperty(ids[a].toString(), fullName + "." + ids[a],
+						pvalue, stringBuffer, level + 1, false);
+			}
+		}
+		return counter;
+	}
+
+	private String getDataType(Object value) {
+		String data_type = "Object";
+		if (value instanceof Function) {
+			data_type = "function";
+		} else if (value instanceof NativeJavaArray) {
+			data_type = "javaarray";
+		} else if (value instanceof NativeArray) {
+			data_type = "array";
+		} else if (value instanceof NativeJavaObject) {
+			data_type = "javaobject";
+		} else if (value instanceof NativeJavaClass) {
+			data_type = "javaclass";
+		} else if (value instanceof String) {
+			data_type = "string";
+		} else if (value instanceof Number) {
+			data_type = "number";
+		} else if (value instanceof Boolean) {
+			data_type = "boolean";
+		} else if (value instanceof Date) {
+			data_type = "date";
+		} else if (value instanceof Undefined || value == null) {
+			data_type = "undefined";
+		} else if (value instanceof Wrapper) {
+			return getDataType(((Wrapper) value).unwrap());
+		}
+		return data_type;
 	}
 
 	public void run() {
@@ -237,7 +385,7 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 	}
 
 	public DebugFrame getFrame(Context cx, DebuggableScript fnOrScript) {
-		return new DBGPDebugFrame(cx, fnOrScript);
+		return new DBGPDebugFrame(cx, fnOrScript, this);
 	}
 
 	public void handleCompilationDone(Context cx, DebuggableScript fnOrScript,

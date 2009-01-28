@@ -1,10 +1,10 @@
 package org.eclipse.dltk.rhino.dbgp;
 
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.NativeJavaArray;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-import org.mozilla.javascript.Undefined;
 import org.mozilla.javascript.debug.DebugFrame;
 import org.mozilla.javascript.debug.DebuggableScript;
 import org.mozilla.javascript.debug.Debugger;
@@ -21,6 +21,7 @@ public final class DBGPDebugFrame implements DebugFrame {
 	private Object[] args;
 	private Context context;
 	private boolean suspend;
+	private boolean callOnEnter;
 
 	public boolean isSuspend() {
 		return suspend;
@@ -30,7 +31,8 @@ public final class DBGPDebugFrame implements DebugFrame {
 		this.suspend = suspend;
 	}
 
-	public DBGPDebugFrame(Context ct, DebuggableScript node) {
+	public DBGPDebugFrame(Context ct, DebuggableScript node,
+			DBGPDebugger debugger) {
 		sourceName = node.getSourceName();
 		this.context = ct;
 		stackManager = DBGPStackManager.getManager(ct);
@@ -56,7 +58,8 @@ public final class DBGPDebugFrame implements DebugFrame {
 		this.scope = activation;
 
 		this.thisObj = thisObj;
-		stackManager.enter(this);
+		callOnEnter = true;
+
 	}
 
 	public void onExceptionThrown(Context cx, Throwable ex) {
@@ -64,13 +67,18 @@ public final class DBGPDebugFrame implements DebugFrame {
 	}
 
 	public void onExit(Context cx, boolean byThrow, Object resultOrException) {
-		
+
 		stackManager.exit(this);
 	}
 
-	public void onLineChange(Context cx, int lineNumber) {		
+	public void onLineChange(Context cx, int lineNumber) {
 		this.lineNumber = lineNumber;
-		stackManager.changeLine(this, lineNumber);
+		if (callOnEnter) {
+			callOnEnter = false;
+			stackManager.enter(this);
+		} else {
+			stackManager.changeLine(this, lineNumber);
+		}
 	}
 
 	public String getSourceName() {
@@ -94,6 +102,11 @@ public final class DBGPDebugFrame implements DebugFrame {
 		return object;
 	}
 
+	public Object getStackFrameArgs() {
+		Object object = scope.get("arguments", thisObj);
+		return object;
+	}
+
 	public Scriptable getThis() {
 		return thisObj;
 	}
@@ -101,10 +114,9 @@ public final class DBGPDebugFrame implements DebugFrame {
 	public void setValue(String name, String value) {
 		if (name.startsWith("this.")) {
 			name = name.substring("this.".length());
-			thisObj.put(name, thisObj, eval( value));
-		}
-		else
-		scope.put(name, scope, value);
+			thisObj.put(name, thisObj, eval(value));
+		} else
+			scope.put(name, scope, value);
 	}
 
 	public Object eval(String value) {
@@ -131,40 +143,48 @@ public final class DBGPDebugFrame implements DebugFrame {
 	}
 
 	public Object getValue(String longName) {
-		if (longName.startsWith("this")){
+		if (longName.startsWith("this")) {
 			int indexOf = longName.indexOf('.');
-			if (indexOf==-1)return thisObj;
-			longName=longName.substring("this.".length());
-			return getProperty(thisObj,longName);
+			if (indexOf == -1)
+				return thisObj;
+			longName = longName.substring("this.".length());
+			return getProperty(thisObj, longName);
 		}
-		return getProperty(scope, longName);		
+		return getProperty(scope, longName);
 	}
 
 	private Object getProperty(Scriptable obj, String longName) {
-		int k=longName.indexOf('.');
-		if (k==-1)return shortGet(obj, longName);
-		String shortName=longName.substring(0,k);
-		String sm=longName.substring(k+1);
+		int k = longName.indexOf('.');
+		if (k == -1)
+			return shortGet(obj, longName);
+		String shortName = longName.substring(0, k);
+		String sm = longName.substring(k + 1);
 		Object property = shortGet(obj, shortName);
-		if (property instanceof Scriptable){
+		if (property instanceof Scriptable) {
 			return getProperty((Scriptable) property, sm);
 		}
 		return null;
 	}
 
 	private Object shortGet(Scriptable obj, String longName) {
-		if (obj instanceof NativeJavaArray){
+		if (obj instanceof NativeJavaArray || obj instanceof NativeArray) {
 			int parseInt = Integer.parseInt(longName);
-			NativeJavaArray na=(NativeJavaArray) obj;
-			return na.get(parseInt, na);
+			return obj.get(parseInt, obj);
 		}
 		Scriptable parent = obj;
-		while(parent != null)
-		{
+		while (parent != null) {
 			Object o = ScriptableObject.getProperty(parent, longName);
-			if (o != null && o != Scriptable.NOT_FOUND ) return o;
+			if (o != null && o != Scriptable.NOT_FOUND)
+				return o;
 			parent = parent.getParentScope();
-				
+
+		}
+		try {
+			int parseInt = Integer.parseInt(longName);
+			Object o = ScriptableObject.getProperty(obj, parseInt);
+			if (o != null && o != Scriptable.NOT_FOUND)
+				return o;
+		} catch (Exception e) {
 		}
 		return null;
 	}
