@@ -206,13 +206,10 @@ public class NativeStringReference extends UnknownReference {
 			} else if (name.equals("replace")) {
 				ur
 						.setProposalInfo("Replaces some characters with some other characters in a string.");
-			} else if (name.equals("replace")) {
-				ur.setProposalInfo("Searches a string for a specified value.");
 				ur.setParameterNames(new char[][] { "findString".toCharArray(),
 						"newString".toCharArray() });
 			} else if (name.equals("search")) {
-				ur
-						.setProposalInfo("Replaces some characters with some other characters in a string.");
+				ur.setProposalInfo("Searches a string for a specified value.");
 				ur.setParameterNames(new char[][] { "searchstring"
 						.toCharArray() });
 			} else if (name.equals("slice")) {
