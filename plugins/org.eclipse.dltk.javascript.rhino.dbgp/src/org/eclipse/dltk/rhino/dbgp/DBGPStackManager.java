@@ -66,18 +66,11 @@ public class DBGPStackManager {
 			if (hit != null)
 				checkBreakpoint(debugFrame, hit);
 		}
-		
+
 		if (suspendOnEntry) {
 			if (debugFrame.getWhere().equals("module")) {
 				observer.update(null, this);
-				synchronized (this) {
-					try {
-						this.wait();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+				waitForContinuation();
 			} else
 				suspenOnChangeLine = true;
 		}
@@ -87,14 +80,7 @@ public class DBGPStackManager {
 		if (needSuspend || suspendOnExit) {
 
 			observer.update(null, this);
-			synchronized (this) {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			waitForContinuation();
 		}
 		String sn = debugFrame.getWhere();
 
@@ -111,20 +97,26 @@ public class DBGPStackManager {
 		if (suspenOnChangeLine) {
 			suspenOnChangeLine = false;
 			observer.update(null, this);
-			synchronized (this) {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			waitForContinuation();
 		}
 		if (frame.isSuspend()) {
 			needSuspend = true;
 		}
 		BreakPoint hit = manager.hit(frame.getSourceName(), lineNumber);
 		checkBreakpoint(frame, hit);
+	}
+
+	private synchronized void waitForContinuation() {
+		try {
+			this.wait();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void continueExecution() {
+		this.notify();
 	}
 
 	private void checkBreakpoint(DBGPDebugFrame frame, BreakPoint hit) {
@@ -147,14 +139,7 @@ public class DBGPStackManager {
 		}
 		if (needSuspend) {
 			observer.update(null, this);
-			synchronized (this) {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			waitForContinuation();
 		}
 	}
 
@@ -172,8 +157,7 @@ public class DBGPStackManager {
 
 	public DBGPDebugFrame getStackFrame(int parseInt) {
 		int stackCounter = stack.size() - parseInt - 1;
-		if (stackCounter >= 0)
-		{
+		if (stackCounter >= 0) {
 			return (DBGPDebugFrame) stack.get(stackCounter);
 		}
 		return null;
@@ -196,22 +180,21 @@ public class DBGPStackManager {
 		for (int a = 0; a < this.getStackDepth(); a++) {
 			this.getStackFrame(a).setSuspend(false);
 		}
-		this.notify();
+		continueExecution();
 	}
 
 	public synchronized void stepOver() {
 		getStackFrame(0).setSuspend(true);
-		if (this.getStackDepth() > 1)
-		{
+		if (this.getStackDepth() > 1) {
 			getStackFrame(1).setSuspend(true);
 		}
 		this.needSuspend = false;
-		this.notify();
+		continueExecution();
 	}
 
 	public synchronized void stepIn() {
 		this.needSuspend = true;
-		this.notify();
+		continueExecution();
 	}
 
 	public synchronized void stepOut() {
@@ -220,16 +203,11 @@ public class DBGPStackManager {
 		if (this.getStackDepth() > 1) {
 			getStackFrame(1).setSuspend(true);
 		}
-		this.notify();
+		continueExecution();
 	}
 
-	public synchronized void waitForNotify() {
-		try {
-			this.wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void waitForNotify() {
+		waitForContinuation();
 	}
 
 	public void removeBreakpoint(String id) {
