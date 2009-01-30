@@ -71,14 +71,36 @@ public class OldCodeFormatter extends CodeFormatter {
 				.getDefault().getPreferenceStore());
 		uintMap.put(Decompiler.INDENT_GAP_PROP, pi.getIndentSize());
 		TabStyle tabStyle = pi.getTabStyle();
-		if (tabStyle==TabStyle.TAB)
-		uintMap.put(Decompiler.INDENT_USE_TAB, 1);
+		String retValue;
+		if (tabStyle == TabStyle.TAB)
+			uintMap.put(Decompiler.INDENT_USE_TAB, 1);
 		else
-		uintMap.put(Decompiler.INDENT_USE_TAB, 0);	
+			uintMap.put(Decompiler.INDENT_USE_TAB, 0);
 		if (computeIndentation == null || computeIndentation.length() == 0)
-			return de.decompile(encodedSource, 0, uintMap).trim();
+			retValue = de.decompile(encodedSource, 0, uintMap).trim();
 		else
-			return de.decompile(encodedSource, 0, uintMap);
+			retValue = de.decompile(encodedSource, 0, uintMap);
+		// hack because this decompiler does strange stuff when the code starts
+		// with /**
+		if (retValue.startsWith("/*/**")) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/**");
+			retValue = retValue.substring(2);
+			for (int i = 3; i < retValue.length(); i++) {
+				char c = retValue.charAt(i);
+				if (c == '/') {
+					sb.append(retValue.substring(i));
+					retValue = sb.toString();
+					break;
+				}
+				if (c == '*' && retValue.charAt(i - 1) == '\n') {
+					sb.append(' ');
+				}
+				sb.append(c);
+
+			}
+		}
+		return retValue;
 	}
 
 }
