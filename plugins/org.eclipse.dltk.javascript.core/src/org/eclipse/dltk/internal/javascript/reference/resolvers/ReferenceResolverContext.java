@@ -12,6 +12,7 @@ package org.eclipse.dltk.internal.javascript.reference.resolvers;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -69,7 +70,16 @@ public final class ReferenceResolverContext {
 		for (int a = 0; a < resolvers.size(); a++) {
 			IReferenceResolver res = (IReferenceResolver) resolvers.get(a);
 			Set result = res.resolveGlobals(id);
-			sm.removeAll(result);
+
+			Iterator it = result.iterator();
+			while (it.hasNext()) {
+				sm.remove(it.next());
+			}
+
+			// this really looks like a bug in java!
+			// above behaves differently then below!
+			// sm.removeAll(result);
+
 			sm.addAll(result);
 		}
 		return sm;
