@@ -184,7 +184,7 @@ public class ScriptOrFnNode extends Node {
 		return array;
 	}
 
-	public final void addParam(String name) {
+	public final void addParam(String name, int start) {
 		// Check addparam is not called after addLocal
 		if (varStart != itsVariables.size())
 			Kit.codeBug();
@@ -192,7 +192,7 @@ public class ScriptOrFnNode extends Node {
 		// will warn about dups)
 		int index = varStart++;
 		itsVariables.add(name);
-		variablePositins.add(new Position(0, 0));
+		variablePositins.add(new Position(start, start + name.length()));
 		itsConst.add(null);
 		itsVariableNames.put(name, index);
 	}

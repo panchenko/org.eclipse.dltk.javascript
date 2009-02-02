@@ -496,12 +496,13 @@ public class Parser {
 					if (!first)
 						decompiler.addToken(Token.COMMA);
 					first = false;
+					int start = ts.getOffset();
 					mustMatchToken(Token.NAME, "msg.no.parm");
 					String s = ts.getString();
 					if (fnNode.hasParamOrVar(s)) {
 						addWarning("msg.dup.parms", s);
 					}
-					fnNode.addParam(s);
+					fnNode.addParam(s, start);
 					decompiler.addName(s);
 				} while (matchToken(Token.COMMA));
 

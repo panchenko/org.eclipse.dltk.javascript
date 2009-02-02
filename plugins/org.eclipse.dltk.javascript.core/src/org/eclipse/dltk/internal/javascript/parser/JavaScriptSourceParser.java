@@ -13,6 +13,7 @@ import java.io.CharArrayReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.eclipse.dltk.ast.declarations.Argument;
 import org.eclipse.dltk.ast.declarations.FieldDeclaration;
 import org.eclipse.dltk.ast.declarations.MethodDeclaration;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
@@ -32,45 +33,43 @@ import com.xored.org.mozilla.javascript.ScriptOrFnNode;
 import com.xored.org.mozilla.javascript.ScriptOrFnNode.Position;
 
 public class JavaScriptSourceParser extends AbstractSourceParser {
-	
+
 	private final class ReferenceRecordingRequestor implements
 			ISourceElementRequestor {
-		
 
-		ArrayList references=new ArrayList();
-		
-		public void acceptFieldReference(char[] fieldName,
-				int sourcePosition) {
+		ArrayList references = new ArrayList();
+
+		public void acceptFieldReference(char[] fieldName, int sourcePosition) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
-		public void acceptMethodReference(char[] methodName,
-				int argCount, int sourcePosition, int sourceEndPosition) {
-			references.add(new SimpleReference(sourcePosition,sourceEndPosition,new String(methodName)));
+		public void acceptMethodReference(char[] methodName, int argCount,
+				int sourcePosition, int sourceEndPosition) {
+			references.add(new SimpleReference(sourcePosition,
+					sourceEndPosition, new String(methodName)));
 		}
 
-		public void acceptPackage(int declarationStart,
-				int declarationEnd, char[] name) {
+		public void acceptPackage(int declarationStart, int declarationEnd,
+				char[] name) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
-		public void acceptTypeReference(char[][] typeName,
-				int sourceStart, int sourceEnd) {
+		public void acceptTypeReference(char[][] typeName, int sourceStart,
+				int sourceEnd) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
-		public void acceptTypeReference(char[] typeName,
-				int sourcePosition) {
+		public void acceptTypeReference(char[] typeName, int sourcePosition) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void enterField(FieldInfo info) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public boolean enterFieldCheckDuplicates(FieldInfo info) {
@@ -86,12 +85,12 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 
 		public void enterMethod(MethodInfo info) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void enterMethodRemoveSame(MethodInfo info) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public boolean enterMethodWithParentType(MethodInfo info,
@@ -102,17 +101,17 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 
 		public void enterModule() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void enterModuleRoot() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void enterType(TypeInfo info) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public boolean enterTypeAppend(String fullName, String delimiter) {
@@ -122,64 +121,69 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 
 		public void exitField(int declarationEnd) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void exitMethod(int declarationEnd) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void exitModule(int declarationEnd) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void exitModuleRoot() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		public void exitType(int declarationEnd) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
 	ModelElement element;
+
 	public JavaScriptSourceParser(IModelElement parent) {
-		this.element=(ModelElement) parent;
+		this.element = (ModelElement) parent;
 	}
-	
+
 	public JavaScriptSourceParser() {
 
 	}
 
-	public ModuleDeclaration parse(char[] fileName, char[] content, IProblemReporter r) {
-		JavaScriptModuleDeclaration moduleDeclaration = new JavaScriptModuleDeclaration(content
-				.length);
-		
-		CompilerEnvirons cenv=new CompilerEnvirons();
+	public ModuleDeclaration parse(char[] fileName, char[] content,
+			IProblemReporter r) {
+		JavaScriptModuleDeclaration moduleDeclaration = new JavaScriptModuleDeclaration(
+				content.length);
+
+		CompilerEnvirons cenv = new CompilerEnvirons();
 		Parser parser = new Parser(cenv, new JavaScriptErrorReporter(r));
 		try {
 
 			ScriptOrFnNode parse = parser.parse(new CharArrayReader(content),
 					"", 0);
-			TypeInferencer interferencer = new TypeInferencer(element,new ReferenceResolverContext(null,new HashMap()));
+			TypeInferencer interferencer = new TypeInferencer(element,
+					new ReferenceResolverContext(null, new HashMap()));
 			ReferenceRecordingRequestor referenceRecordingRequestor = new ReferenceRecordingRequestor();
 			interferencer.setRequestor(referenceRecordingRequestor);
-			interferencer.doInterferencing(parse,Integer.MAX_VALUE);
+			interferencer.doInterferencing(parse, Integer.MAX_VALUE);
 			moduleDeclaration.setCollection(interferencer.getCollection());
 			moduleDeclaration.setFunctionMap(interferencer.getFunctionMap());
-			moduleDeclaration.setReferences(referenceRecordingRequestor.references);
-			processNode(parse,moduleDeclaration);
+			moduleDeclaration
+					.setReferences(referenceRecordingRequestor.references);
+			processNode(parse, moduleDeclaration);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return moduleDeclaration;
 	}
-	
-	private void processNode(ScriptOrFnNode parse, ModuleDeclaration moduleDeclaration) {
+
+	private void processNode(ScriptOrFnNode parse,
+			ModuleDeclaration moduleDeclaration) {
 		for (int a = 0; a < parse.getFunctionCount(); a++) {
 			FunctionNode functionNode = parse.getFunctionNode(a);
 			functionNode.getFunctionName();
@@ -192,18 +196,23 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 			String functionComments = functionNode.getFunctionComments();
 			int declarationStart = functionNode.getEncodedSourceStart();
 			String[] paramsAndVars = functionNode.getParamAndVarNames();
-			String[] params = new String[functionNode.getParamCount()];
-			for (int i = 0; i < params.length; i++) {
-				params[i] = paramsAndVars[i];
-			}
-			String[] parameterNames = params;
 			int nameSourceStart = functionNode.nameStart;
-			int nameSourceEnd = functionNode.nameEnd;			
-			processNode(functionNode,null);
-			MethodDeclaration decl=new MethodDeclaration(functionName,nameSourceStart,nameSourceEnd,declarationStart,functionNode.getEncodedSourceEnd());
-			// TODO set decl.getArguments()
+			int nameSourceEnd = functionNode.nameEnd;
+			processNode(functionNode, null);
+			MethodDeclaration decl = new MethodDeclaration(functionName,
+					nameSourceStart, nameSourceEnd, declarationStart,
+					functionNode.getEncodedSourceEnd());
+			for (int i = 0; i < functionNode.getParamCount(); i++) {
+				Argument argument = new Argument();
+				argument.setName(paramsAndVars[i]);
+				Position position = functionNode.getPosition(i);
+				argument.setNameStart(position.start);
+				argument.setNameEnd(position.end);
+				decl.addArgument(argument);
+			}
+
 			decl.setComments(functionComments);
-			if (moduleDeclaration!=null)
+			if (moduleDeclaration != null)
 				moduleDeclaration.addStatement(decl);
 		}
 		String[] paramsAndVars = parse.getParamAndVarNames();
@@ -219,14 +228,15 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 		}
 		for (int i = params.length; i < paramsAndVars.length - of; i++) {
 			String name = paramsAndVars[i];
-			Position p=parse.getPosition(i);
-			FieldDeclaration decl=new FieldDeclaration(name,p.start,p.start + name.length(),p.start,p.start + name.length());
+			Position p = parse.getPosition(i);
+			FieldDeclaration decl = new FieldDeclaration(name, p.start, p.start
+					+ name.length(), p.start, p.start + name.length());
 			decl.setComments(parse.getParamComments(name));
-			//fRequestor.enterField(fieldInfo);
-			//fRequestor.exitField(fieldInfo.nameSourceEnd);
-			if (moduleDeclaration!=null)
+			// fRequestor.enterField(fieldInfo);
+			// fRequestor.exitField(fieldInfo.nameSourceEnd);
+			if (moduleDeclaration != null)
 				moduleDeclaration.addStatement(decl);
 		}
-		
+
 	}
 }
