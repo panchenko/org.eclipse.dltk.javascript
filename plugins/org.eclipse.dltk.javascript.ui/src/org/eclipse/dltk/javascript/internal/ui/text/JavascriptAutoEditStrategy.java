@@ -365,6 +365,37 @@ public class JavascriptAutoEditStrategy extends
 					if (reference != null)
 						buf.append(reference);
 				}
+			} else {
+				IRegion prevLine = d.getLineInformation(line);
+				String str = d.get(prevLine.getOffset(), prevLine.getLength());
+				if (!str.trim().endsWith("*/")) {
+					int index = str.indexOf("/*");
+
+					// handle the start comment character prefix;
+					if (index != -1) {
+						String indentStr = str.substring(0, index);
+						if (indentStr.equals("\t") == false) {
+							indentStr = "\t";
+						}
+						buf.append("*\n");
+						buf.append(indentStr + "*/");
+					} else {
+						if (IJavaScriptPartitions.JS_COMMENT.equals(region
+								.getType())) {
+							buf = new StringBuffer();
+							buf.append("\n");
+							for (int i = 0; i < str.length(); i++) {
+								char ch = str.charAt(i);
+								if (Character.isWhitespace(ch)) {
+									buf.append(ch);
+								} else {
+									break;
+								}
+							}
+							buf.append("* ");
+						}
+					}
+				}
 			}
 			c.text = buf.toString();
 
@@ -451,8 +482,8 @@ public class JavascriptAutoEditStrategy extends
 	 * @param max
 	 *            the max position
 	 * @return an insert position relative to the line start if
-	 *         <code>line</code> contains a parenthesized expression that can be
-	 *         followed by a block, -1 otherwise
+	 *         <code>line</code> contains a parenthesized expression that can
+	 *         be followed by a block, -1 otherwise
 	 */
 	private static int computeAnonymousPosition(IDocument document, int offset,
 			String partitioning, int max) {
@@ -526,8 +557,8 @@ public class JavascriptAutoEditStrategy extends
 
 	/**
 	 * Checks whether the content of <code>document</code> in the range (
-	 * <code>offset</code>, <code>length</code>) contains the <code>new</code>
-	 * keyword.
+	 * <code>offset</code>, <code>length</code>) contains the
+	 * <code>new</code> keyword.
 	 * 
 	 * @param document
 	 *            the document being modified
@@ -586,8 +617,9 @@ public class JavascriptAutoEditStrategy extends
 	 *            considered
 	 * @param partitioning
 	 *            the document partitioning
-	 * @return <code>true</code> if the content of <code>document</code> looks
-	 *         like an anonymous class definition, <code>false</code> otherwise
+	 * @return <code>true</code> if the content of <code>document</code>
+	 *         looks like an anonymous class definition, <code>false</code>
+	 *         otherwise
 	 */
 	private static boolean looksLikeAnonymousClassDef(IDocument document,
 			String partitioning, JavaHeuristicScanner scanner, int position) {
@@ -616,7 +648,8 @@ public class JavascriptAutoEditStrategy extends
 	 * @param partitioning
 	 *            the document partitioning
 	 * @return <code>true</code> if <code>position</code> is in the default
-	 *         partition of <code>document</code>, <code>false</code> otherwise
+	 *         partition of <code>document</code>, <code>false</code>
+	 *         otherwise
 	 */
 	private static boolean isDefaultPartition(IDocument document, int position,
 			String partitioning) {
@@ -788,10 +821,10 @@ public class JavascriptAutoEditStrategy extends
 
 	/**
 	 * Returns the indentation of the line <code>line</code> in
-	 * <code>document</code>. The returned string may contain pairs of leading
-	 * slashes that are considered part of the indentation. The space before the
-	 * asterisk in a javadoc-like comment is not considered part of the
-	 * indentation.
+	 * <code>document</code>. The returned string may contain pairs of
+	 * leading slashes that are considered part of the indentation. The space
+	 * before the asterisk in a javadoc-like comment is not considered part of
+	 * the indentation.
 	 * 
 	 * @param document
 	 *            the document
@@ -920,9 +953,9 @@ public class JavascriptAutoEditStrategy extends
 	}
 
 	/**
-	 * Cuts the visual equivalent of <code>toDelete</code> characters out of the
-	 * indentation of line <code>line</code> in <code>document</code>. Leaves
-	 * leading comment signs alone.
+	 * Cuts the visual equivalent of <code>toDelete</code> characters out of
+	 * the indentation of line <code>line</code> in <code>document</code>.
+	 * Leaves leading comment signs alone.
 	 * 
 	 * @param document
 	 *            the document
@@ -1388,9 +1421,9 @@ public class JavascriptAutoEditStrategy extends
 	}
 
 	/*
-	 * @see
-	 * org.eclipse.jface.text.IAutoIndentStrategy#customizeDocumentCommand(org
-	 * .eclipse.jface.text.IDocument, org.eclipse.jface.text.DocumentCommand)
+	 * @see org.eclipse.jface.text.IAutoIndentStrategy#customizeDocumentCommand(org
+	 *      .eclipse.jface.text.IDocument,
+	 *      org.eclipse.jface.text.DocumentCommand)
 	 */
 	public void customizeDocumentCommand(IDocument d, DocumentCommand c) {
 		if (c.doit == false)
