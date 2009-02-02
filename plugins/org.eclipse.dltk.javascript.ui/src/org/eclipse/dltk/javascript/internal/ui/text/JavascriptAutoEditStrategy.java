@@ -372,13 +372,50 @@ public class JavascriptAutoEditStrategy extends
 					int index = str.indexOf("/*");
 
 					// handle the start comment character prefix;
-					if (index != -1) {
-						String indentStr = str.substring(0, index);
-						if (indentStr.equals("\t") == false) {
-							indentStr = "\t";
+					if (index != -1 && prevLine.getOffset() + index < c.offset) {
+						buf.setLength(0);
+						StringBuffer indentStr = new StringBuffer(index);
+						int counter = 0;
+						while (counter < index) {
+							char ch = str.charAt(counter++);
+							if (Character.isWhitespace(ch)) {
+								indentStr.append(ch);
+							} else {
+								indentStr.append(' ');
+							}
 						}
-						buf.append("*\n");
-						buf.append(indentStr + "*/");
+
+						boolean enclosedComment = false;
+						try {
+							index = line + 1;
+							IRegion nextLine = null;
+							while ((nextLine = d.getLineInformation(index++)) != null) {
+								String strNextLine = d.get(
+										nextLine.getOffset(), nextLine
+												.getLength());
+								int stComment = strNextLine.indexOf("/*");
+								int endComment = strNextLine.indexOf("*/");
+
+								if (stComment != -1 && endComment != -1) {
+									if (stComment < endComment) {
+										break;
+									}
+								} else if (endComment != -1) {
+									enclosedComment = true;
+									break;
+								} else if (stComment != -1) {
+									break;
+								}
+
+							}
+						} catch (Exception ex) {
+
+						}
+						buf.append("\n" + indentStr + " * ");
+						c.caretOffset = c.offset + buf.length();
+						c.shiftsCaret = false;
+						if (!enclosedComment)
+							buf.append("\n" + indentStr + " */");
 					} else {
 						if (IJavaScriptPartitions.JS_COMMENT.equals(region
 								.getType())) {
@@ -482,8 +519,8 @@ public class JavascriptAutoEditStrategy extends
 	 * @param max
 	 *            the max position
 	 * @return an insert position relative to the line start if
-	 *         <code>line</code> contains a parenthesized expression that can
-	 *         be followed by a block, -1 otherwise
+	 *         <code>line</code> contains a parenthesized expression that can be
+	 *         followed by a block, -1 otherwise
 	 */
 	private static int computeAnonymousPosition(IDocument document, int offset,
 			String partitioning, int max) {
@@ -557,8 +594,8 @@ public class JavascriptAutoEditStrategy extends
 
 	/**
 	 * Checks whether the content of <code>document</code> in the range (
-	 * <code>offset</code>, <code>length</code>) contains the
-	 * <code>new</code> keyword.
+	 * <code>offset</code>, <code>length</code>) contains the <code>new</code>
+	 * keyword.
 	 * 
 	 * @param document
 	 *            the document being modified
@@ -617,9 +654,8 @@ public class JavascriptAutoEditStrategy extends
 	 *            considered
 	 * @param partitioning
 	 *            the document partitioning
-	 * @return <code>true</code> if the content of <code>document</code>
-	 *         looks like an anonymous class definition, <code>false</code>
-	 *         otherwise
+	 * @return <code>true</code> if the content of <code>document</code> looks
+	 *         like an anonymous class definition, <code>false</code> otherwise
 	 */
 	private static boolean looksLikeAnonymousClassDef(IDocument document,
 			String partitioning, JavaHeuristicScanner scanner, int position) {
@@ -648,8 +684,7 @@ public class JavascriptAutoEditStrategy extends
 	 * @param partitioning
 	 *            the document partitioning
 	 * @return <code>true</code> if <code>position</code> is in the default
-	 *         partition of <code>document</code>, <code>false</code>
-	 *         otherwise
+	 *         partition of <code>document</code>, <code>false</code> otherwise
 	 */
 	private static boolean isDefaultPartition(IDocument document, int position,
 			String partitioning) {
@@ -821,10 +856,10 @@ public class JavascriptAutoEditStrategy extends
 
 	/**
 	 * Returns the indentation of the line <code>line</code> in
-	 * <code>document</code>. The returned string may contain pairs of
-	 * leading slashes that are considered part of the indentation. The space
-	 * before the asterisk in a javadoc-like comment is not considered part of
-	 * the indentation.
+	 * <code>document</code>. The returned string may contain pairs of leading
+	 * slashes that are considered part of the indentation. The space before the
+	 * asterisk in a javadoc-like comment is not considered part of the
+	 * indentation.
 	 * 
 	 * @param document
 	 *            the document
@@ -953,9 +988,9 @@ public class JavascriptAutoEditStrategy extends
 	}
 
 	/**
-	 * Cuts the visual equivalent of <code>toDelete</code> characters out of
-	 * the indentation of line <code>line</code> in <code>document</code>.
-	 * Leaves leading comment signs alone.
+	 * Cuts the visual equivalent of <code>toDelete</code> characters out of the
+	 * indentation of line <code>line</code> in <code>document</code>. Leaves
+	 * leading comment signs alone.
 	 * 
 	 * @param document
 	 *            the document
@@ -1421,9 +1456,9 @@ public class JavascriptAutoEditStrategy extends
 	}
 
 	/*
-	 * @see org.eclipse.jface.text.IAutoIndentStrategy#customizeDocumentCommand(org
-	 *      .eclipse.jface.text.IDocument,
-	 *      org.eclipse.jface.text.DocumentCommand)
+	 * @see
+	 * org.eclipse.jface.text.IAutoIndentStrategy#customizeDocumentCommand(org
+	 * .eclipse.jface.text.IDocument, org.eclipse.jface.text.DocumentCommand)
 	 */
 	public void customizeDocumentCommand(IDocument d, DocumentCommand c) {
 		if (c.doit == false)
