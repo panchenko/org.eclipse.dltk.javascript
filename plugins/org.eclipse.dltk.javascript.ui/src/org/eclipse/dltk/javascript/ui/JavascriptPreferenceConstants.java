@@ -489,15 +489,7 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 				PreferenceConstants.EDITOR_SYNC_OUTLINE_ON_CURSOR_MOVE, true);
 
 		// folding
-		store.setDefault(PreferenceConstants.EDITOR_FOLDING_ENABLED, true);
-		store.setDefault(PreferenceConstants.EDITOR_COMMENTS_FOLDING_ENABLED,
-				true);
-		store.setDefault(PreferenceConstants.EDITOR_COMMENTS_DEFAULT_FOLDED,
-				true);
-		// store.setDefault(PreferenceConstants.EDITOR_FOLDING_INNERTYPES,
-		// false);
-		// store.setDefault(PreferenceConstants.EDITOR_FOLDING_METHODS, false);
-		// store.setDefault(PreferenceConstants.EDITOR_FOLDING_IMPORTS, true);
+		initializeFoldingDefaults(store);
 
 		store.setDefault(CodeFormatterConstants.FORMATTER_TAB_CHAR,
 				CodeFormatterConstants.TAB);
@@ -522,5 +514,15 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 
 		store.setDefault(
 				PreferenceConstants.CODEASSIST_AUTOACTIVATION_TRIGGERS, ".");
+	}
+
+	protected static void initializeFoldingDefaults(IPreferenceStore store) {
+		store.setDefault(PreferenceConstants.EDITOR_FOLDING_ENABLED, true);
+		store.setDefault(PreferenceConstants.EDITOR_FOLDING_LINES_LIMIT, 2);
+		store.setDefault(PreferenceConstants.EDITOR_COMMENTS_FOLDING_ENABLED,
+				true);
+		store
+				.setDefault(PreferenceConstants.EDITOR_FOLDING_INIT_COMMENTS,
+						true);
 	}
 }
