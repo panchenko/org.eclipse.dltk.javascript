@@ -168,6 +168,9 @@ public final class DBGPDebugFrame implements DebugFrame {
 
 	private Object shortGet(Scriptable obj, String longName) {
 		if (obj instanceof NativeJavaArray || obj instanceof NativeArray) {
+			longName = longName.trim();
+			if (longName.startsWith("["))
+				longName = longName.substring(1, longName.length() - 1);
 			int parseInt = Integer.parseInt(longName);
 			return obj.get(parseInt, obj);
 		}

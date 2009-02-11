@@ -301,8 +301,13 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 			// behavior of plugins in Eclipse
 			{
 				counter++;
-				printProperty(ids[a].toString(), fullName + "." + ids[a],
-						pvalue, stringBuffer, level + 1, false);
+				if (ids[a] instanceof Integer) {
+					printProperty(ids[a].toString(), fullName + "[" + ids[a]
+							+ "]", pvalue, stringBuffer, level + 1, false);
+				} else {
+					printProperty(ids[a].toString(), fullName + "." + ids[a],
+							pvalue, stringBuffer, level + 1, false);
+				}
 			}
 		}
 		return counter;

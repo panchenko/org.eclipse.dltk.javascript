@@ -34,7 +34,20 @@ final class PropertyGetCommand extends DBGPDebugger.Command {
 		DBGPDebugFrame stackFrame = this.debugger.stackmanager
 				.getStackFrame(level);
 		if (stackFrame != null) {
-			value = stackFrame.getValue(longName);
+			StringBuffer sb = new StringBuffer();
+			boolean previousIsPoint = false;
+			for (int i = 0; i < longName.length(); i++) {
+				char ch = longName.charAt(i);
+				if (ch == '.') {
+					previousIsPoint = true;
+				} else if (ch == '[' && !previousIsPoint) {
+					sb.append('.');
+				} else {
+					previousIsPoint = false;
+				}
+				sb.append(ch);
+			}
+			value = stackFrame.getValue(sb.toString());
 		}
 		this.debugger.printProperty(shortName, longName, value, properties, 0,
 				true);
