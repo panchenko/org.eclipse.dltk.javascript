@@ -291,26 +291,17 @@ public class JavascriptAutoEditStrategy extends
 			int start = reg.getOffset();
 			ITypedRegion region = TextUtilities.getPartition(d, fPartitioning,
 					start, false);
-			if (IJavaScriptPartitions.JS_DOC.equals(region.getType())) {
+			if (IJavaScriptPartitions.JS_DOC.equals(region.getType())
+					|| IJavaScriptPartitions.JS_COMMENT
+							.equals(region.getType())) {
 				IRegion prevLine = d.getLineInformation(line);
 				String str = d.get(prevLine.getOffset(), prevLine.getLength());
 				if (!str.trim().endsWith("*/")) {
-					int index = str.indexOf("/*");
+					String result = handleJsCodeCompleteStars(buf, str,
+							prevLine, line, region, d, c);
+					buf.setLength(0);
+					buf.append(result);
 
-					if (index != -1) {
-						buf.append(str.substring(0, index));
-						buf.append(" * ");
-					} else {
-						for (int i = 0; i < str.length(); i++) {
-							char ch = str.charAt(i);
-							if (Character.isWhitespace(ch)) {
-								buf.append(ch);
-							} else {
-								break;
-							}
-						}
-						buf.append("* ");
-					}
 				}
 			}
 			// insert closing brace on new line after an unclosed opening brace
@@ -369,76 +360,91 @@ public class JavascriptAutoEditStrategy extends
 				IRegion prevLine = d.getLineInformation(line);
 				String str = d.get(prevLine.getOffset(), prevLine.getLength());
 				if (!str.trim().endsWith("*/")) {
-					int index = str.indexOf("/*");
-
-					// handle the start comment character prefix;
-					if (index != -1 && prevLine.getOffset() + index < c.offset) {
-						buf.setLength(0);
-						StringBuffer indentStr = new StringBuffer(index);
-						int counter = 0;
-						while (counter < index) {
-							char ch = str.charAt(counter++);
-							if (Character.isWhitespace(ch)) {
-								indentStr.append(ch);
-							} else {
-								indentStr.append(' ');
-							}
-						}
-
-						boolean enclosedComment = false;
-						try {
-							index = line + 1;
-							IRegion nextLine = null;
-							while ((nextLine = d.getLineInformation(index++)) != null) {
-								String strNextLine = d.get(
-										nextLine.getOffset(), nextLine
-												.getLength());
-								int stComment = strNextLine.indexOf("/*");
-								int endComment = strNextLine.indexOf("*/");
-
-								if (stComment != -1 && endComment != -1) {
-									if (stComment < endComment) {
-										break;
-									}
-								} else if (endComment != -1) {
-									enclosedComment = true;
-									break;
-								} else if (stComment != -1) {
-									break;
-								}
-
-							}
-						} catch (Exception ex) {
-
-						}
-						buf.append("\n" + indentStr + " * ");
-						c.caretOffset = c.offset + buf.length();
-						c.shiftsCaret = false;
-						if (!enclosedComment)
-							buf.append("\n" + indentStr + " */");
-					} else {
-						if (IJavaScriptPartitions.JS_COMMENT.equals(region
-								.getType())) {
-							buf = new StringBuffer();
-							buf.append("\n");
-							for (int i = 0; i < str.length(); i++) {
-								char ch = str.charAt(i);
-								if (Character.isWhitespace(ch)) {
-									buf.append(ch);
-								} else {
-									break;
-								}
-							}
-							buf.append("* ");
-						}
-					}
+					String result = handleJsCodeCompleteStars(buf, str,
+							prevLine, line, region, d, c);
+					buf.setLength(0);
+					buf.append(result);
 				}
 			}
+
 			c.text = buf.toString();
 
 		} catch (BadLocationException e) {
 			DLTKUIPlugin.log(e);
 		}
+	}
+
+	private String handleJsCodeCompleteStars(StringBuffer buf, String str,
+			IRegion prevLine, int line, ITypedRegion region, IDocument d,
+			DocumentCommand c) {
+		int index = str.indexOf("/*");
+
+		// handle the start comment character prefix;
+		if (index != -1 && prevLine.getOffset() + index < c.offset) {
+			buf.setLength(0);
+			StringBuffer indentStr = new StringBuffer(index);
+			int counter = 0;
+			while (counter < index) {
+				char ch = str.charAt(counter++);
+				if (Character.isWhitespace(ch)) {
+					indentStr.append(ch);
+				} else {
+					indentStr.append(' ');
+				}
+			}
+
+			boolean enclosedComment = false;
+			try {
+				index = line + 1;
+				IRegion nextLine = null;
+				while ((nextLine = d.getLineInformation(index++)) != null) {
+					String strNextLine = d.get(nextLine.getOffset(), nextLine
+							.getLength());
+					int stComment = strNextLine.indexOf("/*");
+					int endComment = strNextLine.indexOf("*/");
+
+					if (stComment != -1 && endComment != -1) {
+						if (stComment < endComment) {
+							break;
+						}
+					} else if (endComment != -1) {
+						enclosedComment = true;
+						break;
+					} else if (stComment != -1) {
+						break;
+					}
+
+				}
+			} catch (Exception ex) {
+
+			}
+			buf.append("\n" + indentStr + " * ");
+			c.caretOffset = c.offset + buf.length();
+			c.shiftsCaret = false;
+			if (!enclosedComment)
+				buf.append("\n" + indentStr + " */");
+		} else {
+			if (IJavaScriptPartitions.JS_COMMENT.equals(region.getType())
+					|| IJavaScriptPartitions.JS_DOC.equals(region.getType())) {
+				if (c.offset < region.getOffset() + region.getLength()) {
+					buf = new StringBuffer();
+					buf.append("\n");
+
+					for (int i = 0; i < str.length(); i++) {
+						char ch = str.charAt(i);
+						if (Character.isWhitespace(ch)) {
+							buf.append(ch);
+						} else {
+							break;
+						}
+					}
+					buf.append("* ");
+				}
+			}
+		}
+
+		return buf.toString();
+
 	}
 
 	private boolean isClosed(IDocument d, int offset, int length) {
