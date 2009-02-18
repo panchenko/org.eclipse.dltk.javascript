@@ -48,6 +48,8 @@ public class NativeArrayReference extends UnknownReference {
 	private static UnknownReference some = new NativeBooleanReference("some")
 			.setFunctionRef();
 
+	private static UnknownReference length = new NativeNumberReference("length");
+
 	/**
 	 * @param paramOrVarName
 	 * @param childIsh
@@ -80,6 +82,7 @@ public class NativeArrayReference extends UnknownReference {
 		setChild("forEach", forEach);
 		setChild("map", map);
 		setChild("some", some);
+		setChild("length", length);
 	}
 
 	public void setChild(String key, IReference ref) {
@@ -149,6 +152,10 @@ public class NativeArrayReference extends UnknownReference {
 				ur.setParameterNames(new char[][] {
 						"newelement1".toCharArray(),
 						"[newelementX]".toCharArray() });
+			} else if (name.equals("length")) {
+				ur
+						.setProposalInfo("The length returns an integer representing the length of an array.");
+
 			}
 		}
 		super.setChild(key, ref);
