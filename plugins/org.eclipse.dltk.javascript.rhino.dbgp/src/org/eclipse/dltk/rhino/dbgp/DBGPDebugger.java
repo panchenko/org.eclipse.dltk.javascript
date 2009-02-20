@@ -12,7 +12,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.WeakHashMap;
 
-import org.mozilla.javascript.Arguments;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeArray;
@@ -276,8 +275,10 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 		Object[] ids = null;
 		if (p instanceof LazyInitScope) {
 			ids = ((LazyInitScope) p).getInitializedIds();
-		} else if (p instanceof Arguments) {
-			ids = ((Arguments) p).getAllIds();
+		} else if (p instanceof ScriptableObject && !(p instanceof XMLObject)
+				&& !(p instanceof NativeArray)) {
+
+			ids = ((ScriptableObject) p).getAllIds();
 		} else {
 			ids = p.getIds();
 		}
