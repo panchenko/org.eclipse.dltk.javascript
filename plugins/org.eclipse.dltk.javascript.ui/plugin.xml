@@ -253,38 +253,42 @@
 	    <page	          
 	          class="org.eclipse.dltk.javascript.internal.ui.preferences.JavascriptGlobalPreferencesPage"
 	          id="org.eclipse.dltk.javascript.ui.javascript"
-	          name="Javascript"/>
+	          name="%JavaScriptPreferencePage.name"/>
 	    <page
 	          category="org.eclipse.dltk.javascript.ui.javascript"
 	          class="org.eclipse.dltk.javascript.internal.ui.preferences.JavascriptEditorPreferencesPage"
 	          id="org.eclipse.dltk.javascript.ui.EditorPreferences"
-	          name="Editor"/>
+	          name="%JavaScriptEditorPreferencePage.name"/>
+        <page
+              category="org.eclipse.dltk.javascript.ui.EditorPreferences"
+              class="org.eclipse.dltk.ui.preferences.ScriptEditorHoverPreferencePage:org.eclipse.dltk.javascript.core.nature"
+              id="org.eclipse.dltk.javascript.ui.editor.Hovers"
+              name="%JavaScriptEditorHoversPreferencePage.name"/>	          
 	    <page
 	          category="org.eclipse.dltk.javascript.ui.EditorPreferences"
 	          class="org.eclipse.dltk.javascript.internal.ui.preferences.JavascriptEditorSyntaxColoringPreferencePage"
 	          id="org.eclipse.dltk.javascript.ui.editor.SyntaxColoring"
-	          name="Syntax Coloring"/>
+	          name="%JavaScriptEditorSyntaxColoringPreferencePage.name"/>
         <page
               category="org.eclipse.dltk.javascript.ui.javascript"
               class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptTodoTaskPreferencePage"
               id="org.eclipse.dltk.javascript.preferences.todo"
-              name="%TaskTagsPreferencePage.name"/>
-	          
+              name="%TaskTagsPreferencePage.name"/>	          
 	    <page
 	          category="org.eclipse.dltk.javascript.ui.EditorPreferences"
 	          class="org.eclipse.dltk.javascript.internal.ui.preferences.JavascriptSmartTypingPreferencePage"
 	          id="org.eclipse.dltk.javascript.ui.editor.SmartTyping"
-	          name="Typing"/>          
+	          name="%JavaScriptEditorSmartTypingPreferencePage.name"/>          
 	    <page
           category="org.eclipse.dltk.javascript.ui.EditorPreferences"
           class="org.eclipse.dltk.javascript.internal.ui.preferences.JavascriptFoldingPreferencePage"
           id="org.eclipse.dltk.javascript.ui.editor.JavascriptFolding"
-          name="Folding"/>
+          name="%JavaScriptEditorFoldingPreferencePage.name"/>
 	<page
            category="org.eclipse.dltk.javascript.ui.EditorPreferences"
            class="org.eclipse.dltk.javascript.internal.ui.templates.JavaScriptTemplatePreferencePage"
            id="javascriptTemplatePreferencePage"
-           name="Templates">
+           name="%JavaScriptEditorTemplatesPreferencePage.name">
      </page>	          
 	 </extension>
 	 <extension
