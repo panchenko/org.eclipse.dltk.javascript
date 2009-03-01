@@ -16,7 +16,22 @@
                contentTypeId="org.eclipse.dltk.javascriptContentType">
          </contentTypeBinding>
       </editor>
-   </extension>   
+   </extension>
+
+  <extension point="org.eclipse.ui.editorActions">
+    <editorContribution
+      targetID="org.eclipse.dltk.javascript.ui.editor.JavaScriptEditor"
+      id="org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptEditor.ruler">
+      <action
+        label="JavaScript Selection Ruler action"
+        class="org.eclipse.dltk.ui.actions.ScriptEditorRulerActionDelegate:org.eclipse.dltk.javascript.core.nature"
+        actionID="RulerClick"
+        id="org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptSelectRulerAction">
+      </action>
+    </editorContribution>
+  </extension>    
+   
+      
    <extension point="org.eclipse.core.runtime.preferences">
         <initializer class="org.eclipse.dltk.javascript.internal.ui.JavaScriptUIPreferenceInitializer"/>
     </extension>
