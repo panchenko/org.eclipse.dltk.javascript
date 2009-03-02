@@ -13,6 +13,7 @@ import org.eclipse.dltk.debug.core.model.IScriptDebugTarget;
 import org.eclipse.dltk.debug.ui.ScriptStreamProxy;
 import org.eclipse.dltk.internal.debug.core.model.ScriptDebugTarget;
 import org.eclipse.dltk.internal.launching.JavaScriptSourceLookupDirector;
+import org.eclipse.dltk.javascript.internal.debug.JavaScriptDebugConstants;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.eclipse.ui.console.IOConsole;
 
@@ -27,27 +28,30 @@ public class JavaLocalApplicationLaunchConfigurationDelegate extends
 
 	public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
-//		System.out.println("launching");
+		// System.out.println("launching");
 		IDbgpService dbgpService = null;
 		try {
 			dbgpService = DLTKDebugPlugin.getDefault().getDbgpService();
-			
-			IScriptDebugTarget target = new ScriptDebugTarget("org.eclipse.dltk.debug.javascriptModel", dbgpService,
-					"hello", launch,null);
-			IOConsole cs=new IOConsole("aa",null);
+
+			IScriptDebugTarget target = new ScriptDebugTarget(
+					JavaScriptDebugConstants.DEBUG_MODEL_ID, dbgpService,
+					"hello", launch, null);
+			IOConsole cs = new IOConsole("aa", null);
 			ScriptStreamProxy proxy = new ScriptStreamProxy(cs);
 			target.setStreamProxy(proxy);
-			launch.addDebugTarget(target);			
+			launch.addDebugTarget(target);
 			final ISourceLocator sourceLocator = launch.getSourceLocator();
-			final JavaScriptSourceLookupDirector l=new JavaScriptSourceLookupDirector();
-			launch.setSourceLocator(new ISourceLocator(){
+			final JavaScriptSourceLookupDirector l = new JavaScriptSourceLookupDirector();
+			launch.setSourceLocator(new ISourceLocator() {
 
 				public Object getSourceElement(IStackFrame stackFrame) {
-					Object sourceElement = sourceLocator.getSourceElement(stackFrame);
-					if (sourceElement!=null) return sourceElement;
+					Object sourceElement = sourceLocator
+							.getSourceElement(stackFrame);
+					if (sourceElement != null)
+						return sourceElement;
 					return l.getSourceElement(stackFrame);
 				}
-				
+
 			});
 		} catch (Exception e) {
 
