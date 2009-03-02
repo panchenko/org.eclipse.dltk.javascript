@@ -67,7 +67,7 @@ public class ClasspathUtils {
 			return new File(rootEntry.getPath());
 		if ("jar".equals(rootEntry.getProtocol())) { //$NON-NLS-1$
 			String path = rootEntry.getPath();
-			if (path.startsWith("file:")) {
+			if (path.startsWith("file:")) { //$NON-NLS-1$
 				// strip off the file: and the !/
 				path = path.substring(5, path.length() - 2);
 				return new File(path);
