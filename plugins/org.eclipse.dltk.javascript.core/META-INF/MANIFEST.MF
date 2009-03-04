@@ -16,6 +16,7 @@ Export-Package: com.xored.org.mozilla.javascript,
  org.eclipse.dltk.internal.javascript.typeinference,
  org.eclipse.dltk.javascript.core,
  org.eclipse.dltk.javascript.internal.core.codeassist.completion;x-friends:="org.eclipse.dltk.javascript.core.tests",
- org.eclipse.dltk.javascript.internal.core.codeassist.selection
+ org.eclipse.dltk.javascript.internal.core.codeassist.selection,
+ org.eclipse.dltk.javascript.typeinference
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
 Bundle-ActivationPolicy: lazy

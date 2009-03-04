@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -379,14 +380,23 @@ public class TypeInferencer {
 
 			collection.setType(HostCollection.FUNCTION);
 			collection.setName(functionNode.getFunctionName());
+			String comment = functionNode.getFunctionComments();
+			Map paramTypes = parseComment(comment);
 			for (int am = 0; am < functionNode.getParamCount(); am++) {
 				String paramOrVarName = functionNode.getParamOrVarName(am);
-				UnknownReference uncknownReference = new UnknownReference(
-						paramOrVarName, false);
-				uncknownReference.setLocationInformation(module,
+				String type = (String) paramTypes.get(paramOrVarName);
+				IReference reference = null;
+				if (type != null) {
+					reference = ReferenceFactory.createTypeReference(
+							paramOrVarName, type, cs);
+				}
+				if (reference == null) {
+					reference = new UnknownReference(paramOrVarName, false);
+				}
+				reference.setLocationInformation(module,
 						functionNode.nameStart, functionNode.getFunctionName()
 								.length());
-				collection.write(paramOrVarName, uncknownReference);
+				collection.write(paramOrVarName, reference);
 			}
 			processScriptNode(functionNode.getFirstChild(), arg);
 			functionNodes.put(
@@ -410,6 +420,37 @@ public class TypeInferencer {
 			collection = pop;
 
 			functionContexts.removeLast();
+		}
+
+		/**
+		 * @param comment
+		 * @return
+		 */
+		private Map parseComment(String comment) {
+			if (comment == null)
+				return Collections.EMPTY_MAP;
+
+			HashMap map = new HashMap();
+			// TODO use JSDoc parser.
+			int paramIndex = comment.indexOf("@param");
+			while (paramIndex != -1) {
+				int endLineIndex = comment.indexOf("\n", paramIndex);
+				StringTokenizer st = new StringTokenizer(comment.substring(
+						paramIndex + 6, endLineIndex));
+				String type = "";
+				while (st.hasMoreTokens()) {
+					String token = st.nextToken();
+					if (token.startsWith("{") && token.endsWith("}")) {
+						type = token.substring(1, token.length() - 1);
+					} else {
+						// token is the name.
+						map.put(token, type);
+						break;
+					}
+				}
+				paramIndex = comment.indexOf("@param", endLineIndex);
+			}
+			return map;
 		}
 
 		public Object processVarDeclaration(Node node, Object arg) {
