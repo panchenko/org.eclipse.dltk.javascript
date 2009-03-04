@@ -43,6 +43,10 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 		initProviders();
 	}
 
+	public static IScriptColorProvider[] getScriptColorProviders() {
+		return providers;
+	}
+
 	private static void initProviders() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
 				.getExtensionPoint(
