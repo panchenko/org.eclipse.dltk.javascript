@@ -45,14 +45,4 @@
 <template id="org.eclipse.dltk.javascript.ui.templates.javascript.while" name="while" description="while loop" context="javascriptUniversalTemplateContextType" enabled="true" deleted="false" autoinsert="true">while (${condition}) {
 	${line_selection}${cursor}
 }</template>
-<template id="org.eclipse.dltk.javascript.ui.templates.javascript.exdojo" name="extends_dojo" description="Extend object dojo style" context="javascriptUniversalTemplateContextType" enabled="true" deleted="false" autoinsert="true">dojo.lang.extend(${base}, {
-    ${methodName}: function (${param}) {
-    	${cursor}
-    }
-});</template>
-<template id="org.eclipse.dltk.javascript.ui.templates.javascript.exproto" name="extends_prototype" description="Extend object prototype.js style" context="javascriptUniversalTemplateContextType" enabled="true" deleted="false" autoinsert="true">${ClassName}.prototype = (new ${Base}()).extend({
-  ${methodName}: function(${param}) {
-  	${cursor}
-  },
-});</template>
 </templates>

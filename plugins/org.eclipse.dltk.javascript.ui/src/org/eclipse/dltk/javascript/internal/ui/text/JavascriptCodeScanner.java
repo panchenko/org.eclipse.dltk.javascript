@@ -46,7 +46,7 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 	private static void initProviders() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
 				.getExtensionPoint(
-						"org.eclipse.dltk.javascript.ui.scriptcolor.provider");
+						"org.eclipse.dltk.javascript.ui.keywordsprovider");
 		IExtension[] extensions = extensionPoint.getExtensions();
 		ArrayList providerList = new ArrayList();
 		for (int a = 0; a < extensions.length; a++) {
