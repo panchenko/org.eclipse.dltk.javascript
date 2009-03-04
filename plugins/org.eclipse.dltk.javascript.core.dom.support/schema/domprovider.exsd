@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.dltk.javascript.core.dom.support">
+<schema targetNamespace="org.eclipse.dltk.javascript.core.dom.support" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.eclipse.dltk.javascript.core.dom.support" id="org.eclipse.dltk.javascript.core.domprovider" name="Design time DOM providers"/>
+         <meta.schema plugin="org.eclipse.dltk.javascript.core.dom.support" id="domprovider" name="Design time DOM providers"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -11,8 +11,13 @@
    </annotation>
 
    <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+      </annotation>
       <complexType>
-         <sequence>
+         <sequence minOccurs="1" maxOccurs="unbounded">
             <element ref="provider"/>
          </sequence>
          <attribute name="point" type="string" use="required">
@@ -58,7 +63,7 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="class" type="string">
+         <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
                   
@@ -107,13 +112,5 @@
       </documentation>
    </annotation>
 
-   <annotation>
-      <appInfo>
-         <meta.section type="copyright"/>
-      </appInfo>
-      <documentation>
-         
-      </documentation>
-   </annotation>
 
 </schema>

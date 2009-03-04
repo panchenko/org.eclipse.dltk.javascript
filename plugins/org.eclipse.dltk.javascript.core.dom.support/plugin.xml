@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="org.eclipse.dltk.javascript.core.domprovider" name="Design time DOM providers" schema="schema/org.eclipse.dltk.javascript.core.domprovider.exsd"/>
+   <extension-point id="domprovider" name="Design time DOM providers" schema="schema/domprovider.exsd"/>
    <extension
          point="org.eclipse.dltk.javascript.core.resolver">
       <resolver

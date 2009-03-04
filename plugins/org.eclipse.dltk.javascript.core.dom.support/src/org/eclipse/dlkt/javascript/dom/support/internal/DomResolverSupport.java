@@ -18,9 +18,10 @@ public class DomResolverSupport {
 	}
 
 	private static void initProviders() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
+		IExtensionPoint extensionPoint = Platform
+				.getExtensionRegistry()
 				.getExtensionPoint(
-						"org.eclipse.dltk.javascript.core.domprovider");
+						"org.eclipse.dltk.javascript.core.dom.support.domprovider");
 		IExtension[] extensions = extensionPoint.getExtensions();
 		ArrayList providerList = new ArrayList();
 		for (int a = 0; a < extensions.length; a++) {
@@ -38,7 +39,7 @@ public class DomResolverSupport {
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
-//				System.out.println(configurationElement.getName());
+				// System.out.println(configurationElement.getName());
 			}
 		}
 		IDesignTimeDOMProvider[] pr = new IDesignTimeDOMProvider[providerList

@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dlkt.javascript.dom.support.IDesignTimeDOMProvider;
 import org.eclipse.dlkt.javascript.dom.support.IProposalHolder;
+import org.eclipse.dlkt.javascript.dom.support.ScriptableScopeReference;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.core.ModelElement;
@@ -95,6 +96,14 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			//
 			// }
 			// }
+		} else if (ref instanceof ScriptableScopeReference) {
+			ScriptableScopeReference ssr = (ScriptableScopeReference) ref;
+			org.mozilla.javascript.Scriptable scriptable = ssr.getScriptable();
+			HashMap results = new HashMap();
+			fillMap(results, scriptable, false, null);
+			HashSet rs = new HashSet();
+			createReferences("", results, rs);
+			return rs;
 		}
 		return result;
 	}
@@ -137,6 +146,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 	}
 
 	WeakReference classRef;
+	private ReferenceResolverContext owner;
 
 	private HashMap getGlobalMap(String key) {
 		HashMap mp = new HashMap();
@@ -219,6 +229,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 	}
 
 	public void init(ReferenceResolverContext owner) {
+		this.owner = owner;
 		this.module = owner.getModule();
 		providers = DomResolverSupport.getProviders();
 
@@ -287,7 +298,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					uref = ((UnknownReferenceScope) object).getReference();
 				} else if (object instanceof Scriptable) {
 					uref = new ScriptableScopeReference(s, (Scriptable) object,
-							this);
+							owner);
 					if (object instanceof IProposalHolder) {
 						IProposalHolder fapn = (IProposalHolder) object;
 						uref.setParameterNames(fapn.getParameterNames());
