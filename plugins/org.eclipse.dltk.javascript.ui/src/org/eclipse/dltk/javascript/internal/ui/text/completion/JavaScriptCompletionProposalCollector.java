@@ -99,13 +99,13 @@ public class JavaScriptCompletionProposalCollector extends
 				} else if (ref instanceof IReference) {
 					ArrayList ms = new ArrayList();
 					((IReference) ref).addModelElements(ms);
-					if (ms.size() > 0)
-						;
-					Reader contentReader = new ScriptDocumentationProvider()
-							.getInfo((IMember) ms.get(0), true, true);
-					if (contentReader != null) {
-						String string = getString(contentReader);
-						return string;
+					if (ms.size() > 0) {
+						Reader contentReader = new ScriptDocumentationProvider()
+								.getInfo((IMember) ms.get(0), true, true);
+						if (contentReader != null) {
+							String string = getString(contentReader);
+							return string;
+						}
 					}
 				} else if (ref instanceof IMember) {
 					Reader contentReader = new ScriptDocumentationProvider()
