@@ -29,4 +29,6 @@ public interface IProposalHolder {
 	public boolean isFunctionRef();
 
 	public IFile getSourceFile();
+
+	public String getReturnType();
 }

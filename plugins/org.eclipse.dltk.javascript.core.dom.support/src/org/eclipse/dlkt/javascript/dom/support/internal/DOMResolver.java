@@ -21,6 +21,7 @@ import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IReferenceResolver;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableReference;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
+import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultReference;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
@@ -76,7 +77,34 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					}
 				}
 			}
-			Set resolveGlobals = resolveGlobals(cm.getId() + ".");
+			Set resolveGlobals = resolveGlobals(cm.getId());
+			// if there are more then one try to find the best match
+			if (resolveGlobals.size() > 1) {
+				Iterator iterator = resolveGlobals.iterator();
+				while (iterator.hasNext()) {
+					IReference reference = (IReference) iterator.next();
+					if (!cm.getId().endsWith(reference.getName())) {
+						iterator.remove();
+					}
+				}
+			}
+
+			// If it just resolved to 1 thing it is a method call.
+			if (resolveGlobals.size() == 1) {
+				Object o = resolveGlobals.iterator().next();
+				if (o instanceof SelfCompletingReference
+						&& ((SelfCompletingReference) o).getReturnType() != null) {
+					IReference returnTypeReference = ReferenceFactory
+							.createTypeReference(cm.getName(),
+									((SelfCompletingReference) o)
+											.getReturnType(), owner);
+					if (returnTypeReference != null) {
+						return returnTypeReference.getChilds(true);
+					}
+
+				}
+			}
+			resolveGlobals = resolveGlobals(cm.getId() + ".");
 
 			result.addAll(resolveGlobals);
 			// Object obj = getGlobalMap().get(cm.getId());
@@ -304,6 +332,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						uref.setParameterNames(fapn.getParameterNames());
 						uref.setProposalInfo(fapn.getProposalInfo());
 						sourceFile = fapn.getSourceFile();
+						uref.setReturnType(fapn.getReturnType());
 						uref.setImageUrl(fapn.getImageURL());
 						if (fapn.isFunctionRef())
 							uref.setFunctionRef();
@@ -320,6 +349,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					uref.setParameterNames(fapn.getParameterNames());
 					uref.setProposalInfo(fapn.getProposalInfo());
 					uref.setImageUrl(fapn.getImageURL());
+					uref.setReturnType(fapn.getReturnType());
 					sourceFile = fapn.getSourceFile();
 					object = fapn.getObject();
 					if (fapn.isFunctionRef())
