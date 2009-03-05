@@ -11,7 +11,6 @@ package org.eclipse.dltk.javascript.internal.ui.editor;
 
 import org.eclipse.dltk.internal.ui.editor.BracketInserter;
 import org.eclipse.dltk.internal.ui.editor.ScriptEditor;
-import org.eclipse.dltk.internal.ui.editor.ScriptEditor.BracketLevel;
 import org.eclipse.dltk.javascript.internal.ui.text.Symbols;
 import org.eclipse.dltk.javascript.scriptdoc.JavaHeuristicScanner;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
@@ -21,16 +20,10 @@ import org.eclipse.jface.text.BadPositionCategoryException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
-import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextUtilities;
-import org.eclipse.jface.text.link.LinkedModeModel;
-import org.eclipse.jface.text.link.LinkedModeUI;
-import org.eclipse.jface.text.link.LinkedPosition;
-import org.eclipse.jface.text.link.LinkedPositionGroup;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.ui.texteditor.link.EditorLinkedModeUI;
 
 public class JavaScriptBracketInserter extends BracketInserter {
 
@@ -55,8 +48,7 @@ public class JavaScriptBracketInserter extends BracketInserter {
 			return;
 		}
 
-		final ISourceViewer sourceViewer = this.editor
-				.getScriptSourceViewer();
+		final ISourceViewer sourceViewer = this.editor.getScriptSourceViewer();
 		IDocument document = sourceViewer.getDocument();
 
 		final Point selection = sourceViewer.getSelectedRange();
@@ -128,52 +120,8 @@ public class JavaScriptBracketInserter extends BracketInserter {
 			if (!this.editor.validateEditorInputState())
 				return;
 
-			final char character = event.character;
-			final char closingCharacter = getPeerCharacter(character);
-			final StringBuffer buffer = new StringBuffer();
-			buffer.append(character);
-			buffer.append(closingCharacter);
-
-			document.replace(offset, length, buffer.toString());
-
-			BracketLevel level = new ScriptEditor.BracketLevel();
-			fBracketLevelStack.push(level);
-
-			LinkedPositionGroup group = new LinkedPositionGroup();
-			group.addPosition(new LinkedPosition(document, offset + 1, 0,
-					LinkedPositionGroup.NO_STOP));
-
-			LinkedModeModel model = new LinkedModeModel();
-			model.addLinkingListener(this);
-			model.addGroup(group);
-			model.forceInstall();
-
-			level.fOffset = offset;
-			level.fLength = 2;
-
-			// set up position tracking for our magic peers
-			if (fBracketLevelStack.size() == 1) {
-				document.addPositionCategory(CATEGORY);
-				document.addPositionUpdater(fUpdater);
-			}
-			level.fFirstPosition = new Position(offset, 1);
-			level.fSecondPosition = new Position(offset + 1, 1);
-			document.addPosition(CATEGORY, level.fFirstPosition);
-			document.addPosition(CATEGORY, level.fSecondPosition);
-
-			level.fUI = new EditorLinkedModeUI(model, sourceViewer);
-			level.fUI.setSimpleMode(true);
-			level.fUI.setExitPolicy(this.editor.new ExitPolicy(
-					closingCharacter, getEscapeCharacter(closingCharacter),
-					fBracketLevelStack));
-			level.fUI.setExitPosition(sourceViewer, offset + 2, 0,
-					Integer.MAX_VALUE);
-			level.fUI.setCyclingMode(LinkedModeUI.CYCLE_NEVER);
-			level.fUI.enter();
-
-			IRegion newSelection = level.fUI.getSelectedRegion();
-			sourceViewer.setSelectedRange(newSelection.getOffset(),
-					newSelection.getLength());
+			insertBrackets(document, offset, length, event.character,
+					getPeerCharacter(event.character));
 
 			event.doit = false;
 
