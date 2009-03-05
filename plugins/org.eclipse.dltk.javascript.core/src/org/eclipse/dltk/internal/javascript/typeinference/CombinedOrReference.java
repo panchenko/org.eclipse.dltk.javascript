@@ -436,6 +436,24 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 		return null;
 	}
 
+	public String getReturnType() {
+		for (int i = 0; i < lstReferences.size(); i++) {
+			IReference element = (IReference) lstReferences.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getReturnType() != null) {
+				return ((SelfCompletingReference) element).getReturnType();
+			}
+		}
+		for (int i = 0; i < lstReadonly.size(); i++) {
+			IReference element = (IReference) lstReadonly.get(i);
+			if (element instanceof SelfCompletingReference
+					&& ((SelfCompletingReference) element).getReturnType() != null) {
+				return ((SelfCompletingReference) element).getReturnType();
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * @see org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference#getProposalInfo()
 	 */

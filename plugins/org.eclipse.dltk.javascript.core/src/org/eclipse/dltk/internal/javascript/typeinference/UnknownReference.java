@@ -38,6 +38,7 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 	private String proposalInfo;
 	protected UnknownReference parentRef;
 	private URL imageUrl;
+	private String returnType;
 
 	public int getOffset() {
 		return offset;
@@ -214,6 +215,21 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 	 */
 	public void setImageUrl(URL imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	/**
+	 * @see org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference#getReturnType()
+	 */
+	public String getReturnType() {
+		return returnType;
+	}
+
+	/**
+	 * @param returnType
+	 *            the returntype of this reference
+	 */
+	public void setReturnType(String returnType) {
+		this.returnType = returnType;
 	}
 
 	/**

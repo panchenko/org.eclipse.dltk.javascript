@@ -29,4 +29,6 @@ public interface SelfCompletingReference extends IReference {
 	 * @return
 	 */
 	URL getImageURL();
+
+	String getReturnType();
 }
