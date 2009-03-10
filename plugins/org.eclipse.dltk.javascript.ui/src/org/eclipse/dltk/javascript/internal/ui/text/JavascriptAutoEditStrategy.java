@@ -290,7 +290,7 @@ public class JavascriptAutoEditStrategy extends
 
 			int start = reg.getOffset();
 			ITypedRegion region = TextUtilities.getPartition(d, fPartitioning,
-					start, false);
+					start, true);
 			if (IJavaScriptPartitions.JS_DOC.equals(region.getType())
 					|| IJavaScriptPartitions.JS_COMMENT
 							.equals(region.getType())) {
