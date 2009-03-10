@@ -15,10 +15,10 @@ import org.mozilla.javascript.Scriptable;
  * @author jcompagner
  * 
  */
-public class UnknownReferenceScope implements Scriptable {
-	private final UnknownReference ur;
+public class ReferenceScope implements Scriptable {
+	private final IReference ur;
 
-	public UnknownReferenceScope(UnknownReference ur) {
+	public ReferenceScope(IReference ur) {
 		this.ur = ur;
 	}
 
@@ -41,7 +41,7 @@ public class UnknownReferenceScope implements Scriptable {
 	public Object get(String name, Scriptable start) {
 		IReference child = ur.getChild(name, true);
 		if (child instanceof UnknownReference) {
-			return new UnknownReferenceScope((UnknownReference) child);
+			return new ReferenceScope((UnknownReference) child);
 		}
 		return null;
 	}
@@ -148,7 +148,7 @@ public class UnknownReferenceScope implements Scriptable {
 	/**
 	 * @return
 	 */
-	public UnknownReference getReference() {
+	public IReference getReference() {
 		return ur;
 	}
 }

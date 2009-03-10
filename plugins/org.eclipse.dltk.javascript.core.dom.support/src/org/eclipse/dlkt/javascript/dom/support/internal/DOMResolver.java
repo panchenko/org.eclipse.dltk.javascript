@@ -14,19 +14,18 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dlkt.javascript.dom.support.IDesignTimeDOMProvider;
 import org.eclipse.dlkt.javascript.dom.support.IProposalHolder;
-import org.eclipse.dlkt.javascript.dom.support.ScriptableScopeReference;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IReferenceResolver;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableReference;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
-import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultReference;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
+import org.eclipse.dltk.internal.javascript.typeinference.ScriptableScopeReference;
 import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
@@ -77,53 +76,9 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					}
 				}
 			}
-			Set resolveGlobals = resolveGlobals(cm.getId());
-			// if there are more then one try to find the best match
-			if (resolveGlobals.size() > 1) {
-				Iterator iterator = resolveGlobals.iterator();
-				while (iterator.hasNext()) {
-					IReference reference = (IReference) iterator.next();
-					if (!cm.getId().endsWith(reference.getName())) {
-						iterator.remove();
-					}
-				}
-			}
-
-			// If it just resolved to 1 thing it is a method call.
-			if (resolveGlobals.size() == 1) {
-				Object o = resolveGlobals.iterator().next();
-				if (o instanceof SelfCompletingReference
-						&& ((SelfCompletingReference) o).getReturnType() != null) {
-					IReference returnTypeReference = ReferenceFactory
-							.createTypeReference(cm.getName(),
-									((SelfCompletingReference) o)
-											.getReturnType(), owner);
-					if (returnTypeReference != null) {
-						return returnTypeReference.getChilds(true);
-					}
-
-				}
-			}
-			resolveGlobals = resolveGlobals(cm.getId() + ".");
+			Set resolveGlobals = resolveGlobals(cm.getId() + ".");
 
 			result.addAll(resolveGlobals);
-			// Object obj = getGlobalMap().get(cm.getId());
-			// if (obj instanceof ScriptableObject) {
-			// ScriptableObject sc = (ScriptableObject) obj;
-			// if (sc instanceof Function) {
-			// Function f = (Function) sc;
-			// Scriptable construct = f.construct(Context
-			// .getCurrentContext(), sc, new Object[0]);
-			// if (construct instanceof ScriptableObject) {
-			// ScriptableObject sm = (ScriptableObject) construct;
-			// HashMap map = new HashMap();
-			// fillMap(map, sm, false);
-			// createReferences("", map, result);
-			// }
-			// }
-			//
-			// }
-			// }
 		} else if (ref instanceof ScriptableScopeReference) {
 			ScriptableScopeReference ssr = (ScriptableScopeReference) ref;
 			org.mozilla.javascript.Scriptable scriptable = ssr.getScriptable();
@@ -192,6 +147,22 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 
 	void fillMap(HashMap mp, Scriptable scope, boolean walkParent,
 			String idToFind) {
+		if (scope instanceof IProposalHolder
+				&& ((IProposalHolder) scope).getReturnType() != null) {
+			// the scope overrides its return type
+
+			IReference typeReference = ReferenceFactory.createTypeReference(
+					idToFind, ((IProposalHolder) scope).getReturnType(), owner);
+			Set childs = typeReference.getChilds(true);
+			Iterator it = childs.iterator();
+			while (it.hasNext()) {
+				IReference ref = (IReference) it.next();
+				if (idToFind == null || ref.getName().equals(idToFind)) {
+					mp.put(ref.getName(), new ReferenceScope(ref));
+				}
+			}
+			return;
+		}
 		try {
 			// some scriptable want to have a context when you get the value or
 			// ids.
@@ -321,12 +292,12 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			if (s.startsWith(key)) {
 				IFile sourceFile = null;
 				Object object = globals.get(s);
-				UnknownReference uref = null;
-				if (object instanceof UnknownReferenceScope) {
-					uref = ((UnknownReferenceScope) object).getReference();
+				IReference ref = null;
+				if (object instanceof ReferenceScope) {
+					ref = ((ReferenceScope) object).getReference();
 				} else if (object instanceof Scriptable) {
-					uref = new ScriptableScopeReference(s, (Scriptable) object,
-							owner);
+					UnknownReference uref = new ScriptableScopeReference(s,
+							(Scriptable) object, owner);
 					if (object instanceof IProposalHolder) {
 						IProposalHolder fapn = (IProposalHolder) object;
 						uref.setParameterNames(fapn.getParameterNames());
@@ -337,43 +308,50 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						if (fapn.isFunctionRef())
 							uref.setFunctionRef();
 					}
+					ref = uref;
 				} else if (object instanceof IProposalHolder) {
 					IProposalHolder fapn = (IProposalHolder) object;
 					object = getObjectReferenceScope(s,
 							((IProposalHolder) object).getObject());
-					if (object instanceof UnknownReferenceScope) {
-						uref = ((UnknownReferenceScope) object).getReference();
+					if (object instanceof ReferenceScope) {
+						ref = ((ReferenceScope) object).getReference();
 					} else {
-						uref = new UnknownReference(s, false);
+						ref = new UnknownReference(s, false);
 					}
-					uref.setParameterNames(fapn.getParameterNames());
-					uref.setProposalInfo(fapn.getProposalInfo());
-					uref.setImageUrl(fapn.getImageURL());
-					uref.setReturnType(fapn.getReturnType());
-					sourceFile = fapn.getSourceFile();
-					object = fapn.getObject();
-					if (fapn.isFunctionRef())
-						uref.setFunctionRef();
+					if (ref instanceof UnknownReference) {
+						UnknownReference uref = (UnknownReference) ref;
+						uref.setParameterNames(fapn.getParameterNames());
+						uref.setProposalInfo(fapn.getProposalInfo());
+						uref.setImageUrl(fapn.getImageURL());
+						uref.setReturnType(fapn.getReturnType());
+						sourceFile = fapn.getSourceFile();
+						object = fapn.getObject();
+						if (fapn.isFunctionRef())
+							uref.setFunctionRef();
+					}
 				} else {
-					uref = new UnknownReference(s, false);
+					ref = new UnknownReference(s, false);
 				}
 
-				if (!uref.isFunctionRef() && object instanceof Function
-						&& !(object instanceof NativeJavaTopPackage)) {
-					uref.setFunctionRef();
-				}
+				if (ref instanceof UnknownReference) {
+					UnknownReference uref = (UnknownReference) ref;
+					if (!ref.isFunctionRef() && object instanceof Function
+							&& !(object instanceof NativeJavaTopPackage)) {
+						uref.setFunctionRef();
+					}
 
-				if (sourceFile != null) {
-					ISourceModule sourceFileModule = DLTKCore
-							.createSourceModuleFrom(sourceFile);
-					uref.setLocationInformation(
-							(ModelElement) sourceFileModule, uref.getOffset(),
-							uref.getLength());
-				} else if (module instanceof ModelElement) {
-					uref.setLocationInformation((ModelElement) module, uref
-							.getOffset(), uref.getLength());
+					if (sourceFile != null) {
+						ISourceModule sourceFileModule = DLTKCore
+								.createSourceModuleFrom(sourceFile);
+						ref.setLocationInformation(
+								(ModelElement) sourceFileModule, uref
+										.getOffset(), uref.getLength());
+					} else if (module instanceof ModelElement) {
+						ref.setLocationInformation((ModelElement) module, uref
+								.getOffset(), uref.getLength());
+					}
 				}
-				rs.add(uref);
+				rs.add(ref);
 			}
 		}
 	}
@@ -413,7 +391,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			uref = ReferenceFactory.createArrayReference(s);
 		}
 		if (uref != null)
-			return new UnknownReferenceScope(uref);
+			return new ReferenceScope(uref);
 		return object;
 	}
 
