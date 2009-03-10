@@ -17,11 +17,12 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
-import org.eclipse.dltk.javascript.typeinference.ITypeProvider;
+import org.eclipse.dltk.javascript.typeinference.IScriptableTypeProvider;
+import org.mozilla.javascript.Scriptable;
 
 public class ReferenceFactory {
 
-	private static ITypeProvider[] providers;
+	private static IScriptableTypeProvider[] providers;
 
 	static {
 		initProviders();
@@ -42,7 +43,7 @@ public class ReferenceFactory {
 				try {
 					Object createExecutableExtension = configurationElement
 							.createExecutableExtension("class");
-					if (createExecutableExtension instanceof ITypeProvider) {
+					if (createExecutableExtension instanceof IScriptableTypeProvider) {
 						providerList.add(createExecutableExtension);
 					}
 				} catch (CoreException e) {
@@ -51,7 +52,7 @@ public class ReferenceFactory {
 				// System.out.println(configurationElement.getName());
 			}
 		}
-		ITypeProvider[] pr = new ITypeProvider[providerList.size()];
+		IScriptableTypeProvider[] pr = new IScriptableTypeProvider[providerList.size()];
 		providerList.toArray(pr);
 		providers = pr;
 	}
@@ -110,16 +111,15 @@ public class ReferenceFactory {
 
 			if (providers != null) {
 				for (int i = 0; i < providers.length; i++) {
-					ITypeProvider element = (ITypeProvider) providers[i];
-					IReference ref = element.createTypeReference(
-							paramOrVarName, type, rrc);
+					IScriptableTypeProvider element = (IScriptableTypeProvider) providers[i];
+					Scriptable ref = element.getType(paramOrVarName, type);
 					if (ref != null)
-						return ref;
+						return new ScriptableScopeReference(paramOrVarName,
+								ref, rrc);
 				}
 			}
 
 		}
 		return new UnknownReference(paramOrVarName, false);
 	}
-
 }

@@ -69,7 +69,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.dltk.javascript.typeinference.ITypeProvider"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.dltk.javascript.typeinference.IScriptableTypeProvider"/>
                </appInfo>
             </annotation>
          </attribute>
