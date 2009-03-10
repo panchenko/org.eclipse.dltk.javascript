@@ -48,7 +48,7 @@ import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 
 public class JavaScriptEditor extends ScriptEditor {
 
-	public static final String EDITOR_ID = "org.eclipse.dltk.javascript.internal.ui.editor.JavascriptEditor";
+	public static final String EDITOR_ID = "org.eclipse.dltk.javascript.ui.editor.JavascriptEditor";
 
 	public static final String EDITOR_CONTEXT = "#JavascriptEditorContext";
 
@@ -290,7 +290,8 @@ public class JavaScriptEditor extends ScriptEditor {
 	}
 
 	/*
-	 * @see org.eclipse.ui.texteditor.AbstractDecoratedTextEditor#initializeKeyBindingScopes()
+	 * @seeorg.eclipse.ui.texteditor.AbstractDecoratedTextEditor#
+	 * initializeKeyBindingScopes()
 	 */
 	protected void initializeKeyBindingScopes() {
 		setKeyBindingScopes(new String[] { "org.eclipse.dltk.ui.javascriptEditorScope" }); //$NON-NLS-1$
