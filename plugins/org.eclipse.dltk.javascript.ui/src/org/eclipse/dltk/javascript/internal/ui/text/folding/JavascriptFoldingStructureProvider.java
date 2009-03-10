@@ -20,6 +20,10 @@ import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 public class JavascriptFoldingStructureProvider extends
 		AbstractASTFoldingStructureProvider {
 
+	protected String getDocPartition() {
+		return IJavaScriptPartitions.JS_DOC;
+	}
+
 	protected String getCommentPartition() {
 		return IJavaScriptPartitions.JS_COMMENT;
 	}

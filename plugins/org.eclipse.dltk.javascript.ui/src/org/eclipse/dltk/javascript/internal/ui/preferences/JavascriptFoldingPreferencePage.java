@@ -11,6 +11,7 @@
 package org.eclipse.dltk.javascript.internal.ui.preferences;
 
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.dltk.javascript.internal.ui.text.folding.JavaScriptDocFoldingPreferenceBlock;
 import org.eclipse.dltk.javascript.internal.ui.text.folding.JavascriptFoldingPreferenceBlock;
 import org.eclipse.dltk.ui.preferences.AbstractConfigurationBlockPreferencePage;
 import org.eclipse.dltk.ui.preferences.IPreferenceConfigurationBlock;
@@ -42,6 +43,11 @@ public final class JavascriptFoldingPreferencePage extends
 			OverlayPreferenceStore overlayPreferenceStore) {
 		return new DefaultFoldingPreferenceConfigurationBlock(
 				overlayPreferenceStore, this) {
+			protected IFoldingPreferenceBlock createDocumentationBlock(
+					OverlayPreferenceStore store, PreferencePage page) {
+				return new JavaScriptDocFoldingPreferenceBlock(store, page);
+			}
+
 			protected IFoldingPreferenceBlock createSourceCodeBlock(
 					OverlayPreferenceStore store, PreferencePage page) {
 				return new JavascriptFoldingPreferenceBlock(store, page);

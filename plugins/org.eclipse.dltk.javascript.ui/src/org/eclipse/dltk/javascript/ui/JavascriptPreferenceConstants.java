@@ -521,6 +521,7 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 		store.setDefault(PreferenceConstants.EDITOR_FOLDING_LINES_LIMIT, 2);
 		store.setDefault(PreferenceConstants.EDITOR_COMMENTS_FOLDING_ENABLED,
 				true);
+		store.setDefault(PreferenceConstants.EDITOR_DOCS_FOLDING_ENABLED, true);
 		store
 				.setDefault(PreferenceConstants.EDITOR_FOLDING_INIT_COMMENTS,
 						true);
