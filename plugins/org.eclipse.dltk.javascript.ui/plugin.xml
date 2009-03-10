@@ -20,7 +20,7 @@
 
   <extension point="org.eclipse.ui.editorActions">
     <editorContribution
-      targetID="org.eclipse.dltk.javascript.ui.editor.JavaScriptEditor"
+      targetID="org.eclipse.dltk.javascript.ui.editor.JavascriptEditor"
       id="org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptEditor.ruler">
       <action
         label="JavaScript Selection Ruler action"
