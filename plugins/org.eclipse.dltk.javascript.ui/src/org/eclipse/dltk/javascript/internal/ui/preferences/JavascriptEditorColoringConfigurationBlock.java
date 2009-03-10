@@ -22,6 +22,7 @@ import org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptDocumentSetupPar
 import org.eclipse.dltk.javascript.internal.ui.text.JavascriptCodeScanner;
 import org.eclipse.dltk.javascript.internal.ui.text.SimpleJavascriptSourceViewerConfiguration;
 import org.eclipse.dltk.javascript.ui.JavascriptPreferenceConstants;
+import org.eclipse.dltk.javascript.ui.scriptcolor.provider.IColorProviderCategoryItem;
 import org.eclipse.dltk.javascript.ui.scriptcolor.provider.IScriptColorPreferenceProvider;
 import org.eclipse.dltk.javascript.ui.scriptcolor.provider.IScriptColorProvider;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
@@ -37,6 +38,7 @@ import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -106,13 +108,40 @@ public class JavascriptEditorColoringConfigurationBlock extends
 	// , "XML"},
 	};
 
+	protected class CustomJSColorListContentProvider extends
+			ColorListContentProvider {
+		public Object[] getElements(Object inputElement) {
+			List categories = new ArrayList();
+			List cats = getCustomCategories();
+			for (int a = 0; a < cats.size(); a++) {
+
+				Object aCat = cats.get(a);
+				if (aCat instanceof String) {
+					if (getElementsForCategory((String) aCat).length > 0) {
+						categories.add(cats.get(a));
+					}
+				} else if (aCat instanceof IColorProviderCategoryItem) {
+					IColorProviderCategoryItem hmap = (IColorProviderCategoryItem) aCat;
+					categories.add(hmap.getName());
+
+				}
+			}
+			return categories.toArray();
+
+		}
+	}
+
 	public JavascriptEditorColoringConfigurationBlock(
 			OverlayPreferenceStore store) {
 		super(new MultiplyOverlayPreferenceStore(store, customColorProvider));
 
 	}
 
-	protected String[] getCategories() {
+	protected IContentProvider getColorListContentProvider() {
+		return new CustomJSColorListContentProvider();
+	}
+
+	private List getCustomCategories() {
 		List allCategories = new ArrayList();
 
 		allCategories.add(sCoreCategory);
@@ -121,14 +150,95 @@ public class JavascriptEditorColoringConfigurationBlock extends
 		allCategories.add("XML");
 
 		for (int i = 0; i < customColorProvider.length; i++) {
-			String[] categories = customColorProvider[i].getCategories();
+			IColorProviderCategoryItem categories[] = customColorProvider[i]
+					.getCategories();
 			for (int j = 0; j < categories.length; j++) {
-				allCategories.add(categories[j]);
+				IColorProviderCategoryItem category = categories[j];
+				allCategories.add(category);
 			}
 		}
 
-		return (String[]) allCategories
-				.toArray(new String[allCategories.size()]);
+		return allCategories;
+	}
+
+	public Object[] getElementsForCategory(String entry) {
+		List elements = new ArrayList();
+		IColorProviderCategoryItem categoryParent = null;
+		if ((categoryParent = getIsCategoryParent(entry, getCustomCategories())) != null) {
+			List subChildsList = categoryParent.getCategoryItems();
+
+			List returnList = new ArrayList();
+			for (int c = 0; c < subChildsList.size(); c++) {
+				Object obj = subChildsList.get(c);
+
+				if (obj instanceof IColorProviderCategoryItem) {
+					IColorProviderCategoryItem hobj = (IColorProviderCategoryItem) obj;
+					if (hobj.getCategoryItems() != null
+							&& hobj.getCategoryItems().size() > 0) {
+						returnList.add(hobj.getName());
+					}
+
+				} else if (obj instanceof String) {
+					returnList.add((String) obj);
+				} else if (obj instanceof List) {
+					returnList.addAll((List) obj);
+				}
+
+			}
+
+			Iterator i = this.fListModel.iterator();
+			while (i.hasNext()) {
+				HighlightingColorListItem item = (HighlightingColorListItem) i
+						.next();
+				if (item.getCategory().equals(entry)) {
+					returnList.add(item);
+				}
+			}
+			return returnList.toArray();
+		}
+		Iterator i = this.fListModel.iterator();
+		while (i.hasNext()) {
+			HighlightingColorListItem item = (HighlightingColorListItem) i
+					.next();
+			if (item.getCategory().equals(entry)) {
+				elements.add(item);
+			}
+		}
+		return elements.toArray();
+
+	}
+
+	private IColorProviderCategoryItem getIsCategoryParent(String entry,
+			List categoriesList) {
+
+		if (categoriesList != null && categoriesList.size() > 0) {
+			for (int i = 0; i < categoriesList.size(); i++) {
+				Object obj = categoriesList.get(i);
+				if (obj instanceof IColorProviderCategoryItem) {
+					IColorProviderCategoryItem categoryParent = (IColorProviderCategoryItem) obj;
+					if (entry.equals(categoryParent.getName())) {
+						return categoryParent;
+					} else {
+
+						if (categoryParent.getCategoryItems() != null
+								&& categoryParent.getCategoryItems().size() > 0) {
+							Iterator it = categoryParent.getCategoryItems()
+									.iterator();
+							IColorProviderCategoryItem result = null;
+							while (it.hasNext()) {
+								IColorProviderCategoryItem subItem = (IColorProviderCategoryItem) it
+										.next();
+								result = getIsCategoryParent(entry, subItem
+										.getCategoryItems());
+								if (result != null)
+									return result;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -161,10 +271,14 @@ public class JavascriptEditorColoringConfigurationBlock extends
 			}
 
 			for (int k = 0; k < customColorProvider.length; k++) {
-				String[][] providerList = customColorProvider[k]
-						.getSyntaxColorListModel();
-				for (int i = 0; i < providerList.length; i++) {
-					list.add(providerList[i]);
+
+				IColorProviderCategoryItem categories[] = customColorProvider[k]
+						.getCategories();
+
+				for (int p = 0; p < categories.length; p++) {
+					IColorProviderCategoryItem category = categories[p];
+					checkForColorItems(list, category, category
+							.getCategoryItems());
 				}
 			}
 
@@ -173,6 +287,24 @@ public class JavascriptEditorColoringConfigurationBlock extends
 
 		}
 		return fSyntaxColorListModel;
+	}
+
+	protected void checkForColorItems(List list,
+			IColorProviderCategoryItem category, List categoryItems) {
+
+		if (categoryItems != null && categoryItems.size() > 0) {
+			for (int i = 0; i < categoryItems.size(); i++) {
+				IColorProviderCategoryItem item = (IColorProviderCategoryItem) categoryItems
+						.get(i);
+				if (item.getName() != null && item.getColorKey() != null) {
+					list.add(new String[] { item.getName(), item.getColorKey(),
+							category.getName() });
+				} else { // this means is a category item
+					checkForColorItems(list, item, item.getCategoryItems());
+				}
+			}
+		}
+
 	}
 
 	protected ProjectionViewer createPreviewViewer(Composite parent,

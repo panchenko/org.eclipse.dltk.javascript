@@ -11,9 +11,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
  */
 public interface IScriptColorPreferenceProvider extends IScriptColorProvider {
 
-	public String[] getCategories();
-
-	public String[][] getSyntaxColorListModel();
+	public IColorProviderCategoryItem[] getCategories();
 
 	public IPreferenceStore getPreferenceStore();
 
