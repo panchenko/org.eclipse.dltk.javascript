@@ -3,6 +3,7 @@ package org.eclipse.dltk.rhino.dbgp;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,11 +44,23 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 	}
 
 	void printResponse(String response) {
-		String encodeString = response;
-		out.print(encodeString.length());
-		out.write(0);
-		out.print(encodeString);
-		out.write(0);
+		try {
+			byte[] bytes = response.getBytes("UTF-8");
+			out.print(bytes.length);
+			out.write(0);
+			out.write(bytes, 0, bytes.length);
+			out.write(0);
+			out.flush();
+			if (out.checkError()) {
+				try {
+					socket.close();
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		} catch (UnsupportedEncodingException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	DBGPStackManager stackmanager;
