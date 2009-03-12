@@ -1,9 +1,9 @@
 package org.eclipse.dltk.rhino.dbgp;
 
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +34,7 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 		IDeguggerWithWatchPoints {
 
 	private Socket socket;
-	private PrintStream out;
+	private OutputStream out;
 	private HashMap strategies = new HashMap();
 	HashMap properties = new HashMap();
 	String runTransctionId;
@@ -43,23 +43,25 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 		abstract void parseAndExecute(String command, HashMap options);
 	}
 
+	private static void writeResponseLength(OutputStream out, int value)
+			throws IOException {
+		out.write(String.valueOf(value).getBytes());
+	}
+
 	void printResponse(String response) {
 		try {
-			byte[] bytes = response.getBytes("UTF-8");
-			out.print(bytes.length);
+			byte[] bytes = response.getBytes("UTF-8"); //$NON-NLS-1$
+			writeResponseLength(out, bytes.length);
 			out.write(0);
 			out.write(bytes, 0, bytes.length);
 			out.write(0);
 			out.flush();
-			if (out.checkError()) {
-				try {
-					socket.close();
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+		} catch (IOException e) {
+			try {
+				socket.close();
+			} catch (IOException e2) {
+				// ignore
 			}
-		} catch (UnsupportedEncodingException ex) {
-			ex.printStackTrace();
 		}
 	}
 
@@ -79,7 +81,7 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 
 		stackmanager = DBGPStackManager.getManager(ct);
 		stackmanager.suspend();
-		out = new PrintStream(socket.getOutputStream());
+		out = new BufferedOutputStream(socket.getOutputStream(), 2048);
 		stackmanager.setDebugger(this);
 		String response = "<init appid=\"APPID\"\r\n" + "      idekey=\""
 				+ string + "\"\r\n" + "      session=\"" + string + "\"\r\n"
@@ -111,7 +113,6 @@ public class DBGPDebugger extends Thread implements Debugger, Observer,
 		strategies.put("break", new BreakCommand(this));
 		strategies.put("stack_depth", new StackDepthCommand(this));
 		strategies.put("stack_get", new StackGetCommand(this));
-		out.flush();
 	}
 
 	protected void printProperty(String id, String fullName, Object value,
