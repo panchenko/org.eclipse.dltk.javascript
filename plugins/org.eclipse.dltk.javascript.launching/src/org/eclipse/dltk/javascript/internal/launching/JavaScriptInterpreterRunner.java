@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.internal.launching;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -26,13 +27,13 @@ import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.dltk.compiler.CharOperation;
-import org.eclipse.dltk.console.ScriptConsoleServer;
-import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.javascript.internal.debug.JavaScriptDebugPlugin;
 import org.eclipse.dltk.javascript.launching.IConfigurableRunner;
 import org.eclipse.dltk.javascript.launching.IJavaScriptInterpreterRunnerConfig;
 import org.eclipse.dltk.javascript.launching.JavaScriptLaunchConfigurationConstants;
+import org.eclipse.dltk.javascript.launching.JavaScriptLaunchingPlugin;
 import org.eclipse.dltk.launching.AbstractInterpreterRunner;
 import org.eclipse.dltk.launching.AbstractScriptLaunchConfigurationDelegate;
 import org.eclipse.dltk.launching.IInterpreterInstall;
@@ -62,12 +63,12 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 
 		public String[] getProgramArguments(InterpreterConfig config,
 				ILaunch launch, IJavaProject project) {
-			return new String[0];
+			return CharOperation.NO_STRINGS;
 		}
 
 		public String getRunnerClassName(InterpreterConfig config,
 				ILaunch launch, IJavaProject project) {
-			return "RhinoRunner";
+			return "RhinoRunner"; //$NON-NLS-1$
 		}
 
 	};
@@ -83,19 +84,19 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 
 		String host = (String) config.getProperty(DbgpConstants.HOST_PROP);
 		if (host == null) {
-			host = "";
+			host = Util.EMPTY_STRING;
 		}
 
 		String port = (String) config.getProperty(DbgpConstants.PORT_PROP);
 		if (port == null) {
-			port = "";
+			port = Util.EMPTY_STRING;
 		}
 
 		String sessionId = (String) config
 				.getProperty(DbgpConstants.SESSION_ID_PROP);
 
 		if (sessionId == null) {
-			sessionId = "";
+			sessionId = Util.EMPTY_STRING;
 		}
 
 		IScriptProject proj = AbstractScriptLaunchConfigurationDelegate
@@ -125,18 +126,18 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 										JavaScriptDebugPlugin.PLUGIN_ID,
 										"Script File name is not specified..."));
 							}
-							String[] strings = new String[] {
-									scriptFilePath.toPortableString(), host,
-									"" + port, sessionId };
+							List args = new ArrayList();
+							args.add(scriptFilePath.toPortableString());
+							args.add(host);
+							args.add(port);
+							args.add(sessionId);
 							String[] newStrings = iconfig.getProgramArguments(
 									config, launch, myJavaProject);
-							String[] rs = new String[strings.length
-									+ newStrings.length];
-							for (int a = 0; a < strings.length; a++)
-								rs[a] = strings[a];
-							for (int a = 0; a < newStrings.length; a++)
-								rs[a + strings.length] = newStrings[a];
-							vmConfig.setProgramArguments(strings);
+							if (newStrings.length != 0) {
+								args.addAll(Arrays.asList(newStrings));
+							}
+							vmConfig.setProgramArguments((String[]) args
+									.toArray(new String[args.size()]));
 							ILaunch launchr = new Launch(launch
 									.getLaunchConfiguration(),
 									ILaunchManager.DEBUG_MODE, null);
@@ -161,7 +162,8 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 				}
 			}
 		}
-		throw new CoreException(new Status(IStatus.ERROR, "", ""));
+		throw new CoreException(new Status(IStatus.ERROR,
+				JavaScriptLaunchingPlugin.PLUGIN_ID, "JRE is not configured"));
 	}
 
 	public static String[] getClassPath(IJavaProject myJavaProject)
@@ -190,34 +192,8 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 		return JavaRuntime.computeDefaultRuntimeClassPath(myJavaProject);
 	}
 
-	protected String constructProgramString(InterpreterConfig config)
-			throws CoreException {
-
-		return "";
-	}
-
 	public JavaScriptInterpreterRunner(IInterpreterInstall install) {
 		super(install);
-	}
-
-	protected String[] alterCommandLine(String[] cmdLine, String id) {
-		ScriptConsoleServer server = ScriptConsoleServer.getInstance();
-		String port = Integer.toString(server.getPort());
-		String[] newCmdLine = new String[cmdLine.length + 4];
-
-		newCmdLine[0] = cmdLine[0];
-		newCmdLine[1] = DLTKCore.getDefault().getStateLocation().append(
-				"tcl_proxy").toOSString();
-
-		newCmdLine[2] = "localhost";
-		newCmdLine[3] = port;
-		newCmdLine[4] = id;
-
-		for (int i = 1; i < cmdLine.length; ++i) {
-			newCmdLine[i + 4] = cmdLine[i];
-		}
-
-		return newCmdLine;
 	}
 
 	protected String getProcessType() {
