@@ -16,7 +16,7 @@ import org.eclipse.dltk.launching.InterpreterConfig;
 public class JavaScriptAndJDTDebuggerRunner extends DebuggingEngineRunner
 		implements IConfigurableRunner {
 
-	public static String ENGINE_ID = "org.eclipse.dltk.javascript.jsjdtdebugger";
+	public static final String ENGINE_ID = "org.eclipse.dltk.javascript.jsjdtdebugger"; //$NON-NLS-1$
 
 	IJavaScriptInterpreterRunnerConfig runnerconfig = JavaScriptInterpreterRunner.DEFAULT_CONFIG;
 
@@ -44,16 +44,8 @@ public class JavaScriptAndJDTDebuggerRunner extends DebuggingEngineRunner
 		return ENGINE_ID;
 	}
 
-	/**
-	 * @deprecated Use {@link #addEngineConfig(InterpreterConfig,PreferencesLookupDelegate,ILaunch)} instead
-	 */
 	protected InterpreterConfig addEngineConfig(InterpreterConfig config,
-			PreferencesLookupDelegate delegate) throws CoreException {
-				return addEngineConfig(config, delegate, null);
-			}
-
-	protected InterpreterConfig addEngineConfig(InterpreterConfig config,
-			PreferencesLookupDelegate delegate, ILaunch launch) throws CoreException {
+			PreferencesLookupDelegate delegate, ILaunch launch) {
 		return config;
 	}
 
