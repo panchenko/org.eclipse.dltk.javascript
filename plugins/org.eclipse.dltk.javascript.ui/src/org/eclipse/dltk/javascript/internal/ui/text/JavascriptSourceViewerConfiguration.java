@@ -44,6 +44,8 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.information.IInformationPresenter;
+import org.eclipse.jface.text.information.IInformationProvider;
+import org.eclipse.jface.text.information.InformationPresenter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.ICharacterScanner;
@@ -139,6 +141,24 @@ public class JavascriptSourceViewerConfiguration extends
 		assistant.setContentAssistProcessor(jsProcessor,
 				IJavaScriptPartitions.JS_DOC);
 
+	}
+
+	/**
+	 * Overrides the default outline presenter, so that it can be accessed from
+	 * js comment and doc regions
+	 */
+	public IInformationPresenter getOutlinePresenter(
+			ScriptSourceViewer sourceViewer, boolean doCodeResolve) {
+
+		InformationPresenter presenter = (InformationPresenter) super
+				.getOutlinePresenter(sourceViewer, doCodeResolve);
+		IInformationProvider provider = presenter
+				.getInformationProvider(IDocument.DEFAULT_CONTENT_TYPE);
+		presenter.setInformationProvider(provider,
+				IJavaScriptPartitions.JS_COMMENT);
+		presenter
+				.setInformationProvider(provider, IJavaScriptPartitions.JS_DOC);
+		return presenter;
 	}
 
 	/*
