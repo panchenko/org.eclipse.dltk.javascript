@@ -82,25 +82,89 @@ public class OldCodeFormatter extends CodeFormatter {
 			retValue = de.decompile(encodedSource, 0, uintMap);
 		// hack because this decompiler does strange stuff when the code starts
 		// with /**
-		if (retValue.startsWith("/*/**")) {
-			StringBuffer sb = new StringBuffer();
-			sb.append("/**");
-			retValue = retValue.substring(2);
-			for (int i = 3; i < retValue.length(); i++) {
-				char c = retValue.charAt(i);
-				if (c == '/') {
-					sb.append(retValue.substring(i));
-					retValue = sb.toString();
-					break;
-				}
-				if (c == '*' && retValue.charAt(i - 1) == '\n') {
-					sb.append(' ');
-				}
-				sb.append(c);
-
-			}
-		}
+		retValue = replaceAll(replaceAll(retValue, "/*/**", "/**"), "\n*",
+				"\n *").toString();
 		return retValue;
+	}
+
+	/**
+	 * Replace all occurrences of one string replaceWith another string.
+	 * 
+	 * @param s
+	 *            The string to process
+	 * @param searchFor
+	 *            The value to search for
+	 * @param replaceWith
+	 *            The value to searchFor replaceWith
+	 * @return The resulting string with searchFor replaced with replaceWith
+	 */
+	public static CharSequence replaceAll(final CharSequence s,
+			final CharSequence searchFor, CharSequence replaceWith) {
+		if (s == null) {
+			return null;
+		}
+
+		// If searchFor is null or the empty string, then there is nothing to
+		// replace, so returning s is the only option here.
+		if (searchFor == null || "".equals(searchFor)) {
+			return s;
+		}
+
+		// If replaceWith is null, then the searchFor should be replaced with
+		// nothing, which can be seen as the empty string.
+		if (replaceWith == null) {
+			replaceWith = "";
+		}
+
+		String searchString = searchFor.toString();
+		// Look for first occurrence of searchFor
+		int matchIndex = search(s, searchString, 0);
+		if (matchIndex == -1) {
+			// No replace operation needs to happen
+			return s;
+		} else {
+			// Allocate a AppendingStringBuffer that will hold one replacement
+			// with a
+			// little extra room.
+			int size = s.length();
+			final int replaceWithLength = replaceWith.length();
+			final int searchForLength = searchFor.length();
+			if (replaceWithLength > searchForLength) {
+				size += (replaceWithLength - searchForLength);
+			}
+			final StringBuffer buffer = new StringBuffer(size + 16);
+
+			int pos = 0;
+			do {
+				// Append text up to the match`
+				buffer.append(s.subSequence(pos, matchIndex));
+
+				// Add replaceWith text
+				buffer.append(replaceWith);
+
+				// Find next occurrence, if any
+				pos = matchIndex + searchForLength;
+				matchIndex = search(s, searchString, pos);
+			} while (matchIndex != -1);
+
+			// Add tail of s
+			buffer.append(s.subSequence(pos, s.length()));
+
+			// Return processed buffer
+			return buffer;
+		}
+	}
+
+	private static int search(final CharSequence s, String searchString, int pos) {
+		int matchIndex = -1;
+		if (s instanceof String) {
+			matchIndex = ((String) s).indexOf(searchString, pos);
+		} else if (s instanceof StringBuffer) {
+			matchIndex = ((StringBuffer) s).indexOf(searchString, pos);
+		} else {
+			matchIndex = s.toString().indexOf(searchString, pos);
+		}
+		return matchIndex;
 	}
 
 }
