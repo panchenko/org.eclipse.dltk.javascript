@@ -686,6 +686,8 @@ public class TypeInferencer {
 		}
 		case Token.OBJECTLIT:
 			return createObjectLiteral(collection, key, expression, parent, cs);
+		case Token.ARRAYLIT:
+			return createArrayLiteralReference(collection, key, expression, cs);
 		case Token.CALL:
 			return createCallResult(collection, key, expression, cs);
 		case Token.FUNCTION:
@@ -764,6 +766,18 @@ public class TypeInferencer {
 			} catch (ClassCastException e) {
 			}
 		}
+		CombinedOrReference ws = new CombinedOrReference(ref, unknownReference);
+		return ws;
+
+	}
+
+	private static IReference createArrayLiteralReference(
+			HostCollection collection2, String key, Node expression,
+			ReferenceResolverContext cs) {
+			
+		String id = "Array";
+		NewReference ref = new NewReference(key, id, cs);
+		UnknownReference unknownReference = new UnknownReference(key, false);
 		CombinedOrReference ws = new CombinedOrReference(ref, unknownReference);
 		return ws;
 
