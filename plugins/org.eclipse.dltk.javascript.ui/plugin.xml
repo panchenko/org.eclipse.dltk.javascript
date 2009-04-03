@@ -304,7 +304,13 @@
            class="org.eclipse.dltk.javascript.internal.ui.templates.JavaScriptTemplatePreferencePage"
            id="javascriptTemplatePreferencePage"
            name="%JavaScriptEditorTemplatesPreferencePage.name">
-     </page>	          
+     </page>
+       <page
+             category="org.eclipse.dltk.javascript.ui.javascript"
+             class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptErrorWarningPreferencePage"
+             id="org.eclipse.dltk.javascript.preferences.error.warning"
+             name="%ErrorWarningPreferencePage.name">
+       </page>	          
 	 </extension>
 	 <extension
        point="org.eclipse.ui.perspectives">
