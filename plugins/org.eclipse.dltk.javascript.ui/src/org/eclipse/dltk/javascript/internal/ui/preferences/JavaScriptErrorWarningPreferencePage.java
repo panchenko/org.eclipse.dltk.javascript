@@ -27,4 +27,11 @@ public class JavaScriptErrorWarningPreferencePage extends
 		setPreferenceStore(new PreferencesAdapter(JavaScriptPlugin.getDefault()
 				.getPluginPreferences()));
 	}
+
+	public boolean performOk() {
+		super.performOk();
+		JavaScriptPlugin.getDefault().savePluginPreferences();
+		return true;
+	}
+
 }
