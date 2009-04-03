@@ -25,6 +25,8 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
+import org.eclipse.dltk.javascript.core.JavaScriptCorePreferences;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 
 import com.xored.org.mozilla.javascript.CompilerEnvirons;
 import com.xored.org.mozilla.javascript.FunctionNode;
@@ -161,6 +163,9 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 				content.length);
 
 		CompilerEnvirons cenv = new CompilerEnvirons();
+		boolean strict = JavaScriptPlugin.getDefault().getPluginPreferences()
+				.getBoolean(JavaScriptCorePreferences.USE_STRICT_MODE);
+		cenv.setStrictMode(strict);
 		Parser parser = new Parser(cenv, new JavaScriptErrorReporter(r));
 		try {
 

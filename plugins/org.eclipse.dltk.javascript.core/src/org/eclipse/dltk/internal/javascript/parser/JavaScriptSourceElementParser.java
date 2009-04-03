@@ -29,6 +29,8 @@ import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
 import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
+import org.eclipse.dltk.javascript.core.JavaScriptCorePreferences;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 
 import com.xored.org.mozilla.javascript.CompilerEnvirons;
 import com.xored.org.mozilla.javascript.FunctionNode;
@@ -59,6 +61,9 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 
 	private void parseSourceModule(String content, ISourceModuleInfo info) {
 		CompilerEnvirons cenv = new CompilerEnvirons();
+		boolean strict = JavaScriptPlugin.getDefault().getPluginPreferences()
+				.getBoolean(JavaScriptCorePreferences.USE_STRICT_MODE);
+		cenv.setStrictMode(strict);
 		JavaScriptModuleDeclaration moduleDeclaration = new JavaScriptModuleDeclaration(
 				content.length());
 
