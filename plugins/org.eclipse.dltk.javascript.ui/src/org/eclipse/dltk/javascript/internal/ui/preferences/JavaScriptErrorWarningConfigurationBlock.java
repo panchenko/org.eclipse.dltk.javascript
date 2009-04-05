@@ -12,7 +12,6 @@ package org.eclipse.dltk.javascript.internal.ui.preferences;
 import org.eclipse.dltk.javascript.core.JavaScriptCorePreferences;
 import org.eclipse.dltk.ui.preferences.AbstractConfigurationBlock;
 import org.eclipse.dltk.ui.preferences.OverlayPreferenceStore;
-import org.eclipse.dltk.ui.preferences.PreferencesMessages;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -48,7 +47,7 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 		markersComposite.setFont(parent.getFont());
 
 		addCheckBox(markersComposite,
-				PreferencesMessages.ErrorWarning_strictMode,
+				JavaScriptPreferenceMessages.ErrorWarning_strictMode,
 				JavaScriptCorePreferences.USE_STRICT_MODE, 0);
 		// bindControl(enableCheckbox, STRICT_MODE, null);
 		return markersComposite;
