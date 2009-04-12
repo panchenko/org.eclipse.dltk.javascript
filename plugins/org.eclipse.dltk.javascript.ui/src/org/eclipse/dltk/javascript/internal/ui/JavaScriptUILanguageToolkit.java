@@ -14,7 +14,7 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.core.IJavaScriptConstants;
 import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.dltk.javascript.internal.ui.text.SimpleJavascriptSourceViewerConfiguration;
-import org.eclipse.dltk.ui.IDLTKUILanguageToolkit;
+import org.eclipse.dltk.ui.AbstractDLTKUILanguageToolkit;
 import org.eclipse.dltk.ui.ScriptElementLabels;
 import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
 import org.eclipse.dltk.ui.text.ScriptTextTools;
@@ -22,8 +22,9 @@ import org.eclipse.dltk.ui.viewsupport.ScriptUILabelProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-public class JavaScriptUILanguageToolkit implements IDLTKUILanguageToolkit {
-	private static ScriptElementLabels sInstance = new ScriptElementLabels() {};
+public class JavaScriptUILanguageToolkit extends AbstractDLTKUILanguageToolkit {
+	private static ScriptElementLabels sInstance = new ScriptElementLabels() {
+	};
 
 	public ScriptElementLabels getScriptElementLabels() {
 		return sInstance;
@@ -40,9 +41,11 @@ public class JavaScriptUILanguageToolkit implements IDLTKUILanguageToolkit {
 	public IDialogSettings getDialogSettings() {
 		return JavaScriptUI.getDefault().getDialogSettings();
 	}
+
 	public String getEditorId(Object inputElement) {
 		return "org.eclipse.dltk.javascript.ui.editor.JavascriptEditor";
 	}
+
 	public String getPartitioningId() {
 		return IJavaScriptConstants.JS_PARTITIONING;
 	}
@@ -58,11 +61,11 @@ public class JavaScriptUILanguageToolkit implements IDLTKUILanguageToolkit {
 	public boolean getProvideMembers(ISourceModule element) {
 		return true;
 	}
-	
+
 	public ScriptTextTools getTextTools() {
 		return JavaScriptUI.getDefault().getTextTools();
 	}
-	
+
 	public ScriptSourceViewerConfiguration createSourceViewerConfiguration() {
 		return new SimpleJavascriptSourceViewerConfiguration(getTextTools()
 				.getColorManager(), getPreferenceStore(), null,
@@ -78,13 +81,12 @@ public class JavaScriptUILanguageToolkit implements IDLTKUILanguageToolkit {
 	}
 
 	private static final String[] EDITOR_PREFERENCE_PAGES_IDS = {
-		"org.eclipse.dltk.javascript.ui.EditorPreferences", 
-		"org.eclipse.dltk.javascript.ui.editor.SyntaxColoring", 
-		"org.eclipse.dltk.javascript.ui.editor.SmartTyping", 
-		"org.eclipse.dltk.javascript.ui.editor.JavascriptFolding", 
-		"javascriptTemplatePreferencePage" 
-	};
-	
+			"org.eclipse.dltk.javascript.ui.EditorPreferences",
+			"org.eclipse.dltk.javascript.ui.editor.SyntaxColoring",
+			"org.eclipse.dltk.javascript.ui.editor.SmartTyping",
+			"org.eclipse.dltk.javascript.ui.editor.JavascriptFolding",
+			"javascriptTemplatePreferencePage" };
+
 	public String[] getEditorPreferencePages() {
 		return EDITOR_PREFERENCE_PAGES_IDS;
 	}
