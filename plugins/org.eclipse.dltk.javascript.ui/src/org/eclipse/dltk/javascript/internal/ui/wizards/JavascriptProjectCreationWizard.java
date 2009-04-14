@@ -9,8 +9,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.wizards;
 
-import java.util.Observable;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
@@ -21,7 +19,6 @@ import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.preferences.JavascriptBuildPathsBlock;
 import org.eclipse.dltk.javascript.ui.JavaScriptImages;
-import org.eclipse.dltk.launching.IInterpreterInstall;
 import org.eclipse.dltk.ui.DLTKUIPlugin;
 import org.eclipse.dltk.ui.util.BusyIndicatorRunnableContext;
 import org.eclipse.dltk.ui.util.IStatusChangeListener;
@@ -50,8 +47,6 @@ public class JavascriptProjectCreationWizard extends NewElementWizard implements
 		super.addPages();
 		fFirstPage = new ProjectWizardFirstPage() {
 
-			JavascriptInterpreterGroup fInterpreterGroup;
-
 			final class JavascriptInterpreterGroup extends
 					AbstractInterpreterGroup {
 
@@ -62,30 +57,18 @@ public class JavascriptProjectCreationWizard extends NewElementWizard implements
 				protected String getCurrentLanguageNature() {
 					return JavaScriptNature.NATURE_ID;
 				}
-				
+
 				protected String getIntereprtersPreferencePageId() {
 					return null;
-				} 
+				}
+
+				protected boolean isTargetEnvironmentAllowed() {
+					return false;
+				}
 			};
 
-			protected void createInterpreterGroup(Composite parent) {
-				fInterpreterGroup = new JavascriptInterpreterGroup(parent);
-			}
-
-			protected Observable getInterpreterGroupObservable() {
-				return fInterpreterGroup;
-			}
-
-			protected boolean supportInterpreter() {
-				return true;
-			}
-
-			protected IInterpreterInstall getInterpreter() {
-				return fInterpreterGroup.getSelectedInterpreter();
-			}
-
-			protected void handlePossibleInterpreterChange() {
-				fInterpreterGroup.handlePossibleInterpreterChange();
+			protected IInterpreterGroup createInterpreterGroup(Composite parent) {
+				return new JavascriptInterpreterGroup(parent);
 			}
 
 			protected boolean interpeterRequired() {
