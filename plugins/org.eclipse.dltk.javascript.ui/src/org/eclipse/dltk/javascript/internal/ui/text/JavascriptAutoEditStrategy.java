@@ -450,6 +450,9 @@ public class JavascriptAutoEditStrategy extends
 	private boolean isClosed(IDocument d, int offset, int length) {
 		String sm = d.get();
 		int start = sm.lastIndexOf("function ", offset);
+		if (start == -1) {
+			start = 0;
+		}
 		int lastOpen = sm.lastIndexOf("{", start);
 		if (lastOpen == -1)
 			lastOpen = 0;
