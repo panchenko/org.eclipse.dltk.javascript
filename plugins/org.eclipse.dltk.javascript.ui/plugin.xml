@@ -485,6 +485,15 @@
           </instanceof></enablement>
     </consolePatternMatchListener>
  </extension>
- 
-  
+
+<extension point="org.eclipse.dltk.ui.formatterFactory">
+   <engineContribution natureId="org.eclipse.dltk.javascript.core.nature">
+   <formatterFactory
+         class="org.eclipse.dltk.javascript.internal.ui.formatting.OldFormatterFactory"
+         id="org.eclipse.dltk.javascript.oldFormatter"
+         priority="0">
+   </formatterFactory>
+   </engineContribution>
+</extension>
+
 </plugin>

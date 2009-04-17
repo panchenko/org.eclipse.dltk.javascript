@@ -9,17 +9,23 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.formatting;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IScriptProject;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.dltk.ui.formatter.FormatterException;
+import org.eclipse.dltk.ui.formatter.IScriptFormatterFactory;
+import org.eclipse.dltk.ui.formatter.ScriptFormatterManager;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPositionCategoryException;
 import org.eclipse.jface.text.DefaultPositionUpdater;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.Position;
+import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;
 
 
@@ -154,7 +160,17 @@ public class CodeFormatterUtil {
 		if (offset < 0 || length < 0 || offset + length > string.length()) {
 			throw new IllegalArgumentException("offset or length outside of string. offset: " + offset + ", length: " + length + ", string size: " + string.length());   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 		}
-		return new OldCodeFormatter(options).format(kind, string, offset, length, computeIndentation, lineSeparator);
+		IScriptFormatterFactory factory = ScriptFormatterManager.getSelected(
+				JavaScriptNature.NATURE_ID, null);
+		Map optionsCopy = new HashMap(options);
+		optionsCopy.put("old.computeIndentation", computeIndentation);
+		optionsCopy.put("old.kind", new Integer(kind));
+		try {
+			return factory.createFormatter(lineSeparator, optionsCopy).format(string, offset, length, 0);
+		} catch (FormatterException e) {
+			JavaScriptUI.log(e);
+			return new MultiTextEdit();
+		}
 	}
 	
 	public static TextEdit format2(int kind, String string, StringBuffer indentationLevel, String lineSeparator, Map options) {
