@@ -496,4 +496,25 @@
    </engineContribution>
 </extension>
 
+<extension point="org.eclipse.ui.preferencePages"> 	          
+	<page
+		category="org.eclipse.dltk.javascript.ui.javascript"
+		class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptFormatterPreferencePage"
+		id="org.eclipse.dltk.javascript.preferencePage.formatter"
+		name="%JavaScriptFormatterPreferencePage.name"/>
+</extension>
+<extension point="org.eclipse.ui.propertyPages">
+	<page
+		class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptFormatterPreferencePage"
+		category="org.eclipse.dltk.javascript.propertyPage"
+		id="org.eclipse.dltk.javascript.propertyPage.formatter"
+		name="%Formatter.PropertyPage">
+		<enabledWhen>
+			<adapt type="org.eclipse.core.resources.IProject">
+				<test property="org.eclipse.core.resources.projectNature" value="org.eclipse.dltk.javascript.core.nature"/>
+			</adapt>
+		</enabledWhen>
+	</page>
+</extension>
+
 </plugin>

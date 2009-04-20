@@ -421,6 +421,11 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 	public final static String COMMENT_TASK_TAGS_BOLD = COMMENT_TASK_TAGS
 			+ EDITOR_BOLD_SUFFIX;
 
+	/**
+	 * A preference that controls the selected formatter.
+	 */
+	public static final String FORMATTER_ID = "formatterId"; //$NON-NLS-1$
+
 	public static void initializeDefaultValues(IPreferenceStore store) {
 		PreferenceConstants.initializeDefaultValues(store);
 
