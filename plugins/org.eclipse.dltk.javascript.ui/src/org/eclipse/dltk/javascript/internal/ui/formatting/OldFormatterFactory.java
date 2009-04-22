@@ -3,6 +3,7 @@ package org.eclipse.dltk.javascript.internal.ui.formatting;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.IPreferencesLookupDelegate;
 import org.eclipse.dltk.ui.formatter.AbstractScriptFormatterFactory;
 import org.eclipse.dltk.ui.formatter.FormatterException;
@@ -18,6 +19,14 @@ public class OldFormatterFactory extends AbstractScriptFormatterFactory {
 	public IFormatterModifyDialog createDialog(
 			IFormatterModifyDialogOwner dialogOwner) {
 		return null;
+	}
+
+	public String getName() {
+		return "Legacy DLTK Javascript Formatter";
+	}
+
+	public String getDescription() {
+		return Util.EMPTY_STRING;
 	}
 
 	private static class OldFormatterWrapper implements IScriptFormatter {
