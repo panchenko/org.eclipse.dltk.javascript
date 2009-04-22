@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ui;
 
+import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.javascript.internal.ui.text.JavascriptColorConstants;
 import org.eclipse.dltk.ui.CodeFormatterConstants;
 import org.eclipse.dltk.ui.PreferenceConstants;
@@ -519,6 +520,7 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 
 		store.setDefault(
 				PreferenceConstants.CODEASSIST_AUTOACTIVATION_TRIGGERS, ".");
+		store.setDefault(FORMATTER_ID, Util.EMPTY_STRING);
 	}
 
 	protected static void initializeFoldingDefaults(IPreferenceStore store) {
