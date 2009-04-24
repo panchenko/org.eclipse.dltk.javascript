@@ -1,0 +1,15 @@
+package org.eclipse.dltk.javascript.formatter.internal.nodes;
+
+import org.eclipse.dltk.formatter.IFormatterDocument;
+import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
+
+public class FormatterForInStatementNode extends FormatterBlockWithBeginNode {
+
+	public FormatterForInStatementNode(IFormatterDocument document) {
+		super(document);
+	}
+
+	protected boolean isIndenting() {
+		return false;
+	}
+}

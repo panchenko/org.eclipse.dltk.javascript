@@ -1,0 +1,86 @@
+/*******************************************************************************
+ * Copyright (c) 2009 xored software, Inc.  
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html  
+ *
+ * Contributors:
+ *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *******************************************************************************/
+
+package org.eclipse.dltk.javascript.ast;
+
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.javascript.parser.JSParser;
+
+public class UnaryOperation extends Expression {
+
+	private Expression expression;
+	private int operation;
+	private int operationPos;
+
+	public UnaryOperation(ASTNode parent) {
+		super(parent);
+	}
+
+	public Expression getExpression() {
+		return this.expression;
+	}
+
+	public void setExpression(Expression expression) {
+		this.expression = expression;
+	}
+
+	public int getOperation() {
+		return this.operation;
+	}
+
+	public void setOperation(int operation) {
+		this.operation = operation;
+	}
+
+	public int getOperationPosition() {
+		return this.operationPos;
+	}
+
+	public void setOperationPosition(int operationPos) {
+		this.operationPos = operationPos;
+	}
+
+	public String getOperationText() {
+		return Keywords.fromToken(operation);
+	}
+
+	public boolean isPostfix() {
+		return operation == JSParser.PINC || operation == JSParser.PDEC;
+	}
+
+	public String toSourceString(String indentationString) {
+
+		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceEnd() > 0);
+		Assert.isTrue(operationPos > 0);
+
+		StringBuffer buffer = new StringBuffer();
+
+		if (!isPostfix()) {
+			buffer.append(getOperationText());
+		}
+
+		buffer.append(expression.toSourceString(indentationString));
+
+		if (isPostfix()) {
+			buffer.append(getOperationText());
+		}
+
+		return buffer.toString();
+	}
+
+	public boolean isBlock() {
+		return false;
+	}
+
+}
