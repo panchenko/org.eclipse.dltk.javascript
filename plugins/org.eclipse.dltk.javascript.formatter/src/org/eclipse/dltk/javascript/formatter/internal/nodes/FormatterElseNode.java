@@ -13,12 +13,13 @@ public class FormatterElseNode extends FormatterBlockWithBeginNode {
 
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
-		
+
 		if (isLineBreaking())
 			visitor.writeLineBreak(context);
-		else
-			visitor.writeText(context, " ");
-		
+		else {
+			visitor.appendToPreviousLine(context, " ");
+		}
+
 		super.accept(context, visitor);
 	}
 
