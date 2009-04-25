@@ -4,24 +4,15 @@ Bundle-Name: JavaScript Tests Plug-in
 Bundle-SymbolicName: org.eclipse.dltk.javascript.formatter.tests;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
-Import-Package: 
- org.eclipse.core.runtime,
- org.eclipse.dltk.compiler.util,
- org.eclipse.dltk.internal.corext.util,
- org.eclipse.dltk.javascript.formatter,
- org.eclipse.dltk.ui,
- org.eclipse.dltk.ui.formatter,
- org.eclipse.jface.preference,
- org.eclipse.jface.text,
- org.eclipse.jface.util,
- org.eclipse.text.edits,
- org.eclipse.ui.plugin,
- org.osgi.framework
 Require-Bundle: org.eclipse.dltk.core,
  org.eclipse.dltk.formatter.tests,
- org.junit,
+ org.eclipse.dltk.ui,
  org.eclipse.dltk.javascript.formatter,
- org.antlr.runtime;bundle-version="3.0.0"
+ org.junit,
+ org.antlr.runtime;bundle-version="3.0.0",
+ org.eclipse.core.runtime,
+ org.eclipse.jface,
+ org.eclipse.jface.text
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.dltk.javascript.formatter.tests
 Bundle-Activator: org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin
