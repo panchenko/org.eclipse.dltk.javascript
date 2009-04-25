@@ -15,6 +15,7 @@ package org.eclipse.dltk.javascript.formatter.tests;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.formatter.tests.ScriptedTest.IScriptedTestContext;
@@ -22,14 +23,13 @@ import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 import org.eclipse.dltk.javascript.internal.formatter.tests.StringValueInfo;
 import org.eclipse.dltk.javascript.internal.formatter.tests.TestJavaScriptFormatter;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class JavaScriptFormatterTestsPlugin extends AbstractUIPlugin {
+public class JavaScriptFormatterTestsPlugin extends Plugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.eclipse.dltk.ruby.formatter.tests"; //$NON-NLS-1$
