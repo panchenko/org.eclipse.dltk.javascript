@@ -797,7 +797,19 @@ public final class JavaHeuristicScanner implements Symbols {
 		if (bound == UNBOUND)
 			bound = fDocument.getLength();
 
-		Assert.isLegal(bound <= fDocument.getLength());
+		/*
+		 * Originally there was an assert here:
+		 * 
+		 * Assert.isLegal(bound <= fDocument.getLength());
+		 * 
+		 * But if fails for "var a = {", so I have converted it to the
+		 * condition.
+		 * 
+		 * Alex
+		 */
+		if (bound > fDocument.getLength()) {
+			return NOT_FOUND;
+		}
 
 		try {
 			fPos = start;
