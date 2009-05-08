@@ -16,11 +16,11 @@ import junit.framework.TestSuite;
 
 import org.eclipse.dltk.formatter.tests.ScriptedTest;
 
-public class DoWhileTest extends ScriptedTest {
+public class E4XTest extends ScriptedTest {
 
 	public static TestSuite suite() {
-		return new DoWhileTest().createScriptedSuite(
-				JavaScriptFormatterTestsPlugin.CONTEXT, "scripts/do-while.js");
+		return new E4XTest().createScriptedSuite(
+				JavaScriptFormatterTestsPlugin.CONTEXT, "scripts/e4x.js");
 	}
 
 }

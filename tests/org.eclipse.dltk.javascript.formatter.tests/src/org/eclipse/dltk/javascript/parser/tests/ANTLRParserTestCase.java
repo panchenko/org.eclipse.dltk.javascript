@@ -151,4 +151,9 @@ public class ANTLRParserTestCase extends TestCase {
 	public void testWhitespacesPreview_Methods() throws IOException {
 		ANTLRParserTester.parsePreview("whitespaces-preview.js");
 	}
+
+	public void testE4XParse() throws IOException {
+		ANTLRParserTester.parse("e4x.js");
+	}
+
 }

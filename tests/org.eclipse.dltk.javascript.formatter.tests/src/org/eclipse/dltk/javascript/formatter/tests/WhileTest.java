@@ -22,5 +22,5 @@ public class WhileTest extends ScriptedTest {
 		return new WhileTest().createScriptedSuite(
 				JavaScriptFormatterTestsPlugin.CONTEXT, "scripts/while.js");
 	}
-	
+
 }

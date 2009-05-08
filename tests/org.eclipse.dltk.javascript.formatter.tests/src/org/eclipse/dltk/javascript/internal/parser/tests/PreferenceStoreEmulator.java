@@ -35,8 +35,6 @@ public class PreferenceStoreEmulator implements IPreferenceStore {
 	}
 
 	public void addPropertyChangeListener(IPropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public boolean contains(String name) {
@@ -45,8 +43,6 @@ public class PreferenceStoreEmulator implements IPreferenceStore {
 
 	public void firePropertyChangeEvent(String name, Object oldValue,
 			Object newValue) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public boolean getBoolean(String name) {
@@ -111,73 +107,45 @@ public class PreferenceStoreEmulator implements IPreferenceStore {
 	}
 
 	public void removePropertyChangeListener(IPropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setDefault(String name, double value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setDefault(String name, float value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setDefault(String name, int value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setDefault(String name, long value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setDefault(String name, String defaultObject) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setDefault(String name, boolean value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setToDefault(String name) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setValue(String name, double value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setValue(String name, float value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setValue(String name, int value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setValue(String name, long value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setValue(String name, String value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setValue(String name, boolean value) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

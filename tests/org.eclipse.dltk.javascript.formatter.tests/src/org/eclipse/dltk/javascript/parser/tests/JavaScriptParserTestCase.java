@@ -144,6 +144,14 @@ public class JavaScriptParserTestCase extends TestCase {
 		JavaScriptParserTester.parse("void.js");
 	}
 
+	public void testE4XParse() throws IOException, FormatterException {
+		JavaScriptParserTester.parse("e4x.js");
+	}
+
+	public void testE4XSimpleParse() throws IOException, FormatterException {
+		JavaScriptParserTester.parse("e4x-simple.js");
+	}
+
 	public void testBracesPreview() throws IOException, FormatterException {
 		FormatterPreviewTester.testPagePreview("braces-preview.js");
 	}

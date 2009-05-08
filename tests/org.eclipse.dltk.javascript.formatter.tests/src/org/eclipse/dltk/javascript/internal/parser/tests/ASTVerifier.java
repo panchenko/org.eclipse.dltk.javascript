@@ -32,6 +32,7 @@ import org.eclipse.dltk.javascript.ast.ConstDeclaration;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
+import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
@@ -73,6 +74,7 @@ import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
+import org.eclipse.dltk.javascript.ast.XmlLiteral;
 
 public class ASTVerifier extends ASTVisitor {
 
@@ -678,6 +680,25 @@ public class ASTVerifier extends ASTVisitor {
 	public boolean visitVoidOperator(VoidOperator node) {
 		visit(node.getExpression());
 		visit(node.getVoidKeyword());
+
+		return true;
+	}
+
+	public boolean visitXmlLiteral(XmlLiteral node) {
+
+		testString(node.getXml(), node.sourceStart(), node.sourceEnd());
+
+		return true;
+	}
+
+	public boolean visitDefaultXmlNamespace(DefaultXmlNamespaceStatement node) {
+
+		visit(node.getDefaultKeyword());
+		visit(node.getXmlKeyword());
+		visit(node.getNamespaceKeyword());
+
+		testChar(Keywords.ASSIGN, node.getAssignOperation());
+		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
 
 		return true;
 	}

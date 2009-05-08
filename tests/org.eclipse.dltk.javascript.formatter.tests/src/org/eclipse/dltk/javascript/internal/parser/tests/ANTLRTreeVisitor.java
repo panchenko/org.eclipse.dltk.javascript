@@ -37,8 +37,6 @@ public class ANTLRTreeVisitor {
 	public boolean visitScope(RuleReturnScope scope) {
 		printIndentationString();
 
-		System.out.println(scope.getClass().toString());
-
 		indent++;
 		if (scope.getTree() != null) {
 			visitTree((CommonTree) scope.getTree());
@@ -54,9 +52,6 @@ public class ANTLRTreeVisitor {
 	}
 
 	public boolean visitTree(Tree tree) {
-
-		// printIndentationString();
-		// System.out.println(tree.getClass().toString());
 
 		printIndentationString();
 

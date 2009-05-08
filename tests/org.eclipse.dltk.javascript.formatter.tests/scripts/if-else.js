@@ -61,11 +61,12 @@ else
 {
 	b = 100;
 }
-==> formatter.braces.blocks = same.line
+==> formatter.braces.blocks = next.line
 ==> formatter.newlines.else = false
 ==> formatter.samelines.elseif = false
 ==== 5-if-new-line-else-if
-if ( a1>b1 ) {
+if ( a1>b1 ) 
+{
 	a1 = 100;
 } else if ( c>d ) {
 	b1 = 100;

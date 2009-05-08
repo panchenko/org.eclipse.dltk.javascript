@@ -19,7 +19,7 @@ import org.eclipse.dltk.javascript.formatter.JavaScriptFormatter;
 import org.eclipse.dltk.javascript.formatter.preferences.JavaScriptFormatterPreferenceInterpreter;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 
-public class FormatterPreviewTester {
+public class FormatterPreviewTester extends AbstractTester {
 
 	public static void testPagePreview(String resourceName) throws IOException,
 			FormatterException {
@@ -27,7 +27,7 @@ public class FormatterPreviewTester {
 		InputStream stream = JavaScriptFormatterPreferenceInterpreter.class
 				.getResourceAsStream(resourceName);
 
-		JavaScriptParserTester.parseStream(stream);
+		JavaScriptParserTester.parseSource(getScriptContent(stream));
 	}
 
 	public static void testGeneralPreview(String resourceName)
@@ -36,6 +36,6 @@ public class FormatterPreviewTester {
 		InputStream stream = JavaScriptFormatter.class
 				.getResourceAsStream(resourceName);
 
-		JavaScriptParserTester.parseStream(stream);
+		JavaScriptParserTester.parseSource(getScriptContent(stream));
 	}
 }

@@ -19,13 +19,13 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.javascript.ast.ISourceable;
 import org.eclipse.dltk.javascript.ast.JavaScriptParser;
+import org.eclipse.dltk.javascript.ast.JavaScriptTokenStream;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.formatter.preferences.JavaScriptFormatterModifyDialog;
 import org.eclipse.dltk.javascript.parser.JSLexer;
@@ -36,16 +36,12 @@ public class ANTLRParserTester {
 
 	public static void parsePreview(String resourceName) throws IOException {
 
-		System.out.println(resourceName);
-
 		parseResource(JavaScriptFormatterModifyDialog.class
 				.getResourceAsStream(resourceName));
 
 	}
 
 	public static void parse(String resourceName) throws IOException {
-
-		System.out.println(resourceName);
 
 		parseResource(ANTLRParserTester.class
 				.getResourceAsStream("/scripts.parser/" + resourceName));
@@ -55,18 +51,18 @@ public class ANTLRParserTester {
 	private static void parseResource(InputStream resource) throws IOException {
 		JSLexer lexer = new JSLexer(new ANTLRInputStream(resource));
 
-		CommonTokenStream stream = new CommonTokenStream(lexer);
+		JavaScriptTokenStream stream = new JavaScriptTokenStream(lexer);
 		String source = "";
 
 		List tokens = stream.getTokens();
 		for (int i = 0; i < tokens.size(); i++) {
-			CommonToken token = (CommonToken) tokens.get(i);
+			Token token = (Token) tokens.get(i);
 
 			source += token.getText();
 
-			System.out.println(new Integer(token.getTokenIndex()).toString()
-					+ ". " + JSParser.tokenNames[token.getType()] + " "
-					+ token.getText());
+			// System.out.println(new Integer(token.getTokenIndex()).toString()
+			// + ". " + JSParser.tokenNames[token.getType()] + " "
+			// + token.getText());
 		}
 
 		JSParser parser = new JSParser(stream);
@@ -74,10 +70,12 @@ public class ANTLRParserTester {
 		try {
 			ParserRuleReturnScope root = parser.program();
 
-			new ANTLRTreeVisitor().visit(root);
+			// new ANTLRTreeVisitor().visit(root);
 
 			ModuleDeclaration result = new JSTransformer(root, tokens)
 					.transform();
+
+			Assert.assertNotNull(result);
 
 			String formatted = ((ISourceable) result).toSourceString("");
 
@@ -86,9 +84,9 @@ public class ANTLRParserTester {
 			ANTLRTokenStreamComparer.compare(source, formatted, false);
 			new ASTVerifier(result, source).verify();
 
-			System.out.println("-------------------------------------------");
-			System.out.println(formatted);
-			System.out.println("-------------------------------------------");
+			// System.out.println("-------------------------------------------");
+			// System.out.println(formatted);
+			// System.out.println("-------------------------------------------");
 
 			Script script = (Script) new JavaScriptParser().parse(null,
 					formatted.toCharArray(), null);

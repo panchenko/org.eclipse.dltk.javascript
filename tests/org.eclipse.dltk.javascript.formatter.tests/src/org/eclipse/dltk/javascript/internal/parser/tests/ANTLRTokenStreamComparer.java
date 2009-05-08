@@ -97,12 +97,6 @@ public class ANTLRTokenStreamComparer {
 		List sourceTokens = getTokens(source, sourceComments);
 		List targetTokens = getTokens(target, targetComments);
 
-		// if (sourceTokens.size() != targetTokens.size()) {
-		// printTokens(sourceTokens, targetTokens, Math.min(sourceTokens
-		// .size(), targetTokens.size()));
-		// Assert.fail();
-		// }
-
 		int errorPos = -1;
 
 		for (int i = 0; i < sourceTokens.size(); i++) {

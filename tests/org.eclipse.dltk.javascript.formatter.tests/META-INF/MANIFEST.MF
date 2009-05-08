@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.dltk.core,
  org.eclipse.jface,
  org.eclipse.jface.text
 Eclipse-LazyStart: true
-Export-Package: org.eclipse.dltk.javascript.formatter.tests
+Export-Package: org.eclipse.dltk.javascript.formatter.tests,
+ org.eclipse.dltk.javascript.parser.tests
 Bundle-Activator: org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin
 Bundle-ActivationPolicy: lazy

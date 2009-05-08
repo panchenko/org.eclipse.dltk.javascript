@@ -12,10 +12,7 @@
 
 package org.eclipse.dltk.javascript.internal.parser.tests;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import junit.framework.Assert;
 
@@ -27,31 +24,14 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
-public class JavaScriptParserTester {
+public class JavaScriptParserTester extends AbstractTester {
 
-	private String getScriptContent(InputStream stream) throws IOException {
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(stream));
-
-		StringBuffer content = new StringBuffer();
-		String s = null;
-
-		while ((s = reader.readLine()) != null) {
-			content.append(s);
-			content.append("\r\n");
-		}
-
-		return content.toString();
-	}
-
-	private void parseScript(InputStream stream) throws IOException,
+	private void parseScript(String source) throws IOException,
 			FormatterException {
-		String source = getScriptContent(stream);
 
 		IPreferenceStore preferences = new PreferenceStoreEmulator();
 
 		JavaScriptFormatterFactory f = new JavaScriptFormatterFactory();
-		System.out.println("================================================");
 
 		IScriptFormatter formatter = f.createFormatter("\n",
 				new JavaScriptFormatterPreferenceInterpreter(preferences)
@@ -60,11 +40,6 @@ public class JavaScriptParserTester {
 		TextEdit textEdit = formatter.format(source, 0, source.length(), 0);
 
 		String formatted = ((ReplaceEdit) textEdit).getText();
-
-		System.out.println(source);
-		System.out
-				.println("----------------------------------------------------------");
-		System.out.println(formatted);
 
 		Assert.assertTrue(
 				"There are no changes in formatted document, format() fails!",
@@ -75,24 +50,19 @@ public class JavaScriptParserTester {
 		String reformatted = ((ReplaceEdit) formatter.format(formatted, 0,
 				formatted.length(), 0)).getText();
 
-		// Format formatted text must NOT change it again!
+		// Formatting formatted text MUST NOT change it again!
 		Assert.assertEquals(formatted, reformatted);
 
-		System.out.println();
-		System.out.println("================================================");
-
-	}
-
-	public static void parseStream(InputStream stream) throws IOException,
-			FormatterException {
-		new JavaScriptParserTester().parseScript(stream);
 	}
 
 	public static void parse(String resourceName) throws IOException,
 			FormatterException {
-		System.out.println(resourceName);
-		parseStream(JavaScriptParserTester.class
-				.getResourceAsStream("/scripts.parser/" + resourceName));
+		new JavaScriptParserTester()
+				.parseScript(getScriptContent(resourceName));
 	}
 
+	public static void parseSource(String source) throws IOException,
+			FormatterException {
+		new JavaScriptParserTester().parseScript(source);
+	}
 }

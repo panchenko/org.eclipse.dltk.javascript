@@ -22,5 +22,5 @@ public class TryCatchTest extends ScriptedTest {
 		return new TryCatchTest().createScriptedSuite(
 				JavaScriptFormatterTestsPlugin.CONTEXT, "scripts/try-catch.js");
 	}
-	
+
 }
