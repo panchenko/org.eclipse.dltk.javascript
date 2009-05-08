@@ -19,10 +19,9 @@ public class WhileBlockBracesConfiguration extends AbstractBracesConfiguration {
 
 	public WhileBlockBracesConfiguration(IFormatterDocument document) {
 		super(document);
-		
-		indentingSettingName = JavaScriptFormatterConstants.INDENT_BLOCK; 
+
+		indentingSettingName = JavaScriptFormatterConstants.INDENT_BLOCK;
 		bracesSettingName = JavaScriptFormatterConstants.BRACE_BLOCK;
-		
 	}
 
 }

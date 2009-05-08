@@ -24,7 +24,5 @@ public class WithConditionParensConfiguration extends
 		spaceBeforeLpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_LP_WITH;
 		spaceAfterLpName = JavaScriptFormatterConstants.INSERT_SPACE_AFTER_LP_WITH;
 		spaceBeforeRpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_RP_WITH;
-
 	}
-
 }

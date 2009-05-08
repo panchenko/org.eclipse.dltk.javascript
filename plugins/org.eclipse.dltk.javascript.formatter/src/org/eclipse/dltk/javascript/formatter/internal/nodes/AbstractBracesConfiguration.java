@@ -37,13 +37,6 @@ public abstract class AbstractBracesConfiguration implements
 		if (indentingSettingName != null && indentingSettingName.length() > 0)
 			return document.getBoolean(indentingSettingName);
 
-		// if (indentingSettingName != null && indentingSettingName.length() >
-		// 0) {
-		// boolean result = document.getBoolean(indentingSettingName);
-		// System.out.println(">>> " + indentingSettingName + " = " + result);
-		// return result;
-		// }
-
 		return false;
 	}
 
@@ -55,35 +48,48 @@ public abstract class AbstractBracesConfiguration implements
 		return false;
 	}
 
-	public boolean isBeginLineBreaking() {
-		if (bracesSettingName != null && bracesSettingName.length() != 0) {
-
-			String value = document.getString(bracesSettingName);
-			return JavaScriptFormatterConstants.BRACE_NEXT_LINE_INDENTED
-					.equals(value)
-					|| JavaScriptFormatterConstants.BRACE_NEXT_LINE
-							.equals(value);
-
-		}
-
-		return false;
-	}
-
 	public boolean isStatementContinuation() {
 		return true;
 	}
 
-	public boolean isEndLineBreaking() {
+	public int insertBeforeOpenBrace() {
+		if (bracesSettingName != null && bracesSettingName.length() != 0) {
+
+			String value = document.getString(bracesSettingName);
+
+			return JavaScriptFormatterConstants.BRACE_NEXT_LINE_INDENTED
+					.equals(value)
+					|| JavaScriptFormatterConstants.BRACE_NEXT_LINE
+							.equals(value) ? IBracesConfiguration.LINE_BREAK
+					: IBracesConfiguration.ONE_SPACE;
+
+		}
+
+		return IBracesConfiguration.UNDEFINED;
+	}
+
+	public int insertAfterOpenBrace() {
+		return IBracesConfiguration.LINE_BREAK;
+	}
+
+	public int insertBeforeCloseBrace() {
+		return IBracesConfiguration.LINE_BREAK;
+	}
+
+	public int insertAfterCloseBrace() {
 		if (keepSameLineSettingName != null
 				&& keepSameLineSettingName.length() > 0) {
-			return !document.getBoolean(keepSameLineSettingName);
+			return document.getBoolean(keepSameLineSettingName) ? IBracesConfiguration.UNDEFINED
+					: IBracesConfiguration.LINE_BREAK;
 		}
 
 		if (newLineSettingName != null && newLineSettingName.length() > 0) {
-			return document.getBoolean(newLineSettingName);
+			return document.getBoolean(newLineSettingName) ? IBracesConfiguration.LINE_BREAK
+					: IBracesConfiguration.UNDEFINED;
 		}
 
-		return true;
+		return IBracesConfiguration.UNDEFINED;
+
 	}
 
 }

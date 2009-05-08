@@ -33,5 +33,5 @@ public abstract class LoopStatement extends Statement {
 	public boolean isBlock() {
 		return true;
 	}
-	
+
 }

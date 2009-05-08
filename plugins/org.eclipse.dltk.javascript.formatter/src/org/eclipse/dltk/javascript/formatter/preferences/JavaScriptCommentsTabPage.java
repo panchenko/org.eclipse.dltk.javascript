@@ -23,13 +23,10 @@ public class JavaScriptCommentsTabPage extends FormatterModifyTabPage {
 
 	public JavaScriptCommentsTabPage(IFormatterModifyDialog dialog) {
 		super(dialog);
-		// TODO Auto-generated constructor stub
 	}
 
 	protected void createOptions(IFormatterControlManager manager,
 			Composite parent) {
-		// TODO Auto-generated method stub
-
 	}
 
 	protected URL getPreviewContent() {

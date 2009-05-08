@@ -16,13 +16,8 @@ import org.eclipse.dltk.formatter.IFormatterDocument;
 
 public class FormatterElseIfNode extends FormatterElseNode {
 
-	public FormatterElseIfNode(IFormatterDocument document) {
-		super(document);
+	public FormatterElseIfNode(IFormatterDocument document, boolean lineBreak) {
+		super(document, lineBreak);
 	}
-
-	// protected boolean isLineBreaking() {
-	// return !getDocument().getBoolean(
-	// JavaScriptFormatterConstants.KEEP_ELSE_IF_ON_ONE_LINE);
-	// }
 
 }

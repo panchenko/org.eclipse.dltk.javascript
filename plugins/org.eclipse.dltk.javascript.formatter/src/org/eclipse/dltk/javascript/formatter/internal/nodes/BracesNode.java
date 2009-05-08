@@ -37,39 +37,121 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 
-		if (configuration.isBeginLineBreaking()) {
-			visitor.writeLineBreak(context);
-		} else if (configuration.isStatementContinuation()) {
-			visitor.appendToPreviousLine(context, " ");
-		}
+		context.setBlankLines(getBlankLinesBefore(context));
+
+		printBeforeOpenBrace(context, visitor);
 
 		if (configuration.isBracesIndenting())
 			context.incIndent();
 
+		// print "{"
 		if (getBegin() != null) {
 			IFormatterTextNode[] nodes = getBegin();
 			for (int i = 0; i < nodes.length; i++) {
 				((IFormatterNode) nodes[i]).accept(context, visitor);
 			}
 		}
+
+		printAfterOpenBrace(context, visitor);
+
+		// print body
 		acceptBody(context, visitor);
 
-		if (true) {
-			visitor.writeLineBreak(context);
-		}
+		printBeforeCloseBrace(context, visitor);
+
+		// print "}"
 		if (getEnd() != null) {
 			visitor.write(context, getEnd().getStartOffset(), getEnd()
 					.getEndOffset());
 		}
 
-		if (configuration.isEndLineBreaking()) {
-			context.setBlankLines(-1);
-			visitor.writeLineBreak(context);
-		}
+		printAfterCloseBrace(context, visitor);
 
 		if (configuration.isBracesIndenting())
 			context.decIndent();
 
+	}
+
+	private void printBeforeCloseBrace(IFormatterContext context,
+			IFormatterWriter visitor) throws Exception {
+
+		switch (configuration.insertBeforeCloseBrace()) {
+		case IBracesConfiguration.LINE_BREAK:
+			context.setBlankLines(-1);
+			visitor.writeLineBreak(context);
+			break;
+
+		case IBracesConfiguration.ONE_SPACE:
+			visitor.appendToPreviousLine(context, "");
+			visitor.writeText(context, " ");
+			visitor.skipNextLineBreaks(context);
+			break;
+		}
+	}
+
+	private void printAfterOpenBrace(IFormatterContext context,
+			IFormatterWriter visitor) throws Exception {
+
+		switch (configuration.insertAfterOpenBrace()) {
+
+		case IBracesConfiguration.LINE_BREAK:
+			context.setBlankLines(-1);
+			visitor.writeLineBreak(context);
+			break;
+
+		case IBracesConfiguration.ONE_SPACE:
+			visitor.appendToPreviousLine(context, "");
+			visitor.writeText(context, " ");
+			visitor.skipNextLineBreaks(context);
+			break;
+
+		default:
+			if (configuration.insertBeforeOpenBrace() != IBracesConfiguration.LINE_BREAK) {
+				visitor.appendToPreviousLine(context, "");
+				visitor.writeText(context, " ");
+				visitor.skipNextLineBreaks(context);
+			}
+			break;
+
+		}
+	}
+
+	private void printBeforeOpenBrace(IFormatterContext context,
+			IFormatterWriter visitor) throws Exception {
+
+		switch (configuration.insertBeforeOpenBrace()) {
+
+		case IBracesConfiguration.LINE_BREAK:
+			context.setBlankLines(-1);
+			visitor.writeLineBreak(context);
+			break;
+
+		case IBracesConfiguration.ONE_SPACE:
+			visitor.appendToPreviousLine(context, "");
+			visitor.writeText(context, " ");
+			visitor.skipNextLineBreaks(context);
+			break;
+
+		}
+	}
+
+	private void printAfterCloseBrace(IFormatterContext context,
+			IFormatterWriter visitor) throws Exception {
+
+		switch (configuration.insertAfterCloseBrace()) {
+
+		case IBracesConfiguration.LINE_BREAK:
+			context.setBlankLines(-1);
+			visitor.writeLineBreak(context);
+			break;
+
+		case IBracesConfiguration.ONE_SPACE:
+			visitor.appendToPreviousLine(context, "");
+			visitor.writeText(context, " ");
+			visitor.skipNextLineBreaks(context);
+			break;
+
+		}
 	}
 
 	protected void acceptNodes(final List nodes, IFormatterContext context,

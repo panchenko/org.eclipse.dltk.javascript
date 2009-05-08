@@ -45,7 +45,6 @@ public class FunctionStatement extends Expression {
 
 	public void setName(Identifier name) {
 		this.name = name;
-		// this.name.setParent(this);
 	}
 
 	public List getArguments() {
@@ -54,11 +53,6 @@ public class FunctionStatement extends Expression {
 
 	public void setArguments(List arguments) {
 		this.arguments = arguments;
-		// if (arguments != null) {
-		// for (int i = 0; i < arguments.size(); i++) {
-		// this.arguments.get(i).setParent(this);
-		// }
-		// }
 	}
 
 	public StatementBlock getBody() {
@@ -67,7 +61,6 @@ public class FunctionStatement extends Expression {
 
 	public void setBody(StatementBlock body) {
 		this.body = body;
-		// this.body.setParent(this);
 	}
 
 	public int getLP() {

@@ -15,21 +15,26 @@ package org.eclipse.dltk.javascript.formatter.internal.nodes;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
-public class ElseIfBlockBracesConfiguration extends AbstractBracesConfiguration {
+public class ElseIfBlockBracesConfiguration extends
+		AbstractElseBracesConfiguration {
 
 	public ElseIfBlockBracesConfiguration(IFormatterDocument document) {
 		super(document);
 
 		// Do not set indentation level here, it sets by IF statement!
-
 		bracesSettingName = JavaScriptFormatterConstants.BRACE_BLOCK;
-		// keepSameLineSettingName =
-		// JavaScriptFormatterConstants.KEEP_ELSE_IF_ON_ONE_LINE;
 	}
 
-	public boolean isBeginLineBreaking() {
-		return !getDocument().getBoolean(
-				JavaScriptFormatterConstants.KEEP_ELSE_IF_ON_ONE_LINE);
+	public int insertBeforeOpenBrace() {
+		if (getDocument().getBoolean(
+				JavaScriptFormatterConstants.KEEP_ELSE_IF_ON_ONE_LINE))
+			return IBracesConfiguration.ONE_SPACE;
+		else
+			return IBracesConfiguration.LINE_BREAK;
+	}
+
+	public int insertAfterOpenBrace() {
+		return IBracesConfiguration.UNDEFINED;
 	}
 
 }

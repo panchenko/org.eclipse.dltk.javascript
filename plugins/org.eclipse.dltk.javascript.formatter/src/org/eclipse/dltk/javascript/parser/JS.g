@@ -115,6 +115,10 @@ tokens
 	THROWS 		= 'throws' ;
 	TRANSIENT 	= 'transient' ;
 	VOLATILE 	= 'volatile' ;
+	
+	CDATA = 'CDATA';
+	WXML = 'xml';
+	NAMESPACE = 'namespace';
 
 // Punctuators
 	LBRACE		= '{' ;
@@ -166,12 +170,34 @@ tokens
 	DIV		= '/' ;
 	DIVASS		= '/=' ;
 	
+  XCOPEN = '<!--';
+  XCCLOSE = '-->';
+	
+  XLCLOSE = '</'; 
+	XRCLOSE = '/>'; 
+	
+	CDATAOPEN = '<![';
+	//CDATACLOSE = ']]>';
+
+  XHOPEN = '<?';
+  XHCLOSE = '?>';
+  
+  AT = '@';
+  
+  DOTDOT = '..';
+  
+  COLONCOLON = '::';
+  
+  //Asterisk = '*';
+	
 // Imaginary
 	ARGS ;
 	ARRAY ;
 	BLOCK ;
 	BYFIELD ;
 	BYINDEX ;
+	ALLCHILDREN ;
+	LOCALNAME ;
 	CALL ;
 	CEXPR ;
 	EXPR ;
@@ -186,6 +212,7 @@ tokens
 	PDEC ;
 	PINC ;
 	POS ;
+	XML ;
 }
 
 @lexer::header
@@ -212,6 +239,7 @@ private final boolean areRegularExpressionsEnabled()
 	{
 	// identifier
 		case Identifier:
+		case XmlAttribute:
 	// literals
 		case NULL:
 		case TRUE:
@@ -231,6 +259,38 @@ private final boolean areRegularExpressionsEnabled()
 			return true;
 	}
 }
+/*
+private final boolean areXmlExpressionsEnabled()
+{
+  if (last == null)
+  {
+    return false;
+  }
+  switch (last.getType())
+  {
+  // identifier
+    case Identifier:
+    case XmlAttribute:
+  // literals
+    case NULL:
+    case TRUE:
+    case FALSE:
+    case THIS:
+    case OctalIntegerLiteral:
+    case DecimalLiteral:
+    case HexIntegerLiteral:
+    case StringLiteral:
+  // member access ending 
+    case RBRACK:
+  // function call or nested expression ending
+    case RPAREN:
+      return false;
+  // otherwise OK
+    default:
+      return true;
+  }
+}
+*/
 	
 private final void consumeIdentifierUnicodeStart() throws RecognitionException, NoViableAltException
 {
@@ -334,6 +394,7 @@ private final static boolean isLeftHandSideExpression(RuleReturnScope lhs)
 		// primaryExpression
 			case THIS:
 			case Identifier:
+			case XmlAttribute:
 			case NULL:
 			case TRUE:
 			case FALSE:
@@ -522,6 +583,8 @@ token
 	| punctuator
 	| numericLiteral
 	| StringLiteral
+	| XmlAttribute
+	//| Asterisk
 	;
 
 // $<	Reserved words (7.5.1)
@@ -566,6 +629,8 @@ keyword
 	| VOID
 	| WHILE
 	| WITH
+	| NAMESPACE
+	| XML
 	;
 
 // $>
@@ -646,6 +711,14 @@ Identifier
 	| { consumeIdentifierUnicodeStart(); }
 	;
 
+fragment PropertyIdentifierSymbols
+  : AT Identifier
+  ;
+
+XmlAttribute
+  : PropertyIdentifierSymbols
+  ;
+
 // $>
 
 // $<	Punctuators (7.7)
@@ -699,6 +772,9 @@ punctuator
 	| XORASS
 	| DIV
 	| DIVASS
+	| DOTDOT
+	| COLONCOLON
+	//| Asterisk
 	;
 
 // $>
@@ -813,6 +889,7 @@ StringLiteral
 	: SQUOTE ( ~( SQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* SQUOTE
 	| DQUOTE ( ~( DQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* DQUOTE
 	;
+	
 
 // $>
 
@@ -851,11 +928,16 @@ RegularExpressionLiteral
 primaryExpression
 	: THIS
 	| Identifier
+	| XmlAttribute
 	| literal
 	| arrayLiteral
 	| objectLiteral
-	| lpar=LPAREN expression RPAREN -> ^( PAREXPR[$lpar, "PAREXPR"] expression )
+	| parenExpression
 	;
+
+parenExpression
+  : lpar = LPAREN expression RPAREN -> ^( PAREXPR[$lpar, "PAREXPR"] expression )
+  ;
 
 arrayLiteral
 	: lb=LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK
@@ -887,6 +969,7 @@ propertyName
 	: Identifier
 	| StringLiteral
 	| numericLiteral
+	| XmlAttribute
 	;
 
 // $>
@@ -915,16 +998,45 @@ arguments
 	;
 	
 leftHandSideExpression
-	:
-	(
-		memberExpression 		-> memberExpression
-	)
-	(
-		arguments			-> ^( CALL $leftHandSideExpression arguments )
-		| LBRACK expression RBRACK	-> ^( BYINDEX $leftHandSideExpression expression )
-		| DOT Identifier	-> ^( BYFIELD $leftHandSideExpression Identifier )
-	)*
-	;
+  :
+  (
+    memberExpression    -> memberExpression
+  )
+  (
+    arguments     -> ^( CALL $leftHandSideExpression arguments )
+    | LBRACK expression RBRACK  -> ^( BYINDEX $leftHandSideExpression expression )
+    | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression )
+    | DOTDOT expression -> ^(ALLCHILDREN $leftHandSideExpression expression)
+    | COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpression expression)
+  )*
+  ;
+
+rightHandSideExpression
+  : parenExpression 
+  | Identifier
+  | XmlAttribute
+  | MUL
+; 
+
+
+
+	
+//leftHandSideExpression
+//	:
+//	(
+//		memberExpression 		-> memberExpression
+//	)
+//	(
+//		arguments			-> ^( CALL $leftHandSideExpression arguments )
+//		| LBRACK expression RBRACK	-> ^( BYINDEX $leftHandSideExpression expression )
+//		| DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier )
+//    | DOT XmlAttribute -> ^( BYFIELD $leftHandSideExpression XmlAttribute )
+//    | DOT parenExpression -> ^(BYFIELD $leftHandSideExpression parenExpression)
+//    | DOT MUL -> ^(BYFIELD $leftHandSideExpression MUL)
+//    | DOTDOT expression -> ^(ALLCHILDREN $leftHandSideExpression expression)
+//    | COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpression expression)
+//	)*
+//	;
 
 // $>
 
@@ -952,6 +1064,7 @@ postfixOperator
 unaryExpression
 	: postfixExpression
 	| unaryOperator^ unaryExpression
+  | XMLLiteral
 	;
 	
 unaryOperator
@@ -966,7 +1079,33 @@ unaryOperator
 	| NOT
 	;
 
+//xmlExpression
+//  : xmlTag+
+//  ;
+//
+//xmlTag
+//  : LT^ tagName (xmlArguments)* RCLOSE
+//  | LT^ tagName (xmlArguments)* GT (xmlTag)* LCLOSE tagName GT 
+//  ;
+//
+//xmlArguments
+//  : tagAttribute ASSIGN^ (StringLiteral | numericLiteral)
+//  ; 
+//
+//tagName
+//  : Identifier
+//  | keyword
+//  ;
+//  
+//tagAttribute
+//  : tagName
+//  ;
+
 // $>
+
+namespaceStatement
+  : DEFAULT WXML NAMESPACE^ ASSIGN StringLiteral semic!
+  ;
 
 // $<Multiplicative operators (11.5)
 
@@ -1106,12 +1245,12 @@ assignmentExpression
 	Object[] isLhs = new Object[1];
 }
 	: lhs=conditionalExpression
-	( { isLeftHandSideAssign(lhs, isLhs) }? assignmentOperator^ assignmentExpression )?	
+	( { isLeftHandSideAssign(lhs, isLhs) }? assignmentOperator^ assignmentExpression )?
 	;
 
 assignmentOperator
-	: ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS
-	;
+  : ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS
+  ;
 
 assignmentExpressionNoIn
 @init
@@ -1203,6 +1342,7 @@ statementTail
 	| throwStatement
 	| tryStatement
 	| constStatement
+	| namespaceStatement
 	;
 
 // $<Block (12.1)

@@ -28,7 +28,6 @@ public class JavaScriptWhiteSpacesTabPage extends FormatterModifyTabPage {
 
 	public JavaScriptWhiteSpacesTabPage(IFormatterModifyDialog dialog) {
 		super(dialog);
-		// TODO Auto-generated constructor stub
 	}
 
 	private Group createGroup(Composite parent, String text) {
@@ -43,16 +42,6 @@ public class JavaScriptWhiteSpacesTabPage extends FormatterModifyTabPage {
 
 	protected void createOptions(IFormatterControlManager manager,
 			Composite parent) {
-
-		// switch (100) {
-		// case 10: {
-		// int a = 50;
-		// }
-		//
-		// case 11:
-		// int a = 100;
-		//
-		// }
 
 		SWTFactory.createLabel(parent,
 				Messages.JavaScriptWhileSpacesTabPage_InsertSpaces_name, 1);

@@ -23,6 +23,7 @@ public class ObjectInitializer extends Expression {
 	private int LC;
 	private int RC;
 	private List commas;
+	private boolean multiline;
 
 	public ObjectInitializer(ASTNode parent) {
 		super(parent);
@@ -58,6 +59,14 @@ public class ObjectInitializer extends Expression {
 
 	public void setCommas(List commas) {
 		this.commas = commas;
+	}
+
+	public boolean isMultiline() {
+		return this.multiline;
+	}
+
+	public void setMultiline(boolean multiline) {
+		this.multiline = multiline;
 	}
 
 	public String toSourceString(String indentationString) {

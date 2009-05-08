@@ -17,7 +17,7 @@ import org.eclipse.dltk.ast.ASTNode;
 public abstract class JumpStatement extends Statement {
 
 	private String label = null;
-	
+
 	public JumpStatement(ASTNode parent) {
 		super(parent);
 	}

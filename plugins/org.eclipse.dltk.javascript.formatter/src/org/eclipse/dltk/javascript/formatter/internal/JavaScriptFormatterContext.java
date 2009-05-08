@@ -8,9 +8,4 @@ public class JavaScriptFormatterContext extends FormatterContext {
 		super(indent);
 	}
 
-	// protected boolean isCountable(IFormatterNode node) {
-	// return node instanceof IFormatterContainerNode
-	// || node instanceof FormatterRequireNode;
-	// }
-	
 }

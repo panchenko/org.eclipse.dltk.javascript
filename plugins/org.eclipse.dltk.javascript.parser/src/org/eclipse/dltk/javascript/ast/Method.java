@@ -57,7 +57,6 @@ public abstract class Method extends Expression {
 		this.RP = RP;
 	}
 
-	
 	public boolean isBlock() {
 		return true;
 	}

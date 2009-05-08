@@ -27,7 +27,6 @@ public class JavaScriptControlStatementsTabPage extends FormatterModifyTabPage {
 
 	public JavaScriptControlStatementsTabPage(IFormatterModifyDialog dialog) {
 		super(dialog);
-		// TODO Auto-generated constructor stub
 	}
 
 	protected void createOptions(IFormatterControlManager manager,
@@ -67,46 +66,6 @@ public class JavaScriptControlStatementsTabPage extends FormatterModifyTabPage {
 						JavaScriptFormatterConstants.NEW_LINE_BEFORE_WHILE_IN_DO,
 						Messages.JavaScriptControlStatementsTabPage_NewLineBeforeWhile_name);
 
-		// Group ifElseGroup = SWTFactory.createGroup(parent,
-		// Messages.JavaScriptControlStatementsTabPage_IfElseGroup_name,
-		// 1, 1, GridData.FILL_HORIZONTAL);
-		//
-		// manager
-		// .createCheckbox(
-		// ifElseGroup,
-		// JavaScriptFormatterConstants.KEEP_THEN_ON_SAME_LINE,
-		// Messages.JavaScriptControlStatementsTabPage_KeepThenSameLine_name);
-		//
-		// manager
-		// .createCheckbox(
-		// ifElseGroup,
-		// JavaScriptFormatterConstants.KEEP_SIMPLE_IF_ON_ONE_LINE,
-		//Messages.JavaScriptControlStatementsTabPage_KeepSimpleIfOneLine_name);
-		//
-		// // manager
-		// // .createCheckbox(
-		// // ifElseGroup,
-		// // JavaScriptFormatterConstants.KEEP_ELSE_ON_SAME_LINE,
-		// //
-		// Messages.JavaScriptControlStatementsTabPage_KeepElseSameLine_name);
-		//
-		// manager
-		// .createCheckbox(
-		// ifElseGroup,
-		// JavaScriptFormatterConstants.KEEP_ELSE_IF_ON_ONE_LINE,
-		// Messages.JavaScriptControlStatementsTabPage_KeepElseIfOneLine_name);
-		//
-		// manager
-		// .createCheckbox(
-		// ifElseGroup,
-		// JavaScriptFormatterConstants.KEEP_RETURN_ON_ONE_LINE,
-		// Messages.JavaScriptControlStatementsTabPage_KeepReturnOneLine_name);
-		//
-		// manager
-		// .createCheckbox(
-		// ifElseGroup,
-		// JavaScriptFormatterConstants.KEEP_THROW_ON_ONE_LINE,
-		// Messages.JavaScriptControlStatementsTabPage_KeepThrowOneLine_name);
 	}
 
 	protected URL getPreviewContent() {

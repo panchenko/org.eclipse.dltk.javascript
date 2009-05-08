@@ -50,10 +50,9 @@ public class BracketsNode extends FormatterBlockWithBeginEndNode {
 				((IFormatterNode) nodes[i]).accept(context, visitor);
 			}
 		}
+
 		acceptBody(context, visitor);
-		// if (true) {
-		// visitor.writeLineBreak(context);
-		// }
+
 		if (configuration.isEndLineBreaking()) {
 			visitor.writeLineBreak(context);
 		}

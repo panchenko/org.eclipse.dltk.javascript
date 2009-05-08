@@ -13,8 +13,7 @@
 package org.eclipse.dltk.javascript.ast;
 
 public class SingleLineComment extends Comment {
-	
-	
+
 	public boolean isMultiLine() {
 		return false;
 	}

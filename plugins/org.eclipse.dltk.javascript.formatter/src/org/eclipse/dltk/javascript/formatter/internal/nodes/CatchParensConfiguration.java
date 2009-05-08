@@ -23,7 +23,6 @@ public class CatchParensConfiguration extends AbstractParensConfiguration {
 		spaceBeforeLpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_LP_CATCH;
 		spaceAfterLpName = JavaScriptFormatterConstants.INSERT_SPACE_AFTER_LP_CATCH;
 		spaceBeforeRpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_RP_CATCH;
-
 	}
 
 }

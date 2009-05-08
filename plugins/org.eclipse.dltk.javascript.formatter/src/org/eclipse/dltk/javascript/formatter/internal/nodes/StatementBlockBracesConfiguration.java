@@ -8,8 +8,8 @@ public class StatementBlockBracesConfiguration extends BlockBracesConfiguration 
 		super(document);
 	}
 
-	public boolean isStatementContinuation() {
-		return false;
+	public int insertBeforeOpenBrace() {
+		return IBracesConfiguration.ONE_SPACE;
 	}
 
 }

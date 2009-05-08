@@ -60,7 +60,7 @@ public class GetArrayItemExpression extends Expression {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LB > 0);
 		Assert.isTrue(RB > 0);

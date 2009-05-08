@@ -23,7 +23,6 @@ public class ForParensConfiguration extends AbstractParensConfiguration {
 		spaceBeforeLpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_LP_FOR;
 		spaceAfterLpName = JavaScriptFormatterConstants.INSERT_SPACE_AFTER_LP_FOR;
 		spaceBeforeRpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_RP_FOR;
-
 	}
 
 }

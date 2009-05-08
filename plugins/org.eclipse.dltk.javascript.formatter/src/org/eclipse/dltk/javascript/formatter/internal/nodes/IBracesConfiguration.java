@@ -12,22 +12,77 @@
 
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
+/**
+ * 
+ * [BracesIndenting] [BeforeOpenBrace] { [AfterOpenBrace]
+ * 
+ * [BracesIndenting] [Indenting] body...
+ * 
+ * [BracesIndenting] [BeforeCloseBrace] } [AfterCloseBrace]
+ * 
+ * 
+ * @author Vladimir Belov
+ * 
+ */
+
 public interface IBracesConfiguration {
 
-	public boolean isIndenting();
-
-	public boolean isBracesIndenting();
-
-	public boolean isBeginLineBreaking();
-
 	/**
-	 * Should return <code>true</code> if these brace block is part of
-	 * statement.
+	 * 
+	 * Indents content between braces
 	 * 
 	 * @return
 	 */
-	boolean isStatementContinuation();
+	boolean isIndenting();
 
-	public boolean isEndLineBreaking();
+	/**
+	 * Indents braces and content
+	 * 
+	 * @return
+	 */
+	boolean isBracesIndenting();
 
+	/**
+	 * Keep original text
+	 */
+	public static final int UNDEFINED = 0;
+
+	/**
+	 * Replace white-spaces with one space character
+	 */
+	public static final int ONE_SPACE = 1;
+
+	/**
+	 * Start body with new line
+	 */
+	public static final int LINE_BREAK = 2;
+
+	/**
+	 * Delete all white-spaces
+	 */
+	public static final int EMPTY_SPACE = 3;
+
+	/**
+	 * 
+	 * @return
+	 */
+	int insertBeforeOpenBrace();
+
+	/**
+	 * 
+	 * @return
+	 */
+	int insertAfterOpenBrace();
+
+	/**
+	 * 
+	 * @return
+	 */
+	int insertBeforeCloseBrace();
+
+	/**
+	 * 
+	 * @return
+	 */
+	int insertAfterCloseBrace();
 }

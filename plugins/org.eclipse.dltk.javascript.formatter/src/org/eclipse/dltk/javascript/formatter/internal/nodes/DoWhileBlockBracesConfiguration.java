@@ -15,12 +15,13 @@ package org.eclipse.dltk.javascript.formatter.internal.nodes;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
-public class DoWhileBlockBracesConfiguration extends AbstractBracesConfiguration {
+public class DoWhileBlockBracesConfiguration extends
+		AbstractBracesConfiguration {
 
 	public DoWhileBlockBracesConfiguration(IFormatterDocument document) {
 		super(document);
 
-		indentingSettingName = JavaScriptFormatterConstants.INDENT_BLOCK; 
+		indentingSettingName = JavaScriptFormatterConstants.INDENT_BLOCK;
 		bracesSettingName = JavaScriptFormatterConstants.BRACE_BLOCK;
 		newLineSettingName = JavaScriptFormatterConstants.NEW_LINE_BEFORE_WHILE_IN_DO;
 	}

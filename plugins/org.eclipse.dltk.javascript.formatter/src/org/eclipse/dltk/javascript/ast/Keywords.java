@@ -86,6 +86,10 @@ public class Keywords {
 
 	public static final String VOID = "void";
 
+	public static final String XML = "xml";
+
+	public static final String NAMESPACE = "namespace";
+
 	//
 	//
 	//
@@ -189,6 +193,43 @@ public class Keywords {
 
 	private final static HashMap map = new HashMap();
 	static {
+
+		map.put(new Integer(JSParser.FUNCTION), Keywords.FUNCTION);
+		map.put(new Integer(JSParser.NULL), Keywords.NULL);
+		map.put(new Integer(JSParser.RETURN), Keywords.RETURN);
+		map.put(new Integer(JSParser.IF), Keywords.IF);
+		map.put(new Integer(JSParser.ELSE), Keywords.IF);
+		map.put(new Integer(JSParser.SWITCH), Keywords.SWITCH);
+		map.put(new Integer(JSParser.CASE), Keywords.CASE);
+		map.put(new Integer(JSParser.BREAK), Keywords.BREAK);
+		map.put(new Integer(JSParser.CONTINUE), Keywords.CONTINUE);
+		map.put(new Integer(JSParser.DEFAULT), Keywords.DEFAULT);
+		map.put(new Integer(JSParser.FOR), Keywords.FOR);
+		map.put(new Integer(JSParser.EACH), Keywords.EACH);
+		map.put(new Integer(JSParser.WHILE), Keywords.WHILE);
+		map.put(new Integer(JSParser.DO), Keywords.DO);
+		map.put(new Integer(JSParser.VAR), Keywords.VAR);
+		map.put(new Integer(JSParser.CONST), Keywords.CONST);
+		map.put(new Integer(JSParser.IN), Keywords.IN);
+		map.put(new Integer(JSParser.NEW), Keywords.NEW);
+		map.put(new Integer(JSParser.TRUE), Keywords.TRUE);
+		map.put(new Integer(JSParser.FALSE), Keywords.FALSE);
+		map.put(new Integer(JSParser.TRY), Keywords.TRY);
+		map.put(new Integer(JSParser.CATCH), Keywords.CATCH);
+		map.put(new Integer(JSParser.FINALLY), Keywords.FINALLY);
+		map.put(new Integer(JSParser.INSTANCEOF), Keywords.INSTANCEOF);
+		map.put(new Integer(JSParser.TYPEOF), Keywords.TYPEOF);
+		map.put(new Integer(JSParser.THIS), Keywords.THIS);
+		map.put(new Integer(JSParser.THROW), Keywords.THROW);
+		map.put(new Integer(JSParser.EXPORT), Keywords.EXPORT);
+		map.put(new Integer(JSParser.IMPORT), Keywords.IMPORT);
+		map.put(new Integer(JSParser.WITH), Keywords.WITH);
+		map.put(new Integer(JSParser.DELETE), Keywords.DELETE);
+		map.put(new Integer(JSParser.GET), Keywords.GET);
+		map.put(new Integer(JSParser.SET), Keywords.SET);
+		map.put(new Integer(JSParser.VOID), Keywords.VOID);
+		map.put(new Integer(JSParser.XML), Keywords.XML);
+		map.put(new Integer(JSParser.NAMESPACE), Keywords.NAMESPACE);
 
 		map.put(new Integer(JSParser.ASSIGN), String.valueOf(Keywords.ASSIGN));
 
@@ -308,5 +349,22 @@ public class Keywords {
 			}
 		}
 		return buffer.toString();
+	}
+
+	public static boolean isKeyword(String value) {
+
+		if (value == null || value.length() == 0)
+			return false;
+
+		if (map.containsValue(value.toLowerCase())) {
+			char[] chars = value.toCharArray();
+			for (int i = 0; i < chars.length; i++) {
+				if (!Character.isLetter(chars[i]))
+					return false;
+			}
+			return true;
+		}
+
+		return false;
 	}
 }

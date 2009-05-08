@@ -21,8 +21,8 @@ public class FunctionExpressionBodyBracesConfiguration extends
 		super(document);
 	}
 
-	public boolean isEndLineBreaking() {
-		return false;
+	public int insertAfterCloseBrace() {
+		return IBracesConfiguration.EMPTY_SPACE;
 	}
 
 }

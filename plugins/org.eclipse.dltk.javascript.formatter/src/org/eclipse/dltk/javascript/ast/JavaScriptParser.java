@@ -19,7 +19,6 @@ import java.util.List;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.TokenStream;
@@ -48,11 +47,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 			super.reportError(e);
 
 			if (!errorRecovery) {
-				// DEBUG
-				// System.out.println(e + " Line: " + e.line + " Pos: "
-				// + e.charPositionInLine + " Token: "
-				// + getTokenText(e.token));
-
 				reportProblem(e, reporter);
 			}
 		}
@@ -77,11 +71,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 			super.reportError(e);
 
 			if (!errorRecovery) {
-				// DEBUG
-				// System.out.println(e + " Line: " + e.line + " Pos: "
-				// + e.charPositionInLine + " Token: "
-				// + getTokenText(e.token));
-
 				reportProblem(e, reporter);
 			}
 		}
@@ -91,15 +80,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 				System.err.println(msg);
 		}
 	}
-
-	// // DEBUG
-	// private static String getTokenText(Token token) {
-	// if (token != null)
-	// return token.getText();
-	// else
-	// return "<null>";
-	// }
-	//
 
 	private class JSInternalProblemReporterProxy extends ProblemReporterProxy {
 
@@ -125,8 +105,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 	public ModuleDeclaration parse(char[] fileName, char[] source,
 			IProblemReporter reporter) {
 
-		// Assert.isNotNull(reporter);
-
 		if (fileName == null && source == null)
 			throw new IllegalArgumentException(
 					"fileName or source argument required");
@@ -144,12 +122,11 @@ public class JavaScriptParser extends AbstractSourceParser {
 			CharStream charStream = getCharStream();
 
 			JSLexer lexer = new JSInternalLexer(charStream, reporterProxy);
-			JSParser parser = new JSInternalParser(
-					new CommonTokenStream(lexer), reporterProxy);
 
-			// JSLexer lexer = new JSInternalLexer(charStream);
-			// JSParser parser = new JSInternalParser(new
-			// CommonTokenStream(lexer));
+			TokenStream stream = new JavaScriptTokenStream(lexer);
+			// TokenStream stream = new CommonTokenStream(lexer);
+
+			JSParser parser = new JSInternalParser(stream, reporterProxy);
 
 			RuleReturnScope root = parser.program();
 
@@ -158,15 +135,14 @@ public class JavaScriptParser extends AbstractSourceParser {
 
 			CharStream charStream2 = getCharStream();
 			JSLexer lexer2 = new JSLexer(charStream2);
-			CommonTokenStream stream = new CommonTokenStream(lexer2);
-			List tokens = stream.getTokens();
+			List tokens = new JavaScriptTokenStream(lexer2).getTokens();
 
 			return new JSTransformer(root, tokens).transform();
 
 		} catch (Exception e) {
 			if (DLTKCore.DEBUG)
 				e.printStackTrace();
-			reportProblem(e, reporter);
+			reportProblem(e, reporterProxy);
 			return null;
 		}
 	}
@@ -179,60 +155,65 @@ public class JavaScriptParser extends AbstractSourceParser {
 					.toCharArray()));
 	}
 
+	private class JSInternalProblem implements IProblem {
+
+		private Exception exception;
+
+		public JSInternalProblem(Exception exception) {
+			this.exception = exception;
+		}
+
+		public String[] getArguments() {
+			return null;
+		}
+
+		public int getID() {
+			return 0;
+		}
+
+		public String getMessage() {
+			return exception.getMessage();
+		}
+
+		public String getOriginatingFileName() {
+			return null;
+		}
+
+		public int getSourceEnd() {
+			return 0;
+		}
+
+		public int getSourceLineNumber() {
+			if (exception instanceof RecognitionException)
+				return ((RecognitionException) exception).line;
+			return 0;
+		}
+
+		public int getSourceStart() {
+			return 0;
+		}
+
+		public boolean isError() {
+			return true;
+		}
+
+		public boolean isWarning() {
+			return false;
+		}
+
+		public void setSourceEnd(int sourceEnd) {
+		}
+
+		public void setSourceLineNumber(int lineNumber) {
+		}
+
+		public void setSourceStart(int sourceStart) {
+		}
+
+	}
+
 	private void reportProblem(final Exception e, IProblemReporter reporter) {
-		reporter.reportProblem(new IProblem() {
-
-			public String[] getArguments() {
-				return null;
-			}
-
-			public int getID() {
-				return 0;
-			}
-
-			public String getMessage() {
-				return e.getLocalizedMessage();
-			}
-
-			public String getOriginatingFileName() {
-				return fileName;
-			}
-
-			public int getSourceEnd() {
-				// if (e instanceof RecognitionException)
-				// ((RecognitionException)e).
-				return -1;
-			}
-
-			public int getSourceLineNumber() {
-				if (e instanceof RecognitionException)
-					return ((RecognitionException) e).line;
-
-				return -1;
-			}
-
-			public int getSourceStart() {
-				return -1;
-			}
-
-			public boolean isError() {
-				return true;
-			}
-
-			public boolean isWarning() {
-				return false;
-			}
-
-			public void setSourceEnd(int sourceEnd) {
-			}
-
-			public void setSourceLineNumber(int lineNumber) {
-			}
-
-			public void setSourceStart(int sourceStart) {
-			}
-		});
-
+		reporter.reportProblem(new JSInternalProblem(e));
 	}
 
 }

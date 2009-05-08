@@ -24,7 +24,6 @@ public class WhileConditionParensConfiguration extends
 		spaceBeforeLpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_LP_WHILE;
 		spaceAfterLpName = JavaScriptFormatterConstants.INSERT_SPACE_AFTER_LP_WHILE;
 		spaceBeforeRpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_RP_WHILE;
-
 	}
 
 }

@@ -23,7 +23,6 @@ public abstract class Comment extends ASTNode {
 	}
 
 	public void traverse(ASTVisitor visitor) throws Exception {
-		// TODO Auto-generated method stub
 	}
 
 	public String getText() {

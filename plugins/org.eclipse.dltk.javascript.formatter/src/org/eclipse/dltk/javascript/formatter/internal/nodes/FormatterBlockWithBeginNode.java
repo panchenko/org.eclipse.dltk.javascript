@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2009 xored software, Inc.  
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html  
+ *
+ * Contributors:
+ *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *******************************************************************************/
+
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
 import java.util.ArrayList;
@@ -53,8 +65,7 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 	}
 
 	/*
-	 * @see
-	 * org.eclipse.dltk.ruby.formatter.node.FormatterBlockNode#getStartOffset()
+	 * @see FormatterBlockNode#getStartOffset()
 	 */
 	public int getStartOffset() {
 		if (begin != null) {
@@ -64,8 +75,7 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 	}
 
 	/*
-	 * @see
-	 * org.eclipse.dltk.ruby.formatter.node.FormatterBlockNode#getEndOffset()
+	 * @see FormatterBlockNode#getEndOffset()
 	 */
 	public int getEndOffset() {
 		if (!super.isEmpty()) {
@@ -78,14 +88,14 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ruby.formatter.node.FormatterBlockNode#isEmpty()
+	 * @see FormatterBlockNode#isEmpty()
 	 */
 	public boolean isEmpty() {
 		return begin == null && super.isEmpty();
 	}
 
 	/*
-	 * @see org.eclipse.dltk.formatter.nodes.FormatterBlockNode#getChildren()
+	 * @see FormatterBlockNode#getChildren()
 	 */
 	public List getChildren() {
 		if (begin == null) {
@@ -101,7 +111,7 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ruby.formatter.node.FormatterBlockNode#toString()
+	 * @see FormatterBlockNode#toString()
 	 */
 	public String toString() {
 		return begin + "\n" + super.toString(); //$NON-NLS-1$

@@ -45,6 +45,10 @@ public class JavaScriptIdentationTabPage extends FormatterModifyTabPage {
 			CodeFormatterConstants.SPACE, CodeFormatterConstants.TAB,
 			CodeFormatterConstants.MIXED };
 
+	private final String[] tabPolicyItemNames = new String[] {
+			CodeFormatterConstants.SPACE, CodeFormatterConstants.TAB,
+			CodeFormatterConstants.MIXED };
+
 	private class TabPolicyListener extends SelectionAdapter implements
 			IFormatterControlManager.IInitializeListener {
 
@@ -75,17 +79,15 @@ public class JavaScriptIdentationTabPage extends FormatterModifyTabPage {
 
 	protected void createOptions(final IFormatterControlManager manager,
 			Composite parent) {
-		Group tabPolicyGroup = SWTFactory
-				.createGroup(
-						parent,
-						Messages.JavaScriptIdentationTabPage_GeneralSettingsGroup_name,
-						2, 1, GridData.FILL_HORIZONTAL);
+		Group tabPolicyGroup = SWTFactory.createGroup(parent,
+				Messages.JavaScriptIdentationTabPage_GeneralSettingsGroup_name,
+				2, 1, GridData.FILL_HORIZONTAL);
 		tabPolicy = manager
 				.createCombo(
 						tabPolicyGroup,
 						JavaScriptFormatterConstants.FORMATTER_TAB_CHAR,
 						FormatterMessages.IndentationTabPage_general_group_option_tab_policy,
-						tabPolicyItems);
+						tabPolicyItems, tabPolicyItemNames);
 		tabPolicyListener = new TabPolicyListener(manager);
 		tabPolicy.addSelectionListener(tabPolicyListener);
 		manager.addInitializeListener(tabPolicyListener);
@@ -113,11 +115,9 @@ public class JavaScriptIdentationTabPage extends FormatterModifyTabPage {
 			}
 		});
 
-		Group indentGroup = SWTFactory
-				.createGroup(
-						parent,
-						Messages.JavaScriptIdentationTabPage_IndentGroup_name,
-						1, 1, GridData.FILL_HORIZONTAL);
+		Group indentGroup = SWTFactory.createGroup(parent,
+				Messages.JavaScriptIdentationTabPage_IndentGroup_name, 1, 1,
+				GridData.FILL_HORIZONTAL);
 
 		manager
 				.createCheckbox(
@@ -142,14 +142,9 @@ public class JavaScriptIdentationTabPage extends FormatterModifyTabPage {
 						JavaScriptFormatterConstants.INDENT_CASE,
 						Messages.JavaScriptIdentationTabPage_StatementsWithinCaseBody_name);
 
-		manager
-				.createCheckbox(
-						indentGroup,
-						JavaScriptFormatterConstants.INDENT_BREAK,
-						Messages.JavaScriptIdentationTabPage_BreakStatements_name);
-
-		// manager.createCheckbox(indentGroup,
-		// JavaScriptFormatterConstants.INDENT_EMPTY_LINES, "Empty lines");
+		manager.createCheckbox(indentGroup,
+				JavaScriptFormatterConstants.INDENT_BREAK,
+				Messages.JavaScriptIdentationTabPage_BreakStatements_name);
 
 	}
 

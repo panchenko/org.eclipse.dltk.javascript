@@ -26,8 +26,8 @@ import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.javascript.ast.JavaScriptParser;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.formatter.internal.FormatterNodeBuilder;
-import org.eclipse.dltk.javascript.formatter.internal.JavascriptFormatterNodeRewriter;
 import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterContext;
+import org.eclipse.dltk.javascript.formatter.internal.JavascriptFormatterNodeRewriter;
 import org.eclipse.dltk.ui.formatter.AbstractScriptFormatter;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.text.edits.ReplaceEdit;
@@ -148,19 +148,15 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 
 			if (JavaScriptFormatterConstants.isBoolean(name)) {
 				document.setBoolean(name, getBoolean(name));
-				// System.out.println(name + " = "
-				// + (getBoolean(name) ? "true" : "false"));
 				continue;
 			}
 
 			if (JavaScriptFormatterConstants.isInteger(name)) {
-				// System.out.println(name + " = " + getInt(name));
 				document.setInt(name, getInt(name));
 				continue;
 			}
 
 			if (JavaScriptFormatterConstants.isString(name)) {
-				// System.out.println(name + " = " + getString(name));
 				document.setString(name, getString(name));
 			}
 		}

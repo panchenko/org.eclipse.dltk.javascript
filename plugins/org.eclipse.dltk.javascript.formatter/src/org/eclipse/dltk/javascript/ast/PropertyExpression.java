@@ -18,7 +18,7 @@ import org.eclipse.dltk.ast.ASTNode;
 public class PropertyExpression extends Expression {
 
 	private Expression object;
-	private Identifier property;
+	private Expression property;
 	private int dot;
 
 	public PropertyExpression(ASTNode parent) {
@@ -33,11 +33,11 @@ public class PropertyExpression extends Expression {
 		this.object = object;
 	}
 
-	public Identifier getProperty() {
+	public Expression getProperty() {
 		return this.property;
 	}
 
-	public void setProperty(Identifier property) {
+	public void setProperty(Expression property) {
 		this.property = property;
 	}
 

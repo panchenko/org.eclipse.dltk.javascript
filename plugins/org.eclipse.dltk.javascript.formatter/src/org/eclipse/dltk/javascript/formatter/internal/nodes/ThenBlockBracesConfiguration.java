@@ -26,8 +26,8 @@ public class ThenBlockBracesConfiguration extends AbstractBracesConfiguration {
 		// JavaScriptFormatterConstants.NEW_LINE_BEFORE_ELSE_IN_IF;
 	}
 
-	public boolean isEndLineBreaking() {
-		return false;
+	public int insertAfterCloseBrace() {
+		return IBracesConfiguration.ONE_SPACE;
 	}
 
 }

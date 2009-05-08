@@ -24,8 +24,8 @@ public class CatchBracesConfiguration extends AbstractBracesConfiguration {
 		bracesSettingName = JavaScriptFormatterConstants.BRACE_BLOCK;
 	}
 
-	public boolean isEndLineBreaking() {
-		return false;
+	public int insertAfterCloseBrace() {
+		return IBracesConfiguration.EMPTY_SPACE;
 	}
 
 }

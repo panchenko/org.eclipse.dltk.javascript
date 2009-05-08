@@ -53,7 +53,6 @@ public class DeleteStatement extends Statement {
 
 		Assert.isTrue(sourceStart() > 0);
 		Assert.isTrue(sourceEnd() > 0);
-		// Assert.isTrue(semic > 0);
 
 		StringBuffer buffer = new StringBuffer();
 

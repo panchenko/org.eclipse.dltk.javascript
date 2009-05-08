@@ -60,7 +60,6 @@ public class VariableDeclaration extends Expression {
 
 		StringBuffer buffer = new StringBuffer();
 
-		// buffer.append(indentationString);
 		buffer.append(Keywords.VAR);
 		buffer.append(" ");
 

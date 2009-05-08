@@ -19,7 +19,7 @@ public class BlockBracesConfiguration extends AbstractBracesConfiguration {
 
 	public BlockBracesConfiguration(IFormatterDocument document) {
 		super(document);
-		
+
 		indentingSettingName = JavaScriptFormatterConstants.INDENT_BLOCK;
 		bracesSettingName = JavaScriptFormatterConstants.BRACE_BLOCK;
 	}

@@ -29,17 +29,15 @@ public abstract class Expression extends ASTNode implements ISourceable {
 	public ASTNode getParent() {
 		return this.parent;
 	}
-	
-	
-	public void traverse(ASTVisitor visitor) throws Exception {
-		// TODO Auto-generated method stub
 
+	public void traverse(ASTVisitor visitor) throws Exception {
 	}
 
 	public String toString() {
 		return toSourceString("");
 	}
-	
+
 	public abstract boolean isBlock();
+
 	public abstract String toSourceString(String indentationString);
 }

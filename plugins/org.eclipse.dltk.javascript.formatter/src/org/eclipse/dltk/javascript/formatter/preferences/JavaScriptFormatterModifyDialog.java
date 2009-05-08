@@ -26,22 +26,14 @@ public class JavaScriptFormatterModifyDialog extends FormatterModifyDialog {
 
 	protected void addPages() {
 
-		// TODO create the special option to keep ';' or don't keep ';' at the
-		// EOL in JavaScript code
-
-		// TODO: create resource strings
 		addTabPage(Messages.JavaScriptIdentationTabPage_name,
 				new JavaScriptIdentationTabPage(this));
 		addTabPage(Messages.JavaScriptBracesTabPage_name,
 				new JavaScriptBracesTabPage(this));
-		// addTabPage(Messages.JavaScriptNewLinesTabPage_name,
-		// new JavaScriptNewLinesTabPage(this));
 		addTabPage(Messages.JavaScriptWhiteSpacesTabPage_name,
 				new JavaScriptWhiteSpacesTabPage(this));
 		addTabPage(Messages.JavaScriptControlStatementsTabPage_name,
 				new JavaScriptControlStatementsTabPage(this));
-		// addTabPage(Messages.JavaScriptCommentsTabPage_name,
-		// new JavaScriptCommentsTabPage(this));
 	}
 
 }

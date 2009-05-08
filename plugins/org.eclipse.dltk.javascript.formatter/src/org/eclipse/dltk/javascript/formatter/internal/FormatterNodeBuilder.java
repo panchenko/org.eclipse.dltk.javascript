@@ -13,6 +13,7 @@ import org.eclipse.dltk.formatter.IFormatterContainerNode;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.formatter.IFormatterTextNode;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
+import org.eclipse.dltk.javascript.ast.AsteriskExpression;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.BooleanLiteral;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
@@ -25,6 +26,7 @@ import org.eclipse.dltk.javascript.ast.ConstDeclaration;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
+import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
@@ -34,7 +36,9 @@ import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
 import org.eclipse.dltk.javascript.ast.ForStatement;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.GetAllChildrenExpression;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
+import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.IASTVisitor;
 import org.eclipse.dltk.javascript.ast.Identifier;
@@ -66,6 +70,8 @@ import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
+import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
+import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.AbstractParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ArrayBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.BlockBracesConfiguration;
@@ -78,6 +84,7 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.CatchParensConfigura
 import org.eclipse.dltk.javascript.formatter.internal.nodes.DoWhileBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseIfBlockBracesConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseIfElseBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.EmptyArrayBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ExpressionParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FinallyBracesConfiguration;
@@ -117,13 +124,15 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionArgumentsPar
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionBodyBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionExpressionBodyBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionNoArgumentsParensConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.GetItemArrayBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IfConditionParensConfiguration;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.ObjectInitializerBracesConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.MultiLineObjectInitializerBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ParensNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SemicolonNode;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.SingleLineObjectInitializerBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.StatementBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SwitchBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SwitchConditionParensConfiguration;
@@ -145,10 +154,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 		astRoot.visitAll(new IASTVisitor() {
 
 			public boolean visit(ASTNode node) {
-
-				// System.out.println(node.getClass());
-				// System.out.println(((ISourceable)
-				// node).toSourceString("    "));
 
 				if (node.getClass() == ArrayInitializer.class)
 					return visitArrayInitializer((ArrayInitializer) node);
@@ -308,6 +313,24 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				if (node.getClass() == VoidOperator.class)
 					return visitVoidOperator((VoidOperator) node);
+
+				if (node.getClass() == XmlLiteral.class)
+					return visitXmlLiteral((XmlLiteral) node);
+
+				if (node.getClass() == DefaultXmlNamespaceStatement.class)
+					return visitDefaultXmlNamespace((DefaultXmlNamespaceStatement) node);
+
+				if (node.getClass() == XmlAttributeIdentifier.class)
+					return visitXmlPropertyIdentifier((XmlAttributeIdentifier) node);
+
+				if (node.getClass() == AsteriskExpression.class)
+					return visitAsteriskExpression((AsteriskExpression) node);
+
+				if (node.getClass() == GetAllChildrenExpression.class)
+					return visitGetAllChildrenExpression((GetAllChildrenExpression) node);
+
+				if (node.getClass() == GetLocalNameExpression.class)
+					return visitGetLocalNameExpression((GetLocalNameExpression) node);
 
 				throw new UnsupportedOperationException("Unknown node type: "
 						+ node.getClass());
@@ -850,7 +873,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processParens(node.getLP(), node.getRP(), (ASTNode) null,
 						new FunctionNoArgumentsParensConfiguration(document));
 
-				visit(node.getBody());
+				processBraces(node.getBody(),
+						new FunctionBodyBracesConfiguration(document));
 
 				checkedPop(formatterNode, node.sourceEnd());
 
@@ -951,6 +975,18 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				brackets.setEnd(createCharNode(document, rightBracket));
 			}
 
+			private void processElseIf(ASTNode node,
+					IBracesConfiguration configuration) {
+				BracesNode braces = new BracesNode(document, configuration);
+				braces.setBegin(createEmptyTextNode(document, node
+						.sourceStart()));
+				push(braces);
+				visit(node);
+				checkedPop(braces, node.sourceEnd());
+				// braces.setEnd(createEmptyTextNode(document,
+				// node.sourceEnd()));
+			}
+
 			public boolean visitIfStatement(IfStatement node) {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -975,17 +1011,31 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				checkedPop(formatterNode, node.getThenStatement().sourceEnd());
 
 				if (node.getElseStatement() != null) {
+
+					boolean lineBreakBeforeElse = node.getThenStatement() == null
+							|| !(node.getThenStatement() instanceof StatementBlock);
+
 					IBracesConfiguration elseConfiguration;
 					FormatterElseNode elseNode = null;
 
 					if (node.getElseStatement() instanceof IfStatement) {
-						elseConfiguration = new ElseIfBlockBracesConfiguration(
-								document);
-						elseNode = new FormatterElseIfNode(document);
+						IfStatement elseStatement = (IfStatement) node
+								.getElseStatement();
+
+						if (elseStatement.getElseStatement() == null) {
+							elseConfiguration = new ElseIfBlockBracesConfiguration(
+									document);
+						} else {
+							elseConfiguration = new ElseIfElseBlockBracesConfiguration(
+									document);
+						}
+						elseNode = new FormatterElseIfNode(document,
+								lineBreakBeforeElse);
 					} else {
 						elseConfiguration = new ElseBlockBracesConfiguration(
 								document);
-						elseNode = new FormatterElseNode(document);
+						elseNode = new FormatterElseNode(document,
+								lineBreakBeforeElse);
 					}
 
 					elseNode.addChild(new FormatterElseKeywordNode(document,
@@ -994,7 +1044,12 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 					push(elseNode);
 
-					processBraces(node.getElseStatement(), elseConfiguration);
+					if (node.getElseStatement() instanceof IfStatement)
+						processElseIf(node.getElseStatement(),
+								elseConfiguration);
+					else
+						processBraces(node.getElseStatement(),
+								elseConfiguration);
 
 					checkedPop(elseNode, node.getElseStatement().sourceEnd());
 				}
@@ -1062,9 +1117,17 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitObjectInitializer(ObjectInitializer node) {
 
+				IBracesConfiguration configuration;
+
+				if (node.isMultiline())
+					configuration = new MultiLineObjectInitializerBracesConfiguration(
+							document);
+				else
+					configuration = new SingleLineObjectInitializerBracesConfiguration(
+							document);
+
 				FormatterObjectInitializerNode formatterNode = new FormatterObjectInitializerNode(
-						document, new ObjectInitializerBracesConfiguration(
-								document));
+						document, configuration);
 
 				formatterNode.setBegin(createTextNode(document, node.getLC(),
 						node.getLC() + 1));
@@ -1121,7 +1184,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				visit(node.getName());
 				visit(node.getValue());
 
-				checkedPop(formatterNode, node.sourceEnd());
+				checkedPop(formatterNode, node.getValue().sourceStart());
 
 				return true;
 			}
@@ -1442,19 +1505,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 			}
 
-			// private void visitCommaList(List nodes, List commas) {
-			//
-			// for (int i = 0; i < nodes.size(); i++) {
-			// if (i > 0) {
-			// int offset = ((Integer) commas.get(i - 1)).intValue();
-			//
-			// addChild(createTextNode(document, offset, offset + 1));
-			// }
-			//
-			// visit((ASTNode) nodes.get(i));
-			// }
-			// }
-
 			public boolean visitVoidOperator(VoidOperator node) {
 				FormatterVoidOperatorNode formatterNode = new FormatterVoidOperatorNode(
 						document);
@@ -1465,6 +1515,85 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				push(formatterNode);
 
 				visit(node.getExpression());
+
+				checkedPop(formatterNode, node.sourceEnd());
+
+				return true;
+			}
+
+			public boolean visitXmlLiteral(XmlLiteral node) {
+				FormatterStringNode strNode = new FormatterStringNode(document,
+						node);
+				addChild(strNode);
+				return true;
+			}
+
+			public boolean visitDefaultXmlNamespace(
+					DefaultXmlNamespaceStatement node) {
+
+				FormatterBlockNode formatter = new FormatterBlockNode(document);
+
+				formatter.addChild(createTextNode(document, node
+						.getDefaultKeyword()));
+
+				push(formatter);
+
+				visit(node.getXmlKeyword());
+				visit(node.getNamespaceKeyword());
+				visit(node.getValue());
+
+				checkedPop(formatter, node.sourceEnd());
+
+				return true;
+			}
+
+			public boolean visitXmlPropertyIdentifier(
+					XmlAttributeIdentifier node) {
+				FormatterStringNode strNode = new FormatterStringNode(document,
+						node);
+				addChild(strNode);
+				return true;
+			}
+
+			public boolean visitAsteriskExpression(AsteriskExpression node) {
+				FormatterStringNode strNode = new FormatterStringNode(document,
+						node);
+				addChild(strNode);
+				return true;
+			}
+
+			public boolean visitGetLocalNameExpression(
+					GetLocalNameExpression node) {
+
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
+						document);
+
+				formatterNode.addChild(createEmptyTextNode(document, node
+						.sourceStart()));
+
+				push(formatterNode);
+
+				visit(node.getNamespace());
+				visit(node.getLocalName());
+
+				checkedPop(formatterNode, node.sourceEnd());
+
+				return true;
+			}
+
+			public boolean visitGetAllChildrenExpression(
+					GetAllChildrenExpression node) {
+
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
+						document);
+
+				formatterNode.addChild(createEmptyTextNode(document, node
+						.sourceStart()));
+
+				push(formatterNode);
+
+				visit(node.getObject());
+				visit(node.getProperty());
 
 				checkedPop(formatterNode, node.sourceEnd());
 

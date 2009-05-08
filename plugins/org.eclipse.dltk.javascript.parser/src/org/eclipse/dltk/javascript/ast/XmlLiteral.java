@@ -10,31 +10,32 @@
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
 
-package org.eclipse.dltk.javascript.formatter.internal;
+package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.formatter.IFormatterDocument;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.IBracketsConfiguration;
+import org.eclipse.dltk.ast.ASTNode;
 
-public class GetItemArrayBracketsConfiguration implements
-		IBracketsConfiguration {
+public class XmlLiteral extends Expression {
 
-	public GetItemArrayBracketsConfiguration(IFormatterDocument document) {
+	private String xml;
+
+	public XmlLiteral(ASTNode parent) {
+		super(parent);
 	}
 
-	public boolean isBeginLineBreaking() {
+	public String getXml() {
+		return this.xml;
+	}
+
+	public void setXml(String xml) {
+		this.xml = xml;
+	}
+
+	public boolean isBlock() {
 		return false;
 	}
 
-	public boolean isBracketsIndenting() {
-		return false;
-	}
-
-	public boolean isEndLineBreaking() {
-		return false;
-	}
-
-	public boolean isIndenting() {
-		return false;
+	public String toSourceString(String indentationString) {
+		return this.xml;
 	}
 
 }

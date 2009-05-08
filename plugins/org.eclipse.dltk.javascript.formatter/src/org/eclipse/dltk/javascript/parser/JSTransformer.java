@@ -15,12 +15,13 @@ package org.eclipse.dltk.javascript.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RuleReturnScope;
+import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
+import org.eclipse.dltk.javascript.ast.AsteriskExpression;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.BooleanLiteral;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
@@ -34,6 +35,7 @@ import org.eclipse.dltk.javascript.ast.ConstDeclaration;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
+import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
@@ -44,7 +46,9 @@ import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
 import org.eclipse.dltk.javascript.ast.ForStatement;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.GetAllChildrenExpression;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
+import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
@@ -79,6 +83,8 @@ import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
+import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
+import org.eclipse.dltk.javascript.ast.XmlLiteral;
 
 public class JSTransformer extends JSVisitor {
 
@@ -136,7 +142,7 @@ public class JSTransformer extends JSVisitor {
 
 			List comments = new ArrayList();
 			for (int i = 0; i < tokens.size(); i++) {
-				CommonToken token = (CommonToken) tokens.get(i);
+				Token token = (Token) tokens.get(i);
 
 				switch (token.getType()) {
 				case JSParser.MultiLineComment:
@@ -173,8 +179,8 @@ public class JSTransformer extends JSVisitor {
 	}
 
 	private ASTNode transformNode(Tree node, ASTNode parent) {
-		return new JSTransformer(node, tokens, /* offsetMap */tokenOffsets,
-				source, parent).transformNode();
+		return new JSTransformer(node, tokens, tokenOffsets, source, parent)
+				.transformNode();
 	}
 
 	private void prepareOffsetMap() {
@@ -185,7 +191,7 @@ public class JSTransformer extends JSVisitor {
 		StringBuffer buffer = new StringBuffer();
 
 		for (int i = 0; i < tokens.size(); i++) {
-			String tokenText = ((CommonToken) tokens.get(i)).getText();
+			String tokenText = ((Token) tokens.get(i)).getText();
 
 			tokenOffsets[i] = offset;
 
@@ -210,10 +216,10 @@ public class JSTransformer extends JSVisitor {
 		Assert.isTrue(endTokenIndex > 0);
 		Assert.isTrue(startTokenIndex <= endTokenIndex);
 
-		CommonToken token = null;
+		Token token = null;
 
 		for (int i = startTokenIndex; i <= endTokenIndex; i++) {
-			CommonToken item = (CommonToken) tokens.get(i);
+			Token item = (Token) tokens.get(i);
 			if (item.getType() == tokenType) {
 				token = item;
 				break;
@@ -233,12 +239,12 @@ public class JSTransformer extends JSVisitor {
 		Assert.isTrue(endTokenIndex > 0);
 		Assert.isTrue(startTokenIndex <= endTokenIndex);
 
-		CommonToken token = null;
+		Token token = null;
 
 		int skipped = 0;
 
 		for (int i = startTokenIndex; i <= endTokenIndex; i++) {
-			CommonToken item = (CommonToken) tokens.get(i);
+			Token item = (Token) tokens.get(i);
 			if (item.getType() == tokenType) {
 				if (skipped == skipCount) {
 					token = item;
@@ -267,8 +273,7 @@ public class JSTransformer extends JSVisitor {
 			VoidExpression voidExpression = new VoidExpression(parent);
 			voidExpression.setExpression((Expression) expression);
 
-			CommonToken token = (CommonToken) tokens.get(node
-					.getTokenStopIndex());
+			Token token = (Token) tokens.get(node.getTokenStopIndex());
 
 			if (token.getType() == JSParser.SEMIC) {
 				voidExpression.setSemicolonPosition(getTokenOffset(token
@@ -307,6 +312,20 @@ public class JSTransformer extends JSVisitor {
 	}
 
 	protected boolean visitBinaryOperation(Tree node) {
+
+		if (node.getType() == JSParser.MUL) {
+			switch (node.getChildCount()) {
+			case 0:
+				return visitAsterisk(node);
+			case 1:
+				// HACK
+				return visit(node.getChild(0));
+			}
+
+		}
+
+		Assert.isNotNull(node.getChild(0));
+		Assert.isNotNull(node.getChild(1));
 
 		BinaryOperation operation = new BinaryOperation(this.parent);
 
@@ -389,6 +408,9 @@ public class JSTransformer extends JSVisitor {
 	protected boolean visitCall(Tree node) {
 
 		CallExpression call = new CallExpression(this.parent);
+
+		Assert.isNotNull(node.getChild(0));
+		Assert.isNotNull(node.getChild(1));
 
 		call.setExpression(transformNode(node.getChild(0), call));
 		call.setArguments(transformListNode(node.getChild(1), call));
@@ -749,7 +771,7 @@ public class JSTransformer extends JSVisitor {
 					.getChild(0), returnStatement));
 		}
 
-		CommonToken token = (CommonToken) tokens.get(node.getTokenStopIndex());
+		Token token = (Token) tokens.get(node.getTokenStopIndex());
 		if (token.getType() == JSParser.SEMIC) {
 			returnStatement.setSemicolonPosition(getTokenOffset(node
 					.getTokenStopIndex()));
@@ -970,6 +992,11 @@ public class JSTransformer extends JSVisitor {
 		initializer.setLC(getTokenOffset(node.getTokenStartIndex()));
 		initializer.setRC(getTokenOffset(node.getTokenStopIndex()));
 
+		Token LC = ((Token) tokens.get(node.getTokenStartIndex()));
+		Token RC = ((Token) tokens.get(node.getTokenStopIndex()));
+
+		initializer.setMultiline(LC.getLine() != RC.getLine());
+
 		initializer.setStart(initializer.getLC());
 		initializer.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
@@ -1054,16 +1081,6 @@ public class JSTransformer extends JSVisitor {
 		return true;
 	}
 
-	// private static int getByFieldTokenStartIndex(Tree node) {
-	//
-	// if (node.getType() == JSParser.BYFIELD
-	// && node.getTokenStartIndex() == -1)
-	// return getByFieldTokenStartIndex(node.getChild(0));
-	// else
-	// return node.getTokenStartIndex();
-	//		
-	// }
-
 	private static int getRealTokenStopIndex(Tree node) {
 
 		if (node.getTokenStopIndex() == -1)
@@ -1081,7 +1098,7 @@ public class JSTransformer extends JSVisitor {
 		property.setObject((Expression) transformNode(node.getChild(0),
 				property));
 
-		property.setProperty((Identifier) transformNode(node.getChild(1),
+		property.setProperty((Expression) transformNode(node.getChild(1),
 				property));
 
 		property.setDotPosition(getTokenOffset(JSParser.DOT,
@@ -1740,7 +1757,7 @@ public class JSTransformer extends JSVisitor {
 
 		List comments = new ArrayList();
 		for (int i = 0; i < tokens.size(); i++) {
-			CommonToken token = (CommonToken) tokens.get(i);
+			Token token = (Token) tokens.get(i);
 
 			switch (token.getType()) {
 			case JSParser.MultiLineComment:
@@ -1762,7 +1779,7 @@ public class JSTransformer extends JSVisitor {
 		return true;
 	}
 
-	private ASTNode visitMultiLineComment(CommonToken token) {
+	private ASTNode visitMultiLineComment(Token token) {
 		Comment comment = new MultiLineComment();
 		comment.setText(token.getText());
 		comment.setStart(getTokenOffset(token.getTokenIndex()));
@@ -1771,7 +1788,7 @@ public class JSTransformer extends JSVisitor {
 		return comment;
 	}
 
-	private ASTNode visitSingleLineComment(CommonToken token) {
+	private ASTNode visitSingleLineComment(Token token) {
 		Comment comment = new SingleLineComment();
 		comment.setText(token.getText());
 		comment.setStart(getTokenOffset(token.getTokenIndex()));
@@ -1803,11 +1820,139 @@ public class JSTransformer extends JSVisitor {
 		expression.setExpression((Expression) transformNode(node.getChild(0),
 				expression));
 
-		// statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
-		// .getTokenStopIndex(), node.getTokenStopIndex()));
-
 		expression.setStart(expression.getVoidKeyword().sourceStart());
 		expression.setEnd(expression.getExpression().sourceEnd());
+
+		this.result = expression;
+		return true;
+	}
+
+	protected boolean visitXmlLiteral(Tree node) {
+		XmlLiteral xml = new XmlLiteral(this.parent);
+
+		xml.setXml(node.getText());
+
+		xml.setStart(getTokenOffset(node.getTokenStartIndex()));
+		xml.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
+
+		this.result = xml;
+		return false;
+	}
+
+	protected boolean visitNamespace(Tree node) {
+
+		DefaultXmlNamespaceStatement statement = new DefaultXmlNamespaceStatement(
+				this.parent);
+
+		Keyword defaultKeyword = new Keyword(statement, Keywords.DEFAULT);
+		defaultKeyword.setStart(getTokenOffset(node.getChild(0)
+				.getTokenStartIndex()));
+		defaultKeyword.setEnd(defaultKeyword.sourceStart()
+				+ Keywords.DEFAULT.length());
+		statement.setDefaultKeyword(defaultKeyword);
+
+		Keyword xmlKeyword = new Keyword(statement, Keywords.XML);
+		xmlKeyword.setStart(getTokenOffset(node.getChild(1)
+				.getTokenStartIndex()));
+		xmlKeyword.setEnd(xmlKeyword.sourceStart() + Keywords.XML.length());
+		statement.setXmlKeyword(xmlKeyword);
+
+		Keyword namespaceKeyword = new Keyword(statement, Keywords.NAMESPACE);
+		namespaceKeyword.setStart(getTokenOffset(JSParser.NAMESPACE, node
+				.getTokenStartIndex(), node.getTokenStopIndex()));
+		namespaceKeyword.setEnd(namespaceKeyword.sourceStart()
+				+ Keywords.NAMESPACE.length());
+		statement.setNamespaceKeyword(namespaceKeyword);
+
+		statement.setAssignOperation(getTokenOffset(node.getChild(2)
+				.getTokenStartIndex()));
+
+		StringLiteral value = new StringLiteral(statement);
+		value.setStart(getTokenOffset(node.getChild(3).getTokenStartIndex()));
+		value.setEnd(getTokenOffset(node.getChild(3).getTokenStartIndex()) + 1);
+		value.setText(node.getChild(3).getText());
+		statement.setValue(value);
+
+		Token token = (Token) tokens.get(node.getTokenStopIndex());
+		if (token.getType() == JSParser.SEMIC) {
+			statement.setSemicolonPosition(getTokenOffset(node
+					.getTokenStopIndex()));
+
+			statement.setEnd(statement.getSemicolonPosition() + 1);
+		} else {
+			statement.setEnd(statement.getValue().sourceEnd());
+		}
+		statement.setStart(statement.getDefaultKeyword().sourceStart());
+
+		this.result = statement;
+		return true;
+	}
+
+	protected boolean visitXmlAttribute(Tree node) {
+
+		XmlAttributeIdentifier id = new XmlAttributeIdentifier(parent);
+		id.setName(node.getText());
+
+		id.setStart(getTokenOffset(node.getTokenStartIndex()));
+		id.setEnd(id.sourceStart() + id.getName().length());
+
+		this.result = id;
+		return true;
+	}
+
+	protected boolean visitAsterisk(Tree node) {
+		AsteriskExpression asterisk = new AsteriskExpression(parent);
+
+		asterisk.setStart(getTokenOffset(node.getTokenStartIndex()));
+		asterisk.setEnd(asterisk.sourceStart() + node.getText().length());
+
+		this.result = asterisk;
+		return true;
+	}
+
+	protected boolean visitGetAllChildren(Tree node) {
+		GetAllChildrenExpression expression = new GetAllChildrenExpression(
+				this.parent);
+
+		expression.setObject((Expression) transformNode(node.getChild(0),
+				expression));
+
+		expression.setProperty((Expression) transformNode(node.getChild(1),
+				expression));
+
+		expression.setDotDotPosition(getTokenOffset(JSParser.DOTDOT,
+				getRealTokenStopIndex(node.getChild(0)) + 1, node.getChild(1)
+						.getTokenStartIndex()));
+
+		Assert.isTrue(expression.getObject().sourceStart() >= 0);
+		Assert.isTrue(expression.getProperty().sourceEnd() > 0);
+
+		expression.setStart(expression.getObject().sourceStart());
+		expression.setEnd(expression.getProperty().sourceEnd());
+
+		this.result = expression;
+		return true;
+	}
+
+	protected boolean visitGetLocalName(Tree node) {
+		GetLocalNameExpression expression = new GetLocalNameExpression(
+				this.parent);
+
+		expression.setNamespace((Expression) transformNode(node.getChild(0),
+				expression));
+
+		expression.setLocalName((Expression) transformNode(node.getChild(1),
+				expression));
+
+		expression.setColonColonPosition(getTokenOffset(JSParser.COLONCOLON,
+				getRealTokenStopIndex(node.getChild(0)) + 1, node.getChild(1)
+						.getTokenStartIndex()));
+
+		Assert.isTrue(expression.getNamespace().sourceStart() >= 0);
+		Assert.isTrue(expression.getLocalName().sourceEnd() > 0);
+
+		expression.setStart(expression.getNamespace().sourceStart());
+		expression.setEnd(expression.getLocalName().sourceEnd());
 
 		this.result = expression;
 		return true;

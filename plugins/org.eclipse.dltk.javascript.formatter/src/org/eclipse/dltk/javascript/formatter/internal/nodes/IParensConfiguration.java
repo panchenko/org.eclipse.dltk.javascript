@@ -17,7 +17,7 @@ public interface IParensConfiguration {
 	public boolean getSpaceBeforeLeftParen();
 
 	public boolean getSpaceAfterLeftParen();
-	
+
 	public boolean getSpaceBeforeRightParen();
-	
+
 }

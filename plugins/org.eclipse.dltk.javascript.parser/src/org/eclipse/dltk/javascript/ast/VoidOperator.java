@@ -20,8 +20,6 @@ public class VoidOperator extends Expression {
 	private Keyword voidKeyword;
 	private Expression expression;
 
-	// private int semic;
-
 	public VoidOperator(ASTNode parent) {
 		super(parent);
 	}
@@ -42,19 +40,10 @@ public class VoidOperator extends Expression {
 		this.voidKeyword = keyword;
 	}
 
-	// public int getSemicolonPosition() {
-	// return this.semic;
-	// }
-	//
-	// public void setSemicolonPosition(int semic) {
-	// this.semic = semic;
-	// }
-
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() > 0);
 		Assert.isTrue(sourceEnd() > 0);
-		// Assert.isTrue(semic > 0);
 
 		StringBuffer buffer = new StringBuffer();
 
@@ -62,9 +51,6 @@ public class VoidOperator extends Expression {
 		buffer.append(Keywords.VOID);
 		buffer.append(" ");
 		buffer.append(expression.toSourceString(indentationString));
-		// if (semic > 0)
-		// buffer.append(";");
-		// buffer.append("\n");
 
 		return buffer.toString();
 	}

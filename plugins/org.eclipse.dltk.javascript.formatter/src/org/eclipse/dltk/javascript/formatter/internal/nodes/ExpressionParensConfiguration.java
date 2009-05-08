@@ -24,7 +24,6 @@ public class ExpressionParensConfiguration extends AbstractParensConfiguration
 		spaceBeforeLpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_LP_EXPRESSION;
 		spaceAfterLpName = JavaScriptFormatterConstants.INSERT_SPACE_AFTER_LP_EXPRESSION;
 		spaceBeforeRpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_RP_EXPRESSION;
-
 	}
 
 }

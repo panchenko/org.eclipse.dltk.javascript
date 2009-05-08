@@ -24,7 +24,6 @@ public class FunctionArgumentsParensConfiguration extends
 		spaceBeforeLpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_LP_FUNCTION_ARGUMENTS;
 		spaceAfterLpName = JavaScriptFormatterConstants.INSERT_SPACE_AFTER_LP_FUNCTION_ARGUMENTS;
 		spaceBeforeRpName = JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_RP_FUNCTION_ARGUMENTS;
-
 	}
 
 }

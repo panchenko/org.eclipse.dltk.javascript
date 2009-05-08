@@ -174,6 +174,12 @@ public abstract class ASTVisitor implements IASTVisitor {
 		if (node.getClass() == WithStatement.class)
 			return visitWithStatement((WithStatement) node);
 
+		if (node.getClass() == XmlLiteral.class)
+			return visitXmlLiteral((XmlLiteral) node);
+
+		if (node.getClass() == DefaultXmlNamespaceStatement.class)
+			return visitDefaultXmlNamespace((DefaultXmlNamespaceStatement) node);
+
 		throw new UnsupportedOperationException("Unknown node type: "
 				+ node.getClass());
 	}
@@ -283,4 +289,10 @@ public abstract class ASTVisitor implements IASTVisitor {
 	public abstract boolean visitWhileStatement(WhileStatement node);
 
 	public abstract boolean visitWithStatement(WithStatement node);
+
+	public abstract boolean visitXmlLiteral(XmlLiteral node);
+
+	public abstract boolean visitDefaultXmlNamespace(
+			DefaultXmlNamespaceStatement node);
+
 }

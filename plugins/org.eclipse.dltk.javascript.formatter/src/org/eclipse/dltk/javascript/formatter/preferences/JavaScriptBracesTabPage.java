@@ -45,12 +45,6 @@ public class JavaScriptBracesTabPage extends FormatterModifyTabPage {
 			JavaScriptFormatterConstants.BRACE_NEXT_LINE,
 			JavaScriptFormatterConstants.BRACE_NEXT_LINE_INDENTED };
 
-	private final String[] bracePositionItems4 = new String[] {
-			Messages.JavaScriptBracesTabPage_BraceSameLine,
-			Messages.JavaScriptBracesTabPage_BraceNextLine,
-			Messages.JavaScriptBracesTabPage_BraceNextLineIndented,
-			Messages.JavaScriptBracesTabPage_BraceNextLineOnWrap };
-
 	private final String[] bracePositionItems3 = new String[] {
 			Messages.JavaScriptBracesTabPage_BraceSameLine,
 			Messages.JavaScriptBracesTabPage_BraceNextLine,
@@ -84,19 +78,16 @@ public class JavaScriptBracesTabPage extends FormatterModifyTabPage {
 		manager.createCombo(positionGroup,
 				JavaScriptFormatterConstants.BRACE_METHOD,
 				Messages.JavaScriptBracesTabPage_FunctionDeclaration_name,
-				// bracePositionKeys4, bracePositionItems4);
 				bracePositionKeys3, bracePositionItems3);
 
 		manager.createCombo(positionGroup,
 				JavaScriptFormatterConstants.BRACE_BLOCK,
 				Messages.JavaScriptBracesTabPage_Blocks_name,
-				// bracePositionKeys4, bracePositionItems4);
 				bracePositionKeys3, bracePositionItems3);
 
 		manager.createCombo(positionGroup,
 				JavaScriptFormatterConstants.BRACE_CASE,
 				Messages.JavaScriptBracesTabPage_BlocksInCaseStatement_name,
-				// bracePositionKeys4, bracePositionItems4);
 				bracePositionKeys3, bracePositionItems3);
 
 		manager.createCombo(positionGroup,

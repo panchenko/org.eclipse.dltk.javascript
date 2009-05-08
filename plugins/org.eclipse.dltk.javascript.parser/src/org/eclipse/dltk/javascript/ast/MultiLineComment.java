@@ -14,7 +14,6 @@ package org.eclipse.dltk.javascript.ast;
 
 public class MultiLineComment extends Comment {
 
-	
 	public boolean isMultiLine() {
 		return true;
 	}

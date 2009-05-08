@@ -18,25 +18,23 @@ import org.eclipse.dltk.ast.ASTVisitor;
 public abstract class Statement extends ASTNode implements ISourceable {
 
 	private ASTNode parent;
-	
+
 	public Statement(ASTNode parent) {
 		this.parent = parent;
 		setStart(0);
 		setEnd(0);
 	}
-	
+
 	public ASTNode getParent() {
 		return this.parent;
 	}
-	
-	
+
 	public void traverse(ASTVisitor visitor) throws Exception {
-		// TODO Auto-generated method stub
 	}
-	
+
 	public String toString() {
 		return toSourceString("");
 	}
-	
+
 	public abstract String toSourceString(String indentationString);
 }
