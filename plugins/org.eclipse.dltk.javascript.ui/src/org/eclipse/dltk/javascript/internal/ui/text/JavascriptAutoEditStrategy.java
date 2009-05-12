@@ -718,12 +718,9 @@ public class JavascriptAutoEditStrategy extends
 	 *            the document
 	 */
 	private static void installJavaStuff(Document document) {
-		String[] types = new String[] { IJavaScriptPartitions.JS_DOC,
-				IJavaScriptPartitions.JS_COMMENT,
-				IJavaScriptPartitions.JS_PARTITIONING,
-				IJavaScriptPartitions.JS_STRING, IDocument.DEFAULT_CONTENT_TYPE };
 		FastPartitioner partitioner = new FastPartitioner(
-				new JavascriptPartitionScanner(), types);
+				new JavascriptPartitionScanner(),
+				IJavaScriptPartitions.LEGAL_CONTENT_TYPES);
 		partitioner.connect(document);
 		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING,
 				partitioner);

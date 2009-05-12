@@ -80,9 +80,7 @@ public class JavascriptSourceViewerConfiguration extends
 	}
 
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
-		return new String[] { IDocument.DEFAULT_CONTENT_TYPE,
-				IJavaScriptPartitions.JS_STRING,
-				IJavaScriptPartitions.JS_COMMENT, IJavaScriptPartitions.JS_DOC };
+		return IJavaScriptPartitions.JS_PARTITION_TYPES;
 	}
 
 	public String getCommentPrefix() {
@@ -195,6 +193,7 @@ public class JavascriptSourceViewerConfiguration extends
 				new TodoTaskPreferencesOnPreferenceStore(fPreferenceStore));
 		fDocScanner = new JavascriptDocScanner(getColorManager(),
 				fPreferenceStore);
+
 	}
 
 	/**
@@ -232,6 +231,10 @@ public class JavascriptSourceViewerConfiguration extends
 				this.fCodeScanner);
 		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
+
+		// also let the default code scanner color regexp
+		reconciler.setDamager(dr, IJavaScriptPartitions.JS_REGEXP);
+		reconciler.setRepairer(dr, IJavaScriptPartitions.JS_REGEXP);
 
 		dr = new DefaultDamagerRepairer(getStringScanner());
 		reconciler.setDamager(dr, IJavaScriptPartitions.JS_STRING);

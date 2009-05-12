@@ -17,6 +17,7 @@ import org.eclipse.jface.text.rules.EndOfLineRule;
 import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.MultiLineRule;
+import org.eclipse.jface.text.rules.PatternRule;
 import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
@@ -32,11 +33,16 @@ public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 		IToken string = new Token(IJavaScriptPartitions.JS_STRING);
 		IToken comment = new Token(IJavaScriptPartitions.JS_COMMENT);
 		IToken doc = new Token(IJavaScriptPartitions.JS_DOC);
+		IToken regexp = new Token(IJavaScriptPartitions.JS_REGEXP);
 
 		List/* < IPredicateRule > */rules = new ArrayList/* <IPredicateRule> */();
 		rules.add(new MultiLineRule("/**", "*/", doc)); //$NON-NLS-1$ //$NON-NLS-2$
 		rules.add(new MultiLineRule("/*", "*/", comment)); //$NON-NLS-1$ //$NON-NLS-2$
 		rules.add(new EndOfLineRule("//", comment)); //$NON-NLS-1$		
+
+		// simple regexp tester. Coloring is still default so it doesn't matter
+		// for now to much that var x = 10 / 5 / 10 is also seen as regexp
+		rules.add(new PatternRule("/", "/", regexp, '\\', false, false));
 		// Add rule for character constants.
 		rules.add(new SingleLineRule("'", "'", string, '\\'));
 		rules.add(new MultiLineRule("\"", "\"", string, '\\'));
