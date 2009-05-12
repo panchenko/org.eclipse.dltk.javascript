@@ -17,7 +17,7 @@ import org.eclipse.dltk.ast.ASTNode;
 
 public class PropertyInitializer extends Expression {
 
-	private Identifier name;
+	private Expression name;
 	private Expression value;
 	private int colon;
 
@@ -25,11 +25,11 @@ public class PropertyInitializer extends Expression {
 		super(parent);
 	}
 
-	public Identifier getName() {
+	public Expression getName() {
 		return this.name;
 	}
 
-	public void setName(Identifier name) {
+	public void setName(Expression name) {
 		this.name = name;
 	}
 

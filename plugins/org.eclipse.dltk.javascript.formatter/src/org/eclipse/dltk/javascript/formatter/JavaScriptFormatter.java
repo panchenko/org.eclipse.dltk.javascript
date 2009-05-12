@@ -20,16 +20,18 @@ import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.formatter.FormatterDocument;
-import org.eclipse.dltk.formatter.FormatterWriter;
+import org.eclipse.dltk.formatter.FormatterIndentDetector;
 import org.eclipse.dltk.formatter.IFormatterContainerNode;
 import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.javascript.ast.JavaScriptParser;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.formatter.internal.FormatterNodeBuilder;
 import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterContext;
+import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterWriter;
 import org.eclipse.dltk.javascript.formatter.internal.JavascriptFormatterNodeRewriter;
 import org.eclipse.dltk.ui.formatter.AbstractScriptFormatter;
 import org.eclipse.dltk.ui.formatter.FormatterException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
@@ -44,7 +46,11 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 
 	public TextEdit format(String source, int offset, int length,
 			int indentationLevel) throws FormatterException {
-		return new ReplaceEdit(offset, length, format(source, indentationLevel));
+
+		String input = source.substring(offset, offset + length);
+		int indent = detectIndentationLevel(source, offset);
+
+		return new ReplaceEdit(offset, length, format(input, indent));
 	}
 
 	private class ParserProblemReporter implements IProblemReporter {
@@ -92,6 +98,40 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		}
 	}
 
+	private int detectIndentationLevel(String input, int offset) {
+		ParserProblemReporter reporter = new ParserProblemReporter();
+
+		Script ast = (Script) new JavaScriptParser().parse(null, input
+				.toCharArray(), reporter);
+
+		if (ast == null) {
+			if (DLTKCore.DEBUG)
+				System.out.println(reporter.toString());
+
+			return 0;
+		}
+
+		final FormatterNodeBuilder builder = new FormatterNodeBuilder();
+		final FormatterDocument fDocument = createDocument(input);
+		IFormatterContainerNode root = builder.build(ast, fDocument);
+		IFormatterContext context = new JavaScriptFormatterContext(0);
+
+		new JavascriptFormatterNodeRewriter(ast).rewrite(root);
+
+		FormatterIndentDetector detector = new FormatterIndentDetector(offset);
+		try {
+			root.accept(context, detector);
+			return detector.getLevel();
+		} catch (Exception e) {
+			// ignore all
+		}
+		return 0;
+	}
+
+	public int detectIndentationLevel(IDocument document, int offset) {
+		return detectIndentationLevel(document.get(), offset);
+	}
+
 	public String format(String source, int indentationLevel) {
 
 		ParserProblemReporter reporter = new ParserProblemReporter();
@@ -106,7 +146,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 			return source;
 		}
 
-		return format(source, root, 0);
+		return format(source, root, indentationLevel);
 	}
 
 	private String format(String source, Script ast, int indentationLevel) {
@@ -120,8 +160,8 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 
 		IFormatterContext context = new JavaScriptFormatterContext(
 				indentationLevel);
-		FormatterWriter writer = new FormatterWriter(document, lineDelimiter,
-				createIndentGenerator());
+		JavaScriptFormatterWriter writer = new JavaScriptFormatterWriter(
+				document, lineDelimiter, createIndentGenerator());
 
 		writer
 				.setWrapLength(getInt(JavaScriptFormatterConstants.WRAP_COMMENTS_LENGTH));

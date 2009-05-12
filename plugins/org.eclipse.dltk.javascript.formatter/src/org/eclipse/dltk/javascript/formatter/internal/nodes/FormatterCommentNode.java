@@ -16,6 +16,7 @@ import org.eclipse.dltk.formatter.FormatterTextNode;
 import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.formatter.IFormatterWriter;
+import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterContext;
 
 public class FormatterCommentNode extends FormatterTextNode {
 
@@ -27,14 +28,16 @@ public class FormatterCommentNode extends FormatterTextNode {
 		this.multiLine = multiLine;
 	}
 
-	protected boolean isIndenting() {
-		return false;
-	}
-
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
-		super.accept(context, visitor);
-		if (!multiLine) {
+		if (multiLine) {
+			visitor.ensureLineStarted(context);
+			JavaScriptFormatterContext copy = (JavaScriptFormatterContext) context
+					.copy();
+			copy.setAdditionalIndent(" ");
+			super.accept(copy, visitor);
+		} else {
+			super.accept(context, visitor);
 			visitor.disableAppendToPreviousLine();
 		}
 	}

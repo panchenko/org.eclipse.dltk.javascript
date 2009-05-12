@@ -1008,7 +1008,7 @@ public class JSTransformer extends JSVisitor {
 
 		PropertyInitializer initializer = new PropertyInitializer(this.parent);
 
-		initializer.setName((Identifier) transformNode(node.getChild(0),
+		initializer.setName((Expression) transformNode(node.getChild(0),
 				initializer));
 
 		initializer

@@ -320,12 +320,12 @@ private final void consumeIdentifierUnicodeStart() throws RecognitionException, 
 	
 private final boolean isIdentifierPartUnicode(int ch)
 {
-	return Character.isJavaIdentifierPart(ch);
+	return Character.isJavaIdentifierPart((char)ch);
 }
 	
 private final boolean isIdentifierStartUnicode(int ch)
 {
-	return Character.isJavaIdentifierStart(ch);
+	return Character.isJavaIdentifierStart((char)ch);
 }
 
 public Token nextToken()
