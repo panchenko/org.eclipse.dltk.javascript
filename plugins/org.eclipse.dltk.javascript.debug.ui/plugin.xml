@@ -305,11 +305,13 @@
 
     </editorContribution>
   </extension>
+<!--
   <extension point="org.eclipse.ui.console.consoleFactories">
     <consoleFactory
       class="org.eclipse.dltk.javascript.internal.console.ui.JavaScriptConsoleFactory"
       label="%JavascriptConsole.Console" />
   </extension>
+-->
 
   <extension point="org.eclipse.dltk.console.ui.scriptConsole">
     <scriptConsole
