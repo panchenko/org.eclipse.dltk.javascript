@@ -6,7 +6,7 @@ while (a==100)
 a = 100;
 }
 ==
-while (a==100) {
+while (a == 100) {
 	a = 100;
 }
 ==> formatter.braces.blocks = next.line
@@ -16,7 +16,7 @@ while (b==100) {
 	b = 100;
 }
 ==
-while (b==100)
+while (b == 100)
 {
 b = 100;
 }
@@ -27,7 +27,7 @@ while ( c==100 ) {
 	c = 100;
 }
 ==
-while (c==100)
+while (c == 100)
 	{
 		c = 100;
 	}

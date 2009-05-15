@@ -17,6 +17,9 @@ var o = {
       return null;
     }
   },
+  get first () {
+  	return null;
+  },
   log: []
 }
 

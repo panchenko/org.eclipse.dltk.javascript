@@ -1,3 +1,13 @@
+var msg = (fileName?", file: "+fileName:fileName2 + "");
+
+
+
+var msg = 
+		(fileName?", file: "+fileName:fileName2 + "")+
+		(lineNumber?", line: "+lineNumber:"")+"]"
+	;
+	
+
 
 function aaaa(a, b)
 {
@@ -18,7 +28,6 @@ function aaaa(a, b)
 
 	document.write ("The fee is " + (isMember ? "$2.00" : "$10.00"));
 }
-
 
 // dsgfhg
 

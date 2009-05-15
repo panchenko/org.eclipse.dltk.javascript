@@ -18,8 +18,8 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.Token;
+import org.eclipse.dltk.javascript.ast.JavaScriptTokenStream;
 import org.eclipse.dltk.javascript.parser.JSLexer;
 import org.eclipse.dltk.javascript.parser.JSParser;
 
@@ -28,14 +28,14 @@ public class ANTLRTokenStreamComparer {
 	private static List getTokens(String source, List comments) {
 
 		JSLexer lexer = new JSLexer(new ANTLRStringStream(source));
-		CommonTokenStream stream = new CommonTokenStream(lexer);
+		JavaScriptTokenStream stream = new JavaScriptTokenStream(lexer);
 
 		List list = new ArrayList();
 
 		List tokens = stream.getTokens();
 
 		for (int i = 0; i < tokens.size(); i++) {
-			CommonToken token = (CommonToken) tokens.get(i);
+			Token token = (Token) tokens.get(i);
 
 			switch (token.getType()) {
 
@@ -100,15 +100,31 @@ public class ANTLRTokenStreamComparer {
 		int errorPos = -1;
 
 		for (int i = 0; i < sourceTokens.size(); i++) {
-			if (!sourceTokens.get(i).equals(targetTokens.get(i))) {
+			String sourceToken = (String) sourceTokens.get(i);
+			String targetToken = (String) targetTokens.get(i);
+
+			// if (sourceToken.getType() == JSParser.XML
+			// && targetToken.getType() == JSParser.XML)
+			// continue;
+
+			if (!sourceToken.equals(targetToken)) {
 				errorPos = i;
 				break;
 			}
 		}
 
 		if (errorPos > -1) {
+			System.out
+					.println("SOURCE --------------------------------------------");
+			System.out.println(source);
+			System.out
+					.println("TARGET --------------------------------------------");
+			System.out.println(target);
+			System.out
+					.println("TOKENS --------------------------------------------");
 			printTokens(sourceTokens, targetTokens, errorPos + 1);
-			Assert.fail();
+			Assert.assertEquals(sourceTokens.get(errorPos), targetTokens
+					.get(errorPos));
 		}
 
 		if (compareComments) {

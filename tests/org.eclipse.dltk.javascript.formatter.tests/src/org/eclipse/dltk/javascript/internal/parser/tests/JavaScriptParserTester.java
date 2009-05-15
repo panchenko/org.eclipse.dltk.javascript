@@ -39,6 +39,8 @@ public class JavaScriptParserTester extends AbstractTester {
 
 		TextEdit textEdit = formatter.format(source, 0, source.length(), 0);
 
+		Assert.assertNotNull(textEdit);
+
 		String formatted = ((ReplaceEdit) textEdit).getText();
 
 		Assert.assertTrue(

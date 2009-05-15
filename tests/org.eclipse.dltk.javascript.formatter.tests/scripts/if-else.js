@@ -3,7 +3,7 @@ if (a>b) {
 a = 100;
 }
 ==
-if (a>b) {
+if (a > b) {
 	a = 100;
 }
 ==> formatter.indent.blocks = false
@@ -12,7 +12,7 @@ if (a>b) {
 	a = 100;
 }
 ==
-if (a>b) {
+if (a > b) {
 a = 100;
 }
 ==> formatter.newlines.else = false
@@ -32,15 +32,15 @@ else if (d>e) {
 	d = 100;
 }
 ==
-if (a>b) {
+if (a > b) {
 	a = 100;
-} else if (a>c) {
+} else if (a > c) {
 	b = 100;
 }
 
-if (b>c) {
+if (b > c) {
 	c = 100;
-} else if (d>e) {
+} else if (d > e) {
 	d = 100;
 }
 ====
@@ -53,7 +53,7 @@ if (a>b) {
 	b = 100;
 }
 ==
-if (a>b)
+if (a > b)
 {
 	a = 100;
 }
@@ -72,11 +72,11 @@ if ( a1>b1 )
 	b1 = 100;
 }
 ==
-if (a1>b1)
+if (a1 > b1)
 {
 	a1 = 100;
 } else
-if (c>d)
+if (c > d)
 {
 	b1 = 100;
 }

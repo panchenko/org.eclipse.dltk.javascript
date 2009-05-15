@@ -1,5 +1,4 @@
 
-
 function aaaaa()
 {
 	
@@ -39,3 +38,4 @@ function aaaaa()
 	   closeMyFile(); // always close the resource
 	}			
 }
+

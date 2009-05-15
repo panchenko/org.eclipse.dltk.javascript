@@ -37,6 +37,7 @@ public class AllTests {
 		suite.addTest(WhileTest.suite());
 		suite.addTest(RegExpTest.suite());
 		suite.addTest(E4XTest.suite());
+		// suite.addTest(JavaScriptLibTest.suite());
 		// $JUnit-END$
 		return suite;
 	}

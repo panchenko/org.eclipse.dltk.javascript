@@ -24,3 +24,28 @@ if (true) // always
 {
 	// do something
 }
+==== comment-multiline
+function a() {
+
+	a = 100;
+
+	/**
+	* a
+* b 
+* c
+	* d
+	*/
+}	
+==
+function a () {
+
+	a = 100;
+
+	/**
+	 * a
+	 * b
+	 * c
+	 * d
+	 */
+}
+====

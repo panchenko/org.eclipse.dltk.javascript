@@ -23,7 +23,7 @@ return x*x;
 }
 ==
 function a (x) {
-	return x*x;
+	return x * x;
 }
 ==> formatter.indent.function=true
 ==> formatter.braces.function=next.line
@@ -34,7 +34,7 @@ return x*x;
 ==
 function a (x)
 {
-	return x*x;
+	return x * x;
 }
 ==> formatter.indent.function=true
 ==> formatter.braces.function=next.line.indented
@@ -45,17 +45,23 @@ return x*x;
 ==
 function a (x)
 	{
-		return x*x;
+		return x * x;
 	}
 ==> formatter.indent.function=true
 ==> formatter.braces.function=next.line
 ==== function-no-name
 MyObject.prototype.getMessage = function () {
-return this.message;			
+return 			this.			message;			
 };
 ==
 MyObject.prototype.getMessage = function ()
 {
 	return this.message;
 };
+==> formatter.newlines.empty.method=false
+==== function-empty
+function 		a		(		) {					
+}
+==
+function a () { }
 ====

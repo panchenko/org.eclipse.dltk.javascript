@@ -11,12 +11,13 @@ function aaaa(a, b)
 		case "111":
 			print ("abcdef");
 			break;
+
+		default:
+			return true;
 			
 		case "222":
 			print (100);
 			break;
 		
-		default:
-			return true;
 	}
 }

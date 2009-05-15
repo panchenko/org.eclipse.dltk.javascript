@@ -1,11 +1,18 @@
 ==> formatter.indent.blocks = true
 ==== for-simple
-for(i = 0; i < 10; i++) {
-a = i + 100;
+for(			i			 = 0; 			i 		< 		10; i++			) {
+         a          = 	i 	+ 	100;
+}
+
+for			(			; 			; 			)
+{
 }
 ==
 for (i = 0; i < 10; i++) {
 	a = i + 100;
+}
+
+for (;;) {
 }
 ==> formatter.indent.blocks = false
 ==== for-simple-no-indent

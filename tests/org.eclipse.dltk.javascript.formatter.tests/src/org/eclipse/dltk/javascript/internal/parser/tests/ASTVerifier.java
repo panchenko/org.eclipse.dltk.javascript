@@ -517,10 +517,8 @@ public class ASTVerifier extends ASTVisitor {
 
 	public boolean visitSwitchStatement(SwitchStatement node) {
 
-		visitList(node.getCaseClauses());
 		visit(node.getCondition());
-		if (node.getDefaultClause() != null)
-			node.getDefaultClause();
+		visitList(node.getCaseClauses());
 
 		testChar(Keywords.LC, node.getLC());
 		testChar(Keywords.RC, node.getRC());
