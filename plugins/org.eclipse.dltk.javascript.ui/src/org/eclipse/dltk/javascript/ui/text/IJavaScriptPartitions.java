@@ -16,10 +16,10 @@ public interface IJavaScriptPartitions {
 
 	public final static String JS_PARTITIONING = IJavaScriptConstants.JS_PARTITIONING;
 
-	public final static String JS_COMMENT = "__javascript_comment";
-	public final static String JS_STRING = "__javascript_string";
-	public final static String JS_DOC = "__javascript_doc";
-	public final static String JS_REGEXP = "__javascript_quoteRegExp";
+	public final static String JS_COMMENT = "__javascript_comment"; //$NON-NLS-1$
+	public final static String JS_STRING = "__javascript_string"; //$NON-NLS-1$
+	public final static String JS_DOC = "__javascript_doc"; //$NON-NLS-1$
+	public final static String JS_REGEXP = "__javascript_quoteRegExp"; //$NON-NLS-1$
 
 	public final static String[] JS_PARTITION_TYPES = new String[] {
 			IDocument.DEFAULT_CONTENT_TYPE, IJavaScriptPartitions.JS_STRING,
