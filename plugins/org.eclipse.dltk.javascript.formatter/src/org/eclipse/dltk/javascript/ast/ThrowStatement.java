@@ -51,7 +51,7 @@ public class ThrowStatement extends Statement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		// Assert.isTrue(semic > 0);
 

@@ -19,7 +19,7 @@ public class DefaultClause extends Statement {
 
 	private Keyword defaultKeyword;
 	private StatementList statements;
-	private int colon;
+	private int colon = -1;
 
 	public DefaultClause(ASTNode parent) {
 		super(parent);

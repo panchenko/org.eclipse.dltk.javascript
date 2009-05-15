@@ -15,13 +15,44 @@ package org.eclipse.dltk.javascript.formatter.internal.nodes;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
-public class FunctionBodyBracesConfiguration extends AbstractBracesConfiguration {
+public class FunctionBodyBracesConfiguration extends
+		AbstractBracesConfiguration {
 
-	public FunctionBodyBracesConfiguration(IFormatterDocument document) {
+	private boolean emptyBody;
+
+	public FunctionBodyBracesConfiguration(IFormatterDocument document,
+			boolean emptyBody) {
 		super(document);
-		
+
+		this.emptyBody = emptyBody;
+
 		indentingSettingName = JavaScriptFormatterConstants.INDENT_METHOD;
 		bracesSettingName = JavaScriptFormatterConstants.BRACE_METHOD;
+	}
+
+	public int insertBeforeOpenBrace() {
+		if (emptyBody)
+			return IBracesConfiguration.ONE_SPACE;
+		else
+			return super.insertBeforeOpenBrace();
+	}
+
+	public int insertAfterOpenBrace() {
+		if (emptyBody)
+			return IBracesConfiguration.EMPTY_SPACE;
+		else
+			return super.insertAfterOpenBrace();
+	}
+
+	public int insertBeforeCloseBrace() {
+		if (emptyBody)
+			return IBracesConfiguration.ONE_SPACE;
+		else
+			return super.insertBeforeCloseBrace();
+	}
+
+	public int insertAfterCloseBrace() {
+		return IBracesConfiguration.LINE_BREAK;
 	}
 
 }

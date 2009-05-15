@@ -20,8 +20,8 @@ public class ConditionalOperator extends Expression {
 	private Expression condition;
 	private Expression trueValue;
 	private Expression falseValue;
-	private int questionPos;
-	private int colonPos;
+	private int questionPos = -1;
+	private int colonPos = -1;
 
 	public ConditionalOperator(ASTNode parent) {
 		super(parent);
@@ -69,7 +69,7 @@ public class ConditionalOperator extends Expression {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(questionPos > 0);
 		Assert.isTrue(colonPos > 0);

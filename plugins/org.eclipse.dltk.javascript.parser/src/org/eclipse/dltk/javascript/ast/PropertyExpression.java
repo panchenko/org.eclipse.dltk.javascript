@@ -19,7 +19,7 @@ public class PropertyExpression extends Expression {
 
 	private Expression object;
 	private Expression property;
-	private int dot;
+	private int dot = -1;
 
 	public PropertyExpression(ASTNode parent) {
 		super(parent);

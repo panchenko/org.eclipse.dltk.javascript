@@ -18,7 +18,6 @@ import org.eclipse.dltk.ast.ASTNode;
 public class SetMethod extends Method {
 
 	private Keyword setKeyword;
-
 	private Identifier argument;
 
 	public SetMethod(ASTNode parent) {

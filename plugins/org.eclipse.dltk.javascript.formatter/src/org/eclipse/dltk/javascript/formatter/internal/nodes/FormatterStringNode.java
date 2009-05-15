@@ -29,7 +29,9 @@ public class FormatterStringNode extends FormatterTextNode {
 		visitor.ensureLineStarted(context);
 		IFormatterContext strContext = context.copy();
 		strContext.setIndenting(false);
+		strContext.setComment(true);
 		visitor.write(strContext, getStartOffset(), getEndOffset());
+		strContext.setComment(false);
 	}
 
 }

@@ -107,13 +107,60 @@ public class JavaScriptTokenStream implements TokenStream {
 		return start;
 	}
 
+	private boolean isMinus(Token token) {
+		return token.getType() == JSParser.SUB
+				|| token.getType() == JSParser.NEG;
+	}
+
+	private boolean isXmlCommentOpenTag(TokenStream source, int start) {
+
+		if (start + 3 > source.size() - 1)
+			return false;
+
+		if (source.get(start).getType() != JSParser.LT)
+			return false;
+
+		if (source.get(start + 1).getType() != JSParser.NOT)
+			return false;
+
+		if (!isMinus(source.get(start + 2)))
+			return false;
+
+		if (!isMinus(source.get(start + 3)))
+			return false;
+
+		return true;
+
+	}
+
+	private boolean isXmlCommentCloseTag(TokenStream source, int start) {
+
+		if (start + 2 > source.size() - 1)
+			return false;
+
+		if (!isMinus(source.get(start)))
+			return false;
+
+		if (!isMinus(source.get(start + 1)))
+			return false;
+
+		if (source.get(start + 2).getType() != JSParser.GT)
+			return false;
+
+		return true;
+
+	}
+
 	private int skipText(TokenStream source, int start) {
 		for (int i = start; i < source.size(); i++) {
 
 			switch (source.get(i).getType()) {
 			case JSParser.LT:
-			case JSParser.GT:
 			case JSParser.XCOPEN:
+				// if (isXmlCommentOpenTag(source, i))
+				return i;
+
+			case JSParser.GT:
 			case JSParser.XCCLOSE:
 			case JSParser.XHOPEN:
 			case JSParser.XHCLOSE:
@@ -121,6 +168,11 @@ public class JavaScriptTokenStream implements TokenStream {
 			case JSParser.XRCLOSE:
 			case JSParser.CDATAOPEN:
 				return i;
+
+//			case JSParser.SUB:
+//			case JSParser.NEG:
+//				if (isXmlCommentCloseTag(source, i))
+//					return i;
 
 			case JSParser.RBRACK:
 				if (i < source.size() - 2

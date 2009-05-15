@@ -50,7 +50,7 @@ public class Label extends ASTNode implements ISourceable {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 
 		return text;

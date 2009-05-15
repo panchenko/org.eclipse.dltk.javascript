@@ -21,12 +21,11 @@ public class SwitchStatement extends Statement {
 
 	private Keyword switchKeyword;
 	private Expression condition;
-	private DefaultClause defaultClause;
 	private List caseClauses;
-	private int LP;
-	private int RP;
-	private int LC;
-	private int RC;
+	private int LP = -1;
+	private int RP = -1;
+	private int LC = -1;
+	private int RC = -1;
 
 	public SwitchStatement(ASTNode parent) {
 		super(parent);
@@ -38,14 +37,6 @@ public class SwitchStatement extends Statement {
 
 	public void setCondition(Expression condition) {
 		this.condition = condition;
-	}
-
-	public DefaultClause getDefaultClause() {
-		return this.defaultClause;
-	}
-
-	public void setDefaultClause(DefaultClause defaultClause) {
-		this.defaultClause = defaultClause;
 	}
 
 	public List getCaseClauses() {
@@ -98,7 +89,7 @@ public class SwitchStatement extends Statement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LP > 0);
 		Assert.isTrue(RP > 0);
@@ -118,11 +109,6 @@ public class SwitchStatement extends Statement {
 		for (int i = 0; i < caseClauses.size(); i++) {
 			buffer.append(((ISourceable) caseClauses.get(i))
 					.toSourceString(indentationString + "    "));
-		}
-
-		if (getDefaultClause() != null) {
-			buffer.append(getDefaultClause().toSourceString(
-					indentationString + "    "));
 		}
 
 		buffer.append(indentationString);

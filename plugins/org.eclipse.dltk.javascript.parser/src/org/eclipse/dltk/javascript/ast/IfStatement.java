@@ -22,8 +22,8 @@ public class IfStatement extends Statement {
 	private Expression condition;
 	private Statement thenStatement;
 	private Statement elseStatement = null;
-	private int LP;
-	private int RP;
+	private int LP = -1;
+	private int RP = -1;
 
 	public IfStatement(ASTNode parent) {
 		super(parent);
@@ -87,7 +87,7 @@ public class IfStatement extends Statement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LP > 0);
 		Assert.isTrue(RP > 0);

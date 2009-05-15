@@ -82,6 +82,11 @@ tokens
 	WITH 		= 'with' ;
 	GET = 'get';
 	SET = 'set';
+	YIELD = 'yield';
+  CDATA = 'CDATA';
+  WXML = 'xml';
+  NAMESPACE = 'namespace';
+  
 
 // Future reserved words
 	ABSTRACT	= 'abstract' ;
@@ -116,9 +121,6 @@ tokens
 	TRANSIENT 	= 'transient' ;
 	VOLATILE 	= 'volatile' ;
 	
-	CDATA = 'CDATA';
-	WXML = 'xml';
-	NAMESPACE = 'namespace';
 
 // Punctuators
 	LBRACE		= '{' ;
@@ -403,6 +405,7 @@ private final static boolean isLeftHandSideExpression(RuleReturnScope lhs)
 			case HexIntegerLiteral:
 			case StringLiteral:
 			case RegularExpressionLiteral:
+			case XML:
 			case ARRAY:
 			case OBJECT:
 			case PAREXPR:
@@ -631,6 +634,7 @@ keyword
 	| WITH
 	| NAMESPACE
 	| XML
+	| YIELD
 	;
 
 // $>
@@ -706,10 +710,28 @@ match this ASCII definition, the lexer calls consumeIdentifierUnicodeStart becau
 as first character in ranges other than ASCII and consumes further characters belonging to the identifier with help of mIdentifierPart generated out of the 
 IdentifierPart rule above.
 */
+
 Identifier
-	: IdentifierNameASCIIStart
-	| { consumeIdentifierUnicodeStart(); }
-	;
+  : IdentifierNameASCIIStart
+  | { consumeIdentifierUnicodeStart(); }
+  //| 'xml'
+;
+
+//ID
+//  : IdentifierNameASCIIStart
+//  | { consumeIdentifierUnicodeStart(); }
+//;
+//
+//Identifier
+//  : ID
+//// keywords as identifiers
+//  | WXML
+//  | GET
+//  | SET
+//  ;
+
+
+
 
 fragment PropertyIdentifierSymbols
   : AT Identifier
@@ -919,6 +941,12 @@ RegularExpressionLiteral
 
 // $>
 
+
+//XMLLiteral
+//  : { areXmlExpressionsEnabled() }?=> LT GT
+//  ;
+
+  
 //
 // $<	A.3 Expressions (11)
 //
@@ -1077,6 +1105,7 @@ unaryOperator
 	| op=SUB { $op.setType(NEG); }
 	| INV
 	| NOT
+	| YIELD
 	;
 
 //xmlExpression

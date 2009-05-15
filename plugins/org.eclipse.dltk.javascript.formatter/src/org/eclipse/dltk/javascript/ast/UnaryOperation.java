@@ -19,8 +19,8 @@ import org.eclipse.dltk.javascript.parser.JSParser;
 public class UnaryOperation extends Expression {
 
 	private Expression expression;
-	private int operation;
-	private int operationPos;
+	private int operation = -1;
+	private int operationPos = -1;
 
 	public UnaryOperation(ASTNode parent) {
 		super(parent);
@@ -60,9 +60,10 @@ public class UnaryOperation extends Expression {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(operationPos > 0);
+		Assert.isTrue(operation > 0);
 
 		StringBuffer buffer = new StringBuffer();
 

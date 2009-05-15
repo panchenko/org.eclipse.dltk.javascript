@@ -62,7 +62,7 @@ public class TryStatement extends Statement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 
 		StringBuffer buffer = new StringBuffer();

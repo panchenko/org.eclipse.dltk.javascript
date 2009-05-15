@@ -19,7 +19,7 @@ public class BreakStatement extends Statement {
 
 	private Keyword breakKeyword;
 	private Label label;
-	private int semic;
+	private int semic = -1;
 
 	public BreakStatement(ASTNode parent) {
 		super(parent);
@@ -51,7 +51,7 @@ public class BreakStatement extends Statement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 
 		StringBuffer buffer = new StringBuffer();

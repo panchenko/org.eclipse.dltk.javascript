@@ -20,8 +20,8 @@ import org.eclipse.dltk.ast.ASTNode;
 public class ObjectInitializer extends Expression {
 
 	private List initializers;
-	private int LC;
-	private int RC;
+	private int LC = -1;
+	private int RC = -1;
 	private List commas;
 	private boolean multiline;
 
@@ -71,7 +71,7 @@ public class ObjectInitializer extends Expression {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LC > 0);
 		Assert.isTrue(RC > 0);

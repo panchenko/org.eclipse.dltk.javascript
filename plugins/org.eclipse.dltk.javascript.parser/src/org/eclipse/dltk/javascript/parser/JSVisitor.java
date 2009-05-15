@@ -17,6 +17,14 @@ import org.eclipse.core.runtime.Assert;
 
 public abstract class JSVisitor {
 
+	private int maxRecursionDeep;
+	private int currentRecursionDeep;
+
+	protected JSVisitor(int maxRecursionDeep) {
+		this.maxRecursionDeep = maxRecursionDeep;
+		this.currentRecursionDeep = 0;
+	}
+
 	protected final boolean visitNode(Tree node) {
 
 		boolean accept = visit(node);
@@ -26,6 +34,7 @@ public abstract class JSVisitor {
 				visitNode(node.getChild(i));
 			}
 		}
+
 		return true;
 	}
 
@@ -33,217 +42,236 @@ public abstract class JSVisitor {
 
 		Assert.isNotNull(node);
 
-		switch (node.getType()) {
+		if (currentRecursionDeep > maxRecursionDeep)
+			throw new IllegalArgumentException("Too many AST deep");
 
-		case JSParser.Identifier:
-			return visitIdentifier(node);
+		currentRecursionDeep++;
 
-		case JSParser.ARGS:
-			return visitArguments(node);
+		try {
 
-		case JSParser.BLOCK:
-			return visitBlock(node);
+			switch (node.getType()) {
 
-		case JSParser.TRUE:
-		case JSParser.FALSE:
-			return visitBooleanLiteral(node);
+			case JSParser.Identifier:
+				return visitIdentifier(node);
 
-		case JSParser.THIS:
-			return visitThis(node);
+			case JSParser.ARGS:
+				return visitArguments(node);
 
-		case JSParser.DecimalLiteral:
-			return visitDecimalLiteral(node);
+			case JSParser.BLOCK:
+				return visitBlock(node);
 
-		case JSParser.StringLiteral:
-			return visitStringLiteral(node);
+			case JSParser.TRUE:
+			case JSParser.FALSE:
+				return visitBooleanLiteral(node);
 
-		case JSParser.BYFIELD:
-			return visitByField(node);
+			case JSParser.THIS:
+				return visitThis(node);
 
-		case JSParser.BYINDEX:
-			return visitByIndex(node);
+			case JSParser.DecimalLiteral:
+				return visitDecimalLiteral(node);
 
-		case JSParser.EXPR:
-			return visitExpression(node);
+			case JSParser.StringLiteral:
+				return visitStringLiteral(node);
 
-		case JSParser.CALL:
-			return visitCall(node);
+			case JSParser.BYFIELD:
+				return visitByField(node);
 
-		case JSParser.NULL:
-			return visitNull(node);
+			case JSParser.BYINDEX:
+				return visitByIndex(node);
 
-			// arithmetic
-		case JSParser.ADD:
-		case JSParser.SUB:
-		case JSParser.MUL:
-		case JSParser.DIV:
-		case JSParser.MOD:
-			// assign
-		case JSParser.ASSIGN:
-		case JSParser.ADDASS:
-		case JSParser.SUBASS:
-		case JSParser.MULASS:
-		case JSParser.DIVASS:
-		case JSParser.MODASS:
-			// conditional
-		case JSParser.LT:
-		case JSParser.GT:
-		case JSParser.LTE:
-		case JSParser.GTE:
-			// bitwise
-		case JSParser.AND:
-		case JSParser.OR:
-		case JSParser.XOR:
-		case JSParser.ANDASS:
-		case JSParser.XORASS:
-		case JSParser.ORASS:
-		case JSParser.SHL:
-		case JSParser.SHR:
-		case JSParser.SHU:
-		case JSParser.SHLASS:
-		case JSParser.SHRASS:
-		case JSParser.SHUASS:
-			// logical
-		case JSParser.LOR:
-		case JSParser.LAND:
-		case JSParser.SAME:
-		case JSParser.EQ:
-		case JSParser.NEQ:
-		case JSParser.NSAME:
-			// special
-		case JSParser.IN:
-		case JSParser.INSTANCEOF:
-			return visitBinaryOperation(node);
+			case JSParser.EXPR:
+				return visitExpression(node);
 
-		case JSParser.PINC:
-		case JSParser.PDEC:
-		case JSParser.INC:
-		case JSParser.DEC:
-		case JSParser.NEG:
-		case JSParser.NOT:
-		case JSParser.INV:
-			return visitUnaryOperation(node);
+			case JSParser.CALL:
+				return visitCall(node);
 
-		case JSParser.RETURN:
-			return visitReturn(node);
+			case JSParser.NULL:
+				return visitNull(node);
 
-		case JSParser.SWITCH:
-			return visitSwitch(node);
+				// arithmetic
+			case JSParser.ADD:
+			case JSParser.SUB:
+			case JSParser.MUL:
+			case JSParser.DIV:
+			case JSParser.MOD:
+				// assign
+			case JSParser.ASSIGN:
+			case JSParser.ADDASS:
+			case JSParser.SUBASS:
+			case JSParser.MULASS:
+			case JSParser.DIVASS:
+			case JSParser.MODASS:
+				// conditional
+			case JSParser.LT:
+			case JSParser.GT:
+			case JSParser.LTE:
+			case JSParser.GTE:
+				// bitwise
+			case JSParser.AND:
+			case JSParser.OR:
+			case JSParser.XOR:
+			case JSParser.ANDASS:
+			case JSParser.XORASS:
+			case JSParser.ORASS:
+			case JSParser.SHL:
+			case JSParser.SHR:
+			case JSParser.SHU:
+			case JSParser.SHLASS:
+			case JSParser.SHRASS:
+			case JSParser.SHUASS:
+				// logical
+			case JSParser.LOR:
+			case JSParser.LAND:
+			case JSParser.SAME:
+			case JSParser.EQ:
+			case JSParser.NEQ:
+			case JSParser.NSAME:
+				// special
+			case JSParser.IN:
+			case JSParser.INSTANCEOF:
+				return visitBinaryOperation(node);
 
-		case JSParser.DEFAULT:
-			return visitDefault(node);
+			case JSParser.PINC:
+			case JSParser.PDEC:
+			case JSParser.INC:
+			case JSParser.DEC:
+			case JSParser.NEG:
+			case JSParser.NOT:
+			case JSParser.INV:
+				return visitUnaryOperation(node);
 
-		case JSParser.CASE:
-			return visitCase(node);
+			case JSParser.RETURN:
+				return visitReturn(node);
 
-		case JSParser.BREAK:
-			return visitBreak(node);
+			case JSParser.SWITCH:
+				return visitSwitch(node);
 
-		case JSParser.CONTINUE:
-			return visitContinue(node);
+			case JSParser.DEFAULT:
+				return visitDefault(node);
 
-		case JSParser.DO:
-			return visitDoWhile(node);
+			case JSParser.CASE:
+				return visitCase(node);
 
-		case JSParser.WHILE:
-			return visitWhile(node);
+			case JSParser.BREAK:
+				return visitBreak(node);
 
-		case JSParser.FOR:
-			return visitFor(node);
+			case JSParser.CONTINUE:
+				return visitContinue(node);
 
-		case JSParser.OBJECT:
-			return visitObjectInitializer(node);
+			case JSParser.DO:
+				return visitDoWhile(node);
 
-		case JSParser.NAMEDVALUE:
-			return visitPropertyInitializer(node);
+			case JSParser.WHILE:
+				return visitWhile(node);
 
-		case JSParser.EACH:
-			return visitForEach(node);
+			case JSParser.FOR:
+				return visitFor(node);
 
-		case JSParser.IF:
-			return visitIf(node);
+			case JSParser.OBJECT:
+				return visitObjectInitializer(node);
 
-		case JSParser.QUE:
-			return visitConditional(node);
+			case JSParser.NAMEDVALUE:
+				return visitPropertyInitializer(node);
 
-		case JSParser.PAREXPR:
-			return visitParenthesizedExpression(node);
+			case JSParser.EACH:
+				return visitForEachInStatement(node);
 
-		case JSParser.TRY:
-			return visitTry(node);
+			case JSParser.IF:
+				return visitIf(node);
 
-		case JSParser.THROW:
-			return visitThrow(node);
+			case JSParser.QUE:
+				return visitConditional(node);
 
-		case JSParser.CATCH:
-			return visitCatch(node);
+			case JSParser.PAREXPR:
+				return visitParenthesizedExpression(node);
 
-		case JSParser.FINALLY:
-			return visitFinally(node);
+			case JSParser.TRY:
+				return visitTry(node);
 
-		case JSParser.NEW:
-			return visitNew(node);
+			case JSParser.THROW:
+				return visitThrow(node);
 
-		case JSParser.ARRAY:
-			return visitArray(node);
+			case JSParser.CATCH:
+				return visitCatch(node);
 
-		case JSParser.CEXPR:
-			return visitCommaExpression(node);
+			case JSParser.FINALLY:
+				return visitFinally(node);
 
-		case JSParser.RegularExpressionLiteral:
-			return visitRegExp(node);
+			case JSParser.NEW:
+				return visitNew(node);
 
-		case JSParser.WITH:
-			return visitWith(node);
+			case JSParser.ARRAY:
+				return visitArray(node);
 
-		case JSParser.LABELLED:
-			return visitLabelled(node);
+			case JSParser.CEXPR:
+				return visitCommaExpression(node);
 
-		case JSParser.DELETE:
-			return visitDelete(node);
+			case JSParser.RegularExpressionLiteral:
+				return visitRegExp(node);
 
-		case JSParser.VOID:
-			return visitVoid(node);
+			case JSParser.WITH:
+				return visitWith(node);
 
-		case JSParser.GET:
-			return visitGet(node);
+			case JSParser.LABELLED:
+				return visitLabelled(node);
 
-		case JSParser.SET:
-			return visitSet(node);
+			case JSParser.DELETE:
+				return visitDelete(node);
 
-		case JSParser.TYPEOF:
-			return visitTypeOf(node);
+			case JSParser.VOID:
+				return visitVoid(node);
 
-		case JSParser.VAR:
-			return visitVarDeclaration(node);
+			case JSParser.GET:
+				return visitGet(node);
 
-		case JSParser.CONST:
-			return visitConst(node);
+			case JSParser.SET:
+				return visitSet(node);
 
-		case 0:
-			return visitScript(node);
+			case JSParser.TYPEOF:
+				return visitTypeOf(node);
 
-		case JSParser.FUNCTION:
-			return visitFunction(node);
+			case JSParser.VAR:
+				return visitVarDeclaration(node);
 
-		case JSParser.XMLLiteral:
-			return visitXmlLiteral(node);
+			case JSParser.CONST:
+				return visitConst(node);
 
-		case JSParser.NAMESPACE:
-			return visitNamespace(node);
+			case 0:
+				return visitScript(node);
 
-		case JSParser.XmlAttribute:
-			return visitXmlAttribute(node);
+			case JSParser.FUNCTION:
+				return visitFunction(node);
 
-		case JSParser.ALLCHILDREN:
-			return visitGetAllChildren(node);
+			case JSParser.XMLLiteral:
+				return visitXmlLiteral(node);
 
-		case JSParser.LOCALNAME:
-			return visitGetLocalName(node);
+			case JSParser.NAMESPACE:
+				return visitNamespace(node);
 
-		default:
-			throw new UnsupportedOperationException("Unknown token: "
-					+ node.getType());
+			case JSParser.XmlAttribute:
+				return visitXmlAttribute(node);
+
+			case JSParser.ALLCHILDREN:
+				return visitGetAllChildren(node);
+
+			case JSParser.LOCALNAME:
+				return visitGetLocalName(node);
+
+			case JSParser.HexIntegerLiteral:
+				return visitHexIntegerLiteral(node);
+
+			case JSParser.OctalIntegerLiteral:
+				return visitOctalIntegerLiteral(node);
+
+			case JSParser.YIELD:
+				return visitYield(node);
+
+			default:
+				throw new UnsupportedOperationException("Unknown token: "
+						+ node.getType());
+			}
+		} finally {
+			currentRecursionDeep--;
 		}
 	}
 
@@ -262,6 +290,12 @@ public abstract class JSVisitor {
 	protected abstract boolean visitGetAllChildren(Tree node);
 
 	protected abstract boolean visitGetLocalName(Tree node);
+
+	protected abstract boolean visitHexIntegerLiteral(Tree node);
+
+	protected abstract boolean visitOctalIntegerLiteral(Tree node);
+
+	protected abstract boolean visitYield(Tree node);
 
 	protected abstract boolean visitArguments(Tree node);
 
@@ -293,7 +327,7 @@ public abstract class JSVisitor {
 
 	protected abstract boolean visitWhile(Tree node);
 
-	protected abstract boolean visitForEach(Tree node);
+	protected abstract boolean visitForEachInStatement(Tree node);
 
 	protected abstract boolean visitFor(Tree node);
 

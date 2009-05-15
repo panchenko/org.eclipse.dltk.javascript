@@ -9,7 +9,7 @@ public class StatementBlockBracesConfiguration extends BlockBracesConfiguration 
 	}
 
 	public int insertBeforeOpenBrace() {
-		return IBracesConfiguration.ONE_SPACE;
+		return IBracesConfiguration.LINE_BREAK;
 	}
 
 }

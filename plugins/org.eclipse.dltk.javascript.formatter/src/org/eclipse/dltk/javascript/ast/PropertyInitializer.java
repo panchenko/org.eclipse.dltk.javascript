@@ -19,7 +19,7 @@ public class PropertyInitializer extends Expression {
 
 	private Expression name;
 	private Expression value;
-	private int colon;
+	private int colon = -1;
 
 	public PropertyInitializer(ASTNode parent) {
 		super(parent);

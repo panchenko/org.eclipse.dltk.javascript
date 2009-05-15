@@ -20,9 +20,9 @@ public class DefaultXmlNamespaceStatement extends Statement {
 	private Keyword defaultKeyword;
 	private Keyword xmlKeyword;
 	private Keyword namespaceKeyword;
-	private int assignOperation;
+	private int assignOperation = -1;
 	private StringLiteral value;
-	private int semic;
+	private int semic = -1;
 
 	public DefaultXmlNamespaceStatement(ASTNode parent) {
 		super(parent);

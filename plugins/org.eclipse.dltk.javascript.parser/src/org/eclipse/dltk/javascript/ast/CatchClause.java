@@ -21,8 +21,8 @@ public class CatchClause extends Statement {
 	private Identifier exception;
 	private ExceptionFilter exceptionFilter = null;
 	private Statement statement;
-	private int LP;
-	private int RP;
+	private int LP = -1;
+	private int RP = -1;
 
 	public CatchClause(ASTNode parent) {
 		super(parent);

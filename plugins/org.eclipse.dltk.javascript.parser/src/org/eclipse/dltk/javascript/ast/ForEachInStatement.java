@@ -33,7 +33,7 @@ public class ForEachInStatement extends ForInStatement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(getLP() > 0);
 		Assert.isTrue(getRP() > 0);

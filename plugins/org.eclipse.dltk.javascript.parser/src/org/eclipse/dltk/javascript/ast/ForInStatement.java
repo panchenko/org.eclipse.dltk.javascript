@@ -21,8 +21,8 @@ public class ForInStatement extends LoopStatement {
 	private Keyword inKeyword;
 	private Expression item;
 	private Expression iterator;
-	private int LP;
-	private int RP;
+	private int LP = -1;
+	private int RP = -1;
 	private int semic = -1;
 
 	public ForInStatement(ASTNode parent) {
@@ -87,7 +87,7 @@ public class ForInStatement extends LoopStatement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LP > 0);
 		Assert.isTrue(RP > 0);

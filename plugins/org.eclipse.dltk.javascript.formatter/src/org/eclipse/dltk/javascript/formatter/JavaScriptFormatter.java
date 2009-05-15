@@ -50,7 +50,12 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		String input = source.substring(offset, offset + length);
 		int indent = detectIndentationLevel(source, offset);
 
-		return new ReplaceEdit(offset, length, format(input, indent));
+		String formatted = format(input, indent);
+
+		if (formatted == null)
+			return null;
+
+		return new ReplaceEdit(offset, length, formatted);
 	}
 
 	private class ParserProblemReporter implements IProblemReporter {
@@ -143,7 +148,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 			if (DLTKCore.DEBUG)
 				System.out.println(reporter.toString());
 
-			return source;
+			return null;
 		}
 
 		return format(source, root, indentationLevel);
@@ -174,7 +179,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 			return writer.getOutput();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return source;
+			return null;
 		}
 	}
 

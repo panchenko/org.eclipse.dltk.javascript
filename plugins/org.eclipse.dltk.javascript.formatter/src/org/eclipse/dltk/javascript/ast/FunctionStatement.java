@@ -23,8 +23,8 @@ public class FunctionStatement extends Expression {
 	private Identifier name;
 	private List arguments;
 	private StatementBlock body;
-	private int LP;
-	private int RP;
+	private int LP = -1;
+	private int RP = -1;
 	private List commas;
 
 	public FunctionStatement(ASTNode parent) {

@@ -19,7 +19,7 @@ public class GetAllChildrenExpression extends Expression {
 
 	private Expression object;
 	private Expression property;
-	private int dotdot;
+	private int dotdot = -1;
 
 	public GetAllChildrenExpression(ASTNode parent) {
 		super(parent);

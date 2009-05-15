@@ -18,8 +18,8 @@ import org.eclipse.dltk.ast.ASTNode;
 public class ParenthesizedExpression extends Expression {
 
 	private Expression expression;
-	private int LP;
-	private int RP;
+	private int LP = -1;
+	private int RP = -1;
 
 	public ParenthesizedExpression(ASTNode parent) {
 		super(parent);
@@ -51,7 +51,7 @@ public class ParenthesizedExpression extends Expression {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LP > 0);
 		Assert.isTrue(RP > 0);

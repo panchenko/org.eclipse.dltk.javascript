@@ -21,10 +21,10 @@ public class ForStatement extends LoopStatement {
 	private Expression initial;
 	private Expression condition;
 	private Expression step;
-	private int LP;
-	private int RP;
-	private int initialSemic;
-	private int conditionSemic;
+	private int LP = -1;
+	private int RP = -1;
+	private int initialSemic = -1;
+	private int conditionSemic = -1;
 	private int trailingSemic = -1;
 
 	public ForStatement(ASTNode parent) {
@@ -105,7 +105,7 @@ public class ForStatement extends LoopStatement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LP > 0);
 		Assert.isTrue(RP > 0);

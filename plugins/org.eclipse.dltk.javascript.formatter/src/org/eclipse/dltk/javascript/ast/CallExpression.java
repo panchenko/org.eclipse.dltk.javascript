@@ -22,8 +22,8 @@ public class CallExpression extends Expression {
 	private ASTNode expression;
 	private List arguments;
 	private List commas;
-	private int LP;
-	private int RP;
+	private int LP = -1;
+	private int RP = -1;
 
 	public CallExpression(ASTNode parent) {
 		super(parent);

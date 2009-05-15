@@ -179,8 +179,8 @@ public final class JavaScriptFormatterConstants {
 		registerStringOption(BRACE_ARRAY, BRACE_SAME_LINE);
 		registerBooleanOption(BRACE_EMPTY_ARRAY, true);
 
-		registerBooleanOption(NEW_LINE_IN_EMPTY_METHOD, true);
-		registerBooleanOption(NEW_LINE_IN_EMPTY_BLOCK, true);
+		registerBooleanOption(NEW_LINE_IN_EMPTY_METHOD, false);
+		registerBooleanOption(NEW_LINE_IN_EMPTY_BLOCK, false);
 		registerBooleanOption(NEW_LINE_AT_EOF, true);
 
 		registerBooleanOption(NEW_LINE_BEFORE_ELSE_IN_IF, false);

@@ -18,7 +18,7 @@ import org.eclipse.dltk.ast.ASTNode;
 public class LabelledStatement extends Statement {
 
 	private Label label;
-	private int colon;
+	private int colon = -1;
 	private Statement statement;
 
 	public LabelledStatement(ASTNode parent) {
@@ -51,7 +51,7 @@ public class LabelledStatement extends Statement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(colon > 0);
 

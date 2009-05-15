@@ -20,8 +20,8 @@ public class WithStatement extends Statement {
 	private Keyword withKeyword;
 	private Expression expression;
 	private Statement statement;
-	private int LP;
-	private int RP;
+	private int LP = -1;
+	private int RP = -1;
 
 	public WithStatement(ASTNode parent) {
 		super(parent);
@@ -69,7 +69,7 @@ public class WithStatement extends Statement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LP > 0);
 		Assert.isTrue(RP > 0);

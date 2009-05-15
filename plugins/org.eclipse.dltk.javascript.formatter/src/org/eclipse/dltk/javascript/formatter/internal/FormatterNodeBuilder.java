@@ -1,6 +1,7 @@
 package org.eclipse.dltk.javascript.formatter.internal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.ExceptionFilter;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FinallyClause;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
@@ -46,6 +48,7 @@ import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.Keyword;
 import org.eclipse.dltk.javascript.ast.Label;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
+import org.eclipse.dltk.javascript.ast.Method;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
@@ -72,15 +75,20 @@ import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
+import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.AbstractParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ArrayBracketsConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.BinaryOperationPinctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.BlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.BracesNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.BracketsNode;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.CallExpressionPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.CallParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.CaseBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.CatchBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.CatchParensConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.CommaPunctuationConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.ConditionalOperatorPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.DoWhileBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseIfBlockBracesConfiguration;
@@ -88,7 +96,9 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseIfElseBlockBrace
 import org.eclipse.dltk.javascript.formatter.internal.nodes.EmptyArrayBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ExpressionParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FinallyBracesConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.ForEmptySemicolonPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ForParensConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.ForSemicolonPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterBinaryOperationNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterBreakNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterCaseNode;
@@ -120,7 +130,9 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterUnaryOperat
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVariableDeclarationNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVoidExpressionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVoidOperatorNode;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterYieldOperatorNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionArgumentsParensConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionArgumentsPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionBodyBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionExpressionBodyBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionNoArgumentsParensConfiguration;
@@ -128,9 +140,14 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.GetItemArrayBrackets
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IParensConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.IPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IfConditionParensConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.MethodInitializerPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.MultiLineObjectInitializerBracesConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.OperationOrPunctuationNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ParensNode;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.PropertyExpressionPunctuationConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.PropertyInitializerPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SemicolonNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SingleLineObjectInitializerBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.StatementBlockBracesConfiguration;
@@ -332,6 +349,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				if (node.getClass() == GetLocalNameExpression.class)
 					return visitGetLocalNameExpression((GetLocalNameExpression) node);
 
+				if (node.getClass() == YieldOperator.class)
+					return visitYieldOperator((YieldOperator) node);
+
 				throw new UnsupportedOperationException("Unknown node type: "
 						+ node.getClass());
 			}
@@ -353,9 +373,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitBinaryOperation(BinaryOperation node) {
 
-				// TODO Think about using begin-end node to insert spaces
-				// between arguments and operation symbol!
-
 				FormatterBinaryOperationNode formatterNode = new FormatterBinaryOperationNode(
 						document);
 
@@ -366,9 +383,14 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				visit(node.getLeftExpression());
 
-				addChild(createTextNode(document, node.getOperationPosition(),
-						node.getOperationPosition()
-								+ node.getOperationText().length()));
+				skipSpaces(formatterNode, node.getOperationPosition());
+
+				processPunctuation(node.getOperationPosition(), node
+						.getOperationText().length(),
+						new BinaryOperationPinctuationConfiguration());
+
+				skipSpaces(formatterNode, node.getRightExpression()
+						.sourceStart());
 
 				visit(node.getRightExpression());
 
@@ -424,7 +446,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				visit(node.getExpression());
 
 				processParens(node.getLP(), node.getRP(), node.getArguments(),
-						new CallParensConfiguration(document));
+						new CallParensConfiguration(document),
+						node.getCommas(),
+						new CallExpressionPunctuationConfiguration());
 
 				checkedPop(formatterNode, node.sourceEnd());
 
@@ -495,9 +519,53 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return true;
 			}
 
+			private void visitCombinedNodeList(List nodes, List punctuations,
+					List configurations) {
+
+				if (nodes.size() == 0)
+					return;
+
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
+						document);
+
+				formatterNode.addChild(createEmptyTextNode(document,
+						((ASTNode) nodes.get(0)).sourceStart()));
+
+				push(formatterNode);
+
+				for (int i = 0; i < nodes.size(); i++) {
+					Object item = nodes.get(i);
+					visit((ASTNode) item);
+
+					if (i < punctuations.size()) {
+						int position = ((Integer) punctuations.get(i))
+								.intValue();
+
+						skipSpaces(formatterNode, position);
+
+						processPunctuation(position, 1,
+								(IPunctuationConfiguration) configurations
+										.get(i));
+
+						skipSpaces(formatterNode, ((ASTNode) nodes.get(i + 1))
+								.sourceStart());
+					}
+				}
+
+				checkedPop(formatterNode, ((ASTNode) nodes
+						.get(nodes.size() - 1)).sourceEnd());
+			}
+
+			private void visitCombinedNodeList(List nodes, List punctuations,
+					IPunctuationConfiguration configuration) {
+				visitCombinedNodeList(nodes, punctuations, Collections.nCopies(
+						punctuations.size(), configuration));
+			}
+
 			public boolean visitCommaExpression(CommaExpression node) {
 
-				visitNodeList(node.getItems());
+				visitCombinedNodeList(node.getItems(), node.getCommas(),
+						new CommaPunctuationConfiguration());
 
 				return true;
 			}
@@ -513,7 +581,19 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				push(formatterNode);
 
 				visit(node.getCondition());
+
+				skipSpaces(formatterNode, node.getQuestionPosition());
+				processPunctuation(node.getQuestionPosition(), 1,
+						new ConditionalOperatorPunctuationConfiguration());
+				skipSpaces(formatterNode, node.getTrueValue().sourceStart());
+
 				visit(node.getTrueValue());
+
+				skipSpaces(formatterNode, node.getColonPosition());
+				processPunctuation(node.getColonPosition(), 1,
+						new ConditionalOperatorPunctuationConfiguration());
+				skipSpaces(formatterNode, node.getFalseValue().sourceStart());
+
 				visit(node.getFalseValue());
 
 				checkedPop(formatterNode, node.sourceEnd());
@@ -531,7 +611,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				visitNodeList(node.getConsts());
+				visitCombinedNodeList(node.getConsts(), node.getCommas(),
+						new CommaPunctuationConfiguration());
 
 				checkedPop(formatterNode, node.sourceEnd());
 
@@ -771,8 +852,30 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				nodes.add(node.getCondition());
 				nodes.add(node.getStep());
 
+				List semicolons = new ArrayList();
+				semicolons.add(new Integer(node.getInitialSemicolonPosition()));
+				semicolons.add(new Integer(node
+						.getConditionalSemicolonPosition()));
+
+				List semicolonConfigurations = new ArrayList();
+
+				if (node.getCondition() instanceof EmptyExpression)
+					semicolonConfigurations
+							.add(new ForEmptySemicolonPunctuationConfiguration());
+				else
+					semicolonConfigurations
+							.add(new ForSemicolonPunctuationConfiguration());
+
+				if (node.getStep() instanceof EmptyExpression)
+					semicolonConfigurations
+							.add(new ForEmptySemicolonPunctuationConfiguration());
+				else
+					semicolonConfigurations
+							.add(new ForSemicolonPunctuationConfiguration());
+
 				processParens(node.getLP(), node.getRP(), nodes,
-						new ForParensConfiguration(document));
+						new ForParensConfiguration(document), semicolons,
+						semicolonConfigurations);
 
 				if (node.getBody() != null)
 					processBraces(node.getBody(), new BlockBracesConfiguration(
@@ -818,16 +921,20 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 
 				processParens(node.getLP(), node.getRP(), node.getArguments(),
-						argsConfiguration);
+						argsConfiguration, node.getArgumentCommas(),
+						new FunctionArgumentsPunctuationConfiguration());
 
+				boolean emptyBody = node.getBody() == null
+						|| node.getBody().getStatements() == null
+						|| node.getBody().getStatements().size() == 0;
 				IBracesConfiguration bodyConfiguration;
 
 				if (node.getName() != null)
 					bodyConfiguration = new FunctionBodyBracesConfiguration(
-							document);
+							document, emptyBody);
 				else
 					bodyConfiguration = new FunctionExpressionBodyBracesConfiguration(
-							document);
+							document, emptyBody);
 
 				processBraces(node.getBody(), bodyConfiguration);
 
@@ -873,8 +980,13 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processParens(node.getLP(), node.getRP(), (ASTNode) null,
 						new FunctionNoArgumentsParensConfiguration(document));
 
-				processBraces(node.getBody(),
-						new FunctionBodyBracesConfiguration(document));
+				boolean emptyBody = node.getBody() == null
+						|| node.getBody().getStatements() == null
+						|| node.getBody().getStatements().size() == 0;
+
+				processBraces(
+						node.getBody(),
+						new FunctionBodyBracesConfiguration(document, emptyBody));
 
 				checkedPop(formatterNode, node.sourceEnd());
 
@@ -902,6 +1014,39 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			private void processParens(int leftParen, int rightParen,
+					List expressions, IParensConfiguration configuration,
+					List punctuations,
+					IPunctuationConfiguration punctuationConfiguration) {
+				ParensNode parens = new ParensNode(document, configuration);
+				parens.setBegin(createCharNode(document, leftParen));
+				push(parens);
+				if (!expressions.isEmpty()) {
+					final ASTNode expression0 = (ASTNode) expressions.get(0);
+					skipSpaces(parens, expression0.sourceStart());
+				}
+				visitCombinedNodeList(expressions, punctuations,
+						punctuationConfiguration);
+				checkedPop(parens, rightParen);
+				parens.setEnd(createCharNode(document, rightParen));
+			}
+
+			private void processParens(int leftParen, int rightParen,
+					List expressions, IParensConfiguration configuration,
+					List punctuations, List punctuationConfigurations) {
+				ParensNode parens = new ParensNode(document, configuration);
+				parens.setBegin(createCharNode(document, leftParen));
+				push(parens);
+				if (!expressions.isEmpty()) {
+					final ASTNode expression0 = (ASTNode) expressions.get(0);
+					skipSpaces(parens, expression0.sourceStart());
+				}
+				visitCombinedNodeList(expressions, punctuations,
+						punctuationConfigurations);
+				checkedPop(parens, rightParen);
+				parens.setEnd(createCharNode(document, rightParen));
+			}
+
+			private void processParens(int leftParen, int rightParen,
 					List expressions, IParensConfiguration configuration) {
 				ParensNode parens = new ParensNode(document, configuration);
 				parens.setBegin(createCharNode(document, leftParen));
@@ -915,28 +1060,57 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				parens.setEnd(createCharNode(document, rightParen));
 			}
 
-			private void skipSpaces(ParensNode parens, int end) {
-				final int prev = parens.getEndOffset();
+			private void skipSpaces(IFormatterContainerNode formatterNode,
+					int end) {
+				final int prev = formatterNode.getEndOffset();
 				int pos = prev;
 				while (pos < end
 						&& FormatterUtils.isSpace(document.charAt(pos))) {
 					++pos;
 				}
 				if (pos > prev) {
-					parens.addChild(createEmptyTextNode(document, pos));
+					formatterNode.addChild(createEmptyTextNode(document, pos));
 				}
+			}
+
+			private void processPunctuation(int position, int length,
+					IPunctuationConfiguration configuration) {
+				final OperationOrPunctuationNode block = new OperationOrPunctuationNode(
+						document, configuration);
+				block.addChild(createTextNode(document, position, position
+						+ length));
+				push(block);
+				// visit(node);
+				checkedPop(block, position + length);
 			}
 
 			private void processBraces(ASTNode node,
 					IBracesConfiguration configuration) {
 				if (node instanceof StatementBlock) {
-					BracesNode braces = new BracesNode(document, configuration);
 					StatementBlock block = (StatementBlock) node;
-					braces.setBegin(createCharNode(document, block.getLC()));
-					push(braces);
-					visitNodeList(block.getStatements());
-					checkedPop(braces, block.getRC());
-					braces.setEnd(createCharNode(document, block.getRC()));
+
+					if (block.getLC() > -1 && block.getRC() > -1) {
+
+						BracesNode braces = new BracesNode(document,
+								configuration);
+
+						braces
+								.setBegin(createCharNode(document, block
+										.getLC()));
+						push(braces);
+						visitNodeList(block.getStatements());
+						checkedPop(braces, block.getRC());
+						braces.setEnd(createCharNode(document, block.getRC()));
+					} else {
+						final FormatterBlockNode formatter = new FormatterIndentedBlockNode(
+								document, configuration.isIndenting());
+						formatter.addChild(createEmptyTextNode(document, node
+								.sourceStart()));
+						push(formatter);
+						visitNodeList(block.getStatements());
+						checkedPop(formatter, node.sourceEnd());
+
+					}
 				} else {
 					final FormatterBlockNode block = new FormatterIndentedBlockNode(
 							document, configuration.isIndenting());
@@ -983,8 +1157,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				push(braces);
 				visit(node);
 				checkedPop(braces, node.sourceEnd());
-				// braces.setEnd(createEmptyTextNode(document,
-				// node.sourceEnd()));
 			}
 
 			public boolean visitIfStatement(IfStatement node) {
@@ -1134,7 +1306,23 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				visitNodeList(node.getInitializers());
+				List initializers = node.getInitializers();
+				List commaConfigurations = new ArrayList();
+
+				for (int i = 1; i < initializers.size(); i++) {
+					Expression item = (Expression) initializers.get(i);
+
+					if (item instanceof Method)
+						commaConfigurations
+								.add(new MethodInitializerPunctuationConfiguration());
+					else
+						commaConfigurations
+								.add(new PropertyInitializerPunctuationConfiguration());
+
+				}
+
+				visitCombinedNodeList(node.getInitializers(), node.getCommas(),
+						commaConfigurations);
 
 				checkedPop(formatterNode, node.sourceEnd() - 1);
 
@@ -1164,6 +1352,14 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				push(formatterNode);
 
 				visit(node.getObject());
+
+				skipSpaces(formatterNode, node.getDotPosition());
+
+				processPunctuation(node.getDotPosition(), 1,
+						new PropertyExpressionPunctuationConfiguration());
+
+				skipSpaces(formatterNode, node.getProperty().sourceStart());
+
 				visit(node.getProperty());
 
 				checkedPop(formatterNode, node.sourceEnd());
@@ -1182,6 +1378,14 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				push(formatterNode);
 
 				visit(node.getName());
+
+				skipSpaces(formatterNode, node.getColon());
+
+				processPunctuation(node.getColon(), 1,
+						new PropertyInitializerPunctuationConfiguration());
+
+				skipSpaces(formatterNode, node.getValue().sourceStart());
+
 				visit(node.getValue());
 
 				checkedPop(formatterNode, node.getValue().sourceStart());
@@ -1247,7 +1451,13 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processParens(node.getLP(), node.getRP(), node.getArgument(),
 						new FunctionArgumentsParensConfiguration(document));
 
-				visit(node.getBody());
+				boolean emptyBody = node.getBody() == null
+						|| node.getBody().getStatements() == null
+						|| node.getBody().getStatements().size() == 0;
+
+				processBraces(
+						node.getBody(),
+						new FunctionBodyBracesConfiguration(document, emptyBody));
 
 				checkedPop(formatterNode, node.sourceEnd());
 
@@ -1289,14 +1499,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processParens(node.getLP(), node.getRP(), node.getCondition(),
 						new SwitchConditionParensConfiguration(document));
 
-				List nodes = new ArrayList();
-				nodes.addAll(node.getCaseClauses());
-				if (node.getDefaultClause() != null) {
-					nodes.add(node.getDefaultClause());
-				}
-
-				processBraces(node.getLC(), node.getRC(), nodes,
-						new SwitchBracesConfiguration(document));
+				processBraces(node.getLC(), node.getRC(),
+						node.getCaseClauses(), new SwitchBracesConfiguration(
+								document));
 
 				checkedPop(formatterNode, node.sourceEnd());
 
@@ -1389,11 +1594,14 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 							.getOperationPosition(), node
 							.getOperationPosition()
 							+ node.getOperationText().length()));
+					skipSpaces(formatterNode, node.getExpression()
+							.sourceStart());
 				}
 
 				visit(node.getExpression());
 
 				if (node.isPostfix()) {
+					skipSpaces(formatterNode, node.getOperationPosition());
 					addChild(createTextNode(document, node
 							.getOperationPosition(), node
 							.getOperationPosition()
@@ -1414,7 +1622,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				visitNodeList(node.getVariables());
+				visitCombinedNodeList(node.getVariables(), node.getCommas(),
+						new CommaPunctuationConfiguration());
 
 				checkedPop(formatterNode, node.sourceEnd());
 
@@ -1507,6 +1716,22 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitVoidOperator(VoidOperator node) {
 				FormatterVoidOperatorNode formatterNode = new FormatterVoidOperatorNode(
+						document);
+
+				formatterNode.setBegin(createTextNode(document, node
+						.getVoidKeyword()));
+
+				push(formatterNode);
+
+				visit(node.getExpression());
+
+				checkedPop(formatterNode, node.sourceEnd());
+
+				return true;
+			}
+
+			public boolean visitYieldOperator(YieldOperator node) {
+				FormatterYieldOperatorNode formatterNode = new FormatterYieldOperatorNode(
 						document);
 
 				formatterNode.setBegin(createTextNode(document, node

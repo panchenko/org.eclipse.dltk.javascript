@@ -19,7 +19,7 @@ public class ContinueStatement extends Statement {
 
 	private Keyword continueKeyword;
 	private Label label;
-	private int semic;
+	private int semic = -1;
 
 	public ContinueStatement(ASTNode parent) {
 		super(parent);

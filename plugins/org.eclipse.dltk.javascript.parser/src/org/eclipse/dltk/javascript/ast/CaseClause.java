@@ -20,7 +20,7 @@ public class CaseClause extends Statement {
 	private Keyword caseKeyword;
 	private Expression condition;
 	private StatementList statements;
-	private int colon;
+	private int colon = -1;
 
 	public CaseClause(ASTNode parent) {
 		super(parent);

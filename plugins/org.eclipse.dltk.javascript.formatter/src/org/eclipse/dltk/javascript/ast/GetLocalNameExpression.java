@@ -19,7 +19,7 @@ public class GetLocalNameExpression extends Expression {
 
 	private Expression namespace;
 	private Expression localName;
-	private int coloncolon;
+	private int coloncolon = -1;
 
 	public GetLocalNameExpression(ASTNode parent) {
 		super(parent);

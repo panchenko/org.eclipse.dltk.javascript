@@ -8,17 +8,18 @@
  *
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
- *******************************************************************************/package org.eclipse.dltk.javascript.ast;
+ *******************************************************************************/
+package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
 public class BinaryOperation extends Expression {
 
-	private int operation;
+	private int operation = -1;
 	private Expression left;
 	private Expression right;
-	private int operationPos;
+	private int operationPos = -1;
 
 	public BinaryOperation(ASTNode parent) {
 		super(parent);

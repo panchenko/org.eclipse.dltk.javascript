@@ -20,8 +20,8 @@ import org.eclipse.dltk.ast.ASTNode;
 public class StatementBlock extends Statement {
 
 	private List statements;
-	private int LC;
-	private int RC;
+	private int LC = -1;
+	private int RC = -1;
 
 	public StatementBlock(ASTNode parent) {
 		super(parent);
@@ -55,8 +55,7 @@ public class StatementBlock extends Statement {
 
 		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(LC >= 0);
-		Assert.isTrue(RC > 0);
+		Assert.isTrue((LC >= 0 && RC > 0) || (RC == -1 && LC == -1));
 
 		StringBuffer buffer = new StringBuffer();
 

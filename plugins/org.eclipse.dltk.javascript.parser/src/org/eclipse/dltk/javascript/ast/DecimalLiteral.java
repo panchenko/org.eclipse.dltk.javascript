@@ -33,7 +33,7 @@ public class DecimalLiteral extends Expression {
 
 	public String toSourceString(String indentionString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 
 		return text;

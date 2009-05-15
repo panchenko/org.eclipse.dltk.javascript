@@ -22,7 +22,7 @@ public class ConstDeclaration extends Statement {
 	private Keyword constKeyword;
 	private List consts;
 	private List commas;
-	private int semic;
+	private int semic = -1;
 
 	public ConstDeclaration(ASTNode parent) {
 		super(parent);

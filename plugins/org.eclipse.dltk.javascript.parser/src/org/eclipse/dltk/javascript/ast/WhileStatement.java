@@ -19,9 +19,9 @@ public class WhileStatement extends LoopStatement {
 
 	private Keyword whileKeyword;
 	private Expression condition;
-	private int LP;
-	private int RP;
-	private int semi;
+	private int LP = -1;
+	private int RP = -1;
+	private int semi = -1;
 
 	public WhileStatement(ASTNode parent) {
 		super(parent);
@@ -69,7 +69,7 @@ public class WhileStatement extends LoopStatement {
 
 	public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LP > 0);
 		Assert.isTrue(RP > 0);

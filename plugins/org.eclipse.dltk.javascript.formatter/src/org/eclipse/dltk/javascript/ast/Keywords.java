@@ -90,6 +90,8 @@ public class Keywords {
 
 	public static final String NAMESPACE = "namespace";
 
+	public static final String YIELD = "yield";
+
 	//
 	//
 	//
@@ -230,6 +232,7 @@ public class Keywords {
 		map.put(new Integer(JSParser.VOID), Keywords.VOID);
 		map.put(new Integer(JSParser.XML), Keywords.XML);
 		map.put(new Integer(JSParser.NAMESPACE), Keywords.NAMESPACE);
+		map.put(new Integer(JSParser.YIELD), Keywords.YIELD);
 
 		map.put(new Integer(JSParser.ASSIGN), String.valueOf(Keywords.ASSIGN));
 

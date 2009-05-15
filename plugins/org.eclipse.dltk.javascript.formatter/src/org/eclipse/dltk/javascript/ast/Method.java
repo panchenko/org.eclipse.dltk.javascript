@@ -17,9 +17,9 @@ import org.eclipse.dltk.ast.ASTNode;
 public abstract class Method extends Expression {
 
 	private Identifier name;
-	private Statement body;
-	private int LP;
-	private int RP;
+	private StatementBlock body;
+	private int LP = -1;
+	private int RP = -1;
 
 	public Method(ASTNode parent) {
 		super(parent);
@@ -33,11 +33,11 @@ public abstract class Method extends Expression {
 		this.name = name;
 	}
 
-	public Statement getBody() {
+	public StatementBlock getBody() {
 		return this.body;
 	}
 
-	public void setBody(Statement body) {
+	public void setBody(StatementBlock body) {
 		this.body = body;
 	}
 

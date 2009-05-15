@@ -30,6 +30,7 @@ public class FormatterCommentNode extends FormatterTextNode {
 
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
+		context.setComment(true);
 		if (multiLine) {
 			visitor.ensureLineStarted(context);
 			JavaScriptFormatterContext copy = (JavaScriptFormatterContext) context
@@ -40,6 +41,7 @@ public class FormatterCommentNode extends FormatterTextNode {
 			super.accept(context, visitor);
 			visitor.disableAppendToPreviousLine();
 		}
+		context.setComment(false);
 	}
 
 }

@@ -21,8 +21,8 @@ public class ArrayInitializer extends Expression {
 
 	private List items;
 	private List commas;
-	private int LB;
-	private int RB;
+	private int LB = -1;
+	private int RB = -1;
 
 	public ArrayInitializer(ASTNode parent) {
 		super(parent);
@@ -62,7 +62,7 @@ public class ArrayInitializer extends Expression {
 
 	public String toSourceString(String indentionString) {
 
-		Assert.isTrue(sourceStart() > 0);
+		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LB > 0);
 		Assert.isTrue(RB > 0);

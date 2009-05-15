@@ -17,8 +17,9 @@ import org.eclipse.dltk.formatter.IFormatterDocument;
 public class FunctionExpressionBodyBracesConfiguration extends
 		FunctionBodyBracesConfiguration {
 
-	public FunctionExpressionBodyBracesConfiguration(IFormatterDocument document) {
-		super(document);
+	public FunctionExpressionBodyBracesConfiguration(
+			IFormatterDocument document, boolean emptyBody) {
+		super(document, emptyBody);
 	}
 
 	public int insertAfterCloseBrace() {

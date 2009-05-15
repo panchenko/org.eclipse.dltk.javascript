@@ -19,8 +19,8 @@ public class GetArrayItemExpression extends Expression {
 
 	private Expression array;
 	private Expression index;
-	private int LB;
-	private int RB;
+	private int LB = -1;
+	private int RB = -1;
 
 	public GetArrayItemExpression(ASTNode parent) {
 		super(parent);

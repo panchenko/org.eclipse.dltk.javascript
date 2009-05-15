@@ -19,7 +19,7 @@ public class DeleteStatement extends Statement {
 
 	private Keyword deleteKeyword;
 	private Expression expression;
-	private int semic;
+	private int semic = -1;
 
 	public DeleteStatement(ASTNode parent) {
 		super(parent);
