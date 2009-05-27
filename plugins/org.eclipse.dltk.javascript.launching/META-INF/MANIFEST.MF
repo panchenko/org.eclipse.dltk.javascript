@@ -25,4 +25,4 @@ Export-Package: org.eclipse.dltk.javascript.console,
  org.eclipse.dltk.javascript.launching,
  org.eclipse.dltk.javascript.internal.launching
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
- 
+Bundle-ActivationPolicy: lazy
