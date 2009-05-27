@@ -42,7 +42,7 @@ public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 
 		// simple regexp tester. Coloring is still default so it doesn't matter
 		// for now to much that var x = 10 / 5 / 10 is also seen as regexp
-		rules.add(new PatternRule("/", "/", regexp, '\\', false, false));
+		rules.add(new PatternRule("/", "/", regexp, '\\', true, true));
 		// Add rule for character constants.
 		rules.add(new SingleLineRule("'", "'", string, '\\'));
 		rules.add(new MultiLineRule("\"", "\"", string, '\\'));
