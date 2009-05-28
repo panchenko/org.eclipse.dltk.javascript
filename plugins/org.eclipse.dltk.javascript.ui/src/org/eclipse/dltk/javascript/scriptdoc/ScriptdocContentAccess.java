@@ -214,12 +214,26 @@ public class ScriptdocContentAccess {
 				ISourceRange javadocRange = getJavadocRange(member);
 
 				if (javadocRange != null) {
+
 					JavaDocCommentReader reader = new JavaDocCommentReader(buf,
 							javadocRange.getOffset(), javadocRange.getOffset()
 									+ javadocRange.getLength() - 1);
 					if (!containsOnlyInheritDoc(reader, javadocRange
 							.getLength())) {
 						reader.reset();
+
+						if (member instanceof IProposalHolder
+								&& ((IProposalHolder) member).getProposalInfo() != null) {
+							String proposalInfo = ((IProposalHolder) member)
+									.getProposalInfo();
+							try {
+								return new StringReader("<p>" + proposalInfo
+										+ "</p>" + reader.getString());
+							} catch (IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+
 						return reader;
 					}
 				}
