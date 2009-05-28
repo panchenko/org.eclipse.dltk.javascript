@@ -629,7 +629,8 @@ public class TypeInferencer {
 			Object processScriptNode = processScriptNode(node, arg);
 			IReference evaluateReference = evaluateReference(key, lastChild, cs);
 			evaluateReference.setLocationInformation(module, node
-					.getFirstChild().getPosition(), key.length());
+					.getFirstChild().getPosition()
+					- key.length(), key.length());
 			collection.write(key, evaluateReference);
 			return processScriptNode;
 		}
@@ -705,6 +706,9 @@ public class TypeInferencer {
 			if (ref == null) {
 				ref = resolveReferenceTree(key, cs, key1, ref);
 			}
+			if (ref != null) {
+				ref = new TransparentRef(ref, expression, key, parent, cs);
+			}
 			return ref;
 		default:
 			break;
@@ -774,7 +778,7 @@ public class TypeInferencer {
 	private static IReference createArrayLiteralReference(
 			HostCollection collection2, String key, Node expression,
 			ReferenceResolverContext cs) {
-			
+
 		String id = "Array";
 		NewReference ref = new NewReference(key, id, cs);
 		UnknownReference unknownReference = new UnknownReference(key, false);
