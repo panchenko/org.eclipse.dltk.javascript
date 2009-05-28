@@ -60,19 +60,18 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 		if (index == -1) {
 			index = content.length();
 		}
-		ReferenceResolverContext buildContext2 = AssitUtils.buildContext(
+		ReferenceResolverContext rc = AssitUtils.buildContext(
 				(org.eclipse.dltk.core.ISourceModule) cu, index, content,
 				fileName);
-		HostCollection buildContext = buildContext2.getHostCollection();
 		AssitUtils.PositionCalculator calc = new AssitUtils.PositionCalculator(
 				content, offset, true);
 		// if (i==offset)i=1;
 		final List result = new ArrayList();
 		String selection = calc.getCompletion();
 		if (calc.isMember()) {
-			processMember(buildContext2, calc, result, selection);
+			processMember(rc, calc, result, selection);
 		} else {
-			processGlobals(buildContext2, buildContext, result, selection);
+			processGlobals(rc, result, selection);
 		}
 		String completionPart = calc.getCompletionPart();
 		for (int j = result.size(); --j >= 0;) {
@@ -92,34 +91,35 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 		return resultA;
 	}
 
-	private void processGlobals(ReferenceResolverContext rc,
-			HostCollection buildContext, final List result, String selection) {
+	private void processGlobals(ReferenceResolverContext rc, final List result,
+			String selection) {
 		if (!(selection.length() == 0)) {
 			// local defenitition
 			// global member;
-			IReference rm = buildContext.getReference(selection);
-			if (rm != null) {
-				rm.addModelElements(result);
-			} else {
-				Set resolveGlobals = rc.resolveGlobals(selection);
-				Iterator it = resolveGlobals.iterator();
-				while (it.hasNext()) {
-					Object next = it.next();
-					if (next instanceof IReference) {
-						IReference r = (IReference) next;
-						if (r.getName().equals(selection))
-							r.addModelElements(result);
-					} else if (next instanceof IModelElement
-							&& ((IModelElement) next).getElementName().equals(
-									selection)) {
-						result.add(next);
-					}
+			Set resolveGlobals = rc.resolveGlobals(selection);
+			Iterator it = resolveGlobals.iterator();
+			while (it.hasNext()) {
+				Object next = it.next();
+				if (next instanceof IReference) {
+					IReference r = (IReference) next;
+					if (r.getName().equals(selection))
+						r.addModelElements(result);
+				} else if (next instanceof IModelElement
+						&& ((IModelElement) next).getElementName().equals(
+								selection)) {
+					result.add(next);
 				}
 			}
-
 			if (result.size() == 0) {
-				doCompletionOnFunction(selection, result);
-				doCompletionOnGlobalVariable(selection, result);
+				HostCollection hostCollection = rc.getHostCollection();
+				IReference rm = hostCollection.getReference(selection);
+				if (rm != null) {
+					rm.addModelElements(result);
+				}
+				if (result.size() == 0) {
+					doCompletionOnFunction(selection, result);
+					doCompletionOnGlobalVariable(selection, result);
+				}
 			}
 		}
 	}
@@ -127,46 +127,47 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 	private void processMember(ReferenceResolverContext buildContext,
 			AssitUtils.PositionCalculator calc, final List result,
 			String selection) {
-		String core = calc.getCorePart();
-		IReference rm = buildContext.getHostCollection().queryElement(
-				selection, true);
-		if (rm != null)
-			rm.addModelElements(result);
+		Set resolveGlobals = buildContext.resolveGlobals(selection);
+		Iterator it = resolveGlobals.iterator();
+		while (it.hasNext()) {
+			IReference r = (IReference) it.next();
+			r.addModelElements(result);
+		}
 		if (result.size() == 0) {
-			IDLTKLanguageToolkit toolkit = null;
-			toolkit = DLTKLanguageManager
-					.getLanguageToolkit(JavaScriptNature.NATURE_ID);
-			Set resolveGlobals = buildContext.resolveGlobals(selection);
-			Iterator it = resolveGlobals.iterator();
-			while (it.hasNext()) {
-				IReference r = (IReference) it.next();
-				r.addModelElements(result);
-			}
+			IReference rm = buildContext.getHostCollection().queryElement(
+					selection, true);
+			if (rm != null)
+				rm.addModelElements(result);
+			if (result.size() == 0) {
 
-			SearchRequestor requestor = new SearchRequestor() {
+				SearchRequestor requestor = new SearchRequestor() {
 
-				public void acceptSearchMatch(SearchMatch match)
-						throws CoreException {
-					FieldReferenceMatch mr = (FieldReferenceMatch) match;
-					ASTNode nm = mr.getNode();
-					if (nm instanceof VaribleDeclarationReference) {
-						VaribleDeclarationReference vm = (VaribleDeclarationReference) nm;
-						IReference reference = vm.getReference();
-						if (reference != null) {
-							reference.addModelElements(result);
+					public void acceptSearchMatch(SearchMatch match)
+							throws CoreException {
+						FieldReferenceMatch mr = (FieldReferenceMatch) match;
+						ASTNode nm = mr.getNode();
+						if (nm instanceof VaribleDeclarationReference) {
+							VaribleDeclarationReference vm = (VaribleDeclarationReference) nm;
+							IReference reference = vm.getReference();
+							if (reference != null) {
+								reference.addModelElements(result);
+							}
 						}
+
 					}
 
+				};
+				IDLTKLanguageToolkit toolkit = DLTKLanguageManager
+						.getLanguageToolkit(JavaScriptNature.NATURE_ID);
+				IDLTKSearchScope scope = SearchEngine
+						.createWorkspaceScope(toolkit);
+				try {
+
+					search(selection, IDLTKSearchConstants.FIELD,
+							IDLTKSearchConstants.DECLARATIONS, scope, requestor);
+				} catch (CoreException e) {
+					e.printStackTrace();
 				}
-
-			};
-			IDLTKSearchScope scope = SearchEngine.createWorkspaceScope(toolkit);
-			try {
-
-				search(selection, IDLTKSearchConstants.FIELD,
-						IDLTKSearchConstants.REFERENCES, scope, requestor);
-			} catch (CoreException e) {
-				e.printStackTrace();
 			}
 		}
 	}
