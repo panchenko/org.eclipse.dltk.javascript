@@ -15,7 +15,11 @@ import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dlkt.javascript.dom.support.IDesignTimeDOMProvider;
 import org.eclipse.dlkt.javascript.dom.support.IProposalHolder;
 import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.core.IMember;
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IReferenceResolver;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableReference;
@@ -343,9 +347,42 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					if (sourceFile != null) {
 						ISourceModule sourceFileModule = DLTKCore
 								.createSourceModuleFrom(sourceFile);
-						ref.setLocationInformation(
-								(ModelElement) sourceFileModule, uref
-										.getOffset(), uref.getLength());
+						int offset = uref.getOffset();
+						int length = uref.getLength();
+						try {
+							IModelElement[] children = sourceFileModule
+									.getChildren();
+							ISourceRange nameRange = null;
+							String name = uref.getName();
+							for (int i = 0; i < children.length; i++) {
+								IModelElement child = children[i];
+								if (child instanceof IMember) {
+									if (name.equals(child.getElementName())) {
+										nameRange = ((IMember) child)
+												.getNameRange();
+										// if it is an exact match break
+										// method == function reference
+										// field != function reference
+										// else try the next.
+										if ((child.getElementType() == IModelElement.METHOD && uref
+												.isFunctionRef())
+												|| (child.getElementType() == IModelElement.FIELD && !uref
+														.isFunctionRef())) {
+											break;
+										}
+									}
+								}
+							}
+							if (nameRange != null) {
+								offset = nameRange.getOffset();
+								length = nameRange.getLength();
+							}
+						} catch (ModelException ex) {
+						}
+						ref
+								.setLocationInformation(
+										(ModelElement) sourceFileModule,
+										offset, length);
 					} else if (module instanceof ModelElement) {
 						ref.setLocationInformation((ModelElement) module, uref
 								.getOffset(), uref.getLength());
