@@ -28,7 +28,8 @@ public class NodeSwitch {
 	public Object doAction(Node node, Object arg) {
 		if (node.getPosition() > position
 				&& node.getType() != Token.CATCH_SCOPE
-				&& node.getType() != Token.LEAVEWITH)
+				&& node.getType() != Token.LEAVEWITH
+				&& node.getType() != Token.BLOCK)
 			throw new PositionReachedException(context);
 		switch (node.getType()) {
 		case Token.SCRIPT:
@@ -43,7 +44,12 @@ public class NodeSwitch {
 		case Token.FUNCTION:
 			return processFunction(node, arg);
 		case Token.BLOCK:
-			return processBlock(node, arg);
+			try {
+				return processBlock(node, arg);
+			} finally {
+				if (node.getPosition() > position)
+					throw new PositionReachedException(context);
+			}
 		case Token.VAR:
 			return processVarDeclaration(node, arg);
 		case Token.LABEL:
@@ -636,7 +642,7 @@ public class NodeSwitch {
 			if (type == Token.IFNE) {
 				int q = jm.getFirstChild().getType();
 			}
-//			System.out.println(jm);
+			// System.out.println(jm);
 		}
 		return processScriptNode(node, arg);
 	}
