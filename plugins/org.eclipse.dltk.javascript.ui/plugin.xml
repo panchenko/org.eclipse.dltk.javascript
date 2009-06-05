@@ -486,6 +486,7 @@
     </consolePatternMatchListener>
  </extension>
 
+<!--
 <extension point="org.eclipse.dltk.ui.formatterFactory">
    <engineContribution natureId="org.eclipse.dltk.javascript.core.nature">
    <formatterFactory
@@ -495,6 +496,7 @@
    </formatterFactory>
    </engineContribution>
 </extension>
+-->
 
 <extension point="org.eclipse.ui.preferencePages"> 	          
 	<page
