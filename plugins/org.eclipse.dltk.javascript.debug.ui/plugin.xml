@@ -319,7 +319,7 @@
       natureID="org.eclipse.dltk.javascript.core.nature" />
   </extension>
   <extension point="org.eclipse.dltk.ui.buildpathContainerPage">
-    <buildpathContainerPath
+    <buildpathContainerPage
       class="org.eclipse.dltk.javascript.internal.debug.ui.interpreters.JavaScriptInterpreterContainerWizardPage"
       id="org.eclipse.dltk.javascript.launching.INTERPRETER_CONTAINER"
       name="javascript Interpreter Libraries"
