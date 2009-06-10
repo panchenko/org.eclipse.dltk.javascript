@@ -46,8 +46,9 @@ public class JavaScriptIdentationTabPage extends FormatterModifyTabPage {
 			CodeFormatterConstants.MIXED };
 
 	private final String[] tabPolicyItemNames = new String[] {
-			CodeFormatterConstants.SPACE, CodeFormatterConstants.TAB,
-			CodeFormatterConstants.MIXED };
+			FormatterMessages.IndentationTabPage_general_group_option_tab_policy_SPACE,
+			FormatterMessages.IndentationTabPage_general_group_option_tab_policy_TAB,
+			FormatterMessages.IndentationTabPage_general_group_option_tab_policy_MIXED };
 
 	private class TabPolicyListener extends SelectionAdapter implements
 			IFormatterControlManager.IInitializeListener {
