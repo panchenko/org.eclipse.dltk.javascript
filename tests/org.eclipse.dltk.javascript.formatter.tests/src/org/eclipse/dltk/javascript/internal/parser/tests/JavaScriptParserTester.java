@@ -16,11 +16,10 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
+import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterFactory;
-import org.eclipse.dltk.javascript.formatter.preferences.JavaScriptFormatterPreferenceInterpreter;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
@@ -29,13 +28,10 @@ public class JavaScriptParserTester extends AbstractTester {
 	private void parseScript(String source) throws IOException,
 			FormatterException {
 
-		IPreferenceStore preferences = new PreferenceStoreEmulator();
-
 		JavaScriptFormatterFactory f = new JavaScriptFormatterFactory();
 
 		IScriptFormatter formatter = f.createFormatter("\n",
-				new JavaScriptFormatterPreferenceInterpreter(preferences)
-						.getOptions());
+				JavaScriptFormatterConstants.getDefaults());
 
 		TextEdit textEdit = formatter.format(source, 0, source.length(), 0);
 
