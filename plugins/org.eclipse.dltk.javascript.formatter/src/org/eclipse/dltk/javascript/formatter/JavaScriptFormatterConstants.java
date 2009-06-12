@@ -337,4 +337,12 @@ public final class JavaScriptFormatterConstants {
 
 		return options.get(name).defaultValue;
 	}
+	
+	public static Map<String,Object> getDefaults() {
+		Map<String, Object> values = new HashMap<String, Object>();
+		for (Map.Entry<String, OptionInfo> entry:options.entrySet()) {
+			values.put(entry.getKey(), entry.getValue());
+		}
+		return values;
+	}
 }
