@@ -15,6 +15,8 @@ package org.eclipse.dltk.javascript.formatter.tests;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.eclipse.dltk.javascript.parser.tests.JavaScriptParserTestCase;
+
 public class AllTests {
 
 	static final String CHARSET = "ISO-8859-1";
@@ -37,6 +39,7 @@ public class AllTests {
 		suite.addTest(WhileTest.suite());
 		suite.addTest(RegExpTest.suite());
 		suite.addTest(E4XTest.suite());
+		suite.addTestSuite(JavaScriptParserTestCase.class);
 		// suite.addTest(JavaScriptLibTest.suite());
 		// $JUnit-END$
 		return suite;
