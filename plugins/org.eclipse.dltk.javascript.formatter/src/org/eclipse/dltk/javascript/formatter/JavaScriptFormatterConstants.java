@@ -15,7 +15,6 @@ package org.eclipse.dltk.javascript.formatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -251,24 +250,18 @@ public final class JavaScriptFormatterConstants {
 	// //////////////////////////////////////////////////////////////////////////
 	// //////////////////////////////////////////////////////////////////////////
 
-	private static Map options;
-	private static String[] names;
+	private static final Map<String, OptionInfo> options;
+	private static final String[] names;
 
 	static {
-		options = new HashMap();
+		options = new HashMap<String, OptionInfo>();
 
 		registerOptions();
 
-		List keys = new ArrayList();
-		for (Iterator it = options.keySet().iterator(); it.hasNext();) {
-			keys.add(it.next());
-		}
+		List<String> keys = new ArrayList<String>(options.keySet());
 		Collections.sort(keys);
 
-		names = new String[keys.size()];
-		for (int i = 0; i < keys.size(); i++) {
-			names[i] = (String) keys.get(i);
-		}
+		names = keys.toArray(new String[keys.size()]);
 	}
 
 	// //////////////////////////////////////////////////////////////////////////
@@ -317,21 +310,21 @@ public final class JavaScriptFormatterConstants {
 		if (!isDefined(name))
 			return false;
 
-		return ((OptionInfo) options.get(name)).type == BOOLEAN;
+		return options.get(name).type == BOOLEAN;
 	}
 
 	public static boolean isInteger(String name) {
 		if (!isDefined(name))
 			return false;
 
-		return ((OptionInfo) options.get(name)).type == INT;
+		return options.get(name).type == INT;
 	}
 
 	public static boolean isString(String name) {
 		if (!isDefined(name))
 			return false;
 
-		return ((OptionInfo) options.get(name)).type == STRING;
+		return options.get(name).type == STRING;
 	}
 
 	public static String[] getNames() {
@@ -342,6 +335,6 @@ public final class JavaScriptFormatterConstants {
 		if (!isDefined(name))
 			return null;
 
-		return ((OptionInfo) options.get(name)).defaultValue;
+		return options.get(name).defaultValue;
 	}
 }
