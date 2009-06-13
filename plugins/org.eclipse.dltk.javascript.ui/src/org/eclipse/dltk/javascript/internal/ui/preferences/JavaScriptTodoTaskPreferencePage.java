@@ -1,28 +1,17 @@
 package org.eclipse.dltk.javascript.internal.ui.preferences;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.Preferences;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.ui.PreferencesAdapter;
 import org.eclipse.dltk.ui.preferences.AbstractConfigurationBlockPropertyAndPreferencePage;
 import org.eclipse.dltk.ui.preferences.AbstractOptionsBlock;
-import org.eclipse.dltk.ui.preferences.AbstractTodoTaskOptionsBlock;
-import org.eclipse.dltk.ui.preferences.PreferenceKey;
+import org.eclipse.dltk.ui.preferences.TodoTaskOptionsBlock;
 import org.eclipse.dltk.ui.util.IStatusChangeListener;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 
 public class JavaScriptTodoTaskPreferencePage extends
 		AbstractConfigurationBlockPropertyAndPreferencePage {
-
-	static final PreferenceKey CASE_SENSITIVE = AbstractTodoTaskOptionsBlock
-			.createCaseSensitiveKey(JavaScriptPlugin.PLUGIN_ID);
-
-	static final PreferenceKey ENABLED = AbstractTodoTaskOptionsBlock
-			.createEnabledKey(JavaScriptPlugin.PLUGIN_ID);
-
-	static final PreferenceKey TAGS = AbstractTodoTaskOptionsBlock
-			.createTagKey(JavaScriptPlugin.PLUGIN_ID);
 
 	protected String getHelpId() {
 		return null;
@@ -32,27 +21,11 @@ public class JavaScriptTodoTaskPreferencePage extends
 		setDescription(JavaScriptPreferenceMessages.TodoTaskDescription);
 	}
 
-	protected Preferences getPluginPreferences() {
-		return JavaScriptPlugin.getDefault().getPluginPreferences();
-	}
-
 	protected AbstractOptionsBlock createOptionsBlock(
 			IStatusChangeListener newStatusChangedListener, IProject project,
 			IWorkbenchPreferenceContainer container) {
-		return new AbstractTodoTaskOptionsBlock(newStatusChangedListener,
-				project, getPreferenceKeys(), container) {
-			protected PreferenceKey getTags() {
-				return TAGS;
-			}
-
-			protected PreferenceKey getEnabledKey() {
-				return ENABLED;
-			}
-
-			protected PreferenceKey getCaseSensitiveKey() {
-				return CASE_SENSITIVE;
-			}
-		};
+		return new TodoTaskOptionsBlock(newStatusChangedListener, project,
+				container, JavaScriptPlugin.PLUGIN_ID);
 	}
 
 	protected String getProjectHelpId() {
@@ -69,14 +42,11 @@ public class JavaScriptTodoTaskPreferencePage extends
 	}
 
 	protected String getPreferencePageId() {
-		return "org.eclipse.dltk.javascript.preferences.todo";
+		return "org.eclipse.dltk.javascript.preferences.todo"; //$NON-NLS-1$
 	}
 
 	protected String getPropertyPageId() {
-		return "org.eclipse.dltk.javascript.propertyPage.todo";
+		return "org.eclipse.dltk.javascript.propertyPage.todo"; //$NON-NLS-1$
 	}
 
-	protected PreferenceKey[] getPreferenceKeys() {
-		return new PreferenceKey[] { TAGS, ENABLED, CASE_SENSITIVE };
-	}
 }
