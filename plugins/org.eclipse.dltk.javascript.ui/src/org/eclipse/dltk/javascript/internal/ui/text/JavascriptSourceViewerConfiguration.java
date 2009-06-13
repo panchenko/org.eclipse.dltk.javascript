@@ -21,7 +21,6 @@ import org.eclipse.dltk.internal.ui.editor.ScriptSourceViewer;
 import org.eclipse.dltk.javascript.internal.ui.text.completion.JavaScriptCompletionProcessor;
 import org.eclipse.dltk.javascript.internal.ui.text.completion.JavaScriptContentAssistPreference;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
-import org.eclipse.dltk.ui.CodeFormatterConstants;
 import org.eclipse.dltk.ui.text.AbstractScriptScanner;
 import org.eclipse.dltk.ui.text.DLTKColorConstants;
 import org.eclipse.dltk.ui.text.IColorManager;
@@ -84,13 +83,7 @@ public class JavascriptSourceViewerConfiguration extends
 	}
 
 	public String getCommentPrefix() {
-		return "//";
-	}
-
-	public String[] getIndentPrefixes(ISourceViewer sourceViewer,
-			String contentType) {
-		// XXX: what happens here?.. why " " ?
-		return new String[] { "\t", "    ", "" };
+		return "//"; //$NON-NLS-1$
 	}
 
 	/*
@@ -165,18 +158,6 @@ public class JavascriptSourceViewerConfiguration extends
 	 */
 	protected ContentAssistPreference getContentAssistPreference() {
 		return JavaScriptContentAssistPreference.getDefault();
-	}
-
-	/*
-	 * @see
-	 * org.eclipse.jface.text.source.SourceViewerConfiguration#getTabWidth(org
-	 * .eclipse.jface.text.source.ISourceViewer)
-	 */
-	public int getTabWidth(ISourceViewer sourceViewer) {
-		if (fPreferenceStore == null)
-			return super.getTabWidth(sourceViewer);
-		return fPreferenceStore
-				.getInt(CodeFormatterConstants.FORMATTER_TAB_SIZE);
 	}
 
 	protected void initializeScanners() {
