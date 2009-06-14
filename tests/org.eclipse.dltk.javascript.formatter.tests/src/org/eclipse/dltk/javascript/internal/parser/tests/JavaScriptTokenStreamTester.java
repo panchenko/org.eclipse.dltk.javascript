@@ -17,13 +17,14 @@ import java.io.IOException;
 import java.util.List;
 
 import org.antlr.runtime.ANTLRReaderStream;
+import org.antlr.runtime.CommonTokenStream;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.javascript.parser.JSLexer;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
-import org.eclipse.dltk.javascript.parser.JavaScriptTokenStream;
+import org.eclipse.dltk.javascript.parser.JavaScriptTokenSource;
 
 public class JavaScriptTokenStreamTester extends AbstractTester {
 
@@ -34,8 +35,8 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 		JSLexer lexer = new JSLexer(new ANTLRReaderStream(new CharArrayReader(
 				source.toCharArray())));
 
-		// CommonTokenStream stream = new CommonTokenStream(lexer);
-		JavaScriptTokenStream stream = new JavaScriptTokenStream(lexer);
+		CommonTokenStream stream = new CommonTokenStream(
+				new JavaScriptTokenSource(lexer));
 
 		List tokens = stream.getTokens();
 
