@@ -32,6 +32,7 @@ import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.ui.formatter.AbstractScriptFormatter;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
@@ -55,7 +56,11 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		if (formatted == null)
 			return null;
 
-		return new ReplaceEdit(offset, length, formatted);
+		if (!input.equals(formatted)) {
+			return new ReplaceEdit(offset, length, formatted);
+		} else {
+			return new MultiTextEdit(); // NOP
+		}
 	}
 
 	private class ParserProblemReporter implements IProblemReporter {
