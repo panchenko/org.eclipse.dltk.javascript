@@ -9,7 +9,7 @@ function test_regexp()
 {
 	var myRe = 
 	/d(b+)  (d)/i;
-	var myArray = myRe.exec("cdbBdbsbz");
+	var myArray = myRe.exec   ("cdbBdbsbz");
 
 	var myRe2 = /d(b+)(d)/;
 }
@@ -17,7 +17,7 @@ function test_regexp()
 function test_regexp () {
 	var myRe =
 		/d(b+)  (d)/i;
-	var myArray = myRe.exec ("cdbBdbsbz");
+	var myArray = myRe.exec("cdbBdbsbz");
 
 	var myRe2 = /d(b+)(d)/;
 }
