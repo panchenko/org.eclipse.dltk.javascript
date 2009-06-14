@@ -15,13 +15,9 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class DoWhileStatement extends WhileStatement implements ISemicolonStatement {
+public class DoWhileStatement extends WhileStatement {
 
 	private Keyword doKeyword;
-	private Keyword whileKeyword;
-	private int LP = -1;
-	private int RP = -1;
-	private int semic = -1;
 
 	public DoWhileStatement(ASTNode parent) {
 		super(parent);
@@ -35,45 +31,13 @@ public class DoWhileStatement extends WhileStatement implements ISemicolonStatem
 		this.doKeyword = keyword;
 	}
 
-	public Keyword getWhileKeyword() {
-		return this.whileKeyword;
-	}
-
-	public void setWhileKeyword(Keyword keyword) {
-		this.whileKeyword = keyword;
-	}
-
-	public int getLP() {
-		return this.LP;
-	}
-
-	public void setLP(int LP) {
-		this.LP = LP;
-	}
-
-	public int getRP() {
-		return this.RP;
-	}
-
-	public void setRP(int RP) {
-		this.RP = RP;
-	}
-
-	public int getSemicolonPosition() {
-		return this.semic;
-	}
-
-	public void setSemicolonPosition(int semic) {
-		this.semic = semic;
-	}
-
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(LP > 0);
-		Assert.isTrue(RP > 0);
-		Assert.isTrue(semic > 0);
+		Assert.isTrue(getLP() > 0);
+		Assert.isTrue(getRP() > 0);
+		Assert.isTrue(getSemicolonPosition() > 0);
 
 		StringBuffer buffer = new StringBuffer();
 
