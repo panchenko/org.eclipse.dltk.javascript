@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2009-05-15 17:08:12
+// $ANTLR 3.0.1 JS.g 2009-06-14 12:08:47
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -2818,7 +2818,7 @@ public class JSParser extends Parser {
             	    stream_expression.add(expression66.getTree());
 
             	    // AST REWRITE
-            	    // elements: expression, leftHandSideExpression
+            	    // elements: leftHandSideExpression, expression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -2860,7 +2860,7 @@ public class JSParser extends Parser {
             	    stream_expression.add(expression68.getTree());
 
             	    // AST REWRITE
-            	    // elements: leftHandSideExpression, expression
+            	    // elements: expression, leftHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -7977,7 +7977,7 @@ public class JSParser extends Parser {
                     stream_expression.add(expression246.getTree());
 
                     // AST REWRITE
-                    // elements: expression, VAR, variableDeclarationNoIn
+                    // elements: variableDeclarationNoIn, VAR, expression
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -8117,7 +8117,7 @@ public class JSParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ex2, ex1, variableDeclarationNoIn, VAR
+                    // elements: variableDeclarationNoIn, ex2, ex1, VAR
                     // token labels: 
                     // rule labels: retval, ex2, ex1
                     // token list labels: 
@@ -8575,7 +8575,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: ex2, ex1
+            // elements: ex1, ex2
             // token labels: 
             // rule labels: retval, ex2, ex1
             // token list labels: 
@@ -9076,7 +9076,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: caseClause, expression, defaultClause, SWITCH
+            // elements: caseClause, defaultClause, expression, SWITCH
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -9932,7 +9932,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody311.getTree());
 
             // AST REWRITE
-            // elements: functionBody, FUNCTION, name, formalParameterList
+            // elements: formalParameterList, FUNCTION, functionBody, name
             // token labels: name
             // rule labels: retval
             // token list labels: 
@@ -10045,7 +10045,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody314.getTree());
 
             // AST REWRITE
-            // elements: formalParameterList, FUNCTION, functionBody, name
+            // elements: FUNCTION, name, formalParameterList, functionBody
             // token labels: name
             // rule labels: retval
             // token list labels: 
