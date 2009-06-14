@@ -12,12 +12,11 @@
 
 package org.eclipse.dltk.javascript.formatter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
-import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.formatter.FormatterDocument;
 import org.eclipse.dltk.formatter.FormatterIndentDetector;
@@ -31,6 +30,7 @@ import org.eclipse.dltk.javascript.formatter.internal.JavascriptFormatterNodeRew
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.ui.formatter.AbstractScriptFormatter;
 import org.eclipse.dltk.ui.formatter.FormatterException;
+import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
@@ -49,12 +49,8 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 			int indentationLevel) throws FormatterException {
 
 		String input = source.substring(offset, offset + length);
-		int indent = detectIndentationLevel(source, offset);
 
-		String formatted = format(input, indent);
-
-		if (formatted == null)
-			return null;
+		String formatted = format(input, indentationLevel);
 
 		if (!input.equals(formatted)) {
 			return new ReplaceEdit(offset, length, formatted);
@@ -63,36 +59,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		}
 	}
 
-	private class ParserProblemReporter implements IProblemReporter {
-
-		private List problems;
-
-		public void reportProblem(IProblem problem) {
-			if (problems == null)
-				problems = new ArrayList();
-
-			problems.add(problem);
-		}
-
-		public Object getAdapter(Class adapter) {
-			return null;
-		}
-
-		public List getProblems() {
-			return problems;
-		}
-
-		public boolean isErrorReported() {
-			if (problems == null)
-				return false;
-
-			for (int i = 0; i < problems.size(); i++) {
-				if (((IProblem) problems.get(i)).isError())
-					return true;
-			}
-
-			return false;
-		}
+	private static class ParserProblemReporter extends ProblemCollector {
 
 		public String toString() {
 			if (problems == null)
@@ -142,7 +109,8 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		return detectIndentationLevel(document.get(), offset);
 	}
 
-	public String format(String source, int indentationLevel) {
+	public String format(String source, int indentationLevel)
+			throws FormatterException {
 
 		ParserProblemReporter reporter = new ParserProblemReporter();
 
@@ -150,16 +118,20 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 				.toCharArray(), reporter);
 
 		if (root == null) {
-			if (DLTKCore.DEBUG)
-				System.out.println(reporter.toString());
-
-			return null;
+			final List<IProblem> errors = reporter.getErrors();
+			if (!errors.isEmpty()) {
+				throw new FormatterSyntaxProblemException(errors.get(0)
+						.getMessage());
+			} else {
+				throw new FormatterSyntaxProblemException("Syntax error");
+			}
 		}
 
 		return format(source, root, indentationLevel);
 	}
 
-	private String format(String source, Script ast, int indentationLevel) {
+	private String format(String source, Script ast, int indentationLevel)
+			throws FormatterException {
 
 		final FormatterNodeBuilder builder = new FormatterNodeBuilder();
 		final FormatterDocument document = createDocument(source);
@@ -183,8 +155,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 			writer.flush(context);
 			return writer.getOutput();
 		} catch (Exception e) {
-			JavaScriptFormatterPlugin.error(e);
-			return null;
+			throw new FormatterException(e);
 		}
 	}
 
