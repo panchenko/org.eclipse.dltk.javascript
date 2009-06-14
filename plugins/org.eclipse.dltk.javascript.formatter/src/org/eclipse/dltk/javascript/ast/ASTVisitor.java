@@ -14,285 +14,197 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
 
-public abstract class ASTVisitor implements IASTVisitor {
+public final class ASTVisitor {
 
-	public boolean visit(ASTNode node) {
-
+	public static boolean visit(ASTNode node, IASTVisitor visitor) {
 		if (node.getClass() == ArrayInitializer.class)
-			return visitArrayInitializer((ArrayInitializer) node);
+			return visitor.visitArrayInitializer((ArrayInitializer) node);
 
 		if (node.getClass() == BinaryOperation.class)
-			return visitBinaryOperation((BinaryOperation) node);
+			return visitor.visitBinaryOperation((BinaryOperation) node);
 
 		if (node.getClass() == BooleanLiteral.class)
-			return visitBooleanLiteral((BooleanLiteral) node);
+			return visitor.visitBooleanLiteral((BooleanLiteral) node);
 
 		if (node.getClass() == BreakStatement.class)
-			return visitBreakStatement((BreakStatement) node);
+			return visitor.visitBreakStatement((BreakStatement) node);
 
 		if (node.getClass() == CallExpression.class)
-			return visitCallExpression((CallExpression) node);
+			return visitor.visitCallExpression((CallExpression) node);
 
 		if (node.getClass() == CaseClause.class)
-			return visitCaseClause((CaseClause) node);
+			return visitor.visitCaseClause((CaseClause) node);
 
 		if (node.getClass() == CatchClause.class)
-			return visitCatchClause((CatchClause) node);
+			return visitor.visitCatchClause((CatchClause) node);
 
 		if (node.getClass() == CommaExpression.class)
-			return visitCommaExpression((CommaExpression) node);
+			return visitor.visitCommaExpression((CommaExpression) node);
 
 		if (node.getClass() == ConditionalOperator.class)
-			return visitConditionalOperator((ConditionalOperator) node);
+			return visitor.visitConditionalOperator((ConditionalOperator) node);
 
 		if (node.getClass() == ConstDeclaration.class)
-			return visitConstDeclaration((ConstDeclaration) node);
+			return visitor.visitConstDeclaration((ConstDeclaration) node);
 
 		if (node.getClass() == ContinueStatement.class)
-			return visitContinueStatement((ContinueStatement) node);
+			return visitor.visitContinueStatement((ContinueStatement) node);
 
 		if (node.getClass() == DecimalLiteral.class)
-			return visitDecimalLiteral((DecimalLiteral) node);
+			return visitor.visitDecimalLiteral((DecimalLiteral) node);
 
 		if (node.getClass() == DefaultClause.class)
-			return visitDefaultClause((DefaultClause) node);
+			return visitor.visitDefaultClause((DefaultClause) node);
 
 		if (node.getClass() == DeleteStatement.class)
-			return visitDeleteStatement((DeleteStatement) node);
+			return visitor.visitDeleteStatement((DeleteStatement) node);
 
 		if (node.getClass() == DoWhileStatement.class)
-			return visitDoWhileStatement((DoWhileStatement) node);
+			return visitor.visitDoWhileStatement((DoWhileStatement) node);
 
 		if (node.getClass() == EmptyExpression.class)
-			return visitEmptyExpression((EmptyExpression) node);
+			return visitor.visitEmptyExpression((EmptyExpression) node);
 
 		if (node.getClass() == ExceptionFilter.class)
-			return visitExceptionFilter((ExceptionFilter) node);
+			return visitor.visitExceptionFilter((ExceptionFilter) node);
 
 		if (node.getClass() == FinallyClause.class)
-			return visitFinallyClause((FinallyClause) node);
+			return visitor.visitFinallyClause((FinallyClause) node);
 
 		if (node.getClass() == ForStatement.class)
-			return visitForStatement((ForStatement) node);
+			return visitor.visitForStatement((ForStatement) node);
 
 		if (node.getClass() == ForInStatement.class)
-			return visitForInStatement((ForInStatement) node);
+			return visitor.visitForInStatement((ForInStatement) node);
 
 		if (node.getClass() == ForEachInStatement.class)
-			return visitForEachInStatement((ForEachInStatement) node);
+			return visitor.visitForEachInStatement((ForEachInStatement) node);
 
 		if (node.getClass() == FunctionStatement.class)
-			return visitFunctionStatement((FunctionStatement) node);
+			return visitor.visitFunctionStatement((FunctionStatement) node);
 
 		if (node.getClass() == GetArrayItemExpression.class)
-			return visitGetArrayItemExpression((GetArrayItemExpression) node);
+			return visitor
+					.visitGetArrayItemExpression((GetArrayItemExpression) node);
 
 		if (node.getClass() == GetMethod.class)
-			return visitGetMethod((GetMethod) node);
+			return visitor.visitGetMethod((GetMethod) node);
 
 		if (node.getClass() == Identifier.class)
-			return visitIdentifier((Identifier) node);
+			return visitor.visitIdentifier((Identifier) node);
 
 		if (node.getClass() == IfStatement.class)
-			return visitIfStatement((IfStatement) node);
+			return visitor.visitIfStatement((IfStatement) node);
 
 		if (node.getClass() == Keyword.class)
-			return visitKeyword((Keyword) node);
+			return visitor.visitKeyword((Keyword) node);
 
 		if (node.getClass() == Label.class)
-			return visitLabel((Label) node);
+			return visitor.visitLabel((Label) node);
 
 		if (node.getClass() == LabelledStatement.class)
-			return visitLabelledStatement((LabelledStatement) node);
+			return visitor.visitLabelledStatement((LabelledStatement) node);
 
 		if (node.getClass() == NewExpression.class)
-			return visitNewExpression((NewExpression) node);
+			return visitor.visitNewExpression((NewExpression) node);
 
 		if (node.getClass() == NullExpression.class)
-			return visitNullExpression((NullExpression) node);
+			return visitor.visitNullExpression((NullExpression) node);
 
 		if (node.getClass() == ObjectInitializer.class)
-			return visitObjectInitializer((ObjectInitializer) node);
+			return visitor.visitObjectInitializer((ObjectInitializer) node);
 
 		if (node.getClass() == ParenthesizedExpression.class)
-			return visitParenthesizedExpression((ParenthesizedExpression) node);
+			return visitor
+					.visitParenthesizedExpression((ParenthesizedExpression) node);
 
 		if (node.getClass() == PropertyExpression.class)
-			return visitPropertyExpression((PropertyExpression) node);
+			return visitor.visitPropertyExpression((PropertyExpression) node);
 
 		if (node.getClass() == PropertyInitializer.class)
-			return visitPropertyInitializer((PropertyInitializer) node);
+			return visitor.visitPropertyInitializer((PropertyInitializer) node);
 
 		if (node.getClass() == RegExpLiteral.class)
-			return visitRegExpLiteral((RegExpLiteral) node);
+			return visitor.visitRegExpLiteral((RegExpLiteral) node);
 
 		if (node.getClass() == ReturnStatement.class)
-			return visitReturnStatement((ReturnStatement) node);
+			return visitor.visitReturnStatement((ReturnStatement) node);
 
 		if (node.getClass() == Script.class)
-			return visitScript((Script) node);
+			return visitor.visitScript((Script) node);
 
 		if (node.getClass() == SetMethod.class)
-			return visitSetMethod((SetMethod) node);
+			return visitor.visitSetMethod((SetMethod) node);
 
 		if (node.getClass() == StatementBlock.class)
-			return visitStatementBlock((StatementBlock) node);
+			return visitor.visitStatementBlock((StatementBlock) node);
 
 		if (node.getClass() == StatementList.class)
-			return visitStatementList((StatementList) node);
+			return visitor.visitStatementList((StatementList) node);
 
 		if (node.getClass() == StringLiteral.class)
-			return visitStringLiteral((StringLiteral) node);
+			return visitor.visitStringLiteral((StringLiteral) node);
 
 		if (node.getClass() == SwitchStatement.class)
-			return visitSwitchStatement((SwitchStatement) node);
+			return visitor.visitSwitchStatement((SwitchStatement) node);
 
 		if (node.getClass() == ThisExpression.class)
-			return visitThisExpression((ThisExpression) node);
+			return visitor.visitThisExpression((ThisExpression) node);
 
 		if (node.getClass() == ThrowStatement.class)
-			return visitThrowStatement((ThrowStatement) node);
+			return visitor.visitThrowStatement((ThrowStatement) node);
 
 		if (node.getClass() == TryStatement.class)
-			return visitTryStatement((TryStatement) node);
+			return visitor.visitTryStatement((TryStatement) node);
 
 		if (node.getClass() == TypeOfExpression.class)
-			return visitTypeOfExpression((TypeOfExpression) node);
+			return visitor.visitTypeOfExpression((TypeOfExpression) node);
 
 		if (node.getClass() == UnaryOperation.class)
-			return visitUnaryOperation((UnaryOperation) node);
+			return visitor.visitUnaryOperation((UnaryOperation) node);
 
 		if (node.getClass() == VariableDeclaration.class)
-			return visitVariableDeclaration((VariableDeclaration) node);
+			return visitor.visitVariableDeclaration((VariableDeclaration) node);
 
 		if (node.getClass() == VoidExpression.class)
-			return visitVoidExpression((VoidExpression) node);
+			return visitor.visitVoidExpression((VoidExpression) node);
 
 		if (node.getClass() == WhileStatement.class)
-			return visitWhileStatement((WhileStatement) node);
+			return visitor.visitWhileStatement((WhileStatement) node);
 
 		if (node.getClass() == WithStatement.class)
-			return visitWithStatement((WithStatement) node);
+			return visitor.visitWithStatement((WithStatement) node);
+
+		if (node.getClass() == VoidOperator.class)
+			return visitor.visitVoidOperator((VoidOperator) node);
 
 		if (node.getClass() == XmlLiteral.class)
-			return visitXmlLiteral((XmlLiteral) node);
+			return visitor.visitXmlLiteral((XmlLiteral) node);
 
 		if (node.getClass() == DefaultXmlNamespaceStatement.class)
-			return visitDefaultXmlNamespace((DefaultXmlNamespaceStatement) node);
+			return visitor
+					.visitDefaultXmlNamespace((DefaultXmlNamespaceStatement) node);
+
+		if (node.getClass() == XmlAttributeIdentifier.class)
+			return visitor
+					.visitXmlPropertyIdentifier((XmlAttributeIdentifier) node);
+
+		if (node.getClass() == AsteriskExpression.class)
+			return visitor.visitAsteriskExpression((AsteriskExpression) node);
+
+		if (node.getClass() == GetAllChildrenExpression.class)
+			return visitor
+					.visitGetAllChildrenExpression((GetAllChildrenExpression) node);
+
+		if (node.getClass() == GetLocalNameExpression.class)
+			return visitor
+					.visitGetLocalNameExpression((GetLocalNameExpression) node);
+
+		if (node.getClass() == YieldOperator.class)
+			return visitor.visitYieldOperator((YieldOperator) node);
 
 		throw new UnsupportedOperationException("Unknown node type: "
 				+ node.getClass());
 	}
-
-	public abstract boolean visitArrayInitializer(ArrayInitializer node);
-
-	public abstract boolean visitBinaryOperation(BinaryOperation node);
-
-	public abstract boolean visitBooleanLiteral(BooleanLiteral node);
-
-	public abstract boolean visitBreakStatement(BreakStatement node);
-
-	public abstract boolean visitCallExpression(CallExpression node);
-
-	public abstract boolean visitCaseClause(CaseClause node);
-
-	public abstract boolean visitCatchClause(CatchClause node);
-
-	public abstract boolean visitCommaExpression(CommaExpression node);
-
-	public abstract boolean visitConditionalOperator(ConditionalOperator node);
-
-	public abstract boolean visitConstDeclaration(ConstDeclaration node);
-
-	public abstract boolean visitContinueStatement(ContinueStatement node);
-
-	public abstract boolean visitDecimalLiteral(DecimalLiteral node);
-
-	public abstract boolean visitDefaultClause(DefaultClause node);
-
-	public abstract boolean visitDeleteStatement(DeleteStatement node);
-
-	public abstract boolean visitDoWhileStatement(DoWhileStatement node);
-
-	public abstract boolean visitEmptyExpression(EmptyExpression node);
-
-	public abstract boolean visitExceptionFilter(ExceptionFilter node);
-
-	public abstract boolean visitFinallyClause(FinallyClause node);
-
-	public abstract boolean visitForStatement(ForStatement node);
-
-	public abstract boolean visitForInStatement(ForInStatement node);
-
-	public abstract boolean visitForEachInStatement(ForEachInStatement node);
-
-	public abstract boolean visitFunctionStatement(FunctionStatement node);
-
-	public abstract boolean visitGetArrayItemExpression(
-			GetArrayItemExpression node);
-
-	public abstract boolean visitGetMethod(GetMethod node);
-
-	public abstract boolean visitIdentifier(Identifier node);
-
-	public abstract boolean visitIfStatement(IfStatement node);
-
-	public abstract boolean visitKeyword(Keyword node);
-
-	public abstract boolean visitLabel(Label node);
-
-	public abstract boolean visitLabelledStatement(LabelledStatement node);
-
-	public abstract boolean visitNewExpression(NewExpression node);
-
-	public abstract boolean visitNullExpression(NullExpression node);
-
-	public abstract boolean visitObjectInitializer(ObjectInitializer node);
-
-	public abstract boolean visitParenthesizedExpression(
-			ParenthesizedExpression node);
-
-	public abstract boolean visitPropertyExpression(PropertyExpression node);
-
-	public abstract boolean visitPropertyInitializer(PropertyInitializer node);
-
-	public abstract boolean visitRegExpLiteral(RegExpLiteral node);
-
-	public abstract boolean visitReturnStatement(ReturnStatement node);
-
-	public abstract boolean visitScript(Script node);
-
-	public abstract boolean visitSetMethod(SetMethod node);
-
-	public abstract boolean visitStatementBlock(StatementBlock node);
-
-	public abstract boolean visitStatementList(StatementList node);
-
-	public abstract boolean visitStringLiteral(StringLiteral node);
-
-	public abstract boolean visitSwitchStatement(SwitchStatement node);
-
-	public abstract boolean visitThisExpression(ThisExpression node);
-
-	public abstract boolean visitThrowStatement(ThrowStatement node);
-
-	public abstract boolean visitTryStatement(TryStatement node);
-
-	public abstract boolean visitTypeOfExpression(TypeOfExpression node);
-
-	public abstract boolean visitUnaryOperation(UnaryOperation node);
-
-	public abstract boolean visitVariableDeclaration(VariableDeclaration node);
-
-	public abstract boolean visitVoidExpression(VoidExpression node);
-
-	public abstract boolean visitWhileStatement(WhileStatement node);
-
-	public abstract boolean visitWithStatement(WithStatement node);
-
-	public abstract boolean visitXmlLiteral(XmlLiteral node);
-
-	public abstract boolean visitDefaultXmlNamespace(
-			DefaultXmlNamespaceStatement node);
 
 }

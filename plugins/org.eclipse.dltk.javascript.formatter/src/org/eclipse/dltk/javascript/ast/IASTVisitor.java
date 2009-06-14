@@ -12,11 +12,7 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import org.eclipse.dltk.ast.ASTNode;
-
 public interface IASTVisitor {
-
-	public boolean visit(ASTNode node);
 
 	public boolean visitArrayInitializer(ArrayInitializer node);
 
@@ -120,8 +116,22 @@ public interface IASTVisitor {
 
 	public boolean visitVoidOperator(VoidOperator node);
 
+	public boolean visitYieldOperator(YieldOperator node);
+
 	public boolean visitWhileStatement(WhileStatement node);
 
 	public boolean visitWithStatement(WithStatement node);
+
+	public boolean visitXmlLiteral(XmlLiteral node);
+
+	public boolean visitDefaultXmlNamespace(DefaultXmlNamespaceStatement node);
+
+	public boolean visitXmlPropertyIdentifier(XmlAttributeIdentifier node);
+
+	public boolean visitAsteriskExpression(AsteriskExpression node);
+
+	public boolean visitGetAllChildrenExpression(GetAllChildrenExpression node);
+
+	public boolean visitGetLocalNameExpression(GetLocalNameExpression node);
 
 }

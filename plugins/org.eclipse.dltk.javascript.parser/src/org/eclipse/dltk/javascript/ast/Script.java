@@ -55,7 +55,7 @@ public class Script extends ModuleDeclaration implements ISourceable {
 	public void visitAll(IASTVisitor visitor) {
 		for (int i = 0; i < this.getStatements().size(); i++) {
 			Statement statement = (Statement) this.getStatements().get(i);
-			visitor.visit(statement);
+			ASTVisitor.visit(statement, visitor);
 		}
 	}
 }
