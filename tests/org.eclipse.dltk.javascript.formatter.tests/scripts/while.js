@@ -9,6 +9,18 @@ a = 100;
 while (a == 100) {
 	a = 100;
 }
+==== while-simple-no-block
+while (a==100) a = 100;
+==
+while (a == 100) a = 100;
+==== while-simple-simicolon
+while    (a==100)    ;
+==
+while (a == 100);
+==== while-simple-no-simicolon
+while    (a==100)
+==
+while (a == 100)
 ==> formatter.braces.blocks = next.line
 ==> formatter.indent.blocks = false
 ==== while-no-indenting-next-line
