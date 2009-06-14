@@ -10,7 +10,7 @@
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
 
-package org.eclipse.dltk.javascript.ast;
+package org.eclipse.dltk.javascript.parser;
 
 import org.antlr.runtime.Token;
 import org.eclipse.core.runtime.Assert;

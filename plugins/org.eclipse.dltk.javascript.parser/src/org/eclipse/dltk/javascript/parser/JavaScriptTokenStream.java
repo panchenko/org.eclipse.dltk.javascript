@@ -10,7 +10,7 @@
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
 
-package org.eclipse.dltk.javascript.ast;
+package org.eclipse.dltk.javascript.parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.TokenStream;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.core.ISourceRange;
-import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.ast.Keywords;
 
 public class JavaScriptTokenStream implements TokenStream {
 

@@ -10,7 +10,7 @@
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
 
-package org.eclipse.dltk.javascript.ast;
+package org.eclipse.dltk.javascript.parser;
 
 import java.io.CharArrayReader;
 import java.io.IOException;
@@ -28,9 +28,6 @@ import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemReporterProxy;
 import org.eclipse.dltk.core.DLTKCore;
-import org.eclipse.dltk.javascript.parser.JSLexer;
-import org.eclipse.dltk.javascript.parser.JSParser;
-import org.eclipse.dltk.javascript.parser.JSTransformer;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
