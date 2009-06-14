@@ -89,7 +89,7 @@ public class JavaScriptFormatterTestsPlugin extends Plugin {
 		}
 
 		public String getCharset() {
-			return AllTests.CHARSET;
+			return "ISO-8859-1"; //$NON-NLS-1$
 		}
 
 		public IScriptFormatter createFormatter(Map preferences) {

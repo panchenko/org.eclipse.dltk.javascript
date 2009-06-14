@@ -20,6 +20,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
+import org.eclipse.dltk.javascript.ast.AsteriskExpression;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.BooleanLiteral;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
@@ -42,8 +43,11 @@ import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
 import org.eclipse.dltk.javascript.ast.ForStatement;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.GetAllChildrenExpression;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
+import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.GetMethod;
+import org.eclipse.dltk.javascript.ast.IASTVisitor;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.Keyword;
@@ -74,9 +78,11 @@ import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
+import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
+import org.eclipse.dltk.javascript.ast.YieldOperator;
 
-public class ASTVerifier extends ASTVisitor {
+public class ASTVerifier implements IASTVisitor {
 
 	private String source;
 	private ModuleDeclaration root;
@@ -87,7 +93,11 @@ public class ASTVerifier extends ASTVisitor {
 	}
 
 	public void verify() {
-		visit(this.root);
+		visit(root);
+	}
+
+	public void visit(ASTNode node) {
+		ASTVisitor.visit(node, this);
 	}
 
 	private boolean visitList(List nodes) {
@@ -699,5 +709,30 @@ public class ASTVerifier extends ASTVisitor {
 		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
 
 		return true;
+	}
+
+	public boolean visitAsteriskExpression(AsteriskExpression node) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean visitGetAllChildrenExpression(GetAllChildrenExpression node) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean visitGetLocalNameExpression(GetLocalNameExpression node) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean visitXmlPropertyIdentifier(XmlAttributeIdentifier node) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean visitYieldOperator(YieldOperator node) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
