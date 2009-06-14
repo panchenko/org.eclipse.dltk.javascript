@@ -216,7 +216,7 @@ public final class JavaScriptFormatterConstants {
 		registerBooleanOption(INSERT_SPACE_BEFORE_RP_WHILE, false);
 
 		// CALL spaces
-		registerBooleanOption(INSERT_SPACE_BEFORE_LP_CALL, true);
+		registerBooleanOption(INSERT_SPACE_BEFORE_LP_CALL, false);
 		registerBooleanOption(INSERT_SPACE_AFTER_LP_CALL, false);
 		registerBooleanOption(INSERT_SPACE_BEFORE_RP_CALL, false);
 
@@ -337,10 +337,10 @@ public final class JavaScriptFormatterConstants {
 
 		return options.get(name).defaultValue;
 	}
-	
-	public static Map<String,Object> getDefaults() {
+
+	public static Map<String, Object> getDefaults() {
 		Map<String, Object> values = new HashMap<String, Object>();
-		for (Map.Entry<String, OptionInfo> entry:options.entrySet()) {
+		for (Map.Entry<String, OptionInfo> entry : options.entrySet()) {
 			values.put(entry.getKey(), entry.getValue());
 		}
 		return values;
