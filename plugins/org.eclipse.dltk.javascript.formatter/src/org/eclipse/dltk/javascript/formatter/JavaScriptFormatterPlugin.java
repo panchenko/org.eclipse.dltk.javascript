@@ -12,6 +12,8 @@
 
 package org.eclipse.dltk.javascript.formatter;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -25,7 +27,7 @@ public class JavaScriptFormatterPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static JavaScriptFormatterPlugin plugin;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -33,8 +35,7 @@ public class JavaScriptFormatterPlugin extends AbstractUIPlugin {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * @see AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -42,8 +43,7 @@ public class JavaScriptFormatterPlugin extends AbstractUIPlugin {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * @see AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
@@ -52,11 +52,17 @@ public class JavaScriptFormatterPlugin extends AbstractUIPlugin {
 
 	/**
 	 * Returns the shared instance
-	 *
+	 * 
 	 * @return the shared instance
 	 */
 	public static JavaScriptFormatterPlugin getDefault() {
 		return plugin;
+	}
+
+	public static void error(Throwable t) {
+		plugin.getLog().log(
+				new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, t.toString(),
+						t));
 	}
 
 }

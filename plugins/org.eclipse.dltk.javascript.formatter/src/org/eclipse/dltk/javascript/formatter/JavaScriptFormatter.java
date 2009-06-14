@@ -178,7 +178,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 			writer.flush(context);
 			return writer.getOutput();
 		} catch (Exception e) {
-			e.printStackTrace();
+			JavaScriptFormatterPlugin.error(e);
 			return null;
 		}
 	}
