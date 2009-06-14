@@ -904,6 +904,7 @@ fragment EscapeSequence
 		| OctalEscapeSequence
 		| HexEscapeSequence
 		| UnicodeEscapeSequence
+		| LineTerminator
 	)
 	;
 
