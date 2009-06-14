@@ -40,8 +40,6 @@ import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import org.eclipse.jface.text.formatter.IContentFormatter;
-import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.information.IInformationPresenter;
 import org.eclipse.jface.text.information.IInformationProvider;
 import org.eclipse.jface.text.information.InformationPresenter;
@@ -84,25 +82,6 @@ public class JavascriptSourceViewerConfiguration extends
 
 	public String getCommentPrefix() {
 		return "//"; //$NON-NLS-1$
-	}
-
-	/*
-	 * @see SourceViewerConfiguration#getContentFormatter(ISourceViewer)
-	 */
-	public IContentFormatter getContentFormatter(ISourceViewer sourceViewer) {
-		final MultiPassContentFormatter formatter = new MultiPassContentFormatter(
-				getConfiguredDocumentPartitioning(sourceViewer),
-				IDocument.DEFAULT_CONTENT_TYPE);
-
-		formatter.setMasterStrategy(new JavaScriptFormattingStrategy());
-		// formatter.setSlaveStrategy(new CommentFormattingStrategy(),
-		// IJavaPartitions.JAVA_DOC);
-		// formatter.setSlaveStrategy(new CommentFormattingStrategy(),
-		// IJavaPartitions.JAVA_SINGLE_LINE_COMMENT);
-		// formatter.setSlaveStrategy(new CommentFormattingStrategy(),
-		// IJavaPartitions.JAVA_MULTI_LINE_COMMENT);
-
-		return formatter;
 	}
 
 	/*
