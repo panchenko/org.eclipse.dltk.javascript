@@ -533,6 +533,9 @@ public class JSTransformer extends JSVisitor {
 							.getTokenStartIndex()));
 			list.setEnd(getTokenOffset(node.getChild(node.getChildCount() - 1)
 					.getTokenStopIndex() + 1));
+		} else {
+			list.setStart(defaultClause.getColonPosition() + 1);
+			list.setEnd(defaultClause.getColonPosition() + 1);
 		}
 
 		List<Statement> statements = new ArrayList<Statement>(node
