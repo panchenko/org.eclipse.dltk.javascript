@@ -278,7 +278,7 @@ public class ASTVerifier extends ASTVisitor {
 
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
-		testChar(Keywords.SEMI, node.getSemicolon());
+		testChar(Keywords.SEMI, node.getSemicolonPosition());
 
 		return true;
 	}
@@ -668,7 +668,7 @@ public class ASTVerifier extends ASTVisitor {
 
 		testChar(Keywords.SEMI, node.getConditionalSemicolonPosition());
 		testChar(Keywords.SEMI, node.getInitialSemicolonPosition());
-		testCharIfExists(Keywords.SEMI, node.getTrailingSemicolonPosition());
+		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
 
