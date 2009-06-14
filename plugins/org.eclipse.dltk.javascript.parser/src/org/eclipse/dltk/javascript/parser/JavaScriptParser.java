@@ -13,25 +13,26 @@
 package org.eclipse.dltk.javascript.parser;
 
 import java.io.CharArrayReader;
-import java.io.IOException;
-import java.util.List;
 
-import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.CharStream;
+import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.TokenStream;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.parser.AbstractSourceParser;
+import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemReporterProxy;
+import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.DLTKCore;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
-	private class JSInternalLexer extends JSLexer {
+	private static class JSInternalLexer extends JSLexer {
 		private IProblemReporter reporter;
 
 		public JSInternalLexer(CharStream input, IProblemReporter reporter) {
@@ -44,7 +45,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 			super.reportError(e);
 
 			if (!errorRecovery) {
-				reportProblem(e, reporter);
+				reporter.reportProblem(new JSProblem(e));
 			}
 		}
 
@@ -54,7 +55,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 		}
 	}
 
-	private class JSInternalParser extends JSParser {
+	private static class JSInternalParser extends JSParser {
 
 		private IProblemReporter reporter;
 
@@ -68,7 +69,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 			super.reportError(e);
 
 			if (!errorRecovery) {
-				reportProblem(e, reporter);
+				reporter.reportProblem(new JSProblem(e));
 			}
 		}
 
@@ -78,7 +79,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 		}
 	}
 
-	private class JSInternalProblemReporterProxy extends ProblemReporterProxy {
+	private static class JSInternalProblemReporterProxy extends
+			ProblemReporterProxy {
 
 		private boolean errorReported = false;
 
@@ -96,121 +98,44 @@ public class JavaScriptParser extends AbstractSourceParser {
 		}
 	}
 
-	private String fileName;
-	private String source;
-
 	public ModuleDeclaration parse(char[] fileName, char[] source,
 			IProblemReporter reporter) {
-
-		if (fileName == null && source == null)
-			throw new IllegalArgumentException(
-					"fileName or source argument required");
-
-		if (fileName != null)
-			this.fileName = fileName.toString();
-
-		if (source != null)
-			this.source = new String(source);
-
+		Assert.isNotNull(source);
 		JSInternalProblemReporterProxy reporterProxy = new JSInternalProblemReporterProxy(
 				reporter);
-
 		try {
-			CharStream charStream = getCharStream();
-
+			CharStream charStream = new ANTLRReaderStream(new CharArrayReader(
+					source));
 			JSLexer lexer = new JSInternalLexer(charStream, reporterProxy);
-
-			TokenStream stream = new JavaScriptTokenStream(lexer);
-			// TokenStream stream = new CommonTokenStream(lexer);
-
+			CommonTokenStream stream = new CommonTokenStream(
+					new JavaScriptTokenSource(lexer));
 			JSParser parser = new JSInternalParser(stream, reporterProxy);
-
 			RuleReturnScope root = parser.program();
-
 			if (reporterProxy.isErrorReported())
 				return null;
-
-			CharStream charStream2 = getCharStream();
-			JSLexer lexer2 = new JSLexer(charStream2);
-			List tokens = new JavaScriptTokenStream(lexer2).getTokens();
-
-			return new JSTransformer(root, tokens).transform();
-
+			return new JSTransformer(root, stream.getTokens()).transform();
 		} catch (Exception e) {
 			if (DLTKCore.DEBUG)
 				e.printStackTrace();
-			reportProblem(e, reporterProxy);
+			reporterProxy.reportProblem(new JSProblem(e));
 			return null;
 		}
 	}
 
-	private CharStream getCharStream() throws IOException {
-		if (fileName != null)
-			return new ANTLRFileStream(fileName);
-		else
-			return new ANTLRReaderStream(new CharArrayReader(source
-					.toCharArray()));
-	}
+	private static class JSProblem extends DefaultProblem {
 
-	private class JSInternalProblem implements IProblem {
-
-		private Exception exception;
-
-		public JSInternalProblem(Exception exception) {
-			this.exception = exception;
+		public JSProblem(Exception exception) {
+			super(
+					exception.getMessage(),
+					0,
+					null,
+					ProblemSeverities.Error,
+					0,
+					0,
+					exception instanceof RecognitionException ? ((RecognitionException) exception).line
+							: 0);
 		}
 
-		public String[] getArguments() {
-			return null;
-		}
-
-		public int getID() {
-			return 0;
-		}
-
-		public String getMessage() {
-			return exception.getMessage();
-		}
-
-		public String getOriginatingFileName() {
-			return null;
-		}
-
-		public int getSourceEnd() {
-			return 0;
-		}
-
-		public int getSourceLineNumber() {
-			if (exception instanceof RecognitionException)
-				return ((RecognitionException) exception).line;
-			return 0;
-		}
-
-		public int getSourceStart() {
-			return 0;
-		}
-
-		public boolean isError() {
-			return true;
-		}
-
-		public boolean isWarning() {
-			return false;
-		}
-
-		public void setSourceEnd(int sourceEnd) {
-		}
-
-		public void setSourceLineNumber(int lineNumber) {
-		}
-
-		public void setSourceStart(int sourceStart) {
-		}
-
-	}
-
-	private void reportProblem(final Exception e, IProblemReporter reporter) {
-		reporter.reportProblem(new JSInternalProblem(e));
 	}
 
 }

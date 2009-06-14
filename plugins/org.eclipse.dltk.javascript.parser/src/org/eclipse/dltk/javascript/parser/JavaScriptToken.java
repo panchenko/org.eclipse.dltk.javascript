@@ -31,7 +31,7 @@ public class JavaScriptToken implements Token {
 		this.text = source.getText();
 		this.tokenIndex = source.getTokenIndex();
 		this.ttype = source.getType();
-		Assert.isTrue(this.tokenIndex >= 0);
+		// Assert.isTrue(this.tokenIndex >= 0);
 	}
 
 	public JavaScriptToken() {

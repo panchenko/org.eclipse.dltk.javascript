@@ -12,6 +12,7 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -21,7 +22,7 @@ public class SwitchStatement extends Statement {
 
 	private Keyword switchKeyword;
 	private Expression condition;
-	private List caseClauses;
+	private final List<SwitchComponent> caseClauses = new ArrayList<SwitchComponent>();
 	private int LP = -1;
 	private int RP = -1;
 	private int LC = -1;
@@ -39,12 +40,15 @@ public class SwitchStatement extends Statement {
 		this.condition = condition;
 	}
 
-	public List getCaseClauses() {
+	public List<SwitchComponent> getCaseClauses() {
 		return this.caseClauses;
 	}
 
-	public void setCaseClauses(List caseClauses) {
-		this.caseClauses = caseClauses;
+	/**
+	 * @param transformNode
+	 */
+	public void addCase(SwitchComponent component) {
+		caseClauses.add(component);
 	}
 
 	public int getLP() {
@@ -120,4 +124,5 @@ public class SwitchStatement extends Statement {
 	public boolean isBlock() {
 		return true;
 	}
+
 }

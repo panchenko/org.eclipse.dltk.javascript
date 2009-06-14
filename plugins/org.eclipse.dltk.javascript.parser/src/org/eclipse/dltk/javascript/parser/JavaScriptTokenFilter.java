@@ -15,58 +15,14 @@ package org.eclipse.dltk.javascript.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.Lexer;
 import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenSource;
-import org.antlr.runtime.TokenStream;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.internal.core.SourceRange;
 import org.eclipse.dltk.javascript.ast.Keywords;
 
-public class JavaScriptTokenStream implements TokenStream {
+public class JavaScriptTokenFilter {
 
-	private int p = -1;
-	private int lastMarker = -1;
-	private int channel = Token.DEFAULT_CHANNEL;
-
-	private Lexer lexer;
-	private List tokens;
-	private JavaScriptTokenSource tokenSource;
-
-	public JavaScriptTokenStream(Lexer lexer) {
-		this.lexer = lexer;
-		fillBuffer();
-	}
-
-	private void fillBuffer() {
-		transformTokens(new CommonTokenStream(lexer));
-		tokenSource = new JavaScriptTokenSource(tokens);
-	}
-
-	public List getTokens() {
-		return this.tokens;
-	}
-
-	private class SourceRange implements ISourceRange {
-		private int length;
-		private int offset;
-
-		public SourceRange(int offset, int length) {
-			this.offset = offset;
-			this.length = length;
-		}
-
-		public int getLength() {
-			return length;
-		}
-
-		public int getOffset() {
-			return offset;
-		}
-	}
-
-	private int skipBlanks(TokenStream source, int start) {
+	private int skipBlanks(List<Token> source, int start) {
 
 		for (int i = start; i < source.size(); i++) {
 			switch (source.get(i).getType()) {
@@ -85,7 +41,7 @@ public class JavaScriptTokenStream implements TokenStream {
 		return start;
 	}
 
-	private int skipXmlFragment(TokenStream source, int start) {
+	private int skipXmlFragment(List<Token> source, int start) {
 
 		int p = skipBlanks(source, start);
 
@@ -99,7 +55,7 @@ public class JavaScriptTokenStream implements TokenStream {
 		return start;
 	}
 
-	private int skipText(TokenStream source, int start, int closeToken) {
+	private int skipText(List<Token> source, int start, int closeToken) {
 		for (int i = start; i < source.size(); i++) {
 			if (source.get(i).getType() == closeToken)
 				return i + 1;
@@ -112,7 +68,7 @@ public class JavaScriptTokenStream implements TokenStream {
 				|| token.getType() == JSParser.NEG;
 	}
 
-	private boolean isXmlCommentOpenTag(TokenStream source, int start) {
+	private boolean isXmlCommentOpenTag(List<Token> source, int start) {
 
 		if (start + 3 > source.size() - 1)
 			return false;
@@ -133,7 +89,7 @@ public class JavaScriptTokenStream implements TokenStream {
 
 	}
 
-	private boolean isXmlCommentCloseTag(TokenStream source, int start) {
+	private boolean isXmlCommentCloseTag(List<Token> source, int start) {
 
 		if (start + 2 > source.size() - 1)
 			return false;
@@ -151,7 +107,7 @@ public class JavaScriptTokenStream implements TokenStream {
 
 	}
 
-	private int skipText(TokenStream source, int start) {
+	private int skipText(List<Token> source, int start) {
 		for (int i = start; i < source.size(); i++) {
 
 			switch (source.get(i).getType()) {
@@ -169,10 +125,10 @@ public class JavaScriptTokenStream implements TokenStream {
 			case JSParser.CDATAOPEN:
 				return i;
 
-//			case JSParser.SUB:
-//			case JSParser.NEG:
-//				if (isXmlCommentCloseTag(source, i))
-//					return i;
+				// case JSParser.SUB:
+				// case JSParser.NEG:
+				// if (isXmlCommentCloseTag(source, i))
+				// return i;
 
 			case JSParser.RBRACK:
 				if (i < source.size() - 2
@@ -184,7 +140,7 @@ public class JavaScriptTokenStream implements TokenStream {
 		return start;
 	}
 
-	private ISourceRange getXmlSimpleFragmentRange(TokenStream source,
+	private ISourceRange getXmlSimpleFragmentRange(List<Token> source,
 			int start, int openToken, int closeToken) {
 		if (source.get(start).getType() != openToken)
 			return null;
@@ -200,7 +156,7 @@ public class JavaScriptTokenStream implements TokenStream {
 		return null;
 	}
 
-	private ISourceRange getXmlCDATARange(TokenStream source, int start) {
+	private ISourceRange getXmlCDATARange(List<Token> source, int start) {
 
 		if (source.get(start).getType() != JSParser.CDATAOPEN
 				|| start + 5 /* CDATA, LBRACK, ..., RBRACK, RBRACK, GT */>= source
@@ -250,7 +206,7 @@ public class JavaScriptTokenStream implements TokenStream {
 		return false;
 	}
 
-	private ISourceRange getXmlContainerFragmentRange(TokenStream source,
+	private ISourceRange getXmlContainerFragmentRange(List<Token> source,
 			int start) {
 
 		if (source.get(start).getType() != JSParser.LT)
@@ -301,7 +257,7 @@ public class JavaScriptTokenStream implements TokenStream {
 		return null;
 	}
 
-	private ISourceRange getXmlFragmentRange(TokenStream source, int start) {
+	private ISourceRange getXmlFragmentRange(List<Token> source, int start) {
 		Token tk = source.get(start);
 
 		switch (tk.getType()) {
@@ -324,7 +280,7 @@ public class JavaScriptTokenStream implements TokenStream {
 		return null;
 	}
 
-	private ISourceRange getXmlStringRange(TokenStream source, int start) {
+	private int getXmlStringRange(List<Token> source, int start) {
 
 		int i = start;
 		int stop = -1;
@@ -341,13 +297,10 @@ public class JavaScriptTokenStream implements TokenStream {
 			stop = i;
 		}
 
-		if (stop == -1)
-			return null;
-
-		return new SourceRange(start, stop - start);
+		return stop;
 	}
 
-	private boolean isNotXmlStart(TokenStream source, int start) {
+	private boolean isNotXmlStart(List<Token> source, int start) {
 		for (int i = start; i >= 0; i--) {
 			switch (source.get(i).getType()) {
 			case JSParser.WhiteSpace:
@@ -380,11 +333,10 @@ public class JavaScriptTokenStream implements TokenStream {
 		return false;
 	}
 
-	private void transformTokens(TokenStream source) {
-		List ts = ((CommonTokenStream) source).getTokens();
-		tokens = new ArrayList(source.size());
+	public List<Token> filter(List<Token> source) {
+		List<Token> tokens = new ArrayList<Token>(source.size());
 
-		int tokenIndex = 0;
+		// int tokenIndex = 0;
 
 		for (int i = 0; i < source.size(); i++) {
 			Token tk = source.get(i);
@@ -403,23 +355,20 @@ public class JavaScriptTokenStream implements TokenStream {
 				}
 
 				if (!skip) {
-					ISourceRange fragment = getXmlStringRange(source, i);
-					if (fragment != null) {
+					int xmlEnd = getXmlStringRange(source, i);
+					if (xmlEnd >= 0) {
 
 						Token xmlToken = new JavaScriptToken();
 						xmlToken.setLine(tk.getLine());
 						xmlToken.setCharPositionInLine(tk
 								.getCharPositionInLine());
 						xmlToken.setChannel(Token.DEFAULT_CHANNEL);
-						xmlToken.setTokenIndex(tokenIndex++);
+						// xmlToken.setTokenIndex(tokenIndex++);
 						xmlToken.setType(JSParser.XMLLiteral);
-						xmlToken.setText(source
-								.toString(fragment.getOffset(), fragment
-										.getOffset()
-										+ fragment.getLength() - 1));
+						xmlToken.setText(toString(source, i, xmlEnd - 1));
 
 						tokens.add(xmlToken);
-						i = fragment.getOffset() + fragment.getLength() - 1;
+						i = xmlEnd - 1;
 
 						continue;
 					}
@@ -431,151 +380,26 @@ public class JavaScriptTokenStream implements TokenStream {
 			}
 
 			Token newToken = new JavaScriptToken(source.get(i));
-			newToken.setTokenIndex(tokenIndex++);
+			// newToken.setTokenIndex(tokenIndex++);
 
 			tokens.add(newToken);
 		}
-
-		p = 0;
-		p = skipOffTokenChannels(p);
+		return tokens;
 	}
 
-	private Token LB(int k) {
-		if (p == -1) {
-			fillBuffer();
-		}
-		if (k == 0) {
+	private String toString(List<Token> tokens, int start, int stop) {
+		if (start < 0 || stop < 0) {
 			return null;
 		}
-		if ((p - k) < 0) {
-			return null;
+		if (stop >= tokens.size()) {
+			stop = tokens.size() - 1;
 		}
-
-		int i = p;
-		int n = 1;
-		// find k good tokens looking backwards
-		while (n <= k) {
-			// skip off-channel tokens
-			i = skipOffTokenChannelsReverse(i - 1); // leave p on valid token
-			n++;
-		}
-		if (i < 0) {
-			return null;
-		}
-		return (Token) tokens.get(i);
-	}
-
-	public Token LT(int k) {
-		if (p == -1) {
-			fillBuffer();
-		}
-		if (k == 0) {
-			return null;
-		}
-		if (k < 0) {
-			return LB(-k);
-		}
-		if ((p + k - 1) >= tokens.size()) {
-			return Token.EOF_TOKEN;
-		}
-		int i = p;
-		int n = 1;
-		// find k good tokens
-		while (n < k) {
-			// skip off-channel tokens
-			i = skipOffTokenChannels(i + 1); // leave p on valid token
-			n++;
-		}
-		if (i >= tokens.size()) {
-			return Token.EOF_TOKEN;
-		}
-
-		Assert.isTrue(i >= 0);
-		return (Token) tokens.get(i);
-	}
-
-	public Token get(int i) {
-		return (Token) tokens.get(i);
-	}
-
-	public TokenSource getTokenSource() {
-		return tokenSource;
-	}
-
-	public String toString(int start, int stop) {
-
-		StringBuffer buffer = new StringBuffer();
-
+		StringBuffer buf = new StringBuffer();
 		for (int i = start; i <= stop; i++) {
-			buffer.append(get(i).getText());
+			Token t = tokens.get(i);
+			buf.append(t.getText());
 		}
-
-		return buffer.toString();
-	}
-
-	public String toString(Token start, Token stop) {
-		int startIndex = tokens.indexOf(start);
-		int stopIndex = tokens.indexOf(stop);
-
-		return toString(startIndex, stopIndex);
-	}
-
-	public int LA(int i) {
-		return LT(i).getType();
-	}
-
-	public void consume() {
-		if (p < tokens.size()) {
-			p++;
-			p = skipOffTokenChannels(p); // leave p on valid token
-		}
-	}
-
-	public int index() {
-		return p;
-	}
-
-	public int mark() {
-		if (p == -1) {
-			fillBuffer();
-		}
-		lastMarker = index();
-		return lastMarker;
-	}
-
-	public void release(int marker) {
-		throw new UnsupportedOperationException();
-	}
-
-	public void rewind() {
-		seek(lastMarker);
-	}
-
-	public void rewind(int marker) {
-		seek(marker);
-	}
-
-	public void seek(int index) {
-		p = index;
-	}
-
-	public int size() {
-		return tokens.size();
-	}
-
-	private int skipOffTokenChannels(int i) {
-		int n = tokens.size();
-		while (i < n && ((Token) tokens.get(i)).getChannel() != channel) {
-			i++;
-		}
-		return i;
-	}
-
-	protected int skipOffTokenChannelsReverse(int i) {
-		while (i >= 0 && ((Token) tokens.get(i)).getChannel() != channel) {
-			i--;
-		}
-		return i;
+		return buf.toString();
 	}
 
 }

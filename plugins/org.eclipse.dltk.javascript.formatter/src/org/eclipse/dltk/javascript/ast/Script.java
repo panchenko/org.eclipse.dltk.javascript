@@ -12,6 +12,7 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -19,7 +20,7 @@ import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 
 public class Script extends ModuleDeclaration implements ISourceable {
 
-	private List comments;
+	private final List<Comment> comments = new ArrayList<Comment>();
 
 	public Script() {
 		super(0);
@@ -44,12 +45,12 @@ public class Script extends ModuleDeclaration implements ISourceable {
 		return true;
 	}
 
-	public List getComments() {
+	public List<Comment> getComments() {
 		return this.comments;
 	}
 
-	public void setComments(List comments) {
-		this.comments = comments;
+	public void addComment(Comment comment) {
+		comments.add(comment);
 	}
 
 	public void visitAll(IASTVisitor visitor) {

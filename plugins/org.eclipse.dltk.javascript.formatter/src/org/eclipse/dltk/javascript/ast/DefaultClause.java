@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class DefaultClause extends Statement {
+public class DefaultClause extends SwitchComponent {
 
 	private Keyword defaultKeyword;
 	private StatementList statements;
