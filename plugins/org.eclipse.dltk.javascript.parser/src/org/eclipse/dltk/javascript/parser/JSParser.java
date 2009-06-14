@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g 2009-05-15 17:08:12
+// $ANTLR 3.0.1 JS.g 2009-05-15 17:08:12
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -221,7 +221,7 @@ public class JSParser extends Parser {
     }
 
     public String[] getTokenNames() { return tokenNames; }
-    public String getGrammarFileName() { return "/home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g"; }
+    public String getGrammarFileName() { return "JS.g"; }
 
 
     private final boolean isLeftHandSideAssign(RuleReturnScope lhs, Object[] cached)
@@ -361,7 +361,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start token
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:583:1: token : ( reservedWord | Identifier | punctuator | numericLiteral | StringLiteral | XmlAttribute );
+    // JS.g:583:1: token : ( reservedWord | Identifier | punctuator | numericLiteral | StringLiteral | XmlAttribute );
     public final token_return token() throws RecognitionException {
         token_return retval = new token_return();
         retval.start = input.LT(1);
@@ -383,7 +383,7 @@ public class JSParser extends Parser {
         Object XmlAttribute6_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:584:2: ( reservedWord | Identifier | punctuator | numericLiteral | StringLiteral | XmlAttribute )
+            // JS.g:584:2: ( reservedWord | Identifier | punctuator | numericLiteral | StringLiteral | XmlAttribute )
             int alt1=6;
             switch ( input.LA(1) ) {
             case NULL:
@@ -540,7 +540,7 @@ public class JSParser extends Parser {
 
             switch (alt1) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:584:4: reservedWord
+                    // JS.g:584:4: reservedWord
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -553,7 +553,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:585:4: Identifier
+                    // JS.g:585:4: Identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -566,7 +566,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:586:4: punctuator
+                    // JS.g:586:4: punctuator
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -579,7 +579,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:587:4: numericLiteral
+                    // JS.g:587:4: numericLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -592,7 +592,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:588:4: StringLiteral
+                    // JS.g:588:4: StringLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -605,7 +605,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:589:4: XmlAttribute
+                    // JS.g:589:4: XmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -641,7 +641,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start reservedWord
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:595:1: reservedWord : ( keyword | futureReservedWord | NULL | booleanLiteral );
+    // JS.g:595:1: reservedWord : ( keyword | futureReservedWord | NULL | booleanLiteral );
     public final reservedWord_return reservedWord() throws RecognitionException {
         reservedWord_return retval = new reservedWord_return();
         retval.start = input.LT(1);
@@ -659,7 +659,7 @@ public class JSParser extends Parser {
         Object NULL9_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:596:2: ( keyword | futureReservedWord | NULL | booleanLiteral )
+            // JS.g:596:2: ( keyword | futureReservedWord | NULL | booleanLiteral )
             int alt2=4;
             switch ( input.LA(1) ) {
             case BREAK:
@@ -752,7 +752,7 @@ public class JSParser extends Parser {
 
             switch (alt2) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:596:4: keyword
+                    // JS.g:596:4: keyword
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -765,7 +765,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:597:4: futureReservedWord
+                    // JS.g:597:4: futureReservedWord
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -778,7 +778,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:598:4: NULL
+                    // JS.g:598:4: NULL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -791,7 +791,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:599:4: booleanLiteral
+                    // JS.g:599:4: booleanLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -827,7 +827,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start keyword
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:606:1: keyword : ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | GET | SET | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | NAMESPACE | XML | YIELD );
+    // JS.g:606:1: keyword : ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | GET | SET | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | NAMESPACE | XML | YIELD );
     public final keyword_return keyword() throws RecognitionException {
         keyword_return retval = new keyword_return();
         retval.start = input.LT(1);
@@ -839,8 +839,8 @@ public class JSParser extends Parser {
         Object set11_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:607:2: ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | GET | SET | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | NAMESPACE | XML | YIELD )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            // JS.g:607:2: ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | GET | SET | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | NAMESPACE | XML | YIELD )
+            // JS.g:
             {
             root_0 = (Object)adaptor.nil();
 
@@ -881,7 +881,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start futureReservedWord
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:644:1: futureReservedWord : ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE );
+    // JS.g:644:1: futureReservedWord : ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE );
     public final futureReservedWord_return futureReservedWord() throws RecognitionException {
         futureReservedWord_return retval = new futureReservedWord_return();
         retval.start = input.LT(1);
@@ -893,8 +893,8 @@ public class JSParser extends Parser {
         Object set12_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:645:2: ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            // JS.g:645:2: ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE )
+            // JS.g:
             {
             root_0 = (Object)adaptor.nil();
 
@@ -935,7 +935,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start punctuator
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:748:1: punctuator : ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | DOTDOT | COLONCOLON );
+    // JS.g:748:1: punctuator : ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | DOTDOT | COLONCOLON );
     public final punctuator_return punctuator() throws RecognitionException {
         punctuator_return retval = new punctuator_return();
         retval.start = input.LT(1);
@@ -947,8 +947,8 @@ public class JSParser extends Parser {
         Object set13_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:749:2: ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | DOTDOT | COLONCOLON )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            // JS.g:749:2: ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | DOTDOT | COLONCOLON )
+            // JS.g:
             {
             root_0 = (Object)adaptor.nil();
 
@@ -989,7 +989,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start literal
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:806:1: literal : ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral );
+    // JS.g:806:1: literal : ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral );
     public final literal_return literal() throws RecognitionException {
         literal_return retval = new literal_return();
         retval.start = input.LT(1);
@@ -1009,7 +1009,7 @@ public class JSParser extends Parser {
         Object RegularExpressionLiteral18_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:807:2: ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral )
+            // JS.g:807:2: ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral )
             int alt3=5;
             switch ( input.LA(1) ) {
             case NULL:
@@ -1049,7 +1049,7 @@ public class JSParser extends Parser {
 
             switch (alt3) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:807:4: NULL
+                    // JS.g:807:4: NULL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1062,7 +1062,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:808:4: booleanLiteral
+                    // JS.g:808:4: booleanLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1075,7 +1075,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:809:4: numericLiteral
+                    // JS.g:809:4: numericLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1088,7 +1088,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:810:4: StringLiteral
+                    // JS.g:810:4: StringLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1101,7 +1101,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:811:4: RegularExpressionLiteral
+                    // JS.g:811:4: RegularExpressionLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1137,7 +1137,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start booleanLiteral
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:814:1: booleanLiteral : ( TRUE | FALSE );
+    // JS.g:814:1: booleanLiteral : ( TRUE | FALSE );
     public final booleanLiteral_return booleanLiteral() throws RecognitionException {
         booleanLiteral_return retval = new booleanLiteral_return();
         retval.start = input.LT(1);
@@ -1149,8 +1149,8 @@ public class JSParser extends Parser {
         Object set19_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:815:2: ( TRUE | FALSE )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            // JS.g:815:2: ( TRUE | FALSE )
+            // JS.g:
             {
             root_0 = (Object)adaptor.nil();
 
@@ -1191,7 +1191,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start numericLiteral
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:861:1: numericLiteral : ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral );
+    // JS.g:861:1: numericLiteral : ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral );
     public final numericLiteral_return numericLiteral() throws RecognitionException {
         numericLiteral_return retval = new numericLiteral_return();
         retval.start = input.LT(1);
@@ -1203,8 +1203,8 @@ public class JSParser extends Parser {
         Object set20_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:862:2: ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            // JS.g:862:2: ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral )
+            // JS.g:
             {
             root_0 = (Object)adaptor.nil();
 
@@ -1245,7 +1245,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start primaryExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:956:1: primaryExpression : ( THIS | Identifier | XmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression );
+    // JS.g:956:1: primaryExpression : ( THIS | Identifier | XmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression );
     public final primaryExpression_return primaryExpression() throws RecognitionException {
         primaryExpression_return retval = new primaryExpression_return();
         retval.start = input.LT(1);
@@ -1269,7 +1269,7 @@ public class JSParser extends Parser {
         Object XmlAttribute23_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:957:2: ( THIS | Identifier | XmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression )
+            // JS.g:957:2: ( THIS | Identifier | XmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression )
             int alt4=7;
             switch ( input.LA(1) ) {
             case THIS:
@@ -1323,7 +1323,7 @@ public class JSParser extends Parser {
 
             switch (alt4) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:957:4: THIS
+                    // JS.g:957:4: THIS
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1336,7 +1336,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:958:4: Identifier
+                    // JS.g:958:4: Identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1349,7 +1349,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:959:4: XmlAttribute
+                    // JS.g:959:4: XmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1362,7 +1362,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:960:4: literal
+                    // JS.g:960:4: literal
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1375,7 +1375,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:961:4: arrayLiteral
+                    // JS.g:961:4: arrayLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1388,7 +1388,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:962:4: objectLiteral
+                    // JS.g:962:4: objectLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1401,7 +1401,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:963:4: parenExpression
+                    // JS.g:963:4: parenExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1437,7 +1437,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start parenExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:966:1: parenExpression : lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) ;
+    // JS.g:966:1: parenExpression : lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) ;
     public final parenExpression_return parenExpression() throws RecognitionException {
         parenExpression_return retval = new parenExpression_return();
         retval.start = input.LT(1);
@@ -1455,8 +1455,8 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:967:3: (lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:967:5: lpar= LPAREN expression RPAREN
+            // JS.g:967:3: (lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) )
+            // JS.g:967:5: lpar= LPAREN expression RPAREN
             {
             lpar=(Token)input.LT(1);
             match(input,LPAREN,FOLLOW_LPAREN_in_parenExpression3467); 
@@ -1484,7 +1484,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 967:37: -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:967:40: ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
+                // JS.g:967:40: ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(PAREXPR, lpar,  "PAREXPR"), root_1);
@@ -1522,7 +1522,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start arrayLiteral
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:970:1: arrayLiteral : lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) ;
+    // JS.g:970:1: arrayLiteral : lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) ;
     public final arrayLiteral_return arrayLiteral() throws RecognitionException {
         arrayLiteral_return retval = new arrayLiteral_return();
         retval.start = input.LT(1);
@@ -1545,14 +1545,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_arrayItem=new RewriteRuleSubtreeStream(adaptor,"rule arrayItem");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:971:2: (lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:971:4: lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK
+            // JS.g:971:2: (lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) )
+            // JS.g:971:4: lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK
             {
             lb=(Token)input.LT(1);
             match(input,LBRACK,FOLLOW_LBRACK_in_arrayLiteral3496); 
             stream_LBRACK.add(lb);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:971:14: ( arrayItem ( COMMA arrayItem )* )?
+            // JS.g:971:14: ( arrayItem ( COMMA arrayItem )* )?
             int alt6=2;
             int LA6_0 = input.LA(1);
 
@@ -1568,14 +1568,14 @@ public class JSParser extends Parser {
             }
             switch (alt6) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:971:16: arrayItem ( COMMA arrayItem )*
+                    // JS.g:971:16: arrayItem ( COMMA arrayItem )*
                     {
                     pushFollow(FOLLOW_arrayItem_in_arrayLiteral3500);
                     arrayItem30=arrayItem();
                     _fsp--;
 
                     stream_arrayItem.add(arrayItem30.getTree());
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:971:26: ( COMMA arrayItem )*
+                    // JS.g:971:26: ( COMMA arrayItem )*
                     loop5:
                     do {
                         int alt5=2;
@@ -1588,7 +1588,7 @@ public class JSParser extends Parser {
 
                         switch (alt5) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:971:28: COMMA arrayItem
+                    	    // JS.g:971:28: COMMA arrayItem
                     	    {
                     	    COMMA31=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_arrayLiteral3504); 
@@ -1631,12 +1631,12 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 972:2: -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:972:5: ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
+                // JS.g:972:5: ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(ARRAY, lb,  "ARRAY"), root_1);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:972:28: ( arrayItem )*
+                // JS.g:972:28: ( arrayItem )*
                 while ( stream_arrayItem.hasNext() ) {
                     adaptor.addChild(root_1, stream_arrayItem.next());
 
@@ -1674,7 +1674,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start arrayItem
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:975:1: arrayItem : (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) ;
+    // JS.g:975:1: arrayItem : (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) ;
     public final arrayItem_return arrayItem() throws RecognitionException {
         arrayItem_return retval = new arrayItem_return();
         retval.start = input.LT(1);
@@ -1686,10 +1686,10 @@ public class JSParser extends Parser {
 
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:976:2: ( (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:976:4: (expr= assignmentExpression | {...}?)
+            // JS.g:976:2: ( (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) )
+            // JS.g:976:4: (expr= assignmentExpression | {...}?)
             {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:976:4: (expr= assignmentExpression | {...}?)
+            // JS.g:976:4: (expr= assignmentExpression | {...}?)
             int alt7=2;
             int LA7_0 = input.LA(1);
 
@@ -1707,7 +1707,7 @@ public class JSParser extends Parser {
             }
             switch (alt7) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:976:6: expr= assignmentExpression
+                    // JS.g:976:6: expr= assignmentExpression
                     {
                     pushFollow(FOLLOW_assignmentExpression_in_arrayItem3542);
                     expr=assignmentExpression();
@@ -1718,7 +1718,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:976:34: {...}?
+                    // JS.g:976:34: {...}?
                     {
                     if ( !( input.LA(1) == COMMA ) ) {
                         throw new FailedPredicateException(input, "arrayItem", " input.LA(1) == COMMA ");
@@ -1743,12 +1743,12 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 977:2: -> ^( ITEM ( $expr)? )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:977:5: ^( ITEM ( $expr)? )
+                // JS.g:977:5: ^( ITEM ( $expr)? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(ITEM, "ITEM"), root_1);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:977:13: ( $expr)?
+                // JS.g:977:13: ( $expr)?
                 if ( stream_expr.hasNext() ) {
                     adaptor.addChild(root_1, stream_expr.next());
 
@@ -1786,7 +1786,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start objectLiteral
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:980:1: objectLiteral : lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ) ;
+    // JS.g:980:1: objectLiteral : lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ) ;
     public final objectLiteral_return objectLiteral() throws RecognitionException {
         objectLiteral_return retval = new objectLiteral_return();
         retval.start = input.LT(1);
@@ -1809,14 +1809,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LBRACE=new RewriteRuleTokenStream(adaptor,"token LBRACE");
         RewriteRuleSubtreeStream stream_objectPropertyInitializer=new RewriteRuleSubtreeStream(adaptor,"rule objectPropertyInitializer");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:981:2: (lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:981:4: lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* )? RBRACE
+            // JS.g:981:2: (lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ) )
+            // JS.g:981:4: lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* )? RBRACE
             {
             lb=(Token)input.LT(1);
             match(input,LBRACE,FOLLOW_LBRACE_in_objectLiteral3574); 
             stream_LBRACE.add(lb);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:981:14: ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* )?
+            // JS.g:981:14: ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* )?
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -1825,14 +1825,14 @@ public class JSParser extends Parser {
             }
             switch (alt9) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:981:16: objectPropertyInitializer ( COMMA objectPropertyInitializer )*
+                    // JS.g:981:16: objectPropertyInitializer ( COMMA objectPropertyInitializer )*
                     {
                     pushFollow(FOLLOW_objectPropertyInitializer_in_objectLiteral3578);
                     objectPropertyInitializer34=objectPropertyInitializer();
                     _fsp--;
 
                     stream_objectPropertyInitializer.add(objectPropertyInitializer34.getTree());
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:981:42: ( COMMA objectPropertyInitializer )*
+                    // JS.g:981:42: ( COMMA objectPropertyInitializer )*
                     loop8:
                     do {
                         int alt8=2;
@@ -1845,7 +1845,7 @@ public class JSParser extends Parser {
 
                         switch (alt8) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:981:44: COMMA objectPropertyInitializer
+                    	    // JS.g:981:44: COMMA objectPropertyInitializer
                     	    {
                     	    COMMA35=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_objectLiteral3582); 
@@ -1888,12 +1888,12 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 982:2: -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:982:5: ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* )
+                // JS.g:982:5: ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(OBJECT, lb,  "OBJECT"), root_1);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:982:30: ( objectPropertyInitializer )*
+                // JS.g:982:30: ( objectPropertyInitializer )*
                 while ( stream_objectPropertyInitializer.hasNext() ) {
                     adaptor.addChild(root_1, stream_objectPropertyInitializer.next());
 
@@ -1931,7 +1931,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start objectPropertyInitializer
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:985:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );
+    // JS.g:985:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );
     public final objectPropertyInitializer_return objectPropertyInitializer() throws RecognitionException {
         objectPropertyInitializer_return retval = new objectPropertyInitializer_return();
         retval.start = input.LT(1);
@@ -1947,7 +1947,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:986:3: ( nameValuePair | getMethodDeclaration | setMethodDeclaration )
+            // JS.g:986:3: ( nameValuePair | getMethodDeclaration | setMethodDeclaration )
             int alt10=3;
             switch ( input.LA(1) ) {
             case Identifier:
@@ -1979,7 +1979,7 @@ public class JSParser extends Parser {
 
             switch (alt10) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:986:5: nameValuePair
+                    // JS.g:986:5: nameValuePair
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1992,7 +1992,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:987:5: getMethodDeclaration
+                    // JS.g:987:5: getMethodDeclaration
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2005,7 +2005,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:988:5: setMethodDeclaration
+                    // JS.g:988:5: setMethodDeclaration
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2041,7 +2041,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start nameValuePair
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:991:1: nameValuePair : propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) ;
+    // JS.g:991:1: nameValuePair : propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) ;
     public final nameValuePair_return nameValuePair() throws RecognitionException {
         nameValuePair_return retval = new nameValuePair_return();
         retval.start = input.LT(1);
@@ -2059,8 +2059,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_propertyName=new RewriteRuleSubtreeStream(adaptor,"rule propertyName");
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:992:2: ( propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:992:4: propertyName COLON assignmentExpression
+            // JS.g:992:2: ( propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) )
+            // JS.g:992:4: propertyName COLON assignmentExpression
             {
             pushFollow(FOLLOW_propertyName_in_nameValuePair3643);
             propertyName41=propertyName();
@@ -2089,7 +2089,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 993:2: -> ^( NAMEDVALUE propertyName assignmentExpression )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:993:5: ^( NAMEDVALUE propertyName assignmentExpression )
+                // JS.g:993:5: ^( NAMEDVALUE propertyName assignmentExpression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(NAMEDVALUE, "NAMEDVALUE"), root_1);
@@ -2128,7 +2128,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start propertyName
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:996:1: propertyName : ( Identifier | StringLiteral | numericLiteral | XmlAttribute );
+    // JS.g:996:1: propertyName : ( Identifier | StringLiteral | numericLiteral | XmlAttribute );
     public final propertyName_return propertyName() throws RecognitionException {
         propertyName_return retval = new propertyName_return();
         retval.start = input.LT(1);
@@ -2146,7 +2146,7 @@ public class JSParser extends Parser {
         Object XmlAttribute47_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:997:2: ( Identifier | StringLiteral | numericLiteral | XmlAttribute )
+            // JS.g:997:2: ( Identifier | StringLiteral | numericLiteral | XmlAttribute )
             int alt11=4;
             switch ( input.LA(1) ) {
             case Identifier:
@@ -2180,7 +2180,7 @@ public class JSParser extends Parser {
 
             switch (alt11) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:997:4: Identifier
+                    // JS.g:997:4: Identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2193,7 +2193,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:998:4: StringLiteral
+                    // JS.g:998:4: StringLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2206,7 +2206,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:999:4: numericLiteral
+                    // JS.g:999:4: numericLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2219,7 +2219,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1000:4: XmlAttribute
+                    // JS.g:1000:4: XmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2255,7 +2255,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start memberExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1012:1: memberExpression : ( primaryExpression | functionExpression | newExpression );
+    // JS.g:1012:1: memberExpression : ( primaryExpression | functionExpression | newExpression );
     public final memberExpression_return memberExpression() throws RecognitionException {
         memberExpression_return retval = new memberExpression_return();
         retval.start = input.LT(1);
@@ -2271,7 +2271,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1013:2: ( primaryExpression | functionExpression | newExpression )
+            // JS.g:1013:2: ( primaryExpression | functionExpression | newExpression )
             int alt12=3;
             switch ( input.LA(1) ) {
             case NULL:
@@ -2311,7 +2311,7 @@ public class JSParser extends Parser {
 
             switch (alt12) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1013:4: primaryExpression
+                    // JS.g:1013:4: primaryExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2324,7 +2324,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1014:4: functionExpression
+                    // JS.g:1014:4: functionExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2337,7 +2337,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1015:4: newExpression
+                    // JS.g:1015:4: newExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2373,7 +2373,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start newExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1018:1: newExpression : NEW primaryExpression ;
+    // JS.g:1018:1: newExpression : NEW primaryExpression ;
     public final newExpression_return newExpression() throws RecognitionException {
         newExpression_return retval = new newExpression_return();
         retval.start = input.LT(1);
@@ -2387,8 +2387,8 @@ public class JSParser extends Parser {
         Object NEW51_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1019:2: ( NEW primaryExpression )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1019:4: NEW primaryExpression
+            // JS.g:1019:2: ( NEW primaryExpression )
+            // JS.g:1019:4: NEW primaryExpression
             {
             root_0 = (Object)adaptor.nil();
 
@@ -2427,7 +2427,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start arguments
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1023:1: arguments : LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( ARGS ( assignmentExpression )* ) ;
+    // JS.g:1023:1: arguments : LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( ARGS ( assignmentExpression )* ) ;
     public final arguments_return arguments() throws RecognitionException {
         arguments_return retval = new arguments_return();
         retval.start = input.LT(1);
@@ -2450,14 +2450,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1024:2: ( LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( ARGS ( assignmentExpression )* ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1024:4: LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN
+            // JS.g:1024:2: ( LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( ARGS ( assignmentExpression )* ) )
+            // JS.g:1024:4: LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN
             {
             LPAREN53=(Token)input.LT(1);
             match(input,LPAREN,FOLLOW_LPAREN_in_arguments3741); 
             stream_LPAREN.add(LPAREN53);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1024:11: ( assignmentExpression ( COMMA assignmentExpression )* )?
+            // JS.g:1024:11: ( assignmentExpression ( COMMA assignmentExpression )* )?
             int alt14=2;
             int LA14_0 = input.LA(1);
 
@@ -2466,14 +2466,14 @@ public class JSParser extends Parser {
             }
             switch (alt14) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1024:13: assignmentExpression ( COMMA assignmentExpression )*
+                    // JS.g:1024:13: assignmentExpression ( COMMA assignmentExpression )*
                     {
                     pushFollow(FOLLOW_assignmentExpression_in_arguments3745);
                     assignmentExpression54=assignmentExpression();
                     _fsp--;
 
                     stream_assignmentExpression.add(assignmentExpression54.getTree());
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1024:34: ( COMMA assignmentExpression )*
+                    // JS.g:1024:34: ( COMMA assignmentExpression )*
                     loop13:
                     do {
                         int alt13=2;
@@ -2486,7 +2486,7 @@ public class JSParser extends Parser {
 
                         switch (alt13) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1024:36: COMMA assignmentExpression
+                    	    // JS.g:1024:36: COMMA assignmentExpression
                     	    {
                     	    COMMA55=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_arguments3749); 
@@ -2529,12 +2529,12 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1025:2: -> ^( ARGS ( assignmentExpression )* )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1025:5: ^( ARGS ( assignmentExpression )* )
+                // JS.g:1025:5: ^( ARGS ( assignmentExpression )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(ARGS, "ARGS"), root_1);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1025:13: ( assignmentExpression )*
+                // JS.g:1025:13: ( assignmentExpression )*
                 while ( stream_assignmentExpression.hasNext() ) {
                     adaptor.addChild(root_1, stream_assignmentExpression.next());
 
@@ -2572,7 +2572,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start leftHandSideExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1028:1: leftHandSideExpression : ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression ) | DOTDOT expression -> ^( ALLCHILDREN $leftHandSideExpression expression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )* ;
+    // JS.g:1028:1: leftHandSideExpression : ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression ) | DOTDOT expression -> ^( ALLCHILDREN $leftHandSideExpression expression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )* ;
     public final leftHandSideExpression_return leftHandSideExpression() throws RecognitionException {
         leftHandSideExpression_return retval = new leftHandSideExpression_return();
         retval.start = input.LT(1);
@@ -2612,11 +2612,11 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_arguments=new RewriteRuleSubtreeStream(adaptor,"rule arguments");
         RewriteRuleSubtreeStream stream_rightHandSideExpression=new RewriteRuleSubtreeStream(adaptor,"rule rightHandSideExpression");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1029:3: ( ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression ) | DOTDOT expression -> ^( ALLCHILDREN $leftHandSideExpression expression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1030:3: ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression ) | DOTDOT expression -> ^( ALLCHILDREN $leftHandSideExpression expression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )*
+            // JS.g:1029:3: ( ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression ) | DOTDOT expression -> ^( ALLCHILDREN $leftHandSideExpression expression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )* )
+            // JS.g:1030:3: ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression ) | DOTDOT expression -> ^( ALLCHILDREN $leftHandSideExpression expression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )*
             {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1030:3: ( memberExpression -> memberExpression )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1031:5: memberExpression
+            // JS.g:1030:3: ( memberExpression -> memberExpression )
+            // JS.g:1031:5: memberExpression
             {
             pushFollow(FOLLOW_memberExpression_in_leftHandSideExpression3792);
             memberExpression58=memberExpression();
@@ -2644,7 +2644,7 @@ public class JSParser extends Parser {
 
             }
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1033:3: ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression ) | DOTDOT expression -> ^( ALLCHILDREN $leftHandSideExpression expression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )*
+            // JS.g:1033:3: ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression ) | DOTDOT expression -> ^( ALLCHILDREN $leftHandSideExpression expression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )*
             loop15:
             do {
                 int alt15=6;
@@ -2679,7 +2679,7 @@ public class JSParser extends Parser {
 
                 switch (alt15) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1034:5: arguments
+            	    // JS.g:1034:5: arguments
             	    {
             	    pushFollow(FOLLOW_arguments_in_leftHandSideExpression3813);
             	    arguments59=arguments();
@@ -2699,7 +2699,7 @@ public class JSParser extends Parser {
             	    root_0 = (Object)adaptor.nil();
             	    // 1034:19: -> ^( CALL $leftHandSideExpression arguments )
             	    {
-            	        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1034:22: ^( CALL $leftHandSideExpression arguments )
+            	        // JS.g:1034:22: ^( CALL $leftHandSideExpression arguments )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(CALL, "CALL"), root_1);
@@ -2717,7 +2717,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1035:7: LBRACK expression RBRACK
+            	    // JS.g:1035:7: LBRACK expression RBRACK
             	    {
             	    LBRACK60=(Token)input.LT(1);
             	    match(input,LBRACK,FOLLOW_LBRACK_in_leftHandSideExpression3838); 
@@ -2745,7 +2745,7 @@ public class JSParser extends Parser {
             	    root_0 = (Object)adaptor.nil();
             	    // 1035:33: -> ^( BYINDEX $leftHandSideExpression expression )
             	    {
-            	        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1035:36: ^( BYINDEX $leftHandSideExpression expression )
+            	        // JS.g:1035:36: ^( BYINDEX $leftHandSideExpression expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYINDEX, "BYINDEX"), root_1);
@@ -2763,7 +2763,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 3 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1036:7: DOT rightHandSideExpression
+            	    // JS.g:1036:7: DOT rightHandSideExpression
             	    {
             	    DOT63=(Token)input.LT(1);
             	    match(input,DOT,FOLLOW_DOT_in_leftHandSideExpression3864); 
@@ -2787,7 +2787,7 @@ public class JSParser extends Parser {
             	    root_0 = (Object)adaptor.nil();
             	    // 1036:35: -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression )
             	    {
-            	        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1036:38: ^( BYFIELD $leftHandSideExpression rightHandSideExpression )
+            	        // JS.g:1036:38: ^( BYFIELD $leftHandSideExpression rightHandSideExpression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYFIELD, "BYFIELD"), root_1);
@@ -2805,7 +2805,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 4 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1037:7: DOTDOT expression
+            	    // JS.g:1037:7: DOTDOT expression
             	    {
             	    DOTDOT65=(Token)input.LT(1);
             	    match(input,DOTDOT,FOLLOW_DOTDOT_in_leftHandSideExpression3887); 
@@ -2829,7 +2829,7 @@ public class JSParser extends Parser {
             	    root_0 = (Object)adaptor.nil();
             	    // 1037:25: -> ^( ALLCHILDREN $leftHandSideExpression expression )
             	    {
-            	        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1037:28: ^( ALLCHILDREN $leftHandSideExpression expression )
+            	        // JS.g:1037:28: ^( ALLCHILDREN $leftHandSideExpression expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(ALLCHILDREN, "ALLCHILDREN"), root_1);
@@ -2847,7 +2847,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 5 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1038:7: COLONCOLON expression
+            	    // JS.g:1038:7: COLONCOLON expression
             	    {
             	    COLONCOLON67=(Token)input.LT(1);
             	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_leftHandSideExpression3908); 
@@ -2871,7 +2871,7 @@ public class JSParser extends Parser {
             	    root_0 = (Object)adaptor.nil();
             	    // 1038:29: -> ^( LOCALNAME $leftHandSideExpression expression )
             	    {
-            	        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1038:32: ^( LOCALNAME $leftHandSideExpression expression )
+            	        // JS.g:1038:32: ^( LOCALNAME $leftHandSideExpression expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(LOCALNAME, "LOCALNAME"), root_1);
@@ -2919,7 +2919,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start rightHandSideExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1042:1: rightHandSideExpression : ( parenExpression | Identifier | XmlAttribute | MUL );
+    // JS.g:1042:1: rightHandSideExpression : ( parenExpression | Identifier | XmlAttribute | MUL );
     public final rightHandSideExpression_return rightHandSideExpression() throws RecognitionException {
         rightHandSideExpression_return retval = new rightHandSideExpression_return();
         retval.start = input.LT(1);
@@ -2937,7 +2937,7 @@ public class JSParser extends Parser {
         Object MUL72_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1043:3: ( parenExpression | Identifier | XmlAttribute | MUL )
+            // JS.g:1043:3: ( parenExpression | Identifier | XmlAttribute | MUL )
             int alt16=4;
             switch ( input.LA(1) ) {
             case LPAREN:
@@ -2969,7 +2969,7 @@ public class JSParser extends Parser {
 
             switch (alt16) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1043:5: parenExpression
+                    // JS.g:1043:5: parenExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2982,7 +2982,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1044:5: Identifier
+                    // JS.g:1044:5: Identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2995,7 +2995,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1045:5: XmlAttribute
+                    // JS.g:1045:5: XmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3008,7 +3008,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1046:5: MUL
+                    // JS.g:1046:5: MUL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3044,7 +3044,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start postfixExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1079:1: postfixExpression : leftHandSideExpression ( postfixOperator )? ;
+    // JS.g:1079:1: postfixExpression : leftHandSideExpression ( postfixOperator )? ;
     public final postfixExpression_return postfixExpression() throws RecognitionException {
         postfixExpression_return retval = new postfixExpression_return();
         retval.start = input.LT(1);
@@ -3058,8 +3058,8 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1080:2: ( leftHandSideExpression ( postfixOperator )? )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1080:4: leftHandSideExpression ( postfixOperator )?
+            // JS.g:1080:2: ( leftHandSideExpression ( postfixOperator )? )
+            // JS.g:1080:4: leftHandSideExpression ( postfixOperator )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3069,7 +3069,7 @@ public class JSParser extends Parser {
 
             adaptor.addChild(root_0, leftHandSideExpression73.getTree());
              if (input.LA(1) == INC || input.LA(1) == DEC) promoteEOL(null); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1080:95: ( postfixOperator )?
+            // JS.g:1080:95: ( postfixOperator )?
             int alt17=2;
             int LA17_0 = input.LA(1);
 
@@ -3081,7 +3081,7 @@ public class JSParser extends Parser {
             }
             switch (alt17) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1080:97: postfixOperator
+                    // JS.g:1080:97: postfixOperator
                     {
                     pushFollow(FOLLOW_postfixOperator_in_postfixExpression4002);
                     postfixOperator74=postfixOperator();
@@ -3119,7 +3119,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start postfixOperator
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1083:1: postfixOperator : (op= INC | op= DEC );
+    // JS.g:1083:1: postfixOperator : (op= INC | op= DEC );
     public final postfixOperator_return postfixOperator() throws RecognitionException {
         postfixOperator_return retval = new postfixOperator_return();
         retval.start = input.LT(1);
@@ -3131,7 +3131,7 @@ public class JSParser extends Parser {
         Object op_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1084:2: (op= INC | op= DEC )
+            // JS.g:1084:2: (op= INC | op= DEC )
             int alt18=2;
             int LA18_0 = input.LA(1);
 
@@ -3149,7 +3149,7 @@ public class JSParser extends Parser {
             }
             switch (alt18) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1084:4: op= INC
+                    // JS.g:1084:4: op= INC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3163,7 +3163,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1085:4: op= DEC
+                    // JS.g:1085:4: op= DEC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3200,7 +3200,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start unaryExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1092:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression | XMLLiteral );
+    // JS.g:1092:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression | XMLLiteral );
     public final unaryExpression_return unaryExpression() throws RecognitionException {
         unaryExpression_return retval = new unaryExpression_return();
         retval.start = input.LT(1);
@@ -3218,7 +3218,7 @@ public class JSParser extends Parser {
         Object XMLLiteral78_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1093:2: ( postfixExpression | unaryOperator unaryExpression | XMLLiteral )
+            // JS.g:1093:2: ( postfixExpression | unaryOperator unaryExpression | XMLLiteral )
             int alt19=3;
             switch ( input.LA(1) ) {
             case NULL:
@@ -3269,7 +3269,7 @@ public class JSParser extends Parser {
 
             switch (alt19) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1093:4: postfixExpression
+                    // JS.g:1093:4: postfixExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3282,7 +3282,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1094:4: unaryOperator unaryExpression
+                    // JS.g:1094:4: unaryOperator unaryExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3300,7 +3300,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1095:5: XMLLiteral
+                    // JS.g:1095:5: XMLLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3336,7 +3336,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start unaryOperator
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1098:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );
+    // JS.g:1098:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );
     public final unaryOperator_return unaryOperator() throws RecognitionException {
         unaryOperator_return retval = new unaryOperator_return();
         retval.start = input.LT(1);
@@ -3364,7 +3364,7 @@ public class JSParser extends Parser {
         Object YIELD86_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1099:2: ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD )
+            // JS.g:1099:2: ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD )
             int alt20=10;
             switch ( input.LA(1) ) {
             case DELETE:
@@ -3426,7 +3426,7 @@ public class JSParser extends Parser {
 
             switch (alt20) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1099:4: DELETE
+                    // JS.g:1099:4: DELETE
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3439,7 +3439,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1100:4: VOID
+                    // JS.g:1100:4: VOID
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3452,7 +3452,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1101:4: TYPEOF
+                    // JS.g:1101:4: TYPEOF
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3465,7 +3465,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1102:4: INC
+                    // JS.g:1102:4: INC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3478,7 +3478,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1103:4: DEC
+                    // JS.g:1103:4: DEC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3491,7 +3491,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1104:4: op= ADD
+                    // JS.g:1104:4: op= ADD
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3505,7 +3505,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1105:4: op= SUB
+                    // JS.g:1105:4: op= SUB
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3519,7 +3519,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1106:4: INV
+                    // JS.g:1106:4: INV
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3532,7 +3532,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 9 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1107:4: NOT
+                    // JS.g:1107:4: NOT
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3545,7 +3545,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 10 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1108:4: YIELD
+                    // JS.g:1108:4: YIELD
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3581,7 +3581,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start namespaceStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1135:1: namespaceStatement : DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic ;
+    // JS.g:1135:1: namespaceStatement : DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic ;
     public final namespaceStatement_return namespaceStatement() throws RecognitionException {
         namespaceStatement_return retval = new namespaceStatement_return();
         retval.start = input.LT(1);
@@ -3603,8 +3603,8 @@ public class JSParser extends Parser {
         Object StringLiteral91_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1136:3: ( DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1136:5: DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic
+            // JS.g:1136:3: ( DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic )
+            // JS.g:1136:5: DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3662,7 +3662,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start multiplicativeExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1141:1: multiplicativeExpression : unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* ;
+    // JS.g:1141:1: multiplicativeExpression : unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* ;
     public final multiplicativeExpression_return multiplicativeExpression() throws RecognitionException {
         multiplicativeExpression_return retval = new multiplicativeExpression_return();
         retval.start = input.LT(1);
@@ -3678,8 +3678,8 @@ public class JSParser extends Parser {
         Object set94_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1142:2: ( unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1142:4: unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )*
+            // JS.g:1142:2: ( unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* )
+            // JS.g:1142:4: unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3688,7 +3688,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, unaryExpression93.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1142:20: ( ( MUL | DIV | MOD ) unaryExpression )*
+            // JS.g:1142:20: ( ( MUL | DIV | MOD ) unaryExpression )*
             loop21:
             do {
                 int alt21=2;
@@ -3701,7 +3701,7 @@ public class JSParser extends Parser {
 
                 switch (alt21) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1142:22: ( MUL | DIV | MOD ) unaryExpression
+            	    // JS.g:1142:22: ( MUL | DIV | MOD ) unaryExpression
             	    {
             	    set94=(Token)input.LT(1);
             	    if ( (input.LA(1)>=MUL && input.LA(1)<=MOD)||input.LA(1)==DIV ) {
@@ -3754,7 +3754,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start additiveExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1149:1: additiveExpression : multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* ;
+    // JS.g:1149:1: additiveExpression : multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* ;
     public final additiveExpression_return additiveExpression() throws RecognitionException {
         additiveExpression_return retval = new additiveExpression_return();
         retval.start = input.LT(1);
@@ -3770,8 +3770,8 @@ public class JSParser extends Parser {
         Object set97_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1150:2: ( multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1150:4: multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )*
+            // JS.g:1150:2: ( multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* )
+            // JS.g:1150:4: multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3780,7 +3780,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, multiplicativeExpression96.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1150:29: ( ( ADD | SUB ) multiplicativeExpression )*
+            // JS.g:1150:29: ( ( ADD | SUB ) multiplicativeExpression )*
             loop22:
             do {
                 int alt22=2;
@@ -3793,7 +3793,7 @@ public class JSParser extends Parser {
 
                 switch (alt22) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1150:31: ( ADD | SUB ) multiplicativeExpression
+            	    // JS.g:1150:31: ( ADD | SUB ) multiplicativeExpression
             	    {
             	    set97=(Token)input.LT(1);
             	    if ( (input.LA(1)>=ADD && input.LA(1)<=SUB) ) {
@@ -3846,7 +3846,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start shiftExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1157:1: shiftExpression : additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* ;
+    // JS.g:1157:1: shiftExpression : additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* ;
     public final shiftExpression_return shiftExpression() throws RecognitionException {
         shiftExpression_return retval = new shiftExpression_return();
         retval.start = input.LT(1);
@@ -3862,8 +3862,8 @@ public class JSParser extends Parser {
         Object set100_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1158:2: ( additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1158:4: additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )*
+            // JS.g:1158:2: ( additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* )
+            // JS.g:1158:4: additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3872,7 +3872,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, additiveExpression99.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1158:23: ( ( SHL | SHR | SHU ) additiveExpression )*
+            // JS.g:1158:23: ( ( SHL | SHR | SHU ) additiveExpression )*
             loop23:
             do {
                 int alt23=2;
@@ -3885,7 +3885,7 @@ public class JSParser extends Parser {
 
                 switch (alt23) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1158:25: ( SHL | SHR | SHU ) additiveExpression
+            	    // JS.g:1158:25: ( SHL | SHR | SHU ) additiveExpression
             	    {
             	    set100=(Token)input.LT(1);
             	    if ( (input.LA(1)>=SHL && input.LA(1)<=SHU) ) {
@@ -3938,7 +3938,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start relationalExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1165:1: relationalExpression : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* ;
+    // JS.g:1165:1: relationalExpression : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* ;
     public final relationalExpression_return relationalExpression() throws RecognitionException {
         relationalExpression_return retval = new relationalExpression_return();
         retval.start = input.LT(1);
@@ -3954,8 +3954,8 @@ public class JSParser extends Parser {
         Object set103_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1166:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1166:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
+            // JS.g:1166:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* )
+            // JS.g:1166:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3964,7 +3964,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, shiftExpression102.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1166:20: ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
+            // JS.g:1166:20: ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
             loop24:
             do {
                 int alt24=2;
@@ -3980,7 +3980,7 @@ public class JSParser extends Parser {
 
                 switch (alt24) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1166:22: ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression
+            	    // JS.g:1166:22: ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression
             	    {
             	    set103=(Token)input.LT(1);
             	    if ( (input.LA(1)>=IN && input.LA(1)<=INSTANCEOF)||(input.LA(1)>=LT && input.LA(1)<=GTE) ) {
@@ -4033,7 +4033,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start relationalExpressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1169:1: relationalExpressionNoIn : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* ;
+    // JS.g:1169:1: relationalExpressionNoIn : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* ;
     public final relationalExpressionNoIn_return relationalExpressionNoIn() throws RecognitionException {
         relationalExpressionNoIn_return retval = new relationalExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -4049,8 +4049,8 @@ public class JSParser extends Parser {
         Object set106_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1170:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1170:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
+            // JS.g:1170:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* )
+            // JS.g:1170:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4059,7 +4059,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, shiftExpression105.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1170:20: ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
+            // JS.g:1170:20: ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
             loop25:
             do {
                 int alt25=2;
@@ -4072,7 +4072,7 @@ public class JSParser extends Parser {
 
                 switch (alt25) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1170:22: ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression
+            	    // JS.g:1170:22: ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression
             	    {
             	    set106=(Token)input.LT(1);
             	    if ( input.LA(1)==INSTANCEOF||(input.LA(1)>=LT && input.LA(1)<=GTE) ) {
@@ -4125,7 +4125,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start equalityExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1177:1: equalityExpression : relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* ;
+    // JS.g:1177:1: equalityExpression : relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* ;
     public final equalityExpression_return equalityExpression() throws RecognitionException {
         equalityExpression_return retval = new equalityExpression_return();
         retval.start = input.LT(1);
@@ -4141,8 +4141,8 @@ public class JSParser extends Parser {
         Object set109_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1178:2: ( relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1178:4: relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
+            // JS.g:1178:2: ( relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* )
+            // JS.g:1178:4: relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4151,7 +4151,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, relationalExpression108.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1178:25: ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
+            // JS.g:1178:25: ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
             loop26:
             do {
                 int alt26=2;
@@ -4164,7 +4164,7 @@ public class JSParser extends Parser {
 
                 switch (alt26) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1178:27: ( EQ | NEQ | SAME | NSAME ) relationalExpression
+            	    // JS.g:1178:27: ( EQ | NEQ | SAME | NSAME ) relationalExpression
             	    {
             	    set109=(Token)input.LT(1);
             	    if ( (input.LA(1)>=EQ && input.LA(1)<=NSAME) ) {
@@ -4217,7 +4217,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start equalityExpressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1181:1: equalityExpressionNoIn : relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* ;
+    // JS.g:1181:1: equalityExpressionNoIn : relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* ;
     public final equalityExpressionNoIn_return equalityExpressionNoIn() throws RecognitionException {
         equalityExpressionNoIn_return retval = new equalityExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -4233,8 +4233,8 @@ public class JSParser extends Parser {
         Object set112_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1182:2: ( relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1182:4: relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
+            // JS.g:1182:2: ( relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* )
+            // JS.g:1182:4: relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4243,7 +4243,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, relationalExpressionNoIn111.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1182:29: ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
+            // JS.g:1182:29: ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
             loop27:
             do {
                 int alt27=2;
@@ -4256,7 +4256,7 @@ public class JSParser extends Parser {
 
                 switch (alt27) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1182:31: ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn
+            	    // JS.g:1182:31: ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn
             	    {
             	    set112=(Token)input.LT(1);
             	    if ( (input.LA(1)>=EQ && input.LA(1)<=NSAME) ) {
@@ -4309,7 +4309,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseANDExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1189:1: bitwiseANDExpression : equalityExpression ( AND equalityExpression )* ;
+    // JS.g:1189:1: bitwiseANDExpression : equalityExpression ( AND equalityExpression )* ;
     public final bitwiseANDExpression_return bitwiseANDExpression() throws RecognitionException {
         bitwiseANDExpression_return retval = new bitwiseANDExpression_return();
         retval.start = input.LT(1);
@@ -4325,8 +4325,8 @@ public class JSParser extends Parser {
         Object AND115_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1190:2: ( equalityExpression ( AND equalityExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1190:4: equalityExpression ( AND equalityExpression )*
+            // JS.g:1190:2: ( equalityExpression ( AND equalityExpression )* )
+            // JS.g:1190:4: equalityExpression ( AND equalityExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4335,7 +4335,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, equalityExpression114.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1190:23: ( AND equalityExpression )*
+            // JS.g:1190:23: ( AND equalityExpression )*
             loop28:
             do {
                 int alt28=2;
@@ -4348,7 +4348,7 @@ public class JSParser extends Parser {
 
                 switch (alt28) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1190:25: AND equalityExpression
+            	    // JS.g:1190:25: AND equalityExpression
             	    {
             	    AND115=(Token)input.LT(1);
             	    match(input,AND,FOLLOW_AND_in_bitwiseANDExpression4471); 
@@ -4394,7 +4394,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseANDExpressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1193:1: bitwiseANDExpressionNoIn : equalityExpressionNoIn ( AND equalityExpressionNoIn )* ;
+    // JS.g:1193:1: bitwiseANDExpressionNoIn : equalityExpressionNoIn ( AND equalityExpressionNoIn )* ;
     public final bitwiseANDExpressionNoIn_return bitwiseANDExpressionNoIn() throws RecognitionException {
         bitwiseANDExpressionNoIn_return retval = new bitwiseANDExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -4410,8 +4410,8 @@ public class JSParser extends Parser {
         Object AND118_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1194:2: ( equalityExpressionNoIn ( AND equalityExpressionNoIn )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1194:4: equalityExpressionNoIn ( AND equalityExpressionNoIn )*
+            // JS.g:1194:2: ( equalityExpressionNoIn ( AND equalityExpressionNoIn )* )
+            // JS.g:1194:4: equalityExpressionNoIn ( AND equalityExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4420,7 +4420,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, equalityExpressionNoIn117.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1194:27: ( AND equalityExpressionNoIn )*
+            // JS.g:1194:27: ( AND equalityExpressionNoIn )*
             loop29:
             do {
                 int alt29=2;
@@ -4433,7 +4433,7 @@ public class JSParser extends Parser {
 
                 switch (alt29) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1194:29: AND equalityExpressionNoIn
+            	    // JS.g:1194:29: AND equalityExpressionNoIn
             	    {
             	    AND118=(Token)input.LT(1);
             	    match(input,AND,FOLLOW_AND_in_bitwiseANDExpressionNoIn4492); 
@@ -4479,7 +4479,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseXORExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1197:1: bitwiseXORExpression : bitwiseANDExpression ( XOR bitwiseANDExpression )* ;
+    // JS.g:1197:1: bitwiseXORExpression : bitwiseANDExpression ( XOR bitwiseANDExpression )* ;
     public final bitwiseXORExpression_return bitwiseXORExpression() throws RecognitionException {
         bitwiseXORExpression_return retval = new bitwiseXORExpression_return();
         retval.start = input.LT(1);
@@ -4495,8 +4495,8 @@ public class JSParser extends Parser {
         Object XOR121_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1198:2: ( bitwiseANDExpression ( XOR bitwiseANDExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1198:4: bitwiseANDExpression ( XOR bitwiseANDExpression )*
+            // JS.g:1198:2: ( bitwiseANDExpression ( XOR bitwiseANDExpression )* )
+            // JS.g:1198:4: bitwiseANDExpression ( XOR bitwiseANDExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4505,7 +4505,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseANDExpression120.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1198:25: ( XOR bitwiseANDExpression )*
+            // JS.g:1198:25: ( XOR bitwiseANDExpression )*
             loop30:
             do {
                 int alt30=2;
@@ -4518,7 +4518,7 @@ public class JSParser extends Parser {
 
                 switch (alt30) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1198:27: XOR bitwiseANDExpression
+            	    // JS.g:1198:27: XOR bitwiseANDExpression
             	    {
             	    XOR121=(Token)input.LT(1);
             	    match(input,XOR,FOLLOW_XOR_in_bitwiseXORExpression4515); 
@@ -4564,7 +4564,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseXORExpressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1201:1: bitwiseXORExpressionNoIn : bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* ;
+    // JS.g:1201:1: bitwiseXORExpressionNoIn : bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* ;
     public final bitwiseXORExpressionNoIn_return bitwiseXORExpressionNoIn() throws RecognitionException {
         bitwiseXORExpressionNoIn_return retval = new bitwiseXORExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -4580,8 +4580,8 @@ public class JSParser extends Parser {
         Object XOR124_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1202:2: ( bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1202:4: bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )*
+            // JS.g:1202:2: ( bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* )
+            // JS.g:1202:4: bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4590,7 +4590,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseANDExpressionNoIn123.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1202:29: ( XOR bitwiseANDExpressionNoIn )*
+            // JS.g:1202:29: ( XOR bitwiseANDExpressionNoIn )*
             loop31:
             do {
                 int alt31=2;
@@ -4603,7 +4603,7 @@ public class JSParser extends Parser {
 
                 switch (alt31) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1202:31: XOR bitwiseANDExpressionNoIn
+            	    // JS.g:1202:31: XOR bitwiseANDExpressionNoIn
             	    {
             	    XOR124=(Token)input.LT(1);
             	    match(input,XOR,FOLLOW_XOR_in_bitwiseXORExpressionNoIn4538); 
@@ -4649,7 +4649,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseORExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1205:1: bitwiseORExpression : bitwiseXORExpression ( OR bitwiseXORExpression )* ;
+    // JS.g:1205:1: bitwiseORExpression : bitwiseXORExpression ( OR bitwiseXORExpression )* ;
     public final bitwiseORExpression_return bitwiseORExpression() throws RecognitionException {
         bitwiseORExpression_return retval = new bitwiseORExpression_return();
         retval.start = input.LT(1);
@@ -4665,8 +4665,8 @@ public class JSParser extends Parser {
         Object OR127_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1206:2: ( bitwiseXORExpression ( OR bitwiseXORExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1206:4: bitwiseXORExpression ( OR bitwiseXORExpression )*
+            // JS.g:1206:2: ( bitwiseXORExpression ( OR bitwiseXORExpression )* )
+            // JS.g:1206:4: bitwiseXORExpression ( OR bitwiseXORExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4675,7 +4675,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseXORExpression126.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1206:25: ( OR bitwiseXORExpression )*
+            // JS.g:1206:25: ( OR bitwiseXORExpression )*
             loop32:
             do {
                 int alt32=2;
@@ -4688,7 +4688,7 @@ public class JSParser extends Parser {
 
                 switch (alt32) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1206:27: OR bitwiseXORExpression
+            	    // JS.g:1206:27: OR bitwiseXORExpression
             	    {
             	    OR127=(Token)input.LT(1);
             	    match(input,OR,FOLLOW_OR_in_bitwiseORExpression4560); 
@@ -4734,7 +4734,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseORExpressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1209:1: bitwiseORExpressionNoIn : bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* ;
+    // JS.g:1209:1: bitwiseORExpressionNoIn : bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* ;
     public final bitwiseORExpressionNoIn_return bitwiseORExpressionNoIn() throws RecognitionException {
         bitwiseORExpressionNoIn_return retval = new bitwiseORExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -4750,8 +4750,8 @@ public class JSParser extends Parser {
         Object OR130_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1210:2: ( bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1210:4: bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )*
+            // JS.g:1210:2: ( bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* )
+            // JS.g:1210:4: bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4760,7 +4760,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseXORExpressionNoIn129.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1210:29: ( OR bitwiseXORExpressionNoIn )*
+            // JS.g:1210:29: ( OR bitwiseXORExpressionNoIn )*
             loop33:
             do {
                 int alt33=2;
@@ -4773,7 +4773,7 @@ public class JSParser extends Parser {
 
                 switch (alt33) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1210:31: OR bitwiseXORExpressionNoIn
+            	    // JS.g:1210:31: OR bitwiseXORExpressionNoIn
             	    {
             	    OR130=(Token)input.LT(1);
             	    match(input,OR,FOLLOW_OR_in_bitwiseORExpressionNoIn4582); 
@@ -4819,7 +4819,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start logicalANDExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1217:1: logicalANDExpression : bitwiseORExpression ( LAND bitwiseORExpression )* ;
+    // JS.g:1217:1: logicalANDExpression : bitwiseORExpression ( LAND bitwiseORExpression )* ;
     public final logicalANDExpression_return logicalANDExpression() throws RecognitionException {
         logicalANDExpression_return retval = new logicalANDExpression_return();
         retval.start = input.LT(1);
@@ -4835,8 +4835,8 @@ public class JSParser extends Parser {
         Object LAND133_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1218:2: ( bitwiseORExpression ( LAND bitwiseORExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1218:4: bitwiseORExpression ( LAND bitwiseORExpression )*
+            // JS.g:1218:2: ( bitwiseORExpression ( LAND bitwiseORExpression )* )
+            // JS.g:1218:4: bitwiseORExpression ( LAND bitwiseORExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4845,7 +4845,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseORExpression132.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1218:24: ( LAND bitwiseORExpression )*
+            // JS.g:1218:24: ( LAND bitwiseORExpression )*
             loop34:
             do {
                 int alt34=2;
@@ -4858,7 +4858,7 @@ public class JSParser extends Parser {
 
                 switch (alt34) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1218:26: LAND bitwiseORExpression
+            	    // JS.g:1218:26: LAND bitwiseORExpression
             	    {
             	    LAND133=(Token)input.LT(1);
             	    match(input,LAND,FOLLOW_LAND_in_logicalANDExpression4608); 
@@ -4904,7 +4904,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start logicalANDExpressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1221:1: logicalANDExpressionNoIn : bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* ;
+    // JS.g:1221:1: logicalANDExpressionNoIn : bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* ;
     public final logicalANDExpressionNoIn_return logicalANDExpressionNoIn() throws RecognitionException {
         logicalANDExpressionNoIn_return retval = new logicalANDExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -4920,8 +4920,8 @@ public class JSParser extends Parser {
         Object LAND136_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1222:2: ( bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1222:4: bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )*
+            // JS.g:1222:2: ( bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* )
+            // JS.g:1222:4: bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4930,7 +4930,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseORExpressionNoIn135.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1222:28: ( LAND bitwiseORExpressionNoIn )*
+            // JS.g:1222:28: ( LAND bitwiseORExpressionNoIn )*
             loop35:
             do {
                 int alt35=2;
@@ -4943,7 +4943,7 @@ public class JSParser extends Parser {
 
                 switch (alt35) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1222:30: LAND bitwiseORExpressionNoIn
+            	    // JS.g:1222:30: LAND bitwiseORExpressionNoIn
             	    {
             	    LAND136=(Token)input.LT(1);
             	    match(input,LAND,FOLLOW_LAND_in_logicalANDExpressionNoIn4629); 
@@ -4989,7 +4989,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start logicalORExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1225:1: logicalORExpression : logicalANDExpression ( LOR logicalANDExpression )* ;
+    // JS.g:1225:1: logicalORExpression : logicalANDExpression ( LOR logicalANDExpression )* ;
     public final logicalORExpression_return logicalORExpression() throws RecognitionException {
         logicalORExpression_return retval = new logicalORExpression_return();
         retval.start = input.LT(1);
@@ -5005,8 +5005,8 @@ public class JSParser extends Parser {
         Object LOR139_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1226:2: ( logicalANDExpression ( LOR logicalANDExpression )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1226:4: logicalANDExpression ( LOR logicalANDExpression )*
+            // JS.g:1226:2: ( logicalANDExpression ( LOR logicalANDExpression )* )
+            // JS.g:1226:4: logicalANDExpression ( LOR logicalANDExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5015,7 +5015,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, logicalANDExpression138.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1226:25: ( LOR logicalANDExpression )*
+            // JS.g:1226:25: ( LOR logicalANDExpression )*
             loop36:
             do {
                 int alt36=2;
@@ -5028,7 +5028,7 @@ public class JSParser extends Parser {
 
                 switch (alt36) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1226:27: LOR logicalANDExpression
+            	    // JS.g:1226:27: LOR logicalANDExpression
             	    {
             	    LOR139=(Token)input.LT(1);
             	    match(input,LOR,FOLLOW_LOR_in_logicalORExpression4651); 
@@ -5074,7 +5074,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start logicalORExpressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1229:1: logicalORExpressionNoIn : logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* ;
+    // JS.g:1229:1: logicalORExpressionNoIn : logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* ;
     public final logicalORExpressionNoIn_return logicalORExpressionNoIn() throws RecognitionException {
         logicalORExpressionNoIn_return retval = new logicalORExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -5090,8 +5090,8 @@ public class JSParser extends Parser {
         Object LOR142_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1230:2: ( logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1230:4: logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )*
+            // JS.g:1230:2: ( logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* )
+            // JS.g:1230:4: logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5100,7 +5100,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, logicalANDExpressionNoIn141.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1230:29: ( LOR logicalANDExpressionNoIn )*
+            // JS.g:1230:29: ( LOR logicalANDExpressionNoIn )*
             loop37:
             do {
                 int alt37=2;
@@ -5113,7 +5113,7 @@ public class JSParser extends Parser {
 
                 switch (alt37) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1230:31: LOR logicalANDExpressionNoIn
+            	    // JS.g:1230:31: LOR logicalANDExpressionNoIn
             	    {
             	    LOR142=(Token)input.LT(1);
             	    match(input,LOR,FOLLOW_LOR_in_logicalORExpressionNoIn4673); 
@@ -5159,7 +5159,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start conditionalExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1237:1: conditionalExpression : logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? ;
+    // JS.g:1237:1: conditionalExpression : logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? ;
     public final conditionalExpression_return conditionalExpression() throws RecognitionException {
         conditionalExpression_return retval = new conditionalExpression_return();
         retval.start = input.LT(1);
@@ -5179,8 +5179,8 @@ public class JSParser extends Parser {
         Object COLON147_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1238:2: ( logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1238:4: logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )?
+            // JS.g:1238:2: ( logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? )
+            // JS.g:1238:4: logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5189,7 +5189,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, logicalORExpression144.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1238:24: ( QUE assignmentExpression COLON assignmentExpression )?
+            // JS.g:1238:24: ( QUE assignmentExpression COLON assignmentExpression )?
             int alt38=2;
             int LA38_0 = input.LA(1);
 
@@ -5198,7 +5198,7 @@ public class JSParser extends Parser {
             }
             switch (alt38) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1238:26: QUE assignmentExpression COLON assignmentExpression
+                    // JS.g:1238:26: QUE assignmentExpression COLON assignmentExpression
                     {
                     QUE145=(Token)input.LT(1);
                     match(input,QUE,FOLLOW_QUE_in_conditionalExpression4699); 
@@ -5248,7 +5248,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start conditionalExpressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1241:1: conditionalExpressionNoIn : logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? ;
+    // JS.g:1241:1: conditionalExpressionNoIn : logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? ;
     public final conditionalExpressionNoIn_return conditionalExpressionNoIn() throws RecognitionException {
         conditionalExpressionNoIn_return retval = new conditionalExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -5268,8 +5268,8 @@ public class JSParser extends Parser {
         Object COLON152_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1242:2: ( logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1242:4: logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
+            // JS.g:1242:2: ( logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? )
+            // JS.g:1242:4: logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5278,7 +5278,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, logicalORExpressionNoIn149.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1242:28: ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
+            // JS.g:1242:28: ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
             int alt39=2;
             int LA39_0 = input.LA(1);
 
@@ -5287,7 +5287,7 @@ public class JSParser extends Parser {
             }
             switch (alt39) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1242:30: QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn
+                    // JS.g:1242:30: QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn
                     {
                     QUE150=(Token)input.LT(1);
                     match(input,QUE,FOLLOW_QUE_in_conditionalExpressionNoIn4725); 
@@ -5337,7 +5337,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start assignmentExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1271:1: assignmentExpression : lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? ;
+    // JS.g:1271:1: assignmentExpression : lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? ;
     public final assignmentExpression_return assignmentExpression() throws RecognitionException {
         assignmentExpression_return retval = new assignmentExpression_return();
         retval.start = input.LT(1);
@@ -5356,8 +5356,8 @@ public class JSParser extends Parser {
         	Object[] isLhs = new Object[1];
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1276:2: (lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1276:4: lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )?
+            // JS.g:1276:2: (lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? )
+            // JS.g:1276:4: lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5366,7 +5366,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, lhs.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1277:2: ({...}? assignmentOperator assignmentExpression )?
+            // JS.g:1277:2: ({...}? assignmentOperator assignmentExpression )?
             int alt40=2;
             int LA40_0 = input.LA(1);
 
@@ -5379,7 +5379,7 @@ public class JSParser extends Parser {
             }
             switch (alt40) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1277:4: {...}? assignmentOperator assignmentExpression
+                    // JS.g:1277:4: {...}? assignmentOperator assignmentExpression
                     {
                     if ( !( isLeftHandSideAssign(lhs, isLhs) ) ) {
                         throw new FailedPredicateException(input, "assignmentExpression", " isLeftHandSideAssign(lhs, isLhs) ");
@@ -5425,7 +5425,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start assignmentOperator
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1280:1: assignmentOperator : ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS );
+    // JS.g:1280:1: assignmentOperator : ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS );
     public final assignmentOperator_return assignmentOperator() throws RecognitionException {
         assignmentOperator_return retval = new assignmentOperator_return();
         retval.start = input.LT(1);
@@ -5437,8 +5437,8 @@ public class JSParser extends Parser {
         Object set156_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1281:3: ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            // JS.g:1281:3: ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS )
+            // JS.g:
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5479,7 +5479,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start assignmentExpressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1284:1: assignmentExpressionNoIn : lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? ;
+    // JS.g:1284:1: assignmentExpressionNoIn : lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? ;
     public final assignmentExpressionNoIn_return assignmentExpressionNoIn() throws RecognitionException {
         assignmentExpressionNoIn_return retval = new assignmentExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -5498,8 +5498,8 @@ public class JSParser extends Parser {
         	Object[] isLhs = new Object[1];
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1289:2: (lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1289:4: lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )?
+            // JS.g:1289:2: (lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? )
+            // JS.g:1289:4: lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5508,7 +5508,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, lhs.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1290:2: ({...}? assignmentOperator assignmentExpressionNoIn )?
+            // JS.g:1290:2: ({...}? assignmentOperator assignmentExpressionNoIn )?
             int alt41=2;
             int LA41_0 = input.LA(1);
 
@@ -5521,7 +5521,7 @@ public class JSParser extends Parser {
             }
             switch (alt41) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1290:4: {...}? assignmentOperator assignmentExpressionNoIn
+                    // JS.g:1290:4: {...}? assignmentOperator assignmentExpressionNoIn
                     {
                     if ( !( isLeftHandSideAssign(lhs, isLhs) ) ) {
                         throw new FailedPredicateException(input, "assignmentExpressionNoIn", " isLeftHandSideAssign(lhs, isLhs) ");
@@ -5567,7 +5567,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start expression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1297:1: expression : exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
+    // JS.g:1297:1: expression : exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
     public final expression_return expression() throws RecognitionException {
         expression_return retval = new expression_return();
         retval.start = input.LT(1);
@@ -5581,8 +5581,8 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1298:2: (exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1298:4: exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )*
+            // JS.g:1298:2: (exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
+            // JS.g:1298:4: exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )*
             {
             pushFollow(FOLLOW_assignmentExpression_in_expression4881);
             exprs=assignmentExpression();
@@ -5592,7 +5592,7 @@ public class JSParser extends Parser {
             if (list_exprs==null) list_exprs=new ArrayList();
             list_exprs.add(exprs);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1298:32: ( COMMA exprs+= assignmentExpression )*
+            // JS.g:1298:32: ( COMMA exprs+= assignmentExpression )*
             loop42:
             do {
                 int alt42=2;
@@ -5605,7 +5605,7 @@ public class JSParser extends Parser {
 
                 switch (alt42) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1298:34: COMMA exprs+= assignmentExpression
+            	    // JS.g:1298:34: COMMA exprs+= assignmentExpression
             	    {
             	    COMMA159=(Token)input.LT(1);
             	    match(input,COMMA,FOLLOW_COMMA_in_expression4885); 
@@ -5641,7 +5641,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1299:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
             if ( list_exprs.size() > 1 ) {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1299:28: ^( CEXPR ( $exprs)+ )
+                // JS.g:1299:28: ^( CEXPR ( $exprs)+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(CEXPR, "CEXPR"), root_1);
@@ -5691,7 +5691,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start expressionNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1303:1: expressionNoIn : exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
+    // JS.g:1303:1: expressionNoIn : exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
     public final expressionNoIn_return expressionNoIn() throws RecognitionException {
         expressionNoIn_return retval = new expressionNoIn_return();
         retval.start = input.LT(1);
@@ -5705,8 +5705,8 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_assignmentExpressionNoIn=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpressionNoIn");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1304:2: (exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1304:4: exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )*
+            // JS.g:1304:2: (exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
+            // JS.g:1304:4: exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )*
             {
             pushFollow(FOLLOW_assignmentExpressionNoIn_in_expressionNoIn4926);
             exprs=assignmentExpressionNoIn();
@@ -5716,7 +5716,7 @@ public class JSParser extends Parser {
             if (list_exprs==null) list_exprs=new ArrayList();
             list_exprs.add(exprs);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1304:36: ( COMMA exprs+= assignmentExpressionNoIn )*
+            // JS.g:1304:36: ( COMMA exprs+= assignmentExpressionNoIn )*
             loop43:
             do {
                 int alt43=2;
@@ -5729,7 +5729,7 @@ public class JSParser extends Parser {
 
                 switch (alt43) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1304:38: COMMA exprs+= assignmentExpressionNoIn
+            	    // JS.g:1304:38: COMMA exprs+= assignmentExpressionNoIn
             	    {
             	    COMMA160=(Token)input.LT(1);
             	    match(input,COMMA,FOLLOW_COMMA_in_expressionNoIn4930); 
@@ -5765,7 +5765,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1305:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
             if ( list_exprs.size() > 1 ) {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1305:28: ^( CEXPR ( $exprs)+ )
+                // JS.g:1305:28: ^( CEXPR ( $exprs)+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(CEXPR, "CEXPR"), root_1);
@@ -5815,7 +5815,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start semic
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1331:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );
+    // JS.g:1331:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );
     public final semic_return semic() throws RecognitionException {
         semic_return retval = new semic_return();
         retval.start = input.LT(1);
@@ -5841,7 +5841,7 @@ public class JSParser extends Parser {
         	promoteEOL(retval);
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1339:2: ( SEMIC | EOF | RBRACE | EOL | MultiLineComment )
+            // JS.g:1339:2: ( SEMIC | EOF | RBRACE | EOL | MultiLineComment )
             int alt44=5;
             switch ( input.LA(1) ) {
             case SEMIC:
@@ -5878,7 +5878,7 @@ public class JSParser extends Parser {
 
             switch (alt44) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1339:4: SEMIC
+                    // JS.g:1339:4: SEMIC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -5891,7 +5891,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1340:4: EOF
+                    // JS.g:1340:4: EOF
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -5904,7 +5904,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1341:4: RBRACE
+                    // JS.g:1341:4: RBRACE
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -5918,7 +5918,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1342:4: EOL
+                    // JS.g:1342:4: EOL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -5931,7 +5931,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1342:10: MultiLineComment
+                    // JS.g:1342:10: MultiLineComment
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -5967,7 +5967,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start statement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1350:1: statement options {k=1; } : ({...}? block | statementTail );
+    // JS.g:1350:1: statement options {k=1; } : ({...}? block | statementTail );
     public final statement_return statement() throws RecognitionException {
         statement_return retval = new statement_return();
         retval.start = input.LT(1);
@@ -5981,7 +5981,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1355:2: ({...}? block | statementTail )
+            // JS.g:1355:2: ({...}? block | statementTail )
             int alt45=2;
             int LA45_0 = input.LA(1);
 
@@ -6012,7 +6012,7 @@ public class JSParser extends Parser {
             }
             switch (alt45) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1355:4: {...}? block
+                    // JS.g:1355:4: {...}? block
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6028,7 +6028,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1356:4: statementTail
+                    // JS.g:1356:4: statementTail
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6064,7 +6064,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start statementTail
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1359:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );
+    // JS.g:1359:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );
     public final statementTail_return statementTail() throws RecognitionException {
         statementTail_return retval = new statementTail_return();
         retval.start = input.LT(1);
@@ -6104,7 +6104,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1360:2: ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement )
+            // JS.g:1360:2: ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement )
             int alt46=15;
             switch ( input.LA(1) ) {
             case VAR:
@@ -6231,7 +6231,7 @@ public class JSParser extends Parser {
 
             switch (alt46) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1360:4: variableStatement
+                    // JS.g:1360:4: variableStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6244,7 +6244,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1361:4: emptyStatement
+                    // JS.g:1361:4: emptyStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6257,7 +6257,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1362:4: expressionStatement
+                    // JS.g:1362:4: expressionStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6270,7 +6270,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1363:4: ifStatement
+                    // JS.g:1363:4: ifStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6283,7 +6283,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1364:4: iterationStatement
+                    // JS.g:1364:4: iterationStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6296,7 +6296,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1365:4: continueStatement
+                    // JS.g:1365:4: continueStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6309,7 +6309,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1366:4: breakStatement
+                    // JS.g:1366:4: breakStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6322,7 +6322,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1367:4: returnStatement
+                    // JS.g:1367:4: returnStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6335,7 +6335,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 9 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1368:4: withStatement
+                    // JS.g:1368:4: withStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6348,7 +6348,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 10 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1369:4: labelledStatement
+                    // JS.g:1369:4: labelledStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6361,7 +6361,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 11 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1370:4: switchStatement
+                    // JS.g:1370:4: switchStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6374,7 +6374,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 12 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1371:4: throwStatement
+                    // JS.g:1371:4: throwStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6387,7 +6387,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 13 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1372:4: tryStatement
+                    // JS.g:1372:4: tryStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6400,7 +6400,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 14 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1373:4: constStatement
+                    // JS.g:1373:4: constStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6413,7 +6413,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 15 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1374:4: namespaceStatement
+                    // JS.g:1374:4: namespaceStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -6449,7 +6449,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start block
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1379:1: block : lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) ;
+    // JS.g:1379:1: block : lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) ;
     public final block_return block() throws RecognitionException {
         block_return retval = new block_return();
         retval.start = input.LT(1);
@@ -6467,14 +6467,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LBRACE=new RewriteRuleTokenStream(adaptor,"token LBRACE");
         RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1380:2: (lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1380:4: lb= LBRACE ( statement )* RBRACE
+            // JS.g:1380:2: (lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) )
+            // JS.g:1380:4: lb= LBRACE ( statement )* RBRACE
             {
             lb=(Token)input.LT(1);
             match(input,LBRACE,FOLLOW_LBRACE_in_block5137); 
             stream_LBRACE.add(lb);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1380:14: ( statement )*
+            // JS.g:1380:14: ( statement )*
             loop47:
             do {
                 int alt47=2;
@@ -6487,7 +6487,7 @@ public class JSParser extends Parser {
 
                 switch (alt47) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1380:14: statement
+            	    // JS.g:1380:14: statement
             	    {
             	    pushFollow(FOLLOW_statement_in_block5139);
             	    statement183=statement();
@@ -6520,12 +6520,12 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1381:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1381:5: ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
+                // JS.g:1381:5: ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(BLOCK, lb,  "BLOCK"), root_1);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1381:28: ( statement )*
+                // JS.g:1381:28: ( statement )*
                 while ( stream_statement.hasNext() ) {
                     adaptor.addChild(root_1, stream_statement.next());
 
@@ -6563,7 +6563,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start variableStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1388:1: variableStatement : VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) ;
+    // JS.g:1388:1: variableStatement : VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) ;
     public final variableStatement_return variableStatement() throws RecognitionException {
         variableStatement_return retval = new variableStatement_return();
         retval.start = input.LT(1);
@@ -6586,8 +6586,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_variableDeclaration=new RewriteRuleSubtreeStream(adaptor,"rule variableDeclaration");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1389:2: ( VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1389:4: VAR variableDeclaration ( COMMA variableDeclaration )* semic
+            // JS.g:1389:2: ( VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) )
+            // JS.g:1389:4: VAR variableDeclaration ( COMMA variableDeclaration )* semic
             {
             VAR185=(Token)input.LT(1);
             match(input,VAR,FOLLOW_VAR_in_variableStatement5171); 
@@ -6598,7 +6598,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_variableDeclaration.add(variableDeclaration186.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1389:28: ( COMMA variableDeclaration )*
+            // JS.g:1389:28: ( COMMA variableDeclaration )*
             loop48:
             do {
                 int alt48=2;
@@ -6611,7 +6611,7 @@ public class JSParser extends Parser {
 
                 switch (alt48) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1389:30: COMMA variableDeclaration
+            	    // JS.g:1389:30: COMMA variableDeclaration
             	    {
             	    COMMA187=(Token)input.LT(1);
             	    match(input,COMMA,FOLLOW_COMMA_in_variableStatement5177); 
@@ -6649,7 +6649,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1390:2: -> ^( VAR ( variableDeclaration )+ )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1390:5: ^( VAR ( variableDeclaration )+ )
+                // JS.g:1390:5: ^( VAR ( variableDeclaration )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_VAR.next(), root_1);
@@ -6694,7 +6694,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start variableDeclaration
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1393:1: variableDeclaration : Identifier ( ASSIGN assignmentExpression )? ;
+    // JS.g:1393:1: variableDeclaration : Identifier ( ASSIGN assignmentExpression )? ;
     public final variableDeclaration_return variableDeclaration() throws RecognitionException {
         variableDeclaration_return retval = new variableDeclaration_return();
         retval.start = input.LT(1);
@@ -6710,8 +6710,8 @@ public class JSParser extends Parser {
         Object ASSIGN191_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1394:2: ( Identifier ( ASSIGN assignmentExpression )? )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1394:4: Identifier ( ASSIGN assignmentExpression )?
+            // JS.g:1394:2: ( Identifier ( ASSIGN assignmentExpression )? )
+            // JS.g:1394:4: Identifier ( ASSIGN assignmentExpression )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6720,7 +6720,7 @@ public class JSParser extends Parser {
             Identifier190_tree = (Object)adaptor.create(Identifier190);
             adaptor.addChild(root_0, Identifier190_tree);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1394:15: ( ASSIGN assignmentExpression )?
+            // JS.g:1394:15: ( ASSIGN assignmentExpression )?
             int alt49=2;
             int LA49_0 = input.LA(1);
 
@@ -6729,7 +6729,7 @@ public class JSParser extends Parser {
             }
             switch (alt49) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1394:17: ASSIGN assignmentExpression
+                    // JS.g:1394:17: ASSIGN assignmentExpression
                     {
                     ASSIGN191=(Token)input.LT(1);
                     match(input,ASSIGN,FOLLOW_ASSIGN_in_variableDeclaration5211); 
@@ -6772,7 +6772,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start variableDeclarationNoIn
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1397:1: variableDeclarationNoIn : Identifier ( ASSIGN assignmentExpressionNoIn )? ;
+    // JS.g:1397:1: variableDeclarationNoIn : Identifier ( ASSIGN assignmentExpressionNoIn )? ;
     public final variableDeclarationNoIn_return variableDeclarationNoIn() throws RecognitionException {
         variableDeclarationNoIn_return retval = new variableDeclarationNoIn_return();
         retval.start = input.LT(1);
@@ -6788,8 +6788,8 @@ public class JSParser extends Parser {
         Object ASSIGN194_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1398:2: ( Identifier ( ASSIGN assignmentExpressionNoIn )? )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1398:4: Identifier ( ASSIGN assignmentExpressionNoIn )?
+            // JS.g:1398:2: ( Identifier ( ASSIGN assignmentExpressionNoIn )? )
+            // JS.g:1398:4: Identifier ( ASSIGN assignmentExpressionNoIn )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6798,7 +6798,7 @@ public class JSParser extends Parser {
             Identifier193_tree = (Object)adaptor.create(Identifier193);
             adaptor.addChild(root_0, Identifier193_tree);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1398:15: ( ASSIGN assignmentExpressionNoIn )?
+            // JS.g:1398:15: ( ASSIGN assignmentExpressionNoIn )?
             int alt50=2;
             int LA50_0 = input.LA(1);
 
@@ -6807,7 +6807,7 @@ public class JSParser extends Parser {
             }
             switch (alt50) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1398:17: ASSIGN assignmentExpressionNoIn
+                    // JS.g:1398:17: ASSIGN assignmentExpressionNoIn
                     {
                     ASSIGN194=(Token)input.LT(1);
                     match(input,ASSIGN,FOLLOW_ASSIGN_in_variableDeclarationNoIn5233); 
@@ -6850,7 +6850,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start constStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1401:1: constStatement : CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) ;
+    // JS.g:1401:1: constStatement : CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) ;
     public final constStatement_return constStatement() throws RecognitionException {
         constStatement_return retval = new constStatement_return();
         retval.start = input.LT(1);
@@ -6873,8 +6873,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_variableDeclaration=new RewriteRuleSubtreeStream(adaptor,"rule variableDeclaration");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1402:3: ( CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1402:5: CONST variableDeclaration ( COMMA variableDeclaration )* semic
+            // JS.g:1402:3: ( CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) )
+            // JS.g:1402:5: CONST variableDeclaration ( COMMA variableDeclaration )* semic
             {
             CONST196=(Token)input.LT(1);
             match(input,CONST,FOLLOW_CONST_in_constStatement5251); 
@@ -6885,7 +6885,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_variableDeclaration.add(variableDeclaration197.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1402:31: ( COMMA variableDeclaration )*
+            // JS.g:1402:31: ( COMMA variableDeclaration )*
             loop51:
             do {
                 int alt51=2;
@@ -6898,7 +6898,7 @@ public class JSParser extends Parser {
 
                 switch (alt51) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1402:33: COMMA variableDeclaration
+            	    // JS.g:1402:33: COMMA variableDeclaration
             	    {
             	    COMMA198=(Token)input.LT(1);
             	    match(input,COMMA,FOLLOW_COMMA_in_constStatement5257); 
@@ -6936,7 +6936,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1403:3: -> ^( CONST ( variableDeclaration )+ )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1403:6: ^( CONST ( variableDeclaration )+ )
+                // JS.g:1403:6: ^( CONST ( variableDeclaration )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_CONST.next(), root_1);
@@ -6981,7 +6981,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start emptyStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1410:1: emptyStatement : SEMIC ;
+    // JS.g:1410:1: emptyStatement : SEMIC ;
     public final emptyStatement_return emptyStatement() throws RecognitionException {
         emptyStatement_return retval = new emptyStatement_return();
         retval.start = input.LT(1);
@@ -6993,8 +6993,8 @@ public class JSParser extends Parser {
         Object SEMIC201_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1411:2: ( SEMIC )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1411:4: SEMIC
+            // JS.g:1411:2: ( SEMIC )
+            // JS.g:1411:4: SEMIC
             {
             root_0 = (Object)adaptor.nil();
 
@@ -7025,7 +7025,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start expressionStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1424:1: expressionStatement : expression semic ;
+    // JS.g:1424:1: expressionStatement : expression semic ;
     public final expressionStatement_return expressionStatement() throws RecognitionException {
         expressionStatement_return retval = new expressionStatement_return();
         retval.start = input.LT(1);
@@ -7039,8 +7039,8 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1425:2: ( expression semic )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1425:4: expression semic
+            // JS.g:1425:2: ( expression semic )
+            // JS.g:1425:4: expression semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -7078,7 +7078,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start ifStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1432:1: ifStatement : IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) ;
+    // JS.g:1432:1: ifStatement : IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) ;
     public final ifStatement_return ifStatement() throws RecognitionException {
         ifStatement_return retval = new ifStatement_return();
         retval.start = input.LT(1);
@@ -7107,8 +7107,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1434:2: ( IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1434:4: IF LPAREN expression RPAREN statement ({...}? ELSE statement )?
+            // JS.g:1434:2: ( IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) )
+            // JS.g:1434:4: IF LPAREN expression RPAREN statement ({...}? ELSE statement )?
             {
             IF204=(Token)input.LT(1);
             match(input,IF,FOLLOW_IF_in_ifStatement5333); 
@@ -7132,7 +7132,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_statement.add(statement208.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1434:42: ({...}? ELSE statement )?
+            // JS.g:1434:42: ({...}? ELSE statement )?
             int alt52=2;
             int LA52_0 = input.LA(1);
 
@@ -7145,7 +7145,7 @@ public class JSParser extends Parser {
             }
             switch (alt52) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1434:44: {...}? ELSE statement
+                    // JS.g:1434:44: {...}? ELSE statement
                     {
                     if ( !( input.LA(1) == ELSE ) ) {
                         throw new FailedPredicateException(input, "ifStatement", " input.LA(1) == ELSE ");
@@ -7178,7 +7178,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1435:2: -> ^( IF expression ( statement )+ )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1435:5: ^( IF expression ( statement )+ )
+                // JS.g:1435:5: ^( IF expression ( statement )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_IF.next(), root_1);
@@ -7224,7 +7224,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start iterationStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1442:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );
+    // JS.g:1442:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );
     public final iterationStatement_return iterationStatement() throws RecognitionException {
         iterationStatement_return retval = new iterationStatement_return();
         retval.start = input.LT(1);
@@ -7242,7 +7242,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1443:2: ( doStatement | whileStatement | forEachStatement | forStatement )
+            // JS.g:1443:2: ( doStatement | whileStatement | forEachStatement | forStatement )
             int alt53=4;
             switch ( input.LA(1) ) {
             case DO:
@@ -7282,7 +7282,7 @@ public class JSParser extends Parser {
 
             switch (alt53) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1443:4: doStatement
+                    // JS.g:1443:4: doStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7295,7 +7295,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1444:4: whileStatement
+                    // JS.g:1444:4: whileStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7308,7 +7308,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1445:4: forEachStatement
+                    // JS.g:1445:4: forEachStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7321,7 +7321,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1446:4: forStatement
+                    // JS.g:1446:4: forStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7357,7 +7357,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start doStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1449:1: doStatement : DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) ;
+    // JS.g:1449:1: doStatement : DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) ;
     public final doStatement_return doStatement() throws RecognitionException {
         doStatement_return retval = new doStatement_return();
         retval.start = input.LT(1);
@@ -7387,8 +7387,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1450:2: ( DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1450:4: DO statement WHILE LPAREN expression RPAREN semic
+            // JS.g:1450:2: ( DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) )
+            // JS.g:1450:4: DO statement WHILE LPAREN expression RPAREN semic
             {
             DO215=(Token)input.LT(1);
             match(input,DO,FOLLOW_DO_in_doStatement5409); 
@@ -7434,7 +7434,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1451:2: -> ^( DO statement expression )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1451:5: ^( DO statement expression )
+                // JS.g:1451:5: ^( DO statement expression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_DO.next(), root_1);
@@ -7473,7 +7473,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start whileStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1454:1: whileStatement : WHILE LPAREN expression RPAREN statement ;
+    // JS.g:1454:1: whileStatement : WHILE LPAREN expression RPAREN statement ;
     public final whileStatement_return whileStatement() throws RecognitionException {
         whileStatement_return retval = new whileStatement_return();
         retval.start = input.LT(1);
@@ -7493,8 +7493,8 @@ public class JSParser extends Parser {
         Object RPAREN225_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1455:2: ( WHILE LPAREN expression RPAREN statement )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1455:4: WHILE LPAREN expression RPAREN statement
+            // JS.g:1455:2: ( WHILE LPAREN expression RPAREN statement )
+            // JS.g:1455:4: WHILE LPAREN expression RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
@@ -7542,7 +7542,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forEachStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1500:1: forEachStatement : FOR EACH LPAREN forEachControl RPAREN statement ;
+    // JS.g:1500:1: forEachStatement : FOR EACH LPAREN forEachControl RPAREN statement ;
     public final forEachStatement_return forEachStatement() throws RecognitionException {
         forEachStatement_return retval = new forEachStatement_return();
         retval.start = input.LT(1);
@@ -7564,8 +7564,8 @@ public class JSParser extends Parser {
         Object RPAREN231_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1501:3: ( FOR EACH LPAREN forEachControl RPAREN statement )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1501:5: FOR EACH LPAREN forEachControl RPAREN statement
+            // JS.g:1501:3: ( FOR EACH LPAREN forEachControl RPAREN statement )
+            // JS.g:1501:5: FOR EACH LPAREN forEachControl RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
@@ -7615,7 +7615,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forEachControl
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1504:1: forEachControl : ( forControlVar | forControlExpression );
+    // JS.g:1504:1: forEachControl : ( forControlVar | forControlExpression );
     public final forEachControl_return forEachControl() throws RecognitionException {
         forEachControl_return retval = new forEachControl_return();
         retval.start = input.LT(1);
@@ -7629,7 +7629,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1505:3: ( forControlVar | forControlExpression )
+            // JS.g:1505:3: ( forControlVar | forControlExpression )
             int alt54=2;
             int LA54_0 = input.LA(1);
 
@@ -7647,7 +7647,7 @@ public class JSParser extends Parser {
             }
             switch (alt54) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1505:5: forControlVar
+                    // JS.g:1505:5: forControlVar
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7660,7 +7660,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1506:5: forControlExpression
+                    // JS.g:1506:5: forControlExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7696,7 +7696,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1509:1: forStatement : FOR LPAREN forControl RPAREN statement ;
+    // JS.g:1509:1: forStatement : FOR LPAREN forControl RPAREN statement ;
     public final forStatement_return forStatement() throws RecognitionException {
         forStatement_return retval = new forStatement_return();
         retval.start = input.LT(1);
@@ -7716,8 +7716,8 @@ public class JSParser extends Parser {
         Object RPAREN238_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1510:2: ( FOR LPAREN forControl RPAREN statement )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1510:4: FOR LPAREN forControl RPAREN statement
+            // JS.g:1510:2: ( FOR LPAREN forControl RPAREN statement )
+            // JS.g:1510:4: FOR LPAREN forControl RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
@@ -7765,7 +7765,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forControl
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1513:1: forControl : ( forControlVar | forControlExpression | forControlSemic );
+    // JS.g:1513:1: forControl : ( forControlVar | forControlExpression | forControlSemic );
     public final forControl_return forControl() throws RecognitionException {
         forControl_return retval = new forControl_return();
         retval.start = input.LT(1);
@@ -7781,7 +7781,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1514:2: ( forControlVar | forControlExpression | forControlSemic )
+            // JS.g:1514:2: ( forControlVar | forControlExpression | forControlSemic )
             int alt55=3;
             switch ( input.LA(1) ) {
             case VAR:
@@ -7834,7 +7834,7 @@ public class JSParser extends Parser {
 
             switch (alt55) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1514:4: forControlVar
+                    // JS.g:1514:4: forControlVar
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7847,7 +7847,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1515:4: forControlExpression
+                    // JS.g:1515:4: forControlExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7860,7 +7860,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1516:4: forControlSemic
+                    // JS.g:1516:4: forControlSemic
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7896,7 +7896,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forControlVar
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1519:1: forControlVar : VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) ;
+    // JS.g:1519:1: forControlVar : VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) ;
     public final forControlVar_return forControlVar() throws RecognitionException {
         forControlVar_return retval = new forControlVar_return();
         retval.start = input.LT(1);
@@ -7931,8 +7931,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_variableDeclarationNoIn=new RewriteRuleSubtreeStream(adaptor,"rule variableDeclarationNoIn");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1520:2: ( VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1520:4: VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
+            // JS.g:1520:2: ( VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) )
+            // JS.g:1520:4: VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
             {
             VAR243=(Token)input.LT(1);
             match(input,VAR,FOLLOW_VAR_in_forControlVar5560); 
@@ -7943,7 +7943,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_variableDeclarationNoIn.add(variableDeclarationNoIn244.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1521:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
+            // JS.g:1521:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
             int alt59=2;
             int LA59_0 = input.LA(1);
 
@@ -7961,10 +7961,10 @@ public class JSParser extends Parser {
             }
             switch (alt59) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1522:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
+                    // JS.g:1522:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
                     {
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1522:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1523:4: IN expression
+                    // JS.g:1522:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
+                    // JS.g:1523:4: IN expression
                     {
                     IN245=(Token)input.LT(1);
                     match(input,IN,FOLLOW_IN_in_forControlVar5574); 
@@ -7988,12 +7988,12 @@ public class JSParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 1524:4: -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
                     {
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1524:7: ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
+                        // JS.g:1524:7: ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORITER, "FORITER"), root_1);
 
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1524:18: ^( VAR variableDeclarationNoIn )
+                        // JS.g:1524:18: ^( VAR variableDeclarationNoIn )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_VAR.next(), root_2);
@@ -8002,7 +8002,7 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1524:51: ^( EXPR expression )
+                        // JS.g:1524:51: ^( EXPR expression )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -8025,12 +8025,12 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1527:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
+                    // JS.g:1527:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
                     {
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1527:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1528:4: ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )?
+                    // JS.g:1527:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
+                    // JS.g:1528:4: ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )?
                     {
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1528:4: ( COMMA variableDeclarationNoIn )*
+                    // JS.g:1528:4: ( COMMA variableDeclarationNoIn )*
                     loop56:
                     do {
                         int alt56=2;
@@ -8043,7 +8043,7 @@ public class JSParser extends Parser {
 
                         switch (alt56) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1528:6: COMMA variableDeclarationNoIn
+                    	    // JS.g:1528:6: COMMA variableDeclarationNoIn
                     	    {
                     	    COMMA247=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_forControlVar5622); 
@@ -8067,7 +8067,7 @@ public class JSParser extends Parser {
                     match(input,SEMIC,FOLLOW_SEMIC_in_forControlVar5629); 
                     stream_SEMIC.add(SEMIC249);
 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1528:48: (ex1= expression )?
+                    // JS.g:1528:48: (ex1= expression )?
                     int alt57=2;
                     int LA57_0 = input.LA(1);
 
@@ -8076,7 +8076,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt57) {
                         case 1 :
-                            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1528:48: ex1= expression
+                            // JS.g:1528:48: ex1= expression
                             {
                             pushFollow(FOLLOW_expression_in_forControlVar5633);
                             ex1=expression();
@@ -8093,7 +8093,7 @@ public class JSParser extends Parser {
                     match(input,SEMIC,FOLLOW_SEMIC_in_forControlVar5636); 
                     stream_SEMIC.add(SEMIC250);
 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1528:70: (ex2= expression )?
+                    // JS.g:1528:70: (ex2= expression )?
                     int alt58=2;
                     int LA58_0 = input.LA(1);
 
@@ -8102,7 +8102,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt58) {
                         case 1 :
-                            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1528:70: ex2= expression
+                            // JS.g:1528:70: ex2= expression
                             {
                             pushFollow(FOLLOW_expression_in_forControlVar5640);
                             ex2=expression();
@@ -8130,12 +8130,12 @@ public class JSParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 1529:4: -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
                     {
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1529:7: ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
+                        // JS.g:1529:7: ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1529:18: ^( VAR ( variableDeclarationNoIn )+ )
+                        // JS.g:1529:18: ^( VAR ( variableDeclarationNoIn )+ )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_VAR.next(), root_2);
@@ -8151,12 +8151,12 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1529:52: ^( EXPR ( $ex1)? )
+                        // JS.g:1529:52: ^( EXPR ( $ex1)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1529:60: ( $ex1)?
+                        // JS.g:1529:60: ( $ex1)?
                         if ( stream_ex1.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex1.next());
 
@@ -8165,12 +8165,12 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1529:68: ^( EXPR ( $ex2)? )
+                        // JS.g:1529:68: ^( EXPR ( $ex2)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1529:76: ( $ex2)?
+                        // JS.g:1529:76: ( $ex2)?
                         if ( stream_ex2.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex2.next());
 
@@ -8220,7 +8220,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forControlExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1534:1: forControlExpression : ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) ;
+    // JS.g:1534:1: forControlExpression : ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) ;
     public final forControlExpression_return forControlExpression() throws RecognitionException {
         forControlExpression_return retval = new forControlExpression_return();
         retval.start = input.LT(1);
@@ -8248,15 +8248,15 @@ public class JSParser extends Parser {
         	Object[] isLhs = new Object[1];
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1539:2: (ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1539:4: ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
+            // JS.g:1539:2: (ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) )
+            // JS.g:1539:4: ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
             {
             pushFollow(FOLLOW_expressionNoIn_in_forControlExpression5706);
             ex1=expressionNoIn();
             _fsp--;
 
             stream_expressionNoIn.add(ex1.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1540:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
+            // JS.g:1540:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
             int alt62=2;
             int LA62_0 = input.LA(1);
 
@@ -8274,13 +8274,13 @@ public class JSParser extends Parser {
             }
             switch (alt62) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1541:3: {...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
+                    // JS.g:1541:3: {...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
                     {
                     if ( !( isLeftHandSideIn(ex1, isLhs) ) ) {
                         throw new FailedPredicateException(input, "forControlExpression", " isLeftHandSideIn(ex1, isLhs) ");
                     }
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1541:37: ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1542:4: IN ex2= expression
+                    // JS.g:1541:37: ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
+                    // JS.g:1542:4: IN ex2= expression
                     {
                     IN251=(Token)input.LT(1);
                     match(input,IN,FOLLOW_IN_in_forControlExpression5721); 
@@ -8306,12 +8306,12 @@ public class JSParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 1543:4: -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
                     {
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1543:7: ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
+                        // JS.g:1543:7: ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORITER, "FORITER"), root_1);
 
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1543:18: ^( EXPR $ex1)
+                        // JS.g:1543:18: ^( EXPR $ex1)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -8320,7 +8320,7 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1543:33: ^( EXPR $ex2)
+                        // JS.g:1543:33: ^( EXPR $ex2)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -8343,16 +8343,16 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1546:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
+                    // JS.g:1546:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
                     {
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1546:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1547:4: SEMIC (ex2= expression )? SEMIC (ex3= expression )?
+                    // JS.g:1546:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
+                    // JS.g:1547:4: SEMIC (ex2= expression )? SEMIC (ex3= expression )?
                     {
                     SEMIC252=(Token)input.LT(1);
                     match(input,SEMIC,FOLLOW_SEMIC_in_forControlExpression5771); 
                     stream_SEMIC.add(SEMIC252);
 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1547:13: (ex2= expression )?
+                    // JS.g:1547:13: (ex2= expression )?
                     int alt60=2;
                     int LA60_0 = input.LA(1);
 
@@ -8361,7 +8361,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt60) {
                         case 1 :
-                            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1547:13: ex2= expression
+                            // JS.g:1547:13: ex2= expression
                             {
                             pushFollow(FOLLOW_expression_in_forControlExpression5775);
                             ex2=expression();
@@ -8378,7 +8378,7 @@ public class JSParser extends Parser {
                     match(input,SEMIC,FOLLOW_SEMIC_in_forControlExpression5778); 
                     stream_SEMIC.add(SEMIC253);
 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1547:35: (ex3= expression )?
+                    // JS.g:1547:35: (ex3= expression )?
                     int alt61=2;
                     int LA61_0 = input.LA(1);
 
@@ -8387,7 +8387,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt61) {
                         case 1 :
-                            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1547:35: ex3= expression
+                            // JS.g:1547:35: ex3= expression
                             {
                             pushFollow(FOLLOW_expression_in_forControlExpression5782);
                             ex3=expression();
@@ -8416,12 +8416,12 @@ public class JSParser extends Parser {
                     root_0 = (Object)adaptor.nil();
                     // 1548:4: -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
                     {
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1548:7: ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
+                        // JS.g:1548:7: ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1548:18: ^( EXPR $ex1)
+                        // JS.g:1548:18: ^( EXPR $ex1)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -8430,12 +8430,12 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1548:33: ^( EXPR ( $ex2)? )
+                        // JS.g:1548:33: ^( EXPR ( $ex2)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1548:41: ( $ex2)?
+                        // JS.g:1548:41: ( $ex2)?
                         if ( stream_ex2.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex2.next());
 
@@ -8444,12 +8444,12 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1548:49: ^( EXPR ( $ex3)? )
+                        // JS.g:1548:49: ^( EXPR ( $ex3)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1548:57: ( $ex3)?
+                        // JS.g:1548:57: ( $ex3)?
                         if ( stream_ex3.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex3.next());
 
@@ -8499,7 +8499,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forControlSemic
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1553:1: forControlSemic : SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ;
+    // JS.g:1553:1: forControlSemic : SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ;
     public final forControlSemic_return forControlSemic() throws RecognitionException {
         forControlSemic_return retval = new forControlSemic_return();
         retval.start = input.LT(1);
@@ -8518,14 +8518,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_SEMIC=new RewriteRuleTokenStream(adaptor,"token SEMIC");
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1554:2: ( SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1554:4: SEMIC (ex1= expression )? SEMIC (ex2= expression )?
+            // JS.g:1554:2: ( SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
+            // JS.g:1554:4: SEMIC (ex1= expression )? SEMIC (ex2= expression )?
             {
             SEMIC254=(Token)input.LT(1);
             match(input,SEMIC,FOLLOW_SEMIC_in_forControlSemic5841); 
             stream_SEMIC.add(SEMIC254);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1554:13: (ex1= expression )?
+            // JS.g:1554:13: (ex1= expression )?
             int alt63=2;
             int LA63_0 = input.LA(1);
 
@@ -8534,7 +8534,7 @@ public class JSParser extends Parser {
             }
             switch (alt63) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1554:13: ex1= expression
+                    // JS.g:1554:13: ex1= expression
                     {
                     pushFollow(FOLLOW_expression_in_forControlSemic5845);
                     ex1=expression();
@@ -8551,7 +8551,7 @@ public class JSParser extends Parser {
             match(input,SEMIC,FOLLOW_SEMIC_in_forControlSemic5848); 
             stream_SEMIC.add(SEMIC255);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1554:35: (ex2= expression )?
+            // JS.g:1554:35: (ex2= expression )?
             int alt64=2;
             int LA64_0 = input.LA(1);
 
@@ -8560,7 +8560,7 @@ public class JSParser extends Parser {
             }
             switch (alt64) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1554:35: ex2= expression
+                    // JS.g:1554:35: ex2= expression
                     {
                     pushFollow(FOLLOW_expression_in_forControlSemic5852);
                     ex2=expression();
@@ -8588,24 +8588,24 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1555:2: -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1555:5: ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
+                // JS.g:1555:5: ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1555:16: ^( EXPR )
+                // JS.g:1555:16: ^( EXPR )
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
                 adaptor.addChild(root_1, root_2);
                 }
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1555:26: ^( EXPR ( $ex1)? )
+                // JS.g:1555:26: ^( EXPR ( $ex1)? )
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1555:34: ( $ex1)?
+                // JS.g:1555:34: ( $ex1)?
                 if ( stream_ex1.hasNext() ) {
                     adaptor.addChild(root_2, stream_ex1.next());
 
@@ -8614,12 +8614,12 @@ public class JSParser extends Parser {
 
                 adaptor.addChild(root_1, root_2);
                 }
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1555:42: ^( EXPR ( $ex2)? )
+                // JS.g:1555:42: ^( EXPR ( $ex2)? )
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1555:50: ( $ex2)?
+                // JS.g:1555:50: ( $ex2)?
                 if ( stream_ex2.hasNext() ) {
                     adaptor.addChild(root_2, stream_ex2.next());
 
@@ -8660,7 +8660,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start continueStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1567:1: continueStatement : CONTINUE ( Identifier )? semic ;
+    // JS.g:1567:1: continueStatement : CONTINUE ( Identifier )? semic ;
     public final continueStatement_return continueStatement() throws RecognitionException {
         continueStatement_return retval = new continueStatement_return();
         retval.start = input.LT(1);
@@ -8676,8 +8676,8 @@ public class JSParser extends Parser {
         Object Identifier257_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1568:2: ( CONTINUE ( Identifier )? semic )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1568:4: CONTINUE ( Identifier )? semic
+            // JS.g:1568:2: ( CONTINUE ( Identifier )? semic )
+            // JS.g:1568:4: CONTINUE ( Identifier )? semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -8687,7 +8687,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.becomeRoot(CONTINUE256_tree, root_0);
 
              if (input.LA(1) == Identifier) promoteEOL(null); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1568:67: ( Identifier )?
+            // JS.g:1568:67: ( Identifier )?
             int alt65=2;
             int LA65_0 = input.LA(1);
 
@@ -8696,7 +8696,7 @@ public class JSParser extends Parser {
             }
             switch (alt65) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1568:67: Identifier
+                    // JS.g:1568:67: Identifier
                     {
                     Identifier257=(Token)input.LT(1);
                     match(input,Identifier,FOLLOW_Identifier_in_continueStatement5911); 
@@ -8738,7 +8738,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start breakStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1580:1: breakStatement : BREAK ( Identifier )? semic ;
+    // JS.g:1580:1: breakStatement : BREAK ( Identifier )? semic ;
     public final breakStatement_return breakStatement() throws RecognitionException {
         breakStatement_return retval = new breakStatement_return();
         retval.start = input.LT(1);
@@ -8754,8 +8754,8 @@ public class JSParser extends Parser {
         Object Identifier260_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1581:2: ( BREAK ( Identifier )? semic )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1581:4: BREAK ( Identifier )? semic
+            // JS.g:1581:2: ( BREAK ( Identifier )? semic )
+            // JS.g:1581:4: BREAK ( Identifier )? semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -8765,7 +8765,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.becomeRoot(BREAK259_tree, root_0);
 
              if (input.LA(1) == Identifier) promoteEOL(null); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1581:64: ( Identifier )?
+            // JS.g:1581:64: ( Identifier )?
             int alt66=2;
             int LA66_0 = input.LA(1);
 
@@ -8774,7 +8774,7 @@ public class JSParser extends Parser {
             }
             switch (alt66) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1581:64: Identifier
+                    // JS.g:1581:64: Identifier
                     {
                     Identifier260=(Token)input.LT(1);
                     match(input,Identifier,FOLLOW_Identifier_in_breakStatement5938); 
@@ -8816,7 +8816,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start returnStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1601:1: returnStatement : RETURN ( expression )? semic ;
+    // JS.g:1601:1: returnStatement : RETURN ( expression )? semic ;
     public final returnStatement_return returnStatement() throws RecognitionException {
         returnStatement_return retval = new returnStatement_return();
         retval.start = input.LT(1);
@@ -8832,8 +8832,8 @@ public class JSParser extends Parser {
         Object RETURN262_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1602:2: ( RETURN ( expression )? semic )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1602:4: RETURN ( expression )? semic
+            // JS.g:1602:2: ( RETURN ( expression )? semic )
+            // JS.g:1602:4: RETURN ( expression )? semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -8843,7 +8843,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.becomeRoot(RETURN262_tree, root_0);
 
              promoteEOL(null); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1602:34: ( expression )?
+            // JS.g:1602:34: ( expression )?
             int alt67=2;
             int LA67_0 = input.LA(1);
 
@@ -8852,7 +8852,7 @@ public class JSParser extends Parser {
             }
             switch (alt67) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1602:34: expression
+                    // JS.g:1602:34: expression
                     {
                     pushFollow(FOLLOW_expression_in_returnStatement5965);
                     expression263=expression();
@@ -8894,7 +8894,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start withStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1609:1: withStatement : WITH LPAREN expression RPAREN statement ;
+    // JS.g:1609:1: withStatement : WITH LPAREN expression RPAREN statement ;
     public final withStatement_return withStatement() throws RecognitionException {
         withStatement_return retval = new withStatement_return();
         retval.start = input.LT(1);
@@ -8914,8 +8914,8 @@ public class JSParser extends Parser {
         Object RPAREN268_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1610:2: ( WITH LPAREN expression RPAREN statement )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1610:4: WITH LPAREN expression RPAREN statement
+            // JS.g:1610:2: ( WITH LPAREN expression RPAREN statement )
+            // JS.g:1610:4: WITH LPAREN expression RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
@@ -8963,7 +8963,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start switchStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1617:1: switchStatement : SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )? ( caseClause )* ) ;
+    // JS.g:1617:1: switchStatement : SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )? ( caseClause )* ) ;
     public final switchStatement_return switchStatement() throws RecognitionException {
         switchStatement_return retval = new switchStatement_return();
         retval.start = input.LT(1);
@@ -8999,8 +8999,8 @@ public class JSParser extends Parser {
         	int defaultClauseCount = 0;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1622:2: ( SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )? ( caseClause )* ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1622:4: SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE
+            // JS.g:1622:2: ( SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )? ( caseClause )* ) )
+            // JS.g:1622:4: SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE
             {
             SWITCH270=(Token)input.LT(1);
             match(input,SWITCH,FOLLOW_SWITCH_in_switchStatement6017); 
@@ -9023,7 +9023,7 @@ public class JSParser extends Parser {
             match(input,LBRACE,FOLLOW_LBRACE_in_switchStatement6025); 
             stream_LBRACE.add(LBRACE274);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1622:43: ({...}? => defaultClause | caseClause )*
+            // JS.g:1622:43: ({...}? => defaultClause | caseClause )*
             loop68:
             do {
                 int alt68=3;
@@ -9039,7 +9039,7 @@ public class JSParser extends Parser {
 
                 switch (alt68) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1622:45: {...}? => defaultClause
+            	    // JS.g:1622:45: {...}? => defaultClause
             	    {
             	    if ( !( defaultClauseCount == 0 ) ) {
             	        throw new FailedPredicateException(input, "switchStatement", " defaultClauseCount == 0 ");
@@ -9054,7 +9054,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1622:118: caseClause
+            	    // JS.g:1622:118: caseClause
             	    {
             	    pushFollow(FOLLOW_caseClause_in_switchStatement6038);
             	    caseClause276=caseClause();
@@ -9087,19 +9087,19 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1623:2: -> ^( SWITCH expression ( defaultClause )? ( caseClause )* )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1623:5: ^( SWITCH expression ( defaultClause )? ( caseClause )* )
+                // JS.g:1623:5: ^( SWITCH expression ( defaultClause )? ( caseClause )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_SWITCH.next(), root_1);
 
                 adaptor.addChild(root_1, stream_expression.next());
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1623:26: ( defaultClause )?
+                // JS.g:1623:26: ( defaultClause )?
                 if ( stream_defaultClause.hasNext() ) {
                     adaptor.addChild(root_1, stream_defaultClause.next());
 
                 }
                 stream_defaultClause.reset();
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1623:41: ( caseClause )*
+                // JS.g:1623:41: ( caseClause )*
                 while ( stream_caseClause.hasNext() ) {
                     adaptor.addChild(root_1, stream_caseClause.next());
 
@@ -9137,7 +9137,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start caseClause
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1626:1: caseClause : CASE expression COLON ( statement )* ;
+    // JS.g:1626:1: caseClause : CASE expression COLON ( statement )* ;
     public final caseClause_return caseClause() throws RecognitionException {
         caseClause_return retval = new caseClause_return();
         retval.start = input.LT(1);
@@ -9155,8 +9155,8 @@ public class JSParser extends Parser {
         Object COLON280_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1627:2: ( CASE expression COLON ( statement )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1627:4: CASE expression COLON ( statement )*
+            // JS.g:1627:2: ( CASE expression COLON ( statement )* )
+            // JS.g:1627:4: CASE expression COLON ( statement )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9172,7 +9172,7 @@ public class JSParser extends Parser {
             adaptor.addChild(root_0, expression279.getTree());
             COLON280=(Token)input.LT(1);
             match(input,COLON,FOLLOW_COLON_in_caseClause6076); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1627:28: ( statement )*
+            // JS.g:1627:28: ( statement )*
             loop69:
             do {
                 int alt69=2;
@@ -9194,7 +9194,7 @@ public class JSParser extends Parser {
 
                 switch (alt69) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1627:28: statement
+            	    // JS.g:1627:28: statement
             	    {
             	    pushFollow(FOLLOW_statement_in_caseClause6079);
             	    statement281=statement();
@@ -9235,7 +9235,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start defaultClause
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1630:1: defaultClause : DEFAULT COLON ( statement )* ;
+    // JS.g:1630:1: defaultClause : DEFAULT COLON ( statement )* ;
     public final defaultClause_return defaultClause() throws RecognitionException {
         defaultClause_return retval = new defaultClause_return();
         retval.start = input.LT(1);
@@ -9251,8 +9251,8 @@ public class JSParser extends Parser {
         Object COLON283_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1631:2: ( DEFAULT COLON ( statement )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1631:4: DEFAULT COLON ( statement )*
+            // JS.g:1631:2: ( DEFAULT COLON ( statement )* )
+            // JS.g:1631:4: DEFAULT COLON ( statement )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9263,7 +9263,7 @@ public class JSParser extends Parser {
 
             COLON283=(Token)input.LT(1);
             match(input,COLON,FOLLOW_COLON_in_defaultClause6095); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1631:20: ( statement )*
+            // JS.g:1631:20: ( statement )*
             loop70:
             do {
                 int alt70=2;
@@ -9285,7 +9285,7 @@ public class JSParser extends Parser {
 
                 switch (alt70) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1631:20: statement
+            	    // JS.g:1631:20: statement
             	    {
             	    pushFollow(FOLLOW_statement_in_defaultClause6098);
             	    statement284=statement();
@@ -9326,7 +9326,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start labelledStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1638:1: labelledStatement : Identifier COLON statement -> ^( LABELLED Identifier statement ) ;
+    // JS.g:1638:1: labelledStatement : Identifier COLON statement -> ^( LABELLED Identifier statement ) ;
     public final labelledStatement_return labelledStatement() throws RecognitionException {
         labelledStatement_return retval = new labelledStatement_return();
         retval.start = input.LT(1);
@@ -9344,8 +9344,8 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_Identifier=new RewriteRuleTokenStream(adaptor,"token Identifier");
         RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1639:2: ( Identifier COLON statement -> ^( LABELLED Identifier statement ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1639:4: Identifier COLON statement
+            // JS.g:1639:2: ( Identifier COLON statement -> ^( LABELLED Identifier statement ) )
+            // JS.g:1639:4: Identifier COLON statement
             {
             Identifier285=(Token)input.LT(1);
             match(input,Identifier,FOLLOW_Identifier_in_labelledStatement6115); 
@@ -9373,7 +9373,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1640:2: -> ^( LABELLED Identifier statement )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1640:5: ^( LABELLED Identifier statement )
+                // JS.g:1640:5: ^( LABELLED Identifier statement )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(LABELLED, "LABELLED"), root_1);
@@ -9412,7 +9412,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start throwStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1662:1: throwStatement : THROW expression semic ;
+    // JS.g:1662:1: throwStatement : THROW expression semic ;
     public final throwStatement_return throwStatement() throws RecognitionException {
         throwStatement_return retval = new throwStatement_return();
         retval.start = input.LT(1);
@@ -9428,8 +9428,8 @@ public class JSParser extends Parser {
         Object THROW288_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1663:2: ( THROW expression semic )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1663:4: THROW expression semic
+            // JS.g:1663:2: ( THROW expression semic )
+            // JS.g:1663:4: THROW expression semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9473,7 +9473,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start tryStatement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1670:1: tryStatement : TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) ;
+    // JS.g:1670:1: tryStatement : TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) ;
     public final tryStatement_return tryStatement() throws RecognitionException {
         tryStatement_return retval = new tryStatement_return();
         retval.start = input.LT(1);
@@ -9493,8 +9493,8 @@ public class JSParser extends Parser {
         Object TRY291_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1671:2: ( TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1671:4: TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause )
+            // JS.g:1671:2: ( TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) )
+            // JS.g:1671:4: TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause )
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9508,7 +9508,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, block292.getTree());
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1671:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )
+            // JS.g:1671:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )
             int alt73=2;
             int LA73_0 = input.LA(1);
 
@@ -9526,9 +9526,9 @@ public class JSParser extends Parser {
             }
             switch (alt73) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1671:17: ( catchClause )+ ( finallyClause )?
+                    // JS.g:1671:17: ( catchClause )+ ( finallyClause )?
                     {
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1671:17: ( catchClause )+
+                    // JS.g:1671:17: ( catchClause )+
                     int cnt71=0;
                     loop71:
                     do {
@@ -9542,7 +9542,7 @@ public class JSParser extends Parser {
 
                         switch (alt71) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1671:17: catchClause
+                    	    // JS.g:1671:17: catchClause
                     	    {
                     	    pushFollow(FOLLOW_catchClause_in_tryStatement6181);
                     	    catchClause293=catchClause();
@@ -9562,7 +9562,7 @@ public class JSParser extends Parser {
                         cnt71++;
                     } while (true);
 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1671:30: ( finallyClause )?
+                    // JS.g:1671:30: ( finallyClause )?
                     int alt72=2;
                     int LA72_0 = input.LA(1);
 
@@ -9571,7 +9571,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt72) {
                         case 1 :
-                            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1671:30: finallyClause
+                            // JS.g:1671:30: finallyClause
                             {
                             pushFollow(FOLLOW_finallyClause_in_tryStatement6184);
                             finallyClause294=finallyClause();
@@ -9588,7 +9588,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1671:47: finallyClause
+                    // JS.g:1671:47: finallyClause
                     {
                     pushFollow(FOLLOW_finallyClause_in_tryStatement6189);
                     finallyClause295=finallyClause();
@@ -9626,7 +9626,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start catchClause
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1674:1: catchClause : CATCH LPAREN Identifier ( catchFilter )? RPAREN block ;
+    // JS.g:1674:1: catchClause : CATCH LPAREN Identifier ( catchFilter )? RPAREN block ;
     public final catchClause_return catchClause() throws RecognitionException {
         catchClause_return retval = new catchClause_return();
         retval.start = input.LT(1);
@@ -9648,8 +9648,8 @@ public class JSParser extends Parser {
         Object RPAREN300_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1675:2: ( CATCH LPAREN Identifier ( catchFilter )? RPAREN block )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1675:4: CATCH LPAREN Identifier ( catchFilter )? RPAREN block
+            // JS.g:1675:2: ( CATCH LPAREN Identifier ( catchFilter )? RPAREN block )
+            // JS.g:1675:4: CATCH LPAREN Identifier ( catchFilter )? RPAREN block
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9665,7 +9665,7 @@ public class JSParser extends Parser {
             Identifier298_tree = (Object)adaptor.create(Identifier298);
             adaptor.addChild(root_0, Identifier298_tree);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1675:30: ( catchFilter )?
+            // JS.g:1675:30: ( catchFilter )?
             int alt74=2;
             int LA74_0 = input.LA(1);
 
@@ -9674,7 +9674,7 @@ public class JSParser extends Parser {
             }
             switch (alt74) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1675:30: catchFilter
+                    // JS.g:1675:30: catchFilter
                     {
                     pushFollow(FOLLOW_catchFilter_in_catchClause6211);
                     catchFilter299=catchFilter();
@@ -9719,7 +9719,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start catchFilter
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1678:1: catchFilter : IF instanceofExpression ;
+    // JS.g:1678:1: catchFilter : IF instanceofExpression ;
     public final catchFilter_return catchFilter() throws RecognitionException {
         catchFilter_return retval = new catchFilter_return();
         retval.start = input.LT(1);
@@ -9733,8 +9733,8 @@ public class JSParser extends Parser {
         Object IF302_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1679:3: ( IF instanceofExpression )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1679:5: IF instanceofExpression
+            // JS.g:1679:3: ( IF instanceofExpression )
+            // JS.g:1679:5: IF instanceofExpression
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9773,7 +9773,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start instanceofExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1682:1: instanceofExpression : Identifier INSTANCEOF Identifier ;
+    // JS.g:1682:1: instanceofExpression : Identifier INSTANCEOF Identifier ;
     public final instanceofExpression_return instanceofExpression() throws RecognitionException {
         instanceofExpression_return retval = new instanceofExpression_return();
         retval.start = input.LT(1);
@@ -9789,8 +9789,8 @@ public class JSParser extends Parser {
         Object Identifier306_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1683:3: ( Identifier INSTANCEOF Identifier )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1683:5: Identifier INSTANCEOF Identifier
+            // JS.g:1683:3: ( Identifier INSTANCEOF Identifier )
+            // JS.g:1683:5: Identifier INSTANCEOF Identifier
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9834,7 +9834,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start finallyClause
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1686:1: finallyClause : FINALLY block ;
+    // JS.g:1686:1: finallyClause : FINALLY block ;
     public final finallyClause_return finallyClause() throws RecognitionException {
         finallyClause_return retval = new finallyClause_return();
         retval.start = input.LT(1);
@@ -9848,8 +9848,8 @@ public class JSParser extends Parser {
         Object FINALLY307_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1687:2: ( FINALLY block )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1687:4: FINALLY block
+            // JS.g:1687:2: ( FINALLY block )
+            // JS.g:1687:4: FINALLY block
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9888,7 +9888,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start functionDeclaration
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1700:1: functionDeclaration : FUNCTION name= Identifier formalParameterList functionBody -> ^( FUNCTION $name formalParameterList functionBody ) ;
+    // JS.g:1700:1: functionDeclaration : FUNCTION name= Identifier formalParameterList functionBody -> ^( FUNCTION $name formalParameterList functionBody ) ;
     public final functionDeclaration_return functionDeclaration() throws RecognitionException {
         functionDeclaration_return retval = new functionDeclaration_return();
         retval.start = input.LT(1);
@@ -9909,8 +9909,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_functionBody=new RewriteRuleSubtreeStream(adaptor,"rule functionBody");
         RewriteRuleSubtreeStream stream_formalParameterList=new RewriteRuleSubtreeStream(adaptor,"rule formalParameterList");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1701:2: ( FUNCTION name= Identifier formalParameterList functionBody -> ^( FUNCTION $name formalParameterList functionBody ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1701:4: FUNCTION name= Identifier formalParameterList functionBody
+            // JS.g:1701:2: ( FUNCTION name= Identifier formalParameterList functionBody -> ^( FUNCTION $name formalParameterList functionBody ) )
+            // JS.g:1701:4: FUNCTION name= Identifier formalParameterList functionBody
             {
             FUNCTION309=(Token)input.LT(1);
             match(input,FUNCTION,FOLLOW_FUNCTION_in_functionDeclaration6290); 
@@ -9944,7 +9944,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1702:2: -> ^( FUNCTION $name formalParameterList functionBody )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1702:5: ^( FUNCTION $name formalParameterList functionBody )
+                // JS.g:1702:5: ^( FUNCTION $name formalParameterList functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_FUNCTION.next(), root_1);
@@ -9984,7 +9984,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start functionExpression
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1705:1: functionExpression : FUNCTION (name= Identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) ;
+    // JS.g:1705:1: functionExpression : FUNCTION (name= Identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) ;
     public final functionExpression_return functionExpression() throws RecognitionException {
         functionExpression_return retval = new functionExpression_return();
         retval.start = input.LT(1);
@@ -10005,14 +10005,14 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_functionBody=new RewriteRuleSubtreeStream(adaptor,"rule functionBody");
         RewriteRuleSubtreeStream stream_formalParameterList=new RewriteRuleSubtreeStream(adaptor,"rule formalParameterList");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1706:2: ( FUNCTION (name= Identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1706:4: FUNCTION (name= Identifier )? formalParameterList functionBody
+            // JS.g:1706:2: ( FUNCTION (name= Identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) )
+            // JS.g:1706:4: FUNCTION (name= Identifier )? formalParameterList functionBody
             {
             FUNCTION312=(Token)input.LT(1);
             match(input,FUNCTION,FOLLOW_FUNCTION_in_functionExpression6325); 
             stream_FUNCTION.add(FUNCTION312);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1706:17: (name= Identifier )?
+            // JS.g:1706:17: (name= Identifier )?
             int alt75=2;
             int LA75_0 = input.LA(1);
 
@@ -10021,7 +10021,7 @@ public class JSParser extends Parser {
             }
             switch (alt75) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1706:17: name= Identifier
+                    // JS.g:1706:17: name= Identifier
                     {
                     name=(Token)input.LT(1);
                     match(input,Identifier,FOLLOW_Identifier_in_functionExpression6329); 
@@ -10057,12 +10057,12 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1707:2: -> ^( FUNCTION ( $name)? formalParameterList functionBody )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1707:5: ^( FUNCTION ( $name)? formalParameterList functionBody )
+                // JS.g:1707:5: ^( FUNCTION ( $name)? formalParameterList functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_FUNCTION.next(), root_1);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1707:17: ( $name)?
+                // JS.g:1707:17: ( $name)?
                 if ( stream_name.hasNext() ) {
                     adaptor.addChild(root_1, stream_name.next());
 
@@ -10102,7 +10102,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start formalParameterList
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1710:1: formalParameterList : LPAREN (args+= Identifier ( COMMA args+= Identifier )* )? RPAREN -> ^( ARGS ( $args)* ) ;
+    // JS.g:1710:1: formalParameterList : LPAREN (args+= Identifier ( COMMA args+= Identifier )* )? RPAREN -> ^( ARGS ( $args)* ) ;
     public final formalParameterList_return formalParameterList() throws RecognitionException {
         formalParameterList_return retval = new formalParameterList_return();
         retval.start = input.LT(1);
@@ -10125,14 +10125,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1711:2: ( LPAREN (args+= Identifier ( COMMA args+= Identifier )* )? RPAREN -> ^( ARGS ( $args)* ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1711:4: LPAREN (args+= Identifier ( COMMA args+= Identifier )* )? RPAREN
+            // JS.g:1711:2: ( LPAREN (args+= Identifier ( COMMA args+= Identifier )* )? RPAREN -> ^( ARGS ( $args)* ) )
+            // JS.g:1711:4: LPAREN (args+= Identifier ( COMMA args+= Identifier )* )? RPAREN
             {
             LPAREN315=(Token)input.LT(1);
             match(input,LPAREN,FOLLOW_LPAREN_in_formalParameterList6362); 
             stream_LPAREN.add(LPAREN315);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1711:11: (args+= Identifier ( COMMA args+= Identifier )* )?
+            // JS.g:1711:11: (args+= Identifier ( COMMA args+= Identifier )* )?
             int alt77=2;
             int LA77_0 = input.LA(1);
 
@@ -10141,7 +10141,7 @@ public class JSParser extends Parser {
             }
             switch (alt77) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1711:13: args+= Identifier ( COMMA args+= Identifier )*
+                    // JS.g:1711:13: args+= Identifier ( COMMA args+= Identifier )*
                     {
                     args=(Token)input.LT(1);
                     match(input,Identifier,FOLLOW_Identifier_in_formalParameterList6368); 
@@ -10150,7 +10150,7 @@ public class JSParser extends Parser {
                     if (list_args==null) list_args=new ArrayList();
                     list_args.add(args);
 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1711:30: ( COMMA args+= Identifier )*
+                    // JS.g:1711:30: ( COMMA args+= Identifier )*
                     loop76:
                     do {
                         int alt76=2;
@@ -10163,7 +10163,7 @@ public class JSParser extends Parser {
 
                         switch (alt76) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1711:32: COMMA args+= Identifier
+                    	    // JS.g:1711:32: COMMA args+= Identifier
                     	    {
                     	    COMMA316=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_formalParameterList6372); 
@@ -10209,12 +10209,12 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1712:2: -> ^( ARGS ( $args)* )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1712:5: ^( ARGS ( $args)* )
+                // JS.g:1712:5: ^( ARGS ( $args)* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(ARGS, "ARGS"), root_1);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1712:13: ( $args)*
+                // JS.g:1712:13: ( $args)*
                 while ( stream_args.hasNext() ) {
                     adaptor.addChild(root_1, stream_args.next());
 
@@ -10252,7 +10252,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start functionBody
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1715:1: functionBody : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
+    // JS.g:1715:1: functionBody : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
     public final functionBody_return functionBody() throws RecognitionException {
         functionBody_return retval = new functionBody_return();
         retval.start = input.LT(1);
@@ -10270,14 +10270,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LBRACE=new RewriteRuleTokenStream(adaptor,"token LBRACE");
         RewriteRuleSubtreeStream stream_sourceElement=new RewriteRuleSubtreeStream(adaptor,"rule sourceElement");
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1716:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1716:4: lb= LBRACE ( sourceElement )* RBRACE
+            // JS.g:1716:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
+            // JS.g:1716:4: lb= LBRACE ( sourceElement )* RBRACE
             {
             lb=(Token)input.LT(1);
             match(input,LBRACE,FOLLOW_LBRACE_in_functionBody6410); 
             stream_LBRACE.add(lb);
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1716:14: ( sourceElement )*
+            // JS.g:1716:14: ( sourceElement )*
             loop78:
             do {
                 int alt78=2;
@@ -10290,7 +10290,7 @@ public class JSParser extends Parser {
 
                 switch (alt78) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1716:14: sourceElement
+            	    // JS.g:1716:14: sourceElement
             	    {
             	    pushFollow(FOLLOW_sourceElement_in_functionBody6412);
             	    sourceElement318=sourceElement();
@@ -10323,12 +10323,12 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.nil();
             // 1717:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
             {
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1717:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
+                // JS.g:1717:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(BLOCK, lb,  "BLOCK"), root_1);
 
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1717:28: ( sourceElement )*
+                // JS.g:1717:28: ( sourceElement )*
                 while ( stream_sourceElement.hasNext() ) {
                     adaptor.addChild(root_1, stream_sourceElement.next());
 
@@ -10366,7 +10366,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start getMethodDeclaration
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1725:1: getMethodDeclaration : GET name= Identifier LPAREN RPAREN functionBody ;
+    // JS.g:1725:1: getMethodDeclaration : GET name= Identifier LPAREN RPAREN functionBody ;
     public final getMethodDeclaration_return getMethodDeclaration() throws RecognitionException {
         getMethodDeclaration_return retval = new getMethodDeclaration_return();
         retval.start = input.LT(1);
@@ -10386,8 +10386,8 @@ public class JSParser extends Parser {
         Object RPAREN322_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1726:3: ( GET name= Identifier LPAREN RPAREN functionBody )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1726:5: GET name= Identifier LPAREN RPAREN functionBody
+            // JS.g:1726:3: ( GET name= Identifier LPAREN RPAREN functionBody )
+            // JS.g:1726:5: GET name= Identifier LPAREN RPAREN functionBody
             {
             root_0 = (Object)adaptor.nil();
 
@@ -10435,7 +10435,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start setMethodDeclaration
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1729:1: setMethodDeclaration : SET name= Identifier LPAREN Identifier RPAREN functionBody ;
+    // JS.g:1729:1: setMethodDeclaration : SET name= Identifier LPAREN Identifier RPAREN functionBody ;
     public final setMethodDeclaration_return setMethodDeclaration() throws RecognitionException {
         setMethodDeclaration_return retval = new setMethodDeclaration_return();
         retval.start = input.LT(1);
@@ -10457,8 +10457,8 @@ public class JSParser extends Parser {
         Object RPAREN327_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1730:3: ( SET name= Identifier LPAREN Identifier RPAREN functionBody )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1730:5: SET name= Identifier LPAREN Identifier RPAREN functionBody
+            // JS.g:1730:3: ( SET name= Identifier LPAREN Identifier RPAREN functionBody )
+            // JS.g:1730:5: SET name= Identifier LPAREN Identifier RPAREN functionBody
             {
             root_0 = (Object)adaptor.nil();
 
@@ -10511,7 +10511,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start program
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1737:1: program : ( sourceElement )* EOF ;
+    // JS.g:1737:1: program : ( sourceElement )* EOF ;
     public final program_return program() throws RecognitionException {
         program_return retval = new program_return();
         retval.start = input.LT(1);
@@ -10525,12 +10525,12 @@ public class JSParser extends Parser {
         Object EOF330_tree=null;
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1738:2: ( ( sourceElement )* EOF )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1738:4: ( sourceElement )* EOF
+            // JS.g:1738:2: ( ( sourceElement )* EOF )
+            // JS.g:1738:4: ( sourceElement )* EOF
             {
             root_0 = (Object)adaptor.nil();
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1738:4: ( sourceElement )*
+            // JS.g:1738:4: ( sourceElement )*
             loop79:
             do {
                 int alt79=2;
@@ -10543,7 +10543,7 @@ public class JSParser extends Parser {
 
                 switch (alt79) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1738:4: sourceElement
+            	    // JS.g:1738:4: sourceElement
             	    {
             	    pushFollow(FOLLOW_sourceElement_in_program6505);
             	    sourceElement329=sourceElement();
@@ -10586,7 +10586,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start sourceElement
-    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1746:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );
+    // JS.g:1746:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );
     public final sourceElement_return sourceElement() throws RecognitionException {
         sourceElement_return retval = new sourceElement_return();
         retval.start = input.LT(1);
@@ -10600,7 +10600,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1751:2: ({...}? functionDeclaration | statement )
+            // JS.g:1751:2: ({...}? functionDeclaration | statement )
             int alt80=2;
             int LA80_0 = input.LA(1);
 
@@ -10631,7 +10631,7 @@ public class JSParser extends Parser {
             }
             switch (alt80) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1751:4: {...}? functionDeclaration
+                    // JS.g:1751:4: {...}? functionDeclaration
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -10647,7 +10647,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1752:4: statement
+                    // JS.g:1752:4: statement
                     {
                     root_0 = (Object)adaptor.nil();
 

@@ -317,14 +317,14 @@ public class JSLexer extends Lexer {
     public JSLexer(CharStream input) {
         super(input);
     }
-    public String getGrammarFileName() { return "/home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g"; }
+    public String getGrammarFileName() { return "JS.g"; }
 
     // $ANTLR start NULL
     public final void mNULL() throws RecognitionException {
         try {
             int _type = NULL;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:122:6: ( 'null' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:122:8: 'null'
+            // JS.g:122:6: ( 'null' )
+            // JS.g:122:8: 'null'
             {
             match("null"); 
 
@@ -342,8 +342,8 @@ public class JSLexer extends Lexer {
     public final void mTRUE() throws RecognitionException {
         try {
             int _type = TRUE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:123:6: ( 'true' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:123:8: 'true'
+            // JS.g:123:6: ( 'true' )
+            // JS.g:123:8: 'true'
             {
             match("true"); 
 
@@ -361,8 +361,8 @@ public class JSLexer extends Lexer {
     public final void mFALSE() throws RecognitionException {
         try {
             int _type = FALSE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:124:7: ( 'false' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:124:9: 'false'
+            // JS.g:124:7: ( 'false' )
+            // JS.g:124:9: 'false'
             {
             match("false"); 
 
@@ -380,8 +380,8 @@ public class JSLexer extends Lexer {
     public final void mBREAK() throws RecognitionException {
         try {
             int _type = BREAK;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:125:7: ( 'break' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:125:9: 'break'
+            // JS.g:125:7: ( 'break' )
+            // JS.g:125:9: 'break'
             {
             match("break"); 
 
@@ -399,8 +399,8 @@ public class JSLexer extends Lexer {
     public final void mCASE() throws RecognitionException {
         try {
             int _type = CASE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:126:6: ( 'case' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:126:8: 'case'
+            // JS.g:126:6: ( 'case' )
+            // JS.g:126:8: 'case'
             {
             match("case"); 
 
@@ -418,8 +418,8 @@ public class JSLexer extends Lexer {
     public final void mCATCH() throws RecognitionException {
         try {
             int _type = CATCH;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:127:7: ( 'catch' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:127:9: 'catch'
+            // JS.g:127:7: ( 'catch' )
+            // JS.g:127:9: 'catch'
             {
             match("catch"); 
 
@@ -437,8 +437,8 @@ public class JSLexer extends Lexer {
     public final void mCONTINUE() throws RecognitionException {
         try {
             int _type = CONTINUE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:128:10: ( 'continue' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:128:12: 'continue'
+            // JS.g:128:10: ( 'continue' )
+            // JS.g:128:12: 'continue'
             {
             match("continue"); 
 
@@ -456,8 +456,8 @@ public class JSLexer extends Lexer {
     public final void mDEFAULT() throws RecognitionException {
         try {
             int _type = DEFAULT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:129:9: ( 'default' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:129:11: 'default'
+            // JS.g:129:9: ( 'default' )
+            // JS.g:129:11: 'default'
             {
             match("default"); 
 
@@ -475,8 +475,8 @@ public class JSLexer extends Lexer {
     public final void mDELETE() throws RecognitionException {
         try {
             int _type = DELETE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:130:8: ( 'delete' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:130:10: 'delete'
+            // JS.g:130:8: ( 'delete' )
+            // JS.g:130:10: 'delete'
             {
             match("delete"); 
 
@@ -494,8 +494,8 @@ public class JSLexer extends Lexer {
     public final void mDO() throws RecognitionException {
         try {
             int _type = DO;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:131:4: ( 'do' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:131:6: 'do'
+            // JS.g:131:4: ( 'do' )
+            // JS.g:131:6: 'do'
             {
             match("do"); 
 
@@ -513,8 +513,8 @@ public class JSLexer extends Lexer {
     public final void mELSE() throws RecognitionException {
         try {
             int _type = ELSE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:132:6: ( 'else' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:132:8: 'else'
+            // JS.g:132:6: ( 'else' )
+            // JS.g:132:8: 'else'
             {
             match("else"); 
 
@@ -532,8 +532,8 @@ public class JSLexer extends Lexer {
     public final void mFINALLY() throws RecognitionException {
         try {
             int _type = FINALLY;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:133:9: ( 'finally' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:133:11: 'finally'
+            // JS.g:133:9: ( 'finally' )
+            // JS.g:133:11: 'finally'
             {
             match("finally"); 
 
@@ -551,8 +551,8 @@ public class JSLexer extends Lexer {
     public final void mFOR() throws RecognitionException {
         try {
             int _type = FOR;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:134:5: ( 'for' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:134:7: 'for'
+            // JS.g:134:5: ( 'for' )
+            // JS.g:134:7: 'for'
             {
             match("for"); 
 
@@ -570,8 +570,8 @@ public class JSLexer extends Lexer {
     public final void mEACH() throws RecognitionException {
         try {
             int _type = EACH;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:135:6: ( 'each' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:135:8: 'each'
+            // JS.g:135:6: ( 'each' )
+            // JS.g:135:8: 'each'
             {
             match("each"); 
 
@@ -589,8 +589,8 @@ public class JSLexer extends Lexer {
     public final void mFUNCTION() throws RecognitionException {
         try {
             int _type = FUNCTION;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:136:10: ( 'function' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:136:12: 'function'
+            // JS.g:136:10: ( 'function' )
+            // JS.g:136:12: 'function'
             {
             match("function"); 
 
@@ -608,8 +608,8 @@ public class JSLexer extends Lexer {
     public final void mIF() throws RecognitionException {
         try {
             int _type = IF;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:137:4: ( 'if' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:137:6: 'if'
+            // JS.g:137:4: ( 'if' )
+            // JS.g:137:6: 'if'
             {
             match("if"); 
 
@@ -627,8 +627,8 @@ public class JSLexer extends Lexer {
     public final void mIN() throws RecognitionException {
         try {
             int _type = IN;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:138:4: ( 'in' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:138:6: 'in'
+            // JS.g:138:4: ( 'in' )
+            // JS.g:138:6: 'in'
             {
             match("in"); 
 
@@ -646,8 +646,8 @@ public class JSLexer extends Lexer {
     public final void mINSTANCEOF() throws RecognitionException {
         try {
             int _type = INSTANCEOF;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:139:12: ( 'instanceof' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:139:14: 'instanceof'
+            // JS.g:139:12: ( 'instanceof' )
+            // JS.g:139:14: 'instanceof'
             {
             match("instanceof"); 
 
@@ -665,8 +665,8 @@ public class JSLexer extends Lexer {
     public final void mNEW() throws RecognitionException {
         try {
             int _type = NEW;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:140:5: ( 'new' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:140:7: 'new'
+            // JS.g:140:5: ( 'new' )
+            // JS.g:140:7: 'new'
             {
             match("new"); 
 
@@ -684,8 +684,8 @@ public class JSLexer extends Lexer {
     public final void mRETURN() throws RecognitionException {
         try {
             int _type = RETURN;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:141:8: ( 'return' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:141:10: 'return'
+            // JS.g:141:8: ( 'return' )
+            // JS.g:141:10: 'return'
             {
             match("return"); 
 
@@ -703,8 +703,8 @@ public class JSLexer extends Lexer {
     public final void mSWITCH() throws RecognitionException {
         try {
             int _type = SWITCH;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:142:8: ( 'switch' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:142:10: 'switch'
+            // JS.g:142:8: ( 'switch' )
+            // JS.g:142:10: 'switch'
             {
             match("switch"); 
 
@@ -722,8 +722,8 @@ public class JSLexer extends Lexer {
     public final void mTHIS() throws RecognitionException {
         try {
             int _type = THIS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:143:6: ( 'this' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:143:8: 'this'
+            // JS.g:143:6: ( 'this' )
+            // JS.g:143:8: 'this'
             {
             match("this"); 
 
@@ -741,8 +741,8 @@ public class JSLexer extends Lexer {
     public final void mTHROW() throws RecognitionException {
         try {
             int _type = THROW;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:144:7: ( 'throw' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:144:9: 'throw'
+            // JS.g:144:7: ( 'throw' )
+            // JS.g:144:9: 'throw'
             {
             match("throw"); 
 
@@ -760,8 +760,8 @@ public class JSLexer extends Lexer {
     public final void mTRY() throws RecognitionException {
         try {
             int _type = TRY;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:145:5: ( 'try' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:145:7: 'try'
+            // JS.g:145:5: ( 'try' )
+            // JS.g:145:7: 'try'
             {
             match("try"); 
 
@@ -779,8 +779,8 @@ public class JSLexer extends Lexer {
     public final void mTYPEOF() throws RecognitionException {
         try {
             int _type = TYPEOF;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:146:8: ( 'typeof' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:146:10: 'typeof'
+            // JS.g:146:8: ( 'typeof' )
+            // JS.g:146:10: 'typeof'
             {
             match("typeof"); 
 
@@ -798,8 +798,8 @@ public class JSLexer extends Lexer {
     public final void mVAR() throws RecognitionException {
         try {
             int _type = VAR;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:147:5: ( 'var' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:147:7: 'var'
+            // JS.g:147:5: ( 'var' )
+            // JS.g:147:7: 'var'
             {
             match("var"); 
 
@@ -817,8 +817,8 @@ public class JSLexer extends Lexer {
     public final void mVOID() throws RecognitionException {
         try {
             int _type = VOID;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:148:6: ( 'void' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:148:8: 'void'
+            // JS.g:148:6: ( 'void' )
+            // JS.g:148:8: 'void'
             {
             match("void"); 
 
@@ -836,8 +836,8 @@ public class JSLexer extends Lexer {
     public final void mWHILE() throws RecognitionException {
         try {
             int _type = WHILE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:149:7: ( 'while' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:149:9: 'while'
+            // JS.g:149:7: ( 'while' )
+            // JS.g:149:9: 'while'
             {
             match("while"); 
 
@@ -855,8 +855,8 @@ public class JSLexer extends Lexer {
     public final void mWITH() throws RecognitionException {
         try {
             int _type = WITH;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:150:6: ( 'with' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:150:8: 'with'
+            // JS.g:150:6: ( 'with' )
+            // JS.g:150:8: 'with'
             {
             match("with"); 
 
@@ -874,8 +874,8 @@ public class JSLexer extends Lexer {
     public final void mGET() throws RecognitionException {
         try {
             int _type = GET;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:151:5: ( 'get' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:151:7: 'get'
+            // JS.g:151:5: ( 'get' )
+            // JS.g:151:7: 'get'
             {
             match("get"); 
 
@@ -893,8 +893,8 @@ public class JSLexer extends Lexer {
     public final void mSET() throws RecognitionException {
         try {
             int _type = SET;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:152:5: ( 'set' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:152:7: 'set'
+            // JS.g:152:5: ( 'set' )
+            // JS.g:152:7: 'set'
             {
             match("set"); 
 
@@ -912,8 +912,8 @@ public class JSLexer extends Lexer {
     public final void mYIELD() throws RecognitionException {
         try {
             int _type = YIELD;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:153:7: ( 'yield' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:153:9: 'yield'
+            // JS.g:153:7: ( 'yield' )
+            // JS.g:153:9: 'yield'
             {
             match("yield"); 
 
@@ -931,8 +931,8 @@ public class JSLexer extends Lexer {
     public final void mCDATA() throws RecognitionException {
         try {
             int _type = CDATA;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:154:7: ( 'CDATA' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:154:9: 'CDATA'
+            // JS.g:154:7: ( 'CDATA' )
+            // JS.g:154:9: 'CDATA'
             {
             match("CDATA"); 
 
@@ -950,8 +950,8 @@ public class JSLexer extends Lexer {
     public final void mWXML() throws RecognitionException {
         try {
             int _type = WXML;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:155:6: ( 'xml' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:155:8: 'xml'
+            // JS.g:155:6: ( 'xml' )
+            // JS.g:155:8: 'xml'
             {
             match("xml"); 
 
@@ -969,8 +969,8 @@ public class JSLexer extends Lexer {
     public final void mNAMESPACE() throws RecognitionException {
         try {
             int _type = NAMESPACE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:156:11: ( 'namespace' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:156:13: 'namespace'
+            // JS.g:156:11: ( 'namespace' )
+            // JS.g:156:13: 'namespace'
             {
             match("namespace"); 
 
@@ -988,8 +988,8 @@ public class JSLexer extends Lexer {
     public final void mABSTRACT() throws RecognitionException {
         try {
             int _type = ABSTRACT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:157:10: ( 'abstract' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:157:12: 'abstract'
+            // JS.g:157:10: ( 'abstract' )
+            // JS.g:157:12: 'abstract'
             {
             match("abstract"); 
 
@@ -1007,8 +1007,8 @@ public class JSLexer extends Lexer {
     public final void mBOOLEAN() throws RecognitionException {
         try {
             int _type = BOOLEAN;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:158:9: ( 'boolean' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:158:11: 'boolean'
+            // JS.g:158:9: ( 'boolean' )
+            // JS.g:158:11: 'boolean'
             {
             match("boolean"); 
 
@@ -1026,8 +1026,8 @@ public class JSLexer extends Lexer {
     public final void mBYTE() throws RecognitionException {
         try {
             int _type = BYTE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:159:6: ( 'byte' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:159:8: 'byte'
+            // JS.g:159:6: ( 'byte' )
+            // JS.g:159:8: 'byte'
             {
             match("byte"); 
 
@@ -1045,8 +1045,8 @@ public class JSLexer extends Lexer {
     public final void mCHAR() throws RecognitionException {
         try {
             int _type = CHAR;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:160:6: ( 'char' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:160:8: 'char'
+            // JS.g:160:6: ( 'char' )
+            // JS.g:160:8: 'char'
             {
             match("char"); 
 
@@ -1064,8 +1064,8 @@ public class JSLexer extends Lexer {
     public final void mCLASS() throws RecognitionException {
         try {
             int _type = CLASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:161:7: ( 'class' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:161:9: 'class'
+            // JS.g:161:7: ( 'class' )
+            // JS.g:161:9: 'class'
             {
             match("class"); 
 
@@ -1083,8 +1083,8 @@ public class JSLexer extends Lexer {
     public final void mCONST() throws RecognitionException {
         try {
             int _type = CONST;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:162:7: ( 'const' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:162:9: 'const'
+            // JS.g:162:7: ( 'const' )
+            // JS.g:162:9: 'const'
             {
             match("const"); 
 
@@ -1102,8 +1102,8 @@ public class JSLexer extends Lexer {
     public final void mDEBUGGER() throws RecognitionException {
         try {
             int _type = DEBUGGER;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:163:10: ( 'debugger' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:163:12: 'debugger'
+            // JS.g:163:10: ( 'debugger' )
+            // JS.g:163:12: 'debugger'
             {
             match("debugger"); 
 
@@ -1121,8 +1121,8 @@ public class JSLexer extends Lexer {
     public final void mDOUBLE() throws RecognitionException {
         try {
             int _type = DOUBLE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:164:8: ( 'double' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:164:10: 'double'
+            // JS.g:164:8: ( 'double' )
+            // JS.g:164:10: 'double'
             {
             match("double"); 
 
@@ -1140,8 +1140,8 @@ public class JSLexer extends Lexer {
     public final void mENUM() throws RecognitionException {
         try {
             int _type = ENUM;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:165:6: ( 'enum' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:165:8: 'enum'
+            // JS.g:165:6: ( 'enum' )
+            // JS.g:165:8: 'enum'
             {
             match("enum"); 
 
@@ -1159,8 +1159,8 @@ public class JSLexer extends Lexer {
     public final void mEXPORT() throws RecognitionException {
         try {
             int _type = EXPORT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:166:8: ( 'export' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:166:10: 'export'
+            // JS.g:166:8: ( 'export' )
+            // JS.g:166:10: 'export'
             {
             match("export"); 
 
@@ -1178,8 +1178,8 @@ public class JSLexer extends Lexer {
     public final void mEXTENDS() throws RecognitionException {
         try {
             int _type = EXTENDS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:167:9: ( 'extends' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:167:11: 'extends'
+            // JS.g:167:9: ( 'extends' )
+            // JS.g:167:11: 'extends'
             {
             match("extends"); 
 
@@ -1197,8 +1197,8 @@ public class JSLexer extends Lexer {
     public final void mFINAL() throws RecognitionException {
         try {
             int _type = FINAL;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:168:7: ( 'final' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:168:9: 'final'
+            // JS.g:168:7: ( 'final' )
+            // JS.g:168:9: 'final'
             {
             match("final"); 
 
@@ -1216,8 +1216,8 @@ public class JSLexer extends Lexer {
     public final void mFLOAT() throws RecognitionException {
         try {
             int _type = FLOAT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:169:7: ( 'float' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:169:9: 'float'
+            // JS.g:169:7: ( 'float' )
+            // JS.g:169:9: 'float'
             {
             match("float"); 
 
@@ -1235,8 +1235,8 @@ public class JSLexer extends Lexer {
     public final void mGOTO() throws RecognitionException {
         try {
             int _type = GOTO;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:170:6: ( 'goto' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:170:8: 'goto'
+            // JS.g:170:6: ( 'goto' )
+            // JS.g:170:8: 'goto'
             {
             match("goto"); 
 
@@ -1254,8 +1254,8 @@ public class JSLexer extends Lexer {
     public final void mIMPLEMENTS() throws RecognitionException {
         try {
             int _type = IMPLEMENTS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:171:12: ( 'implements' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:171:14: 'implements'
+            // JS.g:171:12: ( 'implements' )
+            // JS.g:171:14: 'implements'
             {
             match("implements"); 
 
@@ -1273,8 +1273,8 @@ public class JSLexer extends Lexer {
     public final void mIMPORT() throws RecognitionException {
         try {
             int _type = IMPORT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:172:8: ( 'import' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:172:10: 'import'
+            // JS.g:172:8: ( 'import' )
+            // JS.g:172:10: 'import'
             {
             match("import"); 
 
@@ -1292,8 +1292,8 @@ public class JSLexer extends Lexer {
     public final void mINT() throws RecognitionException {
         try {
             int _type = INT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:173:5: ( 'int' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:173:7: 'int'
+            // JS.g:173:5: ( 'int' )
+            // JS.g:173:7: 'int'
             {
             match("int"); 
 
@@ -1311,8 +1311,8 @@ public class JSLexer extends Lexer {
     public final void mINTERFACE() throws RecognitionException {
         try {
             int _type = INTERFACE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:174:11: ( 'interface' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:174:13: 'interface'
+            // JS.g:174:11: ( 'interface' )
+            // JS.g:174:13: 'interface'
             {
             match("interface"); 
 
@@ -1330,8 +1330,8 @@ public class JSLexer extends Lexer {
     public final void mLONG() throws RecognitionException {
         try {
             int _type = LONG;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:175:6: ( 'long' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:175:8: 'long'
+            // JS.g:175:6: ( 'long' )
+            // JS.g:175:8: 'long'
             {
             match("long"); 
 
@@ -1349,8 +1349,8 @@ public class JSLexer extends Lexer {
     public final void mNATIVE() throws RecognitionException {
         try {
             int _type = NATIVE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:176:8: ( 'native' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:176:10: 'native'
+            // JS.g:176:8: ( 'native' )
+            // JS.g:176:10: 'native'
             {
             match("native"); 
 
@@ -1368,8 +1368,8 @@ public class JSLexer extends Lexer {
     public final void mPACKAGE() throws RecognitionException {
         try {
             int _type = PACKAGE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:177:9: ( 'package' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:177:11: 'package'
+            // JS.g:177:9: ( 'package' )
+            // JS.g:177:11: 'package'
             {
             match("package"); 
 
@@ -1387,8 +1387,8 @@ public class JSLexer extends Lexer {
     public final void mPRIVATE() throws RecognitionException {
         try {
             int _type = PRIVATE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:178:9: ( 'private' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:178:11: 'private'
+            // JS.g:178:9: ( 'private' )
+            // JS.g:178:11: 'private'
             {
             match("private"); 
 
@@ -1406,8 +1406,8 @@ public class JSLexer extends Lexer {
     public final void mPROTECTED() throws RecognitionException {
         try {
             int _type = PROTECTED;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:179:11: ( 'protected' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:179:13: 'protected'
+            // JS.g:179:11: ( 'protected' )
+            // JS.g:179:13: 'protected'
             {
             match("protected"); 
 
@@ -1425,8 +1425,8 @@ public class JSLexer extends Lexer {
     public final void mPUBLIC() throws RecognitionException {
         try {
             int _type = PUBLIC;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:180:8: ( 'public' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:180:10: 'public'
+            // JS.g:180:8: ( 'public' )
+            // JS.g:180:10: 'public'
             {
             match("public"); 
 
@@ -1444,8 +1444,8 @@ public class JSLexer extends Lexer {
     public final void mSHORT() throws RecognitionException {
         try {
             int _type = SHORT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:181:7: ( 'short' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:181:9: 'short'
+            // JS.g:181:7: ( 'short' )
+            // JS.g:181:9: 'short'
             {
             match("short"); 
 
@@ -1463,8 +1463,8 @@ public class JSLexer extends Lexer {
     public final void mSTATIC() throws RecognitionException {
         try {
             int _type = STATIC;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:182:8: ( 'static' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:182:10: 'static'
+            // JS.g:182:8: ( 'static' )
+            // JS.g:182:10: 'static'
             {
             match("static"); 
 
@@ -1482,8 +1482,8 @@ public class JSLexer extends Lexer {
     public final void mSUPER() throws RecognitionException {
         try {
             int _type = SUPER;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:183:7: ( 'super' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:183:9: 'super'
+            // JS.g:183:7: ( 'super' )
+            // JS.g:183:9: 'super'
             {
             match("super"); 
 
@@ -1501,8 +1501,8 @@ public class JSLexer extends Lexer {
     public final void mSYNCHRONIZED() throws RecognitionException {
         try {
             int _type = SYNCHRONIZED;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:184:14: ( 'synchronized' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:184:16: 'synchronized'
+            // JS.g:184:14: ( 'synchronized' )
+            // JS.g:184:16: 'synchronized'
             {
             match("synchronized"); 
 
@@ -1520,8 +1520,8 @@ public class JSLexer extends Lexer {
     public final void mTHROWS() throws RecognitionException {
         try {
             int _type = THROWS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:185:8: ( 'throws' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:185:10: 'throws'
+            // JS.g:185:8: ( 'throws' )
+            // JS.g:185:10: 'throws'
             {
             match("throws"); 
 
@@ -1539,8 +1539,8 @@ public class JSLexer extends Lexer {
     public final void mTRANSIENT() throws RecognitionException {
         try {
             int _type = TRANSIENT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:186:11: ( 'transient' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:186:13: 'transient'
+            // JS.g:186:11: ( 'transient' )
+            // JS.g:186:13: 'transient'
             {
             match("transient"); 
 
@@ -1558,8 +1558,8 @@ public class JSLexer extends Lexer {
     public final void mVOLATILE() throws RecognitionException {
         try {
             int _type = VOLATILE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:187:10: ( 'volatile' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:187:12: 'volatile'
+            // JS.g:187:10: ( 'volatile' )
+            // JS.g:187:12: 'volatile'
             {
             match("volatile"); 
 
@@ -1577,8 +1577,8 @@ public class JSLexer extends Lexer {
     public final void mLBRACE() throws RecognitionException {
         try {
             int _type = LBRACE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:188:8: ( '{' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:188:10: '{'
+            // JS.g:188:8: ( '{' )
+            // JS.g:188:10: '{'
             {
             match('{'); 
 
@@ -1595,8 +1595,8 @@ public class JSLexer extends Lexer {
     public final void mRBRACE() throws RecognitionException {
         try {
             int _type = RBRACE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:189:8: ( '}' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:189:10: '}'
+            // JS.g:189:8: ( '}' )
+            // JS.g:189:10: '}'
             {
             match('}'); 
 
@@ -1613,8 +1613,8 @@ public class JSLexer extends Lexer {
     public final void mLPAREN() throws RecognitionException {
         try {
             int _type = LPAREN;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:190:8: ( '(' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:190:10: '('
+            // JS.g:190:8: ( '(' )
+            // JS.g:190:10: '('
             {
             match('('); 
 
@@ -1631,8 +1631,8 @@ public class JSLexer extends Lexer {
     public final void mRPAREN() throws RecognitionException {
         try {
             int _type = RPAREN;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:191:8: ( ')' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:191:10: ')'
+            // JS.g:191:8: ( ')' )
+            // JS.g:191:10: ')'
             {
             match(')'); 
 
@@ -1649,8 +1649,8 @@ public class JSLexer extends Lexer {
     public final void mLBRACK() throws RecognitionException {
         try {
             int _type = LBRACK;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:192:8: ( '[' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:192:10: '['
+            // JS.g:192:8: ( '[' )
+            // JS.g:192:10: '['
             {
             match('['); 
 
@@ -1667,8 +1667,8 @@ public class JSLexer extends Lexer {
     public final void mRBRACK() throws RecognitionException {
         try {
             int _type = RBRACK;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:193:8: ( ']' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:193:10: ']'
+            // JS.g:193:8: ( ']' )
+            // JS.g:193:10: ']'
             {
             match(']'); 
 
@@ -1685,8 +1685,8 @@ public class JSLexer extends Lexer {
     public final void mDOT() throws RecognitionException {
         try {
             int _type = DOT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:194:5: ( '.' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:194:7: '.'
+            // JS.g:194:5: ( '.' )
+            // JS.g:194:7: '.'
             {
             match('.'); 
 
@@ -1703,8 +1703,8 @@ public class JSLexer extends Lexer {
     public final void mSEMIC() throws RecognitionException {
         try {
             int _type = SEMIC;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:195:7: ( ';' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:195:9: ';'
+            // JS.g:195:7: ( ';' )
+            // JS.g:195:9: ';'
             {
             match(';'); 
 
@@ -1721,8 +1721,8 @@ public class JSLexer extends Lexer {
     public final void mCOMMA() throws RecognitionException {
         try {
             int _type = COMMA;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:196:7: ( ',' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:196:9: ','
+            // JS.g:196:7: ( ',' )
+            // JS.g:196:9: ','
             {
             match(','); 
 
@@ -1739,8 +1739,8 @@ public class JSLexer extends Lexer {
     public final void mLT() throws RecognitionException {
         try {
             int _type = LT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:197:4: ( '<' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:197:6: '<'
+            // JS.g:197:4: ( '<' )
+            // JS.g:197:6: '<'
             {
             match('<'); 
 
@@ -1757,8 +1757,8 @@ public class JSLexer extends Lexer {
     public final void mGT() throws RecognitionException {
         try {
             int _type = GT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:198:4: ( '>' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:198:6: '>'
+            // JS.g:198:4: ( '>' )
+            // JS.g:198:6: '>'
             {
             match('>'); 
 
@@ -1775,8 +1775,8 @@ public class JSLexer extends Lexer {
     public final void mLTE() throws RecognitionException {
         try {
             int _type = LTE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:199:5: ( '<=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:199:7: '<='
+            // JS.g:199:5: ( '<=' )
+            // JS.g:199:7: '<='
             {
             match("<="); 
 
@@ -1794,8 +1794,8 @@ public class JSLexer extends Lexer {
     public final void mGTE() throws RecognitionException {
         try {
             int _type = GTE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:200:5: ( '>=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:200:7: '>='
+            // JS.g:200:5: ( '>=' )
+            // JS.g:200:7: '>='
             {
             match(">="); 
 
@@ -1813,8 +1813,8 @@ public class JSLexer extends Lexer {
     public final void mEQ() throws RecognitionException {
         try {
             int _type = EQ;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:201:4: ( '==' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:201:6: '=='
+            // JS.g:201:4: ( '==' )
+            // JS.g:201:6: '=='
             {
             match("=="); 
 
@@ -1832,8 +1832,8 @@ public class JSLexer extends Lexer {
     public final void mNEQ() throws RecognitionException {
         try {
             int _type = NEQ;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:202:5: ( '!=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:202:7: '!='
+            // JS.g:202:5: ( '!=' )
+            // JS.g:202:7: '!='
             {
             match("!="); 
 
@@ -1851,8 +1851,8 @@ public class JSLexer extends Lexer {
     public final void mSAME() throws RecognitionException {
         try {
             int _type = SAME;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:203:6: ( '===' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:203:8: '==='
+            // JS.g:203:6: ( '===' )
+            // JS.g:203:8: '==='
             {
             match("==="); 
 
@@ -1870,8 +1870,8 @@ public class JSLexer extends Lexer {
     public final void mNSAME() throws RecognitionException {
         try {
             int _type = NSAME;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:204:7: ( '!==' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:204:9: '!=='
+            // JS.g:204:7: ( '!==' )
+            // JS.g:204:9: '!=='
             {
             match("!=="); 
 
@@ -1889,8 +1889,8 @@ public class JSLexer extends Lexer {
     public final void mADD() throws RecognitionException {
         try {
             int _type = ADD;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:205:5: ( '+' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:205:7: '+'
+            // JS.g:205:5: ( '+' )
+            // JS.g:205:7: '+'
             {
             match('+'); 
 
@@ -1907,8 +1907,8 @@ public class JSLexer extends Lexer {
     public final void mSUB() throws RecognitionException {
         try {
             int _type = SUB;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:206:5: ( '-' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:206:7: '-'
+            // JS.g:206:5: ( '-' )
+            // JS.g:206:7: '-'
             {
             match('-'); 
 
@@ -1925,8 +1925,8 @@ public class JSLexer extends Lexer {
     public final void mMUL() throws RecognitionException {
         try {
             int _type = MUL;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:207:5: ( '*' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:207:7: '*'
+            // JS.g:207:5: ( '*' )
+            // JS.g:207:7: '*'
             {
             match('*'); 
 
@@ -1943,8 +1943,8 @@ public class JSLexer extends Lexer {
     public final void mMOD() throws RecognitionException {
         try {
             int _type = MOD;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:208:5: ( '%' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:208:7: '%'
+            // JS.g:208:5: ( '%' )
+            // JS.g:208:7: '%'
             {
             match('%'); 
 
@@ -1961,8 +1961,8 @@ public class JSLexer extends Lexer {
     public final void mINC() throws RecognitionException {
         try {
             int _type = INC;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:209:5: ( '++' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:209:7: '++'
+            // JS.g:209:5: ( '++' )
+            // JS.g:209:7: '++'
             {
             match("++"); 
 
@@ -1980,8 +1980,8 @@ public class JSLexer extends Lexer {
     public final void mDEC() throws RecognitionException {
         try {
             int _type = DEC;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:210:5: ( '--' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:210:7: '--'
+            // JS.g:210:5: ( '--' )
+            // JS.g:210:7: '--'
             {
             match("--"); 
 
@@ -1999,8 +1999,8 @@ public class JSLexer extends Lexer {
     public final void mSHL() throws RecognitionException {
         try {
             int _type = SHL;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:211:5: ( '<<' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:211:7: '<<'
+            // JS.g:211:5: ( '<<' )
+            // JS.g:211:7: '<<'
             {
             match("<<"); 
 
@@ -2018,8 +2018,8 @@ public class JSLexer extends Lexer {
     public final void mSHR() throws RecognitionException {
         try {
             int _type = SHR;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:212:5: ( '>>' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:212:7: '>>'
+            // JS.g:212:5: ( '>>' )
+            // JS.g:212:7: '>>'
             {
             match(">>"); 
 
@@ -2037,8 +2037,8 @@ public class JSLexer extends Lexer {
     public final void mSHU() throws RecognitionException {
         try {
             int _type = SHU;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:213:5: ( '>>>' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:213:7: '>>>'
+            // JS.g:213:5: ( '>>>' )
+            // JS.g:213:7: '>>>'
             {
             match(">>>"); 
 
@@ -2056,8 +2056,8 @@ public class JSLexer extends Lexer {
     public final void mAND() throws RecognitionException {
         try {
             int _type = AND;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:214:5: ( '&' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:214:7: '&'
+            // JS.g:214:5: ( '&' )
+            // JS.g:214:7: '&'
             {
             match('&'); 
 
@@ -2074,8 +2074,8 @@ public class JSLexer extends Lexer {
     public final void mOR() throws RecognitionException {
         try {
             int _type = OR;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:215:4: ( '|' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:215:6: '|'
+            // JS.g:215:4: ( '|' )
+            // JS.g:215:6: '|'
             {
             match('|'); 
 
@@ -2092,8 +2092,8 @@ public class JSLexer extends Lexer {
     public final void mXOR() throws RecognitionException {
         try {
             int _type = XOR;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:216:5: ( '^' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:216:7: '^'
+            // JS.g:216:5: ( '^' )
+            // JS.g:216:7: '^'
             {
             match('^'); 
 
@@ -2110,8 +2110,8 @@ public class JSLexer extends Lexer {
     public final void mNOT() throws RecognitionException {
         try {
             int _type = NOT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:217:5: ( '!' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:217:7: '!'
+            // JS.g:217:5: ( '!' )
+            // JS.g:217:7: '!'
             {
             match('!'); 
 
@@ -2128,8 +2128,8 @@ public class JSLexer extends Lexer {
     public final void mINV() throws RecognitionException {
         try {
             int _type = INV;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:218:5: ( '~' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:218:7: '~'
+            // JS.g:218:5: ( '~' )
+            // JS.g:218:7: '~'
             {
             match('~'); 
 
@@ -2146,8 +2146,8 @@ public class JSLexer extends Lexer {
     public final void mLAND() throws RecognitionException {
         try {
             int _type = LAND;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:219:6: ( '&&' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:219:8: '&&'
+            // JS.g:219:6: ( '&&' )
+            // JS.g:219:8: '&&'
             {
             match("&&"); 
 
@@ -2165,8 +2165,8 @@ public class JSLexer extends Lexer {
     public final void mLOR() throws RecognitionException {
         try {
             int _type = LOR;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:220:5: ( '||' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:220:7: '||'
+            // JS.g:220:5: ( '||' )
+            // JS.g:220:7: '||'
             {
             match("||"); 
 
@@ -2184,8 +2184,8 @@ public class JSLexer extends Lexer {
     public final void mQUE() throws RecognitionException {
         try {
             int _type = QUE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:221:5: ( '?' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:221:7: '?'
+            // JS.g:221:5: ( '?' )
+            // JS.g:221:7: '?'
             {
             match('?'); 
 
@@ -2202,8 +2202,8 @@ public class JSLexer extends Lexer {
     public final void mCOLON() throws RecognitionException {
         try {
             int _type = COLON;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:222:7: ( ':' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:222:9: ':'
+            // JS.g:222:7: ( ':' )
+            // JS.g:222:9: ':'
             {
             match(':'); 
 
@@ -2220,8 +2220,8 @@ public class JSLexer extends Lexer {
     public final void mASSIGN() throws RecognitionException {
         try {
             int _type = ASSIGN;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:223:8: ( '=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:223:10: '='
+            // JS.g:223:8: ( '=' )
+            // JS.g:223:10: '='
             {
             match('='); 
 
@@ -2238,8 +2238,8 @@ public class JSLexer extends Lexer {
     public final void mADDASS() throws RecognitionException {
         try {
             int _type = ADDASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:224:8: ( '+=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:224:10: '+='
+            // JS.g:224:8: ( '+=' )
+            // JS.g:224:10: '+='
             {
             match("+="); 
 
@@ -2257,8 +2257,8 @@ public class JSLexer extends Lexer {
     public final void mSUBASS() throws RecognitionException {
         try {
             int _type = SUBASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:225:8: ( '-=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:225:10: '-='
+            // JS.g:225:8: ( '-=' )
+            // JS.g:225:10: '-='
             {
             match("-="); 
 
@@ -2276,8 +2276,8 @@ public class JSLexer extends Lexer {
     public final void mMULASS() throws RecognitionException {
         try {
             int _type = MULASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:226:8: ( '*=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:226:10: '*='
+            // JS.g:226:8: ( '*=' )
+            // JS.g:226:10: '*='
             {
             match("*="); 
 
@@ -2295,8 +2295,8 @@ public class JSLexer extends Lexer {
     public final void mMODASS() throws RecognitionException {
         try {
             int _type = MODASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:227:8: ( '%=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:227:10: '%='
+            // JS.g:227:8: ( '%=' )
+            // JS.g:227:10: '%='
             {
             match("%="); 
 
@@ -2314,8 +2314,8 @@ public class JSLexer extends Lexer {
     public final void mSHLASS() throws RecognitionException {
         try {
             int _type = SHLASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:228:8: ( '<<=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:228:10: '<<='
+            // JS.g:228:8: ( '<<=' )
+            // JS.g:228:10: '<<='
             {
             match("<<="); 
 
@@ -2333,8 +2333,8 @@ public class JSLexer extends Lexer {
     public final void mSHRASS() throws RecognitionException {
         try {
             int _type = SHRASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:229:8: ( '>>=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:229:10: '>>='
+            // JS.g:229:8: ( '>>=' )
+            // JS.g:229:10: '>>='
             {
             match(">>="); 
 
@@ -2352,8 +2352,8 @@ public class JSLexer extends Lexer {
     public final void mSHUASS() throws RecognitionException {
         try {
             int _type = SHUASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:230:8: ( '>>>=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:230:10: '>>>='
+            // JS.g:230:8: ( '>>>=' )
+            // JS.g:230:10: '>>>='
             {
             match(">>>="); 
 
@@ -2371,8 +2371,8 @@ public class JSLexer extends Lexer {
     public final void mANDASS() throws RecognitionException {
         try {
             int _type = ANDASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:231:8: ( '&=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:231:10: '&='
+            // JS.g:231:8: ( '&=' )
+            // JS.g:231:10: '&='
             {
             match("&="); 
 
@@ -2390,8 +2390,8 @@ public class JSLexer extends Lexer {
     public final void mORASS() throws RecognitionException {
         try {
             int _type = ORASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:232:7: ( '|=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:232:9: '|='
+            // JS.g:232:7: ( '|=' )
+            // JS.g:232:9: '|='
             {
             match("|="); 
 
@@ -2409,8 +2409,8 @@ public class JSLexer extends Lexer {
     public final void mXORASS() throws RecognitionException {
         try {
             int _type = XORASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:233:8: ( '^=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:233:10: '^='
+            // JS.g:233:8: ( '^=' )
+            // JS.g:233:10: '^='
             {
             match("^="); 
 
@@ -2428,8 +2428,8 @@ public class JSLexer extends Lexer {
     public final void mDIV() throws RecognitionException {
         try {
             int _type = DIV;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:234:5: ( '/' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:234:7: '/'
+            // JS.g:234:5: ( '/' )
+            // JS.g:234:7: '/'
             {
             match('/'); 
 
@@ -2446,8 +2446,8 @@ public class JSLexer extends Lexer {
     public final void mDIVASS() throws RecognitionException {
         try {
             int _type = DIVASS;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:235:8: ( '/=' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:235:10: '/='
+            // JS.g:235:8: ( '/=' )
+            // JS.g:235:10: '/='
             {
             match("/="); 
 
@@ -2465,8 +2465,8 @@ public class JSLexer extends Lexer {
     public final void mXCOPEN() throws RecognitionException {
         try {
             int _type = XCOPEN;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:236:8: ( '<!--' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:236:10: '<!--'
+            // JS.g:236:8: ( '<!--' )
+            // JS.g:236:10: '<!--'
             {
             match("<!--"); 
 
@@ -2484,8 +2484,8 @@ public class JSLexer extends Lexer {
     public final void mXCCLOSE() throws RecognitionException {
         try {
             int _type = XCCLOSE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:237:9: ( '-->' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:237:11: '-->'
+            // JS.g:237:9: ( '-->' )
+            // JS.g:237:11: '-->'
             {
             match("-->"); 
 
@@ -2503,8 +2503,8 @@ public class JSLexer extends Lexer {
     public final void mXLCLOSE() throws RecognitionException {
         try {
             int _type = XLCLOSE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:238:9: ( '</' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:238:11: '</'
+            // JS.g:238:9: ( '</' )
+            // JS.g:238:11: '</'
             {
             match("</"); 
 
@@ -2522,8 +2522,8 @@ public class JSLexer extends Lexer {
     public final void mXRCLOSE() throws RecognitionException {
         try {
             int _type = XRCLOSE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:239:9: ( '/>' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:239:11: '/>'
+            // JS.g:239:9: ( '/>' )
+            // JS.g:239:11: '/>'
             {
             match("/>"); 
 
@@ -2541,8 +2541,8 @@ public class JSLexer extends Lexer {
     public final void mCDATAOPEN() throws RecognitionException {
         try {
             int _type = CDATAOPEN;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:240:11: ( '<![' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:240:13: '<!['
+            // JS.g:240:11: ( '<![' )
+            // JS.g:240:13: '<!['
             {
             match("<!["); 
 
@@ -2560,8 +2560,8 @@ public class JSLexer extends Lexer {
     public final void mXHOPEN() throws RecognitionException {
         try {
             int _type = XHOPEN;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:241:8: ( '<?' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:241:10: '<?'
+            // JS.g:241:8: ( '<?' )
+            // JS.g:241:10: '<?'
             {
             match("<?"); 
 
@@ -2579,8 +2579,8 @@ public class JSLexer extends Lexer {
     public final void mXHCLOSE() throws RecognitionException {
         try {
             int _type = XHCLOSE;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:242:9: ( '?>' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:242:11: '?>'
+            // JS.g:242:9: ( '?>' )
+            // JS.g:242:11: '?>'
             {
             match("?>"); 
 
@@ -2598,8 +2598,8 @@ public class JSLexer extends Lexer {
     public final void mAT() throws RecognitionException {
         try {
             int _type = AT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:243:4: ( '@' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:243:6: '@'
+            // JS.g:243:4: ( '@' )
+            // JS.g:243:6: '@'
             {
             match('@'); 
 
@@ -2616,8 +2616,8 @@ public class JSLexer extends Lexer {
     public final void mDOTDOT() throws RecognitionException {
         try {
             int _type = DOTDOT;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:244:8: ( '..' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:244:10: '..'
+            // JS.g:244:8: ( '..' )
+            // JS.g:244:10: '..'
             {
             match(".."); 
 
@@ -2635,8 +2635,8 @@ public class JSLexer extends Lexer {
     public final void mCOLONCOLON() throws RecognitionException {
         try {
             int _type = COLONCOLON;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:245:12: ( '::' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:245:14: '::'
+            // JS.g:245:12: ( '::' )
+            // JS.g:245:14: '::'
             {
             match("::"); 
 
@@ -2653,8 +2653,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start BSLASH
     public final void mBSLASH() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:484:2: ( '\\\\' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:484:4: '\\\\'
+            // JS.g:484:2: ( '\\\\' )
+            // JS.g:484:4: '\\\\'
             {
             match('\\'); 
 
@@ -2669,8 +2669,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start DQUOTE
     public final void mDQUOTE() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:488:2: ( '\"' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:488:4: '\"'
+            // JS.g:488:2: ( '\"' )
+            // JS.g:488:4: '\"'
             {
             match('\"'); 
 
@@ -2685,8 +2685,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start SQUOTE
     public final void mSQUOTE() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:492:2: ( '\\'' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:492:4: '\\''
+            // JS.g:492:2: ( '\\'' )
+            // JS.g:492:4: '\\''
             {
             match('\''); 
 
@@ -2701,8 +2701,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start TAB
     public final void mTAB() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:498:2: ( '\\u0009' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:498:4: '\\u0009'
+            // JS.g:498:2: ( '\\u0009' )
+            // JS.g:498:4: '\\u0009'
             {
             match('\t'); 
 
@@ -2717,8 +2717,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start VT
     public final void mVT() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:502:2: ( '\\u000b' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:502:4: '\\u000b'
+            // JS.g:502:2: ( '\\u000b' )
+            // JS.g:502:4: '\\u000b'
             {
             match('\u000B'); 
 
@@ -2733,8 +2733,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start FF
     public final void mFF() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:506:2: ( '\\u000c' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:506:4: '\\u000c'
+            // JS.g:506:2: ( '\\u000c' )
+            // JS.g:506:4: '\\u000c'
             {
             match('\f'); 
 
@@ -2749,8 +2749,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start SP
     public final void mSP() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:510:2: ( '\\u0020' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:510:4: '\\u0020'
+            // JS.g:510:2: ( '\\u0020' )
+            // JS.g:510:4: '\\u0020'
             {
             match(' '); 
 
@@ -2765,8 +2765,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start NBSP
     public final void mNBSP() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:514:2: ( '\\u00a0' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:514:4: '\\u00a0'
+            // JS.g:514:2: ( '\\u00a0' )
+            // JS.g:514:4: '\\u00a0'
             {
             match('\u00A0'); 
 
@@ -2781,8 +2781,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start USP
     public final void mUSP() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:518:2: ( '\\u1680' | '\\u180E' | '\\u2000' | '\\u2001' | '\\u2002' | '\\u2003' | '\\u2004' | '\\u2005' | '\\u2006' | '\\u2007' | '\\u2008' | '\\u2009' | '\\u200A' | '\\u202F' | '\\u205F' | '\\u3000' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            // JS.g:518:2: ( '\\u1680' | '\\u180E' | '\\u2000' | '\\u2001' | '\\u2002' | '\\u2003' | '\\u2004' | '\\u2005' | '\\u2006' | '\\u2007' | '\\u2008' | '\\u2009' | '\\u200A' | '\\u202F' | '\\u205F' | '\\u3000' )
+            // JS.g:
             {
             if ( input.LA(1)=='\u1680'||input.LA(1)=='\u180E'||(input.LA(1)>='\u2000' && input.LA(1)<='\u200A')||input.LA(1)=='\u202F'||input.LA(1)=='\u205F'||input.LA(1)=='\u3000' ) {
                 input.consume();
@@ -2807,10 +2807,10 @@ public class JSLexer extends Lexer {
     public final void mWhiteSpace() throws RecognitionException {
         try {
             int _type = WhiteSpace;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:537:2: ( ( TAB | VT | FF | SP | NBSP | USP )+ )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:537:4: ( TAB | VT | FF | SP | NBSP | USP )+
+            // JS.g:537:2: ( ( TAB | VT | FF | SP | NBSP | USP )+ )
+            // JS.g:537:4: ( TAB | VT | FF | SP | NBSP | USP )+
             {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:537:4: ( TAB | VT | FF | SP | NBSP | USP )+
+            // JS.g:537:4: ( TAB | VT | FF | SP | NBSP | USP )+
             int cnt1=0;
             loop1:
             do {
@@ -2824,7 +2824,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            	    // JS.g:
             	    {
             	    if ( input.LA(1)=='\t'||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||input.LA(1)==' '||input.LA(1)=='\u00A0'||input.LA(1)=='\u1680'||input.LA(1)=='\u180E'||(input.LA(1)>='\u2000' && input.LA(1)<='\u200A')||input.LA(1)=='\u202F'||input.LA(1)=='\u205F'||input.LA(1)=='\u3000' ) {
             	        input.consume();
@@ -2863,8 +2863,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start LF
     public final void mLF() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:545:2: ( '\\n' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:545:4: '\\n'
+            // JS.g:545:2: ( '\\n' )
+            // JS.g:545:4: '\\n'
             {
             match('\n'); 
 
@@ -2879,8 +2879,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start CR
     public final void mCR() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:549:2: ( '\\r' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:549:4: '\\r'
+            // JS.g:549:2: ( '\\r' )
+            // JS.g:549:4: '\\r'
             {
             match('\r'); 
 
@@ -2895,8 +2895,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start LS
     public final void mLS() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:553:2: ( '\\u2028' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:553:4: '\\u2028'
+            // JS.g:553:2: ( '\\u2028' )
+            // JS.g:553:4: '\\u2028'
             {
             match('\u2028'); 
 
@@ -2911,8 +2911,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start PS
     public final void mPS() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:557:2: ( '\\u2029' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:557:4: '\\u2029'
+            // JS.g:557:2: ( '\\u2029' )
+            // JS.g:557:4: '\\u2029'
             {
             match('\u2029'); 
 
@@ -2927,8 +2927,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start LineTerminator
     public final void mLineTerminator() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:561:2: ( CR | LF | LS | PS )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            // JS.g:561:2: ( CR | LF | LS | PS )
+            // JS.g:
             {
             if ( input.LA(1)=='\n'||input.LA(1)=='\r'||(input.LA(1)>='\u2028' && input.LA(1)<='\u2029') ) {
                 input.consume();
@@ -2953,10 +2953,10 @@ public class JSLexer extends Lexer {
     public final void mEOL() throws RecognitionException {
         try {
             int _type = EOL;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:2: ( ( ( CR ( LF )? ) | LF | LS | PS ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:4: ( ( CR ( LF )? ) | LF | LS | PS )
+            // JS.g:565:2: ( ( ( CR ( LF )? ) | LF | LS | PS ) )
+            // JS.g:565:4: ( ( CR ( LF )? ) | LF | LS | PS )
             {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:4: ( ( CR ( LF )? ) | LF | LS | PS )
+            // JS.g:565:4: ( ( CR ( LF )? ) | LF | LS | PS )
             int alt3=4;
             switch ( input.LA(1) ) {
             case '\r':
@@ -2988,13 +2988,13 @@ public class JSLexer extends Lexer {
 
             switch (alt3) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:6: ( CR ( LF )? )
+                    // JS.g:565:6: ( CR ( LF )? )
                     {
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:6: ( CR ( LF )? )
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:8: CR ( LF )?
+                    // JS.g:565:6: ( CR ( LF )? )
+                    // JS.g:565:8: CR ( LF )?
                     {
                     mCR(); 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:11: ( LF )?
+                    // JS.g:565:11: ( LF )?
                     int alt2=2;
                     int LA2_0 = input.LA(1);
 
@@ -3003,7 +3003,7 @@ public class JSLexer extends Lexer {
                     }
                     switch (alt2) {
                         case 1 :
-                            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:11: LF
+                            // JS.g:565:11: LF
                             {
                             mLF(); 
 
@@ -3019,21 +3019,21 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:19: LF
+                    // JS.g:565:19: LF
                     {
                     mLF(); 
 
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:24: LS
+                    // JS.g:565:24: LS
                     {
                     mLS(); 
 
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:565:29: PS
+                    // JS.g:565:29: PS
                     {
                     mPS(); 
 
@@ -3057,12 +3057,12 @@ public class JSLexer extends Lexer {
     public final void mMultiLineComment() throws RecognitionException {
         try {
             int _type = MultiLineComment;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:572:2: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:572:4: '/*' ( options {greedy=false; } : . )* '*/'
+            // JS.g:572:2: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            // JS.g:572:4: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:572:9: ( options {greedy=false; } : . )*
+            // JS.g:572:9: ( options {greedy=false; } : . )*
             loop4:
             do {
                 int alt4=2;
@@ -3087,7 +3087,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt4) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:572:41: .
+            	    // JS.g:572:41: .
             	    {
             	    matchAny(); 
 
@@ -3116,12 +3116,12 @@ public class JSLexer extends Lexer {
     public final void mSingleLineComment() throws RecognitionException {
         try {
             int _type = SingleLineComment;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:576:2: ( '//' (~ ( LineTerminator ) )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:576:4: '//' (~ ( LineTerminator ) )*
+            // JS.g:576:2: ( '//' (~ ( LineTerminator ) )* )
+            // JS.g:576:4: '//' (~ ( LineTerminator ) )*
             {
             match("//"); 
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:576:9: (~ ( LineTerminator ) )*
+            // JS.g:576:9: (~ ( LineTerminator ) )*
             loop5:
             do {
                 int alt5=2;
@@ -3134,7 +3134,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt5) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:576:11: ~ ( LineTerminator )
+            	    // JS.g:576:11: ~ ( LineTerminator )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
             	        input.consume();
@@ -3169,7 +3169,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start IdentifierStartASCII
     public final void mIdentifierStartASCII() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:685:2: ( 'a' .. 'z' | 'A' .. 'Z' | '$' | '_' | BSLASH 'u' HexDigit HexDigit HexDigit HexDigit )
+            // JS.g:685:2: ( 'a' .. 'z' | 'A' .. 'Z' | '$' | '_' | BSLASH 'u' HexDigit HexDigit HexDigit HexDigit )
             int alt6=5;
             switch ( input.LA(1) ) {
             case 'a':
@@ -3256,35 +3256,35 @@ public class JSLexer extends Lexer {
 
             switch (alt6) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:685:4: 'a' .. 'z'
+                    // JS.g:685:4: 'a' .. 'z'
                     {
                     matchRange('a','z'); 
 
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:685:15: 'A' .. 'Z'
+                    // JS.g:685:15: 'A' .. 'Z'
                     {
                     matchRange('A','Z'); 
 
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:686:4: '$'
+                    // JS.g:686:4: '$'
                     {
                     match('$'); 
 
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:687:4: '_'
+                    // JS.g:687:4: '_'
                     {
                     match('_'); 
 
                     }
                     break;
                 case 5 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:688:4: BSLASH 'u' HexDigit HexDigit HexDigit HexDigit
+                    // JS.g:688:4: BSLASH 'u' HexDigit HexDigit HexDigit HexDigit
                     {
                     mBSLASH(); 
                     match('u'); 
@@ -3306,7 +3306,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start IdentifierPart
     public final void mIdentifierPart() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:696:2: ( DecimalDigit | IdentifierStartASCII | {...}?)
+            // JS.g:696:2: ( DecimalDigit | IdentifierStartASCII | {...}?)
             int alt7=3;
             switch ( input.LA(1) ) {
             case '0':
@@ -3387,21 +3387,21 @@ public class JSLexer extends Lexer {
 
             switch (alt7) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:696:4: DecimalDigit
+                    // JS.g:696:4: DecimalDigit
                     {
                     mDecimalDigit(); 
 
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:697:4: IdentifierStartASCII
+                    // JS.g:697:4: IdentifierStartASCII
                     {
                     mIdentifierStartASCII(); 
 
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:698:4: {...}?
+                    // JS.g:698:4: {...}?
                     {
                     if ( !( isIdentifierPartUnicode(input.LA(1)) ) ) {
                         throw new FailedPredicateException(input, "IdentifierPart", " isIdentifierPartUnicode(input.LA(1)) ");
@@ -3421,11 +3421,11 @@ public class JSLexer extends Lexer {
     // $ANTLR start IdentifierNameASCIIStart
     public final void mIdentifierNameASCIIStart() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:702:2: ( IdentifierStartASCII ( IdentifierPart )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:702:4: IdentifierStartASCII ( IdentifierPart )*
+            // JS.g:702:2: ( IdentifierStartASCII ( IdentifierPart )* )
+            // JS.g:702:4: IdentifierStartASCII ( IdentifierPart )*
             {
             mIdentifierStartASCII(); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:702:25: ( IdentifierPart )*
+            // JS.g:702:25: ( IdentifierPart )*
             loop8:
             do {
                 int alt8=2;
@@ -3441,7 +3441,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt8) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:702:25: IdentifierPart
+            	    // JS.g:702:25: IdentifierPart
             	    {
             	    mIdentifierPart(); 
 
@@ -3466,7 +3466,7 @@ public class JSLexer extends Lexer {
     public final void mIdentifier() throws RecognitionException {
         try {
             int _type = Identifier;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:715:3: ( IdentifierNameASCIIStart | )
+            // JS.g:715:3: ( IdentifierNameASCIIStart | )
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -3477,14 +3477,14 @@ public class JSLexer extends Lexer {
                 alt9=2;}
             switch (alt9) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:715:5: IdentifierNameASCIIStart
+                    // JS.g:715:5: IdentifierNameASCIIStart
                     {
                     mIdentifierNameASCIIStart(); 
 
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:716:5: 
+                    // JS.g:716:5: 
                     {
                      consumeIdentifierUnicodeStart(); 
 
@@ -3502,8 +3502,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start PropertyIdentifierSymbols
     public final void mPropertyIdentifierSymbols() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:737:3: ( AT Identifier )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:737:5: AT Identifier
+            // JS.g:737:3: ( AT Identifier )
+            // JS.g:737:5: AT Identifier
             {
             mAT(); 
             mIdentifier(); 
@@ -3520,8 +3520,8 @@ public class JSLexer extends Lexer {
     public final void mXmlAttribute() throws RecognitionException {
         try {
             int _type = XmlAttribute;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:741:3: ( PropertyIdentifierSymbols )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:741:5: PropertyIdentifierSymbols
+            // JS.g:741:3: ( PropertyIdentifierSymbols )
+            // JS.g:741:5: PropertyIdentifierSymbols
             {
             mPropertyIdentifierSymbols(); 
 
@@ -3537,8 +3537,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start DecimalDigit
     public final void mDecimalDigit() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:827:2: ( '0' .. '9' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:827:4: '0' .. '9'
+            // JS.g:827:2: ( '0' .. '9' )
+            // JS.g:827:4: '0' .. '9'
             {
             matchRange('0','9'); 
 
@@ -3553,8 +3553,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start HexDigit
     public final void mHexDigit() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:831:2: ( DecimalDigit | 'a' .. 'f' | 'A' .. 'F' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+            // JS.g:831:2: ( DecimalDigit | 'a' .. 'f' | 'A' .. 'F' )
+            // JS.g:
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='F')||(input.LA(1)>='a' && input.LA(1)<='f') ) {
                 input.consume();
@@ -3578,8 +3578,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start OctalDigit
     public final void mOctalDigit() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:835:2: ( '0' .. '7' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:835:4: '0' .. '7'
+            // JS.g:835:2: ( '0' .. '7' )
+            // JS.g:835:4: '0' .. '7'
             {
             matchRange('0','7'); 
 
@@ -3594,8 +3594,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start ExponentPart
     public final void mExponentPart() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:839:2: ( ( 'e' | 'E' ) ( '+' | '-' )? ( DecimalDigit )+ )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:839:4: ( 'e' | 'E' ) ( '+' | '-' )? ( DecimalDigit )+
+            // JS.g:839:2: ( ( 'e' | 'E' ) ( '+' | '-' )? ( DecimalDigit )+ )
+            // JS.g:839:4: ( 'e' | 'E' ) ( '+' | '-' )? ( DecimalDigit )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -3607,7 +3607,7 @@ public class JSLexer extends Lexer {
                 recover(mse);    throw mse;
             }
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:839:18: ( '+' | '-' )?
+            // JS.g:839:18: ( '+' | '-' )?
             int alt10=2;
             int LA10_0 = input.LA(1);
 
@@ -3616,7 +3616,7 @@ public class JSLexer extends Lexer {
             }
             switch (alt10) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:
+                    // JS.g:
                     {
                     if ( input.LA(1)=='+'||input.LA(1)=='-' ) {
                         input.consume();
@@ -3634,7 +3634,7 @@ public class JSLexer extends Lexer {
 
             }
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:839:33: ( DecimalDigit )+
+            // JS.g:839:33: ( DecimalDigit )+
             int cnt11=0;
             loop11:
             do {
@@ -3648,7 +3648,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt11) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:839:33: DecimalDigit
+            	    // JS.g:839:33: DecimalDigit
             	    {
             	    mDecimalDigit(); 
 
@@ -3676,7 +3676,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start DecimalIntegerLiteral
     public final void mDecimalIntegerLiteral() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:843:2: ( '0' | '1' .. '9' ( DecimalDigit )* )
+            // JS.g:843:2: ( '0' | '1' .. '9' ( DecimalDigit )* )
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -3694,17 +3694,17 @@ public class JSLexer extends Lexer {
             }
             switch (alt13) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:843:4: '0'
+                    // JS.g:843:4: '0'
                     {
                     match('0'); 
 
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:844:4: '1' .. '9' ( DecimalDigit )*
+                    // JS.g:844:4: '1' .. '9' ( DecimalDigit )*
                     {
                     matchRange('1','9'); 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:844:13: ( DecimalDigit )*
+                    // JS.g:844:13: ( DecimalDigit )*
                     loop12:
                     do {
                         int alt12=2;
@@ -3717,7 +3717,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt12) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:844:13: DecimalDigit
+                    	    // JS.g:844:13: DecimalDigit
                     	    {
                     	    mDecimalDigit(); 
 
@@ -3744,16 +3744,16 @@ public class JSLexer extends Lexer {
     public final void mDecimalLiteral() throws RecognitionException {
         try {
             int _type = DecimalLiteral;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:848:2: ( DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )? | '.' ( DecimalDigit )+ ( ExponentPart )? | DecimalIntegerLiteral ( ExponentPart )? )
+            // JS.g:848:2: ( DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )? | '.' ( DecimalDigit )+ ( ExponentPart )? | DecimalIntegerLiteral ( ExponentPart )? )
             int alt19=3;
             alt19 = dfa19.predict(input);
             switch (alt19) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:848:4: DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )?
+                    // JS.g:848:4: DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )?
                     {
                     mDecimalIntegerLiteral(); 
                     match('.'); 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:848:30: ( DecimalDigit )*
+                    // JS.g:848:30: ( DecimalDigit )*
                     loop14:
                     do {
                         int alt14=2;
@@ -3766,7 +3766,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt14) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:848:30: DecimalDigit
+                    	    // JS.g:848:30: DecimalDigit
                     	    {
                     	    mDecimalDigit(); 
 
@@ -3778,7 +3778,7 @@ public class JSLexer extends Lexer {
                         }
                     } while (true);
 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:848:44: ( ExponentPart )?
+                    // JS.g:848:44: ( ExponentPart )?
                     int alt15=2;
                     int LA15_0 = input.LA(1);
 
@@ -3787,7 +3787,7 @@ public class JSLexer extends Lexer {
                     }
                     switch (alt15) {
                         case 1 :
-                            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:848:44: ExponentPart
+                            // JS.g:848:44: ExponentPart
                             {
                             mExponentPart(); 
 
@@ -3800,10 +3800,10 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:849:4: '.' ( DecimalDigit )+ ( ExponentPart )?
+                    // JS.g:849:4: '.' ( DecimalDigit )+ ( ExponentPart )?
                     {
                     match('.'); 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:849:8: ( DecimalDigit )+
+                    // JS.g:849:8: ( DecimalDigit )+
                     int cnt16=0;
                     loop16:
                     do {
@@ -3817,7 +3817,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt16) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:849:8: DecimalDigit
+                    	    // JS.g:849:8: DecimalDigit
                     	    {
                     	    mDecimalDigit(); 
 
@@ -3833,7 +3833,7 @@ public class JSLexer extends Lexer {
                         cnt16++;
                     } while (true);
 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:849:22: ( ExponentPart )?
+                    // JS.g:849:22: ( ExponentPart )?
                     int alt17=2;
                     int LA17_0 = input.LA(1);
 
@@ -3842,7 +3842,7 @@ public class JSLexer extends Lexer {
                     }
                     switch (alt17) {
                         case 1 :
-                            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:849:22: ExponentPart
+                            // JS.g:849:22: ExponentPart
                             {
                             mExponentPart(); 
 
@@ -3855,10 +3855,10 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:850:4: DecimalIntegerLiteral ( ExponentPart )?
+                    // JS.g:850:4: DecimalIntegerLiteral ( ExponentPart )?
                     {
                     mDecimalIntegerLiteral(); 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:850:26: ( ExponentPart )?
+                    // JS.g:850:26: ( ExponentPart )?
                     int alt18=2;
                     int LA18_0 = input.LA(1);
 
@@ -3867,7 +3867,7 @@ public class JSLexer extends Lexer {
                     }
                     switch (alt18) {
                         case 1 :
-                            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:850:26: ExponentPart
+                            // JS.g:850:26: ExponentPart
                             {
                             mExponentPart(); 
 
@@ -3892,11 +3892,11 @@ public class JSLexer extends Lexer {
     public final void mOctalIntegerLiteral() throws RecognitionException {
         try {
             int _type = OctalIntegerLiteral;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:854:2: ( '0' ( OctalDigit )+ )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:854:4: '0' ( OctalDigit )+
+            // JS.g:854:2: ( '0' ( OctalDigit )+ )
+            // JS.g:854:4: '0' ( OctalDigit )+
             {
             match('0'); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:854:8: ( OctalDigit )+
+            // JS.g:854:8: ( OctalDigit )+
             int cnt20=0;
             loop20:
             do {
@@ -3910,7 +3910,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt20) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:854:8: OctalDigit
+            	    // JS.g:854:8: OctalDigit
             	    {
             	    mOctalDigit(); 
 
@@ -3940,10 +3940,10 @@ public class JSLexer extends Lexer {
     public final void mHexIntegerLiteral() throws RecognitionException {
         try {
             int _type = HexIntegerLiteral;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:858:2: ( ( '0x' | '0X' ) ( HexDigit )+ )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:858:4: ( '0x' | '0X' ) ( HexDigit )+
+            // JS.g:858:2: ( ( '0x' | '0X' ) ( HexDigit )+ )
+            // JS.g:858:4: ( '0x' | '0X' ) ( HexDigit )+
             {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:858:4: ( '0x' | '0X' )
+            // JS.g:858:4: ( '0x' | '0X' )
             int alt21=2;
             int LA21_0 = input.LA(1);
 
@@ -3971,7 +3971,7 @@ public class JSLexer extends Lexer {
             }
             switch (alt21) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:858:6: '0x'
+                    // JS.g:858:6: '0x'
                     {
                     match("0x"); 
 
@@ -3979,7 +3979,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:858:13: '0X'
+                    // JS.g:858:13: '0X'
                     {
                     match("0X"); 
 
@@ -3989,7 +3989,7 @@ public class JSLexer extends Lexer {
 
             }
 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:858:20: ( HexDigit )+
+            // JS.g:858:20: ( HexDigit )+
             int cnt22=0;
             loop22:
             do {
@@ -4003,7 +4003,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt22) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:858:20: HexDigit
+            	    // JS.g:858:20: HexDigit
             	    {
             	    mHexDigit(); 
 
@@ -4032,8 +4032,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start CharacterEscapeSequence
     public final void mCharacterEscapeSequence() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:877:2: (~ ( DecimalDigit | 'x' | 'u' | LineTerminator ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:877:4: ~ ( DecimalDigit | 'x' | 'u' | LineTerminator )
+            // JS.g:877:2: (~ ( DecimalDigit | 'x' | 'u' | LineTerminator ) )
+            // JS.g:877:4: ~ ( DecimalDigit | 'x' | 'u' | LineTerminator )
             {
             if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='/')||(input.LA(1)>=':' && input.LA(1)<='t')||(input.LA(1)>='v' && input.LA(1)<='w')||(input.LA(1)>='y' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                 input.consume();
@@ -4057,8 +4057,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start ZeroToThree
     public final void mZeroToThree() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:881:2: ( '0' .. '3' )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:881:4: '0' .. '3'
+            // JS.g:881:2: ( '0' .. '3' )
+            // JS.g:881:4: '0' .. '3'
             {
             matchRange('0','3'); 
 
@@ -4073,7 +4073,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start OctalEscapeSequence
     public final void mOctalEscapeSequence() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:885:2: ( OctalDigit | ZeroToThree OctalDigit | '4' .. '7' OctalDigit | ZeroToThree OctalDigit OctalDigit )
+            // JS.g:885:2: ( OctalDigit | ZeroToThree OctalDigit | '4' .. '7' OctalDigit | ZeroToThree OctalDigit OctalDigit )
             int alt23=4;
             int LA23_0 = input.LA(1);
 
@@ -4109,14 +4109,14 @@ public class JSLexer extends Lexer {
             }
             switch (alt23) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:885:4: OctalDigit
+                    // JS.g:885:4: OctalDigit
                     {
                     mOctalDigit(); 
 
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:886:4: ZeroToThree OctalDigit
+                    // JS.g:886:4: ZeroToThree OctalDigit
                     {
                     mZeroToThree(); 
                     mOctalDigit(); 
@@ -4124,7 +4124,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:887:4: '4' .. '7' OctalDigit
+                    // JS.g:887:4: '4' .. '7' OctalDigit
                     {
                     matchRange('4','7'); 
                     mOctalDigit(); 
@@ -4132,7 +4132,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:888:4: ZeroToThree OctalDigit OctalDigit
+                    // JS.g:888:4: ZeroToThree OctalDigit OctalDigit
                     {
                     mZeroToThree(); 
                     mOctalDigit(); 
@@ -4151,8 +4151,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start HexEscapeSequence
     public final void mHexEscapeSequence() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:892:2: ( 'x' HexDigit HexDigit )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:892:4: 'x' HexDigit HexDigit
+            // JS.g:892:2: ( 'x' HexDigit HexDigit )
+            // JS.g:892:4: 'x' HexDigit HexDigit
             {
             match('x'); 
             mHexDigit(); 
@@ -4169,8 +4169,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start UnicodeEscapeSequence
     public final void mUnicodeEscapeSequence() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:896:2: ( 'u' HexDigit HexDigit HexDigit HexDigit )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:896:4: 'u' HexDigit HexDigit HexDigit HexDigit
+            // JS.g:896:2: ( 'u' HexDigit HexDigit HexDigit HexDigit )
+            // JS.g:896:4: 'u' HexDigit HexDigit HexDigit HexDigit
             {
             match('u'); 
             mHexDigit(); 
@@ -4189,11 +4189,11 @@ public class JSLexer extends Lexer {
     // $ANTLR start EscapeSequence
     public final void mEscapeSequence() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:900:2: ( BSLASH ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:901:2: BSLASH ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence )
+            // JS.g:900:2: ( BSLASH ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence ) )
+            // JS.g:901:2: BSLASH ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence )
             {
             mBSLASH(); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:902:2: ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence )
+            // JS.g:902:2: ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence )
             int alt24=4;
             int LA24_0 = input.LA(1);
 
@@ -4217,28 +4217,28 @@ public class JSLexer extends Lexer {
             }
             switch (alt24) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:903:3: CharacterEscapeSequence
+                    // JS.g:903:3: CharacterEscapeSequence
                     {
                     mCharacterEscapeSequence(); 
 
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:904:5: OctalEscapeSequence
+                    // JS.g:904:5: OctalEscapeSequence
                     {
                     mOctalEscapeSequence(); 
 
                     }
                     break;
                 case 3 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:905:5: HexEscapeSequence
+                    // JS.g:905:5: HexEscapeSequence
                     {
                     mHexEscapeSequence(); 
 
                     }
                     break;
                 case 4 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:906:5: UnicodeEscapeSequence
+                    // JS.g:906:5: UnicodeEscapeSequence
                     {
                     mUnicodeEscapeSequence(); 
 
@@ -4260,7 +4260,7 @@ public class JSLexer extends Lexer {
     public final void mStringLiteral() throws RecognitionException {
         try {
             int _type = StringLiteral;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:911:2: ( SQUOTE (~ ( SQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* SQUOTE | DQUOTE (~ ( DQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* DQUOTE )
+            // JS.g:911:2: ( SQUOTE (~ ( SQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* SQUOTE | DQUOTE (~ ( DQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* DQUOTE )
             int alt27=2;
             int LA27_0 = input.LA(1);
 
@@ -4278,10 +4278,10 @@ public class JSLexer extends Lexer {
             }
             switch (alt27) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:911:4: SQUOTE (~ ( SQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* SQUOTE
+                    // JS.g:911:4: SQUOTE (~ ( SQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* SQUOTE
                     {
                     mSQUOTE(); 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:911:11: (~ ( SQUOTE | BSLASH | LineTerminator ) | EscapeSequence )*
+                    // JS.g:911:11: (~ ( SQUOTE | BSLASH | LineTerminator ) | EscapeSequence )*
                     loop25:
                     do {
                         int alt25=3;
@@ -4297,7 +4297,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt25) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:911:13: ~ ( SQUOTE | BSLASH | LineTerminator )
+                    	    // JS.g:911:13: ~ ( SQUOTE | BSLASH | LineTerminator )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                     	        input.consume();
@@ -4313,7 +4313,7 @@ public class JSLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:911:53: EscapeSequence
+                    	    // JS.g:911:53: EscapeSequence
                     	    {
                     	    mEscapeSequence(); 
 
@@ -4330,10 +4330,10 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:912:4: DQUOTE (~ ( DQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* DQUOTE
+                    // JS.g:912:4: DQUOTE (~ ( DQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* DQUOTE
                     {
                     mDQUOTE(); 
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:912:11: (~ ( DQUOTE | BSLASH | LineTerminator ) | EscapeSequence )*
+                    // JS.g:912:11: (~ ( DQUOTE | BSLASH | LineTerminator ) | EscapeSequence )*
                     loop26:
                     do {
                         int alt26=3;
@@ -4349,7 +4349,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt26) {
                     	case 1 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:912:13: ~ ( DQUOTE | BSLASH | LineTerminator )
+                    	    // JS.g:912:13: ~ ( DQUOTE | BSLASH | LineTerminator )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                     	        input.consume();
@@ -4365,7 +4365,7 @@ public class JSLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:912:53: EscapeSequence
+                    	    // JS.g:912:53: EscapeSequence
                     	    {
                     	    mEscapeSequence(); 
 
@@ -4393,8 +4393,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start BackslashSequence
     public final void mBackslashSequence() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:921:2: ( BSLASH ~ ( LineTerminator ) )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:921:4: BSLASH ~ ( LineTerminator )
+            // JS.g:921:2: ( BSLASH ~ ( LineTerminator ) )
+            // JS.g:921:4: BSLASH ~ ( LineTerminator )
             {
             mBSLASH(); 
             if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
@@ -4419,7 +4419,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start RegularExpressionFirstChar
     public final void mRegularExpressionFirstChar() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:925:2: (~ ( LineTerminator | MUL | BSLASH | DIV ) | BackslashSequence )
+            // JS.g:925:2: (~ ( LineTerminator | MUL | BSLASH | DIV ) | BackslashSequence )
             int alt28=2;
             int LA28_0 = input.LA(1);
 
@@ -4437,7 +4437,7 @@ public class JSLexer extends Lexer {
             }
             switch (alt28) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:925:4: ~ ( LineTerminator | MUL | BSLASH | DIV )
+                    // JS.g:925:4: ~ ( LineTerminator | MUL | BSLASH | DIV )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<=')')||(input.LA(1)>='+' && input.LA(1)<='.')||(input.LA(1)>='0' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                         input.consume();
@@ -4453,7 +4453,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:926:4: BackslashSequence
+                    // JS.g:926:4: BackslashSequence
                     {
                     mBackslashSequence(); 
 
@@ -4470,7 +4470,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start RegularExpressionChar
     public final void mRegularExpressionChar() throws RecognitionException {
         try {
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:930:2: (~ ( LineTerminator | BSLASH | DIV ) | BackslashSequence )
+            // JS.g:930:2: (~ ( LineTerminator | BSLASH | DIV ) | BackslashSequence )
             int alt29=2;
             int LA29_0 = input.LA(1);
 
@@ -4488,7 +4488,7 @@ public class JSLexer extends Lexer {
             }
             switch (alt29) {
                 case 1 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:930:4: ~ ( LineTerminator | BSLASH | DIV )
+                    // JS.g:930:4: ~ ( LineTerminator | BSLASH | DIV )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='.')||(input.LA(1)>='0' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                         input.consume();
@@ -4504,7 +4504,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:931:4: BackslashSequence
+                    // JS.g:931:4: BackslashSequence
                     {
                     mBackslashSequence(); 
 
@@ -4522,15 +4522,15 @@ public class JSLexer extends Lexer {
     public final void mRegularExpressionLiteral() throws RecognitionException {
         try {
             int _type = RegularExpressionLiteral;
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:935:2: ({...}? => DIV RegularExpressionFirstChar ( RegularExpressionChar )* DIV ( IdentifierPart )* )
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:935:4: {...}? => DIV RegularExpressionFirstChar ( RegularExpressionChar )* DIV ( IdentifierPart )*
+            // JS.g:935:2: ({...}? => DIV RegularExpressionFirstChar ( RegularExpressionChar )* DIV ( IdentifierPart )* )
+            // JS.g:935:4: {...}? => DIV RegularExpressionFirstChar ( RegularExpressionChar )* DIV ( IdentifierPart )*
             {
             if ( !( areRegularExpressionsEnabled() ) ) {
                 throw new FailedPredicateException(input, "RegularExpressionLiteral", " areRegularExpressionsEnabled() ");
             }
             mDIV(); 
             mRegularExpressionFirstChar(); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:935:73: ( RegularExpressionChar )*
+            // JS.g:935:73: ( RegularExpressionChar )*
             loop30:
             do {
                 int alt30=2;
@@ -4543,7 +4543,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt30) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:935:73: RegularExpressionChar
+            	    // JS.g:935:73: RegularExpressionChar
             	    {
             	    mRegularExpressionChar(); 
 
@@ -4556,7 +4556,7 @@ public class JSLexer extends Lexer {
             } while (true);
 
             mDIV(); 
-            // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:935:100: ( IdentifierPart )*
+            // JS.g:935:100: ( IdentifierPart )*
             loop31:
             do {
                 int alt31=2;
@@ -4572,7 +4572,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt31) {
             	case 1 :
-            	    // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:935:100: IdentifierPart
+            	    // JS.g:935:100: IdentifierPart
             	    {
             	    mIdentifierPart(); 
 
@@ -4595,7 +4595,7 @@ public class JSLexer extends Lexer {
     // $ANTLR end RegularExpressionLiteral
 
     public void mTokens() throws RecognitionException {
-        // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:8: ( NULL | TRUE | FALSE | BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | GET | SET | YIELD | CDATA | WXML | NAMESPACE | ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE | LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | XCOPEN | XCCLOSE | XLCLOSE | XRCLOSE | CDATAOPEN | XHOPEN | XHCLOSE | AT | DOTDOT | COLONCOLON | WhiteSpace | EOL | MultiLineComment | SingleLineComment | Identifier | XmlAttribute | DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral | StringLiteral | RegularExpressionLiteral )
+        // JS.g:1:8: ( NULL | TRUE | FALSE | BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | GET | SET | YIELD | CDATA | WXML | NAMESPACE | ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE | LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | XCOPEN | XCCLOSE | XLCLOSE | XRCLOSE | CDATAOPEN | XHOPEN | XHCLOSE | AT | DOTDOT | COLONCOLON | WhiteSpace | EOL | MultiLineComment | SingleLineComment | Identifier | XmlAttribute | DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral | StringLiteral | RegularExpressionLiteral )
         int alt32=135;
         switch ( input.LA(1) ) {
         case 'n':
@@ -7489,945 +7489,945 @@ public class JSLexer extends Lexer {
 
         switch (alt32) {
             case 1 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:10: NULL
+                // JS.g:1:10: NULL
                 {
                 mNULL(); 
 
                 }
                 break;
             case 2 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:15: TRUE
+                // JS.g:1:15: TRUE
                 {
                 mTRUE(); 
 
                 }
                 break;
             case 3 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:20: FALSE
+                // JS.g:1:20: FALSE
                 {
                 mFALSE(); 
 
                 }
                 break;
             case 4 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:26: BREAK
+                // JS.g:1:26: BREAK
                 {
                 mBREAK(); 
 
                 }
                 break;
             case 5 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:32: CASE
+                // JS.g:1:32: CASE
                 {
                 mCASE(); 
 
                 }
                 break;
             case 6 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:37: CATCH
+                // JS.g:1:37: CATCH
                 {
                 mCATCH(); 
 
                 }
                 break;
             case 7 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:43: CONTINUE
+                // JS.g:1:43: CONTINUE
                 {
                 mCONTINUE(); 
 
                 }
                 break;
             case 8 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:52: DEFAULT
+                // JS.g:1:52: DEFAULT
                 {
                 mDEFAULT(); 
 
                 }
                 break;
             case 9 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:60: DELETE
+                // JS.g:1:60: DELETE
                 {
                 mDELETE(); 
 
                 }
                 break;
             case 10 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:67: DO
+                // JS.g:1:67: DO
                 {
                 mDO(); 
 
                 }
                 break;
             case 11 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:70: ELSE
+                // JS.g:1:70: ELSE
                 {
                 mELSE(); 
 
                 }
                 break;
             case 12 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:75: FINALLY
+                // JS.g:1:75: FINALLY
                 {
                 mFINALLY(); 
 
                 }
                 break;
             case 13 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:83: FOR
+                // JS.g:1:83: FOR
                 {
                 mFOR(); 
 
                 }
                 break;
             case 14 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:87: EACH
+                // JS.g:1:87: EACH
                 {
                 mEACH(); 
 
                 }
                 break;
             case 15 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:92: FUNCTION
+                // JS.g:1:92: FUNCTION
                 {
                 mFUNCTION(); 
 
                 }
                 break;
             case 16 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:101: IF
+                // JS.g:1:101: IF
                 {
                 mIF(); 
 
                 }
                 break;
             case 17 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:104: IN
+                // JS.g:1:104: IN
                 {
                 mIN(); 
 
                 }
                 break;
             case 18 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:107: INSTANCEOF
+                // JS.g:1:107: INSTANCEOF
                 {
                 mINSTANCEOF(); 
 
                 }
                 break;
             case 19 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:118: NEW
+                // JS.g:1:118: NEW
                 {
                 mNEW(); 
 
                 }
                 break;
             case 20 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:122: RETURN
+                // JS.g:1:122: RETURN
                 {
                 mRETURN(); 
 
                 }
                 break;
             case 21 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:129: SWITCH
+                // JS.g:1:129: SWITCH
                 {
                 mSWITCH(); 
 
                 }
                 break;
             case 22 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:136: THIS
+                // JS.g:1:136: THIS
                 {
                 mTHIS(); 
 
                 }
                 break;
             case 23 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:141: THROW
+                // JS.g:1:141: THROW
                 {
                 mTHROW(); 
 
                 }
                 break;
             case 24 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:147: TRY
+                // JS.g:1:147: TRY
                 {
                 mTRY(); 
 
                 }
                 break;
             case 25 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:151: TYPEOF
+                // JS.g:1:151: TYPEOF
                 {
                 mTYPEOF(); 
 
                 }
                 break;
             case 26 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:158: VAR
+                // JS.g:1:158: VAR
                 {
                 mVAR(); 
 
                 }
                 break;
             case 27 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:162: VOID
+                // JS.g:1:162: VOID
                 {
                 mVOID(); 
 
                 }
                 break;
             case 28 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:167: WHILE
+                // JS.g:1:167: WHILE
                 {
                 mWHILE(); 
 
                 }
                 break;
             case 29 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:173: WITH
+                // JS.g:1:173: WITH
                 {
                 mWITH(); 
 
                 }
                 break;
             case 30 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:178: GET
+                // JS.g:1:178: GET
                 {
                 mGET(); 
 
                 }
                 break;
             case 31 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:182: SET
+                // JS.g:1:182: SET
                 {
                 mSET(); 
 
                 }
                 break;
             case 32 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:186: YIELD
+                // JS.g:1:186: YIELD
                 {
                 mYIELD(); 
 
                 }
                 break;
             case 33 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:192: CDATA
+                // JS.g:1:192: CDATA
                 {
                 mCDATA(); 
 
                 }
                 break;
             case 34 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:198: WXML
+                // JS.g:1:198: WXML
                 {
                 mWXML(); 
 
                 }
                 break;
             case 35 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:203: NAMESPACE
+                // JS.g:1:203: NAMESPACE
                 {
                 mNAMESPACE(); 
 
                 }
                 break;
             case 36 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:213: ABSTRACT
+                // JS.g:1:213: ABSTRACT
                 {
                 mABSTRACT(); 
 
                 }
                 break;
             case 37 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:222: BOOLEAN
+                // JS.g:1:222: BOOLEAN
                 {
                 mBOOLEAN(); 
 
                 }
                 break;
             case 38 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:230: BYTE
+                // JS.g:1:230: BYTE
                 {
                 mBYTE(); 
 
                 }
                 break;
             case 39 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:235: CHAR
+                // JS.g:1:235: CHAR
                 {
                 mCHAR(); 
 
                 }
                 break;
             case 40 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:240: CLASS
+                // JS.g:1:240: CLASS
                 {
                 mCLASS(); 
 
                 }
                 break;
             case 41 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:246: CONST
+                // JS.g:1:246: CONST
                 {
                 mCONST(); 
 
                 }
                 break;
             case 42 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:252: DEBUGGER
+                // JS.g:1:252: DEBUGGER
                 {
                 mDEBUGGER(); 
 
                 }
                 break;
             case 43 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:261: DOUBLE
+                // JS.g:1:261: DOUBLE
                 {
                 mDOUBLE(); 
 
                 }
                 break;
             case 44 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:268: ENUM
+                // JS.g:1:268: ENUM
                 {
                 mENUM(); 
 
                 }
                 break;
             case 45 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:273: EXPORT
+                // JS.g:1:273: EXPORT
                 {
                 mEXPORT(); 
 
                 }
                 break;
             case 46 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:280: EXTENDS
+                // JS.g:1:280: EXTENDS
                 {
                 mEXTENDS(); 
 
                 }
                 break;
             case 47 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:288: FINAL
+                // JS.g:1:288: FINAL
                 {
                 mFINAL(); 
 
                 }
                 break;
             case 48 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:294: FLOAT
+                // JS.g:1:294: FLOAT
                 {
                 mFLOAT(); 
 
                 }
                 break;
             case 49 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:300: GOTO
+                // JS.g:1:300: GOTO
                 {
                 mGOTO(); 
 
                 }
                 break;
             case 50 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:305: IMPLEMENTS
+                // JS.g:1:305: IMPLEMENTS
                 {
                 mIMPLEMENTS(); 
 
                 }
                 break;
             case 51 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:316: IMPORT
+                // JS.g:1:316: IMPORT
                 {
                 mIMPORT(); 
 
                 }
                 break;
             case 52 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:323: INT
+                // JS.g:1:323: INT
                 {
                 mINT(); 
 
                 }
                 break;
             case 53 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:327: INTERFACE
+                // JS.g:1:327: INTERFACE
                 {
                 mINTERFACE(); 
 
                 }
                 break;
             case 54 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:337: LONG
+                // JS.g:1:337: LONG
                 {
                 mLONG(); 
 
                 }
                 break;
             case 55 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:342: NATIVE
+                // JS.g:1:342: NATIVE
                 {
                 mNATIVE(); 
 
                 }
                 break;
             case 56 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:349: PACKAGE
+                // JS.g:1:349: PACKAGE
                 {
                 mPACKAGE(); 
 
                 }
                 break;
             case 57 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:357: PRIVATE
+                // JS.g:1:357: PRIVATE
                 {
                 mPRIVATE(); 
 
                 }
                 break;
             case 58 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:365: PROTECTED
+                // JS.g:1:365: PROTECTED
                 {
                 mPROTECTED(); 
 
                 }
                 break;
             case 59 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:375: PUBLIC
+                // JS.g:1:375: PUBLIC
                 {
                 mPUBLIC(); 
 
                 }
                 break;
             case 60 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:382: SHORT
+                // JS.g:1:382: SHORT
                 {
                 mSHORT(); 
 
                 }
                 break;
             case 61 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:388: STATIC
+                // JS.g:1:388: STATIC
                 {
                 mSTATIC(); 
 
                 }
                 break;
             case 62 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:395: SUPER
+                // JS.g:1:395: SUPER
                 {
                 mSUPER(); 
 
                 }
                 break;
             case 63 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:401: SYNCHRONIZED
+                // JS.g:1:401: SYNCHRONIZED
                 {
                 mSYNCHRONIZED(); 
 
                 }
                 break;
             case 64 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:414: THROWS
+                // JS.g:1:414: THROWS
                 {
                 mTHROWS(); 
 
                 }
                 break;
             case 65 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:421: TRANSIENT
+                // JS.g:1:421: TRANSIENT
                 {
                 mTRANSIENT(); 
 
                 }
                 break;
             case 66 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:431: VOLATILE
+                // JS.g:1:431: VOLATILE
                 {
                 mVOLATILE(); 
 
                 }
                 break;
             case 67 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:440: LBRACE
+                // JS.g:1:440: LBRACE
                 {
                 mLBRACE(); 
 
                 }
                 break;
             case 68 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:447: RBRACE
+                // JS.g:1:447: RBRACE
                 {
                 mRBRACE(); 
 
                 }
                 break;
             case 69 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:454: LPAREN
+                // JS.g:1:454: LPAREN
                 {
                 mLPAREN(); 
 
                 }
                 break;
             case 70 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:461: RPAREN
+                // JS.g:1:461: RPAREN
                 {
                 mRPAREN(); 
 
                 }
                 break;
             case 71 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:468: LBRACK
+                // JS.g:1:468: LBRACK
                 {
                 mLBRACK(); 
 
                 }
                 break;
             case 72 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:475: RBRACK
+                // JS.g:1:475: RBRACK
                 {
                 mRBRACK(); 
 
                 }
                 break;
             case 73 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:482: DOT
+                // JS.g:1:482: DOT
                 {
                 mDOT(); 
 
                 }
                 break;
             case 74 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:486: SEMIC
+                // JS.g:1:486: SEMIC
                 {
                 mSEMIC(); 
 
                 }
                 break;
             case 75 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:492: COMMA
+                // JS.g:1:492: COMMA
                 {
                 mCOMMA(); 
 
                 }
                 break;
             case 76 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:498: LT
+                // JS.g:1:498: LT
                 {
                 mLT(); 
 
                 }
                 break;
             case 77 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:501: GT
+                // JS.g:1:501: GT
                 {
                 mGT(); 
 
                 }
                 break;
             case 78 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:504: LTE
+                // JS.g:1:504: LTE
                 {
                 mLTE(); 
 
                 }
                 break;
             case 79 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:508: GTE
+                // JS.g:1:508: GTE
                 {
                 mGTE(); 
 
                 }
                 break;
             case 80 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:512: EQ
+                // JS.g:1:512: EQ
                 {
                 mEQ(); 
 
                 }
                 break;
             case 81 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:515: NEQ
+                // JS.g:1:515: NEQ
                 {
                 mNEQ(); 
 
                 }
                 break;
             case 82 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:519: SAME
+                // JS.g:1:519: SAME
                 {
                 mSAME(); 
 
                 }
                 break;
             case 83 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:524: NSAME
+                // JS.g:1:524: NSAME
                 {
                 mNSAME(); 
 
                 }
                 break;
             case 84 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:530: ADD
+                // JS.g:1:530: ADD
                 {
                 mADD(); 
 
                 }
                 break;
             case 85 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:534: SUB
+                // JS.g:1:534: SUB
                 {
                 mSUB(); 
 
                 }
                 break;
             case 86 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:538: MUL
+                // JS.g:1:538: MUL
                 {
                 mMUL(); 
 
                 }
                 break;
             case 87 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:542: MOD
+                // JS.g:1:542: MOD
                 {
                 mMOD(); 
 
                 }
                 break;
             case 88 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:546: INC
+                // JS.g:1:546: INC
                 {
                 mINC(); 
 
                 }
                 break;
             case 89 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:550: DEC
+                // JS.g:1:550: DEC
                 {
                 mDEC(); 
 
                 }
                 break;
             case 90 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:554: SHL
+                // JS.g:1:554: SHL
                 {
                 mSHL(); 
 
                 }
                 break;
             case 91 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:558: SHR
+                // JS.g:1:558: SHR
                 {
                 mSHR(); 
 
                 }
                 break;
             case 92 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:562: SHU
+                // JS.g:1:562: SHU
                 {
                 mSHU(); 
 
                 }
                 break;
             case 93 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:566: AND
+                // JS.g:1:566: AND
                 {
                 mAND(); 
 
                 }
                 break;
             case 94 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:570: OR
+                // JS.g:1:570: OR
                 {
                 mOR(); 
 
                 }
                 break;
             case 95 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:573: XOR
+                // JS.g:1:573: XOR
                 {
                 mXOR(); 
 
                 }
                 break;
             case 96 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:577: NOT
+                // JS.g:1:577: NOT
                 {
                 mNOT(); 
 
                 }
                 break;
             case 97 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:581: INV
+                // JS.g:1:581: INV
                 {
                 mINV(); 
 
                 }
                 break;
             case 98 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:585: LAND
+                // JS.g:1:585: LAND
                 {
                 mLAND(); 
 
                 }
                 break;
             case 99 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:590: LOR
+                // JS.g:1:590: LOR
                 {
                 mLOR(); 
 
                 }
                 break;
             case 100 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:594: QUE
+                // JS.g:1:594: QUE
                 {
                 mQUE(); 
 
                 }
                 break;
             case 101 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:598: COLON
+                // JS.g:1:598: COLON
                 {
                 mCOLON(); 
 
                 }
                 break;
             case 102 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:604: ASSIGN
+                // JS.g:1:604: ASSIGN
                 {
                 mASSIGN(); 
 
                 }
                 break;
             case 103 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:611: ADDASS
+                // JS.g:1:611: ADDASS
                 {
                 mADDASS(); 
 
                 }
                 break;
             case 104 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:618: SUBASS
+                // JS.g:1:618: SUBASS
                 {
                 mSUBASS(); 
 
                 }
                 break;
             case 105 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:625: MULASS
+                // JS.g:1:625: MULASS
                 {
                 mMULASS(); 
 
                 }
                 break;
             case 106 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:632: MODASS
+                // JS.g:1:632: MODASS
                 {
                 mMODASS(); 
 
                 }
                 break;
             case 107 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:639: SHLASS
+                // JS.g:1:639: SHLASS
                 {
                 mSHLASS(); 
 
                 }
                 break;
             case 108 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:646: SHRASS
+                // JS.g:1:646: SHRASS
                 {
                 mSHRASS(); 
 
                 }
                 break;
             case 109 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:653: SHUASS
+                // JS.g:1:653: SHUASS
                 {
                 mSHUASS(); 
 
                 }
                 break;
             case 110 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:660: ANDASS
+                // JS.g:1:660: ANDASS
                 {
                 mANDASS(); 
 
                 }
                 break;
             case 111 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:667: ORASS
+                // JS.g:1:667: ORASS
                 {
                 mORASS(); 
 
                 }
                 break;
             case 112 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:673: XORASS
+                // JS.g:1:673: XORASS
                 {
                 mXORASS(); 
 
                 }
                 break;
             case 113 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:680: DIV
+                // JS.g:1:680: DIV
                 {
                 mDIV(); 
 
                 }
                 break;
             case 114 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:684: DIVASS
+                // JS.g:1:684: DIVASS
                 {
                 mDIVASS(); 
 
                 }
                 break;
             case 115 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:691: XCOPEN
+                // JS.g:1:691: XCOPEN
                 {
                 mXCOPEN(); 
 
                 }
                 break;
             case 116 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:698: XCCLOSE
+                // JS.g:1:698: XCCLOSE
                 {
                 mXCCLOSE(); 
 
                 }
                 break;
             case 117 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:706: XLCLOSE
+                // JS.g:1:706: XLCLOSE
                 {
                 mXLCLOSE(); 
 
                 }
                 break;
             case 118 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:714: XRCLOSE
+                // JS.g:1:714: XRCLOSE
                 {
                 mXRCLOSE(); 
 
                 }
                 break;
             case 119 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:722: CDATAOPEN
+                // JS.g:1:722: CDATAOPEN
                 {
                 mCDATAOPEN(); 
 
                 }
                 break;
             case 120 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:732: XHOPEN
+                // JS.g:1:732: XHOPEN
                 {
                 mXHOPEN(); 
 
                 }
                 break;
             case 121 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:739: XHCLOSE
+                // JS.g:1:739: XHCLOSE
                 {
                 mXHCLOSE(); 
 
                 }
                 break;
             case 122 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:747: AT
+                // JS.g:1:747: AT
                 {
                 mAT(); 
 
                 }
                 break;
             case 123 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:750: DOTDOT
+                // JS.g:1:750: DOTDOT
                 {
                 mDOTDOT(); 
 
                 }
                 break;
             case 124 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:757: COLONCOLON
+                // JS.g:1:757: COLONCOLON
                 {
                 mCOLONCOLON(); 
 
                 }
                 break;
             case 125 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:768: WhiteSpace
+                // JS.g:1:768: WhiteSpace
                 {
                 mWhiteSpace(); 
 
                 }
                 break;
             case 126 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:779: EOL
+                // JS.g:1:779: EOL
                 {
                 mEOL(); 
 
                 }
                 break;
             case 127 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:783: MultiLineComment
+                // JS.g:1:783: MultiLineComment
                 {
                 mMultiLineComment(); 
 
                 }
                 break;
             case 128 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:800: SingleLineComment
+                // JS.g:1:800: SingleLineComment
                 {
                 mSingleLineComment(); 
 
                 }
                 break;
             case 129 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:818: Identifier
+                // JS.g:1:818: Identifier
                 {
                 mIdentifier(); 
 
                 }
                 break;
             case 130 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:829: XmlAttribute
+                // JS.g:1:829: XmlAttribute
                 {
                 mXmlAttribute(); 
 
                 }
                 break;
             case 131 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:842: DecimalLiteral
+                // JS.g:1:842: DecimalLiteral
                 {
                 mDecimalLiteral(); 
 
                 }
                 break;
             case 132 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:857: OctalIntegerLiteral
+                // JS.g:1:857: OctalIntegerLiteral
                 {
                 mOctalIntegerLiteral(); 
 
                 }
                 break;
             case 133 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:877: HexIntegerLiteral
+                // JS.g:1:877: HexIntegerLiteral
                 {
                 mHexIntegerLiteral(); 
 
                 }
                 break;
             case 134 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:895: StringLiteral
+                // JS.g:1:895: StringLiteral
                 {
                 mStringLiteral(); 
 
                 }
                 break;
             case 135 :
-                // /home/bell/workspace.js.patch.test/org.eclipse.dltk.javascript.formatter/src/org/eclipse/dltk/javascript/parser/JS.g:1:909: RegularExpressionLiteral
+                // JS.g:1:909: RegularExpressionLiteral
                 {
                 mRegularExpressionLiteral(); 
 
