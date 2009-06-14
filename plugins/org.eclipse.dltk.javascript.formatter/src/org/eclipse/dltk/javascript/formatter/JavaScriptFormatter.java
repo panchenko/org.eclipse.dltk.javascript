@@ -190,18 +190,11 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		String[] options = JavaScriptFormatterConstants.getNames();
 		for (int i = 0; i < options.length; i++) {
 			String name = options[i];
-
 			if (JavaScriptFormatterConstants.isBoolean(name)) {
 				document.setBoolean(name, getBoolean(name));
-				continue;
-			}
-
-			if (JavaScriptFormatterConstants.isInteger(name)) {
+			} else if (JavaScriptFormatterConstants.isInteger(name)) {
 				document.setInt(name, getInt(name));
-				continue;
-			}
-
-			if (JavaScriptFormatterConstants.isString(name)) {
+			} else if (JavaScriptFormatterConstants.isString(name)) {
 				document.setString(name, getString(name));
 			}
 		}
