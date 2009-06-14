@@ -682,7 +682,7 @@ public class JSTransformer extends JSVisitor {
 				|| ((VoidExpression) statement.getBody())
 						.getSemicolonPosition() == -1) {
 
-			statement.setTrailingSemicolonPosition(getTokenOffset(
+			statement.setSemicolonPosition(getTokenOffset(
 					JSParser.SEMIC, node.getTokenStopIndex(), node
 							.getTokenStopIndex()));
 
@@ -1219,7 +1219,7 @@ public class JSTransformer extends JSVisitor {
 				|| ((VoidExpression) statement.getBody())
 						.getSemicolonPosition() == -1) {
 
-			statement.setTrailingSemicolonPosition(getTokenOffset(
+			statement.setSemicolonPosition(getTokenOffset(
 					JSParser.SEMIC, node.getTokenStopIndex(), node
 							.getTokenStopIndex()));
 
@@ -1305,7 +1305,7 @@ public class JSTransformer extends JSVisitor {
 		statement.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(1)
 				.getTokenStopIndex() + 1, node.getTokenStopIndex()));
 
-		statement.setSemicolon(getTokenOffset(JSParser.SEMIC, node.getChild(1)
+		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node.getChild(1)
 				.getTokenStopIndex() + 1, node.getTokenStopIndex()));
 
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));

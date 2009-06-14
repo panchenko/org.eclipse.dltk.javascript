@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class VoidExpression extends Statement {
+public class VoidExpression extends Statement implements ISemicolonStatement {
 
 	private Expression expression;
 	private int semic = -1;

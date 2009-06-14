@@ -43,6 +43,7 @@ import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.IASTVisitor;
+import org.eclipse.dltk.javascript.ast.ISemicolonStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.Keyword;
@@ -419,17 +420,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				if (node.getLabel() != null)
 					visit(node.getLabel());
 
-				if (node.getSemicolonPosition() > -1) {
-
-					checkedPop(formatterNode, node.getSemicolonPosition() /*- 1*/);
-
-					addChild(createSemicolonNode(document, node
-							.getSemicolonPosition()));
-				} else {
-
-					checkedPop(formatterNode, node.sourceEnd());
-				}
-
+				processOptionalSemicolon(formatterNode, node);
 				return true;
 			}
 
@@ -632,18 +623,20 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				if (node.getLabel() != null)
 					visit(node.getLabel());
 
-				if (node.getSemicolonPosition() > -1) {
+				processOptionalSemicolon(formatterNode, node);
+				return true;
+			}
 
-					checkedPop(formatterNode, node.getSemicolonPosition() /*- 1*/);
-
-					addChild(createSemicolonNode(document, node
-							.getSemicolonPosition()));
+			private void processOptionalSemicolon(
+					IFormatterContainerNode formatterNode,
+					ISemicolonStatement node) {
+				int semicolonPosition = node.getSemicolonPosition();
+				if (semicolonPosition > -1) {
+					checkedPop(formatterNode, semicolonPosition /*- 1*/);
+					addChild(createSemicolonNode(document, semicolonPosition));
 				} else {
-
 					checkedPop(formatterNode, node.sourceEnd());
 				}
-
-				return true;
 			}
 
 			public boolean visitDecimalLiteral(DecimalLiteral node) {
@@ -684,17 +677,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				visit(node.getExpression());
 
-				if (node.getSemicolonPosition() > -1) {
-
-					checkedPop(formatterNode, node.getSemicolonPosition() /*- 1*/);
-
-					formatterNode.setEnd(createSemicolonNode(document, node
-							.getSemicolonPosition()));
-				} else {
-
-					checkedPop(formatterNode, node.sourceEnd());
-				}
-
+				processOptionalSemicolon(formatterNode, node);
 				return true;
 			}
 
@@ -716,9 +699,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processParens(node.getLP(), node.getRP(), node.getCondition(),
 						new WhileConditionParensConfiguration(document));
 
-				addChild(createSemicolonNode(document, node.getSemicolon()));
-				checkedPop(formatterNode, node.sourceEnd());
-
+				processOptionalSemicolon(formatterNode, node);
 				return true;
 			}
 
@@ -783,18 +764,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					processBraces(node.getBody(), new BlockBracesConfiguration(
 							document));
 
-				if (node.getSemicolonPosition() > -1) {
-
-					checkedPop(formatterNode, node.getSemicolonPosition() /*- 1*/);
-
-					addChild(createSemicolonNode(document, node
-							.getSemicolonPosition()));
-
-				} else {
-
-					checkedPop(formatterNode, node.sourceEnd());
-				}
-
+				processOptionalSemicolon(formatterNode, node);
 				return true;
 			}
 
@@ -821,18 +791,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					processBraces(node.getBody(), new BlockBracesConfiguration(
 							document));
 
-				if (node.getSemicolonPosition() > -1) {
-
-					checkedPop(formatterNode, node.getSemicolonPosition() /*- 1*/);
-
-					addChild(createSemicolonNode(document, node
-							.getSemicolonPosition()));
-
-				} else {
-
-					checkedPop(formatterNode, node.sourceEnd());
-				}
-
+				processOptionalSemicolon(formatterNode, node);
 				return true;
 			}
 
@@ -881,19 +840,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					processBraces(node.getBody(), new BlockBracesConfiguration(
 							document));
 
-				if (node.getTrailingSemicolonPosition() > -1) {
-
-					checkedPop(formatterNode, node
-							.getTrailingSemicolonPosition()/* - 1 */);
-
-					addChild(createSemicolonNode(document, node
-							.getTrailingSemicolonPosition()));
-
-				} else {
-
-					checkedPop(formatterNode, node.sourceEnd());
-				}
-
+				processOptionalSemicolon(formatterNode, node);
 				return true;
 			}
 
@@ -1412,14 +1359,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				if (node.getValue() != null)
 					visit(node.getValue());
 
-				if (node.getSemicolonPosition() > -1) {
-
-					addChild(createSemicolonNode(document, node
-							.getSemicolonPosition()));
-				}
-
-				checkedPop(formatterNode, node.sourceEnd());
-
+				processOptionalSemicolon(formatterNode, node);
 				return false;
 			}
 
@@ -1528,14 +1468,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				if (node.getException() != null)
 					visit(node.getException());
 
-				if (node.getSemicolonPosition() > -1) {
-					checkedPop(formatterNode, node.getSemicolonPosition() /*- 1*/);
-
-					addChild(createSemicolonNode(document, node
-							.getSemicolonPosition()));
-				} else {
-					checkedPop(formatterNode, node.sourceEnd());
-				}
+				processOptionalSemicolon(formatterNode, node);
 				return true;
 			}
 
@@ -1641,16 +1574,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				visit(node.getExpression());
 
-				if (node.getSemicolonPosition() > -1) {
-
-					checkedPop(formatterNode, node.getSemicolonPosition() /*- 1 */);
-
-					addChild(createSemicolonNode(document, node
-							.getSemicolonPosition()));
-				} else {
-					checkedPop(formatterNode, node.sourceEnd());
-				}
-
+				processOptionalSemicolon(formatterNode, node);
 				return false;
 			}
 
@@ -1672,19 +1596,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 							new WhileBlockBracesConfiguration(document));
 				}
 
-				if (node.getTrailingSemicolonPosition() > -1) {
-
-					checkedPop(formatterNode, node
-							.getTrailingSemicolonPosition() /*- 1*/);
-
-					addChild(createSemicolonNode(document, node
-							.getTrailingSemicolonPosition()));
-
-				} else {
-
-					checkedPop(formatterNode, node.sourceEnd());
-				}
-
+				processOptionalSemicolon(formatterNode, node);
 				return true;
 			}
 

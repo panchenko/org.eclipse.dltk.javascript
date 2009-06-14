@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class ForStatement extends LoopStatement {
+public class ForStatement extends LoopStatement implements ISemicolonStatement {
 
 	private Keyword forKeyword;
 	private Expression initial;
@@ -95,11 +95,11 @@ public class ForStatement extends LoopStatement {
 		this.initialSemic = semic;
 	}
 
-	public int getTrailingSemicolonPosition() {
+	public int getSemicolonPosition() {
 		return this.trailingSemic;
 	}
 
-	public void setTrailingSemicolonPosition(int semic) {
+	public void setSemicolonPosition(int semic) {
 		this.trailingSemic = semic;
 	}
 

@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class ReturnStatement extends Statement {
+public class ReturnStatement extends Statement implements ISemicolonStatement {
 
 	private Keyword returnKeyword;
 	private Expression value;

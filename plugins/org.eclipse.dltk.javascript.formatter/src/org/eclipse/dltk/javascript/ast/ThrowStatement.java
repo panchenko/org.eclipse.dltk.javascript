@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class ThrowStatement extends Statement {
+public class ThrowStatement extends Statement implements ISemicolonStatement {
 
 	private Keyword throwKeyword;
 	private Expression exception;

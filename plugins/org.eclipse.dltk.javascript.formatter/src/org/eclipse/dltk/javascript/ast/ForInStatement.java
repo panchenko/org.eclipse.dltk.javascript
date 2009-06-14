@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class ForInStatement extends LoopStatement {
+public class ForInStatement extends LoopStatement implements ISemicolonStatement {
 
 	private Keyword forKeyword;
 	private Keyword inKeyword;

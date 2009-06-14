@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class WhileStatement extends LoopStatement {
+public class WhileStatement extends LoopStatement implements ISemicolonStatement {
 
 	private Keyword whileKeyword;
 	private Expression condition;
@@ -59,11 +59,11 @@ public class WhileStatement extends LoopStatement {
 		this.RP = RP;
 	}
 
-	public int getTrailingSemicolonPosition() {
+	public int getSemicolonPosition() {
 		return this.semi;
 	}
 
-	public void setTrailingSemicolonPosition(int semi) {
+	public void setSemicolonPosition(int semi) {
 		this.semi = semi;
 	}
 

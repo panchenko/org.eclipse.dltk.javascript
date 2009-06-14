@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class BreakStatement extends Statement {
+public class BreakStatement extends Statement implements ISemicolonStatement {
 
 	private Keyword breakKeyword;
 	private Label label;

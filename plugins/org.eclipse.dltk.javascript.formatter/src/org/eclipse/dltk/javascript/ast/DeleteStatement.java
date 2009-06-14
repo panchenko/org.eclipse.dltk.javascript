@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class DeleteStatement extends Statement {
+public class DeleteStatement extends Statement implements ISemicolonStatement {
 
 	private Keyword deleteKeyword;
 	private Expression expression;

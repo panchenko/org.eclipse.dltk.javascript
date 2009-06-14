@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 
-public class DoWhileStatement extends WhileStatement {
+public class DoWhileStatement extends WhileStatement implements ISemicolonStatement {
 
 	private Keyword doKeyword;
 	private Keyword whileKeyword;
@@ -59,11 +59,11 @@ public class DoWhileStatement extends WhileStatement {
 		this.RP = RP;
 	}
 
-	public int getSemicolon() {
+	public int getSemicolonPosition() {
 		return this.semic;
 	}
 
-	public void setSemicolon(int semic) {
+	public void setSemicolonPosition(int semic) {
 		this.semic = semic;
 	}
 
