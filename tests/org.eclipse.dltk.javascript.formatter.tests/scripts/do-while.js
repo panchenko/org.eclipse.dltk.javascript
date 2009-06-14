@@ -8,6 +8,14 @@ do {
 do {
 	a = 100;
 } while (a == 100);
+==== do-while-simple-no-semicolon
+do {
+			a 	= 	100;
+} while (a==		100)
+==
+do {
+	a = 100;
+} while (a == 100)
 ==> formatter.braces.blocks = next.line
 ==> formatter.indent.blocks = false
 ==== do-while-no-indenting-next-line
