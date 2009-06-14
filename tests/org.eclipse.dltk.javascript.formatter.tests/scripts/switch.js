@@ -19,6 +19,20 @@ switch (z) {
 	default:
 		break;
 }
+==== switch-with-empty-default
+switch (index) {
+case 1:
+break;
+default:
+;
+}
+==
+switch (index) {
+	case 1:
+		break;
+	default:
+		;
+}
 ==> formatter.indent.switch = false
 ==> formatter.indent.case = false
 ==> formatter.indent.break = false
