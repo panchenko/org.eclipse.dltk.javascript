@@ -21,9 +21,9 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
-import org.eclipse.dltk.javascript.ast.JavaScriptParser;
-import org.eclipse.dltk.javascript.ast.JavaScriptTokenStream;
 import org.eclipse.dltk.javascript.parser.JSLexer;
+import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.JavaScriptTokenStream;
 
 public class JavaScriptTokenStreamTester extends AbstractTester {
 

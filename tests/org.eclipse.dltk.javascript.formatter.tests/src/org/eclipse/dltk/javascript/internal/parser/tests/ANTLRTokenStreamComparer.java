@@ -19,9 +19,9 @@ import junit.framework.Assert;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.Token;
-import org.eclipse.dltk.javascript.ast.JavaScriptTokenStream;
 import org.eclipse.dltk.javascript.parser.JSLexer;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.JavaScriptTokenStream;
 
 public class ANTLRTokenStreamComparer {
 

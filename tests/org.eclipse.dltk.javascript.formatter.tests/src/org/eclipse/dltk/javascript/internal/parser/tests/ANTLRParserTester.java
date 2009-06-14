@@ -24,13 +24,13 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.javascript.ast.ISourceable;
-import org.eclipse.dltk.javascript.ast.JavaScriptParser;
-import org.eclipse.dltk.javascript.ast.JavaScriptTokenStream;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.formatter.preferences.JavaScriptFormatterModifyDialog;
 import org.eclipse.dltk.javascript.parser.JSLexer;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSTransformer;
+import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.JavaScriptTokenStream;
 
 public class ANTLRParserTester {
 
