@@ -15,6 +15,7 @@ package org.eclipse.dltk.javascript.internal.parser.tests;
 import java.io.InputStream;
 
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterPlugin;
+import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
 
 public class FormatterPreviewTester extends AbstractTester {
 
@@ -23,7 +24,8 @@ public class FormatterPreviewTester extends AbstractTester {
 		InputStream stream = JavaScriptFormatterPlugin.getDefault().getBundle()
 				.getResource(fullResourceName).openStream();
 
-		JavaScriptParserTester.parseSource(getScriptContent(stream));
+		JavaScriptParserTester.parseSource(getScriptContent(stream,
+				JavaScriptFormatterTestsPlugin.CONTEXT.getCharset()));
 	}
 
 	public static void testGeneralPreview(String resourceName) throws Exception {
@@ -31,6 +33,7 @@ public class FormatterPreviewTester extends AbstractTester {
 		InputStream stream = JavaScriptFormatterPlugin.getDefault().getBundle()
 				.getResource(fullResourceName).openStream();
 
-		JavaScriptParserTester.parseSource(getScriptContent(stream));
+		JavaScriptParserTester.parseSource(getScriptContent(stream,
+				JavaScriptFormatterTestsPlugin.CONTEXT.getCharset()));
 	}
 }

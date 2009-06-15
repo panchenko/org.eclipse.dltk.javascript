@@ -136,7 +136,7 @@ public class JavaScriptParserTestCase extends TestCase {
 	}
 
 	public void testE4XParse() throws Exception {
-		JavaScriptParserTester.parse("e4x.js");
+		JavaScriptParserTester.parse("e4x.js", "UTF-8");
 	}
 
 	public void testE4XSimpleParse() throws Exception {

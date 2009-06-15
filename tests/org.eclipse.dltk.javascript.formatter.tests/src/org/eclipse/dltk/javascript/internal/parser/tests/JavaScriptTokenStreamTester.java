@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
 import org.eclipse.dltk.javascript.parser.JSLexer;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.JavaScriptTokenSource;
@@ -30,7 +31,8 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 
 	public static void tokenize(String resourceName) throws IOException {
 
-		String source = getScriptContent(resourceName);
+		String source = getScriptContent(resourceName,
+				JavaScriptFormatterTestsPlugin.CONTEXT.getCharset());
 
 		JSLexer lexer = new JSLexer(new ANTLRReaderStream(new CharArrayReader(
 				source.toCharArray())));
@@ -49,7 +51,8 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 	}
 
 	public static void parse(String resourceName) throws IOException {
-		String source = getScriptContent(resourceName);
+		String source = getScriptContent(resourceName,
+				JavaScriptFormatterTestsPlugin.CONTEXT.getCharset());
 
 		JavaScriptParser parser = new JavaScriptParser();
 

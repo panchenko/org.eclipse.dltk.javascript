@@ -16,6 +16,7 @@ import junit.framework.Assert;
 
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterFactory;
+import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.ReplaceEdit;
@@ -53,8 +54,13 @@ public class JavaScriptParserTester extends AbstractTester {
 	}
 
 	public static void parse(String resourceName) throws Exception {
-		new JavaScriptParserTester()
-				.parseScript(getScriptContent(resourceName));
+		parse(resourceName, JavaScriptFormatterTestsPlugin.CONTEXT.getCharset());
+	}
+
+	public static void parse(String resourceName, String charset)
+			throws Exception {
+		new JavaScriptParserTester().parseScript(getScriptContent(resourceName,
+				charset));
 	}
 
 	public static void parseSource(String source) throws Exception {

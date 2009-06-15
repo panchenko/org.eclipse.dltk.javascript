@@ -19,10 +19,10 @@ import java.io.InputStreamReader;
 
 public abstract class AbstractTester {
 
-	protected static String getScriptContent(InputStream stream)
+	protected static String getScriptContent(InputStream stream, String charset)
 			throws IOException {
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(stream));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				stream, charset));
 
 		StringBuffer content = new StringBuffer();
 		String s = null;
@@ -35,10 +35,11 @@ public abstract class AbstractTester {
 		return content.toString();
 	}
 
-	protected static String getScriptContent(String resourceName)
+	protected static String getScriptContent(String resourceName, String charset)
 			throws IOException {
 		return getScriptContent(JavaScriptParserTester.class
-				.getResourceAsStream("/scripts.parser/" + resourceName));
+				.getResourceAsStream("/scripts.parser/" + resourceName),
+				charset);
 	}
 
 }
