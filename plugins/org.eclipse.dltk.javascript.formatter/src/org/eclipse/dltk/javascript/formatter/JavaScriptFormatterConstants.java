@@ -226,7 +226,7 @@ public final class JavaScriptFormatterConstants {
 		registerBooleanOption(INSERT_SPACE_BEFORE_RP_EXPRESSION, false);
 
 		// FUNCTION spaces
-		registerBooleanOption(INSERT_SPACE_BEFORE_LP_FUNCTION_ARGUMENTS, true);
+		registerBooleanOption(INSERT_SPACE_BEFORE_LP_FUNCTION_ARGUMENTS, false);
 		registerBooleanOption(INSERT_SPACE_AFTER_LP_FUNCTION_ARGUMENTS, false);
 		registerBooleanOption(INSERT_SPACE_BEFORE_RP_FUNCTION_ARGUMENTS, false);
 		registerBooleanOption(
