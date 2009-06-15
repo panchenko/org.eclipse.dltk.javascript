@@ -43,11 +43,13 @@ public class JavaScriptFormatterTestsPlugin extends Plugin {
 	public JavaScriptFormatterTestsPlugin() {
 	}
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
@@ -92,10 +94,10 @@ public class JavaScriptFormatterTestsPlugin extends Plugin {
 			return "ISO-8859-1"; //$NON-NLS-1$
 		}
 
-		public IScriptFormatter createFormatter(Map preferences) {
+		public IScriptFormatter createFormatter(Map<String, Object> preferences) {
 			if (preferences != null) {
-				final Map prefs = TestJavaScriptFormatter
-						.createTestingPreferences();
+				final Map<String, Object> prefs = JavaScriptFormatterConstants
+						.getDefaults();
 				prefs.putAll(preferences);
 				return new TestJavaScriptFormatter(Util.LINE_SEPARATOR, prefs);
 			} else {
