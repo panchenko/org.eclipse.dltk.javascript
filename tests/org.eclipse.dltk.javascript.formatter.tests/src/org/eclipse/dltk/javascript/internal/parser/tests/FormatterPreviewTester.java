@@ -12,16 +12,13 @@
 
 package org.eclipse.dltk.javascript.internal.parser.tests;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterPlugin;
-import org.eclipse.dltk.ui.formatter.FormatterException;
 
 public class FormatterPreviewTester extends AbstractTester {
 
-	public static void testPagePreview(String resourceName) throws IOException,
-			FormatterException {
+	public static void testPagePreview(String resourceName) throws Exception {
 		String fullResourceName = "org/eclipse/dltk/javascript/formatter/preferences/" + resourceName; //$NON-NLS-1$
 		InputStream stream = JavaScriptFormatterPlugin.getDefault().getBundle()
 				.getResource(fullResourceName).openStream();
@@ -29,8 +26,7 @@ public class FormatterPreviewTester extends AbstractTester {
 		JavaScriptParserTester.parseSource(getScriptContent(stream));
 	}
 
-	public static void testGeneralPreview(String resourceName)
-			throws IOException, FormatterException {
+	public static void testGeneralPreview(String resourceName) throws Exception {
 		String fullResourceName = "org/eclipse/dltk/javascript/formatter/" + resourceName; //$NON-NLS-1$
 		InputStream stream = JavaScriptFormatterPlugin.getDefault().getBundle()
 				.getResource(fullResourceName).openStream();

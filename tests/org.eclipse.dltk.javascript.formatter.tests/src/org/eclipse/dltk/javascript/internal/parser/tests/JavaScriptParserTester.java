@@ -12,21 +12,18 @@
 
 package org.eclipse.dltk.javascript.internal.parser.tests;
 
-import java.io.IOException;
-
 import junit.framework.Assert;
 
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterFactory;
-import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
+import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
 public class JavaScriptParserTester extends AbstractTester {
 
-	private void parseScript(String source) throws IOException,
-			FormatterException {
+	private void parseScript(String source) throws Exception {
 
 		JavaScriptFormatterFactory f = new JavaScriptFormatterFactory();
 
@@ -45,22 +42,22 @@ public class JavaScriptParserTester extends AbstractTester {
 
 		ANTLRTokenStreamComparer.compare(source, formatted, true);
 
-		String reformatted = ((ReplaceEdit) formatter.format(formatted, 0,
-				formatted.length(), 0)).getText();
+		TextEdit edit = formatter.format(formatted, 0, formatted.length(), 0);
+		Document document = new Document(formatted);
+		edit.apply(document);
+		String reformatted = document.get();
 
 		// Formatting formatted text MUST NOT change it again!
 		Assert.assertEquals(formatted, reformatted);
 
 	}
 
-	public static void parse(String resourceName) throws IOException,
-			FormatterException {
+	public static void parse(String resourceName) throws Exception {
 		new JavaScriptParserTester()
 				.parseScript(getScriptContent(resourceName));
 	}
 
-	public static void parseSource(String source) throws IOException,
-			FormatterException {
+	public static void parseSource(String source) throws Exception {
 		new JavaScriptParserTester().parseScript(source);
 	}
 }
