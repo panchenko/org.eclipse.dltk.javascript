@@ -12,7 +12,6 @@
 
 package org.eclipse.dltk.javascript.internal.formatter.tests;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.dltk.compiler.util.Util;
@@ -22,27 +21,15 @@ import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 public class TestJavaScriptFormatter extends JavaScriptFormatter {
 
 	public TestJavaScriptFormatter() {
-		super(Util.LINE_SEPARATOR, createTestingPreferences());
+		super(Util.LINE_SEPARATOR, JavaScriptFormatterConstants.getDefaults());
 	}
 
-	public TestJavaScriptFormatter(String lineDelimiter, Map preferences) {
+	public TestJavaScriptFormatter(String lineDelimiter,
+			Map<String, Object> preferences) {
 		super(lineDelimiter, preferences);
 	}
 
 	protected boolean isValidation() {
 		return false;
-	}
-
-	public static Map createTestingPreferences() {
-		final Map result = new HashMap();
-
-		String[] options = JavaScriptFormatterConstants.getNames();
-		for (int i = 0; i < options.length; i++) {
-			String name = options[i];
-			result
-					.put(name, JavaScriptFormatterConstants
-							.getDefaultValue(name));
-		}
-		return result;
 	}
 }
