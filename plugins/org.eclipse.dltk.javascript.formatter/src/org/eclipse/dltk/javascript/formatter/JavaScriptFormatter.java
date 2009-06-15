@@ -40,7 +40,8 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 
 	private final String lineDelimiter;
 
-	public JavaScriptFormatter(String lineDelimiter, Map preferences) {
+	public JavaScriptFormatter(String lineDelimiter,
+			Map<String, Object> preferences) {
 		super(preferences);
 		this.lineDelimiter = lineDelimiter;
 	}
@@ -61,6 +62,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 
 	private static class ParserProblemReporter extends ProblemCollector {
 
+		@Override
 		public String toString() {
 			if (problems == null)
 				return "No problems";
@@ -105,6 +107,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		return 0;
 	}
 
+	@Override
 	public int detectIndentationLevel(IDocument document, int offset) {
 		return detectIndentationLevel(document.get(), offset);
 	}
