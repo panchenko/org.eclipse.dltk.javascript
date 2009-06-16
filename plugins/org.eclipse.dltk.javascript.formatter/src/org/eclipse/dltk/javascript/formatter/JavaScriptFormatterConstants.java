@@ -151,7 +151,7 @@ public final class JavaScriptFormatterConstants {
 
 	private static void registerOptions() {
 
-		registerStringOption(FORMATTER_TAB_CHAR, "\t");
+		registerStringOption(FORMATTER_TAB_CHAR, CodeFormatterConstants.TAB);
 		registerIntegerOption(FORMATTER_TAB_SIZE, 4);
 		registerIntegerOption(FORMATTER_INDENTATION_SIZE, 2);
 

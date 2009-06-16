@@ -24,8 +24,8 @@ public class JavaScriptFormatterModifyDialog extends FormatterModifyDialog {
 		super(dialogOwner, formatterFactory);
 	}
 
+	@Override
 	protected void addPages() {
-
 		addTabPage(Messages.JavaScriptIdentationTabPage_name,
 				new JavaScriptIdentationTabPage(this));
 		addTabPage(Messages.JavaScriptBracesTabPage_name,

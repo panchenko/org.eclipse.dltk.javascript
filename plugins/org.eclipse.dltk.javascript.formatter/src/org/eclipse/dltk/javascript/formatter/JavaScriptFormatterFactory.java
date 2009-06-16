@@ -15,10 +15,10 @@ package org.eclipse.dltk.javascript.formatter;
 import java.net.URL;
 import java.util.Map;
 
+import org.eclipse.dltk.formatter.AbstractScriptFormatterFactory;
 import org.eclipse.dltk.javascript.formatter.preferences.JavaScriptFormatterModifyDialog;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.ui.CodeFormatterConstants;
-import org.eclipse.dltk.ui.formatter.AbstractScriptFormatterFactory;
 import org.eclipse.dltk.ui.formatter.IFormatterModifyDialog;
 import org.eclipse.dltk.ui.formatter.IFormatterModifyDialogOwner;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
@@ -31,6 +31,7 @@ public class JavaScriptFormatterFactory extends AbstractScriptFormatterFactory {
 		return new JavaScriptFormatter(lineDelimiter, preferences);
 	}
 
+	@Override
 	public PreferenceKey getProfilesKey() {
 		return new PreferenceKey(JavaScriptFormatterPlugin.PLUGIN_ID,
 				JavaScriptFormatterConstants.FORMATTER_PROFILES);

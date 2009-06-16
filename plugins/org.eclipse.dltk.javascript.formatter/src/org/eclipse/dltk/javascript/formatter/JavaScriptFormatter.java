@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.formatter.AbstractScriptFormatter;
 import org.eclipse.dltk.formatter.FormatterDocument;
 import org.eclipse.dltk.formatter.FormatterIndentDetector;
 import org.eclipse.dltk.formatter.IFormatterContainerNode;
@@ -28,7 +29,6 @@ import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterContext
 import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterWriter;
 import org.eclipse.dltk.javascript.formatter.internal.JavascriptFormatterNodeRewriter;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
-import org.eclipse.dltk.ui.formatter.AbstractScriptFormatter;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
 import org.eclipse.jface.text.IDocument;
