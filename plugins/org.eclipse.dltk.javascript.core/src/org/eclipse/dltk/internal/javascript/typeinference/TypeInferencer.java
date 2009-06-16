@@ -92,17 +92,17 @@ final class TransparentRef implements IReference {
 		IReference queryElement = TypeInferencer.internalEvaluate(collection,
 				getName(), node, parent, cs);
 
-		if (queryElement != null
-				&& queryElement != this
-				&& !(queryElement instanceof CombinedOrReference && ((CombinedOrReference) queryElement)
-						.contains(this))) {
+		if (queryElement != null && queryElement != this) {
 			// make sure that this doesn't become a transparent to a transparent
 			// (because then circular references can happen)
 			// just point to the real reference.
 			while (queryElement instanceof TransparentRef) {
 				queryElement = ((TransparentRef) queryElement).evaluateReference;
 			}
-			this.evaluateReference = queryElement;
+			if (!(queryElement instanceof CombinedOrReference && ((CombinedOrReference) queryElement)
+					.testContains(this))) {
+				this.evaluateReference = queryElement;
+			}
 		}
 		Iterator it = s.iterator();
 		// TODO REVIEW IT;

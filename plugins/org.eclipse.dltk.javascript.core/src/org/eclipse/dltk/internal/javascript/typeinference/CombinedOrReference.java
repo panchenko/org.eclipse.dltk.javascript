@@ -65,7 +65,7 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 * @param reference
 	 * @return
 	 */
-	private boolean testContains(IReference reference) {
+	boolean testContains(IReference reference) {
 		if (reference == this)
 			return true;
 
