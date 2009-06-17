@@ -95,14 +95,16 @@ public class JavaScriptFormatterTestsPlugin extends Plugin {
 		}
 
 		public IScriptFormatter createFormatter(Map<String, Object> preferences) {
+			final Map<String, Object> prefs = JavaScriptFormatterConstants
+					.getDefaults();
+			prefs
+					.put(
+							JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_LP_FUNCTION_ARGUMENTS,
+							true);
 			if (preferences != null) {
-				final Map<String, Object> prefs = JavaScriptFormatterConstants
-						.getDefaults();
 				prefs.putAll(preferences);
-				return new TestJavaScriptFormatter(Util.LINE_SEPARATOR, prefs);
-			} else {
-				return new TestJavaScriptFormatter();
 			}
+			return new TestJavaScriptFormatter(Util.LINE_SEPARATOR, prefs);
 		}
 
 		public String validateOptionName(String name) {
