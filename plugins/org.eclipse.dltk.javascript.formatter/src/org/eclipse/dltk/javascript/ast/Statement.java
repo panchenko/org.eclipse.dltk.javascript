@@ -12,6 +12,8 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.Collection;
+
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
@@ -35,6 +37,15 @@ public abstract class Statement extends ASTNode implements ISourceable {
 	public String toString() {
 		return toSourceString("");
 	}
+
+	protected static void toSourceString(Collection<Statement> statements,
+			StringBuffer buffer, String indentationString) {
+		for (Statement statement : statements) {
+			buffer.append(statement.toSourceString(indentationString));
+		}
+	}
+
+	protected static final String INDENT = "    ";
 
 	public abstract String toSourceString(String indentationString);
 }
