@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.formatter.IFormatterNode;
-import org.eclipse.dltk.formatter.IFormatterTextNode;
 import org.eclipse.dltk.formatter.IFormatterWriter;
 
 public class BracketsNode extends FormatterBlockWithBeginEndNode {
@@ -45,9 +44,9 @@ public class BracketsNode extends FormatterBlockWithBeginEndNode {
 			context.incIndent();
 
 		if (getBegin() != null) {
-			IFormatterTextNode[] nodes = getBegin();
+			IFormatterNode[] nodes = getBegin();
 			for (int i = 0; i < nodes.length; i++) {
-				((IFormatterNode) nodes[i]).accept(context, visitor);
+				nodes[i].accept(context, visitor);
 			}
 		}
 
@@ -67,8 +66,9 @@ public class BracketsNode extends FormatterBlockWithBeginEndNode {
 
 	}
 
-	protected void acceptNodes(final List nodes, IFormatterContext context,
-			IFormatterWriter visitor) throws Exception {
+	protected void acceptNodes(final List<IFormatterNode> nodes,
+			IFormatterContext context, IFormatterWriter visitor)
+			throws Exception {
 
 		if (isIndenting())
 			context.incIndent();
