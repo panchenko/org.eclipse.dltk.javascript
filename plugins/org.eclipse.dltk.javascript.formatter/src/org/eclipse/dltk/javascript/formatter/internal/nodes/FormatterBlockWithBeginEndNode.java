@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.dltk.formatter.FormatterBlockNode;
@@ -33,15 +32,15 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 		super(document);
 	}
 
-	private List begin = null;
+	private List<IFormatterNode> begin = null;
 	private IFormatterTextNode end;
 
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 		context.setBlankLines(getBlankLinesBefore(context));
 		if (begin != null) {
-			for (Iterator i = begin.iterator(); i.hasNext();) {
-				((IFormatterNode) i.next()).accept(context, visitor);
+			for (IFormatterNode node : begin) {
+				node.accept(context, visitor);
 			}
 		}
 		context.resetBlankLines();
@@ -70,7 +69,7 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	/**
 	 * @return the begin
 	 */
-	public IFormatterTextNode[] getBegin() {
+	public IFormatterNode[] getBegin() {
 		return FormatterUtils.toTextNodeArray(begin);
 	}
 
@@ -80,14 +79,14 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	 */
 	public void setBegin(IFormatterTextNode begin) {
 		if (this.begin == null) {
-			this.begin = new ArrayList();
+			this.begin = new ArrayList<IFormatterNode>();
 		}
 		this.begin.add(begin);
 	}
 
-	public void insertBefore(List nodes) {
+	public void insertBefore(List<IFormatterNode> nodes) {
 		if (this.begin == null) {
-			this.begin = new ArrayList();
+			this.begin = new ArrayList<IFormatterNode>();
 		}
 		this.begin.addAll(0, nodes);
 	}
@@ -143,11 +142,11 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	/*
 	 * @see FormatterBlockNode#getChildren()
 	 */
-	public List getChildren() {
+	public List<IFormatterNode> getChildren() {
 		if (begin == null && end == null) {
 			return super.getChildren();
 		} else {
-			List result = new ArrayList();
+			List<IFormatterNode> result = new ArrayList<IFormatterNode>();
 			if (begin != null) {
 				result.addAll(begin);
 			}
