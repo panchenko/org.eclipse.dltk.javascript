@@ -1,6 +1,7 @@
 package org.eclipse.dltk.javascript.formatter.internal;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -63,8 +64,8 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
-import org.eclipse.dltk.javascript.ast.StatementList;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
+import org.eclipse.dltk.javascript.ast.SwitchComponent;
 import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
@@ -90,6 +91,7 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.CallParensConfigurat
 import org.eclipse.dltk.javascript.formatter.internal.nodes.CaseBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.CatchBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.CatchParensConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.ColonNodeWrapper;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.CommaPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ConditionalOperatorPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.DoWhileBlockBracesConfiguration;
@@ -175,6 +177,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			private void visit(ASTNode node) {
 				ASTVisitor.visit(node, this);
+			}
+
+			private void visit(Collection<? extends ASTNode> nodes) {
+				ASTVisitor.visit(nodes, this);
 			}
 
 			public boolean visitArrayInitializer(ArrayInitializer node) {
@@ -284,22 +290,44 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			public boolean visitCaseClause(CaseClause node) {
-				FormatterCaseNode formatterNode = new FormatterCaseNode(
+				FormatterCaseNode caseNode = new FormatterCaseNode(document);
+				caseNode.setBegin(createTextNode(document, node.getKeyword()));
+				push(caseNode);
+				visit(node.getCondition());
+				caseNode.addChild(new ColonNodeWrapper(createCharNode(document,
+						node.getColonPosition())));
+				checkedPop(caseNode, node.getColonPosition() + 1);
+
+				CaseBracesConfiguration configuration = new CaseBracesConfiguration(
 						document);
+				final FormatterBlockNode block = new FormatterIndentedBlockNode(
+						document, configuration.isIndenting());
+				block.addChild(createEmptyTextNode(document, node
+						.getColonPosition() + 1));
+				push(block);
+				visit(node.getStatements());
+				checkedPop(block, node.sourceEnd());
+				return true;
+			}
 
-				formatterNode.setBegin(createEmptyTextNode(document, node
-						.getCaseKeyword().sourceStart()));
+			public boolean visitDefaultClause(DefaultClause node) {
+				FormatterCaseNode defaultNode = new FormatterCaseNode(document);
+				defaultNode
+						.setBegin(createTextNode(document, node.getKeyword()));
+				push(defaultNode);
+				defaultNode.addChild(new ColonNodeWrapper(createCharNode(
+						document, node.getColonPosition())));
+				checkedPop(defaultNode, node.getColonPosition() + 1);
 
-				push(formatterNode);
-
-				processTrailingColon(node.getColonPosition(), node
-						.getCaseKeyword(), node.getCondition());
-
-				processBraces(node.getStatements(),
-						new CaseBracesConfiguration(document));
-
-				checkedPop(formatterNode, node.sourceEnd());
-
+				CaseBracesConfiguration configuration = new CaseBracesConfiguration(
+						document);
+				final FormatterBlockNode block = new FormatterIndentedBlockNode(
+						document, configuration.isIndenting());
+				block.addChild(createEmptyTextNode(document, node
+						.getColonPosition() + 1));
+				push(block);
+				visit(node.getStatements());
+				checkedPop(block, node.sourceEnd());
 				return true;
 			}
 
@@ -464,26 +492,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						node);
 				addChild(strNode);
 				return false;
-			}
-
-			public boolean visitDefaultClause(DefaultClause node) {
-				FormatterCaseNode formatterNode = new FormatterCaseNode(
-						document);
-
-				formatterNode.setBegin(createEmptyTextNode(document, node
-						.getDefaultKeyword().sourceStart()));
-
-				push(formatterNode);
-
-				processTrailingColon(node.getColonPosition(), node
-						.getDefaultKeyword(), null);
-
-				processBraces(node.getStatements(),
-						new CaseBracesConfiguration(document));
-
-				checkedPop(formatterNode, node.sourceEnd());
-
-				return true;
 			}
 
 			public boolean visitDeleteStatement(DeleteStatement node) {
@@ -889,19 +897,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 			}
 
-			private void processBraces(int leftBrace, int rightBrace,
-					List nodes, IBracesConfiguration configuration) {
-				BracesNode braces = new BracesNode(document, configuration);
-
-				braces.setBegin(createCharNode(document, leftBrace));
-				push(braces);
-				for (Iterator i = nodes.iterator(); i.hasNext();) {
-					visit((ASTNode) i.next());
-				}
-				checkedPop(braces, rightBrace);
-				braces.setEnd(createCharNode(document, rightBrace));
-			}
-
 			private void processBrackets(int leftBracket, int rightBracket,
 					List nodes, IBracketsConfiguration configuration) {
 				BracketsNode brackets = new BracketsNode(document,
@@ -1232,13 +1227,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return true;
 			}
 
-			public boolean visitStatementList(StatementList node) {
-
-				visitNodeList(node.getStatementList());
-
-				return true;
-			}
-
 			public boolean visitStringLiteral(StringLiteral node) {
 				FormatterStringNode strNode = new FormatterStringNode(document,
 						node);
@@ -1248,22 +1236,28 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitSwitchStatement(SwitchStatement node) {
 
-				FormatterSwitchNode formatterNode = new FormatterSwitchNode(
+				FormatterSwitchNode switchNode = new FormatterSwitchNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
+				switchNode.setBegin(createTextNode(document, node
 						.getSwitchKeyword()));
 
-				push(formatterNode);
+				push(switchNode);
 
 				processParens(node.getLP(), node.getRP(), node.getCondition(),
 						new SwitchConditionParensConfiguration(document));
+				BracesNode braces = new BracesNode(document,
+						new SwitchBracesConfiguration(document));
 
-				processBraces(node.getLC(), node.getRC(),
-						node.getCaseClauses(), new SwitchBracesConfiguration(
-								document));
+				braces.setBegin(createCharNode(document, node.getLC()));
+				push(braces);
+				for (SwitchComponent component : node.getCaseClauses()) {
+					visit(component);
+				}
+				checkedPop(braces, node.getRC());
+				braces.setEnd(createCharNode(document, node.getRC()));
 
-				checkedPop(formatterNode, node.sourceEnd());
+				checkedPop(switchNode, node.sourceEnd());
 
 				return true;
 			}
@@ -1555,6 +1549,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				checkedPop(formatterNode, node.sourceEnd());
 
 				return true;
+			}
+
+			public boolean visitUnknownNode(ASTNode node) {
+				return false;
 			}
 
 		});

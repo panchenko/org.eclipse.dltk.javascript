@@ -11,15 +11,35 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.dltk.ast.ASTNode;
 
 public abstract class SwitchComponent extends Statement {
+
+	private int colon = -1;
+	private final List<Statement> statements = new ArrayList<Statement>();
 
 	/**
 	 * @param parent
 	 */
 	public SwitchComponent(ASTNode parent) {
 		super(parent);
+	}
+
+	public abstract Keyword getKeyword();
+
+	public int getColonPosition() {
+		return this.colon;
+	}
+
+	public void setColonPosition(int colon) {
+		this.colon = colon;
+	}
+
+	public List<Statement> getStatements() {
+		return statements;
 	}
 
 }

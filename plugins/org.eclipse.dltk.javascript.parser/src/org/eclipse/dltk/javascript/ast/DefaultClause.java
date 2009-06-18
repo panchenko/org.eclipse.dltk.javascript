@@ -18,19 +18,9 @@ import org.eclipse.dltk.ast.ASTNode;
 public class DefaultClause extends SwitchComponent {
 
 	private Keyword defaultKeyword;
-	private StatementList statements;
-	private int colon = -1;
 
 	public DefaultClause(ASTNode parent) {
 		super(parent);
-	}
-
-	public StatementList getStatements() {
-		return this.statements;
-	}
-
-	public void setStatements(StatementList statements) {
-		this.statements = statements;
 	}
 
 	public Keyword getDefaultKeyword() {
@@ -41,35 +31,31 @@ public class DefaultClause extends SwitchComponent {
 		this.defaultKeyword = keyword;
 	}
 
-	public int getColonPosition() {
-		return this.colon;
-	}
-
-	public void setColonPosition(int colon) {
-		this.colon = colon;
-	}
-
-	public String toSourceString(String indentionString) {
+	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() > 0);
 		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(colon > 0);
+		// Assert.isTrue(colon > 0);
 
 		StringBuffer buffer = new StringBuffer();
 
-		buffer.append(indentionString);
+		buffer.append(indentationString);
 
 		buffer.append(Keywords.DEFAULT);
 		buffer.append(":\n");
 
-		buffer.append(this.getStatements().toSourceString(
-				indentionString + "    "));
+		toSourceString(getStatements(), buffer, indentationString + INDENT);
 
 		return buffer.toString();
 	}
 
 	public boolean isBlock() {
 		return false;
+	}
+
+	@Override
+	public Keyword getKeyword() {
+		return getDefaultKeyword();
 	}
 
 }

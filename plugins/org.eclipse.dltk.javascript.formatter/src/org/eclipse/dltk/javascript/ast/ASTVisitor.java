@@ -12,9 +12,18 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.Collection;
+
 import org.eclipse.dltk.ast.ASTNode;
 
 public final class ASTVisitor {
+
+	public static void visit(Collection<? extends ASTNode> nodes,
+			IASTVisitor visitor) {
+		for (ASTNode node : nodes) {
+			visit(node, visitor);
+		}
+	}
 
 	public static boolean visit(ASTNode node, IASTVisitor visitor) {
 		if (node.getClass() == ArrayInitializer.class)
@@ -139,9 +148,6 @@ public final class ASTVisitor {
 		if (node.getClass() == StatementBlock.class)
 			return visitor.visitStatementBlock((StatementBlock) node);
 
-		if (node.getClass() == StatementList.class)
-			return visitor.visitStatementList((StatementList) node);
-
 		if (node.getClass() == StringLiteral.class)
 			return visitor.visitStringLiteral((StringLiteral) node);
 
@@ -203,8 +209,12 @@ public final class ASTVisitor {
 		if (node.getClass() == YieldOperator.class)
 			return visitor.visitYieldOperator((YieldOperator) node);
 
-		throw new UnsupportedOperationException("Unknown node type: "
-				+ node.getClass());
+		if (!visitor.visitUnknownNode(node)) {
+			throw new UnsupportedOperationException("Unknown node type: "
+					+ node.getClass());
+		} else {
+			return true;
+		}
 	}
 
 }

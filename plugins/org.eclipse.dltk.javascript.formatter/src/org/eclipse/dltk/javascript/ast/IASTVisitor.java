@@ -12,6 +12,8 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import org.eclipse.dltk.ast.ASTNode;
+
 public interface IASTVisitor {
 
 	public boolean visitArrayInitializer(ArrayInitializer node);
@@ -94,8 +96,6 @@ public interface IASTVisitor {
 
 	public boolean visitStatementBlock(StatementBlock node);
 
-	public boolean visitStatementList(StatementList node);
-
 	public boolean visitStringLiteral(StringLiteral node);
 
 	public boolean visitSwitchStatement(SwitchStatement node);
@@ -133,5 +133,7 @@ public interface IASTVisitor {
 	public boolean visitGetAllChildrenExpression(GetAllChildrenExpression node);
 
 	public boolean visitGetLocalNameExpression(GetLocalNameExpression node);
+
+	public boolean visitUnknownNode(ASTNode node);
 
 }

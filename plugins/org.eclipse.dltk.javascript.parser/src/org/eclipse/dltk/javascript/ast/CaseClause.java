@@ -19,8 +19,6 @@ public class CaseClause extends SwitchComponent {
 
 	private Keyword caseKeyword;
 	private Expression condition;
-	private StatementList statements;
-	private int colon = -1;
 
 	public CaseClause(ASTNode parent) {
 		super(parent);
@@ -34,14 +32,6 @@ public class CaseClause extends SwitchComponent {
 		this.condition = condition;
 	}
 
-	public StatementList getStatements() {
-		return this.statements;
-	}
-
-	public void setStatements(StatementList statements) {
-		this.statements = statements;
-	}
-
 	public Keyword getCaseKeyword() {
 		return this.caseKeyword;
 	}
@@ -50,19 +40,11 @@ public class CaseClause extends SwitchComponent {
 		this.caseKeyword = keyword;
 	}
 
-	public int getColonPosition() {
-		return this.colon;
-	}
-
-	public void setColonPosition(int colon) {
-		this.colon = colon;
-	}
-
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() > 0);
 		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(colon > 0);
+		// Assert.isTrue(colon > 0);
 
 		StringBuffer buffer = new StringBuffer();
 
@@ -73,13 +55,17 @@ public class CaseClause extends SwitchComponent {
 		buffer.append(this.getCondition().toSourceString(indentationString));
 		buffer.append(":\n");
 
-		buffer.append(this.getStatements().toSourceString(
-				indentationString + "    "));
+		toSourceString(getStatements(), buffer, indentationString + INDENT);
 
 		return buffer.toString();
 	}
 
 	public boolean isBlock() {
 		return true;
+	}
+
+	@Override
+	public Keyword getKeyword() {
+		return getCaseKeyword();
 	}
 }

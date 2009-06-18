@@ -72,7 +72,6 @@ import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.SingleLineComment;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
-import org.eclipse.dltk.javascript.ast.StatementList;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.SwitchComponent;
 import org.eclipse.dltk.javascript.ast.SwitchStatement;
@@ -470,28 +469,11 @@ public class JSTransformer extends JSVisitor {
 				.setColonPosition(getTokenOffset(JSParser.COLON, node.getChild(
 						0).getTokenStopIndex() + 1, node.getTokenStopIndex()));
 
-		StatementList list = new StatementList(caseClause);
-
-		List<Statement> statements = new ArrayList<Statement>(node
-				.getChildCount());
 		// miss condition
 		for (int i = 1; i < node.getChildCount(); i++) {
-			statements.add(transformStatementNode(node.getChild(i), list));
+			caseClause.getStatements().add(
+					transformStatementNode(node.getChild(i), caseClause));
 		}
-		list.setStatementList(statements);
-
-		if (node.getChildCount() > 1) {
-			list
-					.setStart(getTokenOffset(node.getChild(1)
-							.getTokenStartIndex()));
-			list.setEnd(getTokenOffset(node.getChild(node.getChildCount() - 1)
-					.getTokenStopIndex() + 1));
-		} else {
-			list.setStart(caseClause.getColonPosition() + 1);
-			list.setEnd(caseClause.getColonPosition() + 1);
-		}
-
-		caseClause.setStatements(list);
 
 		caseClause.setStart(caseClause.getCaseKeyword().sourceStart());
 		caseClause.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -523,26 +505,10 @@ public class JSTransformer extends JSVisitor {
 		defaultClause.setColonPosition(getTokenOffset(JSParser.COLON, node
 				.getTokenStartIndex() + 1, node.getTokenStopIndex() + 1));
 
-		StatementList list = new StatementList(defaultClause);
-		if (node.getChildCount() > 0) {
-			list
-					.setStart(getTokenOffset(node.getChild(0)
-							.getTokenStartIndex()));
-			list.setEnd(getTokenOffset(node.getChild(node.getChildCount() - 1)
-					.getTokenStopIndex() + 1));
-		} else {
-			list.setStart(defaultClause.getColonPosition() + 1);
-			list.setEnd(defaultClause.getColonPosition() + 1);
-		}
-
-		List<Statement> statements = new ArrayList<Statement>(node
-				.getChildCount());
 		for (int i = 0; i < node.getChildCount(); i++) {
-			statements.add(transformStatementNode(node.getChild(i), list));
+			defaultClause.getStatements().add(
+					transformStatementNode(node.getChild(i), defaultClause));
 		}
-		list.setStatementList(statements);
-
-		defaultClause.setStatements(list);
 
 		defaultClause.setStart(defaultClause.getDefaultKeyword().sourceStart());
 		defaultClause.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
