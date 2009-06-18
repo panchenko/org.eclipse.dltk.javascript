@@ -102,7 +102,7 @@ public class IfStatement extends Statement {
 
 		buffer.append(getThenStatement().toSourceString(
 				getThenStatement().isBlock() ? indentationString
-						: indentationString + "    "));
+						: indentationString + INDENT));
 
 		if (getElseStatement() != null) {
 			buffer.append(indentationString);
@@ -110,7 +110,7 @@ public class IfStatement extends Statement {
 			buffer.append("\n");
 			buffer.append(getElseStatement().toSourceString(
 					getElseStatement().isBlock() ? indentationString
-							: indentationString + "    "));
+							: indentationString + INDENT));
 		}
 
 		return buffer.toString();
