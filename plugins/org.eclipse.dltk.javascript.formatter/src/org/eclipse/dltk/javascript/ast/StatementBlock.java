@@ -12,6 +12,7 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -19,7 +20,7 @@ import org.eclipse.dltk.ast.ASTNode;
 
 public class StatementBlock extends Statement {
 
-	private List statements;
+	private final List<Statement> statements = new ArrayList<Statement>();
 	private int LC = -1;
 	private int RC = -1;
 
@@ -27,12 +28,8 @@ public class StatementBlock extends Statement {
 		super(parent);
 	}
 
-	public List getStatements() {
+	public List<Statement> getStatements() {
 		return this.statements;
-	}
-
-	public void setStatements(List statements) {
-		this.statements = statements;
 	}
 
 	public int getLC() {

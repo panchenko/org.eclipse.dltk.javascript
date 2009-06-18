@@ -12,6 +12,7 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -21,7 +22,7 @@ public class TryStatement extends Statement {
 
 	private Keyword tryKeyword;
 	private StatementBlock body;
-	private List catchClauses;
+	private List<CatchClause> catchClauses = new ArrayList<CatchClause>();
 	private FinallyClause finallyClause;
 
 	public TryStatement(ASTNode parent) {
@@ -44,12 +45,8 @@ public class TryStatement extends Statement {
 		this.finallyClause = finallyClause;
 	}
 
-	public List getCatches() {
+	public List<CatchClause> getCatches() {
 		return this.catchClauses;
-	}
-
-	public void setCatches(List catches) {
-		this.catchClauses = catches;
 	}
 
 	public Keyword getTryKeyword() {

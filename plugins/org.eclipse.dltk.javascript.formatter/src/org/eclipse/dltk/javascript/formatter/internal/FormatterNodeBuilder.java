@@ -61,6 +61,7 @@ import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
+import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.StatementList;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
@@ -312,7 +313,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				List exceptionNodes = new ArrayList();
+				List<ASTNode> exceptionNodes = new ArrayList<ASTNode>();
 				exceptionNodes.add(node.getException());
 				if (node.getExceptionFilter() != null) {
 					exceptionNodes.add(node.getExceptionFilter());
@@ -570,7 +571,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				List nodes = new ArrayList();
+				List<ASTNode> nodes = new ArrayList<ASTNode>();
 
 				nodes.add(node.getItem());
 				nodes.add(node.getInKeyword());
@@ -597,7 +598,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				List nodes = new ArrayList();
+				List<ASTNode> nodes = new ArrayList<ASTNode>();
 
 				nodes.add(node.getItem());
 				nodes.add(node.getInKeyword());
@@ -624,18 +625,18 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				List nodes = new ArrayList();
+				List<ASTNode> nodes = new ArrayList<ASTNode>();
 
 				nodes.add(node.getInitial());
 				nodes.add(node.getCondition());
 				nodes.add(node.getStep());
 
-				List semicolons = new ArrayList();
+				List<Integer> semicolons = new ArrayList<Integer>();
 				semicolons.add(new Integer(node.getInitialSemicolonPosition()));
 				semicolons.add(new Integer(node
 						.getConditionalSemicolonPosition()));
 
-				List semicolonConfigurations = new ArrayList();
+				List<IPunctuationConfiguration> semicolonConfigurations = new ArrayList<IPunctuationConfiguration>();
 
 				if (node.getCondition() instanceof EmptyExpression)
 					semicolonConfigurations
@@ -722,7 +723,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				visit(node.getArray());
 
-				List nodes = new ArrayList();
+				List<ASTNode> nodes = new ArrayList<ASTNode>();
 				nodes.add(node.getIndex());
 				processBrackets(node.getLB(), node.getRB(), nodes,
 						new GetItemArrayBracketsConfiguration(document));
@@ -1073,7 +1074,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				push(formatterNode);
 
 				List initializers = node.getInitializers();
-				List commaConfigurations = new ArrayList();
+				List<IPunctuationConfiguration> commaConfigurations = new ArrayList<IPunctuationConfiguration>();
 
 				for (int i = 1; i < initializers.size(); i++) {
 					Expression item = (Expression) initializers.get(i);
@@ -1304,7 +1305,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processBraces(node.getBody(),
 						new TryBodyConfiguration(document));
 
-				List nodes = new ArrayList();
+				List<Statement> nodes = new ArrayList<Statement>();
 				nodes.addAll(node.getCatches());
 				if (node.getFinally() != null) {
 					nodes.add(node.getFinally());
@@ -1439,9 +1440,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return true;
 			}
 
-			private void visitNodeList(List nodes) {
+			private void visitNodeList(List<? extends ASTNode> nodes) {
 				for (int i = 0; i < nodes.size(); i++) {
-					visit((ASTNode) nodes.get(i));
+					visit(nodes.get(i));
 				}
 			}
 

@@ -100,7 +100,7 @@ public class JSTransformer extends JSVisitor {
 
 	private ASTNode parent;
 	private ASTNode result = null;
-	private List resultList = null;
+	private List<ASTNode> resultList = null;
 
 	private int currentRecursionDeep;
 
@@ -174,7 +174,7 @@ public class JSTransformer extends JSVisitor {
 		return result;
 	}
 
-	private List transformListNode() {
+	private List<ASTNode> transformListNode() {
 		visitNode(root);
 		Assert.isTrue(resultList != null);
 		return resultList;
@@ -296,14 +296,14 @@ public class JSTransformer extends JSVisitor {
 		}
 	}
 
-	private List transformListNode(Tree node, ASTNode parent) {
+	private List<ASTNode> transformListNode(Tree node, ASTNode parent) {
 		return new JSTransformer(node, tokens, tokenOffsets/* offsetMap */,
 				source, parent, currentRecursionDeep + 1).transformListNode();
 	}
 
 	protected boolean visitArguments(Tree node) {
 
-		List nodes = new ArrayList(node.getChildCount());
+		List<ASTNode> nodes = new ArrayList<ASTNode>(node.getChildCount());
 
 		for (int i = 0; i < node.getChildCount(); i++) {
 			nodes.add(transformNode(node.getChild(i), this.parent));
@@ -360,13 +360,10 @@ public class JSTransformer extends JSVisitor {
 
 		StatementBlock block = new StatementBlock(this.parent);
 
-		List statements = new ArrayList(node.getChildCount());
 		for (int i = 0; i < node.getChildCount(); i++) {
-			statements
-					.add(transformStatementNode(node.getChild(i), this.parent));
+			block.getStatements().add(
+					transformStatementNode(node.getChild(i), this.parent));
 		}
-
-		block.setStatements(statements);
 
 		block.setLC(getTokenOffset(JSParser.LBRACE, node.getTokenStartIndex(),
 				node.getTokenStopIndex()));
@@ -436,7 +433,7 @@ public class JSTransformer extends JSVisitor {
 		call.setExpression(transformNode(node.getChild(0), call));
 		call.setArguments(transformListNode(node.getChild(1), call));
 
-		List commas = new ArrayList();
+		List<Integer> commas = new ArrayList<Integer>();
 		Tree args = node.getChild(1);
 		for (int i = 1 /* miss the first */; i < args.getChildCount(); i++) {
 			commas.add(new Integer(getTokenOffset(JSParser.COMMA, args
@@ -761,7 +758,7 @@ public class JSTransformer extends JSVisitor {
 
 		fn.setArguments(transformListNode(argsNode, fn));
 
-		List commas = new ArrayList();
+		List<Integer> commas = new ArrayList<Integer>();
 
 		if (argsNode.getChildCount() > 1) {
 			for (int i = 1; i < argsNode.getChildCount(); i++) {
@@ -812,7 +809,7 @@ public class JSTransformer extends JSVisitor {
 					.getChild(0), returnStatement));
 		}
 
-		Token token = (Token) tokens.get(node.getTokenStopIndex());
+		Token token = tokens.get(node.getTokenStopIndex());
 		if (token.getType() == JSParser.SEMIC) {
 			returnStatement.setSemicolonPosition(getTokenOffset(node
 					.getTokenStopIndex()));
@@ -993,8 +990,8 @@ public class JSTransformer extends JSVisitor {
 		varKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
 		var.setVarKeyword(varKeyword);
 
-		List commas = new ArrayList();
-		List variables = new ArrayList(node.getChildCount());
+		List<Integer> commas = new ArrayList<Integer>();
+		List<ASTNode> variables = new ArrayList<ASTNode>(node.getChildCount());
 		for (int i = 0; i < node.getChildCount(); i++) {
 			variables.add(transformNode(node.getChild(i), var));
 
@@ -1017,8 +1014,8 @@ public class JSTransformer extends JSVisitor {
 
 		ObjectInitializer initializer = new ObjectInitializer(this.parent);
 
-		List properties = new ArrayList(node.getChildCount());
-		List commas = new ArrayList();
+		List<ASTNode> properties = new ArrayList<ASTNode>(node.getChildCount());
+		List<Integer> commas = new ArrayList<Integer>();
 
 		for (int i = 0; i < node.getChildCount(); i++) {
 			properties.add(transformNode(node.getChild(i), initializer));
@@ -1350,14 +1347,14 @@ public class JSTransformer extends JSVisitor {
 		statement.setBody((StatementBlock) transformStatementNode(node
 				.getChild(0), statement));
 
-		List catches = new ArrayList(node.getChildCount() - 1);
 		for (int i = 1 /* miss body */; i < node.getChildCount(); i++) {
 
 			Tree child = node.getChild(i);
 
 			switch (child.getType()) {
 			case JSParser.CATCH:
-				catches.add(transformNode(child, statement));
+				statement.getCatches().add(
+						(CatchClause) transformNode(child, statement));
 				break;
 
 			case JSParser.FINALLY:
@@ -1372,7 +1369,6 @@ public class JSTransformer extends JSVisitor {
 			}
 
 		}
-		statement.setCatches(catches);
 
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -1504,8 +1500,8 @@ public class JSTransformer extends JSVisitor {
 		array.setLB(getTokenOffset(JSParser.LBRACK, node.getTokenStartIndex(),
 				node.getTokenStartIndex()));
 
-		List items = new ArrayList(node.getChildCount());
-		List commas = new ArrayList();
+		List<ASTNode> items = new ArrayList<ASTNode>(node.getChildCount());
+		List<Integer> commas = new ArrayList<Integer>();
 
 		for (int i = 0; i < node.getChildCount(); i++) {
 			Tree child = node.getChild(i);
@@ -1559,8 +1555,8 @@ public class JSTransformer extends JSVisitor {
 
 		CommaExpression expression = new CommaExpression(this.parent);
 
-		List items = new ArrayList(node.getChildCount());
-		List commas = new ArrayList();
+		List<ASTNode> items = new ArrayList<ASTNode>(node.getChildCount());
+		List<Integer> commas = new ArrayList<Integer>();
 
 		for (int i = 0; i < node.getChildCount(); i++) {
 			items.add(transformNode(node.getChild(i), expression));
@@ -1789,8 +1785,8 @@ public class JSTransformer extends JSVisitor {
 		constKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
 		declaration.setConstKeyword(constKeyword);
 
-		List commas = new ArrayList();
-		List consts = new ArrayList(node.getChildCount());
+		List<Integer> commas = new ArrayList<Integer>();
+		List<ASTNode> consts = new ArrayList<ASTNode>(node.getChildCount());
 		for (int i = 0; i < node.getChildCount(); i++) {
 			consts.add(transformNode(node.getChild(i), declaration));
 			if (i > 0)
