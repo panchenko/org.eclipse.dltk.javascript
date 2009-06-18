@@ -65,7 +65,6 @@ import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
-import org.eclipse.dltk.javascript.ast.StatementList;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
@@ -117,9 +116,9 @@ public class ASTVerifier implements IASTVisitor {
 			Assert.assertEquals(ch, source.charAt(charAt));
 	}
 
-	private void testCharList(char ch, List chars) {
-		for (int i = 0; i < chars.size(); i++) {
-			int charAt = ((Integer) chars.get(i)).intValue();
+	private void testCharList(char ch, List<Integer> charIndexes) {
+		for (int i = 0; i < charIndexes.size(); i++) {
+			int charAt = charIndexes.get(i).intValue();
 			Assert.assertTrue(charAt > -1);
 			testChar(ch, charAt);
 		}
@@ -188,7 +187,7 @@ public class ASTVerifier implements IASTVisitor {
 
 		visit(node.getCaseKeyword());
 		visit(node.getCondition());
-		visit(node.getStatements());
+		visitList(node.getStatements());
 
 		testChar(Keywords.COLON, node.getColonPosition());
 
@@ -264,7 +263,7 @@ public class ASTVerifier implements IASTVisitor {
 		testChar(Keywords.COLON, node.getColonPosition());
 
 		visit(node.getDefaultKeyword());
-		visit(node.getStatements());
+		visitList(node.getStatements());
 
 		return true;
 	}
@@ -511,13 +510,6 @@ public class ASTVerifier implements IASTVisitor {
 		return true;
 	}
 
-	public boolean visitStatementList(StatementList node) {
-
-		visitList(node.getStatementList());
-
-		return true;
-	}
-
 	public boolean visitStringLiteral(StringLiteral node) {
 
 		testString(node.getText(), node.sourceStart(), node.sourceEnd());
@@ -733,6 +725,10 @@ public class ASTVerifier implements IASTVisitor {
 
 	public boolean visitYieldOperator(YieldOperator node) {
 		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean visitUnknownNode(ASTNode node) {
 		return false;
 	}
 }
