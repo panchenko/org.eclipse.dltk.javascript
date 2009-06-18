@@ -112,7 +112,7 @@ public class SwitchStatement extends Statement {
 
 		for (int i = 0; i < caseClauses.size(); i++) {
 			buffer.append(((ISourceable) caseClauses.get(i))
-					.toSourceString(indentationString + "    "));
+					.toSourceString(indentationString + INDENT));
 		}
 
 		buffer.append(indentationString);
