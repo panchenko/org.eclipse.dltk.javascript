@@ -61,7 +61,7 @@ public class StatementBlock extends Statement {
 
 		for (int i = 0; i < statements.size(); i++) {
 			buffer.append(((ISourceable) statements.get(i))
-					.toSourceString(indentationString + "    "));
+					.toSourceString(indentationString + INDENT));
 		}
 
 		buffer.append(indentationString);
