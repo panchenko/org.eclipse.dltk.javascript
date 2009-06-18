@@ -63,7 +63,7 @@ public class LabelledStatement extends Statement {
 
 		buffer
 				.append(getStatement().toSourceString(
-						indentationString + "    "));
+						indentationString + INDENT));
 
 		return buffer.toString();
 	}
