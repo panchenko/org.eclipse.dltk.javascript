@@ -270,17 +270,6 @@ public class JavascriptSourceViewerConfiguration extends
 		};
 	}
 
-	protected IInformationControlCreator getOutlinePresenterControlCreator(
-			ISourceViewer sourceViewer, final String commandId) {
-		return new IInformationControlCreator() {
-			public IInformationControl createInformationControl(Shell parent) {
-				int shellStyle = SWT.RESIZE;
-				int treeStyle = SWT.V_SCROLL | SWT.H_SCROLL;
-				return new JavaScriptOutlineInformationControl(parent,
-						shellStyle, treeStyle, commandId);
-			}
-		};
-	}
 }
 
 class ScriptCommentScanner extends AbstractScriptScanner {
