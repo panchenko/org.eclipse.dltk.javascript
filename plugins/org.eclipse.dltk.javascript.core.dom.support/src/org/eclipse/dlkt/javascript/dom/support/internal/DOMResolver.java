@@ -349,35 +349,38 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 								.createSourceModuleFrom(sourceFile);
 						int offset = uref.getOffset();
 						int length = uref.getLength();
-						try {
-							IModelElement[] children = sourceFileModule
-									.getChildren();
-							ISourceRange nameRange = null;
-							String name = uref.getName();
-							for (int i = 0; i < children.length; i++) {
-								IModelElement child = children[i];
-								if (child instanceof IMember) {
-									if (name.equals(child.getElementName())) {
-										nameRange = ((IMember) child)
-												.getNameRange();
-										// if it is an exact match break
-										// method == function reference
-										// field != function reference
-										// else try the next.
-										if ((child.getElementType() == IModelElement.METHOD && uref
-												.isFunctionRef())
-												|| (child.getElementType() == IModelElement.FIELD && !uref
-														.isFunctionRef())) {
-											break;
+						if ("js"
+								.equalsIgnoreCase(sourceFile.getFileExtension())) {
+							try {
+								IModelElement[] children = sourceFileModule
+										.getChildren();
+								ISourceRange nameRange = null;
+								String name = uref.getName();
+								for (int i = 0; i < children.length; i++) {
+									IModelElement child = children[i];
+									if (child instanceof IMember) {
+										if (name.equals(child.getElementName())) {
+											nameRange = ((IMember) child)
+													.getNameRange();
+											// if it is an exact match break
+											// method == function reference
+											// field != function reference
+											// else try the next.
+											if ((child.getElementType() == IModelElement.METHOD && uref
+													.isFunctionRef())
+													|| (child.getElementType() == IModelElement.FIELD && !uref
+															.isFunctionRef())) {
+												break;
+											}
 										}
 									}
 								}
+								if (nameRange != null) {
+									offset = nameRange.getOffset();
+									length = nameRange.getLength();
+								}
+							} catch (ModelException ex) {
 							}
-							if (nameRange != null) {
-								offset = nameRange.getOffset();
-								length = nameRange.getLength();
-							}
-						} catch (ModelException ex) {
 						}
 						ref
 								.setLocationInformation(
