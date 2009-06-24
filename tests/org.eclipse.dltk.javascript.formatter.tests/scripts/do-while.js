@@ -40,4 +40,16 @@ do
 	z = 100;
 }
 while (z == 100);
+==== do-while-same-line
+==> formatter.braces.blocks = same.line
+==> formatter.newlines.while = false
+do
+{
+z = 100;
+}
+while (z==100);
+==
+do {
+	z = 100;
+} while (z == 100);
 ====
