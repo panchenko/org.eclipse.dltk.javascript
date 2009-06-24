@@ -127,7 +127,8 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 			break;
 
 		case IBracesConfiguration.ONE_SPACE:
-			visitor.appendToPreviousLine(context, JSLiterals.SPACE);
+			visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
+			visitor.writeText(context, JSLiterals.SPACE);
 			visitor.skipNextLineBreaks(context);
 			break;
 
