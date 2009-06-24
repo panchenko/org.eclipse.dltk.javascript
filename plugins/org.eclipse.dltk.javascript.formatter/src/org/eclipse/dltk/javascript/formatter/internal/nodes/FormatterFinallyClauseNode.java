@@ -24,11 +24,14 @@ public class FormatterFinallyClauseNode extends FormatterBlockNode {
 		super(document);
 	}
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 
 		if (isNewLineBreaking())
 			visitor.writeLineBreak(context);
+		else
+			visitor.appendToPreviousLine(context, JSLiterals.SPACE);
 
 		super.accept(context, visitor);
 	}
@@ -36,7 +39,6 @@ public class FormatterFinallyClauseNode extends FormatterBlockNode {
 	private boolean isNewLineBreaking() {
 		return getDocument().getBoolean(
 				JavaScriptFormatterConstants.NEW_LINE_BEFORE_FINALLY_IN_TRY);
-
 	}
 
 }
