@@ -92,4 +92,27 @@ public abstract class AbstractBracesConfiguration implements
 
 	}
 
+	private static final String describe(int value) {
+		switch (value) {
+		case UNDEFINED:
+			return "UNDEFINED";
+		case ONE_SPACE:
+			return "ONE_SPACE";
+		case LINE_BREAK:
+			return "LINE_BREAK";
+		case EMPTY_SPACE:
+			return "EMPTY_SPACE";
+		default:
+			return String.valueOf(value);
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "beforeOpenBrace=" + describe(insertBeforeOpenBrace())
+				+ ", afterOpenBrace=" + describe(insertAfterOpenBrace())
+				+ ", beforeCloseBrace=" + describe(insertBeforeCloseBrace())
+				+ ", afterCloseBrace=" + describe(insertAfterCloseBrace());
+	}
+
 }
