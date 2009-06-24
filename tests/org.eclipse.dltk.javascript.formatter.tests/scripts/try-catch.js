@@ -27,7 +27,7 @@ try {
 }
 ==> formatter.newlines.catch = true
 ==> formatter.newlines.finally = true
-==== try-simple-new-lines-catch-finally
+==== try-new-lines-catch-finally
 try {
 		throw "Cannot x/0"
 } catch(e if e instanceof Error) {
@@ -54,6 +54,29 @@ catch (e) {
 	print("Unknown error")
 }
 finally {
+	print("Successful")
+}
+==> formatter.newlines.catch = false
+==> formatter.newlines.finally = false
+==== try-no-new-lines-catch-finally
+try
+{
+		throw "Cannot x/0"
+}
+catch(e)
+{
+print			("Error")
+}
+finally
+{
+print     ("Successful")
+}
+==
+try {
+	throw "Cannot x/0"
+} catch (e) {
+	print("Error")
+} finally {
 	print("Successful")
 }
 ====
