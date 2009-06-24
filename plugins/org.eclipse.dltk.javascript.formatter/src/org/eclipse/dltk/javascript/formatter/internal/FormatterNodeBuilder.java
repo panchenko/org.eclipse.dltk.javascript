@@ -95,6 +95,7 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.CatchParensConfigura
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ColonNodeWrapper;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.CommaPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ConditionalOperatorPunctuationConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.DoLoopWhileWrapper;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.DoWhileBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseIfBlockBracesConfiguration;
@@ -534,7 +535,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processBraces(node.getBody(),
 						new DoWhileBlockBracesConfiguration(document));
 
-				visit(node.getWhileKeyword());
+				formatterNode.addChild(new DoLoopWhileWrapper(createTextNode(
+						document, node.getWhileKeyword())));
 
 				processParens(node.getLP(), node.getRP(), node.getCondition(),
 						new WhileConditionParensConfiguration(document));
