@@ -80,6 +80,7 @@ import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.AbstractParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ArrayBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.BinaryOperationPinctuationConfiguration;
@@ -294,8 +295,14 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				caseNode.setBegin(createTextNode(document, node.getKeyword()));
 				push(caseNode);
 				visit(node.getCondition());
-				caseNode.addChild(new ColonNodeWrapper(createCharNode(document,
-						node.getColonPosition())));
+				IFormatterTextNode colon = createCharNode(document, node
+						.getColonPosition());
+				if (!JavaScriptFormatterConstants.BRACE_SAME_LINE
+						.equals(document
+								.getString(JavaScriptFormatterConstants.BRACE_CASE))) {
+					colon = new ColonNodeWrapper(colon);
+				}
+				caseNode.addChild(colon);
 				checkedPop(caseNode, node.getColonPosition() + 1);
 
 				CaseBracesConfiguration configuration = new CaseBracesConfiguration(
@@ -305,7 +312,12 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				block.addChild(createEmptyTextNode(document, node
 						.getColonPosition() + 1));
 				push(block);
-				visit(node.getStatements());
+				if (node.getStatements().size() == 1
+						&& node.getStatements().get(0) instanceof StatementBlock) {
+					processBraces(node.getStatements().get(0), configuration);
+				} else {
+					visit(node.getStatements());
+				}
 				checkedPop(block, node.sourceEnd());
 				return true;
 			}
