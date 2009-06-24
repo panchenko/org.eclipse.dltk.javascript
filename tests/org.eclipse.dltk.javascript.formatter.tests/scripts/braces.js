@@ -23,4 +23,32 @@ var a = { 		b		:		 100		, 			c			:			 '567'		};
 ==
 // aaaaaaa
 var a = { b: 100, c: '567' };
+==== braces-if
+if(x){
+print("hello");
+}
+==
+if (x) {
+	print("hello");
+}
+==== braces-if-next-line
+==> formatter.braces.blocks = next.line
+if(x){
+print("hello");
+}
+==
+if (x)
+{
+	print("hello");
+}
+==== braces-if-same-line
+==> formatter.braces.blocks = same.line
+if(x)
+{
+print("hello");
+}
+==
+if (x) {
+	print("hello");
+}
 ====
