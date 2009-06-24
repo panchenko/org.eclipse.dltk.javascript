@@ -9,7 +9,6 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
 import org.eclipse.dltk.formatter.IFormatterDocument;
@@ -24,6 +23,7 @@ public class CatchBracesConfiguration extends AbstractBracesConfiguration {
 		bracesSettingName = JavaScriptFormatterConstants.BRACE_BLOCK;
 	}
 
+	@Override
 	public int insertAfterCloseBrace() {
 		return IBracesConfiguration.EMPTY_SPACE;
 	}

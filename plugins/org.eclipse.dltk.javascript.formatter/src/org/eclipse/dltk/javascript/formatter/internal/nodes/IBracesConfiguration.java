@@ -9,26 +9,18 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
 /**
- * 
  * [BracesIndenting] [BeforeOpenBrace] { [AfterOpenBrace]
  * 
  * [BracesIndenting] [Indenting] body...
  * 
  * [BracesIndenting] [BeforeCloseBrace] } [AfterCloseBrace]
- * 
- * 
- * @author Vladimir Belov
- * 
  */
-
 public interface IBracesConfiguration {
 
 	/**
-	 * 
 	 * Indents content between braces
 	 * 
 	 * @return
