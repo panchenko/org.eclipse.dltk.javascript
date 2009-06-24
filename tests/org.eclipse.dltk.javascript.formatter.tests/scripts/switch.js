@@ -152,4 +152,51 @@ switch (y)
 			y = ""
 			break;
 	}
+==== switch-case-same-line
+==> formatter.braces.switch = same.line
+==> formatter.insertspace.before.lp.function = false
+==> formatter.braces.case = same.line
+function test() {
+switch (x) {
+case 0: 
+{
+return
+}
+case 1:
+return
+}
+}
+==
+function test() {
+	switch (x) {
+		case 0: {
+				return
+			}
+		case 1:
+			return
+	}
+}
+==== switch-case-next-line
+==> formatter.braces.case = next.line
+function test() {
+switch (x) {
+case 0: 
+{
+return
+}
+case 1:
+return
+}
+}
+==
+function test() {
+	switch (x) {
+		case 0:
+			{
+				return
+			}
+		case 1:
+			return
+	}
+}
 ====
