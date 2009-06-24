@@ -25,13 +25,14 @@ public class FormatterElseKeywordNode extends FormatterTextNode {
 		super(document, startOffset, endOffset);
 	}
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 
 		if (isLineBreaking()) {
 			visitor.writeLineBreak(context);
 		} else {
-			visitor.writeText(context, " ");
+			visitor.writeText(context, JSLiterals.SPACE);
 		}
 
 		super.accept(context, visitor);

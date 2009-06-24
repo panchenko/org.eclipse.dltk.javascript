@@ -27,16 +27,17 @@ public class OperationOrPunctuationNode extends FormatterBlockNode {
 		this.configuration = configuration;
 	}
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 
 		if (configuration.insertSpaceBefore())
-			visitor.writeText(context, " ");
+			visitor.writeText(context, JSLiterals.SPACE);
 
 		super.accept(context, visitor);
 
 		if (configuration.insertSpaceAfter())
-			visitor.writeText(context, " ");
+			visitor.writeText(context, JSLiterals.SPACE);
 		else if (configuration.insertLineBreakAfter())
 			visitor.writeLineBreak(context);
 	}

@@ -33,6 +33,7 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 		this.configuration = configuration;
 	}
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 
@@ -81,8 +82,8 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 			break;
 
 		case IBracesConfiguration.ONE_SPACE:
-			visitor.appendToPreviousLine(context, "");
-			visitor.writeText(context, " ");
+			visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
+			visitor.writeText(context, JSLiterals.SPACE);
 			visitor.skipNextLineBreaks(context);
 			break;
 		}
@@ -99,15 +100,15 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 			break;
 
 		case IBracesConfiguration.ONE_SPACE:
-			visitor.appendToPreviousLine(context, "");
-			visitor.writeText(context, " ");
+			visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
+			visitor.writeText(context, JSLiterals.SPACE);
 			visitor.skipNextLineBreaks(context);
 			break;
 
 		default:
 			if (configuration.insertBeforeOpenBrace() != IBracesConfiguration.LINE_BREAK) {
-				visitor.appendToPreviousLine(context, "");
-				visitor.writeText(context, " ");
+				visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
+				visitor.writeText(context, JSLiterals.SPACE);
 				visitor.skipNextLineBreaks(context);
 			}
 			break;
@@ -126,8 +127,7 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 			break;
 
 		case IBracesConfiguration.ONE_SPACE:
-			visitor.appendToPreviousLine(context, "");
-			visitor.writeText(context, " ");
+			visitor.appendToPreviousLine(context, JSLiterals.SPACE);
 			visitor.skipNextLineBreaks(context);
 			break;
 
@@ -145,8 +145,7 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 			break;
 
 		case IBracesConfiguration.ONE_SPACE:
-			visitor.appendToPreviousLine(context, "");
-			visitor.writeText(context, " ");
+			visitor.appendToPreviousLine(context, JSLiterals.SPACE);
 			visitor.skipNextLineBreaks(context);
 			break;
 

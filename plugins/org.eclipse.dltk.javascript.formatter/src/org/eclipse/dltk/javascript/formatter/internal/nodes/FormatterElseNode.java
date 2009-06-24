@@ -26,14 +26,14 @@ public class FormatterElseNode extends FormatterBlockWithBeginNode {
 		this.lineBreak = lineBreak;
 	}
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 
 		if (isLineBreaking()) {
 			visitor.writeLineBreak(context);
 		} else {
-			visitor.appendToPreviousLine(context, "");
-			visitor.writeText(context, " ");
+			visitor.appendToPreviousLine(context, JSLiterals.SPACE);
 		}
 
 		super.accept(context, visitor);

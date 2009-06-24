@@ -28,6 +28,7 @@ public class FormatterCommentNode extends FormatterTextNode {
 		this.multiLine = multiLine;
 	}
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 		context.setComment(true);
@@ -35,7 +36,7 @@ public class FormatterCommentNode extends FormatterTextNode {
 			visitor.ensureLineStarted(context);
 			JavaScriptFormatterContext copy = (JavaScriptFormatterContext) context
 					.copy();
-			copy.setAdditionalIndent(" ");
+			copy.setAdditionalIndent(JSLiterals.SPACE);
 			super.accept(copy, visitor);
 		} else {
 			super.accept(context, visitor);

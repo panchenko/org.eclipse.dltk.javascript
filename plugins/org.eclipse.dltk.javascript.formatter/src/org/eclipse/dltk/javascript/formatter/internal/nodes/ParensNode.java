@@ -29,6 +29,7 @@ public class ParensNode extends FormatterBlockWithBeginEndNode {
 		this.configuration = configuration;
 	}
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 
@@ -52,6 +53,6 @@ public class ParensNode extends FormatterBlockWithBeginEndNode {
 
 	private void writeSpace(IFormatterContext context,
 			IFormatterWriter visitor, boolean flag) throws Exception {
-		visitor.writeText(context, flag ? " " : "");
+		visitor.writeText(context, flag ? JSLiterals.SPACE : JSLiterals.EMPTY);
 	}
 }
