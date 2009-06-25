@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.JSLiterals;
 
 public class DeleteStatement extends Statement implements ISemicolonStatement {
 
@@ -49,6 +50,7 @@ public class DeleteStatement extends Statement implements ISemicolonStatement {
 		this.semic = semic;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() > 0);
@@ -58,11 +60,11 @@ public class DeleteStatement extends Statement implements ISemicolonStatement {
 
 		buffer.append(indentationString);
 		buffer.append(Keywords.DELETE);
-		buffer.append(" ");
+		buffer.append(JSLiterals.SPACE);
 		buffer.append(expression.toSourceString(indentationString));
 		if (semic > 0)
-			buffer.append(";");
-		buffer.append("\n");
+			buffer.append(JSLiterals.SEMICOLON);
+		buffer.append(JSLiterals.EOL);
 
 		return buffer.toString();
 	}

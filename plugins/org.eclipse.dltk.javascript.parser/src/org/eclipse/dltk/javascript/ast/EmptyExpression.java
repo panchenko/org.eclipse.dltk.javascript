@@ -13,6 +13,7 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.JSLiterals;
 
 public class EmptyExpression extends Expression {
 
@@ -23,12 +24,12 @@ public class EmptyExpression extends Expression {
 		setEnd(-1);
 	}
 
-	
+	@Override
 	public String toSourceString(String indentationString) {
-		return "";
+		return JSLiterals.EMPTY;
 	}
 
-	
+	@Override
 	public boolean isBlock() {
 		return false;
 	}

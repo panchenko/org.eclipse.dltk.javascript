@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.JSLiterals;
 
 public class DoWhileStatement extends WhileStatement {
 
@@ -31,6 +32,7 @@ public class DoWhileStatement extends WhileStatement {
 		this.doKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);
@@ -43,7 +45,7 @@ public class DoWhileStatement extends WhileStatement {
 
 		buffer.append(indentationString);
 		buffer.append(Keywords.DO);
-		buffer.append("\n");
+		buffer.append(JSLiterals.EOL);
 		buffer.append(getBody().toSourceString(indentationString));
 		buffer.append(indentationString);
 		buffer.append(Keywords.WHILE);
@@ -54,6 +56,7 @@ public class DoWhileStatement extends WhileStatement {
 		return buffer.toString();
 	}
 
+	@Override
 	public boolean isBlock() {
 		return false;
 	}

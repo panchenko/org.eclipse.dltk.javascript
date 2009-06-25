@@ -16,4 +16,6 @@ import org.eclipse.dltk.compiler.util.Util;
 public class JSLiterals {
 	public static final String EMPTY = Util.EMPTY_STRING;
 	public static final String SPACE = " "; //$NON-NLS-1$
+	public static final String EOL = "\n"; //$NON-NLS-1$
+	public static final String SEMICOLON = ";"; //$NON-NLS-1$
 }
