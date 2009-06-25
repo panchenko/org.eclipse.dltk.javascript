@@ -164,6 +164,10 @@ return
 }
 case 1:
 return
+default:
+{
+return
+}
 }
 }
 ==
@@ -174,6 +178,9 @@ function test() {
 			}
 		case 1:
 			return
+		default: {
+				return
+			}
 	}
 }
 ==== switch-case-next-line
@@ -186,6 +193,10 @@ return
 }
 case 1:
 return
+default:
+{
+return
+}
 }
 }
 ==
@@ -197,6 +208,10 @@ function test() {
 			}
 		case 1:
 			return
+		default:
+			{
+				return
+			}
 	}
 }
 ====
