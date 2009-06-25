@@ -174,17 +174,48 @@ return
 function test() {
 	switch (x) {
 		case 0: {
-				return
-			}
+			return
+		}
 		case 1:
 			return
 		default: {
-				return
-			}
+			return
+		}
 	}
 }
 ==== switch-case-next-line
 ==> formatter.braces.case = next.line
+function test() {
+switch (x) {
+case 0: 
+{
+return
+}
+case 1:
+return
+default:
+{
+return
+}
+}
+}
+==
+function test() {
+	switch (x) {
+		case 0:
+		{
+			return
+		}
+		case 1:
+			return
+		default:
+		{
+			return
+		}
+	}
+}
+==== switch-case-next-line
+==> formatter.braces.case = next.line.indented
 function test() {
 switch (x) {
 case 0: 
