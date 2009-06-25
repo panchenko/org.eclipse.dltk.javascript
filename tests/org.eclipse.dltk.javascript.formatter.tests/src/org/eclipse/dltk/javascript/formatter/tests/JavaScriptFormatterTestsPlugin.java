@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.formatter.tests.ScriptedTest.IScriptedTestContext;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
-import org.eclipse.dltk.javascript.internal.formatter.tests.StringValueInfo;
 import org.eclipse.dltk.javascript.internal.formatter.tests.TestJavaScriptFormatter;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
 import org.osgi.framework.Bundle;
@@ -119,15 +118,29 @@ public class JavaScriptFormatterTestsPlugin extends Plugin {
 				return null;
 
 			if (JavaScriptFormatterConstants.isBoolean(name)) {
-				return StringValueInfo.isBoolean(value) ? value : null;
+				return isBoolean(value) ? value : null;
 			}
 
 			if (JavaScriptFormatterConstants.isInteger(name)) {
-				return StringValueInfo.isInteger(value) ? value : null;
+				return isInteger(value) ? value : null;
 			}
 
 			return value;
 		}
+
 	};
+
+	private static boolean isBoolean(String value) {
+		return "false".equals(value) || "true".equals(value); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	private static boolean isInteger(String value) {
+		try {
+			Integer.parseInt(value);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return true;
+	}
 
 }
