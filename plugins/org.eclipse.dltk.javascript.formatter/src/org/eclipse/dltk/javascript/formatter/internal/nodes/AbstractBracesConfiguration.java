@@ -95,13 +95,13 @@ public abstract class AbstractBracesConfiguration implements
 	private static final String describe(int value) {
 		switch (value) {
 		case UNDEFINED:
-			return "UNDEFINED";
+			return "UNDEFINED"; //$NON-NLS-1$
 		case ONE_SPACE:
-			return "ONE_SPACE";
+			return "ONE_SPACE"; //$NON-NLS-1$
 		case LINE_BREAK:
-			return "LINE_BREAK";
+			return "LINE_BREAK"; //$NON-NLS-1$
 		case EMPTY_SPACE:
-			return "EMPTY_SPACE";
+			return "EMPTY_SPACE"; //$NON-NLS-1$
 		default:
 			return String.valueOf(value);
 		}
@@ -109,10 +109,10 @@ public abstract class AbstractBracesConfiguration implements
 
 	@Override
 	public String toString() {
-		return "beforeOpenBrace=" + describe(insertBeforeOpenBrace())
-				+ ", afterOpenBrace=" + describe(insertAfterOpenBrace())
-				+ ", beforeCloseBrace=" + describe(insertBeforeCloseBrace())
-				+ ", afterCloseBrace=" + describe(insertAfterCloseBrace());
+		return "beforeOpenBrace=" + describe(insertBeforeOpenBrace()) //$NON-NLS-1$
+				+ ", afterOpenBrace=" + describe(insertAfterOpenBrace()) //$NON-NLS-1$
+				+ ", beforeCloseBrace=" + describe(insertBeforeCloseBrace()) //$NON-NLS-1$
+				+ ", afterCloseBrace=" + describe(insertAfterCloseBrace()); //$NON-NLS-1$
 	}
 
 }
