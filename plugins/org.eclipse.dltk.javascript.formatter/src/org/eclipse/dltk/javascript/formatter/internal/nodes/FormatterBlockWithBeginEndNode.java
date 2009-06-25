@@ -35,6 +35,7 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	private List<IFormatterNode> begin = null;
 	private IFormatterTextNode end;
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 		context.setBlankLines(getBlankLinesBefore(context));
@@ -108,6 +109,7 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	/*
 	 * @see FormatterBlockNode#getStartOffset()
 	 */
+	@Override
 	public int getStartOffset() {
 		if (begin != null) {
 			return ((IFormatterTextNode) begin.get(0)).getStartOffset();
@@ -118,6 +120,7 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	/*
 	 * @see FormatterBlockNode#getEndOffset()
 	 */
+	@Override
 	public int getEndOffset() {
 		if (end != null) {
 			return end.getEndOffset();
@@ -135,6 +138,7 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	/*
 	 * @see FormatterBlockNode#isEmpty()
 	 */
+	@Override
 	public boolean isEmpty() {
 		return begin == null && end == null && super.isEmpty();
 	}
@@ -142,6 +146,7 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	/*
 	 * @see FormatterBlockNode#getChildren()
 	 */
+	@Override
 	public List<IFormatterNode> getChildren() {
 		if (begin == null && end == null) {
 			return super.getChildren();
@@ -161,6 +166,7 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	/*
 	 * @see FormatterBlockNode#toString()
 	 */
+	@Override
 	public String toString() {
 		return begin + "\n" + super.toString() + "\n" + end; //$NON-NLS-1$ //$NON-NLS-2$
 	}
