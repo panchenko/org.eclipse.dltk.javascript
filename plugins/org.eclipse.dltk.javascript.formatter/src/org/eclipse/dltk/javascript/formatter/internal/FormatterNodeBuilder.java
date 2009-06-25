@@ -80,7 +80,6 @@ import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
-import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.AbstractParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ArrayBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.BinaryOperationPinctuationConfiguration;
@@ -298,14 +297,25 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				visit(node.getCondition());
 				IFormatterTextNode colon = createCharNode(document, node
 						.getColonPosition());
-				if (!JavaScriptFormatterConstants.BRACE_SAME_LINE
-						.equals(document
-								.getString(JavaScriptFormatterConstants.BRACE_CASE))) {
-					colon = new ColonNodeWrapper(colon);
-				}
-				caseNode.addChild(colon);
+				caseNode.addChild(new ColonNodeWrapper(colon));
 				checkedPop(caseNode, node.getColonPosition() + 1);
 
+				return processSwitchComponent(node);
+			}
+
+			public boolean visitDefaultClause(DefaultClause node) {
+				FormatterCaseNode defaultNode = new FormatterCaseNode(document);
+				defaultNode
+						.setBegin(createTextNode(document, node.getKeyword()));
+				push(defaultNode);
+				defaultNode.addChild(new ColonNodeWrapper(createCharNode(
+						document, node.getColonPosition())));
+				checkedPop(defaultNode, node.getColonPosition() + 1);
+
+				return processSwitchComponent(node);
+			}
+
+			private boolean processSwitchComponent(SwitchComponent node) {
 				CaseBracesConfiguration configuration = new CaseBracesConfiguration(
 						document);
 				final FormatterBlockNode block = new FormatterIndentedBlockNode(
@@ -319,27 +329,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				} else {
 					visit(node.getStatements());
 				}
-				checkedPop(block, node.sourceEnd());
-				return true;
-			}
-
-			public boolean visitDefaultClause(DefaultClause node) {
-				FormatterCaseNode defaultNode = new FormatterCaseNode(document);
-				defaultNode
-						.setBegin(createTextNode(document, node.getKeyword()));
-				push(defaultNode);
-				defaultNode.addChild(new ColonNodeWrapper(createCharNode(
-						document, node.getColonPosition())));
-				checkedPop(defaultNode, node.getColonPosition() + 1);
-
-				CaseBracesConfiguration configuration = new CaseBracesConfiguration(
-						document);
-				final FormatterBlockNode block = new FormatterIndentedBlockNode(
-						document, configuration.isIndenting());
-				block.addChild(createEmptyTextNode(document, node
-						.getColonPosition() + 1));
-				push(block);
-				visit(node.getStatements());
 				checkedPop(block, node.sourceEnd());
 				return true;
 			}
