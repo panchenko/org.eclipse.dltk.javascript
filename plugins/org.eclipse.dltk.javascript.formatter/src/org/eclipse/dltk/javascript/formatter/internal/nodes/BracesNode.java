@@ -12,8 +12,6 @@
 
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.formatter.IFormatterDocument;
@@ -55,7 +53,14 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 		printAfterOpenBrace(context, visitor);
 
 		// print body
+		final boolean indenting = isIndenting();
+		if (indenting) {
+			context.incIndent();
+		}
 		acceptBody(context, visitor);
+		if (indenting) {
+			context.decIndent();
+		}
 
 		printBeforeCloseBrace(context, visitor);
 
@@ -153,20 +158,7 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 		}
 	}
 
-	protected void acceptNodes(final List<IFormatterNode> nodes,
-			IFormatterContext context, IFormatterWriter visitor)
-			throws Exception {
-
-		if (isIndenting())
-			context.incIndent();
-
-		super.acceptNodes(nodes, context, visitor);
-
-		if (isIndenting())
-			context.decIndent();
-
-	}
-
+	@Override
 	protected boolean isIndenting() {
 		return configuration.isIndenting();
 	}

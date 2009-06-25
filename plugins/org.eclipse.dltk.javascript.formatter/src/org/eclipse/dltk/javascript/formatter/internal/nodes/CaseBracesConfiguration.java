@@ -20,8 +20,12 @@ public class CaseBracesConfiguration extends AbstractBracesConfiguration {
 	public CaseBracesConfiguration(IFormatterDocument document) {
 		super(document);
 
-		indentingSettingName = JavaScriptFormatterConstants.INDENT_CASE;
 		bracesSettingName = JavaScriptFormatterConstants.BRACE_CASE;
+	}
+
+	@Override
+	public boolean isIndenting() {
+		return true;
 	}
 
 }

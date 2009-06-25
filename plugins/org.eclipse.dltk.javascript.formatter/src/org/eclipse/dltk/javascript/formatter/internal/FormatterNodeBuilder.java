@@ -295,12 +295,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				caseNode.setBegin(createTextNode(document, node.getKeyword()));
 				push(caseNode);
 				visit(node.getCondition());
-				IFormatterTextNode colon = createCharNode(document, node
-						.getColonPosition());
-				caseNode.addChild(new ColonNodeWrapper(colon));
-				checkedPop(caseNode, node.getColonPosition() + 1);
+				caseNode.addChild(new ColonNodeWrapper(createCharNode(document,
+						node.getColonPosition())));
 
-				return processSwitchComponent(node);
+				return processSwitchComponent(caseNode, node);
 			}
 
 			public boolean visitDefaultClause(DefaultClause node) {
@@ -310,26 +308,22 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				push(defaultNode);
 				defaultNode.addChild(new ColonNodeWrapper(createCharNode(
 						document, node.getColonPosition())));
-				checkedPop(defaultNode, node.getColonPosition() + 1);
 
-				return processSwitchComponent(node);
+				return processSwitchComponent(defaultNode, node);
 			}
 
-			private boolean processSwitchComponent(SwitchComponent node) {
-				CaseBracesConfiguration configuration = new CaseBracesConfiguration(
-						document);
-				final FormatterBlockNode block = new FormatterIndentedBlockNode(
-						document, configuration.isIndenting());
-				block.addChild(createEmptyTextNode(document, node
-						.getColonPosition() + 1));
-				push(block);
+			private boolean processSwitchComponent(FormatterCaseNode caseNode,
+					SwitchComponent node) {
 				if (node.getStatements().size() == 1
 						&& node.getStatements().get(0) instanceof StatementBlock) {
+					CaseBracesConfiguration configuration = new CaseBracesConfiguration(
+							document);
+					caseNode.setIndenting(false);
 					processBraces(node.getStatements().get(0), configuration);
 				} else {
 					visit(node.getStatements());
 				}
-				checkedPop(block, node.sourceEnd());
+				checkedPop(caseNode, node.sourceEnd());
 				return true;
 			}
 

@@ -17,12 +17,20 @@ import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
 public class FormatterCaseNode extends FormatterBlockWithBeginEndNode {
 
+	private boolean indenting;
+
 	public FormatterCaseNode(IFormatterDocument document) {
 		super(document);
+		indenting = document
+				.getBoolean(JavaScriptFormatterConstants.INDENT_CASE);
 	}
 
-	protected boolean isIndenting() {
-		return getDocument().getBoolean(
-				JavaScriptFormatterConstants.INDENT_CASE);
+	@Override
+	public boolean isIndenting() {
+		return indenting;
+	}
+
+	public void setIndenting(boolean value) {
+		this.indenting = value;
 	}
 }
