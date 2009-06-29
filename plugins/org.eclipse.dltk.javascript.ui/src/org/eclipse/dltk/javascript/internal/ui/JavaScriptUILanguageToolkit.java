@@ -10,6 +10,7 @@
 package org.eclipse.dltk.javascript.internal.ui;
 
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
+import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.core.IJavaScriptConstants;
 import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
@@ -43,6 +44,16 @@ public class JavaScriptUILanguageToolkit extends AbstractDLTKUILanguageToolkit {
 	}
 
 	public String getEditorId(Object inputElement) {
+		if (inputElement instanceof IMember) {
+			// test if a member really points to another javascript file.
+			ISourceModule sourceModule = ((IMember) inputElement)
+					.getSourceModule();
+			if (sourceModule != null && sourceModule.getResource() != null) {
+				if (!"js".equalsIgnoreCase(sourceModule.getResource()
+						.getFileExtension()))
+					return null;
+			}
+		}
 		return "org.eclipse.dltk.javascript.ui.editor.JavascriptEditor";
 	}
 
