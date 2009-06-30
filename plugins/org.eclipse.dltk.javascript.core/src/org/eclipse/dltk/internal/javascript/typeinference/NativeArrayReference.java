@@ -15,6 +15,8 @@ public class NativeArrayReference extends UnknownReference {
 			"toLocaleString").setFunctionRef();
 	private static UnknownReference toSource = new NativeStringReference(
 			"toSource").setFunctionRef();
+	private static UnknownReference join = new NativeArrayReference("join")
+			.setFunctionRef();
 	private static UnknownReference reverse = new NativeArrayReference(
 			"reverse").setFunctionRef();
 	private static UnknownReference sort = new NativeArrayReference("sort")
@@ -66,6 +68,7 @@ public class NativeArrayReference extends UnknownReference {
 		setChild("toString", toString);
 		setChild("toLocaleString", toLocaleString);
 		setChild("toSource", toSource);
+		setChild("join", join);
 		setChild("reverse", reverse);
 		setChild("sort", sort);
 		setChild("push", push);
