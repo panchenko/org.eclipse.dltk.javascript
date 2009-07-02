@@ -7,7 +7,7 @@ package org.eclipse.dltk.internal.javascript.typeinference;
  * @author jcompagner
  * 
  */
-public class NativeBooleanReference extends UnknownReference {
+public class NativeBooleanReference extends StandardSelfCompletingReference {
 
 	/**
 	 * @param paramOrVarName

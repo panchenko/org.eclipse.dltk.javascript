@@ -7,21 +7,21 @@ package org.eclipse.dltk.internal.javascript.typeinference;
  * @author jcompagner
  * 
  */
-public class NativeNumberReference extends UnknownReference {
+public class NativeNumberReference extends StandardSelfCompletingReference {
 
-	private static UnknownReference toString = new NativeStringReference(
+	private static StandardSelfCompletingReference toString = new NativeStringReference(
 			"toString").setFunctionRef();
-	private static UnknownReference toLocaleString = new NativeStringReference(
+	private static StandardSelfCompletingReference toLocaleString = new NativeStringReference(
 			"toLocaleString").setFunctionRef();
-	private static UnknownReference toSource = new NativeStringReference(
+	private static StandardSelfCompletingReference toSource = new NativeStringReference(
 			"toSource").setFunctionRef();
-	private static UnknownReference valueOf = new NativeStringReference(
+	private static StandardSelfCompletingReference valueOf = new NativeStringReference(
 			"valueOf").setFunctionRef();
-	private static UnknownReference toFixed = new NativeStringReference(
+	private static StandardSelfCompletingReference toFixed = new NativeStringReference(
 			"toFixed").setFunctionRef();
-	private static UnknownReference toExponential = new NativeStringReference(
+	private static StandardSelfCompletingReference toExponential = new NativeStringReference(
 			"toExponential").setFunctionRef();
-	private static UnknownReference toPrecision = new NativeStringReference(
+	private static StandardSelfCompletingReference toPrecision = new NativeStringReference(
 			"toPrecision").setFunctionRef();
 
 	/**
@@ -33,7 +33,7 @@ public class NativeNumberReference extends UnknownReference {
 	}
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#createChilds()
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference#createChilds()
 	 */
 	protected void createChilds() {
 		setChild("toString", toString);
@@ -48,8 +48,8 @@ public class NativeNumberReference extends UnknownReference {
 
 	public void setChild(String key, IReference ref) {
 
-		if (ref instanceof UnknownReference) {
-			UnknownReference ur = (UnknownReference) ref;
+		if (ref instanceof StandardSelfCompletingReference) {
+			StandardSelfCompletingReference ur = (StandardSelfCompletingReference) ref;
 			String name = ref.getName();
 			if (name.equals("toString")) {
 				ur.setProposalInfo("Returns a String value for this Number.");

@@ -7,50 +7,50 @@ package org.eclipse.dltk.internal.javascript.typeinference;
  * @author jcompagner
  * 
  */
-public class NativeArrayReference extends UnknownReference {
+public class NativeArrayReference extends StandardSelfCompletingReference {
 
-	private static UnknownReference toString = new NativeStringReference(
+	private static StandardSelfCompletingReference toString = new NativeStringReference(
 			"toString").setFunctionRef();
-	private static UnknownReference toLocaleString = new NativeStringReference(
+	private static StandardSelfCompletingReference toLocaleString = new NativeStringReference(
 			"toLocaleString").setFunctionRef();
-	private static UnknownReference toSource = new NativeStringReference(
+	private static StandardSelfCompletingReference toSource = new NativeStringReference(
 			"toSource").setFunctionRef();
-	private static UnknownReference join = new NativeArrayReference("join")
+	private static StandardSelfCompletingReference join = new NativeArrayReference("join")
 			.setFunctionRef();
-	private static UnknownReference reverse = new NativeArrayReference(
+	private static StandardSelfCompletingReference reverse = new NativeArrayReference(
 			"reverse").setFunctionRef();
-	private static UnknownReference sort = new NativeArrayReference("sort")
+	private static StandardSelfCompletingReference sort = new NativeArrayReference("sort")
 			.setFunctionRef();
-	private static UnknownReference push = new NativeNumberReference("push")
+	private static StandardSelfCompletingReference push = new NativeNumberReference("push")
 			.setFunctionRef();
-	private static UnknownReference pop = new UnknownReference("pop", false)
+	private static StandardSelfCompletingReference pop = new StandardSelfCompletingReference("pop", false)
 			.setFunctionRef();
-	private static UnknownReference shift = new NativeArrayReference("shift")
+	private static StandardSelfCompletingReference shift = new NativeArrayReference("shift")
 			.setFunctionRef();
-	private static UnknownReference unshift = new NativeNumberReference(
+	private static StandardSelfCompletingReference unshift = new NativeNumberReference(
 			"unshift").setFunctionRef();
-	private static UnknownReference splice = new UnknownReference("splice",
+	private static StandardSelfCompletingReference splice = new StandardSelfCompletingReference("splice",
 			false).setFunctionRef();
-	private static UnknownReference concat = new NativeArrayReference("concat")
+	private static StandardSelfCompletingReference concat = new NativeArrayReference("concat")
 			.setFunctionRef();
-	private static UnknownReference slice = new NativeArrayReference("slice")
+	private static StandardSelfCompletingReference slice = new NativeArrayReference("slice")
 			.setFunctionRef();
-	private static UnknownReference indexOf = new NativeNumberReference(
+	private static StandardSelfCompletingReference indexOf = new NativeNumberReference(
 			"indexOf").setFunctionRef();
-	private static UnknownReference lastIndexOf = new NativeNumberReference(
+	private static StandardSelfCompletingReference lastIndexOf = new NativeNumberReference(
 			"lastIndexOf").setFunctionRef();
-	private static UnknownReference every = new NativeBooleanReference("every")
+	private static StandardSelfCompletingReference every = new NativeBooleanReference("every")
 			.setFunctionRef();
-	private static UnknownReference filter = new NativeArrayReference("filter")
+	private static StandardSelfCompletingReference filter = new NativeArrayReference("filter")
 			.setFunctionRef();
-	private static UnknownReference forEach = new UnknownReference("forEach",
+	private static StandardSelfCompletingReference forEach = new StandardSelfCompletingReference("forEach",
 			false).setFunctionRef();
-	private static UnknownReference map = new NativeArrayReference("map")
+	private static StandardSelfCompletingReference map = new NativeArrayReference("map")
 			.setFunctionRef();
-	private static UnknownReference some = new NativeBooleanReference("some")
+	private static StandardSelfCompletingReference some = new NativeBooleanReference("some")
 			.setFunctionRef();
 
-	private static UnknownReference length = new NativeNumberReference("length");
+	private static StandardSelfCompletingReference length = new NativeNumberReference("length");
 
 	/**
 	 * @param paramOrVarName
@@ -62,7 +62,7 @@ public class NativeArrayReference extends UnknownReference {
 	}
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#createChilds()
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference#createChilds()
 	 */
 	protected void createChilds() {
 		setChild("toString", toString);
@@ -90,8 +90,8 @@ public class NativeArrayReference extends UnknownReference {
 
 	public void setChild(String key, IReference ref) {
 
-		if (ref instanceof UnknownReference) {
-			UnknownReference ur = (UnknownReference) ref;
+		if (ref instanceof StandardSelfCompletingReference) {
+			StandardSelfCompletingReference ur = (StandardSelfCompletingReference) ref;
 			String name = ref.getName();
 			if (name.equals("toString")) {
 				ur.setProposalInfo("Returns a String value for Array.");

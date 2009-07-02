@@ -14,7 +14,7 @@ import org.mozilla.javascript.Scriptable;
  * @author jcompagner
  * 
  */
-public class ScriptableScopeReference extends UnknownReference implements
+public class ScriptableScopeReference extends StandardSelfCompletingReference implements
 		IResolvableReference {
 
 	private final Scriptable scriptable;
@@ -33,7 +33,7 @@ public class ScriptableScopeReference extends UnknownReference implements
 	}
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#createChilds()
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference#createChilds()
 	 */
 	protected void createChilds() {
 
@@ -60,7 +60,7 @@ public class ScriptableScopeReference extends UnknownReference implements
 	}
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#equals(java.lang.Object)
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference#equals(java.lang.Object)
 	 */
 	public boolean equals(Object obj) {
 		if (obj instanceof ScriptableScopeReference && super.equals(obj)) {

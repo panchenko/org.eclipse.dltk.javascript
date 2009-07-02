@@ -43,6 +43,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.CombinedOrReference;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
+import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils.PositionCalculator;
@@ -61,11 +62,10 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 	}
 
 	public JavaScriptCompletionEngine(/*
-										 * ISearchableEnvironment
-										 * nameEnvironment, CompletionRequestor
-										 * requestor, Map settings,
-										 * IScriptProject scriptProject
-										 */) {
+									 * ISearchableEnvironment nameEnvironment,
+									 * CompletionRequestor requestor, Map
+									 * settings, IScriptProject scriptProject
+									 */) {
 	}
 
 	protected int getEndOfEmptyToken() {
@@ -332,8 +332,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		Object put = dubR.put(r.getName(), r);
 		if (put instanceof IReference) {
 			if (r instanceof CombinedOrReference) {
-				((CombinedOrReference) r)
-						.addReference((IReference) put);
+				((CombinedOrReference) r).addReference((IReference) put);
 			} else if (put instanceof CombinedOrReference) {
 				((CombinedOrReference) put).addReference(r);
 				dubR.put(r.getName(), put);
@@ -387,6 +386,32 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 							knd, this.actualCompletionPosition);
 					createProposal.setName(name);
 					createProposal.setCompletion(name);
+
+					if (ref.isFunctionRef()) {
+						Iterator childs = ref.getChilds(true).iterator();
+						ArrayList al = new ArrayList();
+						while (childs.hasNext()) {
+							Object o = childs.next();
+							if (o instanceof StandardSelfCompletingReference
+									&& ((StandardSelfCompletingReference) o)
+											.getParameterIndex() != -1) {
+								int index = ((StandardSelfCompletingReference) o)
+										.getParameterIndex();
+								while (index >= al.size()) {
+									al.add(null);
+								}
+								al.set(index, ((StandardSelfCompletingReference) o).getName()
+										.toCharArray());
+							}
+						}
+						if (al.size() > 0) {
+							char[][] parameterNames = new char[al.size()][];
+							for (int i = 0; i < al.size(); i++) {
+								parameterNames[i] = (char[]) al.get(i);
+							}
+							createProposal.setParameterNames(parameterNames);
+						}
+					}
 					// createProposal.setSignature(name);
 					// createProposal.setDeclarationSignature(cm.getDeclarationSignature());
 					// createProposal.setSignature(cm.getSignature());

@@ -17,7 +17,7 @@ import com.xored.org.mozilla.javascript.NativeJavaMethod;
  * @author jcompagner
  * 
  */
-public class NativeObjectReference extends UnknownReference {
+public class NativeObjectReference extends StandardSelfCompletingReference {
 
 	public static HashMap TYPES = new HashMap() {
 		private static final long serialVersionUID = 1L;
@@ -53,7 +53,7 @@ public class NativeObjectReference extends UnknownReference {
 	}
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#createChilds()
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference#createChilds()
 	 */
 	protected void createChilds() {
 		try {
@@ -66,7 +66,7 @@ public class NativeObjectReference extends UnknownReference {
 			if (members != null) {
 				Iterator iterator = members.entrySet().iterator();
 				while (iterator.hasNext()) {
-					UnknownReference uref = null;
+					StandardSelfCompletingReference uref = null;
 					Map.Entry entry = (Entry) iterator.next();
 					String key = (String) entry.getKey();
 					if (entry.getValue() instanceof NativeJavaMethod) {
@@ -96,7 +96,7 @@ public class NativeObjectReference extends UnknownReference {
 								}
 							}
 							if (uref == null) {
-								uref = new UnknownReference(key, false);
+								uref = new StandardSelfCompletingReference(key, false);
 							}
 
 							Class[] argTypes = methods[i].getArgTypes();
@@ -125,7 +125,7 @@ public class NativeObjectReference extends UnknownReference {
 							setChild(key, uref);
 						}
 					} else {
-						setChild(key, new UnknownReference(key, false));
+						setChild(key, new StandardSelfCompletingReference(key, false));
 					}
 
 				}

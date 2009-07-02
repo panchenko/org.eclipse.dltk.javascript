@@ -7,95 +7,95 @@ package org.eclipse.dltk.internal.javascript.typeinference;
  * @author jcompagner
  * 
  */
-public class NativeDateReference extends UnknownReference {
+public class NativeDateReference extends StandardSelfCompletingReference {
 
-	private static UnknownReference toString = new NativeStringReference(
+	private static StandardSelfCompletingReference toString = new NativeStringReference(
 			"toString").setFunctionRef();
-	private static UnknownReference toTimeString = new NativeStringReference(
+	private static StandardSelfCompletingReference toTimeString = new NativeStringReference(
 			"toTimeString").setFunctionRef();
-	private static UnknownReference toDateString = new NativeStringReference(
+	private static StandardSelfCompletingReference toDateString = new NativeStringReference(
 			"toDateString").setFunctionRef();
-	private static UnknownReference toLocaleString = new NativeStringReference(
+	private static StandardSelfCompletingReference toLocaleString = new NativeStringReference(
 			"toLocaleString").setFunctionRef();
-	private static UnknownReference toLocaleTimeString = new NativeStringReference(
+	private static StandardSelfCompletingReference toLocaleTimeString = new NativeStringReference(
 			"toLocaleTimeString").setFunctionRef();
-	private static UnknownReference toLocaleDateString = new NativeStringReference(
+	private static StandardSelfCompletingReference toLocaleDateString = new NativeStringReference(
 			"toLocaleDateString").setFunctionRef();
-	private static UnknownReference toUTCString = new NativeStringReference(
+	private static StandardSelfCompletingReference toUTCString = new NativeStringReference(
 			"toUTCString").setFunctionRef();
-	private static UnknownReference toSource = new NativeStringReference(
+	private static StandardSelfCompletingReference toSource = new NativeStringReference(
 			"toSource").setFunctionRef();
-	private static UnknownReference valueOf = new NativeStringReference(
+	private static StandardSelfCompletingReference valueOf = new NativeStringReference(
 			"valueOf").setFunctionRef();
-	private static UnknownReference getTime = new NativeNumberReference(
+	private static StandardSelfCompletingReference getTime = new NativeNumberReference(
 			"getTime").setFunctionRef();
-	private static UnknownReference getYear = new NativeNumberReference(
+	private static StandardSelfCompletingReference getYear = new NativeNumberReference(
 			"getYear").setFunctionRef();
-	private static UnknownReference getFullYear = new NativeNumberReference(
+	private static StandardSelfCompletingReference getFullYear = new NativeNumberReference(
 			"getFullYear").setFunctionRef();
-	private static UnknownReference getUTCFullYear = new NativeNumberReference(
+	private static StandardSelfCompletingReference getUTCFullYear = new NativeNumberReference(
 			"getUTCFullYear").setFunctionRef();
-	private static UnknownReference getMonth = new NativeNumberReference(
+	private static StandardSelfCompletingReference getMonth = new NativeNumberReference(
 			"getMonth").setFunctionRef();
-	private static UnknownReference getUTCMonth = new NativeNumberReference(
+	private static StandardSelfCompletingReference getUTCMonth = new NativeNumberReference(
 			"getUTCMonth").setFunctionRef();
-	private static UnknownReference getDate = new NativeNumberReference(
+	private static StandardSelfCompletingReference getDate = new NativeNumberReference(
 			"getDate").setFunctionRef();
-	private static UnknownReference getUTCDate = new NativeNumberReference(
+	private static StandardSelfCompletingReference getUTCDate = new NativeNumberReference(
 			"getUTCDate").setFunctionRef();
-	private static UnknownReference getDay = new NativeNumberReference("getDay")
+	private static StandardSelfCompletingReference getDay = new NativeNumberReference("getDay")
 			.setFunctionRef();
-	private static UnknownReference getUTCDay = new NativeNumberReference(
+	private static StandardSelfCompletingReference getUTCDay = new NativeNumberReference(
 			"getUTCDay").setFunctionRef();
-	private static UnknownReference getHours = new NativeNumberReference(
+	private static StandardSelfCompletingReference getHours = new NativeNumberReference(
 			"getHours").setFunctionRef();
-	private static UnknownReference getUTCHours = new NativeNumberReference(
+	private static StandardSelfCompletingReference getUTCHours = new NativeNumberReference(
 			"getUTCHours").setFunctionRef();
-	private static UnknownReference getMinutes = new NativeNumberReference(
+	private static StandardSelfCompletingReference getMinutes = new NativeNumberReference(
 			"getMinutes").setFunctionRef();
-	private static UnknownReference getUTCMinutes = new NativeNumberReference(
+	private static StandardSelfCompletingReference getUTCMinutes = new NativeNumberReference(
 			"getUTCMinutes").setFunctionRef();
-	private static UnknownReference getSeconds = new NativeNumberReference(
+	private static StandardSelfCompletingReference getSeconds = new NativeNumberReference(
 			"getSeconds").setFunctionRef();
-	private static UnknownReference getUTCSeconds = new NativeNumberReference(
+	private static StandardSelfCompletingReference getUTCSeconds = new NativeNumberReference(
 			"getUTCSeconds").setFunctionRef();
-	private static UnknownReference getMilliseconds = new NativeNumberReference(
+	private static StandardSelfCompletingReference getMilliseconds = new NativeNumberReference(
 			"getMilliseconds").setFunctionRef();
-	private static UnknownReference getUTCMilliseconds = new NativeNumberReference(
+	private static StandardSelfCompletingReference getUTCMilliseconds = new NativeNumberReference(
 			"getUTCMilliseconds").setFunctionRef();
-	private static UnknownReference getTimezoneOffset = new NativeNumberReference(
+	private static StandardSelfCompletingReference getTimezoneOffset = new NativeNumberReference(
 			"getTimezoneOffset").setFunctionRef();
-	private static UnknownReference setTime = new NativeNumberReference(
+	private static StandardSelfCompletingReference setTime = new NativeNumberReference(
 			"setTime").setFunctionRef();
-	private static UnknownReference setMilliseconds = new NativeNumberReference(
+	private static StandardSelfCompletingReference setMilliseconds = new NativeNumberReference(
 			"setMilliseconds").setFunctionRef();
-	private static UnknownReference setUTCMilliseconds = new NativeNumberReference(
+	private static StandardSelfCompletingReference setUTCMilliseconds = new NativeNumberReference(
 			"setUTCMilliseconds").setFunctionRef();
-	private static UnknownReference setSeconds = new NativeNumberReference(
+	private static StandardSelfCompletingReference setSeconds = new NativeNumberReference(
 			"setSeconds").setFunctionRef();
-	private static UnknownReference setUTCSeconds = new NativeNumberReference(
+	private static StandardSelfCompletingReference setUTCSeconds = new NativeNumberReference(
 			"setUTCSeconds").setFunctionRef();
-	private static UnknownReference setMinutes = new NativeNumberReference(
+	private static StandardSelfCompletingReference setMinutes = new NativeNumberReference(
 			"setMinutes").setFunctionRef();
-	private static UnknownReference setUTCMinutes = new NativeNumberReference(
+	private static StandardSelfCompletingReference setUTCMinutes = new NativeNumberReference(
 			"setUTCMinutes").setFunctionRef();
-	private static UnknownReference setHours = new NativeNumberReference(
+	private static StandardSelfCompletingReference setHours = new NativeNumberReference(
 			"setHours").setFunctionRef();
-	private static UnknownReference setUTCHours = new NativeNumberReference(
+	private static StandardSelfCompletingReference setUTCHours = new NativeNumberReference(
 			"setUTCHours").setFunctionRef();
-	private static UnknownReference setDate = new NativeNumberReference(
+	private static StandardSelfCompletingReference setDate = new NativeNumberReference(
 			"setDate").setFunctionRef();
-	private static UnknownReference setUTCDate = new NativeNumberReference(
+	private static StandardSelfCompletingReference setUTCDate = new NativeNumberReference(
 			"setUTCDate").setFunctionRef();
-	private static UnknownReference setMonth = new NativeNumberReference(
+	private static StandardSelfCompletingReference setMonth = new NativeNumberReference(
 			"setMonth").setFunctionRef();
-	private static UnknownReference setUTCMonth = new NativeNumberReference(
+	private static StandardSelfCompletingReference setUTCMonth = new NativeNumberReference(
 			"setUTCMonth").setFunctionRef();
-	private static UnknownReference setFullYear = new NativeNumberReference(
+	private static StandardSelfCompletingReference setFullYear = new NativeNumberReference(
 			"setFullYear").setFunctionRef();
-	private static UnknownReference setUTCFullYear = new NativeNumberReference(
+	private static StandardSelfCompletingReference setUTCFullYear = new NativeNumberReference(
 			"setUTCFullYear").setFunctionRef();
-	private static UnknownReference setYear = new NativeNumberReference(
+	private static StandardSelfCompletingReference setYear = new NativeNumberReference(
 			"setYear").setFunctionRef();
 
 	/**
@@ -107,7 +107,7 @@ public class NativeDateReference extends UnknownReference {
 	}
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#createChilds()
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference#createChilds()
 	 */
 	protected void createChilds() {
 		setChild("toString", toString);
@@ -158,8 +158,8 @@ public class NativeDateReference extends UnknownReference {
 
 	public void setChild(String key, IReference ref) {
 
-		if (ref instanceof UnknownReference) {
-			UnknownReference ur = (UnknownReference) ref;
+		if (ref instanceof StandardSelfCompletingReference) {
+			StandardSelfCompletingReference ur = (StandardSelfCompletingReference) ref;
 			String name = ref.getName();
 			if (name.equals("toString")) {
 				ur.setProposalInfo("Returns a String value for this object.");

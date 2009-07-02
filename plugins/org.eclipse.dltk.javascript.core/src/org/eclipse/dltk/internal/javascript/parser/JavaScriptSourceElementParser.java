@@ -28,7 +28,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.ContextReference;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
-import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.dltk.javascript.core.JavaScriptCorePreferences;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 
@@ -201,8 +201,8 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 					Object o = it.next();
 					if (o instanceof IReference) {
 						IReference ref = (IReference) o;
-						if (ref instanceof UnknownReference) {
-							UnknownReference uref = (UnknownReference) ref;
+						if (ref instanceof StandardSelfCompletingReference) {
+							StandardSelfCompletingReference uref = (StandardSelfCompletingReference) ref;
 							ISourceElementRequestor.FieldInfo fieldInfo1 = new ISourceElementRequestor.FieldInfo();
 							fieldInfo1.name = ref.getName();
 							fieldInfo1.nameSourceStart = uref.getOffset();

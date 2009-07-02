@@ -22,7 +22,7 @@ import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.core.SourceMethod;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 
-public class UnknownReference implements IReference, SelfCompletingReference {
+public class StandardSelfCompletingReference implements IReference, SelfCompletingReference {
 
 	private String name;
 	private final boolean childIsh;
@@ -36,9 +36,10 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 	private Map childs;
 	private char[][] parameterNames;
 	private String proposalInfo;
-	protected UnknownReference parentRef;
+	protected StandardSelfCompletingReference parentRef;
 	private URL imageUrl;
 	private String returnType;
+	private int parameterIndex = -1;
 
 	public int getOffset() {
 		return offset;
@@ -48,7 +49,7 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 		return length;
 	}
 
-	public UnknownReference(String paramOrVarName, boolean childIsh) {
+	public StandardSelfCompletingReference(String paramOrVarName, boolean childIsh) {
 		this.name = paramOrVarName;
 		this.childIsh = childIsh;
 
@@ -107,8 +108,8 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 	 * @return
 	 */
 	private IReference testRecursion(IReference ref) {
-		if (ref instanceof UnknownReference) {
-			UnknownReference ssr = (UnknownReference) ref;
+		if (ref instanceof StandardSelfCompletingReference) {
+			StandardSelfCompletingReference ssr = (StandardSelfCompletingReference) ref;
 			ssr.parentRef = this;
 			if (parentRef != null) {
 				HashSet set = new HashSet();
@@ -181,7 +182,7 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 		return fRef;
 	}
 
-	public UnknownReference setFunctionRef() {
+	public StandardSelfCompletingReference setFunctionRef() {
 		fRef = true;
 		return this;
 	}
@@ -252,8 +253,8 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object obj) {
-		if (obj instanceof UnknownReference) {
-			UnknownReference ur = (UnknownReference) obj;
+		if (obj instanceof StandardSelfCompletingReference) {
+			StandardSelfCompletingReference ur = (StandardSelfCompletingReference) obj;
 			return ur.name.equals(name) && fRef == ur.fRef
 					&& childIsh == ur.childIsh && fRef == ur.fRef
 					&& local == ur.local && ur.offset == offset
@@ -313,5 +314,19 @@ public class UnknownReference implements IReference, SelfCompletingReference {
 		public boolean exists() {
 			return true;
 		}
+	}
+
+	/**
+	 * @param b
+	 */
+	public void setParameterIndex(int index) {
+		parameterIndex = index;
+	}
+
+	/**
+	 * @return the parameter
+	 */
+	public int getParameterIndex() {
+		return parameterIndex;
 	}
 }

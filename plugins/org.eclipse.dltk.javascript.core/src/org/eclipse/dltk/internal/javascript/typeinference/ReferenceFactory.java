@@ -57,27 +57,27 @@ public class ReferenceFactory {
 		providers = pr;
 	}
 
-	public static UnknownReference createNumberReference(String name) {
+	public static StandardSelfCompletingReference createNumberReference(String name) {
 		return new NativeNumberReference(name);
 	}
 
-	public static UnknownReference createStringReference(String name) {
+	public static StandardSelfCompletingReference createStringReference(String name) {
 		return new NativeStringReference(name);
 	}
 
-	public static UnknownReference createBooleanReference(String name) {
+	public static StandardSelfCompletingReference createBooleanReference(String name) {
 		return new NativeBooleanReference(name);
 	}
 
-	public static UnknownReference createArrayReference(String name) {
+	public static StandardSelfCompletingReference createArrayReference(String name) {
 		return new NativeArrayReference(name);
 	}
 
-	public static UnknownReference createDateReference(String name) {
+	public static StandardSelfCompletingReference createDateReference(String name) {
 		return new NativeDateReference(name);
 	}
 
-	public static UnknownReference createXMLReference(String name) {
+	public static StandardSelfCompletingReference createXMLReference(String name) {
 		return new NativeXMLReference(name);
 	}
 
@@ -120,6 +120,6 @@ public class ReferenceFactory {
 			}
 
 		}
-		return new UnknownReference(paramOrVarName, false);
+		return new StandardSelfCompletingReference(paramOrVarName, false);
 	}
 }

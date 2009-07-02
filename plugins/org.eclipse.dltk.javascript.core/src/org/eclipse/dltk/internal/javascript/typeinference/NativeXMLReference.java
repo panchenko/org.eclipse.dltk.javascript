@@ -1,94 +1,94 @@
 package org.eclipse.dltk.internal.javascript.typeinference;
 
-public class NativeXMLReference extends UnknownReference {
+public class NativeXMLReference extends StandardSelfCompletingReference {
 
 	public NativeXMLReference(String paramOrVarName) {
 		super(paramOrVarName, false);
 	}
 
-	private static UnknownReference toXMLString = new NativeStringReference(
+	private static StandardSelfCompletingReference toXMLString = new NativeStringReference(
 			"toXMLString").setFunctionRef();
-	private static UnknownReference text = new NativeStringReference("text")
+	private static StandardSelfCompletingReference text = new NativeStringReference("text")
 			.setFunctionRef();
-	private static UnknownReference toString = new NativeStringReference(
+	private static StandardSelfCompletingReference toString = new NativeStringReference(
 			"toString").setFunctionRef();
 
-	private static UnknownReference addNamespace = new NativeXMLReference(
+	private static StandardSelfCompletingReference addNamespace = new NativeXMLReference(
 			"addNamespace").setFunctionRef();
-	private static UnknownReference appendChild = new NativeXMLReference(
+	private static StandardSelfCompletingReference appendChild = new NativeXMLReference(
 			"appendChild").setFunctionRef();
-	private static UnknownReference attribute = new NativeXMLReference(
+	private static StandardSelfCompletingReference attribute = new NativeXMLReference(
 			"attribute").setFunctionRef();
-	private static UnknownReference attributes = new NativeXMLReference(
+	private static StandardSelfCompletingReference attributes = new NativeXMLReference(
 			"attributes").setFunctionRef();
-	private static UnknownReference child = new NativeXMLReference("child")
+	private static StandardSelfCompletingReference child = new NativeXMLReference("child")
 			.setFunctionRef();
-	private static UnknownReference childIndex = new NativeNumberReference(
+	private static StandardSelfCompletingReference childIndex = new NativeNumberReference(
 			"childIndex").setFunctionRef();
-	private static UnknownReference children = new NativeXMLReference(
+	private static StandardSelfCompletingReference children = new NativeXMLReference(
 			"children").setFunctionRef();
-	private static UnknownReference comments = new NativeXMLReference(
+	private static StandardSelfCompletingReference comments = new NativeXMLReference(
 			"comments").setFunctionRef();
-	private static UnknownReference contains = new NativeBooleanReference(
+	private static StandardSelfCompletingReference contains = new NativeBooleanReference(
 			"contains").setFunctionRef();
-	private static UnknownReference copy = new NativeXMLReference("copy")
+	private static StandardSelfCompletingReference copy = new NativeXMLReference("copy")
 			.setFunctionRef();
-	private static UnknownReference descendants = new NativeXMLReference(
+	private static StandardSelfCompletingReference descendants = new NativeXMLReference(
 			"descendants").setFunctionRef();
-	private static UnknownReference elements = new NativeXMLReference(
+	private static StandardSelfCompletingReference elements = new NativeXMLReference(
 			"elements").setFunctionRef();
-	private static UnknownReference hasComplexContent = new NativeBooleanReference(
+	private static StandardSelfCompletingReference hasComplexContent = new NativeBooleanReference(
 			"hasComplexContent").setFunctionRef();
-	private static UnknownReference hasOwnProperty = new NativeBooleanReference(
+	private static StandardSelfCompletingReference hasOwnProperty = new NativeBooleanReference(
 			"hasOwnProperty").setFunctionRef();
-	private static UnknownReference hasSimpleContent = new NativeBooleanReference(
+	private static StandardSelfCompletingReference hasSimpleContent = new NativeBooleanReference(
 			"hasSimpleContent").setFunctionRef();
-	private static UnknownReference inScopeNamespaces = new NativeArrayReference(
+	private static StandardSelfCompletingReference inScopeNamespaces = new NativeArrayReference(
 			"inScopeNamespaces").setFunctionRef();
-	private static UnknownReference insertChildAfter = new NativeXMLReference(
+	private static StandardSelfCompletingReference insertChildAfter = new NativeXMLReference(
 			"insertChildAfter").setFunctionRef();
-	private static UnknownReference insertChildBefore = new NativeXMLReference(
+	private static StandardSelfCompletingReference insertChildBefore = new NativeXMLReference(
 			"insertChildBefore").setFunctionRef();
-	private static UnknownReference length = new NativeNumberReference("length")
+	private static StandardSelfCompletingReference length = new NativeNumberReference("length")
 			.setFunctionRef();
-	private static UnknownReference localName = new NativeStringReference(
+	private static StandardSelfCompletingReference localName = new NativeStringReference(
 			"localName").setFunctionRef();
-	private static UnknownReference name = new NativeStringReference("name")
+	private static StandardSelfCompletingReference name = new NativeStringReference("name")
 			.setFunctionRef();
-	private static UnknownReference namespace = new NativeXMLReference(
+	private static StandardSelfCompletingReference namespace = new NativeXMLReference(
 			"namespace").setFunctionRef();
-	private static UnknownReference namespaceDeclarations = new NativeArrayReference(
+	private static StandardSelfCompletingReference namespaceDeclarations = new NativeArrayReference(
 			"namespaceDeclarations").setFunctionRef();
-	private static UnknownReference nodeKind = new NativeStringReference(
+	private static StandardSelfCompletingReference nodeKind = new NativeStringReference(
 			"nodeKind").setFunctionRef();
-	private static UnknownReference normalize = new NativeXMLReference(
+	private static StandardSelfCompletingReference normalize = new NativeXMLReference(
 			"normalize").setFunctionRef();
-	private static UnknownReference parent = new NativeXMLReference("parent")
+	private static StandardSelfCompletingReference parent = new NativeXMLReference("parent")
 			.setFunctionRef();
-	private static UnknownReference processingInstructions = new NativeXMLReference(
+	private static StandardSelfCompletingReference processingInstructions = new NativeXMLReference(
 			"processingInstructions").setFunctionRef();
 	// propertyIsEnumerable
-	private static UnknownReference propertyIsEnumerable = new NativeBooleanReference(
+	private static StandardSelfCompletingReference propertyIsEnumerable = new NativeBooleanReference(
 			"propertyIsEnumerable").setFunctionRef();
-	private static UnknownReference prependChild = new NativeXMLReference(
+	private static StandardSelfCompletingReference prependChild = new NativeXMLReference(
 			"prependChild").setFunctionRef();
-	private static UnknownReference removeNamespace = new NativeXMLReference(
+	private static StandardSelfCompletingReference removeNamespace = new NativeXMLReference(
 			"removeNamespace").setFunctionRef();
-	private static UnknownReference replace = new NativeXMLReference("replace")
+	private static StandardSelfCompletingReference replace = new NativeXMLReference("replace")
 			.setFunctionRef();
-	private static UnknownReference setChildren = new NativeXMLReference(
+	private static StandardSelfCompletingReference setChildren = new NativeXMLReference(
 			"setChildren").setFunctionRef();
-	private static UnknownReference setName = new NativeXMLReference("setName")
+	private static StandardSelfCompletingReference setName = new NativeXMLReference("setName")
 			.setFunctionRef();
-	private static UnknownReference setNamespace = new NativeXMLReference(
+	private static StandardSelfCompletingReference setNamespace = new NativeXMLReference(
 			"setNamespace").setFunctionRef();
-	private static UnknownReference valueOf = new NativeXMLReference("valueOf")
+	private static StandardSelfCompletingReference valueOf = new NativeXMLReference("valueOf")
 			.setFunctionRef();
-	private static UnknownReference setLocalName = new NativeXMLReference(
+	private static StandardSelfCompletingReference setLocalName = new NativeXMLReference(
 			"setLocalName").setFunctionRef();
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#createChilds()
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference#createChilds()
 	 */
 	protected void createChilds() {
 
@@ -148,8 +148,8 @@ public class NativeXMLReference extends UnknownReference {
 
 	public void setChild(String key, IReference ref) {
 
-		if (ref instanceof UnknownReference) {
-			UnknownReference ur = (UnknownReference) ref;
+		if (ref instanceof StandardSelfCompletingReference) {
+			StandardSelfCompletingReference ur = (StandardSelfCompletingReference) ref;
 			String name = ref.getName();
 			if (name.equals("toXMLString")) {
 				ur.setProposalInfo("Returns a String value for this object.");

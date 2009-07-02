@@ -12,7 +12,7 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolve
  * @author jcompagner
  * 
  */
-public class AutoCompleteReference extends UnknownReference {
+public class AutoCompleteReference extends StandardSelfCompletingReference {
 
 	private final String key;
 	private final ReferenceResolverContext cs;
@@ -30,7 +30,7 @@ public class AutoCompleteReference extends UnknownReference {
 	}
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#createChilds()
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference#createChilds()
 	 */
 	protected void createChilds() {
 		Set resolveGlobals = cs.resolveGlobals(key + ".");

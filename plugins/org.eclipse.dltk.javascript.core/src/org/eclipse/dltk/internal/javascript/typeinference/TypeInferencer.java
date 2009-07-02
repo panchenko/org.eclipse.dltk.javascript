@@ -288,7 +288,7 @@ public class TypeInferencer {
 			// TODO this seems wrong!
 			collection = new HostCollection(collection.getParent());
 			String name = n1.getString();
-			collection.setReference(name, new UnknownReference(name, true));
+			collection.setReference(name, new StandardSelfCompletingReference(name, true));
 			node.getFirstChild();
 			processScriptNode(node, arg);
 			HostCollection pop = (HostCollection) contexts.pop();
@@ -391,11 +391,14 @@ public class TypeInferencer {
 							paramOrVarName, type, cs);
 				}
 				if (reference == null) {
-					reference = new UnknownReference(paramOrVarName, false);
+					reference = new StandardSelfCompletingReference(paramOrVarName, false);
 				}
 				reference.setLocationInformation(module,
 						functionNode.nameStart, functionNode.getFunctionName()
 								.length());
+				if (reference instanceof StandardSelfCompletingReference) {
+					((StandardSelfCompletingReference) reference).setParameterIndex(am);
+				}
 				collection.write(paramOrVarName, reference);
 			}
 			processScriptNode(functionNode.getFirstChild(), arg);
@@ -461,7 +464,7 @@ public class TypeInferencer {
 				IReference evaluateReference = evaluateReference(key,
 						firstChild.getFirstChild(), cs);
 				if (evaluateReference == null) {
-					evaluateReference = new UnknownReference(key, false);
+					evaluateReference = new StandardSelfCompletingReference(key, false);
 				}
 				evaluateReference.setLocationInformation(module, firstChild
 						.getPosition() + 1, key.length());
@@ -511,7 +514,7 @@ public class TypeInferencer {
 			IReference root = (IReference) collection
 					.getReferenceNoParentContext(rootName);
 			if (root == null) {
-				root = new UnknownReference(rootName, true);
+				root = new StandardSelfCompletingReference(rootName, true);
 				root.setLocationInformation(module, node.getPosition(), fieldId
 						.length());
 				HostCollection parent = collection.getParent();
@@ -536,7 +539,7 @@ public class TypeInferencer {
 					field = objId.substring(pos);
 				IReference child = root.getChild(field, false);
 				if (child == null) {
-					child = new UnknownReference(field, true);
+					child = new StandardSelfCompletingReference(field, true);
 
 					child.setLocationInformation(module, node.getPosition(),
 							fieldId.length());
@@ -650,7 +653,7 @@ public class TypeInferencer {
 		IReference internalEvaluate = internalEvaluate(collection, key,
 				expression, module, cs);
 		if (internalEvaluate == null)
-			return new UnknownReference(key, false);
+			return new StandardSelfCompletingReference(key, false);
 		return internalEvaluate;
 	}
 
@@ -666,7 +669,7 @@ public class TypeInferencer {
 					expression.getFirstChild(), parent, cs);
 		case Token.NUMBER: {
 			NewReference newReference = new NewReference(key, "Number", cs);
-			UnknownReference uncknownReference = new UnknownReference(key,
+			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(key,
 					false);
 			return new CombinedOrReference(newReference, uncknownReference);
 		}
@@ -674,14 +677,14 @@ public class TypeInferencer {
 			// .getDouble());
 		case Token.STRING: {
 			NewReference newReference = new NewReference(key, "String", cs);
-			UnknownReference uncknownReference = new UnknownReference(key,
+			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(key,
 					false);
 			return new CombinedOrReference(newReference, uncknownReference);
 		}
 		case Token.TRUE:
 		case Token.FALSE: {
 			NewReference newReference = new NewReference(key, "Boolean", cs);
-			UnknownReference uncknownReference = new UnknownReference(key,
+			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(key,
 					false);
 			return new CombinedOrReference(newReference, uncknownReference);
 		}
@@ -750,7 +753,7 @@ public class TypeInferencer {
 		CallResultReference ref = new CallResultReference(collection2, key, id,
 				cs);
 		CombinedOrReference ws = new CombinedOrReference(ref,
-				new UnknownReference(key, false));
+				new StandardSelfCompletingReference(key, false));
 		return ws;
 	}
 
@@ -762,7 +765,7 @@ public class TypeInferencer {
 		if (id == null)
 			return null;
 		NewReference ref = new NewReference(key, id, cs);
-		UnknownReference unknownReference = new UnknownReference(key, false);
+		StandardSelfCompletingReference unknownReference = new StandardSelfCompletingReference(key, false);
 		if (id.equals("XML")) {
 			try {
 				String string = expression.getLastChild().getString();
@@ -781,7 +784,7 @@ public class TypeInferencer {
 
 		String id = "Array";
 		NewReference ref = new NewReference(key, id, cs);
-		UnknownReference unknownReference = new UnknownReference(key, false);
+		StandardSelfCompletingReference unknownReference = new StandardSelfCompletingReference(key, false);
 		CombinedOrReference ws = new CombinedOrReference(ref, unknownReference);
 		return ws;
 
@@ -800,7 +803,7 @@ public class TypeInferencer {
 	}
 
 	private static void modifyReferenceXML(
-			final UnknownReference uncknownReference, String string,
+			final StandardSelfCompletingReference uncknownReference, String string,
 			final ReferenceResolverContext cs) {
 		try {
 			parser.parse(new ByteArrayInputStream(string.getBytes()),
@@ -833,7 +836,7 @@ public class TypeInferencer {
 
 							NewReference elementNewRef = new NewReference(name,
 									"XML", cs);
-							UnknownReference uncknownReference2 = new UnknownReference(
+							StandardSelfCompletingReference uncknownReference2 = new StandardSelfCompletingReference(
 									name, true);
 
 							CombinedOrReference corf = new CombinedOrReference(
@@ -854,7 +857,7 @@ public class TypeInferencer {
 
 								NewReference attrNewRef = new NewReference(val,
 										"XMLATTR", null);
-								UnknownReference uncknownReference3 = new UnknownReference(
+								StandardSelfCompletingReference uncknownReference3 = new StandardSelfCompletingReference(
 										val, true);
 								CombinedOrReference attrCorf = new CombinedOrReference(
 										attrNewRef, uncknownReference3);
@@ -879,14 +882,14 @@ public class TypeInferencer {
 		ArrayList positions = (ArrayList) expression
 				.getProp(Node.DESCENDANTS_FLAG);
 		Node child = expression.getFirstChild();
-		UnknownReference uRef = new UnknownReference(key, false);
+		StandardSelfCompletingReference uRef = new StandardSelfCompletingReference(key, false);
 		for (int a = 0; a < ids.length; a++) {
 			if (ids[a] instanceof String) {
 				String name = (String) ids[a];
 				IReference internalEvaluate = internalEvaluate(col, name,
 						child, parent, cs);
 				if (internalEvaluate == null)
-					internalEvaluate = new UnknownReference(name, false);
+					internalEvaluate = new StandardSelfCompletingReference(name, false);
 				internalEvaluate.setLocationInformation(parent,
 						((Integer) positions.get(a)).intValue() - name.length()
 								- 1, name.length());

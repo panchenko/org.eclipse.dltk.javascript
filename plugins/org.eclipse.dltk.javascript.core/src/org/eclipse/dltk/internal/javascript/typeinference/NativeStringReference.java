@@ -7,77 +7,77 @@ package org.eclipse.dltk.internal.javascript.typeinference;
  * @author jcompagner
  * 
  */
-public class NativeStringReference extends UnknownReference {
+public class NativeStringReference extends StandardSelfCompletingReference {
 
-	private static UnknownReference toString = new NativeStringReference(
+	private static StandardSelfCompletingReference toString = new NativeStringReference(
 			"toString").setFunctionRef();
-	private static UnknownReference toSource = new NativeStringReference(
+	private static StandardSelfCompletingReference toSource = new NativeStringReference(
 			"toSource").setFunctionRef();
-	private static UnknownReference valueOf = new NativeStringReference(
+	private static StandardSelfCompletingReference valueOf = new NativeStringReference(
 			"valueOf").setFunctionRef();
-	private static UnknownReference charAt = new NativeStringReference("charAt")
+	private static StandardSelfCompletingReference charAt = new NativeStringReference("charAt")
 			.setFunctionRef();
-	private static UnknownReference charCodeAt = new NativeNumberReference(
+	private static StandardSelfCompletingReference charCodeAt = new NativeNumberReference(
 			"charCodeAt").setFunctionRef();
-	private static UnknownReference indexOf = new NativeNumberReference(
+	private static StandardSelfCompletingReference indexOf = new NativeNumberReference(
 			"indexOf").setFunctionRef();
-	private static UnknownReference lastIndexOf = new NativeNumberReference(
+	private static StandardSelfCompletingReference lastIndexOf = new NativeNumberReference(
 			"lastIndexOf").setFunctionRef();
-	private static UnknownReference split = new NativeArrayReference("split")
+	private static StandardSelfCompletingReference split = new NativeArrayReference("split")
 			.setFunctionRef();
-	private static UnknownReference substring = new NativeStringReference(
+	private static StandardSelfCompletingReference substring = new NativeStringReference(
 			"substring").setFunctionRef();
-	private static UnknownReference toLowerCase = new NativeStringReference(
+	private static StandardSelfCompletingReference toLowerCase = new NativeStringReference(
 			"toLowerCase").setFunctionRef();
-	private static UnknownReference toUpperCase = new NativeStringReference(
+	private static StandardSelfCompletingReference toUpperCase = new NativeStringReference(
 			"toUpperCase").setFunctionRef();
-	private static UnknownReference substr = new NativeStringReference("substr")
+	private static StandardSelfCompletingReference substr = new NativeStringReference("substr")
 			.setFunctionRef();
-	private static UnknownReference concat = new NativeStringReference("concat")
+	private static StandardSelfCompletingReference concat = new NativeStringReference("concat")
 			.setFunctionRef();
-	private static UnknownReference slice = new NativeStringReference("slice")
+	private static StandardSelfCompletingReference slice = new NativeStringReference("slice")
 			.setFunctionRef();
-	private static UnknownReference bold = new NativeStringReference("bold")
+	private static StandardSelfCompletingReference bold = new NativeStringReference("bold")
 			.setFunctionRef();
-	private static UnknownReference italics = new NativeStringReference(
+	private static StandardSelfCompletingReference italics = new NativeStringReference(
 			"italics").setFunctionRef();
-	private static UnknownReference fixed = new NativeStringReference("fixed")
+	private static StandardSelfCompletingReference fixed = new NativeStringReference("fixed")
 			.setFunctionRef();
-	private static UnknownReference strike = new NativeStringReference("strike")
+	private static StandardSelfCompletingReference strike = new NativeStringReference("strike")
 			.setFunctionRef();
-	private static UnknownReference small = new NativeStringReference("small")
+	private static StandardSelfCompletingReference small = new NativeStringReference("small")
 			.setFunctionRef();
-	private static UnknownReference big = new NativeStringReference("big")
+	private static StandardSelfCompletingReference big = new NativeStringReference("big")
 			.setFunctionRef();
-	private static UnknownReference blink = new NativeStringReference("blink")
+	private static StandardSelfCompletingReference blink = new NativeStringReference("blink")
 			.setFunctionRef();
-	private static UnknownReference sup = new NativeStringReference("sup")
+	private static StandardSelfCompletingReference sup = new NativeStringReference("sup")
 			.setFunctionRef();
-	private static UnknownReference sub = new NativeStringReference("sub")
+	private static StandardSelfCompletingReference sub = new NativeStringReference("sub")
 			.setFunctionRef();
-	private static UnknownReference fontsize = new NativeStringReference(
+	private static StandardSelfCompletingReference fontsize = new NativeStringReference(
 			"fontsize").setFunctionRef();
-	private static UnknownReference fontcolor = new NativeStringReference(
+	private static StandardSelfCompletingReference fontcolor = new NativeStringReference(
 			"fontcolor").setFunctionRef();
-	private static UnknownReference link = new NativeStringReference("link")
+	private static StandardSelfCompletingReference link = new NativeStringReference("link")
 			.setFunctionRef();
-	private static UnknownReference anchor = new NativeStringReference("anchor")
+	private static StandardSelfCompletingReference anchor = new NativeStringReference("anchor")
 			.setFunctionRef();
-	private static UnknownReference equals = new NativeBooleanReference(
+	private static StandardSelfCompletingReference equals = new NativeBooleanReference(
 			"equals").setFunctionRef();
-	private static UnknownReference equalsIgnoreCase = new NativeBooleanReference(
+	private static StandardSelfCompletingReference equalsIgnoreCase = new NativeBooleanReference(
 			"equalsIgnoreCase").setFunctionRef();
-	private static UnknownReference match = new NativeStringReference("match")
+	private static StandardSelfCompletingReference match = new NativeStringReference("match")
 			.setFunctionRef();
-	private static UnknownReference search = new NativeNumberReference("search")
+	private static StandardSelfCompletingReference search = new NativeNumberReference("search")
 			.setFunctionRef();
-	private static UnknownReference replace = new NativeStringReference(
+	private static StandardSelfCompletingReference replace = new NativeStringReference(
 			"replace").setFunctionRef();
-	private static UnknownReference localeCompare = new NativeNumberReference(
+	private static StandardSelfCompletingReference localeCompare = new NativeNumberReference(
 			"localeCompare").setFunctionRef();
-	private static UnknownReference toLocaleLowerCase = new NativeStringReference(
+	private static StandardSelfCompletingReference toLocaleLowerCase = new NativeStringReference(
 			"toLocaleLowerCase").setFunctionRef();
-	private static UnknownReference toLocaleUpperCase = new NativeStringReference(
+	private static StandardSelfCompletingReference toLocaleUpperCase = new NativeStringReference(
 			"toLocaleUpperCase").setFunctionRef();
 
 	/**
@@ -89,7 +89,7 @@ public class NativeStringReference extends UnknownReference {
 	}
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.UnknownReference#createChilds()
+	 * @see org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference#createChilds()
 	 */
 	protected void createChilds() {
 
@@ -132,8 +132,8 @@ public class NativeStringReference extends UnknownReference {
 
 	public void setChild(String key, IReference ref) {
 
-		if (ref instanceof UnknownReference) {
-			UnknownReference ur = (UnknownReference) ref;
+		if (ref instanceof StandardSelfCompletingReference) {
+			StandardSelfCompletingReference ur = (StandardSelfCompletingReference) ref;
 			String name = ref.getName();
 			if (name.equals("toString")) {
 				ur.setProposalInfo("Returns a String value for this object.");
