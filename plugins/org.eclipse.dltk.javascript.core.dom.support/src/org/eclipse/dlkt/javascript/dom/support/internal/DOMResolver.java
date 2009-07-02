@@ -30,7 +30,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
 import org.eclipse.dltk.internal.javascript.typeinference.ScriptableScopeReference;
-import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.MemberBox;
@@ -42,7 +42,7 @@ import org.mozilla.javascript.ScriptableObject;
 
 public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 
-	final static class ClassReference extends UnknownReference implements
+	final static class ClassReference extends StandardSelfCompletingReference implements
 			IClassReference {
 		private ClassReference(String paramOrVarName, boolean childIsh) {
 			super(paramOrVarName, childIsh);
@@ -64,17 +64,17 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					String stringset = "jsSet_";
 					Method method = methods[a];
 					if (method.getName().startsWith(string)) {
-						UnknownReference r = new UnknownReference(method
+						StandardSelfCompletingReference r = new StandardSelfCompletingReference(method
 								.getName().substring(string.length()), true);
 
 						result.add(r);
 						r.setFunctionRef();
 					} else if (method.getName().startsWith(stringget)) {
-						IReference r = new UnknownReference(method.getName()
+						IReference r = new StandardSelfCompletingReference(method.getName()
 								.substring(stringget.length()), true);
 						result.add(r);
 					} else if (method.getName().startsWith(stringset)) {
-						IReference r = new UnknownReference(method.getName()
+						IReference r = new StandardSelfCompletingReference(method.getName()
 								.substring(stringset.length()), true);
 						result.add(r);
 					}
@@ -258,7 +258,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			while (iterator.hasNext()) {
 				String s = (String) iterator.next();
 				if (s.startsWith(key)) {
-					UnknownReference uref = new ClassReference(s, false);
+					StandardSelfCompletingReference uref = new ClassReference(s, false);
 					rs.add(uref);
 				}
 			}
@@ -300,7 +300,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 				if (object instanceof ReferenceScope) {
 					ref = ((ReferenceScope) object).getReference();
 				} else if (object instanceof Scriptable) {
-					UnknownReference uref = new ScriptableScopeReference(s,
+					StandardSelfCompletingReference uref = new ScriptableScopeReference(s,
 							(Scriptable) object, owner);
 					if (object instanceof IProposalHolder) {
 						IProposalHolder fapn = (IProposalHolder) object;
@@ -320,10 +320,10 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					if (object instanceof ReferenceScope) {
 						ref = ((ReferenceScope) object).getReference();
 					} else {
-						ref = new UnknownReference(s, false);
+						ref = new StandardSelfCompletingReference(s, false);
 					}
-					if (ref instanceof UnknownReference) {
-						UnknownReference uref = (UnknownReference) ref;
+					if (ref instanceof StandardSelfCompletingReference) {
+						StandardSelfCompletingReference uref = (StandardSelfCompletingReference) ref;
 						uref.setParameterNames(fapn.getParameterNames());
 						uref.setProposalInfo(fapn.getProposalInfo());
 						uref.setImageUrl(fapn.getImageURL());
@@ -334,11 +334,11 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 							uref.setFunctionRef();
 					}
 				} else {
-					ref = new UnknownReference(s, false);
+					ref = new StandardSelfCompletingReference(s, false);
 				}
 
-				if (ref instanceof UnknownReference) {
-					UnknownReference uref = (UnknownReference) ref;
+				if (ref instanceof StandardSelfCompletingReference) {
+					StandardSelfCompletingReference uref = (StandardSelfCompletingReference) ref;
 					if (!ref.isFunctionRef() && object instanceof Function
 							&& !(object instanceof NativeJavaTopPackage)) {
 						uref.setFunctionRef();
@@ -404,7 +404,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 	private Object getObjectReferenceScope(String s, Object object) {
 		if (object == null)
 			return null;
-		UnknownReference uref = null;
+		StandardSelfCompletingReference uref = null;
 		Class clz = object.getClass();
 		if (object instanceof NativeJavaObject) {
 			clz = ((NativeJavaObject) object).unwrap().getClass();

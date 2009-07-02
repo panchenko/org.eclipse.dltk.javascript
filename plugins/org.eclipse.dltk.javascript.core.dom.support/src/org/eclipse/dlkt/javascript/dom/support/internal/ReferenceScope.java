@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.mozilla.javascript.Scriptable;
 
 /**
@@ -40,8 +40,8 @@ public class ReferenceScope implements Scriptable {
 	 */
 	public Object get(String name, Scriptable start) {
 		IReference child = ur.getChild(name, true);
-		if (child instanceof UnknownReference) {
-			return new ReferenceScope((UnknownReference) child);
+		if (child instanceof StandardSelfCompletingReference) {
+			return new ReferenceScope((StandardSelfCompletingReference) child);
 		}
 		return null;
 	}
