@@ -16,14 +16,14 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.typeinference.FakeField;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.JavaModelException;
 
-public class JavaElementReference extends UnknownReference{
+public class JavaElementReference extends StandardSelfCompletingReference{
 
 	public Set getChilds(boolean resolveLocals) {
 		if (element instanceof IMethod){

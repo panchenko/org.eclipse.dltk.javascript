@@ -18,7 +18,7 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolve
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.typeinference.FakeField;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.CompletionRequestor;
 import org.eclipse.jdt.core.Flags;
@@ -32,7 +32,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.eval.IEvaluationContext;
 
-public class JavaProposalReference extends UnknownReference implements SelfCompletingReference {
+public class JavaProposalReference extends StandardSelfCompletingReference implements SelfCompletingReference {
 
 	private IJavaProject project;
 	private CompletionProposal proposal;

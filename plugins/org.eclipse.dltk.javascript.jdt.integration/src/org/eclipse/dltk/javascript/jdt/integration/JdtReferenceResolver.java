@@ -27,7 +27,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.CallResultReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NewReference;
-import org.eclipse.dltk.internal.javascript.typeinference.UnknownReference;
+import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.CompletionRequestor;
 import org.eclipse.jdt.core.IJavaElement;
@@ -47,8 +47,8 @@ import org.eclipse.jdt.core.search.SearchRequestor;
 public class JdtReferenceResolver implements IExecutableExtension,
 		IReferenceResolver {
 
-	private static final class ClassRef extends UnknownReference implements
-			IClassReference {
+	private static final class ClassRef extends StandardSelfCompletingReference
+			implements IClassReference {
 		private ClassRef(String paramOrVarName, boolean childIsh) {
 			super(paramOrVarName, childIsh);
 		}
@@ -68,7 +68,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 
 	public boolean canResolve(ISourceModule module) {
 		IResource resource = module.getResource();
-		if( resource == null ) {
+		if (resource == null) {
 			return false;
 		}
 		IProject pr = resource.getProject();
@@ -120,7 +120,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 													IMethod method = ts[a];
 													if (method.getElementName()
 															.startsWith(string)) {
-														UnknownReference r = new UnknownReference(
+														StandardSelfCompletingReference r = new StandardSelfCompletingReference(
 																method
 																		.getElementName()
 																		.substring(
@@ -134,7 +134,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 															.getElementName()
 															.startsWith(
 																	stringget)) {
-														IReference r = new UnknownReference(
+														IReference r = new StandardSelfCompletingReference(
 																method
 																		.getElementName()
 																		.substring(
@@ -146,7 +146,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 															.getElementName()
 															.startsWith(
 																	stringset)) {
-														IReference r = new UnknownReference(
+														IReference r = new StandardSelfCompletingReference(
 																method
 																		.getElementName()
 																		.substring(
