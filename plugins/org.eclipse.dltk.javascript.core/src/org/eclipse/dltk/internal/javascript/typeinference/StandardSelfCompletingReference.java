@@ -22,7 +22,11 @@ import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.core.SourceMethod;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 
-public class StandardSelfCompletingReference implements IReference, SelfCompletingReference {
+/**
+ * @since 2.0
+ */
+public class StandardSelfCompletingReference implements IReference,
+		SelfCompletingReference {
 
 	private String name;
 	private final boolean childIsh;
@@ -49,7 +53,8 @@ public class StandardSelfCompletingReference implements IReference, SelfCompleti
 		return length;
 	}
 
-	public StandardSelfCompletingReference(String paramOrVarName, boolean childIsh) {
+	public StandardSelfCompletingReference(String paramOrVarName,
+			boolean childIsh) {
 		this.name = paramOrVarName;
 		this.childIsh = childIsh;
 

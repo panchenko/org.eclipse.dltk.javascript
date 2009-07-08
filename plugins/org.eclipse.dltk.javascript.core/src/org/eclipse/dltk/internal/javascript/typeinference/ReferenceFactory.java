@@ -52,31 +52,55 @@ public class ReferenceFactory {
 				// System.out.println(configurationElement.getName());
 			}
 		}
-		IScriptableTypeProvider[] pr = new IScriptableTypeProvider[providerList.size()];
+		IScriptableTypeProvider[] pr = new IScriptableTypeProvider[providerList
+				.size()];
 		providerList.toArray(pr);
 		providers = pr;
 	}
 
-	public static StandardSelfCompletingReference createNumberReference(String name) {
+	/**
+	 * @since 2.0
+	 */
+	public static StandardSelfCompletingReference createNumberReference(
+			String name) {
 		return new NativeNumberReference(name);
 	}
 
-	public static StandardSelfCompletingReference createStringReference(String name) {
+	/**
+	 * @since 2.0
+	 */
+	public static StandardSelfCompletingReference createStringReference(
+			String name) {
 		return new NativeStringReference(name);
 	}
 
-	public static StandardSelfCompletingReference createBooleanReference(String name) {
+	/**
+	 * @since 2.0
+	 */
+	public static StandardSelfCompletingReference createBooleanReference(
+			String name) {
 		return new NativeBooleanReference(name);
 	}
 
-	public static StandardSelfCompletingReference createArrayReference(String name) {
+	/**
+	 * @since 2.0
+	 */
+	public static StandardSelfCompletingReference createArrayReference(
+			String name) {
 		return new NativeArrayReference(name);
 	}
 
-	public static StandardSelfCompletingReference createDateReference(String name) {
+	/**
+	 * @since 2.0
+	 */
+	public static StandardSelfCompletingReference createDateReference(
+			String name) {
 		return new NativeDateReference(name);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public static StandardSelfCompletingReference createXMLReference(String name) {
 		return new NativeXMLReference(name);
 	}
