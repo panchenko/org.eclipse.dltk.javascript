@@ -134,6 +134,9 @@ public interface IASTVisitor {
 
 	public boolean visitGetLocalNameExpression(GetLocalNameExpression node);
 
+	/**
+	 * @since 2.0
+	 */
 	public boolean visitUnknownNode(ASTNode node);
 
 }

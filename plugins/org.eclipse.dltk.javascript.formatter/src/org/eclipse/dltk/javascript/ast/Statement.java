@@ -38,6 +38,9 @@ public abstract class Statement extends ASTNode implements ISourceable {
 		return toSourceString("");
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	protected static void toSourceString(Collection<Statement> statements,
 			StringBuffer buffer, String indentationString) {
 		for (Statement statement : statements) {
@@ -45,6 +48,9 @@ public abstract class Statement extends ASTNode implements ISourceable {
 		}
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	protected static final String INDENT = "    ";
 
 	public abstract String toSourceString(String indentationString);

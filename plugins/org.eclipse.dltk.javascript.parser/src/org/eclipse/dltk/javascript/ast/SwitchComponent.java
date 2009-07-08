@@ -28,16 +28,28 @@ public abstract class SwitchComponent extends Statement {
 		super(parent);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public abstract Keyword getKeyword();
 
+	/**
+	 * @since 2.0
+	 */
 	public int getColonPosition() {
 		return this.colon;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public void setColonPosition(int colon) {
 		this.colon = colon;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public List<Statement> getStatements() {
 		return statements;
 	}
