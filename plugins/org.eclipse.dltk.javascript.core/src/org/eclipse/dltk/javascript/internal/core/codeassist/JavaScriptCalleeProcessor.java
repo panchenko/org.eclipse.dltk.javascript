@@ -17,7 +17,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.ast.references.SimpleReference;
-import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.compiler.SourceElementRequestorAdaptor;
 import org.eclipse.dltk.compiler.env.CompilerSourceCode;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.DLTKLanguageManager;
@@ -52,10 +52,8 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 
 	int index;
 
-	private class CaleeSourceElementRequestor implements
-			ISourceElementRequestor {
-		public void acceptFieldReference(char[] fieldName, int sourcePosition) {
-		}
+	private class CaleeSourceElementRequestor extends
+			SourceElementRequestorAdaptor {
 
 		public void acceptMethodReference(char[] methodName, int argCount,
 				int sourcePosition, int sourceEndPosition) {
@@ -74,103 +72,6 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 			fSearchResults.put(ref, methods);
 		}
 
-		public void acceptPackage(int declarationStart, int declarationEnd,
-				char[] name) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void acceptTypeReference(char[][] typeName, int sourceStart,
-				int sourceEnd) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void acceptTypeReference(char[] typeName, int sourcePosition) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void enterField(FieldInfo info) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public boolean enterFieldCheckDuplicates(FieldInfo info) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public void enterMethod(MethodInfo info) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void enterMethodRemoveSame(MethodInfo info) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public boolean enterMethodWithParentType(MethodInfo info,
-				String parentName, String delimiter) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public boolean enterFieldWithParentType(FieldInfo info,
-				String parentName, String delimiter) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public void enterModule() {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void enterType(TypeInfo info) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public boolean enterTypeAppend(TypeInfo info, String fullName,
-				String delimiter) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public void exitField(int declarationEnd) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void exitMethod(int declarationEnd) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void exitModule(int declarationEnd) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void exitType(int declarationEnd) {
-		}
-
-		public void enterModuleRoot() {
-			// TODO Auto-generated method stub
-
-		}
-
-		public boolean enterTypeAppend(String fullName, String delimiter) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public void exitModuleRoot() {
-			// TODO Auto-generated method stub
-
-		}
 	}
 
 	public Map doOperation() {
