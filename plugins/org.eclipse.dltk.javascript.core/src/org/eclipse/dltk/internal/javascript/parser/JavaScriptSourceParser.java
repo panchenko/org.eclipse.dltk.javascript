@@ -20,6 +20,7 @@ import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.parser.AbstractSourceParser;
 import org.eclipse.dltk.ast.references.SimpleReference;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.compiler.SourceElementRequestorAdaptor;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
@@ -36,15 +37,10 @@ import com.xored.org.mozilla.javascript.ScriptOrFnNode.Position;
 
 public class JavaScriptSourceParser extends AbstractSourceParser {
 
-	private final class ReferenceRecordingRequestor implements
-			ISourceElementRequestor {
+	private final class ReferenceRecordingRequestor extends
+			SourceElementRequestorAdaptor {
 
 		ArrayList references = new ArrayList();
-
-		public void acceptFieldReference(char[] fieldName, int sourcePosition) {
-			// TODO Auto-generated method stub
-
-		}
 
 		public void acceptMethodReference(char[] methodName, int argCount,
 				int sourcePosition, int sourceEndPosition) {
@@ -52,99 +48,6 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 					sourceEndPosition, new String(methodName)));
 		}
 
-		public void acceptPackage(int declarationStart, int declarationEnd,
-				char[] name) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void acceptTypeReference(char[][] typeName, int sourceStart,
-				int sourceEnd) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void acceptTypeReference(char[] typeName, int sourcePosition) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void enterField(FieldInfo info) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public boolean enterFieldCheckDuplicates(FieldInfo info) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public boolean enterFieldWithParentType(FieldInfo info,
-				String parentName, String delimiter) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public void enterMethod(MethodInfo info) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void enterMethodRemoveSame(MethodInfo info) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public boolean enterMethodWithParentType(MethodInfo info,
-				String parentName, String delimiter) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public void enterModule() {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void enterModuleRoot() {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void enterType(TypeInfo info) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public boolean enterTypeAppend(String fullName, String delimiter) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public void exitField(int declarationEnd) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void exitMethod(int declarationEnd) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void exitModule(int declarationEnd) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void exitModuleRoot() {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void exitType(int declarationEnd) {
-			// TODO Auto-generated method stub
-
-		}
 	}
 
 	ModelElement element;
