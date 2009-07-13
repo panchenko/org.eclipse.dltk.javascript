@@ -15,42 +15,43 @@ public class NativeArrayReference extends StandardSelfCompletingReference {
 			"toLocaleString").setFunctionRef();
 	private static StandardSelfCompletingReference toSource = new NativeStringReference(
 			"toSource").setFunctionRef();
-	private static StandardSelfCompletingReference join = new NativeArrayReference("join")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference join = new NativeArrayReference(
+			"join").setFunctionRef();
 	private static StandardSelfCompletingReference reverse = new NativeArrayReference(
 			"reverse").setFunctionRef();
-	private static StandardSelfCompletingReference sort = new NativeArrayReference("sort")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference push = new NativeNumberReference("push")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference pop = new StandardSelfCompletingReference("pop", false)
-			.setFunctionRef();
-	private static StandardSelfCompletingReference shift = new NativeArrayReference("shift")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference sort = new NativeArrayReference(
+			"sort").setFunctionRef();
+	private static StandardSelfCompletingReference push = new NativeNumberReference(
+			"push").setFunctionRef();
+	private static StandardSelfCompletingReference pop = new StandardSelfCompletingReference(
+			"pop", false).setFunctionRef();
+	private static StandardSelfCompletingReference shift = new NativeArrayReference(
+			"shift").setFunctionRef();
 	private static StandardSelfCompletingReference unshift = new NativeNumberReference(
 			"unshift").setFunctionRef();
-	private static StandardSelfCompletingReference splice = new StandardSelfCompletingReference("splice",
-			false).setFunctionRef();
-	private static StandardSelfCompletingReference concat = new NativeArrayReference("concat")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference slice = new NativeArrayReference("slice")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference splice = new StandardSelfCompletingReference(
+			"splice", false).setFunctionRef();
+	private static StandardSelfCompletingReference concat = new NativeArrayReference(
+			"concat").setFunctionRef();
+	private static StandardSelfCompletingReference slice = new NativeArrayReference(
+			"slice").setFunctionRef();
 	private static StandardSelfCompletingReference indexOf = new NativeNumberReference(
 			"indexOf").setFunctionRef();
 	private static StandardSelfCompletingReference lastIndexOf = new NativeNumberReference(
 			"lastIndexOf").setFunctionRef();
-	private static StandardSelfCompletingReference every = new NativeBooleanReference("every")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference filter = new NativeArrayReference("filter")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference forEach = new StandardSelfCompletingReference("forEach",
-			false).setFunctionRef();
-	private static StandardSelfCompletingReference map = new NativeArrayReference("map")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference some = new NativeBooleanReference("some")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference every = new NativeBooleanReference(
+			"every").setFunctionRef();
+	private static StandardSelfCompletingReference filter = new NativeArrayReference(
+			"filter").setFunctionRef();
+	private static StandardSelfCompletingReference forEach = new StandardSelfCompletingReference(
+			"forEach", false).setFunctionRef();
+	private static StandardSelfCompletingReference map = new NativeArrayReference(
+			"map").setFunctionRef();
+	private static StandardSelfCompletingReference some = new NativeBooleanReference(
+			"some").setFunctionRef();
 
-	private static StandardSelfCompletingReference length = new NativeNumberReference("length");
+	private static StandardSelfCompletingReference length = new NativeNumberReference(
+			"length");
 
 	/**
 	 * @param paramOrVarName
@@ -149,6 +150,41 @@ public class NativeArrayReference extends StandardSelfCompletingReference {
 						.setParameterNames(new char[][] {
 								"index".toCharArray(), "howmany".toCharArray(),
 								"[newelementX]".toCharArray() });
+			} else if (name.equals("filter")) {
+				ur
+						.setProposalInfo("Creates a new array with all elements that pass the test implemented by the provided function.");
+				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+
+			} else if (name.equals("every")) {
+				ur
+						.setProposalInfo("Tests whether all elements in the array pass the test implemented by the provided function.");
+				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+			} else if (name.equals("map")) {
+				ur
+						.setProposalInfo("Creates a new array with the results of calling a provided function on every element in this array.");
+				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+			} else if (name.equals("some")) {
+				ur
+						.setProposalInfo("Tests whether some element in the array passes the test implemented by the provided function.");
+				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+
+			} else if (name.equals("forEach")) {
+				ur
+						.setProposalInfo("Calls a function for each element in the array.");
+				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+			} else if (name.equals("indexOf")) {
+				ur
+						.setProposalInfo("Returns the first index at which a given element can be found in the array, or -1 if it is not present.");
+				ur.setParameterNames(new char[][] {
+						"searchElement".toCharArray(),
+						"[fromIndex]".toCharArray() });
+			} else if (name.equals("lastIndexOf")) {
+				ur
+						.setProposalInfo("Returns the last (greatest) index of an element within the array equal to the specified value, or -1 if none is found.");
+				ur.setParameterNames(new char[][] {
+						"searchElement".toCharArray(),
+						"[formIndex]".toCharArray() });
+
 			} else if (name.equals("unshift")) {
 				ur
 						.setProposalInfo("Adds one or more elements to the beginning of an array and returns the new length.");
