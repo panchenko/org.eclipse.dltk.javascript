@@ -282,4 +282,18 @@ final class JavaReferenceFakeField extends FakeField implements ISourceModule,IF
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public void codeComplete(int offset, CompletionRequestor requestor,
+			long timeout) throws ModelException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void codeComplete(int offset, CompletionRequestor requestor,
+			WorkingCopyOwner owner, long timeout) throws ModelException {
+		// TODO Auto-generated method stub
+		
+	}
 }
