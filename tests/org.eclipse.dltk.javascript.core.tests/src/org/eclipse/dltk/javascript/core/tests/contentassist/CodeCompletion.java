@@ -435,6 +435,18 @@ public class CodeCompletion extends TestCase {
 			// TODO Auto-generated method stub
 			return false;
 		}
+
+		public void codeComplete(int offset, CompletionRequestor requestor,
+				long timeout) throws ModelException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void codeComplete(int offset, CompletionRequestor requestor,
+				WorkingCopyOwner owner, long timeout) throws ModelException {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	private final class TestCompletionRequetor extends CompletionRequestor {
