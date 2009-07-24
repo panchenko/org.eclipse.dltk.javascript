@@ -99,6 +99,7 @@ public class SourceBasedResolver implements IReferenceResolver,
 
 	protected List searchMethods(String name) {
 		final List result = new ArrayList(2);
+		final List sameModuleResult = new ArrayList(2);
 		try {
 			searchMethodDeclarations(name, new SearchRequestor() {
 
@@ -110,17 +111,23 @@ public class SourceBasedResolver implements IReferenceResolver,
 						FunctionDeclarationReference funcRef = (FunctionDeclarationReference) node;
 
 						result.add(funcRef);
+						if (module.getResource().equals(fr.getResource())) {
+							sameModuleResult.add(funcRef);
+						}
 					}
 				}
 			});
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
+		if (sameModuleResult.size() > 0)
+			return sameModuleResult;
 		return result;
 	}
 
 	protected List searchRefs(String name) {
 		final List result = new ArrayList(2);
+		final List sameModuleResult = new ArrayList(2);
 		try {
 			searchMethodDefs(name, new SearchRequestor() {
 
@@ -131,12 +138,17 @@ public class SourceBasedResolver implements IReferenceResolver,
 					if (node instanceof VaribleDeclarationReference) {
 						VaribleDeclarationReference funcRef = (VaribleDeclarationReference) node;
 						result.add(funcRef);
+						if (module.getResource().equals(fr.getResource())) {
+							sameModuleResult.add(funcRef);
+						}
 					}
 				}
 			});
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
+		if (sameModuleResult.size() > 0)
+			return sameModuleResult;
 		return result;
 	}
 
@@ -164,7 +176,8 @@ public class SourceBasedResolver implements IReferenceResolver,
 			matchRule |= SearchPattern.R_PATTERN_MATCH;
 		}
 		SearchPattern pattern = SearchPattern.createPattern(patternString,
-				searchFor, limitTo, matchRule, JavaScriptLanguageToolkit.getDefault());
+				searchFor, limitTo, matchRule, JavaScriptLanguageToolkit
+						.getDefault());
 		new SearchEngine().search(pattern,
 				new SearchParticipant[] { SearchEngine
 						.getDefaultSearchParticipant() }, scope, requestor,
