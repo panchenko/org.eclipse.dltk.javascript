@@ -366,9 +366,10 @@ final class IRFactory {
 				// function's name to the function value.
 				if (fnNode.addVar(name, fnNode.nameStart, fnNode.nameEnd, null) == ScriptOrFnNode.DUPLICATE_CONST)
 					parser.addError("msg.const.redecl", name);
+				Node bindName = Node.newString(Token.BINDNAME, name);
+				bindName.setPosition(fnNode.nameStart);
 				Node setFn = new Node(Token.EXPR_VOID, new Node(Token.SETNAME,
-						Node.newString(Token.BINDNAME, name), new Node(
-								Token.THISFN)));
+						bindName, new Node(Token.THISFN)));
 				statements.addChildrenToFront(setFn);
 			}
 		}
