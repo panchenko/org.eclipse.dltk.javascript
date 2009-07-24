@@ -288,7 +288,8 @@ public class TypeInferencer {
 			// TODO this seems wrong!
 			collection = new HostCollection(collection.getParent());
 			String name = n1.getString();
-			collection.setReference(name, new StandardSelfCompletingReference(name, true));
+			collection.setReference(name, new StandardSelfCompletingReference(
+					name, true));
 			node.getFirstChild();
 			processScriptNode(node, arg);
 			HostCollection pop = (HostCollection) contexts.pop();
@@ -391,13 +392,15 @@ public class TypeInferencer {
 							paramOrVarName, type, cs);
 				}
 				if (reference == null) {
-					reference = new StandardSelfCompletingReference(paramOrVarName, false);
+					reference = new StandardSelfCompletingReference(
+							paramOrVarName, false);
 				}
 				reference.setLocationInformation(module,
 						functionNode.nameStart, functionNode.getFunctionName()
 								.length());
 				if (reference instanceof StandardSelfCompletingReference) {
-					((StandardSelfCompletingReference) reference).setParameterIndex(am);
+					((StandardSelfCompletingReference) reference)
+							.setParameterIndex(am);
 				}
 				collection.write(paramOrVarName, reference);
 			}
@@ -414,7 +417,8 @@ public class TypeInferencer {
 				Object o = i.next();
 				if (o instanceof IReference) {
 					IReference rf = (IReference) o;
-					if (!rf.isLocal()) {
+					if (!rf.isLocal() && !"this".equals(rf.getName())) {
+						// dont overwrite if of the parent.
 						pop.write(rf.getName(), rf);
 					}
 				}
@@ -464,7 +468,8 @@ public class TypeInferencer {
 				IReference evaluateReference = evaluateReference(key,
 						firstChild.getFirstChild(), cs);
 				if (evaluateReference == null) {
-					evaluateReference = new StandardSelfCompletingReference(key, false);
+					evaluateReference = new StandardSelfCompletingReference(
+							key, false);
 				}
 				evaluateReference.setLocationInformation(module, firstChild
 						.getPosition() + 1, key.length());
@@ -669,23 +674,23 @@ public class TypeInferencer {
 					expression.getFirstChild(), parent, cs);
 		case Token.NUMBER: {
 			NewReference newReference = new NewReference(key, "Number", cs);
-			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(key,
-					false);
+			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(
+					key, false);
 			return new CombinedOrReference(newReference, uncknownReference);
 		}
 			// return ReferenceFactory.createNumberReference(key, expression
 			// .getDouble());
 		case Token.STRING: {
 			NewReference newReference = new NewReference(key, "String", cs);
-			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(key,
-					false);
+			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(
+					key, false);
 			return new CombinedOrReference(newReference, uncknownReference);
 		}
 		case Token.TRUE:
 		case Token.FALSE: {
 			NewReference newReference = new NewReference(key, "Boolean", cs);
-			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(key,
-					false);
+			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(
+					key, false);
 			return new CombinedOrReference(newReference, uncknownReference);
 		}
 		case Token.OBJECTLIT:
@@ -765,7 +770,8 @@ public class TypeInferencer {
 		if (id == null)
 			return null;
 		NewReference ref = new NewReference(key, id, cs);
-		StandardSelfCompletingReference unknownReference = new StandardSelfCompletingReference(key, false);
+		StandardSelfCompletingReference unknownReference = new StandardSelfCompletingReference(
+				key, false);
 		if (id.equals("XML")) {
 			try {
 				String string = expression.getLastChild().getString();
@@ -784,7 +790,8 @@ public class TypeInferencer {
 
 		String id = "Array";
 		NewReference ref = new NewReference(key, id, cs);
-		StandardSelfCompletingReference unknownReference = new StandardSelfCompletingReference(key, false);
+		StandardSelfCompletingReference unknownReference = new StandardSelfCompletingReference(
+				key, false);
 		CombinedOrReference ws = new CombinedOrReference(ref, unknownReference);
 		return ws;
 
@@ -803,8 +810,8 @@ public class TypeInferencer {
 	}
 
 	private static void modifyReferenceXML(
-			final StandardSelfCompletingReference uncknownReference, String string,
-			final ReferenceResolverContext cs) {
+			final StandardSelfCompletingReference uncknownReference,
+			String string, final ReferenceResolverContext cs) {
 		try {
 			parser.parse(new ByteArrayInputStream(string.getBytes()),
 					new DefaultHandler() {
@@ -882,14 +889,16 @@ public class TypeInferencer {
 		ArrayList positions = (ArrayList) expression
 				.getProp(Node.DESCENDANTS_FLAG);
 		Node child = expression.getFirstChild();
-		StandardSelfCompletingReference uRef = new StandardSelfCompletingReference(key, false);
+		StandardSelfCompletingReference uRef = new StandardSelfCompletingReference(
+				key, false);
 		for (int a = 0; a < ids.length; a++) {
 			if (ids[a] instanceof String) {
 				String name = (String) ids[a];
 				IReference internalEvaluate = internalEvaluate(col, name,
 						child, parent, cs);
 				if (internalEvaluate == null)
-					internalEvaluate = new StandardSelfCompletingReference(name, false);
+					internalEvaluate = new StandardSelfCompletingReference(
+							name, false);
 				internalEvaluate.setLocationInformation(parent,
 						((Integer) positions.get(a)).intValue() - name.length()
 								- 1, name.length());
