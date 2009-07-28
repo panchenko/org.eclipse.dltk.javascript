@@ -22,7 +22,7 @@ public class JavaScriptTemplateAccess extends ScriptTemplateAccess {
 
 	private static JavaScriptTemplateAccess instance;
 
-	public static JavaScriptTemplateAccess getInstance() {
+	public static synchronized JavaScriptTemplateAccess getInstance() {
 		if (instance == null) {
 			instance = new JavaScriptTemplateAccess();
 		}
@@ -31,21 +31,25 @@ public class JavaScriptTemplateAccess extends ScriptTemplateAccess {
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplateAccess#getPreferenceStore()
+	 * @see
+	 * org.eclipse.dltk.ui.templates.ScriptTemplateAccess#getPreferenceStore()
 	 */
 	protected IPreferenceStore getPreferenceStore() {
 		return JavaScriptUI.getDefault().getPreferenceStore();
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplateAccess#getContextTypeId()
+	 * @see
+	 * org.eclipse.dltk.ui.templates.ScriptTemplateAccess#getContextTypeId()
 	 */
 	protected String getContextTypeId() {
 		return JavaScriptUniversalTemplateContextType.CONTEXT_TYPE_ID;
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplateAccess#getCustomTemplatesKey()
+	 * @see
+	 * org.eclipse.dltk.ui.templates.ScriptTemplateAccess#getCustomTemplatesKey
+	 * ()
 	 */
 	protected String getCustomTemplatesKey() {
 		return CUSTOM_TEMPLATES_KEY;
