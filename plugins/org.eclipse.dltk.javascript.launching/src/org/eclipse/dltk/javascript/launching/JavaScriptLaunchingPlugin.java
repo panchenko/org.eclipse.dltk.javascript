@@ -66,6 +66,9 @@ public class JavaScriptLaunchingPlugin extends Plugin {
 	public IFileHandle getConsoleProxy(IExecutionEnvironment exeEnv)
 			throws IOException {
 		IDeployment deployment = exeEnv.createDeployment();
+		if (deployment == null) {
+			return null;
+		}
 		IPath path = deployment.add(this.getBundle(), "console");
 		path.append("ConsoleProxy.js");
 		return deployment.getFile(path);

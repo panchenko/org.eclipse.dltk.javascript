@@ -28,7 +28,9 @@ public class JavaScriptConsoleUtil {
 				.getLocalEnvironment().getAdapter(IExecutionEnvironment.class);
 		IFileHandle scriptFile = JavaScriptLaunchingPlugin.getDefault()
 				.getConsoleProxy(exeEnv);
-		ScriptLaunchUtil.runScript(JavaScriptNature.NATURE_ID, scriptFile,
-				null, null, args, null);
+		if (scriptFile != null) {
+			ScriptLaunchUtil.runScript(JavaScriptNature.NATURE_ID, scriptFile,
+					null, null, args, null);
+		}
 	}
 }
