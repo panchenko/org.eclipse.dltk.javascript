@@ -1,6 +1,6 @@
 package org.eclipse.dltk.javascript.internal.console.ui.actions;
 
-import org.eclipse.dltk.console.ui.ScriptConsole;
+import org.eclipse.dltk.console.ui.IScriptConsole;
 import org.eclipse.dltk.console.ui.ScriptConsoleManager;
 import org.eclipse.dltk.javascript.internal.console.ui.JavaScriptConsole;
 import org.eclipse.jface.action.IAction;
@@ -12,8 +12,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-
-public class PasteJavaScriptTextToConsoleAction implements IEditorActionDelegate {
+public class PasteJavaScriptTextToConsoleAction implements
+		IEditorActionDelegate {
 
 	private ISelection selection;
 
@@ -35,7 +35,7 @@ public class PasteJavaScriptTextToConsoleAction implements IEditorActionDelegate
 	public void run(IAction action) {
 		ScriptConsoleManager manager = ScriptConsoleManager.getInstance();
 
-		ScriptConsole console = manager
+		IScriptConsole console = manager
 				.getActiveScriptConsole(JavaScriptConsole.CONSOLE_TYPE);
 
 		if (console == null) {
@@ -44,8 +44,8 @@ public class PasteJavaScriptTextToConsoleAction implements IEditorActionDelegate
 
 		if (selection instanceof ITextSelection) {
 			String text = ((ITextSelection) selection).getText();
-			console.getInput().insertText(text);
-		}		
+			console.insertText(text);
+		}
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
