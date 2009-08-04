@@ -213,11 +213,12 @@
       class="org.eclipse.dltk.javascript.internal.debug.ui.console.JavaScriptConsoleTracker"
       regex="\(file &quot;.*&quot; line .*\)"
       id="org.eclipse.dltk.javascript.debug.ui.TclConsoleTracker">
+      <!-- TODO is this regex valid for javascript projects ? -->
       <enablement>
         <or>
           <test
             property="org.eclipse.debug.ui.processTypeTest"
-            value="tclInterpreter" />
+            value="javascriptInterpreter" />
         </or>
       </enablement>
     </consolePatternMatchListener>

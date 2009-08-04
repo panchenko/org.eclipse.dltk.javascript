@@ -12,10 +12,10 @@ package org.eclipse.dltk.javascript.internal.debug.ui.console;
 import org.eclipse.osgi.util.NLS;
 
 public class ConsoleMessages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.dltk.tcl.internal.debug.ui.console.ConsoleMessages";
+	private static final String BUNDLE_NAME = "org.eclipse.dltk.javascript.internal.debug.ui.console.ConsoleMessages";
 
-    public static String TclFileHyperlink_Information_1;
-    public static String TclFileHyperlink_Error;
+	public static String TclFileHyperlink_Information_1;
+	public static String TclFileHyperlink_Error;
 	public static String ScriptStackTraceConsoleFactory_0;
 	public static String ScriptStackTraceConsole_0;
 	public static String TclFileHyperlink_Source_not_found_for__0__2;
@@ -29,7 +29,7 @@ public class ConsoleMessages extends NLS {
 		NLS.initializeMessages(BUNDLE_NAME, ConsoleMessages.class);
 	}
 
-    public static String TclFileHyperlink_0;
+	public static String TclFileHyperlink_0;
 
-    public static String TclFileHyperlink_1;
+	public static String TclFileHyperlink_1;
 }
