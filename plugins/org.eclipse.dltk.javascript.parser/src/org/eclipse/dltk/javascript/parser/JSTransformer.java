@@ -782,7 +782,7 @@ public class JSTransformer extends JSVisitor {
 
 			returnStatement.setEnd(returnStatement.getSemicolonPosition() + 1);
 		} else if (returnStatement.getValue() != null) {
-			returnStatement.setEnd(returnStatement.getValue().sourceEnd() + 1);
+			returnStatement.setEnd(returnStatement.getValue().sourceEnd());
 		} else {
 			returnStatement.setEnd(returnStatement.getReturnKeyword()
 					.sourceEnd());
