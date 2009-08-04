@@ -7,6 +7,12 @@ return;
 function a () {
 	return;
 }
+==== function-closure
+x=function(element){return typeof element=="string"}
+==
+x = function (element) {
+	return typeof element == "string"
+}
 ==> formatter.indent.function=false
 ==== function-no-indent
 function a () {
