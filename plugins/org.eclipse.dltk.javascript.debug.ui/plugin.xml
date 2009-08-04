@@ -39,7 +39,7 @@
     <launchConfigurationTabGroup
       type="org.eclipse.dltk.javascript.launching.JavaScriptLaunchConfigurationType"
       class="org.eclipse.dltk.javascript.internal.debug.ui.launchConfigurations.JavaScriptTabGroup"
-      id="org.eclipse.dltk.javascript.internal.debug.ui.launchConfigurations.TclTabGroup">
+      id="org.eclipse.dltk.javascript.internal.debug.ui.launchConfigurations.JavaScriptTabGroup">
       <launchMode
         mode="debug"
         perspective="org.eclipse.debug.ui.DebugPerspective"
@@ -56,7 +56,7 @@
   <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
     <launchConfigurationTypeImage
       icon="icons/javascript.gif"
-      configTypeID="org.eclipse.dltk.javascript.launching.TCLLaunchConfigurationType"
+      configTypeID="org.eclipse.dltk.javascript.launching.JavaScriptLaunchConfigurationType"
       id="org.eclipse.dltk.javascript.debug.ui.launchConfigurationTypeImage.localTCLScript">
     </launchConfigurationTypeImage>
     <!--launchConfigurationTypeImage
@@ -87,7 +87,7 @@
           </with>
         </enablement>
       </contextualLaunch>
-      <perspective id="org.eclipse.dltk.javascript.ui.TclPerspective">
+      <perspective id="org.eclipse.dltk.javascript.ui.JavascriptPerspective">
       </perspective>
       <perspective id="org.eclipse.debug.ui.DebugPerspective"></perspective>
     </shortcut>
@@ -212,7 +212,7 @@
     <consolePatternMatchListener
       class="org.eclipse.dltk.javascript.internal.debug.ui.console.JavaScriptConsoleTracker"
       regex="\(file &quot;.*&quot; line .*\)"
-      id="org.eclipse.dltk.javascript.debug.ui.TclConsoleTracker">
+      id="org.eclipse.dltk.javascript.debug.ui.JavaScriptConsoleTracker">
       <!-- TODO is this regex valid for javascript projects ? -->
       <enablement>
         <or>
