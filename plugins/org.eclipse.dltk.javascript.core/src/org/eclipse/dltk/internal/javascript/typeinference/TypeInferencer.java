@@ -51,6 +51,8 @@ final class TransparentRef implements IReference {
 
 	ReferenceResolverContext cs;
 
+	private boolean recursive = false;
+
 	TransparentRef(IReference evaluateReference, Node objID, String fieldId,
 			ModelElement parent, ReferenceResolverContext cs) {
 		this.evaluateReference = evaluateReference;
@@ -61,12 +63,26 @@ final class TransparentRef implements IReference {
 	}
 
 	public IReference getChild(String key, boolean resolveLocals) {
-		IReference child = evaluateReference.getChild(key, resolveLocals);
-		return child;
+		if (recursive)
+			return null;
+		try {
+			recursive = true;
+			IReference child = evaluateReference.getChild(key, resolveLocals);
+			return child;
+		} finally {
+			recursive = false;
+		}
 	}
 
 	public Set getChilds(boolean resolveLocals) {
-		return evaluateReference.getChilds(resolveLocals);
+		if (recursive)
+			return Collections.EMPTY_SET;
+		try {
+			recursive = true;
+			return evaluateReference.getChilds(resolveLocals);
+		} finally {
+			recursive = false;
+		}
 	}
 
 	public String getName() {
@@ -78,7 +94,14 @@ final class TransparentRef implements IReference {
 	}
 
 	public void setChild(String key, IReference ref) {
-		evaluateReference.setChild(key, ref);
+		if (recursive)
+			return;
+		try {
+			recursive = true;
+			evaluateReference.setChild(key, ref);
+		} finally {
+			recursive = false;
+		}
 	}
 
 	public boolean isChildishReference() {
@@ -88,43 +111,72 @@ final class TransparentRef implements IReference {
 	ModelElement parent;
 
 	public void patchRef(HostCollection collection) {
-		Set s = evaluateReference.getChilds(false);
-		IReference queryElement = TypeInferencer.internalEvaluate(collection,
-				getName(), node, parent, cs);
+		if (recursive)
+			return;
+		try {
+			recursive = true;
+			Set s = evaluateReference.getChilds(false);
+			IReference queryElement = TypeInferencer.internalEvaluate(
+					collection, getName(), node, parent, cs);
 
-		if (queryElement != null && queryElement != this) {
-			// make sure that this doesn't become a transparent to a transparent
-			// (because then circular references can happen)
-			// just point to the real reference.
-			while (queryElement instanceof TransparentRef) {
-				queryElement = ((TransparentRef) queryElement).evaluateReference;
+			if (queryElement != null && queryElement != this) {
+				// make sure that this doesn't become a transparent to a
+				// transparent
+				// (because then circular references can happen)
+				// just point to the real reference.
+				while (queryElement instanceof TransparentRef) {
+					queryElement = ((TransparentRef) queryElement).evaluateReference;
+				}
+				if (!(queryElement instanceof CombinedOrReference && ((CombinedOrReference) queryElement)
+						.testContains(this))) {
+					this.evaluateReference = queryElement;
+				}
 			}
-			if (!(queryElement instanceof CombinedOrReference && ((CombinedOrReference) queryElement)
-					.testContains(this))) {
-				this.evaluateReference = queryElement;
+			Iterator it = s.iterator();
+			// TODO REVIEW IT;
+			while (it.hasNext()) {
+				Object next = it.next();
+				if (!(next instanceof IReference))
+					continue;
+				IReference r = (IReference) next;
+				evaluateReference.setChild(r.getName(), r);
 			}
-		}
-		Iterator it = s.iterator();
-		// TODO REVIEW IT;
-		while (it.hasNext()) {
-			Object next = it.next();
-			if (!(next instanceof IReference))
-				continue;
-			IReference r = (IReference) next;
-			evaluateReference.setChild(r.getName(), r);
+		} finally {
+			recursive = false;
 		}
 	}
 
 	public void recordDelete(String fieldId) {
-		evaluateReference.recordDelete(fieldId);
+		if (recursive)
+			return;
+		try {
+			recursive = true;
+			evaluateReference.recordDelete(fieldId);
+		} finally {
+			recursive = false;
+		}
 	}
 
 	public IReference getPrototype(boolean resolveLocals) {
-		return evaluateReference.getPrototype(false);
+		if (recursive)
+			return null;
+		try {
+			recursive = true;
+			return evaluateReference.getPrototype(false);
+		} finally {
+			recursive = false;
+		}
 	}
 
 	public void setPrototype(IReference ref) {
-		evaluateReference.setPrototype(ref);
+		if (recursive)
+			return;
+		try {
+			recursive = true;
+			evaluateReference.setPrototype(ref);
+		} finally {
+			recursive = false;
+		}
 	}
 
 	int length;
@@ -142,15 +194,36 @@ final class TransparentRef implements IReference {
 	}
 
 	public boolean isFunctionRef() {
-		return evaluateReference.isFunctionRef();
+		if (recursive)
+			return false;
+		try {
+			recursive = true;
+			return evaluateReference.isFunctionRef();
+		} finally {
+			recursive = false;
+		}
 	}
 
 	public boolean isLocal() {
-		return evaluateReference.isLocal();
+		if (recursive)
+			return false;
+		try {
+			recursive = true;
+			return evaluateReference.isLocal();
+		} finally {
+			recursive = false;
+		}
 	}
 
 	public void setLocal(boolean local) {
-		evaluateReference.setLocal(local);
+		if (recursive)
+			return;
+		try {
+			recursive = true;
+			evaluateReference.setLocal(local);
+		} finally {
+			recursive = false;
+		}
 	}
 
 }
