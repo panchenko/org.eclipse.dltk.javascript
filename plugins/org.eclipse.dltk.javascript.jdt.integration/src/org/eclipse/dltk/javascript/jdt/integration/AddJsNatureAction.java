@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
+import org.eclipse.dltk.core.IScriptProjectFilenames;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -57,9 +58,11 @@ public class AddJsNatureAction implements IExecutableExtension,
 						newNStrings[natureIds.length] = JavaScriptNature.NATURE_ID;
 						description.setNatureIds(newNStrings);
 						adapter.setDescription(description, null);
-						adapter.getFile(".buildpath").create(
-								this.getClass().getResourceAsStream(
-										"buildpath.snap"), true, null);
+						adapter.getFile(
+								IScriptProjectFilenames.BUILDPATH_FILENAME)
+								.create(
+										this.getClass().getResourceAsStream(
+												"buildpath.snap"), true, null);
 					} catch (CoreException e) {
 						e.printStackTrace();
 					}
