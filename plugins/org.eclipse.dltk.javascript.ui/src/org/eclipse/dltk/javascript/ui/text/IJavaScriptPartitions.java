@@ -17,12 +17,14 @@ public interface IJavaScriptPartitions {
 	public final static String JS_PARTITIONING = IJavaScriptConstants.JS_PARTITIONING;
 
 	public final static String JS_COMMENT = "__javascript_comment"; //$NON-NLS-1$
-	public final static String JS_STRING = "__javascript_string"; //$NON-NLS-1$
+	public final static String JS_STRING_SINGLE = "__javascript_string_single"; //$NON-NLS-1$
+	public final static String JS_STRING = "__javascript_string_double";//$NON-NLS-1$
 	public final static String JS_DOC = "__javascript_doc"; //$NON-NLS-1$
 	public final static String JS_REGEXP = "__javascript_quoteRegExp"; //$NON-NLS-1$
 
 	public final static String[] JS_PARTITION_TYPES = new String[] {
 			IDocument.DEFAULT_CONTENT_TYPE, IJavaScriptPartitions.JS_STRING,
+			IJavaScriptPartitions.JS_STRING_SINGLE,
 			IJavaScriptPartitions.JS_COMMENT, IJavaScriptPartitions.JS_DOC,
 			JS_REGEXP };
 
@@ -30,6 +32,8 @@ public interface IJavaScriptPartitions {
 			IJavaScriptPartitions.JS_REGEXP, IJavaScriptPartitions.JS_DOC,
 			IJavaScriptPartitions.JS_COMMENT,
 			IJavaScriptPartitions.JS_PARTITIONING,
-			IJavaScriptPartitions.JS_STRING, IDocument.DEFAULT_CONTENT_TYPE };
+			IJavaScriptPartitions.JS_STRING,
+			IJavaScriptPartitions.JS_STRING_SINGLE,
+			IDocument.DEFAULT_CONTENT_TYPE };
 
 }

@@ -105,6 +105,11 @@ public class JavascriptSourceViewerConfiguration extends
 		assistant.setContentAssistProcessor(stringProcessor,
 				IJavaScriptPartitions.JS_STRING);
 
+		ContentAssistProcessor stringSingleProcessor = new JavaScriptCompletionProcessor(
+				getEditor(), assistant, IJavaScriptPartitions.JS_STRING_SINGLE);
+		assistant.setContentAssistProcessor(stringSingleProcessor,
+				IJavaScriptPartitions.JS_STRING_SINGLE);
+
 		// TODO JS DOC completion??
 		ContentAssistProcessor jsProcessor = new JavaScriptCompletionProcessor(
 				getEditor(), assistant, IJavaScriptPartitions.JS_DOC);
@@ -199,6 +204,10 @@ public class JavascriptSourceViewerConfiguration extends
 		dr = new DefaultDamagerRepairer(getStringScanner());
 		reconciler.setDamager(dr, IJavaScriptPartitions.JS_STRING);
 		reconciler.setRepairer(dr, IJavaScriptPartitions.JS_STRING);
+
+		dr = new DefaultDamagerRepairer(getStringScanner());
+		reconciler.setDamager(dr, IJavaScriptPartitions.JS_STRING_SINGLE);
+		reconciler.setRepairer(dr, IJavaScriptPartitions.JS_STRING_SINGLE);
 
 		dr = new DefaultDamagerRepairer(getCommentScanner());
 		reconciler.setDamager(dr, IJavaScriptPartitions.JS_COMMENT);

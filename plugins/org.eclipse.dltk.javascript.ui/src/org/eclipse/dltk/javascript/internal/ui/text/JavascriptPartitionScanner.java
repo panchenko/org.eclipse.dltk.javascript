@@ -31,6 +31,7 @@ public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 		super();
 
 		IToken string = new Token(IJavaScriptPartitions.JS_STRING);
+		IToken stringSingle = new Token(IJavaScriptPartitions.JS_STRING_SINGLE);
 		IToken comment = new Token(IJavaScriptPartitions.JS_COMMENT);
 		IToken doc = new Token(IJavaScriptPartitions.JS_DOC);
 		IToken regexp = new Token(IJavaScriptPartitions.JS_REGEXP);
@@ -44,7 +45,7 @@ public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 		// for now to much that var x = 10 / 5 / 10 is also seen as regexp
 		rules.add(new PatternRule("/", "/", regexp, '\\', true, true));
 		// Add rule for character constants.
-		rules.add(new SingleLineRule("'", "'", string, '\\'));
+		rules.add(new SingleLineRule("'", "'", stringSingle, '\\'));
 		rules.add(new MultiLineRule("\"", "\"", string, '\\'));
 
 		IPredicateRule[] result = new IPredicateRule[rules.size()];
