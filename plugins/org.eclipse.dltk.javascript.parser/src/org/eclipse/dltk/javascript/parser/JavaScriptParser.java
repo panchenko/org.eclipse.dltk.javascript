@@ -21,7 +21,6 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.TokenStream;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.parser.AbstractSourceParser;
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblem;
@@ -29,6 +28,7 @@ import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemReporterProxy;
 import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.javascript.ast.Script;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
@@ -98,7 +98,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 		}
 	}
 
-	public ModuleDeclaration parse(char[] fileName, char[] source,
+	public Script parse(char[] fileName, char[] source,
 			IProblemReporter reporter) {
 		Assert.isNotNull(source);
 		JSInternalProblemReporterProxy reporterProxy = new JSInternalProblemReporterProxy(
