@@ -52,6 +52,7 @@ public abstract class JSVisitor {
 			switch (node.getType()) {
 
 			case JSParser.Identifier:
+			case JSParser.WXML:
 				return visitIdentifier(node);
 
 			case JSParser.ARGS:

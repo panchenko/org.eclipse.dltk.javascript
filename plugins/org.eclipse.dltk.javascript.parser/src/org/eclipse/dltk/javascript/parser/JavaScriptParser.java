@@ -22,13 +22,12 @@ import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.TokenStream;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.parser.AbstractSourceParser;
-import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemReporterProxy;
-import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.internal.parser.JSProblem;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
@@ -120,22 +119,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 			reporterProxy.reportProblem(new JSProblem(e));
 			return null;
 		}
-	}
-
-	private static class JSProblem extends DefaultProblem {
-
-		public JSProblem(Exception exception) {
-			super(
-					exception.getMessage(),
-					0,
-					null,
-					ProblemSeverities.Error,
-					0,
-					0,
-					exception instanceof RecognitionException ? ((RecognitionException) exception).line
-							: 0);
-		}
-
 	}
 
 }
