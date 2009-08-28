@@ -1023,7 +1023,7 @@ memberExpression
 	;
 
 newExpression
-	: NEW^ primaryExpression
+	: NEW^ memberExpression
 	;
 
 	

@@ -18,17 +18,17 @@ import org.eclipse.dltk.ast.ASTNode;
 public class NewExpression extends Expression {
 
 	private Keyword newKeyword;
-	private Identifier objectClass;
+	private Expression objectClass;
 
 	public NewExpression(ASTNode parent) {
 		super(parent);
 	}
 
-	public Identifier getObjectClass() {
+	public Expression getObjectClass() {
 		return this.objectClass;
 	}
 
-	public void setObjectClass(Identifier objectClass) {
+	public void setObjectClass(Expression objectClass) {
 		this.objectClass = objectClass;
 	}
 

@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2009-08-28 15:30:48
+// $ANTLR 3.0.1 JS.g 2009-08-28 15:49:29
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -2435,7 +2435,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start newExpression
-    // JS.g:1025:1: newExpression : NEW primaryExpression ;
+    // JS.g:1025:1: newExpression : NEW memberExpression ;
     public final newExpression_return newExpression() throws RecognitionException {
         newExpression_return retval = new newExpression_return();
         retval.start = input.LT(1);
@@ -2443,14 +2443,14 @@ public class JSParser extends Parser {
         Object root_0 = null;
 
         Token NEW52=null;
-        primaryExpression_return primaryExpression53 = null;
+        memberExpression_return memberExpression53 = null;
 
 
         Object NEW52_tree=null;
 
         try {
-            // JS.g:1026:2: ( NEW primaryExpression )
-            // JS.g:1026:4: NEW primaryExpression
+            // JS.g:1026:2: ( NEW memberExpression )
+            // JS.g:1026:4: NEW memberExpression
             {
             root_0 = (Object)adaptor.nil();
 
@@ -2459,11 +2459,11 @@ public class JSParser extends Parser {
             NEW52_tree = (Object)adaptor.create(NEW52);
             root_0 = (Object)adaptor.becomeRoot(NEW52_tree, root_0);
 
-            pushFollow(FOLLOW_primaryExpression_in_newExpression3731);
-            primaryExpression53=primaryExpression();
+            pushFollow(FOLLOW_memberExpression_in_newExpression3731);
+            memberExpression53=memberExpression();
             _fsp--;
 
-            adaptor.addChild(root_0, primaryExpression53.getTree());
+            adaptor.addChild(root_0, memberExpression53.getTree());
 
             }
 
@@ -10802,8 +10802,8 @@ public class JSParser extends Parser {
     public static final BitSet FOLLOW_primaryExpression_in_memberExpression3707 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_functionExpression_in_memberExpression3712 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_newExpression_in_memberExpression3717 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NEW_in_newExpression3728 = new BitSet(new long[]{0x0000002002000070L,0x0000000000000540L,0x00E2830000000000L});
-    public static final BitSet FOLLOW_primaryExpression_in_newExpression3731 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NEW_in_newExpression3728 = new BitSet(new long[]{0x0000002002440070L,0x0000000000000540L,0x00E2830000000000L});
+    public static final BitSet FOLLOW_memberExpression_in_newExpression3731 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_LPAREN_in_arguments3744 = new BitSet(new long[]{0x0000002852441070L,0x0000001819800740L,0x00E2830000000000L,0x0000000000000002L});
     public static final BitSet FOLLOW_assignmentExpression_in_arguments3748 = new BitSet(new long[]{0x0000000000000000L,0x0000000000004200L});
     public static final BitSet FOLLOW_COMMA_in_arguments3752 = new BitSet(new long[]{0x0000002852441070L,0x0000001819800540L,0x00E2830000000000L,0x0000000000000002L});
