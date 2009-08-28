@@ -193,112 +193,111 @@ public class Keywords {
 
 	public static final char HOOK = '?';
 
-	private final static HashMap map = new HashMap();
+	private final static HashMap<Integer, String> map = new HashMap<Integer, String>();
+
 	static {
+		map.put(Integer.valueOf(JSParser.FUNCTION), Keywords.FUNCTION);
+		map.put(Integer.valueOf(JSParser.NULL), Keywords.NULL);
+		map.put(Integer.valueOf(JSParser.RETURN), Keywords.RETURN);
+		map.put(Integer.valueOf(JSParser.IF), Keywords.IF);
+		map.put(Integer.valueOf(JSParser.ELSE), Keywords.IF);
+		map.put(Integer.valueOf(JSParser.SWITCH), Keywords.SWITCH);
+		map.put(Integer.valueOf(JSParser.CASE), Keywords.CASE);
+		map.put(Integer.valueOf(JSParser.BREAK), Keywords.BREAK);
+		map.put(Integer.valueOf(JSParser.CONTINUE), Keywords.CONTINUE);
+		map.put(Integer.valueOf(JSParser.DEFAULT), Keywords.DEFAULT);
+		map.put(Integer.valueOf(JSParser.FOR), Keywords.FOR);
+		map.put(Integer.valueOf(JSParser.EACH), Keywords.EACH);
+		map.put(Integer.valueOf(JSParser.WHILE), Keywords.WHILE);
+		map.put(Integer.valueOf(JSParser.DO), Keywords.DO);
+		map.put(Integer.valueOf(JSParser.VAR), Keywords.VAR);
+		map.put(Integer.valueOf(JSParser.CONST), Keywords.CONST);
+		map.put(Integer.valueOf(JSParser.IN), Keywords.IN);
+		map.put(Integer.valueOf(JSParser.NEW), Keywords.NEW);
+		map.put(Integer.valueOf(JSParser.TRUE), Keywords.TRUE);
+		map.put(Integer.valueOf(JSParser.FALSE), Keywords.FALSE);
+		map.put(Integer.valueOf(JSParser.TRY), Keywords.TRY);
+		map.put(Integer.valueOf(JSParser.CATCH), Keywords.CATCH);
+		map.put(Integer.valueOf(JSParser.FINALLY), Keywords.FINALLY);
+		map.put(Integer.valueOf(JSParser.INSTANCEOF), Keywords.INSTANCEOF);
+		map.put(Integer.valueOf(JSParser.TYPEOF), Keywords.TYPEOF);
+		map.put(Integer.valueOf(JSParser.THIS), Keywords.THIS);
+		map.put(Integer.valueOf(JSParser.THROW), Keywords.THROW);
+		map.put(Integer.valueOf(JSParser.EXPORT), Keywords.EXPORT);
+		map.put(Integer.valueOf(JSParser.IMPORT), Keywords.IMPORT);
+		map.put(Integer.valueOf(JSParser.WITH), Keywords.WITH);
+		map.put(Integer.valueOf(JSParser.DELETE), Keywords.DELETE);
+		map.put(Integer.valueOf(JSParser.GET), Keywords.GET);
+		map.put(Integer.valueOf(JSParser.SET), Keywords.SET);
+		map.put(Integer.valueOf(JSParser.VOID), Keywords.VOID);
+		map.put(Integer.valueOf(JSParser.XML), Keywords.XML);
+		map.put(Integer.valueOf(JSParser.NAMESPACE), Keywords.NAMESPACE);
+		map.put(Integer.valueOf(JSParser.YIELD), Keywords.YIELD);
 
-		map.put(new Integer(JSParser.FUNCTION), Keywords.FUNCTION);
-		map.put(new Integer(JSParser.NULL), Keywords.NULL);
-		map.put(new Integer(JSParser.RETURN), Keywords.RETURN);
-		map.put(new Integer(JSParser.IF), Keywords.IF);
-		map.put(new Integer(JSParser.ELSE), Keywords.IF);
-		map.put(new Integer(JSParser.SWITCH), Keywords.SWITCH);
-		map.put(new Integer(JSParser.CASE), Keywords.CASE);
-		map.put(new Integer(JSParser.BREAK), Keywords.BREAK);
-		map.put(new Integer(JSParser.CONTINUE), Keywords.CONTINUE);
-		map.put(new Integer(JSParser.DEFAULT), Keywords.DEFAULT);
-		map.put(new Integer(JSParser.FOR), Keywords.FOR);
-		map.put(new Integer(JSParser.EACH), Keywords.EACH);
-		map.put(new Integer(JSParser.WHILE), Keywords.WHILE);
-		map.put(new Integer(JSParser.DO), Keywords.DO);
-		map.put(new Integer(JSParser.VAR), Keywords.VAR);
-		map.put(new Integer(JSParser.CONST), Keywords.CONST);
-		map.put(new Integer(JSParser.IN), Keywords.IN);
-		map.put(new Integer(JSParser.NEW), Keywords.NEW);
-		map.put(new Integer(JSParser.TRUE), Keywords.TRUE);
-		map.put(new Integer(JSParser.FALSE), Keywords.FALSE);
-		map.put(new Integer(JSParser.TRY), Keywords.TRY);
-		map.put(new Integer(JSParser.CATCH), Keywords.CATCH);
-		map.put(new Integer(JSParser.FINALLY), Keywords.FINALLY);
-		map.put(new Integer(JSParser.INSTANCEOF), Keywords.INSTANCEOF);
-		map.put(new Integer(JSParser.TYPEOF), Keywords.TYPEOF);
-		map.put(new Integer(JSParser.THIS), Keywords.THIS);
-		map.put(new Integer(JSParser.THROW), Keywords.THROW);
-		map.put(new Integer(JSParser.EXPORT), Keywords.EXPORT);
-		map.put(new Integer(JSParser.IMPORT), Keywords.IMPORT);
-		map.put(new Integer(JSParser.WITH), Keywords.WITH);
-		map.put(new Integer(JSParser.DELETE), Keywords.DELETE);
-		map.put(new Integer(JSParser.GET), Keywords.GET);
-		map.put(new Integer(JSParser.SET), Keywords.SET);
-		map.put(new Integer(JSParser.VOID), Keywords.VOID);
-		map.put(new Integer(JSParser.XML), Keywords.XML);
-		map.put(new Integer(JSParser.NAMESPACE), Keywords.NAMESPACE);
-		map.put(new Integer(JSParser.YIELD), Keywords.YIELD);
+		map.put(Integer.valueOf(JSParser.ASSIGN), String
+				.valueOf(Keywords.ASSIGN));
 
-		map.put(new Integer(JSParser.ASSIGN), String.valueOf(Keywords.ASSIGN));
-
-		map.put(new Integer(JSParser.ADDASS), Keywords.ADDASS);
-		map.put(new Integer(JSParser.SUBASS), Keywords.SUBASS);
-		map.put(new Integer(JSParser.MULASS), Keywords.MULASS);
-		map.put(new Integer(JSParser.DIVASS), Keywords.DIVASS);
-		map.put(new Integer(JSParser.MODASS), Keywords.MODASS);
-		map.put(new Integer(JSParser.XORASS), Keywords.XORASS);
-		map.put(new Integer(JSParser.ANDASS), Keywords.ANDASS);
-		map.put(new Integer(JSParser.ORASS), Keywords.ORASS);
-		map.put(new Integer(JSParser.SHLASS), Keywords.SHLASS);
-		map.put(new Integer(JSParser.SHRASS), Keywords.SHRASS);
-		map.put(new Integer(JSParser.SHUASS), Keywords.SHUASS);
+		map.put(Integer.valueOf(JSParser.ADDASS), Keywords.ADDASS);
+		map.put(Integer.valueOf(JSParser.SUBASS), Keywords.SUBASS);
+		map.put(Integer.valueOf(JSParser.MULASS), Keywords.MULASS);
+		map.put(Integer.valueOf(JSParser.DIVASS), Keywords.DIVASS);
+		map.put(Integer.valueOf(JSParser.MODASS), Keywords.MODASS);
+		map.put(Integer.valueOf(JSParser.XORASS), Keywords.XORASS);
+		map.put(Integer.valueOf(JSParser.ANDASS), Keywords.ANDASS);
+		map.put(Integer.valueOf(JSParser.ORASS), Keywords.ORASS);
+		map.put(Integer.valueOf(JSParser.SHLASS), Keywords.SHLASS);
+		map.put(Integer.valueOf(JSParser.SHRASS), Keywords.SHRASS);
+		map.put(Integer.valueOf(JSParser.SHUASS), Keywords.SHUASS);
 
 		//
 		//
 		//
 
-		map.put(new Integer(JSParser.PINC), Keywords.INC);
-		map.put(new Integer(JSParser.PDEC), Keywords.DEC);
-		map.put(new Integer(JSParser.INC), Keywords.INC);
-		map.put(new Integer(JSParser.DEC), Keywords.DEC);
-		map.put(new Integer(JSParser.NEG), String.valueOf(Keywords.SUB));
+		map.put(Integer.valueOf(JSParser.PINC), Keywords.INC);
+		map.put(Integer.valueOf(JSParser.PDEC), Keywords.DEC);
+		map.put(Integer.valueOf(JSParser.INC), Keywords.INC);
+		map.put(Integer.valueOf(JSParser.DEC), Keywords.DEC);
+		map.put(Integer.valueOf(JSParser.NEG), String.valueOf(Keywords.SUB));
 
-		map.put(new Integer(JSParser.ADD), String.valueOf(Keywords.ADD));
-		map.put(new Integer(JSParser.SUB), String.valueOf(Keywords.SUB));
-		map.put(new Integer(JSParser.DIV), String.valueOf(Keywords.DIV));
-		map.put(new Integer(JSParser.MUL), String.valueOf(Keywords.MUL));
-		map.put(new Integer(JSParser.MOD), String.valueOf(Keywords.MOD));
+		map.put(Integer.valueOf(JSParser.ADD), String.valueOf(Keywords.ADD));
+		map.put(Integer.valueOf(JSParser.SUB), String.valueOf(Keywords.SUB));
+		map.put(Integer.valueOf(JSParser.DIV), String.valueOf(Keywords.DIV));
+		map.put(Integer.valueOf(JSParser.MUL), String.valueOf(Keywords.MUL));
+		map.put(Integer.valueOf(JSParser.MOD), String.valueOf(Keywords.MOD));
 
-		map.put(new Integer(JSParser.LAND), Keywords.LAND);
-		map.put(new Integer(JSParser.LOR), Keywords.LOR);
-		map.put(new Integer(JSParser.NOT), String.valueOf(Keywords.NOT));
+		map.put(Integer.valueOf(JSParser.LAND), Keywords.LAND);
+		map.put(Integer.valueOf(JSParser.LOR), Keywords.LOR);
+		map.put(Integer.valueOf(JSParser.NOT), String.valueOf(Keywords.NOT));
 
-		map.put(new Integer(JSParser.OR), String.valueOf(Keywords.OR));
-		map.put(new Integer(JSParser.XOR), String.valueOf(Keywords.XOR));
-		map.put(new Integer(JSParser.AND), String.valueOf(Keywords.AND));
-		map.put(new Integer(JSParser.INV), String.valueOf(Keywords.INV));
+		map.put(Integer.valueOf(JSParser.OR), String.valueOf(Keywords.OR));
+		map.put(Integer.valueOf(JSParser.XOR), String.valueOf(Keywords.XOR));
+		map.put(Integer.valueOf(JSParser.AND), String.valueOf(Keywords.AND));
+		map.put(Integer.valueOf(JSParser.INV), String.valueOf(Keywords.INV));
 
-		map.put(new Integer(JSParser.SHL), Keywords.SHL);
-		map.put(new Integer(JSParser.SHR), Keywords.SHR);
-		map.put(new Integer(JSParser.SHU), Keywords.SHU);
+		map.put(Integer.valueOf(JSParser.SHL), Keywords.SHL);
+		map.put(Integer.valueOf(JSParser.SHR), Keywords.SHR);
+		map.put(Integer.valueOf(JSParser.SHU), Keywords.SHU);
 
-		map.put(new Integer(JSParser.EQ), Keywords.EQ);
-		map.put(new Integer(JSParser.NEQ), Keywords.NEQ);
-		map.put(new Integer(JSParser.LTE), Keywords.LTE);
-		map.put(new Integer(JSParser.LT), String.valueOf(Keywords.LT));
-		map.put(new Integer(JSParser.GTE), Keywords.GTE);
-		map.put(new Integer(JSParser.GT), String.valueOf(Keywords.GT));
-		map.put(new Integer(JSParser.SAME), Keywords.SAME);
-		map.put(new Integer(JSParser.NSAME), Keywords.NSAME);
+		map.put(Integer.valueOf(JSParser.EQ), Keywords.EQ);
+		map.put(Integer.valueOf(JSParser.NEQ), Keywords.NEQ);
+		map.put(Integer.valueOf(JSParser.LTE), Keywords.LTE);
+		map.put(Integer.valueOf(JSParser.LT), String.valueOf(Keywords.LT));
+		map.put(Integer.valueOf(JSParser.GTE), Keywords.GTE);
+		map.put(Integer.valueOf(JSParser.GT), String.valueOf(Keywords.GT));
+		map.put(Integer.valueOf(JSParser.SAME), Keywords.SAME);
+		map.put(Integer.valueOf(JSParser.NSAME), Keywords.NSAME);
 
-		map.put(new Integer(JSParser.INSTANCEOF), Keywords.INSTANCEOF);
-		map.put(new Integer(JSParser.TYPEOF), Keywords.TYPEOF);
-		map.put(new Integer(JSParser.IN), Keywords.IN);
+		map.put(Integer.valueOf(JSParser.INSTANCEOF), Keywords.INSTANCEOF);
+		map.put(Integer.valueOf(JSParser.TYPEOF), Keywords.TYPEOF);
+		map.put(Integer.valueOf(JSParser.IN), Keywords.IN);
 	}
 
 	public static String fromToken(int token) {
-
-		Integer tokenValue = new Integer(token);
+		Integer tokenValue = Integer.valueOf(token);
 		if (map.containsKey(tokenValue)) {
-			return map.get(tokenValue).toString();
+			return map.get(tokenValue);
 		}
-
-		throw new IllegalArgumentException(new Integer(token).toString());
+		throw new IllegalArgumentException(Integer.toString(token));
 	}
 
 	private static String charToHexString(char ch) {
