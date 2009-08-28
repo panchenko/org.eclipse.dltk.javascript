@@ -70,4 +70,13 @@ function 		a		(		) {
 }
 ==
 function a () { }
+==> formatter.insertspace.before.lp.function = false
+==== function-closure
+	var x = function ( ) { }
+==
+var x = function() { }
+==== function-closure-new
+	var x = new function ( ) { }
+==	
+var x = new function() { }
 ====
