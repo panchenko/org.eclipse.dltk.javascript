@@ -140,12 +140,12 @@ public class JavaScriptParserTestCase extends TestCase {
 		JavaScriptParserTester.parse("e4x.js", "UTF-8");
 	}
 
-	public void testXml1() throws Exception {
-		JavaScriptParserTester.parse("e4x-xml1.js");
+	public void testXmlNamespace() throws Exception {
+		JavaScriptParserTester.parse("e4x-xml-namespace.js");
 	}
 
-	public void testXml2() throws Exception {
-		JavaScriptParserTester.parse("e4x-xml2.js");
+	public void testXmlVar() throws Exception {
+		JavaScriptParserTester.parse("e4x-xml-var.js");
 	}
 
 	public void testE4XSimpleParse() throws Exception {
