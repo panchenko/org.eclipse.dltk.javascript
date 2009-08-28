@@ -19,7 +19,6 @@ import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterFactory;
 import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
 import org.eclipse.jface.text.Document;
-import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
 public class JavaScriptParserTester extends AbstractTester {
@@ -35,7 +34,9 @@ public class JavaScriptParserTester extends AbstractTester {
 
 		Assert.assertNotNull(textEdit);
 
-		String formatted = ((ReplaceEdit) textEdit).getText();
+		Document doc = new Document(source);
+		textEdit.apply(doc);
+		String formatted = doc.get();
 
 		Assert.assertTrue(
 				"There are no changes in formatted document, format() fails!",
