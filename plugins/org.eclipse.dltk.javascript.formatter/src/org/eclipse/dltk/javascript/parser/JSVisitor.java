@@ -137,6 +137,7 @@ public abstract class JSVisitor {
 			case JSParser.INC:
 			case JSParser.DEC:
 			case JSParser.NEG:
+			case JSParser.POS:
 			case JSParser.NOT:
 			case JSParser.INV:
 				return visitUnaryOperation(node);

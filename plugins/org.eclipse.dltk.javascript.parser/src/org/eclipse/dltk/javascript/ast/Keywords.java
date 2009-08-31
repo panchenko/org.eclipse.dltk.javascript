@@ -258,6 +258,7 @@ public class Keywords {
 		map.put(Integer.valueOf(JSParser.INC), Keywords.INC);
 		map.put(Integer.valueOf(JSParser.DEC), Keywords.DEC);
 		map.put(Integer.valueOf(JSParser.NEG), String.valueOf(Keywords.SUB));
+		map.put(Integer.valueOf(JSParser.POS), String.valueOf(Keywords.ADD));
 
 		map.put(Integer.valueOf(JSParser.ADD), String.valueOf(Keywords.ADD));
 		map.put(Integer.valueOf(JSParser.SUB), String.valueOf(Keywords.SUB));

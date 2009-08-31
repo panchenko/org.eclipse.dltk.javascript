@@ -889,6 +889,10 @@ public class JSTransformer extends JSVisitor {
 				operationType = JSParser.DEC;
 				break;
 
+			case JSParser.POS:
+				operationType = JSParser.ADD;
+				break;
+
 			case JSParser.NEG:
 				operationType = JSParser.SUB;
 				break;
