@@ -736,6 +736,9 @@ Identifier
 ;
 identifier
   : WXML
+  | GET
+  | SET
+  | EACH
   | Identifier
 ;
 
