@@ -20,18 +20,18 @@ import org.eclipse.dltk.ast.ASTNode;
 public class VariableDeclaration extends Expression {
 
 	private Keyword varKeyword;
-	private List variables;
-	private List commas;
+	private List<ASTNode> variables;
+	private List<Integer> commas;
 
 	public VariableDeclaration(ASTNode parent) {
 		super(parent);
 	}
 
-	public List getVariables() {
+	public List<ASTNode> getVariables() {
 		return this.variables;
 	}
 
-	public void setVariables(List variables) {
+	public void setVariables(List<ASTNode> variables) {
 		this.variables = variables;
 	}
 
@@ -43,11 +43,11 @@ public class VariableDeclaration extends Expression {
 		this.varKeyword = keyword;
 	}
 
-	public List getCommas() {
+	public List<Integer> getCommas() {
 		return this.commas;
 	}
 
-	public void setCommas(List commas) {
+	public void setCommas(List<Integer> commas) {
 		this.commas = commas;
 	}
 
