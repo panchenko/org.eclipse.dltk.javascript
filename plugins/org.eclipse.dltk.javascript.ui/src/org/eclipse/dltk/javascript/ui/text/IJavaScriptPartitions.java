@@ -17,6 +17,9 @@ public interface IJavaScriptPartitions {
 	public final static String JS_PARTITIONING = IJavaScriptConstants.JS_PARTITIONING;
 
 	public final static String JS_COMMENT = "__javascript_comment"; //$NON-NLS-1$
+	/**
+	 * @since 2.0
+	 */
 	public final static String JS_STRING_SINGLE = "__javascript_string_single"; //$NON-NLS-1$
 	public final static String JS_STRING = "__javascript_string_double";//$NON-NLS-1$
 	public final static String JS_DOC = "__javascript_doc"; //$NON-NLS-1$
