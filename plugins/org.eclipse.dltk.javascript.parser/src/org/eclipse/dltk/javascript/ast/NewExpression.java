@@ -24,10 +24,16 @@ public class NewExpression extends Expression {
 		super(parent);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public Expression getObjectClass() {
 		return this.objectClass;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public void setObjectClass(Expression objectClass) {
 		this.objectClass = objectClass;
 	}

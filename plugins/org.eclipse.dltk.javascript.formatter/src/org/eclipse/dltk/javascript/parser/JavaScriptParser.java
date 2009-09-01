@@ -97,6 +97,9 @@ public class JavaScriptParser extends AbstractSourceParser {
 		}
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public Script parse(char[] fileName, char[] source,
 			IProblemReporter reporter) {
 		Assert.isNotNull(source);
