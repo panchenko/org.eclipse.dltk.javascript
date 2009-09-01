@@ -81,8 +81,8 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 	private int detectIndentationLevel(String input, int offset) {
 		ParserProblemReporter reporter = new ParserProblemReporter();
 
-		Script ast = (Script) new JavaScriptParser().parse(null, input
-				.toCharArray(), reporter);
+		Script ast = new JavaScriptParser().parse(null, input.toCharArray(),
+				reporter);
 
 		if (ast == null) {
 			if (DLTKCore.DEBUG)
@@ -118,8 +118,8 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 
 		ParserProblemReporter reporter = new ParserProblemReporter();
 
-		Script root = (Script) new JavaScriptParser().parse(null, source
-				.toCharArray(), reporter);
+		Script root = new JavaScriptParser().parse(null, source.toCharArray(),
+				reporter);
 
 		if (root == null) {
 			final List<IProblem> errors = reporter.getErrors();
