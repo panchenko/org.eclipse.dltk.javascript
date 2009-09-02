@@ -205,6 +205,10 @@ tokens
 	EXPR ;
 	FORITER ;
 	FORSTEP ;
+	FOREACH ;
+	GETTER ;
+	SETTER ;
+	DEFAULT_XML_NAMESPACE ;
 	ITEM ;
 	LABELLED ;
 	NAMEDVALUE ;
@@ -233,7 +237,11 @@ private Token last;
 
 final static boolean isIdentifierKeyword(int token)
 {
-	return token == WXML; 
+	return token == WXML
+		|| token == GET
+  		|| token == SET
+  		|| token == EACH
+  		|| token == NAMESPACE; 
 }
 
 private final boolean areRegularExpressionsEnabled()
@@ -739,6 +747,7 @@ identifier
   | GET
   | SET
   | EACH
+  | NAMESPACE
   | Identifier
 ;
 
@@ -1143,7 +1152,8 @@ unaryOperator
 // $>
 
 namespaceStatement
-  : DEFAULT WXML NAMESPACE^ ASSIGN StringLiteral semic!
+  : DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic
+    -> ^(DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN StringLiteral)
   ;
 
 // $<Multiplicative operators (11.5)
@@ -1508,7 +1518,8 @@ Furthermore backtracking seemed to have 3 major drawbacks:
 */
 
 forEachStatement
-  : FOR! EACH^ LPAREN! forEachControl RPAREN! statement
+  : FOR EACH LPAREN forEachControl RPAREN statement 
+  	-> ^(FOREACH forEachControl statement)
   ;
 
 forEachControl
@@ -1733,11 +1744,13 @@ functionBody
 // $< get/set methods
 
 getMethodDeclaration
-  : GET^ name=identifier LPAREN! RPAREN! functionBody
+  : GET name=identifier LPAREN RPAREN functionBody
+  	-> ^(GETTER identifier functionBody)
   ;
   
 setMethodDeclaration
-  : SET^ name=identifier LPAREN! identifier RPAREN! functionBody
+  : SET name=identifier LPAREN param=identifier RPAREN functionBody
+    -> ^(SETTER $name $param functionBody)
   ;
 
 // $>	

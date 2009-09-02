@@ -53,6 +53,10 @@ public abstract class JSVisitor {
 
 			case JSParser.Identifier:
 			case JSParser.WXML:
+			case JSParser.GET:
+			case JSParser.SET:
+			case JSParser.EACH:
+			case JSParser.NAMESPACE:
 				return visitIdentifier(node);
 
 			case JSParser.ARGS:
@@ -175,7 +179,7 @@ public abstract class JSVisitor {
 			case JSParser.NAMEDVALUE:
 				return visitPropertyInitializer(node);
 
-			case JSParser.EACH:
+			case JSParser.FOREACH:
 				return visitForEachInStatement(node);
 
 			case JSParser.IF:
@@ -223,10 +227,10 @@ public abstract class JSVisitor {
 			case JSParser.VOID:
 				return visitVoid(node);
 
-			case JSParser.GET:
+			case JSParser.GETTER:
 				return visitGet(node);
 
-			case JSParser.SET:
+			case JSParser.SETTER:
 				return visitSet(node);
 
 			case JSParser.TYPEOF:
@@ -247,7 +251,7 @@ public abstract class JSVisitor {
 			case JSParser.XMLLiteral:
 				return visitXmlLiteral(node);
 
-			case JSParser.NAMESPACE:
+			case JSParser.DEFAULT_XML_NAMESPACE:
 				return visitNamespace(node);
 
 			case JSParser.XmlAttribute:
