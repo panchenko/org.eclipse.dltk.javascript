@@ -36,6 +36,7 @@ public class AllTests {
 		suite.addTest(ForStatementTest.suite());
 		suite.addTest(WhileTest.suite());
 		suite.addTest(RegExpTest.suite());
+		suite.addTest(KeywordsTest.suite());
 		suite.addTest(E4XTest.suite());
 		suite.addTestSuite(JavaScriptParserTestCase.class);
 		suite.addTestSuite(ANTLRParserTestCase.class);
