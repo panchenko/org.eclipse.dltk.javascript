@@ -584,10 +584,14 @@ fragment PS // Paragraph Separator
 	: '\u2029'
 	;
 
-fragment LineTerminator
+fragment LineTerminatorChar
 	: CR | LF | LS | PS
 	;
-		
+
+fragment LineTerminator
+	: (CR LF?) | LF | LS | PS
+	;
+
 EOL
 	: ( ( CR LF? ) | LF | LS | PS ) { $channel = HIDDEN; }
 	;
@@ -600,7 +604,7 @@ MultiLineComment
 	;
 
 SingleLineComment
-	: '//' ( ~( LineTerminator ) )* { $channel = HIDDEN; }
+	: '//' ( ~( LineTerminatorChar ) )* { $channel = HIDDEN; }
 	;
 
 // $>
@@ -892,7 +896,7 @@ These are removed from the standards but are here for backwards compatibility wi
 */
 	
 fragment CharacterEscapeSequence
-	: ~( DecimalDigit | 'x' | 'u' | LineTerminator ) // Concatenation of SingleEscapeCharacter and NonEscapeCharacter
+	: ~( DecimalDigit | 'x' | 'u' | LineTerminatorChar ) // Concatenation of SingleEscapeCharacter and NonEscapeCharacter
 	;
 
 fragment ZeroToThree
@@ -927,8 +931,8 @@ fragment EscapeSequence
 	;
 
 StringLiteral
-	: SQUOTE ( ~( SQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* SQUOTE
-	| DQUOTE ( ~( DQUOTE | BSLASH | LineTerminator ) | EscapeSequence )* DQUOTE
+	: SQUOTE ( ~( SQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* SQUOTE
+	| DQUOTE ( ~( DQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* DQUOTE
 	;
 	
 
@@ -937,16 +941,16 @@ StringLiteral
 // $<	Regular expression literals (7.8.5)
 
 fragment BackslashSequence
-	: BSLASH ~( LineTerminator )
+	: BSLASH ~( LineTerminatorChar )
 	;
 
 fragment RegularExpressionFirstChar
-	: ~ ( LineTerminator | MUL | BSLASH | DIV )
+	: ~ ( LineTerminatorChar | MUL | BSLASH | DIV )
 	| BackslashSequence
 	;
 
 fragment RegularExpressionChar
-	: ~ ( LineTerminator | BSLASH | DIV )
+	: ~ ( LineTerminatorChar | BSLASH | DIV )
 	| BackslashSequence
 	;
 
