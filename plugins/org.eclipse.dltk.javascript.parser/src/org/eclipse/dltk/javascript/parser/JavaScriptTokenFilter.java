@@ -379,10 +379,7 @@ public class JavaScriptTokenFilter {
 
 			}
 
-			Token newToken = new JavaScriptToken(source.get(i));
-			// newToken.setTokenIndex(tokenIndex++);
-
-			tokens.add(newToken);
+			tokens.add(tk);
 		}
 		return tokens;
 	}
