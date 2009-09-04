@@ -201,6 +201,8 @@ public class JavaScriptTokenFilter {
 		case JSParser.BOOLEAN:
 		case JSParser.WhiteSpace:
 		case JSParser.EOL:
+		case JSParser.LBRACE:
+		case JSParser.RBRACE:
 			return true;
 		}
 		return false;
