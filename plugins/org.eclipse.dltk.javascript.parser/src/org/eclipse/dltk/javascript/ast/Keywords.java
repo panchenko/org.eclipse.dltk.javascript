@@ -230,7 +230,7 @@ public class Keywords {
 		map.put(Integer.valueOf(JSParser.GET), Keywords.GET);
 		map.put(Integer.valueOf(JSParser.SET), Keywords.SET);
 		map.put(Integer.valueOf(JSParser.VOID), Keywords.VOID);
-		map.put(Integer.valueOf(JSParser.XML), Keywords.XML);
+		map.put(Integer.valueOf(JSParser.WXML), Keywords.XML);
 		map.put(Integer.valueOf(JSParser.NAMESPACE), Keywords.NAMESPACE);
 		map.put(Integer.valueOf(JSParser.YIELD), Keywords.YIELD);
 
@@ -360,9 +360,8 @@ public class Keywords {
 			return false;
 
 		if (map.containsValue(value.toLowerCase())) {
-			char[] chars = value.toCharArray();
-			for (int i = 0; i < chars.length; i++) {
-				if (!Character.isLetter(chars[i]))
+			for (int i = 0; i < value.length(); i++) {
+				if (!Character.isLetter(value.charAt(i)))
 					return false;
 			}
 			return true;
