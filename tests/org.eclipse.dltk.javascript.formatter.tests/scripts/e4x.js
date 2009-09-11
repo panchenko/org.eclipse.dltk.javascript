@@ -23,9 +23,8 @@ function test3 () {
 	    var _xml =      <xml/>;
     }
 ==
-function test3()
-{
-	var _xml =      <xml/>;
+function test3 () {
+	var _xml = <xml/>;
 }
 ==== none keyword openclose tag
     function test3()
