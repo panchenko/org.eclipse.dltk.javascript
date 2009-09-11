@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2009-09-03 19:32:37
+// $ANTLR 3.0.1 JS.g 2009-09-11 10:55:01
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -63,7 +63,6 @@ public class JSLexer extends Lexer {
     public static final int GT=80;
     public static final int CALL=135;
     public static final int CharacterEscapeSequence=189;
-    public static final int XML=153;
     public static final int LAND=101;
     public static final int PINC=151;
     public static final int PROTECTED=61;
@@ -86,14 +85,14 @@ public class JSLexer extends Lexer {
     public static final int ADD=87;
     public static final int ZeroToThree=190;
     public static final int ITEM=144;
-    public static final int XMLLiteral=198;
+    public static final int XMLLiteral=153;
     public static final int UnicodeEscapeSequence=193;
     public static final int SHUASS=112;
     public static final int SET=34;
     public static final int SHORT=63;
     public static final int INSTANCEOF=21;
     public static final int SQUOTE=156;
-    public static final int Tokens=199;
+    public static final int Tokens=198;
     public static final int SAME=85;
     public static final int XHCLOSE=124;
     public static final int StringLiteral=173;
@@ -225,7 +224,7 @@ public class JSLexer extends Lexer {
     		return true;
     	}
     	if (isIdentifierKeyword(last.getType())) {
-    		return true; 
+    		return false; 
     	}
     	switch (last.getType())
     	{

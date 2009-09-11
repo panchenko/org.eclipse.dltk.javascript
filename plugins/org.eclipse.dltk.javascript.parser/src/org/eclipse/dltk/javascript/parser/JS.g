@@ -218,7 +218,7 @@ tokens
 	PDEC ;
 	PINC ;
 	POS ;
-	XML ;
+	XMLLiteral ;
 }
 
 @lexer::header
@@ -251,7 +251,7 @@ private final boolean areRegularExpressionsEnabled()
 		return true;
 	}
 	if (isIdentifierKeyword(last.getType())) {
-		return true; 
+		return false; 
 	}
 	switch (last.getType())
 	{
@@ -432,7 +432,7 @@ private final static boolean isLeftHandSideExpression(RuleReturnScope lhs)
 			case HexIntegerLiteral:
 			case StringLiteral:
 			case RegularExpressionLiteral:
-			case XML:
+			case XMLLiteral:
 			case ARRAY:
 			case OBJECT:
 			case PAREXPR:
@@ -664,7 +664,7 @@ keyword
 	| WHILE
 	| WITH
 	| NAMESPACE
-	| XML
+	| WXML
 	| YIELD
 	;
 
@@ -1115,7 +1115,7 @@ postfixOperator
 unaryExpression
 	: postfixExpression
 	| unaryOperator^ unaryExpression
-  | XMLLiteral
+	| XMLLiteral
 	;
 	
 unaryOperator
