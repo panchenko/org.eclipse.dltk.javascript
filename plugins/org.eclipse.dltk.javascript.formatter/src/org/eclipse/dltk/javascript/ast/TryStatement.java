@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class TryStatement extends Statement {
 
@@ -27,6 +28,30 @@ public class TryStatement extends Statement {
 
 	public TryStatement(ASTNode parent) {
 		super(parent);
+	}
+	
+
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (tryKeyword != null) tryKeyword.traverse(visitor);
+			if (body != null) body.traverse(visitor);
+			
+			if (catchClauses != null)
+			{
+				for (CatchClause ctch : catchClauses)
+				{
+					ctch.traverse(visitor);
+				}
+			}
+			if (finallyClause != null) finallyClause.traverse(visitor);
+			visitor.endvisit(this);
+		}
 	}
 
 	public Statement getBody() {

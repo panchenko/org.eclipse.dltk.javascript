@@ -16,20 +16,45 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class FunctionStatement extends Expression {
 
 	private Keyword functionKeyword;
 	private Identifier name;
-	private List arguments;
+	private List<ASTNode> arguments;
 	private StatementBlock body;
 	private int LP = -1;
 	private int RP = -1;
-	private List commas;
+	private List<Integer> commas;
 
 	public FunctionStatement(ASTNode parent) {
 		super(parent);
 	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (functionKeyword != null) functionKeyword.traverse(visitor);
+			if (name != null) name.traverse(visitor);
+			
+			if (arguments != null)
+			{
+				for (ASTNode node : arguments)
+				{
+					node.traverse(visitor);
+				}
+			}
+			if (body != null) body.traverse(visitor);
+			visitor.endvisit(this);
+		}
+	}
+
 
 	public Keyword getFunctionKeyword() {
 		return this.functionKeyword;
@@ -47,11 +72,11 @@ public class FunctionStatement extends Expression {
 		this.name = name;
 	}
 
-	public List getArguments() {
+	public List<ASTNode> getArguments() {
 		return this.arguments;
 	}
 
-	public void setArguments(List arguments) {
+	public void setArguments(List<ASTNode> arguments) {
 		this.arguments = arguments;
 	}
 
@@ -79,11 +104,11 @@ public class FunctionStatement extends Expression {
 		this.RP = RP;
 	}
 
-	public List getArgumentCommas() {
+	public List<Integer> getArgumentCommas() {
 		return this.commas;
 	}
 
-	public void setArgumentCommas(List commas) {
+	public void setArgumentCommas(List<Integer> commas) {
 		this.commas = commas;
 	}
 

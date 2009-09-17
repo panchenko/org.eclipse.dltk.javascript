@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class VoidExpression extends Statement implements ISemicolonStatement {
 
@@ -24,6 +25,20 @@ public class VoidExpression extends Statement implements ISemicolonStatement {
 		super(parent);
 	}
 
+
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (expression != null) expression.traverse(visitor);
+			visitor.endvisit(this);
+		}
+	}
+	
 	public Expression getExpression() {
 		return this.expression;
 	}

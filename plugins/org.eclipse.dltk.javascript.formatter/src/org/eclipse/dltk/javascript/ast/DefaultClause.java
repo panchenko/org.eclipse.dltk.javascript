@@ -12,8 +12,11 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class DefaultClause extends SwitchComponent {
 
@@ -21,6 +24,28 @@ public class DefaultClause extends SwitchComponent {
 
 	public DefaultClause(ASTNode parent) {
 		super(parent);
+	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (defaultKeyword != null) defaultKeyword.traverse(visitor);
+			
+			List<Statement> statements = getStatements();
+			if (statements != null)
+			{
+				for (Statement statement : statements)
+				{
+					statement.traverse(visitor);
+				}
+			}
+			visitor.endvisit(this);
+		}
 	}
 
 	public Keyword getDefaultKeyword() {

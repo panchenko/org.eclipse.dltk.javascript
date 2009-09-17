@@ -16,23 +16,47 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ConstDeclaration extends Statement {
 
 	private Keyword constKeyword;
-	private List consts;
-	private List commas;
+	private List<ASTNode> consts;
+	private List<Integer> commas;
 	private int semic = -1;
 
 	public ConstDeclaration(ASTNode parent) {
 		super(parent);
 	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (constKeyword != null) constKeyword.traverse(visitor);
+			
+			if (consts != null)
+			{
+				for (ASTNode constNode : consts)
+				{
+					constNode.traverse(visitor);
+				}
+			}
+			
+			visitor.endvisit(this);
+		}
+	}
 
-	public List getConsts() {
+
+	public List<ASTNode> getConsts() {
 		return this.consts;
 	}
 
-	public void setConsts(List consts) {
+	public void setConsts(List<ASTNode> consts) {
 		this.consts = consts;
 	}
 
@@ -44,11 +68,11 @@ public class ConstDeclaration extends Statement {
 		this.constKeyword = keyword;
 	}
 
-	public List getCommas() {
+	public List<Integer> getCommas() {
 		return this.commas;
 	}
 
-	public void setCommas(List commas) {
+	public void setCommas(List<Integer> commas) {
 		this.commas = commas;
 	}
 

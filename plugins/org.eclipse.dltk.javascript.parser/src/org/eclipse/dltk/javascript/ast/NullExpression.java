@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class NullExpression extends Expression {
 
@@ -23,6 +24,18 @@ public class NullExpression extends Expression {
 
 	public String getText() {
 		return Keywords.NULL;
+	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			visitor.endvisit(this);
+		}
 	}
 
 	public String toSourceString(String indentationString) {

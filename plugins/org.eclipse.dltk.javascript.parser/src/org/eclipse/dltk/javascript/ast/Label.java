@@ -38,6 +38,10 @@ public class Label extends ASTNode implements ISourceable {
 	}
 
 	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this))
+		{
+			visitor.endvisit(this);
+		}
 	}
 
 	public boolean isBlock() {

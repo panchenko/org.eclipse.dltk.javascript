@@ -21,7 +21,7 @@ public abstract class LoopStatement extends Statement {
 	public LoopStatement(ASTNode parent) {
 		super(parent);
 	}
-
+	
 	public Statement getBody() {
 		return this.body;
 	}

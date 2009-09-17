@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class WhileStatement extends LoopStatement implements ISemicolonStatement {
 
@@ -27,6 +28,26 @@ public class WhileStatement extends LoopStatement implements ISemicolonStatement
 		super(parent);
 	}
 
+	/**
+	 * @see org.eclipse.dltk.javascript.ast.Statement#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (whileKeyword != null) whileKeyword.traverse(visitor);
+			if (condition != null) condition.traverse(visitor);
+
+			Statement body = getBody();
+			if (body != null)
+			{
+				body.traverse(visitor);
+			}
+			visitor.endvisit(this);
+		}
+	}
+	
 	public Expression getCondition() {
 		return this.condition;
 	}

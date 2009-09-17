@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ForInStatement extends LoopStatement implements ISemicolonStatement {
 
@@ -28,6 +29,30 @@ public class ForInStatement extends LoopStatement implements ISemicolonStatement
 	public ForInStatement(ASTNode parent) {
 		super(parent);
 	}
+	
+	/**
+	 * @see org.eclipse.dltk.javascript.ast.Statement#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (forKeyword != null) forKeyword.traverse(visitor);
+			if (inKeyword != null) inKeyword.traverse(visitor);
+			if (item != null) item.traverse(visitor);
+			if (iterator != null) iterator.traverse(visitor);
+
+			Statement body = getBody();
+			if (body != null)
+			{
+				body.traverse(visitor);
+			}
+			visitor.endvisit(this);
+		}
+	}
+
+
 
 	public Expression getItem() {
 		return this.item;

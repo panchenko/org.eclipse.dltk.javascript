@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class BreakStatement extends Statement implements ISemicolonStatement {
 
@@ -24,6 +25,21 @@ public class BreakStatement extends Statement implements ISemicolonStatement {
 	public BreakStatement(ASTNode parent) {
 		super(parent);
 	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (breakKeyword != null) breakKeyword.traverse(visitor);
+			if (label != null) label.traverse(visitor);
+			visitor.endvisit(this);
+		}
+	}
+
 
 	public Keyword getBreakKeyword() {
 		return breakKeyword;

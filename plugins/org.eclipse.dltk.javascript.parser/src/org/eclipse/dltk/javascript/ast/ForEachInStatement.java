@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ForEachInStatement extends ForInStatement implements ISemicolonStatement {
 
@@ -21,6 +22,29 @@ public class ForEachInStatement extends ForInStatement implements ISemicolonStat
 
 	public ForEachInStatement(ASTNode parent) {
 		super(parent);
+	}
+	
+	/**
+	 * @see org.eclipse.dltk.javascript.ast.Statement#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (eachKeyword != null) eachKeyword.traverse(visitor);
+			if (getForKeyword() != null) getForKeyword().traverse(visitor);
+			if (getInKeyword() != null) getInKeyword().traverse(visitor);
+			if (getItem() != null) getItem().traverse(visitor);
+			if (getIterator() != null) getIterator().traverse(visitor);
+			
+			Statement body = getBody();
+			if (body != null)
+			{
+				body.traverse(visitor);
+			}
+			visitor.endvisit(this);
+		}
 	}
 
 	public Keyword getEachKeyword() {

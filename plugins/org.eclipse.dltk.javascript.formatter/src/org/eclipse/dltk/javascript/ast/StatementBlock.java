@@ -13,10 +13,12 @@
 package org.eclipse.dltk.javascript.ast;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class StatementBlock extends Statement {
 
@@ -26,6 +28,17 @@ public class StatementBlock extends Statement {
 
 	public StatementBlock(ASTNode parent) {
 		super(parent);
+	}
+	
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			Iterator<Statement> it = statements.iterator();
+			while (it.hasNext()) {
+				Statement node = it.next();
+				node.traverse(visitor);
+			}
+			visitor.endvisit(this);
+		}
 	}
 
 	public List<Statement> getStatements() {

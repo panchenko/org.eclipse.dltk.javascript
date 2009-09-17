@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class LabelledStatement extends Statement {
 
@@ -23,6 +24,21 @@ public class LabelledStatement extends Statement {
 
 	public LabelledStatement(ASTNode parent) {
 		super(parent);
+	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (label != null) label.traverse(visitor);
+			if (statement != null) statement.traverse(visitor);
+			
+			visitor.endvisit(this);
+		}
 	}
 
 	public Label getLabel() {

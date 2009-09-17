@@ -16,31 +16,51 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ArrayInitializer extends Expression {
 
-	private List items;
-	private List commas;
+	private List<ASTNode> items;
+	private List<Integer> commas;
 	private int LB = -1;
 	private int RB = -1;
 
 	public ArrayInitializer(ASTNode parent) {
 		super(parent);
 	}
-
-	public List getItems() {
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (items != null)
+			{
+				for (ASTNode node : items)
+				{
+					node.traverse(visitor);
+				}
+			}
+			visitor.endvisit(this);
+		}
+	}
+	
+	public List<ASTNode> getItems() {
 		return this.items;
 	}
 
-	public void setItems(List items) {
+	public void setItems(List<ASTNode> items) {
 		this.items = items;
 	}
 
-	public List getCommas() {
+	public List<Integer> getCommas() {
 		return this.commas;
 	}
 
-	public void setCommas(List commas) {
+	public void setCommas(List<Integer> commas) {
 		this.commas = commas;
 	}
 

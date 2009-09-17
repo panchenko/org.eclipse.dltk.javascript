@@ -53,6 +53,10 @@ public class Keyword extends ASTNode {
 	}
 
 	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this))
+		{
+			visitor.endvisit(this);
+		}
 	}
 
 }

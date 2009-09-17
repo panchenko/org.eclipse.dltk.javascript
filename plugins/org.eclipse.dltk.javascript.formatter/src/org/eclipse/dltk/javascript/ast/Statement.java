@@ -15,7 +15,6 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.Collection;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.ast.ASTVisitor;
 
 public abstract class Statement extends ASTNode implements ISourceable {
 
@@ -29,9 +28,6 @@ public abstract class Statement extends ASTNode implements ISourceable {
 
 	public ASTNode getParent() {
 		return this.parent;
-	}
-
-	public void traverse(ASTVisitor visitor) throws Exception {
 	}
 
 	public String toString() {

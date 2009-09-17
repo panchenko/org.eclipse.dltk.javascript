@@ -16,24 +16,45 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ObjectInitializer extends Expression {
 
-	private List initializers;
+	private List<ASTNode> initializers;
 	private int LC = -1;
 	private int RC = -1;
-	private List commas;
+	private List<Integer> commas;
 	private boolean multiline;
 
 	public ObjectInitializer(ASTNode parent) {
 		super(parent);
 	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (initializers != null)
+			{
+				for (ASTNode node : initializers)
+				{
+					node.traverse(visitor);
+				}
+			}
+			visitor.endvisit(this);
+		}
+	}
 
-	public List getInitializers() {
+
+	public List<ASTNode> getInitializers() {
 		return this.initializers;
 	}
 
-	public void setInitializers(List initializers) {
+	public void setInitializers(List<ASTNode> initializers) {
 		this.initializers = initializers;
 	}
 
@@ -53,11 +74,11 @@ public class ObjectInitializer extends Expression {
 		this.RC = RC;
 	}
 
-	public List getCommas() {
+	public List<Integer> getCommas() {
 		return this.commas;
 	}
 
-	public void setCommas(List commas) {
+	public void setCommas(List<Integer> commas) {
 		this.commas = commas;
 	}
 

@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class SwitchStatement extends Statement {
 
@@ -30,6 +31,28 @@ public class SwitchStatement extends Statement {
 
 	public SwitchStatement(ASTNode parent) {
 		super(parent);
+	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (switchKeyword != null) switchKeyword.traverse(visitor);
+			if (condition != null) condition.traverse(visitor);
+			
+			if (caseClauses != null)
+			{
+				for (SwitchComponent comp : caseClauses)
+				{
+					comp.traverse(visitor);
+				}
+			}
+			visitor.endvisit(this);
+		}
 	}
 
 	public Expression getCondition() {

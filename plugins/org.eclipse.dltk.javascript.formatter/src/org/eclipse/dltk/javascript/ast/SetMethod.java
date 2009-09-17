@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class SetMethod extends Method {
 
@@ -23,6 +24,23 @@ public class SetMethod extends Method {
 	public SetMethod(ASTNode parent) {
 		super(parent);
 	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (setKeyword != null) setKeyword.traverse(visitor);
+			if (getName() != null) getName().traverse(visitor);
+			if (argument != null) argument.traverse(visitor);
+			if (getBody() != null) getBody().traverse(visitor);
+			visitor.endvisit(this);
+		}
+	}
+
 
 	public Identifier getArgument() {
 		return this.argument;

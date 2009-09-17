@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class IfStatement extends Statement {
 
@@ -27,6 +28,23 @@ public class IfStatement extends Statement {
 
 	public IfStatement(ASTNode parent) {
 		super(parent);
+	}
+	
+	/**
+	 * @see org.eclipse.dltk.javascript.ast.Statement#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (ifKeyword != null) ifKeyword.traverse(visitor);
+			if (elseKeyword != null) elseKeyword.traverse(visitor);
+			if (condition != null) condition.traverse(visitor);
+			if (thenStatement != null) thenStatement.traverse(visitor);
+			if (elseStatement != null) elseStatement.traverse(visitor);
+			visitor.endvisit(this);
+		}
 	}
 
 	public Expression getCondition() {

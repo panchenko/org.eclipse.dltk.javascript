@@ -16,18 +16,41 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class CallExpression extends Expression {
 
 	private ASTNode expression;
-	private List arguments;
-	private List commas;
+	private List<ASTNode>  arguments;
+	private List<Integer> commas;
 	private int LP = -1;
 	private int RP = -1;
 
 	public CallExpression(ASTNode parent) {
 		super(parent);
 	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (expression != null) expression.traverse(visitor);
+			
+			if (arguments != null)
+			{
+				for (ASTNode node : arguments)
+				{
+					node.traverse(visitor);
+				}
+			}
+			visitor.endvisit(this);
+		}
+	}
+
 
 	public ASTNode getExpression() {
 		return this.expression;
@@ -37,11 +60,11 @@ public class CallExpression extends Expression {
 		this.expression = expression;
 	}
 
-	public List getArguments() {
+	public List<ASTNode>  getArguments() {
 		return this.arguments;
 	}
 
-	public void setArguments(List arguments) {
+	public void setArguments(List<ASTNode>  arguments) {
 		this.arguments = arguments;
 	}
 
@@ -61,11 +84,11 @@ public class CallExpression extends Expression {
 		this.RP = RP;
 	}
 
-	public List getCommas() {
+	public List<Integer> getCommas() {
 		return this.commas;
 	}
 
-	public void setCommas(List commas) {
+	public void setCommas(List<Integer> commas) {
 		this.commas = commas;
 	}
 

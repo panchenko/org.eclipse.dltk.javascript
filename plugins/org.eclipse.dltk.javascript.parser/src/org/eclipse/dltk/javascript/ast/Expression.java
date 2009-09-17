@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.JSLiterals;
 
 public abstract class Expression extends ASTNode implements ISourceable {
@@ -29,10 +28,6 @@ public abstract class Expression extends ASTNode implements ISourceable {
 
 	public ASTNode getParent() {
 		return this.parent;
-	}
-
-	@Override
-	public void traverse(ASTVisitor visitor) throws Exception {
 	}
 
 	@Override

@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ConditionalOperator extends Expression {
 
@@ -26,6 +27,22 @@ public class ConditionalOperator extends Expression {
 	public ConditionalOperator(ASTNode parent) {
 		super(parent);
 	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			if (condition != null) condition.traverse(visitor);
+			if (trueValue != null) trueValue.traverse(visitor);
+			if (falseValue != null) falseValue.traverse(visitor);
+			visitor.endvisit(this);
+		}
+	}
+
 
 	public Expression getCondition() {
 		return this.condition;

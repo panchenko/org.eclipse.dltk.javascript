@@ -13,6 +13,7 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
 public class XmlLiteral extends Expression {
 
@@ -20,6 +21,18 @@ public class XmlLiteral extends Expression {
 
 	public XmlLiteral(ASTNode parent) {
 		super(parent);
+	}
+	
+	/**
+	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+	 */
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception
+	{
+		if (visitor.visit(this))
+		{
+			visitor.endvisit(this);
+		}
 	}
 
 	public String getXml() {

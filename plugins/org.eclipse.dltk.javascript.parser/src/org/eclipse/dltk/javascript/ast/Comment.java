@@ -23,6 +23,10 @@ public abstract class Comment extends ASTNode {
 	}
 
 	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this))
+		{
+			visitor.endvisit(this);
+		}
 	}
 
 	public String getText() {
