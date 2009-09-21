@@ -34,6 +34,10 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
+		if (startOnNewLine())
+		{
+			visitor.writeLineBreak(context);
+		}
 		if (begin != null) {
 			visitor
 					.write(context, begin.getStartOffset(), begin
@@ -41,7 +45,7 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 		}
 		final boolean indenting = isIndenting();
 		if (indenting) {
-			context.incIndent();
+			context.incIndent();try {} finally {}
 		}
 		super.accept(context, visitor);
 		if (indenting) {
@@ -49,6 +53,16 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 		}
 	}
 
+	/**
+	 * By default a block with begin node will force a new line.
+	 * Subclasses that want to control this themselves should overwrite and return false.
+	 * @return
+	 */
+	protected boolean startOnNewLine()
+	{
+		return true;
+	}
+	
 	/**
 	 * @return the begin
 	 */

@@ -58,7 +58,7 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 		}
 		context.setBlankLines(getBlankLinesAfter(context));
 	}
-
+	
 	protected int getBlankLinesBefore(IFormatterContext context) {
 		return -1;
 	}

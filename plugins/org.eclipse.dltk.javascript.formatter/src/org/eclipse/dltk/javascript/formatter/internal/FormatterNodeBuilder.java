@@ -121,6 +121,7 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForInStatem
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterFunctionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterGetMethodNode;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.LineBreakFormatterNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterLabelledStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterNewExpressionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterObjectInitializerNode;
@@ -919,8 +920,15 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			public boolean visitIfStatement(IfStatement node) {
-				FormatterBlockNode formatterNode = new FormatterBlockNode(
-						document);
+				FormatterBlockNode formatterNode = null;
+				if (node.getParent() instanceof IfStatement)
+				{
+					formatterNode = new FormatterBlockNode(document);
+				}
+				else
+				{
+					formatterNode = new LineBreakFormatterNode(document);
+				}
 
 				formatterNode.addChild(createTextNode(document, node
 						.getIfKeyword()));
@@ -1285,7 +1293,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitTryStatement(TryStatement node) {
 
-				FormatterBlockNode formatterNode = new FormatterBlockNode(
+				FormatterBlockNode formatterNode = new LineBreakFormatterNode(
 						document);
 
 				formatterNode.addChild(createTextNode(document, node

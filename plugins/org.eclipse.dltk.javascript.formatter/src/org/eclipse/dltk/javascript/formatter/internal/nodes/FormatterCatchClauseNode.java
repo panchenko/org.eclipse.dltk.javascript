@@ -40,5 +40,4 @@ public class FormatterCatchClauseNode extends FormatterBlockNode {
 		return getDocument().getBoolean(
 				JavaScriptFormatterConstants.NEW_LINE_BEFORE_CATCH_IN_TRY);
 	}
-
 }

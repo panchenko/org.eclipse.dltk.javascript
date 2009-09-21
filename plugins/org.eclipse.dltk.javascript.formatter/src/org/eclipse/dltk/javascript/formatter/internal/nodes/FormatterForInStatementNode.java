@@ -23,5 +23,4 @@ public class FormatterForInStatementNode extends FormatterBlockWithBeginNode {
 	protected boolean isIndenting() {
 		return false;
 	}
-
 }
