@@ -18,7 +18,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.ISourceModule;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.CompletionRequestor;
@@ -446,6 +445,11 @@ public class CodeCompletion extends TestCase {
 				WorkingCopyOwner owner, long timeout) throws ModelException {
 			// TODO Auto-generated method stub
 			
+		}
+
+		public boolean isBinary() {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
