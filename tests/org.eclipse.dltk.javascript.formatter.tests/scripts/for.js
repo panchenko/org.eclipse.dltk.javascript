@@ -23,4 +23,27 @@ for(j = 0; j < 10; j++) {
 for (j = 0; j < 10; j++) {
 b = j + 100;
 }
+==== function-for-each-nextline
+function testFormatting(){if(a==10){}else{}for each(var a in {}){}};
+==
+function testFormatting () {
+	if (a == 10) {
+	} else {
+	}
+	for each (var a in { }) {
+	}
+}
+;
+==== function-for-loop-nextline
+function testFormatting(){if(a==10){}else{}for (var a=0;a<10;a++)){}};
+==
+function testFormatting () {
+	if (a == 10) {
+	} else {
+	}
+	for (var a = 0; a < 10; a++))
+	{
+	}
+}
+;
 ====
