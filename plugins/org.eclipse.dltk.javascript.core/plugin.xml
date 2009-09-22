@@ -31,6 +31,13 @@
       </resolver>
    </extension>
    <extension
+      point="org.eclipse.dltk.core.projectIndexer">
+      <enable
+            indexer="org.eclipse.dltk.core.indexer.mixin"
+            nature="org.eclipse.dltk.javascript.core.nature">
+      </enable>
+   </extension>
+   <extension
          point="org.eclipse.dltk.core.mixin">
       <mixin
             class="org.eclipse.dltk.javascript.internal.core.mixin.JavaScriptMixinParser"
