@@ -294,4 +294,9 @@ final class JavaReferenceFakeField extends FakeField implements ISourceModule,IF
 		// TODO Auto-generated method stub
 		
 	}
+
+	public boolean isBinary() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
