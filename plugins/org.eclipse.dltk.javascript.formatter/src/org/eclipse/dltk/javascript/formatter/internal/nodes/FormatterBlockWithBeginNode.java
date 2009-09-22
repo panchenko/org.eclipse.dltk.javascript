@@ -30,19 +30,19 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 		super(document);
 	}
 
-	public FormatterBlockWithBeginNode(IFormatterDocument document, boolean startOnNewLine) {
+	public FormatterBlockWithBeginNode(IFormatterDocument document,
+			boolean startOnNewLine) {
 		super(document);
 		this.startOnNewLine = startOnNewLine;
 	}
 
 	private IFormatterTextNode begin;
-	
+
 	private boolean startOnNewLine = false;
 
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
-		if (startOnNewLine)
-		{
+		if (startOnNewLine) {
 			visitor.writeLineBreak(context);
 		}
 		if (begin != null) {
@@ -52,7 +52,7 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 		}
 		final boolean indenting = isIndenting();
 		if (indenting) {
-			context.incIndent();try {} finally {}
+			context.incIndent();
 		}
 		super.accept(context, visitor);
 		if (indenting) {
