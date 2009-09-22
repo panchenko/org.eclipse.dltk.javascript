@@ -30,11 +30,18 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 		super(document);
 	}
 
+	public FormatterBlockWithBeginNode(IFormatterDocument document, boolean startOnNewLine) {
+		super(document);
+		this.startOnNewLine = startOnNewLine;
+	}
+
 	private IFormatterTextNode begin;
+	
+	private boolean startOnNewLine = false;
 
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
-		if (startOnNewLine())
+		if (startOnNewLine)
 		{
 			visitor.writeLineBreak(context);
 		}
@@ -53,16 +60,6 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 		}
 	}
 
-	/**
-	 * By default a block with begin node will force a new line.
-	 * Subclasses that want to control this themselves should overwrite and return false.
-	 * @return
-	 */
-	protected boolean startOnNewLine()
-	{
-		return true;
-	}
-	
 	/**
 	 * @return the begin
 	 */

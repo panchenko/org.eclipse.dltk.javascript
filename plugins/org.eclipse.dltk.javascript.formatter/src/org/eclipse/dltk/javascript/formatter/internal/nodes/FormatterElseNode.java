@@ -39,15 +39,6 @@ public class FormatterElseNode extends FormatterBlockWithBeginNode {
 		super.accept(context, visitor);
 	}
 	
-	/**
-	 * @see org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterBlockWithBeginNode#startOnNewLine()
-	 */
-	@Override
-	protected boolean startOnNewLine()
-	{
-		return false;
-	}
-
 	protected boolean isIndenting() {
 		return false;
 	}

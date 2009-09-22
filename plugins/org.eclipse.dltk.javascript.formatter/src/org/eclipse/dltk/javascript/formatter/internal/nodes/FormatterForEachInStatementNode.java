@@ -22,7 +22,7 @@ public class FormatterForEachInStatementNode extends
 	private IFormatterNode eachKeyword;
 
 	public FormatterForEachInStatementNode(IFormatterDocument document) {
-		super(document);
+		super(document,true);
 	}
 
 	public IFormatterNode getEachKeyword() {
