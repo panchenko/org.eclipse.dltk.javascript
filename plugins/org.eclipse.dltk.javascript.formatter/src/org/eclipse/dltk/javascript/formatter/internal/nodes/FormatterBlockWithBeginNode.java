@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.dltk.formatter.FormatterBlockNode;
 import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.formatter.IFormatterDocument;
+import org.eclipse.dltk.formatter.IFormatterNode;
 import org.eclipse.dltk.formatter.IFormatterTextNode;
 import org.eclipse.dltk.formatter.IFormatterWriter;
 
@@ -108,11 +109,11 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 	/*
 	 * @see FormatterBlockNode#getChildren()
 	 */
-	public List getChildren() {
+	public List<IFormatterNode> getChildren() {
 		if (begin == null) {
 			return super.getChildren();
 		} else {
-			List result = new ArrayList();
+			List<IFormatterNode> result = new ArrayList<IFormatterNode>();
 			if (begin != null) {
 				result.add(begin);
 			}
