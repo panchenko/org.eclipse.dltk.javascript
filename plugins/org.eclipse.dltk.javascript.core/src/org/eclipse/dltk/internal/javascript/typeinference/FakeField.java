@@ -41,6 +41,8 @@ public class FakeField extends SourceField implements IProposalHolder {
 
 	public ISourceRange getSourceRange() throws ModelException {
 		if (offset == 0 && length == 0) {
+			if (getElementInfo() == null)
+				return null;
 			return super.getSourceRange();
 		}
 		return new SourceRange(offset, length);
