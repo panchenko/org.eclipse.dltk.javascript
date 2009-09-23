@@ -16,9 +16,10 @@ import java.io.CharArrayReader;
 import java.io.IOException;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.CommonTokenStream;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
@@ -30,9 +31,14 @@ import org.eclipse.dltk.javascript.parser.JavaScriptTokenSource;
 public class JavaScriptTokenStreamTester extends AbstractTester {
 
 	public static void tokenize(String resourceName) throws IOException {
+		tokenize(resourceName, JavaScriptFormatterTestsPlugin.CONTEXT
+				.getCharset());
+	}
 
-		String source = getScriptContent(resourceName,
-				JavaScriptFormatterTestsPlugin.CONTEXT.getCharset());
+	public static void tokenize(String resourceName, String charset)
+			throws IOException {
+
+		String source = getScriptContent(resourceName, charset);
 
 		JSLexer lexer = new JSLexer(new ANTLRReaderStream(new CharArrayReader(
 				source.toCharArray())));
@@ -42,7 +48,7 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 
 		List tokens = stream.getTokens();
 
-		Assert.isTrue(tokens.size() > 0);
+		Assert.assertTrue(tokens.size() > 0);
 
 		// for (int i = 0; i < tokens.size(); i++) {
 		// Token tk = (Token) tokens.get(i);
@@ -51,8 +57,12 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 	}
 
 	public static void parse(String resourceName) throws IOException {
-		String source = getScriptContent(resourceName,
-				JavaScriptFormatterTestsPlugin.CONTEXT.getCharset());
+		parse(resourceName, JavaScriptFormatterTestsPlugin.CONTEXT.getCharset());
+	}
+
+	public static void parse(String resourceName, String charset)
+			throws IOException {
+		String source = getScriptContent(resourceName, charset);
 
 		JavaScriptParser parser = new JavaScriptParser();
 
@@ -69,7 +79,7 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 					}
 				});
 
-		Assert.isNotNull(root);
+		Assert.assertNotNull(root);
 
 		// System.out.println(((Script) root).toSourceString(""));
 	}

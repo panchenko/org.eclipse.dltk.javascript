@@ -26,32 +26,43 @@ import org.antlr.runtime.Token;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.javascript.ast.ISourceable;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterPlugin;
 import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
 import org.eclipse.dltk.javascript.parser.JSLexer;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSTransformer;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
-import org.eclipse.dltk.javascript.parser.JavaScriptTokenFilter;
 import org.eclipse.dltk.javascript.parser.JavaScriptTokenSource;
 
+@SuppressWarnings("nls")
 public class ANTLRParserTester {
 
 	public static void parsePreview(String resourceName) throws Exception {
-		String fullResourceName = "org/eclipse/dltk/javascript/formatter/preferences/" + resourceName; //$NON-NLS-1$
-		parseResource(JavaScriptFormatterPlugin.getDefault().getBundle()
-				.getResource(fullResourceName).openStream());
+		String fullResourceName = "org/eclipse/dltk/javascript/formatter/preferences/"
+				+ resourceName;
+		parseResource(fullResourceName, null);
 	}
 
 	public static void parse(String resourceName) throws Exception {
-		String fullResourceName = "scripts.parser/" + resourceName; //$NON-NLS-1$
-		parseResource(JavaScriptFormatterTestsPlugin.getDefault().getBundle()
-				.getResource(fullResourceName).openStream());
+		parse(resourceName, null);
 	}
 
-	private static void parseResource(InputStream resource) throws IOException,
-			RecognitionException {
-		JSLexer lexer = new JSLexer(new ANTLRInputStream(resource));
+	public static void parse(String resourceName, String enconding)
+			throws Exception {
+		String fullResourceName = "scripts.parser/" + resourceName;
+		parseResource(fullResourceName, enconding);
+	}
+
+	/**
+	 * @param fullResourceName
+	 * @param encoding
+	 *            encoding of the resource or <code>null</code> if default
+	 *            system encoding should be used.
+	 */
+	private static void parseResource(String fullResourceName, String encoding)
+			throws IOException, RecognitionException {
+		InputStream resource = JavaScriptFormatterTestsPlugin.getDefault()
+				.getBundle().getResource(fullResourceName).openStream();
+		JSLexer lexer = new JSLexer(new ANTLRInputStream(resource, encoding));
 		CommonTokenStream stream = new CommonTokenStream(
 				new JavaScriptTokenSource(lexer));
 		JSParser parser = new JSParser(stream);
@@ -77,12 +88,11 @@ public class ANTLRParserTester {
 		// System.out.println(formatted);
 		// System.out.println("-------------------------------------------");
 
-		Script script = (Script) new JavaScriptParser().parse(null, formatted
+		Script script = new JavaScriptParser().parse(null, formatted
 				.toCharArray(), null);
 
-		if (script == null || script.toSourceString("").length() == 0)
-			Assert.fail();
-
+		Assert.assertNotNull(script);
+		Assert.assertTrue(script.toSourceString("").length() != 0);
 	}
 
 }

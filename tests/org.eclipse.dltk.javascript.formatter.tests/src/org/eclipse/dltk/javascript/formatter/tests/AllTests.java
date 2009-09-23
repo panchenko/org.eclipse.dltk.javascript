@@ -17,6 +17,7 @@ import junit.framework.TestSuite;
 
 import org.eclipse.dltk.javascript.parser.tests.ANTLRParserTestCase;
 import org.eclipse.dltk.javascript.parser.tests.JavaScriptParserTestCase;
+import org.eclipse.dltk.javascript.parser.tests.JavaScriptStreamTokenTestCase;
 
 public class AllTests {
 
@@ -39,6 +40,7 @@ public class AllTests {
 		suite.addTest(RegExpTest.suite());
 		suite.addTest(KeywordsTest.suite());
 		suite.addTest(E4XTest.suite());
+		suite.addTestSuite(JavaScriptStreamTokenTestCase.class);
 		suite.addTestSuite(JavaScriptParserTestCase.class);
 		suite.addTestSuite(ANTLRParserTestCase.class);
 		// suite.addTest(JavaScriptLibTest.suite());

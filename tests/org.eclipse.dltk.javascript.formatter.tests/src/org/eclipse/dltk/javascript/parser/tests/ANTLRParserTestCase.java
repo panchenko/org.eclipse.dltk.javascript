@@ -16,6 +16,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.dltk.javascript.internal.parser.tests.ANTLRParserTester;
 
+@SuppressWarnings("nls")
 public class ANTLRParserTestCase extends TestCase {
 
 	public void _testFunctionParse() throws Exception {
@@ -151,7 +152,7 @@ public class ANTLRParserTestCase extends TestCase {
 	}
 
 	public void testE4XParse() throws Exception {
-		ANTLRParserTester.parse("e4x.js");
+		ANTLRParserTester.parse("e4x.js", "UTF-8");
 	}
 
 }

@@ -18,14 +18,15 @@ import junit.framework.TestCase;
 
 import org.eclipse.dltk.javascript.internal.parser.tests.JavaScriptTokenStreamTester;
 
+@SuppressWarnings("nls")
 public class JavaScriptStreamTokenTestCase extends TestCase {
 
 	public void testE4XTokenizer() throws IOException {
-		JavaScriptTokenStreamTester.tokenize("e4x.js");
+		JavaScriptTokenStreamTester.tokenize("e4x.js", "UTF-8");
 	}
 
 	public void testE4XParser() throws IOException {
-		JavaScriptTokenStreamTester.parse("e4x.js");
+		JavaScriptTokenStreamTester.parse("e4x.js", "UTF-8");
 	}
 
 	public void testE4XSimpleTokenizer() throws IOException {
