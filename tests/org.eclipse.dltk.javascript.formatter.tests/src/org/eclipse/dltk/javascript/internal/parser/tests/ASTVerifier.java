@@ -273,8 +273,6 @@ public class ASTVerifier implements IASTVisitor {
 		visit(node.getDeleteKeyword());
 		visit(node.getExpression());
 
-		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
-
 		return true;
 	}
 
