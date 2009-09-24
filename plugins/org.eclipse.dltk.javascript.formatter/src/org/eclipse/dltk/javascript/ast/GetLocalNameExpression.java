@@ -25,21 +25,20 @@ public class GetLocalNameExpression extends Expression {
 	public GetLocalNameExpression(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (namespace != null) namespace.traverse(visitor);
-			if (localName != null) localName.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (namespace != null)
+				namespace.traverse(visitor);
+			if (localName != null)
+				localName.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Expression getNamespace() {
 		return this.namespace;
@@ -78,10 +77,6 @@ public class GetLocalNameExpression extends Expression {
 		buffer.append(localName.toSourceString(indentationString));
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

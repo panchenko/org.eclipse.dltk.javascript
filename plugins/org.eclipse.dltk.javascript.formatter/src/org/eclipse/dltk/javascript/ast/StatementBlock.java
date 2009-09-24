@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class StatementBlock extends Statement {
+public class StatementBlock extends Statement implements ISourceableBlock {
 
 	private final List<Statement> statements = new ArrayList<Statement>();
 	private int LC = -1;
@@ -29,7 +29,7 @@ public class StatementBlock extends Statement {
 	public StatementBlock(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	public void traverse(ASTVisitor visitor) throws Exception {
 		if (visitor.visit(this)) {
 			Iterator<Statement> it = statements.iterator();

@@ -29,26 +29,21 @@ public class ObjectInitializer extends Expression {
 	public ObjectInitializer(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (initializers != null)
-			{
-				for (ASTNode node : initializers)
-				{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (initializers != null) {
+				for (ASTNode node : initializers) {
 					node.traverse(visitor);
 				}
 			}
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public List<ASTNode> getInitializers() {
 		return this.initializers;
@@ -112,10 +107,6 @@ public class ObjectInitializer extends Expression {
 		buffer.append("}");
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

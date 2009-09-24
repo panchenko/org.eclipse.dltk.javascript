@@ -25,21 +25,20 @@ public class PropertyExpression extends Expression {
 	public PropertyExpression(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (object != null) object.traverse(visitor);
-			if (property != null) property.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (object != null)
+				object.traverse(visitor);
+			if (property != null)
+				property.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Expression getObject() {
 		return this.object;
@@ -80,7 +79,4 @@ public class PropertyExpression extends Expression {
 		return buffer.toString();
 	}
 
-	public boolean isBlock() {
-		return false;
-	}
 }

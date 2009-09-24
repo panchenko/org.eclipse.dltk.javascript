@@ -35,7 +35,5 @@ public abstract class Expression extends ASTNode implements ISourceable {
 		return toSourceString(JSLiterals.EMPTY);
 	}
 
-	public abstract boolean isBlock();
-
 	public abstract String toSourceString(String indentationString);
 }

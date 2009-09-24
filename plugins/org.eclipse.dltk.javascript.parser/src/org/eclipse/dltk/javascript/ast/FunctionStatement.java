@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class FunctionStatement extends Expression {
+public class FunctionStatement extends Expression implements ISourceableBlock {
 
 	private Keyword functionKeyword;
 	private Identifier name;
@@ -31,30 +31,28 @@ public class FunctionStatement extends Expression {
 	public FunctionStatement(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (functionKeyword != null) functionKeyword.traverse(visitor);
-			if (name != null) name.traverse(visitor);
-			
-			if (arguments != null)
-			{
-				for (ASTNode node : arguments)
-				{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (functionKeyword != null)
+				functionKeyword.traverse(visitor);
+			if (name != null)
+				name.traverse(visitor);
+
+			if (arguments != null) {
+				for (ASTNode node : arguments) {
 					node.traverse(visitor);
 				}
 			}
-			if (body != null) body.traverse(visitor);
+			if (body != null)
+				body.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Keyword getFunctionKeyword() {
 		return this.functionKeyword;

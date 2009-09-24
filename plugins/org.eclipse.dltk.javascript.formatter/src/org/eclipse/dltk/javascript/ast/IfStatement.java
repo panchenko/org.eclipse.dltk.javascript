@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class IfStatement extends Statement {
+public class IfStatement extends Statement implements ISourceableBlock {
 
 	private Keyword ifKeyword;
 	private Keyword elseKeyword;
@@ -29,20 +29,23 @@ public class IfStatement extends Statement {
 	public IfStatement(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.javascript.ast.Statement#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (ifKeyword != null) ifKeyword.traverse(visitor);
-			if (elseKeyword != null) elseKeyword.traverse(visitor);
-			if (condition != null) condition.traverse(visitor);
-			if (thenStatement != null) thenStatement.traverse(visitor);
-			if (elseStatement != null) elseStatement.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (ifKeyword != null)
+				ifKeyword.traverse(visitor);
+			if (elseKeyword != null)
+				elseKeyword.traverse(visitor);
+			if (condition != null)
+				condition.traverse(visitor);
+			if (thenStatement != null)
+				thenStatement.traverse(visitor);
+			if (elseStatement != null)
+				elseStatement.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
@@ -119,7 +122,7 @@ public class IfStatement extends Statement {
 		buffer.append(")\n");
 
 		buffer.append(getThenStatement().toSourceString(
-				getThenStatement().isBlock() ? indentationString
+				isBlock(getThenStatement()) ? indentationString
 						: indentationString + INDENT));
 
 		if (getElseStatement() != null) {
@@ -127,11 +130,16 @@ public class IfStatement extends Statement {
 			buffer.append(Keywords.ELSE);
 			buffer.append("\n");
 			buffer.append(getElseStatement().toSourceString(
-					getElseStatement().isBlock() ? indentationString
+					isBlock(getElseStatement()) ? indentationString
 							: indentationString + INDENT));
 		}
 
 		return buffer.toString();
+	}
+
+	private static boolean isBlock(ASTNode node) {
+		return (node instanceof ISourceableBlock)
+				&& ((ISourceableBlock) node).isBlock();
 	}
 
 	public boolean isBlock() {

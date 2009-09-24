@@ -23,20 +23,18 @@ public class ThisExpression extends Expression {
 	public ThisExpression(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (thisKeyword != null) thisKeyword.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (thisKeyword != null)
+				thisKeyword.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Keyword getThisKeyword() {
 		return this.thisKeyword;
@@ -52,10 +50,6 @@ public class ThisExpression extends Expression {
 		Assert.isTrue(sourceEnd() > 0);
 
 		return Keywords.THIS;
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

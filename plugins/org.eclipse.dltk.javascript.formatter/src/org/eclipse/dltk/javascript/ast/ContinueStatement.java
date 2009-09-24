@@ -30,17 +30,17 @@ public class ContinueStatement extends Statement implements ISemicolonStatement 
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (continueKeyword != null) continueKeyword.traverse(visitor);
-			if (label != null) label.traverse(visitor);
-			
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (continueKeyword != null)
+				continueKeyword.traverse(visitor);
+			if (label != null)
+				label.traverse(visitor);
+
 			visitor.endvisit(this);
 		}
 	}
-	
+
 	public Keyword getContinueKeyword() {
 		return continueKeyword;
 	}
@@ -83,10 +83,6 @@ public class ContinueStatement extends Statement implements ISemicolonStatement 
 		buffer.append(";\n");
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

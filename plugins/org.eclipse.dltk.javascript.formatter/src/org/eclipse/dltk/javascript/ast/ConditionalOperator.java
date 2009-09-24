@@ -27,22 +27,22 @@ public class ConditionalOperator extends Expression {
 	public ConditionalOperator(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (condition != null) condition.traverse(visitor);
-			if (trueValue != null) trueValue.traverse(visitor);
-			if (falseValue != null) falseValue.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (condition != null)
+				condition.traverse(visitor);
+			if (trueValue != null)
+				trueValue.traverse(visitor);
+			if (falseValue != null)
+				falseValue.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Expression getCondition() {
 		return this.condition;
@@ -100,10 +100,6 @@ public class ConditionalOperator extends Expression {
 		buffer.append(this.getFalseValue().toSourceString(indentationString));
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

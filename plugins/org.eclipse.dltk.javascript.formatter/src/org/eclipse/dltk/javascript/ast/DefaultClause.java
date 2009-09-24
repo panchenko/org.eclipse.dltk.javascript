@@ -25,22 +25,19 @@ public class DefaultClause extends SwitchComponent {
 	public DefaultClause(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (defaultKeyword != null) defaultKeyword.traverse(visitor);
-			
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (defaultKeyword != null)
+				defaultKeyword.traverse(visitor);
+
 			List<Statement> statements = getStatements();
-			if (statements != null)
-			{
-				for (Statement statement : statements)
-				{
+			if (statements != null) {
+				for (Statement statement : statements) {
 					statement.traverse(visitor);
 				}
 			}
@@ -72,10 +69,6 @@ public class DefaultClause extends SwitchComponent {
 		toSourceString(getStatements(), buffer, indentationString + INDENT);
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 	@Override

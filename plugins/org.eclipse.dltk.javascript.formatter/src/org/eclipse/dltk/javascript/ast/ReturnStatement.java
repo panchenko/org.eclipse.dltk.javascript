@@ -30,17 +30,17 @@ public class ReturnStatement extends Statement implements ISemicolonStatement {
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (returnKeyword != null) returnKeyword.traverse(visitor);
-			if (value != null) value.traverse(visitor);
-			
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (returnKeyword != null)
+				returnKeyword.traverse(visitor);
+			if (value != null)
+				value.traverse(visitor);
+
 			visitor.endvisit(this);
 		}
 	}
-	
+
 	public Expression getValue() {
 		return this.value;
 	}
@@ -85,10 +85,6 @@ public class ReturnStatement extends Statement implements ISemicolonStatement {
 		buffer.append("\n");
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

@@ -24,21 +24,20 @@ public class TypeOfExpression extends Expression {
 	public TypeOfExpression(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (typeofKeyword != null) typeofKeyword.traverse(visitor);
-			if (expression != null) expression.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (typeofKeyword != null)
+				typeofKeyword.traverse(visitor);
+			if (expression != null)
+				expression.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Expression getExpression() {
 		return this.expression;
@@ -68,10 +67,6 @@ public class TypeOfExpression extends Expression {
 		buffer.append(expression.toSourceString(indentationString));
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

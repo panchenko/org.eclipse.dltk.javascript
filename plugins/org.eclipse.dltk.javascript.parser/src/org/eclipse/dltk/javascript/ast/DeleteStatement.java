@@ -74,8 +74,4 @@ public class DeleteStatement extends Expression {
 		return buffer.toString();
 	}
 
-	public boolean isBlock() {
-		return false;
-	}
-
 }

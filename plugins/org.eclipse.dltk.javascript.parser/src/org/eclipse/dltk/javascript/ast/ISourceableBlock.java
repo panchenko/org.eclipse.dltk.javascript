@@ -7,11 +7,10 @@
  * http://www.eclipse.org/legal/epl-v10.html  
  *
  * Contributors:
- *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.ast;
 
-public interface ISourceable {
-	public String toSourceString(String indentationString);
+public interface ISourceableBlock {
+	boolean isBlock();
 }

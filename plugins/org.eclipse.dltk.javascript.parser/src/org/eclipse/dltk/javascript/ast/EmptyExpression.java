@@ -24,15 +24,13 @@ public class EmptyExpression extends Expression {
 		setStart(-1);
 		setEnd(-1);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
 			visitor.endvisit(this);
 		}
 	}
@@ -40,11 +38,6 @@ public class EmptyExpression extends Expression {
 	@Override
 	public String toSourceString(String indentationString) {
 		return JSLiterals.EMPTY;
-	}
-
-	@Override
-	public boolean isBlock() {
-		return false;
 	}
 
 }

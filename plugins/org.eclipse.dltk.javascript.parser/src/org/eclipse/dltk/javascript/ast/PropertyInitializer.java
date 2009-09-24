@@ -25,21 +25,20 @@ public class PropertyInitializer extends Expression {
 	public PropertyInitializer(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (name != null) name.traverse(visitor);
-			if (value != null) value.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (name != null)
+				name.traverse(visitor);
+			if (value != null)
+				value.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Expression getName() {
 		return this.name;
@@ -80,7 +79,4 @@ public class PropertyInitializer extends Expression {
 		return buffer.toString();
 	}
 
-	public boolean isBlock() {
-		return false;
-	}
 }

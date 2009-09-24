@@ -24,21 +24,20 @@ public class NewExpression extends Expression {
 	public NewExpression(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (newKeyword != null) newKeyword.traverse(visitor);
-			if (objectClass != null) objectClass.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (newKeyword != null)
+				newKeyword.traverse(visitor);
+			if (objectClass != null)
+				objectClass.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	/**
 	 * @since 2.0
@@ -76,7 +75,4 @@ public class NewExpression extends Expression {
 		return buffer.toString();
 	}
 
-	public boolean isBlock() {
-		return false;
-	}
 }

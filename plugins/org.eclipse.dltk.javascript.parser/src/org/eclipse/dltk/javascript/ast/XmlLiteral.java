@@ -22,15 +22,13 @@ public class XmlLiteral extends Expression {
 	public XmlLiteral(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
 			visitor.endvisit(this);
 		}
 	}
@@ -41,10 +39,6 @@ public class XmlLiteral extends Expression {
 
 	public void setXml(String xml) {
 		this.xml = xml;
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 	public String toSourceString(String indentationString) {

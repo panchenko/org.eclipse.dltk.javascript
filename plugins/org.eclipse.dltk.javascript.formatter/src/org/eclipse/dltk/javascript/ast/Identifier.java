@@ -23,15 +23,13 @@ public class Identifier extends Expression {
 	public Identifier(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
 			visitor.endvisit(this);
 		}
 	}
@@ -50,10 +48,6 @@ public class Identifier extends Expression {
 		Assert.isTrue(sourceEnd() > 0);
 
 		return name;
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

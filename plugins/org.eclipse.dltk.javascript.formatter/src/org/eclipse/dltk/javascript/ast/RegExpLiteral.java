@@ -23,19 +23,16 @@ public class RegExpLiteral extends Expression {
 	public RegExpLiteral(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public String getText() {
 		return this.text;
@@ -51,10 +48,6 @@ public class RegExpLiteral extends Expression {
 		Assert.isTrue(sourceEnd() > 0);
 
 		return text;
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

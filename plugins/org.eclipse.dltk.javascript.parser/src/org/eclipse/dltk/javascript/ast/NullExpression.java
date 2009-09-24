@@ -25,15 +25,13 @@ public class NullExpression extends Expression {
 	public String getText() {
 		return Keywords.NULL;
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
 			visitor.endvisit(this);
 		}
 	}
@@ -44,10 +42,6 @@ public class NullExpression extends Expression {
 		Assert.isTrue(sourceEnd() > 0);
 
 		return Keywords.NULL;
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

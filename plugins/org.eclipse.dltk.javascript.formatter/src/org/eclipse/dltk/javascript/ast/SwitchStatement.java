@@ -32,22 +32,20 @@ public class SwitchStatement extends Statement {
 	public SwitchStatement(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (switchKeyword != null) switchKeyword.traverse(visitor);
-			if (condition != null) condition.traverse(visitor);
-			
-			if (caseClauses != null)
-			{
-				for (SwitchComponent comp : caseClauses)
-				{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (switchKeyword != null)
+				switchKeyword.traverse(visitor);
+			if (condition != null)
+				condition.traverse(visitor);
+
+			if (caseClauses != null) {
+				for (SwitchComponent comp : caseClauses) {
 					comp.traverse(visitor);
 				}
 			}
@@ -142,10 +140,6 @@ public class SwitchStatement extends Statement {
 		buffer.append("}\n");
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return true;
 	}
 
 }

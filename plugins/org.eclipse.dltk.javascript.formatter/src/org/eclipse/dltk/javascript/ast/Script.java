@@ -41,10 +41,6 @@ public class Script extends ModuleDeclaration implements ISourceable {
 		return buffer.toString();
 	}
 
-	public boolean isBlock() {
-		return true;
-	}
-
 	public List<Comment> getComments() {
 		return this.comments;
 	}

@@ -24,22 +24,22 @@ public class DoWhileStatement extends WhileStatement {
 	public DoWhileStatement(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.javascript.ast.Statement#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (getWhileKeyword() != null) getWhileKeyword().traverse(visitor);
-			if (getCondition() != null) getCondition().traverse(visitor);
-			if (doKeyword != null) doKeyword.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (getWhileKeyword() != null)
+				getWhileKeyword().traverse(visitor);
+			if (getCondition() != null)
+				getCondition().traverse(visitor);
+			if (doKeyword != null)
+				doKeyword.traverse(visitor);
 
 			Statement body = getBody();
-			if (body != null)
-			{
+			if (body != null) {
 				body.traverse(visitor);
 			}
 			visitor.endvisit(this);
@@ -76,11 +76,6 @@ public class DoWhileStatement extends WhileStatement {
 		buffer.append(");\n");
 
 		return buffer.toString();
-	}
-
-	@Override
-	public boolean isBlock() {
-		return false;
 	}
 
 }

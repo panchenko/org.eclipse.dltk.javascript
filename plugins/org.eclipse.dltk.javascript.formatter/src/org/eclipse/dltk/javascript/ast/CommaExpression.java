@@ -26,26 +26,21 @@ public class CommaExpression extends Expression {
 	public CommaExpression(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (items != null)
-			{
-				for (ASTNode node : items)
-				{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (items != null) {
+				for (ASTNode node : items) {
 					node.traverse(visitor);
 				}
 			}
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public List<ASTNode> getItems() {
 		return this.items;
@@ -80,10 +75,6 @@ public class CommaExpression extends Expression {
 		}
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

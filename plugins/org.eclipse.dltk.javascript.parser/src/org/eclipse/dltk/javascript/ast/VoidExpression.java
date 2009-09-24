@@ -25,20 +25,18 @@ public class VoidExpression extends Statement implements ISemicolonStatement {
 		super(parent);
 	}
 
-
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (expression != null) expression.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (expression != null)
+				expression.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-	
+
 	public Expression getExpression() {
 		return this.expression;
 	}
@@ -71,10 +69,6 @@ public class VoidExpression extends Statement implements ISemicolonStatement {
 		buffer.append('\n');
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

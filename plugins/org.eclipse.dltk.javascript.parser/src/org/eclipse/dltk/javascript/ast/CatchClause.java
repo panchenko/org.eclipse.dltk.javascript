@@ -28,20 +28,22 @@ public class CatchClause extends Statement {
 	public CatchClause(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (catchKeyword != null) catchKeyword.traverse(visitor);
-			if (exception != null) exception.traverse(visitor);
-			if (exceptionFilter != null) exceptionFilter.traverse(visitor);
-			if (statement != null) statement.traverse(visitor);
-			
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (catchKeyword != null)
+				catchKeyword.traverse(visitor);
+			if (exception != null)
+				exception.traverse(visitor);
+			if (exceptionFilter != null)
+				exceptionFilter.traverse(visitor);
+			if (statement != null)
+				statement.traverse(visitor);
+
 			visitor.endvisit(this);
 		}
 	}
@@ -118,7 +120,4 @@ public class CatchClause extends Statement {
 		return buffer.toString();
 	}
 
-	public boolean isBlock() {
-		return true;
-	}
 }

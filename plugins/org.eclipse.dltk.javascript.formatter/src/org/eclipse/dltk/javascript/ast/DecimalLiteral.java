@@ -23,15 +23,13 @@ public class DecimalLiteral extends Expression {
 	public DecimalLiteral(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
 			visitor.endvisit(this);
 		}
 	}
@@ -52,7 +50,4 @@ public class DecimalLiteral extends Expression {
 		return text;
 	}
 
-	public boolean isBlock() {
-		return false;
-	}
 }

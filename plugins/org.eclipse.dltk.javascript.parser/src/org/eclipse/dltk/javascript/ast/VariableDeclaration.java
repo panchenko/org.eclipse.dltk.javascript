@@ -27,28 +27,24 @@ public class VariableDeclaration extends Expression {
 	public VariableDeclaration(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (varKeyword != null) varKeyword.traverse(visitor);
-			
-			if (variables != null)
-			{
-				for (ASTNode node : variables)
-				{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (varKeyword != null)
+				varKeyword.traverse(visitor);
+
+			if (variables != null) {
+				for (ASTNode node : variables) {
 					node.traverse(visitor);
 				}
 			}
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public List<ASTNode> getVariables() {
 		return this.variables;
@@ -95,10 +91,6 @@ public class VariableDeclaration extends Expression {
 		}
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

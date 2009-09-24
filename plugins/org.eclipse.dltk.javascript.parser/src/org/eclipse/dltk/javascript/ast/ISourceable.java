@@ -13,8 +13,5 @@
 package org.eclipse.dltk.javascript.ast;
 
 public interface ISourceable {
-
-	public boolean isBlock();
-	
 	public String toSourceString(String indentationString);
 }

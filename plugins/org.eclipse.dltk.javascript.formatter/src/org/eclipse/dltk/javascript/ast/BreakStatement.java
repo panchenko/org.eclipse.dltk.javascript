@@ -25,21 +25,20 @@ public class BreakStatement extends Statement implements ISemicolonStatement {
 	public BreakStatement(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (breakKeyword != null) breakKeyword.traverse(visitor);
-			if (label != null) label.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (breakKeyword != null)
+				breakKeyword.traverse(visitor);
+			if (label != null)
+				label.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Keyword getBreakKeyword() {
 		return breakKeyword;
@@ -83,10 +82,6 @@ public class BreakStatement extends Statement implements ISemicolonStatement {
 		buffer.append(";\n");
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

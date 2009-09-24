@@ -24,17 +24,17 @@ public class YieldOperator extends Expression {
 	public YieldOperator(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (yieldKeyword != null) yieldKeyword.traverse(visitor);
-			if (expression != null) expression.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (yieldKeyword != null)
+				yieldKeyword.traverse(visitor);
+			if (expression != null)
+				expression.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
@@ -68,10 +68,6 @@ public class YieldOperator extends Expression {
 		buffer.append(expression.toSourceString(indentationString));
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

@@ -21,7 +21,7 @@ import org.eclipse.dltk.ast.ASTVisitor;
 public class CallExpression extends Expression {
 
 	private ASTNode expression;
-	private List<ASTNode>  arguments;
+	private List<ASTNode> arguments;
 	private List<Integer> commas;
 	private int LP = -1;
 	private int RP = -1;
@@ -29,28 +29,24 @@ public class CallExpression extends Expression {
 	public CallExpression(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (expression != null) expression.traverse(visitor);
-			
-			if (arguments != null)
-			{
-				for (ASTNode node : arguments)
-				{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (expression != null)
+				expression.traverse(visitor);
+
+			if (arguments != null) {
+				for (ASTNode node : arguments) {
 					node.traverse(visitor);
 				}
 			}
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public ASTNode getExpression() {
 		return this.expression;
@@ -60,11 +56,11 @@ public class CallExpression extends Expression {
 		this.expression = expression;
 	}
 
-	public List<ASTNode>  getArguments() {
+	public List<ASTNode> getArguments() {
 		return this.arguments;
 	}
 
-	public void setArguments(List<ASTNode>  arguments) {
+	public void setArguments(List<ASTNode> arguments) {
 		this.arguments = arguments;
 	}
 
@@ -121,7 +117,4 @@ public class CallExpression extends Expression {
 		return buffer.toString();
 	}
 
-	public boolean isBlock() {
-		return false;
-	}
 }

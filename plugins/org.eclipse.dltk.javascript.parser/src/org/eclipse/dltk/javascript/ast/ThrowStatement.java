@@ -30,17 +30,17 @@ public class ThrowStatement extends Statement implements ISemicolonStatement {
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (throwKeyword != null) throwKeyword.traverse(visitor);
-			if (exception != null) exception.traverse(visitor);
-			
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (throwKeyword != null)
+				throwKeyword.traverse(visitor);
+			if (exception != null)
+				exception.traverse(visitor);
+
 			visitor.endvisit(this);
 		}
 	}
-	
+
 	public Expression getException() {
 		return this.exception;
 	}
@@ -86,7 +86,4 @@ public class ThrowStatement extends Statement implements ISemicolonStatement {
 		return buffer.toString();
 	}
 
-	public boolean isBlock() {
-		return false;
-	}
 }

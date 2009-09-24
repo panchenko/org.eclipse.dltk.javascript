@@ -28,20 +28,22 @@ public class DefaultXmlNamespaceStatement extends Statement {
 	public DefaultXmlNamespaceStatement(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (defaultKeyword != null) defaultKeyword.traverse(visitor);
-			if (xmlKeyword != null) xmlKeyword.traverse(visitor);
-			if (namespaceKeyword != null) namespaceKeyword.traverse(visitor);
-			if (value != null) value.traverse(visitor);
-			
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (defaultKeyword != null)
+				defaultKeyword.traverse(visitor);
+			if (xmlKeyword != null)
+				xmlKeyword.traverse(visitor);
+			if (namespaceKeyword != null)
+				namespaceKeyword.traverse(visitor);
+			if (value != null)
+				value.traverse(visitor);
+
 			visitor.endvisit(this);
 		}
 	}
@@ -116,10 +118,6 @@ public class DefaultXmlNamespaceStatement extends Statement {
 			buffer.append(";");
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

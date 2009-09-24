@@ -26,30 +26,27 @@ public class CaseClause extends SwitchComponent {
 	public CaseClause(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (caseKeyword != null) caseKeyword.traverse(visitor);
-			if (condition != null) condition.traverse(visitor);
-			
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (caseKeyword != null)
+				caseKeyword.traverse(visitor);
+			if (condition != null)
+				condition.traverse(visitor);
+
 			List<Statement> statements = getStatements();
-			if (statements != null)
-			{
-				for (Statement statement : statements)
-				{
+			if (statements != null) {
+				for (Statement statement : statements) {
 					statement.traverse(visitor);
 				}
 			}
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Expression getCondition() {
 		return this.condition;
@@ -85,10 +82,6 @@ public class CaseClause extends SwitchComponent {
 		toSourceString(getStatements(), buffer, indentationString + INDENT);
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return true;
 	}
 
 	@Override

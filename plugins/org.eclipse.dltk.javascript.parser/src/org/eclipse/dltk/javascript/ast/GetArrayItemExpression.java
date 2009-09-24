@@ -26,21 +26,20 @@ public class GetArrayItemExpression extends Expression {
 	public GetArrayItemExpression(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (array != null) array.traverse(visitor);
-			if (index != null) index.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (array != null)
+				array.traverse(visitor);
+			if (index != null)
+				index.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public Expression getArray() {
 		return this.array;
@@ -89,10 +88,6 @@ public class GetArrayItemExpression extends Expression {
 		buffer.append("]");
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }

@@ -25,17 +25,17 @@ public class FinallyClause extends Statement {
 	public FinallyClause(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (finallyKeyword != null) finallyKeyword.traverse(visitor);
-			if (statement != null) statement.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (finallyKeyword != null)
+				finallyKeyword.traverse(visitor);
+			if (statement != null)
+				statement.traverse(visitor);
 			visitor.endvisit(this);
 		}
 	}
@@ -70,10 +70,6 @@ public class FinallyClause extends Statement {
 		buffer.append(statement.toSourceString(indentationString));
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return true;
 	}
 
 }

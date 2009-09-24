@@ -14,7 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
 
-public abstract class Method extends Expression {
+public abstract class Method extends Expression implements ISourceableBlock {
 
 	private Identifier name;
 	private StatementBlock body;

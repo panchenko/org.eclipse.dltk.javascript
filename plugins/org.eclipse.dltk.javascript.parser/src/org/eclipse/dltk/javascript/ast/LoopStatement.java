@@ -14,14 +14,15 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
 
-public abstract class LoopStatement extends Statement {
+public abstract class LoopStatement extends Statement implements
+		ISourceableBlock {
 
 	private Statement body = null;
 
 	public LoopStatement(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	public Statement getBody() {
 		return this.body;
 	}

@@ -28,29 +28,25 @@ public class ConstDeclaration extends Statement {
 	public ConstDeclaration(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (constKeyword != null) constKeyword.traverse(visitor);
-			
-			if (consts != null)
-			{
-				for (ASTNode constNode : consts)
-				{
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (constKeyword != null)
+				constKeyword.traverse(visitor);
+
+			if (consts != null) {
+				for (ASTNode constNode : consts) {
 					constNode.traverse(visitor);
 				}
 			}
-			
+
 			visitor.endvisit(this);
 		}
 	}
-
 
 	public List<ASTNode> getConsts() {
 		return this.consts;
@@ -107,10 +103,6 @@ public class ConstDeclaration extends Statement {
 		buffer.append(";\n");
 
 		return buffer.toString();
-	}
-
-	public boolean isBlock() {
-		return false;
 	}
 
 }
