@@ -52,3 +52,7 @@ function FooTest()
 	delete Foo.prototype.bar; // deletes property on prototype
 	alert(foo.bar);           // alerts "undefined", property no longer inherited
 }
+
+function deleteReturnsBoolean() {
+	var x = delete y;
+}
