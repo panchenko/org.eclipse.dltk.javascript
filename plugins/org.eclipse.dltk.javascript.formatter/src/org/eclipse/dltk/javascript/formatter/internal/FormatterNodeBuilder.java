@@ -502,7 +502,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				visit(node.getExpression());
 
-				processOptionalSemicolon(formatterNode, node);
+				checkedPop(formatterNode, node.getExpression().sourceEnd());
 				return true;
 			}
 
@@ -921,12 +921,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitIfStatement(IfStatement node) {
 				FormatterBlockNode formatterNode = null;
-				if (node.getParent() instanceof IfStatement)
-				{
+				if (node.getParent() instanceof IfStatement) {
 					formatterNode = new FormatterBlockNode(document);
-				}
-				else
-				{
+				} else {
 					formatterNode = new LineBreakFormatterNode(document);
 				}
 
