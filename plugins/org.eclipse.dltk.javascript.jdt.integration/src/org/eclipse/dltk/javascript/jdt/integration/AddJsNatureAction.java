@@ -9,30 +9,24 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.jdt.integration;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dltk.core.IScriptProjectFilenames;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.utils.AdaptUtils;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-public class AddJsNatureAction implements IExecutableExtension,
-		IObjectActionDelegate {
+public class AddJsNatureAction implements IObjectActionDelegate {
 
-	ISelection selection;
+	private ISelection selection;
 
 	public AddJsNatureAction() {
-	}
-
-	public void setInitializationData(IConfigurationElement config,
-			String propertyName, Object data) throws CoreException {
 	}
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
@@ -43,29 +37,29 @@ public class AddJsNatureAction implements IExecutableExtension,
 			IStructuredSelection ssel = (IStructuredSelection) selection;
 			Object[] array = ssel.toArray();
 			for (int a = 0; a < array.length; a++) {
-				Object o = array[a];
-				if (o instanceof IAdaptable) {
-					IAdaptable adaptable = (IAdaptable) o;
-					IProject adapter = (IProject) adaptable
-							.getAdapter(IProject.class);
-					try {
-						IProjectDescription description = adapter
-								.getDescription();
-						String[] natureIds = description.getNatureIds();
-						String[] newNStrings = new String[natureIds.length + 1];
-						System.arraycopy(natureIds, 0, newNStrings, 0,
-								natureIds.length);
-						newNStrings[natureIds.length] = JavaScriptNature.NATURE_ID;
-						description.setNatureIds(newNStrings);
-						adapter.setDescription(description, null);
-						adapter.getFile(
-								IScriptProjectFilenames.BUILDPATH_FILENAME)
-								.create(
-										this.getClass().getResourceAsStream(
-												"buildpath.snap"), true, null);
-					} catch (CoreException e) {
-						e.printStackTrace();
+				final IProject project = AdaptUtils.getAdapter(
+						array[a], IProject.class);
+				if (project == null) {
+					continue;
+				}
+				try {
+					IProjectDescription description = project.getDescription();
+					String[] natureIds = description.getNatureIds();
+					String[] newNStrings = new String[natureIds.length + 1];
+					System.arraycopy(natureIds, 0, newNStrings, 0,
+							natureIds.length);
+					newNStrings[natureIds.length] = JavaScriptNature.NATURE_ID;
+					description.setNatureIds(newNStrings);
+					project.setDescription(description, null);
+					IFile buildpathFile = project
+							.getFile(IScriptProjectFilenames.BUILDPATH_FILENAME);
+					if (!buildpathFile.exists()) {
+						buildpathFile.create(this.getClass()
+								.getResourceAsStream("buildpath.snap"), true,
+								null);
 					}
+				} catch (CoreException e) {
+					Activator.error(e);
 				}
 			}
 		}
