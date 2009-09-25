@@ -20,7 +20,7 @@
                icon="icons/javascript.gif"
                id="org.eclipse.dltk.javascript.jdt.integration.action2"
                label="Add JavaScript Nature"
-               menubarPath="additions"
+               menubarPath="org.eclipse.ui.projectConfigure/additions"
                style="push">
          </action>
          <visibility>
