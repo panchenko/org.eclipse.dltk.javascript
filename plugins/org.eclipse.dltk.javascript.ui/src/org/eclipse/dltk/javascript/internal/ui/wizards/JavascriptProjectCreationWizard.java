@@ -54,10 +54,6 @@ public class JavascriptProjectCreationWizard extends NewElementWizard implements
 					super(composite);
 				}
 
-				protected String getCurrentLanguageNature() {
-					return JavaScriptNature.NATURE_ID;
-				}
-
 				protected String getIntereprtersPreferencePageId() {
 					return null;
 				}
@@ -66,6 +62,10 @@ public class JavascriptProjectCreationWizard extends NewElementWizard implements
 					return false;
 				}
 			};
+
+			public String getScriptNature() {
+				return JavaScriptNature.NATURE_ID;
+			}
 
 			protected IInterpreterGroup createInterpreterGroup(Composite parent) {
 				return new JavascriptInterpreterGroup(parent);
@@ -87,10 +87,6 @@ public class JavascriptProjectCreationWizard extends NewElementWizard implements
 				return new JavascriptBuildPathsBlock(
 						new BusyIndicatorRunnableContext(), listener, 0,
 						useNewSourcePage(), null);
-			}
-
-			protected String getScriptNature() {
-				return JavaScriptNature.NATURE_ID;
 			}
 
 			protected IPreferenceStore getPreferenceStore() {
