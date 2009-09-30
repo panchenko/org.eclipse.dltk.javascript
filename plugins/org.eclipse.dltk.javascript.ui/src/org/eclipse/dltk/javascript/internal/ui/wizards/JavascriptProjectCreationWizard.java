@@ -47,28 +47,13 @@ public class JavascriptProjectCreationWizard extends NewElementWizard implements
 		super.addPages();
 		fFirstPage = new ProjectWizardFirstPage() {
 
-			final class JavascriptInterpreterGroup extends
-					AbstractInterpreterGroup {
-
-				public JavascriptInterpreterGroup(Composite composite) {
-					super(composite);
-				}
-
-				protected String getIntereprtersPreferencePageId() {
-					return null;
-				}
-
-				protected boolean isTargetEnvironmentAllowed() {
-					return false;
-				}
-			};
-
 			public String getScriptNature() {
 				return JavaScriptNature.NATURE_ID;
 			}
 
 			protected IInterpreterGroup createInterpreterGroup(Composite parent) {
-				return new JavascriptInterpreterGroup(parent);
+				return new DefaultInterpreterGroup(parent, null,
+						DefaultInterpreterGroupOption.NO_TARGET_ENVIRONMENT);
 			}
 
 			protected boolean interpeterRequired() {
