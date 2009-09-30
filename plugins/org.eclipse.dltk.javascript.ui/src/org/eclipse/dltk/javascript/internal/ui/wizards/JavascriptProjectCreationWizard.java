@@ -52,7 +52,7 @@ public class JavascriptProjectCreationWizard extends NewElementWizard implements
 			}
 
 			protected IInterpreterGroup createInterpreterGroup(Composite parent) {
-				return new DefaultInterpreterGroup(parent, null,
+				return new DefaultInterpreterGroup(parent,
 						DefaultInterpreterGroupOption.NO_TARGET_ENVIRONMENT);
 			}
 
