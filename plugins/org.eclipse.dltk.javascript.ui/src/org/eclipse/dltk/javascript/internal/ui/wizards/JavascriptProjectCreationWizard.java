@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
-import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.preferences.JavascriptBuildPathsBlock;
 import org.eclipse.dltk.javascript.ui.JavaScriptImages;
 import org.eclipse.dltk.ui.DLTKUIPlugin;
@@ -26,7 +25,6 @@ import org.eclipse.dltk.ui.wizards.BuildpathsBlock;
 import org.eclipse.dltk.ui.wizards.NewElementWizard;
 import org.eclipse.dltk.ui.wizards.ProjectWizardFirstPage;
 import org.eclipse.dltk.ui.wizards.ProjectWizardSecondPage;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
@@ -72,10 +70,6 @@ public class JavascriptProjectCreationWizard extends NewElementWizard implements
 				return new JavascriptBuildPathsBlock(
 						new BusyIndicatorRunnableContext(), listener, 0,
 						useNewSourcePage(), null);
-			}
-
-			protected IPreferenceStore getPreferenceStore() {
-				return JavaScriptUI.getDefault().getPreferenceStore();
 			}
 		};
 		addPage(fSecondPage);
