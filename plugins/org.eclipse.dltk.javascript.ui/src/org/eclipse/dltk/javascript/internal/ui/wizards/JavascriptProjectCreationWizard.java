@@ -25,7 +25,6 @@ import org.eclipse.dltk.ui.wizards.BuildpathsBlock;
 import org.eclipse.dltk.ui.wizards.NewElementWizard;
 import org.eclipse.dltk.ui.wizards.ProjectWizardFirstPage;
 import org.eclipse.dltk.ui.wizards.ProjectWizardSecondPage;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
@@ -47,11 +46,6 @@ public class JavascriptProjectCreationWizard extends NewElementWizard implements
 
 			public String getScriptNature() {
 				return JavaScriptNature.NATURE_ID;
-			}
-
-			protected IInterpreterGroup createInterpreterGroup(Composite parent) {
-				return new DefaultInterpreterGroup(parent,
-						DefaultInterpreterGroupOption.NO_TARGET_ENVIRONMENT);
 			}
 
 			protected boolean interpeterRequired() {
