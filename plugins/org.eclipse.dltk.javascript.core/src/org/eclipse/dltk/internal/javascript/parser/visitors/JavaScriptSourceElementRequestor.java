@@ -111,15 +111,13 @@ public class JavaScriptSourceElementRequestor extends
 	protected String makeLanguageDependentValue(Expression value) {
 
 		String outValue = "";
-		/*if (value instanceof ExtendedVariableReference) {
-			// Lets use AST Printer to print extended variable in python like
-			// syntax.
-			StringWriter stringWriter = new StringWriter();
-			CorePrinter printer = new CorePrinter(stringWriter);
-			value.printNode(printer);
-			printer.flush();
-			return stringWriter.getBuffer().toString();
-		}*/
+		/*
+		 * if (value instanceof ExtendedVariableReference) { // Lets use AST
+		 * Printer to print extended variable in python like // syntax.
+		 * StringWriter stringWriter = new StringWriter(); CorePrinter printer =
+		 * new CorePrinter(stringWriter); value.printNode(printer);
+		 * printer.flush(); return stringWriter.getBuffer().toString(); }
+		 */
 		return outValue;
 	}
 
@@ -155,63 +153,48 @@ public class JavaScriptSourceElementRequestor extends
 				}
 			}
 
-		}/* else if (left instanceof ExtendedVariableReference) {
-			// This is for in class and in method.
-			if (inClass && inMethod) {
-				ExtendedVariableReference extendedVariable = ((ExtendedVariableReference) left);
-
-				List varParts = extendedVariable.getExpressions();
-				if (extendedVariable.isDot(0)) {
-					Expression first = (Expression) varParts.get(0);
-					// support only local variable addition.
-					// TODO: Add more complex variable addition.
-					Expression second = (Expression) varParts.get(1);
-
-					if (first instanceof VariableReference
-							&& second instanceof VariableReference) {
-						String varName = ((VariableReference) first).getName();
-						MethodDeclaration currentMethod = this
-								.getCurrentMethod();
-						List <Argument> arguments = currentMethod
-								.getArguments();
-						if (arguments != null && arguments.size() > 0) {
-							Argument firstArgument = (Argument) arguments
-									.get(0);
-							String argumentName = firstArgument.getName();
-							if (argumentName.equals(varName)) {
-								VariableReference var = (VariableReference) second;
-								int initialValueStart = 0;
-								int initialValueEnd = 0;
-								if (right != null) {
-									initialValueStart = right.sourceStart();
-									initialValueEnd = right.sourceEnd();
-								}
-								PositionInformation pos = new PositionInformation(
-										var.sourceStart(), var.sourceEnd(),
-										initialValueStart, initialValueEnd);
-								String initialString = this.makeValue(right);
-								ASTNode method = (ASTNode) this.fNodes.pop();
-								ASTNode toClass = (ASTNode) this.fNodes.peek();
-								this.fNodes.push(method);
-
-								TypeField field = new TypeField(var.getName(),
-										initialString, pos, left, toClass);
-								this.fNotAddedFields.add(field);
-							}
-						}
-					}
-				}
-			} else if (left instanceof ExpressionList) { // Multiple
-				// TODO: Add list of variables reporting.
-				
-				 * // assignment. ExpressionList list = (ExpressionList) left;
-				 * List<Expression> exprs = list.getExpressions(); for
-				 * (Expression expr : exprs) { }
-				 
-			} else {// TODO: dynamic variable handling not yet supported.
-
-			}
-		}*/
+		}/*
+		 * else if (left instanceof ExtendedVariableReference) { // This is for
+		 * in class and in method. if (inClass && inMethod) {
+		 * ExtendedVariableReference extendedVariable =
+		 * ((ExtendedVariableReference) left);
+		 * 
+		 * List varParts = extendedVariable.getExpressions(); if
+		 * (extendedVariable.isDot(0)) { Expression first = (Expression)
+		 * varParts.get(0); // support only local variable addition. // TODO:
+		 * Add more complex variable addition. Expression second = (Expression)
+		 * varParts.get(1);
+		 * 
+		 * if (first instanceof VariableReference && second instanceof
+		 * VariableReference) { String varName = ((VariableReference)
+		 * first).getName(); MethodDeclaration currentMethod = this
+		 * .getCurrentMethod(); List <Argument> arguments = currentMethod
+		 * .getArguments(); if (arguments != null && arguments.size() > 0) {
+		 * Argument firstArgument = (Argument) arguments .get(0); String
+		 * argumentName = firstArgument.getName(); if
+		 * (argumentName.equals(varName)) { VariableReference var =
+		 * (VariableReference) second; int initialValueStart = 0; int
+		 * initialValueEnd = 0; if (right != null) { initialValueStart =
+		 * right.sourceStart(); initialValueEnd = right.sourceEnd(); }
+		 * PositionInformation pos = new PositionInformation( var.sourceStart(),
+		 * var.sourceEnd(), initialValueStart, initialValueEnd); String
+		 * initialString = this.makeValue(right); ASTNode method = (ASTNode)
+		 * this.fNodes.pop(); ASTNode toClass = (ASTNode) this.fNodes.peek();
+		 * this.fNodes.push(method);
+		 * 
+		 * TypeField field = new TypeField(var.getName(), initialString, pos,
+		 * left, toClass); this.fNotAddedFields.add(field); } } } } } else if
+		 * (left instanceof ExpressionList) { // Multiple // TODO: Add list of
+		 * variables reporting.
+		 * 
+		 * // assignment. ExpressionList list = (ExpressionList) left;
+		 * List<Expression> exprs = list.getExpressions(); for (Expression expr
+		 * : exprs) { }
+		 * 
+		 * } else {// TODO: dynamic variable handling not yet supported.
+		 * 
+		 * } }
+		 */
 	}
 
 	public boolean visit(Expression expression) throws Exception {
@@ -288,7 +271,7 @@ public class JavaScriptSourceElementRequestor extends
 		mi.nameSourceStart = method.getNameStart();
 		mi.nameSourceEnd = method.getNameEnd() - 1;
 		mi.declarationStart = method.sourceStart();
-		this.fRequestor.enterMethodRemoveSame(mi);
+		((ISourceElementRequestor) this.fRequestor).enterMethodRemoveSame(mi);
 		this.fInMethod = true;
 		this.fCurrentMethod = method;
 		return true;
