@@ -2,7 +2,6 @@ package org.eclipse.dltk.javascript.internal.launching;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
@@ -59,13 +58,6 @@ public class GenericJavaScriptInstallType extends
 
 	protected IInterpreterInstall doCreateInterpreterInstall(String id) {
 		return new GenericJavaScriptInstall(this, id);
-	}
-
-	protected void filterEnvironment(Map environment) {
-		// make sure that $auto_path is clean
-		environment.remove("TCLLIBPATH");
-		// block wish from showing window under linux
-		environment.remove("DISPLAY");
 	}
 
 	public IStatus validateInstallLocation(IFileHandle installLocation) {
