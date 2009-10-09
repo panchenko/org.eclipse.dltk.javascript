@@ -482,7 +482,8 @@
        <enablement>
           <instanceof
                 value="org.eclipse.dltk.debug.ui.ScriptDebugConsole">
-          </instanceof></enablement>
+          </instanceof>
+       </enablement>
     </consolePatternMatchListener>
  </extension>
 
