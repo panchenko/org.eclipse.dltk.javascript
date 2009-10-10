@@ -14,6 +14,7 @@ import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.core.IJavaScriptConstants;
 import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
+import org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptEditor;
 import org.eclipse.dltk.javascript.internal.ui.text.SimpleJavascriptSourceViewerConfiguration;
 import org.eclipse.dltk.ui.AbstractDLTKUILanguageToolkit;
 import org.eclipse.dltk.ui.ScriptElementLabels;
@@ -54,7 +55,7 @@ public class JavaScriptUILanguageToolkit extends AbstractDLTKUILanguageToolkit {
 					return null;
 			}
 		}
-		return "org.eclipse.dltk.javascript.ui.editor.JavascriptEditor";
+		return JavaScriptEditor.EDITOR_ID;
 	}
 
 	public String getPartitioningId() {
