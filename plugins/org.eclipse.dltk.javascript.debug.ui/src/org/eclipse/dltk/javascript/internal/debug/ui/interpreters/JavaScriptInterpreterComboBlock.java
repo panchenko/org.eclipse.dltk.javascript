@@ -3,7 +3,6 @@ package org.eclipse.dltk.javascript.internal.debug.ui.interpreters;
 import org.eclipse.dltk.debug.ui.launchConfigurations.IMainLaunchConfigurationTabListenerManager;
 import org.eclipse.dltk.internal.debug.ui.interpreters.AbstractInterpreterComboBlock;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
-import org.eclipse.jface.preference.IPreferencePage;
 
 public class JavaScriptInterpreterComboBlock extends
 		AbstractInterpreterComboBlock {
@@ -11,11 +10,6 @@ public class JavaScriptInterpreterComboBlock extends
 	protected JavaScriptInterpreterComboBlock(
 			IMainLaunchConfigurationTabListenerManager tab) {
 		super(tab);
-	}
-
-	protected void showInterpreterPreferencePage() {
-		IPreferencePage page = new JavaScriptInterpreterPreferencePage();
-		//showPrefPage("org.eclipse.dltk.tcl.debug.ui.interpreters.TclInterpreterPreferencePage", page); //$NON-NLS-1$
 	}
 
 	protected String getCurrentLanguageNature() {
