@@ -26,7 +26,7 @@ public class JavaScriptDebugModelPresentation extends
 	static ImageRegistry registry = new ImageRegistry(Display.getDefault());
 
 	static {
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
 
