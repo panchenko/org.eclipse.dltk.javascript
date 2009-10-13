@@ -24,6 +24,7 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("DLTK Javascript Formatter Tests"); //$NON-NLS-1$
 		// $JUnit-BEGIN$
+		suite.addTest(ArraysTest.suite());
 		suite.addTest(BracesTest.suite());
 		suite.addTest(IfStatementTest.suite());
 		suite.addTest(FunctionTest.suite());
