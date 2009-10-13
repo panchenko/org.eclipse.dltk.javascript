@@ -91,4 +91,14 @@ if (c > d)
 {
 	b1 = 100;
 }
+==== if-without-then-body
+function test() {
+if (1 == 2);
+throw 1
+}
+==
+function test () {
+	if (1 == 2);
+	throw 1
+}
 ====
