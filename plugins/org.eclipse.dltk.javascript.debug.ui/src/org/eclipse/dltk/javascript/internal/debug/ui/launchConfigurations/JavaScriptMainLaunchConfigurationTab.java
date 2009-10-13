@@ -40,10 +40,10 @@ public class JavaScriptMainLaunchConfigurationTab extends
 				DLTKDebugPreferenceConstants.PREF_DBGP_ENABLE_LOGGING);
 	}
 
-	/*
-	 * @see org.eclipse.dltk.debug.ui.launchConfigurations.ScriptLaunchConfigurationTab#getNatureID()
+	/**
+	 * @since 2.0
 	 */
-	protected String getNatureID() {
+	public String getNatureID() {
 		return JavaScriptNature.NATURE_ID;
 	}
 }
