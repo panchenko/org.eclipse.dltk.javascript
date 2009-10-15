@@ -1191,13 +1191,17 @@ public class JSTransformer extends JSVisitor {
 		ifStatement.setCondition((Expression) transformNode(node.getChild(0),
 				ifStatement));
 
-		ifStatement
-				.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
-						.getTokenStopIndex() + 1, node.getChild(1)
-						.getTokenStartIndex()));
-
-		ifStatement.setThenStatement(transformStatementNode(node.getChild(1),
-				ifStatement));
+		if (node.getChildCount() > 1) {
+			ifStatement.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
+					.getTokenStopIndex() + 1, node.getChild(1)
+					.getTokenStartIndex()));
+			ifStatement.setThenStatement(transformStatementNode(node
+					.getChild(1), ifStatement));
+		} else {
+			ifStatement.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
+					.getTokenStopIndex() + 1, node.getChild(0)
+					.getTokenStopIndex() + 1));
+		}
 
 		if (node.getChildCount() > 2) {
 			Keyword elseKeyword = new Keyword(ifStatement, Keywords.ELSE);

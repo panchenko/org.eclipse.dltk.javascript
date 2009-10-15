@@ -934,17 +934,18 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processParens(node.getLP(), node.getRP(), node.getCondition(),
 						new IfConditionParensConfiguration(document));
 
-				IBracesConfiguration thenConfiguration;
-
-				if (node.getElseStatement() != null)
-					thenConfiguration = new ThenBlockBracesConfiguration(
-							document);
-				else
-					thenConfiguration = new BlockBracesConfiguration(document);
-
-				processBraces(node.getThenStatement(), thenConfiguration);
-
-				checkedPop(formatterNode, node.getThenStatement().sourceEnd());
+				if (node.getThenStatement() != null) {
+					final IBracesConfiguration thenConf;
+					if (node.getElseStatement() != null)
+						thenConf = new ThenBlockBracesConfiguration(document);
+					else
+						thenConf = new BlockBracesConfiguration(document);
+					processBraces(node.getThenStatement(), thenConf);
+					checkedPop(formatterNode, node.getThenStatement()
+							.sourceEnd());
+				} else {
+					checkedPop(formatterNode, node.sourceEnd());
+				}
 
 				if (node.getElseStatement() != null) {
 
