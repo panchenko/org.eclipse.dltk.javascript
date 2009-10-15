@@ -1467,6 +1467,7 @@ public class JSTransformer extends JSVisitor {
 		return true;
 	}
 
+	@Override
 	protected boolean visitArray(Tree node) {
 
 		ArrayInitializer array = new ArrayInitializer(this.parent);
@@ -1481,9 +1482,14 @@ public class JSTransformer extends JSVisitor {
 			Tree child = node.getChild(i);
 
 			if (child.getType() != JSParser.ITEM)
-				throw new UnsupportedOperationException("ITEM expected");
+				throw new UnsupportedOperationException("ITEM expected"); //$NON-NLS-1$
 
-			items.add(transformNode(child.getChild(0), array));
+			final Tree item = child.getChild(0);
+			if (item != null) {
+				items.add(transformNode(item, array));
+			} else {
+				items.add(new EmptyExpression(parent));
+			}
 
 			if (i > 0) {
 				commas.add(new Integer(getTokenOffset(JSParser.COMMA, node
