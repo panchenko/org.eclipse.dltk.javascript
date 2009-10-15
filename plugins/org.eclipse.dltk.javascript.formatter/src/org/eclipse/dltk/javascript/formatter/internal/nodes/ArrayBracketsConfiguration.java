@@ -15,7 +15,8 @@ package org.eclipse.dltk.javascript.formatter.internal.nodes;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
-public class ArrayBracketsConfiguration implements IBracketsConfiguration {
+public class ArrayBracketsConfiguration implements IBracketsConfiguration,
+		IPunctuationConfiguration {
 
 	private IFormatterDocument document;
 
@@ -53,6 +54,21 @@ public class ArrayBracketsConfiguration implements IBracketsConfiguration {
 		return JavaScriptFormatterConstants.BRACE_NEXT_LINE.equals(value)
 				|| JavaScriptFormatterConstants.BRACE_NEXT_LINE_INDENTED
 						.equals(value);
+	}
+
+	public boolean insertLineBreakAfter() {
+		// SHOULD NOT BE CALLED
+		return false;
+	}
+
+	public boolean insertSpaceAfter() {
+		// TODO introduce option for it?
+		return true;
+	}
+
+	public boolean insertSpaceBefore() {
+		// TODO introduce option for it?
+		return false;
 	}
 
 }

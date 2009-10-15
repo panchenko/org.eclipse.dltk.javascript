@@ -3,7 +3,6 @@ package org.eclipse.dltk.javascript.formatter.internal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.dltk.ast.ASTNode;
@@ -121,7 +120,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForInStatem
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterFunctionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterGetMethodNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.LineBreakFormatterNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterLabelledStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterNewExpressionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterObjectInitializerNode;
@@ -149,6 +147,7 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.IBracketsConfigurati
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IfConditionParensConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.LineBreakFormatterNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.MethodInitializerPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.MultiLineObjectInitializerBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.OperationOrPunctuationNode;
@@ -195,7 +194,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 							document);
 
 				processBrackets(node.getLB(), node.getRB(), node.getItems(),
-						configuration);
+						node.getCommas(), configuration);
 
 				return true;
 			}
@@ -355,41 +354,33 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return true;
 			}
 
-			private void visitCombinedNodeList(List nodes, List punctuations,
-					List configurations) {
+			private void visitCombinedNodeList(List<ASTNode> nodes,
+					List<Integer> punctuations,
+					List<IPunctuationConfiguration> configurations) {
 
-				if (nodes.size() == 0)
+				if (nodes.isEmpty())
 					return;
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document,
-						((ASTNode) nodes.get(0)).sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document, nodes.get(
+						0).sourceStart()));
 
 				push(formatterNode);
 
 				for (int i = 0; i < nodes.size(); i++) {
-					Object item = nodes.get(i);
-					visit((ASTNode) item);
-
-					if (i < punctuations.size()) {
-						int position = ((Integer) punctuations.get(i))
-								.intValue();
-
+					visit(nodes.get(i));
+					if (i < punctuations.size() && i + 1 < nodes.size()) {
+						int position = punctuations.get(i).intValue();
 						skipSpaces(formatterNode, position);
-
-						processPunctuation(position, 1,
-								(IPunctuationConfiguration) configurations
-										.get(i));
-
-						skipSpaces(formatterNode, ((ASTNode) nodes.get(i + 1))
+						processPunctuation(position, 1, configurations.get(i));
+						skipSpaces(formatterNode, nodes.get(i + 1)
 								.sourceStart());
 					}
 				}
-
-				checkedPop(formatterNode, ((ASTNode) nodes
-						.get(nodes.size() - 1)).sourceEnd());
+				checkedPop(formatterNode, nodes.get(nodes.size() - 1)
+						.sourceEnd());
 			}
 
 			private void visitCombinedNodeList(List nodes, List punctuations,
@@ -729,9 +720,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				visit(node.getArray());
 
-				List<ASTNode> nodes = new ArrayList<ASTNode>();
-				nodes.add(node.getIndex());
-				processBrackets(node.getLB(), node.getRB(), nodes,
+				processBrackets(node.getLB(), node.getRB(), Collections
+						.<ASTNode> singletonList(node.getIndex()), Collections
+						.<Integer> emptyList(),
 						new GetItemArrayBracketsConfiguration(document));
 
 				checkedPop(formatterNode, node.sourceEnd());
@@ -786,6 +777,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				parens.setEnd(createCharNode(document, rightParen));
 			}
 
+			/**
+			 * process function declaration parameters and call arguments
+			 */
 			private void processParens(int leftParen, int rightParen,
 					List expressions, IParensConfiguration configuration,
 					List punctuations,
@@ -895,15 +889,33 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 			}
 
+			/**
+			 * process array initialization
+			 */
 			private void processBrackets(int leftBracket, int rightBracket,
-					List nodes, IBracketsConfiguration configuration) {
+					List<ASTNode> nodes, List<Integer> commas,
+					IBracketsConfiguration configuration) {
 				BracketsNode brackets = new BracketsNode(document,
 						configuration);
 
 				brackets.setBegin(createCharNode(document, leftBracket));
 				push(brackets);
-				for (Iterator i = nodes.iterator(); i.hasNext();) {
-					visit((ASTNode) i.next());
+				if (!nodes.isEmpty()) {
+					// TODO introduce option for: spaces after opening bracket
+					skipSpaces(brackets, nodes.get(0).sourceStart());
+				}
+				if (!commas.isEmpty()) {
+					// TODO introduce option for spaces between omitted values
+					visitCombinedNodeList(nodes, commas, Collections.nCopies(
+							commas.size(),
+							(IPunctuationConfiguration) configuration));
+				} else {
+					visitCombinedNodeList(nodes, commas, Collections
+							.<IPunctuationConfiguration> emptyList());
+				}
+				if (!nodes.isEmpty()) {
+					// TODO introduce option for: spaces before closing bracket
+					skipSpaces(brackets, rightBracket);
 				}
 				checkedPop(brackets, rightBracket);
 				brackets.setEnd(createCharNode(document, rightBracket));
