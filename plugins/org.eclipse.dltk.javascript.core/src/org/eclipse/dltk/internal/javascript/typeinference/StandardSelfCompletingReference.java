@@ -172,7 +172,7 @@ public class StandardSelfCompletingReference implements IReference,
 					}
 				}
 				MethodReference method = new MethodReference(parent, name,
-						params, getProposalInfo());
+						params, getProposalInfo(), getReturnType());
 				toAdd.add(method);
 			} else {
 				FakeField fakeField = new FakeField(parent, name, offset,
@@ -281,16 +281,19 @@ public class StandardSelfCompletingReference implements IReference,
 
 		private final String[] parameters;
 		private final String proposalInfo;
+		private final String type;
 
 		/**
 		 * @param parent
 		 * @param name
+		 * @param type
 		 */
 		public MethodReference(ModelElement parent, String name,
-				String[] parameters, String proposalInfo) {
+				String[] parameters, String proposalInfo, String type) {
 			super(parent, name);
 			this.parameters = parameters;
 			this.proposalInfo = proposalInfo;
+			this.type = type;
 		}
 
 		/**
@@ -314,10 +317,24 @@ public class StandardSelfCompletingReference implements IReference,
 		}
 
 		/**
+		 * @see org.eclipse.dltk.internal.core.SourceMethod#getType()
+		 */
+		public String getType() throws ModelException {
+			return type;
+		}
+
+		/**
 		 * @see org.eclipse.dltk.internal.core.ModelElement#exists()
 		 */
 		public boolean exists() {
 			return true;
+		}
+
+		/**
+		 * @see org.eclipse.dltk.internal.core.SourceMethod#isConstructor()
+		 */
+		public boolean isConstructor() throws ModelException {
+			return false;
 		}
 	}
 
