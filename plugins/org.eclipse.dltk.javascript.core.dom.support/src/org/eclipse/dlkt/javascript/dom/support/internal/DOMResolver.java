@@ -42,8 +42,8 @@ import org.mozilla.javascript.ScriptableObject;
 
 public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 
-	final static class ClassReference extends StandardSelfCompletingReference implements
-			IClassReference {
+	final static class ClassReference extends StandardSelfCompletingReference
+			implements IClassReference {
 		private ClassReference(String paramOrVarName, boolean childIsh) {
 			super(paramOrVarName, childIsh);
 		}
@@ -64,18 +64,21 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					String stringset = "jsSet_";
 					Method method = methods[a];
 					if (method.getName().startsWith(string)) {
-						StandardSelfCompletingReference r = new StandardSelfCompletingReference(method
-								.getName().substring(string.length()), true);
+						StandardSelfCompletingReference r = new StandardSelfCompletingReference(
+								method.getName().substring(string.length()),
+								true);
 
 						result.add(r);
 						r.setFunctionRef();
 					} else if (method.getName().startsWith(stringget)) {
-						IReference r = new StandardSelfCompletingReference(method.getName()
-								.substring(stringget.length()), true);
+						IReference r = new StandardSelfCompletingReference(
+								method.getName().substring(stringget.length()),
+								true);
 						result.add(r);
 					} else if (method.getName().startsWith(stringset)) {
-						IReference r = new StandardSelfCompletingReference(method.getName()
-								.substring(stringset.length()), true);
+						IReference r = new StandardSelfCompletingReference(
+								method.getName().substring(stringset.length()),
+								true);
 						result.add(r);
 					}
 				}
@@ -154,18 +157,23 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		if (scope instanceof IProposalHolder
 				&& ((IProposalHolder) scope).getReturnType() != null) {
 			// the scope overrides its return type
-
 			IReference typeReference = ReferenceFactory.createTypeReference(
 					idToFind, ((IProposalHolder) scope).getReturnType(), owner);
-			Set childs = typeReference.getChilds(true);
-			Iterator it = childs.iterator();
-			while (it.hasNext()) {
-				IReference ref = (IReference) it.next();
-				if (idToFind == null || ref.getName().equals(idToFind)) {
-					mp.put(ref.getName(), new ReferenceScope(ref));
+			if (typeReference instanceof ScriptableScopeReference) {
+				scope = ((ScriptableScopeReference) typeReference)
+						.getScriptable();
+			} else {
+				Set childs = typeReference.getChilds(true);
+				Iterator it = childs.iterator();
+				while (it.hasNext()) {
+					IReference ref = (IReference) it.next();
+					if (idToFind == null || ref.getName().equals(idToFind)) {
+						mp.put(ref.getName(), new ReferenceScope(ref));
+					}
 				}
+				if (mp.size() > 0)
+					return;
 			}
-			return;
 		}
 		try {
 			// some scriptable want to have a context when you get the value or
@@ -227,7 +235,6 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		} finally {
 			Context.exit();
 		}
-
 		return;
 	}
 
@@ -258,7 +265,8 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			while (iterator.hasNext()) {
 				String s = (String) iterator.next();
 				if (s.startsWith(key)) {
-					StandardSelfCompletingReference uref = new ClassReference(s, false);
+					StandardSelfCompletingReference uref = new ClassReference(
+							s, false);
 					rs.add(uref);
 				}
 			}
@@ -300,8 +308,8 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 				if (object instanceof ReferenceScope) {
 					ref = ((ReferenceScope) object).getReference();
 				} else if (object instanceof Scriptable) {
-					StandardSelfCompletingReference uref = new ScriptableScopeReference(s,
-							(Scriptable) object, owner);
+					StandardSelfCompletingReference uref = new ScriptableScopeReference(
+							s, (Scriptable) object, owner);
 					if (object instanceof IProposalHolder) {
 						IProposalHolder fapn = (IProposalHolder) object;
 						uref.setParameterNames(fapn.getParameterNames());
