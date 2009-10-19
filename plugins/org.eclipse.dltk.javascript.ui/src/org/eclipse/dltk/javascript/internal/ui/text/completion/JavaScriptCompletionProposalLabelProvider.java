@@ -19,9 +19,11 @@ import org.eclipse.jface.resource.ImageDescriptor;
 public class JavaScriptCompletionProposalLabelProvider extends
 		CompletionProposalLabelProvider {
 	protected String createMethodProposalLabel(CompletionProposal methodProposal) {
+		String returnType = null;
 		if (methodProposal.extraInfo instanceof SelfCompletingReference) {
 			SelfCompletingReference cm = (SelfCompletingReference) methodProposal.extraInfo;
 			methodProposal.setParameterNames(cm.getParameterNames());
+			returnType = cm.getReturnType();
 		}
 		StringBuffer nameBuffer = new StringBuffer();
 
@@ -33,6 +35,10 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		appendUnboundedParameterList(nameBuffer, methodProposal);
 		nameBuffer.append(')');
 
+		if (returnType != null) {
+			nameBuffer.append(": ");
+			nameBuffer.append(returnType);
+		}
 		return nameBuffer.toString();
 	}
 
