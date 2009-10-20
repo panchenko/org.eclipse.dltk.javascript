@@ -176,7 +176,7 @@ public class StandardSelfCompletingReference implements IReference,
 				toAdd.add(method);
 			} else {
 				FakeField fakeField = new FakeField(parent, name, offset,
-						length);
+						length, getReturnType());
 				fakeField.setProposalInfo(getProposalInfo());
 				toAdd.add(fakeField);
 			}

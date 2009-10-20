@@ -25,11 +25,18 @@ public class FakeField extends SourceField implements IProposalHolder {
 	private int length;
 	private String snippet;
 	private String proposalInfo;
+	private final String type;
 
 	public FakeField(ModelElement parent, String name, int offset, int length) {
+		this(parent, name, offset, length, null);
+	}
+
+	public FakeField(ModelElement parent, String name, int offset, int length,
+			String type) {
 		super(parent, name);
 		this.offset = offset;
 		this.length = length;
+		this.type = type;
 	}
 
 	public ISourceRange getNameRange() throws ModelException {
@@ -50,6 +57,20 @@ public class FakeField extends SourceField implements IProposalHolder {
 
 	public String getSnippet() {
 		return snippet;
+	}
+
+	/**
+	 * @see org.eclipse.dltk.internal.core.SourceField#getType()
+	 */
+	public String getType() throws ModelException {
+		return type;
+	}
+
+	/**
+	 * @see org.eclipse.dltk.internal.core.ModelElement#exists()
+	 */
+	public boolean exists() {
+		return true;
 	}
 
 	public void setSnippet(String snippet) {
