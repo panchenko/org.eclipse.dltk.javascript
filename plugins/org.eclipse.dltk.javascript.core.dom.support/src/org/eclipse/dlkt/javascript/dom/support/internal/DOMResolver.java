@@ -154,11 +154,12 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 
 	void fillMap(HashMap mp, Scriptable scope, boolean walkParent,
 			String idToFind) {
+		String returnType = null;
 		if (scope instanceof IProposalHolder
-				&& ((IProposalHolder) scope).getReturnType() != null) {
+				&& (returnType = ((IProposalHolder) scope).getReturnType()) != null) {
 			// the scope overrides its return type
 			IReference typeReference = ReferenceFactory.createTypeReference(
-					idToFind, ((IProposalHolder) scope).getReturnType(), owner);
+					idToFind, returnType, owner);
 			if (typeReference instanceof ScriptableScopeReference) {
 				scope = ((ScriptableScopeReference) typeReference)
 						.getScriptable();
