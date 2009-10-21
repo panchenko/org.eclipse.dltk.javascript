@@ -1,7 +1,6 @@
 package org.eclipse.dltk.javascript.internal.launching;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IPath;
@@ -67,39 +66,6 @@ public class GenericJavaScriptInstallType extends
 	protected IPath createPathFile(IDeployment deployment) throws IOException {
 		// this method should not be used
 		throw new RuntimeException("This method should not be used");
-	}
-
-	protected String[] parsePaths(String result) {
-		ArrayList paths = new ArrayList();
-		String subs = null;
-		int index = 0;
-		while (index < result.length()) {
-			// skip whitespaces
-			while (index < result.length()
-					&& Character.isWhitespace(result.charAt(index)))
-				index++;
-			if (index == result.length())
-				break;
-
-			if (result.charAt(index) == '{') {
-				int start = index;
-				while (index < result.length() && result.charAt(index) != '}')
-					index++;
-				if (index == result.length())
-					break;
-				subs = result.substring(start + 1, index);
-			} else {
-				int start = index;
-				while (index < result.length() && result.charAt(index) != ' ')
-					index++;
-				subs = result.substring(start, index);
-			}
-
-			paths.add(subs);
-			index++;
-		}
-
-		return (String[]) paths.toArray(new String[paths.size()]);
 	}
 
 	protected ILog getLog() {
