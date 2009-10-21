@@ -31,6 +31,9 @@ public class FakeField extends SourceField implements IProposalHolder {
 		this(parent, name, offset, length, null);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public FakeField(ModelElement parent, String name, int offset, int length,
 			String type) {
 		super(parent, name);
@@ -61,6 +64,7 @@ public class FakeField extends SourceField implements IProposalHolder {
 
 	/**
 	 * @see org.eclipse.dltk.internal.core.SourceField#getType()
+	 * @since 2.0
 	 */
 	public String getType() throws ModelException {
 		return type;
@@ -68,6 +72,7 @@ public class FakeField extends SourceField implements IProposalHolder {
 
 	/**
 	 * @see org.eclipse.dltk.internal.core.ModelElement#exists()
+	 * @since 2.0
 	 */
 	public boolean exists() {
 		return true;
