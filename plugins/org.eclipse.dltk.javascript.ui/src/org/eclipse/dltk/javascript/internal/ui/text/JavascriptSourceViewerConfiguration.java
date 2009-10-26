@@ -104,35 +104,37 @@ public class JavascriptSourceViewerConfiguration extends
 				int end = -1;
 				String text = document.get();
 
-				try {
-					String contentType = ((IDocumentExtension3) document)
-							.getContentType(
-									IJavaScriptPartitions.JS_PARTITIONING,
-									offset, true);
-					if (IJavaScriptPartitions.JS_STRING_SINGLE
-							.equals(contentType)
-							|| IJavaScriptPartitions.JS_STRING
-									.equals(contentType)
-							|| IJavaScriptPartitions.JS_REGEXP
-									.equals(contentType)) {
-						ITypedRegion region = ((IDocumentExtension3) document)
-								.getPartition(
+				if (document instanceof IDocumentExtension3) {
+					try {
+						String contentType = ((IDocumentExtension3) document)
+								.getContentType(
 										IJavaScriptPartitions.JS_PARTITIONING,
 										offset, true);
-						if (region != null && region.getLength() > 0) {
-							// if reg exp return as is.
-							if (IJavaScriptPartitions.JS_REGEXP
-									.equals(contentType))
-								return region;
-							// if it is a string, strip the quotes.
-							return new Region(region.getOffset() + 1, region
-									.getLength() - 2);
+						if (IJavaScriptPartitions.JS_STRING_SINGLE
+								.equals(contentType)
+								|| IJavaScriptPartitions.JS_STRING
+										.equals(contentType)
+								|| IJavaScriptPartitions.JS_REGEXP
+										.equals(contentType)) {
+							ITypedRegion region = ((IDocumentExtension3) document)
+									.getPartition(
+											IJavaScriptPartitions.JS_PARTITIONING,
+											offset, true);
+							if (region != null && region.getLength() > 0) {
+								// if reg exp return as is.
+								if (IJavaScriptPartitions.JS_REGEXP
+										.equals(contentType))
+									return region;
+								// if it is a string, strip the quotes.
+								return new Region(region.getOffset() + 1,
+										region.getLength() - 2);
+							}
 						}
+					} catch (BadLocationException ex) {
+						ex.printStackTrace();
+					} catch (BadPartitioningException ex) {
+						ex.printStackTrace();
 					}
-				} catch (BadLocationException ex) {
-					ex.printStackTrace();
-				} catch (BadPartitioningException ex) {
-					ex.printStackTrace();
 				}
 
 				// try to find if the text just before the offset is 1 of (,[ or
