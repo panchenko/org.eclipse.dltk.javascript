@@ -61,6 +61,8 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 		}
 	}
 
+	boolean recursive = false;
+
 	/**
 	 * @param reference
 	 * @return
@@ -69,25 +71,33 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 		if (reference == this)
 			return true;
 
-		for (int i = 0; i < lstReferences.size(); i++) {
-			Object element = lstReferences.get(i);
-			if (element.equals(reference))
-				return true;
-			if (testTransparentRef(reference, element))
-				return true;
-		}
-
-		for (int i = 0; i < lstReadonly.size(); i++) {
-			Object element = lstReadonly.get(i);
-			if (element.equals(reference))
-				return true;
-			if (testTransparentRef(reference, element))
-				return true;
-		}
-
-		if (testTransparentRef(this, reference))
+		if (recursive)
 			return true;
-		return false;
+
+		try {
+			recursive = true;
+			for (int i = 0; i < lstReferences.size(); i++) {
+				Object element = lstReferences.get(i);
+				if (element.equals(reference))
+					return true;
+				if (testTransparentRef(reference, element))
+					return true;
+			}
+
+			for (int i = 0; i < lstReadonly.size(); i++) {
+				Object element = lstReadonly.get(i);
+				if (element.equals(reference))
+					return true;
+				if (testTransparentRef(reference, element))
+					return true;
+			}
+
+			if (testTransparentRef(this, reference))
+				return true;
+			return false;
+		} finally {
+			recursive = false;
+		}
 	}
 
 	/**
