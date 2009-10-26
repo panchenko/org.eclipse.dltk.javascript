@@ -33,11 +33,19 @@ import org.eclipse.dltk.ui.text.rules.CombinedWordRule;
 import org.eclipse.dltk.ui.text.rules.CombinedWordRule.WordMatcher;
 import org.eclipse.jface.internal.text.html.HTMLTextPresenter;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.BadPartitioningException;
 import org.eclipse.jface.text.DefaultInformationControl;
+import org.eclipse.jface.text.DefaultTextDoubleClickStrategy;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.IInformationControlCreator;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextDoubleClickStrategy;
+import org.eclipse.jface.text.ITypedRegion;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.information.IInformationPresenter;
@@ -74,6 +82,143 @@ public class JavascriptSourceViewerConfiguration extends
 			IPreferenceStore preferenceStore, ITextEditor editor,
 			String partitioning) {
 		super(colorManager, preferenceStore, editor, partitioning);
+	}
+
+	/**
+	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getDoubleClickStrategy(org.eclipse.jface.text.source.ISourceViewer,
+	 *      java.lang.String)
+	 * @since 2.0
+	 */
+	@Override
+	public ITextDoubleClickStrategy getDoubleClickStrategy(
+			ISourceViewer sourceViewer, String contentType) {
+		return new DefaultTextDoubleClickStrategy() {
+			/**
+			 * @see org.eclipse.jface.text.DefaultTextDoubleClickStrategy#findExtendedDoubleClickSelection(org.eclipse.jface.text.IDocument,
+			 *      int)
+			 */
+			@Override
+			protected IRegion findExtendedDoubleClickSelection(
+					IDocument document, int offset) {
+				int start = -1;
+				int end = -1;
+				String text = document.get();
+
+				try {
+					String contentType = ((IDocumentExtension3) document)
+							.getContentType(
+									IJavaScriptPartitions.JS_PARTITIONING,
+									offset, true);
+					if (IJavaScriptPartitions.JS_STRING_SINGLE
+							.equals(contentType)
+							|| IJavaScriptPartitions.JS_STRING
+									.equals(contentType)
+							|| IJavaScriptPartitions.JS_REGEXP
+									.equals(contentType)) {
+						ITypedRegion region = ((IDocumentExtension3) document)
+								.getPartition(
+										IJavaScriptPartitions.JS_PARTITIONING,
+										offset, true);
+						if (region != null && region.getLength() > 0) {
+							// if reg exp return as is.
+							if (IJavaScriptPartitions.JS_REGEXP
+									.equals(contentType))
+								return region;
+							// if it is a string, strip the quotes.
+							return new Region(region.getOffset() + 1, region
+									.getLength() - 2);
+						}
+					}
+				} catch (BadLocationException ex) {
+					ex.printStackTrace();
+				} catch (BadPartitioningException ex) {
+					ex.printStackTrace();
+				}
+
+				// try to find if the text just before the offset is 1 of (,[ or
+				// {
+				if (offset > 0) {
+					char ch = text.charAt(offset - 1);
+					char closingChar = 0;
+
+					if (ch == '(')
+						closingChar = ')';
+					else if (ch == '{')
+						closingChar = '}';
+					else if (ch == '[')
+						closingChar = ']';
+
+					if (closingChar != 0) {
+						// it was one of the grouping chars, try to find the
+						// closing.
+						int closing = findClosing(text, offset, ch,
+								closingChar, 1);
+						if (closing != -1)
+							return new Region(offset, closing - offset);
+					}
+				}
+
+				// try to find if the text under the offset is 1 of ),] or }
+				char ch = text.charAt(offset);
+				char startChar = 0;
+
+				if (ch == ')')
+					startChar = '(';
+				else if (ch == '}')
+					startChar = '{';
+				else if (ch == ']')
+					startChar = '[';
+
+				if (startChar != 0) {
+					// it was one now try to find the start.
+					int closing = findClosing(text, offset - 1, ch, startChar,
+							-1);
+					if (closing != -1)
+						return new Region(closing + 1, offset - closing - 1);
+				}
+
+				// fall back on just words
+				int i = offset;
+				while (Character.isJavaIdentifierPart(text.charAt(i--))) {
+					if (i == -1) {
+						break;
+					}
+				}
+				start = i + 2;
+
+				i = offset;
+				while (Character.isJavaIdentifierPart(text.charAt(i++))) {
+					if (i == text.length()) {
+						break;
+					}
+				}
+				end = i - 1;
+
+				return new Region(start, end - start);
+			}
+
+			// pretty simple find next { or }, doesnt skip over strings yet.
+			private int findClosing(String text, int offset, char beginChar,
+					char endChar, int next) {
+				int skip = 0;
+				int counter = offset;
+				while (counter != -1 && counter < text.length()) {
+					char ch = text.charAt(counter);
+
+					if (ch == endChar) {
+						if (skip == 0)
+							return counter;
+						skip--;
+					}
+
+					if (ch == beginChar)
+						skip++;
+
+					counter += next;
+				}
+				return -1;
+			}
+		};
 	}
 
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
@@ -588,4 +733,5 @@ class ScriptCommentScanner extends AbstractScriptScanner {
 		}
 		return read() != EOF ? fDefaultReturnToken : Token.EOF;
 	}
+
 }
