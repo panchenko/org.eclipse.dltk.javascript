@@ -30,14 +30,17 @@ public class JavascriptProjectCreationWizard extends ProjectWizard {
 		setWindowTitle(JavascriptWizardMessages.ProjectCreationWizard_title);
 	}
 
+	@Override
+	public String getScriptNature() {
+		return JavaScriptNature.NATURE_ID;
+	}
+
+	@Override
 	public void addPages() {
 		super.addPages();
 		fFirstPage = new ProjectWizardFirstPage() {
 
-			public String getScriptNature() {
-				return JavaScriptNature.NATURE_ID;
-			}
-
+			@Override
 			protected boolean interpeterRequired() {
 				// TODO Auto-generated method stub
 				return false;
