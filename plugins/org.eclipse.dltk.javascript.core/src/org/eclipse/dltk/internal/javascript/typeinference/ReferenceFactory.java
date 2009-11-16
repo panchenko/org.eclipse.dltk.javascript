@@ -58,6 +58,9 @@ public class ReferenceFactory {
 		providers = pr;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public static IScriptableTypeProvider[] getScriptTypeProviders() {
 		return providers;
 	}
