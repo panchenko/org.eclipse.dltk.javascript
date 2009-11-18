@@ -27,8 +27,8 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.ResolverManager;
 import org.eclipse.dltk.internal.javascript.typeinference.ContextReference;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
 import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
+import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
 import org.eclipse.dltk.javascript.core.JavaScriptCorePreferences;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 
@@ -106,8 +106,7 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 			Iterator ia = ms.values().iterator();
 			while (ia.hasNext()) {
 				HostCollection next = (HostCollection) ia.next();
-				fRequestor.acceptFieldReference(("!!!" + next.getName())
-						.toCharArray(), 0);
+				fRequestor.acceptFieldReference("!!!" + next.getName(), 0);
 			}
 			fRequestor.exitModule(content.length());
 		} catch (Exception e) {
@@ -138,7 +137,7 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 			}
 		}
 		// contibuting field to index
-		fRequestor.acceptFieldReference((key).toCharArray(), 0);
+		fRequestor.acceptFieldReference(key, 0);
 	}
 
 	private void processNode(ScriptOrFnNode parse, HostCollection collection) {
