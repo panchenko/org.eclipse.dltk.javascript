@@ -161,8 +161,13 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			IReference typeReference = ReferenceFactory.createTypeReference(
 					idToFind, returnType, owner);
 			if (typeReference instanceof ScriptableScopeReference) {
-				scope = ((ScriptableScopeReference) typeReference)
+				Scriptable resolved = ((ScriptableScopeReference) typeReference)
 						.getScriptable();
+				if (!(resolved instanceof IProposalHolder && returnType
+						.equals(((IProposalHolder) resolved).getReturnType()))) {
+					// only override if it was transformed to something else.
+					scope = resolved;
+				}
 			} else {
 				Set childs = typeReference.getChilds(true);
 				Iterator it = childs.iterator();
