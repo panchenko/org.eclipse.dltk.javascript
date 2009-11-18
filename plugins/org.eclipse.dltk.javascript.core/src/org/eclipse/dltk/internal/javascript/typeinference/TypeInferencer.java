@@ -257,9 +257,9 @@ public class TypeInferencer {
 				if (requestor != null) {
 					if (call != null) {
 						if (firstChild.getPosition() != 0) {
-							requestor.acceptMethodReference(call.toCharArray(),
-									0, firstChild.getPosition() - length,
-									firstChild.getPosition() - 1);
+							requestor.acceptMethodReference(call, 0, firstChild
+									.getPosition()
+									- length, firstChild.getPosition() - 1);
 						}
 					}
 				}
@@ -288,8 +288,8 @@ public class TypeInferencer {
 							// if (start < 0) {
 							// System.out.println("AA");
 							// }
-							requestor.acceptMethodReference(call.toCharArray(),
-									0, start, end);
+							requestor
+									.acceptMethodReference(call, 0, start, end);
 						}
 					}
 				}
