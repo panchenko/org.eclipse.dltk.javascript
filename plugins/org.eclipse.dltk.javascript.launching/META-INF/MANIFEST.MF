@@ -24,5 +24,5 @@ Eclipse-LazyStart: true
 Export-Package: org.eclipse.dltk.javascript.console,
  org.eclipse.dltk.javascript.launching,
  org.eclipse.dltk.javascript.internal.launching
-Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
