@@ -689,8 +689,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						new FunctionArgumentsPunctuationConfiguration());
 
 				boolean emptyBody = node.getBody() == null
-						|| node.getBody().getStatements() == null
-						|| node.getBody().getStatements().size() == 0;
+						|| isEmptyBody(node.getBody());
 				IBracesConfiguration bodyConfiguration;
 
 				if (node.getName() != null)
@@ -705,6 +704,19 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				checkedPop(formatterNode, node.sourceEnd());
 
 				return false;
+			}
+
+			private boolean isEmptyBody(StatementBlock block) {
+				if (block.getStatements().isEmpty()) {
+					for (int i = block.getLC() + 1; i < block.getRC(); ++i) {
+						if (!Character.isWhitespace(document.charAt(i))) {
+							return false;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
 			}
 
 			public boolean visitGetArrayItemExpression(
@@ -745,8 +757,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						new FunctionNoArgumentsParensConfiguration(document));
 
 				boolean emptyBody = node.getBody() == null
-						|| node.getBody().getStatements() == null
-						|| node.getBody().getStatements().size() == 0;
+						|| isEmptyBody(node.getBody());
 
 				processBraces(
 						node.getBody(),
@@ -1222,8 +1233,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						new FunctionArgumentsParensConfiguration(document));
 
 				boolean emptyBody = node.getBody() == null
-						|| node.getBody().getStatements() == null
-						|| node.getBody().getStatements().size() == 0;
+						|| isEmptyBody(node.getBody());
 
 				processBraces(
 						node.getBody(),
