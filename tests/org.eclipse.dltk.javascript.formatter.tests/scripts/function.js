@@ -70,6 +70,15 @@ function 		a		(		) {
 }
 ==
 function a () { }
+==== function-empty-with-comment
+function 		a		(		) {
+// do something
+}
+==
+function a ()
+{
+	// do something
+}
 ==> formatter.insertspace.before.lp.function = false
 ==== function-closure
 	var x = function ( ) { }
