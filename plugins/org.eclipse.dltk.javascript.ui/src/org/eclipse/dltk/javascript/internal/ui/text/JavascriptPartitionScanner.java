@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
+import org.eclipse.dltk.ui.text.rules.ScriptRegExpRule;
 import org.eclipse.jface.text.rules.EndOfLineRule;
 import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.MultiLineRule;
-import org.eclipse.jface.text.rules.PatternRule;
 import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
@@ -36,14 +36,20 @@ public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 		IToken doc = new Token(IJavaScriptPartitions.JS_DOC);
 		IToken regexp = new Token(IJavaScriptPartitions.JS_REGEXP);
 
-		List/* < IPredicateRule > */rules = new ArrayList/* <IPredicateRule> */();
+		List<IPredicateRule> rules = new ArrayList<IPredicateRule>();
 		rules.add(new MultiLineRule("/**", "*/", doc)); //$NON-NLS-1$ //$NON-NLS-2$
 		rules.add(new MultiLineRule("/*", "*/", comment)); //$NON-NLS-1$ //$NON-NLS-2$
 		rules.add(new EndOfLineRule("//", comment)); //$NON-NLS-1$		
 
 		// simple regexp tester. Coloring is still default so it doesn't matter
 		// for now to much that var x = 10 / 5 / 10 is also seen as regexp
-		rules.add(new PatternRule("/", "/", regexp, '\\', true, true));
+		rules.add(new ScriptRegExpRule("/", "/", regexp) {
+
+			@Override
+			protected boolean isRegExpModifier(char c) {
+				return c == 'g' || c == 'm' || c == 'i';
+			}
+		});
 		// Add rule for character constants.
 		rules.add(new SingleLineRule("'", "'", stringSingle, '\\'));
 		rules.add(new MultiLineRule("\"", "\"", string, '\\'));
