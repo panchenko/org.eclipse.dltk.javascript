@@ -15,62 +15,62 @@ public class NativeStringReference extends StandardSelfCompletingReference {
 			"toSource").setFunctionRef();
 	private static StandardSelfCompletingReference valueOf = new NativeStringReference(
 			"valueOf").setFunctionRef();
-	private static StandardSelfCompletingReference charAt = new NativeStringReference("charAt")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference charAt = new NativeStringReference(
+			"charAt").setFunctionRef();
 	private static StandardSelfCompletingReference charCodeAt = new NativeNumberReference(
 			"charCodeAt").setFunctionRef();
 	private static StandardSelfCompletingReference indexOf = new NativeNumberReference(
 			"indexOf").setFunctionRef();
 	private static StandardSelfCompletingReference lastIndexOf = new NativeNumberReference(
 			"lastIndexOf").setFunctionRef();
-	private static StandardSelfCompletingReference split = new NativeArrayReference("split")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference split = new NativeArrayReference(
+			"split").setFunctionRef();
 	private static StandardSelfCompletingReference substring = new NativeStringReference(
 			"substring").setFunctionRef();
 	private static StandardSelfCompletingReference toLowerCase = new NativeStringReference(
 			"toLowerCase").setFunctionRef();
 	private static StandardSelfCompletingReference toUpperCase = new NativeStringReference(
 			"toUpperCase").setFunctionRef();
-	private static StandardSelfCompletingReference substr = new NativeStringReference("substr")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference concat = new NativeStringReference("concat")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference slice = new NativeStringReference("slice")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference bold = new NativeStringReference("bold")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference substr = new NativeStringReference(
+			"substr").setFunctionRef();
+	private static StandardSelfCompletingReference concat = new NativeStringReference(
+			"concat").setFunctionRef();
+	private static StandardSelfCompletingReference slice = new NativeStringReference(
+			"slice").setFunctionRef();
+	private static StandardSelfCompletingReference bold = new NativeStringReference(
+			"bold").setFunctionRef();
 	private static StandardSelfCompletingReference italics = new NativeStringReference(
 			"italics").setFunctionRef();
-	private static StandardSelfCompletingReference fixed = new NativeStringReference("fixed")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference strike = new NativeStringReference("strike")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference small = new NativeStringReference("small")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference big = new NativeStringReference("big")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference blink = new NativeStringReference("blink")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference sup = new NativeStringReference("sup")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference sub = new NativeStringReference("sub")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference fixed = new NativeStringReference(
+			"fixed").setFunctionRef();
+	private static StandardSelfCompletingReference strike = new NativeStringReference(
+			"strike").setFunctionRef();
+	private static StandardSelfCompletingReference small = new NativeStringReference(
+			"small").setFunctionRef();
+	private static StandardSelfCompletingReference big = new NativeStringReference(
+			"big").setFunctionRef();
+	private static StandardSelfCompletingReference blink = new NativeStringReference(
+			"blink").setFunctionRef();
+	private static StandardSelfCompletingReference sup = new NativeStringReference(
+			"sup").setFunctionRef();
+	private static StandardSelfCompletingReference sub = new NativeStringReference(
+			"sub").setFunctionRef();
 	private static StandardSelfCompletingReference fontsize = new NativeStringReference(
 			"fontsize").setFunctionRef();
 	private static StandardSelfCompletingReference fontcolor = new NativeStringReference(
 			"fontcolor").setFunctionRef();
-	private static StandardSelfCompletingReference link = new NativeStringReference("link")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference anchor = new NativeStringReference("anchor")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference link = new NativeStringReference(
+			"link").setFunctionRef();
+	private static StandardSelfCompletingReference anchor = new NativeStringReference(
+			"anchor").setFunctionRef();
 	private static StandardSelfCompletingReference equals = new NativeBooleanReference(
 			"equals").setFunctionRef();
 	private static StandardSelfCompletingReference equalsIgnoreCase = new NativeBooleanReference(
 			"equalsIgnoreCase").setFunctionRef();
-	private static StandardSelfCompletingReference match = new NativeStringReference("match")
-			.setFunctionRef();
-	private static StandardSelfCompletingReference search = new NativeNumberReference("search")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference match = new NativeStringReference(
+			"match").setFunctionRef();
+	private static StandardSelfCompletingReference search = new NativeNumberReference(
+			"search").setFunctionRef();
 	private static StandardSelfCompletingReference replace = new NativeStringReference(
 			"replace").setFunctionRef();
 	private static StandardSelfCompletingReference localeCompare = new NativeNumberReference(
@@ -79,6 +79,9 @@ public class NativeStringReference extends StandardSelfCompletingReference {
 			"toLocaleLowerCase").setFunctionRef();
 	private static StandardSelfCompletingReference toLocaleUpperCase = new NativeStringReference(
 			"toLocaleUpperCase").setFunctionRef();
+
+	private static StandardSelfCompletingReference length = new NativeNumberReference(
+			"length");
 
 	/**
 	 * @param paramOrVarName
@@ -128,6 +131,8 @@ public class NativeStringReference extends StandardSelfCompletingReference {
 		setChild("localeCompare", localeCompare);
 		setChild("toLocaleLowerCase", toLocaleLowerCase);
 		setChild("toLocaleUpperCase", toLocaleUpperCase);
+		setChild("length", length);
+
 	}
 
 	public void setChild(String key, IReference ref) {
