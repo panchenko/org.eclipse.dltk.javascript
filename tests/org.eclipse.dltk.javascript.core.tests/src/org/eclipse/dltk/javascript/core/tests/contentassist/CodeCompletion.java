@@ -641,25 +641,14 @@ public class CodeCompletion extends TestCase {
 		return stringMethods;
 	}
 	
-	private static List<String> concat(String value, List<String> values) {
-		List<String> result = new ArrayList<String>(values.size() + 1);
-		result.add(value);
-		result.addAll(values);
-		return result;
-	}
-	
-	private static List<String> concat(List<String> values, String... addition) {
+	private static String[] concat(List<String> values, String... addition) {
 		List<String> result = new ArrayList<String>(values.size()
 				+ addition.length);
 		result.addAll(values);
 		for (String value : addition) {
 			result.add(value);
 		}
-		return result;
-	}	
-	
-	private static String[] toArray(List<String> values) {
-		return values.toArray(new String[values.size()]);
+		return result.toArray(new String[result.size()]);
 	}
 	
 	//104 ,temperature
@@ -667,7 +656,7 @@ public class CodeCompletion extends TestCase {
 	 * dumb completion on function
 	 */
 	public void test4() {
-		String[] names = toArray(concat("temperature", getMethodsOfString()));
+		String[] names = concat(getMethodsOfString(), "temperature");
 		String module = "test4.js";
 		int position = lastPositionInFile("firstVar.world.", module);
 		basicTest(module, position, names);		
@@ -675,8 +664,8 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test5() {
-		String[] names = toArray(concat("world", getMethodsOfString()));
-		String[] names1 = toArray(concat("temperature", getMethodsOfString()));
+		String[] names = concat(getMethodsOfString(), "world");
+		String[] names1 = concat(getMethodsOfString(), "temperature");
 		String module = "test5.js";
 		int positionFirst = lastPositionInFile("secondVar.", module);
 		basicTest(module, positionFirst, names);
@@ -687,7 +676,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test6() {
-		String[] names = toArray(concat("world", getMethodsOfString()));
+		String[] names = concat(getMethodsOfString(), "world");
 		//String[] names1=new String[]{"temperature"};
 		String module = "test6.js";
 		int position = lastPositionInFile("world.", module);
@@ -696,7 +685,7 @@ public class CodeCompletion extends TestCase {
 		//basicTest(module, 126, names1);
 	}
 	public void test7() {
-		String[] names = toArray(concat("world", getMethodsOfString()));
+		String[] names = concat(getMethodsOfString(), "world");
 		//String[] names1=new String[]{"temperature"};
 		String module = "test7.js";
 		int position = lastPositionInFile("world.", module);
@@ -705,8 +694,7 @@ public class CodeCompletion extends TestCase {
 		//basicTest(module, 126, names1);
 	}
 	public void test8() {
-		String[] names = toArray(concat(getMethodsOfString(), "mission",
-				"target"));
+		String[] names = concat(getMethodsOfString(), "mission", "target");
 		//String[] names1=new String[]{"temperature"};
 		String module = "test8.js";
 		int position = lastPositionInFile("firstVar.", module);
@@ -715,7 +703,7 @@ public class CodeCompletion extends TestCase {
 		//basicTest(module, 126, names1);
 	}
 	public void test9() {
-		String[] names = toArray(getMethodsOfString());
+		String[] names = concat(getMethodsOfString());
 		//String[] names1=new String[]{"temperature"};
 		String module = "test9.js";
 		int position = lastPositionInFile("firstVar.", module);
@@ -725,8 +713,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test10() {
-		String[] names = toArray(concat(getMethodsOfString(), "mission",
-				"target"));
+		String[] names = concat(getMethodsOfString(), "mission", "target");
 		//String[] names1=new String[]{"temperature"};
 		String module = "test10.js";
 //		basicTest(module, 139, names);
@@ -751,14 +738,14 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test13() {
-		String[] names = toArray(concat(getMethodsOfString(), "element"));
+		String[] names = concat(getMethodsOfString(), "element");
 		String module = "test13.js";
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
 	}
 	
 	public void test14() {
-		String[] names = toArray(concat(getMethodsOfString(), "element"));
+		String[] names = concat(getMethodsOfString(), "element");
 		String module = "test14.js";
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
@@ -896,7 +883,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test31() {
-		String[] names = toArray(concat(getMethodsOfString(), "x"));
+		String[] names = concat(getMethodsOfString(), "x");
 		String module = "test31.js";
 		int position = lastPositionInFile("node.", module);
 		basicTest(module, position, names);
@@ -904,7 +891,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test32() {
-		String[] names = toArray(concat(getMethodsOfString(), "x"));
+		String[] names = concat(getMethodsOfString(), "x");
 		String module = "test32.js";
 		int position = lastPositionInFile("node.", module);
 		basicTest(module, position, names);
