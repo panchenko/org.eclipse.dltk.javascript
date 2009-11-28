@@ -5,12 +5,14 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -38,6 +40,8 @@ import org.eclipse.dltk.core.WorkingCopyOwner;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.core.NameLookup;
 import org.eclipse.dltk.internal.core.util.MementoTokenizer;
+import org.eclipse.dltk.internal.javascript.typeinference.IReference;
+import org.eclipse.dltk.internal.javascript.typeinference.NativeStringReference;
 import org.eclipse.dltk.javascript.internal.core.codeassist.completion.JavaScriptCompletionEngine;
 import org.eclipse.dltk.utils.CorePrinter;
 
@@ -620,12 +624,50 @@ public class CodeCompletion extends TestCase {
 		basicTest(module, position, names);		
 //		basicTest(module, 63, names);		
 	}
+	
+	private static List<String> stringMethods = null;
+	
+	private static List<String> getMethodsOfString() {
+		if (stringMethods == null) {
+			List<String> names = new ArrayList<String>();
+			for (Iterator<?> i = new NativeStringReference("")
+					.getChilds(false).iterator(); i.hasNext();) {
+				IReference reference = (IReference) i.next();
+				names.add(reference.getName());
+			}
+			assertEquals(36, names.size());
+			stringMethods = Collections.unmodifiableList(names);
+		}
+		return stringMethods;
+	}
+	
+	private static List<String> concat(String value, List<String> values) {
+		List<String> result = new ArrayList<String>(values.size() + 1);
+		result.add(value);
+		result.addAll(values);
+		return result;
+	}
+	
+	private static List<String> concat(List<String> values, String... addition) {
+		List<String> result = new ArrayList<String>(values.size()
+				+ addition.length);
+		result.addAll(values);
+		for (String value : addition) {
+			result.add(value);
+		}
+		return result;
+	}	
+	
+	private static String[] toArray(List<String> values) {
+		return values.toArray(new String[values.size()]);
+	}
+	
 	//104 ,temperature
 	/**
 	 * dumb completion on function
 	 */
 	public void test4() {
-		String[] names=new String[]{"temperature","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};	
+		String[] names = toArray(concat("temperature", getMethodsOfString()));
 		String module = "test4.js";
 		int position = lastPositionInFile("firstVar.world.", module);
 		basicTest(module, position, names);		
@@ -633,8 +675,8 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test5() {
-		String[] names=new String[]{"world","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
-		String[] names1=new String[]{"temperature","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(concat("world", getMethodsOfString()));
+		String[] names1 = toArray(concat("temperature", getMethodsOfString()));
 		String module = "test5.js";
 		int positionFirst = lastPositionInFile("secondVar.", module);
 		basicTest(module, positionFirst, names);
@@ -645,7 +687,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test6() {
-		String[] names=new String[]{"world","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(concat("world", getMethodsOfString()));
 		//String[] names1=new String[]{"temperature"};
 		String module = "test6.js";
 		int position = lastPositionInFile("world.", module);
@@ -654,7 +696,7 @@ public class CodeCompletion extends TestCase {
 		//basicTest(module, 126, names1);
 	}
 	public void test7() {
-		String[] names=new String[]{"world","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(concat("world", getMethodsOfString()));
 		//String[] names1=new String[]{"temperature"};
 		String module = "test7.js";
 		int position = lastPositionInFile("world.", module);
@@ -663,7 +705,8 @@ public class CodeCompletion extends TestCase {
 		//basicTest(module, 126, names1);
 	}
 	public void test8() {
-		String[] names=new String[]{"mission","target","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(concat(getMethodsOfString(), "mission",
+				"target"));
 		//String[] names1=new String[]{"temperature"};
 		String module = "test8.js";
 		int position = lastPositionInFile("firstVar.", module);
@@ -672,7 +715,7 @@ public class CodeCompletion extends TestCase {
 		//basicTest(module, 126, names1);
 	}
 	public void test9() {
-		String[] names=new String[]{"toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(getMethodsOfString());
 		//String[] names1=new String[]{"temperature"};
 		String module = "test9.js";
 		int position = lastPositionInFile("firstVar.", module);
@@ -682,7 +725,8 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test10() {
-		String[] names=new String[]{"mission","target","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(concat(getMethodsOfString(), "mission",
+				"target"));
 		//String[] names1=new String[]{"temperature"};
 		String module = "test10.js";
 //		basicTest(module, 139, names);
@@ -707,14 +751,14 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test13() {
-		String[] names=new String[]{"element","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(concat(getMethodsOfString(), "element"));
 		String module = "test13.js";
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
 	}
 	
 	public void test14() {
-		String[] names=new String[]{"element","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(concat(getMethodsOfString(), "element"));
 		String module = "test14.js";
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
@@ -852,7 +896,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test31() {
-		String[] names=new String[]{"x","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(concat(getMethodsOfString(), "x"));
 		String module = "test31.js";
 		int position = lastPositionInFile("node.", module);
 		basicTest(module, position, names);
@@ -860,7 +904,7 @@ public class CodeCompletion extends TestCase {
 	}
 	
 	public void test32() {
-		String[] names=new String[]{"x","toString","toSource","valueOf","charAt","charCodeAt","indexOf","lastIndexOf","split","substring","toLowerCase","toUpperCase","substr","concat","slice","bold","italics","fixed","strike","small","big","blink","sup","sub","fontsize","fontcolor","link","anchor","equals","equalsIgnoreCase","match","search","replace","localeCompare","toLocaleLowerCase","toLocaleUpperCase"};
+		String[] names = toArray(concat(getMethodsOfString(), "x"));
 		String module = "test32.js";
 		int position = lastPositionInFile("node.", module);
 		basicTest(module, position, names);
