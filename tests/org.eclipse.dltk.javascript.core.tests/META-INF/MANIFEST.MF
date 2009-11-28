@@ -10,3 +10,4 @@ Require-Bundle: org.junit,
  org.eclipse.core.runtime
 Export-Package: org.eclipse.dltk.javascript.core.tests,
  org.eclipse.dltk.javascript.core.tests.contentassist
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
