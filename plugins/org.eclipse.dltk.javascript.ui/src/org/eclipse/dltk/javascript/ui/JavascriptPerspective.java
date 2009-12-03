@@ -10,6 +10,7 @@
 package org.eclipse.dltk.javascript.ui;
 
 
+import org.eclipse.dltk.ui.DLTKUIPlugin;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
@@ -27,9 +28,8 @@ public class JavascriptPerspective implements IPerspectiveFactory  {
 		//folder.addView(JavascriptUI.ID_TYPE_HIERARCHY);	
 		//folder.addView("org.eclipse.dltk.javascript.ui.views.navigator");//IPageLayout.ID_RES_NAV);
 		//String navigator = IPageLayout.ID_RES_NAV;
-		String navigator = "org.eclipse.dltk.ui.ScriptExplorer";
 
-		folder.addView(navigator);		
+		folder.addView(DLTKUIPlugin.ID_SCRIPT_EXPLORER);
 		folder.addPlaceholder(IPageLayout.ID_BOOKMARKS);
 		
 		IFolderLayout outputfolder= layout.createFolder("bottom", IPageLayout.BOTTOM, (float)0.75, editorArea); //$NON-NLS-1$
@@ -50,7 +50,7 @@ public class JavascriptPerspective implements IPerspectiveFactory  {
 		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 		layout.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
 		layout.addShowViewShortcut(IConsoleConstants.ID_CONSOLE_VIEW);
-		layout.addShowViewShortcut(navigator);
+		layout.addShowViewShortcut(DLTKUIPlugin.ID_SCRIPT_EXPLORER);
 		layout.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
 		layout.addShowViewShortcut(IProgressConstants.PROGRESS_VIEW_ID);
 		
