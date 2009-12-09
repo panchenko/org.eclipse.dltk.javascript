@@ -431,9 +431,11 @@ public class TypeInferencer {
 				}
 			else {
 				int index = node.getIntProp(Node.FUNCTION_PROP, -1);
-				FunctionNode functionNode = context.getFunctionNode(index);
-				context = functionNode;
-				internalProcessFunctionNode(arg, functionNode, node);
+				if (index >= 0 && index < context.getFunctionCount()) {
+					FunctionNode functionNode = context.getFunctionNode(index);
+					context = functionNode;
+					internalProcessFunctionNode(arg, functionNode, node);
+				}
 			}
 			context = oldC;
 			return null;
