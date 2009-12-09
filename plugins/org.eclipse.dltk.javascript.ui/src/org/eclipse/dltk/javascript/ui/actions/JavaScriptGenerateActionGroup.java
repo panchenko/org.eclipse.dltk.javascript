@@ -17,8 +17,6 @@ import org.eclipse.dltk.ui.actions.DLTKActionConstants;
 import org.eclipse.dltk.ui.actions.GenerateActionGroup;
 import org.eclipse.dltk.ui.actions.IScriptEditorActionDefinitionIds;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.ui.texteditor.TextOperationAction;
 
 public class JavaScriptGenerateActionGroup extends GenerateActionGroup {
 
@@ -44,14 +42,6 @@ public class JavaScriptGenerateActionGroup extends GenerateActionGroup {
 				DLTKActionConstants.REMOVE_BLOCK_COMMENT, true);
 		editor.markAsSelectionDependentAction(
 				DLTKActionConstants.REMOVE_BLOCK_COMMENT, true);
-
-		action = new TextOperationAction(DLTKEditorMessages
-				.getBundleForConstructedKeys(),
-				"Format.", editor, ISourceViewer.FORMAT); //$NON-NLS-1$
-		action.setActionDefinitionId(IScriptEditorActionDefinitionIds.FORMAT);
-		editor.setAction(DLTKActionConstants.FORMAT, action);
-		editor.markAsStateDependentAction(DLTKActionConstants.FORMAT, true);
-		editor.markAsSelectionDependentAction(DLTKActionConstants.FORMAT, true);
 
 		action = new IndentAction(DLTKEditorMessages
 				.getBundleForConstructedKeys(), "Indent.", editor, false); //$NON-NLS-1$
