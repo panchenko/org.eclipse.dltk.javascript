@@ -36,7 +36,6 @@ public class Messages extends NLS {
 	public static String JavaScriptCodeStylePreferencePage_description;
 
 	public static String JavaScriptIdentationTabPage_name;
-	public static String JavaScriptIdentationTabPage_GeneralSettingsGroup_name;
 	public static String JavaScriptIdentationTabPage_IndentGroup_name;
 	public static String JavaScriptIdentationTabPage_StatementsWithinFunctionBody_name;
 	public static String JavaScriptIdentationTabPage_StatementsWithinBlocks_name;
