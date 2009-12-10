@@ -25,7 +25,7 @@ public class JavaScriptFormatterWriter extends FormatterWriter {
 	}
 
 	@Override
-	protected void writeIndent(IFormatterContext context, StringBuffer buffer) {
+	protected void writeIndent(IFormatterContext context, StringBuilder buffer) {
 		super.writeIndent(context, buffer);
 
 		JavaScriptFormatterContext jscontext = (JavaScriptFormatterContext) context;
