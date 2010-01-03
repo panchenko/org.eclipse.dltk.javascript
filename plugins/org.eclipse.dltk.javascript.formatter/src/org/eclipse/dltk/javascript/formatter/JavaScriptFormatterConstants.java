@@ -80,6 +80,11 @@ public final class JavaScriptFormatterConstants {
 
 	public static final String STATEMENT_NEW_LINE = "formatter.statement.new.line";//$NON-NLS-1$
 
+	/**
+	 * Internal option used in indenting only mode.
+	 */
+	public static final String KEEP_LINES = "formatter.keep.lines";//$NON-NLS-1$
+
 	public static final String NEW_LINE_IN_EMPTY_METHOD = "formatter.newlines.empty.method";//$NON-NLS-1$
 	public static final String NEW_LINE_IN_EMPTY_BLOCK = "formatter.newlines.empty.block";//$NON-NLS-1$
 	public static final String NEW_LINE_AT_EOF = "formatter.newlines.eof";//$NON-NLS-1$

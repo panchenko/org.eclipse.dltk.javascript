@@ -43,6 +43,7 @@ public class JavaScriptFormatterFactory extends AbstractScriptFormatterFactory {
 				.valueOf(false));
 		copy.put(JavaScriptFormatterConstants.LINES_PRESERVE, String
 				.valueOf(-1));
+		copy.put(JavaScriptFormatterConstants.KEEP_LINES, String.valueOf(true));
 		return copy;
 	}
 

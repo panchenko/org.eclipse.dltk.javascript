@@ -157,6 +157,8 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 				.setWrapLength(getInt(JavaScriptFormatterConstants.WRAP_COMMENTS_LENGTH));
 		writer.setLinesPreserve(1);// FIXME
 		writer.setPreserveSpaces(false);
+		writer
+				.setKeepLines(getBoolean(JavaScriptFormatterConstants.KEEP_LINES));
 
 		try {
 			root.accept(context, writer);
