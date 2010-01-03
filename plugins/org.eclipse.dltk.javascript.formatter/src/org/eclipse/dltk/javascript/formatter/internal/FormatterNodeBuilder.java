@@ -520,7 +520,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				int semicolonPosition = node.getSemicolonPosition();
 				if (semicolonPosition > -1) {
 					checkedPop(formatterNode, semicolonPosition /*- 1*/);
-					if (semicolonPosition > formatterNode.getEndOffset()) {
+					if (semicolonPosition >= formatterNode.getEndOffset()) {
 						addChild(createSemicolonNode(document,
 								semicolonPosition));
 					}
