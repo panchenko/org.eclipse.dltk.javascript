@@ -361,7 +361,7 @@ public class JSTransformer extends JSVisitor {
 
 		for (int i = 0; i < node.getChildCount(); i++) {
 			block.getStatements().add(
-					transformStatementNode(node.getChild(i), this.parent));
+					transformStatementNode(node.getChild(i), block));
 		}
 
 		block.setLC(getTokenOffset(JSParser.LBRACE, node.getTokenStartIndex(),
