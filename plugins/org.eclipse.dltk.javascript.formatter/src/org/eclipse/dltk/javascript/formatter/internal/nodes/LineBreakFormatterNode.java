@@ -14,7 +14,7 @@ import org.eclipse.dltk.formatter.IFormatterWriter;
 
 /**
  * @author jcompagner
- * @author Alex Panchenko  
+ * @author Alex Panchenko
  */
 public class LineBreakFormatterNode implements IFormatterContainerNode,
 		IFormatterNodeProxy {
@@ -38,11 +38,11 @@ public class LineBreakFormatterNode implements IFormatterContainerNode,
 		target.addChild(child);
 	}
 
-	public List getBody() {
+	public List<IFormatterNode> getBody() {
 		return target.getBody();
 	}
 
-	public List getChildren() {
+	public List<IFormatterNode> getChildren() {
 		return target.getChildren();
 	}
 
