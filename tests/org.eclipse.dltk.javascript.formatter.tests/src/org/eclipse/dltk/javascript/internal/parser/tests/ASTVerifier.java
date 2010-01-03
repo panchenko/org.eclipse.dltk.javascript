@@ -81,7 +81,7 @@ import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 
-public class ASTVerifier implements IASTVisitor {
+public class ASTVerifier extends ASTVisitor {
 
 	private String source;
 	private ModuleDeclaration root;
@@ -95,15 +95,8 @@ public class ASTVerifier implements IASTVisitor {
 		visit(root);
 	}
 
-	public void visit(ASTNode node) {
-		ASTVisitor.visit(node, this);
-	}
-
-	private boolean visitList(List nodes) {
-		for (int i = 0; i < nodes.size(); i++) {
-			visit((ASTNode) nodes.get(i));
-		}
-		return true;
+	private void visitList(List nodes) {
+		visit(nodes);
 	}
 
 	private void testChar(char ch, int charAt) {

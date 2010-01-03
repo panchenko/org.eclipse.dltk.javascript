@@ -14,8 +14,8 @@ package org.eclipse.dltk.javascript.internal.parser.tests;
 
 import junit.framework.Assert;
 
+import org.eclipse.dltk.javascript.formatter.JavaScriptFormatter;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
-import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterFactory;
 import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
 import org.eclipse.jface.text.Document;
@@ -25,9 +25,7 @@ public class JavaScriptParserTester extends AbstractTester {
 
 	private void parseScript(String source) throws Exception {
 
-		JavaScriptFormatterFactory f = new JavaScriptFormatterFactory();
-
-		IScriptFormatter formatter = f.createFormatter("\n",
+		IScriptFormatter formatter = new JavaScriptFormatter("\n",
 				JavaScriptFormatterConstants.getDefaults());
 
 		TextEdit textEdit = formatter.format(source, 0, source.length(), 0);
