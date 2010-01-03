@@ -42,13 +42,6 @@ public class JavaScriptGenerateActionGroup extends GenerateActionGroup {
 				DLTKActionConstants.REMOVE_BLOCK_COMMENT, true);
 		editor.markAsSelectionDependentAction(
 				DLTKActionConstants.REMOVE_BLOCK_COMMENT, true);
-
-		action = new IndentAction(DLTKEditorMessages
-				.getBundleForConstructedKeys(), "Indent.", editor, false); //$NON-NLS-1$
-		action.setActionDefinitionId(IScriptEditorActionDefinitionIds.INDENT);
-		editor.setAction(DLTKActionConstants.INDENT, action);
-		editor.markAsStateDependentAction(DLTKActionConstants.INDENT, true);
-		editor.markAsSelectionDependentAction(DLTKActionConstants.INDENT, true);
 	}
 
 }
