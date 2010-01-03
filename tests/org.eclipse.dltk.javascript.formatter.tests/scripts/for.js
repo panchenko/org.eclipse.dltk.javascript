@@ -46,4 +46,11 @@ function testFormatting () {
 	}
 }
 ;
-====
+==== for-break
+for  (;;)    break;
+==
+for (;;) break;
+==== for-continue
+for  (;;)    continue;
+==
+for (;;) continue;

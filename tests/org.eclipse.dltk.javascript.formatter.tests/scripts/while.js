@@ -17,6 +17,14 @@ while (a == 100) a = 100;
 while    (a==100)    ;
 ==
 while (a == 100);
+==== while-break
+while    (true)    break;
+==
+while (true) break;
+==== while-contirnue
+while    (true)    contirnue;
+==
+while (true) contirnue;
 ==== while-simple-no-simicolon
 while    (a==100)
 ==
