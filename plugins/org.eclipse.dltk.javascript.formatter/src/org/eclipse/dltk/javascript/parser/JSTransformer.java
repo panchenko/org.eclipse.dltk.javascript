@@ -236,7 +236,7 @@ public class JSTransformer extends JSVisitor {
 	private int getTokenOffset(int tokenType, int startTokenIndex,
 			int endTokenIndex, int skipCount) {
 
-		Assert.isTrue(startTokenIndex > 0);
+		Assert.isTrue(startTokenIndex >= 0);
 		Assert.isTrue(endTokenIndex > 0);
 		Assert.isTrue(startTokenIndex <= endTokenIndex);
 
@@ -412,10 +412,10 @@ public class JSTransformer extends JSVisitor {
 		statement.setStart(statement.getBreakKeyword().sourceStart());
 
 		if (statement.getLabel() != null)
-			statement.setEnd(Math.max(statement.getSemicolonPosition(),
+			statement.setEnd(Math.max(statement.getSemicolonPosition() + 1,
 					statement.getLabel().sourceEnd()));
 		else
-			statement.setEnd(Math.max(statement.getSemicolonPosition(),
+			statement.setEnd(Math.max(statement.getSemicolonPosition() + 1,
 					statement.getBreakKeyword().sourceEnd()));
 
 		this.result = statement;

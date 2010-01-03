@@ -1,9 +1,11 @@
 package org.eclipse.dltk.javascript.formatter.internal;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.formatter.AbstractFormatterNodeBuilder;
@@ -43,7 +45,6 @@ import org.eclipse.dltk.javascript.ast.GetAllChildrenExpression;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.GetMethod;
-import org.eclipse.dltk.javascript.ast.IASTVisitor;
 import org.eclipse.dltk.javascript.ast.ISemicolonStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
@@ -79,6 +80,7 @@ import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.AbstractParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ArrayBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.BinaryOperationPinctuationConfiguration;
@@ -168,20 +170,69 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.WithBlockBracesConfi
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WithConditionParensConfiguration;
 
 public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
-	public IFormatterContainerNode build(Script astRoot,
-			final IFormatterDocument document) {
+
+	protected final IFormatterDocument document;
+
+	public FormatterNodeBuilder(IFormatterDocument document) {
+		this.document = document;
+	}
+
+	private Stack<ASTNode> nodes = new Stack<ASTNode>();
+
+	@Override
+	protected void start(IFormatterContainerNode root) {
+		super.start(root);
+		nodes.clear();
+		processed.clear();
+	}
+
+	private boolean isBlock(IFormatterContainerNode node) {
+		return node instanceof FormatterBlockNode
+				&& !(node instanceof BracesNode)
+				&& !(node instanceof ParensNode);
+	}
+
+	private boolean isStatement(ASTNode node) {
+		if (!(node instanceof Statement)) {
+			return false;
+		}
+		final Statement statement = (Statement) node;
+		final ASTNode parent = statement.getParent();
+		if (parent instanceof ForStatement || parent instanceof IfStatement
+				|| parent instanceof WhileStatement) {
+			return false;
+		}
+		return true;
+	}
+
+	private final Map<ASTNode, Boolean> processed = new IdentityHashMap<ASTNode, Boolean>();
+
+	@Override
+	protected void push(IFormatterContainerNode node) {
+		if (document
+				.getBoolean(JavaScriptFormatterConstants.STATEMENT_NEW_LINE)
+				&& isBlock(node)
+				&& isStatement(nodes.peek())
+				&& processed.put(nodes.peek(), Boolean.TRUE) == null) {
+			super.push(new LineBreakFormatterNode(node));
+		} else {
+			super.push(node);
+		}
+	}
+
+	public IFormatterContainerNode build(Script astRoot) {
 
 		final IFormatterContainerNode root = new FormatterRootNode(document);
 		start(root);
 
-		astRoot.visitAll(new IASTVisitor() {
+		astRoot.visitAll(new ASTVisitor() {
 
-			private void visit(ASTNode node) {
-				ASTVisitor.visit(node, this);
-			}
-
-			private void visit(Collection<? extends ASTNode> nodes) {
-				ASTVisitor.visit(nodes, this);
+			@Override
+			public boolean visit(ASTNode node) {
+				nodes.push(node);
+				final boolean result = super.visit(node);
+				nodes.pop();
+				return result;
 			}
 
 			public boolean visitArrayInitializer(ArrayInitializer node) {
@@ -469,7 +520,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				int semicolonPosition = node.getSemicolonPosition();
 				if (semicolonPosition > -1) {
 					checkedPop(formatterNode, semicolonPosition /*- 1*/);
-					addChild(createSemicolonNode(document, semicolonPosition));
+					if (semicolonPosition > formatterNode.getEndOffset()) {
+						addChild(createSemicolonNode(document,
+								semicolonPosition));
+					}
 				} else {
 					checkedPop(formatterNode, node.sourceEnd());
 				}
@@ -943,12 +997,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			public boolean visitIfStatement(IfStatement node) {
-				FormatterBlockNode formatterNode = null;
-				if (node.getParent() instanceof IfStatement) {
-					formatterNode = new FormatterBlockNode(document);
-				} else {
-					formatterNode = new LineBreakFormatterNode(document);
-				}
+				final FormatterBlockNode formatterNode = new FormatterBlockNode(
+						document);
 
 				formatterNode.addChild(createTextNode(document, node
 						.getIfKeyword()));
@@ -1313,7 +1363,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitTryStatement(TryStatement node) {
 
-				FormatterBlockNode formatterNode = new LineBreakFormatterNode(
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
 				formatterNode.addChild(createTextNode(document, node

@@ -21,11 +21,6 @@ public abstract class FormatterBlockWithParensNode extends
 		super(document);
 	}
 
-	public FormatterBlockWithParensNode(IFormatterDocument document,boolean startsOneNewLine) {
-		super(document,startsOneNewLine);
-	}
-
-
 	protected abstract boolean insertSpaceBeforeLP();
 
 	protected abstract boolean insertSpaceAfterLP();

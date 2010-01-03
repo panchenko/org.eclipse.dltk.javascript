@@ -17,7 +17,7 @@ import org.eclipse.dltk.formatter.IFormatterDocument;
 public class FormatterForStatementNode extends FormatterBlockWithBeginNode {
 
 	public FormatterForStatementNode(IFormatterDocument document) {
-		super(document,true);
+		super(document);
 	}
 
 	protected boolean isIndenting() {

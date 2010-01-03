@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.eclipse.dltk.ui.CodeFormatterConstants;
 
+@SuppressWarnings("nls")
 public final class JavaScriptFormatterConstants {
 
 	/*
@@ -76,6 +77,8 @@ public final class JavaScriptFormatterConstants {
 
 	//
 	// //////////////////////////////////////////////////////////////////////////
+
+	public static final String STATEMENT_NEW_LINE = "formatter.statement.new.line";//$NON-NLS-1$
 
 	public static final String NEW_LINE_IN_EMPTY_METHOD = "formatter.newlines.empty.method";//$NON-NLS-1$
 	public static final String NEW_LINE_IN_EMPTY_BLOCK = "formatter.newlines.empty.block";//$NON-NLS-1$
@@ -150,6 +153,8 @@ public final class JavaScriptFormatterConstants {
 	// Register options here
 
 	private static void registerOptions() {
+
+		registerBooleanOption(STATEMENT_NEW_LINE, true);
 
 		registerStringOption(FORMATTER_TAB_CHAR, CodeFormatterConstants.TAB);
 		registerIntegerOption(FORMATTER_TAB_SIZE, 4);
@@ -285,7 +290,7 @@ public final class JavaScriptFormatterConstants {
 	private static final int INT = 2;
 
 	private static void registerIntegerOption(String name, int defaultValue) {
-		internalRegisterOption(name, INT, new Integer(defaultValue));
+		internalRegisterOption(name, INT, Integer.valueOf(defaultValue));
 	}
 
 	private static void registerStringOption(String name, String defaultValue) {
@@ -293,8 +298,7 @@ public final class JavaScriptFormatterConstants {
 	}
 
 	private static void registerBooleanOption(String name, boolean defaultValue) {
-		internalRegisterOption(name, BOOLEAN, defaultValue ? Boolean.TRUE
-				: Boolean.FALSE);
+		internalRegisterOption(name, BOOLEAN, Boolean.valueOf(defaultValue));
 	}
 
 	private static void internalRegisterOption(String name, int type,

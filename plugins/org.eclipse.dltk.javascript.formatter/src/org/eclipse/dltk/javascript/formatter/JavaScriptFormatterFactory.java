@@ -13,6 +13,7 @@
 package org.eclipse.dltk.javascript.formatter;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.dltk.formatter.AbstractScriptFormatterFactory;
@@ -27,8 +28,22 @@ import org.eclipse.dltk.ui.preferences.PreferenceKey;
 public class JavaScriptFormatterFactory extends AbstractScriptFormatterFactory {
 
 	public IScriptFormatter createFormatter(String lineDelimiter,
-			Map preferences) {
+			Map<String, String> preferences) {
 		return new JavaScriptFormatter(lineDelimiter, preferences);
+	}
+
+	@Override
+	public Map<String, String> changeToIndentingOnly(
+			Map<String, String> preferences) {
+		final Map<String, String> copy = new HashMap<String, String>(
+				preferences);
+		copy.put(JavaScriptFormatterConstants.STATEMENT_NEW_LINE, String
+				.valueOf(false));
+		copy.put(JavaScriptFormatterConstants.WRAP_COMMENTS, String
+				.valueOf(false));
+		copy.put(JavaScriptFormatterConstants.LINES_PRESERVE, String
+				.valueOf(-1));
+		return copy;
 	}
 
 	@Override

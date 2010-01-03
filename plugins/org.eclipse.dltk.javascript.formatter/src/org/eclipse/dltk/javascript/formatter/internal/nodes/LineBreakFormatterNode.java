@@ -3,34 +3,67 @@
  */
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
-import org.eclipse.dltk.formatter.FormatterBlockNode;
+import java.util.List;
+
+import org.eclipse.dltk.formatter.IFormatterContainerNode;
 import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.formatter.IFormatterDocument;
+import org.eclipse.dltk.formatter.IFormatterNode;
+import org.eclipse.dltk.formatter.IFormatterNodeProxy;
 import org.eclipse.dltk.formatter.IFormatterWriter;
 
 /**
  * @author jcompagner
- *
+ * @author Alex Panchenko  
  */
-public class LineBreakFormatterNode extends FormatterBlockNode
-{
+public class LineBreakFormatterNode implements IFormatterContainerNode,
+		IFormatterNodeProxy {
+
+	private final IFormatterContainerNode target;
 
 	/**
 	 * @param document
 	 */
-	public LineBreakFormatterNode(IFormatterDocument document)
-	{
-		super(document);
+	public LineBreakFormatterNode(IFormatterContainerNode target) {
+		this.target = target;
 	}
-	
-	/**
-	 * @see org.eclipse.dltk.formatter.FormatterBlockNode#accept(org.eclipse.dltk.formatter.IFormatterContext, org.eclipse.dltk.formatter.IFormatterWriter)
-	 */
-	@Override
-	public void accept(IFormatterContext context, IFormatterWriter visitor) throws Exception
-	{
+
+	public void accept(IFormatterContext context, IFormatterWriter visitor)
+			throws Exception {
 		visitor.writeLineBreak(context);
-		super.accept(context, visitor);
+		target.accept(context, visitor);
+	}
+
+	public void addChild(IFormatterNode child) {
+		target.addChild(child);
+	}
+
+	public List getBody() {
+		return target.getBody();
+	}
+
+	public List getChildren() {
+		return target.getChildren();
+	}
+
+	public IFormatterDocument getDocument() {
+		return target.getDocument();
+	}
+
+	public int getEndOffset() {
+		return target.getEndOffset();
+	}
+
+	public int getStartOffset() {
+		return target.getStartOffset();
+	}
+
+	public boolean isEmpty() {
+		return target.isEmpty();
+	}
+
+	public IFormatterNode getTargetNode() {
+		return target;
 	}
 
 }

@@ -49,10 +49,10 @@ public class Script extends ModuleDeclaration implements ISourceable {
 		comments.add(comment);
 	}
 
-	public void visitAll(IASTVisitor visitor) {
+	public void visitAll(ASTVisitor visitor) {
 		for (int i = 0; i < this.getStatements().size(); i++) {
 			Statement statement = (Statement) this.getStatements().get(i);
-			ASTVisitor.visit(statement, visitor);
+			visitor.visit(statement);
 		}
 	}
 }

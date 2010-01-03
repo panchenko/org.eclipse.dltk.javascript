@@ -42,7 +42,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 	private final String lineDelimiter;
 
 	public JavaScriptFormatter(String lineDelimiter,
-			Map<String, Object> preferences) {
+			Map<String, ? extends Object> preferences) {
 		super(preferences);
 		this.lineDelimiter = lineDelimiter;
 	}
@@ -91,9 +91,9 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 			return 0;
 		}
 
-		final FormatterNodeBuilder builder = new FormatterNodeBuilder();
 		final FormatterDocument fDocument = createDocument(input);
-		IFormatterContainerNode root = builder.build(ast, fDocument);
+		final FormatterNodeBuilder builder = new FormatterNodeBuilder(fDocument);
+		IFormatterContainerNode root = builder.build(ast);
 		IFormatterContext context = new JavaScriptFormatterContext(0);
 
 		new JavascriptFormatterNodeRewriter(ast).rewrite(root);
@@ -141,10 +141,10 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 	private String format(String source, Script ast, int indentationLevel)
 			throws FormatterException {
 
-		final FormatterNodeBuilder builder = new FormatterNodeBuilder();
 		final FormatterDocument document = createDocument(source);
+		final FormatterNodeBuilder builder = new FormatterNodeBuilder(document);
 
-		IFormatterContainerNode root = builder.build(ast, document);
+		IFormatterContainerNode root = builder.build(ast);
 
 		new JavascriptFormatterNodeRewriter(ast).rewrite(root);
 

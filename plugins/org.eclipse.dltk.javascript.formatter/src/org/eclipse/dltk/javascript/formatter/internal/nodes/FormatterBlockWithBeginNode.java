@@ -31,21 +31,10 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 		super(document);
 	}
 
-	public FormatterBlockWithBeginNode(IFormatterDocument document,
-			boolean startOnNewLine) {
-		super(document);
-		this.startOnNewLine = startOnNewLine;
-	}
-
 	private IFormatterTextNode begin;
-
-	private boolean startOnNewLine = false;
 
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
-		if (startOnNewLine) {
-			visitor.writeLineBreak(context);
-		}
 		if (begin != null) {
 			visitor
 					.write(context, begin.getStartOffset(), begin
