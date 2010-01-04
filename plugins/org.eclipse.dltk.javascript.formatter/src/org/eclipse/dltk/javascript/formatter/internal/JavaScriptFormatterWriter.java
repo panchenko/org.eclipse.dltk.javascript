@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.formatter.internal;
 import org.eclipse.dltk.formatter.FormatterWriter;
 import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.formatter.IFormatterDocument;
-import org.eclipse.dltk.ui.formatter.IFormatterIndentGenerator;
+import org.eclipse.dltk.formatter.IFormatterIndentGenerator;
 
 public class JavaScriptFormatterWriter extends FormatterWriter {
 
