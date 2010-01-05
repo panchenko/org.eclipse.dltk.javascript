@@ -211,13 +211,15 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 	protected void push(IFormatterContainerNode node) {
 		if (document
 				.getBoolean(JavaScriptFormatterConstants.STATEMENT_NEW_LINE)
-				&& isBlock(node)
-				&& isStatement(nodes.peek())
-				&& processed.put(nodes.peek(), Boolean.TRUE) == null) {
-			super.push(new LineBreakFormatterNode(node));
-		} else {
-			super.push(node);
+				&& isBlock(node)) {
+			final ASTNode astNode = nodes.peek();
+			if (isStatement(astNode)
+					&& processed.put(astNode, Boolean.TRUE) == null) {
+				super.push(new LineBreakFormatterNode(node));
+				return;
+			}
 		}
+		super.push(node);
 	}
 
 	public IFormatterContainerNode build(Script astRoot) {
@@ -1127,7 +1129,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitObjectInitializer(ObjectInitializer node) {
 
-				IBracesConfiguration configuration;
+				final IBracesConfiguration configuration;
 
 				if (node.isMultiline())
 					configuration = new MultiLineObjectInitializerBracesConfiguration(
@@ -1139,12 +1141,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterObjectInitializerNode formatterNode = new FormatterObjectInitializerNode(
 						document, configuration);
 
-				formatterNode.setBegin(createTextNode(document, node.getLC(),
-						node.getLC() + 1));
+				formatterNode.setBegin(createCharNode(document, node.getLC()));
 
 				push(formatterNode);
 
-				List initializers = node.getInitializers();
+				List<ASTNode> initializers = node.getInitializers();
 				List<IPunctuationConfiguration> commaConfigurations = new ArrayList<IPunctuationConfiguration>();
 
 				for (int i = 1; i < initializers.size(); i++) {
@@ -1164,8 +1165,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd() - 1);
 
-				formatterNode.setEnd(createTextNode(document, node.getRC(),
-						node.getRC() + 1));
+				formatterNode.setEnd(createCharNode(document, node.getRC()));
 
 				return true;
 			}
