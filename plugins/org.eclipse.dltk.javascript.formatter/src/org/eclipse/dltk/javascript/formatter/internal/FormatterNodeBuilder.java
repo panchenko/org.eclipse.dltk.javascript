@@ -193,6 +193,12 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 	}
 
 	private boolean isStatement(ASTNode node) {
+		if (node instanceof PropertyInitializer) {
+			final PropertyInitializer initializer = (PropertyInitializer) node;
+			if (initializer.getValue() instanceof FunctionStatement) {
+				return true;
+			}
+		}
 		if (!(node instanceof Statement)) {
 			return false;
 		}
