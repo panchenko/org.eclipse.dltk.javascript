@@ -11,3 +11,14 @@ var vArray  = [    1      ,2            ,,,    3            ]
 ==
 var vArray = [1, 2, , , 3]
 ====
+==> formatter.braces.array = next.line
+==== array-brackets-next-line
+var vArray  = [    1      ,2  ,  3            ]
+==
+var vArray =
+	[1, 2, 3]
+==== return-array-brackets-same-line
+return [    1      ,2  ,  3            ]
+==
+return [1, 2, 3]
+====
