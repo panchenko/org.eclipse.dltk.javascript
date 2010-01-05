@@ -25,4 +25,10 @@ public class MultiLineObjectInitializerBracesConfiguration extends
 		indentingSettingName = JavaScriptFormatterConstants.INDENT_BLOCK;
 		bracesSettingName = JavaScriptFormatterConstants.BRACE_BLOCK;
 	}
+
+	@Override
+	public int insertBeforeOpenBrace() {
+		return IBracesConfiguration.ONE_SPACE;
+	}
+
 }
