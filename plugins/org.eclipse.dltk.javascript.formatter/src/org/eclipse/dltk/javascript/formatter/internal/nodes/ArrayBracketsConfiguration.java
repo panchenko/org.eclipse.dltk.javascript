@@ -13,15 +13,19 @@
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
 import org.eclipse.dltk.formatter.IFormatterDocument;
+import org.eclipse.dltk.javascript.ast.JSNode;
+import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
 public class ArrayBracketsConfiguration implements IBracketsConfiguration,
 		IPunctuationConfiguration {
 
 	private IFormatterDocument document;
+	private final JSNode node;
 
-	public ArrayBracketsConfiguration(IFormatterDocument document) {
+	public ArrayBracketsConfiguration(IFormatterDocument document, JSNode node) {
 		this.document = document;
+		this.node = node;
 	}
 
 	protected IFormatterDocument getDocument() {
@@ -29,12 +33,22 @@ public class ArrayBracketsConfiguration implements IBracketsConfiguration,
 	}
 
 	public boolean isBeginLineBreaking() {
+		if (!canBreak()) {
+			return false;
+		}
 		String value = document
 				.getString(JavaScriptFormatterConstants.BRACE_ARRAY);
 
 		return JavaScriptFormatterConstants.BRACE_NEXT_LINE.equals(value)
 				|| JavaScriptFormatterConstants.BRACE_NEXT_LINE_INDENTED
 						.equals(value);
+	}
+
+	private boolean canBreak() {
+		if (node.getParent() instanceof ReturnStatement) {
+			return false;
+		}
+		return true;
 	}
 
 	public boolean isBracketsIndenting() {

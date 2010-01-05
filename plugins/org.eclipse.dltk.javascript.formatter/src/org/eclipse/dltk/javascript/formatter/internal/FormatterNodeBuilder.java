@@ -247,10 +247,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				IBracketsConfiguration configuration;
 				if (node.getItems().size() > 0)
-					configuration = new ArrayBracketsConfiguration(document);
+					configuration = new ArrayBracketsConfiguration(document,
+							node);
 				else
 					configuration = new EmptyArrayBracketsConfiguration(
-							document);
+							document, node);
 
 				processBrackets(node.getLB(), node.getRB(), node.getItems(),
 						node.getCommas(), configuration);
@@ -1139,7 +1140,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				if (node.isMultiline())
 					configuration = new MultiLineObjectInitializerBracesConfiguration(
-							document);
+							document, node);
 				else
 					configuration = new SingleLineObjectInitializerBracesConfiguration(
 							document);

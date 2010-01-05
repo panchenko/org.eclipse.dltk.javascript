@@ -12,13 +12,15 @@
 
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
+import static org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants.BRACE_NEXT_LINE;
+import static org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants.BRACE_NEXT_LINE_INDENTED;
+
 import org.eclipse.dltk.formatter.IFormatterDocument;
-import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
 public abstract class AbstractBracesConfiguration implements
 		IBracesConfiguration {
 
-	private IFormatterDocument document;
+	private final IFormatterDocument document;
 
 	protected String indentingSettingName;
 	protected String bracesSettingName;
@@ -34,16 +36,16 @@ public abstract class AbstractBracesConfiguration implements
 	}
 
 	public boolean isIndenting() {
-		if (indentingSettingName != null && indentingSettingName.length() > 0)
+		if (indentingSettingName != null)
 			return document.getBoolean(indentingSettingName);
 
 		return false;
 	}
 
 	public boolean isBracesIndenting() {
-		if (bracesSettingName != null && bracesSettingName.length() > 0)
-			return JavaScriptFormatterConstants.BRACE_NEXT_LINE_INDENTED
-					.equals(document.getString(bracesSettingName));
+		if (bracesSettingName != null)
+			return BRACE_NEXT_LINE_INDENTED.equals(document
+					.getString(bracesSettingName));
 
 		return false;
 	}
@@ -53,18 +55,12 @@ public abstract class AbstractBracesConfiguration implements
 	}
 
 	public int insertBeforeOpenBrace() {
-		if (bracesSettingName != null && bracesSettingName.length() != 0) {
-
+		if (bracesSettingName != null) {
 			String value = document.getString(bracesSettingName);
-
-			return JavaScriptFormatterConstants.BRACE_NEXT_LINE_INDENTED
-					.equals(value)
-					|| JavaScriptFormatterConstants.BRACE_NEXT_LINE
-							.equals(value) ? IBracesConfiguration.LINE_BREAK
+			return BRACE_NEXT_LINE_INDENTED.equals(value)
+					|| BRACE_NEXT_LINE.equals(value) ? IBracesConfiguration.LINE_BREAK
 					: IBracesConfiguration.ONE_SPACE;
-
 		}
-
 		return IBracesConfiguration.UNDEFINED;
 	}
 
@@ -77,13 +73,12 @@ public abstract class AbstractBracesConfiguration implements
 	}
 
 	public int insertAfterCloseBrace() {
-		if (keepSameLineSettingName != null
-				&& keepSameLineSettingName.length() > 0) {
+		if (keepSameLineSettingName != null) {
 			return document.getBoolean(keepSameLineSettingName) ? IBracesConfiguration.UNDEFINED
 					: IBracesConfiguration.LINE_BREAK;
 		}
 
-		if (newLineSettingName != null && newLineSettingName.length() > 0) {
+		if (newLineSettingName != null) {
 			return document.getBoolean(newLineSettingName) ? IBracesConfiguration.LINE_BREAK
 					: IBracesConfiguration.UNDEFINED;
 		}

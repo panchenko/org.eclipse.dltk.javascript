@@ -13,12 +13,14 @@
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
 import org.eclipse.dltk.formatter.IFormatterDocument;
+import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
 public class EmptyArrayBracketsConfiguration extends ArrayBracketsConfiguration {
 
-	public EmptyArrayBracketsConfiguration(IFormatterDocument document) {
-		super(document);
+	public EmptyArrayBracketsConfiguration(IFormatterDocument document,
+			JSNode node) {
+		super(document, node);
 	}
 
 	public boolean isBeginLineBreaking() {
