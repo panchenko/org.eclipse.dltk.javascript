@@ -100,6 +100,7 @@ public class JavaScriptFormatterTestsPlugin extends Plugin {
 					.put(
 							JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_LP_FUNCTION_ARGUMENTS,
 							true);
+			prefs.put(JavaScriptFormatterConstants.INDENT_SWITCH, true);
 			if (preferences != null) {
 				prefs.putAll(preferences);
 			}
