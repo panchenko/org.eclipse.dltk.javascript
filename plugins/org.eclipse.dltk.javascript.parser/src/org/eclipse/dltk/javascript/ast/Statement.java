@@ -15,23 +15,16 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.Collection;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.JSLiterals;
 
-public abstract class Statement extends ASTNode implements ISourceable {
-
-	private ASTNode parent;
+public abstract class Statement extends JSNode implements ISourceable {
 
 	public Statement(ASTNode parent) {
-		this.parent = parent;
-		setStart(0);
-		setEnd(0);
-	}
-
-	public ASTNode getParent() {
-		return this.parent;
+		super(parent);
 	}
 
 	public String toString() {
-		return toSourceString("");
+		return toSourceString(JSLiterals.EMPTY);
 	}
 
 	/**

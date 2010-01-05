@@ -15,19 +15,10 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.JSLiterals;
 
-public abstract class Expression extends ASTNode implements ISourceable {
-
-	private ASTNode parent;
+public abstract class Expression extends JSNode implements ISourceable {
 
 	public Expression(ASTNode parent) {
-		this.parent = parent;
-
-		setStart(0);
-		setEnd(0);
-	}
-
-	public ASTNode getParent() {
-		return this.parent;
+		super(parent);
 	}
 
 	@Override

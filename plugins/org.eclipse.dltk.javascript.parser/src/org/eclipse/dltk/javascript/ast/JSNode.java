@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009 xored software, Inc.  
+ * Copyright (c) 2010 xored software, Inc.  
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,24 +7,24 @@
  * http://www.eclipse.org/legal/epl-v10.html  
  *
  * Contributors:
- *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.JSLiterals;
 
-public abstract class Expression extends JSNode implements ISourceable {
+public abstract class JSNode extends ASTNode {
 
-	public Expression(ASTNode parent) {
-		super(parent);
+	private ASTNode parent;
+
+	public JSNode(ASTNode parent) {
+		this.parent = parent;
+		setStart(0);
+		setEnd(0);
 	}
 
-	@Override
-	public String toString() {
-		return toSourceString(JSLiterals.EMPTY);
+	public ASTNode getParent() {
+		return this.parent;
 	}
 
-	public abstract String toSourceString(String indentationString);
 }
