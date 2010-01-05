@@ -158,6 +158,7 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.PropertyExpressionPu
 import org.eclipse.dltk.javascript.formatter.internal.nodes.PropertyInitializerPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SemicolonNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SingleLineObjectInitializerBracesConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.SpaceAfterKeyword;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.StatementBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SwitchBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SwitchConditionParensConfiguration;
@@ -352,7 +353,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitCaseClause(CaseClause node) {
 				FormatterCaseNode caseNode = new FormatterCaseNode(document);
-				caseNode.setBegin(createTextNode(document, node.getKeyword()));
+				caseNode.setBegin(new SpaceAfterKeyword(createTextNode(
+						document, node.getKeyword())));
 				push(caseNode);
 				visit(node.getCondition());
 				caseNode.addChild(new ColonNodeWrapper(createCharNode(document,
@@ -1249,8 +1251,12 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterReturnStatementNode formatterNode = new FormatterReturnStatementNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getReturnKeyword()));
+				final IFormatterTextNode keyword = createTextNode(document,
+						node.getReturnKeyword());
+				formatterNode
+						.addChild(node.getValue() != null ? new SpaceAfterKeyword(
+								keyword)
+								: keyword);
 
 				push(formatterNode);
 
