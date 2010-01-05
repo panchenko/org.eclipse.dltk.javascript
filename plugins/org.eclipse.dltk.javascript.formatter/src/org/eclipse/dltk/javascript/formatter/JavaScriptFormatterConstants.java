@@ -176,7 +176,7 @@ public final class JavaScriptFormatterConstants {
 
 		registerBooleanOption(INDENT_METHOD, true);
 		registerBooleanOption(INDENT_BLOCK, true);
-		registerBooleanOption(INDENT_SWITCH, true);
+		registerBooleanOption(INDENT_SWITCH, false);
 		registerBooleanOption(INDENT_CASE, true);
 		registerBooleanOption(INDENT_BREAK, true);
 		registerBooleanOption(INDENT_EMPTY_LINES, true);
