@@ -41,6 +41,17 @@ if (x)
 {
 	print("hello");
 }
+==== return-hash-always-same-line
+function x() {
+return {
+a:1,b:2}
+}
+==
+function x () {
+	return {
+		a: 1, b: 2
+	}
+}
 ==== braces-if-same-line
 ==> formatter.braces.blocks = same.line
 if(x)
