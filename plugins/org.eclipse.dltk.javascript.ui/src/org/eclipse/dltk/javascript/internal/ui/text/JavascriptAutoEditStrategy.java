@@ -47,7 +47,7 @@ import org.eclipse.ui.texteditor.ITextEditorExtension3;
 public class JavascriptAutoEditStrategy extends
 		DefaultIndentLineAutoEditStrategy {
 
-	/** The line comment introducer. Value is "{@value}" */
+	/** The line comment introducer. Value is "{@value} " */
 	private static final String LINE_COMMENT = "//"; //$NON-NLS-1$
 
 	private static class CompilationUnitInfo {
@@ -1346,12 +1346,13 @@ public class JavascriptAutoEditStrategy extends
 		case '{':
 			smartIndentAfterOpeningBracket(document, command);
 			break;
-		case '\"':
-		case '\'':
-		case '(':
-		case '[':
-			autoClose(document, command);
-			break;
+		// quotes and brackets are handled by JavaScriptBracketInserter
+		// case '\"':
+		// case '\'':
+		// case '(':
+		// case '[':
+		// autoClose(document, command);
+		// break;
 		case 'e':
 			smartIndentUponE(document, command);
 			break;
