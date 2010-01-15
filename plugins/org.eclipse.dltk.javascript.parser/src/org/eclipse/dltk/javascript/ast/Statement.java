@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.Collection;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.JSLiterals;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public abstract class Statement extends JSNode implements ISourceable {
 
