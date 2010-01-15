@@ -22,7 +22,7 @@ import org.eclipse.dltk.javascript.parser.tests.JavaScriptStreamTokenTestCase;
 public class AllTests {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite("DLTK Javascript Formatter Tests"); //$NON-NLS-1$
+		TestSuite suite = new TestSuite("org.eclipse.dltk.javascript.formatter.tests"); //$NON-NLS-1$
 		// $JUnit-BEGIN$
 		suite.addTest(ArraysTest.suite());
 		suite.addTest(BracesTest.suite());
