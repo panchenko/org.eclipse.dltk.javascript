@@ -27,7 +27,6 @@ import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemReporterProxy;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.internal.parser.JSProblem;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
