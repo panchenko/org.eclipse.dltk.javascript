@@ -30,29 +30,6 @@ import org.eclipse.dltk.javascript.ast.Script;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
-	private static class JSInternalLexer extends JSLexer {
-		private IProblemReporter reporter;
-
-		public JSInternalLexer(CharStream input, IProblemReporter reporter) {
-			super(input);
-
-			this.reporter = reporter;
-		}
-
-		public void reportError(RecognitionException e) {
-			super.reportError(e);
-
-			if (!errorRecovery) {
-				reporter.reportProblem(new JSProblem(e));
-			}
-		}
-
-		public void emitErrorMessage(String msg) {
-			if (DLTKCore.DEBUG)
-				System.err.println(msg);
-		}
-	}
-
 	private static class JSInternalParser extends JSParser {
 
 		private IProblemReporter reporter;
@@ -107,7 +84,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 		try {
 			CharStream charStream = new ANTLRReaderStream(new CharArrayReader(
 					source));
-			JSLexer lexer = new JSInternalLexer(charStream, reporterProxy);
+			JSLexer lexer = new JSLexer(charStream);
 			CommonTokenStream stream = new CommonTokenStream(
 					new JavaScriptTokenSource(lexer));
 			JSParser parser = new JSInternalParser(stream, reporterProxy);
