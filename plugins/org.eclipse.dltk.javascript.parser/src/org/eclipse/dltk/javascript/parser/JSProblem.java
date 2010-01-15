@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.internal.parser;
+package org.eclipse.dltk.javascript.parser;
 
 import org.antlr.runtime.RecognitionException;
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
