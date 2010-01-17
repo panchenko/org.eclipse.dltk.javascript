@@ -11,9 +11,22 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.Collection;
+
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public abstract class JSNode extends ASTNode {
+
+	/**
+	 * @since 2.0
+	 */
+	protected static void toSourceString(Collection<Statement> statements,
+			StringBuffer buffer, String indentationString) {
+		for (Statement statement : statements) {
+			buffer.append(statement.toSourceString(indentationString));
+		}
+	}
 
 	private ASTNode parent;
 
@@ -26,5 +39,12 @@ public abstract class JSNode extends ASTNode {
 	public ASTNode getParent() {
 		return this.parent;
 	}
+
+	@Override
+	public String toString() {
+		return toSourceString(JSLiterals.EMPTY);
+	}
+
+	public abstract String toSourceString(String indentationString);
 
 }

@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public abstract class Expression extends JSNode implements ISourceable {
 
@@ -21,10 +20,4 @@ public abstract class Expression extends JSNode implements ISourceable {
 		super(parent);
 	}
 
-	@Override
-	public String toString() {
-		return toSourceString(JSLiterals.EMPTY);
-	}
-
-	public abstract String toSourceString(String indentationString);
 }

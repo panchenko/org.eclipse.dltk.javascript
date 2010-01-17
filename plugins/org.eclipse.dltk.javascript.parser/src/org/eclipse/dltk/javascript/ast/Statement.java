@@ -12,10 +12,7 @@
 
 package org.eclipse.dltk.javascript.ast;
 
-import java.util.Collection;
-
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public abstract class Statement extends JSNode implements ISourceable {
 
@@ -23,24 +20,6 @@ public abstract class Statement extends JSNode implements ISourceable {
 		super(parent);
 	}
 
-	public String toString() {
-		return toSourceString(JSLiterals.EMPTY);
-	}
+	protected static final String INDENT = "    "; //$NON-NLS-1$
 
-	/**
-	 * @since 2.0
-	 */
-	protected static void toSourceString(Collection<Statement> statements,
-			StringBuffer buffer, String indentationString) {
-		for (Statement statement : statements) {
-			buffer.append(statement.toSourceString(indentationString));
-		}
-	}
-
-	/**
-	 * @since 2.0
-	 */
-	protected static final String INDENT = "    ";
-
-	public abstract String toSourceString(String indentationString);
 }
