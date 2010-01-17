@@ -91,7 +91,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 			RuleReturnScope root = parser.program();
 			if (reporterProxy.isErrorReported())
 				return null;
-			return new JSTransformer(root, stream.getTokens()).transform();
+			return new JSTransformer(stream.getTokens()).transform(root);
 		} catch (Exception e) {
 			if (DLTKCore.DEBUG)
 				e.printStackTrace();
