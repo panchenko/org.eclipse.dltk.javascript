@@ -48,6 +48,7 @@ import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.ISemicolonStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
+import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.Keyword;
 import org.eclipse.dltk.javascript.ast.Label;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
@@ -203,7 +204,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 		if (!(node instanceof Statement)) {
 			return false;
 		}
-		final Statement statement = (Statement) node;
+		final JSNode statement = (JSNode) node;
 		final ASTNode parent = statement.getParent();
 		if (parent instanceof ForStatement || parent instanceof IfStatement
 				|| parent instanceof WhileStatement) {

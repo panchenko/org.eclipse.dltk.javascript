@@ -14,14 +14,13 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.dltk.ui,
  org.eclipse.dltk.javascript.ui,
  org.eclipse.dltk.javascript.core,
+ org.eclipse.dltk.javascript.parser,
  org.antlr.runtime,
  org.eclipse.core.resources
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.dltk.javascript.ast,
- org.eclipse.dltk.javascript.formatter,
- org.eclipse.dltk.javascript.formatter.preferences,
- org.eclipse.dltk.javascript.parser
+Export-Package: org.eclipse.dltk.javascript.formatter,
+ org.eclipse.dltk.javascript.formatter.preferences
 Bundle-Localization: plugin
 Bundle-Vendor: %pluginProvider

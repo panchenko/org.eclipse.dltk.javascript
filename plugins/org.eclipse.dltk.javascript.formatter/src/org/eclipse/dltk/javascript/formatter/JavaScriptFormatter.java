@@ -28,7 +28,7 @@ import org.eclipse.dltk.javascript.formatter.internal.FormatterNodeBuilder;
 import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterContext;
 import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterWriter;
 import org.eclipse.dltk.javascript.formatter.internal.JavascriptFormatterNodeRewriter;
-import org.eclipse.dltk.javascript.internal.parser.JSProblem;
+import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
@@ -127,7 +127,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 				if (errors.size() == 1 && errors.get(0) instanceof JSProblem) {
 					final JSProblem problem = (JSProblem) errors.get(0);
 					throw new FormatterSyntaxProblemException(problem
-							.getCause());
+							.getMessage(), problem.getCause());
 				}
 				throw new FormatterSyntaxProblemException(errors.toString());
 			} else {
