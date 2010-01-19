@@ -39,6 +39,7 @@ public class JavaScriptTokenSource implements TokenSource {
 				t = tokenSource.nextToken();
 			}
 			tokens = new JavaScriptTokenFilter().filter(source);
+			// tokens = source;
 			Assert.isNotNull(tokens);
 		}
 		if (currentPos < this.tokens.size()) {
