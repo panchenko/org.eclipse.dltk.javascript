@@ -1724,12 +1724,12 @@ finallyClause
 
 functionDeclaration
 	: FUNCTION name=identifier formalParameterList functionBody
-	-> ^( FUNCTION $name formalParameterList functionBody )
+	-> ^( FUNCTION $name formalParameterList functionBody? )
 	;
 
 functionExpression
 	: FUNCTION name=identifier? formalParameterList functionBody
-	-> ^( FUNCTION $name? formalParameterList functionBody )
+	-> ^( FUNCTION $name? formalParameterList functionBody? )
 	;
 
 formalParameterList
@@ -1749,12 +1749,12 @@ functionBody
 
 getMethodDeclaration
   : GET name=identifier LPAREN RPAREN functionBody
-  	-> ^(GETTER identifier functionBody)
+  	-> ^(GETTER identifier functionBody?)
   ;
   
 setMethodDeclaration
   : SET name=identifier LPAREN param=identifier RPAREN functionBody
-    -> ^(SETTER $name $param functionBody)
+    -> ^(SETTER $name $param functionBody?)
   ;
 
 // $>	
