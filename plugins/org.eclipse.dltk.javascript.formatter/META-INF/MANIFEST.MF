@@ -6,17 +6,12 @@ Bundle-Version: 2.0.0.qualifier
 Bundle-Activator: org.eclipse.dltk.javascript.formatter.JavaScriptFormatterPlugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- org.eclipse.ui.editors,
- org.eclipse.text,
  org.eclipse.jface.text,
  org.eclipse.dltk.core;bundle-version="2.0.0",
  org.eclipse.dltk.formatter,
  org.eclipse.dltk.ui,
  org.eclipse.dltk.javascript.ui,
- org.eclipse.dltk.javascript.core,
- org.eclipse.dltk.javascript.parser,
- org.antlr.runtime,
- org.eclipse.core.resources
+ org.eclipse.dltk.javascript.parser
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
