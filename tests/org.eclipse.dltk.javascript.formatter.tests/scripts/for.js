@@ -35,14 +35,13 @@ function testFormatting () {
 }
 ;
 ==== function-for-loop-nextline
-function testFormatting(){if(a==10){}else{}for (var a=0;a<10;a++)){}};
+function testFormatting(){if(a==10){}else{}for (var a=0;a<10;a++){}};
 ==
 function testFormatting () {
 	if (a == 10) {
 	} else {
 	}
-	for (var a = 0; a < 10; a++))
-	{
+	for (var a = 0; a < 10; a++) {
 	}
 }
 ;

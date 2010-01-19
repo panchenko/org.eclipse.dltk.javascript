@@ -26,9 +26,9 @@ while    (true)    contirnue;
 ==
 while (true) contirnue;
 ==== while-simple-no-simicolon
-while    (a==100)
+while    (a==100) break
 ==
-while (a == 100)
+while (a == 100) break
 ==> formatter.braces.blocks = next.line
 ==> formatter.indent.blocks = false
 ==== while-no-indenting-next-line
