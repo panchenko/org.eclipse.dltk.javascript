@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="org.eclipse.dltk.core.sourceParsers">
+      <parserContribution natureId="org.eclipse.dltk.javascript.core.nature">
+         <parser
+               class="org.eclipse.dltk.javascript.parser.JavaScriptParserFactory"
+               description="JavaScript Source Parser"
+               id="org.eclipse.dltk.javascript.parser"
+               name="JavaScript Source Parser+"
+               priority="-1" />
+      </parserContribution>
+   </extension>
+</plugin>
