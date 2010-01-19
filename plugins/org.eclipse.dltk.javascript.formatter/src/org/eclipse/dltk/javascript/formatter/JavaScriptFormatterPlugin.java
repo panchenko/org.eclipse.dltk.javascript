@@ -9,7 +9,6 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.formatter;
 
 import org.eclipse.core.runtime.IStatus;
@@ -34,17 +33,13 @@ public class JavaScriptFormatterPlugin extends AbstractUIPlugin {
 	public JavaScriptFormatterPlugin() {
 	}
 
-	/*
-	 * @see AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 	}
 
-	/*
-	 * @see AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
