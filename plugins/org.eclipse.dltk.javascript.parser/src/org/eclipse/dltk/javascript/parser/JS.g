@@ -1724,7 +1724,7 @@ finallyClause
 
 functionDeclaration
 	: FUNCTION name=identifier formalParameterList functionBody
-	-> ^( FUNCTION $name formalParameterList functionBody? )
+	-> ^( FUNCTION $name? formalParameterList functionBody? )
 	;
 
 functionExpression

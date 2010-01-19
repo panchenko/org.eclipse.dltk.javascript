@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2009-09-11 10:55:01
+// $ANTLR 3.0.1 JS.g 2010-01-19 17:14:30
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -205,9 +205,9 @@ public class JSLexer extends Lexer {
     public static final int EXTENDS=49;
     public static final int BSLASH=154;
     public static final int LF=164;
-    
+
     private Token last;
-    
+
     final static boolean isIdentifierKeyword(int token)
     {
     	return token == WXML
@@ -216,7 +216,7 @@ public class JSLexer extends Lexer {
       		|| token == EACH
       		|| token == NAMESPACE; 
     }
-    
+
     private final boolean areRegularExpressionsEnabled()
     {
     	if (last == null)
@@ -321,7 +321,7 @@ public class JSLexer extends Lexer {
     {
     	return Character.isJavaIdentifierStart((char)ch);
     }
-    
+
     public Token nextToken()
     {
     	Token result = super.nextToken();
@@ -331,7 +331,7 @@ public class JSLexer extends Lexer {
     	}
     	return result;		
     }
-    
+
     @Override
     public void emitErrorMessage(String msg) {
     // IGNORE

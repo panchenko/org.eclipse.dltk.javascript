@@ -106,7 +106,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	public JSTransformer(List<Token> tokens) {
 		Assert.isNotNull(tokens);
-		Assert.isTrue(tokens.size() > 0);
 		this.tokens = tokens;
 		tokenOffsets = prepareOffsetMap(tokens);
 	}
@@ -340,13 +339,14 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return operation;
 	}
 
+	@Override
 	protected ASTNode visitBlock(Tree node) {
 
 		StatementBlock block = new StatementBlock(getParent());
 
+		List<Statement> statements = block.getStatements();
 		for (int i = 0; i < node.getChildCount(); i++) {
-			block.getStatements().add(
-					transformStatementNode(node.getChild(i), block));
+			statements.add(transformStatementNode(node.getChild(i), block));
 		}
 
 		block.setLC(getTokenOffset(JSParser.LBRACE, node.getTokenStartIndex(),
@@ -355,14 +355,19 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		block.setRC(getTokenOffset(JSParser.RBRACE, node.getTokenStopIndex(),
 				node.getTokenStopIndex()));
 
-		if (block.getLC() > -1 && block.getRC() > -1) {
+		if (block.getLC() > -1) {
 			block.setStart(block.getLC());
-			block.setEnd(block.getRC() + 1);
+		} else if (!statements.isEmpty()) {
+			block.setStart(statements.get(0).sourceStart());
 		} else {
-			block.setStart(((ASTNode) block.getStatements().get(0))
-					.sourceStart());
-			block.setEnd(((ASTNode) block.getStatements().get(
-					block.getStatements().size() - 1)).sourceStart());
+			block.setStart(getTokenOffset(node.getTokenStartIndex()));
+		}
+		if (block.getRC() > -1) {
+			block.setEnd(block.getRC() + 1);
+		} else if (!statements.isEmpty()) {
+			block.setEnd(statements.get(statements.size() - 1).sourceStart());
+		} else {
+			block.setEnd(getTokenOffset(node.getTokenStopIndex()));
 		}
 
 		return block;
@@ -667,6 +672,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
+	@Override
 	protected ASTNode visitFunction(Tree node) {
 		FunctionStatement fn = new FunctionStatement(getParent());
 
@@ -700,12 +706,14 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 		fn.setArgumentCommas(commas);
 
+		final Tree bodyNode = node.getChild(argsIndex + 1);
 		fn.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(argsIndex)
-				.getTokenStopIndex(), node.getChild(argsIndex + 1)
-				.getTokenStartIndex()));
+				.getTokenStopIndex(), bodyNode != null ? bodyNode
+				.getTokenStartIndex() : node.getTokenStopIndex()));
 
-		fn.setBody((StatementBlock) transformNode(node.getChild(argsIndex + 1),
-				fn));
+		if (bodyNode != null) {
+			fn.setBody((StatementBlock) transformNode(bodyNode, fn));
+		}
 
 		fn.setStart(fn.getFunctionKeyword().sourceStart());
 		fn.setEnd(fn.getBody().sourceEnd());

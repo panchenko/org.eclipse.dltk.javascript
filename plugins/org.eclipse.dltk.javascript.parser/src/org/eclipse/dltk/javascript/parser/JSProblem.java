@@ -21,7 +21,7 @@ public class JSProblem extends DefaultProblem {
 
 	public JSProblem(Throwable cause) {
 		super(
-				cause.getMessage(),
+				cause.getClass().getSimpleName() + ": " + cause.getMessage(),
 				0,
 				null,
 				ProblemSeverities.Error,
