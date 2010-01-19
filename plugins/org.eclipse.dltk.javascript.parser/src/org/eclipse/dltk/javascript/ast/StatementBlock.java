@@ -30,6 +30,7 @@ public class StatementBlock extends Statement implements ISourceableBlock {
 		super(parent);
 	}
 
+	@Override
 	public void traverse(ASTVisitor visitor) throws Exception {
 		if (visitor.visit(this)) {
 			Iterator<Statement> it = statements.iterator();
