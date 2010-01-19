@@ -121,7 +121,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		Script root = new JavaScriptParser().parse(null, source.toCharArray(),
 				reporter);
 
-		if (root == null) {
+		if (root == null || reporter.hasErrors()) {
 			final List<IProblem> errors = reporter.getErrors();
 			if (!errors.isEmpty()) {
 				if (errors.size() == 1 && errors.get(0) instanceof JSProblem) {
