@@ -22,55 +22,40 @@ import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.TokenStream;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.parser.AbstractSourceParser;
-import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
-import org.eclipse.dltk.compiler.problem.ProblemReporterProxy;
+import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.utils.TextUtils;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
 	private static class JSInternalParser extends JSParser {
 
-		private IProblemReporter reporter;
+		private final IProblemReporter reporter;
+		private final ISourceLineTracker lineTracker;
 
-		public JSInternalParser(TokenStream input, IProblemReporter reporter) {
+		public JSInternalParser(TokenStream input, IProblemReporter reporter,
+				ISourceLineTracker lineTracker) {
 			super(input);
-
 			this.reporter = reporter;
+			this.lineTracker = lineTracker;
 		}
 
-		public void reportError(RecognitionException e) {
-			super.reportError(e);
-
-			if (!errorRecovery) {
-				reporter.reportProblem(new JSProblem(e));
-			}
+		@Override
+		public void displayRecognitionError(String[] tokenNames,
+				RecognitionException e) {
+			if (reporter == null)
+				return;
+			int offset = lineTracker.getLineOffset(e.line)
+					+ e.charPositionInLine;
+			reporter.reportProblem(new DefaultProblem(getErrorMessage(e,
+					tokenNames), 0, null, ProblemSeverities.Error, offset,
+					offset, e.line));
 		}
 
-		public void emitErrorMessage(String msg) {
-			if (DLTKCore.DEBUG)
-				System.err.println(msg);
-		}
-	}
-
-	private static class JSInternalProblemReporterProxy extends
-			ProblemReporterProxy {
-
-		private boolean errorReported = false;
-
-		public JSInternalProblemReporterProxy(IProblemReporter original) {
-			super(original);
-		}
-
-		public void reportProblem(IProblem problem) {
-			errorReported = true;
-			super.reportProblem(problem);
-		}
-
-		public boolean isErrorReported() {
-			return this.errorReported;
-		}
 	}
 
 	/**
@@ -79,23 +64,24 @@ public class JavaScriptParser extends AbstractSourceParser {
 	public Script parse(char[] fileName, char[] source,
 			IProblemReporter reporter) {
 		Assert.isNotNull(source);
-		JSInternalProblemReporterProxy reporterProxy = new JSInternalProblemReporterProxy(
-				reporter);
 		try {
 			CharStream charStream = new ANTLRReaderStream(new CharArrayReader(
 					source));
 			JSLexer lexer = new JSLexer(charStream);
 			CommonTokenStream stream = new CommonTokenStream(
 					new JavaScriptTokenSource(lexer));
-			JSParser parser = new JSInternalParser(stream, reporterProxy);
+			JSInternalParser parser = new JSInternalParser(stream, reporter,
+					TextUtils.createLineTracker(source));
 			RuleReturnScope root = parser.program();
-			if (reporterProxy.isErrorReported())
-				return null;
+			// if (parser.errorCount != 0)
+			// return null;
 			return new JSTransformer(stream.getTokens()).transform(root);
 		} catch (Exception e) {
 			if (DLTKCore.DEBUG)
 				e.printStackTrace();
-			reporterProxy.reportProblem(new JSProblem(e));
+			if (reporter != null) {
+				reporter.reportProblem(new JSProblem(e));
+			}
 			return null;
 		}
 	}
