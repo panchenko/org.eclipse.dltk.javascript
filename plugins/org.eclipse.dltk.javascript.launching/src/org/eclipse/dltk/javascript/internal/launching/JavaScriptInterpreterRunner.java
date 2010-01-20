@@ -10,8 +10,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.launching;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +20,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IProcess;
@@ -82,23 +81,6 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 	public static void doRunImpl(InterpreterConfig config, ILaunch launch,
 			IJavaScriptInterpreterRunnerConfig iconfig) throws CoreException {
 
-		String host = (String) config.getProperty(DbgpConstants.HOST_PROP);
-		if (host == null) {
-			host = Util.EMPTY_STRING;
-		}
-
-		String port = (String) config.getProperty(DbgpConstants.PORT_PROP);
-		if (port == null) {
-			port = Util.EMPTY_STRING;
-		}
-
-		String sessionId = (String) config
-				.getProperty(DbgpConstants.SESSION_ID_PROP);
-
-		if (sessionId == null) {
-			sessionId = Util.EMPTY_STRING;
-		}
-
 		IScriptProject proj = AbstractScriptLaunchConfigurationDelegate
 				.getScriptProject(launch.getLaunchConfiguration());
 		IJavaProject myJavaProject = JavaCore.create(proj.getProject());
@@ -108,57 +90,71 @@ public class JavaScriptInterpreterRunner extends AbstractInterpreterRunner
 		if (vmInstall != null) {
 			IVMRunner vmRunner = vmInstall.getVMRunner(launch.getLaunchMode());
 			if (vmRunner != null) {
-				try {
-					String[] newClassPath = getClassPath(myJavaProject);
+				String[] newClassPath = getClassPath(myJavaProject);
 
-					VMRunnerConfiguration vmConfig = new VMRunnerConfiguration(
-							iconfig.getRunnerClassName(config, launch,
-									myJavaProject), newClassPath);
-					IPath scriptFilePath = config.getScriptFilePath();
-					if (scriptFilePath == null) {
-						throw new CoreException(new Status(IStatus.ERROR,
-								JavaScriptDebugPlugin.PLUGIN_ID,
-								"Script File name is not specified..."));
-					}
-					List<String> args = new ArrayList<String>();
-					args.add(scriptFilePath.toPortableString());
-					args.add(host);
-					args.add(port);
-					args.add(sessionId);
-					String[] newStrings = iconfig.getProgramArguments(config,
-							launch, myJavaProject);
-					if (newStrings.length != 0) {
-						args.addAll(Arrays.asList(newStrings));
-					}
-					vmConfig.setProgramArguments(args.toArray(new String[args
-							.size()]));
-					ILaunch launchr = new Launch(launch
-							.getLaunchConfiguration(), launch.getLaunchMode(),
-							null);
-					iconfig.adjustRunnerConfiguration(vmConfig, config, launch,
-							myJavaProject);
-					vmRunner.run(vmConfig, launchr, null);
-					IDebugTarget[] debugTargets = launchr.getDebugTargets();
-					for (int a = 0; a < debugTargets.length; a++) {
-						launch.addDebugTarget(debugTargets[a]);
-					}
-					IProcess[] processes = launchr.getProcesses();
-					for (int a = 0; a < processes.length; a++)
-						launch.addProcess(processes[a]);
-					return;
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+				VMRunnerConfiguration vmConfig = new VMRunnerConfiguration(
+						iconfig.getRunnerClassName(config, launch,
+								myJavaProject), newClassPath);
+				IPath scriptFilePath = config.getScriptFilePath();
+				if (scriptFilePath == null) {
+					throw new CoreException(new Status(IStatus.ERROR,
+							JavaScriptDebugPlugin.PLUGIN_ID,
+							"Script File name is not specified..."));
 				}
+				List<String> args = new ArrayList<String>();
+				args.add(scriptFilePath.toOSString());
+				addDebugArguments(config, launch, args);
+				String[] newStrings = iconfig.getProgramArguments(config,
+						launch, myJavaProject);
+				if (newStrings.length != 0) {
+					args.addAll(Arrays.asList(newStrings));
+				}
+				vmConfig.setProgramArguments(args.toArray(new String[args
+						.size()]));
+				ILaunch launchr = new Launch(launch.getLaunchConfiguration(),
+						launch.getLaunchMode(), null);
+				iconfig.adjustRunnerConfiguration(vmConfig, config, launch,
+						myJavaProject);
+				vmRunner.run(vmConfig, launchr, null);
+				IDebugTarget[] debugTargets = launchr.getDebugTargets();
+				for (int a = 0; a < debugTargets.length; a++) {
+					launch.addDebugTarget(debugTargets[a]);
+				}
+				IProcess[] processes = launchr.getProcesses();
+				for (int a = 0; a < processes.length; a++)
+					launch.addProcess(processes[a]);
+				return;
 			}
 		}
 		throw new CoreException(new Status(IStatus.ERROR,
 				JavaScriptLaunchingPlugin.PLUGIN_ID, "JRE is not configured"));
 	}
 
-	public static String[] getClassPath(IJavaProject myJavaProject)
-			throws IOException, URISyntaxException {
+	private static void addDebugArguments(InterpreterConfig config,
+			ILaunch launch, List<String> args) {
+		if (ILaunchManager.DEBUG_MODE.equals(launch.getLaunchMode())) {
+			String host = (String) config.getProperty(DbgpConstants.HOST_PROP);
+			if (host == null) {
+				host = Util.EMPTY_STRING;
+			}
+			args.add(host);
+
+			String port = (String) config.getProperty(DbgpConstants.PORT_PROP);
+			if (port == null) {
+				port = Util.EMPTY_STRING;
+			}
+			args.add(port);
+
+			String sessionId = (String) config
+					.getProperty(DbgpConstants.SESSION_ID_PROP);
+			if (sessionId == null) {
+				sessionId = Util.EMPTY_STRING;
+			}
+			args.add(sessionId);
+		}
+	}
+
+	public static String[] getClassPath(IJavaProject myJavaProject) {
 		final List<String> result = new ArrayList<String>();
 		ClasspathUtils
 				.collectClasspath(
