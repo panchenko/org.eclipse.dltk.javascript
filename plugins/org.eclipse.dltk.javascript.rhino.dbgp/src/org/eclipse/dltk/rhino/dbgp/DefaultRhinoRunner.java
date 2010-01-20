@@ -16,10 +16,10 @@ public class DefaultRhinoRunner {
 		Context cx = Context.enter();
 		if (args.length > 1) {
 			String host = args[1];
-			String porg = args[2];
+			String port = args[2];
 			DBGPDebugger debugger;
 			try {
-				final Socket s = new Socket(host, Integer.parseInt(porg));
+				final Socket s = new Socket(host, Integer.parseInt(port));
 				debugger = new DBGPDebugger(s, args[0], args[3], cx);
 
 				debugger.start();
