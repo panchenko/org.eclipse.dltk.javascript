@@ -24,10 +24,12 @@ public class JavaScriptAndJDTDebuggerRunner extends DebuggingEngineRunner
 		super(install);
 	}
 
+	@Override
 	public String getDebugModelId() {
 		return JavaScriptDebugConstants.DEBUG_MODEL_ID;
 	}
 
+	@Override
 	public void run(InterpreterConfig config, ILaunch launch,
 			IProgressMonitor monitor) throws CoreException {
 		initializeLaunch(launch, config,
@@ -40,35 +42,31 @@ public class JavaScriptAndJDTDebuggerRunner extends DebuggingEngineRunner
 		this.runnerconfig = config;
 	}
 
+	@Override
 	protected String getDebuggingEngineId() {
 		return ENGINE_ID;
 	}
 
+	@Override
 	protected InterpreterConfig addEngineConfig(InterpreterConfig config,
 			PreferencesLookupDelegate delegate, ILaunch launch) {
 		return config;
 	}
 
+	@Override
 	protected String getDebugPreferenceQualifier() {
 		return JavaScriptDebugPlugin.PLUGIN_ID;
 	}
 
+	@Override
 	protected String getDebuggingEnginePreferenceQualifier() {
 		return JavaScriptAndJdtDebuggerPlugin.PLUGIN_ID;
 	}
 
-	protected String getLoggingEnabledPreferenceKey() {
-		// not yet supported...
-		return null;
-	}
-
+	@Override
 	protected String getLogFileNamePreferenceKey() {
 		// not yet supported...
 		return null;
 	}
 
-	protected String getLogFilePathPreferenceKey() {
-		// not yet supported...
-		return null;
-	}
 }
