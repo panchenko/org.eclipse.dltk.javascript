@@ -129,7 +129,31 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 					throw new FormatterSyntaxProblemException(problem
 							.getMessage(), problem.getCause());
 				}
-				throw new FormatterSyntaxProblemException(errors.toString());
+				IProblem first = null;
+				for (IProblem problem : errors) {
+					if (problem.isError()
+							&& !(problem instanceof JSProblem)
+							&& problem.getSourceStart() >= 0
+							&& (first == null || problem.getSourceStart() < first
+									.getSourceStart())) {
+						first = problem;
+					}
+				}
+				if (first != null) {
+					throw new FormatterSyntaxProblemException(first
+							.getMessage());
+				} else {
+					final StringBuilder sb = new StringBuilder();
+					for (IProblem problem : errors) {
+						if (problem.isError()) {
+							if (sb.length() != 0) {
+								sb.append(", ");
+							}
+							sb.append(problem.getMessage());
+						}
+					}
+					throw new FormatterSyntaxProblemException(sb.toString());
+				}
 			} else {
 				throw new FormatterSyntaxProblemException("Syntax error");
 			}
