@@ -25,10 +25,10 @@ public class JSProblem extends DefaultProblem {
 				0,
 				null,
 				ProblemSeverities.Error,
-				0,
-				0,
+				-1,
+				-1,
 				cause instanceof RecognitionException ? ((RecognitionException) cause).line
-						: 0);
+						: -1);
 		this.cause = cause;
 	}
 
