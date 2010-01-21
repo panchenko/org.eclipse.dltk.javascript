@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class Script extends ModuleDeclaration implements ISourceable {
 
@@ -54,5 +55,10 @@ public class Script extends ModuleDeclaration implements ISourceable {
 			Statement statement = (Statement) this.getStatements().get(i);
 			visitor.visit(statement);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return toSourceString(JSLiterals.EMPTY);
 	}
 }
