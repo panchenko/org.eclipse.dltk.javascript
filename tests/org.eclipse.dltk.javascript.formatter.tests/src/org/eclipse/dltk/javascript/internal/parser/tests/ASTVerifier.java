@@ -47,7 +47,6 @@ import org.eclipse.dltk.javascript.ast.GetAllChildrenExpression;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.GetMethod;
-import org.eclipse.dltk.javascript.ast.IASTVisitor;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.Keyword;
@@ -95,10 +94,6 @@ public class ASTVerifier extends ASTVisitor {
 		visit(root);
 	}
 
-	private void visitList(List nodes) {
-		visit(nodes);
-	}
-
 	private void testChar(char ch, int charAt) {
 		Assert.assertEquals(ch, source.charAt(charAt));
 	}
@@ -129,7 +124,7 @@ public class ASTVerifier extends ASTVisitor {
 	public boolean visitArrayInitializer(ArrayInitializer node) {
 
 		testCharList(Keywords.COMMA, node.getCommas());
-		visitList(node.getItems());
+		visit(node.getItems());
 		testChar(Keywords.LB, node.getLB());
 		testChar(Keywords.RB, node.getRB());
 
@@ -167,7 +162,7 @@ public class ASTVerifier extends ASTVisitor {
 	public boolean visitCallExpression(CallExpression node) {
 
 		visit(node.getExpression());
-		visitList(node.getArguments());
+		visit(node.getArguments());
 
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
@@ -180,7 +175,7 @@ public class ASTVerifier extends ASTVisitor {
 
 		visit(node.getCaseKeyword());
 		visit(node.getCondition());
-		visitList(node.getStatements());
+		visit(node.getStatements());
 
 		testChar(Keywords.COLON, node.getColonPosition());
 
@@ -204,7 +199,7 @@ public class ASTVerifier extends ASTVisitor {
 	public boolean visitCommaExpression(CommaExpression node) {
 
 		testCharList(Keywords.COMMA, node.getCommas());
-		visitList(node.getItems());
+		visit(node.getItems());
 
 		return true;
 	}
@@ -225,7 +220,7 @@ public class ASTVerifier extends ASTVisitor {
 
 		testCharList(Keywords.COMMA, node.getCommas());
 		visit(node.getConstKeyword());
-		visitList(node.getConsts());
+		visit(node.getConsts());
 
 		testChar(Keywords.SEMI, node.getSemicolonPosition());
 
@@ -256,7 +251,7 @@ public class ASTVerifier extends ASTVisitor {
 		testChar(Keywords.COLON, node.getColonPosition());
 
 		visit(node.getDefaultKeyword());
-		visitList(node.getStatements());
+		visit(node.getStatements());
 
 		return true;
 	}
@@ -412,7 +407,7 @@ public class ASTVerifier extends ASTVisitor {
 	public boolean visitObjectInitializer(ObjectInitializer node) {
 
 		testCharList(Keywords.COMMA, node.getCommas());
-		visitList(node.getInitializers());
+		visit(node.getInitializers());
 
 		testChar(Keywords.LC, node.getLC());
 		testChar(Keywords.RC, node.getRC());
@@ -474,7 +469,7 @@ public class ASTVerifier extends ASTVisitor {
 		Assert.assertEquals(0, node.sourceStart());
 		Assert.assertEquals(source.length(), node.sourceEnd());
 
-		visitList(node.getStatements());
+		visit(node.getStatements());
 		return true;
 	}
 
@@ -496,7 +491,7 @@ public class ASTVerifier extends ASTVisitor {
 		testChar(Keywords.LC, node.getLC());
 		testChar(Keywords.RC, node.getRC());
 
-		visitList(node.getStatements());
+		visit(node.getStatements());
 
 		return true;
 	}
@@ -511,7 +506,7 @@ public class ASTVerifier extends ASTVisitor {
 	public boolean visitSwitchStatement(SwitchStatement node) {
 
 		visit(node.getCondition());
-		visitList(node.getCaseClauses());
+		visit(node.getCaseClauses());
 
 		testChar(Keywords.LC, node.getLC());
 		testChar(Keywords.RC, node.getRC());
@@ -543,7 +538,7 @@ public class ASTVerifier extends ASTVisitor {
 
 		visit(node.getTryKeyword());
 		visit(node.getBody());
-		visitList(node.getCatches());
+		visit(node.getCatches());
 
 		if (node.getFinally() != null)
 			visit(node.getFinally());
@@ -573,7 +568,7 @@ public class ASTVerifier extends ASTVisitor {
 	public boolean visitVariableDeclaration(VariableDeclaration node) {
 
 		visit(node.getVarKeyword());
-		visitList(node.getVariables());
+		visit(node.getVariables());
 		testCharList(Keywords.COMMA, node.getCommas());
 
 		return true;
@@ -634,7 +629,7 @@ public class ASTVerifier extends ASTVisitor {
 
 	public boolean visitFunctionStatement(FunctionStatement node) {
 
-		visitList(node.getArguments());
+		visit(node.getArguments());
 		visit(node.getBody());
 		visit(node.getFunctionKeyword());
 
