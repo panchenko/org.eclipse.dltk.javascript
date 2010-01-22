@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
 import org.eclipse.dltk.javascript.parser.JSLexer;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.JSTokenStream;
 import org.eclipse.dltk.javascript.parser.JSTransformer;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.JavaScriptTokenSource;
@@ -62,9 +63,8 @@ public class ANTLRParserTester {
 			throws IOException, RecognitionException {
 		InputStream resource = JavaScriptFormatterTestsPlugin.getDefault()
 				.getBundle().getResource(fullResourceName).openStream();
-		JSLexer lexer = new JSLexer(new ANTLRInputStream(resource, encoding));
-		CommonTokenStream stream = new CommonTokenStream(
-				new JavaScriptTokenSource(lexer));
+		JSTokenStream stream = JavaScriptParser.createTokenStream(resource,
+				encoding);
 		JSParser parser = new JSParser(stream);
 		ParserRuleReturnScope root = parser.program();
 

@@ -17,21 +17,16 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;
-import org.eclipse.dltk.javascript.parser.JSLexer;
 import org.eclipse.dltk.javascript.parser.JSParser;
-import org.eclipse.dltk.javascript.parser.JavaScriptTokenFilter;
-import org.eclipse.dltk.javascript.parser.JavaScriptTokenSource;
+import org.eclipse.dltk.javascript.parser.JSTokenStream;
+import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
 public class ANTLRTokenStreamComparer {
 
 	private static List getTokens(String source, List comments) {
 
-		JSLexer lexer = new JSLexer(new ANTLRStringStream(source));
-		CommonTokenStream stream = new CommonTokenStream(
-				new JavaScriptTokenSource(lexer));
+		JSTokenStream stream = JavaScriptParser.createTokenStream(source);
 
 		List list = new ArrayList();
 

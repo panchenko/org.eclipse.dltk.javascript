@@ -154,5 +154,9 @@ public class ANTLRParserTestCase extends TestCase {
 	public void testE4XParse() throws Exception {
 		ANTLRParserTester.parse("e4x.js", "UTF-8");
 	}
+	
+	public void testE4XParse1() throws Exception {
+		ANTLRParserTester.parse("e4x-1.js", "UTF-8");
+	}
 
 }
