@@ -88,8 +88,12 @@ import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
+import org.eclipse.dltk.javascript.ast.XmlExpressionFragment;
+import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
+import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.w3c.dom.Node;
 
 public class JSTransformer extends JSVisitor<ASTNode> {
 
@@ -1781,10 +1785,36 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	protected ASTNode visitXmlLiteral(Tree node) {
-		XmlLiteral xml = new XmlLiteral(getParent());
-
-		xml.setXml(node.getText());
-
+		final XmlLiteral xml = new XmlLiteral(getParent());
+		final List<XmlFragment> fragments = new ArrayList<XmlFragment>();
+		for (int i = 0; i < node.getChildCount(); ++i) {
+			final Tree child = node.getChild(i);
+			if (child.getType() == JSParser.XMLFragment
+					|| child.getType() == JSParser.XMLFragmentEnd) {
+				final XmlTextFragment fragment = new XmlTextFragment(xml);
+				fragment.setStart(getTokenOffset(child.getTokenStartIndex()));
+				fragment.setEnd(getTokenOffset(child.getTokenStopIndex() + 1));
+				fragment.setXml(child.getText());
+				fragments.add(fragment);
+			} else {
+				XmlExpressionFragment fragment = new XmlExpressionFragment(xml);
+				Expression expression = (Expression) transformNode(child,
+						fragment);
+				fragment.setExpression(expression);
+				fragment.setStart(expression.sourceStart());
+				fragment.setEnd(expression.sourceEnd());
+				fragments.add(fragment);
+				// TODO curly braces
+			}
+		}
+		if (fragments.size() > 1) {
+			Collections.sort(fragments, new Comparator<XmlFragment>() {
+				public int compare(XmlFragment o1, XmlFragment o2) {
+					return o1.sourceStart() - o2.sourceStart();
+				}
+			});
+		}
+		xml.setFragments(fragments);
 		xml.setStart(getTokenOffset(node.getTokenStartIndex()));
 		xml.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 

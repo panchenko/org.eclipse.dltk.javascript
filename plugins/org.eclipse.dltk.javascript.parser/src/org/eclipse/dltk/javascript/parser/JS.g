@@ -180,6 +180,7 @@ tokens
 // E4X Tokens
 	XMLFragment;
 	XMLFragmentEnd;
+	XMLFragmentError;
 
 // Imaginary
 	ARGS ;
@@ -330,6 +331,22 @@ public Token nextToken()
 @Override
 public void emitErrorMessage(String msg) {
 // IGNORE
+}
+
+@Override
+public void recoverFromMismatchedToken(IntStream input, RecognitionException e, int ttype, BitSet follow) throws RecognitionException {
+	// if next token is what we are looking for then "delete" this token
+	if ( input.LA(2)==ttype ) {
+		reportError(e);
+		beginResync();
+		input.consume(); // simply delete extra token
+		endResync();
+		input.consume(); // move past ttype token as if all were ok
+		return;
+	}
+	if ( !recoverFromMismatchedElement(input,e,follow) ) {
+		throw e;
+	}
 }
 }
 
@@ -820,7 +837,7 @@ xmlLiteral
 	    LBRACE expression RBRACE
 	    { ((JSTokenStream)input).setMode(JSTokenSource.MODE_XML); } 
 	  )* XMLFragmentEnd
-	  -> ^(XML_LITERAL XMLFragment? expression? XMLFragmentEnd)
+	  -> ^(XML_LITERAL XMLFragment* expression* XMLFragmentEnd)
 	;
 	finally { ((JSTokenStream)input).setMode(JSTokenSource.MODE_JS); }
 

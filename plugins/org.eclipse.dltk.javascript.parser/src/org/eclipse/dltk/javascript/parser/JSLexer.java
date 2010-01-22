@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2010-01-22 19:41:58
+// $ANTLR 3.0.1 JS.g 2010-01-23 01:43:24
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -12,33 +12,33 @@ public class JSLexer extends Lexer {
     public static final int PACKAGE=58;
     public static final int FUNCTION=18;
     public static final int SHR=93;
-    public static final int VT=153;
-    public static final int RegularExpressionChar=190;
-    public static final int LOCALNAME=128;
+    public static final int VT=154;
+    public static final int RegularExpressionChar=191;
+    public static final int LOCALNAME=129;
     public static final int XMLFragmentEnd=121;
     public static final int SHL=92;
     public static final int MOD=89;
     public static final int CONST=43;
-    public static final int LineTerminatorChar=163;
-    public static final int DQUOTE=150;
+    public static final int LineTerminatorChar=164;
+    public static final int DQUOTE=151;
     public static final int DO=13;
     public static final int NOT=98;
     public static final int EOF=-1;
-    public static final int CEXPR=130;
+    public static final int CEXPR=131;
     public static final int DIVASS=116;
-    public static final int BYINDEX=126;
+    public static final int BYINDEX=127;
     public static final int INC=90;
     public static final int RPAREN=72;
     public static final int FINAL=49;
-    public static final int FORSTEP=133;
+    public static final int FORSTEP=134;
     public static final int IMPORT=53;
-    public static final int EOL=165;
-    public static final int OctalDigit=176;
+    public static final int EOL=166;
+    public static final int OctalDigit=177;
     public static final int RETURN=23;
     public static final int THIS=25;
-    public static final int ARGS=122;
+    public static final int ARGS=123;
     public static final int GET=33;
-    public static final int WhiteSpace=158;
+    public static final int WhiteSpace=159;
     public static final int EXPORT=47;
     public static final int EQ=82;
     public static final int GOTO=51;
@@ -51,114 +51,115 @@ public class JSLexer extends Lexer {
     public static final int ELSE=14;
     public static final int NATIVE=57;
     public static final int INT=54;
-    public static final int DEFAULT_XML_NAMESPACE=137;
-    public static final int FF=154;
-    public static final int OctalEscapeSequence=184;
-    public static final int RegularExpressionFirstChar=189;
+    public static final int DEFAULT_XML_NAMESPACE=138;
+    public static final int FF=155;
+    public static final int OctalEscapeSequence=185;
+    public static final int RegularExpressionFirstChar=190;
     public static final int TYPEOF=28;
     public static final int GT=79;
-    public static final int CALL=129;
-    public static final int CharacterEscapeSequence=182;
+    public static final int CALL=130;
+    public static final int CharacterEscapeSequence=183;
     public static final int LAND=100;
-    public static final int PINC=145;
+    public static final int PINC=146;
     public static final int PROTECTED=60;
     public static final int LBRACK=73;
     public static final int LBRACE=69;
-    public static final int RegularExpressionLiteral=175;
+    public static final int RegularExpressionLiteral=176;
     public static final int SUB=87;
     public static final int FLOAT=50;
-    public static final int DecimalIntegerLiteral=178;
-    public static final int HexDigit=169;
+    public static final int DecimalIntegerLiteral=179;
+    public static final int HexDigit=170;
     public static final int LPAREN=71;
     public static final int AT=117;
     public static final int IMPLEMENTS=52;
     public static final int YIELD=35;
     public static final int SHRASS=110;
-    public static final int PS=162;
-    public static final int MultiLineComment=166;
+    public static final int PS=163;
+    public static final int MultiLineComment=167;
     public static final int ADD=86;
-    public static final int ZeroToThree=183;
-    public static final int ITEM=138;
-    public static final int UnicodeEscapeSequence=186;
+    public static final int ZeroToThree=184;
+    public static final int ITEM=139;
+    public static final int UnicodeEscapeSequence=187;
     public static final int SHUASS=111;
     public static final int SET=34;
     public static final int SHORT=62;
     public static final int INSTANCEOF=21;
-    public static final int SQUOTE=151;
-    public static final int Tokens=191;
+    public static final int SQUOTE=152;
+    public static final int Tokens=192;
     public static final int SAME=84;
-    public static final int StringLiteral=168;
+    public static final int StringLiteral=169;
     public static final int COLON=103;
     public static final int XMLFragment=120;
-    public static final int PAREXPR=143;
+    public static final int PAREXPR=144;
     public static final int ENUM=46;
-    public static final int HexIntegerLiteral=181;
-    public static final int NBSP=156;
-    public static final int SP=155;
-    public static final int BLOCK=124;
-    public static final int LineTerminator=164;
+    public static final int HexIntegerLiteral=182;
+    public static final int NBSP=157;
+    public static final int SP=156;
+    public static final int BLOCK=125;
+    public static final int LineTerminator=165;
     public static final int INTERFACE=55;
     public static final int DIV=115;
     public static final int LONG=56;
-    public static final int CR=160;
+    public static final int CR=161;
     public static final int PUBLIC=61;
     public static final int LOR=101;
     public static final int LT=78;
     public static final int WHILE=31;
-    public static final int BackslashSequence=188;
-    public static final int LS=161;
+    public static final int BackslashSequence=189;
+    public static final int LS=162;
     public static final int CASE=8;
     public static final int NEW=22;
     public static final int CHAR=41;
-    public static final int DecimalDigit=171;
-    public static final int BYFIELD=125;
+    public static final int DecimalDigit=172;
+    public static final int BYFIELD=126;
     public static final int BREAK=7;
-    public static final int Identifier=174;
+    public static final int Identifier=175;
     public static final int WXML=36;
-    public static final int POS=146;
+    public static final int POS=147;
     public static final int DOUBLE=45;
-    public static final int ExponentPart=177;
+    public static final int ExponentPart=178;
     public static final int VAR=29;
     public static final int VOID=30;
     public static final int SUPER=64;
     public static final int EACH=17;
-    public static final int LABELLED=139;
+    public static final int LABELLED=140;
     public static final int ADDASS=105;
-    public static final int ARRAY=123;
+    public static final int ARRAY=124;
     public static final int PRIVATE=59;
     public static final int SWITCH=24;
     public static final int NULL=4;
     public static final int THROWS=66;
     public static final int DELETE=12;
     public static final int MUL=88;
-    public static final int IdentifierStartASCII=170;
+    public static final int IdentifierStartASCII=171;
     public static final int TRY=27;
     public static final int NAMESPACE=37;
     public static final int SHLASS=109;
     public static final int COLONCOLON=119;
-    public static final int USP=157;
+    public static final int USP=158;
     public static final int ANDASS=112;
-    public static final int IdentifierNameASCIIStart=173;
+    public static final int IdentifierNameASCIIStart=174;
     public static final int QUE=102;
     public static final int OR=96;
-    public static final int SETTER=136;
+    public static final int SETTER=137;
     public static final int DEBUGGER=44;
-    public static final int FOREACH=134;
-    public static final int PDEC=144;
+    public static final int FOREACH=135;
+    public static final int PDEC=145;
     public static final int CATCH=9;
     public static final int FALSE=6;
-    public static final int EscapeSequence=187;
+    public static final int EscapeSequence=188;
     public static final int THROW=26;
     public static final int MULASS=107;
-    public static final int XmlAttribute=147;
+    public static final int XmlAttribute=148;
     public static final int DEC=91;
-    public static final int OctalIntegerLiteral=180;
+    public static final int OctalIntegerLiteral=181;
     public static final int CLASS=42;
     public static final int ORASS=113;
-    public static final int HexEscapeSequence=185;
-    public static final int NAMEDVALUE=140;
-    public static final int SingleLineComment=167;
+    public static final int HexEscapeSequence=186;
+    public static final int NAMEDVALUE=141;
+    public static final int SingleLineComment=168;
     public static final int GTE=81;
+    public static final int XMLFragmentError=122;
     public static final int FOR=16;
     public static final int DOTDOT=118;
     public static final int ABSTRACT=38;
@@ -168,36 +169,36 @@ public class JSLexer extends Lexer {
     public static final int SUBASS=106;
     public static final int SYNCHRONIZED=65;
     public static final int BOOLEAN=39;
-    public static final int EXPR=131;
+    public static final int EXPR=132;
     public static final int IN=20;
     public static final int CONTINUE=10;
-    public static final int OBJECT=142;
+    public static final int OBJECT=143;
     public static final int COMMA=77;
     public static final int TRANSIENT=67;
-    public static final int FORITER=132;
+    public static final int FORITER=133;
     public static final int MODASS=108;
     public static final int DOT=75;
-    public static final int IdentifierPart=172;
+    public static final int IdentifierPart=173;
     public static final int WITH=32;
     public static final int BYTE=40;
     public static final int XOR=97;
     public static final int VOLATILE=68;
-    public static final int GETTER=135;
+    public static final int GETTER=136;
     public static final int NSAME=85;
     public static final int DEFAULT=11;
-    public static final int ALLCHILDREN=127;
-    public static final int TAB=152;
-    public static final int DecimalLiteral=179;
+    public static final int ALLCHILDREN=128;
+    public static final int TAB=153;
+    public static final int DecimalLiteral=180;
     public static final int TRUE=5;
     public static final int NEQ=83;
     public static final int FINALLY=15;
-    public static final int NEG=141;
+    public static final int NEG=142;
     public static final int ASSIGN=104;
-    public static final int XML_LITERAL=148;
+    public static final int XML_LITERAL=149;
     public static final int SEMIC=76;
     public static final int EXTENDS=48;
-    public static final int BSLASH=149;
-    public static final int LF=159;
+    public static final int BSLASH=150;
+    public static final int LF=160;
 
     private Token last;
 
@@ -308,6 +309,22 @@ public class JSLexer extends Lexer {
     // IGNORE
     }
 
+    @Override
+    public void recoverFromMismatchedToken(IntStream input, RecognitionException e, int ttype, BitSet follow) throws RecognitionException {
+    	// if next token is what we are looking for then "delete" this token
+    	if ( input.LA(2)==ttype ) {
+    		reportError(e);
+    		beginResync();
+    		input.consume(); // simply delete extra token
+    		endResync();
+    		input.consume(); // move past ttype token as if all were ok
+    		return;
+    	}
+    	if ( !recoverFromMismatchedElement(input,e,follow) ) {
+    		throw e;
+    	}
+    }
+
     public JSLexer() {;} 
     public JSLexer(CharStream input) {
         super(input);
@@ -318,8 +335,8 @@ public class JSLexer extends Lexer {
     public final void mNULL() throws RecognitionException {
         try {
             int _type = NULL;
-            // JS.g:120:6: ( 'null' )
-            // JS.g:120:8: 'null'
+            // JS.g:136:6: ( 'null' )
+            // JS.g:136:8: 'null'
             {
             match("null"); 
 
@@ -337,8 +354,8 @@ public class JSLexer extends Lexer {
     public final void mTRUE() throws RecognitionException {
         try {
             int _type = TRUE;
-            // JS.g:121:6: ( 'true' )
-            // JS.g:121:8: 'true'
+            // JS.g:137:6: ( 'true' )
+            // JS.g:137:8: 'true'
             {
             match("true"); 
 
@@ -356,8 +373,8 @@ public class JSLexer extends Lexer {
     public final void mFALSE() throws RecognitionException {
         try {
             int _type = FALSE;
-            // JS.g:122:7: ( 'false' )
-            // JS.g:122:9: 'false'
+            // JS.g:138:7: ( 'false' )
+            // JS.g:138:9: 'false'
             {
             match("false"); 
 
@@ -375,8 +392,8 @@ public class JSLexer extends Lexer {
     public final void mBREAK() throws RecognitionException {
         try {
             int _type = BREAK;
-            // JS.g:123:7: ( 'break' )
-            // JS.g:123:9: 'break'
+            // JS.g:139:7: ( 'break' )
+            // JS.g:139:9: 'break'
             {
             match("break"); 
 
@@ -394,8 +411,8 @@ public class JSLexer extends Lexer {
     public final void mCASE() throws RecognitionException {
         try {
             int _type = CASE;
-            // JS.g:124:6: ( 'case' )
-            // JS.g:124:8: 'case'
+            // JS.g:140:6: ( 'case' )
+            // JS.g:140:8: 'case'
             {
             match("case"); 
 
@@ -413,8 +430,8 @@ public class JSLexer extends Lexer {
     public final void mCATCH() throws RecognitionException {
         try {
             int _type = CATCH;
-            // JS.g:125:7: ( 'catch' )
-            // JS.g:125:9: 'catch'
+            // JS.g:141:7: ( 'catch' )
+            // JS.g:141:9: 'catch'
             {
             match("catch"); 
 
@@ -432,8 +449,8 @@ public class JSLexer extends Lexer {
     public final void mCONTINUE() throws RecognitionException {
         try {
             int _type = CONTINUE;
-            // JS.g:126:10: ( 'continue' )
-            // JS.g:126:12: 'continue'
+            // JS.g:142:10: ( 'continue' )
+            // JS.g:142:12: 'continue'
             {
             match("continue"); 
 
@@ -451,8 +468,8 @@ public class JSLexer extends Lexer {
     public final void mDEFAULT() throws RecognitionException {
         try {
             int _type = DEFAULT;
-            // JS.g:127:9: ( 'default' )
-            // JS.g:127:11: 'default'
+            // JS.g:143:9: ( 'default' )
+            // JS.g:143:11: 'default'
             {
             match("default"); 
 
@@ -470,8 +487,8 @@ public class JSLexer extends Lexer {
     public final void mDELETE() throws RecognitionException {
         try {
             int _type = DELETE;
-            // JS.g:128:8: ( 'delete' )
-            // JS.g:128:10: 'delete'
+            // JS.g:144:8: ( 'delete' )
+            // JS.g:144:10: 'delete'
             {
             match("delete"); 
 
@@ -489,8 +506,8 @@ public class JSLexer extends Lexer {
     public final void mDO() throws RecognitionException {
         try {
             int _type = DO;
-            // JS.g:129:4: ( 'do' )
-            // JS.g:129:6: 'do'
+            // JS.g:145:4: ( 'do' )
+            // JS.g:145:6: 'do'
             {
             match("do"); 
 
@@ -508,8 +525,8 @@ public class JSLexer extends Lexer {
     public final void mELSE() throws RecognitionException {
         try {
             int _type = ELSE;
-            // JS.g:130:6: ( 'else' )
-            // JS.g:130:8: 'else'
+            // JS.g:146:6: ( 'else' )
+            // JS.g:146:8: 'else'
             {
             match("else"); 
 
@@ -527,8 +544,8 @@ public class JSLexer extends Lexer {
     public final void mFINALLY() throws RecognitionException {
         try {
             int _type = FINALLY;
-            // JS.g:131:9: ( 'finally' )
-            // JS.g:131:11: 'finally'
+            // JS.g:147:9: ( 'finally' )
+            // JS.g:147:11: 'finally'
             {
             match("finally"); 
 
@@ -546,8 +563,8 @@ public class JSLexer extends Lexer {
     public final void mFOR() throws RecognitionException {
         try {
             int _type = FOR;
-            // JS.g:132:5: ( 'for' )
-            // JS.g:132:7: 'for'
+            // JS.g:148:5: ( 'for' )
+            // JS.g:148:7: 'for'
             {
             match("for"); 
 
@@ -565,8 +582,8 @@ public class JSLexer extends Lexer {
     public final void mEACH() throws RecognitionException {
         try {
             int _type = EACH;
-            // JS.g:133:6: ( 'each' )
-            // JS.g:133:8: 'each'
+            // JS.g:149:6: ( 'each' )
+            // JS.g:149:8: 'each'
             {
             match("each"); 
 
@@ -584,8 +601,8 @@ public class JSLexer extends Lexer {
     public final void mFUNCTION() throws RecognitionException {
         try {
             int _type = FUNCTION;
-            // JS.g:134:10: ( 'function' )
-            // JS.g:134:12: 'function'
+            // JS.g:150:10: ( 'function' )
+            // JS.g:150:12: 'function'
             {
             match("function"); 
 
@@ -603,8 +620,8 @@ public class JSLexer extends Lexer {
     public final void mIF() throws RecognitionException {
         try {
             int _type = IF;
-            // JS.g:135:4: ( 'if' )
-            // JS.g:135:6: 'if'
+            // JS.g:151:4: ( 'if' )
+            // JS.g:151:6: 'if'
             {
             match("if"); 
 
@@ -622,8 +639,8 @@ public class JSLexer extends Lexer {
     public final void mIN() throws RecognitionException {
         try {
             int _type = IN;
-            // JS.g:136:4: ( 'in' )
-            // JS.g:136:6: 'in'
+            // JS.g:152:4: ( 'in' )
+            // JS.g:152:6: 'in'
             {
             match("in"); 
 
@@ -641,8 +658,8 @@ public class JSLexer extends Lexer {
     public final void mINSTANCEOF() throws RecognitionException {
         try {
             int _type = INSTANCEOF;
-            // JS.g:137:12: ( 'instanceof' )
-            // JS.g:137:14: 'instanceof'
+            // JS.g:153:12: ( 'instanceof' )
+            // JS.g:153:14: 'instanceof'
             {
             match("instanceof"); 
 
@@ -660,8 +677,8 @@ public class JSLexer extends Lexer {
     public final void mNEW() throws RecognitionException {
         try {
             int _type = NEW;
-            // JS.g:138:5: ( 'new' )
-            // JS.g:138:7: 'new'
+            // JS.g:154:5: ( 'new' )
+            // JS.g:154:7: 'new'
             {
             match("new"); 
 
@@ -679,8 +696,8 @@ public class JSLexer extends Lexer {
     public final void mRETURN() throws RecognitionException {
         try {
             int _type = RETURN;
-            // JS.g:139:8: ( 'return' )
-            // JS.g:139:10: 'return'
+            // JS.g:155:8: ( 'return' )
+            // JS.g:155:10: 'return'
             {
             match("return"); 
 
@@ -698,8 +715,8 @@ public class JSLexer extends Lexer {
     public final void mSWITCH() throws RecognitionException {
         try {
             int _type = SWITCH;
-            // JS.g:140:8: ( 'switch' )
-            // JS.g:140:10: 'switch'
+            // JS.g:156:8: ( 'switch' )
+            // JS.g:156:10: 'switch'
             {
             match("switch"); 
 
@@ -717,8 +734,8 @@ public class JSLexer extends Lexer {
     public final void mTHIS() throws RecognitionException {
         try {
             int _type = THIS;
-            // JS.g:141:6: ( 'this' )
-            // JS.g:141:8: 'this'
+            // JS.g:157:6: ( 'this' )
+            // JS.g:157:8: 'this'
             {
             match("this"); 
 
@@ -736,8 +753,8 @@ public class JSLexer extends Lexer {
     public final void mTHROW() throws RecognitionException {
         try {
             int _type = THROW;
-            // JS.g:142:7: ( 'throw' )
-            // JS.g:142:9: 'throw'
+            // JS.g:158:7: ( 'throw' )
+            // JS.g:158:9: 'throw'
             {
             match("throw"); 
 
@@ -755,8 +772,8 @@ public class JSLexer extends Lexer {
     public final void mTRY() throws RecognitionException {
         try {
             int _type = TRY;
-            // JS.g:143:5: ( 'try' )
-            // JS.g:143:7: 'try'
+            // JS.g:159:5: ( 'try' )
+            // JS.g:159:7: 'try'
             {
             match("try"); 
 
@@ -774,8 +791,8 @@ public class JSLexer extends Lexer {
     public final void mTYPEOF() throws RecognitionException {
         try {
             int _type = TYPEOF;
-            // JS.g:144:8: ( 'typeof' )
-            // JS.g:144:10: 'typeof'
+            // JS.g:160:8: ( 'typeof' )
+            // JS.g:160:10: 'typeof'
             {
             match("typeof"); 
 
@@ -793,8 +810,8 @@ public class JSLexer extends Lexer {
     public final void mVAR() throws RecognitionException {
         try {
             int _type = VAR;
-            // JS.g:145:5: ( 'var' )
-            // JS.g:145:7: 'var'
+            // JS.g:161:5: ( 'var' )
+            // JS.g:161:7: 'var'
             {
             match("var"); 
 
@@ -812,8 +829,8 @@ public class JSLexer extends Lexer {
     public final void mVOID() throws RecognitionException {
         try {
             int _type = VOID;
-            // JS.g:146:6: ( 'void' )
-            // JS.g:146:8: 'void'
+            // JS.g:162:6: ( 'void' )
+            // JS.g:162:8: 'void'
             {
             match("void"); 
 
@@ -831,8 +848,8 @@ public class JSLexer extends Lexer {
     public final void mWHILE() throws RecognitionException {
         try {
             int _type = WHILE;
-            // JS.g:147:7: ( 'while' )
-            // JS.g:147:9: 'while'
+            // JS.g:163:7: ( 'while' )
+            // JS.g:163:9: 'while'
             {
             match("while"); 
 
@@ -850,8 +867,8 @@ public class JSLexer extends Lexer {
     public final void mWITH() throws RecognitionException {
         try {
             int _type = WITH;
-            // JS.g:148:6: ( 'with' )
-            // JS.g:148:8: 'with'
+            // JS.g:164:6: ( 'with' )
+            // JS.g:164:8: 'with'
             {
             match("with"); 
 
@@ -869,8 +886,8 @@ public class JSLexer extends Lexer {
     public final void mGET() throws RecognitionException {
         try {
             int _type = GET;
-            // JS.g:149:5: ( 'get' )
-            // JS.g:149:7: 'get'
+            // JS.g:165:5: ( 'get' )
+            // JS.g:165:7: 'get'
             {
             match("get"); 
 
@@ -888,8 +905,8 @@ public class JSLexer extends Lexer {
     public final void mSET() throws RecognitionException {
         try {
             int _type = SET;
-            // JS.g:150:5: ( 'set' )
-            // JS.g:150:7: 'set'
+            // JS.g:166:5: ( 'set' )
+            // JS.g:166:7: 'set'
             {
             match("set"); 
 
@@ -907,8 +924,8 @@ public class JSLexer extends Lexer {
     public final void mYIELD() throws RecognitionException {
         try {
             int _type = YIELD;
-            // JS.g:151:7: ( 'yield' )
-            // JS.g:151:9: 'yield'
+            // JS.g:167:7: ( 'yield' )
+            // JS.g:167:9: 'yield'
             {
             match("yield"); 
 
@@ -926,8 +943,8 @@ public class JSLexer extends Lexer {
     public final void mWXML() throws RecognitionException {
         try {
             int _type = WXML;
-            // JS.g:152:6: ( 'xml' )
-            // JS.g:152:8: 'xml'
+            // JS.g:168:6: ( 'xml' )
+            // JS.g:168:8: 'xml'
             {
             match("xml"); 
 
@@ -945,8 +962,8 @@ public class JSLexer extends Lexer {
     public final void mNAMESPACE() throws RecognitionException {
         try {
             int _type = NAMESPACE;
-            // JS.g:153:11: ( 'namespace' )
-            // JS.g:153:13: 'namespace'
+            // JS.g:169:11: ( 'namespace' )
+            // JS.g:169:13: 'namespace'
             {
             match("namespace"); 
 
@@ -964,8 +981,8 @@ public class JSLexer extends Lexer {
     public final void mABSTRACT() throws RecognitionException {
         try {
             int _type = ABSTRACT;
-            // JS.g:154:10: ( 'abstract' )
-            // JS.g:154:12: 'abstract'
+            // JS.g:170:10: ( 'abstract' )
+            // JS.g:170:12: 'abstract'
             {
             match("abstract"); 
 
@@ -983,8 +1000,8 @@ public class JSLexer extends Lexer {
     public final void mBOOLEAN() throws RecognitionException {
         try {
             int _type = BOOLEAN;
-            // JS.g:155:9: ( 'boolean' )
-            // JS.g:155:11: 'boolean'
+            // JS.g:171:9: ( 'boolean' )
+            // JS.g:171:11: 'boolean'
             {
             match("boolean"); 
 
@@ -1002,8 +1019,8 @@ public class JSLexer extends Lexer {
     public final void mBYTE() throws RecognitionException {
         try {
             int _type = BYTE;
-            // JS.g:156:6: ( 'byte' )
-            // JS.g:156:8: 'byte'
+            // JS.g:172:6: ( 'byte' )
+            // JS.g:172:8: 'byte'
             {
             match("byte"); 
 
@@ -1021,8 +1038,8 @@ public class JSLexer extends Lexer {
     public final void mCHAR() throws RecognitionException {
         try {
             int _type = CHAR;
-            // JS.g:157:6: ( 'char' )
-            // JS.g:157:8: 'char'
+            // JS.g:173:6: ( 'char' )
+            // JS.g:173:8: 'char'
             {
             match("char"); 
 
@@ -1040,8 +1057,8 @@ public class JSLexer extends Lexer {
     public final void mCLASS() throws RecognitionException {
         try {
             int _type = CLASS;
-            // JS.g:158:7: ( 'class' )
-            // JS.g:158:9: 'class'
+            // JS.g:174:7: ( 'class' )
+            // JS.g:174:9: 'class'
             {
             match("class"); 
 
@@ -1059,8 +1076,8 @@ public class JSLexer extends Lexer {
     public final void mCONST() throws RecognitionException {
         try {
             int _type = CONST;
-            // JS.g:159:7: ( 'const' )
-            // JS.g:159:9: 'const'
+            // JS.g:175:7: ( 'const' )
+            // JS.g:175:9: 'const'
             {
             match("const"); 
 
@@ -1078,8 +1095,8 @@ public class JSLexer extends Lexer {
     public final void mDEBUGGER() throws RecognitionException {
         try {
             int _type = DEBUGGER;
-            // JS.g:160:10: ( 'debugger' )
-            // JS.g:160:12: 'debugger'
+            // JS.g:176:10: ( 'debugger' )
+            // JS.g:176:12: 'debugger'
             {
             match("debugger"); 
 
@@ -1097,8 +1114,8 @@ public class JSLexer extends Lexer {
     public final void mDOUBLE() throws RecognitionException {
         try {
             int _type = DOUBLE;
-            // JS.g:161:8: ( 'double' )
-            // JS.g:161:10: 'double'
+            // JS.g:177:8: ( 'double' )
+            // JS.g:177:10: 'double'
             {
             match("double"); 
 
@@ -1116,8 +1133,8 @@ public class JSLexer extends Lexer {
     public final void mENUM() throws RecognitionException {
         try {
             int _type = ENUM;
-            // JS.g:162:6: ( 'enum' )
-            // JS.g:162:8: 'enum'
+            // JS.g:178:6: ( 'enum' )
+            // JS.g:178:8: 'enum'
             {
             match("enum"); 
 
@@ -1135,8 +1152,8 @@ public class JSLexer extends Lexer {
     public final void mEXPORT() throws RecognitionException {
         try {
             int _type = EXPORT;
-            // JS.g:163:8: ( 'export' )
-            // JS.g:163:10: 'export'
+            // JS.g:179:8: ( 'export' )
+            // JS.g:179:10: 'export'
             {
             match("export"); 
 
@@ -1154,8 +1171,8 @@ public class JSLexer extends Lexer {
     public final void mEXTENDS() throws RecognitionException {
         try {
             int _type = EXTENDS;
-            // JS.g:164:9: ( 'extends' )
-            // JS.g:164:11: 'extends'
+            // JS.g:180:9: ( 'extends' )
+            // JS.g:180:11: 'extends'
             {
             match("extends"); 
 
@@ -1173,8 +1190,8 @@ public class JSLexer extends Lexer {
     public final void mFINAL() throws RecognitionException {
         try {
             int _type = FINAL;
-            // JS.g:165:7: ( 'final' )
-            // JS.g:165:9: 'final'
+            // JS.g:181:7: ( 'final' )
+            // JS.g:181:9: 'final'
             {
             match("final"); 
 
@@ -1192,8 +1209,8 @@ public class JSLexer extends Lexer {
     public final void mFLOAT() throws RecognitionException {
         try {
             int _type = FLOAT;
-            // JS.g:166:7: ( 'float' )
-            // JS.g:166:9: 'float'
+            // JS.g:182:7: ( 'float' )
+            // JS.g:182:9: 'float'
             {
             match("float"); 
 
@@ -1211,8 +1228,8 @@ public class JSLexer extends Lexer {
     public final void mGOTO() throws RecognitionException {
         try {
             int _type = GOTO;
-            // JS.g:167:6: ( 'goto' )
-            // JS.g:167:8: 'goto'
+            // JS.g:183:6: ( 'goto' )
+            // JS.g:183:8: 'goto'
             {
             match("goto"); 
 
@@ -1230,8 +1247,8 @@ public class JSLexer extends Lexer {
     public final void mIMPLEMENTS() throws RecognitionException {
         try {
             int _type = IMPLEMENTS;
-            // JS.g:168:12: ( 'implements' )
-            // JS.g:168:14: 'implements'
+            // JS.g:184:12: ( 'implements' )
+            // JS.g:184:14: 'implements'
             {
             match("implements"); 
 
@@ -1249,8 +1266,8 @@ public class JSLexer extends Lexer {
     public final void mIMPORT() throws RecognitionException {
         try {
             int _type = IMPORT;
-            // JS.g:169:8: ( 'import' )
-            // JS.g:169:10: 'import'
+            // JS.g:185:8: ( 'import' )
+            // JS.g:185:10: 'import'
             {
             match("import"); 
 
@@ -1268,8 +1285,8 @@ public class JSLexer extends Lexer {
     public final void mINT() throws RecognitionException {
         try {
             int _type = INT;
-            // JS.g:170:5: ( 'int' )
-            // JS.g:170:7: 'int'
+            // JS.g:186:5: ( 'int' )
+            // JS.g:186:7: 'int'
             {
             match("int"); 
 
@@ -1287,8 +1304,8 @@ public class JSLexer extends Lexer {
     public final void mINTERFACE() throws RecognitionException {
         try {
             int _type = INTERFACE;
-            // JS.g:171:11: ( 'interface' )
-            // JS.g:171:13: 'interface'
+            // JS.g:187:11: ( 'interface' )
+            // JS.g:187:13: 'interface'
             {
             match("interface"); 
 
@@ -1306,8 +1323,8 @@ public class JSLexer extends Lexer {
     public final void mLONG() throws RecognitionException {
         try {
             int _type = LONG;
-            // JS.g:172:6: ( 'long' )
-            // JS.g:172:8: 'long'
+            // JS.g:188:6: ( 'long' )
+            // JS.g:188:8: 'long'
             {
             match("long"); 
 
@@ -1325,8 +1342,8 @@ public class JSLexer extends Lexer {
     public final void mNATIVE() throws RecognitionException {
         try {
             int _type = NATIVE;
-            // JS.g:173:8: ( 'native' )
-            // JS.g:173:10: 'native'
+            // JS.g:189:8: ( 'native' )
+            // JS.g:189:10: 'native'
             {
             match("native"); 
 
@@ -1344,8 +1361,8 @@ public class JSLexer extends Lexer {
     public final void mPACKAGE() throws RecognitionException {
         try {
             int _type = PACKAGE;
-            // JS.g:174:9: ( 'package' )
-            // JS.g:174:11: 'package'
+            // JS.g:190:9: ( 'package' )
+            // JS.g:190:11: 'package'
             {
             match("package"); 
 
@@ -1363,8 +1380,8 @@ public class JSLexer extends Lexer {
     public final void mPRIVATE() throws RecognitionException {
         try {
             int _type = PRIVATE;
-            // JS.g:175:9: ( 'private' )
-            // JS.g:175:11: 'private'
+            // JS.g:191:9: ( 'private' )
+            // JS.g:191:11: 'private'
             {
             match("private"); 
 
@@ -1382,8 +1399,8 @@ public class JSLexer extends Lexer {
     public final void mPROTECTED() throws RecognitionException {
         try {
             int _type = PROTECTED;
-            // JS.g:176:11: ( 'protected' )
-            // JS.g:176:13: 'protected'
+            // JS.g:192:11: ( 'protected' )
+            // JS.g:192:13: 'protected'
             {
             match("protected"); 
 
@@ -1401,8 +1418,8 @@ public class JSLexer extends Lexer {
     public final void mPUBLIC() throws RecognitionException {
         try {
             int _type = PUBLIC;
-            // JS.g:177:8: ( 'public' )
-            // JS.g:177:10: 'public'
+            // JS.g:193:8: ( 'public' )
+            // JS.g:193:10: 'public'
             {
             match("public"); 
 
@@ -1420,8 +1437,8 @@ public class JSLexer extends Lexer {
     public final void mSHORT() throws RecognitionException {
         try {
             int _type = SHORT;
-            // JS.g:178:7: ( 'short' )
-            // JS.g:178:9: 'short'
+            // JS.g:194:7: ( 'short' )
+            // JS.g:194:9: 'short'
             {
             match("short"); 
 
@@ -1439,8 +1456,8 @@ public class JSLexer extends Lexer {
     public final void mSTATIC() throws RecognitionException {
         try {
             int _type = STATIC;
-            // JS.g:179:8: ( 'static' )
-            // JS.g:179:10: 'static'
+            // JS.g:195:8: ( 'static' )
+            // JS.g:195:10: 'static'
             {
             match("static"); 
 
@@ -1458,8 +1475,8 @@ public class JSLexer extends Lexer {
     public final void mSUPER() throws RecognitionException {
         try {
             int _type = SUPER;
-            // JS.g:180:7: ( 'super' )
-            // JS.g:180:9: 'super'
+            // JS.g:196:7: ( 'super' )
+            // JS.g:196:9: 'super'
             {
             match("super"); 
 
@@ -1477,8 +1494,8 @@ public class JSLexer extends Lexer {
     public final void mSYNCHRONIZED() throws RecognitionException {
         try {
             int _type = SYNCHRONIZED;
-            // JS.g:181:14: ( 'synchronized' )
-            // JS.g:181:16: 'synchronized'
+            // JS.g:197:14: ( 'synchronized' )
+            // JS.g:197:16: 'synchronized'
             {
             match("synchronized"); 
 
@@ -1496,8 +1513,8 @@ public class JSLexer extends Lexer {
     public final void mTHROWS() throws RecognitionException {
         try {
             int _type = THROWS;
-            // JS.g:182:8: ( 'throws' )
-            // JS.g:182:10: 'throws'
+            // JS.g:198:8: ( 'throws' )
+            // JS.g:198:10: 'throws'
             {
             match("throws"); 
 
@@ -1515,8 +1532,8 @@ public class JSLexer extends Lexer {
     public final void mTRANSIENT() throws RecognitionException {
         try {
             int _type = TRANSIENT;
-            // JS.g:183:11: ( 'transient' )
-            // JS.g:183:13: 'transient'
+            // JS.g:199:11: ( 'transient' )
+            // JS.g:199:13: 'transient'
             {
             match("transient"); 
 
@@ -1534,8 +1551,8 @@ public class JSLexer extends Lexer {
     public final void mVOLATILE() throws RecognitionException {
         try {
             int _type = VOLATILE;
-            // JS.g:184:10: ( 'volatile' )
-            // JS.g:184:12: 'volatile'
+            // JS.g:200:10: ( 'volatile' )
+            // JS.g:200:12: 'volatile'
             {
             match("volatile"); 
 
@@ -1553,8 +1570,8 @@ public class JSLexer extends Lexer {
     public final void mLBRACE() throws RecognitionException {
         try {
             int _type = LBRACE;
-            // JS.g:185:8: ( '{' )
-            // JS.g:185:10: '{'
+            // JS.g:201:8: ( '{' )
+            // JS.g:201:10: '{'
             {
             match('{'); 
 
@@ -1571,8 +1588,8 @@ public class JSLexer extends Lexer {
     public final void mRBRACE() throws RecognitionException {
         try {
             int _type = RBRACE;
-            // JS.g:186:8: ( '}' )
-            // JS.g:186:10: '}'
+            // JS.g:202:8: ( '}' )
+            // JS.g:202:10: '}'
             {
             match('}'); 
 
@@ -1589,8 +1606,8 @@ public class JSLexer extends Lexer {
     public final void mLPAREN() throws RecognitionException {
         try {
             int _type = LPAREN;
-            // JS.g:187:8: ( '(' )
-            // JS.g:187:10: '('
+            // JS.g:203:8: ( '(' )
+            // JS.g:203:10: '('
             {
             match('('); 
 
@@ -1607,8 +1624,8 @@ public class JSLexer extends Lexer {
     public final void mRPAREN() throws RecognitionException {
         try {
             int _type = RPAREN;
-            // JS.g:188:8: ( ')' )
-            // JS.g:188:10: ')'
+            // JS.g:204:8: ( ')' )
+            // JS.g:204:10: ')'
             {
             match(')'); 
 
@@ -1625,8 +1642,8 @@ public class JSLexer extends Lexer {
     public final void mLBRACK() throws RecognitionException {
         try {
             int _type = LBRACK;
-            // JS.g:189:8: ( '[' )
-            // JS.g:189:10: '['
+            // JS.g:205:8: ( '[' )
+            // JS.g:205:10: '['
             {
             match('['); 
 
@@ -1643,8 +1660,8 @@ public class JSLexer extends Lexer {
     public final void mRBRACK() throws RecognitionException {
         try {
             int _type = RBRACK;
-            // JS.g:190:8: ( ']' )
-            // JS.g:190:10: ']'
+            // JS.g:206:8: ( ']' )
+            // JS.g:206:10: ']'
             {
             match(']'); 
 
@@ -1661,8 +1678,8 @@ public class JSLexer extends Lexer {
     public final void mDOT() throws RecognitionException {
         try {
             int _type = DOT;
-            // JS.g:191:5: ( '.' )
-            // JS.g:191:7: '.'
+            // JS.g:207:5: ( '.' )
+            // JS.g:207:7: '.'
             {
             match('.'); 
 
@@ -1679,8 +1696,8 @@ public class JSLexer extends Lexer {
     public final void mSEMIC() throws RecognitionException {
         try {
             int _type = SEMIC;
-            // JS.g:192:7: ( ';' )
-            // JS.g:192:9: ';'
+            // JS.g:208:7: ( ';' )
+            // JS.g:208:9: ';'
             {
             match(';'); 
 
@@ -1697,8 +1714,8 @@ public class JSLexer extends Lexer {
     public final void mCOMMA() throws RecognitionException {
         try {
             int _type = COMMA;
-            // JS.g:193:7: ( ',' )
-            // JS.g:193:9: ','
+            // JS.g:209:7: ( ',' )
+            // JS.g:209:9: ','
             {
             match(','); 
 
@@ -1715,8 +1732,8 @@ public class JSLexer extends Lexer {
     public final void mLT() throws RecognitionException {
         try {
             int _type = LT;
-            // JS.g:194:4: ( '<' )
-            // JS.g:194:6: '<'
+            // JS.g:210:4: ( '<' )
+            // JS.g:210:6: '<'
             {
             match('<'); 
 
@@ -1733,8 +1750,8 @@ public class JSLexer extends Lexer {
     public final void mGT() throws RecognitionException {
         try {
             int _type = GT;
-            // JS.g:195:4: ( '>' )
-            // JS.g:195:6: '>'
+            // JS.g:211:4: ( '>' )
+            // JS.g:211:6: '>'
             {
             match('>'); 
 
@@ -1751,8 +1768,8 @@ public class JSLexer extends Lexer {
     public final void mLTE() throws RecognitionException {
         try {
             int _type = LTE;
-            // JS.g:196:5: ( '<=' )
-            // JS.g:196:7: '<='
+            // JS.g:212:5: ( '<=' )
+            // JS.g:212:7: '<='
             {
             match("<="); 
 
@@ -1770,8 +1787,8 @@ public class JSLexer extends Lexer {
     public final void mGTE() throws RecognitionException {
         try {
             int _type = GTE;
-            // JS.g:197:5: ( '>=' )
-            // JS.g:197:7: '>='
+            // JS.g:213:5: ( '>=' )
+            // JS.g:213:7: '>='
             {
             match(">="); 
 
@@ -1789,8 +1806,8 @@ public class JSLexer extends Lexer {
     public final void mEQ() throws RecognitionException {
         try {
             int _type = EQ;
-            // JS.g:198:4: ( '==' )
-            // JS.g:198:6: '=='
+            // JS.g:214:4: ( '==' )
+            // JS.g:214:6: '=='
             {
             match("=="); 
 
@@ -1808,8 +1825,8 @@ public class JSLexer extends Lexer {
     public final void mNEQ() throws RecognitionException {
         try {
             int _type = NEQ;
-            // JS.g:199:5: ( '!=' )
-            // JS.g:199:7: '!='
+            // JS.g:215:5: ( '!=' )
+            // JS.g:215:7: '!='
             {
             match("!="); 
 
@@ -1827,8 +1844,8 @@ public class JSLexer extends Lexer {
     public final void mSAME() throws RecognitionException {
         try {
             int _type = SAME;
-            // JS.g:200:6: ( '===' )
-            // JS.g:200:8: '==='
+            // JS.g:216:6: ( '===' )
+            // JS.g:216:8: '==='
             {
             match("==="); 
 
@@ -1846,8 +1863,8 @@ public class JSLexer extends Lexer {
     public final void mNSAME() throws RecognitionException {
         try {
             int _type = NSAME;
-            // JS.g:201:7: ( '!==' )
-            // JS.g:201:9: '!=='
+            // JS.g:217:7: ( '!==' )
+            // JS.g:217:9: '!=='
             {
             match("!=="); 
 
@@ -1865,8 +1882,8 @@ public class JSLexer extends Lexer {
     public final void mADD() throws RecognitionException {
         try {
             int _type = ADD;
-            // JS.g:202:5: ( '+' )
-            // JS.g:202:7: '+'
+            // JS.g:218:5: ( '+' )
+            // JS.g:218:7: '+'
             {
             match('+'); 
 
@@ -1883,8 +1900,8 @@ public class JSLexer extends Lexer {
     public final void mSUB() throws RecognitionException {
         try {
             int _type = SUB;
-            // JS.g:203:5: ( '-' )
-            // JS.g:203:7: '-'
+            // JS.g:219:5: ( '-' )
+            // JS.g:219:7: '-'
             {
             match('-'); 
 
@@ -1901,8 +1918,8 @@ public class JSLexer extends Lexer {
     public final void mMUL() throws RecognitionException {
         try {
             int _type = MUL;
-            // JS.g:204:5: ( '*' )
-            // JS.g:204:7: '*'
+            // JS.g:220:5: ( '*' )
+            // JS.g:220:7: '*'
             {
             match('*'); 
 
@@ -1919,8 +1936,8 @@ public class JSLexer extends Lexer {
     public final void mMOD() throws RecognitionException {
         try {
             int _type = MOD;
-            // JS.g:205:5: ( '%' )
-            // JS.g:205:7: '%'
+            // JS.g:221:5: ( '%' )
+            // JS.g:221:7: '%'
             {
             match('%'); 
 
@@ -1937,8 +1954,8 @@ public class JSLexer extends Lexer {
     public final void mINC() throws RecognitionException {
         try {
             int _type = INC;
-            // JS.g:206:5: ( '++' )
-            // JS.g:206:7: '++'
+            // JS.g:222:5: ( '++' )
+            // JS.g:222:7: '++'
             {
             match("++"); 
 
@@ -1956,8 +1973,8 @@ public class JSLexer extends Lexer {
     public final void mDEC() throws RecognitionException {
         try {
             int _type = DEC;
-            // JS.g:207:5: ( '--' )
-            // JS.g:207:7: '--'
+            // JS.g:223:5: ( '--' )
+            // JS.g:223:7: '--'
             {
             match("--"); 
 
@@ -1975,8 +1992,8 @@ public class JSLexer extends Lexer {
     public final void mSHL() throws RecognitionException {
         try {
             int _type = SHL;
-            // JS.g:208:5: ( '<<' )
-            // JS.g:208:7: '<<'
+            // JS.g:224:5: ( '<<' )
+            // JS.g:224:7: '<<'
             {
             match("<<"); 
 
@@ -1994,8 +2011,8 @@ public class JSLexer extends Lexer {
     public final void mSHR() throws RecognitionException {
         try {
             int _type = SHR;
-            // JS.g:209:5: ( '>>' )
-            // JS.g:209:7: '>>'
+            // JS.g:225:5: ( '>>' )
+            // JS.g:225:7: '>>'
             {
             match(">>"); 
 
@@ -2013,8 +2030,8 @@ public class JSLexer extends Lexer {
     public final void mSHU() throws RecognitionException {
         try {
             int _type = SHU;
-            // JS.g:210:5: ( '>>>' )
-            // JS.g:210:7: '>>>'
+            // JS.g:226:5: ( '>>>' )
+            // JS.g:226:7: '>>>'
             {
             match(">>>"); 
 
@@ -2032,8 +2049,8 @@ public class JSLexer extends Lexer {
     public final void mAND() throws RecognitionException {
         try {
             int _type = AND;
-            // JS.g:211:5: ( '&' )
-            // JS.g:211:7: '&'
+            // JS.g:227:5: ( '&' )
+            // JS.g:227:7: '&'
             {
             match('&'); 
 
@@ -2050,8 +2067,8 @@ public class JSLexer extends Lexer {
     public final void mOR() throws RecognitionException {
         try {
             int _type = OR;
-            // JS.g:212:4: ( '|' )
-            // JS.g:212:6: '|'
+            // JS.g:228:4: ( '|' )
+            // JS.g:228:6: '|'
             {
             match('|'); 
 
@@ -2068,8 +2085,8 @@ public class JSLexer extends Lexer {
     public final void mXOR() throws RecognitionException {
         try {
             int _type = XOR;
-            // JS.g:213:5: ( '^' )
-            // JS.g:213:7: '^'
+            // JS.g:229:5: ( '^' )
+            // JS.g:229:7: '^'
             {
             match('^'); 
 
@@ -2086,8 +2103,8 @@ public class JSLexer extends Lexer {
     public final void mNOT() throws RecognitionException {
         try {
             int _type = NOT;
-            // JS.g:214:5: ( '!' )
-            // JS.g:214:7: '!'
+            // JS.g:230:5: ( '!' )
+            // JS.g:230:7: '!'
             {
             match('!'); 
 
@@ -2104,8 +2121,8 @@ public class JSLexer extends Lexer {
     public final void mINV() throws RecognitionException {
         try {
             int _type = INV;
-            // JS.g:215:5: ( '~' )
-            // JS.g:215:7: '~'
+            // JS.g:231:5: ( '~' )
+            // JS.g:231:7: '~'
             {
             match('~'); 
 
@@ -2122,8 +2139,8 @@ public class JSLexer extends Lexer {
     public final void mLAND() throws RecognitionException {
         try {
             int _type = LAND;
-            // JS.g:216:6: ( '&&' )
-            // JS.g:216:8: '&&'
+            // JS.g:232:6: ( '&&' )
+            // JS.g:232:8: '&&'
             {
             match("&&"); 
 
@@ -2141,8 +2158,8 @@ public class JSLexer extends Lexer {
     public final void mLOR() throws RecognitionException {
         try {
             int _type = LOR;
-            // JS.g:217:5: ( '||' )
-            // JS.g:217:7: '||'
+            // JS.g:233:5: ( '||' )
+            // JS.g:233:7: '||'
             {
             match("||"); 
 
@@ -2160,8 +2177,8 @@ public class JSLexer extends Lexer {
     public final void mQUE() throws RecognitionException {
         try {
             int _type = QUE;
-            // JS.g:218:5: ( '?' )
-            // JS.g:218:7: '?'
+            // JS.g:234:5: ( '?' )
+            // JS.g:234:7: '?'
             {
             match('?'); 
 
@@ -2178,8 +2195,8 @@ public class JSLexer extends Lexer {
     public final void mCOLON() throws RecognitionException {
         try {
             int _type = COLON;
-            // JS.g:219:7: ( ':' )
-            // JS.g:219:9: ':'
+            // JS.g:235:7: ( ':' )
+            // JS.g:235:9: ':'
             {
             match(':'); 
 
@@ -2196,8 +2213,8 @@ public class JSLexer extends Lexer {
     public final void mASSIGN() throws RecognitionException {
         try {
             int _type = ASSIGN;
-            // JS.g:220:8: ( '=' )
-            // JS.g:220:10: '='
+            // JS.g:236:8: ( '=' )
+            // JS.g:236:10: '='
             {
             match('='); 
 
@@ -2214,8 +2231,8 @@ public class JSLexer extends Lexer {
     public final void mADDASS() throws RecognitionException {
         try {
             int _type = ADDASS;
-            // JS.g:221:8: ( '+=' )
-            // JS.g:221:10: '+='
+            // JS.g:237:8: ( '+=' )
+            // JS.g:237:10: '+='
             {
             match("+="); 
 
@@ -2233,8 +2250,8 @@ public class JSLexer extends Lexer {
     public final void mSUBASS() throws RecognitionException {
         try {
             int _type = SUBASS;
-            // JS.g:222:8: ( '-=' )
-            // JS.g:222:10: '-='
+            // JS.g:238:8: ( '-=' )
+            // JS.g:238:10: '-='
             {
             match("-="); 
 
@@ -2252,8 +2269,8 @@ public class JSLexer extends Lexer {
     public final void mMULASS() throws RecognitionException {
         try {
             int _type = MULASS;
-            // JS.g:223:8: ( '*=' )
-            // JS.g:223:10: '*='
+            // JS.g:239:8: ( '*=' )
+            // JS.g:239:10: '*='
             {
             match("*="); 
 
@@ -2271,8 +2288,8 @@ public class JSLexer extends Lexer {
     public final void mMODASS() throws RecognitionException {
         try {
             int _type = MODASS;
-            // JS.g:224:8: ( '%=' )
-            // JS.g:224:10: '%='
+            // JS.g:240:8: ( '%=' )
+            // JS.g:240:10: '%='
             {
             match("%="); 
 
@@ -2290,8 +2307,8 @@ public class JSLexer extends Lexer {
     public final void mSHLASS() throws RecognitionException {
         try {
             int _type = SHLASS;
-            // JS.g:225:8: ( '<<=' )
-            // JS.g:225:10: '<<='
+            // JS.g:241:8: ( '<<=' )
+            // JS.g:241:10: '<<='
             {
             match("<<="); 
 
@@ -2309,8 +2326,8 @@ public class JSLexer extends Lexer {
     public final void mSHRASS() throws RecognitionException {
         try {
             int _type = SHRASS;
-            // JS.g:226:8: ( '>>=' )
-            // JS.g:226:10: '>>='
+            // JS.g:242:8: ( '>>=' )
+            // JS.g:242:10: '>>='
             {
             match(">>="); 
 
@@ -2328,8 +2345,8 @@ public class JSLexer extends Lexer {
     public final void mSHUASS() throws RecognitionException {
         try {
             int _type = SHUASS;
-            // JS.g:227:8: ( '>>>=' )
-            // JS.g:227:10: '>>>='
+            // JS.g:243:8: ( '>>>=' )
+            // JS.g:243:10: '>>>='
             {
             match(">>>="); 
 
@@ -2347,8 +2364,8 @@ public class JSLexer extends Lexer {
     public final void mANDASS() throws RecognitionException {
         try {
             int _type = ANDASS;
-            // JS.g:228:8: ( '&=' )
-            // JS.g:228:10: '&='
+            // JS.g:244:8: ( '&=' )
+            // JS.g:244:10: '&='
             {
             match("&="); 
 
@@ -2366,8 +2383,8 @@ public class JSLexer extends Lexer {
     public final void mORASS() throws RecognitionException {
         try {
             int _type = ORASS;
-            // JS.g:229:7: ( '|=' )
-            // JS.g:229:9: '|='
+            // JS.g:245:7: ( '|=' )
+            // JS.g:245:9: '|='
             {
             match("|="); 
 
@@ -2385,8 +2402,8 @@ public class JSLexer extends Lexer {
     public final void mXORASS() throws RecognitionException {
         try {
             int _type = XORASS;
-            // JS.g:230:8: ( '^=' )
-            // JS.g:230:10: '^='
+            // JS.g:246:8: ( '^=' )
+            // JS.g:246:10: '^='
             {
             match("^="); 
 
@@ -2404,8 +2421,8 @@ public class JSLexer extends Lexer {
     public final void mDIV() throws RecognitionException {
         try {
             int _type = DIV;
-            // JS.g:231:5: ( '/' )
-            // JS.g:231:7: '/'
+            // JS.g:247:5: ( '/' )
+            // JS.g:247:7: '/'
             {
             match('/'); 
 
@@ -2422,8 +2439,8 @@ public class JSLexer extends Lexer {
     public final void mDIVASS() throws RecognitionException {
         try {
             int _type = DIVASS;
-            // JS.g:232:8: ( '/=' )
-            // JS.g:232:10: '/='
+            // JS.g:248:8: ( '/=' )
+            // JS.g:248:10: '/='
             {
             match("/="); 
 
@@ -2441,8 +2458,8 @@ public class JSLexer extends Lexer {
     public final void mAT() throws RecognitionException {
         try {
             int _type = AT;
-            // JS.g:233:4: ( '@' )
-            // JS.g:233:6: '@'
+            // JS.g:249:4: ( '@' )
+            // JS.g:249:6: '@'
             {
             match('@'); 
 
@@ -2459,8 +2476,8 @@ public class JSLexer extends Lexer {
     public final void mDOTDOT() throws RecognitionException {
         try {
             int _type = DOTDOT;
-            // JS.g:234:8: ( '..' )
-            // JS.g:234:10: '..'
+            // JS.g:250:8: ( '..' )
+            // JS.g:250:10: '..'
             {
             match(".."); 
 
@@ -2478,8 +2495,8 @@ public class JSLexer extends Lexer {
     public final void mCOLONCOLON() throws RecognitionException {
         try {
             int _type = COLONCOLON;
-            // JS.g:235:12: ( '::' )
-            // JS.g:235:14: '::'
+            // JS.g:251:12: ( '::' )
+            // JS.g:251:14: '::'
             {
             match("::"); 
 
@@ -2496,8 +2513,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start BSLASH
     public final void mBSLASH() throws RecognitionException {
         try {
-            // JS.g:493:2: ( '\\\\' )
-            // JS.g:493:4: '\\\\'
+            // JS.g:510:2: ( '\\\\' )
+            // JS.g:510:4: '\\\\'
             {
             match('\\'); 
 
@@ -2512,8 +2529,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start DQUOTE
     public final void mDQUOTE() throws RecognitionException {
         try {
-            // JS.g:497:2: ( '\"' )
-            // JS.g:497:4: '\"'
+            // JS.g:514:2: ( '\"' )
+            // JS.g:514:4: '\"'
             {
             match('\"'); 
 
@@ -2528,8 +2545,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start SQUOTE
     public final void mSQUOTE() throws RecognitionException {
         try {
-            // JS.g:501:2: ( '\\'' )
-            // JS.g:501:4: '\\''
+            // JS.g:518:2: ( '\\'' )
+            // JS.g:518:4: '\\''
             {
             match('\''); 
 
@@ -2544,8 +2561,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start TAB
     public final void mTAB() throws RecognitionException {
         try {
-            // JS.g:507:2: ( '\\u0009' )
-            // JS.g:507:4: '\\u0009'
+            // JS.g:524:2: ( '\\u0009' )
+            // JS.g:524:4: '\\u0009'
             {
             match('\t'); 
 
@@ -2560,8 +2577,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start VT
     public final void mVT() throws RecognitionException {
         try {
-            // JS.g:511:2: ( '\\u000b' )
-            // JS.g:511:4: '\\u000b'
+            // JS.g:528:2: ( '\\u000b' )
+            // JS.g:528:4: '\\u000b'
             {
             match('\u000B'); 
 
@@ -2576,8 +2593,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start FF
     public final void mFF() throws RecognitionException {
         try {
-            // JS.g:515:2: ( '\\u000c' )
-            // JS.g:515:4: '\\u000c'
+            // JS.g:532:2: ( '\\u000c' )
+            // JS.g:532:4: '\\u000c'
             {
             match('\f'); 
 
@@ -2592,8 +2609,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start SP
     public final void mSP() throws RecognitionException {
         try {
-            // JS.g:519:2: ( '\\u0020' )
-            // JS.g:519:4: '\\u0020'
+            // JS.g:536:2: ( '\\u0020' )
+            // JS.g:536:4: '\\u0020'
             {
             match(' '); 
 
@@ -2608,8 +2625,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start NBSP
     public final void mNBSP() throws RecognitionException {
         try {
-            // JS.g:523:2: ( '\\u00a0' )
-            // JS.g:523:4: '\\u00a0'
+            // JS.g:540:2: ( '\\u00a0' )
+            // JS.g:540:4: '\\u00a0'
             {
             match('\u00A0'); 
 
@@ -2624,7 +2641,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start USP
     public final void mUSP() throws RecognitionException {
         try {
-            // JS.g:527:2: ( '\\u1680' | '\\u180E' | '\\u2000' | '\\u2001' | '\\u2002' | '\\u2003' | '\\u2004' | '\\u2005' | '\\u2006' | '\\u2007' | '\\u2008' | '\\u2009' | '\\u200A' | '\\u202F' | '\\u205F' | '\\u3000' )
+            // JS.g:544:2: ( '\\u1680' | '\\u180E' | '\\u2000' | '\\u2001' | '\\u2002' | '\\u2003' | '\\u2004' | '\\u2005' | '\\u2006' | '\\u2007' | '\\u2008' | '\\u2009' | '\\u200A' | '\\u202F' | '\\u205F' | '\\u3000' )
             // JS.g:
             {
             if ( input.LA(1)=='\u1680'||input.LA(1)=='\u180E'||(input.LA(1)>='\u2000' && input.LA(1)<='\u200A')||input.LA(1)=='\u202F'||input.LA(1)=='\u205F'||input.LA(1)=='\u3000' ) {
@@ -2650,10 +2667,10 @@ public class JSLexer extends Lexer {
     public final void mWhiteSpace() throws RecognitionException {
         try {
             int _type = WhiteSpace;
-            // JS.g:546:2: ( ( TAB | VT | FF | SP | NBSP | USP )+ )
-            // JS.g:546:4: ( TAB | VT | FF | SP | NBSP | USP )+
+            // JS.g:563:2: ( ( TAB | VT | FF | SP | NBSP | USP )+ )
+            // JS.g:563:4: ( TAB | VT | FF | SP | NBSP | USP )+
             {
-            // JS.g:546:4: ( TAB | VT | FF | SP | NBSP | USP )+
+            // JS.g:563:4: ( TAB | VT | FF | SP | NBSP | USP )+
             int cnt1=0;
             loop1:
             do {
@@ -2706,8 +2723,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start LF
     public final void mLF() throws RecognitionException {
         try {
-            // JS.g:554:2: ( '\\n' )
-            // JS.g:554:4: '\\n'
+            // JS.g:571:2: ( '\\n' )
+            // JS.g:571:4: '\\n'
             {
             match('\n'); 
 
@@ -2722,8 +2739,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start CR
     public final void mCR() throws RecognitionException {
         try {
-            // JS.g:558:2: ( '\\r' )
-            // JS.g:558:4: '\\r'
+            // JS.g:575:2: ( '\\r' )
+            // JS.g:575:4: '\\r'
             {
             match('\r'); 
 
@@ -2738,8 +2755,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start LS
     public final void mLS() throws RecognitionException {
         try {
-            // JS.g:562:2: ( '\\u2028' )
-            // JS.g:562:4: '\\u2028'
+            // JS.g:579:2: ( '\\u2028' )
+            // JS.g:579:4: '\\u2028'
             {
             match('\u2028'); 
 
@@ -2754,8 +2771,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start PS
     public final void mPS() throws RecognitionException {
         try {
-            // JS.g:566:2: ( '\\u2029' )
-            // JS.g:566:4: '\\u2029'
+            // JS.g:583:2: ( '\\u2029' )
+            // JS.g:583:4: '\\u2029'
             {
             match('\u2029'); 
 
@@ -2770,7 +2787,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start LineTerminatorChar
     public final void mLineTerminatorChar() throws RecognitionException {
         try {
-            // JS.g:570:2: ( CR | LF | LS | PS )
+            // JS.g:587:2: ( CR | LF | LS | PS )
             // JS.g:
             {
             if ( input.LA(1)=='\n'||input.LA(1)=='\r'||(input.LA(1)>='\u2028' && input.LA(1)<='\u2029') ) {
@@ -2795,7 +2812,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start LineTerminator
     public final void mLineTerminator() throws RecognitionException {
         try {
-            // JS.g:574:2: ( ( CR ( LF )? ) | LF | LS | PS )
+            // JS.g:591:2: ( ( CR ( LF )? ) | LF | LS | PS )
             int alt3=4;
             switch ( input.LA(1) ) {
             case '\r':
@@ -2820,20 +2837,20 @@ public class JSLexer extends Lexer {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("573:10: fragment LineTerminator : ( ( CR ( LF )? ) | LF | LS | PS );", 3, 0, input);
+                    new NoViableAltException("590:10: fragment LineTerminator : ( ( CR ( LF )? ) | LF | LS | PS );", 3, 0, input);
 
                 throw nvae;
             }
 
             switch (alt3) {
                 case 1 :
-                    // JS.g:574:4: ( CR ( LF )? )
+                    // JS.g:591:4: ( CR ( LF )? )
                     {
-                    // JS.g:574:4: ( CR ( LF )? )
-                    // JS.g:574:5: CR ( LF )?
+                    // JS.g:591:4: ( CR ( LF )? )
+                    // JS.g:591:5: CR ( LF )?
                     {
                     mCR(); 
-                    // JS.g:574:8: ( LF )?
+                    // JS.g:591:8: ( LF )?
                     int alt2=2;
                     int LA2_0 = input.LA(1);
 
@@ -2842,7 +2859,7 @@ public class JSLexer extends Lexer {
                     }
                     switch (alt2) {
                         case 1 :
-                            // JS.g:574:8: LF
+                            // JS.g:591:8: LF
                             {
                             mLF(); 
 
@@ -2858,21 +2875,21 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // JS.g:574:15: LF
+                    // JS.g:591:15: LF
                     {
                     mLF(); 
 
                     }
                     break;
                 case 3 :
-                    // JS.g:574:20: LS
+                    // JS.g:591:20: LS
                     {
                     mLS(); 
 
                     }
                     break;
                 case 4 :
-                    // JS.g:574:25: PS
+                    // JS.g:591:25: PS
                     {
                     mPS(); 
 
@@ -2890,10 +2907,10 @@ public class JSLexer extends Lexer {
     public final void mEOL() throws RecognitionException {
         try {
             int _type = EOL;
-            // JS.g:578:2: ( ( ( CR ( LF )? ) | LF | LS | PS ) )
-            // JS.g:578:4: ( ( CR ( LF )? ) | LF | LS | PS )
+            // JS.g:595:2: ( ( ( CR ( LF )? ) | LF | LS | PS ) )
+            // JS.g:595:4: ( ( CR ( LF )? ) | LF | LS | PS )
             {
-            // JS.g:578:4: ( ( CR ( LF )? ) | LF | LS | PS )
+            // JS.g:595:4: ( ( CR ( LF )? ) | LF | LS | PS )
             int alt5=4;
             switch ( input.LA(1) ) {
             case '\r':
@@ -2918,20 +2935,20 @@ public class JSLexer extends Lexer {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("578:4: ( ( CR ( LF )? ) | LF | LS | PS )", 5, 0, input);
+                    new NoViableAltException("595:4: ( ( CR ( LF )? ) | LF | LS | PS )", 5, 0, input);
 
                 throw nvae;
             }
 
             switch (alt5) {
                 case 1 :
-                    // JS.g:578:6: ( CR ( LF )? )
+                    // JS.g:595:6: ( CR ( LF )? )
                     {
-                    // JS.g:578:6: ( CR ( LF )? )
-                    // JS.g:578:8: CR ( LF )?
+                    // JS.g:595:6: ( CR ( LF )? )
+                    // JS.g:595:8: CR ( LF )?
                     {
                     mCR(); 
-                    // JS.g:578:11: ( LF )?
+                    // JS.g:595:11: ( LF )?
                     int alt4=2;
                     int LA4_0 = input.LA(1);
 
@@ -2940,7 +2957,7 @@ public class JSLexer extends Lexer {
                     }
                     switch (alt4) {
                         case 1 :
-                            // JS.g:578:11: LF
+                            // JS.g:595:11: LF
                             {
                             mLF(); 
 
@@ -2956,21 +2973,21 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // JS.g:578:19: LF
+                    // JS.g:595:19: LF
                     {
                     mLF(); 
 
                     }
                     break;
                 case 3 :
-                    // JS.g:578:24: LS
+                    // JS.g:595:24: LS
                     {
                     mLS(); 
 
                     }
                     break;
                 case 4 :
-                    // JS.g:578:29: PS
+                    // JS.g:595:29: PS
                     {
                     mPS(); 
 
@@ -2994,12 +3011,12 @@ public class JSLexer extends Lexer {
     public final void mMultiLineComment() throws RecognitionException {
         try {
             int _type = MultiLineComment;
-            // JS.g:585:2: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // JS.g:585:4: '/*' ( options {greedy=false; } : . )* '*/'
+            // JS.g:602:2: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            // JS.g:602:4: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // JS.g:585:9: ( options {greedy=false; } : . )*
+            // JS.g:602:9: ( options {greedy=false; } : . )*
             loop6:
             do {
                 int alt6=2;
@@ -3024,7 +3041,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt6) {
             	case 1 :
-            	    // JS.g:585:41: .
+            	    // JS.g:602:41: .
             	    {
             	    matchAny(); 
 
@@ -3053,12 +3070,12 @@ public class JSLexer extends Lexer {
     public final void mSingleLineComment() throws RecognitionException {
         try {
             int _type = SingleLineComment;
-            // JS.g:589:2: ( '//' (~ ( LineTerminatorChar ) )* )
-            // JS.g:589:4: '//' (~ ( LineTerminatorChar ) )*
+            // JS.g:606:2: ( '//' (~ ( LineTerminatorChar ) )* )
+            // JS.g:606:4: '//' (~ ( LineTerminatorChar ) )*
             {
             match("//"); 
 
-            // JS.g:589:9: (~ ( LineTerminatorChar ) )*
+            // JS.g:606:9: (~ ( LineTerminatorChar ) )*
             loop7:
             do {
                 int alt7=2;
@@ -3071,7 +3088,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt7) {
             	case 1 :
-            	    // JS.g:589:11: ~ ( LineTerminatorChar )
+            	    // JS.g:606:11: ~ ( LineTerminatorChar )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
             	        input.consume();
@@ -3106,7 +3123,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start IdentifierStartASCII
     public final void mIdentifierStartASCII() throws RecognitionException {
         try {
-            // JS.g:699:2: ( 'a' .. 'z' | 'A' .. 'Z' | '$' | '_' | BSLASH 'u' HexDigit HexDigit HexDigit HexDigit )
+            // JS.g:716:2: ( 'a' .. 'z' | 'A' .. 'Z' | '$' | '_' | BSLASH 'u' HexDigit HexDigit HexDigit HexDigit )
             int alt8=5;
             switch ( input.LA(1) ) {
             case 'a':
@@ -3186,42 +3203,42 @@ public class JSLexer extends Lexer {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("698:10: fragment IdentifierStartASCII : ( 'a' .. 'z' | 'A' .. 'Z' | '$' | '_' | BSLASH 'u' HexDigit HexDigit HexDigit HexDigit );", 8, 0, input);
+                    new NoViableAltException("715:10: fragment IdentifierStartASCII : ( 'a' .. 'z' | 'A' .. 'Z' | '$' | '_' | BSLASH 'u' HexDigit HexDigit HexDigit HexDigit );", 8, 0, input);
 
                 throw nvae;
             }
 
             switch (alt8) {
                 case 1 :
-                    // JS.g:699:4: 'a' .. 'z'
+                    // JS.g:716:4: 'a' .. 'z'
                     {
                     matchRange('a','z'); 
 
                     }
                     break;
                 case 2 :
-                    // JS.g:699:15: 'A' .. 'Z'
+                    // JS.g:716:15: 'A' .. 'Z'
                     {
                     matchRange('A','Z'); 
 
                     }
                     break;
                 case 3 :
-                    // JS.g:700:4: '$'
+                    // JS.g:717:4: '$'
                     {
                     match('$'); 
 
                     }
                     break;
                 case 4 :
-                    // JS.g:701:4: '_'
+                    // JS.g:718:4: '_'
                     {
                     match('_'); 
 
                     }
                     break;
                 case 5 :
-                    // JS.g:702:4: BSLASH 'u' HexDigit HexDigit HexDigit HexDigit
+                    // JS.g:719:4: BSLASH 'u' HexDigit HexDigit HexDigit HexDigit
                     {
                     mBSLASH(); 
                     match('u'); 
@@ -3243,7 +3260,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start IdentifierPart
     public final void mIdentifierPart() throws RecognitionException {
         try {
-            // JS.g:710:2: ( DecimalDigit | IdentifierStartASCII | {...}?)
+            // JS.g:727:2: ( DecimalDigit | IdentifierStartASCII | {...}?)
             int alt9=3;
             switch ( input.LA(1) ) {
             case '0':
@@ -3324,21 +3341,21 @@ public class JSLexer extends Lexer {
 
             switch (alt9) {
                 case 1 :
-                    // JS.g:710:4: DecimalDigit
+                    // JS.g:727:4: DecimalDigit
                     {
                     mDecimalDigit(); 
 
                     }
                     break;
                 case 2 :
-                    // JS.g:711:4: IdentifierStartASCII
+                    // JS.g:728:4: IdentifierStartASCII
                     {
                     mIdentifierStartASCII(); 
 
                     }
                     break;
                 case 3 :
-                    // JS.g:712:4: {...}?
+                    // JS.g:729:4: {...}?
                     {
                     if ( !( isIdentifierPartUnicode(input.LA(1)) ) ) {
                         throw new FailedPredicateException(input, "IdentifierPart", " isIdentifierPartUnicode(input.LA(1)) ");
@@ -3358,11 +3375,11 @@ public class JSLexer extends Lexer {
     // $ANTLR start IdentifierNameASCIIStart
     public final void mIdentifierNameASCIIStart() throws RecognitionException {
         try {
-            // JS.g:716:2: ( IdentifierStartASCII ( IdentifierPart )* )
-            // JS.g:716:4: IdentifierStartASCII ( IdentifierPart )*
+            // JS.g:733:2: ( IdentifierStartASCII ( IdentifierPart )* )
+            // JS.g:733:4: IdentifierStartASCII ( IdentifierPart )*
             {
             mIdentifierStartASCII(); 
-            // JS.g:716:25: ( IdentifierPart )*
+            // JS.g:733:25: ( IdentifierPart )*
             loop10:
             do {
                 int alt10=2;
@@ -3378,7 +3395,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt10) {
             	case 1 :
-            	    // JS.g:716:25: IdentifierPart
+            	    // JS.g:733:25: IdentifierPart
             	    {
             	    mIdentifierPart(); 
 
@@ -3403,7 +3420,7 @@ public class JSLexer extends Lexer {
     public final void mIdentifier() throws RecognitionException {
         try {
             int _type = Identifier;
-            // JS.g:729:3: ( IdentifierNameASCIIStart | )
+            // JS.g:746:3: ( IdentifierNameASCIIStart | )
             int alt11=2;
             int LA11_0 = input.LA(1);
 
@@ -3414,14 +3431,14 @@ public class JSLexer extends Lexer {
                 alt11=2;}
             switch (alt11) {
                 case 1 :
-                    // JS.g:729:5: IdentifierNameASCIIStart
+                    // JS.g:746:5: IdentifierNameASCIIStart
                     {
                     mIdentifierNameASCIIStart(); 
 
                     }
                     break;
                 case 2 :
-                    // JS.g:730:5: 
+                    // JS.g:747:5: 
                     {
                      consumeIdentifierUnicodeStart(); 
 
@@ -3443,11 +3460,11 @@ public class JSLexer extends Lexer {
              
             	int marker = input.mark();
 
-            // JS.g:831:5: ( LT ( NOT | QUE | 'a' .. 'z' | 'A' .. 'Z' | '_' | ':' | '{' | {...}?)? {...}?)
-            // JS.g:831:7: LT ( NOT | QUE | 'a' .. 'z' | 'A' .. 'Z' | '_' | ':' | '{' | {...}?)? {...}?
+            // JS.g:848:5: ( LT ( NOT | QUE | 'a' .. 'z' | 'A' .. 'Z' | '_' | ':' | '{' | {...}?)? {...}?)
+            // JS.g:848:7: LT ( NOT | QUE | 'a' .. 'z' | 'A' .. 'Z' | '_' | ':' | '{' | {...}?)? {...}?
             {
             mLT(); 
-            // JS.g:831:10: ( NOT | QUE | 'a' .. 'z' | 'A' .. 'Z' | '_' | ':' | '{' | {...}?)?
+            // JS.g:848:10: ( NOT | QUE | 'a' .. 'z' | 'A' .. 'Z' | '_' | ':' | '{' | {...}?)?
             int alt12=9;
             int LA12_0 = input.LA(1);
 
@@ -3477,56 +3494,56 @@ public class JSLexer extends Lexer {
             }
             switch (alt12) {
                 case 1 :
-                    // JS.g:831:12: NOT
+                    // JS.g:848:12: NOT
                     {
                     mNOT(); 
 
                     }
                     break;
                 case 2 :
-                    // JS.g:832:12: QUE
+                    // JS.g:849:12: QUE
                     {
                     mQUE(); 
 
                     }
                     break;
                 case 3 :
-                    // JS.g:833:12: 'a' .. 'z'
+                    // JS.g:850:12: 'a' .. 'z'
                     {
                     matchRange('a','z'); 
 
                     }
                     break;
                 case 4 :
-                    // JS.g:834:12: 'A' .. 'Z'
+                    // JS.g:851:12: 'A' .. 'Z'
                     {
                     matchRange('A','Z'); 
 
                     }
                     break;
                 case 5 :
-                    // JS.g:835:12: '_'
+                    // JS.g:852:12: '_'
                     {
                     match('_'); 
 
                     }
                     break;
                 case 6 :
-                    // JS.g:836:12: ':'
+                    // JS.g:853:12: ':'
                     {
                     match(':'); 
 
                     }
                     break;
                 case 7 :
-                    // JS.g:837:12: '{'
+                    // JS.g:854:12: '{'
                     {
                     match('{'); 
 
                     }
                     break;
                 case 8 :
-                    // JS.g:838:12: {...}?
+                    // JS.g:855:12: {...}?
                     {
                     if ( !( Character.isLetter(input.LT(1)) ) ) {
                         throw new FailedPredicateException(input, "XMLFragment", " Character.isLetter(input.LT(1)) ");
@@ -3557,8 +3574,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start DecimalDigit
     public final void mDecimalDigit() throws RecognitionException {
         try {
-            // JS.g:858:2: ( '0' .. '9' )
-            // JS.g:858:4: '0' .. '9'
+            // JS.g:875:2: ( '0' .. '9' )
+            // JS.g:875:4: '0' .. '9'
             {
             matchRange('0','9'); 
 
@@ -3573,7 +3590,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start HexDigit
     public final void mHexDigit() throws RecognitionException {
         try {
-            // JS.g:862:2: ( DecimalDigit | 'a' .. 'f' | 'A' .. 'F' )
+            // JS.g:879:2: ( DecimalDigit | 'a' .. 'f' | 'A' .. 'F' )
             // JS.g:
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='F')||(input.LA(1)>='a' && input.LA(1)<='f') ) {
@@ -3598,8 +3615,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start OctalDigit
     public final void mOctalDigit() throws RecognitionException {
         try {
-            // JS.g:866:2: ( '0' .. '7' )
-            // JS.g:866:4: '0' .. '7'
+            // JS.g:883:2: ( '0' .. '7' )
+            // JS.g:883:4: '0' .. '7'
             {
             matchRange('0','7'); 
 
@@ -3614,8 +3631,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start ExponentPart
     public final void mExponentPart() throws RecognitionException {
         try {
-            // JS.g:870:2: ( ( 'e' | 'E' ) ( '+' | '-' )? ( DecimalDigit )+ )
-            // JS.g:870:4: ( 'e' | 'E' ) ( '+' | '-' )? ( DecimalDigit )+
+            // JS.g:887:2: ( ( 'e' | 'E' ) ( '+' | '-' )? ( DecimalDigit )+ )
+            // JS.g:887:4: ( 'e' | 'E' ) ( '+' | '-' )? ( DecimalDigit )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -3627,7 +3644,7 @@ public class JSLexer extends Lexer {
                 recover(mse);    throw mse;
             }
 
-            // JS.g:870:18: ( '+' | '-' )?
+            // JS.g:887:18: ( '+' | '-' )?
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -3654,7 +3671,7 @@ public class JSLexer extends Lexer {
 
             }
 
-            // JS.g:870:33: ( DecimalDigit )+
+            // JS.g:887:33: ( DecimalDigit )+
             int cnt14=0;
             loop14:
             do {
@@ -3668,7 +3685,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt14) {
             	case 1 :
-            	    // JS.g:870:33: DecimalDigit
+            	    // JS.g:887:33: DecimalDigit
             	    {
             	    mDecimalDigit(); 
 
@@ -3696,7 +3713,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start DecimalIntegerLiteral
     public final void mDecimalIntegerLiteral() throws RecognitionException {
         try {
-            // JS.g:874:2: ( '0' | '1' .. '9' ( DecimalDigit )* )
+            // JS.g:891:2: ( '0' | '1' .. '9' ( DecimalDigit )* )
             int alt16=2;
             int LA16_0 = input.LA(1);
 
@@ -3708,23 +3725,23 @@ public class JSLexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("873:10: fragment DecimalIntegerLiteral : ( '0' | '1' .. '9' ( DecimalDigit )* );", 16, 0, input);
+                    new NoViableAltException("890:10: fragment DecimalIntegerLiteral : ( '0' | '1' .. '9' ( DecimalDigit )* );", 16, 0, input);
 
                 throw nvae;
             }
             switch (alt16) {
                 case 1 :
-                    // JS.g:874:4: '0'
+                    // JS.g:891:4: '0'
                     {
                     match('0'); 
 
                     }
                     break;
                 case 2 :
-                    // JS.g:875:4: '1' .. '9' ( DecimalDigit )*
+                    // JS.g:892:4: '1' .. '9' ( DecimalDigit )*
                     {
                     matchRange('1','9'); 
-                    // JS.g:875:13: ( DecimalDigit )*
+                    // JS.g:892:13: ( DecimalDigit )*
                     loop15:
                     do {
                         int alt15=2;
@@ -3737,7 +3754,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt15) {
                     	case 1 :
-                    	    // JS.g:875:13: DecimalDigit
+                    	    // JS.g:892:13: DecimalDigit
                     	    {
                     	    mDecimalDigit(); 
 
@@ -3764,16 +3781,16 @@ public class JSLexer extends Lexer {
     public final void mDecimalLiteral() throws RecognitionException {
         try {
             int _type = DecimalLiteral;
-            // JS.g:879:2: ( DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )? | '.' ( DecimalDigit )+ ( ExponentPart )? | DecimalIntegerLiteral ( ExponentPart )? )
+            // JS.g:896:2: ( DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )? | '.' ( DecimalDigit )+ ( ExponentPart )? | DecimalIntegerLiteral ( ExponentPart )? )
             int alt22=3;
             alt22 = dfa22.predict(input);
             switch (alt22) {
                 case 1 :
-                    // JS.g:879:4: DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )?
+                    // JS.g:896:4: DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )?
                     {
                     mDecimalIntegerLiteral(); 
                     match('.'); 
-                    // JS.g:879:30: ( DecimalDigit )*
+                    // JS.g:896:30: ( DecimalDigit )*
                     loop17:
                     do {
                         int alt17=2;
@@ -3786,7 +3803,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt17) {
                     	case 1 :
-                    	    // JS.g:879:30: DecimalDigit
+                    	    // JS.g:896:30: DecimalDigit
                     	    {
                     	    mDecimalDigit(); 
 
@@ -3798,7 +3815,7 @@ public class JSLexer extends Lexer {
                         }
                     } while (true);
 
-                    // JS.g:879:44: ( ExponentPart )?
+                    // JS.g:896:44: ( ExponentPart )?
                     int alt18=2;
                     int LA18_0 = input.LA(1);
 
@@ -3807,7 +3824,7 @@ public class JSLexer extends Lexer {
                     }
                     switch (alt18) {
                         case 1 :
-                            // JS.g:879:44: ExponentPart
+                            // JS.g:896:44: ExponentPart
                             {
                             mExponentPart(); 
 
@@ -3820,10 +3837,10 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // JS.g:880:4: '.' ( DecimalDigit )+ ( ExponentPart )?
+                    // JS.g:897:4: '.' ( DecimalDigit )+ ( ExponentPart )?
                     {
                     match('.'); 
-                    // JS.g:880:8: ( DecimalDigit )+
+                    // JS.g:897:8: ( DecimalDigit )+
                     int cnt19=0;
                     loop19:
                     do {
@@ -3837,7 +3854,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt19) {
                     	case 1 :
-                    	    // JS.g:880:8: DecimalDigit
+                    	    // JS.g:897:8: DecimalDigit
                     	    {
                     	    mDecimalDigit(); 
 
@@ -3853,7 +3870,7 @@ public class JSLexer extends Lexer {
                         cnt19++;
                     } while (true);
 
-                    // JS.g:880:22: ( ExponentPart )?
+                    // JS.g:897:22: ( ExponentPart )?
                     int alt20=2;
                     int LA20_0 = input.LA(1);
 
@@ -3862,7 +3879,7 @@ public class JSLexer extends Lexer {
                     }
                     switch (alt20) {
                         case 1 :
-                            // JS.g:880:22: ExponentPart
+                            // JS.g:897:22: ExponentPart
                             {
                             mExponentPart(); 
 
@@ -3875,10 +3892,10 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // JS.g:881:4: DecimalIntegerLiteral ( ExponentPart )?
+                    // JS.g:898:4: DecimalIntegerLiteral ( ExponentPart )?
                     {
                     mDecimalIntegerLiteral(); 
-                    // JS.g:881:26: ( ExponentPart )?
+                    // JS.g:898:26: ( ExponentPart )?
                     int alt21=2;
                     int LA21_0 = input.LA(1);
 
@@ -3887,7 +3904,7 @@ public class JSLexer extends Lexer {
                     }
                     switch (alt21) {
                         case 1 :
-                            // JS.g:881:26: ExponentPart
+                            // JS.g:898:26: ExponentPart
                             {
                             mExponentPart(); 
 
@@ -3912,11 +3929,11 @@ public class JSLexer extends Lexer {
     public final void mOctalIntegerLiteral() throws RecognitionException {
         try {
             int _type = OctalIntegerLiteral;
-            // JS.g:885:2: ( '0' ( OctalDigit )+ )
-            // JS.g:885:4: '0' ( OctalDigit )+
+            // JS.g:902:2: ( '0' ( OctalDigit )+ )
+            // JS.g:902:4: '0' ( OctalDigit )+
             {
             match('0'); 
-            // JS.g:885:8: ( OctalDigit )+
+            // JS.g:902:8: ( OctalDigit )+
             int cnt23=0;
             loop23:
             do {
@@ -3930,7 +3947,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt23) {
             	case 1 :
-            	    // JS.g:885:8: OctalDigit
+            	    // JS.g:902:8: OctalDigit
             	    {
             	    mOctalDigit(); 
 
@@ -3960,10 +3977,10 @@ public class JSLexer extends Lexer {
     public final void mHexIntegerLiteral() throws RecognitionException {
         try {
             int _type = HexIntegerLiteral;
-            // JS.g:889:2: ( ( '0x' | '0X' ) ( HexDigit )+ )
-            // JS.g:889:4: ( '0x' | '0X' ) ( HexDigit )+
+            // JS.g:906:2: ( ( '0x' | '0X' ) ( HexDigit )+ )
+            // JS.g:906:4: ( '0x' | '0X' ) ( HexDigit )+
             {
-            // JS.g:889:4: ( '0x' | '0X' )
+            // JS.g:906:4: ( '0x' | '0X' )
             int alt24=2;
             int LA24_0 = input.LA(1);
 
@@ -3978,20 +3995,20 @@ public class JSLexer extends Lexer {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("889:4: ( '0x' | '0X' )", 24, 1, input);
+                        new NoViableAltException("906:4: ( '0x' | '0X' )", 24, 1, input);
 
                     throw nvae;
                 }
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("889:4: ( '0x' | '0X' )", 24, 0, input);
+                    new NoViableAltException("906:4: ( '0x' | '0X' )", 24, 0, input);
 
                 throw nvae;
             }
             switch (alt24) {
                 case 1 :
-                    // JS.g:889:6: '0x'
+                    // JS.g:906:6: '0x'
                     {
                     match("0x"); 
 
@@ -3999,7 +4016,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // JS.g:889:13: '0X'
+                    // JS.g:906:13: '0X'
                     {
                     match("0X"); 
 
@@ -4009,7 +4026,7 @@ public class JSLexer extends Lexer {
 
             }
 
-            // JS.g:889:20: ( HexDigit )+
+            // JS.g:906:20: ( HexDigit )+
             int cnt25=0;
             loop25:
             do {
@@ -4023,7 +4040,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt25) {
             	case 1 :
-            	    // JS.g:889:20: HexDigit
+            	    // JS.g:906:20: HexDigit
             	    {
             	    mHexDigit(); 
 
@@ -4052,8 +4069,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start CharacterEscapeSequence
     public final void mCharacterEscapeSequence() throws RecognitionException {
         try {
-            // JS.g:908:2: (~ ( DecimalDigit | 'x' | 'u' | LineTerminatorChar ) )
-            // JS.g:908:4: ~ ( DecimalDigit | 'x' | 'u' | LineTerminatorChar )
+            // JS.g:925:2: (~ ( DecimalDigit | 'x' | 'u' | LineTerminatorChar ) )
+            // JS.g:925:4: ~ ( DecimalDigit | 'x' | 'u' | LineTerminatorChar )
             {
             if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='/')||(input.LA(1)>=':' && input.LA(1)<='t')||(input.LA(1)>='v' && input.LA(1)<='w')||(input.LA(1)>='y' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                 input.consume();
@@ -4077,8 +4094,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start ZeroToThree
     public final void mZeroToThree() throws RecognitionException {
         try {
-            // JS.g:912:2: ( '0' .. '3' )
-            // JS.g:912:4: '0' .. '3'
+            // JS.g:929:2: ( '0' .. '3' )
+            // JS.g:929:4: '0' .. '3'
             {
             matchRange('0','3'); 
 
@@ -4093,7 +4110,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start OctalEscapeSequence
     public final void mOctalEscapeSequence() throws RecognitionException {
         try {
-            // JS.g:916:2: ( OctalDigit | ZeroToThree OctalDigit | '4' .. '7' OctalDigit | ZeroToThree OctalDigit OctalDigit )
+            // JS.g:933:2: ( OctalDigit | ZeroToThree OctalDigit | '4' .. '7' OctalDigit | ZeroToThree OctalDigit OctalDigit )
             int alt26=4;
             int LA26_0 = input.LA(1);
 
@@ -4123,20 +4140,20 @@ public class JSLexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("915:10: fragment OctalEscapeSequence : ( OctalDigit | ZeroToThree OctalDigit | '4' .. '7' OctalDigit | ZeroToThree OctalDigit OctalDigit );", 26, 0, input);
+                    new NoViableAltException("932:10: fragment OctalEscapeSequence : ( OctalDigit | ZeroToThree OctalDigit | '4' .. '7' OctalDigit | ZeroToThree OctalDigit OctalDigit );", 26, 0, input);
 
                 throw nvae;
             }
             switch (alt26) {
                 case 1 :
-                    // JS.g:916:4: OctalDigit
+                    // JS.g:933:4: OctalDigit
                     {
                     mOctalDigit(); 
 
                     }
                     break;
                 case 2 :
-                    // JS.g:917:4: ZeroToThree OctalDigit
+                    // JS.g:934:4: ZeroToThree OctalDigit
                     {
                     mZeroToThree(); 
                     mOctalDigit(); 
@@ -4144,7 +4161,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // JS.g:918:4: '4' .. '7' OctalDigit
+                    // JS.g:935:4: '4' .. '7' OctalDigit
                     {
                     matchRange('4','7'); 
                     mOctalDigit(); 
@@ -4152,7 +4169,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 4 :
-                    // JS.g:919:4: ZeroToThree OctalDigit OctalDigit
+                    // JS.g:936:4: ZeroToThree OctalDigit OctalDigit
                     {
                     mZeroToThree(); 
                     mOctalDigit(); 
@@ -4171,8 +4188,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start HexEscapeSequence
     public final void mHexEscapeSequence() throws RecognitionException {
         try {
-            // JS.g:923:2: ( 'x' HexDigit HexDigit )
-            // JS.g:923:4: 'x' HexDigit HexDigit
+            // JS.g:940:2: ( 'x' HexDigit HexDigit )
+            // JS.g:940:4: 'x' HexDigit HexDigit
             {
             match('x'); 
             mHexDigit(); 
@@ -4189,8 +4206,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start UnicodeEscapeSequence
     public final void mUnicodeEscapeSequence() throws RecognitionException {
         try {
-            // JS.g:927:2: ( 'u' HexDigit HexDigit HexDigit HexDigit )
-            // JS.g:927:4: 'u' HexDigit HexDigit HexDigit HexDigit
+            // JS.g:944:2: ( 'u' HexDigit HexDigit HexDigit HexDigit )
+            // JS.g:944:4: 'u' HexDigit HexDigit HexDigit HexDigit
             {
             match('u'); 
             mHexDigit(); 
@@ -4209,11 +4226,11 @@ public class JSLexer extends Lexer {
     // $ANTLR start EscapeSequence
     public final void mEscapeSequence() throws RecognitionException {
         try {
-            // JS.g:931:2: ( BSLASH ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence | LineTerminator ) )
-            // JS.g:932:2: BSLASH ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence | LineTerminator )
+            // JS.g:948:2: ( BSLASH ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence | LineTerminator ) )
+            // JS.g:949:2: BSLASH ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence | LineTerminator )
             {
             mBSLASH(); 
-            // JS.g:933:2: ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence | LineTerminator )
+            // JS.g:950:2: ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence | LineTerminator )
             int alt27=5;
             int LA27_0 = input.LA(1);
 
@@ -4234,41 +4251,41 @@ public class JSLexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("933:2: ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence | LineTerminator )", 27, 0, input);
+                    new NoViableAltException("950:2: ( CharacterEscapeSequence | OctalEscapeSequence | HexEscapeSequence | UnicodeEscapeSequence | LineTerminator )", 27, 0, input);
 
                 throw nvae;
             }
             switch (alt27) {
                 case 1 :
-                    // JS.g:934:3: CharacterEscapeSequence
+                    // JS.g:951:3: CharacterEscapeSequence
                     {
                     mCharacterEscapeSequence(); 
 
                     }
                     break;
                 case 2 :
-                    // JS.g:935:5: OctalEscapeSequence
+                    // JS.g:952:5: OctalEscapeSequence
                     {
                     mOctalEscapeSequence(); 
 
                     }
                     break;
                 case 3 :
-                    // JS.g:936:5: HexEscapeSequence
+                    // JS.g:953:5: HexEscapeSequence
                     {
                     mHexEscapeSequence(); 
 
                     }
                     break;
                 case 4 :
-                    // JS.g:937:5: UnicodeEscapeSequence
+                    // JS.g:954:5: UnicodeEscapeSequence
                     {
                     mUnicodeEscapeSequence(); 
 
                     }
                     break;
                 case 5 :
-                    // JS.g:938:5: LineTerminator
+                    // JS.g:955:5: LineTerminator
                     {
                     mLineTerminator(); 
 
@@ -4290,7 +4307,7 @@ public class JSLexer extends Lexer {
     public final void mStringLiteral() throws RecognitionException {
         try {
             int _type = StringLiteral;
-            // JS.g:943:2: ( SQUOTE (~ ( SQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* SQUOTE | DQUOTE (~ ( DQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* DQUOTE )
+            // JS.g:960:2: ( SQUOTE (~ ( SQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* SQUOTE | DQUOTE (~ ( DQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* DQUOTE )
             int alt30=2;
             int LA30_0 = input.LA(1);
 
@@ -4302,16 +4319,16 @@ public class JSLexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("942:1: StringLiteral : ( SQUOTE (~ ( SQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* SQUOTE | DQUOTE (~ ( DQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* DQUOTE );", 30, 0, input);
+                    new NoViableAltException("959:1: StringLiteral : ( SQUOTE (~ ( SQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* SQUOTE | DQUOTE (~ ( DQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* DQUOTE );", 30, 0, input);
 
                 throw nvae;
             }
             switch (alt30) {
                 case 1 :
-                    // JS.g:943:4: SQUOTE (~ ( SQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* SQUOTE
+                    // JS.g:960:4: SQUOTE (~ ( SQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* SQUOTE
                     {
                     mSQUOTE(); 
-                    // JS.g:943:11: (~ ( SQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )*
+                    // JS.g:960:11: (~ ( SQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )*
                     loop28:
                     do {
                         int alt28=3;
@@ -4327,7 +4344,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt28) {
                     	case 1 :
-                    	    // JS.g:943:13: ~ ( SQUOTE | BSLASH | LineTerminatorChar )
+                    	    // JS.g:960:13: ~ ( SQUOTE | BSLASH | LineTerminatorChar )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                     	        input.consume();
@@ -4343,7 +4360,7 @@ public class JSLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // JS.g:943:57: EscapeSequence
+                    	    // JS.g:960:57: EscapeSequence
                     	    {
                     	    mEscapeSequence(); 
 
@@ -4360,10 +4377,10 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // JS.g:944:4: DQUOTE (~ ( DQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* DQUOTE
+                    // JS.g:961:4: DQUOTE (~ ( DQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )* DQUOTE
                     {
                     mDQUOTE(); 
-                    // JS.g:944:11: (~ ( DQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )*
+                    // JS.g:961:11: (~ ( DQUOTE | BSLASH | LineTerminatorChar ) | EscapeSequence )*
                     loop29:
                     do {
                         int alt29=3;
@@ -4379,7 +4396,7 @@ public class JSLexer extends Lexer {
 
                         switch (alt29) {
                     	case 1 :
-                    	    // JS.g:944:13: ~ ( DQUOTE | BSLASH | LineTerminatorChar )
+                    	    // JS.g:961:13: ~ ( DQUOTE | BSLASH | LineTerminatorChar )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                     	        input.consume();
@@ -4395,7 +4412,7 @@ public class JSLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // JS.g:944:57: EscapeSequence
+                    	    // JS.g:961:57: EscapeSequence
                     	    {
                     	    mEscapeSequence(); 
 
@@ -4423,8 +4440,8 @@ public class JSLexer extends Lexer {
     // $ANTLR start BackslashSequence
     public final void mBackslashSequence() throws RecognitionException {
         try {
-            // JS.g:953:2: ( BSLASH ~ ( LineTerminatorChar ) )
-            // JS.g:953:4: BSLASH ~ ( LineTerminatorChar )
+            // JS.g:970:2: ( BSLASH ~ ( LineTerminatorChar ) )
+            // JS.g:970:4: BSLASH ~ ( LineTerminatorChar )
             {
             mBSLASH(); 
             if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
@@ -4449,7 +4466,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start RegularExpressionFirstChar
     public final void mRegularExpressionFirstChar() throws RecognitionException {
         try {
-            // JS.g:957:2: (~ ( LineTerminatorChar | MUL | BSLASH | DIV ) | BackslashSequence )
+            // JS.g:974:2: (~ ( LineTerminatorChar | MUL | BSLASH | DIV ) | BackslashSequence )
             int alt31=2;
             int LA31_0 = input.LA(1);
 
@@ -4461,13 +4478,13 @@ public class JSLexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("956:10: fragment RegularExpressionFirstChar : (~ ( LineTerminatorChar | MUL | BSLASH | DIV ) | BackslashSequence );", 31, 0, input);
+                    new NoViableAltException("973:10: fragment RegularExpressionFirstChar : (~ ( LineTerminatorChar | MUL | BSLASH | DIV ) | BackslashSequence );", 31, 0, input);
 
                 throw nvae;
             }
             switch (alt31) {
                 case 1 :
-                    // JS.g:957:4: ~ ( LineTerminatorChar | MUL | BSLASH | DIV )
+                    // JS.g:974:4: ~ ( LineTerminatorChar | MUL | BSLASH | DIV )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<=')')||(input.LA(1)>='+' && input.LA(1)<='.')||(input.LA(1)>='0' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                         input.consume();
@@ -4483,7 +4500,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // JS.g:958:4: BackslashSequence
+                    // JS.g:975:4: BackslashSequence
                     {
                     mBackslashSequence(); 
 
@@ -4500,7 +4517,7 @@ public class JSLexer extends Lexer {
     // $ANTLR start RegularExpressionChar
     public final void mRegularExpressionChar() throws RecognitionException {
         try {
-            // JS.g:962:2: (~ ( LineTerminatorChar | BSLASH | DIV ) | BackslashSequence )
+            // JS.g:979:2: (~ ( LineTerminatorChar | BSLASH | DIV ) | BackslashSequence )
             int alt32=2;
             int LA32_0 = input.LA(1);
 
@@ -4512,13 +4529,13 @@ public class JSLexer extends Lexer {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("961:10: fragment RegularExpressionChar : (~ ( LineTerminatorChar | BSLASH | DIV ) | BackslashSequence );", 32, 0, input);
+                    new NoViableAltException("978:10: fragment RegularExpressionChar : (~ ( LineTerminatorChar | BSLASH | DIV ) | BackslashSequence );", 32, 0, input);
 
                 throw nvae;
             }
             switch (alt32) {
                 case 1 :
-                    // JS.g:962:4: ~ ( LineTerminatorChar | BSLASH | DIV )
+                    // JS.g:979:4: ~ ( LineTerminatorChar | BSLASH | DIV )
                     {
                     if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='.')||(input.LA(1)>='0' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\u2027')||(input.LA(1)>='\u202A' && input.LA(1)<='\uFFFE') ) {
                         input.consume();
@@ -4534,7 +4551,7 @@ public class JSLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // JS.g:963:4: BackslashSequence
+                    // JS.g:980:4: BackslashSequence
                     {
                     mBackslashSequence(); 
 
@@ -4552,15 +4569,15 @@ public class JSLexer extends Lexer {
     public final void mRegularExpressionLiteral() throws RecognitionException {
         try {
             int _type = RegularExpressionLiteral;
-            // JS.g:967:2: ({...}? => DIV RegularExpressionFirstChar ( RegularExpressionChar )* DIV ( IdentifierPart )* )
-            // JS.g:967:4: {...}? => DIV RegularExpressionFirstChar ( RegularExpressionChar )* DIV ( IdentifierPart )*
+            // JS.g:984:2: ({...}? => DIV RegularExpressionFirstChar ( RegularExpressionChar )* DIV ( IdentifierPart )* )
+            // JS.g:984:4: {...}? => DIV RegularExpressionFirstChar ( RegularExpressionChar )* DIV ( IdentifierPart )*
             {
             if ( !( areRegularExpressionsEnabled() ) ) {
                 throw new FailedPredicateException(input, "RegularExpressionLiteral", " areRegularExpressionsEnabled() ");
             }
             mDIV(); 
             mRegularExpressionFirstChar(); 
-            // JS.g:967:73: ( RegularExpressionChar )*
+            // JS.g:984:73: ( RegularExpressionChar )*
             loop33:
             do {
                 int alt33=2;
@@ -4573,7 +4590,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt33) {
             	case 1 :
-            	    // JS.g:967:73: RegularExpressionChar
+            	    // JS.g:984:73: RegularExpressionChar
             	    {
             	    mRegularExpressionChar(); 
 
@@ -4586,7 +4603,7 @@ public class JSLexer extends Lexer {
             } while (true);
 
             mDIV(); 
-            // JS.g:967:100: ( IdentifierPart )*
+            // JS.g:984:100: ( IdentifierPart )*
             loop34:
             do {
                 int alt34=2;
@@ -4602,7 +4619,7 @@ public class JSLexer extends Lexer {
 
                 switch (alt34) {
             	case 1 :
-            	    // JS.g:967:100: IdentifierPart
+            	    // JS.g:984:100: IdentifierPart
             	    {
             	    mIdentifierPart(); 
 
@@ -8437,7 +8454,7 @@ public class JSLexer extends Lexer {
             this.transition = DFA22_transition;
         }
         public String getDescription() {
-            return "878:1: DecimalLiteral : ( DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )? | '.' ( DecimalDigit )+ ( ExponentPart )? | DecimalIntegerLiteral ( ExponentPart )? );";
+            return "895:1: DecimalLiteral : ( DecimalIntegerLiteral '.' ( DecimalDigit )* ( ExponentPart )? | '.' ( DecimalDigit )+ ( ExponentPart )? | DecimalIntegerLiteral ( ExponentPart )? );";
         }
     }
  

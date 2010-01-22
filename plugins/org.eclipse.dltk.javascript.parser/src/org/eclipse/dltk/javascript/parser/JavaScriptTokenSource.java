@@ -60,14 +60,12 @@ public class JavaScriptTokenSource extends JSLexer implements JSTokenSource {
 	}
 
 	private void readNextXml() throws EarlyExitException {
-		final int mark = input.mark();
 		try {
 			type = readXmlToken();
-			emit();// create token
-			return;
+			emit();
 		} catch (LexerException e) {
-			input.rewind(mark);
-			throw new EarlyExitException(0, input);
+			type = XMLFragmentError;
+			emit();
 		}
 	}
 
