@@ -77,7 +77,10 @@ import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
+import org.eclipse.dltk.javascript.ast.XmlExpressionFragment;
+import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
+import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 
 public class ASTVerifier extends ASTVisitor {
@@ -671,9 +674,17 @@ public class ASTVerifier extends ASTVisitor {
 	}
 
 	public boolean visitXmlLiteral(XmlLiteral node) {
-
-		testString(node.getXml(), node.sourceStart(), node.sourceEnd());
-
+		for (XmlFragment fragment : node.getFragments()) {
+			if (fragment instanceof XmlTextFragment) {
+				XmlTextFragment textFragment = (XmlTextFragment) fragment;
+				testString(textFragment.getXml(), fragment.sourceStart(),
+						fragment.sourceEnd());
+			} else {
+				XmlExpressionFragment expression = (XmlExpressionFragment) fragment;
+				visit(expression.getExpression());
+				// TODO curly braces
+			}
+		}
 		return true;
 	}
 
