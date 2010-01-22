@@ -40,13 +40,43 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 
 	private static final boolean DEBUG = false;
 
-	private final JavaScriptTokenSource tokenSource;
+	private final JSTokenSource tokenSource;
+
+	final static class IntList {
+		private int[] values;
+		public int length = 0;
+
+		public IntList() {
+			this(16);
+		}
+
+		public IntList(int initialSize) {
+			this.values = new int[initialSize];
+		}
+
+		public void add(int value) {
+			if (values.length == length) {
+				System.arraycopy(values, 0, values = new int[this.length * 2],
+						0, length);
+			}
+			values[length++] = value;
+		}
+
+		public int get(int index) {
+			assert index < length;
+			return values[index];
+		}
+	}
 
 	/**
 	 * Record every single token pulled from the source so we can reproduce
 	 * chunks of it later.
 	 */
 	private List<Token> tokens;
+	private IntList offsets;
+	private IntList modes;
+
+	private int currentMode = 0;
 
 	/**
 	 * Skip tokens on any channel but this one; this is how we skip
@@ -63,12 +93,14 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	 */
 	private int p = UNKNOWN;
 
-	public DynamicTokenStream(JavaScriptTokenSource tokenSource) {
+	public DynamicTokenStream(JSTokenSource tokenSource) {
 		tokens = new ArrayList<Token>(500);
+		offsets = new IntList(500);
+		modes = new IntList(500);
 		this.tokenSource = tokenSource;
 	}
 
-	public DynamicTokenStream(JavaScriptTokenSource tokenSource, int channel) {
+	public DynamicTokenStream(JSTokenSource tokenSource, int channel) {
 		this(tokenSource);
 		this.channel = channel;
 	}
@@ -82,6 +114,12 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 			int index = tokens.size();
 			t.setTokenIndex(index);
 			tokens.add(t);
+			int offset = t.getText().length();
+			if (offsets.length != 0) {
+				offset += offsets.get(offsets.length - 1);
+			}
+			offsets.add(offset);
+			modes.add(currentMode);
 			return true;
 		} else {
 			return false;
@@ -304,5 +342,30 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 			return toString(start.getTokenIndex(), stop.getTokenIndex());
 		}
 		return null;
+	}
+
+	public int getMode() {
+		return currentMode;
+	}
+
+	public void setMode(int value) {
+		if (value == currentMode) {
+			return;
+		}
+		// TODO reset already loaded tokens after current position & rewind
+		// tokenSource
+		currentMode = value;
+		tokenSource.setMode(value);
+		if (p < tokens.size()) {
+			endOfStream = false;
+			for (int i = p; i < tokens.size(); ++i) {
+				tokens.remove(tokens.size() - 1);
+			}
+			offsets.length = p;
+			modes.length = p;
+			assert offsets.length == tokens.size();
+			tokenSource.seek(offsets.length == 0 ? 0 : offsets
+					.get(offsets.length - 1));
+		}
 	}
 }

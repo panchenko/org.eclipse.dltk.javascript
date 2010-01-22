@@ -1786,7 +1786,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		xml.setXml(node.getText());
 
 		xml.setStart(getTokenOffset(node.getTokenStartIndex()));
-		xml.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
+		xml.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
 		return xml;
 	}

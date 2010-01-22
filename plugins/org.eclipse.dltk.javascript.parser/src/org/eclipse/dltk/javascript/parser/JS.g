@@ -60,14 +60,14 @@ tokens
 	CONTINUE 	= 'continue' ;
 	DEFAULT		= 'default' ;
 	DELETE		= 'delete' ;
-	DO 		= 'do' ;
+	DO 			= 'do' ;
 	ELSE 		= 'else' ;
 	FINALLY 	= 'finally' ;
 	FOR 		= 'for' ;
-	EACH    = 'each';
+	EACH    	= 'each';
 	FUNCTION 	= 'function' ;
-	IF 		= 'if' ;
-	IN 		= 'in' ;
+	IF 			= 'if' ;
+	IN 			= 'in' ;
 	INSTANCEOF 	= 'instanceof' ;
 	NEW 		= 'new' ;
 	RETURN 		= 'return' ;
@@ -80,12 +80,11 @@ tokens
 	VOID 		= 'void' ;
 	WHILE 		= 'while' ;
 	WITH 		= 'with' ;
-	GET = 'get';
-	SET = 'set';
-	YIELD = 'yield';
-  CDATA = 'CDATA';
-  WXML = 'xml';
-  NAMESPACE = 'namespace';
+	GET 		= 'get';
+	SET 		= 'set';
+	YIELD 		= 'yield';
+	WXML 		= 'xml';
+	NAMESPACE 	= 'namespace';
   
 
 // Future reserved words
@@ -172,26 +171,16 @@ tokens
 	DIV		= '/' ;
 	DIVASS		= '/=' ;
 	
-  XCOPEN = '<!--';
-  XCCLOSE = '-->';
-	
-  XLCLOSE = '</'; 
-	XRCLOSE = '/>'; 
-	
-	CDATAOPEN = '<![';
-	//CDATACLOSE = ']]>';
+	AT 		= '@';
+  
+	DOTDOT = '..';
+  
+	COLONCOLON = '::';
 
-  XHOPEN = '<?';
-  XHCLOSE = '?>';
-  
-  AT = '@';
-  
-  DOTDOT = '..';
-  
-  COLONCOLON = '::';
-  
-  //Asterisk = '*';
-	
+// E4X Tokens
+	XMLFragment;
+	XMLFragmentEnd;
+
 // Imaginary
 	ARGS ;
 	ARRAY ;
@@ -218,7 +207,8 @@ tokens
 	PDEC ;
 	PINC ;
 	POS ;
-	XMLLiteral ;
+	XmlAttribute;
+	XML_LITERAL;
 }
 
 @lexer::header
@@ -257,7 +247,7 @@ private final boolean areRegularExpressionsEnabled()
 	{
 	// identifier
 		case Identifier:
-		case XmlAttribute:
+	// XmlAttribute = Identifier or isIdentifierKeyword()
 	// literals
 		case NULL:
 		case TRUE:
@@ -277,42 +267,16 @@ private final boolean areRegularExpressionsEnabled()
 			return true;
 	}
 }
-/*
-private final boolean areXmlExpressionsEnabled()
-{
-  if (last == null)
-  {
-    return false;
-  }
-  	if (isIdentifierKeyword(last.getType())) {
-		return false; 
-	}
-  switch (last.getType())
-  {
-  // identifier
-    case Identifier:
-    case XmlAttribute:
-  // literals
-    case NULL:
-    case TRUE:
-    case FALSE:
-    case THIS:
-    case OctalIntegerLiteral:
-    case DecimalLiteral:
-    case HexIntegerLiteral:
-    case StringLiteral:
-  // member access ending 
-    case RBRACK:
-  // function call or nested expression ending
-    case RPAREN:
-      return false;
-  // otherwise OK
-    default:
-      return true;
-  }
+
+private final boolean isXmlStartEnabled() {
+  // TODO
+  return areRegularExpressionsEnabled();
 }
-*/
-	
+
+protected void readFirstXml() throws RecognitionException {
+	throw new EarlyExitException(0, input);
+}
+
 private final void consumeIdentifierUnicodeStart() throws RecognitionException, NoViableAltException
 {
 	int ch = input.LA(1);
@@ -349,6 +313,10 @@ private final boolean isIdentifierStartUnicode(int ch)
 	return Character.isJavaIdentifierStart((char)ch);
 }
 
+private final boolean isUnicodeLetter(int ch) {
+	return Character.isLetter(ch);
+}
+
 public Token nextToken()
 {
 	Token result = super.nextToken();
@@ -367,6 +335,9 @@ public void emitErrorMessage(String msg) {
 
 @parser::members
 {
+protected void reportFailure(Throwable t) {
+}
+
 private final boolean isLeftHandSideAssign(RuleReturnScope lhs, Object[] cached)
 {
 	if (cached[0] != null)
@@ -403,7 +374,7 @@ private final boolean isLeftHandSideAssign(RuleReturnScope lhs, Object[] cached)
 		result = false;
 	}
 	
-	cached[0] = new Boolean(result);
+	cached[0] = Boolean.valueOf(result);
 	return result;
 }
 
@@ -432,7 +403,8 @@ private final static boolean isLeftHandSideExpression(RuleReturnScope lhs)
 			case HexIntegerLiteral:
 			case StringLiteral:
 			case RegularExpressionLiteral:
-			case XMLLiteral:
+			case XMLFragment:
+			case XMLFragmentEnd:
 			case ARRAY:
 			case OBJECT:
 			case PAREXPR:
@@ -499,6 +471,16 @@ private final void promoteEOL(ParserRuleReturnScope rule)
 		}
 	}
 }	
+}
+
+@rulecatch {
+catch (RecognitionException re) {
+	reportError(re);
+	recover(input,re);
+}
+catch (RuntimeException e) {
+	reportFailure(e);
+}
 }
 
 //
@@ -614,11 +596,12 @@ SingleLineComment
 token
 	: reservedWord
 	| identifier
+	| XMLFragment
+	| XMLFragmentEnd
 	| punctuator
 	| numericLiteral
 	| StringLiteral
-	| XmlAttribute
-	//| Asterisk
+	| xmlAttribute
 	;
 
 // $<	Reserved words (7.5.1)
@@ -755,12 +738,9 @@ identifier
   | Identifier
 ;
 
-fragment PropertyIdentifierSymbols
-  : AT Identifier
-  ;
-
-XmlAttribute
-  : PropertyIdentifierSymbols
+xmlAttribute
+  : AT identifier -> ^(XmlAttribute AT identifier)
+  | AT MUL -> ^(XmlAttribute AT MUL)
   ;
 
 // $>
@@ -818,7 +798,6 @@ punctuator
 	| DIVASS
 	| DOTDOT
 	| COLONCOLON
-	//| Asterisk
 	;
 
 // $>
@@ -831,7 +810,37 @@ literal
 	| numericLiteral
 	| StringLiteral
 	| RegularExpressionLiteral
+	| xmlLiteral
 	;
+
+xmlLiteral
+	: (
+	    XMLFragment
+        { ((JSTokenStream)input).setMode(JSTokenSource.MODE_JS); }
+	    LBRACE expression RBRACE
+	    { ((JSTokenStream)input).setMode(JSTokenSource.MODE_XML); } 
+	  )* XMLFragmentEnd
+	  -> ^(XML_LITERAL XMLFragment? expression? XMLFragmentEnd)
+	;
+	finally { ((JSTokenStream)input).setMode(JSTokenSource.MODE_JS); }
+
+XMLFragment
+@init { 
+	int marker = input.mark();
+}
+    : LT ( NOT 
+         | QUE 
+         | 'a'..'z' 
+         | 'A'..'Z' 
+         | '_' 
+         | ':'
+         | '{'
+         | { Character.isLetter(input.LT(1)) }?
+         )? { isXmlStartEnabled() }? { 
+			input.rewind(marker);
+			readFirstXml(); 
+         }
+    ;
 
 booleanLiteral
 	: TRUE
@@ -964,12 +973,6 @@ RegularExpressionLiteral
 
 // $>
 
-
-//XMLLiteral
-//  : { areXmlExpressionsEnabled() }?=> LT GT
-//  ;
-
-  
 //
 // $<	A.3 Expressions (11)
 //
@@ -979,7 +982,7 @@ RegularExpressionLiteral
 primaryExpression
 	: THIS
 	| identifier
-	| XmlAttribute
+	| xmlAttribute
 	| literal
 	| arrayLiteral
 	| objectLiteral
@@ -1020,7 +1023,7 @@ propertyName
 	: identifier
 	| StringLiteral
 	| numericLiteral
-	| XmlAttribute
+	| xmlAttribute
 	;
 
 // $>
@@ -1065,29 +1068,9 @@ leftHandSideExpression
 rightHandSideExpression
   : parenExpression 
   | identifier
-  | XmlAttribute
+  | xmlAttribute
   | MUL
 ; 
-
-
-
-	
-//leftHandSideExpression
-//	:
-//	(
-//		memberExpression 		-> memberExpression
-//	)
-//	(
-//		arguments			-> ^( CALL $leftHandSideExpression arguments )
-//		| LBRACK expression RBRACK	-> ^( BYINDEX $leftHandSideExpression expression )
-//		| DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier )
-//    | DOT XmlAttribute -> ^( BYFIELD $leftHandSideExpression XmlAttribute )
-//    | DOT parenExpression -> ^(BYFIELD $leftHandSideExpression parenExpression)
-//    | DOT MUL -> ^(BYFIELD $leftHandSideExpression MUL)
-//    | DOTDOT expression -> ^(ALLCHILDREN $leftHandSideExpression expression)
-//    | COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpression expression)
-//	)*
-//	;
 
 // $>
 
@@ -1115,7 +1098,6 @@ postfixOperator
 unaryExpression
 	: postfixExpression
 	| unaryOperator^ unaryExpression
-	| XMLLiteral
 	;
 	
 unaryOperator
@@ -1130,28 +1112,6 @@ unaryOperator
 	| NOT
 	| YIELD
 	;
-
-//xmlExpression
-//  : xmlTag+
-//  ;
-//
-//xmlTag
-//  : LT^ tagName (xmlArguments)* RCLOSE
-//  | LT^ tagName (xmlArguments)* GT (xmlTag)* LCLOSE tagName GT 
-//  ;
-//
-//xmlArguments
-//  : tagAttribute ASSIGN^ (StringLiteral | numericLiteral)
-//  ; 
-//
-//tagName
-//  : Identifier
-//  | keyword
-//  ;
-//  
-//tagAttribute
-//  : tagName
-//  ;
 
 // $>
 

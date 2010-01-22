@@ -11,17 +11,20 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
-import java.util.List;
+import org.antlr.runtime.TokenSource;
 
-import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenStream;
+public interface JSTokenSource extends TokenSource {
 
-public interface JSTokenStream extends TokenStream {
-
-	List<Token> getTokens();
+	int MODE_JS = 0;
+	int MODE_XML = 1;
 
 	int getMode();
 
-	void setMode(int value);
+	void setMode(int mode);
+
+	/**
+	 * Set the input cursor to the character position indicated by index.
+	 **/
+	void seek(int index);
 
 }

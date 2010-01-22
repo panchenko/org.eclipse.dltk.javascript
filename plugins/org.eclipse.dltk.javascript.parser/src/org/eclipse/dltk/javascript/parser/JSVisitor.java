@@ -228,7 +228,7 @@ public abstract class JSVisitor<E> {
 		case JSParser.FUNCTION:
 			return visitFunction(node);
 
-		case JSParser.XMLLiteral:
+		case JSParser.XML_LITERAL:
 			return visitXmlLiteral(node);
 
 		case JSParser.DEFAULT_XML_NAMESPACE:

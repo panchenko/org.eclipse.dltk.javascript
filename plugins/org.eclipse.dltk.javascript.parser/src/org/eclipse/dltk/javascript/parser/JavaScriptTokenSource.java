@@ -12,40 +12,243 @@
 
 package org.eclipse.dltk.javascript.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.antlr.runtime.CharStream;
-import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenSource;
-import org.eclipse.core.runtime.Assert;
+import org.antlr.runtime.EarlyExitException;
+import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.RecognitionException;
 
-public class JavaScriptTokenSource implements TokenSource {
+public class JavaScriptTokenSource extends JSLexer implements JSTokenSource {
 
-	private final TokenSource tokenSource;
-	private List<Token> tokens = null;
-	private int currentPos = 0;
-
-	public JavaScriptTokenSource(TokenSource tokenSource) {
-		this.tokenSource = tokenSource;
+	public JavaScriptTokenSource(CharStream input) {
+		super(input);
 	}
 
-	public Token nextToken() {
-		if (tokens == null) {
-			final List<Token> source = new ArrayList<Token>();
-			Token t = tokenSource.nextToken();
-			while (t != null && t.getType() != CharStream.EOF) {
-				source.add(t);
-				t = tokenSource.nextToken();
+	private int xmlMode = MODE_JS;
+
+	public int getMode() {
+		return xmlMode;
+	}
+
+	public void setMode(int mode) {
+		this.xmlMode = mode;
+	}
+
+	public void seek(int index) {
+		input.seek(index);
+	}
+
+	@Override
+	public void mTokens() throws RecognitionException {
+		if (xmlMode == MODE_XML) {
+			readNextXml();
+		} else {
+			super.mTokens();
+		}
+	}
+
+	private int xmlOpenTagsCount;
+	private boolean xmlIsAttribute;
+	private boolean xmlIsTagContent;
+
+	@Override
+	protected void readFirstXml() throws RecognitionException {
+		assert xmlMode == MODE_JS;
+		xmlOpenTagsCount = 0;
+		xmlIsAttribute = false;
+		xmlIsTagContent = false;
+		readNextXml();
+	}
+
+	private void readNextXml() throws EarlyExitException {
+		final int mark = input.mark();
+		try {
+			type = readXmlToken();
+			emit();// create token
+			return;
+		} catch (LexerException e) {
+			input.rewind(mark);
+			throw new EarlyExitException(0, input);
+		}
+	}
+
+	private int readXmlToken() {
+		int c;
+		while ((c = input.LA(1)) != EOF) {
+			if (xmlIsTagContent) {
+				switch (c) {
+				case '>':
+					matchAny();
+					xmlIsTagContent = false;
+					xmlIsAttribute = false;
+					break;
+				case '/':
+					matchAny();
+					if (input.LA(1) == '>') {
+						matchAny();
+						xmlIsTagContent = false;
+						xmlOpenTagsCount--;
+					}
+					break;
+				case '{':
+					// matchAny();
+					return JSParser.XMLFragment;
+				case '\'':
+				case '\"':
+					matchAny();
+					readQuotedString(c);
+					break;
+				case '=':
+					matchAny();
+					xmlIsAttribute = true;
+					break;
+				case ' ':
+				case '\t':
+				case '\r':
+				case '\n':
+					matchAny();
+					break;
+				default:
+					matchAny();
+					xmlIsAttribute = false;
+					break;
+				}
+				if (!xmlIsTagContent && xmlOpenTagsCount == 0) {
+					return XMLFragmentEnd;
+				}
+			} else {
+				switch (c) {
+				case '<':
+					matchAny();
+					switch (input.LA(1)) {
+					case '!':
+						matchAny();
+						switch (input.LA(1)) {
+						case '-':
+							matchAny();
+							if (input.LA(1) == '-') {
+								matchAny();
+								readXmlComment();
+							} else {
+								throw new LexerException("msg.XML.bad.form");
+							}
+							break;
+						case '[':
+							matchAny();
+							try {
+								match("CDATA[");
+							} catch (MismatchedTokenException e) {
+								throw new LexerException("CDATA[ expected");
+							}
+							readCDATA();
+							break;
+						default:
+							readEntity();
+							break;
+						}
+						break;
+					case '?':
+						matchAny();
+						readPI();
+						break;
+					case '/':
+						// End tag
+						matchAny();
+						if (xmlOpenTagsCount == 0) {
+							throw new LexerException("msg.XML.bad.form");
+						}
+						xmlIsTagContent = true;
+						xmlOpenTagsCount--;
+						break;
+					default:
+						// Start tag
+						xmlIsTagContent = true;
+						xmlOpenTagsCount++;
+						break;
+					}
+					// /
+					break;
+				case '{':
+					// matchAny();
+					return JSParser.XMLFragment;
+				default:
+					matchAny();
+					break;
+				}
 			}
-			tokens = new JavaScriptTokenFilter().filter(source);
-			// tokens = source;
-			Assert.isNotNull(tokens);
 		}
-		if (currentPos < this.tokens.size()) {
-			return this.tokens.get(currentPos++);
+		throw new LexerException("msg.XML.bad.form");
+	}
+
+	private void readQuotedString(int quote) {
+		int c;
+		while ((c = input.LA(1)) != EOF) {
+			matchAny();
+			if (c == quote) {
+				return;
+			}
 		}
-		return Token.EOF_TOKEN;
+		throw new LexerException("msg.XML.bad.form");
+	}
+
+	private void readXmlComment() {
+		int c;
+		while ((c = input.LA(1)) != EOF) {
+			matchAny();
+			if (c == '-' && input.LA(1) == '-' && input.LA(2) == '>') {
+				return;
+			}
+		}
+		throw new LexerException("msg.XML.bad.form");
+	}
+
+	private void readCDATA() {
+		int c;
+		while ((c = input.LA(1)) != EOF) {
+			matchAny();
+			if (c == ']' && input.LA(1) == ']' && input.LA(2) == '>')
+				return;
+		}
+		throw new LexerException("msg.XML.bad.form");
+	}
+
+	private void readEntity() {
+		int declTags = 1;
+		int c;
+		while ((c = input.LA(1)) != EOF) {
+			matchAny();
+			switch (c) {
+			case '<':
+				declTags++;
+				break;
+			case '>':
+				declTags--;
+				if (declTags == 0)
+					return;
+				break;
+			}
+		}
+		throw new LexerException("msg.XML.bad.form");
+	}
+
+	private void readPI() {
+		int c;
+		while ((c = input.LA(1)) != EOF) {
+			matchAny();
+			if (c == '?' && input.LA(1) == '>') {
+				matchAny();
+				return;
+			}
+		}
+		throw new LexerException("msg.XML.bad.form");
+	}
+
+	@SuppressWarnings("serial")
+	private static class LexerException extends RuntimeException {
+
+		public LexerException(String message) {
+			super(message);
+		}
+
 	}
 
 }

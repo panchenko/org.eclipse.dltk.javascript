@@ -9,15 +9,15 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.parser;
 
-import java.io.CharArrayReader;
+import java.io.IOException;
+import java.io.InputStream;
 
-import org.antlr.runtime.ANTLRReaderStream;
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.BitSet;
 import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.IntStream;
 import org.antlr.runtime.MismatchedSetException;
 import org.antlr.runtime.MismatchedTokenException;
@@ -51,6 +51,13 @@ public class JavaScriptParser extends AbstractSourceParser {
 		}
 
 		@Override
+		protected void reportFailure(Throwable t) {
+			if (reporter != null) {
+				reporter.reportProblem(new JSProblem(t));
+			}
+		}
+
+		@Override
 		public void displayRecognitionError(String[] tokenNames,
 				RecognitionException re) {
 			if (reporter == null)
@@ -81,8 +88,11 @@ public class JavaScriptParser extends AbstractSourceParser {
 					stop = start + length(prevToken);
 				} else {
 					message = "Mismatched input "
-							+ getTokenErrorDisplay(re.token) + ", "
-							+ tokenNames[mte.expecting] + " expected";
+							+ getTokenErrorDisplay(re.token);
+					if (mte.expecting >= 0 && mte.expecting < tokenNames.length) {
+						message += ", " + tokenNames[mte.expecting]
+								+ " expected";
+					}
 					start = convert(re.token);
 					stop = start + length(re.token);
 				}
@@ -156,17 +166,25 @@ public class JavaScriptParser extends AbstractSourceParser {
 	public Script parse(char[] fileName, char[] source,
 			IProblemReporter reporter) {
 		Assert.isNotNull(source);
+		return parse(createTokenStream(source), TextUtils
+				.createLineTracker(source), reporter);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public Script parse(String source, IProblemReporter reporter) {
+		Assert.isNotNull(source);
+		return parse(createTokenStream(source), TextUtils
+				.createLineTracker(source), reporter);
+	}
+
+	private Script parse(JSTokenStream stream, ISourceLineTracker lineTracker,
+			IProblemReporter reporter) {
 		try {
-			CharStream charStream = new ANTLRReaderStream(new CharArrayReader(
-					source));
-			JSLexer lexer = new JSLexer(charStream);
-			CommonTokenStream stream = new CommonTokenStream(
-					new JavaScriptTokenSource(lexer));
 			JSInternalParser parser = new JSInternalParser(stream, reporter,
-					TextUtils.createLineTracker(source));
+					lineTracker);
 			RuleReturnScope root = parser.program();
-			// if (parser.errorCount != 0)
-			// return null;
 			return new JSTransformer(stream.getTokens()).transform(root);
 		} catch (Exception e) {
 			if (DLTKCore.DEBUG)
@@ -177,9 +195,31 @@ public class JavaScriptParser extends AbstractSourceParser {
 			// create empty output
 			Script script = new Script();
 			script.setStart(0);
-			script.setEnd(source.length);
+			script.setEnd(lineTracker.getLength());
 			return script;
 		}
+	}
+
+	public static JSTokenStream createTokenStream(char[] source) {
+		CharStream charStream = new ANTLRStringStream(source, source.length);
+		return new DynamicTokenStream(new JavaScriptTokenSource(charStream));
+	}
+
+	public static JSTokenStream createTokenStream(String source) {
+		CharStream charStream = new ANTLRStringStream(source);
+		return new DynamicTokenStream(new JavaScriptTokenSource(charStream));
+	}
+
+	/**
+	 * @param input
+	 * @param encoding
+	 * @return
+	 * @throws IOException
+	 */
+	public static JSTokenStream createTokenStream(InputStream input,
+			String encoding) throws IOException {
+		CharStream charStream = new ANTLRInputStream(input, encoding);
+		return new DynamicTokenStream(new JavaScriptTokenSource(charStream));
 	}
 
 }
