@@ -18,11 +18,13 @@ import junit.framework.TestSuite;
 import org.eclipse.dltk.javascript.parser.tests.ANTLRParserTestCase;
 import org.eclipse.dltk.javascript.parser.tests.JavaScriptParserTestCase;
 import org.eclipse.dltk.javascript.parser.tests.JavaScriptStreamTokenTestCase;
+import org.eclipse.dltk.javascript.parser.tests.SimpleE4xTests;
 
 public class AllTests {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite("org.eclipse.dltk.javascript.formatter.tests"); //$NON-NLS-1$
+		TestSuite suite = new TestSuite(
+				"org.eclipse.dltk.javascript.formatter.tests"); //$NON-NLS-1$
 		// $JUnit-BEGIN$
 		suite.addTest(ArraysTest.suite());
 		suite.addTest(BracesTest.suite());
@@ -40,6 +42,7 @@ public class AllTests {
 		suite.addTest(WhileTest.suite());
 		suite.addTest(RegExpTest.suite());
 		suite.addTest(KeywordsTest.suite());
+		suite.addTestSuite(SimpleE4xTests.class);
 		suite.addTest(E4XTest.suite());
 		suite.addTest(StatementTest.suite());
 		suite.addTestSuite(JavaScriptStreamTokenTestCase.class);
