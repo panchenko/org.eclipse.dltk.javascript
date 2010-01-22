@@ -62,31 +62,16 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 	}
 
 	private static class ParserProblemReporter extends ProblemCollector {
-
-		@Override
-		public String toString() {
-			if (problems == null)
-				return "No problems";
-
-			StringBuffer buffer = new StringBuffer();
-			for (int i = 0; i < problems.size(); i++) {
-				buffer.append(problems.toString());
-				buffer.append("\n");
-			}
-
-			return buffer.toString();
-		}
 	}
 
 	private int detectIndentationLevel(String input, int offset) {
 		ParserProblemReporter reporter = new ParserProblemReporter();
 
-		Script ast = new JavaScriptParser().parse(null, input.toCharArray(),
-				reporter);
+		Script ast = new JavaScriptParser().parse(input, reporter);
 
-		if (ast == null) {
+		if (ast == null || reporter.hasErrors()) {
 			if (DLTKCore.DEBUG)
-				System.out.println(reporter.toString());
+				System.out.println(reporter.getErrors());
 
 			return 0;
 		}
@@ -110,16 +95,17 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 
 	@Override
 	public int detectIndentationLevel(IDocument document, int offset) {
+		if (offset == 0) {
+			return 0;
+		}
 		return detectIndentationLevel(document.get(), offset);
 	}
 
 	public String format(String source, int indentationLevel)
 			throws FormatterException {
-
 		ParserProblemReporter reporter = new ParserProblemReporter();
 
-		Script root = new JavaScriptParser().parse(null, source.toCharArray(),
-				reporter);
+		Script root = new JavaScriptParser().parse(source, reporter);
 
 		if (root == null || reporter.hasErrors()) {
 			final List<IProblem> errors = reporter.getErrors();
