@@ -30,37 +30,38 @@ package org.eclipse.dltk.javascript.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.runtime.BitSet;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.TokenStream;
 
 public class DynamicTokenStream implements TokenStream, JSTokenStream {
 
-	private static final boolean DEBUG = true;
+	private static final int UNKNOWN = -1;
 
-	protected final JavaScriptTokenSource tokenSource;
+	private static final boolean DEBUG = false;
+
+	private final JavaScriptTokenSource tokenSource;
 
 	/**
 	 * Record every single token pulled from the source so we can reproduce
 	 * chunks of it later.
 	 */
-	protected List<Token> tokens;
+	private List<Token> tokens;
 
 	/**
 	 * Skip tokens on any channel but this one; this is how we skip
 	 * whitespace...
 	 */
-	protected int channel = Token.DEFAULT_CHANNEL;
+	private int channel = Token.DEFAULT_CHANNEL;
 
 	/** Track the last mark() call result value for use in rewind(). */
-	protected int lastMarker;
+	private int lastMarker;
 
 	/**
 	 * The index into the tokens list of the current token (next token to
-	 * consume). p==-1 indicates that the tokens list is empty
+	 * consume). p==UNKNOWN indicates not initialized value
 	 */
-	protected int p = -1;
+	private int p = UNKNOWN;
 
 	public DynamicTokenStream(JavaScriptTokenSource tokenSource) {
 		tokens = new ArrayList<Token>(500);
@@ -72,6 +73,9 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 		this.channel = channel;
 	}
 
+	/**
+	 * Fetches the next token, returns the result if fetch was successful
+	 */
 	private final boolean fetchToken() {
 		Token t = tokenSource.nextToken();
 		if (t != Token.EOF_TOKEN) {
@@ -85,33 +89,47 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	}
 
 	/**
-	 * Fill between p and n; do nothing if n is p. If p==-1 and n==0, fill in
-	 * first token.
+	 * if EOF was reached.
+	 */
+	private boolean endOfStream = false;
+
+	/**
+	 * Loads tokens up to <code>n</code>-th, do nothing if the specified element
+	 * is already loaded.
 	 */
 	protected void fill(int n) {
-		for (int i = tokens.size(); i <= n; i++) {
+		if (endOfStream) {
+			return;
+		}
+		for (int i = tokens.size(); i <= n; ++i) {
 			if (!fetchToken()) {
+				endOfStream = true;
 				if (DEBUG)
-					System.out.println("fill(" + n + ") failed");
+					System.out.println("EOF at fill(" + i + ")");
 				break;
 			}
 		}
-		if (p < 0) {
-			p = 0; // init
+	}
+
+	/**
+	 * Makes sure current index is valid
+	 */
+	private void init() {
+		if (p == UNKNOWN) {
+			p = skipOffTokenChannels(0); // init
 		}
 	}
 
-	private void init() {
-		fill(0);
-	}
-
+	/**
+	 * Loads all tokens from the stream
+	 */
 	private void loadAll() {
-		if (DEBUG)
-			System.out.println("LOAD ALL");
-		while (fetchToken())
-			;
-		if (p < 0) {
-			p = 0; // init
+		if (!endOfStream) {
+			if (DEBUG)
+				System.out.println("LOAD ALL");
+			while (fetchToken())
+				;
+			assert endOfStream;
 		}
 	}
 
@@ -123,8 +141,12 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	 * Walk past any token not on the channel the parser is listening to.
 	 */
 	public void consume() {
+		assert p != UNKNOWN;
+		if (!endOfStream) {
+			fill(p + 1);
+		}
 		if (p < tokens.size()) {
-			p++;
+			++p;
 			p = skipOffTokenChannels(p); // leave p on valid token
 		}
 	}
@@ -133,11 +155,18 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	 * Given a starting index, return the index of the first on-channel token.
 	 */
 	protected int skipOffTokenChannels(int i) {
-		int n = tokens.size();
-		while (i < n && tokens.get(i).getChannel() != channel) {
-			i++;
+		for (;;) {
+			if (!endOfStream) {
+				fill(i);
+			}
+			if (i >= tokens.size()) {
+				return i;
+			}
+			if (tokens.get(i).getChannel() == channel) {
+				return i;
+			}
+			++i;
 		}
-		return i;
 	}
 
 	protected int skipOffTokenChannelsReverse(int i) {
@@ -152,49 +181,6 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 		return tokens;
 	}
 
-	public List<Token> getTokens(int start, int stop) {
-		return getTokens(start, stop, (BitSet) null);
-	}
-
-	/**
-	 * Given a start and stop index, return a List of all tokens in the token
-	 * type BitSet. Return null if no tokens were found. This method looks at
-	 * both on and off channel tokens.
-	 */
-	public List<Token> getTokens(int start, int stop, BitSet types) {
-		fill(stop);
-		if (stop >= tokens.size()) {
-			stop = tokens.size() - 1;
-		}
-		if (start < 0) {
-			start = 0;
-		}
-		if (start > stop) {
-			return null;
-		}
-
-		// list = tokens[start:stop]:{Token t, t.getType() in types}
-		List<Token> filteredTokens = new ArrayList<Token>(stop - start + 1);
-		for (int i = start; i <= stop; i++) {
-			Token t = tokens.get(i);
-			if (types == null || types.member(t.getType())) {
-				filteredTokens.add(t);
-			}
-		}
-		if (filteredTokens.size() == 0) {
-			filteredTokens = null;
-		}
-		return filteredTokens;
-	}
-
-	public List<Token> getTokens(int start, int stop, List<Integer> types) {
-		return getTokens(start, stop, new BitSet(types));
-	}
-
-	public List<Token> getTokens(int start, int stop, int ttype) {
-		return getTokens(start, stop, BitSet.of(ttype));
-	}
-
 	/**
 	 * Get the ith token from the current position 1..n where k=1 is the first
 	 * symbol of lookahead.
@@ -203,36 +189,37 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 		if (k == 0) {
 			return null;
 		}
+		init();
 		if (k < 0) {
 			return LB(-k);
 		}
-		fill(p + k);
+		fill(p + k - 1);
+		if (p + k - 1 >= tokens.size()) {
+			return Token.EOF_TOKEN;
+		}
 		int i = p;
-		int n = 1;
-		// find k good tokens
-		while (n < k) {
+		// skip k-1 tokens
+		while (--k > 0) {
 			// skip off-channel tokens
 			i = skipOffTokenChannels(i + 1); // leave p on valid token
-			n++;
+		}
+		if (i >= tokens.size()) {
+			return Token.EOF_TOKEN;
 		}
 		return tokens.get(i);
 	}
 
 	/** Look backwards k tokens on-channel tokens */
 	protected Token LB(int k) {
-		if (k == 0) {
-			return null;
-		}
-		if ((p - k) < 0) {
+		assert k != 0;
+		if (p < k) {
 			return null;
 		}
 		int i = p;
-		int n = 1;
-		// find k good tokens looking backwards
-		while (n <= k) {
+		// skip k tokens backwards
+		while (--k >= 0) {
 			// skip off-channel tokens
 			i = skipOffTokenChannelsReverse(i - 1); // leave p on valid token
-			n++;
 		}
 		if (i < 0) {
 			return null;
@@ -245,6 +232,7 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	 * count all tokens not just on-channel tokens.
 	 */
 	public Token get(int i) {
+		fill(i);
 		return tokens.get(i);
 	}
 
@@ -253,7 +241,6 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	}
 
 	public int mark() {
-		init();
 		lastMarker = index();
 		return lastMarker;
 	}
@@ -268,6 +255,7 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	}
 
 	public int index() {
+		assert p != UNKNOWN;
 		return p;
 	}
 
@@ -280,6 +268,8 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	}
 
 	public void seek(int index) {
+		fill(index);
+		// TODO any validation?
 		p = index;
 	}
 
@@ -301,7 +291,7 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 		if (stop >= tokens.size()) {
 			stop = tokens.size() - 1;
 		}
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (int i = start; i <= stop; i++) {
 			Token t = tokens.get(i);
 			buf.append(t.getText());
