@@ -19,6 +19,7 @@ import org.eclipse.dltk.javascript.parser.tests.ANTLRParserTestCase;
 import org.eclipse.dltk.javascript.parser.tests.JavaScriptParserTestCase;
 import org.eclipse.dltk.javascript.parser.tests.JavaScriptStreamTokenTestCase;
 import org.eclipse.dltk.javascript.parser.tests.XmlLiteralTests;
+import org.eclipse.dltk.javascript.parser.tests.XmlQueryTests;
 
 public class AllTests {
 
@@ -43,6 +44,7 @@ public class AllTests {
 		suite.addTest(RegExpTest.suite());
 		suite.addTest(KeywordsTest.suite());
 		suite.addTestSuite(XmlLiteralTests.class);
+		suite.addTestSuite(XmlQueryTests.class);
 		suite.addTest(E4XTest.suite());
 		suite.addTest(StatementTest.suite());
 		suite.addTestSuite(JavaScriptStreamTokenTestCase.class);
@@ -52,5 +54,4 @@ public class AllTests {
 		// $JUnit-END$
 		return suite;
 	}
-
 }

@@ -13,12 +13,8 @@ package org.eclipse.dltk.javascript.parser.tests;
 
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.utils.ASTUtil;
-import org.eclipse.dltk.compiler.problem.IProblem;
-import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -26,23 +22,9 @@ import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.XmlExpressionFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
-import org.eclipse.dltk.javascript.parser.JSProblem;
-import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
 @SuppressWarnings("nls")
-public class XmlLiteralTests extends TestCase {
-
-	protected final ProblemCollector reporter = new ProblemCollector();
-
-	protected Script parse(final String source) {
-		reporter.reset();
-		final Script script = new JavaScriptParser().parse(source, reporter);
-		assertNotNull(script);
-		for (IProblem problem : reporter.getProblems()) {
-			assertFalse(problem.getMessage(), problem instanceof JSProblem);
-		}
-		return script;
-	}
+public class XmlLiteralTests extends AbstractJSParserTest {
 
 	public void testXmlLiteralSimple() {
 		parse("var x = <xml/>;");
