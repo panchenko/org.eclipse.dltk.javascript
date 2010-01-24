@@ -13,11 +13,41 @@
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.ASTVisitor;
 
-public class XmlAttributeIdentifier extends Identifier {
+public class XmlAttributeIdentifier extends Expression {
+
+	private Expression expression;
 
 	public XmlAttributeIdentifier(ASTNode parent) {
 		super(parent);
+	}
+
+	public void setExpression(Expression expression) {
+		this.expression = expression;
+	}
+
+	public Expression getExpression() {
+		return expression;
+	}
+
+	@Override
+	public String toSourceString(String indentationString) {
+		if (expression != null) {
+			return "@" + expression.toSourceString(indentationString);
+		} else {
+			return "@" + "?";
+		}
+	}
+
+	@Override
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (expression != null) {
+				expression.traverse(visitor);
+			}
+			visitor.endvisit(this);
+		}
 	}
 
 }

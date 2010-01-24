@@ -93,7 +93,6 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
-import org.w3c.dom.Node;
 
 public class JSTransformer extends JSVisitor<ASTNode> {
 
@@ -1872,10 +1871,12 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitXmlAttribute(Tree node) {
 
 		XmlAttributeIdentifier id = new XmlAttributeIdentifier(getParent());
-		id.setName(node.getText());
+		final Expression expression = (Expression) transformNode(node
+				.getChild(1), id);
+		id.setExpression(expression);
 
 		id.setStart(getTokenOffset(node.getTokenStartIndex()));
-		id.setEnd(id.sourceStart() + id.getName().length());
+		id.setEnd(expression.sourceEnd());
 
 		return id;
 	}
