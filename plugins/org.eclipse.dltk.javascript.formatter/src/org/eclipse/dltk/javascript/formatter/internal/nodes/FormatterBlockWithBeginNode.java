@@ -33,6 +33,7 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 
 	private IFormatterTextNode begin;
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 		if (begin != null) {

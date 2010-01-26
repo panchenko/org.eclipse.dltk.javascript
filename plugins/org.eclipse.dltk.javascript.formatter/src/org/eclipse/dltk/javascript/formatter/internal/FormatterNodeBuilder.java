@@ -35,7 +35,6 @@ import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.ExceptionFilter;
-import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FinallyClause;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
@@ -124,14 +123,12 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterFinallyClau
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForInStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterFunctionNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterGetMethodNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterLabelledStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterNewExpressionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterObjectInitializerNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterReturnStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterRootNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterScriptNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterSetMethodNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterStringNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterSwitchNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterThrowNode;
@@ -153,7 +150,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.IParensConfiguration
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.IfConditionParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.LineBreakFormatterNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.MethodInitializerPunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.MultiLineObjectInitializerBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.OperationOrPunctuationNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ParensNode;
@@ -198,11 +194,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 	}
 
 	private boolean isStatement(ASTNode node) {
-		if (node instanceof PropertyInitializer) {
-			final PropertyInitializer initializer = (PropertyInitializer) node;
-			if (initializer.getValue() instanceof FunctionStatement) {
-				return true;
-			}
+		if (isMultiLineObjectInitializerComponent(node)) {
+			return true;
 		}
 		if (!(node instanceof Statement)) {
 			return false;
@@ -214,6 +207,28 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			return false;
 		}
 		return true;
+	}
+
+	private boolean isMultiLineObjectInitializerComponent(ASTNode node) {
+		if (node instanceof PropertyInitializer) {
+			final PropertyInitializer initializer = (PropertyInitializer) node;
+			if (initializer.getValue() instanceof FunctionStatement) {
+				return true;
+			}
+		}
+		if (node instanceof Method) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isMultiLineObjectInitializer(ObjectInitializer initializer) {
+		for (ASTNode component : initializer.getInitializers()) {
+			if (isMultiLineObjectInitializerComponent(component)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private final Map<ASTNode, Boolean> processed = new IdentityHashMap<ASTNode, Boolean>();
@@ -812,10 +827,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			public boolean visitGetMethod(GetMethod node) {
-				FormatterGetMethodNode formatterNode = new FormatterGetMethodNode(
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
+				formatterNode.addChild(createTextNode(document, node
 						.getGetKeyword()));
 
 				push(formatterNode);
@@ -923,13 +938,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			private void processPunctuation(int position, int length,
 					IPunctuationConfiguration configuration) {
-				final OperationOrPunctuationNode block = new OperationOrPunctuationNode(
-						document, configuration);
-				block.addChild(createTextNode(document, position, position
-						+ length));
-				push(block);
-				// visit(node);
-				checkedPop(block, position + length);
+				addChild(new OperationOrPunctuationNode(createTextNode(
+						document, position, position + length), configuration));
 			}
 
 			private void processBraces(ASTNode node,
@@ -1145,7 +1155,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				final IBracesConfiguration configuration;
 
-				if (node.isMultiline())
+				if (node.isMultiline()
+						|| document
+								.getBoolean(JavaScriptFormatterConstants.STATEMENT_NEW_LINE)
+						&& isMultiLineObjectInitializer(node))
 					configuration = new MultiLineObjectInitializerBracesConfiguration(
 							document, node);
 				else
@@ -1159,23 +1172,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				List<ASTNode> initializers = node.getInitializers();
-				List<IPunctuationConfiguration> commaConfigurations = new ArrayList<IPunctuationConfiguration>();
-
-				for (int i = 1; i < initializers.size(); i++) {
-					Expression item = (Expression) initializers.get(i);
-
-					if (item instanceof Method)
-						commaConfigurations
-								.add(new MethodInitializerPunctuationConfiguration());
-					else
-						commaConfigurations
-								.add(new PropertyInitializerPunctuationConfiguration());
-
-				}
-
 				visitCombinedNodeList(node.getInitializers(), node.getCommas(),
-						commaConfigurations);
+						new PropertyInitializerPunctuationConfiguration());
 
 				checkedPop(formatterNode, node.sourceEnd() - 1);
 
@@ -1287,10 +1285,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			public boolean visitSetMethod(SetMethod node) {
 
-				FormatterSetMethodNode formatterNode = new FormatterSetMethodNode(
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
+				formatterNode.addChild(createTextNode(document, node
 						.getSetKeyword()));
 
 				push(formatterNode);

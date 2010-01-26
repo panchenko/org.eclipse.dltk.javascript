@@ -9,7 +9,6 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
 public abstract class AbstractPunctuationConfiguration implements
@@ -23,7 +22,4 @@ public abstract class AbstractPunctuationConfiguration implements
 		return true;
 	}
 
-	public boolean insertLineBreakAfter() {
-		return false;
-	}
 }

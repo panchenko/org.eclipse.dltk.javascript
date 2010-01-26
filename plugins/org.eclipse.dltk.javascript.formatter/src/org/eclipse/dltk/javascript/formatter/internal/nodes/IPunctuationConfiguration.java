@@ -18,9 +18,4 @@ public interface IPunctuationConfiguration {
 
 	boolean insertSpaceAfter();
 
-	/**
-	 * not the best way
-	 */
-	@Deprecated
-	boolean insertLineBreakAfter();
 }

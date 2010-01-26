@@ -70,11 +70,6 @@ public class ArrayBracketsConfiguration implements IBracketsConfiguration,
 						.equals(value);
 	}
 
-	public boolean insertLineBreakAfter() {
-		// SHOULD NOT BE CALLED
-		return false;
-	}
-
 	public boolean insertSpaceAfter() {
 		// TODO introduce option for it?
 		return true;
