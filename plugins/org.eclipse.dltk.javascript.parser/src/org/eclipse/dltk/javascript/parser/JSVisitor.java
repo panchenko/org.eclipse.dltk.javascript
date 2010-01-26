@@ -42,9 +42,6 @@ public abstract class JSVisitor<E> {
 		case JSParser.NAMESPACE:
 			return visitIdentifier(node);
 
-		case JSParser.ARGS:
-			return visitArguments(node);
-
 		case JSParser.BLOCK:
 			return visitBlock(node);
 
@@ -277,8 +274,6 @@ public abstract class JSVisitor<E> {
 	protected abstract E visitOctalIntegerLiteral(Tree node);
 
 	protected abstract E visitYield(Tree node);
-
-	protected abstract E visitArguments(Tree node);
 
 	protected abstract E visitBlock(Tree node);
 

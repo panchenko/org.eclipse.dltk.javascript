@@ -183,7 +183,8 @@ tokens
 	XMLFragmentError;
 
 // Imaginary
-	ARGS ;
+	CALL_ARGUMENTS ;
+	ARGUMENTS ;
 	ARRAY ;
 	BLOCK ;
 	BYFIELD ;
@@ -1075,7 +1076,7 @@ newExpression
 	
 arguments
 	: LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN
-	-> ^( ARGS assignmentExpression* )
+	-> ^( CALL_ARGUMENTS assignmentExpression* )
 	;
 	
 leftHandSideExpression
@@ -1723,9 +1724,13 @@ functionExpression
 	-> ^( FUNCTION $name? formalParameterList functionBody )
 	;
 
+formalParameter
+	: identifier^ ( { isTypeInformationEnabled() }?=> COLON typeRef )?
+	;
+
 formalParameterList
-	: LPAREN ( args+=identifier ( { isTypeInformationEnabled() }?=> COLON typeRef )? ( COMMA args+=identifier ( { isTypeInformationEnabled() }? COLON typeRef )? )* )? RPAREN
-	-> ^( ARGS $args* )
+	: LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN
+	-> ^( ARGUMENTS formalParameter* )
 	;
 
 functionBody

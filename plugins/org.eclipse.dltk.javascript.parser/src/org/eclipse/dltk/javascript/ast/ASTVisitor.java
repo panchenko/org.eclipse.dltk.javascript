@@ -91,6 +91,9 @@ public abstract class ASTVisitor implements IASTVisitor {
 		if (node.getClass() == FunctionStatement.class)
 			return visitFunctionStatement((FunctionStatement) node);
 
+		if (node.getClass() == Argument.class)
+			return visitArgument((Argument) node);
+
 		if (node.getClass() == GetArrayItemExpression.class)
 			return visitGetArrayItemExpression((GetArrayItemExpression) node);
 
@@ -213,6 +216,4 @@ public abstract class ASTVisitor implements IASTVisitor {
 		}
 	}
 
-	
-	
 }

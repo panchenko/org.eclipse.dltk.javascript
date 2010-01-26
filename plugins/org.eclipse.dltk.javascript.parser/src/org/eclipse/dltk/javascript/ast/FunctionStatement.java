@@ -12,6 +12,7 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -22,11 +23,10 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 
 	private Keyword functionKeyword;
 	private Identifier name;
-	private List<ASTNode> arguments;
+	private final List<Argument> arguments = new ArrayList<Argument>();
 	private StatementBlock body;
 	private int LP = -1;
 	private int RP = -1;
-	private List<Integer> commas;
 
 	public FunctionStatement(ASTNode parent) {
 		super(parent);
@@ -70,12 +70,12 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 		this.name = name;
 	}
 
-	public List<ASTNode> getArguments() {
+	public List<Argument> getArguments() {
 		return this.arguments;
 	}
 
-	public void setArguments(List<ASTNode> arguments) {
-		this.arguments = arguments;
+	public void addArgument(Argument argument) {
+		this.arguments.add(argument);
 	}
 
 	public StatementBlock getBody() {
@@ -102,22 +102,13 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 		this.RP = RP;
 	}
 
-	public List<Integer> getArgumentCommas() {
-		return this.commas;
-	}
-
-	public void setArgumentCommas(List<Integer> commas) {
-		this.commas = commas;
-	}
-
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LP > 0);
 		Assert.isTrue(RP > 0);
-		Assert.isTrue(arguments.size() == 0
-				|| commas.size() == arguments.size() - 1);
 
 		StringBuffer buffer = new StringBuffer();
 

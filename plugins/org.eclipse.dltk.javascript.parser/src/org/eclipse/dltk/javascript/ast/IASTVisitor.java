@@ -60,6 +60,8 @@ public interface IASTVisitor {
 
 	public boolean visitFunctionStatement(FunctionStatement node);
 
+	public boolean visitArgument(Argument argument);
+
 	public boolean visitGetArrayItemExpression(GetArrayItemExpression node);
 
 	public boolean visitGetMethod(GetMethod node);

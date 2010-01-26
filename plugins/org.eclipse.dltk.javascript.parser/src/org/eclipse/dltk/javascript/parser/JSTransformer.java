@@ -23,6 +23,7 @@ import org.antlr.runtime.tree.Tree;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
@@ -264,51 +265,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 	}
 
-	private static class ASTNodeList extends ASTNode {
-		final List<ASTNode> nodes;
-
-		/**
-		 * @param count
-		 */
-		public ASTNodeList(int count) {
-			nodes = new ArrayList<ASTNode>(count);
-		}
-
-		@Override
-		public void traverse(ASTVisitor visitor) throws Exception {
-			if (visitor.visit(this)) {
-				for (ASTNode node : nodes) {
-					node.traverse(visitor);
-				}
-				visitor.endvisit(this);
-			}
-		}
-
-		public void add(ASTNode node) {
-			nodes.add(node);
-		}
-
-	}
-
-	private List<ASTNode> transformListNode(Tree node, ASTNode parent) {
-		ASTNode result = transformNode(node, parent);
-		if (result instanceof ASTNodeList) {
-			return ((ASTNodeList) result).nodes;
-		} else {
-			return Collections.singletonList(result);
-		}
-	}
-
-	protected ASTNode visitArguments(Tree node) {
-		ASTNodeList nodes = new ASTNodeList(node.getChildCount());
-
-		for (int i = 0; i < node.getChildCount(); i++) {
-			nodes.add(transformNode(node.getChild(i), getParent()));
-		}
-
-		return nodes;
-	}
-
 	protected ASTNode visitBinaryOperation(Tree node) {
 		if (node.getType() == JSParser.MUL) {
 			switch (node.getChildCount()) {
@@ -424,6 +380,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
+	@Override
 	protected ASTNode visitCall(Tree node) {
 		CallExpression call = new CallExpression(getParent());
 
@@ -431,14 +388,17 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		Assert.isNotNull(node.getChild(1));
 
 		call.setExpression(transformNode(node.getChild(0), call));
-		call.setArguments(transformListNode(node.getChild(1), call));
-
+		Tree callArgs = node.getChild(1);
 		List<Integer> commas = new ArrayList<Integer>();
-		Tree args = node.getChild(1);
-		for (int i = 1 /* miss the first */; i < args.getChildCount(); i++) {
-			commas.add(getTokenOffset(JSParser.COMMA, args.getChild(i - 1)
-					.getTokenStopIndex() + 1, args.getChild(i)
-					.getTokenStartIndex()));
+		for (int i = 0; i < callArgs.getChildCount(); ++i) {
+			Tree callArg = callArgs.getChild(i);
+			final ASTNode argument = transformNode(callArg, call);
+			if (i > 0) {
+				commas.add(getTokenOffset(JSParser.COMMA, callArgs.getChild(
+						i - 1).getTokenStopIndex() + 1, callArg
+						.getTokenStartIndex()));
+			}
+			call.addArgument(argument);
 		}
 		call.setCommas(commas);
 
@@ -675,45 +635,59 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
+	private Argument transformArgument(Tree node, ASTNode parent) {
+		Assert.isTrue(node.getType() == JSParser.Identifier
+				|| JSLexer.isIdentifierKeyword(node.getType()));
+
+		Argument argument = new Argument(parent);
+		argument.setIdentifier((Identifier) visitIdentifier(node));
+		argument.setStart(getTokenOffset(node.getTokenStartIndex()));
+		argument.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+		int i = 0;
+		if (i + 2 <= node.getChildCount()
+				&& node.getChild(i).getType() == JSParser.COLON) {
+			argument.setColonPosition(getTokenOffset(node.getChild(i)
+					.getTokenStartIndex()));
+			argument.setType(transformType(node.getChild(i + 1), argument));
+			i += 2;
+		}
+		return argument;
+	}
+
 	@Override
 	protected ASTNode visitFunction(Tree node) {
 		FunctionStatement fn = new FunctionStatement(getParent());
 
 		fn.setFunctionKeyword(createKeyword(node, Keywords.FUNCTION));
 
-		int argsIndex = 0;
+		int index = 0;
 
-		if (node.getChild(0).getType() != JSParser.ARGS) {
-			fn.setName((Identifier) transformNode(node.getChild(0), fn));
-			argsIndex++;
+		if (node.getChild(index).getType() != JSParser.ARGUMENTS) {
+			fn.setName((Identifier) transformNode(node.getChild(index), fn));
+			index++;
 		}
 
-		Tree argsNode = node.getChild(argsIndex);
+		Tree argsNode = node.getChild(index);
+		assert argsNode.getType() == JSParser.ARGUMENTS;
 
 		fn.setLP(getTokenOffset(JSParser.LPAREN, node.getTokenStartIndex() + 1,
 				argsNode.getTokenStartIndex()));
-
-		fn.setArguments(transformListNode(argsNode, fn));
-
-		List<Integer> commas = new ArrayList<Integer>();
-
-		if (argsNode.getChildCount() > 1) {
-			for (int i = 1; i < argsNode.getChildCount(); i++) {
-				commas.add(getTokenOffset(JSParser.COMMA, argsNode.getChild(
-						i - 1).getTokenStopIndex() + 1, argsNode.getChild(i)
-						.getTokenStartIndex()));
+		for (int i = 0; i < argsNode.getChildCount(); ++i) {
+			final Tree argNode = argsNode.getChild(i);
+			Argument argument = transformArgument(argNode, fn);
+			if (i > 0) {
+				argument.setCommaPosition(getTokenOffset(JSParser.COMMA,
+						argsNode.getChild(i - 1).getTokenStopIndex() + 1,
+						argNode.getTokenStartIndex()));
 			}
+			fn.addArgument(argument);
 		}
-		fn.setArgumentCommas(commas);
 
-		final Tree bodyNode = node.getChild(argsIndex + 1);
-		fn.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(argsIndex)
-				.getTokenStopIndex(), bodyNode != null ? bodyNode
-				.getTokenStartIndex() : node.getTokenStopIndex()));
+		final Tree bodyNode = node.getChild(index + 1);
+		fn.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(index)
+				.getTokenStopIndex(), bodyNode.getTokenStartIndex()));
 
-		if (bodyNode != null) {
-			fn.setBody((StatementBlock) transformNode(bodyNode, fn));
-		}
+		fn.setBody((StatementBlock) transformNode(bodyNode, fn));
 
 		fn.setStart(fn.getFunctionKeyword().sourceStart());
 		fn.setEnd(fn.getBody().sourceEnd());
