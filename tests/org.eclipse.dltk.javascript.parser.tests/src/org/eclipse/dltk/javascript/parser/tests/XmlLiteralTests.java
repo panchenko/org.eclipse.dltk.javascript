@@ -51,7 +51,7 @@ public class XmlLiteralTests extends AbstractJSParserTest {
 				.getVariables();
 		assertEquals(1, vars.size());
 		VariableDeclaration var0 = vars.get(0);
-		assertEquals("x", var0.getVariableName().getName());
+		assertEquals("x", var0.getIdentifier().getName());
 		final XmlLiteral literal = (XmlLiteral) var0.getInitializer();
 		assertEquals(3, literal.getFragments().size());
 		assertTrue(literal.getFragments().get(0) instanceof XmlTextFragment);
