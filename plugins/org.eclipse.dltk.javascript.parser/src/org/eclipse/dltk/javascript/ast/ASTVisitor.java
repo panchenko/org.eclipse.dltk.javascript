@@ -103,6 +103,9 @@ public abstract class ASTVisitor implements IASTVisitor {
 		if (node.getClass() == Identifier.class)
 			return visitIdentifier((Identifier) node);
 
+		if (node.getClass() == SimpleType.class)
+			return visitSimpleType((SimpleType) node);
+
 		if (node.getClass() == IfStatement.class)
 			return visitIfStatement((IfStatement) node);
 

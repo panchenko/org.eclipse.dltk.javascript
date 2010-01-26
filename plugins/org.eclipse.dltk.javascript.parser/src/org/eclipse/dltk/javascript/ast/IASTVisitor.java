@@ -68,6 +68,8 @@ public interface IASTVisitor {
 
 	public boolean visitIdentifier(Identifier node);
 
+	public boolean visitSimpleType(SimpleType node);
+
 	public boolean visitIfStatement(IfStatement node);
 
 	public boolean visitKeyword(Keyword node);

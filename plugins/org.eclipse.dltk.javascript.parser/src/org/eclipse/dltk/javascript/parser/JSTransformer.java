@@ -22,7 +22,6 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
@@ -667,7 +666,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			index++;
 		}
 
-		Tree argsNode = node.getChild(index);
+		Tree argsNode = node.getChild(index++);
 		assert argsNode.getType() == JSParser.ARGUMENTS;
 
 		fn.setLP(getTokenOffset(JSParser.LPAREN, node.getTokenStartIndex() + 1,
@@ -682,7 +681,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			}
 			fn.addArgument(argument);
 		}
-		++index;
+		fn.setRP(getTokenOffset(JSParser.RPAREN, argsNode.getTokenStopIndex(),
+				node.getChild(index).getTokenStartIndex()));
+
 		if (index + 2 < node.getChildCount()
 				&& node.getChild(index).getType() == JSParser.COLON) {
 			fn.setColonPosition(getTokenOffset(node.getChild(index)
@@ -692,9 +693,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 
 		final Tree bodyNode = node.getChild(index);
-		fn.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(index - 1)
-				.getTokenStopIndex(), bodyNode.getTokenStartIndex()));
-
 		fn.setBody((StatementBlock) transformNode(bodyNode, fn));
 
 		fn.setStart(fn.getFunctionKeyword().sourceStart());
