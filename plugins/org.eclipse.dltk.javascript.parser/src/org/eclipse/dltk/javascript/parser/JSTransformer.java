@@ -682,9 +682,17 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			}
 			fn.addArgument(argument);
 		}
+		++index;
+		if (index + 2 < node.getChildCount()
+				&& node.getChild(index).getType() == JSParser.COLON) {
+			fn.setColonPosition(getTokenOffset(node.getChild(index)
+					.getTokenStartIndex()));
+			fn.setReturnType(transformType(node.getChild(index + 1), fn));
+			index += 2;
+		}
 
-		final Tree bodyNode = node.getChild(index + 1);
-		fn.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(index)
+		final Tree bodyNode = node.getChild(index);
+		fn.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(index - 1)
 				.getTokenStopIndex(), bodyNode.getTokenStartIndex()));
 
 		fn.setBody((StatementBlock) transformNode(bodyNode, fn));

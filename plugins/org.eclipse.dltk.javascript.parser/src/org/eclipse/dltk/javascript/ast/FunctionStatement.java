@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class FunctionStatement extends Expression implements ISourceableBlock {
 
@@ -27,6 +28,8 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 	private StatementBlock body;
 	private int LP = -1;
 	private int RP = -1;
+	private int colonPosition = -1;
+	private Type returnType;
 
 	public FunctionStatement(ASTNode parent) {
 		super(parent);
@@ -102,6 +105,22 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 		this.RP = RP;
 	}
 
+	public int getColonPosition() {
+		return colonPosition;
+	}
+
+	public void setColonPosition(int colonPosition) {
+		this.colonPosition = colonPosition;
+	}
+
+	public Type getReturnType() {
+		return returnType;
+	}
+
+	public void setReturnType(Type returnType) {
+		this.returnType = returnType;
+	}
+
 	@Override
 	public String toSourceString(String indentationString) {
 
@@ -126,11 +145,16 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 			if (i > 0)
 				buffer.append(", ");
 
-			buffer.append(((ISourceable) getArguments().get(i))
-					.toSourceString(indentationString));
+			buffer.append(getArguments().get(i).toSourceString(
+					indentationString));
 		}
 
-		buffer.append(")\n");
+		buffer.append(")");
+		if (returnType != null) {
+			buffer.append(JSLiterals.COLON);
+			buffer.append(returnType.toSourceString(indentationString));
+		}
+		buffer.append(JSLiterals.EOL);
 		buffer.append(getBody().toSourceString(indentationString));
 
 		return buffer.toString();

@@ -1715,8 +1715,8 @@ finallyClause
 // $<	Function Definition (13)
 
 functionDeclaration
-	: FUNCTION name=identifier formalParameterList functionBody
-	-> ^( FUNCTION $name formalParameterList functionBody )
+	: FUNCTION name=identifier formalParameterList ( { isTypeInformationEnabled() }?=> COLON typeRef )? functionBody
+	-> ^( FUNCTION $name formalParameterList COLON? typeRef? functionBody )
 	;
 
 functionExpression
