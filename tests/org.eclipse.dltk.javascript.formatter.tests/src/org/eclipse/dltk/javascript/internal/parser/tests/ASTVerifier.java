@@ -19,6 +19,7 @@ import junit.framework.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
@@ -650,17 +651,30 @@ public class ASTVerifier extends ASTVisitor {
 
 	public boolean visitFunctionStatement(FunctionStatement node) {
 
+		visit(node.getFunctionKeyword());
 		visit(node.getArguments());
 		visit(node.getBody());
-		visit(node.getFunctionKeyword());
 
 		if (node.getName() != null)
 			visit(node.getName());
 
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
-		testCharList(Keywords.COMMA, node.getArgumentCommas());
 
+		return true;
+	}
+
+	public boolean visitArgument(Argument argument) {
+		visit(argument.getIdentifier());
+		if (argument.getType() != null) {
+			visit(argument.getType());
+		}
+		if (argument.getColonPosition() != -1) {
+			testChar(':', argument.getColonPosition());
+		}
+		if (argument.getCommaPosition() != -1) {
+			testChar(',', argument.getCommaPosition());
+		}
 		return true;
 	}
 
