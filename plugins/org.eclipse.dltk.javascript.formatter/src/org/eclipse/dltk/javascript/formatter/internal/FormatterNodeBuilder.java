@@ -26,7 +26,7 @@ import org.eclipse.dltk.javascript.ast.CaseClause;
 import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.CommaExpression;
 import org.eclipse.dltk.javascript.ast.ConditionalOperator;
-import org.eclipse.dltk.javascript.ast.ConstDeclaration;
+import org.eclipse.dltk.javascript.ast.ConstStatement;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
@@ -46,6 +46,7 @@ import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.ISemicolonStatement;
+import org.eclipse.dltk.javascript.ast.IVariableStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.JSNode;
@@ -74,6 +75,7 @@ import org.eclipse.dltk.javascript.ast.TryStatement;
 import org.eclipse.dltk.javascript.ast.TypeOfExpression;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
@@ -166,6 +168,7 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.SwitchConditionParen
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ThenBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.TrailingColonNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.TryBodyConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.TypePunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WhileBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WhileConditionParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WithBlockBracesConfiguration;
@@ -417,7 +420,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return true;
 			}
 
-			private void visitCombinedNodeList(List<ASTNode> nodes,
+			private void visitCombinedNodeList(List<? extends ASTNode> nodes,
 					List<Integer> punctuations,
 					List<IPunctuationConfiguration> configurations) {
 
@@ -446,7 +449,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						.sourceEnd());
 			}
 
-			private void visitCombinedNodeList(List nodes, List punctuations,
+			private void visitCombinedNodeList(List<? extends ASTNode> nodes,
+					List<Integer> punctuations,
 					IPunctuationConfiguration configuration) {
 				visitCombinedNodeList(nodes, punctuations, Collections.nCopies(
 						punctuations.size(), configuration));
@@ -491,7 +495,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return true;
 			}
 
-			public boolean visitConstDeclaration(ConstDeclaration node) {
+			public boolean visitConstDeclaration(ConstStatement node) {
 
 				FormatterConstDeclarationNode formatterNode = new FormatterConstDeclarationNode(
 						document);
@@ -501,8 +505,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				visitCombinedNodeList(node.getConsts(), node.getCommas(),
-						new CommaPunctuationConfiguration());
+				processVariableDeclarations(node);
 
 				checkedPop(formatterNode, node.sourceEnd());
 
@@ -858,14 +861,15 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			 * process function declaration parameters and call arguments
 			 */
 			private void processParens(int leftParen, int rightParen,
-					List expressions, IParensConfiguration configuration,
-					List punctuations,
+					List<ASTNode> expressions,
+					IParensConfiguration configuration,
+					List<Integer> punctuations,
 					IPunctuationConfiguration punctuationConfiguration) {
 				ParensNode parens = new ParensNode(document, configuration);
 				parens.setBegin(createCharNode(document, leftParen));
 				push(parens);
 				if (!expressions.isEmpty()) {
-					final ASTNode expression0 = (ASTNode) expressions.get(0);
+					final ASTNode expression0 = expressions.get(0);
 					skipSpaces(parens, expression0.sourceStart());
 				}
 				visitCombinedNodeList(expressions, punctuations,
@@ -1449,7 +1453,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return true;
 			}
 
-			public boolean visitVariableDeclaration(VariableDeclaration node) {
+			public boolean visitVariableStatment(VariableStatement node) {
 				FormatterVariableDeclarationNode formatterNode = new FormatterVariableDeclarationNode(
 						document);
 
@@ -1458,11 +1462,44 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				visitCombinedNodeList(node.getVariables(), node.getCommas(),
-						new CommaPunctuationConfiguration());
+				processVariableDeclarations(node);
 
 				checkedPop(formatterNode, node.sourceEnd());
 
+				return true;
+			}
+
+			private void processVariableDeclarations(IVariableStatement node) {
+				List<Integer> commas = new ArrayList<Integer>();
+				for (VariableDeclaration declaration : node.getVariables()) {
+					if (declaration.getCommaPosition() != -1) {
+						commas.add(declaration.getCommaPosition());
+					}
+				}
+				visitCombinedNodeList(node.getVariables(), commas,
+						new CommaPunctuationConfiguration());
+			}
+
+			public boolean visitVariableDeclaration(VariableDeclaration node) {
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
+						document);
+				formatterNode.addChild(createEmptyTextNode(document, node
+						.sourceStart()));
+				push(formatterNode);
+				visit(node.getIdentifier());
+				if (node.getType() != null) {
+					skipSpaces(formatterNode, node.getColonPosition());
+					processPunctuation(node.getColonPosition(), 1,
+							new TypePunctuationConfiguration());
+					visit(node.getType());
+				}
+				if (node.getInitializer() != null) {
+					skipSpaces(formatterNode, node.getAssignPosition());
+					processPunctuation(node.getAssignPosition(), 1,
+							new BinaryOperationPinctuationConfiguration());
+					visit(node.getInitializer());
+				}
+				checkedPop(formatterNode, node.sourceEnd());
 				return true;
 			}
 
