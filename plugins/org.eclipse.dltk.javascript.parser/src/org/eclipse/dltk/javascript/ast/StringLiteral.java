@@ -19,7 +19,6 @@ import org.eclipse.dltk.ast.ASTVisitor;
 public class StringLiteral extends Expression {
 
 	private String text;
-	private char quoteChar;
 
 	public StringLiteral(ASTNode parent) {
 		super(parent);
@@ -43,12 +42,8 @@ public class StringLiteral extends Expression {
 		this.text = text;
 	}
 
-	public char getQuoteChar() {
-		return quoteChar;
-	}
-
+	@Override
 	public String toSourceString(String indentationString) {
-
 		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
 
