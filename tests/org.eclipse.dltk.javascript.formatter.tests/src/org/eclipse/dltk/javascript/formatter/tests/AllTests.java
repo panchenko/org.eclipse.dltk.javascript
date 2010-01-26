@@ -44,6 +44,7 @@ public class AllTests {
 		suite.addTest(E4XTest.suite());
 		suite.addTest(StatementTest.suite());
 		suite.addTest(VarTest.suite());
+		suite.addTest(ObjectInitializerTest.suite());
 		suite.addTestSuite(JavaScriptStreamTokenTestCase.class);
 		suite.addTestSuite(JavaScriptParserTestCase.class);
 		suite.addTestSuite(ANTLRParserTestCase.class);
