@@ -29,7 +29,7 @@ import org.eclipse.dltk.javascript.ast.CaseClause;
 import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.CommaExpression;
 import org.eclipse.dltk.javascript.ast.ConditionalOperator;
-import org.eclipse.dltk.javascript.ast.ConstDeclaration;
+import org.eclipse.dltk.javascript.ast.ConstStatement;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
@@ -72,6 +72,7 @@ import org.eclipse.dltk.javascript.ast.TryStatement;
 import org.eclipse.dltk.javascript.ast.TypeOfExpression;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
@@ -219,11 +220,9 @@ public class ASTVerifier extends ASTVisitor {
 		return true;
 	}
 
-	public boolean visitConstDeclaration(ConstDeclaration node) {
-
-		testCharList(Keywords.COMMA, node.getCommas());
+	public boolean visitConstDeclaration(ConstStatement node) {
 		visit(node.getConstKeyword());
-		visit(node.getConsts());
+		visit(node.getVariables());
 
 		testChar(Keywords.SEMI, node.getSemicolonPosition());
 
@@ -568,12 +567,31 @@ public class ASTVerifier extends ASTVisitor {
 		return true;
 	}
 
-	public boolean visitVariableDeclaration(VariableDeclaration node) {
+	public boolean visitVariableStatment(VariableStatement node) {
 
 		visit(node.getVarKeyword());
 		visit(node.getVariables());
-		testCharList(Keywords.COMMA, node.getCommas());
 
+		return true;
+	}
+
+	public boolean visitVariableDeclaration(VariableDeclaration declaration) {
+		visit(declaration.getIdentifier());
+		if (declaration.getType() != null) {
+			visit(declaration.getType());
+		}
+		if (declaration.getInitializer() != null) {
+			visit(declaration.getInitializer());
+		}
+		if (declaration.getColonPosition() != -1) {
+			testChar(':', declaration.getColonPosition());
+		}
+		if (declaration.getAssignPosition() != -1) {
+			testChar('=', declaration.getAssignPosition());
+		}
+		if (declaration.getCommaPosition() != -1) {
+			testChar(',', declaration.getCommaPosition());
+		}
 		return true;
 	}
 
