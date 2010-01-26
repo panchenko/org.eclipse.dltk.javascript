@@ -14,4 +14,9 @@ package org.eclipse.dltk.javascript.formatter.internal.nodes;
 public class TypePunctuationConfiguration extends
 		AbstractPunctuationConfiguration {
 
+	@Override
+	public boolean insertSpaceBefore() {
+		return false;
+	}
+
 }
