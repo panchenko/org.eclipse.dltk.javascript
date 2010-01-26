@@ -11,13 +11,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.tests;
 
+import java.util.List;
+
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
+
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
-
-import junit.framework.TestCase;
 
 public abstract class AbstractJSParserTest extends TestCase {
 
@@ -40,6 +43,14 @@ public abstract class AbstractJSParserTest extends TestCase {
 			}
 		}
 		return script;
+	}
+
+	protected static <E> E uniqueResult(List<E> elements) {
+		if (elements.size() == 1) {
+			return elements.get(0);
+		} else {
+			throw new AssertionFailedError("Single element expected");
+		}
 	}
 
 	protected static void rethrow(final Throwable cause) {
