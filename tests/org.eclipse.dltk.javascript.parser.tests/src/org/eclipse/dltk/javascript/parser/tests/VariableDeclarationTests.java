@@ -45,6 +45,22 @@ public class VariableDeclarationTests extends AbstractJSParserTest {
 		assertNull(var0.getInitializer());
 	}
 
+	public void testTypedVar2DeclarationDisabled() {
+		Script script = parse(VAR_X_STRING + "," + "y:String");
+		assertTrue(reporter.hasErrors());
+		VariableStatement vars = uniqueResult(ASTUtil.select(script,
+				VariableStatement.class));
+		assertEquals(2, vars.getVariables().size());
+
+		assertEquals("x", vars.getVariables().get(0).getVariableName());
+		assertNull(vars.getVariables().get(0).getType());
+		assertNull(vars.getVariables().get(0).getInitializer());
+
+		assertEquals("y", vars.getVariables().get(1).getVariableName());
+		assertNull(vars.getVariables().get(1).getType());
+		assertNull(vars.getVariables().get(1).getInitializer());
+	}
+
 	public void testTypedVarDeclaration() {
 		parser.setTypeInformationEnabled(true);
 		Script script = parse(VAR_X_STRING);
