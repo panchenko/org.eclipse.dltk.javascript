@@ -64,6 +64,7 @@ import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
+import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
@@ -778,6 +779,12 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processParens(node.getLP(), node.getRP(), node.getArguments(),
 						argsConfiguration, commas,
 						new FunctionArgumentsPunctuationConfiguration());
+				if (node.getReturnType() != null) {
+					skipSpaces(formatterNode, node.getColonPosition());
+					processPunctuation(node.getColonPosition(), 1,
+							new TypePunctuationConfiguration());
+					visit(node.getReturnType());
+				}
 
 				boolean emptyBody = node.getBody() == null
 						|| isEmptyBody(node.getBody());
@@ -877,9 +884,12 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			public boolean visitIdentifier(Identifier node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
+				addChild(new FormatterStringNode(document, node));
+				return true;
+			}
+
+			public boolean visitSimpleType(SimpleType node) {
+				addChild(new FormatterStringNode(document, node));
 				return true;
 			}
 
