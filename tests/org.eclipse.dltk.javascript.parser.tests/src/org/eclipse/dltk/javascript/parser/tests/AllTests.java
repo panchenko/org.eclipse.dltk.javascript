@@ -21,8 +21,8 @@ public class AllTests {
 				"org.eclipse.dltk.javascript.parser.tests");
 		// $JUnit-BEGIN$
 		suite.addTestSuite(VariableDeclarationTests.class);
-//		suite.addTestSuite(XmlQueryTests.class);
-//		suite.addTestSuite(XmlLiteralTests.class);
+		suite.addTestSuite(XmlQueryTests.class);
+		suite.addTestSuite(XmlLiteralTests.class);
 		// $JUnit-END$
 		return suite;
 	}
