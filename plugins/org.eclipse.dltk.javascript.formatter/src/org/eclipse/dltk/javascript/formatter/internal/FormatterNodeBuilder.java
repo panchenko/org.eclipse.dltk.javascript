@@ -16,6 +16,7 @@ import org.eclipse.dltk.formatter.IFormatterContainerNode;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.formatter.IFormatterTextNode;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
@@ -767,9 +768,15 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					argsConfiguration = new FunctionArgumentsParensConfiguration(
 							document);
 				}
+				List<Integer> commas = new ArrayList<Integer>();
+				for (Argument argument : node.getArguments()) {
+					if (argument.getCommaPosition() != -1) {
+						commas.add(argument.getCommaPosition());
+					}
+				}
 
 				processParens(node.getLP(), node.getRP(), node.getArguments(),
-						argsConfiguration, node.getArgumentCommas(),
+						argsConfiguration, commas,
 						new FunctionArgumentsPunctuationConfiguration());
 
 				boolean emptyBody = node.getBody() == null
@@ -788,6 +795,23 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				checkedPop(formatterNode, node.sourceEnd());
 
 				return false;
+			}
+
+			public boolean visitArgument(Argument argument) {
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
+						document);
+				formatterNode.addChild(createEmptyTextNode(document, argument
+						.sourceStart()));
+				push(formatterNode);
+				visit(argument.getIdentifier());
+				if (argument.getType() != null) {
+					skipSpaces(formatterNode, argument.getColonPosition());
+					processPunctuation(argument.getColonPosition(), 1,
+							new TypePunctuationConfiguration());
+					visit(argument.getType());
+				}
+				checkedPop(formatterNode, argument.sourceEnd());
+				return true;
 			}
 
 			private boolean isEmptyBody(StatementBlock block) {
@@ -876,7 +900,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			 * process function declaration parameters and call arguments
 			 */
 			private void processParens(int leftParen, int rightParen,
-					List<ASTNode> expressions,
+					List<? extends ASTNode> expressions,
 					IParensConfiguration configuration,
 					List<Integer> punctuations,
 					IPunctuationConfiguration punctuationConfiguration) {
@@ -894,13 +918,15 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			private void processParens(int leftParen, int rightParen,
-					List expressions, IParensConfiguration configuration,
-					List punctuations, List punctuationConfigurations) {
+					List<ASTNode> expressions,
+					IParensConfiguration configuration,
+					List<Integer> punctuations,
+					List<IPunctuationConfiguration> punctuationConfigurations) {
 				ParensNode parens = new ParensNode(document, configuration);
 				parens.setBegin(createCharNode(document, leftParen));
 				push(parens);
 				if (!expressions.isEmpty()) {
-					final ASTNode expression0 = (ASTNode) expressions.get(0);
+					final ASTNode expression0 = expressions.get(0);
 					skipSpaces(parens, expression0.sourceStart());
 				}
 				visitCombinedNodeList(expressions, punctuations,
