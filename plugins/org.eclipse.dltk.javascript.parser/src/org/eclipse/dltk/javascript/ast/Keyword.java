@@ -25,8 +25,6 @@ public class Keyword extends ASTNode implements ISourceable {
 	}
 
 	public String getKeyword() {
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
 		return this.keyword;
 	}
 
