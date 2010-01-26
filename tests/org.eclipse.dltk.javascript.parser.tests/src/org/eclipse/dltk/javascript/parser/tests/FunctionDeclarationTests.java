@@ -100,4 +100,15 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertEquals("Number", func.getArguments().get(1).getType().getName());
 	}
 
+	public void testTypedReturn() {
+		parser.setTypeInformationEnabled(true);
+		Script script = parse("function a():Number{return 1}");
+		assertFalse(reporter.hasErrors());
+		FunctionStatement func = uniqueResult(ASTUtil.select(script,
+				FunctionStatement.class));
+		assertEquals("a", func.getName().getName());
+		assertTrue(func.getArguments().isEmpty());
+		assertEquals("Number", func.getReturnType().getName());
+	}
+
 }
