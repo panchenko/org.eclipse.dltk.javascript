@@ -34,7 +34,7 @@ public interface IASTVisitor {
 
 	public boolean visitConditionalOperator(ConditionalOperator node);
 
-	public boolean visitConstDeclaration(ConstDeclaration node);
+	public boolean visitConstDeclaration(ConstStatement node);
 
 	public boolean visitContinueStatement(ContinueStatement node);
 
@@ -109,6 +109,8 @@ public interface IASTVisitor {
 	public boolean visitTypeOfExpression(TypeOfExpression node);
 
 	public boolean visitUnaryOperation(UnaryOperation node);
+
+	public boolean visitVariableStatment(VariableStatement node);
 
 	public boolean visitVariableDeclaration(VariableDeclaration node);
 

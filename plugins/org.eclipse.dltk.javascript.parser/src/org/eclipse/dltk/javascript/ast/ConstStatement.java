@@ -9,23 +9,22 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class ConstDeclaration extends Statement {
+public class ConstStatement extends Statement implements IVariableStatement {
 
 	private Keyword constKeyword;
-	private List<ASTNode> consts;
-	private List<Integer> commas;
+	private final List<VariableDeclaration> consts = new ArrayList<VariableDeclaration>();
 	private int semic = -1;
 
-	public ConstDeclaration(ASTNode parent) {
+	public ConstStatement(ASTNode parent) {
 		super(parent);
 	}
 
@@ -38,22 +37,20 @@ public class ConstDeclaration extends Statement {
 			if (constKeyword != null)
 				constKeyword.traverse(visitor);
 
-			if (consts != null) {
-				for (ASTNode constNode : consts) {
-					constNode.traverse(visitor);
-				}
+			for (ASTNode constNode : consts) {
+				constNode.traverse(visitor);
 			}
 
 			visitor.endvisit(this);
 		}
 	}
 
-	public List<ASTNode> getConsts() {
+	public List<VariableDeclaration> getVariables() {
 		return this.consts;
 	}
 
-	public void setConsts(List<ASTNode> consts) {
-		this.consts = consts;
+	public void addVariable(VariableDeclaration declaration) {
+		consts.add(declaration);
 	}
 
 	public Keyword getConstKeyword() {
@@ -64,14 +61,6 @@ public class ConstDeclaration extends Statement {
 		this.constKeyword = keyword;
 	}
 
-	public List<Integer> getCommas() {
-		return this.commas;
-	}
-
-	public void setCommas(List<Integer> commas) {
-		this.commas = commas;
-	}
-
 	public int getSemicolonPosition() {
 		return this.semic;
 	}
@@ -80,11 +69,10 @@ public class ConstDeclaration extends Statement {
 		this.semic = semic;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
-
 		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(consts.size() == 0 || commas.size() == consts.size() - 1);
 		Assert.isTrue(semic > 0);
 
 		StringBuffer buffer = new StringBuffer();
@@ -96,9 +84,7 @@ public class ConstDeclaration extends Statement {
 		for (int i = 0; i < consts.size(); i++) {
 			if (i > 0)
 				buffer.append(", ");
-
-			buffer.append(((ISourceable) consts.get(i))
-					.toSourceString(indentationString));
+			buffer.append(consts.get(i).toSourceString(indentationString));
 		}
 		buffer.append(";\n");
 

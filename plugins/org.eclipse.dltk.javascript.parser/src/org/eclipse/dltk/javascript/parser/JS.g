@@ -352,6 +352,16 @@ public void recoverFromMismatchedToken(IntStream input, RecognitionException e, 
 
 @parser::members
 {
+private boolean typeInformationEnabled;
+
+public final boolean isTypeInformationEnabled() {
+	return typeInformationEnabled;
+}
+
+public void setTypeInformationEnabled(boolean value) {
+	this.typeInformationEnabled = value;
+}
+
 protected void reportFailure(Throwable t) {
 }
 
@@ -1391,12 +1401,16 @@ variableStatement
 	-> ^( VAR variableDeclaration+ )
 	;
 
+typeRef
+	: identifier
+	;
+
 variableDeclaration
-	: identifier ( ASSIGN^ assignmentExpression )?
+	: identifier^ ( { isTypeInformationEnabled() }?=> COLON typeRef )? ( ASSIGN assignmentExpression )?
 	;
 	
 variableDeclarationNoIn
-	: identifier ( ASSIGN^ assignmentExpressionNoIn )?
+	: identifier^ ( { isTypeInformationEnabled() }?=> COLON typeRef )? ( ASSIGN assignmentExpressionNoIn )?
 	;
 
 constStatement
@@ -1499,8 +1513,8 @@ Furthermore backtracking seemed to have 3 major drawbacks:
 */
 
 forEachStatement
-  : FOR EACH LPAREN forEachControl RPAREN statement 
-  	-> ^(FOREACH forEachControl statement)
+  : forKeyword=FOR EACH LPAREN forEachControl RPAREN statement 
+  	-> ^(FOREACH[$forKeyword] forEachControl statement)
   ;
 
 forEachControl
@@ -1710,7 +1724,7 @@ functionExpression
 	;
 
 formalParameterList
-	: LPAREN ( args+=identifier ( COMMA args+=identifier )* )? RPAREN
+	: LPAREN ( args+=identifier ( { isTypeInformationEnabled() }?=> COLON typeRef )? ( COMMA args+=identifier ( { isTypeInformationEnabled() }? COLON typeRef )? )* )? RPAREN
 	-> ^( ARGS $args* )
 	;
 
@@ -1725,13 +1739,13 @@ functionBody
 // $< get/set methods
 
 getMethodDeclaration
-  : GET name=identifier LPAREN RPAREN functionBody
-  	-> ^(GETTER identifier functionBody?)
+  : get=GET name=identifier LPAREN RPAREN functionBody
+  	-> ^(GETTER[$get] identifier functionBody?)
   ;
   
 setMethodDeclaration
-  : SET name=identifier LPAREN param=identifier RPAREN functionBody
-    -> ^(SETTER $name $param functionBody?)
+  : set=SET name=identifier LPAREN param=identifier RPAREN functionBody
+    -> ^(SETTER[$set] $name $param functionBody?)
   ;
 
 // $>	

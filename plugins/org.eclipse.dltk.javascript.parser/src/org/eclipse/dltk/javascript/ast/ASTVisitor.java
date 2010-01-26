@@ -52,8 +52,8 @@ public abstract class ASTVisitor implements IASTVisitor {
 		if (node.getClass() == ConditionalOperator.class)
 			return visitConditionalOperator((ConditionalOperator) node);
 
-		if (node.getClass() == ConstDeclaration.class)
-			return visitConstDeclaration((ConstDeclaration) node);
+		if (node.getClass() == ConstStatement.class)
+			return visitConstDeclaration((ConstStatement) node);
 
 		if (node.getClass() == ContinueStatement.class)
 			return visitContinueStatement((ContinueStatement) node);
@@ -166,6 +166,9 @@ public abstract class ASTVisitor implements IASTVisitor {
 		if (node.getClass() == UnaryOperation.class)
 			return visitUnaryOperation((UnaryOperation) node);
 
+		if (node.getClass() == VariableStatement.class)
+			return visitVariableStatment((VariableStatement) node);
+
 		if (node.getClass() == VariableDeclaration.class)
 			return visitVariableDeclaration((VariableDeclaration) node);
 
@@ -209,4 +212,7 @@ public abstract class ASTVisitor implements IASTVisitor {
 			return true;
 		}
 	}
+
+	
+	
 }

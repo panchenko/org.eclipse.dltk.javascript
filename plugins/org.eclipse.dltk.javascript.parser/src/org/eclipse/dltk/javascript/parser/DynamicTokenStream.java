@@ -167,7 +167,7 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 				System.out.println("LOAD ALL");
 			while (fetchToken())
 				;
-			assert endOfStream;
+			endOfStream = true;
 		}
 	}
 

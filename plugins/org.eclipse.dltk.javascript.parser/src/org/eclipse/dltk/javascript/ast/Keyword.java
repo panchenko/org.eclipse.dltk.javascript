@@ -9,52 +9,41 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class Keyword extends ASTNode {
+public class Keyword extends ASTNode implements ISourceable {
 
-	private String keyword;
-	private ASTNode parent;
+	private final String keyword;
 
-	public Keyword(ASTNode parent, String keyword) {
-		this.parent = parent;
+	public Keyword(String keyword) {
+		super(-1, -1);
 		this.keyword = keyword;
-		setStart(-1);
-		setEnd(-1);
-	}
-
-	public ASTNode getParent() {
-		return this.parent;
 	}
 
 	public String getKeyword() {
-
 		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
-
 		return this.keyword;
 	}
 
+	@Override
 	public String toString() {
 		return toSourceString("");
 	}
 
 	public String toSourceString(String indentationString) {
-
 		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
-
 		return keyword;
 	}
 
+	@Override
 	public void traverse(ASTVisitor visitor) throws Exception {
-		if (visitor.visit(this))
-		{
+		if (visitor.visit(this)) {
 			visitor.endvisit(this);
 		}
 	}

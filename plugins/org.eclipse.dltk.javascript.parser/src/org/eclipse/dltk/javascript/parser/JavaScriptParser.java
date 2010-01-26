@@ -38,6 +38,16 @@ import org.eclipse.dltk.utils.TextUtils;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
+	private boolean typeInformationEnabled = false;
+
+	public boolean isTypeInformationEnabled() {
+		return typeInformationEnabled;
+	}
+
+	public void setTypeInformationEnabled(boolean typeInformationEnabled) {
+		this.typeInformationEnabled = typeInformationEnabled;
+	}
+
 	private static class JSInternalParser extends JSParser {
 
 		private final IProblemReporter reporter;
@@ -184,6 +194,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 		try {
 			JSInternalParser parser = new JSInternalParser(stream, reporter,
 					lineTracker);
+			parser.setTypeInformationEnabled(typeInformationEnabled);
 			RuleReturnScope root = parser.program();
 			return new JSTransformer(stream.getTokens()).transform(root);
 		} catch (Exception e) {

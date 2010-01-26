@@ -9,7 +9,6 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.parser;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.CommaExpression;
 import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.ConditionalOperator;
-import org.eclipse.dltk.javascript.ast.ConstDeclaration;
+import org.eclipse.dltk.javascript.ast.ConstStatement;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
@@ -54,6 +53,7 @@ import org.eclipse.dltk.javascript.ast.GetAllChildrenExpression;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.GetMethod;
+import org.eclipse.dltk.javascript.ast.IVariableStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.Keyword;
@@ -71,6 +71,7 @@ import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
+import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.SingleLineComment;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
@@ -80,9 +81,11 @@ import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
+import org.eclipse.dltk.javascript.ast.Type;
 import org.eclipse.dltk.javascript.ast.TypeOfExpression;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.VoidExpression;
 import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
@@ -170,6 +173,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		Assert.isTrue(tokenIndex >= -1 && tokenIndex < tokenOffsets.length);
 
 		return tokenOffsets[tokenIndex];
+	}
+
+	private void setRangeByToken(ASTNode node, int tokenIndex) {
+		node.setStart(getTokenOffset(tokenIndex));
+		node.setEnd(getTokenOffset(tokenIndex + 1));
 	}
 
 	private int getTokenOffset(int tokenType, int startTokenIndex,
@@ -376,14 +384,18 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return block;
 	}
 
+	private Keyword createKeyword(Tree node, String text) {
+		assert text.equals(node.getText());
+		// assert text.equals(Keywords.fromToken(node.getType()));
+		final Keyword keyword = new Keyword(text);
+		setRangeByToken(keyword, node.getTokenStartIndex());
+		return keyword;
+	}
+
 	protected ASTNode visitBreak(Tree node) {
 		BreakStatement statement = new BreakStatement(getParent());
 
-		Keyword breakKeyword = new Keyword(statement, Keywords.BREAK);
-		breakKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		breakKeyword.setEnd(breakKeyword.sourceStart()
-				+ Keywords.BREAK.length());
-		statement.setBreakKeyword(breakKeyword);
+		statement.setBreakKeyword(createKeyword(node, Keywords.BREAK));
 
 		if (node.getChildCount() > 0) {
 			Label label = new Label(statement);
@@ -424,9 +436,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		List<Integer> commas = new ArrayList<Integer>();
 		Tree args = node.getChild(1);
 		for (int i = 1 /* miss the first */; i < args.getChildCount(); i++) {
-			commas.add(new Integer(getTokenOffset(JSParser.COMMA, args
-					.getChild(i - 1).getTokenStopIndex() + 1, args.getChild(i)
-					.getTokenStartIndex())));
+			commas.add(getTokenOffset(JSParser.COMMA, args.getChild(i - 1)
+					.getTokenStopIndex() + 1, args.getChild(i)
+					.getTokenStartIndex()));
 		}
 		call.setCommas(commas);
 
@@ -444,10 +456,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitCase(Tree node) {
 		CaseClause caseClause = new CaseClause(getParent());
 
-		Keyword caseKeyword = new Keyword(caseClause, Keywords.CASE);
-		caseKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		caseKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		caseClause.setCaseKeyword(caseKeyword);
+		caseClause.setCaseKeyword(createKeyword(node, Keywords.CASE));
 
 		caseClause.setCondition((Expression) transformNode(node.getChild(0),
 				caseClause));
@@ -480,10 +489,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitDefault(Tree node) {
 		DefaultClause defaultClause = new DefaultClause(getParent());
 
-		Keyword defaultKeyword = new Keyword(getParent(), Keywords.DEFAULT);
-		defaultKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		defaultKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		defaultClause.setDefaultKeyword(defaultKeyword);
+		defaultClause.setDefaultKeyword(createKeyword(node, Keywords.DEFAULT));
 
 		defaultClause.setColonPosition(getTokenOffset(JSParser.COLON, node
 				.getTokenStartIndex() + 1, node.getTokenStopIndex() + 1));
@@ -522,10 +528,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	private ASTNode visitForStatement(Tree node) {
 		ForStatement statement = new ForStatement(getParent());
 
-		Keyword forKeyword = new Keyword(getParent(), Keywords.FOR);
-		forKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		forKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setForKeyword(forKeyword);
+		statement.setForKeyword(createKeyword(node, Keywords.FOR));
 
 		statement.setLP(getTokenOffset(JSParser.LPAREN, node
 				.getTokenStartIndex() + 1, node.getTokenStopIndex()));
@@ -621,10 +624,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	private ASTNode visitForInStatement(Tree node) {
 		ForInStatement statement = new ForInStatement(getParent());
 
-		Keyword forKeyword = new Keyword(statement, Keywords.FOR);
-		forKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		forKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setForKeyword(forKeyword);
+		statement.setForKeyword(createKeyword(node, Keywords.FOR));
 
 		statement.setLP(getTokenOffset(JSParser.LPAREN, node
 				.getTokenStartIndex() + 1, node.getChild(0)
@@ -633,7 +633,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		statement.setItem((Expression) transformNode(node.getChild(0).getChild(
 				0), statement));
 
-		Keyword inKeyword = new Keyword(statement, Keywords.IN);
+		Keyword inKeyword = new Keyword(Keywords.IN);
 
 		int iteratorStart = node.getChild(0).getChild(1).getTokenStartIndex();
 
@@ -679,10 +679,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitFunction(Tree node) {
 		FunctionStatement fn = new FunctionStatement(getParent());
 
-		Keyword functionKeyword = new Keyword(fn, Keywords.FUNCTION);
-		functionKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		functionKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		fn.setFunctionKeyword(functionKeyword);
+		fn.setFunctionKeyword(createKeyword(node, Keywords.FUNCTION));
 
 		int argsIndex = 0;
 
@@ -702,9 +699,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		if (argsNode.getChildCount() > 1) {
 			for (int i = 1; i < argsNode.getChildCount(); i++) {
-				commas.add(new Integer(getTokenOffset(JSParser.COMMA, argsNode
-						.getChild(i - 1).getTokenStopIndex() + 1, argsNode
-						.getChild(i).getTokenStartIndex())));
+				commas.add(getTokenOffset(JSParser.COMMA, argsNode.getChild(
+						i - 1).getTokenStopIndex() + 1, argsNode.getChild(i)
+						.getTokenStartIndex()));
 			}
 		}
 		fn.setArgumentCommas(commas);
@@ -729,8 +726,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		Identifier id = new Identifier(getParent());
 		id.setName(node.getText());
 
-		id.setStart(getTokenOffset(node.getTokenStartIndex()));
-		id.setEnd(id.sourceStart() + id.getName().length());
+		setRangeByToken(id, node.getTokenStartIndex());
 
 		return id;
 	}
@@ -739,10 +735,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		ReturnStatement returnStatement = new ReturnStatement(getParent());
 
-		Keyword keyword = new Keyword(returnStatement, Keywords.RETURN);
-		keyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		keyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		returnStatement.setReturnKeyword(keyword);
+		returnStatement.setReturnKeyword(createKeyword(node, Keywords.RETURN));
 
 		if (node.getChildCount() > 0) {
 			returnStatement.setValue((Expression) transformNode(node
@@ -783,10 +776,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		SwitchStatement statement = new SwitchStatement(getParent());
 
-		Keyword switchKeyword = new Keyword(statement, Keywords.SWITCH);
-		switchKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		switchKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setSwitchKeyword(switchKeyword);
+		statement.setSwitchKeyword(createKeyword(node, Keywords.SWITCH));
 
 		statement.setLP(getTokenOffset(JSParser.LPAREN, node
 				.getTokenStartIndex() + 1, node.getChild(0)
@@ -894,11 +884,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		ContinueStatement statement = new ContinueStatement(getParent());
 
-		Keyword continueKeyword = new Keyword(statement, Keywords.CONTINUE);
-		continueKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		continueKeyword.setEnd(continueKeyword.sourceStart()
-				+ Keywords.CONTINUE.length());
-		statement.setContinueKeyword(continueKeyword);
+		statement.setContinueKeyword(createKeyword(node, Keywords.CONTINUE));
 
 		if (node.getChildCount() > 0) {
 			Label label = new Label(statement);
@@ -920,32 +906,68 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	protected ASTNode visitVarDeclaration(Tree node) {
+	private Type transformType(Tree node, ASTNode parent) {
+		Assert.isTrue(node.getType() == JSParser.Identifier);
+		SimpleType type = new SimpleType(parent);
+		type.setName(node.getText());
+		setRangeByToken(type, node.getTokenStartIndex());
+		return type;
+	}
 
-		VariableDeclaration var = new VariableDeclaration(getParent());
+	private VariableDeclaration transformVariableDeclaration(Tree node,
+			IVariableStatement statement) {
+		Assert.isTrue(node.getType() == JSParser.Identifier
+				|| JSLexer.isIdentifierKeyword(node.getType()));
 
-		Keyword varKeyword = new Keyword(getParent(), Keywords.VAR);
-		varKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		varKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		var.setVarKeyword(varKeyword);
-
-		List<Integer> commas = new ArrayList<Integer>();
-		List<ASTNode> variables = new ArrayList<ASTNode>(node.getChildCount());
-		for (int i = 0; i < node.getChildCount(); i++) {
-			variables.add(transformNode(node.getChild(i), var));
-
-			if (i > 0)
-				commas.add(new Integer(getTokenOffset(JSParser.COMMA, node
-						.getChild(i - 1).getTokenStopIndex() + 1, node
-						.getChild(i).getTokenStartIndex())));
+		VariableDeclaration declaration = new VariableDeclaration(
+				(ASTNode) statement);
+		declaration.setIdentifier((Identifier) visitIdentifier(node));
+		declaration.setStart(getTokenOffset(node.getTokenStartIndex()));
+		declaration.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+		int i = 0;
+		if (i + 2 <= node.getChildCount()
+				&& node.getChild(i).getType() == JSParser.COLON) {
+			declaration.setColonPosition(getTokenOffset(node.getChild(i)
+					.getTokenStartIndex()));
+			declaration
+					.setType(transformType(node.getChild(i + 1), declaration));
+			i += 2;
 		}
-		var.setVariables(variables);
-		var.setCommas(commas);
+		if (i + 2 <= node.getChildCount()
+				&& node.getChild(i).getType() == JSParser.ASSIGN) {
+			declaration.setAssignPosition(getTokenOffset(node.getChild(i)
+					.getTokenStartIndex()));
+			declaration.setInitializer((Expression) transformNode(node
+					.getChild(i + 1), declaration));
+			i += 2;
+		}
+		return declaration;
+	}
+
+	@Override
+	protected ASTNode visitVarDeclaration(Tree node) {
+		VariableStatement var = new VariableStatement(getParent());
+		var.setVarKeyword(createKeyword(node, Keywords.VAR));
+
+		processVariableDeclarations(node, var);
 
 		var.setStart(getTokenOffset(node.getTokenStartIndex()));
 		var.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
 		return var;
+	}
+
+	private void processVariableDeclarations(Tree node, IVariableStatement var) {
+		for (int i = 0; i < node.getChildCount(); i++) {
+			VariableDeclaration declaration = transformVariableDeclaration(node
+					.getChild(i), var);
+			var.addVariable(declaration);
+			if (i > 0) {
+				declaration.setCommaPosition(getTokenOffset(JSParser.COMMA,
+						node.getChild(i - 1).getTokenStopIndex() + 1, node
+								.getChild(i).getTokenStartIndex()));
+			}
+		}
 	}
 
 	protected ASTNode visitObjectInitializer(Tree node) {
@@ -959,9 +981,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			properties.add(transformNode(node.getChild(i), initializer));
 
 			if (i > 0)
-				commas.add(new Integer(getTokenOffset(JSParser.COMMA, node
-						.getChild(i - 1).getTokenStopIndex() + 1, node
-						.getChild(i).getTokenStartIndex())));
+				commas.add(getTokenOffset(JSParser.COMMA, node.getChild(i - 1)
+						.getTokenStopIndex() + 1, node.getChild(i)
+						.getTokenStartIndex()));
 		}
 
 		initializer.setInitializers(properties);
@@ -1005,12 +1027,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitForEachInStatement(Tree node) {
 		ForEachInStatement statement = new ForEachInStatement(getParent());
 
-		Keyword forKeyword = new Keyword(statement, Keywords.FOR);
-		forKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		forKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setForKeyword(forKeyword);
+		statement.setForKeyword(createKeyword(node, Keywords.FOR));
 
-		Keyword eachKeyword = new Keyword(statement, Keywords.EACH);
+		Keyword eachKeyword = new Keyword(Keywords.EACH);
 		eachKeyword.setStart(getTokenOffset(JSParser.EACH, node
 				.getTokenStartIndex(), node.getTokenStopIndex()));
 		eachKeyword.setEnd(eachKeyword.sourceStart() + Keywords.EACH.length());
@@ -1023,7 +1042,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		statement.setItem((Expression) transformNode(node.getChild(0).getChild(
 				0), statement));
 
-		Keyword inKeyword = new Keyword(statement, Keywords.IN);
+		Keyword inKeyword = new Keyword(Keywords.IN);
 		int iteratorStart = node.getChild(0).getChild(1).getTokenStartIndex();
 		if (iteratorStart == -1
 				&& node.getChild(0).getChild(1).getType() == JSParser.EXPR
@@ -1105,10 +1124,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		WhileStatement statement = new WhileStatement(getParent());
 
-		Keyword whileKeyword = new Keyword(statement, Keywords.WHILE);
-		whileKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		whileKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setWhileKeyword(whileKeyword);
+		statement.setWhileKeyword(createKeyword(node, Keywords.WHILE));
 
 		statement.setLP(getTokenOffset(JSParser.LPAREN, node
 				.getTokenStartIndex(), node.getChild(0).getTokenStartIndex()));
@@ -1143,10 +1159,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		IfStatement ifStatement = new IfStatement(getParent());
 
-		Keyword ifKeyword = new Keyword(ifStatement, Keywords.IF);
-		ifKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		ifKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		ifStatement.setIfKeyword(ifKeyword);
+		ifStatement.setIfKeyword(createKeyword(node, Keywords.IF));
 
 		ifStatement.setLP(getTokenOffset(JSParser.LPAREN, node
 				.getTokenStartIndex() + 1, node.getChild(0)
@@ -1167,7 +1180,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 
 		if (node.getChildCount() > 2) {
-			Keyword elseKeyword = new Keyword(ifStatement, Keywords.ELSE);
+			Keyword elseKeyword = new Keyword(Keywords.ELSE);
 			elseKeyword.setStart(getTokenOffset(JSParser.ELSE, node.getChild(1)
 					.getTokenStopIndex() + 1, node.getChild(2)
 					.getTokenStartIndex()));
@@ -1188,14 +1201,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitDoWhile(Tree node) {
 		DoWhileStatement statement = new DoWhileStatement(getParent());
 
-		Keyword doKeyword = new Keyword(getParent(), Keywords.DO);
-		doKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		doKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setDoKeyword(doKeyword);
+		statement.setDoKeyword(createKeyword(node, Keywords.DO));
 
 		statement.setBody(transformStatementNode(node.getChild(0), statement));
 
-		Keyword whileKeyword = new Keyword(getParent(), Keywords.WHILE);
+		Keyword whileKeyword = new Keyword(Keywords.WHILE);
 		whileKeyword
 				.setStart(getTokenOffset(JSParser.WHILE, node.getChild(0)
 						.getTokenStopIndex() + 1, node.getChild(1)
@@ -1272,10 +1282,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		TryStatement statement = new TryStatement(getParent());
 
-		Keyword tryKeyword = new Keyword(getParent(), Keywords.TRY);
-		tryKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		tryKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setTryKeyword(tryKeyword);
+		statement.setTryKeyword(createKeyword(node, Keywords.TRY));
 
 		statement.setBody((StatementBlock) transformStatementNode(node
 				.getChild(0), statement));
@@ -1313,10 +1320,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		ThrowStatement statement = new ThrowStatement(getParent());
 
-		Keyword throwKeyword = new Keyword(statement, Keywords.THROW);
-		throwKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		throwKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setThrowKeyword(throwKeyword);
+		statement.setThrowKeyword(createKeyword(node, Keywords.THROW));
 
 		if (node.getChildCount() > 0) {
 			statement.setException((Expression) transformNode(node.getChild(0),
@@ -1336,10 +1340,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		NewExpression expression = new NewExpression(getParent());
 
-		Keyword newKeyword = new Keyword(expression, Keywords.NEW);
-		newKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		newKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		expression.setNewKeyword(newKeyword);
+		expression.setNewKeyword(createKeyword(node, Keywords.NEW));
 
 		expression.setObjectClass((Expression) transformNode(node.getChild(0),
 				expression));
@@ -1354,10 +1355,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		CatchClause catchClause = new CatchClause(getParent());
 
-		Keyword catchKeyword = new Keyword(catchClause, Keywords.CATCH);
-		catchKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		catchKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		catchClause.setCatchKeyword(catchKeyword);
+		catchClause.setCatchKeyword(createKeyword(node, Keywords.CATCH));
 
 		catchClause.setLP(getTokenOffset(JSParser.LPAREN, node
 				.getTokenStartIndex() + 1, node.getChild(0)
@@ -1375,7 +1373,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 			Tree filterNode = node.getChild(1);
 
-			Keyword ifKeyword = new Keyword(catchClause, Keywords.IF);
+			Keyword ifKeyword = new Keyword(Keywords.IF);
 			ifKeyword.setStart(getTokenOffset(filterNode.getTokenStartIndex()));
 			ifKeyword
 					.setEnd(getTokenOffset(filterNode.getTokenStartIndex() + 1));
@@ -1407,10 +1405,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		FinallyClause finallyClause = new FinallyClause(getParent());
 
-		Keyword finallyKeyword = new Keyword(finallyClause, Keywords.FINALLY);
-		finallyKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		finallyKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		finallyClause.setFinallyKeyword(finallyKeyword);
+		finallyClause.setFinallyKeyword(createKeyword(node, Keywords.FINALLY));
 
 		finallyClause.setStatement(transformStatementNode(node.getChild(0),
 				finallyClause));
@@ -1446,9 +1441,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			}
 
 			if (i > 0) {
-				commas.add(new Integer(getTokenOffset(JSParser.COMMA, node
-						.getChild(i - 1).getTokenStopIndex() + 1, child
-						.getTokenStartIndex())));
+				commas.add(getTokenOffset(JSParser.COMMA, node.getChild(i - 1)
+						.getTokenStopIndex() + 1, child.getTokenStartIndex()));
 			}
 		}
 
@@ -1494,9 +1488,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			items.add(transformNode(node.getChild(i), expression));
 
 			if (i > 0)
-				commas.add(new Integer(getTokenOffset(JSParser.COMMA, node
-						.getChild(i - 1).getTokenStopIndex(), node.getChild(i)
-						.getTokenStartIndex())));
+				commas.add(getTokenOffset(JSParser.COMMA, node.getChild(i - 1)
+						.getTokenStopIndex(), node.getChild(i)
+						.getTokenStartIndex()));
 		}
 
 		expression.setItems(items);
@@ -1522,10 +1516,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		WithStatement statement = new WithStatement(getParent());
 
-		Keyword withKeyword = new Keyword(statement, Keywords.WITH);
-		withKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		withKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setWithKeyword(withKeyword);
+		statement.setWithKeyword(createKeyword(node, Keywords.WITH));
 
 		statement.setLP(getTokenOffset(JSParser.LPAREN, node
 				.getTokenStartIndex(), node.getChild(0).getTokenStartIndex()));
@@ -1550,10 +1541,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		ThisExpression expression = new ThisExpression(getParent());
 
-		Keyword thisKeyword = new Keyword(expression, Keywords.THIS);
-		thisKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		thisKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		expression.setThisKeyword(thisKeyword);
+		expression.setThisKeyword(createKeyword(node, Keywords.THIS));
 
 		expression.setStart(getTokenOffset(node.getTokenStartIndex()));
 		expression.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -1589,10 +1577,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		DeleteStatement statement = new DeleteStatement(getParent());
 
-		Keyword deleteKeyword = new Keyword(statement, Keywords.DELETE);
-		deleteKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		deleteKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		statement.setDeleteKeyword(deleteKeyword);
+		statement.setDeleteKeyword(createKeyword(node, Keywords.DELETE));
 
 		statement.setExpression((Expression) transformNode(node.getChild(0),
 				statement));
@@ -1607,10 +1592,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		GetMethod method = new GetMethod(getParent());
 
-		Keyword getKeyword = new Keyword(method, Keywords.GET);
-		getKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		getKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		method.setGetKeyword(getKeyword);
+		method.setGetKeyword(createKeyword(node, Keywords.GET));
 
 		method.setName((Identifier) transformNode(node.getChild(0), method));
 
@@ -1636,10 +1618,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitSet(Tree node) {
 		SetMethod method = new SetMethod(getParent());
 
-		Keyword setKeyword = new Keyword(method, Keywords.SET);
-		setKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		setKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		method.setSetKeyword(setKeyword);
+		method.setSetKeyword(createKeyword(node, Keywords.SET));
 
 		method.setName((Identifier) transformNode(node.getChild(0), method));
 
@@ -1680,10 +1659,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		TypeOfExpression expression = new TypeOfExpression(getParent());
 
-		Keyword typeofKeyword = new Keyword(getParent(), Keywords.TYPEOF);
-		typeofKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		typeofKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		expression.setTypeOfKeyword(typeofKeyword);
+		expression.setTypeOfKeyword(createKeyword(node, Keywords.TYPEOF));
 
 		expression.setExpression((Expression) transformNode(node.getChild(0),
 				expression));
@@ -1695,24 +1671,10 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	protected ASTNode visitConst(Tree node) {
-		ConstDeclaration declaration = new ConstDeclaration(getParent());
+		ConstStatement declaration = new ConstStatement(getParent());
+		declaration.setConstKeyword(createKeyword(node, Keywords.CONST));
 
-		Keyword constKeyword = new Keyword(getParent(), Keywords.CONST);
-		constKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		constKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		declaration.setConstKeyword(constKeyword);
-
-		List<Integer> commas = new ArrayList<Integer>();
-		List<ASTNode> consts = new ArrayList<ASTNode>(node.getChildCount());
-		for (int i = 0; i < node.getChildCount(); i++) {
-			consts.add(transformNode(node.getChild(i), declaration));
-			if (i > 0)
-				commas.add(new Integer(getTokenOffset(JSParser.COMMA, node
-						.getChild(i - 1).getTokenStopIndex() + 1, node
-						.getChild(i).getTokenStartIndex())));
-		}
-		declaration.setConsts(consts);
-		declaration.setCommas(commas);
+		processVariableDeclarations(node, declaration);
 
 		declaration.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
 				.getTokenStopIndex(), node.getTokenStopIndex()));
@@ -1769,10 +1731,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitVoid(Tree node) {
 		VoidOperator expression = new VoidOperator(getParent());
 
-		Keyword voidKeyword = new Keyword(expression, Keywords.VOID);
-		voidKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		voidKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		expression.setVoidKeyword(voidKeyword);
+		expression.setVoidKeyword(createKeyword(node, Keywords.VOID));
 
 		expression.setExpression((Expression) transformNode(node.getChild(0),
 				expression));
@@ -1825,20 +1784,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		DefaultXmlNamespaceStatement statement = new DefaultXmlNamespaceStatement(
 				getParent());
 
-		Keyword defaultKeyword = new Keyword(statement, Keywords.DEFAULT);
-		defaultKeyword.setStart(getTokenOffset(node.getChild(0)
-				.getTokenStartIndex()));
-		defaultKeyword.setEnd(defaultKeyword.sourceStart()
-				+ Keywords.DEFAULT.length());
-		statement.setDefaultKeyword(defaultKeyword);
+		statement.setDefaultKeyword(createKeyword(node.getChild(0),
+				Keywords.DEFAULT));
+		statement.setXmlKeyword(createKeyword(node.getChild(1), Keywords.XML));
 
-		Keyword xmlKeyword = new Keyword(statement, Keywords.XML);
-		xmlKeyword.setStart(getTokenOffset(node.getChild(1)
-				.getTokenStartIndex()));
-		xmlKeyword.setEnd(xmlKeyword.sourceStart() + Keywords.XML.length());
-		statement.setXmlKeyword(xmlKeyword);
-
-		Keyword namespaceKeyword = new Keyword(statement, Keywords.NAMESPACE);
+		Keyword namespaceKeyword = new Keyword(Keywords.NAMESPACE);
 		namespaceKeyword.setStart(getTokenOffset(JSParser.NAMESPACE, node
 				.getTokenStartIndex(), node.getTokenStopIndex()));
 		namespaceKeyword.setEnd(namespaceKeyword.sourceStart()
@@ -1957,10 +1907,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitYield(Tree node) {
 		YieldOperator expression = new YieldOperator(getParent());
 
-		Keyword yieldKeyword = new Keyword(expression, Keywords.YIELD);
-		yieldKeyword.setStart(getTokenOffset(node.getTokenStartIndex()));
-		yieldKeyword.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
-		expression.setVoidKeyword(yieldKeyword);
+		expression.setVoidKeyword(createKeyword(node, Keywords.YIELD));
 
 		expression.setExpression((Expression) transformNode(node.getChild(0),
 				expression));
