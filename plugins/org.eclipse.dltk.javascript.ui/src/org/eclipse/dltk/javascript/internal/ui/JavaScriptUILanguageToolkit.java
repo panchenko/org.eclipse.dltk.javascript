@@ -12,10 +12,10 @@ package org.eclipse.dltk.javascript.internal.ui;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.javascript.core.IJavaScriptConstants;
 import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptEditor;
 import org.eclipse.dltk.javascript.internal.ui.text.SimpleJavascriptSourceViewerConfiguration;
+import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.AbstractDLTKUILanguageToolkit;
 import org.eclipse.dltk.ui.ScriptElementLabels;
 import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
@@ -59,7 +59,7 @@ public class JavaScriptUILanguageToolkit extends AbstractDLTKUILanguageToolkit {
 	}
 
 	public String getPartitioningId() {
-		return IJavaScriptConstants.JS_PARTITIONING;
+		return IJavaScriptPartitions.JS_PARTITIONING;
 	}
 
 	public String getInterpreterContainerId() {

@@ -9,12 +9,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ui.text;
 
-import org.eclipse.dltk.javascript.core.IJavaScriptConstants;
 import org.eclipse.jface.text.IDocument;
 
 public interface IJavaScriptPartitions {
 
-	public final static String JS_PARTITIONING = IJavaScriptConstants.JS_PARTITIONING;
+	public final static String JS_PARTITIONING = "__javascript_partitioning"; //$NON-NLS-1$
 
 	public final static String JS_COMMENT = "__javascript_comment"; //$NON-NLS-1$
 	/**
