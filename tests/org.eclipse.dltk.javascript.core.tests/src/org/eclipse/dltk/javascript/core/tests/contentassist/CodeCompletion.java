@@ -33,13 +33,11 @@ import org.eclipse.dltk.core.IPackageDeclaration;
 import org.eclipse.dltk.core.IProblemRequestor;
 import org.eclipse.dltk.core.IScriptModel;
 import org.eclipse.dltk.core.IScriptProject;
-import org.eclipse.dltk.core.ISearchableEnvironment;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.IType;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.WorkingCopyOwner;
 import org.eclipse.dltk.internal.core.ModelElement;
-import org.eclipse.dltk.internal.core.NameLookup;
 import org.eclipse.dltk.internal.core.util.MementoTokenizer;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeStringReference;
@@ -459,56 +457,20 @@ public class CodeCompletion extends TestCase {
 	}
 
 	private final class TestCompletionRequetor extends CompletionRequestor {
-		LinkedList results;
+		final List<CompletionProposal> results;
 
-		public TestCompletionRequetor(LinkedList results2) {
-			this.results = results2;
+		public TestCompletionRequetor(List<CompletionProposal> results) {
+			this.results = results;
 		}
 
+		@Override
 		public void accept(CompletionProposal proposal) {
 			results.add(proposal);
 		}
 	}
 
-	private final class NullEnvironment implements ISearchableEnvironment {
-//		public void findPackages(char[] prefix, ISearchRequestor requestor) {
-//			// TODO Auto-generated method stub
-//
-//		}
-
-//		public void findTypes(char[] prefix, boolean findMembers,
-//				boolean camelCaseMatch, ISearchRequestor storage) {
-//			// TODO Auto-generated method stub
-//
-//		}
-
-		public NameLookup getNameLookup() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public void cleanup() {
-			// TODO Auto-generated method stub
-
-		}
-
-//		public NameEnvironmentAnswer findType(char[][] compoundTypeName) {
-//			return null;
-//		}
-//
-//		public NameEnvironmentAnswer findType(char[] typeName,
-//				char[][] packageName) {
-//			return null;
-//		}
-
-		public boolean isPackage(char[][] parentPackageName, char[] packageName) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-	}
-
-	public JavaScriptCompletionEngine createEngine(LinkedList results) {
-		ISearchableEnvironment env = new NullEnvironment();
+	public JavaScriptCompletionEngine createEngine(
+			List<CompletionProposal> results) {
 		JavaScriptCompletionEngine engine = new JavaScriptCompletionEngine();
 		engine.setRequestor(new TestCompletionRequetor(results));
 		return engine;
@@ -550,29 +512,29 @@ public class CodeCompletion extends TestCase {
 		return -1;
 	}
 
-	private void compareNames(LinkedList results, String[] names) {
-		assertEquals(names.length,results.size());
-		Collections.sort(results,new Comparator(){
+	private void compareNames(LinkedList<CompletionProposal> results,
+			String[] names) {
+		assertEquals(names.length, results.size());
+		Collections.sort(results, new Comparator<CompletionProposal>() {
 
-			public int compare(Object arg0, Object arg1) {
-				CompletionProposal pr=(CompletionProposal) arg0;
-				CompletionProposal pr1=(CompletionProposal) arg1;
-				return new String(pr.getName()).compareTo(new String(pr1.getName()));
+			public int compare(CompletionProposal pr, CompletionProposal pr1) {
+				return new String(pr.getName()).compareTo(new String(pr1
+						.getName()));
 			}
-			
+
 		});
 		Arrays.sort(names);
-		Iterator it=results.iterator();
-		int pos=0;
-		while (it.hasNext()){
-			CompletionProposal pr=(CompletionProposal) it.next();
-			assertEquals(names[pos],new String(pr.getName()));
+		Iterator<CompletionProposal> it = results.iterator();
+		int pos = 0;
+		while (it.hasNext()) {
+			CompletionProposal pr = it.next();
+			assertEquals(names[pos], new String(pr.getName()));
 			pos++;
 		}
 	}
 	
 	private void basicTest(String mname,int position,String[] compNames){
-		LinkedList results = new LinkedList();
+		LinkedList<CompletionProposal> results = new LinkedList<CompletionProposal>();
 		JavaScriptCompletionEngine c = createEngine(results);
 		c.setUseEngine(false);
 		c.complete(new TestModule(this.getClass().getResource(mname)), position,
@@ -585,7 +547,7 @@ public class CodeCompletion extends TestCase {
 	 * dumb completion on keyword
 	 */
 	public void test0() {
-		LinkedList results = new LinkedList();
+		LinkedList<CompletionProposal> results = new LinkedList<CompletionProposal>();
 		JavaScriptCompletionEngine c = createEngine(results);
 		c.setUseEngine(false);
 		c.complete(new TestModule(""), 0, 0);
@@ -596,7 +558,7 @@ public class CodeCompletion extends TestCase {
 	 * dumb completion on function
 	 */
 	public void test1() {
-		LinkedList results = new LinkedList();
+		LinkedList<CompletionProposal> results = new LinkedList<CompletionProposal>();
 		JavaScriptCompletionEngine c = createEngine(results);
 		c.setUseEngine(false);
 		c.complete(new TestModule(this.getClass().getResource("test1.js")), 0,
