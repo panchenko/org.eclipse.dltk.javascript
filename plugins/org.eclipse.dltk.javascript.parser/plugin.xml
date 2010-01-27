@@ -6,7 +6,7 @@
          <parser
                class="org.eclipse.dltk.javascript.parser.JavaScriptParserFactory"
                description="JavaScript Source Parser"
-               id="org.eclipse.dltk.javascript.parser"
+               id="org.eclipse.dltk.javascript.NewParser"
                name="JavaScript Source Parser+"
                priority="-1" />
       </parserContribution>

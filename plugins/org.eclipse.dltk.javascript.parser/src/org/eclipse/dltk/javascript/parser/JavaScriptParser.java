@@ -38,6 +38,8 @@ import org.eclipse.dltk.utils.TextUtils;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
+	public static final String PARSER_ID = "org.eclipse.dltk.javascript.NewParser";
+
 	private boolean typeInformationEnabled = false;
 
 	public boolean isTypeInformationEnabled() {
