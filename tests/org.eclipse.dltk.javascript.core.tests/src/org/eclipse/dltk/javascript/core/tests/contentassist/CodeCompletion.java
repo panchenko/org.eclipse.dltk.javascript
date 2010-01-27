@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.dltk.compiler.env.ISourceModule;
+import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.CompletionRequestor;
 import org.eclipse.dltk.core.IBuffer;
@@ -93,8 +94,8 @@ public class CodeCompletion extends TestCase {
 			return content.toCharArray();
 		}
 
-		public char[] getFileName() {
-			return "".toCharArray();
+		public String getFileName() {
+			return Util.EMPTY_STRING;
 		}
 
 		public void becomeWorkingCopy(IProblemRequestor problemRequestor,
