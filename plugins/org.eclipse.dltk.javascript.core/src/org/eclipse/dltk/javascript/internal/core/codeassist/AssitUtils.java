@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.core.ModelElement;
+import org.eclipse.dltk.internal.javascript.parser.NullReporter;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ResolverManager;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
