@@ -58,8 +58,8 @@ public class JavaScriptMatchLocatorParser extends MatchLocatorParser implements
 
 			}
 		}
-		return parser.parse(possibleMatch.getFileName(), possibleMatch
-				.getContentsAsCharArray(), null);
+		return parser.parse(possibleMatch.getFileName().toCharArray(),
+				possibleMatch.getContentsAsCharArray(), null);
 	}
 
 	public void parseBodies(ModuleDeclaration unit) {

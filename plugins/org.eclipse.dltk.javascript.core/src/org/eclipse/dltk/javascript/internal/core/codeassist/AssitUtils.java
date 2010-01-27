@@ -26,13 +26,13 @@ import com.xored.org.mozilla.javascript.ScriptOrFnNode;
 public class AssitUtils {
 
 	public static ReferenceResolverContext buildContext(ISourceModule module,
-			int position, String content, char[] fileName2) {
+			int position, String content, String fileName2) {
 		HashMap settings = new HashMap();
 		ReferenceResolverContext createResolverContext = ResolverManager
 				.createResolverContext(module, settings, false);
 		createResolverContext.init();
 		Parser p = new Parser(new CompilerEnvirons(), new NullReporter());
-		ScriptOrFnNode parse = p.parse(content, new String(fileName2), 0);
+		ScriptOrFnNode parse = p.parse(content, fileName2, 0);
 		TypeInferencer inf = new TypeInferencer((ModelElement) module,
 				createResolverContext);
 		try {

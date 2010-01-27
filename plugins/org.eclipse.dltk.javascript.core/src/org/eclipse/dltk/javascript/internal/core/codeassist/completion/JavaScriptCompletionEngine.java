@@ -108,7 +108,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				}
 		}
 		calculator = new PositionCalculator(content, position, false);
-		char[] fileName2 = cu.getFileName();
+		String fileName2 = cu.getFileName();
 		ReferenceResolverContext buildContext = AssitUtils.buildContext(
 				(org.eclipse.dltk.core.ISourceModule) cu, position, content,
 				fileName2);
@@ -400,8 +400,9 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 								while (index >= al.size()) {
 									al.add(null);
 								}
-								al.set(index, ((StandardSelfCompletingReference) o).getName()
-										.toCharArray());
+								al.set(index,
+										((StandardSelfCompletingReference) o)
+												.getName().toCharArray());
 							}
 						}
 						if (al.size() > 0) {

@@ -54,7 +54,7 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 
 	public IModelElement[] select(ISourceModule cu, int offset, int i) {
 		String content = cu.getSourceContents();
-		char[] fileName = cu.getFileName();
+		String fileName = cu.getFileName();
 		this.cu = cu;
 		int index = content.indexOf('\n', offset);
 		if (index == -1) {
