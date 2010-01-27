@@ -9,19 +9,25 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.templates;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.javascript.internal.ui.formatting.OldCodeFormatter;
+import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.dltk.ui.formatter.FormatterException;
+import org.eclipse.dltk.ui.formatter.IScriptFormatter;
+import org.eclipse.dltk.ui.formatter.IScriptFormatterFactory;
+import org.eclipse.dltk.ui.formatter.ScriptFormatterManager;
 import org.eclipse.dltk.ui.templates.ScriptTemplateContext;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.templates.Template;
 import org.eclipse.jface.text.templates.TemplateBuffer;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.TemplateException;
+import org.eclipse.text.edits.TextEdit;
 
 public class JavaScriptTemplateContext extends ScriptTemplateContext {
 
@@ -31,75 +37,86 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 		super(type, document, completionOffset, completionLength, sourceModule);
 	}
 
-	// Just for testing
+	@Override
 	public TemplateBuffer evaluate(Template template)
 			throws BadLocationException, TemplateException {
 		if (!canEvaluate(template)) {
 			return null;
 		}
+		final IScriptFormatterFactory factory = ScriptFormatterManager
+				.getSelected(getSourceModule().getScriptProject());
+		if (factory != null) {
+			final IScriptFormatter formatter = factory.createFormatter(
+					TextUtilities.getDefaultLineDelimiter(getDocument()),
+					factory.retrievePreferences(getPreferences()));
+			try {
+				final Map<String, String> remeberedVariables = new HashMap<String, String>();
+				final String encoded = encodeVariables(template.getPattern(),
+						remeberedVariables);
+				final TextEdit edit = formatter.format(encoded, 0, encoded
+						.length(), 0);
+				if (edit != null) {
+					final Document document = new Document(encoded);
+					edit.apply(document);
+					template = new Template(
+							template.getName(),
+							template.getDescription(),
+							template.getContextTypeId(),
+							restoreVariables(document.get(), remeberedVariables),
+							template.isAutoInsertable());
+				}
+			} catch (FormatterException e) {
+				JavaScriptUI.log(e);
+			}
+		}
+		return super.evaluate(template);
+	}
 
-		String indentTo = calculateIndent(getDocument(), getStart());
-
-		String delimeter = TextUtilities.getDefaultLineDelimiter(getDocument());
-		String lines = template.getPattern();
-		StringBuffer bf = new StringBuffer();
-
+	/**
+	 * Temporary replace variables with unique keys, so variables would not
+	 * cause parsing errors during formatting.
+	 * 
+	 * @param content
+	 * @param variables
+	 * @return
+	 */
+	private static String encodeVariables(String content,
+			Map<String, String> variables) {
+		final StringBuilder bf = new StringBuilder(content.length() * 2);
 		boolean in = false;
-		HashMap qs = new HashMap();
-		String sp0 = "specialSecret12435Id";
-		String sp = sp0 + '0';
-		String cId = null;
+		final String prefix = "specialSecret12435Id";
 		int r = 0;
 		int pos = -1;
-		for (int a = 0; a < lines.length(); a++) {
-			char c = lines.charAt(a);
+		for (int a = 0; a < content.length(); a++) {
+			char c = content.charAt(a);
 			if (c == '$') {
-				if (a < lines.length() - 1)
-					if (lines.charAt(a + 1) == '{') {
+				if (a < content.length() - 1)
+					if (content.charAt(a + 1) == '{') {
 						in = true;
-						bf.append(sp);
 						pos = a;
 					}
-			}
-
-			if (in) {
+			} else if (in) {
 				if (c == '}') {
-					String tv = lines.substring(pos, a + 1);
-					if (tv.equals("${cursor}")) {
-						cId = sp;
-					}
-					qs.put(sp, tv);
-					r++;
-					sp = sp0 + r;
+					String variableValue = content.substring(pos, a + 1);
+					String variableKey = prefix + r++;
+					bf.append(variableKey);
+					variables.put(variableKey, variableValue);
 					in = false;
-					continue;
 				}
-			}
-			if (!in) {
+			} else if (!in) {
 				bf.append(c);
 			}
 		}
-		OldCodeFormatter formater = new OldCodeFormatter(Collections.EMPTY_MAP);
-		String string = bf.toString();
-		String formatted = formater.formatString(string, new StringBuffer());
-		java.util.Iterator it = qs.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
-			String value = (String) qs.get(key);
-			if (key == cId) {
-				String replaced = replaceSeq(formatted, key + ";", value);
-				if (replaced == formatted) {
-					replaced = replaceSeq(formatted, key, value);
-				}
-				formatted = replaced;
-			} else
-				formatted = replaceSeq(formatted, key, value);
-		}
-		template = new Template(template.getName(), template.getDescription(),
-				template.getContextTypeId(), formatted, template
-						.isAutoInsertable());
+		return bf.toString();
+	}
 
-		return super.evaluate(template);
+	private static String restoreVariables(String value,
+			Map<String, String> variables) {
+		String formatted = value;
+		for (Map.Entry<String, String> entry : variables.entrySet()) {
+			formatted = replaceSeq(formatted, entry.getKey(), entry.getValue());
+		}
+		return formatted;
 	}
 
 	private static String replaceSeq(String sq, String target,
