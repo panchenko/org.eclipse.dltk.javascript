@@ -9,8 +9,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.formatting;
 
-import java.util.Map;
-
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 
 public class DefaultCodeFormatterConstants {
@@ -187,19 +185,4 @@ public class DefaultCodeFormatterConstants {
      */ 
     public final static String FORMATTER_COMMENT_CLEAR_BLANK_LINES = JavaScriptUI.PLUGIN_ID +  ".formatter.comment.clear_blank_lines"; //$NON-NLS-1$
     
-    
-    /**
-     * Returns the default Eclipse formatter settings
-     * 
-     * @return the Eclipse default settings
-     * @since 0.8.0
-     */
-    public static Map getEclipseDefaultSettings() {
-        return DefaultCodeFormatterOptions.getEclipseDefaultSettings().getMap();
-    }
-
-    public static Map getRubyConventionsSettings() {
-        return DefaultCodeFormatterOptions.getRubyConventionsSettings().getMap();
-    }
-
 }
