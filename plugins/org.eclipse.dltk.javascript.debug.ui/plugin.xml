@@ -179,7 +179,7 @@
       <action
         label="%ScriptInspect.label"
         icon="/icons/insp_sbook.gif"
-        definitionId="org.eclipse.dlkt.debug.ui.commands.ScriptInspect"
+        definitionId="org.eclipse.dltk.debug.ui.commands.ScriptInspect"
         class="org.eclipse.dltk.internal.debug.ui.actions.PopupScriptInspectAction"
         menubarPath="additions"
         id="org.eclipse.dltk.javascript.debug.ui.ScriptInspect">
@@ -187,7 +187,7 @@
       <action
         label="%ScriptDisplay.label"
         icon="/icons/disp_sbook.gif"
-        definitionId="org.eclipse.dlkt.debug.ui.commands.ScriptDisplay"
+        definitionId="org.eclipse.dltk.debug.ui.commands.ScriptDisplay"
         class="org.eclipse.dltk.internal.debug.ui.actions.PopupScriptDisplayAction"
         menubarPath="additions"
         id="org.eclipse.dltk.javascript.debug.ui.ScriptDisplay">
@@ -208,12 +208,12 @@
       <part id="org.eclipse.dltk.javascript.ui.editor.JavascriptEditor"></part>
     </actionSetPartAssociation>
   </extension>
+  <!-- TODO Test if these consolePatternMatchListeners are valid for javascript ? -->
   <extension point="org.eclipse.ui.console.consolePatternMatchListeners">
     <consolePatternMatchListener
       class="org.eclipse.dltk.javascript.internal.debug.ui.console.JavaScriptConsoleTracker"
       regex="\(file &quot;.*&quot; line .*\)"
       id="org.eclipse.dltk.javascript.debug.ui.JavaScriptConsoleTracker">
-      <!-- TODO is this regex valid for javascript projects ? -->
       <enablement>
         <or>
           <test
@@ -222,7 +222,19 @@
         </or>
       </enablement>
     </consolePatternMatchListener>
-
+    <consolePatternMatchListener
+          class="org.eclipse.dltk.javascript.internal.debug.ui.console.JavaScriptDebugConsoleTracker"
+          id="org.eclipse.dltk.javascript.ui.consolePatternMatchListener"
+          regex="\tat (.*):(\d+)">
+       <enablement>
+          <instanceof
+                value="org.eclipse.dltk.debug.ui.ScriptDebugConsole">
+          </instanceof>
+          <test
+            property="org.eclipse.debug.ui.processTypeTest"
+            value="javascriptInterpreter" />
+       </enablement>
+    </consolePatternMatchListener>
   </extension>
   <!--extension
     point="org.eclipse.debug.ui.launchConfigurationTabGroups">
