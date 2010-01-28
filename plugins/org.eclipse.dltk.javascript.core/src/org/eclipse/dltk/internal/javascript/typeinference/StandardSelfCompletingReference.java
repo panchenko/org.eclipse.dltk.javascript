@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.core.CompletionProposal;
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.core.SourceMethod;
@@ -38,7 +39,7 @@ public class StandardSelfCompletingReference implements IReference,
 	private int offset;
 	private int length;
 
-	private Map childs;
+	private Map<String, IReference> childs;
 	private char[][] parameterNames;
 	private String proposalInfo;
 	protected StandardSelfCompletingReference parentRef;
@@ -68,18 +69,19 @@ public class StandardSelfCompletingReference implements IReference,
 		this.offset = offset;
 	}
 
-	public Set getChilds(boolean resolveLocals) {
+	public Set<IReference> getChilds(boolean resolveLocals) {
 		if (childs == null) {
-			childs = new HashMap(3);
+			childs = new HashMap<String, IReference>(3);
 			createChilds();
 		}
-		return new HashSet(childs.values());
+		return new HashSet<IReference>(childs.values());
 	}
 
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public String toString() {
 		return name;
 	}
@@ -90,11 +92,10 @@ public class StandardSelfCompletingReference implements IReference,
 
 	public IReference getChild(String key, boolean resolveLocals) {
 		if (childs == null) {
-			childs = new HashMap(3);
+			childs = new HashMap<String, IReference>(3);
 			createChilds();
 		}
-		IReference r = (IReference) childs.get(key);
-		return r;
+		return childs.get(key);
 	}
 
 	protected void createChilds() {
@@ -102,7 +103,7 @@ public class StandardSelfCompletingReference implements IReference,
 
 	public void setChild(String key, IReference ref) {
 		if (childs == null) {
-			childs = new HashMap(3);
+			childs = new HashMap<String, IReference>(3);
 			createChilds();
 		}
 		ref = testRecursion(ref);
@@ -161,7 +162,7 @@ public class StandardSelfCompletingReference implements IReference,
 		this.setChild("prototype", ref);
 	}
 
-	public void addModelElements(Collection toAdd) {
+	public void addModelElements(Collection<IModelElement> toAdd) {
 		if (parent != null) {
 			if (isFunctionRef()) {
 				String[] params = null;

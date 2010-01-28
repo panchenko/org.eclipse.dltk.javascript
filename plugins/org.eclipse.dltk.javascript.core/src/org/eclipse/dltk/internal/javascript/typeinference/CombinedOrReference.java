@@ -6,10 +6,12 @@ package org.eclipse.dltk.internal.javascript.typeinference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 
@@ -19,16 +21,16 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingRe
  */
 public class CombinedOrReference implements IReference, SelfCompletingReference {
 
-	private final List lstReadonly;
-	private final List lstReferences;
+	private final List<IReference> lstReadonly;
+	private final List<IReference> lstReferences;
 	private boolean recursiveCheck;
 
 	/**
 	 * 
 	 */
 	public CombinedOrReference() {
-		lstReferences = new ArrayList();
-		lstReadonly = new ArrayList();
+		lstReferences = new ArrayList<IReference>();
+		lstReadonly = new ArrayList<IReference>();
 	}
 
 	private CombinedOrReference(List references, List readonly) {
@@ -125,10 +127,10 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	private void addCombinedReference(IReference reference) {
 		CombinedOrReference cor = (CombinedOrReference) reference;
 		for (int i = 0; i < cor.lstReferences.size(); i++) {
-			addReference((IReference) cor.lstReferences.get(i));
+			addReference(cor.lstReferences.get(i));
 		}
 		for (int i = 0; i < cor.lstReadonly.size(); i++) {
-			addReadonly((IReference) cor.lstReadonly.get(i));
+			addReadonly(cor.lstReadonly.get(i));
 		}
 	}
 
@@ -143,13 +145,13 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	/**
 	 * @see org.eclipse.dltk.internal.javascript.typeinference.IReference#addModelElements(java.util.Collection)
 	 */
-	public void addModelElements(Collection toAdd) {
+	public void addModelElements(Collection<IModelElement> toAdd) {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			element.addModelElements(toAdd);
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			element.addModelElements(toAdd);
 		}
 	}
@@ -161,14 +163,14 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	public IReference getChild(String key, boolean resolveLocals) {
 		ArrayList alReferences = new ArrayList();
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			IReference child = element.getChild(key, resolveLocals);
 			if (child != null && !alReferences.contains(child))
 				alReferences.add(child);
 		}
 		ArrayList alReadonly = new ArrayList();
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			IReference child = element.getChild(key, resolveLocals);
 			if (child != null && !alReadonly.contains(child))
 				alReadonly.add(child);
@@ -190,10 +192,10 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	private IReference compressed() {
 		if (lstReferences.size() == 1 && lstReadonly.size() == 0) {
-			return (IReference) lstReferences.get(0);
+			return lstReferences.get(0);
 		}
 		if (lstReferences.size() == 0 && lstReadonly.size() == 1) {
-			return (IReference) lstReadonly.get(0);
+			return lstReadonly.get(0);
 		}
 		return this;
 	}
@@ -201,18 +203,18 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	/**
 	 * @see org.eclipse.dltk.internal.javascript.typeinference.IReference#getChilds(boolean)
 	 */
-	public Set getChilds(boolean resolveLocals) {
-		HashSet set = new HashSet();
+	public Set<IReference> getChilds(boolean resolveLocals) {
 		if (recursiveCheck)
-			return set;
+			return Collections.emptySet();
+		final Set<IReference> set = new HashSet<IReference>();
 		try {
 			recursiveCheck = true;
 			for (int i = 0; i < lstReferences.size(); i++) {
-				IReference element = (IReference) lstReferences.get(i);
+				IReference element = lstReferences.get(i);
 				set.addAll(element.getChilds(resolveLocals));
 			}
 			for (int i = 0; i < lstReadonly.size(); i++) {
-				IReference element = (IReference) lstReadonly.get(i);
+				IReference element = lstReadonly.get(i);
 				set.addAll(element.getChilds(resolveLocals));
 			}
 		} finally {
@@ -226,9 +228,9 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public String getName() {
 		if (lstReferences.size() > 0)
-			return ((IReference) lstReferences.get(0)).getName();
+			return lstReferences.get(0).getName();
 		if (lstReadonly.size() > 0)
-			return ((IReference) lstReadonly.get(0)).getName();
+			return lstReadonly.get(0).getName();
 		return null;
 	}
 
@@ -238,7 +240,7 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	public IReference getPrototype(boolean resolveLocals) {
 		ArrayList alReferences = new ArrayList();
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			IReference prototype = element.getPrototype(resolveLocals);
 			if (prototype != null && !alReferences.contains(prototype)) {
 				alReferences.add(prototype);
@@ -246,7 +248,7 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 		}
 		ArrayList alReadonly = new ArrayList();
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			IReference prototype = element.getPrototype(resolveLocals);
 			if (prototype != null && !alReadonly.contains(prototype)) {
 				alReadonly.add(prototype);
@@ -269,12 +271,12 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public boolean isChildishReference() {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			if (element.isChildishReference())
 				return true;
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			if (element.isChildishReference())
 				return true;
 		}
@@ -286,12 +288,12 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public boolean isFunctionRef() {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			if (element.isFunctionRef())
 				return true;
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			if (element.isFunctionRef())
 				return true;
 		}
@@ -303,12 +305,12 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public boolean isLocal() {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			if (element.isLocal())
 				return true;
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			if (element.isLocal())
 				return true;
 		}
@@ -331,7 +333,7 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public void setChild(String key, IReference ref) {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			element.setChild(key, ref);
 		}
 	}
@@ -341,11 +343,11 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public void setLocal(boolean local) {
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			element.setLocal(local);
 		}
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			element.setLocal(local);
 		}
 	}
@@ -356,11 +358,11 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public void setLocationInformation(ModelElement mo, int position, int length) {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			element.setLocationInformation(mo, position, length);
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			element.setLocationInformation(mo, position, length);
 		}
 	}
@@ -370,7 +372,7 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public void setPrototype(IReference ref) {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			element.setPrototype(ref);
 		}
 	}
@@ -388,14 +390,14 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public URL getImageURL() {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getImageURL() != null) {
 				return ((SelfCompletingReference) element).getImageURL();
 			}
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getImageURL() != null) {
 				return ((SelfCompletingReference) element).getImageURL();
@@ -409,14 +411,14 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public int getKind() {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getKind() != 0) {
 				return ((SelfCompletingReference) element).getKind();
 			}
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getKind() != 0) {
 				return ((SelfCompletingReference) element).getKind();
@@ -430,14 +432,14 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public char[][] getParameterNames() {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getParameterNames() != null) {
 				return ((SelfCompletingReference) element).getParameterNames();
 			}
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getParameterNames() != null) {
 				return ((SelfCompletingReference) element).getParameterNames();
@@ -448,14 +450,14 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 
 	public String getReturnType() {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getReturnType() != null) {
 				return ((SelfCompletingReference) element).getReturnType();
 			}
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getReturnType() != null) {
 				return ((SelfCompletingReference) element).getReturnType();
@@ -469,14 +471,14 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	 */
 	public String getProposalInfo() {
 		for (int i = 0; i < lstReferences.size(); i++) {
-			IReference element = (IReference) lstReferences.get(i);
+			IReference element = lstReferences.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getProposalInfo() != null) {
 				return ((SelfCompletingReference) element).getProposalInfo();
 			}
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
-			IReference element = (IReference) lstReadonly.get(i);
+			IReference element = lstReadonly.get(i);
 			if (element instanceof SelfCompletingReference
 					&& ((SelfCompletingReference) element).getProposalInfo() != null) {
 				return ((SelfCompletingReference) element).getProposalInfo();

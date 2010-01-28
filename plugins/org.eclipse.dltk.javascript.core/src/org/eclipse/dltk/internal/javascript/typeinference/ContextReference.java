@@ -13,6 +13,7 @@
 package org.eclipse.dltk.internal.javascript.typeinference;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -52,12 +53,10 @@ public final class ContextReference implements IReference {
 		return function.getReference(key);
 	}
 
-	public Set getChilds(boolean resolveLocals) {
+	public Set<IReference> getChilds(boolean resolveLocals) {
 		if (!resolveLocals)
-			return new HashSet();
-		Map references = function.getReferences();
-		Collection values = references.values();
-		HashSet hashSet = new HashSet(values);
+			return Collections.emptySet();
+		HashSet hashSet = new HashSet(function.getReferences().values());
 		hashSet.remove(this);
 		return hashSet;
 	}

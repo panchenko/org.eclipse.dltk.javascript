@@ -74,9 +74,9 @@ final class TransparentRef implements IReference {
 		}
 	}
 
-	public Set getChilds(boolean resolveLocals) {
+	public Set<IReference> getChilds(boolean resolveLocals) {
 		if (recursive)
-			return Collections.EMPTY_SET;
+			return Collections.emptySet();
 		try {
 			recursive = true;
 			return evaluateReference.getChilds(resolveLocals);
