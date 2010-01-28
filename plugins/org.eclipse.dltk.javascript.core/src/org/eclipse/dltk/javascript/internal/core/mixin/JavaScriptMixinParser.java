@@ -17,9 +17,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IModelElement;
@@ -45,8 +42,7 @@ import com.xored.org.mozilla.javascript.FunctionNode;
 import com.xored.org.mozilla.javascript.Parser;
 import com.xored.org.mozilla.javascript.ScriptOrFnNode;
 
-public class JavaScriptMixinParser implements IMixinParser,
-		IExecutableExtension {
+public class JavaScriptMixinParser implements IMixinParser {
 
 	private IMixinRequestor requestor;
 
@@ -168,10 +164,6 @@ public class JavaScriptMixinParser implements IMixinParser,
 
 	public void setRequirestor(IMixinRequestor requestor) {
 		this.requestor = requestor;
-	}
-
-	public void setInitializationData(IConfigurationElement config,
-			String propertyName, Object data) throws CoreException {
 	}
 
 	public void parserSourceModule(boolean signature, ISourceModule module) {
