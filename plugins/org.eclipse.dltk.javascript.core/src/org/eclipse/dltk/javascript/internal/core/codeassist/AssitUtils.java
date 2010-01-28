@@ -9,7 +9,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
-import java.util.HashMap;
+import java.util.Collections;
 
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.core.ModelElement;
@@ -28,9 +28,8 @@ public class AssitUtils {
 
 	public static ReferenceResolverContext buildContext(ISourceModule module,
 			int position, String content, String fileName2) {
-		HashMap settings = new HashMap();
 		ReferenceResolverContext createResolverContext = ResolverManager
-				.createResolverContext(module, settings, false);
+				.createResolverContext(module, Collections.emptyMap(), false);
 		createResolverContext.init();
 		Parser p = new Parser(new CompilerEnvirons(), new NullReporter());
 		ScriptOrFnNode parse = p.parse(content, fileName2, 0);
