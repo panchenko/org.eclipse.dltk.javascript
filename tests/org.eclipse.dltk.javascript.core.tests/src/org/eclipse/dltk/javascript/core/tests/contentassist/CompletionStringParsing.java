@@ -5,155 +5,108 @@ package org.eclipse.dltk.javascript.core.tests.contentassist;
 
 import junit.framework.TestCase;
 
-import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
+import static org.eclipse.dltk.internal.javascript.typeinference.CompletionString.parse;
 
 /**
  * @author jcompagner
- * 
  */
 public class CompletionStringParsing extends TestCase {
 
 	public void testCompletionWithArrayDotResolving() throws Exception {
 
-		assertEquals("forms.xxx.yyy", HostCollection.parseCompletionString(
-				"forms.xxx.yyy", true));
-		assertEquals("forms.xxx.yyy", HostCollection.parseCompletionString(
-				"forms.xxx.yyy()", true));
-		assertEquals("forms.xxx.yyy", HostCollection.parseCompletionString(
-				"forms.xxx().yyy()", true));
-		assertEquals("forms.xxx.[].yyy.[]", HostCollection
-				.parseCompletionString("forms.xxx[].yyy[]", true));
-		assertEquals("forms.[].yyy", HostCollection.parseCompletionString(
-				"forms[xxx].yyy", true));
-		assertEquals("forms.[].yyy", HostCollection.parseCompletionString(
-				"forms[xxx()].yyy", true));
-		assertEquals("forms.[].yyy", HostCollection.parseCompletionString(
-				"forms[xxx(1)].yyy", true));
-		assertEquals("xxx", HostCollection.parseCompletionString("forms[xxx",
-				true));
-		assertEquals("", HostCollection.parseCompletionString("forms[xxx(",
-				true));
-		assertEquals("a", HostCollection.parseCompletionString("forms[xxx(a",
-				true));
-		assertEquals("xxx", HostCollection.parseCompletionString(
-				"forms[xxx(1)", true));
-		assertEquals("xxx.yyy", HostCollection.parseCompletionString(
-				"forms[xxx(1).yyy", true));
-		assertEquals("forms.[]", HostCollection.parseCompletionString(
-				"forms[xxx(1).yyy]", true));
+		assertEquals("forms.xxx.yyy", parse("forms.xxx.yyy", true));
+		assertEquals("forms.xxx.yyy", parse("forms.xxx.yyy()", true));
+		assertEquals("forms.xxx.yyy", parse("forms.xxx().yyy()", true));
+		assertEquals("forms.xxx.[].yyy.[]", parse("forms.xxx[].yyy[]", true));
+		assertEquals("forms.[].yyy", parse("forms[xxx].yyy", true));
+		assertEquals("forms.[].yyy", parse("forms[xxx()].yyy", true));
+		assertEquals("forms.[].yyy", parse("forms[xxx(1)].yyy", true));
+		assertEquals("xxx", parse("forms[xxx", true));
+		assertEquals("", parse("forms[xxx(", true));
+		assertEquals("a", parse("forms[xxx(a", true));
+		assertEquals("xxx", parse("forms[xxx(1)", true));
+		assertEquals("xxx.yyy", parse("forms[xxx(1).yyy", true));
+		assertEquals("forms.[]", parse("forms[xxx(1).yyy]", true));
 
-		assertEquals("forms.[]", HostCollection.parseCompletionString(
-				"forms[xxx(1).yyy]]", true));
-		assertEquals("forms.[]", HostCollection.parseCompletionString(
-				"forms[xxx(1)).yyy]", true));
-		assertEquals("forms.[]", HostCollection.parseCompletionString(
-				"forms[[xxx(1).yyy]", true));
-		assertEquals("forms.[]", HostCollection.parseCompletionString(
-				"forms[xxx((1).yyy]", true));
-		assertEquals("forms.[]", HostCollection.parseCompletionString(
-				"forms[[xxx((1).yyy]", true));
-		assertEquals("forms.[]", HostCollection.parseCompletionString(
-				"forms[xxx((1).yyy]]", true));
-		assertEquals("forms.[]", HostCollection.parseCompletionString(
-				")forms[xxx(1)).yyy]", true));
+		assertEquals("forms.[]", parse("forms[xxx(1).yyy]]", true));
+		assertEquals("forms.[]", parse("forms[xxx(1)).yyy]", true));
+		assertEquals("forms.[]", parse("forms[[xxx(1).yyy]", true));
+		assertEquals("forms.[]", parse("forms[xxx((1).yyy]", true));
+		assertEquals("forms.[]", parse("forms[[xxx((1).yyy]", true));
+		assertEquals("forms.[]", parse("forms[xxx((1).yyy]]", true));
+		assertEquals("forms.[]", parse(")forms[xxx(1)).yyy]", true));
 
 	}
-	
+
 	public void testCompletionWithoutArrayDotResolving() throws Exception {
 
-		assertEquals("forms.xxx.yyy", HostCollection.parseCompletionString(
-				"forms.xxx.yyy", false));
-		assertEquals("forms.xxx.yyy", HostCollection.parseCompletionString(
-				"forms.xxx.yyy()", false));
-		assertEquals("forms.xxx.yyy", HostCollection.parseCompletionString(
-				"forms.xxx().yyy()", false));
-		assertEquals("forms.xxx[].yyy[]", HostCollection
-				.parseCompletionString("forms.xxx[].yyy[]", false));
-		assertEquals("forms[].yyy", HostCollection.parseCompletionString(
-				"forms[xxx].yyy", false));
-		assertEquals("forms[].yyy", HostCollection.parseCompletionString(
-				"forms[xxx()].yyy", false));
-		assertEquals("forms[].yyy", HostCollection.parseCompletionString(
-				"forms[xxx(1)].yyy", false));
-		assertEquals("xxx", HostCollection.parseCompletionString("forms[xxx",
-				false));
-		assertEquals("", HostCollection.parseCompletionString("forms[xxx(",
-				false));
-		assertEquals("a", HostCollection.parseCompletionString("forms[xxx(a",
-				false));
-		assertEquals("xxx", HostCollection.parseCompletionString(
-				"forms[xxx(1)", false));
-		assertEquals("xxx.yyy", HostCollection.parseCompletionString(
-				"forms[xxx(1).yyy", false));
-		assertEquals("forms[]", HostCollection.parseCompletionString(
-				"forms[xxx(1).yyy]", false));
+		assertEquals("forms.xxx.yyy", parse("forms.xxx.yyy", false));
+		assertEquals("forms.xxx.yyy", parse("forms.xxx.yyy()", false));
+		assertEquals("forms.xxx.yyy", parse("forms.xxx().yyy()", false));
+		assertEquals("forms.xxx[].yyy[]", parse("forms.xxx[].yyy[]", false));
+		assertEquals("forms[].yyy", parse("forms[xxx].yyy", false));
+		assertEquals("forms[].yyy", parse("forms[xxx()].yyy", false));
+		assertEquals("forms[].yyy", parse("forms[xxx(1)].yyy", false));
+		assertEquals("xxx", parse("forms[xxx", false));
+		assertEquals("", parse("forms[xxx(", false));
+		assertEquals("a", parse("forms[xxx(a", false));
+		assertEquals("xxx", parse("forms[xxx(1)", false));
+		assertEquals("xxx.yyy", parse("forms[xxx(1).yyy", false));
+		assertEquals("forms[]", parse("forms[xxx(1).yyy]", false));
 
-		assertEquals("forms[]", HostCollection.parseCompletionString(
-				"forms[xxx(1).yyy]]", false));
-		assertEquals("forms[]", HostCollection.parseCompletionString(
-				"forms[xxx(1)).yyy]", false));
-		assertEquals("forms[]", HostCollection.parseCompletionString(
-				")forms[xxx(1)).yyy]", false));
+		assertEquals("forms[]", parse("forms[xxx(1).yyy]]", false));
+		assertEquals("forms[]", parse("forms[xxx(1)).yyy]", false));
+		assertEquals("forms[]", parse(")forms[xxx(1)).yyy]", false));
 
 	}
-	
-	public void testDoubleParsing() throws Exception
-	{
-		assertEquals("forms.xxx.[].yyy.[]", HostCollection
-				.parseCompletionString("forms.xxx.[].yyy.[]", true));
+
+	public void testDoubleParsing() throws Exception {
+		assertEquals("forms.xxx.[].yyy.[]", parse("forms.xxx.[].yyy.[]", true));
 
 	}
-	
-	public void testWithLineEnding() throws Exception
-	{
-		assertEquals("forms.xxx.[].yyy.[]", HostCollection
-				.parseCompletionString("someCode\nforms.xxx[xxx].yyy[yyy]", true));
-		assertEquals("", HostCollection
-				.parseCompletionString("someCode\nforms.xxx[xxx].yyy[yyy]\n", true));
+
+	public void testWithLineEnding() throws Exception {
+		assertEquals("forms.xxx.[].yyy.[]", parse(
+				"someCode\nforms.xxx[xxx].yyy[yyy]", true));
+		assertEquals("", parse("someCode\nforms.xxx[xxx].yyy[yyy]\n", true));
 
 	}
-	
-	public void testWithWhiteSpace() throws Exception
-	{
-		assertEquals("forms.xxx.[].yyy.[]", HostCollection
-				.parseCompletionString("someCode forms.xxx[xxx].yyy[yyy]", true));
-		assertEquals("", HostCollection
-				.parseCompletionString("someCode forms.xxx[xxx].yyy[yyy] ", true));
+
+	public void testWithWhiteSpace() throws Exception {
+		assertEquals("forms.xxx.[].yyy.[]", parse(
+				"someCode forms.xxx[xxx].yyy[yyy]", true));
+		assertEquals("", parse("someCode forms.xxx[xxx].yyy[yyy] ", true));
 
 	}
-	
-	
-	public void testWithMultiplyParams() throws Exception
-	{
-		assertEquals("forms.xxx.[].yyy.[]", HostCollection
-				.parseCompletionString("someCode forms.xxx[xxx,yyy].yyy[xxx,yyy]", true));
-		assertEquals("forms.xxx.[].yyy.[]", HostCollection
-				.parseCompletionString("someCode forms.xxx[xxx , yyy].yyy[xxx , yyy, yyy]", true));
-		assertEquals("a", HostCollection
-				.parseCompletionString("someCode forms.xxx[xxx,yyy].yyy[a", true));
-		assertEquals("a", HostCollection
-				.parseCompletionString("someCode forms.xxx[xxx , yyy].yyy[xxx,a", true));
-		assertEquals("a", HostCollection
-				.parseCompletionString("someCode forms.xxx[xxx , yyy].yyy[xxx , a", true));
+
+	public void testWithMultiplyParams() throws Exception {
+		assertEquals("forms.xxx.[].yyy.[]", parse(
+				"someCode forms.xxx[xxx,yyy].yyy[xxx,yyy]", true));
+		assertEquals("forms.xxx.[].yyy.[]", parse(
+				"someCode forms.xxx[xxx , yyy].yyy[xxx , yyy, yyy]", true));
+		assertEquals("a", parse("someCode forms.xxx[xxx,yyy].yyy[a", true));
+		assertEquals("a",
+				parse("someCode forms.xxx[xxx , yyy].yyy[xxx,a", true));
+		assertEquals("a", parse("someCode forms.xxx[xxx , yyy].yyy[xxx , a",
+				true));
 	}
-	
-	public void testWithString() throws Exception
-	{
-		assertEquals("forms.xxx.[].yyy.[]", HostCollection
-				.parseCompletionString("forms.xxx['xxx'].yyy[\"yyy\"]", true));
-		assertEquals("forms.xxx.[].yyy.[]", HostCollection
-				.parseCompletionString("forms.xxx['xxx yyy'].yyy[\"xxx yyy\"]", true));
-		assertEquals("forms.xxx.[].yyy.[]", HostCollection
-				.parseCompletionString("forms.xxx['xxx yyy'].yyy[\"xxx 'yyy'\"]", true));
-		assertEquals("\"xxx 'yyy'\"", HostCollection
-				.parseCompletionString("\"xxx 'yyy'\"", true));
-		assertEquals("'xxx \"yyy\"'", HostCollection
-				.parseCompletionString("'xxx \"yyy\"'", true));
+
+	public void testWithString() throws Exception {
+		assertEquals("forms.xxx.[].yyy.[]", parse(
+				"forms.xxx['xxx'].yyy[\"yyy\"]", true));
+		assertEquals("forms.xxx.[].yyy.[]", parse(
+				"forms.xxx['xxx yyy'].yyy[\"xxx yyy\"]", true));
+		assertEquals("forms.xxx.[].yyy.[]", parse(
+				"forms.xxx['xxx yyy'].yyy[\"xxx 'yyy'\"]", true));
+		assertEquals("\"xxx 'yyy'\"", parse("\"xxx 'yyy'\"", true));
+		assertEquals("'xxx \"yyy\"'", parse("'xxx \"yyy\"'", true));
 	}
-	
-	public void testXMLSyntax() throws Exception
-	{
-		assertEquals("_xml.articulo.art::articulo_catalago.art::articulo_borrador", HostCollection
-				.parseCompletionString("_xml.articulo.art::articulo_catalago.art::articulo_borrador", true));
+
+	public void testXMLSyntax() throws Exception {
+		assertEquals(
+				"_xml.articulo.art::articulo_catalago.art::articulo_borrador",
+				parse(
+						"_xml.articulo.art::articulo_catalago.art::articulo_borrador",
+						true));
 	}
 }
