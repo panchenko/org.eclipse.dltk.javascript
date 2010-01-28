@@ -12,6 +12,7 @@ package org.eclipse.dltk.internal.javascript.typeinference;
 import java.util.Collection;
 import java.util.Set;
 
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 
 public interface IReference {
@@ -27,7 +28,7 @@ public interface IReference {
 	 * 
 	 * @return
 	 */
-	public Set getChilds(boolean resolveLocals);
+	public Set<IReference> getChilds(boolean resolveLocals);
 
 	public IReference getChild(String key, boolean resolveLocals);
 
@@ -48,7 +49,7 @@ public interface IReference {
 
 	public void setPrototype(IReference ref);
 
-	public void addModelElements(Collection toAdd);
+	public void addModelElements(Collection<IModelElement> toAdd);
 
 	public void setLocationInformation(ModelElement mo, int position, int length);
 
