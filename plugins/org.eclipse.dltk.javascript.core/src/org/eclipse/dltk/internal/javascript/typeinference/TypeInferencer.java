@@ -230,6 +230,8 @@ final class TransparentRef implements IReference {
 
 public class TypeInferencer {
 
+	public static final String RETURN_VALUE = "!!!returnValue";
+
 	private ReferenceResolverContext cs;
 
 	public TypeInferencer(ModelElement owner, ReferenceResolverContext cs) {
@@ -333,9 +335,9 @@ public class TypeInferencer {
 		}
 
 		public Object processReturn(Node node, Object arg) {
-			IReference r = evaluateReference("!!!returnValue", node
-					.getFirstChild(), cs);
-			collection.setReference("!!!returnValue", r);
+			IReference r = evaluateReference(RETURN_VALUE,
+					node.getFirstChild(), cs);
+			collection.setReference(RETURN_VALUE, r);
 			return arg;
 		}
 
