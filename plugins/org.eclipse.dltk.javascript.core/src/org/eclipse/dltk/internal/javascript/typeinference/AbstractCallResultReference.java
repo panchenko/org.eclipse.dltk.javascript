@@ -10,6 +10,7 @@
 package org.eclipse.dltk.internal.javascript.typeinference;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -25,15 +26,13 @@ public abstract class AbstractCallResultReference implements IReference,
 		return hashSet == null ? new HashSet() : hashSet;
 	}
 
-	private String name;
+	private final String id;
+	private final String name;
+	private final ReferenceResolverContext cs;
 
-	private Set hashSet;
+	private Set<IReference> hashSet = null;
 
-	private String id;
-
-	private ReferenceResolverContext cs;
-
-	boolean local;
+	private boolean local;
 
 	public IReference getChild(String key, boolean resolveLocals) {
 		if (!resolveLocals)
@@ -64,13 +63,13 @@ public abstract class AbstractCallResultReference implements IReference,
 		return this.getChild("prototype", resolveLocals);
 	}
 
-	private static HashSet searchIds = new HashSet();
+	private static final Set<String> searchIds = new HashSet<String>();
 
-	public Set getChilds(boolean resolveLocals) {
+	public Set<IReference> getChilds(boolean resolveLocals) {
 		if (!resolveLocals)
-			return new HashSet();
+			return Collections.emptySet();
 		if (searchIds.contains(id))
-			return new HashSet();
+			return Collections.emptySet();
 		if (this.hashSet != null)
 			return hashSet;
 		try {

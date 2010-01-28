@@ -352,7 +352,7 @@ public class TypeInferencer {
 			collection = elseContext;
 			Node elseNode = node.getLastChild();
 			doAction(elseNode, arg);
-			collection = (HostCollection) contexts.pop();
+			collection = contexts.pop();
 			root.mergeElseIf(ifContext, elseContext);
 			return arg;
 		}
@@ -367,7 +367,7 @@ public class TypeInferencer {
 					name, true));
 			node.getFirstChild();
 			processScriptNode(node, arg);
-			HostCollection pop = (HostCollection) contexts.pop();
+			HostCollection pop = contexts.pop();
 			if (node.getPosition() >= this.position)
 				throw new PositionReachedException(null);
 			// pop.mergeIf(collection);
@@ -379,7 +379,7 @@ public class TypeInferencer {
 			contexts.push(collection);
 			collection = new HostCollection(collection);
 			processScriptNode(node, arg);
-			HostCollection pop = (HostCollection) contexts.pop();
+			HostCollection pop = contexts.pop();
 			pop.mergeIf(collection);
 			collection = pop;
 			return arg;
@@ -397,14 +397,14 @@ public class TypeInferencer {
 					Jump cm = (Jump) n;
 					if (cm.getType() == Token.GOTO) {
 						// else then lies.
-						HostCollection pop = (HostCollection) contexts.peek();
+						HostCollection pop = contexts.peek();
 						ifCollection = collection;
 						HostCollection elseCollection = new HostCollection(pop);
 						collection = elseCollection;
 					}
 				}
 			}
-			HostCollection pop = (HostCollection) contexts.pop();
+			HostCollection pop = contexts.pop();
 			if (ifCollection == null)
 				pop.mergeIf(collection);
 			else
@@ -454,10 +454,9 @@ public class TypeInferencer {
 			contexts.push(parent);
 
 			collection = new HostCollection((HostCollection) functionContexts
-					.getFirst());
+					.getFirst(), functionNode.getFunctionName(),
+					HostCollection.FUNCTION);
 
-			collection.setType(HostCollection.FUNCTION);
-			collection.setName(functionNode.getFunctionName());
 			String comment = functionNode.getFunctionComments();
 			Map paramTypes = parseComment(comment);
 			for (int am = 0; am < functionNode.getParamCount(); am++) {
@@ -488,7 +487,7 @@ public class TypeInferencer {
 
 			if (functionNode.getEncodedSourceEnd() >= position)
 				throw new PositionReachedException(functionNode);
-			HostCollection pop = (HostCollection) contexts.pop();
+			HostCollection pop = contexts.pop();
 			Iterator i = collection.getReferences().values().iterator();
 			while (i.hasNext()) {
 				Object o = i.next();
@@ -593,8 +592,7 @@ public class TypeInferencer {
 
 			int pos = objId.indexOf('.');
 			String rootName = pos == -1 ? objId : objId.substring(0, pos);
-			IReference root = (IReference) collection
-					.getReferenceNoParentContext(rootName);
+			IReference root = collection.getReferenceNoParentContext(rootName);
 			if (root == null) {
 				root = new StandardSelfCompletingReference(rootName, true);
 				root.setLocationInformation(module, node.getPosition(), fieldId
@@ -641,16 +639,14 @@ public class TypeInferencer {
 			root.setChild(fieldId, transparentRef);
 		}
 
-		public Object processLeaveWidth(Node node, Object arg) {
+		@Override
+		public Object processLeaveWith(Node node, Object arg) {
 
 			if (node.getPosition() >= position)
 				throw new PositionReachedException(null);
-			if (contexts.isEmpty())
+			if (withContexts.isEmpty())
 				return arg;
-			if (!(contexts.peek() instanceof IReference)
-					&& contexts.peek() != null)
-				return arg;
-			IReference to = (IReference) contexts.pop();
+			IReference to = withContexts.pop();
 			if (to != null) {
 				Map mn = collection.getReferences();
 				Iterator i = mn.keySet().iterator();
@@ -659,49 +655,44 @@ public class TypeInferencer {
 					to.setChild(next, (IReference) mn.get(next));
 				}
 			}
-			collection = (HostCollection) contexts.pop();
+			collection = contexts.pop();
 
 			return null;
 		}
 
-		public Object processEnterWidth(Node node, Object arg) {
+		@Override
+		public Object processEnterWith(Node node, Object arg) {
 			Node firstChild = node.getFirstChild();
 			// try catch case
 			if (!(firstChild instanceof Node.StringNode)) {
 				contexts.push(collection);
-				contexts.push(null);
+				withContexts.push(null);
 				return arg;
 			}
 			contexts.push(collection);
 			String name = firstChild.getString();
 			IReference ref = collection.queryElement(name, false);
-			contexts.push(ref);
+			withContexts.push(ref);
 			collection = new HostCollection(collection);
 			if (ref != null) {
 				IReference r = ref.getPrototype(false);
 				if (r != null) {
-					Collection lm = new LinkedHashSet();
+					final Collection<IReference> lm = new LinkedHashSet<IReference>();
 					while (r != null && !lm.contains(r)) {
 						lm.add(r);
 						r = r.getPrototype(false);
 					}
-					lm = new LinkedList(lm);
-					Collections.reverse((List) lm);
-					Iterator i = lm.iterator();
-					while (i.hasNext()) {
-						IReference k = (IReference) i.next();
-						Set sm = k.getChilds(false);
-						Iterator i1 = sm.iterator();
-						while (i1.hasNext()) {
-							IReference k1 = (IReference) i1.next();
+					final List<IReference> list = new ArrayList<IReference>(lm);
+					Collections.reverse(list);
+					for (IReference k : list) {
+						Set<IReference> sm = k.getChilds(false);
+						for (IReference k1 : sm) {
 							collection.setReference(k1.getName(), k1);
 						}
 					}
 				}
-				Set sm = ref.getChilds(false);
-				Iterator i = sm.iterator();
-				while (i.hasNext()) {
-					IReference k = (IReference) i.next();
+				Set<IReference> sm = ref.getChilds(false);
+				for (IReference k : sm) {
 					collection.setReference(k.getName(), k);
 				}
 			}
@@ -721,9 +712,10 @@ public class TypeInferencer {
 		}
 	}
 
-	Stack contexts = new Stack();
-	Map functionNodes = new HashMap();
-	HostCollection collection = new HostCollection(null);
+	private final Stack<HostCollection> contexts = new Stack<HostCollection>();
+	private final Stack<IReference> withContexts = new Stack<IReference>();
+	private final Map<Integer, HostCollection> functionNodes = new HashMap<Integer, HostCollection>();
+	HostCollection collection = new HostCollection();
 	ModelElement module;
 
 	public HostCollection getCollection() {
@@ -787,7 +779,7 @@ public class TypeInferencer {
 			String key1 = getObjId(expression);
 			if (key1.endsWith(".e"))
 				key1 = key1.substring(0, key1.length() - 2);
-			IReference ref = (IReference) collection.queryElement(key1, true);
+			IReference ref = collection.queryElement(key1, true);
 			if (ref == null) {
 				ref = resolveReferenceTree(key, cs, key1, ref);
 			}
@@ -1020,12 +1012,11 @@ public class TypeInferencer {
 			return id.getString();
 		} catch (ClassCastException e) {
 			return "";
-		} finally {
 		}
 	}
 
 	public HostCollection doInterferencing(ScriptOrFnNode node, int tillPosition) {
-		HostCollection hostCollection = new HostCollection(null);
+		HostCollection hostCollection = new HostCollection();
 		NodeSwitch sw = new TypeInferencerSwitch(node, tillPosition);
 		sw.doAction(node, hostCollection);
 		return hostCollection;

@@ -213,19 +213,19 @@ public class NodeSwitch {
 		case Token.ELSE:
 			return processElse(node, arg);
 		case Token.ENTERWITH:
-			return processEnterWidth(node, arg);
+			return processEnterWith(node, arg);
 		case Token.LEAVEWITH:
-			return processLeaveWidth(node, arg);
+			return processLeaveWith(node, arg);
 		case Token.WITH:
-			return processWidth(node, arg);
+			return processWith(node, arg);
 		case Token.IFNE:
-			return processWidth(node, arg);
+			return processScriptNode(node, arg);
 		case Token.RETURN:
 			return processReturn(node, arg);
 		case Token.RETURN_RESULT:
-			return processWidth(node, arg);
+			return processScriptNode(node, arg);
 		case Token.GET_REF:
-			return processWidth(node, arg);
+			return processScriptNode(node, arg);
 		case Token.SWITCH:
 			return processSwitch(node, arg);
 		default:
@@ -241,11 +241,11 @@ public class NodeSwitch {
 		return processScriptNode(node, arg);
 	}
 
-	public Object processLeaveWidth(Node node, Object arg) {
+	public Object processLeaveWith(Node node, Object arg) {
 		return processScriptNode(node, arg);
 	}
 
-	public Object processEnterWidth(Node node, Object arg) {
+	public Object processEnterWith(Node node, Object arg) {
 		return processScriptNode(node, arg);
 	}
 
@@ -396,7 +396,7 @@ public class NodeSwitch {
 		return processScriptNode(node, arg);
 	}
 
-	public Object processWidth(Node node, Object arg) {
+	public Object processWith(Node node, Object arg) {
 		return processScriptNode(node, arg);
 	}
 

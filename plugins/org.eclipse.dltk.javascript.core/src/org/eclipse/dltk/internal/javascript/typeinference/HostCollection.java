@@ -23,7 +23,8 @@ public class HostCollection {
 
 	private final HostCollection parent;
 	private final Map<Object, Object> reference = new HashMap<Object, Object>();
-	private int type;
+	private final int type;
+	private final String name;
 
 	public IReference getReference(String key) {
 		IReference reference2 = (IReference) reference.get(key);
@@ -163,9 +164,18 @@ public class HostCollection {
 		return res;
 	}
 
+	public HostCollection() {
+		this(null, null, NORMAL);
+	}
+
 	public HostCollection(HostCollection parent) {
-		super();
+		this(parent, null, NORMAL);
+	}
+
+	public HostCollection(HostCollection parent, String name, int type) {
 		this.parent = parent;
+		this.name = name;
+		this.type = type;
 	}
 
 	public Map getReferences() {
@@ -310,12 +320,6 @@ public class HostCollection {
 		reference.remove(objId);
 	}
 
-	private String name;
-
-	public void setName(String functionName) {
-		this.name = functionName;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -324,15 +328,16 @@ public class HostCollection {
 		return type;
 	}
 
-	public void setType(int type) {
-		this.type = type;
-	}
-
 	public void recordFunction(Object function, HostCollection collection) {
 		reference.put(function, collection);
 	}
 
 	public HostCollection getFunction(Object funObject) {
 		return (HostCollection) reference.get(funObject);
+	}
+
+	@Override
+	public String toString() {
+		return "HostCollection(" + (name != null ? name : "") + ")";
 	}
 }
