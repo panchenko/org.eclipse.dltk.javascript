@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.core.ModelElement;
@@ -301,7 +302,7 @@ public class StandardSelfCompletingReference implements IReference,
 		 */
 		public String[] getParameters() throws ModelException {
 			if (parameters == null)
-				return new String[0];
+				return CharOperation.NO_STRINGS;
 			return parameters;
 		}
 
