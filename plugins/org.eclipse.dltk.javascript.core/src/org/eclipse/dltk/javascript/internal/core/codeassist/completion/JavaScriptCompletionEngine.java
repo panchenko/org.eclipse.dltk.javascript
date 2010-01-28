@@ -44,6 +44,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
+import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils.PositionCalculator;
@@ -129,10 +130,9 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 
 	private void doGlobalCompletion(ReferenceResolverContext buildContext,
 			ISourceModule cu, int position, int pos, HostCollection collection,
-			String startPart) {
-		HashSet completedNames = new HashSet();
+			String completion) {
+		Set<String> completedNames = new HashSet<String>();
 
-		String completion = startPart;
 		char[] token = completion.toCharArray();
 
 		HashMap names = new HashMap();
@@ -150,7 +150,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				}
 			}
 		}
-		names.remove("!!!returnValue");
+		names.remove(TypeInferencer.RETURN_VALUE);
 		completeFromMap(position, completion, names);
 		if (names.size() > 0) {
 			char[][] choices = new char[names.size()][];
@@ -181,8 +181,8 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			String[] findElements = instance.findElements(MixinModel.SEPARATOR
 					+ completion);
 
-			ArrayList methods = new ArrayList();
-			ArrayList fields = new ArrayList();
+			List<IMethod> methods = new ArrayList<IMethod>();
+			Set<String> fields = new HashSet<String>();
 
 			for (int a = 0; a < findElements.length; a++) {
 				String string = findElements[a];
@@ -201,31 +201,29 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 							IModelElement el = (IModelElement) object;
 							int elementType = el.getElementType();
 							if (elementType == IModelElement.METHOD) {
-								methods.add(el);
+								methods.add((IMethod) el);
 							} else if (elementType == IModelElement.FIELD) {
-								String elementName = el.getElementName();
-								if (!completedNames.contains(elementName)) {
-									fields.add(elementName.toCharArray());
-									completedNames.add(elementName);
-								}
+								fields.add(el.getElementName());
 							}
 						} else if (object == null) {
-							String lastKeySegment = mixinElement
-									.getLastKeySegment();
-							if (!completedNames.contains(lastKeySegment)) {
-								fields.add(lastKeySegment.toCharArray());
-								completedNames.add(lastKeySegment);
-							}
+							fields.add(mixinElement.getLastKeySegment());
 						}
 					}
 				}
 			}
-			findMethods(token, true, methods);
-			char[][] choices = new char[fields.size()][];
-			for (int a = 0; a < fields.size(); a++) {
-				choices[a] = (char[]) fields.get(a);
+			for (IMethod method : methods) {
+				completedNames.add(method.getElementName());
 			}
-			findLocalVariables(token, choices, true, false);
+			findMethods(token, true, methods);
+			if (!fields.isEmpty()) {
+				completedNames.addAll(fields);
+				char[][] choices = new char[fields.size()][];
+				int ia = 0;
+				for (String field : fields) {
+					choices[ia++] = field.toCharArray();
+				}
+				findLocalVariables(token, choices, true, false);
+			}
 			// doCompletionOnFunction(position, pos, completion);
 			// doCompletionOnGlobalVariable(position, pos, completion,
 			// completedNames);
@@ -256,7 +254,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				continue;
 			names.put(name, rfs.get(name));
 		}
-		names.remove("!!!returnValue");
+		names.remove(TypeInferencer.RETURN_VALUE);
 		if (names.size() > 0) {
 			completeFromMap(position, completion, names);
 		}
@@ -268,9 +266,9 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 
 		String completionPart = calculator.getCompletionPart();
 		String corePart = calculator.getCorePart();
-		final HashMap dubR = new HashMap();
+		final Map<String, Object> dubR = new HashMap<String, Object>();
 		Set resolveGlobals = buildContext.resolveGlobals(corePart + '.');
-		Iterator it = resolveGlobals.iterator();
+		Iterator<?> it = resolveGlobals.iterator();
 		while (it.hasNext()) {
 			Object o = it.next();
 			if (o instanceof IReference) {
@@ -284,7 +282,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		}
 		completeFromMap(position, completionPart, dubR);
 
-		Set references = collection.queryElements(corePart, true);
+		Set<IReference> references = collection.queryElements(corePart, true);
 		Iterator iterator;
 		if (!references.isEmpty()) {
 			iterator = references.iterator();
@@ -328,7 +326,8 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 	 * @param dubR
 	 * @param r
 	 */
-	private void putAndCheckDuplicateReference(final HashMap dubR, IReference r) {
+	private void putAndCheckDuplicateReference(final Map<String, Object> dubR,
+			IReference r) {
 		Object put = dubR.put(r.getName(), r);
 		if (put instanceof IReference) {
 			if (r instanceof CombinedOrReference) {
@@ -346,13 +345,13 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 	}
 
 	private void completeFromMap(int position, String completionPart,
-			final HashMap dubR) {
-		Iterator iterator;
+			final Map<String, Object> dubR) {
 		this.requestor.acceptContext(new CompletionContext());
 		this.setSourceRange(position - completionPart.length(), position);
 		char[] token = completionPart.toCharArray();
 		int length = token.length;
-		for (iterator = dubR.values().iterator(); iterator.hasNext();) {
+		for (Iterator<?> iterator = dubR.values().iterator(); iterator
+				.hasNext();) {
 			Object next = iterator.next();
 
 			if (next instanceof SelfCompletingReference) {
@@ -388,8 +387,8 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 					createProposal.setCompletion(name);
 
 					if (ref.isFunctionRef()) {
-						Iterator childs = ref.getChilds(true).iterator();
-						ArrayList al = new ArrayList();
+						Iterator<?> childs = ref.getChilds(true).iterator();
+						List<char[]> al = new ArrayList<char[]>();
 						while (childs.hasNext()) {
 							Object o = childs.next();
 							if (o instanceof StandardSelfCompletingReference
@@ -408,7 +407,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 						if (al.size() > 0) {
 							char[][] parameterNames = new char[al.size()][];
 							for (int i = 0; i < al.size(); i++) {
-								parameterNames[i] = (char[]) al.get(i);
+								parameterNames[i] = al.get(i);
 							}
 							createProposal.setParameterNames(parameterNames);
 						}
@@ -440,8 +439,9 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		return 0;
 	}
 
+	@Override
 	protected void findMethods(char[] token, boolean canCompleteEmptyToken,
-			List methods, int kind) {
+			List<IMethod> methods, int kind) {
 		if (methods == null || methods.size() == 0)
 			return;
 
@@ -449,7 +449,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		String tok = new String(token);
 		if (canCompleteEmptyToken || length > 0) {
 			for (int i = 0; i < methods.size(); i++) {
-				IMethod method = (IMethod) methods.get(i);
+				IMethod method = methods.get(i);
 				String qname = processMethodName(method, tok);
 				char[] name = qname.toCharArray();
 				if (DLTKCore.DEBUG_COMPLETION) {
