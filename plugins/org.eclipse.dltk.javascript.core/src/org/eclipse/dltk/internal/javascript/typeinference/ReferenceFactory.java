@@ -10,11 +10,10 @@
 package org.eclipse.dltk.internal.javascript.typeinference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.javascript.typeinference.IScriptableTypeProvider;
@@ -29,33 +28,25 @@ public class ReferenceFactory {
 	}
 
 	private static void initProviders() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
-				.getExtensionPoint(
+		final List<IScriptableTypeProvider> providerList = new ArrayList<IScriptableTypeProvider>();
+		final IConfigurationElement[] configurationElements = Platform
+				.getExtensionRegistry().getConfigurationElementsFor(
 						"org.eclipse.dltk.javascript.core.customtype");
-		IExtension[] extensions = extensionPoint.getExtensions();
-		ArrayList providerList = new ArrayList();
-		for (int a = 0; a < extensions.length; a++) {
-			IConfigurationElement[] configurationElements = extensions[a]
-					.getConfigurationElements();
-			for (int b = 0; b < configurationElements.length; b++) {
-
-				IConfigurationElement configurationElement = configurationElements[b];
-				try {
-					Object createExecutableExtension = configurationElement
-							.createExecutableExtension("class");
-					if (createExecutableExtension instanceof IScriptableTypeProvider) {
-						providerList.add(createExecutableExtension);
-					}
-				} catch (CoreException e) {
-					e.printStackTrace();
+		for (int b = 0; b < configurationElements.length; b++) {
+			IConfigurationElement configurationElement = configurationElements[b];
+			try {
+				Object createExecutableExtension = configurationElement
+						.createExecutableExtension("class");
+				if (createExecutableExtension instanceof IScriptableTypeProvider) {
+					providerList
+							.add((IScriptableTypeProvider) createExecutableExtension);
 				}
-				// System.out.println(configurationElement.getName());
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		}
-		IScriptableTypeProvider[] pr = new IScriptableTypeProvider[providerList
-				.size()];
-		providerList.toArray(pr);
-		providers = pr;
+		providers = providerList
+				.toArray(new IScriptableTypeProvider[providerList.size()]);
 	}
 
 	/**
@@ -142,14 +133,12 @@ public class ReferenceFactory {
 
 			if (providers != null) {
 				for (int i = 0; i < providers.length; i++) {
-					IScriptableTypeProvider element = (IScriptableTypeProvider) providers[i];
-					Scriptable ref = element.getType(paramOrVarName, type);
+					Scriptable ref = providers[i].getType(paramOrVarName, type);
 					if (ref != null)
 						return new ScriptableScopeReference(paramOrVarName,
 								ref, rrc);
 				}
 			}
-
 		}
 		return new StandardSelfCompletingReference(paramOrVarName, false);
 	}
