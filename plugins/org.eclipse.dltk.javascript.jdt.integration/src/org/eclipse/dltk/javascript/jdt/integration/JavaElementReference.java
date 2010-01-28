@@ -45,7 +45,8 @@ public class JavaElementReference extends StandardSelfCompletingReference{
 		return super.getChild(key, resolveLocals);
 	}
 
-	public void addModelElements(Collection toAdd) {
+	@Override
+	public void addModelElements(Collection<IModelElement> toAdd) {
 		if (element instanceof IMember){
 			IMember m=(IMember) element;
 			ISourceRange sourceRange;

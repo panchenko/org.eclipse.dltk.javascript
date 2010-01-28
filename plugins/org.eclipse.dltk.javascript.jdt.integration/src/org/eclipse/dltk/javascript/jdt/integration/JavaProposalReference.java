@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
@@ -71,7 +72,8 @@ public class JavaProposalReference extends StandardSelfCompletingReference
 		this.isGlobal = true;
 	}
 
-	public void addModelElements(Collection toAdd) {
+	@Override
+	public void addModelElements(Collection<IModelElement> toAdd) {
 		try {
 
 			IType r = findType(parentName);
@@ -209,6 +211,7 @@ public class JavaProposalReference extends StandardSelfCompletingReference
 		return Collections.emptySet();
 	}
 
+	@Override
 	public int getKind() {
 		int kind = proposal.getKind();
 		switch (kind) {
