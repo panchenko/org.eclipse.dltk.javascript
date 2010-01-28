@@ -22,8 +22,7 @@ public interface IReferenceResolver {
 	public Set resolveGlobals(String id);
 
 	void processCall(String call, String objId);
-	
+
 	void init(ReferenceResolverContext owner);
-	
-	
+
 }
