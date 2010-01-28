@@ -25,7 +25,7 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.IReferenceResolv
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableReference;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultReference;
-import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
+import org.eclipse.dltk.internal.javascript.typeinference.CompletionString;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
@@ -256,7 +256,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 	}
 
 	public Set resolveGlobals(String completion) {
-		completion = HostCollection.parseCompletionString(completion, true);
+		completion = CompletionString.parse(completion, true);
 		int pos = completion.indexOf('.');
 		String key = pos == -1 ? completion : completion.substring(0, pos);
 
