@@ -62,8 +62,9 @@ public class CallResultReference extends AbstractCallResultReference {
 		return root;
 	}
 
+	@Override
 	public String getResultId() {
-		return "!!!returnValue";
+		return TypeInferencer.RETURN_VALUE;
 	}
 
 	public boolean isFunctionRef() {
