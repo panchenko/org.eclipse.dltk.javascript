@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -24,13 +25,13 @@ import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 
 public final class ReferenceResolverContext {
 
-	protected ArrayList resolvers = new ArrayList();
+	protected final List<IReferenceResolver> resolvers = new ArrayList<IReferenceResolver>();
 
-	protected ISourceModule module;
+	protected final ISourceModule module;
 
-	protected Map settings;
+	protected final Map<?, ?> settings;
 
-	public ReferenceResolverContext(ISourceModule module, Map settings) {
+	public ReferenceResolverContext(ISourceModule module, Map<?, ?> settings) {
 		super();
 		this.module = module;
 		this.settings = settings;
@@ -40,7 +41,7 @@ public final class ReferenceResolverContext {
 		return module;
 	}
 
-	public Map getOptions() {
+	public Map<?, ?> getOptions() {
 		return settings;
 	}
 
@@ -68,7 +69,7 @@ public final class ReferenceResolverContext {
 			}
 		});
 		for (int a = 0; a < resolvers.size(); a++) {
-			IReferenceResolver res = (IReferenceResolver) resolvers.get(a);
+			IReferenceResolver res = resolvers.get(a);
 			Set result = res.resolveGlobals(id);
 
 			Iterator it = result.iterator();
@@ -86,15 +87,14 @@ public final class ReferenceResolverContext {
 	}
 
 	public void init() {
-		for (int a = 0; a < resolvers.size(); a++) {
-			IReferenceResolver res = (IReferenceResolver) resolvers.get(a);
+		for (IReferenceResolver res : resolvers) {
 			res.init(this);
 		}
 	}
 
 	public Set resolveChilds(IResolvableReference abstractCallResultReference) {
 		for (int a = 0; a < resolvers.size(); a++) {
-			IReferenceResolver res = (IReferenceResolver) resolvers.get(a);
+			IReferenceResolver res = resolvers.get(a);
 			Set result = res.getChilds(abstractCallResultReference);
 			if (result != null) {
 				if (!result.isEmpty())
@@ -106,7 +106,7 @@ public final class ReferenceResolverContext {
 
 	public void processCall(String call, String objId) {
 		for (int a = 0; a < resolvers.size(); a++) {
-			IReferenceResolver res = (IReferenceResolver) resolvers.get(a);
+			IReferenceResolver res = resolvers.get(a);
 			res.processCall(call, objId);
 		}
 	}
