@@ -10,45 +10,43 @@
 package org.eclipse.dltk.internal.javascript.reference.resolvers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 
 public class ResolverManager {
 
-	static private IResolverFactory[] registredResolvers;
+	static private IResolverFactory[] registered;
 
 	static {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
-				.getExtensionPoint("org.eclipse.dltk.javascript.core.resolver");
-		IExtension[] ext = extensionPoint.getExtensions();
-		ArrayList resolvers = new ArrayList();
-		for (int a = 0; a < ext.length; a++) {
-			IConfigurationElement[] elements = ext[a]
-					.getConfigurationElements();
-			IConfigurationElement myElement = elements[0];
+		IConfigurationElement[] elements = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(
+						"org.eclipse.dltk.javascript.core.resolver");
+		List<IResolverFactory> factories = new ArrayList<IResolverFactory>();
+		for (IConfigurationElement element : elements) {
 			try {
-				IResolverFactory resolver = (IResolverFactory) myElement
+				IResolverFactory factory = (IResolverFactory) element
 						.createExecutableExtension("class");
-				resolvers.add(resolver);
+				factories.add(factory);
 			} catch (Exception e) {
+				JavaScriptPlugin.error("Error instantiating IResolverFactory",
+						e);
 				e.printStackTrace();
 			}
 		}
-		registredResolvers = new IResolverFactory[resolvers.size()];
-		resolvers.toArray(registredResolvers);
+		registered = factories.toArray(new IResolverFactory[factories.size()]);
 	}
 
 	public static ReferenceResolverContext createResolverContext(
-			ISourceModule module, Map settings, boolean skipSourceBased) {
+			ISourceModule module, Map<?, ?> settings, boolean skipSourceBased) {
 		ReferenceResolverContext cm = new ReferenceResolverContext(module,
 				settings);
-		for (int a = 0; a < registredResolvers.length; a++) {
-			IReferenceResolver create = registredResolvers[a].create();
+		for (int a = 0; a < registered.length; a++) {
+			IReferenceResolver create = registered[a].create();
 			if (create instanceof SourceBasedResolver) {
 				if (!skipSourceBased) {
 					cm.resolvers.add(0, create);
