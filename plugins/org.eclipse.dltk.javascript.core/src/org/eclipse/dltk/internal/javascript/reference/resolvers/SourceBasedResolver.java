@@ -191,14 +191,11 @@ public class SourceBasedResolver implements IReferenceResolver,
 		String[] findElements = m.findElements(key);
 		HashSet result = new HashSet();
 		for (int a = 0; a < findElements.length; a++) {
-			IMixinElement mixinElement = m.getRawInstance()
-					.get(findElements[a]);
+			IMixinElement mixinElement = m.getRawModel().get(findElements[a]);
 			if (mixinElement == null)
 				continue;
 			String keye = mixinElement.getKey().substring(key.length());
 			if (keye.indexOf(IIndexConstants.SEPARATOR) != -1)
-				continue;
-			if (mixinElement == null)
 				continue;
 			Object[] allObjects = mixinElement.getObjects(module);
 
