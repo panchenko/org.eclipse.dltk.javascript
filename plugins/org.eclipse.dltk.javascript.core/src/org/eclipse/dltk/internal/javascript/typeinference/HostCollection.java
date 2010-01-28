@@ -22,7 +22,7 @@ public class HostCollection {
 	public static final int NORMAL = 0;
 
 	private final HostCollection parent;
-	private final HashMap reference = new HashMap();
+	private final Map<Object, Object> reference = new HashMap<Object, Object>();
 	private int type;
 
 	public IReference getReference(String key) {
@@ -33,12 +33,23 @@ public class HostCollection {
 		return reference2;
 	}
 
+	private static class Bracket {
+		final char ch;
+		final int position;
+
+		public Bracket(char ch, int position) {
+			this.ch = ch;
+			this.position = position;
+		}
+
+	}
+
 	public static String parseCompletionString(String id,
 			boolean dotBeforeBrackets) {
 		StringBuffer sb = new StringBuffer();
 		int start = 0;
 		int current = id.length();
-		Stack inBrackStack = new Stack();
+		final Stack<Bracket> inBrackStack = new Stack<Bracket>();
 		boolean inStringSingle = false;
 		boolean inStringDouble = false;
 		for (int i = id.length(); --i >= 0;) {
@@ -73,14 +84,14 @@ public class HostCollection {
 					}
 					sb.insert(0, brackets + id.substring(i + 1, current));
 				}
-				inBrackStack.push(new Integer(i));
+				inBrackStack.push(new Bracket('[', i));
 				continue;
 			}
 			if (c == ')') {
 				if (inBrackStack.isEmpty()) {
 					sb.insert(0, id.substring(i + 1, current));
 				}
-				inBrackStack.push(new Long(i));
+				inBrackStack.push(new Bracket('(', i));
 				continue;
 			}
 			if (c == '[' || c == '(') {
@@ -92,13 +103,9 @@ public class HostCollection {
 					}
 					return id.substring(i + 1, current) + sb.toString();
 				}
-				Object pop = inBrackStack.pop();
-				if (c == '[' && !(pop instanceof Integer)) {
-					inBrackStack.push(pop);
-				} else if (c == '(' && !(pop instanceof Long)) {
-					inBrackStack.push(pop);
-				} else {
+				if (c == inBrackStack.peek().ch) {
 					current = i;
+					inBrackStack.pop();
 				}
 				continue;
 			}
@@ -114,20 +121,20 @@ public class HostCollection {
 		if (start == 0 && current == id.length() && inBrackStack.isEmpty())
 			return id;
 		if (!inBrackStack.isEmpty()) { // illegal code like []]
-			Number last = (Number) inBrackStack.pop();
-			id = id.substring(start, last.intValue())
-					+ id.substring(last.intValue() + 1, id.length());
+			Bracket last = inBrackStack.pop();
+			id = id.substring(start, last.position)
+					+ id.substring(last.position + 1, id.length());
 			return parseCompletionString(id, dotBeforeBrackets);
 		}
 		sb.insert(0, id.substring(start, current));
 		return sb.toString();
 	}
 
-	public Set queryElements(String completion, boolean useGlobal) {
+	public Set<IReference> queryElements(String completion, boolean useGlobal) {
 		completion = parseCompletionString(completion, false);
 
 		IReference r = getReference(completion);
-		HashSet res = new HashSet();
+		Set<IReference> res = new HashSet<IReference>();
 		if (r != null) {
 			res.add(r);
 			return res;
@@ -136,12 +143,12 @@ public class HostCollection {
 		if (pos == -1)
 			return res;
 		String rootName = completion.substring(0, pos);
-		r = (IReference) getReference(rootName);
+		r = getReference(rootName);
 		pos += 1;
 		String field;
 		while (pos != 0) {
 			if (r == null)
-				return new HashSet();
+				return new HashSet<IReference>();
 			int k = completion.indexOf('.', pos);
 			if (k == -1)
 				field = completion.substring(pos);
@@ -278,14 +285,14 @@ public class HostCollection {
 		return (IReference) this.reference.get(rootName);
 	}
 
-	public IReference queryElement(String key1, boolean useGlobal) {
-		Set queryElement = this.queryElements(key1, useGlobal);
+	public IReference queryElement(String key, boolean useGlobal) {
+		Set<IReference> queryElement = this.queryElements(key, useGlobal);
 		if (queryElement.isEmpty())
 			return null;
-		return (IReference) queryElement.iterator().next();
+		return queryElement.iterator().next();
 	}
 
-	HashSet transparent = new HashSet();
+	private Set<TransparentRef> transparent = new HashSet<TransparentRef>();
 
 	public void addTransparent(TransparentRef transparentRef) {
 		transparent.add(transparentRef);
