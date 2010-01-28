@@ -9,7 +9,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -19,9 +21,9 @@ public class JavaScriptPlugin extends Plugin {
 
 	public static final String PLUGIN_ID = "org.eclipse.dltk.javascript.core";
 
-	//The shared instance.
+	// The shared instance.
 	private static JavaScriptPlugin plugin;
-	
+
 	/**
 	 * The constructor.
 	 */
@@ -32,6 +34,7 @@ public class JavaScriptPlugin extends Plugin {
 	/**
 	 * This method is called upon plug-in activation
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 	}
@@ -39,6 +42,7 @@ public class JavaScriptPlugin extends Plugin {
 	/**
 	 * This method is called when the plug-in is stopped
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
 		plugin = null;
@@ -49,6 +53,21 @@ public class JavaScriptPlugin extends Plugin {
 	 */
 	public static JavaScriptPlugin getDefault() {
 		return plugin;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public static void error(Throwable e) {
+		error(e.getLocalizedMessage(), e);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public static void error(String message, Throwable t) {
+		plugin.getLog().log(
+				new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, message, t));
 	}
 
 }
