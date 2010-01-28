@@ -11,6 +11,7 @@ package org.eclipse.dltk.javascript.jdt.integration;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -55,7 +56,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 	}
 
 	private static final String PACKAGES = "Packages.";
-	ArrayList imports = new ArrayList();
+	private List<String> imports = new ArrayList<String>();
 
 	public void evaluate(IProject pr) {
 		JavaCore.create(pr);
