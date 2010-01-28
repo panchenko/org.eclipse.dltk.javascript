@@ -11,7 +11,7 @@ package org.eclipse.dltk.internal.javascript.parser;
 
 import java.io.StringReader;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -75,11 +75,11 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 			ReferenceResolverContext createResolverContext = null;
 			if (module != null) {
 				createResolverContext = ResolverManager.createResolverContext(
-						module, new HashMap(), true);
+						module, Collections.emptyMap(), true);
 				createResolverContext.init();
 			} else {
 				createResolverContext = new ReferenceResolverContext(null,
-						new HashMap());
+						Collections.emptyMap());
 			}
 			TypeInferencer interferencer = new TypeInferencer(null,
 					createResolverContext);
