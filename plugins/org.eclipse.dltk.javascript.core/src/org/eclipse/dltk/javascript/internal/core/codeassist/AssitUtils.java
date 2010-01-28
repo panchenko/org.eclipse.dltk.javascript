@@ -16,6 +16,7 @@ import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.parser.NullReporter;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ResolverManager;
+import org.eclipse.dltk.internal.javascript.typeinference.CompletionString;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
@@ -68,7 +69,7 @@ public class AssitUtils {
 				} else
 					pos = maxPos;
 			}
-			completion = HostCollection.parseCompletionString(conString
+			completion = CompletionString.parse(conString
 					.substring(0, pos), false);
 			int lastDot = completion.lastIndexOf('.');
 			if (lastDot != -1) {
