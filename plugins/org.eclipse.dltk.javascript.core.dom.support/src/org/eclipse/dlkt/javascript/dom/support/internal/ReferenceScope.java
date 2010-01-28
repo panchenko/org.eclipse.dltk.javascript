@@ -4,7 +4,7 @@
 package org.eclipse.dlkt.javascript.dom.support.internal;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
@@ -72,14 +72,12 @@ public class ReferenceScope implements Scriptable {
 	 * @see org.mozilla.javascript.Scriptable#getIds()
 	 */
 	public Object[] getIds() {
-		Set childs = ur.getChilds(true);
-		ArrayList al = new ArrayList();
-		Iterator it = childs.iterator();
-		while (it.hasNext()) {
-			IReference ref = (IReference) it.next();
-			al.add(ref.getName());
+		final Set<IReference> childs = ur.getChilds(true);
+		final List<String> names = new ArrayList<String>(childs.size());
+		for (IReference ref : childs) {
+			names.add(ref.getName());
 		}
-		return al.toArray();
+		return names.toArray();
 	}
 
 	/**
