@@ -504,11 +504,20 @@ public class Parser {
 					}
 					fnNode.addParam(s, start);
 					decompiler.addName(s);
+					if (matchToken(Token.COLON)) {
+						// skip type info
+						mustMatchToken(Token.NAME, "msg.no.typeinfo");
+					}
+
 				} while (matchToken(Token.COMMA));
 
 				mustMatchToken(Token.RP, "msg.no.paren.after.parms");
 			}
 			decompiler.addToken(Token.RP);
+
+			if (matchToken(Token.COLON)) {
+				mustMatchToken(Token.NAME, "msg.no.typeinfo");
+			}
 
 			mustMatchToken(Token.LC, "msg.no.brace.body");
 			decompiler.addEOL(Token.LC);
@@ -1253,6 +1262,11 @@ public class Parser {
 			name = nf.createName(s);
 			name.setPosition(nameStart);
 			// omitted check for argument hiding
+
+			if (matchToken(Token.COLON)) {
+				// skip type info
+				mustMatchToken(Token.NAME, "msg.no.typeinfo");
+			}
 
 			if (matchToken(Token.ASSIGN)) {
 				decompiler.addToken(Token.ASSIGN);
