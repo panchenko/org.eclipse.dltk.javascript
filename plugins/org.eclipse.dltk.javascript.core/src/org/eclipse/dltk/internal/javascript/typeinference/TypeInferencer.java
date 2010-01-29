@@ -443,7 +443,7 @@ public class TypeInferencer {
 			return null;
 		}
 
-		LinkedList functionContexts = new LinkedList();
+		private final LinkedList<HostCollection> functionContexts = new LinkedList<HostCollection>();
 
 		private void internalProcessFunctionNode(Object arg,
 				FunctionNode functionNode, Node function) {
@@ -453,9 +453,8 @@ public class TypeInferencer {
 			functionContexts.addLast(collection);
 			contexts.push(parent);
 
-			collection = new HostCollection((HostCollection) functionContexts
-					.getFirst(), functionNode.getFunctionName(),
-					HostCollection.FUNCTION);
+			collection = new HostCollection(functionContexts.getFirst(),
+					functionNode.getFunctionName(), HostCollection.FUNCTION);
 
 			String comment = functionNode.getFunctionComments();
 			Map paramTypes = parseComment(comment);
