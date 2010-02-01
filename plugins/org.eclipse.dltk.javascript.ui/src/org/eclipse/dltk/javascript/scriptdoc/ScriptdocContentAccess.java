@@ -108,6 +108,9 @@ class JavaDocCommentReader extends SingleCharReader {
 
 public class ScriptdocContentAccess {
 
+	private static final String JAVADOC_BEGIN = "/**";
+	private static final String JAVADOC_END = "*/";
+
 	private ScriptdocContentAccess() {
 		// do not instantiate
 	}
@@ -141,14 +144,15 @@ public class ScriptdocContentAccess {
 		int start = range.getOffset();
 		int length = range.getLength();
 		String sm = buf.getText(0, start);
-		int q = sm.lastIndexOf("/**");
-		if (q != -1) {
-			start = q;
-			sm = sm.substring(q);
+		start = sm.lastIndexOf(JAVADOC_BEGIN);
+		if (start == -1) {
+			return null;
 		}
-		int pm = sm.lastIndexOf("*/");
-		if (pm != -1)
-			length = pm + 2;
+		sm = sm.substring(start);
+		int end = sm.lastIndexOf(JAVADOC_END);
+		if (end != -1) {
+			length = end + JAVADOC_END.length();
+		}
 		if (length > 0) {
 			IScanner scanner = createScanner(true, false, false, false);
 			scanner.setSource(buf.getText(start, length).toCharArray());
