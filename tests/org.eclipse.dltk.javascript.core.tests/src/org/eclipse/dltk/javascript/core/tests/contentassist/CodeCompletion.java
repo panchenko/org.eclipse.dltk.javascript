@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.core.CompletionProposal;
+import org.eclipse.dltk.core.tests.TestSupport;
 
 public class CodeCompletion extends AbstractCompletionTest {
 
@@ -444,7 +445,9 @@ public class CodeCompletion extends AbstractCompletionTest {
 		// basicTest(module, 54, names);
 	}
 
-	public void REM_test48() {
+	public void test48() {
+		if (TestSupport.notYetImplemented(this))
+			return;
 		String[] names = new String[] { "erer" };
 		String module = "test48.js";
 		int position = lastPositionInFile("this.", module);
