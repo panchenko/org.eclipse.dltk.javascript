@@ -70,10 +70,10 @@ public class CodeCompletion extends TestCase {
 
 	}
 
-	private final class TestCompletionRequetor extends CompletionRequestor {
+	private final class TestCompletionRequestor extends CompletionRequestor {
 		final List<CompletionProposal> results;
 
-		public TestCompletionRequetor(List<CompletionProposal> results) {
+		public TestCompletionRequestor(List<CompletionProposal> results) {
 			this.results = results;
 		}
 
@@ -83,10 +83,10 @@ public class CodeCompletion extends TestCase {
 		}
 	}
 
-	public JavaScriptCompletionEngine createEngine(
+	private JavaScriptCompletionEngine createEngine(
 			List<CompletionProposal> results) {
 		JavaScriptCompletionEngine engine = new JavaScriptCompletionEngine();
-		engine.setRequestor(new TestCompletionRequetor(results));
+		engine.setRequestor(new TestCompletionRequestor(results));
 		return engine;
 
 		// throw new Error("Unimplemented, please fix");
@@ -126,8 +126,7 @@ public class CodeCompletion extends TestCase {
 		return -1;
 	}
 
-	private void compareNames(LinkedList<CompletionProposal> results,
-			String[] names) {
+	private void compareNames(List<CompletionProposal> results, String[] names) {
 		assertEquals(names.length, results.size());
 		Collections.sort(results, new Comparator<CompletionProposal>() {
 
@@ -148,7 +147,7 @@ public class CodeCompletion extends TestCase {
 	}
 
 	private void basicTest(String mname, int position, String[] compNames) {
-		LinkedList<CompletionProposal> results = new LinkedList<CompletionProposal>();
+		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
 		JavaScriptCompletionEngine c = createEngine(results);
 		c.setUseEngine(false);
 		c.complete(new TestModule(this.getClass().getResource(mname)),
@@ -598,7 +597,7 @@ public class CodeCompletion extends TestCase {
 		// basicTest(module, 95, names);
 	}
 
-	public void REM_test45() {
+	public void test45() {
 		String[] names = new String[] { "word", "other_word" };
 		String module = "test45.js";
 		int position = lastPositionInFile("x.hello.", module);
