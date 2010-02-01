@@ -1,168 +1,18 @@
 package org.eclipse.dltk.javascript.core.tests.contentassist;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
-import junit.framework.TestCase;
-
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.dltk.compiler.env.ISourceModule;
-import org.eclipse.dltk.compiler.util.Util;
+import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.core.CompletionProposal;
-import org.eclipse.dltk.core.CompletionRequestor;
-import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeStringReference;
-import org.eclipse.dltk.javascript.internal.core.codeassist.completion.JavaScriptCompletionEngine;
 
-public class CodeCompletion extends TestCase {
-
-	private final class TestModule implements ISourceModule {
-
-		final String content;
-		final String elementName;
-
-		public TestModule(String string) {
-			this.content = string;
-			this.elementName = "noname.js";
-		}
-
-		public TestModule(URL resource) {
-			try {
-				this.elementName = new Path(resource.getPath()).lastSegment();
-				this.content = new String(Util.getInputStreamAsCharArray(
-						resource.openStream(), -1, "UTF-8"));
-			} catch (IOException e) {
-				throw new IllegalArgumentException();
-			}
-		}
-
-		public IModelElement getModelElement() {
-			return null;
-		}
-
-		public IPath getScriptFolder() {
-			return Path.EMPTY;
-		}
-
-		public String getSourceContents() {
-			return content;
-		}
-
-		public char[] getContentsAsCharArray() {
-			return content.toCharArray();
-		}
-
-		public String getFileName() {
-			return elementName;
-		}
-
-	}
-
-	private final class TestCompletionRequestor extends CompletionRequestor {
-		final List<CompletionProposal> results;
-
-		public TestCompletionRequestor(List<CompletionProposal> results) {
-			this.results = results;
-		}
-
-		@Override
-		public void accept(CompletionProposal proposal) {
-			results.add(proposal);
-		}
-	}
-
-	private JavaScriptCompletionEngine createEngine(
-			List<CompletionProposal> results) {
-		JavaScriptCompletionEngine engine = new JavaScriptCompletionEngine();
-		engine.setRequestor(new TestCompletionRequestor(results));
-		return engine;
-
-		// throw new Error("Unimplemented, please fix");
-	}
-
-	private int lastPositionInFile(String string, String moduleName) {
-		URL resource = this.getClass().getResource(moduleName);
-		DataInputStream str;
-		try {
-			str = new DataInputStream(resource.openStream());
-		} catch (IOException e1) {
-			return -1;
-		}
-		ByteArrayOutputStream bs = new ByteArrayOutputStream();
-		try {
-			while (str.available() >= 0) {
-				int k = str.read();
-				if (k == -1)
-					break;
-				else
-					bs.write(k);
-			}
-		} catch (IOException e) {
-			return -1;
-		}
-		String content = "";
-		try {
-			content = new String(bs.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return -1;
-		}
-
-		int position = content.lastIndexOf(string);
-		if (position >= 0) {
-			return position + string.length();
-		}
-		return -1;
-	}
-
-	private void compareNames(List<CompletionProposal> results, String[] names) {
-		assertEquals(names.length, results.size());
-		Collections.sort(results, new Comparator<CompletionProposal>() {
-
-			public int compare(CompletionProposal pr, CompletionProposal pr1) {
-				return new String(pr.getName()).compareTo(new String(pr1
-						.getName()));
-			}
-
-		});
-		Arrays.sort(names);
-		Iterator<CompletionProposal> it = results.iterator();
-		int pos = 0;
-		while (it.hasNext()) {
-			CompletionProposal pr = it.next();
-			assertEquals(names[pos], new String(pr.getName()));
-			pos++;
-		}
-	}
-
-	private void basicTest(String mname, int position, String[] compNames) {
-		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
-		JavaScriptCompletionEngine c = createEngine(results);
-		c.setUseEngine(false);
-		c.complete(new TestModule(this.getClass().getResource(mname)),
-				position, 0);
-		// assertEquals(2, results.size());
-		compareNames(results, compNames);
-	}
+public class CodeCompletion extends AbstractCompletionTest {
 
 	/**
 	 * dumb completion on keyword
 	 */
 	public void test0() {
 		LinkedList<CompletionProposal> results = new LinkedList<CompletionProposal>();
-		JavaScriptCompletionEngine c = createEngine(results);
-		c.setUseEngine(false);
+		ICompletionEngine c = createEngine(results, false);
 		c.complete(new TestModule(""), 0, 0);
 		assertEquals(0, results.size());
 	}
@@ -172,8 +22,7 @@ public class CodeCompletion extends TestCase {
 	 */
 	public void test1() {
 		LinkedList<CompletionProposal> results = new LinkedList<CompletionProposal>();
-		JavaScriptCompletionEngine c = createEngine(results);
-		c.setUseEngine(false);
+		ICompletionEngine c = createEngine(results, false);
 		c.complete(new TestModule(this.getClass().getResource("test1.js")), 0,
 				0);
 		assertEquals(0, results.size());
@@ -199,32 +48,6 @@ public class CodeCompletion extends TestCase {
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
 		// basicTest(module, 63, names);
-	}
-
-	private static List<String> stringMethods = null;
-
-	private static List<String> getMethodsOfString() {
-		if (stringMethods == null) {
-			List<String> names = new ArrayList<String>();
-			for (Iterator<?> i = new NativeStringReference("").getChilds(false)
-					.iterator(); i.hasNext();) {
-				IReference reference = (IReference) i.next();
-				names.add(reference.getName());
-			}
-			assertEquals(36, names.size());
-			stringMethods = Collections.unmodifiableList(names);
-		}
-		return stringMethods;
-	}
-
-	private static String[] concat(List<String> values, String... addition) {
-		List<String> result = new ArrayList<String>(values.size()
-				+ addition.length);
-		result.addAll(values);
-		for (String value : addition) {
-			result.add(value);
-		}
-		return result.toArray(new String[result.size()]);
 	}
 
 	// 104 ,temperature
