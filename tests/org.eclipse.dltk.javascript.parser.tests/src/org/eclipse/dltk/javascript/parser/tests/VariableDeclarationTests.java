@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.parser.tests;
 
 import org.eclipse.dltk.ast.utils.ASTUtil;
+import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
@@ -46,6 +47,8 @@ public class VariableDeclarationTests extends AbstractJSParserTest {
 	}
 
 	public void testTypedVar2DeclarationDisabled() {
+		if (TestSupport.notYetImplemented(this))
+			return;
 		Script script = parse(VAR_X_STRING + "," + "y:String");
 		assertTrue(reporter.hasErrors());
 		VariableStatement vars = uniqueResult(ASTUtil.select(script,

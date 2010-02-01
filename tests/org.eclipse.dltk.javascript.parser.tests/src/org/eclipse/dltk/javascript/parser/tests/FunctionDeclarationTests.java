@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.parser.tests;
 
 import org.eclipse.dltk.ast.utils.ASTUtil;
+import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 
@@ -51,6 +52,8 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 	}
 
 	public void testTypedArg1Disabled() {
+		if (TestSupport.notYetImplemented(this))
+			return;
 		Script script = parse("function a(x:String){}");
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
@@ -62,6 +65,8 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 	}
 
 	public void testTypedArg2Disabled() {
+		if (TestSupport.notYetImplemented(this))
+			return;
 		Script script = parse("function a(x:String,y:Number){}");
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
