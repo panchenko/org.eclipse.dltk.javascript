@@ -62,13 +62,6 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		this.useEngine = useEngine;
 	}
 
-	public JavaScriptCompletionEngine(/*
-									 * ISearchableEnvironment nameEnvironment,
-									 * CompletionRequestor requestor, Map
-									 * settings, IScriptProject scriptProject
-									 */) {
-	}
-
 	protected int getEndOfEmptyToken() {
 		return 0;
 	}
@@ -84,8 +77,6 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 	public IAssistParser getParser() {
 		return null;
 	}
-
-	AssitUtils.PositionCalculator calculator;;
 
 	public void complete(ISourceModule cu, int position, int i) {
 		// System.out.println("Completion position:" + position);
@@ -108,19 +99,24 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 							+ content.substring(position);
 				}
 		}
-		calculator = new PositionCalculator(content, position, false);
-		String fileName2 = cu.getFileName();
-		ReferenceResolverContext buildContext = AssitUtils.buildContext(
-				(org.eclipse.dltk.core.ISourceModule) cu, position, content,
-				fileName2);
+		final AssitUtils.PositionCalculator calculator = new PositionCalculator(
+				content, position, false);
+		final org.eclipse.dltk.core.ISourceModule module;
+		if (cu instanceof org.eclipse.dltk.core.ISourceModule) {
+			module = (org.eclipse.dltk.core.ISourceModule) cu;
+		} else {
+			module = null;
+		}
+		ReferenceResolverContext buildContext = AssitUtils.buildContext(module,
+				position, content, cu.getFileName());
 		HostCollection collection = buildContext.getHostCollection();
 
 		String startPart = calculator.getCompletion();
 		this.setSourceRange(position - startPart.length(), position);
 		// System.out.println(startPart);
 		if (calculator.isMember()) {
-			doCompletionOnMember(buildContext, cu, position, content, position,
-					collection);
+			doCompletionOnMember(calculator, buildContext, cu, position,
+					content, position, collection);
 		} else {
 			doGlobalCompletion(buildContext, cu, position, position,
 					collection, startPart);
@@ -260,9 +256,9 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		}
 	}
 
-	private void doCompletionOnMember(ReferenceResolverContext buildContext,
-			ISourceModule cu, int position, String content, int pos,
-			HostCollection collection) {
+	private void doCompletionOnMember(PositionCalculator calculator,
+			ReferenceResolverContext buildContext, ISourceModule cu,
+			int position, String content, int pos, HostCollection collection) {
 
 		String completionPart = calculator.getCompletionPart();
 		String corePart = calculator.getCorePart();
