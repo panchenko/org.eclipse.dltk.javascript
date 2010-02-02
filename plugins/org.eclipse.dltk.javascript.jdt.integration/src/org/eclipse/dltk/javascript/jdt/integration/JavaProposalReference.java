@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
@@ -233,16 +234,18 @@ public class JavaProposalReference extends StandardSelfCompletingReference
 		return kind;
 	}
 
-	public char[] getDeclarationSignature() {
-		return proposal.getDeclarationSignature();
-	}
+	// public char[] getDeclarationSignature() {
+	// return proposal.getDeclarationSignature();
+	// }
 
-	public char[] getSignature() {
-		return proposal.getSignature();
-	}
+	// public char[] getSignature() {
+	// return proposal.getSignature();
+	// }
 
-	public char[][] getParameterNames() {
-		return proposal.findParameterNames(null);
+	@Override
+	public String[] getParameterNames() {
+		return CharOperation.charArrayToStringArray(proposal
+				.findParameterNames(null));
 	}
 
 }
