@@ -18,7 +18,7 @@ import org.eclipse.core.resources.IFile;
  * 
  */
 public interface IProposalHolder {
-	public char[][] getParameterNames();
+	public String[] getParameterNames();
 
 	public String getProposalInfo();
 
