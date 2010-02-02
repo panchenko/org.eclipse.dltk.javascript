@@ -17,13 +17,10 @@ import java.util.Set;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IReferenceResolver;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableReference;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
-import org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultReference;
 import org.eclipse.dltk.internal.javascript.typeinference.CallResultReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
@@ -45,8 +42,70 @@ import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 
-public class JdtReferenceResolver implements IExecutableExtension,
-		IReferenceResolver {
+public class JdtReferenceResolver implements IReferenceResolver {
+
+	private static final class MethodAcceptor extends SearchRequestor {
+
+		private final String typeId;
+		final Set<IReference> references = new HashSet<IReference>();
+
+		private MethodAcceptor(String typeId) {
+			this.typeId = typeId;
+		}
+
+		@Override
+		public void acceptSearchMatch(SearchMatch match) throws CoreException {
+			Object element = match.getElement();
+
+			if (element instanceof IMethod) {
+				IMethod m = (IMethod) element;
+				IType declaringType = m.getDeclaringType();
+				if (!declaringType.getElementName().equals(typeId))
+					return;
+				IMethod[] ts = declaringType.getMethods();
+				for (int a = 0; a < ts.length; a++) {
+					String string = "jsFunction_";
+					String stringget = "jsGet_";
+					String stringset = "jsSet_";
+					IMethod method = ts[a];
+					if (method.getElementName().startsWith(string)) {
+						StandardSelfCompletingReference r = new StandardSelfCompletingReference(
+								method.getElementName().substring(
+										string.length()), true);
+
+						references.add(r);
+						r.setFunctionRef();
+					} else if (method.getElementName().startsWith(stringget)) {
+						IReference r = new StandardSelfCompletingReference(
+								method.getElementName().substring(
+										stringget.length()), true);
+						references.add(r);
+					} else if (method.getElementName().startsWith(stringset)) {
+						IReference r = new StandardSelfCompletingReference(
+								method.getElementName().substring(
+										stringset.length()), true);
+						references.add(r);
+					}
+				}
+			}
+		}
+
+	}
+
+	private final class CompletionAcceptor extends CompletionRequestor {
+		private final String cmid;
+		final Set<IReference> references = new HashSet<IReference>();
+
+		private CompletionAcceptor(String cmid) {
+			this.cmid = cmid;
+		}
+
+		@Override
+		public void accept(CompletionProposal proposal) {
+			references.add(new JavaProposalReference(context, proposal, owner,
+					javaProject, cmid));
+		}
+	}
 
 	private static final class ClassRef extends StandardSelfCompletingReference
 			implements IClassReference {
@@ -58,15 +117,6 @@ public class JdtReferenceResolver implements IExecutableExtension,
 	private static final String PACKAGES = "Packages.";
 	private List<String> imports = new ArrayList<String>();
 
-	public void evaluate(IProject pr) {
-		JavaCore.create(pr);
-	}
-
-	public void setInitializationData(IConfigurationElement config,
-			String propertyName, Object data) throws CoreException {
-
-	}
-
 	public boolean canResolve(ISourceModule module) {
 		IResource resource = module.getResource();
 		if (resource == null) {
@@ -76,135 +126,58 @@ public class JdtReferenceResolver implements IExecutableExtension,
 		return JavaCore.create(pr).exists();
 	}
 
-	public Set getChilds(final IResolvableReference ref) {
-		if (ref instanceof AbstractCallResultReference) {
-			final AbstractCallResultReference cm = (AbstractCallResultReference) ref;
-			if (cm instanceof NewReference) {
-				String preId = cm.getId();
-				final HashSet result = new HashSet();
-				if (preId.startsWith(PACKAGES))
-					preId = preId.substring(PACKAGES.length());
-				IJavaSearchScope createJavaSearchScope = SearchEngine
-						.createJavaSearchScope(new IJavaElement[] { create });
-				SearchPattern createPattern = SearchPattern.createPattern(
-						"jsFunction*", IJavaSearchConstants.METHOD, 100,
-						SearchPattern.R_PATTERN_MATCH);
-				try {
-
-					engine
-							.search(
-									createPattern,
-									new org.eclipse.jdt.core.search.SearchParticipant[] { engine
-											.getDefaultSearchParticipant() },
-									createJavaSearchScope,
-									new SearchRequestor() {
-
-										public void acceptSearchMatch(
-												SearchMatch match)
-												throws CoreException {
-											Object element = match.getElement();
-
-											if (element instanceof IMethod) {
-												IMethod m = (IMethod) element;
-												IType declaringType = m
-														.getDeclaringType();
-												if (!declaringType
-														.getElementName()
-														.equals(cm.getId()))
-													return;
-												IMethod[] ts = declaringType
-														.getMethods();
-												for (int a = 0; a < ts.length; a++) {
-													String string = "jsFunction_";
-													String stringget = "jsGet_";
-													String stringset = "jsSet_";
-													IMethod method = ts[a];
-													if (method.getElementName()
-															.startsWith(string)) {
-														StandardSelfCompletingReference r = new StandardSelfCompletingReference(
-																method
-																		.getElementName()
-																		.substring(
-																				string
-																						.length()),
-																true);
-
-														result.add(r);
-														r.setFunctionRef();
-													} else if (method
-															.getElementName()
-															.startsWith(
-																	stringget)) {
-														IReference r = new StandardSelfCompletingReference(
-																method
-																		.getElementName()
-																		.substring(
-																				stringget
-																						.length()),
-																true);
-														result.add(r);
-													} else if (method
-															.getElementName()
-															.startsWith(
-																	stringset)) {
-														IReference r = new StandardSelfCompletingReference(
-																method
-																		.getElementName()
-																		.substring(
-																				stringset
-																						.length()),
-																true);
-														result.add(r);
-													}
-												}
-											}
-										}
-
-									}, null);
-				} catch (CoreException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				final String cmid = preId;
-				if (!result.isEmpty())
-					return result;
-				String string = cmid + " z=new " + cmid + ";z.";
-				try {
-
-					context.codeComplete(string, string.length(),
-							new CompletionRequestor() {
-								public void accept(CompletionProposal proposal) {
-									IReference r = new JavaProposalReference(
-											context, proposal, owner, create,
-											cmid);
-									result.add(r);
-
-								}
-							});
-					return result;
-				} catch (JavaModelException e) {
-					return null;
-				}
+	public Set<IReference> getChilds(final IResolvableReference ref) {
+		if (ref instanceof NewReference) {
+			final NewReference newRef = (NewReference) ref;
+			String preId = newRef.getId();
+			if (preId.startsWith(PACKAGES))
+				preId = preId.substring(PACKAGES.length());
+			IJavaSearchScope javaSearchScope = SearchEngine
+					.createJavaSearchScope(new IJavaElement[] { javaProject });
+			SearchPattern createPattern = SearchPattern.createPattern(
+					"jsFunction*", IJavaSearchConstants.METHOD, 100,
+					SearchPattern.R_PATTERN_MATCH);
+			final MethodAcceptor methods = new MethodAcceptor(preId);
+			try {
+				engine
+						.search(
+								createPattern,
+								new org.eclipse.jdt.core.search.SearchParticipant[] { SearchEngine
+										.getDefaultSearchParticipant() },
+								javaSearchScope, methods, null);
+				if (!methods.references.isEmpty())
+					return methods.references;
+			} catch (CoreException e) {
+				Activator.error(e);
 			}
-			if (cm instanceof CallResultReference) {
-				CallResultReference call = (CallResultReference) cm;
-				IReference rm = call.getRoot();
-				if (rm != null) {
-					int lastIndexOf = call.getId().lastIndexOf('.');
-					String substring = call.getId().substring(lastIndexOf + 1);
-					IReference child = rm.getChild(substring, true);
-					if (child == null)
-						return null;
-					return child.getChilds(true);
-				}
+			final String codeSnippet = preId + " z=new " + preId + ";z.";
+			try {
+				final CompletionAcceptor completions = new CompletionAcceptor(
+						preId);
+				context.codeComplete(codeSnippet, codeSnippet.length(),
+						completions);
+				return completions.references;
+			} catch (JavaModelException e) {
+				Activator.error(e);
+			}
+		} else if (ref instanceof CallResultReference) {
+			CallResultReference call = (CallResultReference) ref;
+			IReference rm = call.getRoot();
+			if (rm != null) {
+				int lastIndexOf = call.getId().lastIndexOf('.');
+				String substring = call.getId().substring(lastIndexOf + 1);
+				IReference child = rm.getChild(substring, true);
+				if (child == null)
+					return null;
+				return child.getChilds(true);
 			}
 		}
 		return null;
 	}
 
-	public Set resolveGlobals(String id) {
+	public Set<IReference> resolveGlobals(String id) {
 
-		final HashSet result = new HashSet();
+		final HashSet<IReference> result = new HashSet<IReference>();
 		if (id.startsWith(PACKAGES))
 			id = id.substring(PACKAGES.length());
 		final String id2 = id;
@@ -216,7 +189,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 		if (indexOf == -1) {
 			sm = "import " + sm;
 			IJavaSearchScope createJavaSearchScope = SearchEngine
-					.createJavaSearchScope(new IJavaElement[] { create });
+					.createJavaSearchScope(new IJavaElement[] { javaProject });
 			SearchPattern createPattern = SearchPattern.createPattern(
 					"jsFunction*", IJavaSearchConstants.METHOD, 100,
 					SearchPattern.R_PATTERN_MATCH);
@@ -258,8 +231,8 @@ public class JdtReferenceResolver implements IExecutableExtension,
 							public void accept(CompletionProposal proposal) {
 								if (proposal.getName() != null) {
 									IReference r = new JavaProposalReference(
-											context, proposal, owner, create,
-											"");
+											context, proposal, owner,
+											javaProject, "");
 									result.add(r);
 								} else {
 									char[] completion = proposal
@@ -267,7 +240,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 									String sm = new String(completion);
 									IReference r = new JavaProposalReference(
 											context, sm, proposal, owner,
-											create, "");
+											javaProject, "");
 									result.add(r);
 								}
 							}
@@ -284,8 +257,8 @@ public class JdtReferenceResolver implements IExecutableExtension,
 							public void accept(CompletionProposal proposal) {
 								if (proposal.getName() != null) {
 									IReference r = new JavaProposalReference(
-											context, proposal, owner, create,
-											"");
+											context, proposal, owner,
+											javaProject, "");
 									result.add(r);
 								} else {
 
@@ -304,7 +277,7 @@ public class JdtReferenceResolver implements IExecutableExtension,
 									}
 									IReference r = new JavaProposalReference(
 											context, sm, proposal, owner,
-											create, pName);
+											javaProject, pName);
 									result.add(r);
 								}
 							}
@@ -324,14 +297,14 @@ public class JdtReferenceResolver implements IExecutableExtension,
 
 	ReferenceResolverContext owner;
 	IEvaluationContext context;
-	IJavaProject create;
+	IJavaProject javaProject;
 	SearchEngine engine = new SearchEngine();
 
 	public void init(ReferenceResolverContext owner) {
 		ISourceModule module = owner.getModule();
 		IProject pr = module.getResource().getProject();
-		create = JavaCore.create(pr);
-		context = create.newEvaluationContext();
+		javaProject = JavaCore.create(pr);
+		context = javaProject.newEvaluationContext();
 		String[] imps = new String[imports.size()];
 		for (int a = 0; a < imps.length; a++) {
 			imps[a] = imports.get(a).toString() + ".*";
