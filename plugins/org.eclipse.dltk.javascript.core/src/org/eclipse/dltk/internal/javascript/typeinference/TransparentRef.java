@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 
@@ -165,7 +166,7 @@ class TransparentRef implements IReference {
 	int length;
 	int location;
 
-	public void addModelElements(Collection toAdd) {
+	public void addModelElements(Collection<IModelElement> toAdd) {
 		if (parent != null)
 			toAdd.add(new FakeField(parent, getName(), location, length));
 	}

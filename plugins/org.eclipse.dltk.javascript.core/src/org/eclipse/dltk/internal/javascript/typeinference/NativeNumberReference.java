@@ -62,20 +62,17 @@ public class NativeNumberReference extends StandardSelfCompletingReference {
 			} else if (name.equals("toExponential")) {
 				ur
 						.setProposalInfo("Converts the value of the object into an exponential notation.");
-				ur.setParameterNames(new char[][] { "numberOfDecimals"
-						.toCharArray() });
+				ur.setParameterNames(new String[] { "numberOfDecimals" });
 
 			} else if (name.equals("toFixed")) {
 				ur
 						.setProposalInfo("Formats a number to the specified number of decimals.");
-				ur.setParameterNames(new char[][] { "numberOfDecimals"
-						.toCharArray() });
+				ur.setParameterNames(new String[] { "numberOfDecimals" });
 			} else if (name.equals("toLocaleString")) {
 			} else if (name.equals("toPrecision")) {
 				ur
 						.setProposalInfo("Converts a number into an exponential notation if it has more digits than specified.");
-				ur.setParameterNames(new char[][] { "numberOfDigits"
-						.toCharArray() });
+				ur.setParameterNames(new String[] { "numberOfDigits" });
 			}
 		}
 		super.setChild(key, ref);

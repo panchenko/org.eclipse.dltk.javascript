@@ -21,7 +21,7 @@ public interface SelfCompletingReference extends IReference {
 	//	
 	// char[] getDeclarationSignature();
 
-	char[][] getParameterNames();
+	String[] getParameterNames();
 
 	public String getProposalInfo();
 

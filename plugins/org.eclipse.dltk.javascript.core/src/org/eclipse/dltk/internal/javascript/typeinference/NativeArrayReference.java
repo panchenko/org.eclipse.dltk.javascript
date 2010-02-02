@@ -106,13 +106,11 @@ public class NativeArrayReference extends StandardSelfCompletingReference {
 
 				ur
 						.setProposalInfo("Joins two or more arrays and returns the result.");
-				ur.setParameterNames(new char[][] { "arrayN".toCharArray(),
-						"[arrayX]".toCharArray() });
+				ur.setParameterNames(new String[] { "arrayN", "[arrayX]" });
 			} else if (name.equals("slice")) {
 				ur
 						.setProposalInfo("Returns selected elements from an existing array.");
-				ur.setParameterNames(new char[][] { "start".toCharArray(),
-						"[end]".toCharArray() });
+				ur.setParameterNames(new String[] { "start", "[end]" });
 
 			} else if (name.equals("valueOf")) {
 				ur
@@ -120,17 +118,14 @@ public class NativeArrayReference extends StandardSelfCompletingReference {
 			} else if (name.equals("join")) {
 				ur
 						.setProposalInfo("Puts all the elements of an array into a string. The elements are separated by a specified delimiter.");
-				ur
-						.setParameterNames(new char[][] { "[separator]"
-								.toCharArray() });
+				ur.setParameterNames(new String[] { "[separator]" });
 			} else if (name.equals("pop")) {
 				ur
 						.setProposalInfo("Removes and returns the last element of an array.");
 			} else if (name.equals("push")) {
 				ur
 						.setProposalInfo("Adds one or more elements to the end of an array and returns the new length");
-				ur.setParameterNames(new char[][] { "element1".toCharArray(),
-						"[elementX]".toCharArray() });
+				ur.setParameterNames(new String[] { "element1", "[elementX]" });
 
 			} else if (name.equals("reverse")) {
 				ur
@@ -140,57 +135,51 @@ public class NativeArrayReference extends StandardSelfCompletingReference {
 						.setProposalInfo("Removes and returns the first element of an array.");
 			} else if (name.equals("sort")) {
 				ur.setProposalInfo("Sorts the elements of an array.");
-				ur.setParameterNames(new char[][] { "sortByFunction"
-						.toCharArray() });
+				ur.setParameterNames(new String[] { "sortByFunction" });
 
 			} else if (name.equals("splice")) {
 				ur
 						.setProposalInfo("Removes and adds new elements to an array.");
-				ur
-						.setParameterNames(new char[][] {
-								"index".toCharArray(), "howmany".toCharArray(),
-								"[newelementX]".toCharArray() });
+				ur.setParameterNames(new String[] { "index", "howmany",
+						"[newelementX]" });
 			} else if (name.equals("filter")) {
 				ur
 						.setProposalInfo("Creates a new array with all elements that pass the test implemented by the provided function.");
-				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+				ur.setParameterNames(new String[] { "callback" });
 
 			} else if (name.equals("every")) {
 				ur
 						.setProposalInfo("Tests whether all elements in the array pass the test implemented by the provided function.");
-				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+				ur.setParameterNames(new String[] { "callback" });
 			} else if (name.equals("map")) {
 				ur
 						.setProposalInfo("Creates a new array with the results of calling a provided function on every element in this array.");
-				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+				ur.setParameterNames(new String[] { "callback" });
 			} else if (name.equals("some")) {
 				ur
 						.setProposalInfo("Tests whether some element in the array passes the test implemented by the provided function.");
-				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+				ur.setParameterNames(new String[] { "callback" });
 
 			} else if (name.equals("forEach")) {
 				ur
 						.setProposalInfo("Calls a function for each element in the array.");
-				ur.setParameterNames(new char[][] { "callback".toCharArray() });
+				ur.setParameterNames(new String[] { "callback" });
 			} else if (name.equals("indexOf")) {
 				ur
 						.setProposalInfo("Returns the first index at which a given element can be found in the array, or -1 if it is not present.");
-				ur.setParameterNames(new char[][] {
-						"searchElement".toCharArray(),
-						"[fromIndex]".toCharArray() });
+				ur.setParameterNames(new String[] { "searchElement",
+						"[fromIndex]" });
 			} else if (name.equals("lastIndexOf")) {
 				ur
 						.setProposalInfo("Returns the last (greatest) index of an element within the array equal to the specified value, or -1 if none is found.");
-				ur.setParameterNames(new char[][] {
-						"searchElement".toCharArray(),
-						"[formIndex]".toCharArray() });
+				ur.setParameterNames(new String[] { "searchElement",
+						"[formIndex]" });
 
 			} else if (name.equals("unshift")) {
 				ur
 						.setProposalInfo("Adds one or more elements to the beginning of an array and returns the new length.");
-				ur.setParameterNames(new char[][] {
-						"newelement1".toCharArray(),
-						"[newelementX]".toCharArray() });
+				ur.setParameterNames(new String[] { "newelement1",
+						"[newelementX]" });
 			} else if (name.equals("length")) {
 				ur
 						.setProposalInfo("The length returns an integer representing the length of an array.");

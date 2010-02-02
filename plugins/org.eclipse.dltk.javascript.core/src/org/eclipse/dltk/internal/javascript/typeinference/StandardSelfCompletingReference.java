@@ -40,7 +40,7 @@ public class StandardSelfCompletingReference implements IReference,
 	private int length;
 
 	private Map<String, IReference> childs;
-	private char[][] parameterNames;
+	private String[] parameterNames;
 	private String proposalInfo;
 	protected StandardSelfCompletingReference parentRef;
 	private URL imageUrl;
@@ -165,16 +165,8 @@ public class StandardSelfCompletingReference implements IReference,
 	public void addModelElements(Collection<IModelElement> toAdd) {
 		if (parent != null) {
 			if (isFunctionRef()) {
-				String[] params = null;
-				char[][] parameterNames = getParameterNames();
-				if (parameterNames != null) {
-					params = new String[parameterNames.length];
-					for (int i = 0; i < parameterNames.length; i++) {
-						params[i] = new String(parameterNames[i]);
-					}
-				}
 				MethodReference method = new MethodReference(parent, name,
-						params, getProposalInfo(), getReturnType());
+						getParameterNames(), getProposalInfo(), getReturnType());
 				toAdd.add(method);
 			} else {
 				FakeField fakeField = new FakeField(parent, name, offset,
@@ -194,7 +186,7 @@ public class StandardSelfCompletingReference implements IReference,
 		return this;
 	}
 
-	public char[][] getParameterNames() {
+	public String[] getParameterNames() {
 		return parameterNames;
 	}
 
@@ -202,7 +194,7 @@ public class StandardSelfCompletingReference implements IReference,
 	 * @param parameterNames
 	 *            the parameterNames to set
 	 */
-	public void setParameterNames(char[][] parameterNames) {
+	public void setParameterNames(String[] parameterNames) {
 		this.parameterNames = parameterNames;
 	}
 

@@ -19,28 +19,28 @@ import com.xored.org.mozilla.javascript.NativeJavaMethod;
  */
 public class NativeObjectReference extends StandardSelfCompletingReference {
 
-	public static HashMap TYPES = new HashMap() {
-		private static final long serialVersionUID = 1L;
+	public static final Map<String, String> TYPES = new HashMap<String, String>();
 
-		public Object get(Object name) {
-			Object o = super.get(name);
-			if (o == null) {
-				String str = (String) name;
-				int i = str.lastIndexOf("."); //$NON-NLS-1$
-				if (i >= 0) {
-					str = str.substring(i + 1);
-				}
-				o = str;
-			}
-			return o;
-		}
-	};
 	static {
 		TYPES.put("double", "number"); //$NON-NLS-1$ //$NON-NLS-2$
 		TYPES.put("float", "number"); //$NON-NLS-1$ //$NON-NLS-2$
 		TYPES.put("int", "number"); //$NON-NLS-1$ //$NON-NLS-2$
 		TYPES.put("long", "number"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+
+	private static String convertType(String name) {
+		final String result = TYPES.get(name);
+		if (result != null) {
+			return result;
+		}
+		int i = name.lastIndexOf("."); //$NON-NLS-1$
+		if (i >= 0) {
+			return name.substring(i + 1);
+		} else {
+			return name;
+		}
+	}
+
 	private final Class clz;
 
 	/**
@@ -96,24 +96,21 @@ public class NativeObjectReference extends StandardSelfCompletingReference {
 								}
 							}
 							if (uref == null) {
-								uref = new StandardSelfCompletingReference(key, false);
+								uref = new StandardSelfCompletingReference(key,
+										false);
 							}
 
 							Class[] argTypes = methods[i].getArgTypes();
 							if (argTypes != null) {
-								char[][] names = new char[argTypes.length][];
+								String[] names = new String[argTypes.length];
 								for (int j = 0; j < argTypes.length; j++) {
 									if (argTypes[j].isArray()) {
-										String name = (String) TYPES
-												.get(argTypes[j]
-														.getComponentType()
-														.getName())
+										names[j] = convertType(argTypes[j]
+												.getComponentType().getName())
 												+ "[]";
-										names[j] = name.toCharArray();
 									} else {
-										String name = (String) TYPES
-												.get(argTypes[j].getName());
-										names[j] = name.toCharArray();
+										names[j] = convertType(argTypes[j]
+												.getName());
 									}
 								}
 								uref.setParameterNames(names);
@@ -125,7 +122,8 @@ public class NativeObjectReference extends StandardSelfCompletingReference {
 							setChild(key, uref);
 						}
 					} else {
-						setChild(key, new StandardSelfCompletingReference(key, false));
+						setChild(key, new StandardSelfCompletingReference(key,
+								false));
 					}
 
 				}

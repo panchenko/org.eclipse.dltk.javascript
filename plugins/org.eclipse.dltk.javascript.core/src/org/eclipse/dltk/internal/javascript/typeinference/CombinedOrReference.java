@@ -430,7 +430,7 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	/**
 	 * @see org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference#getParameterNames()
 	 */
-	public char[][] getParameterNames() {
+	public String[] getParameterNames() {
 		for (int i = 0; i < lstReferences.size(); i++) {
 			IReference element = lstReferences.get(i);
 			if (element instanceof SelfCompletingReference

@@ -8,8 +8,8 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 
 	private static StandardSelfCompletingReference toXMLString = new NativeStringReference(
 			"toXMLString").setFunctionRef();
-	private static StandardSelfCompletingReference text = new NativeStringReference("text")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference text = new NativeStringReference(
+			"text").setFunctionRef();
 	private static StandardSelfCompletingReference toString = new NativeStringReference(
 			"toString").setFunctionRef();
 
@@ -21,8 +21,8 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			"attribute").setFunctionRef();
 	private static StandardSelfCompletingReference attributes = new NativeXMLReference(
 			"attributes").setFunctionRef();
-	private static StandardSelfCompletingReference child = new NativeXMLReference("child")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference child = new NativeXMLReference(
+			"child").setFunctionRef();
 	private static StandardSelfCompletingReference childIndex = new NativeNumberReference(
 			"childIndex").setFunctionRef();
 	private static StandardSelfCompletingReference children = new NativeXMLReference(
@@ -31,8 +31,8 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			"comments").setFunctionRef();
 	private static StandardSelfCompletingReference contains = new NativeBooleanReference(
 			"contains").setFunctionRef();
-	private static StandardSelfCompletingReference copy = new NativeXMLReference("copy")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference copy = new NativeXMLReference(
+			"copy").setFunctionRef();
 	private static StandardSelfCompletingReference descendants = new NativeXMLReference(
 			"descendants").setFunctionRef();
 	private static StandardSelfCompletingReference elements = new NativeXMLReference(
@@ -49,12 +49,12 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			"insertChildAfter").setFunctionRef();
 	private static StandardSelfCompletingReference insertChildBefore = new NativeXMLReference(
 			"insertChildBefore").setFunctionRef();
-	private static StandardSelfCompletingReference length = new NativeNumberReference("length")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference length = new NativeNumberReference(
+			"length").setFunctionRef();
 	private static StandardSelfCompletingReference localName = new NativeStringReference(
 			"localName").setFunctionRef();
-	private static StandardSelfCompletingReference name = new NativeStringReference("name")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference name = new NativeStringReference(
+			"name").setFunctionRef();
 	private static StandardSelfCompletingReference namespace = new NativeXMLReference(
 			"namespace").setFunctionRef();
 	private static StandardSelfCompletingReference namespaceDeclarations = new NativeArrayReference(
@@ -63,8 +63,8 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			"nodeKind").setFunctionRef();
 	private static StandardSelfCompletingReference normalize = new NativeXMLReference(
 			"normalize").setFunctionRef();
-	private static StandardSelfCompletingReference parent = new NativeXMLReference("parent")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference parent = new NativeXMLReference(
+			"parent").setFunctionRef();
 	private static StandardSelfCompletingReference processingInstructions = new NativeXMLReference(
 			"processingInstructions").setFunctionRef();
 	// propertyIsEnumerable
@@ -74,16 +74,16 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			"prependChild").setFunctionRef();
 	private static StandardSelfCompletingReference removeNamespace = new NativeXMLReference(
 			"removeNamespace").setFunctionRef();
-	private static StandardSelfCompletingReference replace = new NativeXMLReference("replace")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference replace = new NativeXMLReference(
+			"replace").setFunctionRef();
 	private static StandardSelfCompletingReference setChildren = new NativeXMLReference(
 			"setChildren").setFunctionRef();
-	private static StandardSelfCompletingReference setName = new NativeXMLReference("setName")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference setName = new NativeXMLReference(
+			"setName").setFunctionRef();
 	private static StandardSelfCompletingReference setNamespace = new NativeXMLReference(
 			"setNamespace").setFunctionRef();
-	private static StandardSelfCompletingReference valueOf = new NativeXMLReference("valueOf")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference valueOf = new NativeXMLReference(
+			"valueOf").setFunctionRef();
 	private static StandardSelfCompletingReference setLocalName = new NativeXMLReference(
 			"setLocalName").setFunctionRef();
 
@@ -162,19 +162,17 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 				ur
 						.setProposalInfo("The addNamespace method adds a namespace declaration to the in scope namespaces for this XML object and returns this XML object.");
 
-				ur
-						.setParameterNames(new char[][] { "namespace"
-								.toCharArray() });
+				ur.setParameterNames(new String[] { "namespace" });
 			} else if (name.equals("appendChild")) {
 
 				ur
-						.setProposalInfo("The appendChild method appends the given child to the end of this XML object’s properties and returns this XML object.");
-				ur.setParameterNames(new char[][] { "child".toCharArray() });
+						.setProposalInfo("The appendChild method appends the given child to the end of this XML objectï¿½s properties and returns this XML object.");
+				ur.setParameterNames(new String[] { "child" });
 
 			} else if (name.equals("attribute")) {
 				ur
 						.setProposalInfo("The attribute method returns an XMLList containing zero or one XML attributes associated with this XML object that have the given attributeName. ");
-				ur.setParameterNames(new char[][] { "child".toCharArray() });
+				ur.setParameterNames(new String[] { "child" });
 
 			} else if (name.equals("attributes")) {
 				ur
@@ -183,8 +181,7 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			} else if (name.equals("child")) {
 				ur
 						.setProposalInfo("The child method returns the list of children in this XML object matching the given propertyName.");
-				ur.setParameterNames(new char[][] { "propertyName"
-						.toCharArray() });
+				ur.setParameterNames(new String[] { "propertyName" });
 
 			} else if (name.equals("childIndex")) {
 				ur
@@ -201,7 +198,7 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			} else if (name.equals("contains")) {
 				ur
 						.setProposalInfo("The contains method returns the result of comparing this XML object with the given value.");
-				ur.setParameterNames(new char[][] { "value".toCharArray() });
+				ur.setParameterNames(new String[] { "value" });
 
 			} else if (name.equals("copy")) {
 				ur
@@ -210,12 +207,12 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			} else if (name.equals("descendants")) {
 				ur
 						.setProposalInfo("The descendants method returns all the XML valued descendants (children, grandchildren, great-grandchildren, etc.) of this XML object with the given name. If the name parameter is omitted, it returns all descendants of this XML object.");
-				ur.setParameterNames(new char[][] { "[name]".toCharArray() });
+				ur.setParameterNames(new String[] { "[name]" });
 
 			} else if (name.equals("elements")) {
 				ur
 						.setProposalInfo("When the elements method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are XML elements with the given name. When the elements method is called with no parameters, it returns an XMLList containing all the children of this XML object that are XML elements regardless of their name.");
-				ur.setParameterNames(new char[][] { "[name]".toCharArray() });
+				ur.setParameterNames(new String[] { "[name]" });
 
 			} else if (name.equals("hasComplexContent")) {
 				ur
@@ -224,7 +221,7 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			} else if (name.equals("hasOwnProperty")) {
 				ur
 						.setProposalInfo("The hasOwnProperty method returns a Boolean value indicating whether this object has the property specified by P. For all XML objects except the XML prototype object, this is the same result returned by the internal method [[HasProperty]]. For the XML prototype object, hasOwnProperty also examines the list of local properties to determine if there is a method property with the given name.");
-				ur.setParameterNames(new char[][] { " P ".toCharArray() });
+				ur.setParameterNames(new String[] { " P " });
 
 			} else if (name.equals("hasSimpleContent")) {
 				ur
@@ -237,14 +234,12 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			} else if (name.equals("insertChildAfter")) {
 				ur
 						.setProposalInfo("The insertChildAfter method inserts the given child2 after the given child1 in this XML object and returns this XML object. If child1 is null, the insertChildAfter method inserts child2 before all children of this XML object (i.e., after none of them). If child1 does not exist in this XML object, it returns without modifying this XML object.");
-				ur.setParameterNames(new char[][] { "child1 , child2"
-						.toCharArray() });
+				ur.setParameterNames(new String[] { "child1 , child2" });
 
 			} else if (name.equals("insertChildBefore")) {
 				ur
 						.setProposalInfo("he insertChildBefore method inserts the given child2 before the given child1 in this XML object and returns this XML object. If child1 is null, the insertChildBefore method inserts child2 after all children in this XML object (i.e., before none of them). If child1 does not exist in this XML object, it returns without modifying this XML object.");
-				ur.setParameterNames(new char[][] { "child1 , child2"
-						.toCharArray() });
+				ur.setParameterNames(new String[] { "child1 , child2" });
 
 			} else if (name.equals("length")) {
 				ur
@@ -257,7 +252,7 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			} else if (name.equals("namespace")) {
 				ur
 						.setProposalInfo("If no prefix is specified, the namespace method returns the Namespace associated with the qualified name of this XML object. If a prefix is specified, the namespace method looks for a namespace in scope for this XML object with the given prefix and, if found, returns it. If no such namespace is found, the namespace method returns undefined");
-				ur.setParameterNames(new char[][] { "[prefix]".toCharArray() });
+				ur.setParameterNames(new String[] { "[prefix]" });
 
 			} else if (name.equals("namespaceDeclarations")) {
 				ur
@@ -278,50 +273,47 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 			} else if (name.equals("processingInstructions")) {
 				ur
 						.setProposalInfo("When the processingInstructions method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are processing-instructions with the given name. When the processingInstructions method is called with no parameters, it returns an XMLList containing all the children of this XML object that are processing-instructions regardless of their name");
-				ur.setParameterNames(new char[][] { "[name]".toCharArray() });
+				ur.setParameterNames(new String[] { "[name]" });
 
 			} else if (name.equals("propertyIsEnumerable")) {
 				ur
 						.setProposalInfo("The propertyIsEnumerable method returns a Boolean value indicating whether the property P will be included in the set of properties iterated over when this XML object is used in a for-in statement. This method returns truewhen ToString(P) is \"0\"; otherwise, it returns false. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value");
-				ur.setParameterNames(new char[][] { " P ".toCharArray() });
+				ur.setParameterNames(new String[] { " P " });
 
 			} else if (name.equals("prependChild")) {
 				ur
 						.setProposalInfo("The prependChild method inserts the given child into this object prior to its existing XML properties and returns this XML object.");
-				ur.setParameterNames(new char[][] { "value".toCharArray() });
+				ur.setParameterNames(new String[] { "value" });
 
 			} else if (name.equals("removeNamespace")) {
 				ur
-						.setProposalInfo("The removeNamespace method removes the given namespace from the in scope namespaces of this object and all its descendents, then returns a copy of this XML object. The removeNamespaces method will not remove a namespace from an object where it is referenced by that object’s QName or the QNames of that object’s attributes");
-				ur
-						.setParameterNames(new char[][] { "namespace"
-								.toCharArray() });
+						.setProposalInfo("The removeNamespace method removes the given namespace from the in scope namespaces of this object and all its descendents, then returns a copy of this XML object. The removeNamespaces method will not remove a namespace from an object where it is referenced by that objectï¿½s QName or the QNames of that objectï¿½s attributes");
+				ur.setParameterNames(new String[] { "namespace" });
 
 			} else if (name.equals("replace")) {
 				ur
 						.setProposalInfo("The replace method replaces the XML properties of this XML object specified by propertyName with value and returns this XML object. If this XML object contains no properties that match propertyName, the replace method returns without modifying this XML object. The propertyName parameter may be a numeric property name, an unqualified name for a set of XML elements, a qualified name for a set of XML elements or the properties wildcard \"*\". When the propertyName parameter is an unqualified name, it identifies XML elements in the default namespace. The value parameter may be an XML object, XMLList object or any value that may be converted to a String with ToString(). ");
-				ur.setParameterNames(new char[][] { "propertyName , value"
-						.toCharArray() });
+				ur.setParameterNames(new String[] { "propertyName , value" });
 
 			} else if (name.equals("setChildren")) {
 				ur
 						.setProposalInfo("The setChildren method replaces the XML properties of this XML object with a new set of XML properties from value. value may be a single XML object or an XMLList. setChildren returns this XML object.");
-				ur.setParameterNames(new char[][] { "value".toCharArray() });
+				ur.setParameterNames(new String[] { "value" });
 
 			} else if (name.equals("setName")) {
 				ur
 						.setProposalInfo("The setName method replaces the name of this XML object with a QName or AttributeName constructed from the given name");
-				ur.setParameterNames(new char[][] { "name".toCharArray() });
+				ur.setParameterNames(new String[] { "name" });
 
 			} else if (name.equals("setNamespace")) {
 				ur
 						.setProposalInfo("The setNamespace method replaces the namespace associated with the name of this XML object with the given namespace");
-				ur.setParameterNames(new char[][] { "ns".toCharArray() });
+				ur.setParameterNames(new String[] { "ns" });
 
 			} else if (name.equals("setLocalName")) {
 				ur
 						.setProposalInfo("The setLocalName method replaces the local name of this XML object with a string constructed from the givenname");
-				ur.setParameterNames(new char[][] { "name".toCharArray() });
+				ur.setParameterNames(new String[] { "name" });
 
 			} else if (name.equals("valueOf")) {
 				ur

@@ -15,9 +15,9 @@ package org.eclipse.dltk.internal.javascript.typeinference;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 
 public final class ContextReference implements IReference {
@@ -85,7 +85,7 @@ public final class ContextReference implements IReference {
 
 	}
 
-	public void addModelElements(Collection toAdd) {
+	public void addModelElements(Collection<IModelElement> toAdd) {
 
 	}
 

@@ -150,9 +150,7 @@ public class NativeStringReference extends StandardSelfCompletingReference {
 						.setProposalInfo("Returns the primitive value of a String object.");
 			} else if (name.equals("anchor")) {
 				ur.setProposalInfo("Creates an HTML anchor.");
-				ur
-						.setParameterNames(new char[][] { "anchorname"
-								.toCharArray() });
+				ur.setParameterNames(new String[] { "anchorname" });
 			} else if (name.equals("big")) {
 				ur.setProposalInfo("Returns a string in a big font.");
 			} else if (name.equals("blink")) {
@@ -165,70 +163,62 @@ public class NativeStringReference extends StandardSelfCompletingReference {
 			} else if (name.equals("charCodeAt")) {
 				ur
 						.setProposalInfo("Returns the Unicode of the character at a specified position.");
-				ur.setParameterNames(new char[][] { "index".toCharArray() });
+				ur.setParameterNames(new String[] { "index" });
 			} else if (name.equals("concat")) {
 
 				ur.setProposalInfo("Joins two or more strings.");
-				ur.setParameterNames(new char[][] { "stringN".toCharArray(),
-						"[StringX]".toCharArray() });
+				ur.setParameterNames(new String[] { "stringN", "[StringX]" });
 			} else if (name.equals("fixed")) {
 				ur.setProposalInfo("Returns a string as teletype text.");
 			} else if (name.equals("fontcolor")) {
 				ur.setProposalInfo("Returns a string in a specified color.");
-				ur.setParameterNames(new char[][] { "color".toCharArray() });
+				ur.setParameterNames(new String[] { "color" });
 
 			} else if (name.equals("fontsize")) {
 				ur.setProposalInfo("Returns a string in a specified size.");
-				ur.setParameterNames(new char[][] { "size".toCharArray() });
+				ur.setParameterNames(new String[] { "size" });
 			} else if (name.equals("fromCharCode")) {
 				ur
 						.setProposalInfo("Takes the specified Unicode values and returns a string.");
-				ur.setParameterNames(new char[][] { "numN".toCharArray(),
-						"[numX]".toCharArray() });
+				ur.setParameterNames(new String[] { "numN", "[numX]" });
 			} else if (name.equals("indexOf")) {
 				ur
 						.setProposalInfo("Returns the position of the first occurrence of a specified string value in a string.");
-				ur.setParameterNames(new char[][] {
-						"searchValue".toCharArray(),
-						"[fromIndex]".toCharArray() });
+				ur.setParameterNames(new String[] { "searchValue",
+						"[fromIndex]" });
 			} else if (name.equals("italics")) {
 				ur.setProposalInfo("Returns a string in italic.");
 			} else if (name.equals("lastIndexOf")) {
 				ur
 						.setProposalInfo("Returns the position of the last occurrence of a specified string value, searching backwards from the specified position in a string.");
-				ur.setParameterNames(new char[][] {
-						"searchValue".toCharArray(),
-						"[fromIndex]".toCharArray() });
+				ur.setParameterNames(new String[] { "searchValue",
+						"[fromIndex]" });
 			} else if (name.equals("link")) {
 				ur.setProposalInfo("Returns a string as a hyperlink.");
-				ur.setParameterNames(new char[][] { "url".toCharArray() });
+				ur.setParameterNames(new String[] { "url" });
 			} else if (name.equals("match")) {
 				ur
 						.setProposalInfo("Searches for a specified value in a string.");
-				ur
-						.setParameterNames(new char[][] { "searchvalue"
-								.toCharArray() });
+				ur.setParameterNames(new String[] { "searchvalue" });
 			} else if (name.equals("replace")) {
 				ur
 						.setProposalInfo("Replaces some characters with some other characters in a string.");
-				ur.setParameterNames(new char[][] { "findString".toCharArray(),
-						"newString".toCharArray() });
+				ur
+						.setParameterNames(new String[] { "findString",
+								"newString" });
 			} else if (name.equals("search")) {
 				ur.setProposalInfo("Searches a string for a specified value.");
-				ur.setParameterNames(new char[][] { "searchstring"
-						.toCharArray() });
+				ur.setParameterNames(new String[] { "searchstring" });
 			} else if (name.equals("slice")) {
 				ur
 						.setProposalInfo("Extracts a part of a string and returns the extracted part in a new string.");
-				ur.setParameterNames(new char[][] { "start".toCharArray(),
-						"[end]".toCharArray() });
+				ur.setParameterNames(new String[] { "start", "[end]" });
 
 			} else if (name.equals("small")) {
 				ur.setProposalInfo("Returns a string in a small font.");
 			} else if (name.equals("split")) {
 				ur.setProposalInfo("Splits a string into an array of strings.");
-				ur.setParameterNames(new char[][] { "separator".toCharArray(),
-						"[howmany]".toCharArray() });
+				ur.setParameterNames(new String[] { "separator", "[howmany]" });
 			} else if (name.equals("strike")) {
 				ur.setProposalInfo("Returns a string with a strikethrough.");
 			} else if (name.equals("sub")) {
@@ -236,13 +226,11 @@ public class NativeStringReference extends StandardSelfCompletingReference {
 			} else if (name.equals("substr")) {
 				ur
 						.setProposalInfo("Extracts a specified number of characters in a string, from a start index");
-				ur.setParameterNames(new char[][] { "start".toCharArray(),
-						"[length]".toCharArray() });
+				ur.setParameterNames(new String[] { "start", "[length]" });
 			} else if (name.equals("substring")) {
 				ur
 						.setProposalInfo("Extracts the characters in a string between two specified indices");
-				ur.setParameterNames(new char[][] { "start".toCharArray(),
-						"[stop]".toCharArray() });
+				ur.setParameterNames(new String[] { "start", "[stop]" });
 			} else if (name.equals("sup")) {
 				ur.setProposalInfo("Returns a string as superscript.");
 			} else if (name.equals("toLowerCase")) {

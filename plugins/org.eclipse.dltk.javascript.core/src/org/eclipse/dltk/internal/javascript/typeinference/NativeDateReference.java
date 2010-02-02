@@ -43,8 +43,8 @@ public class NativeDateReference extends StandardSelfCompletingReference {
 			"getDate").setFunctionRef();
 	private static StandardSelfCompletingReference getUTCDate = new NativeNumberReference(
 			"getUTCDate").setFunctionRef();
-	private static StandardSelfCompletingReference getDay = new NativeNumberReference("getDay")
-			.setFunctionRef();
+	private static StandardSelfCompletingReference getDay = new NativeNumberReference(
+			"getDay").setFunctionRef();
 	private static StandardSelfCompletingReference getUTCDay = new NativeNumberReference(
 			"getUTCDay").setFunctionRef();
 	private static StandardSelfCompletingReference getHours = new NativeNumberReference(
@@ -225,84 +225,76 @@ public class NativeDateReference extends StandardSelfCompletingReference {
 			} else if (name.equals("parse")) {
 				ur
 						.setProposalInfo("Takes a date string and returns the number of milliseconds since midnight of January 1, 1970.");
-				ur
-						.setParameterNames(new char[][] { "datestring"
-								.toCharArray() });
+				ur.setParameterNames(new String[] { "datestring" });
 			} else if (name.equals("setDate")) {
 				ur
 						.setProposalInfo("Sets the day of the month from a Date object (from 1-31).");
-				ur.setParameterNames(new char[][] { "day".toCharArray() });
+				ur.setParameterNames(new String[] { "day" });
 			} else if (name.equals("setFullYear")) {
 				ur.setProposalInfo("Sets the year, as a four-digit number.");
-				ur.setParameterNames(new char[][] { "fullyear".toCharArray(),
-						"[month]".toCharArray(), "[day]".toCharArray() });
+				ur.setParameterNames(new String[] { "fullyear", "[month]",
+						"[day]" });
 			} else if (name.equals("setHours")) {
 				ur.setProposalInfo("Sets the hour of a day (from 0-23).");
-				ur.setParameterNames(new char[][] { "hours".toCharArray(),
-						"[minutes]".toCharArray(), "[seconds]".toCharArray(),
-						"[millis]".toCharArray() });
+				ur.setParameterNames(new String[] { "hours", "[minutes]",
+						"[seconds]", "[millis]" });
 			} else if (name.equals("setMilliseconds")) {
 				ur
 						.setProposalInfo("Sets the milliseconds of a Date object (from 0-999).");
-				ur.setParameterNames(new char[][] { "millis".toCharArray() });
+				ur.setParameterNames(new String[] { "millis" });
 			} else if (name.equals("setMinutes")) {
 				ur.setProposalInfo("Sets the minutes of a date (from 0-59)");
-				ur.setParameterNames(new char[][] { "minutes".toCharArray(),
-						"[seconds]".toCharArray(), "[millis]".toCharArray() });
+				ur.setParameterNames(new String[] { "minutes", "[seconds]",
+						"[millis]" });
 			} else if (name.equals("setSeconds")) {
 				ur.setProposalInfo("Sets the seconds of a date (from 0-59)");
-				ur.setParameterNames(new char[][] { "seconds".toCharArray(),
-						"[millis]".toCharArray() });
+				ur.setParameterNames(new String[] { "seconds", "[millis]" });
 			} else if (name.equals("setMonth")) {
 				ur.setProposalInfo("Sets the month from a date (from 0-11).");
-				ur.setParameterNames(new char[][] { "month".toCharArray(),
-						"[day]".toCharArray() });
+				ur.setParameterNames(new String[] { "month", "[day]" });
 			} else if (name.equals("setTime")) {
 				ur
 						.setProposalInfo("Sets the number of milliseconds since midnight Jan 1, 1970");
-				ur.setParameterNames(new char[][] { "millis".toCharArray() });
+				ur.setParameterNames(new String[] { "millis" });
 			} else if (name.equals("setUTCDate")) {
 				ur
 						.setProposalInfo("Sets the day of the month from a date according to universal time (from 0-6).");
-				ur.setParameterNames(new char[][] { "day".toCharArray() });
+				ur.setParameterNames(new String[] { "day" });
 			} else if (name.equals("setUTCDay")) {
 				ur
 						.setProposalInfo("Sets the day of the week from a date according to universal time (from 1-31)");
-				ur.setParameterNames(new char[][] { "day".toCharArray() });
+				ur.setParameterNames(new String[] { "day" });
 			} else if (name.equals("setUTCMonth")) {
 				ur
 						.setProposalInfo("Sets the month from a Date object according to universal time (from 0-11)");
-				ur.setParameterNames(new char[][] { "month".toCharArray(),
-						"[day]".toCharArray() });
+				ur.setParameterNames(new String[] { "month", "[day]" });
 			} else if (name.equals("setUTCFullYear")) {
 				ur
 						.setProposalInfo("Sets the four-digit year from a date according to universal time ");
-				ur.setParameterNames(new char[][] { "fullyear".toCharArray(),
-						"[month]".toCharArray(), "[day]".toCharArray() });
+				ur.setParameterNames(new String[] { "fullyear", "[month]",
+						"[day]" });
 			} else if (name.equals("setUTCHours")) {
 				ur
 						.setProposalInfo("Sets the hour of a date according to universal time (from 0-23)");
-				ur.setParameterNames(new char[][] { "hours".toCharArray(),
-						"[minutes]".toCharArray(), "[seconds]".toCharArray(),
-						"[millis]".toCharArray() });
+				ur.setParameterNames(new String[] { "hours", "[minutes]",
+						"[seconds]", "[millis]" });
 			} else if (name.equals("setUTCMinutes")) {
 				ur
 						.setProposalInfo("Sets the minutes of a date according to universal time (from 0-59)");
-				ur.setParameterNames(new char[][] { "minutes".toCharArray(),
-						"[seconds]".toCharArray(), "[millis]".toCharArray() });
+				ur.setParameterNames(new String[] { "minutes", "[seconds]",
+						"[millis]" });
 			} else if (name.equals("setUTCSeconds")) {
 				ur
 						.setProposalInfo("Sets the seconds of a date according to universal time (from 0-59)");
-				ur.setParameterNames(new char[][] { "seconds".toCharArray(),
-						"[millis]".toCharArray() });
+				ur.setParameterNames(new String[] { "seconds", "[millis]" });
 			} else if (name.equals("setUTCMilliseconds")) {
 				ur
 						.setProposalInfo("Sets the milliseconds of a date according to universal time (from 0-999)");
-				ur.setParameterNames(new char[][] { "millis".toCharArray() });
+				ur.setParameterNames(new String[] { "millis" });
 			} else if (name.equals("setYear")) {
 				ur
 						.setProposalInfo("Sets the year, as a two-digit or a three/four-digit number, depending on the browser. Use setFullYear() instead!!");
-				ur.setParameterNames(new char[][] { "year".toCharArray() });
+				ur.setParameterNames(new String[] { "year" });
 
 			} else if (name.equals("toDateString")) {
 				ur
@@ -328,9 +320,8 @@ public class NativeDateReference extends StandardSelfCompletingReference {
 			} else if (name.equals("UTC")) {
 				ur
 						.setProposalInfo("Takes a date and returns the number of milliseconds since midnight of January 1, 1970 according to universal time.");
-				ur.setParameterNames(new char[][] { "year".toCharArray(),
-						"month".toCharArray(), "day".toCharArray(),
-						"[hours,minutes,seconds,ms]".toCharArray() });
+				ur.setParameterNames(new String[] { "year", "month", "day",
+						"[hours,minutes,seconds,ms]" });
 			}
 		}
 		super.setChild(key, ref);
