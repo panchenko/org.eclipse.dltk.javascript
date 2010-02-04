@@ -14,15 +14,44 @@ package org.eclipse.dltk.javascript.parser.tests;
 import java.util.List;
 
 import org.eclipse.dltk.ast.utils.ASTUtil;
+import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.CallExpression;
+import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
+import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.XmlExpressionFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 
 @SuppressWarnings("nls")
 public class XmlLiteralTests extends AbstractJSParserTest {
+
+	public void testNoXmlLiteral() {
+		final Script script = parse("while (a<b.c) { advance(); }");
+		assertFalse(reporter.hasErrors());
+		final List<?> statements = script.getStatements();
+		assertEquals(1, statements.size());
+		final WhileStatement whileStatement = (WhileStatement) statements
+				.get(0);
+		final BinaryOperation compare = (BinaryOperation) whileStatement
+				.getCondition();
+		assertEquals("a", ((Identifier) compare.getLeftExpression()).getName());
+		final PropertyExpression right = (PropertyExpression) compare
+				.getRightExpression();
+		assertEquals("b", ((Identifier) right.getObject()).getName());
+		assertEquals("c", ((Identifier) right.getProperty()).getName());
+		final StatementBlock block = (StatementBlock) whileStatement.getBody();
+		assertEquals(1, block.getStatements().size());
+		final CallExpression call = uniqueResult(ASTUtil.select(block,
+				CallExpression.class));
+		assertTrue(call.getArguments().isEmpty());
+		assertEquals("advance", ((Identifier) call.getExpression()).getName());
+	}
 
 	public void testXmlLiteralSimple() {
 		parse("var x = <xml/>;");
@@ -57,5 +86,13 @@ public class XmlLiteralTests extends AbstractJSParserTest {
 		assertTrue(literal.getFragments().get(0) instanceof XmlTextFragment);
 		assertTrue(literal.getFragments().get(1) instanceof XmlExpressionFragment);
 		assertTrue(literal.getFragments().get(2) instanceof XmlTextFragment);
+		assertEquals("<xml>", ((XmlTextFragment) literal.getFragments().get(0))
+				.getXml());
+		Expression expression = ((XmlExpressionFragment) literal.getFragments()
+				.get(1)).getExpression();
+		assertTrue(expression instanceof Identifier);
+		assertEquals("value", ((Identifier) expression).getName());
+		assertEquals("</xml>",
+				((XmlTextFragment) literal.getFragments().get(2)).getXml());
 	}
 }
