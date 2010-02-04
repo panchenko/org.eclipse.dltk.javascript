@@ -352,18 +352,19 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 		if (value == currentMode) {
 			return;
 		}
-		// TODO reset already loaded tokens after current position & rewind
-		// tokenSource
 		currentMode = value;
 		tokenSource.setMode(value);
 		if (p < tokens.size()) {
+			// reset already loaded tokens after current position
 			endOfStream = false;
-			for (int i = p; i < tokens.size(); ++i) {
-				tokens.remove(tokens.size() - 1);
+			for (int i = tokens.size(); --i >= p;) {
+				tokens.remove(i);
 			}
+			assert p == tokens.size();
 			offsets.length = p;
 			modes.length = p;
 			assert offsets.length == tokens.size();
+			// rewind tokenSource
 			tokenSource.seek(offsets.length == 0 ? 0 : offsets
 					.get(offsets.length - 1));
 		}
