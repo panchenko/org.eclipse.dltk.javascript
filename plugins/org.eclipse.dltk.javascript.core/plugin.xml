@@ -52,7 +52,7 @@
                class="org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceParserFactory"
                description="JavaScript Source Parser"
                id="org.eclipse.dltk.javascript.sourceParser"
-               name="JavaScript Source Parser"
+               name="JavaScript *Rhino* Parser"
                priority="0" />
       </parserContribution>
    </extension>
