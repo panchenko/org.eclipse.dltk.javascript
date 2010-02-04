@@ -3,11 +3,12 @@
 <plugin>
    <extension point="org.eclipse.dltk.core.sourceParsers">
       <parserContribution natureId="org.eclipse.dltk.javascript.core.nature">
+		 <selector class="org.eclipse.dltk.javascript.internal.parser.JavaScriptParserSelector"/>
          <parser
                class="org.eclipse.dltk.javascript.parser.JavaScriptParserFactory"
                description="JavaScript Source Parser"
                id="org.eclipse.dltk.javascript.NewParser"
-               name="JavaScript Source Parser+"
+               name="JavaScript *DLTK* Parser"
                priority="-1" />
       </parserContribution>
    </extension>
