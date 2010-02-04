@@ -345,7 +345,18 @@
           <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.dltk.javascript.core.nature"/>
         </adapt>         
       </enabledWhen>
-    </page>    
+    </page>
+    <page
+		category="org.eclipse.dltk.javascript.propertyPage"
+		class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptErrorWarningPreferencePage"
+		id="org.eclipse.dltk.javascript.propertyPage.error.warning"
+		name="%ErrorWarningPreferencePage.name">
+      <enabledWhen>
+        <adapt type="org.eclipse.core.resources.IProject">
+          <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.dltk.javascript.core.nature"/>
+        </adapt>
+      </enabledWhen>
+	</page>
     <page
       name="%JavaScriptPropertyPage.name"
       class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptPropertyPage"

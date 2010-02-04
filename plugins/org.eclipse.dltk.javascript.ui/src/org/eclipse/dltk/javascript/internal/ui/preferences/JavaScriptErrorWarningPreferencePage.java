@@ -1,37 +1,49 @@
 package org.eclipse.dltk.javascript.internal.ui.preferences;
 
-import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
-import org.eclipse.dltk.ui.PreferencesAdapter;
-import org.eclipse.dltk.ui.preferences.AbstractConfigurationBlockPreferencePage;
-import org.eclipse.dltk.ui.preferences.IPreferenceConfigurationBlock;
-import org.eclipse.dltk.ui.preferences.OverlayPreferenceStore;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.dltk.ui.preferences.AbstractConfigurationBlockPropertyAndPreferencePage;
+import org.eclipse.dltk.ui.preferences.AbstractOptionsBlock;
+import org.eclipse.dltk.ui.util.IStatusChangeListener;
+import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 
 public class JavaScriptErrorWarningPreferencePage extends
-		AbstractConfigurationBlockPreferencePage {
+		AbstractConfigurationBlockPropertyAndPreferencePage {
 
-	protected String getHelpId() {
-		return null;
-	}
-
+	@Override
 	protected void setDescription() {
 		setDescription(JavaScriptPreferenceMessages.ErrorWarningDescription);
 	}
 
-	protected IPreferenceConfigurationBlock createConfigurationBlock(
-			OverlayPreferenceStore overlayPreferenceStore) {
+	@Override
+	protected AbstractOptionsBlock createOptionsBlock(
+			IStatusChangeListener newStatusChangedListener, IProject project,
+			IWorkbenchPreferenceContainer container) {
 		return new JavaScriptErrorWarningConfigurationBlock(
-				overlayPreferenceStore);
+				newStatusChangedListener, project, container);
 	}
 
+	@Override
 	protected void setPreferenceStore() {
-		setPreferenceStore(new PreferencesAdapter(JavaScriptPlugin.getDefault()
-				.getPluginPreferences()));
 	}
 
-	public boolean performOk() {
-		super.performOk();
-		JavaScriptPlugin.getDefault().savePluginPreferences();
-		return true;
+	@Override
+	protected String getHelpId() {
+		return null;
+	}
+
+	@Override
+	protected String getProjectHelpId() {
+		return null;
+	}
+
+	@Override
+	protected String getPreferencePageId() {
+		return "org.eclipse.dltk.javascript.preferences.error.warning";
+	}
+
+	@Override
+	protected String getPropertyPageId() {
+		return "org.eclipse.dltk.javascript.propertyPage.error.warning";
 	}
 
 }
