@@ -18,8 +18,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
@@ -27,12 +25,11 @@ import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.javascript.ast.ISourceable;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
-import org.eclipse.dltk.javascript.parser.JSLexer;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSTokenStream;
 import org.eclipse.dltk.javascript.parser.JSTransformer;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
-import org.eclipse.dltk.javascript.parser.JavaScriptTokenSource;
+import org.eclipse.dltk.javascript.parser.tests.ASTVerifier;
 
 @SuppressWarnings("nls")
 public class ANTLRParserTester {
@@ -69,7 +66,6 @@ public class ANTLRParserTester {
 		ParserRuleReturnScope root = parser.program();
 
 		final StringBuffer source = new StringBuffer();
-		@SuppressWarnings("unchecked")
 		List<Token> tokens = stream.getTokens();
 		for (Token token : tokens) {
 			source.append(token.getText());
@@ -79,7 +75,7 @@ public class ANTLRParserTester {
 		Assert.assertNotNull(result);
 
 		String formatted = ((ISourceable) result).toSourceString("");
-		Assert.assertTrue(formatted != null && formatted.length() > 0);
+		Assert.assertTrue(formatted.length() > 0);
 
 		ANTLRTokenStreamComparer.compare(source.toString(), formatted, false);
 		new ASTVerifier(result, source.toString()).verify();
