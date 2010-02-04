@@ -36,6 +36,7 @@ public abstract class AbstractJSParserTest extends TestCase {
 
 	protected Script parse(final String source) {
 		final Script script = parser.parse(source, reporter);
+		new ASTVerifier(script, source).verify();
 		assertNotNull(script);
 		for (IProblem problem : reporter.getProblems()) {
 			if (problem instanceof JSProblem) {
