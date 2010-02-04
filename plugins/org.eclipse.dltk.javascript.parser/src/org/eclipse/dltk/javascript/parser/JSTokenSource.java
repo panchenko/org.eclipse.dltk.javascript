@@ -17,6 +17,7 @@ public interface JSTokenSource extends TokenSource {
 
 	int MODE_JS = 0;
 	int MODE_XML = 1;
+	int MODE_EXPRESSION = 2;
 
 	int getMode();
 

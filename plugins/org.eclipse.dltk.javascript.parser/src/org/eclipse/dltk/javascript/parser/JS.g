@@ -272,7 +272,7 @@ private final boolean areRegularExpressionsEnabled()
 
 private final boolean isXmlStartEnabled() {
   // TODO
-  return areRegularExpressionsEnabled();
+  return ((JSTokenSource)this).getMode() == JSTokenSource.MODE_JS && areRegularExpressionsEnabled();
 }
 
 protected void readFirstXml() throws RecognitionException {
@@ -313,10 +313,6 @@ private final boolean isIdentifierPartUnicode(int ch)
 private final boolean isIdentifierStartUnicode(int ch)
 {
 	return Character.isJavaIdentifierStart((char)ch);
-}
-
-private final boolean isUnicodeLetter(int ch) {
-	return Character.isLetter(ch);
 }
 
 public Token nextToken()
@@ -844,7 +840,7 @@ literal
 xmlLiteral
 	: (
 	    XMLFragment
-        { ((JSTokenStream)input).setMode(JSTokenSource.MODE_JS); }
+        { ((JSTokenStream)input).setMode(JSTokenSource.MODE_EXPRESSION); }
 	    LBRACE expression RBRACE
 	    { ((JSTokenStream)input).setMode(JSTokenSource.MODE_XML); } 
 	  )* XMLFragmentEnd
@@ -853,20 +849,21 @@ xmlLiteral
 	finally { ((JSTokenStream)input).setMode(JSTokenSource.MODE_JS); }
 
 XMLFragment
-@init { 
+@init {
 	int marker = input.mark();
 }
-    : LT ( NOT 
-         | QUE 
+    : { isXmlStartEnabled() }?=>
+      LT ( NOT
+         | QUE
          | 'a'..'z' 
          | 'A'..'Z' 
          | '_' 
          | ':'
          | '{'
-         | { Character.isLetter(input.LT(1)) }?
-         )? { isXmlStartEnabled() }? { 
+//         | { Character.isLetter(input.LT(1)) }?
+         ) {
 			input.rewind(marker);
-			readFirstXml(); 
+			readFirstXml();
          }
     ;
 
