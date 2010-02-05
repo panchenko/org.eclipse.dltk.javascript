@@ -133,9 +133,9 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 
 		buffer.append(indentationString);
 		buffer.append(Keywords.FUNCTION);
-		buffer.append(" ");
 
 		if (getName() != null) {
+			buffer.append(" ");
 			buffer.append(getName().toSourceString(indentationString));
 		}
 
