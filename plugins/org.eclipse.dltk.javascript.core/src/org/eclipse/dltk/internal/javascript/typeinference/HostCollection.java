@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Assert;
+
 public class HostCollection {
 
 	public static final int FUNCTION = 1;
@@ -85,14 +87,12 @@ public class HostCollection {
 	}
 
 	public void write(String key, IReference ref) {
-		if (ref == null)
-			throw new IllegalArgumentException();
+		Assert.isNotNull(ref);
 		reference.put(key, ref);
 	}
 
 	public void add(String key, IReference ref) {
-		if (ref == null)
-			throw new IllegalArgumentException();
+		Assert.isNotNull(ref);
 		Object object = reference.get(key);
 		if (object == null) {
 			reference.put(key, ref);
@@ -126,10 +126,8 @@ public class HostCollection {
 	}
 
 	public void oneOf(String key, IReference ref, IReference other) {
-		if (ref == null)
-			throw new IllegalArgumentException();
-		if (other == null)
-			throw new IllegalArgumentException();
+		Assert.isNotNull(ref);
+		Assert.isNotNull(other);
 		if (ref.isChildishReference() || other.isChildishReference()) {
 			add(key, ref);
 			add(key, other);
