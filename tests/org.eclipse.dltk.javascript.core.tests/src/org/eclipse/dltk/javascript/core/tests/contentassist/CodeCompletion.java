@@ -454,4 +454,12 @@ public class CodeCompletion extends AbstractCompletionTest {
 		basicTest(module, position, names);
 		// basicTest(module, 105, names);
 	}
+
+	public void testObjectFunctionReturnValue() {
+		String[] names = new String[] { "a", "b" };
+		String module = "test-return-value.js";
+		int position = lastPositionInFile("execute().", module);
+		basicTest(module, position, names);
+	}
+
 }
