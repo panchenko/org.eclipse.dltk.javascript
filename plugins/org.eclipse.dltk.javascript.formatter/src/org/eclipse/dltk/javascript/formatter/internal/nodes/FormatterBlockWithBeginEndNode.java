@@ -58,7 +58,7 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 		}
 		context.setBlankLines(getBlankLinesAfter(context));
 	}
-	
+
 	protected int getBlankLinesBefore(IFormatterContext context) {
 		return -1;
 	}
@@ -104,6 +104,10 @@ public abstract class FormatterBlockWithBeginEndNode extends FormatterBlockNode 
 	 */
 	public void setEnd(IFormatterTextNode node) {
 		this.end = node;
+	}
+
+	protected boolean isIndenting() {
+		return true;
 	}
 
 	/*

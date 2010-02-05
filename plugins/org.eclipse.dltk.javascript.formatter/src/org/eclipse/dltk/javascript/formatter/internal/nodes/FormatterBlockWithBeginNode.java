@@ -79,6 +79,7 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 	/*
 	 * @see FormatterBlockNode#getEndOffset()
 	 */
+	@Override
 	public int getEndOffset() {
 		if (!super.isEmpty()) {
 			return super.getEndOffset();
@@ -92,6 +93,7 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 	/*
 	 * @see FormatterBlockNode#isEmpty()
 	 */
+	@Override
 	public boolean isEmpty() {
 		return begin == null && super.isEmpty();
 	}
@@ -99,6 +101,7 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 	/*
 	 * @see FormatterBlockNode#getChildren()
 	 */
+	@Override
 	public List<IFormatterNode> getChildren() {
 		if (begin == null) {
 			return super.getChildren();
@@ -115,7 +118,13 @@ public abstract class FormatterBlockWithBeginNode extends FormatterBlockNode {
 	/*
 	 * @see FormatterBlockNode#toString()
 	 */
+	@Override
 	public String toString() {
 		return begin + "\n" + super.toString(); //$NON-NLS-1$
 	}
+
+	protected boolean isIndenting() {
+		return true;
+	}
+
 }
