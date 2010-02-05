@@ -529,11 +529,13 @@ public class TypeInferencer {
 
 	public IReference evaluateReference(String key, Node expression,
 			ReferenceResolverContext cs) {
-		IReference internalEvaluate = internalEvaluate(collection, key,
-				expression, module, cs);
-		if (internalEvaluate == null)
+		IReference result = internalEvaluate(collection, key, expression,
+				module, cs);
+		if (result != null) {
+			return result;
+		} else {
 			return new StandardSelfCompletingReference(key, false);
-		return internalEvaluate;
+		}
 	}
 
 	IReference internalEvaluate(HostCollection collection, String key,
@@ -546,27 +548,19 @@ public class TypeInferencer {
 		case Token.EXPR_RESULT:
 			return internalEvaluate(collection, key,
 					expression.getFirstChild(), parent, cs);
-		case Token.NUMBER: {
-			NewReference newReference = new NewReference(key, "Number", cs);
-			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(
-					key, false);
-			return new CombinedOrReference(newReference, uncknownReference);
-		}
+		case Token.NUMBER:
+			return new CombinedOrReference(new NewReference(key, "Number", cs),
+					new StandardSelfCompletingReference(key, false));
 			// return ReferenceFactory.createNumberReference(key, expression
 			// .getDouble());
-		case Token.STRING: {
-			NewReference newReference = new NewReference(key, "String", cs);
-			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(
-					key, false);
-			return new CombinedOrReference(newReference, uncknownReference);
-		}
+		case Token.STRING:
+			return new CombinedOrReference(new NewReference(key, "String", cs),
+					new StandardSelfCompletingReference(key, false));
 		case Token.TRUE:
-		case Token.FALSE: {
-			NewReference newReference = new NewReference(key, "Boolean", cs);
-			StandardSelfCompletingReference uncknownReference = new StandardSelfCompletingReference(
-					key, false);
-			return new CombinedOrReference(newReference, uncknownReference);
-		}
+		case Token.FALSE:
+			return new CombinedOrReference(
+					new NewReference(key, "Boolean", cs),
+					new StandardSelfCompletingReference(key, false));
 		case Token.OBJECTLIT:
 			return createObjectLiteral(collection, key, expression, parent, cs);
 		case Token.ARRAYLIT:
