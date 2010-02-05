@@ -296,7 +296,17 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 						fields.addAll(proto1.getChilds(true));
 					}
 				}
-				fields.addAll(mnext.getChilds(true));
+				if (mnext.isFunctionRef()) {
+					// get function return value
+					final IReference result = mnext.getChild(
+							TypeInferencer.RETURN_VALUE, true);
+					if (result != null) {
+						// expand it
+						fields.addAll(result.getChilds(true));
+					}
+				} else {
+					fields.addAll(mnext.getChilds(true));
+				}
 			}
 
 			for (IReference name : fields) {
@@ -333,21 +343,16 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			final Map<String, Object> dubR) {
 		this.requestor.acceptContext(new CompletionContext());
 		this.setSourceRange(position - completionPart.length(), position);
-		char[] token = completionPart.toCharArray();
-		int length = token.length;
 		for (Iterator<?> iterator = dubR.values().iterator(); iterator
 				.hasNext();) {
 			Object next = iterator.next();
 
 			if (next instanceof SelfCompletingReference) {
 				SelfCompletingReference cm = (SelfCompletingReference) next;
-				int knd = cm.getKind();
-
-				char[] name = cm.getName().toCharArray();
-				if (length <= name.length
-						&& CharOperation.prefixEquals(token, name, false)) {
-					CompletionProposal createProposal = this.createProposal(
-							knd, this.actualCompletionPosition);
+				if (startsWith(cm, completionPart)) {
+					CompletionProposal createProposal = this.createProposal(cm
+							.getKind(), this.actualCompletionPosition);
+					char[] name = cm.getName().toCharArray();
 					createProposal.setName(name);
 					createProposal.setCompletion(name);
 					// createProposal.setSignature(name);
@@ -361,13 +366,12 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				iterator.remove();
 			} else if (next instanceof IReference) {
 				IReference ref = (IReference) next;
-				int knd = ref.isFunctionRef() ? CompletionProposal.METHOD_REF
-						: CompletionProposal.LOCAL_VARIABLE_REF;
-				char[] name = ref.getName().toCharArray();
-				if (length <= name.length
-						&& CharOperation.prefixEquals(token, name, false)) {
-					CompletionProposal createProposal = this.createProposal(
-							knd, this.actualCompletionPosition);
+				if (startsWith(ref, completionPart)) {
+					CompletionProposal createProposal = this.createProposal(ref
+							.isFunctionRef() ? CompletionProposal.METHOD_REF
+							: CompletionProposal.LOCAL_VARIABLE_REF,
+							this.actualCompletionPosition);
+					char[] name = ref.getName().toCharArray();
 					createProposal.setName(name);
 					createProposal.setCompletion(name);
 
@@ -407,6 +411,11 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				iterator.remove();
 			}
 		}
+	}
+
+	private static boolean startsWith(IReference reference, String prefix) {
+		return reference.getName().toLowerCase().startsWith(
+				prefix.toLowerCase());
 	}
 
 	int computeBaseRelevance() {
