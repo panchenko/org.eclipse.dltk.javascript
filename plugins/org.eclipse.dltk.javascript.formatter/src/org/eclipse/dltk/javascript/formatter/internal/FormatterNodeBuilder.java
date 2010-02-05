@@ -456,9 +456,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					visit(nodes.get(i));
 					if (i < punctuations.size() && i + 1 < nodes.size()) {
 						int position = punctuations.get(i).intValue();
-						skipSpaces(formatterNode, position);
+						skipSpacesOnly(formatterNode, position);
 						processPunctuation(position, 1, configurations.get(i));
-						skipSpaces(formatterNode, nodes.get(i + 1)
+						skipSpacesOnly(formatterNode, nodes.get(i + 1)
 								.sourceStart());
 					}
 				}
@@ -959,12 +959,25 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				parens.setEnd(createCharNode(document, rightParen));
 			}
 
-			private void skipSpaces(IFormatterContainerNode formatterNode,
+			private void skipSpacesOnly(IFormatterContainerNode formatterNode,
 					int end) {
 				final int prev = formatterNode.getEndOffset();
 				int pos = prev;
 				while (pos < end
 						&& FormatterUtils.isSpace(document.charAt(pos))) {
+					++pos;
+				}
+				if (pos > prev) {
+					formatterNode.addChild(createEmptyTextNode(document, pos));
+				}
+			}
+
+			private void skipSpaces(IFormatterContainerNode formatterNode,
+					int end) {
+				final int prev = formatterNode.getEndOffset();
+				int pos = prev;
+				while (pos < end
+						&& Character.isWhitespace(document.charAt(pos))) {
 					++pos;
 				}
 				if (pos > prev) {
