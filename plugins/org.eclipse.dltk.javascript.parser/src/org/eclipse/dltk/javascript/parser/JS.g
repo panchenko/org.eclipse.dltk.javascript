@@ -1084,7 +1084,7 @@ leftHandSideExpression
   (
     arguments     -> ^( CALL $leftHandSideExpression arguments )
     | LBRACK expression RBRACK  -> ^( BYINDEX $leftHandSideExpression expression )
-    | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression rightHandSideExpression )
+    | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression )
     | DOTDOT expression -> ^(ALLCHILDREN $leftHandSideExpression expression)
     | COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpression expression)
   )*

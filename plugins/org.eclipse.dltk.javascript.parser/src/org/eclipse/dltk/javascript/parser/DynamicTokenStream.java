@@ -271,7 +271,7 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	 */
 	public Token get(int i) {
 		fill(i);
-		return tokens.get(i);
+		return i < tokens.size() ? tokens.get(i) : null;
 	}
 
 	public int LA(int i) {

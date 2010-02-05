@@ -243,14 +243,16 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			VoidExpression voidExpression = new VoidExpression(parent);
 			voidExpression.setExpression((Expression) expression);
 
-			Token token = tokens.get(node.getTokenStopIndex());
-
-			if (token.getType() == JSParser.SEMIC) {
-				voidExpression.setSemicolonPosition(getTokenOffset(token
-						.getTokenIndex()));
-				voidExpression.getExpression().setEnd(
-						Math.min(voidExpression.getSemicolonPosition(),
-								expression.sourceEnd()));
+			if (node.getTokenStopIndex() >= 0
+					&& node.getTokenStopIndex() < tokens.size()) {
+				final Token token = tokens.get(node.getTokenStopIndex());
+				if (token.getType() == JSParser.SEMIC) {
+					voidExpression.setSemicolonPosition(getTokenOffset(token
+							.getTokenIndex()));
+					voidExpression.getExpression().setEnd(
+							Math.min(voidExpression.getSemicolonPosition(),
+									expression.sourceEnd()));
+				}
 			}
 
 			Assert.isTrue(expression.sourceStart() >= 0);
@@ -1077,6 +1079,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return node.getTokenStopIndex();
 	}
 
+	@Override
 	protected ASTNode visitByField(Tree node) {
 
 		PropertyExpression property = new PropertyExpression(getParent());
@@ -1084,12 +1087,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		property.setObject((Expression) transformNode(node.getChild(0),
 				property));
 
-		property.setProperty((Expression) transformNode(node.getChild(1),
+		property.setProperty((Expression) transformNode(node.getChild(2),
 				property));
 
-		property.setDotPosition(getTokenOffset(JSParser.DOT,
-				getRealTokenStopIndex(node.getChild(0)) + 1, node.getChild(1)
-						.getTokenStartIndex()));
+		property.setDotPosition(getTokenOffset(node.getChild(1)
+				.getTokenStartIndex()));
 
 		Assert.isTrue(property.getObject().sourceStart() >= 0);
 		Assert.isTrue(property.getProperty().sourceEnd() > 0);

@@ -32,7 +32,9 @@ import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
+import org.eclipse.dltk.internal.core.SourceRange;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.utils.TextUtils;
 
@@ -75,29 +77,14 @@ public class JavaScriptParser extends AbstractSourceParser {
 			if (reporter == null)
 				return;
 			String message;
-			int start;
-			int stop;
+			ISourceRange range;
 			if (re instanceof NoViableAltException) {
-				start = convert(re.token);
-				stop = start + length(re.token);
+				range = convert(re.token);
 				message = "Unexpected " + getTokenErrorDisplay(re.token);
 			} else if (re instanceof MismatchedTokenException) {
 				MismatchedTokenException mte = (MismatchedTokenException) re;
 				if (re.token == Token.EOF_TOKEN) {
 					message = tokenNames[mte.expecting] + " expected";
-					TokenStream stream = getTokenStream();
-					int index = stream.index();
-					Token prevToken;
-					for (;;) {
-						--index;
-						prevToken = stream.get(index);
-						if (prevToken.getType() != JSParser.WhiteSpace
-								&& prevToken.getType() != JSParser.EOL) {
-							break;
-						}
-					}
-					start = convert(prevToken);
-					stop = start + length(prevToken);
 				} else {
 					message = "Mismatched input "
 							+ getTokenErrorDisplay(re.token);
@@ -105,12 +92,12 @@ public class JavaScriptParser extends AbstractSourceParser {
 						message += ", " + tokenNames[mte.expecting]
 								+ " expected";
 					}
-					start = convert(re.token);
-					stop = start + length(re.token);
 				}
-				if (stop >= inputLength()) {
-					stop = inputLength() - 1;
-					start -= 2;
+				range = convert(re.token);
+				if (range.getLength() + range.getOffset() >= inputLength()) {
+					int stop = inputLength() - 1;
+					int start = Math.min(stop - 1, range.getOffset() - 2);
+					range = new SourceRange(start, stop - start);
 				}
 			} else if (re instanceof MismatchedSetException) {
 				MismatchedSetException mse = (MismatchedSetException) re;
@@ -118,20 +105,38 @@ public class JavaScriptParser extends AbstractSourceParser {
 				if (mse.expecting != null) {
 					message += " expecting set " + mse.expecting;
 				}
-				start = convert(re.token);
-				stop = start + length(re.token);
+				range = convert(re.token);
 			} else {
 				message = "Syntax Error:" + re.getMessage();
-				start = convert(re.token);
-				stop = start + 1;
+				range = convert(re.token);
+				// stop = start + 1;}
 			}
 			reporter.reportProblem(new DefaultProblem(message, 0, null,
-					ProblemSeverities.Error, start, stop, re.line - 1));
+					ProblemSeverities.Error, range != null ? range.getOffset()
+							: -1, range != null ? range.getOffset()
+							+ range.getLength() : -1, re.line - 1));
 		}
 
-		private int convert(Token token) {
-			return lineTracker.getLineOffset(token.getLine() - 1)
+		private ISourceRange convert(Token token) {
+			if (token == Token.EOF_TOKEN) {
+				final TokenStream stream = getTokenStream();
+				int index = stream.index();
+				for (;;) {
+					--index;
+					final Token prevToken = stream.get(index);
+					if (prevToken.getType() != JSParser.WhiteSpace
+							&& prevToken.getType() != JSParser.EOL) {
+						token = prevToken;
+						break;
+					}
+				}
+				if (token == Token.EOF_TOKEN) {
+					return null;
+				}
+			}
+			int offset = lineTracker.getLineOffset(token.getLine() - 1)
 					+ Math.max(token.getCharPositionInLine(), 0);
+			return new SourceRange(offset, length(token));
 		}
 
 		private int length(Token token) {
