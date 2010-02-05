@@ -1029,7 +1029,7 @@ arrayItem
 	;
 
 objectLiteral
-	: lb=LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* )? RBRACE
+	: lb=LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* COMMA?)? RBRACE
 	-> ^( OBJECT[$lb, "OBJECT"] objectPropertyInitializer* )
 	;
 
