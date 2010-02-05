@@ -279,40 +279,29 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		completeFromMap(position, completionPart, dubR);
 
 		Set<IReference> references = collection.queryElements(corePart, true);
-		Iterator iterator;
+
 		if (!references.isEmpty()) {
-			iterator = references.iterator();
-			HashSet fields = new HashSet();
-			while (iterator.hasNext()) {
-				Object next = iterator.next();
-				if (!(next instanceof IReference))
-					continue;
-				IReference mnext = (IReference) next;
+			Set<IReference> fields = new HashSet<IReference>();
+			for (IReference mnext : references) {
 				IReference proto = mnext.getPrototype(true);
 				if (proto != null) {
-					Collection protos = new LinkedHashSet();
+					Collection<IReference> protos = new LinkedHashSet<IReference>();
 					while (proto != null && !protos.contains(proto)) {
 						protos.add(proto);
 						proto = proto.getPrototype(false);
 					}
-					protos = new LinkedList(protos);
-					Collections.reverse((List) protos);
-					Iterator iterator2 = protos.iterator();
-					while (iterator2.hasNext()) {
-						IReference proto1 = (IReference) iterator2.next();
+					protos = new LinkedList<IReference>(protos);
+					Collections.reverse((List<IReference>) protos);
+					for (IReference proto1 : protos) {
 						fields.addAll(proto1.getChilds(true));
 					}
 				}
 				fields.addAll(mnext.getChilds(true));
 			}
 
-			for (iterator = fields.iterator(); iterator.hasNext();) {
-				Object next = iterator.next();
-				if (next instanceof IReference) {
-					IReference name = (IReference) next;
-					String refa = name.getName();
-					dubR.put(refa, name);
-				}
+			for (IReference name : fields) {
+				String refa = name.getName();
+				dubR.put(refa, name);
 			}
 			completeFromMap(position, completionPart, dubR);
 		}
