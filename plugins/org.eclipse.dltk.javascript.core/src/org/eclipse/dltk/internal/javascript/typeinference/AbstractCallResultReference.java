@@ -133,4 +133,9 @@ public abstract class AbstractCallResultReference implements IReference,
 	public void setLocal(boolean local) {
 		this.local = local;
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[" + name + "]";
+	}
 }
