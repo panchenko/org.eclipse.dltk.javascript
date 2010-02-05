@@ -286,10 +286,10 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		operation.setOperation(node.getType());
 
 		operation.setLeftExpression((Expression) transformNode(
-				node.getChild(0), getParent()));
+				node.getChild(0), operation));
 
 		operation.setRightExpression((Expression) transformNode(node
-				.getChild(1), getParent()));
+				.getChild(1), operation));
 
 		operation.setOperationPosition(getTokenOffset(node.getType(),
 				getRealTokenStopIndex(node.getChild(0)) + 1, node.getChild(1)
