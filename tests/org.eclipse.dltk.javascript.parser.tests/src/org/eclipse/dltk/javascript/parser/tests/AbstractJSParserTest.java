@@ -16,8 +16,11 @@ import java.util.List;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
+import org.eclipse.dltk.javascript.ast.DecimalLiteral;
+import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
@@ -62,6 +65,14 @@ public abstract class AbstractJSParserTest extends TestCase {
 		} else {
 			throw new RuntimeException(cause);
 		}
+	}
+
+	protected static void assertIdentifier(String expected, ASTNode id) {
+		assertEquals(expected, ((Identifier) id).getName());
+	}
+
+	protected static void assertDecimal(String expected, ASTNode decimal) {
+		assertEquals(expected, ((DecimalLiteral) decimal).getText());
 	}
 
 }
