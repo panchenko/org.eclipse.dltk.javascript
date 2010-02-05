@@ -752,7 +752,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterFunctionNode formatterNode = new FormatterFunctionNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
+				formatterNode.addChild(createTextNode(document, node
 						.getFunctionKeyword()));
 
 				push(formatterNode);
