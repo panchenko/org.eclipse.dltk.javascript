@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
@@ -44,7 +45,8 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 			return null;
 		}
 		final IScriptFormatterFactory factory = ScriptFormatterManager
-				.getSelected(getSourceModule().getScriptProject());
+				.getSelected(JavaScriptNature.NATURE_ID, getSourceModule()
+						.getScriptProject().getProject());
 		if (factory != null) {
 			final IScriptFormatter formatter = factory.createFormatter(
 					TextUtilities.getDefaultLineDelimiter(getDocument()),
