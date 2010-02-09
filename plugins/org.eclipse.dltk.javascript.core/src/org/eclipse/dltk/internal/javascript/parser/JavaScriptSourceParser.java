@@ -21,6 +21,7 @@ import org.eclipse.dltk.ast.parser.AbstractSourceParser;
 import org.eclipse.dltk.ast.references.SimpleReference;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.compiler.SourceElementRequestorAdaptor;
+import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
@@ -61,8 +62,8 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 
 	}
 
-	public ModuleDeclaration parse(char[] fileName, char[] content,
-			IProblemReporter r) {
+	public ModuleDeclaration parse(IModuleSource input, IProblemReporter r) {
+		char[] content = input.getContentsAsCharArray();
 		JavaScriptModuleDeclaration moduleDeclaration = new JavaScriptModuleDeclaration(
 				content.length);
 

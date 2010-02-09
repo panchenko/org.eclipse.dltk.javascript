@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.codeassist.IAssistParser;
 import org.eclipse.dltk.codeassist.ScriptSelectionEngine;
-import org.eclipse.dltk.compiler.env.ISourceModule;
+import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
 import org.eclipse.dltk.core.IField;
@@ -50,9 +50,9 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 		return null;
 	}
 
-	ISourceModule cu;
+	IModuleSource cu;
 
-	public IModelElement[] select(ISourceModule cu, int offset, int i) {
+	public IModelElement[] select(IModuleSource cu, int offset, int i) {
 		String content = cu.getSourceContents();
 		String fileName = cu.getFileName();
 		this.cu = cu;

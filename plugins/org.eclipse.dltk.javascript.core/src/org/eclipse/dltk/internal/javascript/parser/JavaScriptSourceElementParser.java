@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.ISourceElementParser;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.core.ISourceModuleInfoCache.ISourceModuleInfo;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ResolverManager;
 import org.eclipse.dltk.internal.javascript.typeinference.ContextReference;
@@ -50,16 +50,14 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 	/**
 	 * @see org.eclipse.dltk.core.ISourceElementParser#parseSourceModule(org.eclipse.dltk.core.ISourceModule)
 	 */
-	public void parseSourceModule(
-			org.eclipse.dltk.compiler.env.ISourceModule module,
-			ISourceModuleInfo mifo) {
+	public void parseSourceModule(IModuleSource module) {
 		if (module instanceof ISourceModule) {
 			this.module = (ISourceModule) module;
 		}
-		parseSourceModule(module.getSourceContents(), mifo);
+		parseSourceModule(module.getSourceContents());
 	}
 
-	private void parseSourceModule(String content, ISourceModuleInfo info) {
+	private void parseSourceModule(String content) {
 		CompilerEnvirons cenv = new CompilerEnvirons();
 		boolean strict = JavaScriptPlugin.getDefault().getPluginPreferences()
 				.getBoolean(JavaScriptCorePreferences.USE_STRICT_MODE);

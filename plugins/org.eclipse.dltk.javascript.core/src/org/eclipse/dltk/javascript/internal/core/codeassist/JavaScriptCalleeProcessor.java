@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.ast.references.SimpleReference;
 import org.eclipse.dltk.compiler.SourceElementRequestorAdaptor;
-import org.eclipse.dltk.compiler.env.CompilerSourceCode;
+import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.ICalleeProcessor;
@@ -84,9 +84,7 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 			ISourceElementParser parser = DLTKLanguageManager
 					.getSourceElementParser(JavaScriptNature.NATURE_ID);
 			parser.setRequestor(requestor);
-			parser
-					.parseSourceModule(new CompilerSourceCode(methodSource),
-							null);
+			parser.parseSourceModule(new ModuleSource(methodSource));
 			return fSearchResults;
 		} catch (ModelException e) {
 			DLTKCore.error("Error parsing methods source: " + method, e);

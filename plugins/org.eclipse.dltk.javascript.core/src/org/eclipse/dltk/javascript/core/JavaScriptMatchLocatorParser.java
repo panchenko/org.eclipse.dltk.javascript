@@ -21,8 +21,6 @@ import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.references.Reference;
 import org.eclipse.dltk.ast.references.SimpleReference;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.search.IMatchLocatorParser;
 import org.eclipse.dltk.core.search.matching.MatchLocator;
 import org.eclipse.dltk.core.search.matching.MatchLocatorParser;
@@ -49,17 +47,7 @@ public class JavaScriptMatchLocatorParser extends MatchLocatorParser implements
 	public ModuleDeclaration parse(PossibleMatch possibleMatch) {
 		parent = possibleMatch.getModelElement();
 		parser = new JavaScriptSourceParser(parent);
-		if (parent instanceof ISourceModule) {
-			ISourceModule m = (ISourceModule) parent;
-			try {
-				return parser.parse(m.getPath().toOSString().toCharArray(), m
-						.getSourceAsCharArray(), null);
-			} catch (ModelException e) {
-
-			}
-		}
-		return parser.parse(possibleMatch.getFileName().toCharArray(),
-				possibleMatch.getContentsAsCharArray(), null);
+		return parser.parse(possibleMatch, null);
 	}
 
 	public void parseBodies(ModuleDeclaration unit) {

@@ -25,7 +25,7 @@ import org.eclipse.dltk.codeassist.IAssistParser;
 import org.eclipse.dltk.codeassist.RelevanceConstants;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
-import org.eclipse.dltk.compiler.env.ISourceModule;
+import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionContext;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKCore;
@@ -78,7 +78,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		return null;
 	}
 
-	public void complete(ISourceModule cu, int position, int i) {
+	public void complete(IModuleSource cu, int position, int i) {
 		// System.out.println("Completion position:" + position);
 		this.actualCompletionPosition = position;
 		this.requestor.beginReporting();
@@ -125,7 +125,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 	}
 
 	private void doGlobalCompletion(ReferenceResolverContext buildContext,
-			ISourceModule cu, int position, int pos, HostCollection collection,
+			IModuleSource cu, int position, int pos, HostCollection collection,
 			String completion) {
 		Set<String> completedNames = new HashSet<String>();
 
@@ -257,7 +257,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 	}
 
 	private void doCompletionOnMember(PositionCalculator calculator,
-			ReferenceResolverContext buildContext, ISourceModule cu,
+			ReferenceResolverContext buildContext, IModuleSource cu,
 			int position, String content, int pos, HostCollection collection) {
 
 		String completionPart = calculator.getCompletionPart();
