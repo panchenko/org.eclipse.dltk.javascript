@@ -14,13 +14,12 @@ package org.eclipse.dltk.javascript.core.tests.contentassist;
 import java.io.IOException;
 import java.net.URL;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.dltk.compiler.env.ISourceModule;
+import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.IModelElement;
 
-class TestModule implements ISourceModule {
+class TestModule implements IModuleSource {
 
 	final String content;
 	final String elementName;
