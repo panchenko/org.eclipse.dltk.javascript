@@ -9,23 +9,20 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.ast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
+import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
-public class Script extends ModuleDeclaration implements ISourceable {
+public class Script extends ASTNode implements ISourceable, IModuleDeclaration {
 
 	private final List<Comment> comments = new ArrayList<Comment>();
-
-	public Script() {
-		super(0);
-	}
+	private final List<Statement> statements = new ArrayList<Statement>();
 
 	public String toSourceString(String indentationString) {
 
@@ -34,8 +31,7 @@ public class Script extends ModuleDeclaration implements ISourceable {
 
 		StringBuffer buffer = new StringBuffer();
 
-		for (int i = 0; i < this.getStatements().size(); i++) {
-			Statement statement = (Statement) this.getStatements().get(i);
+		for (Statement statement : statements) {
 			buffer.append(statement.toSourceString(indentationString));
 		}
 
@@ -50,9 +46,16 @@ public class Script extends ModuleDeclaration implements ISourceable {
 		comments.add(comment);
 	}
 
+	public List<Statement> getStatements() {
+		return statements;
+	}
+
+	public void addStatement(Statement statement) {
+		statements.add(statement);
+	}
+
 	public void visitAll(ASTVisitor visitor) {
-		for (int i = 0; i < this.getStatements().size(); i++) {
-			Statement statement = (Statement) this.getStatements().get(i);
+		for (Statement statement : statements) {
 			visitor.visit(statement);
 		}
 	}
@@ -60,5 +63,16 @@ public class Script extends ModuleDeclaration implements ISourceable {
 	@Override
 	public String toString() {
 		return toSourceString(JSLiterals.EMPTY);
+	}
+
+	@Override
+	public void traverse(org.eclipse.dltk.ast.ASTVisitor visitor)
+			throws Exception {
+		if (visitor.visit(this)) {
+			for (Statement statement : statements) {
+				statement.traverse(visitor);
+			}
+			visitor.endvisit(this);
+		}
 	}
 }
