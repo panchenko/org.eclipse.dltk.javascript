@@ -28,6 +28,7 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.parser.AbstractSourceParser;
+import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemSeverities;
@@ -180,9 +181,9 @@ public class JavaScriptParser extends AbstractSourceParser {
 	/**
 	 * @since 2.0
 	 */
-	public Script parse(char[] fileName, char[] source,
-			IProblemReporter reporter) {
-		Assert.isNotNull(source);
+	public Script parse(IModuleSource input, IProblemReporter reporter) {
+		Assert.isNotNull(input);
+		char[] source = input.getContentsAsCharArray();
 		return parse(createTokenStream(source), TextUtils
 				.createLineTracker(source), reporter);
 	}
