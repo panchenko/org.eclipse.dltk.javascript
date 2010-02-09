@@ -21,6 +21,7 @@ import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
 import org.eclipse.dltk.javascript.parser.JSTokenStream;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
@@ -59,7 +60,7 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 
 		JavaScriptParser parser = new JavaScriptParser();
 
-		ModuleDeclaration root = parser.parse(new ModuleSource(source),
+		Script root = parser.parse(new ModuleSource(source),
 				new IProblemReporter() {
 
 					public void reportProblem(IProblem problem) {

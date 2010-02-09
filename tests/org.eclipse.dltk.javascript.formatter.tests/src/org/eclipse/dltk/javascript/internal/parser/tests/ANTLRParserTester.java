@@ -72,7 +72,7 @@ public class ANTLRParserTester {
 			source.append(token.getText());
 		}
 
-		ModuleDeclaration result = new JSTransformer(tokens).transform(root);
+		Script result = new JSTransformer(tokens).transform(root);
 		Assert.assertNotNull(result);
 
 		String formatted = ((ISourceable) result).toSourceString("");
