@@ -88,9 +88,9 @@ import org.eclipse.dltk.javascript.ast.YieldOperator;
 public class ASTVerifier extends ASTVisitor {
 
 	private String source;
-	private ModuleDeclaration root;
+	private Script root;
 
-	public ASTVerifier(ModuleDeclaration root, String source) {
+	public ASTVerifier(Script root, String source) {
 		this.root = root;
 		this.source = source;
 	}
