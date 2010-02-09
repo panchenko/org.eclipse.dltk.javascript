@@ -22,6 +22,7 @@ import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
+import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.javascript.ast.ISourceable;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
@@ -84,8 +85,8 @@ public class ANTLRParserTester {
 		// System.out.println(formatted);
 		// System.out.println("-------------------------------------------");
 
-		Script script = new JavaScriptParser().parse(null, formatted
-				.toCharArray(), null);
+		Script script = new JavaScriptParser().parse(
+				new ModuleSource(formatted), null);
 
 		Assert.assertNotNull(script);
 		Assert.assertTrue(script.toSourceString("").length() != 0);

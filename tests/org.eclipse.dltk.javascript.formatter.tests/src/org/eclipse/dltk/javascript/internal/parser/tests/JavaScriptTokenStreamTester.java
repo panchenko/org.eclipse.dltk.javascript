@@ -18,6 +18,7 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
+import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
@@ -58,7 +59,7 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 
 		JavaScriptParser parser = new JavaScriptParser();
 
-		ModuleDeclaration root = parser.parse(null, source.toCharArray(),
+		ModuleDeclaration root = parser.parse(new ModuleSource(source),
 				new IProblemReporter() {
 
 					public void reportProblem(IProblem problem) {
