@@ -6,11 +6,11 @@ package org.eclipse.dltk.javascript.internal.ui.text;
 import java.io.StringReader;
 import java.util.List;
 
-import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.ast.parser.ISourceParser;
 import org.eclipse.dltk.ast.parser.SourceParserManager;
 import org.eclipse.dltk.ast.utils.ASTUtil;
-import org.eclipse.dltk.compiler.CharOperation;
+import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
@@ -24,15 +24,13 @@ final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
 	private static final int HL_XML_COMMENT = 2;
 
 	@Override
-	protected boolean doHighlighting(
-			org.eclipse.dltk.compiler.env.ISourceModule code) throws Exception {
+	protected boolean doHighlighting(IModuleSource code) throws Exception {
 		final ISourceParser parser = SourceParserManager.getInstance()
 				.getSourceParserById(JavaScriptParser.PARSER_ID);
 		if (parser == null) {
 			return false;
 		}
-		final ModuleDeclaration declaration = parser.parse(
-				CharOperation.NO_CHAR, code.getContentsAsCharArray(), null);
+		final Script declaration = (Script) parser.parse(code, null);
 		if (declaration == null) {
 			return false;
 		}
