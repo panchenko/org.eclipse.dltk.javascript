@@ -165,7 +165,7 @@ public class HostCollection {
 				add(s, rm);
 			}
 		}
-		cl.pach(this);
+		cl.patch(this);
 	}
 
 	public void mergeElseIf(HostCollection cl, HostCollection cl1) {
@@ -179,8 +179,8 @@ public class HostCollection {
 			IReference rm1 = (IReference) cl1.reference.get(s);
 			oneOf(s, rm, rm1);
 		}
-		cl1.pach(this);
-		cl.pach(this);
+		cl1.patch(this);
+		cl.patch(this);
 	}
 
 	public void override(HostCollection other) {
@@ -208,10 +208,8 @@ public class HostCollection {
 		transparent.add(transparentRef);
 	}
 
-	private void pach(HostCollection col) {
-		Iterator iterator = transparent.iterator();
-		while (iterator.hasNext()) {
-			TransparentRef next = (TransparentRef) iterator.next();
+	private void patch(HostCollection col) {
+		for (TransparentRef next : transparent) {
 			next.patchRef(col);
 		}
 	}
