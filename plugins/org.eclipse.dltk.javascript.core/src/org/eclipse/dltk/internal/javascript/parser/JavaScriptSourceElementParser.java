@@ -30,7 +30,6 @@ import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
 import org.eclipse.dltk.javascript.core.JavaScriptCorePreferences;
-import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 
 import com.xored.org.mozilla.javascript.CompilerEnvirons;
 import com.xored.org.mozilla.javascript.FunctionNode;
@@ -59,9 +58,7 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 
 	private void parseSourceModule(String content) {
 		CompilerEnvirons cenv = new CompilerEnvirons();
-		boolean strict = JavaScriptPlugin.getDefault().getPluginPreferences()
-				.getBoolean(JavaScriptCorePreferences.USE_STRICT_MODE);
-		cenv.setStrictMode(strict);
+		cenv.setStrictMode(JavaScriptCorePreferences.isStrictMode());
 		JavaScriptModuleDeclaration moduleDeclaration = new JavaScriptModuleDeclaration(
 				content.length());
 
@@ -114,7 +111,7 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 		return;
 	}
 
-	private HashSet reportedRefs = new HashSet();
+	private Set<IReference> reportedRefs = new HashSet<IReference>();
 
 	private void reportRef(IReference ref, String sma, int level) {
 		if (reportedRefs.contains(ref))
@@ -124,14 +121,9 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 		if (sma != null)
 			key = sma + '.' + key;
 		if (level == 0) {
-			Set sm = ref.getChilds(false);
-			Iterator i = sm.iterator();
-			while (i.hasNext()) {
-				Object next = i.next();
-				if (next instanceof IReference) {
-					IReference refa = (IReference) next;
-					reportRef(refa, key, level + 1);
-				}
+			Set<IReference> sm = ref.getChilds(false);
+			for (IReference refa : sm) {
+				reportRef(refa, key, level + 1);
 			}
 		}
 		// contibuting field to index
@@ -146,11 +138,11 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 
 			HostCollection function = collection != null ? collection
 					.getFunction(functionNode) : null;
-			ISourceElementRequestor.MethodInfo methodInfo = new ISourceElementRequestor.MethodInfo();
 			String functionName = functionNode.getFunctionName();
 
 			if (functionName.length() == 0)
 				continue;
+			ISourceElementRequestor.MethodInfo methodInfo = new ISourceElementRequestor.MethodInfo();
 			methodInfo.name = functionName;
 			methodInfo.declarationStart = functionNode.getEncodedSourceStart();
 			String[] paramsAndVars = functionNode.getParamAndVarNames();
@@ -192,27 +184,22 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 				IReference reference = collection.getReference(fieldInfo.name);
 				if (reference == null)
 					continue;
-				Set childs = reference.getChilds(false);
-				Iterator it = childs.iterator();
-				while (it.hasNext()) {
-					Object o = it.next();
-					if (o instanceof IReference) {
-						IReference ref = (IReference) o;
-						if (ref instanceof StandardSelfCompletingReference) {
-							StandardSelfCompletingReference uref = (StandardSelfCompletingReference) ref;
-							ISourceElementRequestor.FieldInfo fieldInfo1 = new ISourceElementRequestor.FieldInfo();
-							fieldInfo1.name = ref.getName();
-							fieldInfo1.nameSourceStart = uref.getOffset();
-							fieldInfo1.nameSourceEnd = uref.getOffset()
-									+ uref.getLength() - 1;
-							fieldInfo1.declarationStart = uref.getOffset();
-							fRequestor.enterField(fieldInfo1);
-							fRequestor.exitField(uref.getOffset()
-									+ uref.getLength());
-						}
+				Set<IReference> childs = reference.getChilds(false);
+				for (IReference ref : childs) {
+					if (ref instanceof StandardSelfCompletingReference) {
+						StandardSelfCompletingReference uref = (StandardSelfCompletingReference) ref;
+						ISourceElementRequestor.FieldInfo fieldInfo1 = new ISourceElementRequestor.FieldInfo();
+						fieldInfo1.name = ref.getName();
+						fieldInfo1.nameSourceStart = uref.getOffset();
+						fieldInfo1.nameSourceEnd = uref.getOffset()
+								+ uref.getLength() - 1;
+						fieldInfo1.declarationStart = uref.getOffset();
+						fRequestor.enterField(fieldInfo1);
+						fRequestor.exitField(uref.getOffset()
+								+ uref.getLength());
 					}
-					if (o instanceof ContextReference) {
-						ContextReference rr = (ContextReference) o;
+					if (ref instanceof ContextReference) {
+						ContextReference rr = (ContextReference) ref;
 						ISourceElementRequestor.MethodInfo methodInfo = new ISourceElementRequestor.MethodInfo();
 						methodInfo.name = rr.getName();
 						methodInfo.parameterNames = new String[0];
