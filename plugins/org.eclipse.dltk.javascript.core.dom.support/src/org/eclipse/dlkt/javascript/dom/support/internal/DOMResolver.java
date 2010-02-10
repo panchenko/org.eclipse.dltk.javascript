@@ -20,7 +20,6 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
-import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IReferenceResolver;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableReference;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
@@ -28,7 +27,9 @@ import org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultRefe
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionString;
 import org.eclipse.dltk.internal.javascript.typeinference.IClassReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
+import org.eclipse.dltk.internal.javascript.typeinference.IReferenceLocation;
 import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
+import org.eclipse.dltk.internal.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.internal.javascript.typeinference.ScriptableScopeReference;
 import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.mozilla.javascript.Context;
@@ -359,13 +360,12 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					}
 
 					if (sourceFile != null) {
-						ISourceModule sourceFileModule = DLTKCore
-								.createSourceModuleFrom(sourceFile);
-						int offset = uref.getOffset();
-						int length = uref.getLength();
+						IReferenceLocation location = uref.getLocation();
 						if ("js"
 								.equalsIgnoreCase(sourceFile.getFileExtension())) {
 							try {
+								ISourceModule sourceFileModule = DLTKCore
+										.createSourceModuleFrom(sourceFile);
 								IModelElement[] children = sourceFileModule
 										.getChildren();
 								ISourceRange nameRange = null;
@@ -390,19 +390,17 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 									}
 								}
 								if (nameRange != null) {
-									offset = nameRange.getOffset();
-									length = nameRange.getLength();
+									location = new ReferenceLocation(
+											sourceFileModule, nameRange
+													.getOffset(), nameRange
+													.getLength());
 								}
 							} catch (ModelException ex) {
 							}
 						}
-						ref
-								.setLocationInformation(
-										(ModelElement) sourceFileModule,
-										offset, length);
-					} else if (module instanceof ModelElement) {
-						ref.setLocationInformation((ModelElement) module, uref
-								.getOffset(), uref.getLength());
+						ref.setLocationInformation(location);
+					} else {
+						ref.setLocationInformation(uref.getLocation());
 					}
 				}
 				rs.add(ref);
