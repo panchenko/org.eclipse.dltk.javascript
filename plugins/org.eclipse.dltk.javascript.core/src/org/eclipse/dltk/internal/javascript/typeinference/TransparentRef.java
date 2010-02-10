@@ -36,13 +36,13 @@ class TransparentRef implements IReference {
 	private boolean recursive = false;
 
 	TransparentRef(TypeInferencer typeInferencer, IReference evaluateReference,
-			Node objID, String fieldId, ModelElement parent,
+			Node objID, String fieldId, IModelElement parent,
 			ReferenceResolverContext cs) {
 		this.typeInferencer = typeInferencer;
 		this.evaluateReference = evaluateReference;
 		this.fieldId = fieldId;
 		this.node = objID;
-		this.parent = parent;
+		this.location = new ReferenceLocation(parent, 0, 0);
 		this.cs = cs;
 	}
 
@@ -92,16 +92,15 @@ class TransparentRef implements IReference {
 		return false;
 	}
 
-	ModelElement parent;
-
 	public void patchRef(HostCollection collection) {
 		if (recursive)
 			return;
 		try {
 			recursive = true;
 			Set s = evaluateReference.getChilds(false);
-			IReference queryElement = this.typeInferencer.internalEvaluate(
-					collection, getName(), node, parent, cs);
+			IReference queryElement = this.typeInferencer
+					.internalEvaluate(collection, getName(), node, location
+							.getModelElement(), cs);
 
 			if (queryElement != null && queryElement != this) {
 				// make sure that this doesn't become a transparent to a
@@ -163,18 +162,16 @@ class TransparentRef implements IReference {
 		}
 	}
 
-	int length;
-	int location;
+	private IReferenceLocation location;
 
 	public void addModelElements(Collection<IModelElement> toAdd) {
-		if (parent != null)
-			toAdd.add(new FakeField(parent, getName(), location, length));
+		if (location != null)
+			toAdd.add(new FakeField((ModelElement) location.getModelElement(),
+					getName(), location.getOffset(), location.getLength()));
 	}
 
-	public void setLocationInformation(ModelElement mo, int position, int length) {
-		this.parent = mo;
-		this.location = position;
-		this.length = length;
+	public void setLocationInformation(IReferenceLocation location) {
+		this.location = location;
 	}
 
 	public boolean isFunctionRef() {

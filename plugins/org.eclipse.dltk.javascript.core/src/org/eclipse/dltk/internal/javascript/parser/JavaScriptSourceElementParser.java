@@ -10,13 +10,12 @@
 package org.eclipse.dltk.internal.javascript.parser;
 
 import java.io.StringReader;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
@@ -27,6 +26,7 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.ResolverManager;
 import org.eclipse.dltk.internal.javascript.typeinference.ContextReference;
 import org.eclipse.dltk.internal.javascript.typeinference.HostCollection;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
+import org.eclipse.dltk.internal.javascript.typeinference.IReferenceLocation;
 import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
 import org.eclipse.dltk.javascript.core.JavaScriptCorePreferences;
@@ -67,17 +67,17 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 
 			ScriptOrFnNode parse = parser.parse(new StringReader(content), "",
 					0);
-			ReferenceResolverContext createResolverContext = null;
+			final ReferenceResolverContext resolverContext;
 			if (module != null) {
-				createResolverContext = ResolverManager.createResolverContext(
-						module, Collections.emptyMap(), true);
-				createResolverContext.init();
+				resolverContext = ResolverManager.createResolverContext(module,
+						Collections.emptyMap(), true);
+				resolverContext.init();
 			} else {
-				createResolverContext = new ReferenceResolverContext(null,
+				resolverContext = new ReferenceResolverContext(null,
 						Collections.emptyMap());
 			}
 			TypeInferencer interferencer = new TypeInferencer(null,
-					createResolverContext);
+					resolverContext);
 			interferencer.setRequestor(fRequestor);
 			interferencer.doInterferencing(parse, Integer.MAX_VALUE);
 
@@ -87,20 +87,12 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 
 			// elements/
 			moduleDeclaration.setCollection(collection);
-			Collection sm = (Collection) collection.getReferences().values();
-			Iterator i = sm.iterator();
-			while (i.hasNext()) {
-				Object next = i.next();
-				if (next instanceof IReference) {
-					IReference ref = (IReference) next;
-					reportRef(ref, null, 0);
-				}
+			for (IReference ref : collection.getReferences().values()) {
+				reportRef(ref, null, 0);
 			}
-			Map ms = interferencer.getFunctionMap();
+			Map<Integer, HostCollection> ms = interferencer.getFunctionMap();
 			moduleDeclaration.setFunctionMap(ms);
-			Iterator ia = ms.values().iterator();
-			while (ia.hasNext()) {
-				HostCollection next = (HostCollection) ia.next();
+			for (HostCollection next : ms.values()) {
 				fRequestor.acceptFieldReference("!!!" + next.getName(), 0);
 			}
 			fRequestor.exitModule(content.length());
@@ -190,26 +182,28 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 						StandardSelfCompletingReference uref = (StandardSelfCompletingReference) ref;
 						ISourceElementRequestor.FieldInfo fieldInfo1 = new ISourceElementRequestor.FieldInfo();
 						fieldInfo1.name = ref.getName();
-						fieldInfo1.nameSourceStart = uref.getOffset();
-						fieldInfo1.nameSourceEnd = uref.getOffset()
-								+ uref.getLength() - 1;
-						fieldInfo1.declarationStart = uref.getOffset();
+						IReferenceLocation location = uref.getLocation();
+						fieldInfo1.nameSourceStart = location.getOffset();
+						fieldInfo1.nameSourceEnd = location.getOffset()
+								+ location.getLength() - 1;
+						fieldInfo1.declarationStart = location.getOffset();
 						fRequestor.enterField(fieldInfo1);
-						fRequestor.exitField(uref.getOffset()
-								+ uref.getLength());
+						fRequestor.exitField(location.getOffset()
+								+ location.getLength());
 					}
 					if (ref instanceof ContextReference) {
 						ContextReference rr = (ContextReference) ref;
 						ISourceElementRequestor.MethodInfo methodInfo = new ISourceElementRequestor.MethodInfo();
 						methodInfo.name = rr.getName();
-						methodInfo.parameterNames = new String[0];
-						methodInfo.declarationStart = rr.getPosition();
-						methodInfo.nameSourceStart = rr.getPosition();
-						methodInfo.nameSourceEnd = rr.getPosition()
-								+ rr.getLength() - 1;
+						methodInfo.parameterNames = CharOperation.NO_STRINGS;
+						IReferenceLocation location = rr.getLocation();
+						methodInfo.declarationStart = location.getOffset();
+						methodInfo.nameSourceStart = location.getOffset();
+						methodInfo.nameSourceEnd = location.getOffset()
+								+ location.getLength() - 1;
 						fRequestor.enterMethod(methodInfo);
-						fRequestor
-								.exitMethod(rr.getPosition() + rr.getLength());
+						fRequestor.exitMethod(location.getOffset()
+								+ location.getLength());
 					}
 				}
 			}

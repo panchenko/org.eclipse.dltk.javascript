@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.internal.core.ModelElement;
 
 public interface IReference {
 
@@ -51,7 +50,7 @@ public interface IReference {
 
 	public void addModelElements(Collection<IModelElement> toAdd);
 
-	public void setLocationInformation(ModelElement mo, int position, int length);
+	public void setLocationInformation(IReferenceLocation location);
 
 	public boolean isFunctionRef();
 

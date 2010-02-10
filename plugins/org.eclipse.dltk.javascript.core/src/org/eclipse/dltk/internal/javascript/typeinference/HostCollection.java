@@ -11,7 +11,6 @@ package org.eclipse.dltk.internal.javascript.typeinference;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,12 +22,13 @@ public class HostCollection {
 	public static final int NORMAL = 0;
 
 	private final HostCollection parent;
-	private final Map<Object, Object> reference = new HashMap<Object, Object>();
+	private final Map<String, IReference> reference = new HashMap<String, IReference>();
+	private final Map<Object, HostCollection> functions = new HashMap<Object, HostCollection>();
 	private final int type;
 	private final String name;
 
 	public IReference getReference(String key) {
-		IReference reference2 = (IReference) reference.get(key);
+		IReference reference2 = reference.get(key);
 		if (reference2 == null)
 			if (parent != null)
 				return parent.getReference(key);
@@ -82,7 +82,7 @@ public class HostCollection {
 		this.type = type;
 	}
 
-	public Map getReferences() {
+	public Map<String, IReference> getReferences() {
 		return reference;
 	}
 
@@ -154,29 +154,18 @@ public class HostCollection {
 	}
 
 	public void mergeIf(HostCollection cl) {
-
-		Iterator i = cl.reference.keySet().iterator();
-		while (i.hasNext()) {
-
-			Object next = i.next();
-			if (next instanceof String) {
-				String s = (String) next;
-				IReference rm = (IReference) cl.reference.get(s);
-				add(s, rm);
-			}
+		for (Map.Entry<String, IReference> entry : cl.reference.entrySet()) {
+			add(entry.getKey(), entry.getValue());
 		}
 		cl.patch(this);
 	}
 
 	public void mergeElseIf(HostCollection cl, HostCollection cl1) {
-
-		HashSet sm = new HashSet(cl.reference.keySet());
+		Set<String> sm = new HashSet<String>(cl.reference.keySet());
 		sm.retainAll(cl1.reference.keySet());
-		Iterator i = sm.iterator();
-		while (i.hasNext()) {
-			String s = (String) i.next();
-			IReference rm = (IReference) cl.reference.get(s);
-			IReference rm1 = (IReference) cl1.reference.get(s);
+		for (String s : sm) {
+			IReference rm = cl.reference.get(s);
+			IReference rm1 = cl1.reference.get(s);
 			oneOf(s, rm, rm1);
 		}
 		cl1.patch(this);
@@ -192,7 +181,7 @@ public class HostCollection {
 	}
 
 	public IReference getReferenceNoParentContext(String rootName) {
-		return (IReference) this.reference.get(rootName);
+		return this.reference.get(rootName);
 	}
 
 	public IReference queryElement(String key, boolean useGlobal) {
@@ -227,11 +216,11 @@ public class HostCollection {
 	}
 
 	public void recordFunction(Object function, HostCollection collection) {
-		reference.put(function, collection);
+		functions.put(function, collection);
 	}
 
 	public HostCollection getFunction(Object funObject) {
-		return (HostCollection) reference.get(funObject);
+		return functions.get(funObject);
 	}
 
 	@Override

@@ -35,9 +35,7 @@ public class StandardSelfCompletingReference implements IReference,
 	boolean fRef;
 	boolean local;
 
-	protected ModelElement parent;
-	private int offset;
-	private int length;
+	private IReferenceLocation location;
 
 	private Map<String, IReference> childs;
 	private String[] parameterNames;
@@ -47,26 +45,18 @@ public class StandardSelfCompletingReference implements IReference,
 	private String returnType;
 	private int parameterIndex = -1;
 
-	public int getOffset() {
-		return offset;
-	}
-
-	public int getLength() {
-		return length;
-	}
-
 	public StandardSelfCompletingReference(String paramOrVarName,
 			boolean childIsh) {
 		this.name = paramOrVarName;
 		this.childIsh = childIsh;
-
 	}
 
-	public void setLocationInformation(ModelElement parent, int offset,
-			int length) {
-		this.parent = parent;
-		this.length = length;
-		this.offset = offset;
+	public IReferenceLocation getLocation() {
+		return location;
+	}
+
+	public void setLocationInformation(IReferenceLocation location) {
+		this.location = location;
 	}
 
 	public Set<IReference> getChilds(boolean resolveLocals) {
@@ -110,6 +100,12 @@ public class StandardSelfCompletingReference implements IReference,
 		childs.put(key, ref);
 	}
 
+	protected void addChildren(Collection<IReference> references) {
+		for (IReference reference : references) {
+			setChild(reference.getName(), reference);
+		}
+	}
+
 	/**
 	 * @param ref
 	 * @return
@@ -119,7 +115,7 @@ public class StandardSelfCompletingReference implements IReference,
 			StandardSelfCompletingReference ssr = (StandardSelfCompletingReference) ref;
 			ssr.parentRef = this;
 			if (parentRef != null) {
-				HashSet set = new HashSet();
+				HashSet<IReference> set = new HashSet<IReference>();
 				set.add(parentRef);
 				IReference child = parentRef.findEqualParent(ref, set);
 				if (child != null) {
@@ -134,7 +130,7 @@ public class StandardSelfCompletingReference implements IReference,
 	 * @param ref
 	 * @return
 	 */
-	private IReference findEqualParent(IReference ref, Set parents) {
+	private IReference findEqualParent(IReference ref, Set<IReference> parents) {
 		if (this.equals(ref))
 			return this;
 		if (parentRef != null && !parents.contains(parentRef)) {
@@ -163,14 +159,16 @@ public class StandardSelfCompletingReference implements IReference,
 	}
 
 	public void addModelElements(Collection<IModelElement> toAdd) {
-		if (parent != null) {
+		if (location != null) {
 			if (isFunctionRef()) {
-				MethodReference method = new MethodReference(parent, name,
+				MethodReference method = new MethodReference(
+						(ModelElement) location.getModelElement(), name,
 						getParameterNames(), getProposalInfo(), getReturnType());
 				toAdd.add(method);
 			} else {
-				FakeField fakeField = new FakeField(parent, name, offset,
-						length, getReturnType());
+				FakeField fakeField = new FakeField((ModelElement) location
+						.getModelElement(), name, location.getOffset(),
+						location.getLength(), getReturnType());
 				fakeField.setProposalInfo(getProposalInfo());
 				toAdd.add(fakeField);
 			}
@@ -251,15 +249,25 @@ public class StandardSelfCompletingReference implements IReference,
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof StandardSelfCompletingReference) {
 			StandardSelfCompletingReference ur = (StandardSelfCompletingReference) obj;
 			return ur.name.equals(name) && fRef == ur.fRef
 					&& childIsh == ur.childIsh && fRef == ur.fRef
-					&& local == ur.local && ur.offset == offset
-					&& length == ur.length;
+					&& local == ur.local && equals(location, ur.location);
 		}
 		return false;
+	}
+
+	private static boolean equals(IReferenceLocation ref1,
+			IReferenceLocation ref2) {
+		if (ref1 != null && ref2 != null) {
+			return ref1.getOffset() == ref2.getOffset()
+					&& ref1.getLength() == ref2.getLength();
+		} else {
+			return ref1 == null && ref2 == null;
+		}
 	}
 
 	/**
@@ -290,9 +298,7 @@ public class StandardSelfCompletingReference implements IReference,
 			this.type = type;
 		}
 
-		/**
-		 * @see org.eclipse.dltk.internal.core.SourceMethod#getParameters()
-		 */
+		@Override
 		public String[] getParameters() throws ModelException {
 			if (parameters == null)
 				return CharOperation.NO_STRINGS;
@@ -303,30 +309,22 @@ public class StandardSelfCompletingReference implements IReference,
 			return proposalInfo;
 		}
 
-		/**
-		 * @see org.eclipse.dltk.internal.core.SourceMethod#getParameterInitializers()
-		 */
+		@Override
 		public String[] getParameterInitializers() throws ModelException {
 			return null;
 		}
 
-		/**
-		 * @see org.eclipse.dltk.internal.core.SourceMethod#getType()
-		 */
+		@Override
 		public String getType() throws ModelException {
 			return type;
 		}
 
-		/**
-		 * @see org.eclipse.dltk.internal.core.ModelElement#exists()
-		 */
+		@Override
 		public boolean exists() {
 			return true;
 		}
 
-		/**
-		 * @see org.eclipse.dltk.internal.core.SourceMethod#isConstructor()
-		 */
+		@Override
 		public boolean isConstructor() throws ModelException {
 			return false;
 		}

@@ -11,7 +11,7 @@ package org.eclipse.dltk.internal.javascript.parser;
 
 import java.io.CharArrayReader;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 
 import org.eclipse.dltk.ast.declarations.Argument;
 import org.eclipse.dltk.ast.declarations.FieldDeclaration;
@@ -74,7 +74,7 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 			ScriptOrFnNode parse = parser.parse(new CharArrayReader(content),
 					"", 0);
 			TypeInferencer interferencer = new TypeInferencer(element,
-					new ReferenceResolverContext(null, new HashMap()));
+					new ReferenceResolverContext(null, Collections.emptyMap()));
 			ReferenceRecordingRequestor referenceRecordingRequestor = new ReferenceRecordingRequestor();
 			interferencer.setRequestor(referenceRecordingRequestor);
 			interferencer.doInterferencing(parse, Integer.MAX_VALUE);

@@ -18,31 +18,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.internal.core.ModelElement;
 
 public final class ContextReference implements IReference {
 
 	private final HostCollection function;
 	private final String key;
 	private boolean local;
-	private int position;
-	private int length;
-
-	public int getPosition() {
-		return position;
-	}
-
-	public void setPosition(int position) {
-		this.position = position;
-	}
-
-	public int getLength() {
-		return length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
-	}
+	private IReferenceLocation location;
 
 	ContextReference(HostCollection function, String key) {
 		this.function = function;
@@ -56,7 +38,8 @@ public final class ContextReference implements IReference {
 	public Set<IReference> getChilds(boolean resolveLocals) {
 		if (!resolveLocals)
 			return Collections.emptySet();
-		HashSet hashSet = new HashSet(function.getReferences().values());
+		Set<IReference> hashSet = new HashSet<IReference>(function
+				.getReferences().values());
 		hashSet.remove(this);
 		return hashSet;
 	}
@@ -89,9 +72,12 @@ public final class ContextReference implements IReference {
 
 	}
 
-	public void setLocationInformation(ModelElement mo, int position, int length) {
-		this.position = position;
-		this.length = length;
+	public IReferenceLocation getLocation() {
+		return location;
+	}
+
+	public void setLocationInformation(IReferenceLocation location) {
+		this.location = location;
 	}
 
 	public boolean isFunctionRef() {

@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableReference;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 
@@ -118,7 +117,7 @@ public abstract class AbstractCallResultReference implements IReference,
 
 	}
 
-	public void setLocationInformation(ModelElement mo, int position, int length) {
+	public void setLocationInformation(IReferenceLocation location) {
 
 	}
 

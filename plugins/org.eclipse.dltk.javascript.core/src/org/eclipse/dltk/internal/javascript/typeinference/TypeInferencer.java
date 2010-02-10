@@ -23,6 +23,7 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 
@@ -275,9 +276,9 @@ public class TypeInferencer {
 					reference = new StandardSelfCompletingReference(
 							paramOrVarName, false);
 				}
-				reference.setLocationInformation(module,
+				reference.setLocationInformation(new ReferenceLocation(module,
 						functionNode.nameStart, functionNode.getFunctionName()
-								.length());
+								.length()));
 				if (reference instanceof StandardSelfCompletingReference) {
 					((StandardSelfCompletingReference) reference)
 							.setParameterIndex(am);
@@ -351,8 +352,8 @@ public class TypeInferencer {
 					evaluateReference = new StandardSelfCompletingReference(
 							key, false);
 				}
-				evaluateReference.setLocationInformation(module, firstChild
-						.getPosition() + 1, key.length());
+				evaluateReference.setLocationInformation(new ReferenceLocation(
+						module, firstChild.getPosition() + 1, key.length()));
 				evaluateReference.setLocal(true);
 				collection.write(key, evaluateReference);
 				firstChild = firstChild.getNext();
@@ -399,8 +400,8 @@ public class TypeInferencer {
 			IReference root = collection.getReferenceNoParentContext(rootName);
 			if (root == null) {
 				root = new StandardSelfCompletingReference(rootName, true);
-				root.setLocationInformation(module, node.getPosition(), fieldId
-						.length());
+				root.setLocationInformation(new ReferenceLocation(module, node
+						.getPosition(), fieldId.length()));
 				HostCollection parent = collection.getParent();
 				if (parent == null) {
 					collection.setReference(rootName, root);
@@ -425,8 +426,8 @@ public class TypeInferencer {
 				if (child == null) {
 					child = new StandardSelfCompletingReference(field, true);
 
-					child.setLocationInformation(module, node.getPosition(),
-							fieldId.length());
+					child.setLocationInformation(new ReferenceLocation(module,
+							node.getPosition(), fieldId.length()));
 					root.setChild(field, child);
 				}
 				root = child;
@@ -436,8 +437,8 @@ public class TypeInferencer {
 					TypeInferencer.this, evaluateReference,
 					node.getLastChild(), fieldId, module, cs);
 			collection.addTransparent(transparentRef);
-			transparentRef.setLocationInformation(module, node.getPosition(),
-					fieldId.length());
+			transparentRef.setLocationInformation(new ReferenceLocation(module,
+					node.getPosition(), fieldId.length()));
 			if (root.getName().equals("this")) {
 				collection.add(transparentRef.getName(), transparentRef);
 			}
@@ -509,9 +510,9 @@ public class TypeInferencer {
 			Node lastChild = node.getLastChild();
 			Object processScriptNode = processScriptNode(node, arg);
 			IReference evaluateReference = evaluateReference(key, lastChild, cs);
-			evaluateReference.setLocationInformation(module, node
-					.getFirstChild().getPosition()
-					- key.length(), key.length());
+			evaluateReference.setLocationInformation(new ReferenceLocation(
+					module, node.getFirstChild().getPosition() - key.length(),
+					key.length()));
 			collection.write(key, evaluateReference);
 			return processScriptNode;
 		}
@@ -521,7 +522,7 @@ public class TypeInferencer {
 	private final Stack<IReference> withContexts = new Stack<IReference>();
 	private final Map<Integer, HostCollection> functionNodes = new HashMap<Integer, HostCollection>();
 	HostCollection collection = new HostCollection();
-	ModelElement module;
+	IModelElement module;
 
 	public HostCollection getCollection() {
 		return collection;
@@ -539,7 +540,7 @@ public class TypeInferencer {
 	}
 
 	IReference internalEvaluate(HostCollection collection, String key,
-			Node expression, ModelElement parent, ReferenceResolverContext cs) {
+			Node expression, IModelElement parent, ReferenceResolverContext cs) {
 		if (expression == null)
 			return null;
 		int type = expression.getType();
@@ -669,7 +670,7 @@ public class TypeInferencer {
 	}
 
 	private IReference createObjectLiteral(HostCollection col, String key,
-			Node expression, ModelElement parent, ReferenceResolverContext cs) {
+			Node expression, IModelElement parent, ReferenceResolverContext cs) {
 		Object[] ids = (Object[]) expression.getProp(Node.OBJECT_IDS_PROP);
 		ArrayList positions = (ArrayList) expression
 				.getProp(Node.DESCENDANTS_FLAG);
@@ -684,9 +685,9 @@ public class TypeInferencer {
 				if (internalEvaluate == null)
 					internalEvaluate = new StandardSelfCompletingReference(
 							name, false);
-				internalEvaluate.setLocationInformation(parent,
-						((Integer) positions.get(a)).intValue() - name.length()
-								- 1, name.length());
+				internalEvaluate.setLocationInformation(new ReferenceLocation(
+						parent, ((Integer) positions.get(a)).intValue()
+								- name.length() - 1, name.length()));
 				uRef.setChild(name, internalEvaluate);
 				child = child.getNext();
 			}
@@ -738,7 +739,7 @@ public class TypeInferencer {
 		return hostCollection;
 	}
 
-	public Map getFunctionMap() {
+	public Map<Integer, HostCollection> getFunctionMap() {
 		return functionNodes;
 	}
 

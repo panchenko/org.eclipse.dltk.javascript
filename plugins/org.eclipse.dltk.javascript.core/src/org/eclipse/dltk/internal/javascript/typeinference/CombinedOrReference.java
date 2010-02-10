@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 
 /**
@@ -354,17 +353,16 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 	}
 
 	/**
-	 * @see org.eclipse.dltk.internal.javascript.typeinference.IReference#setLocationInformation(org.eclipse.dltk.internal.core.ModelElement,
-	 *      int, int)
+	 * @see IReference#setLocationInformation(IReferenceLocation)
 	 */
-	public void setLocationInformation(ModelElement mo, int position, int length) {
+	public void setLocationInformation(IReferenceLocation location) {
 		for (int i = 0; i < lstReferences.size(); i++) {
 			IReference element = lstReferences.get(i);
-			element.setLocationInformation(mo, position, length);
+			element.setLocationInformation(location);
 		}
 		for (int i = 0; i < lstReadonly.size(); i++) {
 			IReference element = lstReadonly.get(i);
-			element.setLocationInformation(mo, position, length);
+			element.setLocationInformation(location);
 		}
 	}
 
