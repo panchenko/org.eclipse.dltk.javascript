@@ -58,6 +58,13 @@ public class JavaScriptPlugin extends Plugin {
 	/**
 	 * @since 2.0
 	 */
+	public static void error(String message) {
+		error(message, null);
+	}
+
+	/**
+	 * @since 2.0
+	 */
 	public static void error(Throwable e) {
 		error(e.getLocalizedMessage(), e);
 	}
