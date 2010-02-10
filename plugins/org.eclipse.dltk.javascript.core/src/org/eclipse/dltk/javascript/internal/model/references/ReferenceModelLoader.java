@@ -22,6 +22,11 @@ import java.util.Map;
 
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeArrayReference;
+import org.eclipse.dltk.internal.javascript.typeinference.NativeBooleanReference;
+import org.eclipse.dltk.internal.javascript.typeinference.NativeDateReference;
+import org.eclipse.dltk.internal.javascript.typeinference.NativeNumberReference;
+import org.eclipse.dltk.internal.javascript.typeinference.NativeStringReference;
+import org.eclipse.dltk.internal.javascript.typeinference.NativeXMLReference;
 import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.emf.common.util.URI;
@@ -135,27 +140,27 @@ public class ReferenceModelLoader {
 		});
 		factories.put("Boolean", new Factory() {
 			public StandardSelfCompletingReference create(String name) {
-				return new NativeArrayReference(name);
+				return new NativeBooleanReference(name);
 			}
 		});
 		factories.put("Number", new Factory() {
 			public StandardSelfCompletingReference create(String name) {
-				return new NativeArrayReference(name);
+				return new NativeNumberReference(name);
 			}
 		});
 		factories.put("String", new Factory() {
 			public StandardSelfCompletingReference create(String name) {
-				return new NativeArrayReference(name);
+				return new NativeStringReference(name);
 			}
 		});
 		factories.put("XML", new Factory() {
 			public StandardSelfCompletingReference create(String name) {
-				return new NativeArrayReference(name);
+				return new NativeXMLReference(name);
 			}
 		});
 		factories.put("Date", new Factory() {
 			public StandardSelfCompletingReference create(String name) {
-				return new NativeArrayReference(name);
+				return new NativeDateReference(name);
 			}
 		});
 	}
