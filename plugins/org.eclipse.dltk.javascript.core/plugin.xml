@@ -125,6 +125,13 @@
             id="org.eclipse.dltk.javascript.buildParticipant.parser">
       </requires>
     </buildParticipant>
-  </extension>   
-   
+  </extension>
+
+	<extension point="org.eclipse.emf.ecore.generated_package">
+		<package
+            uri="http://www.eclipse.org/dltk/javascript/references.ecore"
+            class="org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage"
+            genModel="models/references.genmodel"/>
+	</extension>
+
 </plugin>

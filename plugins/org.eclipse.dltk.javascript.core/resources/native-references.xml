@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/references.ecore">
+  <ref:Type name="Array">
+    <members xsi:type="ref:Method" name="concat" type="Array" description="Joins two or more arrays and returns the result.">
+      <parameters name="arrayN"/>
+      <parameters name="[arrayX]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="every" type="Boolean" description="Tests whether all elements in the array pass the test implemented by the provided function.">
+      <parameters name="callback"/>
+    </members>
+    <members xsi:type="ref:Method" name="filter" type="Array" description="Creates a new array with all elements that pass the test implemented by the provided function.">
+      <parameters name="callback"/>
+    </members>
+    <members xsi:type="ref:Method" name="forEach" description="Calls a function for each element in the array.">
+      <parameters name="callback"/>
+    </members>
+    <members xsi:type="ref:Method" name="indexOf" type="Number" description="Returns the first index at which a given element can be found in the array, or -1 if it is not present.">
+      <parameters name="searchElement"/>
+      <parameters name="[fromIndex]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="join" type="Array" description="Puts all the elements of an array into a string. The elements are separated by a specified delimiter.">
+      <parameters name="[separator]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="lastIndexOf" type="Number" description="Returns the last (greatest) index of an element within the array equal to the specified value, or -1 if none is found.">
+      <parameters name="searchElement"/>
+      <parameters name="[formIndex]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Property" name="length" type="Number" description="The length returns an integer representing the length of an array."/>
+    <members xsi:type="ref:Method" name="map" type="Array" description="Creates a new array with the results of calling a provided function on every element in this array.">
+      <parameters name="callback"/>
+    </members>
+    <members xsi:type="ref:Method" name="pop" description="Removes and returns the last element of an array."/>
+    <members xsi:type="ref:Method" name="push" type="Number" description="Adds one or more elements to the end of an array and returns the new length">
+      <parameters name="element1"/>
+      <parameters name="[elementX]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="reverse" type="Array" description="Reverses the order of the elements in an array."/>
+    <members xsi:type="ref:Method" name="shift" type="Array" description="Removes and returns the first element of an array."/>
+    <members xsi:type="ref:Method" name="slice" type="Array" description="Returns selected elements from an existing array.">
+      <parameters name="start"/>
+      <parameters name="[end]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="some" type="Boolean" description="Tests whether some element in the array passes the test implemented by the provided function.">
+      <parameters name="callback"/>
+    </members>
+    <members xsi:type="ref:Method" name="sort" type="Array" description="Sorts the elements of an array.">
+      <parameters name="sortByFunction"/>
+    </members>
+    <members xsi:type="ref:Method" name="splice" description="Removes and adds new elements to an array.">
+      <parameters name="index"/>
+      <parameters name="howmany"/>
+      <parameters name="[newelementX]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="toLocaleString" type="String"/>
+    <members xsi:type="ref:Method" name="toSource" type="String" description="The toSource() method represents the source code of an object."/>
+    <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for Array."/>
+    <members xsi:type="ref:Method" name="unshift" type="Number" description="Adds one or more elements to the beginning of an array and returns the new length.">
+      <parameters name="newelement1"/>
+      <parameters name="[newelementX]" optional="true"/>
+    </members>
+  </ref:Type>
+  <ref:Type name="Boolean"/>
+  <ref:Type name="Date">
+    <members xsi:type="ref:Method" name="getDate" type="Number" description="Returns the day of the month from a Date object (from 1-31)."/>
+    <members xsi:type="ref:Method" name="getDay" type="Number" description="Returns the day of the week from a Date object (from 0-6)."/>
+    <members xsi:type="ref:Method" name="getFullYear" type="Number" description="Returns the year, as a four-digit number."/>
+    <members xsi:type="ref:Method" name="getHours" type="Number" description="Returns the hour of a day (from 0-23)."/>
+    <members xsi:type="ref:Method" name="getMilliseconds" type="Number" description="Returns the milliseconds of a Date object (from 0-999)."/>
+    <members xsi:type="ref:Method" name="getMinutes" type="Number" description="Returns the minutes of a date (from 0-59)"/>
+    <members xsi:type="ref:Method" name="getMonth" type="Number" description="Returns the month from a date (from 0-11)."/>
+    <members xsi:type="ref:Method" name="getSeconds" type="Number" description="Returns the seconds of a date (from 0-59)"/>
+    <members xsi:type="ref:Method" name="getTime" type="Number" description="Returns the number of milliseconds since midnight Jan 1, 1970"/>
+    <members xsi:type="ref:Method" name="getTimezoneOffset" type="Number" description="Returns the difference in minutes between local time and Greenwich Mean Time (GMT)."/>
+    <members xsi:type="ref:Method" name="getUTCDate" type="Number" description="Returns the day of the month from a date according to universal time (from 0-6)."/>
+    <members xsi:type="ref:Method" name="getUTCDay" type="Number" description="Returns the day of the week from a date according to universal time (from 1-31)"/>
+    <members xsi:type="ref:Method" name="getUTCFullYear" type="Number" description="Returns the four-digit year from a date according to universal time "/>
+    <members xsi:type="ref:Method" name="getUTCHours" type="Number" description="Returns the hour of a date according to universal time (from 0-23)"/>
+    <members xsi:type="ref:Method" name="getUTCMilliseconds" type="Number" description="Returns the milliseconds of a date according to universal time (from 0-999)"/>
+    <members xsi:type="ref:Method" name="getUTCMinutes" type="Number" description="Returns the minutes of a date according to universal time (from 0-59)"/>
+    <members xsi:type="ref:Method" name="getUTCMonth" type="Number" description="Returns the month from a Date object according to universal time (from 0-11)"/>
+    <members xsi:type="ref:Method" name="getUTCSeconds" type="Number" description="Returns the seconds of a date according to universal time (from 0-59)"/>
+    <members xsi:type="ref:Method" name="getYear" type="Number" description="Returns the year, as a two-digit or a three/four-digit number, depending on the browser. Use getFullYear() instead!!"/>
+    <members xsi:type="ref:Method" name="setDate" type="Number" description="Sets the day of the month from a Date object (from 1-31).">
+      <parameters name="day"/>
+    </members>
+    <members xsi:type="ref:Method" name="setFullYear" type="Number" description="Sets the year, as a four-digit number.">
+      <parameters name="fullyear"/>
+      <parameters name="[month]" optional="true"/>
+      <parameters name="[day]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setHours" type="Number" description="Sets the hour of a day (from 0-23).">
+      <parameters name="hours"/>
+      <parameters name="[minutes]" optional="true"/>
+      <parameters name="[seconds]" optional="true"/>
+      <parameters name="[millis]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setMilliseconds" type="Number" description="Sets the milliseconds of a Date object (from 0-999).">
+      <parameters name="millis"/>
+    </members>
+    <members xsi:type="ref:Method" name="setMinutes" type="Number" description="Sets the minutes of a date (from 0-59)">
+      <parameters name="minutes"/>
+      <parameters name="[seconds]" optional="true"/>
+      <parameters name="[millis]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setMonth" type="Number" description="Sets the month from a date (from 0-11).">
+      <parameters name="month"/>
+      <parameters name="[day]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setSeconds" type="Number" description="Sets the seconds of a date (from 0-59)">
+      <parameters name="seconds"/>
+      <parameters name="[millis]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setTime" type="Number" description="Sets the number of milliseconds since midnight Jan 1, 1970">
+      <parameters name="millis"/>
+    </members>
+    <members xsi:type="ref:Method" name="setUTCDate" type="Number" description="Sets the day of the month from a date according to universal time (from 0-6).">
+      <parameters name="day"/>
+    </members>
+    <members xsi:type="ref:Method" name="setUTCFullYear" type="Number" description="Sets the four-digit year from a date according to universal time ">
+      <parameters name="fullyear"/>
+      <parameters name="[month]" optional="true"/>
+      <parameters name="[day]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setUTCHours" type="Number" description="Sets the hour of a date according to universal time (from 0-23)">
+      <parameters name="hours"/>
+      <parameters name="[minutes]" optional="true"/>
+      <parameters name="[seconds]" optional="true"/>
+      <parameters name="[millis]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setUTCMilliseconds" type="Number" description="Sets the milliseconds of a date according to universal time (from 0-999)">
+      <parameters name="millis"/>
+    </members>
+    <members xsi:type="ref:Method" name="setUTCMinutes" type="Number" description="Sets the minutes of a date according to universal time (from 0-59)">
+      <parameters name="minutes"/>
+      <parameters name="[seconds]" optional="true"/>
+      <parameters name="[millis]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setUTCMonth" type="Number" description="Sets the month from a Date object according to universal time (from 0-11)">
+      <parameters name="month"/>
+      <parameters name="[day]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setUTCSeconds" type="Number" description="Sets the seconds of a date according to universal time (from 0-59)">
+      <parameters name="seconds"/>
+      <parameters name="[millis]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setYear" type="Number" description="Sets the year, as a two-digit or a three/four-digit number, depending on the browser. Use setFullYear() instead!!">
+      <parameters name="year"/>
+    </members>
+    <members xsi:type="ref:Method" name="toDateString" type="String" description="Returns the date portion of a Date object in readable form"/>
+    <members xsi:type="ref:Method" name="toLocaleDateString" type="String" description="Converts a Date object, according to local time, to a string and returns the date portion."/>
+    <members xsi:type="ref:Method" name="toLocaleString" type="String" description="Converts a Date object, according to local time, to a string."/>
+    <members xsi:type="ref:Method" name="toLocaleTimeString" type="String" description="Converts a Date object, according to local time, to a string and returns the time portion."/>
+    <members xsi:type="ref:Method" name="toSource" type="String" description="The toSource() method represents the source code of an object."/>
+    <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this object."/>
+    <members xsi:type="ref:Method" name="toTimeString" type="String" description="Returns the time portion of a Date object in readable form."/>
+    <members xsi:type="ref:Method" name="toUTCString" type="String" description="Converts a Date object, according to universal time, to a string."/>
+    <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a String object."/>
+  </ref:Type>
+  <ref:Type name="Number">
+    <members xsi:type="ref:Method" name="toExponential" type="String" description="Converts the value of the object into an exponential notation.">
+      <parameters name="numberOfDecimals"/>
+    </members>
+    <members xsi:type="ref:Method" name="toFixed" type="String" description="Formats a number to the specified number of decimals.">
+      <parameters name="numberOfDecimals"/>
+    </members>
+    <members xsi:type="ref:Method" name="toLocaleString" type="String"/>
+    <members xsi:type="ref:Method" name="toPrecision" type="String" description="Converts a number into an exponential notation if it has more digits than specified.">
+      <parameters name="numberOfDigits"/>
+    </members>
+    <members xsi:type="ref:Method" name="toSource" type="String" description="The toSource() method represents the source code of an object."/>
+    <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this Number."/>
+    <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a Number object."/>
+  </ref:Type>
+  <ref:Type name="String">
+    <members xsi:type="ref:Method" name="anchor" type="String" description="Creates an HTML anchor.">
+      <parameters name="anchorname"/>
+    </members>
+    <members xsi:type="ref:Method" name="big" type="String" description="Returns a string in a big font."/>
+    <members xsi:type="ref:Method" name="blink" type="String" description="Returns a blinking string."/>
+    <members xsi:type="ref:Method" name="bold" type="String" description="Returns a string in bold."/>
+    <members xsi:type="ref:Method" name="charAt" type="String" description="Returns the character at a specified position."/>
+    <members xsi:type="ref:Method" name="charCodeAt" type="Number" description="Returns the Unicode of the character at a specified position.">
+      <parameters name="index"/>
+    </members>
+    <members xsi:type="ref:Method" name="concat" type="String" description="Joins two or more strings.">
+      <parameters name="stringN"/>
+      <parameters name="[StringX]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="equals" type="Boolean"/>
+    <members xsi:type="ref:Method" name="equalsIgnoreCase" type="Boolean"/>
+    <members xsi:type="ref:Method" name="fixed" type="String" description="Returns a string as teletype text."/>
+    <members xsi:type="ref:Method" name="fontcolor" type="String" description="Returns a string in a specified color.">
+      <parameters name="color"/>
+    </members>
+    <members xsi:type="ref:Method" name="fontsize" type="String" description="Returns a string in a specified size.">
+      <parameters name="size"/>
+    </members>
+    <members xsi:type="ref:Method" name="indexOf" type="Number" description="Returns the position of the first occurrence of a specified string value in a string.">
+      <parameters name="searchValue"/>
+      <parameters name="[fromIndex]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="italics" type="String" description="Returns a string in italic."/>
+    <members xsi:type="ref:Method" name="lastIndexOf" type="Number" description="Returns the position of the last occurrence of a specified string value, searching backwards from the specified position in a string.">
+      <parameters name="searchValue"/>
+      <parameters name="[fromIndex]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Property" name="length" type="Number"/>
+    <members xsi:type="ref:Method" name="link" type="String" description="Returns a string as a hyperlink.">
+      <parameters name="url"/>
+    </members>
+    <members xsi:type="ref:Method" name="localeCompare" type="Number"/>
+    <members xsi:type="ref:Method" name="match" type="String" description="Searches for a specified value in a string.">
+      <parameters name="searchvalue"/>
+    </members>
+    <members xsi:type="ref:Method" name="replace" type="String" description="Replaces some characters with some other characters in a string.">
+      <parameters name="findString"/>
+      <parameters name="newString"/>
+    </members>
+    <members xsi:type="ref:Method" name="search" type="Number" description="Searches a string for a specified value.">
+      <parameters name="searchstring"/>
+    </members>
+    <members xsi:type="ref:Method" name="slice" type="String" description="Extracts a part of a string and returns the extracted part in a new string.">
+      <parameters name="start"/>
+      <parameters name="[end]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="small" type="String" description="Returns a string in a small font."/>
+    <members xsi:type="ref:Method" name="split" type="Array" description="Splits a string into an array of strings.">
+      <parameters name="separator"/>
+      <parameters name="[howmany]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="strike" type="String" description="Returns a string with a strikethrough."/>
+    <members xsi:type="ref:Method" name="sub" type="String" description="Returns a string as subscript."/>
+    <members xsi:type="ref:Method" name="substr" type="String" description="Extracts a specified number of characters in a string, from a start index">
+      <parameters name="start"/>
+      <parameters name="[length]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="substring" type="String" description="Extracts the characters in a string between two specified indices">
+      <parameters name="start"/>
+      <parameters name="[stop]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="sup" type="String" description="Returns a string as superscript."/>
+    <members xsi:type="ref:Method" name="toLocaleLowerCase" type="String"/>
+    <members xsi:type="ref:Method" name="toLocaleUpperCase" type="String"/>
+    <members xsi:type="ref:Method" name="toLowerCase" type="String" description="Returns a string in lowercase letters."/>
+    <members xsi:type="ref:Method" name="toSource" type="String" description="The toSource() method represents the source code of an object."/>
+    <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this object."/>
+    <members xsi:type="ref:Method" name="toUpperCase" type="String" description="Returns a string in uppercase letters."/>
+    <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a String object."/>
+  </ref:Type>
+  <ref:Type name="XML">
+    <members xsi:type="ref:Method" name="addNamespace" type="XML" description="The addNamespace method adds a namespace declaration to the in scope namespaces for this XML object and returns this XML object.">
+      <parameters name="namespace"/>
+    </members>
+    <members xsi:type="ref:Method" name="appendChild" type="XML" description="The appendChild method appends the given child to the end of this XML object�s properties and returns this XML object.">
+      <parameters name="child"/>
+    </members>
+    <members xsi:type="ref:Method" name="attribute" type="XML" description="The attribute method returns an XMLList containing zero or one XML attributes associated with this XML object that have the given attributeName. ">
+      <parameters name="child"/>
+    </members>
+    <members xsi:type="ref:Method" name="attributes" type="XML" description="The attributes method returns an XMLList containing the XML attributes of this object."/>
+    <members xsi:type="ref:Method" name="child" type="XML" description="The child method returns the list of children in this XML object matching the given propertyName.">
+      <parameters name="propertyName"/>
+    </members>
+    <members xsi:type="ref:Method" name="childIndex" type="Number" description="The childIndex method returns a Number representing the ordinal position of this XML object within the context of its parent."/>
+    <members xsi:type="ref:Method" name="children" type="XML" description="The children method returns an XMLList containing all the properties of this XML object in order"/>
+    <members xsi:type="ref:Method" name="comments" type="XML" description="The comments method returns an XMLList containing the properties of this XML object that represent XML comments."/>
+    <members xsi:type="ref:Method" name="contains" type="Boolean" description="The contains method returns the result of comparing this XML object with the given value.">
+      <parameters name="value"/>
+    </members>
+    <members xsi:type="ref:Method" name="copy" type="XML" description="The copy method returns a deep copy of this XML object with the internal [[Parent]] property set to null."/>
+    <members xsi:type="ref:Method" name="descendants" type="XML" description="The descendants method returns all the XML valued descendants (children, grandchildren, great-grandchildren, etc.) of this XML object with the given name. If the name parameter is omitted, it returns all descendants of this XML object.">
+      <parameters name="[name]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="elements" type="XML" description="When the elements method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are XML elements with the given name. When the elements method is called with no parameters, it returns an XMLList containing all the children of this XML object that are XML elements regardless of their name.">
+      <parameters name="[name]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="hasComplexContent" type="Boolean" description="The hasComplexContent method returns a Boolean value indicating whether this XML object contains complex content. An XML object is considered to contain complex content if it represents an XML element that has child elements. XML objects representing attributes, comments, processing instructions and text nodes do not have complex content. The existence of attributes, comments, processing instructions and text nodes within an XML object is not significant in determining if it has complex content."/>
+    <members xsi:type="ref:Method" name="hasOwnProperty" type="Boolean" description="The hasOwnProperty method returns a Boolean value indicating whether this object has the property specified by P. For all XML objects except the XML prototype object, this is the same result returned by the internal method [[HasProperty]]. For the XML prototype object, hasOwnProperty also examines the list of local properties to determine if there is a method property with the given name.">
+      <parameters name=" P " optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="hasSimpleContent" type="Boolean" description="The hasSimpleContent method returns a Boolean value indicating whether this XML object contains simple content. An XML object is considered to contain simple content if it represents a text node, represents an attribute node or if it represents an XML element that has no child elements. XML objects representing comments and processing instructions do not have simple content. The existence of attributes, comments, processing instructions and text nodes within an XML object is not significant in determining if it has simple content."/>
+    <members xsi:type="ref:Property" name="ignoreComments" type="Boolean"/>
+    <members xsi:type="ref:Property" name="ignoreProcessingInstructions" type="Boolean"/>
+    <members xsi:type="ref:Property" name="ignoreWhitespace" type="Boolean"/>
+    <members xsi:type="ref:Method" name="inScopeNamespaces" type="Array" description="The inScopeNamespaces method returns an Array of Namespace objects representing the namespaces in scope for this XML object in the context of its parent. If the parent of this XML object is modified, the associated namespace declarations may change. The set of namespaces returned by this method may be a super set of the namespaces used by this value."/>
+    <members xsi:type="ref:Method" name="insertChildAfter" type="XML" description="The insertChildAfter method inserts the given child2 after the given child1 in this XML object and returns this XML object. If child1 is null, the insertChildAfter method inserts child2 before all children of this XML object (i.e., after none of them). If child1 does not exist in this XML object, it returns without modifying this XML object.">
+      <parameters name="child1 , child2" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="insertChildBefore" type="XML" description="he insertChildBefore method inserts the given child2 before the given child1 in this XML object and returns this XML object. If child1 is null, the insertChildBefore method inserts child2 after all children in this XML object (i.e., before none of them). If child1 does not exist in this XML object, it returns without modifying this XML object.">
+      <parameters name="child1 , child2" optional="true"/>
+    </members>
+    <members xsi:type="ref:Property" name="length" type="Number" description="The length method always returns the integer 1 for XML objects. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value"/>
+    <members xsi:type="ref:Method" name="localName" type="String"/>
+    <members xsi:type="ref:Property" name="name" type="String" description="The name method returns the qualified name associated with this XML object"/>
+    <members xsi:type="ref:Method" name="namespace" type="XML" description="If no prefix is specified, the namespace method returns the Namespace associated with the qualified name of this XML object. If a prefix is specified, the namespace method looks for a namespace in scope for this XML object with the given prefix and, if found, returns it. If no such namespace is found, the namespace method returns undefined">
+      <parameters name="[prefix]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="namespaceDeclarations" type="Array" description="The namespaceDeclarations method returns an Array of Namespace objects representing the namespace declarations associated with this XML object in the context of its parent. If the parent of this XML object is modified, the associated namespace declarations may change"/>
+    <members xsi:type="ref:Method" name="nodeKind" type="String" description="he nodeKind method returns a string representing the [[Class]] of this XML object."/>
+    <members xsi:type="ref:Method" name="normalize" type="XML" description="The normalize method puts all text nodes in this and all descendant XML objects into a normal form by merging adjacent text nodes and eliminating empty text nodes. It returns this XML object."/>
+    <members xsi:type="ref:Method" name="parent" type="XML" description="The parent method returns the parent of this XML object."/>
+    <members xsi:type="ref:Method" name="prependChild" type="XML" description="The prependChild method inserts the given child into this object prior to its existing XML properties and returns this XML object.">
+      <parameters name="value"/>
+    </members>
+    <members xsi:type="ref:Property" name="prettyIndent" type="Number"/>
+    <members xsi:type="ref:Property" name="prettyPrinting" type="Boolean"/>
+    <members xsi:type="ref:Method" name="processingInstructions" type="XML" description="When the processingInstructions method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are processing-instructions with the given name. When the processingInstructions method is called with no parameters, it returns an XMLList containing all the children of this XML object that are processing-instructions regardless of their name">
+      <parameters name="[name]" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="propertyIsEnumerable" type="Boolean" description="The propertyIsEnumerable method returns a Boolean value indicating whether the property P will be included in the set of properties iterated over when this XML object is used in a for-in statement. This method returns truewhen ToString(P) is &quot;0&quot;; otherwise, it returns false. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value">
+      <parameters name=" P " optional="true"/>
+    </members>
+    <members xsi:type="ref:Property" name="prototype" type="XML"/>
+    <members xsi:type="ref:Method" name="removeNamespace" type="XML" description="The removeNamespace method removes the given namespace from the in scope namespaces of this object and all its descendents, then returns a copy of this XML object. The removeNamespaces method will not remove a namespace from an object where it is referenced by that object�s QName or the QNames of that object�s attributes">
+      <parameters name="namespace"/>
+    </members>
+    <members xsi:type="ref:Method" name="replace" type="XML" description="The replace method replaces the XML properties of this XML object specified by propertyName with value and returns this XML object. If this XML object contains no properties that match propertyName, the replace method returns without modifying this XML object. The propertyName parameter may be a numeric property name, an unqualified name for a set of XML elements, a qualified name for a set of XML elements or the properties wildcard &quot;*&quot;. When the propertyName parameter is an unqualified name, it identifies XML elements in the default namespace. The value parameter may be an XML object, XMLList object or any value that may be converted to a String with ToString(). ">
+      <parameters name="propertyName , value" optional="true"/>
+    </members>
+    <members xsi:type="ref:Method" name="setChildren" type="XML" description="The setChildren method replaces the XML properties of this XML object with a new set of XML properties from value. value may be a single XML object or an XMLList. setChildren returns this XML object.">
+      <parameters name="value"/>
+    </members>
+    <members xsi:type="ref:Method" name="setLocalName" type="XML" description="The setLocalName method replaces the local name of this XML object with a string constructed from the givenname">
+      <parameters name="name"/>
+    </members>
+    <members xsi:type="ref:Method" name="setName" type="XML" description="The setName method replaces the name of this XML object with a QName or AttributeName constructed from the given name">
+      <parameters name="name"/>
+    </members>
+    <members xsi:type="ref:Method" name="setNamespace" type="XML" description="The setNamespace method replaces the namespace associated with the name of this XML object with the given namespace">
+      <parameters name="ns"/>
+    </members>
+    <members xsi:type="ref:Method" name="text" type="String" description="The text() method represents the source code of an object."/>
+    <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this object."/>
+    <members xsi:type="ref:Method" name="toXMLString" type="String" description="Returns a String value for this object."/>
+    <members xsi:type="ref:Method" name="valueOf" type="XML" description="The valueOf method returns this XML object"/>
+  </ref:Type>
+</xmi:XMI>
