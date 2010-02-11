@@ -15,6 +15,7 @@ import org.eclipse.dltk.formatter.FormatterIndentedBlockNode;
 import org.eclipse.dltk.formatter.FormatterUtils;
 import org.eclipse.dltk.formatter.IFormatterContainerNode;
 import org.eclipse.dltk.formatter.IFormatterDocument;
+import org.eclipse.dltk.formatter.IFormatterNode;
 import org.eclipse.dltk.formatter.IFormatterTextNode;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
@@ -256,17 +257,18 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 		final IFormatterContainerNode root = new FormatterRootNode(document);
 		start(root);
 
-		astRoot.visitAll(new ASTVisitor() {
+		astRoot.visitAll(new ASTVisitor<IFormatterNode>() {
 
 			@Override
-			public boolean visit(ASTNode node) {
+			public IFormatterNode visit(ASTNode node) {
 				nodes.push(node);
-				final boolean result = super.visit(node);
+				final IFormatterNode result = super.visit(node);
 				nodes.pop();
 				return result;
 			}
 
-			public boolean visitArrayInitializer(ArrayInitializer node) {
+			@Override
+			public IFormatterNode visitArrayInitializer(ArrayInitializer node) {
 
 				IBracketsConfiguration configuration;
 				if (node.getItems().size() > 0)
@@ -276,13 +278,12 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					configuration = new EmptyArrayBracketsConfiguration(
 							document, node);
 
-				processBrackets(node.getLB(), node.getRB(), node.getItems(),
-						node.getCommas(), configuration);
-
-				return true;
+				return processBrackets(node.getLB(), node.getRB(), node
+						.getItems(), node.getCommas(), configuration);
 			}
 
-			public boolean visitBinaryOperation(BinaryOperation node) {
+			@Override
+			public IFormatterNode visitBinaryOperation(BinaryOperation node) {
 
 				FormatterBinaryOperationNode formatterNode = new FormatterBinaryOperationNode(
 						document);
@@ -307,17 +308,16 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitBooleanLiteral(BooleanLiteral node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return false;
+			@Override
+			public IFormatterNode visitBooleanLiteral(BooleanLiteral node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitBreakStatement(BreakStatement node) {
+			@Override
+			public IFormatterNode visitBreakStatement(BreakStatement node) {
 
 				FormatterBreakNode formatterNode = new FormatterBreakNode(
 						document);
@@ -331,10 +331,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					visit(node.getLabel());
 
 				processOptionalSemicolon(formatterNode, node);
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitCallExpression(CallExpression node) {
+			@Override
+			public IFormatterNode visitCallExpression(CallExpression node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -353,7 +354,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
 			private void processTrailingColon(int colon, ASTNode keywordNode,
@@ -373,7 +374,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				checkedPop(formatterNode, colon);
 			}
 
-			public boolean visitCaseClause(CaseClause node) {
+			@Override
+			public IFormatterNode visitCaseClause(CaseClause node) {
 				FormatterCaseNode caseNode = new FormatterCaseNode(document);
 				caseNode.setBegin(new SpaceAfterKeyword(createTextNode(
 						document, node.getKeyword())));
@@ -385,7 +387,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return processSwitchComponent(caseNode, node);
 			}
 
-			public boolean visitDefaultClause(DefaultClause node) {
+			@Override
+			public IFormatterNode visitDefaultClause(DefaultClause node) {
 				FormatterCaseNode defaultNode = new FormatterCaseNode(document);
 				defaultNode
 						.setBegin(createTextNode(document, node.getKeyword()));
@@ -396,8 +399,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return processSwitchComponent(defaultNode, node);
 			}
 
-			private boolean processSwitchComponent(FormatterCaseNode caseNode,
-					SwitchComponent node) {
+			private IFormatterNode processSwitchComponent(
+					FormatterCaseNode caseNode, SwitchComponent node) {
 				if (node.getStatements().size() == 1
 						&& node.getStatements().get(0) instanceof StatementBlock) {
 					CaseBracesConfiguration configuration = new CaseBracesConfiguration(
@@ -408,10 +411,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					visit(node.getStatements());
 				}
 				checkedPop(caseNode, node.sourceEnd());
-				return true;
+				return caseNode;
 			}
 
-			public boolean visitCatchClause(CatchClause node) {
+			@Override
+			public IFormatterNode visitCatchClause(CatchClause node) {
 
 				FormatterCatchClauseNode formatterNode = new FormatterCatchClauseNode(
 						document);
@@ -435,15 +439,15 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			private void visitCombinedNodeList(List<? extends ASTNode> nodes,
-					List<Integer> punctuations,
+			private IFormatterNode visitCombinedNodeList(
+					List<? extends ASTNode> nodes, List<Integer> punctuations,
 					List<IPunctuationConfiguration> configurations) {
 
 				if (nodes.isEmpty())
-					return;
+					return null;
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -465,24 +469,25 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 				checkedPop(formatterNode, nodes.get(nodes.size() - 1)
 						.sourceEnd());
+				return formatterNode;
 			}
 
-			private void visitCombinedNodeList(List<? extends ASTNode> nodes,
-					List<Integer> punctuations,
+			private IFormatterNode visitCombinedNodeList(
+					List<? extends ASTNode> nodes, List<Integer> punctuations,
 					IPunctuationConfiguration configuration) {
-				visitCombinedNodeList(nodes, punctuations, Collections.nCopies(
-						punctuations.size(), configuration));
+				return visitCombinedNodeList(nodes, punctuations, Collections
+						.nCopies(punctuations.size(), configuration));
 			}
 
-			public boolean visitCommaExpression(CommaExpression node) {
-
-				visitCombinedNodeList(node.getItems(), node.getCommas(),
+			@Override
+			public IFormatterNode visitCommaExpression(CommaExpression node) {
+				return visitCombinedNodeList(node.getItems(), node.getCommas(),
 						new CommaPunctuationConfiguration());
-
-				return true;
 			}
 
-			public boolean visitConditionalOperator(ConditionalOperator node) {
+			@Override
+			public IFormatterNode visitConditionalOperator(
+					ConditionalOperator node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -510,10 +515,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitConstDeclaration(ConstStatement node) {
+			@Override
+			public IFormatterNode visitConstDeclaration(ConstStatement node) {
 
 				FormatterConstDeclarationNode formatterNode = new FormatterConstDeclarationNode(
 						document);
@@ -527,10 +533,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitContinueStatement(ContinueStatement node) {
+			@Override
+			public IFormatterNode visitContinueStatement(ContinueStatement node) {
 
 				FormatterContinueNode formatterNode = new FormatterContinueNode(
 						document);
@@ -544,7 +551,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					visit(node.getLabel());
 
 				processOptionalSemicolon(formatterNode, node);
-				return true;
+				return formatterNode;
 			}
 
 			private void processOptionalSemicolon(
@@ -562,14 +569,13 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 			}
 
-			public boolean visitDecimalLiteral(DecimalLiteral node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return false;
+			@Override
+			public IFormatterNode visitDecimalLiteral(DecimalLiteral node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitDeleteStatement(DeleteStatement node) {
+			@Override
+			public IFormatterNode visitDeleteStatement(DeleteStatement node) {
 				FormatterDeleteStatementNode formatterNode = new FormatterDeleteStatementNode(
 						document);
 
@@ -581,10 +587,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				visit(node.getExpression());
 
 				checkedPop(formatterNode, node.getExpression().sourceEnd());
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitDoWhileStatement(DoWhileStatement node) {
+			@Override
+			public IFormatterNode visitDoWhileStatement(DoWhileStatement node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -604,15 +611,17 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						new WhileConditionParensConfiguration(document));
 
 				processOptionalSemicolon(formatterNode, node);
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitEmptyExpression(EmptyExpression node) {
+			@Override
+			public IFormatterNode visitEmptyExpression(EmptyExpression node) {
 				// nothing
-				return true;
+				return null;
 			}
 
-			public boolean visitExceptionFilter(ExceptionFilter node) {
+			@Override
+			public IFormatterNode visitExceptionFilter(ExceptionFilter node) {
 				FormatterExceptionFilterNode formatterNode = new FormatterExceptionFilterNode(
 						document);
 
@@ -625,10 +634,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitFinallyClause(FinallyClause node) {
+			@Override
+			public IFormatterNode visitFinallyClause(FinallyClause node) {
 				FormatterFinallyClauseNode formatterNode = new FormatterFinallyClauseNode(
 						document);
 
@@ -642,10 +652,12 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitForEachInStatement(ForEachInStatement node) {
+			@Override
+			public IFormatterNode visitForEachInStatement(
+					ForEachInStatement node) {
 
 				FormatterForInStatementNode formatterNode = new FormatterForInStatementNode(
 						document);
@@ -669,10 +681,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 							document));
 
 				processOptionalSemicolon(formatterNode, node);
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitForInStatement(ForInStatement node) {
+			@Override
+			public IFormatterNode visitForInStatement(ForInStatement node) {
 
 				FormatterForInStatementNode formatterNode = new FormatterForInStatementNode(
 						document);
@@ -696,10 +709,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 							document));
 
 				processOptionalSemicolon(formatterNode, node);
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitForStatement(ForStatement node) {
+			@Override
+			public IFormatterNode visitForStatement(ForStatement node) {
 
 				FormatterForStatementNode formatterNode = new FormatterForStatementNode(
 						document);
@@ -745,10 +759,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 							document));
 
 				processOptionalSemicolon(formatterNode, node);
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitFunctionStatement(FunctionStatement node) {
+			@Override
+			public IFormatterNode visitFunctionStatement(FunctionStatement node) {
 
 				FormatterFunctionNode formatterNode = new FormatterFunctionNode(
 						document);
@@ -802,10 +817,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return false;
+				return formatterNode;
 			}
 
-			public boolean visitArgument(Argument argument) {
+			@Override
+			public IFormatterNode visitArgument(Argument argument) {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 				formatterNode.addChild(createEmptyTextNode(document, argument
@@ -819,7 +835,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					visit(argument.getType());
 				}
 				checkedPop(formatterNode, argument.sourceEnd());
-				return true;
+				return formatterNode;
 			}
 
 			private boolean isEmptyBody(StatementBlock block) {
@@ -835,7 +851,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 			}
 
-			public boolean visitGetArrayItemExpression(
+			@Override
+			public IFormatterNode visitGetArrayItemExpression(
 					GetArrayItemExpression node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
@@ -855,10 +872,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitGetMethod(GetMethod node) {
+			@Override
+			public IFormatterNode visitGetMethod(GetMethod node) {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
@@ -881,20 +899,20 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return false;
+				return formatterNode;
 			}
 
-			public boolean visitIdentifier(Identifier node) {
-				addChild(new FormatterStringNode(document, node));
-				return true;
+			@Override
+			public IFormatterNode visitIdentifier(Identifier node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitSimpleType(SimpleType node) {
-				addChild(new FormatterStringNode(document, node));
-				return true;
+			@Override
+			public IFormatterNode visitSimpleType(SimpleType node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			private void processParens(int leftParen, int rightParen,
+			private IFormatterNode processParens(int leftParen, int rightParen,
 					ASTNode expression, IParensConfiguration configuration) {
 				ParensNode parens = new ParensNode(document, configuration);
 				parens.setBegin(createCharNode(document, leftParen));
@@ -905,6 +923,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 				checkedPop(parens, rightParen);
 				parens.setEnd(createCharNode(document, rightParen));
+				return parens;
 			}
 
 			/**
@@ -947,12 +966,13 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			private void processParens(int leftParen, int rightParen,
-					List expressions, IParensConfiguration configuration) {
+					List<ASTNode> expressions,
+					IParensConfiguration configuration) {
 				ParensNode parens = new ParensNode(document, configuration);
 				parens.setBegin(createCharNode(document, leftParen));
 				push(parens);
 				if (!expressions.isEmpty()) {
-					final ASTNode expression0 = (ASTNode) expressions.get(0);
+					final ASTNode expression0 = expressions.get(0);
 					skipSpaces(parens, expression0.sourceStart());
 				}
 				visitNodeList(expressions);
@@ -992,7 +1012,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						document, position, position + length), configuration));
 			}
 
-			private void processBraces(ASTNode node,
+			private IFormatterNode processBraces(ASTNode node,
 					IBracesConfiguration configuration) {
 				if (node instanceof StatementBlock) {
 					StatementBlock block = (StatementBlock) node;
@@ -1009,6 +1029,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						visitNodeList(block.getStatements());
 						checkedPop(braces, block.getRC());
 						braces.setEnd(createCharNode(document, block.getRC()));
+						return braces;
 					} else {
 						final FormatterBlockNode formatter = new FormatterIndentedBlockNode(
 								document, configuration.isIndenting());
@@ -1017,6 +1038,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						push(formatter);
 						visitNodeList(block.getStatements());
 						checkedPop(formatter, node.sourceEnd());
+						return formatter;
 
 					}
 				} else {
@@ -1027,15 +1049,16 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					push(block);
 					visit(node);
 					checkedPop(block, node.sourceEnd());
+					return block;
 				}
 			}
 
 			/**
 			 * process array initialization
 			 */
-			private void processBrackets(int leftBracket, int rightBracket,
-					List<ASTNode> nodes, List<Integer> commas,
-					IBracketsConfiguration configuration) {
+			private IFormatterNode processBrackets(int leftBracket,
+					int rightBracket, List<ASTNode> nodes,
+					List<Integer> commas, IBracketsConfiguration configuration) {
 				BracketsNode brackets = new BracketsNode(document,
 						configuration);
 
@@ -1060,6 +1083,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 				checkedPop(brackets, rightBracket);
 				brackets.setEnd(createCharNode(document, rightBracket));
+				return brackets;
 			}
 
 			private void processElseIf(ASTNode node,
@@ -1072,7 +1096,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				checkedPop(braces, node.sourceEnd());
 			}
 
-			public boolean visitIfStatement(IfStatement node) {
+			@Override
+			public IFormatterNode visitIfStatement(IfStatement node) {
 				final FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
@@ -1139,24 +1164,21 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 					checkedPop(elseNode, node.getElseStatement().sourceEnd());
 				}
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitKeyword(Keyword node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return false;
+			@Override
+			public IFormatterNode visitKeyword(Keyword node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitLabel(Label node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return true;
+			@Override
+			public IFormatterNode visitLabel(Label node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitLabelledStatement(LabelledStatement node) {
+			@Override
+			public IFormatterNode visitLabelledStatement(LabelledStatement node) {
 
 				FormatterLabelledStatementNode formatterNode = new FormatterLabelledStatementNode(
 						document);
@@ -1174,10 +1196,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitNewExpression(NewExpression node) {
+			@Override
+			public IFormatterNode visitNewExpression(NewExpression node) {
 
 				FormatterNewExpressionNode formatterNode = new FormatterNewExpressionNode(
 						document);
@@ -1191,17 +1214,16 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return false;
+				return formatterNode;
 			}
 
-			public boolean visitNullExpression(NullExpression node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return false;
+			@Override
+			public IFormatterNode visitNullExpression(NullExpression node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitObjectInitializer(ObjectInitializer node) {
+			@Override
+			public IFormatterNode visitObjectInitializer(ObjectInitializer node) {
 
 				final IBracesConfiguration configuration;
 
@@ -1229,19 +1251,21 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				formatterNode.setEnd(createCharNode(document, node.getRC()));
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitParenthesizedExpression(
+			@Override
+			public IFormatterNode visitParenthesizedExpression(
 					ParenthesizedExpression node) {
 
-				processParens(node.getLP(), node.getRP(), node.getExpression(),
-						new ExpressionParensConfiguration(document));
-
-				return true;
+				return processParens(node.getLP(), node.getRP(), node
+						.getExpression(), new ExpressionParensConfiguration(
+						document));
 			}
 
-			public boolean visitPropertyExpression(PropertyExpression node) {
+			@Override
+			public IFormatterNode visitPropertyExpression(
+					PropertyExpression node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -1264,10 +1288,12 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return false;
+				return formatterNode;
 			}
 
-			public boolean visitPropertyInitializer(PropertyInitializer node) {
+			@Override
+			public IFormatterNode visitPropertyInitializer(
+					PropertyInitializer node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -1290,17 +1316,16 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.getValue().sourceStart());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitRegExpLiteral(RegExpLiteral node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return false;
+			@Override
+			public IFormatterNode visitRegExpLiteral(RegExpLiteral node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitReturnStatement(ReturnStatement node) {
+			@Override
+			public IFormatterNode visitReturnStatement(ReturnStatement node) {
 				FormatterReturnStatementNode formatterNode = new FormatterReturnStatementNode(
 						document);
 
@@ -1317,10 +1342,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					visit(node.getValue());
 
 				processOptionalSemicolon(formatterNode, node);
-				return false;
+				return formatterNode;
 			}
 
-			public boolean visitScript(Script node) {
+			@Override
+			public IFormatterNode visitScript(Script node) {
 				FormatterScriptNode scriptNode = new FormatterScriptNode(
 						document);
 
@@ -1330,10 +1356,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(scriptNode, node.sourceEnd());
 
-				return true;
+				return scriptNode;
 			}
 
-			public boolean visitSetMethod(SetMethod node) {
+			@Override
+			public IFormatterNode visitSetMethod(SetMethod node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -1357,25 +1384,22 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return false;
+				return formatterNode;
 			}
 
-			public boolean visitStatementBlock(StatementBlock node) {
-
-				processBraces(node, new StatementBlockBracesConfiguration(
-						document));
-
-				return true;
+			@Override
+			public IFormatterNode visitStatementBlock(StatementBlock node) {
+				return processBraces(node,
+						new StatementBlockBracesConfiguration(document));
 			}
 
-			public boolean visitStringLiteral(StringLiteral node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return false;
+			@Override
+			public IFormatterNode visitStringLiteral(StringLiteral node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitSwitchStatement(SwitchStatement node) {
+			@Override
+			public IFormatterNode visitSwitchStatement(SwitchStatement node) {
 
 				FormatterSwitchNode switchNode = new FormatterSwitchNode(
 						document);
@@ -1400,17 +1424,16 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(switchNode, node.sourceEnd());
 
-				return true;
+				return switchNode;
 			}
 
-			public boolean visitThisExpression(ThisExpression node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return false;
+			@Override
+			public IFormatterNode visitThisExpression(ThisExpression node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitThrowStatement(ThrowStatement node) {
+			@Override
+			public IFormatterNode visitThrowStatement(ThrowStatement node) {
 
 				FormatterThrowNode formatterNode = new FormatterThrowNode(
 						document);
@@ -1424,10 +1447,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					visit(node.getException());
 
 				processOptionalSemicolon(formatterNode, node);
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitTryStatement(TryStatement node) {
+			@Override
+			public IFormatterNode visitTryStatement(TryStatement node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -1449,10 +1473,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitTypeOfExpression(TypeOfExpression node) {
+			@Override
+			public IFormatterNode visitTypeOfExpression(TypeOfExpression node) {
 				FormatterTypeofNode formatterNode = new FormatterTypeofNode(
 						document);
 
@@ -1465,10 +1490,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitUnaryOperation(UnaryOperation node) {
+			@Override
+			public IFormatterNode visitUnaryOperation(UnaryOperation node) {
 				FormatterUnaryOperationNode formatterNode = new FormatterUnaryOperationNode(
 						document);
 
@@ -1498,10 +1524,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitVariableStatment(VariableStatement node) {
+			@Override
+			public IFormatterNode visitVariableStatment(VariableStatement node) {
 				FormatterVariableDeclarationNode formatterNode = new FormatterVariableDeclarationNode(
 						document);
 
@@ -1514,7 +1541,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
 			private void processVariableDeclarations(IVariableStatement node) {
@@ -1528,7 +1555,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						new CommaPunctuationConfiguration());
 			}
 
-			public boolean visitVariableDeclaration(VariableDeclaration node) {
+			@Override
+			public IFormatterNode visitVariableDeclaration(
+					VariableDeclaration node) {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 				formatterNode.addChild(createEmptyTextNode(document, node
@@ -1548,10 +1577,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					visit(node.getInitializer());
 				}
 				checkedPop(formatterNode, node.sourceEnd());
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitVoidExpression(VoidExpression node) {
+			@Override
+			public IFormatterNode visitVoidExpression(VoidExpression node) {
 				FormatterVoidExpressionNode formatterNode = new FormatterVoidExpressionNode(
 						document);
 
@@ -1563,10 +1593,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				visit(node.getExpression());
 
 				processOptionalSemicolon(formatterNode, node);
-				return false;
+				return formatterNode;
 			}
 
-			public boolean visitWhileStatement(WhileStatement node) {
+			@Override
+			public IFormatterNode visitWhileStatement(WhileStatement node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
@@ -1585,10 +1616,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 
 				processOptionalSemicolon(formatterNode, node);
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitWithStatement(WithStatement node) {
+			@Override
+			public IFormatterNode visitWithStatement(WithStatement node) {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
@@ -1605,7 +1637,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
 			private void visitNodeList(List<? extends ASTNode> nodes) {
@@ -1614,7 +1646,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 			}
 
-			public boolean visitVoidOperator(VoidOperator node) {
+			@Override
+			public IFormatterNode visitVoidOperator(VoidOperator node) {
 				FormatterVoidOperatorNode formatterNode = new FormatterVoidOperatorNode(
 						document);
 
@@ -1627,10 +1660,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitYieldOperator(YieldOperator node) {
+			@Override
+			public IFormatterNode visitYieldOperator(YieldOperator node) {
 				FormatterYieldOperatorNode formatterNode = new FormatterYieldOperatorNode(
 						document);
 
@@ -1643,17 +1677,16 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitXmlLiteral(XmlLiteral node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return true;
+			@Override
+			public IFormatterNode visitXmlLiteral(XmlLiteral node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitDefaultXmlNamespace(
+			@Override
+			public IFormatterNode visitDefaultXmlNamespace(
 					DefaultXmlNamespaceStatement node) {
 
 				FormatterBlockNode formatter = new FormatterBlockNode(document);
@@ -1669,25 +1702,23 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatter, node.sourceEnd());
 
-				return true;
+				return formatter;
 			}
 
-			public boolean visitXmlPropertyIdentifier(
+			@Override
+			public IFormatterNode visitXmlPropertyIdentifier(
 					XmlAttributeIdentifier node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return true;
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitAsteriskExpression(AsteriskExpression node) {
-				FormatterStringNode strNode = new FormatterStringNode(document,
-						node);
-				addChild(strNode);
-				return true;
+			@Override
+			public IFormatterNode visitAsteriskExpression(
+					AsteriskExpression node) {
+				return addChild(new FormatterStringNode(document, node));
 			}
 
-			public boolean visitGetLocalNameExpression(
+			@Override
+			public IFormatterNode visitGetLocalNameExpression(
 					GetLocalNameExpression node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
@@ -1703,10 +1734,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
+				return formatterNode;
 			}
 
-			public boolean visitGetAllChildrenExpression(
+			@Override
+			public IFormatterNode visitGetAllChildrenExpression(
 					GetAllChildrenExpression node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
@@ -1722,11 +1754,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return true;
-			}
-
-			public boolean visitUnknownNode(ASTNode node) {
-				return false;
+				return formatterNode;
 			}
 
 		});
