@@ -46,7 +46,7 @@
     <members xsi:type="ref:Method" name="sort" type="Array" description="Sorts the elements of an array.">
       <parameters name="sortByFunction"/>
     </members>
-    <members xsi:type="ref:Method" name="splice" description="Removes and adds new elements to an array.">
+    <members xsi:type="ref:Method" name="splice" type="Array" description="Removes and adds new elements to an array.">
       <parameters name="index"/>
       <parameters name="howmany"/>
       <parameters name="[newelementX]" optional="true"/>
