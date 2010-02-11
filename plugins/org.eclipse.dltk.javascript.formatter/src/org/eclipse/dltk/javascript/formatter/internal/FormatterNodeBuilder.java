@@ -10,6 +10,7 @@ import java.util.Stack;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.formatter.AbstractFormatterNodeBuilder;
 import org.eclipse.dltk.formatter.FormatterBlockNode;
+import org.eclipse.dltk.formatter.FormatterEmptyNode;
 import org.eclipse.dltk.formatter.FormatterIndentedBlockNode;
 import org.eclipse.dltk.formatter.FormatterUtils;
 import org.eclipse.dltk.formatter.IFormatterContainerNode;
@@ -1747,7 +1748,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 	private IFormatterTextNode createEmptyTextNode(IFormatterDocument document,
 			int pos) {
-		return createTextNode(document, pos, pos);
+		return new FormatterEmptyNode(document, pos);
 	}
 
 	private IFormatterTextNode createSemicolonNode(IFormatterDocument document,
