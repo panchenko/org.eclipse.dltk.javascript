@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Method.java,v 1.1 2010/02/10 13:23:59 apanchenk Exp $
+ * $Id: Method.java,v 1.2 2010/02/11 11:11:40 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.internal.model.references;
 
@@ -32,13 +32,6 @@ import org.eclipse.emf.common.util.EList;
  * @generated
  */
 public interface Method extends Member {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	String copyright = "Copyright (c) 2010 xored software, Inc.\n\nAll rights reserved. This program and the accompanying materials\nare made available under the terms of the Eclipse Public License v1.0\nwhich accompanies this distribution, and is available at\nhttp://www.eclipse.org/legal/epl-v10.html\n\nContributors:\n    xored software, Inc. - initial API and Implementation (Alex Panchenko)"; //$NON-NLS-1$
-
 	/**
 	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.dltk.javascript.internal.model.references.Parameter}.
