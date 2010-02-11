@@ -10,7 +10,6 @@
 package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,27 +20,21 @@ import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalComputer;
 import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.templates.TemplateCompletionProcessor;
 
 public class JavaScriptTypeCompletionProposalComputer extends
 		ScriptCompletionProposalComputer {
 
-	public JavaScriptTypeCompletionProposalComputer() {
-	}
-
-	public List computeCompletionProposals(
-			ContentAssistInvocationContext context, IProgressMonitor monitor) {
-		List types = super.computeCompletionProposals(context, monitor);
-		return types;
-	}
-
+	@Override
 	protected TemplateCompletionProcessor createTemplateProposalComputer(
 			ScriptContentAssistInvocationContext context) {
 		return new JavaScriptTemplateCompletionProcessor(context);
 	}
 
-	public List computeContextInformation(
+	@Override
+	public List<IContextInformation> computeContextInformation(
 			ContentAssistInvocationContext context, IProgressMonitor monitor) {
 		System.out.println("Offset: " + context.getInvocationOffset());
 
@@ -61,15 +54,13 @@ public class JavaScriptTypeCompletionProposalComputer extends
 		// }
 		// return Collections.EMPTY_LIST;
 
-		List types = computeCompletionProposals(context, monitor);
+		List<ICompletionProposal> types = computeCompletionProposals(context,
+				monitor);
 		if (DLTKCore.DEBUG) {
 			System.out.println("!!! Proposals: " + types.size());
 		}
-		Iterator iter = types.iterator();
-
-		List list = new ArrayList();
-		while (iter.hasNext()) {
-			Object next = iter.next();
+		List<IContextInformation> list = new ArrayList<IContextInformation>();
+		for (ICompletionProposal next : types) {
 			if (!(next instanceof IScriptCompletionProposal))
 				continue;
 			IScriptCompletionProposal proposal = (IScriptCompletionProposal) next;
@@ -87,18 +78,22 @@ public class JavaScriptTypeCompletionProposalComputer extends
 		return list;
 	}
 
+	@Override
 	public String getErrorMessage() {
 		return null;
 	}
 
+	@Override
 	public void sessionEnded() {
 
 	}
 
+	@Override
 	public void sessionStarted() {
 
 	}
 
+	@Override
 	protected ScriptCompletionProposalCollector createCollector(
 			ScriptContentAssistInvocationContext context) {
 		return new JavaScriptCompletionProposalCollector(context
