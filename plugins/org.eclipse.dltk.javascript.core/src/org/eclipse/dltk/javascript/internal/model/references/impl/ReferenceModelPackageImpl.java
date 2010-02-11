@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ReferenceModelPackageImpl.java,v 1.1 2010/02/10 13:23:59 apanchenk Exp $
+ * $Id: ReferenceModelPackageImpl.java,v 1.2 2010/02/11 11:20:36 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.internal.model.references.impl;
 
@@ -35,13 +35,6 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * @generated
  */
 public class ReferenceModelPackageImpl extends EPackageImpl implements ReferenceModelPackage {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public static final String copyright = "Copyright (c) 2010 xored software, Inc.\n\nAll rights reserved. This program and the accompanying materials\nare made available under the terms of the Eclipse Public License v1.0\nwhich accompanies this distribution, and is available at\nhttp://www.eclipse.org/legal/epl-v10.html\n\nContributors:\n    xored software, Inc. - initial API and Implementation (Alex Panchenko)"; //$NON-NLS-1$
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

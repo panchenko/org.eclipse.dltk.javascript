@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ReferenceModelSwitch.java,v 1.1 2010/02/10 13:24:00 apanchenk Exp $
+ * $Id: ReferenceModelSwitch.java,v 1.2 2010/02/11 11:20:37 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.internal.model.references.util;
 
@@ -34,13 +34,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public class ReferenceModelSwitch<T> {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public static final String copyright = "Copyright (c) 2010 xored software, Inc.\n\nAll rights reserved. This program and the accompanying materials\nare made available under the terms of the Eclipse Public License v1.0\nwhich accompanies this distribution, and is available at\nhttp://www.eclipse.org/legal/epl-v10.html\n\nContributors:\n    xored software, Inc. - initial API and Implementation (Alex Panchenko)"; //$NON-NLS-1$
-
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
