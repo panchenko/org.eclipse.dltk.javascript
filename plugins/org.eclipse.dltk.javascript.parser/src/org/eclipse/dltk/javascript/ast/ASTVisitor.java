@@ -16,7 +16,7 @@ import java.util.Collection;
 
 import org.eclipse.dltk.ast.ASTNode;
 
-public abstract class ASTVisitor implements IASTVisitor {
+public abstract class ASTVisitor<E> {
 
 	public void visit(Collection<? extends ASTNode> nodes) {
 		for (ASTNode node : nodes) {
@@ -24,7 +24,7 @@ public abstract class ASTVisitor implements IASTVisitor {
 		}
 	}
 
-	public boolean visit(ASTNode node) {
+	public E visit(ASTNode node) {
 		if (node.getClass() == ArrayInitializer.class)
 			return visitArrayInitializer((ArrayInitializer) node);
 
@@ -211,12 +211,140 @@ public abstract class ASTVisitor implements IASTVisitor {
 		if (node.getClass() == YieldOperator.class)
 			return visitYieldOperator((YieldOperator) node);
 
-		if (!visitUnknownNode(node)) {
-			throw new UnsupportedOperationException("Unknown node type: "
-					+ node.getClass());
-		} else {
-			return true;
-		}
+		return visitUnknownNode(node);
+	}
+
+	public abstract E visitArrayInitializer(ArrayInitializer node);
+
+	public abstract E visitBinaryOperation(BinaryOperation node);
+
+	public abstract E visitBooleanLiteral(BooleanLiteral node);
+
+	public abstract E visitBreakStatement(BreakStatement node);
+
+	public abstract E visitCallExpression(CallExpression node);
+
+	public abstract E visitCaseClause(CaseClause node);
+
+	public abstract E visitCatchClause(CatchClause node);
+
+	public abstract E visitCommaExpression(CommaExpression node);
+
+	public abstract E visitConditionalOperator(ConditionalOperator node);
+
+	public abstract E visitConstDeclaration(ConstStatement node);
+
+	public abstract E visitContinueStatement(ContinueStatement node);
+
+	public abstract E visitDecimalLiteral(DecimalLiteral node);
+
+	public abstract E visitDefaultClause(DefaultClause node);
+
+	public abstract E visitDeleteStatement(DeleteStatement node);
+
+	public abstract E visitDoWhileStatement(DoWhileStatement node);
+
+	public abstract E visitEmptyExpression(EmptyExpression node);
+
+	public abstract E visitExceptionFilter(ExceptionFilter node);
+
+	public abstract E visitFinallyClause(FinallyClause node);
+
+	public abstract E visitForStatement(ForStatement node);
+
+	public abstract E visitForInStatement(ForInStatement node);
+
+	public abstract E visitForEachInStatement(ForEachInStatement node);
+
+	public abstract E visitFunctionStatement(FunctionStatement node);
+
+	public abstract E visitArgument(Argument argument);
+
+	public abstract E visitGetArrayItemExpression(GetArrayItemExpression node);
+
+	public abstract E visitGetMethod(GetMethod node);
+
+	public abstract E visitIdentifier(Identifier node);
+
+	public abstract E visitSimpleType(SimpleType node);
+
+	public abstract E visitIfStatement(IfStatement node);
+
+	public abstract E visitKeyword(Keyword node);
+
+	public abstract E visitLabel(Label node);
+
+	public abstract E visitLabelledStatement(LabelledStatement node);
+
+	public abstract E visitNewExpression(NewExpression node);
+
+	public abstract E visitNullExpression(NullExpression node);
+
+	public abstract E visitObjectInitializer(ObjectInitializer node);
+
+	public abstract E visitParenthesizedExpression(ParenthesizedExpression node);
+
+	public abstract E visitPropertyExpression(PropertyExpression node);
+
+	public abstract E visitPropertyInitializer(PropertyInitializer node);
+
+	public abstract E visitRegExpLiteral(RegExpLiteral node);
+
+	public abstract E visitReturnStatement(ReturnStatement node);
+
+	public abstract E visitScript(Script node);
+
+	public abstract E visitSetMethod(SetMethod node);
+
+	public abstract E visitStatementBlock(StatementBlock node);
+
+	public abstract E visitStringLiteral(StringLiteral node);
+
+	public abstract E visitSwitchStatement(SwitchStatement node);
+
+	public abstract E visitThisExpression(ThisExpression node);
+
+	public abstract E visitThrowStatement(ThrowStatement node);
+
+	public abstract E visitTryStatement(TryStatement node);
+
+	public abstract E visitTypeOfExpression(TypeOfExpression node);
+
+	public abstract E visitUnaryOperation(UnaryOperation node);
+
+	public abstract E visitVariableStatment(VariableStatement node);
+
+	public abstract E visitVariableDeclaration(VariableDeclaration node);
+
+	public abstract E visitVoidExpression(VoidExpression node);
+
+	public abstract E visitVoidOperator(VoidOperator node);
+
+	public abstract E visitYieldOperator(YieldOperator node);
+
+	public abstract E visitWhileStatement(WhileStatement node);
+
+	public abstract E visitWithStatement(WithStatement node);
+
+	public abstract E visitXmlLiteral(XmlLiteral node);
+
+	public abstract E visitDefaultXmlNamespace(DefaultXmlNamespaceStatement node);
+
+	public abstract E visitXmlPropertyIdentifier(XmlAttributeIdentifier node);
+
+	public abstract E visitAsteriskExpression(AsteriskExpression node);
+
+	public abstract E visitGetAllChildrenExpression(
+			GetAllChildrenExpression node);
+
+	public abstract E visitGetLocalNameExpression(GetLocalNameExpression node);
+
+	/**
+	 * @since 2.0
+	 */
+	public E visitUnknownNode(ASTNode node) {
+		throw new UnsupportedOperationException("Unknown node type: "
+				+ node.getClass());
 	}
 
 }
