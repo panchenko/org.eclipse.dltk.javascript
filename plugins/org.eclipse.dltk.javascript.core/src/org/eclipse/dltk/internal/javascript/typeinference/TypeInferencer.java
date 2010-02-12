@@ -304,6 +304,8 @@ public class TypeInferencer {
 					}
 				}
 			}
+			// FIXME hack...
+			pop.recordFunction(function, collection);
 			pop.recordFunction(functionNode, collection);
 			collection = pop;
 
