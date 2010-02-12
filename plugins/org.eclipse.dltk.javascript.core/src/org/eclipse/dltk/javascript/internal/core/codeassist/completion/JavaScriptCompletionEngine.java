@@ -301,8 +301,11 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 					final IReference result = mnext.getChild(
 							TypeInferencer.RETURN_VALUE, true);
 					if (result != null) {
-						// expand it
+						// expand result
 						fields.addAll(result.getChilds(true));
+					} else {
+						// expand all children (it should be type)
+						fields.addAll(mnext.getChilds(true));
 					}
 				} else {
 					fields.addAll(mnext.getChilds(true));
