@@ -1,0 +1,53 @@
+/*******************************************************************************
+ * Copyright (c) 2010 xored software, Inc.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
+ *******************************************************************************/
+package org.eclipse.dltk.javascript.core.tests.structure;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Member {
+
+	private final String name;
+
+	private final List<Member> children = new ArrayList<Member>();
+
+	public Member(String name) {
+		this.name = name;
+	}
+
+	public Member addChild(Member child) {
+		children.add(child);
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return describeMember() + children;
+	}
+
+	protected String describeMember() {
+		return getClass().getSimpleName() + "[" + name + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && obj.getClass() == getClass()) {
+			final Member other = (Member) obj;
+			return equals0(other) && children.equals(other.children);
+		}
+		return false;
+	}
+
+	protected boolean equals0(Member other) {
+		return name.equals(other.name);
+	}
+}
