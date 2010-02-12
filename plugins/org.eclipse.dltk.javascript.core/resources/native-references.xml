@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/references.ecore">
+  <ref:Type name="void">
+  </ref:Type>
+  <ref:Type name="Object">
+    <members xsi:type="ref:Method" name="toString" type="String" description="Returns a string representing the specified object."/>
+    <members xsi:type="ref:Method" name="toSource" type="String" description="Returns a string representing the source code of the object."/>
+    <members xsi:type="ref:Method" name="valueOf" type="Object" description="Returns the primitive value of the specified object."/>
+  </ref:Type>
   <ref:Type name="Array">
     <members xsi:type="ref:Method" name="concat" type="Array" description="Joins two or more arrays and returns the result.">
       <parameters name="arrayN"/>
@@ -11,7 +18,7 @@
     <members xsi:type="ref:Method" name="filter" type="Array" description="Creates a new array with all elements that pass the test implemented by the provided function.">
       <parameters name="callback"/>
     </members>
-    <members xsi:type="ref:Method" name="forEach" description="Calls a function for each element in the array.">
+    <members xsi:type="ref:Method" name="forEach" type="void" description="Calls a function for each element in the array.">
       <parameters name="callback"/>
     </members>
     <members xsi:type="ref:Method" name="indexOf" type="Number" description="Returns the first index at which a given element can be found in the array, or -1 if it is not present.">
@@ -29,7 +36,7 @@
     <members xsi:type="ref:Method" name="map" type="Array" description="Creates a new array with the results of calling a provided function on every element in this array.">
       <parameters name="callback"/>
     </members>
-    <members xsi:type="ref:Method" name="pop" description="Removes and returns the last element of an array."/>
+    <members xsi:type="ref:Method" name="pop" type="Object" description="Removes and returns the last element of an array."/>
     <members xsi:type="ref:Method" name="push" type="Number" description="Adds one or more elements to the end of an array and returns the new length">
       <parameters name="element1"/>
       <parameters name="[elementX]" optional="true"/>

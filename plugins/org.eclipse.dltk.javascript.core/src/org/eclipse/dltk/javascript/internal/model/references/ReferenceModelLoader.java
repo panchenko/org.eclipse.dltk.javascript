@@ -24,6 +24,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeArrayReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeBooleanReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeDateReference;
+import org.eclipse.dltk.internal.javascript.typeinference.NativeJSObjectReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeNumberReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeStringReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeXMLReference;
@@ -161,6 +162,16 @@ public class ReferenceModelLoader {
 		factories.put("Date", new Factory() {
 			public StandardSelfCompletingReference create(String name) {
 				return new NativeDateReference(name);
+			}
+		});
+		factories.put("Object", new Factory() {
+			public StandardSelfCompletingReference create(String name) {
+				return new NativeJSObjectReference(name);
+			}
+		});
+		factories.put("void", new Factory() {
+			public StandardSelfCompletingReference create(String name) {
+				return new StandardSelfCompletingReference(name, false);
 			}
 		});
 	}
