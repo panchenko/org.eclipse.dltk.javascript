@@ -682,9 +682,14 @@ public class TypeInferencer {
 				String name = (String) ids[a];
 				IReference internalEvaluate = internalEvaluate(col, name,
 						child, parent, cs);
-				if (internalEvaluate == null)
+				if (internalEvaluate == null) {
 					internalEvaluate = new StandardSelfCompletingReference(
 							name, false);
+					if (child.getType() == Token.FUNCTION) {
+						((StandardSelfCompletingReference) internalEvaluate)
+								.setFunctionRef();
+					}
+				}
 				internalEvaluate.setLocationInformation(new ReferenceLocation(
 						parent, ((Integer) positions.get(a)).intValue()
 								- name.length() - 1, name.length()));

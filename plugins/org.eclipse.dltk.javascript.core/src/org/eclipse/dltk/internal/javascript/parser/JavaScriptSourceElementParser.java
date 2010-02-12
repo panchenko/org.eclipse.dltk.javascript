@@ -179,37 +179,41 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 				Set<IReference> childs = reference.getChilds(false);
 				for (IReference ref : childs) {
 					if (ref instanceof StandardSelfCompletingReference) {
-						// TODO report as field or method
 						StandardSelfCompletingReference uref = (StandardSelfCompletingReference) ref;
-						ISourceElementRequestor.FieldInfo fieldInfo1 = new ISourceElementRequestor.FieldInfo();
-						fieldInfo1.name = ref.getName();
-						IReferenceLocation location = uref.getLocation();
-						fieldInfo1.nameSourceStart = location.getOffset();
-						fieldInfo1.nameSourceEnd = location.getOffset()
-								+ location.getLength() - 1;
-						fieldInfo1.declarationStart = location.getOffset();
-						fRequestor.enterField(fieldInfo1);
-						fRequestor.exitField(location.getOffset()
-								+ location.getLength());
-					}
-					if (ref instanceof ContextReference) {
+						if (ref.isFunctionRef()) {
+							reportMethod(ref.getName(), uref.getLocation());
+						} else {
+							reportField(ref.getName(), uref.getLocation());
+						}
+					} else if (ref instanceof ContextReference) {
 						ContextReference rr = (ContextReference) ref;
-						ISourceElementRequestor.MethodInfo methodInfo = new ISourceElementRequestor.MethodInfo();
-						methodInfo.name = rr.getName();
-						methodInfo.parameterNames = CharOperation.NO_STRINGS;
-						IReferenceLocation location = rr.getLocation();
-						methodInfo.declarationStart = location.getOffset();
-						methodInfo.nameSourceStart = location.getOffset();
-						methodInfo.nameSourceEnd = location.getOffset()
-								+ location.getLength() - 1;
-						fRequestor.enterMethod(methodInfo);
-						fRequestor.exitMethod(location.getOffset()
-								+ location.getLength());
+						reportMethod(rr.getName(), rr.getLocation());
 					}
 				}
 			}
 			fRequestor.exitField(fieldInfo.nameSourceEnd);
 		}
+	}
+
+	private void reportMethod(String methodName, IReferenceLocation location) {
+		ISourceElementRequestor.MethodInfo mi = new ISourceElementRequestor.MethodInfo();
+		mi.name = methodName;
+		mi.parameterNames = CharOperation.NO_STRINGS;
+		mi.declarationStart = location.getOffset();
+		mi.nameSourceStart = location.getOffset();
+		mi.nameSourceEnd = location.getOffset() + location.getLength() - 1;
+		fRequestor.enterMethod(mi);
+		fRequestor.exitMethod(location.getOffset() + location.getLength());
+	}
+
+	private void reportField(String fieldName, IReferenceLocation location) {
+		ISourceElementRequestor.FieldInfo fi = new ISourceElementRequestor.FieldInfo();
+		fi.name = fieldName;
+		fi.nameSourceStart = location.getOffset();
+		fi.nameSourceEnd = location.getOffset() + location.getLength() - 1;
+		fi.declarationStart = location.getOffset();
+		fRequestor.enterField(fi);
+		fRequestor.exitField(location.getOffset() + location.getLength());
 	}
 
 	public void setRequestor(ISourceElementRequestor requestor) {
