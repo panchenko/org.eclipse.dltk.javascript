@@ -179,6 +179,7 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 				Set<IReference> childs = reference.getChilds(false);
 				for (IReference ref : childs) {
 					if (ref instanceof StandardSelfCompletingReference) {
+						// TODO report as field or method
 						StandardSelfCompletingReference uref = (StandardSelfCompletingReference) ref;
 						ISourceElementRequestor.FieldInfo fieldInfo1 = new ISourceElementRequestor.FieldInfo();
 						fieldInfo1.name = ref.getName();
