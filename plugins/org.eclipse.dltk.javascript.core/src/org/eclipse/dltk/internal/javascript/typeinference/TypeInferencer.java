@@ -304,7 +304,7 @@ public class TypeInferencer {
 					}
 				}
 			}
-			pop.recordFunction(function, collection);
+			pop.recordFunction(functionNode, collection);
 			collection = pop;
 
 			functionContexts.removeLast();
