@@ -207,4 +207,9 @@ class TransparentRef implements IReference {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "[" + fieldId + "]";
+	}
+
 }
