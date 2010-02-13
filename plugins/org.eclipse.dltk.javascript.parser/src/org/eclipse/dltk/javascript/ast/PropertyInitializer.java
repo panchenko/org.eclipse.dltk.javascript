@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class PropertyInitializer extends Expression {
+public class PropertyInitializer extends JSNode implements ISourceable {
 
 	private Expression name;
 	private Expression value;
