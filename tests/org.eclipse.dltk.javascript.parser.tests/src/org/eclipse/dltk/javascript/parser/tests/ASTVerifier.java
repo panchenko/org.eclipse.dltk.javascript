@@ -162,7 +162,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	public Boolean visitBreakStatement(BreakStatement node) {
 
 		visit(node.getBreakKeyword());
-
+		testLabel(node.getLabel());
 		testChar(Keywords.SEMI, node.getSemicolonPosition());
 
 		return true;
@@ -232,10 +232,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	public Boolean visitContinueStatement(ContinueStatement node) {
 
 		visit(node.getContinueKeyword());
-
-		if (node.getLabel() != null)
-			visit(node.getLabel());
-
+		testLabel(node.getLabel());
 		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
 
 		return true;
@@ -382,20 +379,17 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		return true;
 	}
 
-	@Override
-	public Boolean visitLabel(Label node) {
-
-		testString(node.getText(), node.sourceStart(), node.sourceEnd());
-
-		return true;
+	private void testLabel(Label node) {
+		if (node != null) {
+			testString(node.getText(), node.sourceStart(), node.sourceEnd());
+		}
 	}
 
 	@Override
 	public Boolean visitLabelledStatement(LabelledStatement node) {
 
+		testLabel(node.getLabel());
 		testChar(Keywords.COLON, node.getColonPosition());
-
-		visit(node.getLabel());
 		visit(node.getStatement());
 
 		return true;
