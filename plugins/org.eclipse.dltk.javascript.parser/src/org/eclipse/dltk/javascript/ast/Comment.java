@@ -22,9 +22,9 @@ public abstract class Comment extends ASTNode {
 	public Comment() {
 	}
 
+	@Override
 	public void traverse(ASTVisitor visitor) throws Exception {
-		if (visitor.visit(this))
-		{
+		if (visitor.visit(this)) {
 			visitor.endvisit(this);
 		}
 	}
