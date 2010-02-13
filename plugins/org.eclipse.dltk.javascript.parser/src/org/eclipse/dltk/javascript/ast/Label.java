@@ -15,6 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class Label extends ASTNode implements ISourceable {
 
@@ -37,14 +38,16 @@ public class Label extends ASTNode implements ISourceable {
 		this.text = text;
 	}
 
+	@Override
 	public void traverse(ASTVisitor visitor) throws Exception {
 		if (visitor.visit(this)) {
 			visitor.endvisit(this);
 		}
 	}
 
+	@Override
 	public String toString() {
-		return toSourceString("");
+		return toSourceString(JSLiterals.EMPTY);
 	}
 
 	public String toSourceString(String indentationString) {
