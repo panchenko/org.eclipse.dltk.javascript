@@ -201,6 +201,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 		if (isMultiLineObjectInitializerComponent(node)) {
 			return true;
 		}
+		if (node instanceof SwitchComponent) {
+			return true;
+		}
 		if (!(node instanceof Statement)) {
 			return false;
 		}
@@ -372,31 +375,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				formatterNode.addChild(createCharNode(document, colon));
 
 				checkedPop(formatterNode, colon);
-			}
-
-			@Override
-			public IFormatterNode visitCaseClause(CaseClause node) {
-				FormatterCaseNode caseNode = new FormatterCaseNode(document);
-				caseNode.setBegin(new SpaceAfterKeyword(createTextNode(
-						document, node.getKeyword())));
-				push(caseNode);
-				visit(node.getCondition());
-				caseNode.addChild(new ColonNodeWrapper(createCharNode(document,
-						node.getColonPosition())));
-
-				return processSwitchComponent(caseNode, node);
-			}
-
-			@Override
-			public IFormatterNode visitDefaultClause(DefaultClause node) {
-				FormatterCaseNode defaultNode = new FormatterCaseNode(document);
-				defaultNode
-						.setBegin(createTextNode(document, node.getKeyword()));
-				push(defaultNode);
-				defaultNode.addChild(new ColonNodeWrapper(createCharNode(
-						document, node.getColonPosition())));
-
-				return processSwitchComponent(defaultNode, node);
 			}
 
 			private IFormatterNode processSwitchComponent(
@@ -1417,7 +1395,31 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				braces.setBegin(createCharNode(document, node.getLC()));
 				push(braces);
 				for (SwitchComponent component : node.getCaseClauses()) {
-					visit(component);
+					nodes.push(component);
+					if (component instanceof CaseClause) {
+						final CaseClause caseClause = (CaseClause) component;
+						FormatterCaseNode caseNode = new FormatterCaseNode(
+								document);
+						caseNode.setBegin(new SpaceAfterKeyword(createTextNode(
+								document, caseClause.getKeyword())));
+						push(caseNode);
+						visit(caseClause.getCondition());
+						caseNode.addChild(new ColonNodeWrapper(createCharNode(
+								document, caseClause.getColonPosition())));
+						processSwitchComponent(caseNode, caseClause);
+					} else {
+						final DefaultClause defaultClause = (DefaultClause) component;
+						FormatterCaseNode defaultNode = new FormatterCaseNode(
+								document);
+						defaultNode.setBegin(createTextNode(document,
+								defaultClause.getKeyword()));
+						push(defaultNode);
+						defaultNode.addChild(new ColonNodeWrapper(
+								createCharNode(document, defaultClause
+										.getColonPosition())));
+						processSwitchComponent(defaultNode, defaultClause);
+					}
+					nodes.pop();
 				}
 				checkedPop(braces, node.getRC());
 				braces.setEnd(createCharNode(document, node.getRC()));
