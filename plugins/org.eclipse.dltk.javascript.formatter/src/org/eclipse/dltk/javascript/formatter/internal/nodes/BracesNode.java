@@ -17,6 +17,7 @@ import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.formatter.IFormatterNode;
 import org.eclipse.dltk.formatter.IFormatterWriter;
+import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
 public class BracesNode extends FormatterBlockWithBeginEndNode {
 
@@ -77,13 +78,20 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 
 	}
 
+	private boolean isStatementNewLine() {
+		return getDocument().getBoolean(
+				JavaScriptFormatterConstants.STATEMENT_NEW_LINE);
+	}
+
 	private void printBeforeCloseBrace(IFormatterContext context,
 			IFormatterWriter visitor) throws Exception {
 
 		switch (configuration.insertBeforeCloseBrace()) {
 		case IBracesConfiguration.LINE_BREAK:
-			context.setBlankLines(-1);
-			visitor.writeLineBreak(context);
+			if (isStatementNewLine()) {
+				context.setBlankLines(-1);
+				visitor.writeLineBreak(context);
+			}
 			break;
 
 		case IBracesConfiguration.ONE_SPACE:
@@ -100,8 +108,10 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 		switch (configuration.insertAfterOpenBrace()) {
 
 		case IBracesConfiguration.LINE_BREAK:
-			context.setBlankLines(-1);
-			visitor.writeLineBreak(context);
+			if (isStatementNewLine()) {
+				context.setBlankLines(-1);
+				visitor.writeLineBreak(context);
+			}
 			break;
 
 		case IBracesConfiguration.ONE_SPACE:
@@ -127,8 +137,10 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 		switch (configuration.insertBeforeOpenBrace()) {
 
 		case IBracesConfiguration.LINE_BREAK:
-			context.setBlankLines(-1);
-			visitor.writeLineBreak(context);
+			if (isStatementNewLine()) {
+				context.setBlankLines(-1);
+				visitor.writeLineBreak(context);
+			}
 			break;
 
 		case IBracesConfiguration.ONE_SPACE:
@@ -146,8 +158,10 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 		switch (configuration.insertAfterCloseBrace()) {
 
 		case IBracesConfiguration.LINE_BREAK:
-			context.setBlankLines(-1);
-			visitor.writeLineBreak(context);
+			if (isStatementNewLine()) {
+				context.setBlankLines(-1);
+				visitor.writeLineBreak(context);
+			}
 			break;
 
 		case IBracesConfiguration.ONE_SPACE:
