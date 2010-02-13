@@ -53,7 +53,6 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.Keyword;
-import org.eclipse.dltk.javascript.ast.Label;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.Method;
 import org.eclipse.dltk.javascript.ast.NewExpression;
@@ -166,7 +165,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.StatementBlockBraces
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SwitchBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SwitchConditionParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ThenBlockBracesConfiguration;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.TrailingColonNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.TryBodyConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.TypePunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WhileBlockBracesConfiguration;
@@ -330,8 +328,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				if (node.getLabel() != null)
-					visit(node.getLabel());
+				if (node.getLabel() != null) {
+					addChild(new FormatterStringNode(document, node.getLabel()));
+				}
 
 				processOptionalSemicolon(formatterNode, node);
 				return formatterNode;
@@ -358,23 +357,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				checkedPop(formatterNode, node.sourceEnd());
 
 				return formatterNode;
-			}
-
-			private void processTrailingColon(int colon, ASTNode keywordNode,
-					ASTNode valueNode) {
-				TrailingColonNode formatterNode = new TrailingColonNode(
-						document);
-
-				formatterNode.setBegin(createTextNode(document, keywordNode));
-
-				push(formatterNode);
-
-				if (valueNode != null)
-					visit(valueNode);
-
-				formatterNode.addChild(createCharNode(document, colon));
-
-				checkedPop(formatterNode, colon);
 			}
 
 			private IFormatterNode processSwitchComponent(
@@ -525,8 +507,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatterNode);
 
-				if (node.getLabel() != null)
-					visit(node.getLabel());
+				if (node.getLabel() != null) {
+					addChild(new FormatterStringNode(document, node.getLabel()));
+				}
 
 				processOptionalSemicolon(formatterNode, node);
 				return formatterNode;
@@ -1151,24 +1134,19 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			@Override
-			public IFormatterNode visitLabel(Label node) {
-				return addChild(new FormatterStringNode(document, node));
-			}
-
-			@Override
 			public IFormatterNode visitLabelledStatement(LabelledStatement node) {
 
 				FormatterLabelledStatementNode formatterNode = new FormatterLabelledStatementNode(
 						document);
 
-				formatterNode.setBegin(createEmptyTextNode(document, node
-						.getLabel().sourceStart()));
+				formatterNode
+						.setBegin(createTextNode(document, node.getLabel()));
+				formatterNode.addChild(createCharNode(document, node
+						.getColonPosition()));
 
 				push(formatterNode);
 
-				processTrailingColon(node.getColonPosition(), node.getLabel(),
-						null);
-
+				// TODO introduce options for it
 				processBraces(node.getStatement(), new CaseBracesConfiguration(
 						document));
 
