@@ -172,9 +172,6 @@ public abstract class ASTVisitor<E> {
 		if (node.getClass() == Keyword.class)
 			return visitKeyword((Keyword) node);
 
-		if (node.getClass() == Label.class)
-			return visitLabel((Label) node);
-
 		if (node.getClass() == LabelledStatement.class)
 			return visitLabelledStatement((LabelledStatement) node);
 
@@ -338,7 +335,10 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitKeyword(Keyword node);
 
-	public abstract E visitLabel(Label node);
+	@Deprecated
+	public final E visitLabel(Label node) {
+		return null;
+	}
 
 	public abstract E visitLabelledStatement(LabelledStatement node);
 
