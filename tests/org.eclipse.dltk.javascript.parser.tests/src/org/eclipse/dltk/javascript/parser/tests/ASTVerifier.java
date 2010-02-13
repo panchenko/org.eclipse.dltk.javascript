@@ -65,6 +65,7 @@ import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
+import org.eclipse.dltk.javascript.ast.SwitchComponent;
 import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
@@ -181,18 +182,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	}
 
 	@Override
-	public Boolean visitCaseClause(CaseClause node) {
-
-		visit(node.getCaseKeyword());
-		visit(node.getCondition());
-		visit(node.getStatements());
-
-		testChar(Keywords.COLON, node.getColonPosition());
-
-		return true;
-	}
-
-	@Override
 	public Boolean visitCatchClause(CatchClause node) {
 
 		visit(node.getCatchKeyword());
@@ -256,17 +245,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	public Boolean visitDecimalLiteral(DecimalLiteral node) {
 
 		testString(node.getText(), node.sourceStart(), node.sourceEnd());
-
-		return true;
-	}
-
-	@Override
-	public Boolean visitDefaultClause(DefaultClause node) {
-
-		testChar(Keywords.COLON, node.getColonPosition());
-
-		visit(node.getDefaultKeyword());
-		visit(node.getStatements());
 
 		return true;
 	}
@@ -553,7 +531,20 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	public Boolean visitSwitchStatement(SwitchStatement node) {
 
 		visit(node.getCondition());
-		visit(node.getCaseClauses());
+		for (SwitchComponent component : node.getCaseClauses()) {
+			if (component instanceof CaseClause) {
+				final CaseClause caseClause = (CaseClause) component;
+				visit(caseClause.getCaseKeyword());
+				visit(caseClause.getCondition());
+				testChar(Keywords.COLON, caseClause.getColonPosition());
+				visit(caseClause.getStatements());
+			} else {
+				final DefaultClause defaultClause = (DefaultClause) component;
+				visit(defaultClause.getDefaultKeyword());
+				testChar(Keywords.COLON, defaultClause.getColonPosition());
+				visit(defaultClause.getStatements());
+			}
+		}
 
 		testChar(Keywords.LC, node.getLC());
 		testChar(Keywords.RC, node.getRC());
