@@ -66,7 +66,8 @@ public class DefaultClause extends SwitchComponent {
 		buffer.append(Keywords.DEFAULT);
 		buffer.append(":\n");
 
-		toSourceString(getStatements(), buffer, indentationString + INDENT);
+		toSourceString(getStatements(), buffer, indentationString
+				+ Statement.INDENT);
 
 		return buffer.toString();
 	}

@@ -79,7 +79,8 @@ public class CaseClause extends SwitchComponent {
 		buffer.append(this.getCondition().toSourceString(indentationString));
 		buffer.append(":\n");
 
-		toSourceString(getStatements(), buffer, indentationString + INDENT);
+		toSourceString(getStatements(), buffer, indentationString
+				+ Statement.INDENT);
 
 		return buffer.toString();
 	}

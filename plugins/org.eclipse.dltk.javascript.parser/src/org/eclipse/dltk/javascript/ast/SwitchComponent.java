@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.dltk.ast.ASTNode;
 
-public abstract class SwitchComponent extends Statement {
+public abstract class SwitchComponent extends JSNode implements ISourceable {
 
 	private int colon = -1;
 	private final List<Statement> statements = new ArrayList<Statement>();

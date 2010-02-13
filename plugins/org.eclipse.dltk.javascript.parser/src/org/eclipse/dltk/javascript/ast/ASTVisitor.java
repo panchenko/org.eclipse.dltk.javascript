@@ -13,6 +13,8 @@
 package org.eclipse.dltk.javascript.ast;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.dltk.ast.ASTNode;
 
@@ -24,63 +26,121 @@ public abstract class ASTVisitor<E> {
 		}
 	}
 
+	private static interface Handler {
+		<E> E handle(ASTVisitor<E> visitor, ASTNode node);
+	}
+
+	private static final Map<Class<? extends ASTNode>, Handler> HANDLERS = new HashMap<Class<? extends ASTNode>, Handler>();
+
+	static {
+		HANDLERS.put(ArrayInitializer.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitArrayInitializer((ArrayInitializer) node);
+			}
+		});
+		HANDLERS.put(BinaryOperation.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitBinaryOperation((BinaryOperation) node);
+			}
+		});
+		HANDLERS.put(BooleanLiteral.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitBooleanLiteral((BooleanLiteral) node);
+			}
+		});
+		HANDLERS.put(BreakStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitBreakStatement((BreakStatement) node);
+			}
+		});
+		HANDLERS.put(CallExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitCallExpression((CallExpression) node);
+			}
+		});
+		// HANDLERS.put(CaseClause.class, new Handler() {
+		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+		// return visitor.visitCaseClause((CaseClause) node);
+		// }
+		// });
+		HANDLERS.put(CatchClause.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitCatchClause((CatchClause) node);
+			}
+		});
+		HANDLERS.put(CommaExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitCommaExpression((CommaExpression) node);
+			}
+		});
+		HANDLERS.put(ConditionalOperator.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitConditionalOperator((ConditionalOperator) node);
+			}
+		});
+		HANDLERS.put(ConstStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitConstDeclaration((ConstStatement) node);
+			}
+		});
+		HANDLERS.put(ContinueStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitContinueStatement((ContinueStatement) node);
+			}
+		});
+		HANDLERS.put(DecimalLiteral.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitDecimalLiteral((DecimalLiteral) node);
+			}
+		});
+		// HANDLERS.put(DefaultClause.class, new Handler() {
+		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+		// return visitor.visitDefaultClause((DefaultClause) node);
+		// }
+		// });
+		HANDLERS.put(DeleteStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitDeleteStatement((DeleteStatement) node);
+			}
+		});
+		HANDLERS.put(DoWhileStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitDoWhileStatement((DoWhileStatement) node);
+			}
+		});
+		HANDLERS.put(EmptyExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitEmptyExpression((EmptyExpression) node);
+			}
+		});
+		HANDLERS.put(ExceptionFilter.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitExceptionFilter((ExceptionFilter) node);
+			}
+		});
+		HANDLERS.put(FinallyClause.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitFinallyClause((FinallyClause) node);
+			}
+		});
+		HANDLERS.put(ForStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitForStatement((ForStatement) node);
+			}
+		});
+		// HANDLERS.put(.class, new Handler() {
+		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+		// return visitor.(() node);
+		// }
+		// });
+	}
+
 	public E visit(ASTNode node) {
-		if (node.getClass() == ArrayInitializer.class)
-			return visitArrayInitializer((ArrayInitializer) node);
-
-		if (node.getClass() == BinaryOperation.class)
-			return visitBinaryOperation((BinaryOperation) node);
-
-		if (node.getClass() == BooleanLiteral.class)
-			return visitBooleanLiteral((BooleanLiteral) node);
-
-		if (node.getClass() == BreakStatement.class)
-			return visitBreakStatement((BreakStatement) node);
-
-		if (node.getClass() == CallExpression.class)
-			return visitCallExpression((CallExpression) node);
-
-		if (node.getClass() == CaseClause.class)
-			return visitCaseClause((CaseClause) node);
-
-		if (node.getClass() == CatchClause.class)
-			return visitCatchClause((CatchClause) node);
-
-		if (node.getClass() == CommaExpression.class)
-			return visitCommaExpression((CommaExpression) node);
-
-		if (node.getClass() == ConditionalOperator.class)
-			return visitConditionalOperator((ConditionalOperator) node);
-
-		if (node.getClass() == ConstStatement.class)
-			return visitConstDeclaration((ConstStatement) node);
-
-		if (node.getClass() == ContinueStatement.class)
-			return visitContinueStatement((ContinueStatement) node);
-
-		if (node.getClass() == DecimalLiteral.class)
-			return visitDecimalLiteral((DecimalLiteral) node);
-
-		if (node.getClass() == DefaultClause.class)
-			return visitDefaultClause((DefaultClause) node);
-
-		if (node.getClass() == DeleteStatement.class)
-			return visitDeleteStatement((DeleteStatement) node);
-
-		if (node.getClass() == DoWhileStatement.class)
-			return visitDoWhileStatement((DoWhileStatement) node);
-
-		if (node.getClass() == EmptyExpression.class)
-			return visitEmptyExpression((EmptyExpression) node);
-
-		if (node.getClass() == ExceptionFilter.class)
-			return visitExceptionFilter((ExceptionFilter) node);
-
-		if (node.getClass() == FinallyClause.class)
-			return visitFinallyClause((FinallyClause) node);
-
-		if (node.getClass() == ForStatement.class)
-			return visitForStatement((ForStatement) node);
+		final Handler handler = HANDLERS.get(node.getClass());
+		if (handler != null) {
+			return handler.handle(this, node);
+		}
 
 		if (node.getClass() == ForInStatement.class)
 			return visitForInStatement((ForInStatement) node);
@@ -224,7 +284,10 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitCallExpression(CallExpression node);
 
-	public abstract E visitCaseClause(CaseClause node);
+	@Deprecated
+	public final E visitCaseClause(CaseClause node) {
+		return null;
+	}
 
 	public abstract E visitCatchClause(CatchClause node);
 
@@ -238,7 +301,10 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitDecimalLiteral(DecimalLiteral node);
 
-	public abstract E visitDefaultClause(DefaultClause node);
+	@Deprecated
+	public final E visitDefaultClause(DefaultClause node) {
+		return null;
+	}
 
 	public abstract E visitDeleteStatement(DeleteStatement node);
 
