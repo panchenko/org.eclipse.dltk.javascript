@@ -400,7 +400,12 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 						}
 						ref.setLocationInformation(location);
 					} else {
-						ref.setLocationInformation(uref.getLocation());
+						if (uref.getLocation() != null) {
+							ref.setLocationInformation(uref.getLocation());
+						} else {
+							ref.setLocationInformation(new ReferenceLocation(
+									module, 0, 0));
+						}
 					}
 				}
 				rs.add(ref);
