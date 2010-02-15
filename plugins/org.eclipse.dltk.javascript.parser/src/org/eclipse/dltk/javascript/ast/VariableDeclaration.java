@@ -79,10 +79,21 @@ public class VariableDeclaration extends JSNode implements ISourceable {
 		this.assignPosition = assignPosition;
 	}
 
+	/**
+	 * Returns the comma position after this variable or -1 if this is the last
+	 * variable in statement.
+	 * 
+	 * @return
+	 */
 	public int getCommaPosition() {
 		return commaPosition;
 	}
 
+	/**
+	 * Sets the comma position after this variable.
+	 * 
+	 * @param commaPosition
+	 */
 	public void setCommaPosition(int commaPosition) {
 		this.commaPosition = commaPosition;
 	}
