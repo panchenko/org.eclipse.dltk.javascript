@@ -19,7 +19,6 @@ import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider;
 import org.eclipse.dltk.ui.text.completion.AbstractScriptCompletionProposal;
@@ -93,10 +92,7 @@ public class JavaScriptCompletionProposalCollector extends
 
 			public String getInfo(IProgressMonitor monitor) {
 
-				if (ref instanceof SelfCompletingReference
-						&& ((SelfCompletingReference) ref).getProposalInfo() != null) {
-					return ((SelfCompletingReference) ref).getProposalInfo();
-				} else if (ref instanceof IReference) {
+				if (ref instanceof IReference) {
 					ArrayList ms = new ArrayList();
 					((IReference) ref).addModelElements(ms);
 					if (ms.size() > 0) {
