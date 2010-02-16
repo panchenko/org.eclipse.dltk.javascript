@@ -29,6 +29,7 @@ public class JavaScriptControlStatementsTabPage extends FormatterModifyTabPage {
 		super(dialog);
 	}
 
+	@Override
 	protected void createOptions(IFormatterControlManager manager,
 			Composite parent) {
 
@@ -68,6 +69,7 @@ public class JavaScriptControlStatementsTabPage extends FormatterModifyTabPage {
 
 	}
 
+	@Override
 	protected URL getPreviewContent() {
 		return getClass().getResource("control-statements-preview.js"); //$NON-NLS-1$
 	}

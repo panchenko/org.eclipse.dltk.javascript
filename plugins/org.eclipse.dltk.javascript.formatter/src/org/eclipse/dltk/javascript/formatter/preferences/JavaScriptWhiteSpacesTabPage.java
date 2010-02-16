@@ -40,6 +40,7 @@ public class JavaScriptWhiteSpacesTabPage extends FormatterModifyTabPage {
 		return manager.createCheckbox(group, preferenceName, text);
 	}
 
+	@Override
 	protected void createOptions(IFormatterControlManager manager,
 			Composite parent) {
 
@@ -213,6 +214,7 @@ public class JavaScriptWhiteSpacesTabPage extends FormatterModifyTabPage {
 
 	}
 
+	@Override
 	protected URL getPreviewContent() {
 		return getClass().getResource("whitespaces-preview.js"); //$NON-NLS-1$
 	}

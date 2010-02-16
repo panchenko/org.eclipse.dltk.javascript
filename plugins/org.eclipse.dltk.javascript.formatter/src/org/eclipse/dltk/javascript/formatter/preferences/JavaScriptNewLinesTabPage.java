@@ -20,8 +20,6 @@ import org.eclipse.dltk.ui.formatter.IFormatterControlManager;
 import org.eclipse.dltk.ui.formatter.IFormatterModifyDialog;
 import org.eclipse.dltk.ui.util.SWTFactory;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
@@ -31,9 +29,7 @@ public class JavaScriptNewLinesTabPage extends FormatterModifyTabPage {
 		super(dialog);
 	}
 
-	Combo arrayInitializer;
-	Button keepEmptyArray;
-
+	@Override
 	protected void createOptions(IFormatterControlManager manager,
 			Composite parent) {
 
@@ -55,6 +51,7 @@ public class JavaScriptNewLinesTabPage extends FormatterModifyTabPage {
 
 	}
 
+	@Override
 	protected URL getPreviewContent() {
 		return getClass().getResource("new-lines-preview.js"); //$NON-NLS-1$
 	}

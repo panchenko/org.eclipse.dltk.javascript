@@ -25,10 +25,12 @@ public class JavaScriptCommentsTabPage extends FormatterModifyTabPage {
 		super(dialog);
 	}
 
+	@Override
 	protected void createOptions(IFormatterControlManager manager,
 			Composite parent) {
 	}
 
+	@Override
 	protected URL getPreviewContent() {
 		return getClass().getResource("comments-preview.js"); //$NON-NLS-1$
 	}

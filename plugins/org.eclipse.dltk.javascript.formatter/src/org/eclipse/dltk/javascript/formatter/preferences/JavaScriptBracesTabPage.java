@@ -21,7 +21,6 @@ import org.eclipse.dltk.ui.formatter.IFormatterModifyDialog;
 import org.eclipse.dltk.ui.util.SWTFactory;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -50,7 +49,7 @@ public class JavaScriptBracesTabPage extends FormatterModifyTabPage {
 			Messages.JavaScriptBracesTabPage_BraceNextLine,
 			Messages.JavaScriptBracesTabPage_BraceNextLineIndented };
 
-	private class InitializeListener extends SelectionAdapter implements
+	private class InitializeListener implements
 			IFormatterControlManager.IInitializeListener {
 
 		private final IFormatterControlManager manager;
@@ -69,6 +68,7 @@ public class JavaScriptBracesTabPage extends FormatterModifyTabPage {
 	Combo arrayInitializer;
 	Button keepEmptyArray;
 
+	@Override
 	protected void createOptions(IFormatterControlManager manager,
 			Composite parent) {
 		Group positionGroup = SWTFactory.createGroup(parent,
@@ -115,6 +115,7 @@ public class JavaScriptBracesTabPage extends FormatterModifyTabPage {
 
 	}
 
+	@Override
 	protected URL getPreviewContent() {
 		return getClass().getResource("braces-preview.js"); //$NON-NLS-1$
 	}
