@@ -129,6 +129,210 @@ public abstract class ASTVisitor<E> {
 				return visitor.visitForStatement((ForStatement) node);
 			}
 		});
+		HANDLERS.put(Script.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitScript((Script) node);
+			}
+		});
+		HANDLERS.put(ForInStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitForInStatement((ForInStatement) node);
+			}
+		});
+		HANDLERS.put(ForEachInStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitForEachInStatement((ForEachInStatement) node);
+			}
+		});
+		HANDLERS.put(FunctionStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitFunctionStatement((FunctionStatement) node);
+			}
+		});
+		HANDLERS.put(Identifier.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitIdentifier((Identifier) node);
+			}
+		});
+		HANDLERS.put(SimpleType.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitSimpleType((SimpleType) node);
+			}
+		});
+		HANDLERS.put(IfStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitIfStatement((IfStatement) node);
+			}
+		});
+		HANDLERS.put(NewExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitNewExpression((NewExpression) node);
+			}
+		});
+		HANDLERS.put(NullExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitNullExpression((NullExpression) node);
+			}
+		});
+		HANDLERS.put(ObjectInitializer.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitObjectInitializer((ObjectInitializer) node);
+			}
+		});
+		HANDLERS.put(ParenthesizedExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitParenthesizedExpression((ParenthesizedExpression) node);
+			}
+		});
+		HANDLERS.put(RegExpLiteral.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitRegExpLiteral((RegExpLiteral) node);
+			}
+		});
+		HANDLERS.put(ReturnStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitReturnStatement((ReturnStatement) node);
+			}
+		});
+		HANDLERS.put(StringLiteral.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitStringLiteral((StringLiteral) node);
+			}
+		});
+		HANDLERS.put(SwitchStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitSwitchStatement((SwitchStatement) node);
+			}
+		});
+		HANDLERS.put(ThrowStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitThrowStatement((ThrowStatement) node);
+			}
+		});
+		HANDLERS.put(GetArrayItemExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitGetArrayItemExpression((GetArrayItemExpression) node);
+			}
+		});
+		HANDLERS.put(LabelledStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitLabelledStatement((LabelledStatement) node);
+			}
+		});
+		HANDLERS.put(PropertyExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitPropertyExpression((PropertyExpression) node);
+			}
+		});
+		HANDLERS.put(StatementBlock.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitStatementBlock((StatementBlock) node);
+			}
+		});
+		HANDLERS.put(ThisExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitThisExpression((ThisExpression) node);
+			}
+		});
+		HANDLERS.put(TryStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitTryStatement((TryStatement) node);
+			}
+		});
+		HANDLERS.put(TypeOfExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitTypeOfExpression((TypeOfExpression) node);
+			}
+		});
+		HANDLERS.put(UnaryOperation.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitUnaryOperation((UnaryOperation) node);
+			}
+		});
+		HANDLERS.put(VariableStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitVariableStatment((VariableStatement) node);
+			}
+		});
+		HANDLERS.put(VoidExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitVoidExpression((VoidExpression) node);
+			}
+		});
+		HANDLERS.put(WhileStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitWhileStatement((WhileStatement) node);
+			}
+		});
+		HANDLERS.put(WithStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitWithStatement((WithStatement) node);
+			}
+		});
+		HANDLERS.put(VoidOperator.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitVoidOperator((VoidOperator) node);
+			}
+		});
+		HANDLERS.put(XmlLiteral.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitXmlLiteral((XmlLiteral) node);
+			}
+		});
+		HANDLERS.put(DefaultXmlNamespaceStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitDefaultXmlNamespace((DefaultXmlNamespaceStatement) node);
+			}
+		});
+		HANDLERS.put(XmlAttributeIdentifier.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitXmlPropertyIdentifier((XmlAttributeIdentifier) node);
+			}
+		});
+		HANDLERS.put(AsteriskExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitAsteriskExpression((AsteriskExpression) node);
+			}
+		});
+		HANDLERS.put(GetAllChildrenExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitGetAllChildrenExpression((GetAllChildrenExpression) node);
+			}
+		});
+		HANDLERS.put(GetLocalNameExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor
+						.visitGetLocalNameExpression((GetLocalNameExpression) node);
+			}
+		});
+		HANDLERS.put(YieldOperator.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitYieldOperator((YieldOperator) node);
+			}
+		});
+		// HANDLERS.put(.class, new Handler() {
+		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+		// return visitor.(() node);
+		// }
+		// });
+		// HANDLERS.put(.class, new Handler() {
+		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+		// return visitor.(() node);
+		// }
+		// });
+		// HANDLERS.put(.class, new Handler() {
+		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+		// return visitor.(() node);
+		// }
+		// });
 		// HANDLERS.put(.class, new Handler() {
 		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 		// return visitor.(() node);
@@ -142,131 +346,14 @@ public abstract class ASTVisitor<E> {
 			return handler.handle(this, node);
 		}
 
-		if (node.getClass() == ForInStatement.class)
-			return visitForInStatement((ForInStatement) node);
-
-		if (node.getClass() == ForEachInStatement.class)
-			return visitForEachInStatement((ForEachInStatement) node);
-
-		if (node.getClass() == FunctionStatement.class)
-			return visitFunctionStatement((FunctionStatement) node);
-
-		if (node.getClass() == Argument.class)
-			return visitArgument((Argument) node);
-
-		if (node.getClass() == GetArrayItemExpression.class)
-			return visitGetArrayItemExpression((GetArrayItemExpression) node);
-
 		if (node.getClass() == GetMethod.class)
 			return visitGetMethod((GetMethod) node);
-
-		if (node.getClass() == Identifier.class)
-			return visitIdentifier((Identifier) node);
-
-		if (node.getClass() == SimpleType.class)
-			return visitSimpleType((SimpleType) node);
-
-		if (node.getClass() == IfStatement.class)
-			return visitIfStatement((IfStatement) node);
-
-		if (node.getClass() == Keyword.class)
-			return visitKeyword((Keyword) node);
-
-		if (node.getClass() == LabelledStatement.class)
-			return visitLabelledStatement((LabelledStatement) node);
-
-		if (node.getClass() == NewExpression.class)
-			return visitNewExpression((NewExpression) node);
-
-		if (node.getClass() == NullExpression.class)
-			return visitNullExpression((NullExpression) node);
-
-		if (node.getClass() == ObjectInitializer.class)
-			return visitObjectInitializer((ObjectInitializer) node);
-
-		if (node.getClass() == ParenthesizedExpression.class)
-			return visitParenthesizedExpression((ParenthesizedExpression) node);
-
-		if (node.getClass() == PropertyExpression.class)
-			return visitPropertyExpression((PropertyExpression) node);
 
 		if (node.getClass() == PropertyInitializer.class)
 			return visitPropertyInitializer((PropertyInitializer) node);
 
-		if (node.getClass() == RegExpLiteral.class)
-			return visitRegExpLiteral((RegExpLiteral) node);
-
-		if (node.getClass() == ReturnStatement.class)
-			return visitReturnStatement((ReturnStatement) node);
-
-		if (node.getClass() == Script.class)
-			return visitScript((Script) node);
-
 		if (node.getClass() == SetMethod.class)
 			return visitSetMethod((SetMethod) node);
-
-		if (node.getClass() == StatementBlock.class)
-			return visitStatementBlock((StatementBlock) node);
-
-		if (node.getClass() == StringLiteral.class)
-			return visitStringLiteral((StringLiteral) node);
-
-		if (node.getClass() == SwitchStatement.class)
-			return visitSwitchStatement((SwitchStatement) node);
-
-		if (node.getClass() == ThisExpression.class)
-			return visitThisExpression((ThisExpression) node);
-
-		if (node.getClass() == ThrowStatement.class)
-			return visitThrowStatement((ThrowStatement) node);
-
-		if (node.getClass() == TryStatement.class)
-			return visitTryStatement((TryStatement) node);
-
-		if (node.getClass() == TypeOfExpression.class)
-			return visitTypeOfExpression((TypeOfExpression) node);
-
-		if (node.getClass() == UnaryOperation.class)
-			return visitUnaryOperation((UnaryOperation) node);
-
-		if (node.getClass() == VariableStatement.class)
-			return visitVariableStatment((VariableStatement) node);
-
-		if (node.getClass() == VariableDeclaration.class)
-			return visitVariableDeclaration((VariableDeclaration) node);
-
-		if (node.getClass() == VoidExpression.class)
-			return visitVoidExpression((VoidExpression) node);
-
-		if (node.getClass() == WhileStatement.class)
-			return visitWhileStatement((WhileStatement) node);
-
-		if (node.getClass() == WithStatement.class)
-			return visitWithStatement((WithStatement) node);
-
-		if (node.getClass() == VoidOperator.class)
-			return visitVoidOperator((VoidOperator) node);
-
-		if (node.getClass() == XmlLiteral.class)
-			return visitXmlLiteral((XmlLiteral) node);
-
-		if (node.getClass() == DefaultXmlNamespaceStatement.class)
-			return visitDefaultXmlNamespace((DefaultXmlNamespaceStatement) node);
-
-		if (node.getClass() == XmlAttributeIdentifier.class)
-			return visitXmlPropertyIdentifier((XmlAttributeIdentifier) node);
-
-		if (node.getClass() == AsteriskExpression.class)
-			return visitAsteriskExpression((AsteriskExpression) node);
-
-		if (node.getClass() == GetAllChildrenExpression.class)
-			return visitGetAllChildrenExpression((GetAllChildrenExpression) node);
-
-		if (node.getClass() == GetLocalNameExpression.class)
-			return visitGetLocalNameExpression((GetLocalNameExpression) node);
-
-		if (node.getClass() == YieldOperator.class)
-			return visitYieldOperator((YieldOperator) node);
 
 		return visitUnknownNode(node);
 	}
@@ -321,7 +408,10 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitFunctionStatement(FunctionStatement node);
 
-	public abstract E visitArgument(Argument argument);
+	@Deprecated
+	public final E visitArgument(Argument argument) {
+		return null;
+	}
 
 	public abstract E visitGetArrayItemExpression(GetArrayItemExpression node);
 
@@ -333,7 +423,10 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitIfStatement(IfStatement node);
 
-	public abstract E visitKeyword(Keyword node);
+	@Deprecated
+	public final E visitKeyword(Keyword node) {
+		return null;
+	}
 
 	@Deprecated
 	public final E visitLabel(Label node) {
@@ -380,7 +473,10 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitVariableStatment(VariableStatement node);
 
-	public abstract E visitVariableDeclaration(VariableDeclaration node);
+	@Deprecated
+	public final E visitVariableDeclaration(VariableDeclaration node) {
+		return null;
+	}
 
 	public abstract E visitVoidExpression(VoidExpression node);
 
@@ -410,7 +506,7 @@ public abstract class ASTVisitor<E> {
 	 */
 	public E visitUnknownNode(ASTNode node) {
 		throw new UnsupportedOperationException("Unknown node type: "
-				+ node.getClass());
+				+ node.getClass().getName());
 	}
 
 }

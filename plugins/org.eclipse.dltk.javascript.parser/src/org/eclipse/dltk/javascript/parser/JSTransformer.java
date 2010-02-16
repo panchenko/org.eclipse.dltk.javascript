@@ -673,13 +673,13 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		fn.setLP(getTokenOffset(JSParser.LPAREN, node.getTokenStartIndex() + 1,
 				argsNode.getTokenStartIndex()));
-		for (int i = 0; i < argsNode.getChildCount(); ++i) {
+		for (int i = 0, childCount = argsNode.getChildCount(); i < childCount; ++i) {
 			final Tree argNode = argsNode.getChild(i);
 			Argument argument = transformArgument(argNode, fn);
-			if (i > 0) {
+			if (i + 1 < childCount) {
 				argument.setCommaPosition(getTokenOffset(JSParser.COMMA,
-						argsNode.getChild(i - 1).getTokenStopIndex() + 1,
-						argNode.getTokenStartIndex()));
+						argNode.getTokenStopIndex() + 1, argsNode.getChild(
+								i + 1).getTokenStartIndex()));
 			}
 			fn.addArgument(argument);
 		}
@@ -940,14 +940,15 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	private void processVariableDeclarations(Tree node, IVariableStatement var) {
-		for (int i = 0; i < node.getChildCount(); i++) {
-			VariableDeclaration declaration = transformVariableDeclaration(node
-					.getChild(i), var);
+		for (int i = 0, childCount = node.getChildCount(); i < childCount; i++) {
+			final Tree varNode = node.getChild(i);
+			final VariableDeclaration declaration = transformVariableDeclaration(
+					varNode, var);
 			var.addVariable(declaration);
-			if (i > 0) {
+			if (i + 1 < childCount) {
 				declaration.setCommaPosition(getTokenOffset(JSParser.COMMA,
-						node.getChild(i - 1).getTokenStopIndex() + 1, node
-								.getChild(i).getTokenStartIndex()));
+						varNode.getTokenStopIndex() + 1, node.getChild(i + 1)
+								.getTokenStartIndex()));
 			}
 		}
 	}
