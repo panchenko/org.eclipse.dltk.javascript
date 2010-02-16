@@ -86,7 +86,6 @@ import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.AbstractParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ArrayBracketsConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.BinaryOperationPinctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.BlockBracesConfiguration;
@@ -262,10 +261,15 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			@Override
 			public IFormatterNode visit(ASTNode node) {
-				nodes.push(node);
-				final IFormatterNode result = super.visit(node);
-				nodes.pop();
-				return result;
+				if (node instanceof Keyword) {
+					// from visitForEachInStatement() only
+					return addChild(createTextNode(document, node));
+				} else {
+					nodes.push(node);
+					final IFormatterNode result = super.visit(node);
+					nodes.pop();
+					return result;
+				}
 			}
 
 			@Override
@@ -737,25 +741,39 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				if (node.getName() != null)
 					visit(node.getName());
 
-				AbstractParensConfiguration argsConfiguration;
-
-				if (node.getArguments().size() == 0) {
-					argsConfiguration = new FunctionNoArgumentsParensConfiguration(
+				final IParensConfiguration parensConf;
+				if (node.getArguments().isEmpty()) {
+					parensConf = new FunctionNoArgumentsParensConfiguration(
 							document);
 				} else {
-					argsConfiguration = new FunctionArgumentsParensConfiguration(
+					parensConf = new FunctionArgumentsParensConfiguration(
 							document);
 				}
-				List<Integer> commas = new ArrayList<Integer>();
+				final ParensNode parens = new ParensNode(document, parensConf);
+				parens.setBegin(createCharNode(document, node.getLP()));
+				push(parens);
+				if (!node.getArguments().isEmpty()) {
+					final Argument arg0 = node.getArguments().get(0);
+					skipSpaces(parens, arg0.sourceStart());
+				}
 				for (Argument argument : node.getArguments()) {
+					visit(argument.getIdentifier());
+					if (argument.getType() != null) {
+						skipSpaces(parens, argument.getColonPosition());
+						processPunctuation(argument.getColonPosition(), 1,
+								new TypePunctuationConfiguration());
+						visit(argument.getType());
+					}
 					if (argument.getCommaPosition() != -1) {
-						commas.add(argument.getCommaPosition());
+						int position = argument.getCommaPosition();
+						skipSpacesOnly(parens, position);
+						processPunctuation(position, 1,
+								new FunctionArgumentsPunctuationConfiguration());
 					}
 				}
+				checkedPop(parens, node.getRP());
+				parens.setEnd(createCharNode(document, node.getRP()));
 
-				processParens(node.getLP(), node.getRP(), node.getArguments(),
-						argsConfiguration, commas,
-						new FunctionArgumentsPunctuationConfiguration());
 				if (node.getReturnType() != null) {
 					skipSpaces(formatterNode, node.getColonPosition());
 					processPunctuation(node.getColonPosition(), 1,
@@ -778,24 +796,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				checkedPop(formatterNode, node.sourceEnd());
 
-				return formatterNode;
-			}
-
-			@Override
-			public IFormatterNode visitArgument(Argument argument) {
-				FormatterBlockNode formatterNode = new FormatterBlockNode(
-						document);
-				formatterNode.addChild(createEmptyTextNode(document, argument
-						.sourceStart()));
-				push(formatterNode);
-				visit(argument.getIdentifier());
-				if (argument.getType() != null) {
-					skipSpaces(formatterNode, argument.getColonPosition());
-					processPunctuation(argument.getColonPosition(), 1,
-							new TypePunctuationConfiguration());
-					visit(argument.getType());
-				}
-				checkedPop(formatterNode, argument.sourceEnd());
 				return formatterNode;
 			}
 
@@ -1126,11 +1126,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					checkedPop(elseNode, node.getElseStatement().sourceEnd());
 				}
 				return formatterNode;
-			}
-
-			@Override
-			public IFormatterNode visitKeyword(Keyword node) {
-				return addChild(new FormatterStringNode(document, node));
 			}
 
 			@Override
@@ -1525,39 +1520,39 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			private void processVariableDeclarations(IVariableStatement node) {
-				List<Integer> commas = new ArrayList<Integer>();
-				for (VariableDeclaration declaration : node.getVariables()) {
-					if (declaration.getCommaPosition() != -1) {
-						commas.add(declaration.getCommaPosition());
+				final List<VariableDeclaration> vars = node.getVariables();
+				if (vars.isEmpty()) {
+					return;
+				}
+				final FormatterBlockNode formatterNode = new FormatterBlockNode(
+						document);
+				formatterNode.addChild(createEmptyTextNode(document, vars
+						.get(0).sourceStart()));
+				push(formatterNode);
+				for (VariableDeclaration var : vars) {
+					visit(var.getIdentifier());
+					if (var.getType() != null) {
+						int position = var.getColonPosition();
+						skipSpaces(formatterNode, position);
+						processPunctuation(position, 1,
+								new TypePunctuationConfiguration());
+						visit(var.getType());
+					}
+					if (var.getInitializer() != null) {
+						int position = var.getAssignPosition();
+						skipSpaces(formatterNode, position);
+						processPunctuation(position, 1,
+								new BinaryOperationPinctuationConfiguration());
+						visit(var.getInitializer());
+					}
+					if (var.getCommaPosition() != -1) {
+						int position = var.getCommaPosition();
+						skipSpacesOnly(formatterNode, position);
+						processPunctuation(position, 1,
+								new CommaPunctuationConfiguration());
 					}
 				}
-				visitCombinedNodeList(node.getVariables(), commas,
-						new CommaPunctuationConfiguration());
-			}
-
-			@Override
-			public IFormatterNode visitVariableDeclaration(
-					VariableDeclaration node) {
-				FormatterBlockNode formatterNode = new FormatterBlockNode(
-						document);
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
-				push(formatterNode);
-				visit(node.getIdentifier());
-				if (node.getType() != null) {
-					skipSpaces(formatterNode, node.getColonPosition());
-					processPunctuation(node.getColonPosition(), 1,
-							new TypePunctuationConfiguration());
-					visit(node.getType());
-				}
-				if (node.getInitializer() != null) {
-					skipSpaces(formatterNode, node.getAssignPosition());
-					processPunctuation(node.getAssignPosition(), 1,
-							new BinaryOperationPinctuationConfiguration());
-					visit(node.getInitializer());
-				}
-				checkedPop(formatterNode, node.sourceEnd());
-				return formatterNode;
+				checkedPop(formatterNode, vars.get(vars.size() - 1).sourceEnd());
 			}
 
 			@Override
@@ -1676,8 +1671,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				push(formatter);
 
-				visit(node.getXmlKeyword());
-				visit(node.getNamespaceKeyword());
+				addChild(createTextNode(document, node.getXmlKeyword()));
+				addChild(createTextNode(document, node.getNamespaceKeyword()));
 				visit(node.getValue());
 
 				checkedPop(formatter, node.sourceEnd());
