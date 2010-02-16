@@ -212,10 +212,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 				reporter.reportProblem(new JSProblem(e));
 			}
 			// create empty output
-			Script script = new Script();
-			script.setStart(0);
-			script.setEnd(lineTracker.getLength());
-			return script;
+			return new Script();
 		}
 	}
 
