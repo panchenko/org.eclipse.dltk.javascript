@@ -34,6 +34,7 @@ public class FormatterForEachInStatementNode extends
 		getBody().add(node);
 	}
 
+	@Override
 	protected boolean isIndenting() {
 		return getDocument().getBoolean(
 				JavaScriptFormatterConstants.INDENT_BLOCK);

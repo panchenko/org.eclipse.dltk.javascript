@@ -80,6 +80,7 @@ public class BracketsNode extends FormatterBlockWithBeginEndNode {
 
 	}
 
+	@Override
 	protected boolean isIndenting() {
 		return configuration.isIndenting();
 	}

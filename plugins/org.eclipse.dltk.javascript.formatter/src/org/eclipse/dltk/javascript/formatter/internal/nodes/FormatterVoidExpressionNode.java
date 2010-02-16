@@ -21,8 +21,4 @@ public class FormatterVoidExpressionNode extends FormatterBlockNode {
 		super(document);
 	}
 
-	protected boolean isIndenting() {
-		return false;
-	}
-
 }

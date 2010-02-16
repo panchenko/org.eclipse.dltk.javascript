@@ -21,6 +21,7 @@ public class FormatterLabelledStatementNode extends FormatterBlockWithBeginNode 
 		super(document);
 	}
 
+	@Override
 	protected boolean isIndenting() {
 		return getDocument().getBoolean(
 				JavaScriptFormatterConstants.INDENT_BLOCK);

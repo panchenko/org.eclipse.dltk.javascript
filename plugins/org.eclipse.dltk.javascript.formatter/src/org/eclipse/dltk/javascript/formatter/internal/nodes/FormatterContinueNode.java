@@ -20,6 +20,7 @@ public class FormatterContinueNode extends FormatterBlockWithBeginNode {
 		super(document);
 	}
 
+	@Override
 	protected boolean isIndenting() {
 		return true;
 	}

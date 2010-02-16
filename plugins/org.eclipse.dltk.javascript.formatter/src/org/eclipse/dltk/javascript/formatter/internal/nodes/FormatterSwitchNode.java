@@ -20,6 +20,7 @@ public class FormatterSwitchNode extends FormatterBlockWithBeginNode {
 		super(document);
 	}
 
+	@Override
 	protected boolean isIndenting() {
 		return false;
 	}

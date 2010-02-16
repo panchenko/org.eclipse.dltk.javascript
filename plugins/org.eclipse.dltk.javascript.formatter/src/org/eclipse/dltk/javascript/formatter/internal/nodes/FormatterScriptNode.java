@@ -21,8 +21,4 @@ public class FormatterScriptNode extends FormatterBlockNode {
 		super(document);
 	}
 
-	protected boolean isIndenting() {
-		return false;
-	}
-
 }

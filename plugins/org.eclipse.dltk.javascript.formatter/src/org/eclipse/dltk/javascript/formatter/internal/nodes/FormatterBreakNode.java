@@ -46,6 +46,7 @@ public class FormatterBreakNode extends FormatterBlockWithBeginNode {
 				JavaScriptFormatterConstants.INDENT_CASE);
 	}
 
+	@Override
 	protected boolean isIndenting() {
 		return getDocument().getBoolean(
 				JavaScriptFormatterConstants.INDENT_BREAK);

@@ -21,6 +21,7 @@ public class FormatterInfixExpressionNode extends
 		super(document);
 	}
 
+	@Override
 	protected boolean isIndenting() {
 		return false;
 	}

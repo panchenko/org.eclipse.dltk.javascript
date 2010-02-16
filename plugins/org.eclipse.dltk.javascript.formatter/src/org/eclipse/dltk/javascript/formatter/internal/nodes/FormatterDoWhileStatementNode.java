@@ -22,6 +22,7 @@ public class FormatterDoWhileStatementNode extends
 		super(document);
 	}
 
+	@Override
 	protected boolean isIndenting() {
 		return getDocument().getBoolean(
 				JavaScriptFormatterConstants.INDENT_BLOCK);
