@@ -37,7 +37,6 @@ import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
-import org.eclipse.dltk.javascript.ast.ExceptionFilter;
 import org.eclipse.dltk.javascript.ast.FinallyClause;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
@@ -120,7 +119,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterDeleteState
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterElseIfNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterElseKeywordNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterElseNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterExceptionFilterNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterFinallyClauseNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForInStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForStatementNode;
@@ -262,7 +260,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			@Override
 			public IFormatterNode visit(ASTNode node) {
 				if (node instanceof Keyword) {
-					// from visitForEachInStatement() only
+					// for(each) *in*
+					// catch *if*
 					return addChild(createTextNode(document, node));
 				} else {
 					nodes.push(node);
@@ -376,34 +375,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 				checkedPop(caseNode, node.sourceEnd());
 				return caseNode;
-			}
-
-			@Override
-			public IFormatterNode visitCatchClause(CatchClause node) {
-
-				FormatterCatchClauseNode formatterNode = new FormatterCatchClauseNode(
-						document);
-
-				formatterNode.addChild(createTextNode(document, node
-						.getCatchKeyword()));
-
-				push(formatterNode);
-
-				List<ASTNode> exceptionNodes = new ArrayList<ASTNode>();
-				exceptionNodes.add(node.getException());
-				if (node.getExceptionFilter() != null) {
-					exceptionNodes.add(node.getExceptionFilter());
-				}
-
-				processParens(node.getLP(), node.getRP(), exceptionNodes,
-						new CatchParensConfiguration(document));
-
-				processBraces(node.getStatement(),
-						new CatchBracesConfiguration(document));
-
-				checkedPop(formatterNode, node.sourceEnd());
-
-				return formatterNode;
 			}
 
 			private IFormatterNode visitCombinedNodeList(
@@ -583,41 +554,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			public IFormatterNode visitEmptyExpression(EmptyExpression node) {
 				// nothing
 				return null;
-			}
-
-			@Override
-			public IFormatterNode visitExceptionFilter(ExceptionFilter node) {
-				FormatterExceptionFilterNode formatterNode = new FormatterExceptionFilterNode(
-						document);
-
-				formatterNode.setBegin(createTextNode(document, node
-						.getIfKeyword()));
-
-				push(formatterNode);
-
-				visit(node.getExpression());
-
-				checkedPop(formatterNode, node.sourceEnd());
-
-				return formatterNode;
-			}
-
-			@Override
-			public IFormatterNode visitFinallyClause(FinallyClause node) {
-				FormatterFinallyClauseNode formatterNode = new FormatterFinallyClauseNode(
-						document);
-
-				formatterNode.addChild(createTextNode(document, node
-						.getFinallyKeyword()));
-
-				push(formatterNode);
-
-				processBraces(node.getStatement(),
-						new FinallyBracesConfiguration(document));
-
-				checkedPop(formatterNode, node.sourceEnd());
-
-				return formatterNode;
 			}
 
 			@Override
@@ -1439,16 +1375,58 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processBraces(node.getBody(),
 						new TryBodyConfiguration(document));
 
-				List<Statement> nodes = new ArrayList<Statement>();
-				nodes.addAll(node.getCatches());
-				if (node.getFinally() != null) {
-					nodes.add(node.getFinally());
+				for (CatchClause catchClause : node.getCatches()) {
+					processCatch(catchClause);
 				}
-				visitNodeList(nodes);
+				if (node.getFinally() != null) {
+					processFinally(node.getFinally());
+				}
 
 				checkedPop(formatterNode, node.sourceEnd());
 
 				return formatterNode;
+			}
+
+			private void processCatch(CatchClause catchClause) {
+				FormatterCatchClauseNode formatterNode = new FormatterCatchClauseNode(
+						document);
+
+				formatterNode.addChild(createTextNode(document, catchClause
+						.getCatchKeyword()));
+
+				push(formatterNode);
+
+				List<ASTNode> exceptionNodes = new ArrayList<ASTNode>();
+				exceptionNodes.add(catchClause.getException());
+				if (catchClause.getExceptionFilter() != null) {
+					exceptionNodes.add(catchClause.getExceptionFilter()
+							.getIfKeyword());
+					exceptionNodes.add(catchClause.getExceptionFilter()
+							.getExpression());
+				}
+
+				processParens(catchClause.getLP(), catchClause.getRP(),
+						exceptionNodes, new CatchParensConfiguration(document));
+
+				processBraces(catchClause.getStatement(),
+						new CatchBracesConfiguration(document));
+
+				checkedPop(formatterNode, catchClause.sourceEnd());
+			}
+
+			private void processFinally(FinallyClause node) {
+				FormatterFinallyClauseNode formatterNode = new FormatterFinallyClauseNode(
+						document);
+
+				formatterNode.addChild(createTextNode(document, node
+						.getFinallyKeyword()));
+
+				push(formatterNode);
+
+				processBraces(node.getStatement(),
+						new FinallyBracesConfiguration(document));
+
+				checkedPop(formatterNode, node.sourceEnd());
 			}
 
 			@Override
