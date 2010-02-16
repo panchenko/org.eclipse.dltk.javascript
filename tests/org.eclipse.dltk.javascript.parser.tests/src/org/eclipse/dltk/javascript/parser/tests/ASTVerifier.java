@@ -36,8 +36,6 @@ import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
-import org.eclipse.dltk.javascript.ast.ExceptionFilter;
-import org.eclipse.dltk.javascript.ast.FinallyClause;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
 import org.eclipse.dltk.javascript.ast.ForStatement;
@@ -186,21 +184,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	}
 
 	@Override
-	public Boolean visitCatchClause(CatchClause node) {
-
-		testKeyword(node.getCatchKeyword());
-		visit(node.getException());
-		if (node.getExceptionFilter() != null)
-			visit(node.getExceptionFilter());
-		visit(node.getStatement());
-
-		testChar(Keywords.LP, node.getLP());
-		testChar(Keywords.RP, node.getRP());
-
-		return true;
-	}
-
-	@Override
 	public Boolean visitCommaExpression(CommaExpression node) {
 
 		testCharList(Keywords.COMMA, node.getCommas());
@@ -279,24 +262,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 		// Assert.assertTrue(node.sourceStart() < 0);
 		// Assert.assertTrue(node.sourceEnd() < 0);
-
-		return true;
-	}
-
-	@Override
-	public Boolean visitExceptionFilter(ExceptionFilter node) {
-
-		testKeyword(node.getIfKeyword());
-		visit(node.getExpression());
-
-		return true;
-	}
-
-	@Override
-	public Boolean visitFinallyClause(FinallyClause node) {
-
-		testKeyword(node.getFinallyKeyword());
-		visit(node.getStatement());
 
 		return true;
 	}
@@ -569,10 +534,23 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 		testKeyword(node.getTryKeyword());
 		visit(node.getBody());
-		visit(node.getCatches());
+		for (CatchClause catchClause : node.getCatches()) {
+			testKeyword(catchClause.getCatchKeyword());
+			visit(catchClause.getException());
+			if (catchClause.getExceptionFilter() != null) {
+				testKeyword(catchClause.getExceptionFilter().getIfKeyword());
+				visit(catchClause.getExceptionFilter().getExpression());
+			}
+			visit(catchClause.getStatement());
 
-		if (node.getFinally() != null)
-			visit(node.getFinally());
+			testChar(Keywords.LP, catchClause.getLP());
+			testChar(Keywords.RP, catchClause.getRP());
+		}
+
+		if (node.getFinally() != null) {
+			testKeyword(node.getFinally().getFinallyKeyword());
+			visit(node.getFinally().getStatement());
+		}
 
 		return true;
 	}
