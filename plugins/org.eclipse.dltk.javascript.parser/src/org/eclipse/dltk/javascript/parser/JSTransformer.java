@@ -903,7 +903,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		VariableDeclaration declaration = new VariableDeclaration(
 				(ASTNode) statement);
-		declaration.setIdentifier((Identifier) visitIdentifier(node));
+		declaration
+				.setIdentifier((Identifier) transformNode(node, declaration));
 		declaration.setStart(getTokenOffset(node.getTokenStartIndex()));
 		declaration.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 		int i = 0;
