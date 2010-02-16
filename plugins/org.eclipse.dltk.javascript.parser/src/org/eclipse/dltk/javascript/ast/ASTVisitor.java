@@ -63,11 +63,11 @@ public abstract class ASTVisitor<E> {
 		// return visitor.visitCaseClause((CaseClause) node);
 		// }
 		// });
-		HANDLERS.put(CatchClause.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitCatchClause((CatchClause) node);
-			}
-		});
+		// HANDLERS.put(CatchClause.class, new Handler() {
+		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+		// return visitor.visitCatchClause((CatchClause) node);
+		// }
+		// });
 		HANDLERS.put(CommaExpression.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 				return visitor.visitCommaExpression((CommaExpression) node);
@@ -114,16 +114,16 @@ public abstract class ASTVisitor<E> {
 				return visitor.visitEmptyExpression((EmptyExpression) node);
 			}
 		});
-		HANDLERS.put(ExceptionFilter.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitExceptionFilter((ExceptionFilter) node);
-			}
-		});
-		HANDLERS.put(FinallyClause.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitFinallyClause((FinallyClause) node);
-			}
-		});
+		// HANDLERS.put(ExceptionFilter.class, new Handler() {
+		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+		// return visitor.visitExceptionFilter((ExceptionFilter) node);
+		// }
+		// });
+		// HANDLERS.put(FinallyClause.class, new Handler() {
+		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+		// return visitor.visitFinallyClause((FinallyClause) node);
+		// }
+		// });
 		HANDLERS.put(ForStatement.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 				return visitor.visitForStatement((ForStatement) node);
@@ -373,7 +373,10 @@ public abstract class ASTVisitor<E> {
 		return null;
 	}
 
-	public abstract E visitCatchClause(CatchClause node);
+	@Deprecated
+	public final E visitCatchClause(CatchClause node) {
+		return null;
+	}
 
 	public abstract E visitCommaExpression(CommaExpression node);
 
@@ -396,9 +399,15 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitEmptyExpression(EmptyExpression node);
 
-	public abstract E visitExceptionFilter(ExceptionFilter node);
+	@Deprecated
+	public final E visitExceptionFilter(ExceptionFilter node) {
+		return null;
+	}
 
-	public abstract E visitFinallyClause(FinallyClause node);
+	@Deprecated
+	public final E visitFinallyClause(FinallyClause node) {
+		return null;
+	}
 
 	public abstract E visitForStatement(ForStatement node);
 
