@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ast;
 
-public abstract class XmlFragment extends Expression {
+public abstract class XmlFragment extends JSNode {
 
 	/**
 	 * @param parent
