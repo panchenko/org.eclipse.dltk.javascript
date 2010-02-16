@@ -133,7 +133,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterStringNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterSwitchNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterThrowNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterTypeofNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterUnaryOperationNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVariableDeclarationNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVoidExpressionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVoidOperatorNode;
@@ -1448,7 +1447,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			@Override
 			public IFormatterNode visitUnaryOperation(UnaryOperation node) {
-				FormatterUnaryOperationNode formatterNode = new FormatterUnaryOperationNode(
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
 				formatterNode.addChild(createEmptyTextNode(document, node
