@@ -126,6 +126,10 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		Assert.assertEquals(text, source.substring(start, end));
 	}
 
+	private void testKeyword(Keyword node) {
+		testString(node.getKeyword(), node.sourceStart(), node.sourceEnd());
+	}
+
 	@Override
 	public Boolean visitArrayInitializer(ArrayInitializer node) {
 
@@ -161,7 +165,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitBreakStatement(BreakStatement node) {
 
-		visit(node.getBreakKeyword());
+		testKeyword(node.getBreakKeyword());
 		testLabel(node.getLabel());
 		testChar(Keywords.SEMI, node.getSemicolonPosition());
 
@@ -184,7 +188,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitCatchClause(CatchClause node) {
 
-		visit(node.getCatchKeyword());
+		testKeyword(node.getCatchKeyword());
 		visit(node.getException());
 		if (node.getExceptionFilter() != null)
 			visit(node.getExceptionFilter());
@@ -220,8 +224,8 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 	@Override
 	public Boolean visitConstDeclaration(ConstStatement node) {
-		visit(node.getConstKeyword());
-		visit(node.getVariables());
+		testKeyword(node.getConstKeyword());
+		visitVariableDeclarations(node.getVariables());
 
 		testChar(Keywords.SEMI, node.getSemicolonPosition());
 
@@ -231,7 +235,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitContinueStatement(ContinueStatement node) {
 
-		visit(node.getContinueKeyword());
+		testKeyword(node.getContinueKeyword());
 		testLabel(node.getLabel());
 		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
 
@@ -249,7 +253,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitDeleteStatement(DeleteStatement node) {
 
-		visit(node.getDeleteKeyword());
+		testKeyword(node.getDeleteKeyword());
 		visit(node.getExpression());
 
 		return true;
@@ -258,9 +262,9 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitDoWhileStatement(DoWhileStatement node) {
 
-		visit(node.getDoKeyword());
+		testKeyword(node.getDoKeyword());
 		visit(node.getBody());
-		visit(node.getWhileKeyword());
+		testKeyword(node.getWhileKeyword());
 		visit(node.getCondition());
 
 		testChar(Keywords.LP, node.getLP());
@@ -282,7 +286,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitExceptionFilter(ExceptionFilter node) {
 
-		visit(node.getIfKeyword());
+		testKeyword(node.getIfKeyword());
 		visit(node.getExpression());
 
 		return true;
@@ -291,7 +295,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitFinallyClause(FinallyClause node) {
 
-		visit(node.getFinallyKeyword());
+		testKeyword(node.getFinallyKeyword());
 		visit(node.getStatement());
 
 		return true;
@@ -300,14 +304,14 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitForEachInStatement(ForEachInStatement node) {
 
-		visit(node.getForKeyword());
-		visit(node.getEachKeyword());
+		testKeyword(node.getForKeyword());
+		testKeyword(node.getEachKeyword());
 
 		if (node.getBody() != null)
 			node.getBody();
 
 		visit(node.getItem());
-		visit(node.getInKeyword());
+		testKeyword(node.getInKeyword());
 		visit(node.getIterator());
 
 		testChar(Keywords.LP, node.getLP());
@@ -333,7 +337,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	public Boolean visitGetMethod(GetMethod node) {
 
 		visit(node.getName());
-		visit(node.getGetKeyword());
+		testKeyword(node.getGetKeyword());
 		visit(node.getBody());
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
@@ -358,23 +362,15 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitIfStatement(IfStatement node) {
 
-		visit(node.getIfKeyword());
+		testKeyword(node.getIfKeyword());
 		visit(node.getCondition());
 		visit(node.getThenStatement());
 		if (node.getElseStatement() != null) {
-			visit(node.getElseKeyword());
+			testKeyword(node.getElseKeyword());
 			visit(node.getElseStatement());
 		}
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
-
-		return true;
-	}
-
-	@Override
-	public Boolean visitKeyword(Keyword node) {
-
-		testString(node.getKeyword(), node.sourceStart(), node.sourceEnd());
 
 		return true;
 	}
@@ -398,7 +394,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitNewExpression(NewExpression node) {
 
-		visit(node.getNewKeyword());
+		testKeyword(node.getNewKeyword());
 		visit(node.getObjectClass());
 
 		return true;
@@ -468,7 +464,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitReturnStatement(ReturnStatement node) {
 
-		visitKeyword(node.getReturnKeyword());
+		testKeyword(node.getReturnKeyword());
 
 		if (node.getValue() != null)
 			visit(node.getValue());
@@ -491,7 +487,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitSetMethod(SetMethod node) {
 
-		visit(node.getSetKeyword());
+		testKeyword(node.getSetKeyword());
 		visit(node.getName());
 		visit(node.getArgument());
 		visit(node.getBody());
@@ -528,13 +524,13 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		for (SwitchComponent component : node.getCaseClauses()) {
 			if (component instanceof CaseClause) {
 				final CaseClause caseClause = (CaseClause) component;
-				visit(caseClause.getCaseKeyword());
+				testKeyword(caseClause.getCaseKeyword());
 				visit(caseClause.getCondition());
 				testChar(Keywords.COLON, caseClause.getColonPosition());
 				visit(caseClause.getStatements());
 			} else {
 				final DefaultClause defaultClause = (DefaultClause) component;
-				visit(defaultClause.getDefaultKeyword());
+				testKeyword(defaultClause.getDefaultKeyword());
 				testChar(Keywords.COLON, defaultClause.getColonPosition());
 				visit(defaultClause.getStatements());
 			}
@@ -551,7 +547,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitThisExpression(ThisExpression node) {
 
-		visitKeyword(node.getThisKeyword());
+		testKeyword(node.getThisKeyword());
 
 		return true;
 	}
@@ -559,7 +555,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitThrowStatement(ThrowStatement node) {
 
-		visit(node.getThrowKeyword());
+		testKeyword(node.getThrowKeyword());
 		visit(node.getException());
 
 		if (node.getSemicolonPosition() > 0)
@@ -571,7 +567,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitTryStatement(TryStatement node) {
 
-		visit(node.getTryKeyword());
+		testKeyword(node.getTryKeyword());
 		visit(node.getBody());
 		visit(node.getCatches());
 
@@ -585,7 +581,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	public Boolean visitTypeOfExpression(TypeOfExpression node) {
 
 		visit(node.getExpression());
-		visit(node.getTypeOfKeyword());
+		testKeyword(node.getTypeOfKeyword());
 
 		return true;
 	}
@@ -605,31 +601,32 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitVariableStatment(VariableStatement node) {
 
-		visit(node.getVarKeyword());
-		visit(node.getVariables());
+		testKeyword(node.getVarKeyword());
+		visitVariableDeclarations(node.getVariables());
 
 		return true;
 	}
 
-	@Override
-	public Boolean visitVariableDeclaration(VariableDeclaration declaration) {
-		visit(declaration.getIdentifier());
-		if (declaration.getType() != null) {
-			visit(declaration.getType());
+	private void visitVariableDeclarations(
+			List<VariableDeclaration> declarations) {
+		for (VariableDeclaration declaration : declarations) {
+			visit(declaration.getIdentifier());
+			if (declaration.getType() != null) {
+				visit(declaration.getType());
+			}
+			if (declaration.getInitializer() != null) {
+				visit(declaration.getInitializer());
+			}
+			if (declaration.getColonPosition() != -1) {
+				testChar(':', declaration.getColonPosition());
+			}
+			if (declaration.getAssignPosition() != -1) {
+				testChar('=', declaration.getAssignPosition());
+			}
+			if (declaration.getCommaPosition() != -1) {
+				testChar(',', declaration.getCommaPosition());
+			}
 		}
-		if (declaration.getInitializer() != null) {
-			visit(declaration.getInitializer());
-		}
-		if (declaration.getColonPosition() != -1) {
-			testChar(':', declaration.getColonPosition());
-		}
-		if (declaration.getAssignPosition() != -1) {
-			testChar('=', declaration.getAssignPosition());
-		}
-		if (declaration.getCommaPosition() != -1) {
-			testChar(',', declaration.getCommaPosition());
-		}
-		return true;
 	}
 
 	@Override
@@ -645,7 +642,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitWhileStatement(WhileStatement node) {
 
-		visit(node.getWhileKeyword());
+		testKeyword(node.getWhileKeyword());
 		visit(node.getCondition());
 
 		if (node.getBody() != null)
@@ -663,7 +660,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
 
-		visit(node.getWithKeyword());
+		testKeyword(node.getWithKeyword());
 		visit(node.getExpression());
 		visit(node.getStatement());
 
@@ -673,13 +670,13 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitForInStatement(ForInStatement node) {
 
-		visit(node.getForKeyword());
+		testKeyword(node.getForKeyword());
 
 		if (node.getBody() != null)
 			node.getBody();
 
 		visit(node.getItem());
-		visit(node.getInKeyword());
+		testKeyword(node.getInKeyword());
 		visit(node.getIterator());
 
 		testChar(Keywords.LP, node.getLP());
@@ -692,8 +689,19 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitFunctionStatement(FunctionStatement node) {
 
-		visit(node.getFunctionKeyword());
-		visit(node.getArguments());
+		testKeyword(node.getFunctionKeyword());
+		for (Argument argument : node.getArguments()) {
+			visit(argument.getIdentifier());
+			if (argument.getColonPosition() != -1) {
+				testChar(':', argument.getColonPosition());
+			}
+			if (argument.getType() != null) {
+				visit(argument.getType());
+			}
+			if (argument.getCommaPosition() != -1) {
+				testChar(',', argument.getCommaPosition());
+			}
+		}
 		visit(node.getBody());
 
 		if (node.getName() != null)
@@ -706,24 +714,9 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	}
 
 	@Override
-	public Boolean visitArgument(Argument argument) {
-		visit(argument.getIdentifier());
-		if (argument.getType() != null) {
-			visit(argument.getType());
-		}
-		if (argument.getColonPosition() != -1) {
-			testChar(':', argument.getColonPosition());
-		}
-		if (argument.getCommaPosition() != -1) {
-			testChar(',', argument.getCommaPosition());
-		}
-		return true;
-	}
-
-	@Override
 	public Boolean visitForStatement(ForStatement node) {
 
-		visit(node.getForKeyword());
+		testKeyword(node.getForKeyword());
 
 		visit(node.getInitial());
 		visit(node.getCondition());
@@ -744,7 +737,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitVoidOperator(VoidOperator node) {
 		visit(node.getExpression());
-		visit(node.getVoidKeyword());
+		testKeyword(node.getVoidKeyword());
 
 		return true;
 	}
@@ -768,9 +761,9 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitDefaultXmlNamespace(DefaultXmlNamespaceStatement node) {
 
-		visit(node.getDefaultKeyword());
-		visit(node.getXmlKeyword());
-		visit(node.getNamespaceKeyword());
+		testKeyword(node.getDefaultKeyword());
+		testKeyword(node.getXmlKeyword());
+		testKeyword(node.getNamespaceKeyword());
 
 		testChar(Keywords.ASSIGN, node.getAssignOperation());
 		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
