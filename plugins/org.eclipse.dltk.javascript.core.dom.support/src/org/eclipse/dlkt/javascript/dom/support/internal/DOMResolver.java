@@ -5,13 +5,10 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dlkt.javascript.dom.support.IDesignTimeDOMProvider;
 import org.eclipse.dlkt.javascript.dom.support.IProposalHolder;
 import org.eclipse.dltk.core.DLTKCore;
@@ -41,7 +38,7 @@ import org.mozilla.javascript.NativeJavaTopPackage;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
-public class DOMResolver implements IReferenceResolver, IExecutableExtension {
+public class DOMResolver implements IReferenceResolver {
 
 	final static class ClassReference extends StandardSelfCompletingReference
 			implements IClassReference {
@@ -50,13 +47,13 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		}
 	}
 
-	public Set getChilds(IResolvableReference ref) {
-		HashMap classRef = getClassMap();
-		HashSet result = new HashSet();
+	public Set<IReference> getChilds(IResolvableReference ref) {
+		final Map<String, Class<Scriptable>> classRef = getClassMap();
+		Set<IReference> result = new HashSet<IReference>();
 		if (ref instanceof AbstractCallResultReference) {
 			final AbstractCallResultReference cm = (AbstractCallResultReference) ref;
 			// if (cm instanceof NewReference) {
-			Class clzz = (Class) classRef.get(cm.getId());
+			Class<Scriptable> clzz = classRef.get(cm.getId());
 			if (clzz != null) {
 				Method[] methods = clzz.getMethods();
 				for (int a = 0; a < methods.length; a++) {
@@ -84,15 +81,13 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					}
 				}
 			}
-			Set resolveGlobals = resolveGlobals(cm.getId() + ".");
-
-			result.addAll(resolveGlobals);
+			result.addAll(resolveGlobals(cm.getId() + "."));
 		} else if (ref instanceof ScriptableScopeReference) {
 			ScriptableScopeReference ssr = (ScriptableScopeReference) ref;
 			org.mozilla.javascript.Scriptable scriptable = ssr.getScriptable();
-			HashMap results = new HashMap();
+			Map<String, Object> results = new HashMap<String, Object>();
 			fillMap(results, scriptable, false, null);
-			HashSet rs = new HashSet();
+			Set<IReference> rs = new HashSet<IReference>();
 			createReferences("", results, rs);
 			return rs;
 		}
@@ -102,26 +97,25 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 	IDesignTimeDOMProvider[] providers;
 	ISourceModule module;
 
-	public HashMap getClassMap() {
+	public Map<String, Class<Scriptable>> getClassMap() {
 		if (classRef != null) {
-			HashMap object = (HashMap) classRef.get();
+			Map<String, Class<Scriptable>> object = classRef.get();
 			if (object != null)
 				return object;
 		}
-		HashMap mp = new HashMap();
+		Map<String, Class<Scriptable>> mp = new HashMap<String, Class<Scriptable>>();
 
 		for (int a = 0; a < providers.length; a++) {
 			if (providers[a].canResolve(module)) {
-				Class[] resolveHostObjectClasses = providers[a]
+				Class<Scriptable>[] resolveHostObjectClasses = providers[a]
 						.resolveHostObjectClasses(module);
 				if (resolveHostObjectClasses == null)
 					continue;
 				for (int b = 0; b < resolveHostObjectClasses.length; b++) {
-					Class class1 = resolveHostObjectClasses[b];
+					Class<Scriptable> class1 = resolveHostObjectClasses[b];
 
 					try {
-						ScriptableObject dc = (ScriptableObject) class1
-								.newInstance();
+						Scriptable dc = class1.newInstance();
 						mp.put(dc.getClassName(), class1);
 					} catch (InstantiationException e) {
 						e.printStackTrace();
@@ -132,15 +126,15 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 				}
 			}
 		}
-		classRef = new WeakReference(mp);
+		classRef = new WeakReference<Map<String, Class<Scriptable>>>(mp);
 		return mp;
 	}
 
-	WeakReference classRef;
+	private WeakReference<Map<String, Class<Scriptable>>> classRef;
 	private ReferenceResolverContext owner;
 
-	private HashMap getGlobalMap(String key) {
-		HashMap mp = new HashMap();
+	private Map<String, Object> getGlobalMap(String key) {
+		Map<String, Object> mp = new HashMap<String, Object>();
 		for (int a = 0; a < providers.length; a++) {
 			if (providers[a].canResolve(module)) {
 				Scriptable resolveTopLevelScope = providers[a]
@@ -153,7 +147,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		return mp;
 	}
 
-	void fillMap(HashMap mp, Scriptable scope, boolean walkParent,
+	void fillMap(Map<String, Object> mp, Scriptable scope, boolean walkParent,
 			String idToFind) {
 		String returnType = null;
 		if (scope instanceof IProposalHolder
@@ -170,10 +164,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					scope = resolved;
 				}
 			} else {
-				Set childs = typeReference.getChilds(true);
-				Iterator it = childs.iterator();
-				while (it.hasNext()) {
-					IReference ref = (IReference) it.next();
+				for (IReference ref : typeReference.getChilds(true)) {
 					if (idToFind == null || ref.getName().equals(idToFind)) {
 						mp.put(ref.getName(), new ReferenceScope(ref));
 					}
@@ -256,25 +247,20 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 
 	}
 
-	public Set resolveGlobals(String completion) {
+	public Set<IReference> resolveGlobals(String completion) {
 		completion = CompletionString.parse(completion, true);
 		int pos = completion.indexOf('.');
 		String key = pos == -1 ? completion : completion.substring(0, pos);
 
-		HashMap globals = getGlobalMap(pos == -1 ? null : key);
-		HashMap clss = getClassMap();
-		HashSet rs = new HashSet();
+		Map<String, Object> globals = getGlobalMap(pos == -1 ? null : key);
+		Map<String, Class<Scriptable>> clss = getClassMap();
+		Set<IReference> rs = new HashSet<IReference>();
 
 		if (pos == -1) {
-			Iterator iterator;
 			createReferences(key, globals, rs);
-			iterator = clss.keySet().iterator();
-			while (iterator.hasNext()) {
-				String s = (String) iterator.next();
+			for (String s : clss.keySet()) {
 				if (s.startsWith(key)) {
-					StandardSelfCompletingReference uref = new ClassReference(
-							s, false);
-					rs.add(uref);
+					rs.add(new ClassReference(s, false));
 				}
 			}
 		} else {
@@ -289,12 +275,12 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 					pos = completion.indexOf('.');
 					key = pos == -1 ? completion : completion.substring(0, pos);
 					Scriptable sc = (Scriptable) object;
-					globals = new HashMap();
+					globals = new HashMap<String, Object>();
 					fillMap(globals, sc, false,
 							(pos == -1 && !"[]".equals(key)) ? null : key);
 				} else {
 					// not at match at all clear it
-					globals = new HashMap();
+					globals = new HashMap<String, Object>();
 					break;
 				}
 			}
@@ -303,14 +289,14 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		return rs;
 	}
 
-	void createReferences(String key, HashMap globals, HashSet rs) {
-		Iterator iterator = globals.keySet().iterator();
-		while (iterator.hasNext()) {
-			String s = (String) iterator.next();
+	void createReferences(String key, Map<String, Object> globals,
+			Set<IReference> rs) {
+		for (Map.Entry<String, Object> entry : globals.entrySet()) {
+			String s = entry.getKey();
 
 			if (s.startsWith(key)) {
 				IFile sourceFile = null;
-				Object object = globals.get(s);
+				Object object = entry.getValue();
 				IReference ref = null;
 				if (object instanceof ReferenceScope) {
 					ref = ((ReferenceScope) object).getReference();
@@ -422,7 +408,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		if (object == null)
 			return null;
 		StandardSelfCompletingReference uref = null;
-		Class clz = object.getClass();
+		Class<?> clz = object.getClass();
 		if (object instanceof NativeJavaObject) {
 			clz = ((NativeJavaObject) object).unwrap().getClass();
 		} else if (object instanceof NativeJavaMethod) {
@@ -444,7 +430,7 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 			// booleans are just above.
 		} else if (Number.class.isAssignableFrom(clz) || clz.isPrimitive()) {
 			uref = ReferenceFactory.createNumberReference(s);
-		} else if ((clz).isArray()) {
+		} else if (clz.isArray()) {
 			uref = ReferenceFactory.createArrayReference(s);
 		}
 		if (uref != null)
@@ -456,7 +442,4 @@ public class DOMResolver implements IReferenceResolver, IExecutableExtension {
 		return true;
 	}
 
-	public void setInitializationData(IConfigurationElement config,
-			String propertyName, Object data) throws CoreException {
-	}
 }

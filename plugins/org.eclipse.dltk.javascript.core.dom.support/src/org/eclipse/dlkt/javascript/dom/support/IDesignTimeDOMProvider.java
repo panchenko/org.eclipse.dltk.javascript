@@ -25,7 +25,7 @@ public interface IDesignTimeDOMProvider extends IExecutableExtension {
 	 * @param module
 	 * @return set of classes wich are defined for given module
 	 */
-	public Class[] resolveHostObjectClasses(ISourceModule module);
+	public Class<Scriptable>[] resolveHostObjectClasses(ISourceModule module);
 
 	/**
 	 * @param resolveTopLevelScope
@@ -36,8 +36,8 @@ public interface IDesignTimeDOMProvider extends IExecutableExtension {
 
 	/**
 	 * The dom provider can resolve the proposal them selfs by returning a
-	 * {@link IProposalHolder}. That object can hold the parameters for this
-	 * key or extra proposal info (documentation) <br>
+	 * {@link IProposalHolder}. That object can hold the parameters for this key
+	 * or extra proposal info (documentation) <br>
 	 * Also if you want lazy lookup then you can return the proposal with just
 	 * the name. So that there isn't a lookup in the scope if that is a heavy
 	 * operation.
