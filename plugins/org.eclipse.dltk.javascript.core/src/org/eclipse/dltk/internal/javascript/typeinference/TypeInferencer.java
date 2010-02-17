@@ -643,11 +643,15 @@ public class TypeInferencer {
 		StandardSelfCompletingReference unknownReference = new StandardSelfCompletingReference(
 				key, false);
 		if (id.equals(ReferenceFactory.XML)) {
-			if (xmlInferencer == null) {
-				xmlInferencer = new XMLLiteralInferencer();
+			final Node lastChild = expression.getLastChild();
+			if (lastChild instanceof StringNode) {
+				// parse simple XML fragments
+				final String xmlText = lastChild.getString();
+				if (xmlInferencer == null) {
+					xmlInferencer = new XMLLiteralInferencer();
+				}
+				xmlInferencer.modifyReference(unknownReference, xmlText, cs);
 			}
-			xmlInferencer.modifyReference(unknownReference, expression
-					.getLastChild().getString(), cs);
 		}
 		return new CombinedOrReference(ref, unknownReference);
 	}
