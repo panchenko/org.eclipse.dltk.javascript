@@ -20,10 +20,12 @@ import org.eclipse.dltk.ast.ASTNode;
 
 public abstract class ASTVisitor<E> {
 
-	public void visit(Collection<? extends ASTNode> nodes) {
+	public E visit(Collection<? extends ASTNode> nodes) {
+		E result = null;
 		for (ASTNode node : nodes) {
-			visit(node);
+			result = visit(node);
 		}
+		return result;
 	}
 
 	private static interface Handler {
