@@ -40,6 +40,13 @@ public interface IReference {
 	 */
 	public String getName();
 
+	/**
+	 * Returns possible types of this reference or <code>null</code> if unknown.
+	 * 
+	 * @return
+	 */
+	public Set<String> getTypes();
+
 	public boolean isChildishReference();
 
 	public void recordDelete(String fieldId);

@@ -21,6 +21,14 @@ import org.mozilla.javascript.Scriptable;
 
 public class ReferenceFactory {
 
+	public static final String XML = "XML";
+	public static final String ARRAY = "Array";
+	public static final String DATE = "Date";
+	public static final String STRING = "String";
+	public static final String NUMBER = "Number";
+	public static final String BOOLEAN = "Boolean";
+	public static final String OBJECT = "Object";
+
 	private static IScriptableTypeProvider[] providers;
 
 	static {
@@ -111,35 +119,40 @@ public class ReferenceFactory {
 	public static IReference createTypeReference(String paramOrVarName,
 			String type, ReferenceResolverContext rrc) {
 		if (type != null) {
-			String typeLowerCase = type.toLowerCase();
-			if ("boolean".equals(typeLowerCase)) {
+			if (BOOLEAN.equalsIgnoreCase(type)) {
 				return createBooleanReference(paramOrVarName);
-			}
-			if ("number".equals(typeLowerCase)) {
+			} else if (NUMBER.equalsIgnoreCase(type)) {
 				return createNumberReference(paramOrVarName);
-			}
-			if ("string".equals(typeLowerCase)) {
+			} else if (STRING.equalsIgnoreCase(type)) {
 				return createStringReference(paramOrVarName);
-			}
-			if ("date".equals(typeLowerCase)) {
+			} else if (DATE.equalsIgnoreCase(type)) {
 				return createDateReference(paramOrVarName);
-			}
-			if ("array".equals(typeLowerCase)) {
+			} else if (ARRAY.equalsIgnoreCase(type)) {
 				return createArrayReference(paramOrVarName);
-			}
-			if ("xml".equals(typeLowerCase)) {
+			} else if (XML.equalsIgnoreCase(type)) {
 				return createXMLReference(paramOrVarName);
-			}
-
-			if (providers != null) {
-				for (int i = 0; i < providers.length; i++) {
-					Scriptable ref = providers[i].getType(paramOrVarName, type);
-					if (ref != null)
-						return new ScriptableScopeReference(paramOrVarName,
-								ref, rrc);
+			} else {
+				if (providers != null) {
+					for (int i = 0; i < providers.length; i++) {
+						Scriptable ref = providers[i].getType(paramOrVarName,
+								type);
+						if (ref != null)
+							return new ScriptableScopeReference(paramOrVarName,
+									ref, rrc);
+					}
 				}
 			}
 		}
 		return new StandardSelfCompletingReference(paramOrVarName, false);
 	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	public static IReference createRegExpReference(String name) {
+		// TODO provide RegExp members
+		return new StandardSelfCompletingReference(name, false);
+	}
+
 }

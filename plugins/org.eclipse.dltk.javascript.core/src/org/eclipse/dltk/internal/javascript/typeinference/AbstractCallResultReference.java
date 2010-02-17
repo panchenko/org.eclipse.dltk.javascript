@@ -22,10 +22,6 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolve
 public abstract class AbstractCallResultReference implements IReference,
 		IDoNotReportChilds, IResolvableReference {
 
-	public Set getChildsNoGlobalOp() {
-		return hashSet == null ? new HashSet() : hashSet;
-	}
-
 	private final String id;
 	private final String name;
 	private final ReferenceResolverContext cs;
@@ -81,8 +77,7 @@ public abstract class AbstractCallResultReference implements IReference,
 		return hashSet;
 	}
 
-	protected Set internalGetChilds(boolean resolveLocals) {
-
+	protected Set<IReference> internalGetChilds(boolean resolveLocals) {
 		return cs.resolveChilds(this);
 	}
 

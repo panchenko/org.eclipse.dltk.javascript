@@ -3,6 +3,9 @@
  */
 package org.eclipse.dltk.internal.javascript.typeinference;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.eclipse.dltk.javascript.internal.model.references.ReferenceModelLoader;
 
 /**
@@ -19,8 +22,14 @@ public class NativeDateReference extends StandardSelfCompletingReference {
 	}
 
 	@Override
+	public Set<String> getTypes() {
+		return Collections.singleton(ReferenceFactory.DATE);
+	}
+
+	@Override
 	protected void createChilds() {
-		addChildren(ReferenceModelLoader.getInstance().getChildren("Date"));
+		addChildren(ReferenceModelLoader.getInstance().getChildren(
+				ReferenceFactory.DATE));
 	}
 
 }

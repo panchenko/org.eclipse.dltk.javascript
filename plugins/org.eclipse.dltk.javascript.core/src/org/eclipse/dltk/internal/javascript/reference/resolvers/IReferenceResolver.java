@@ -12,14 +12,15 @@ package org.eclipse.dltk.internal.javascript.reference.resolvers;
 import java.util.Set;
 
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 
 public interface IReferenceResolver {
 
 	boolean canResolve(ISourceModule module);
 
-	public Set getChilds(IResolvableReference ref);
+	public Set<IReference> getChilds(IResolvableReference ref);
 
-	public Set resolveGlobals(String id);
+	public Set<IReference> resolveGlobals(String id);
 
 	void processCall(String call, String objId);
 

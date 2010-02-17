@@ -3,9 +3,6 @@
  */
 package org.eclipse.dltk.internal.javascript.typeinference;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableReference;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.mozilla.javascript.Scriptable;
@@ -14,8 +11,8 @@ import org.mozilla.javascript.Scriptable;
  * @author jcompagner
  * 
  */
-public class ScriptableScopeReference extends StandardSelfCompletingReference implements
-		IResolvableReference {
+public class ScriptableScopeReference extends StandardSelfCompletingReference
+		implements IResolvableReference {
 
 	private final Scriptable scriptable;
 	private final ReferenceResolverContext resolver;
@@ -37,15 +34,8 @@ public class ScriptableScopeReference extends StandardSelfCompletingReference im
 	 */
 	protected void createChilds() {
 
-		Set hashSet = resolver.resolveChilds(this);
-
-		Iterator i = hashSet.iterator();
-		while (i.hasNext()) {
-			Object next = i.next();
-			if (next instanceof IReference) {
-				IReference r = (IReference) next;
-				setChild(r.getName(), r);
-			}
+		for (IReference r : resolver.resolveChilds(this)) {
+			setChild(r.getName(), r);
 		}
 
 		// HashMap results = new HashMap();

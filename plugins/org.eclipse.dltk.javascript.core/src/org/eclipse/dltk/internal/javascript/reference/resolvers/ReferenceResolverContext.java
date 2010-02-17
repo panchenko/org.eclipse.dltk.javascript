@@ -10,8 +10,8 @@
 package org.eclipse.dltk.internal.javascript.reference.resolvers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -92,16 +92,16 @@ public final class ReferenceResolverContext {
 		}
 	}
 
-	public Set resolveChilds(IResolvableReference abstractCallResultReference) {
+	public Set<IReference> resolveChilds(
+			IResolvableReference abstractCallResultReference) {
 		for (int a = 0; a < resolvers.size(); a++) {
 			IReferenceResolver res = resolvers.get(a);
-			Set result = res.getChilds(abstractCallResultReference);
-			if (result != null) {
-				if (!result.isEmpty())
-					return result;
+			Set<IReference> result = res.getChilds(abstractCallResultReference);
+			if (result != null && !result.isEmpty()) {
+				return result;
 			}
 		}
-		return new HashSet();
+		return Collections.emptySet();
 	}
 
 	public void processCall(String call, String objId) {

@@ -234,6 +234,23 @@ public class CombinedOrReference implements IReference, SelfCompletingReference 
 		return null;
 	}
 
+	public Set<String> getTypes() {
+		final Set<String> types = new HashSet<String>();
+		for (IReference ref : lstReferences) {
+			final Set<String> refTypes = ref.getTypes();
+			if (refTypes != null) {
+				types.addAll(refTypes);
+			}
+		}
+		for (IReference ref : lstReadonly) {
+			final Set<String> refTypes = ref.getTypes();
+			if (refTypes != null) {
+				types.addAll(refTypes);
+			}
+		}
+		return types;
+	}
+
 	/**
 	 * @see org.eclipse.dltk.internal.javascript.typeinference.IReference#getPrototype(boolean)
 	 */

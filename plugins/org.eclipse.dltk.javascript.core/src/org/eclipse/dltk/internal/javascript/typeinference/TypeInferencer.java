@@ -642,18 +642,14 @@ public class TypeInferencer {
 		NewReference ref = new NewReference(key, id, cs);
 		StandardSelfCompletingReference unknownReference = new StandardSelfCompletingReference(
 				key, false);
-		if (id.equals("XML")) {
-			try {
-				if (xmlInferencer == null) {
-					xmlInferencer = new XMLLiteralInferencer();
-				}
-				xmlInferencer.modifyReference(unknownReference, expression
-						.getLastChild().getString(), cs);
-			} catch (ClassCastException e) {
+		if (id.equals(ReferenceFactory.XML)) {
+			if (xmlInferencer == null) {
+				xmlInferencer = new XMLLiteralInferencer();
 			}
+			xmlInferencer.modifyReference(unknownReference, expression
+					.getLastChild().getString(), cs);
 		}
-		CombinedOrReference ws = new CombinedOrReference(ref, unknownReference);
-		return ws;
+		return new CombinedOrReference(ref, unknownReference);
 	}
 
 	private XMLLiteralInferencer xmlInferencer = null;

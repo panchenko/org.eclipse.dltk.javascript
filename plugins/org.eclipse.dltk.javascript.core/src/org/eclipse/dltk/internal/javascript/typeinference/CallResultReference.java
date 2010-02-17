@@ -31,7 +31,8 @@ public class CallResultReference extends AbstractCallResultReference {
 	/**
 	 * @see org.eclipse.dltk.internal.javascript.typeinference.AbstractCallResultReference#internalGetChilds(boolean)
 	 */
-	protected Set internalGetChilds(boolean resolveLocals) {
+	@Override
+	protected Set<IReference> internalGetChilds(boolean resolveLocals) {
 		if (root != null) {
 			String id = getId();
 			int index = id.indexOf(".");
@@ -69,5 +70,9 @@ public class CallResultReference extends AbstractCallResultReference {
 
 	public boolean isFunctionRef() {
 		return false;
+	}
+
+	public Set<String> getTypes() {
+		return null;
 	}
 }

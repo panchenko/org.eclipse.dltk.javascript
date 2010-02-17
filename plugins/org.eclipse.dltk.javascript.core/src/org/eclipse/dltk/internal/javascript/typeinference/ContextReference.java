@@ -48,6 +48,16 @@ public final class ContextReference implements IReference {
 		return key;
 	}
 
+	public Set<String> getTypes() {
+		final IReference returnValue = function
+				.getReference(TypeInferencer.RETURN_VALUE);
+		if (returnValue != null) {
+			return returnValue.getTypes();
+		} else {
+			return null;
+		}
+	}
+
 	public IReference getPrototype(boolean resolveLocals) {
 		return getChild("prototype", resolveLocals);
 	}

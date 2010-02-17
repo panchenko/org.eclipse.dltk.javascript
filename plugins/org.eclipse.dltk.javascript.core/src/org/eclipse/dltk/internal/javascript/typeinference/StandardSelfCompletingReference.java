@@ -16,12 +16,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IParameter;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.core.SourceMethod;
+import org.eclipse.dltk.internal.core.SourceMethodUtils;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 
 /**
@@ -69,6 +70,10 @@ public class StandardSelfCompletingReference implements IReference,
 
 	public String getName() {
 		return name;
+	}
+
+	public Set<String> getTypes() {
+		return null;
 	}
 
 	@Override
@@ -163,7 +168,7 @@ public class StandardSelfCompletingReference implements IReference,
 			if (isFunctionRef()) {
 				MethodReference method = new MethodReference(
 						(ModelElement) location.getModelElement(), name,
-						getParameterNames(), getProposalInfo(), getReturnType());
+						getParameters(), getProposalInfo(), getReturnType());
 				toAdd.add(method);
 			} else {
 				FakeField fakeField = new FakeField((ModelElement) location
@@ -182,6 +187,39 @@ public class StandardSelfCompletingReference implements IReference,
 	public StandardSelfCompletingReference setFunctionRef() {
 		fRef = true;
 		return this;
+	}
+
+	private static final class Param implements IParameter {
+
+		private final String name;
+
+		public Param(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getType() {
+			return null;
+		}
+
+		public String getDefaultValue() {
+			return null;
+		}
+
+	}
+
+	private IParameter[] getParameters() {
+		if (parameterNames == null || parameterNames.length == 0) {
+			return SourceMethodUtils.NO_PARAMETERS;
+		}
+		final Param[] params = new Param[parameterNames.length];
+		for (int i = 0; i < parameterNames.length; ++i) {
+			params[i] = new Param(parameterNames[i]);
+		}
+		return params;
 	}
 
 	public String[] getParameterNames() {
@@ -281,7 +319,7 @@ public class StandardSelfCompletingReference implements IReference,
 	private static class MethodReference extends SourceMethod implements
 			IProposalHolder {
 
-		private final String[] parameters;
+		private final IParameter[] parameters;
 		private final String proposalInfo;
 		private final String type;
 
@@ -291,7 +329,7 @@ public class StandardSelfCompletingReference implements IReference,
 		 * @param type
 		 */
 		public MethodReference(ModelElement parent, String name,
-				String[] parameters, String proposalInfo, String type) {
+				IParameter[] parameters, String proposalInfo, String type) {
 			super(parent, name);
 			this.parameters = parameters;
 			this.proposalInfo = proposalInfo;
@@ -299,10 +337,8 @@ public class StandardSelfCompletingReference implements IReference,
 		}
 
 		@Override
-		public String[] getParameters() throws ModelException {
-			if (parameters == null)
-				return CharOperation.NO_STRINGS;
-			return parameters;
+		public String[] getParameterNames() throws ModelException {
+			return SourceMethodUtils.getParameterNames(parameters);
 		}
 
 		public String getProposalInfo() {
@@ -310,8 +346,8 @@ public class StandardSelfCompletingReference implements IReference,
 		}
 
 		@Override
-		public String[] getParameterInitializers() throws ModelException {
-			return null;
+		public IParameter[] getParameters() throws ModelException {
+			return parameters;
 		}
 
 		@Override

@@ -13,7 +13,6 @@ package org.eclipse.dltk.internal.javascript.typeinference;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.dltk.core.IModelElement;
@@ -73,6 +72,17 @@ class TransparentRef implements IReference {
 		return fieldId;
 	}
 
+	public Set<String> getTypes() {
+		if (recursive)
+			return null;
+		try {
+			recursive = true;
+			return evaluateReference.getTypes();
+		} finally {
+			recursive = false;
+		}
+	}
+
 	public String getParentName() {
 		return fieldId;
 	}
@@ -97,7 +107,7 @@ class TransparentRef implements IReference {
 			return;
 		try {
 			recursive = true;
-			Set s = evaluateReference.getChilds(false);
+			Set<IReference> s = evaluateReference.getChilds(false);
 			IReference queryElement = this.typeInferencer
 					.internalEvaluate(collection, getName(), node, location
 							.getModelElement(), cs);
@@ -115,13 +125,8 @@ class TransparentRef implements IReference {
 					this.evaluateReference = queryElement;
 				}
 			}
-			Iterator it = s.iterator();
 			// TODO REVIEW IT;
-			while (it.hasNext()) {
-				Object next = it.next();
-				if (!(next instanceof IReference))
-					continue;
-				IReference r = (IReference) next;
+			for (IReference r : s) {
 				evaluateReference.setChild(r.getName(), r);
 			}
 		} finally {

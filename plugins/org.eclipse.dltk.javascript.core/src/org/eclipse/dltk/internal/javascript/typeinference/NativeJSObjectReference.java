@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.typeinference;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.eclipse.dltk.javascript.internal.model.references.ReferenceModelLoader;
 
 public class NativeJSObjectReference extends StandardSelfCompletingReference {
@@ -23,8 +26,14 @@ public class NativeJSObjectReference extends StandardSelfCompletingReference {
 	}
 
 	@Override
+	public Set<String> getTypes() {
+		return Collections.singleton(ReferenceFactory.OBJECT);
+	}
+
+	@Override
 	protected void createChilds() {
-		addChildren(ReferenceModelLoader.getInstance().getChildren("Object"));
+		addChildren(ReferenceModelLoader.getInstance().getChildren(
+				ReferenceFactory.OBJECT));
 	}
 
 }

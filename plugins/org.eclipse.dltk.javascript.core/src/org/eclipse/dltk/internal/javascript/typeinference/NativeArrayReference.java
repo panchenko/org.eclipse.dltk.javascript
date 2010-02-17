@@ -3,6 +3,9 @@
  */
 package org.eclipse.dltk.internal.javascript.typeinference;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.eclipse.dltk.javascript.internal.model.references.ReferenceModelLoader;
 
 /**
@@ -16,12 +19,17 @@ public class NativeArrayReference extends StandardSelfCompletingReference {
 	 */
 	public NativeArrayReference(String paramOrVarName) {
 		super(paramOrVarName, false);
+	}
 
+	@Override
+	public Set<String> getTypes() {
+		return Collections.singleton(ReferenceFactory.ARRAY);
 	}
 
 	@Override
 	protected void createChilds() {
-		addChildren(ReferenceModelLoader.getInstance().getChildren("Array"));
+		addChildren(ReferenceModelLoader.getInstance().getChildren(
+				ReferenceFactory.ARRAY));
 	}
 
 }
