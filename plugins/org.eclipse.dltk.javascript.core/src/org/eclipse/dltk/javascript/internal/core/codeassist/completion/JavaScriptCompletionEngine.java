@@ -470,7 +470,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 						String[] arguments = null;
 
 						try {
-							arguments = method.getParameters();
+							arguments = method.getParameterNames();
 						} catch (ModelException e) {
 
 						}
