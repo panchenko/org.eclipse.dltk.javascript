@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
@@ -40,8 +38,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.mixin.JavaScriptMixinModel;
 
-public class SourceBasedResolver implements IReferenceResolver,
-		IExecutableExtension {
+public class SourceBasedResolver implements IReferenceResolver {
 
 	private ISourceModule module;
 
@@ -49,7 +46,7 @@ public class SourceBasedResolver implements IReferenceResolver,
 		return true;
 	}
 
-	public Set getChilds(IResolvableReference ref) {
+	public Set<IReference> getChilds(IResolvableReference ref) {
 		if (ref instanceof AbstractCallResultReference) {
 			AbstractCallResultReference cm = (AbstractCallResultReference) ref;
 			String id = cm.getId();
@@ -79,11 +76,6 @@ public class SourceBasedResolver implements IReferenceResolver,
 			return hashSet;
 		}
 		return null;
-	}
-
-	public void setInitializationData(IConfigurationElement config,
-			String propertyName, Object data) throws CoreException {
-
 	}
 
 	protected static IDLTKLanguageToolkit toolkit;
@@ -207,10 +199,6 @@ public class SourceBasedResolver implements IReferenceResolver,
 	}
 
 	public void processCall(String call, String objId) {
-
-	}
-
-	public void init() {
 
 	}
 
