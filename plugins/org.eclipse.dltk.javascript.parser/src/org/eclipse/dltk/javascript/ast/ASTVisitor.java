@@ -346,18 +346,9 @@ public abstract class ASTVisitor<E> {
 		final Handler handler = HANDLERS.get(node.getClass());
 		if (handler != null) {
 			return handler.handle(this, node);
+		} else {
+			return visitUnknownNode(node);
 		}
-
-		if (node.getClass() == GetMethod.class)
-			return visitGetMethod((GetMethod) node);
-
-		if (node.getClass() == PropertyInitializer.class)
-			return visitPropertyInitializer((PropertyInitializer) node);
-
-		if (node.getClass() == SetMethod.class)
-			return visitSetMethod((SetMethod) node);
-
-		return visitUnknownNode(node);
 	}
 
 	public abstract E visitArrayInitializer(ArrayInitializer node);
@@ -426,7 +417,10 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitGetArrayItemExpression(GetArrayItemExpression node);
 
-	public abstract E visitGetMethod(GetMethod node);
+	@Deprecated
+	public final E visitGetMethod(GetMethod node) {
+		return null;
+	}
 
 	public abstract E visitIdentifier(Identifier node);
 
@@ -456,7 +450,10 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitPropertyExpression(PropertyExpression node);
 
-	public abstract E visitPropertyInitializer(PropertyInitializer node);
+	@Deprecated
+	public final E visitPropertyInitializer(PropertyInitializer node) {
+		return null;
+	}
 
 	public abstract E visitRegExpLiteral(RegExpLiteral node);
 
@@ -464,7 +461,10 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitScript(Script node);
 
-	public abstract E visitSetMethod(SetMethod node);
+	@Deprecated
+	public final E visitSetMethod(SetMethod node) {
+		return null;
+	}
 
 	public abstract E visitStatementBlock(StatementBlock node);
 

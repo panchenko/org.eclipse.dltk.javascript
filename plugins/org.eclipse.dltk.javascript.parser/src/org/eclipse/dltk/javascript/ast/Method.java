@@ -14,8 +14,8 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
 
-public abstract class Method extends JSNode implements ISourceable,
-		ISourceableBlock {
+public abstract class Method extends ObjectInitializerPart implements
+		ISourceable, ISourceableBlock {
 
 	private Identifier name;
 	private StatementBlock body;

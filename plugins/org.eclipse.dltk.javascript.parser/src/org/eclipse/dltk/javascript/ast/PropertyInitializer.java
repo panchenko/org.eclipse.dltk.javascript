@@ -16,7 +16,8 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class PropertyInitializer extends JSNode implements ISourceable {
+public class PropertyInitializer extends ObjectInitializerPart implements
+		ISourceable {
 
 	private Expression name;
 	private Expression value;
@@ -64,6 +65,7 @@ public class PropertyInitializer extends JSNode implements ISourceable {
 		this.colon = colon;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() > 0);
