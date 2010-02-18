@@ -53,6 +53,7 @@ import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
+import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
 import org.eclipse.dltk.javascript.ast.ParenthesizedExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
@@ -298,16 +299,12 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		return true;
 	}
 
-	@Override
-	public Boolean visitGetMethod(GetMethod node) {
-
+	private void testGetMethod(GetMethod node) {
 		visit(node.getName());
 		testKeyword(node.getGetKeyword());
 		visit(node.getBody());
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
-
-		return true;
 	}
 
 	@Override
@@ -377,8 +374,17 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	public Boolean visitObjectInitializer(ObjectInitializer node) {
 
 		testCharList(Keywords.COMMA, node.getCommas());
-		visit(node.getInitializers());
-
+		for (ObjectInitializerPart part : node.getInitializers()) {
+			if (part instanceof GetMethod) {
+				testGetMethod((GetMethod) part);
+			} else if (part instanceof SetMethod) {
+				testSetMethod((SetMethod) part);
+			} else if (part instanceof PropertyInitializer) {
+				testPropertyInitializer((PropertyInitializer) part);
+			} else {
+				Assert.fail(part.getClass().getName());
+			}
+		}
 		testChar(Keywords.LC, node.getLC());
 		testChar(Keywords.RC, node.getRC());
 
@@ -407,15 +413,11 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		return true;
 	}
 
-	@Override
-	public Boolean visitPropertyInitializer(PropertyInitializer node) {
-
+	private void testPropertyInitializer(PropertyInitializer node) {
 		testChar(Keywords.COLON, node.getColon());
 
 		visit(node.getName());
 		visit(node.getValue());
-
-		return true;
 	}
 
 	@Override
@@ -449,9 +451,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		return true;
 	}
 
-	@Override
-	public Boolean visitSetMethod(SetMethod node) {
-
+	private void testSetMethod(SetMethod node) {
 		testKeyword(node.getSetKeyword());
 		visit(node.getName());
 		visit(node.getArgument());
@@ -459,8 +459,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
-
-		return true;
 	}
 
 	@Override
