@@ -262,6 +262,21 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					// for(each) *in*
 					// catch *if*
 					return addChild(createTextNode(document, node));
+				} else if (node instanceof PropertyInitializer) {
+					nodes.push(node);
+					final IFormatterNode result = formatPropertyInitializer((PropertyInitializer) node);
+					nodes.pop();
+					return result;
+				} else if (node instanceof GetMethod) {
+					nodes.push(node);
+					final IFormatterNode result = formatGetMethod((GetMethod) node);
+					nodes.pop();
+					return result;
+				} else if (node instanceof SetMethod) {
+					nodes.push(node);
+					final IFormatterNode result = formatSetMethod((SetMethod) node);
+					nodes.pop();
+					return result;
 				} else {
 					nodes.push(node);
 					final IFormatterNode result = super.visit(node);
@@ -771,8 +786,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return formatterNode;
 			}
 
-			@Override
-			public IFormatterNode visitGetMethod(GetMethod node) {
+			private IFormatterNode formatGetMethod(GetMethod node) {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
@@ -1177,8 +1191,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return formatterNode;
 			}
 
-			@Override
-			public IFormatterNode visitPropertyInitializer(
+			private IFormatterNode formatPropertyInitializer(
 					PropertyInitializer node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
@@ -1245,8 +1258,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				return scriptNode;
 			}
 
-			@Override
-			public IFormatterNode visitSetMethod(SetMethod node) {
+			private IFormatterNode formatSetMethod(SetMethod node) {
 
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
