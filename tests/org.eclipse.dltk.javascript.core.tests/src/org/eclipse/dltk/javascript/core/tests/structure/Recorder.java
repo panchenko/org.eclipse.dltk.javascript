@@ -50,7 +50,7 @@ public class Recorder extends SourceElementRequestorAdaptor {
 
 	@Override
 	public void enterMethod(MethodInfo info) {
-		push(new Method(info.name));
+		push(new Method(info));
 	}
 
 	@Override
