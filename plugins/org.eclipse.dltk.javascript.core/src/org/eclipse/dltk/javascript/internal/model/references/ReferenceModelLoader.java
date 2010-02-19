@@ -70,16 +70,25 @@ public class ReferenceModelLoader {
 		return resource;
 	}
 
-	public Collection<IReference> getChildren(String typeName) {
+	public Type getType(String typeName) {
 		for (EObject object : resource.getContents()) {
 			if (object instanceof Type) {
 				final Type type = (Type) object;
 				if (typeName.equals(type.getName())) {
-					return getChildren(type);
+					return type;
 				}
 			}
 		}
-		return Collections.emptyList();
+		return null;
+	}
+
+	public Collection<IReference> getChildren(String typeName) {
+		final Type type = getType(typeName);
+		if (type != null) {
+			return getChildren(type);
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 	private final Map<Type, List<IReference>> referencesByType = new IdentityHashMap<Type, List<IReference>>();
