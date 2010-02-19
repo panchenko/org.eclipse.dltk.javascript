@@ -28,6 +28,7 @@ public class ReferenceFactory {
 	public static final String NUMBER = "Number";
 	public static final String BOOLEAN = "Boolean";
 	public static final String OBJECT = "Object";
+	public static final String REGEXP = "RegExp";
 
 	private static IScriptableTypeProvider[] providers;
 
