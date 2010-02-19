@@ -84,6 +84,7 @@ public class ConditionalOperator extends Expression {
 		this.colonPos = colonPos;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

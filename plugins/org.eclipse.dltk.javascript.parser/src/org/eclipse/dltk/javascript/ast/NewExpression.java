@@ -61,6 +61,7 @@ public class NewExpression extends Expression {
 		this.newKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

@@ -62,6 +62,7 @@ public class StatementBlock extends Statement implements ISourceableBlock {
 		this.RC = RC;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

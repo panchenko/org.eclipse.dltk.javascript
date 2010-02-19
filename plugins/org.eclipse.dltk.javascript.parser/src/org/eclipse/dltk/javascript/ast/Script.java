@@ -54,7 +54,7 @@ public class Script extends ASTNode implements ISourceable, IModuleDeclaration {
 		statements.add(statement);
 	}
 
-	public void visitAll(ASTVisitor visitor) {
+	public <E> void visitAll(ASTVisitor<E> visitor) {
 		for (Statement statement : statements) {
 			visitor.visit(statement);
 		}

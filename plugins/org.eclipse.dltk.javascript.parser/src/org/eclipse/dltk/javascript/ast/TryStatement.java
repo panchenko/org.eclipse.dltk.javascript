@@ -80,6 +80,7 @@ public class TryStatement extends Statement {
 		this.tryKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

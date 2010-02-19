@@ -106,6 +106,7 @@ public class IfStatement extends Statement implements ISourceableBlock {
 		this.RP = RP;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

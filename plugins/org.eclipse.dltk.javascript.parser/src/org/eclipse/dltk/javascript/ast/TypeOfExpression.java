@@ -55,6 +55,7 @@ public class TypeOfExpression extends Expression {
 		this.typeofKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

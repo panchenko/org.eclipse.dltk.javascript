@@ -55,6 +55,7 @@ public class YieldOperator extends Expression {
 		this.yieldKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

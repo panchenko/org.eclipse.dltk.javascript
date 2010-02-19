@@ -73,6 +73,7 @@ public class GetArrayItemExpression extends Expression {
 		this.RB = RB;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

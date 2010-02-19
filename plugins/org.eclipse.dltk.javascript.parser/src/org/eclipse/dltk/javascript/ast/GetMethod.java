@@ -48,6 +48,7 @@ public class GetMethod extends Method {
 		this.getKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() > 0);

@@ -64,6 +64,7 @@ public class CaseClause extends SwitchComponent {
 		this.caseKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() > 0);

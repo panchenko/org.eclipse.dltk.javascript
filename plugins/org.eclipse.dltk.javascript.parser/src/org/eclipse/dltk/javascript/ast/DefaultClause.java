@@ -53,6 +53,7 @@ public class DefaultClause extends SwitchComponent {
 		this.defaultKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() > 0);

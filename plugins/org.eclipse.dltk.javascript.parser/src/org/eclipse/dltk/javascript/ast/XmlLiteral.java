@@ -51,6 +51,7 @@ public class XmlLiteral extends Expression {
 		}
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 		StringBuilder sb = new StringBuilder();
 		for (XmlFragment fragment : fragments) {

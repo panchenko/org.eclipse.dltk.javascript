@@ -76,6 +76,7 @@ public class ArrayInitializer extends Expression {
 		this.RB = pos;
 	}
 
+	@Override
 	public String toSourceString(String indentionString) {
 
 		Assert.isTrue(sourceStart() >= 0);

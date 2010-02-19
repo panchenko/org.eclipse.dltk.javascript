@@ -112,6 +112,7 @@ public class SwitchStatement extends Statement {
 		this.switchKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

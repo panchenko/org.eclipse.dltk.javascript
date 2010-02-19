@@ -65,6 +65,7 @@ public class LabelledStatement extends Statement implements ISourceableBlock {
 		this.colon = colon;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

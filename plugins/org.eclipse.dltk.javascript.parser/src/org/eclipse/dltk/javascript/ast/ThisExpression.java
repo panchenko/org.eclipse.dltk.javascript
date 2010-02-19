@@ -44,6 +44,7 @@ public class ThisExpression extends Expression {
 		this.thisKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

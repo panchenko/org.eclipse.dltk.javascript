@@ -55,6 +55,7 @@ public class VoidOperator extends Expression {
 		this.voidKeyword = keyword;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

@@ -71,6 +71,7 @@ public class UnaryOperation extends Expression {
 		return operation == JSParser.PINC || operation == JSParser.PDEC;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

@@ -42,6 +42,7 @@ public class RegExpLiteral extends Expression {
 		this.text = text;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

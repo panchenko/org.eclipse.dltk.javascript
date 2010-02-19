@@ -36,6 +36,7 @@ public class NullExpression extends Expression {
 		}
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

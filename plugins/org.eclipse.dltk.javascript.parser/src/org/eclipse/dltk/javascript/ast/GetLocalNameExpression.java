@@ -64,6 +64,7 @@ public class GetLocalNameExpression extends Expression {
 		this.coloncolon = coloncolon;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

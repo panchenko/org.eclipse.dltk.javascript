@@ -96,6 +96,7 @@ public class CatchClause extends Statement {
 		this.RP = RP;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() > 0);

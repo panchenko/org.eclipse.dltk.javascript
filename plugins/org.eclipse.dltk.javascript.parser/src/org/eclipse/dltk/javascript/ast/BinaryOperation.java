@@ -76,6 +76,7 @@ public class BinaryOperation extends Expression {
 		this.right = right;
 	}
 
+	@Override
 	public String toSourceString(String indentionString) {
 
 		Assert.isTrue(sourceStart() >= 0);

@@ -88,6 +88,7 @@ public class WhileStatement extends LoopStatement implements ISemicolonStatement
 		this.semi = semi;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

@@ -64,6 +64,7 @@ public class PropertyExpression extends Expression {
 		this.dot = dot;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

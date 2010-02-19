@@ -64,6 +64,7 @@ public class BreakStatement extends Statement implements ISemicolonStatement {
 		this.semic = semic;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

@@ -96,6 +96,7 @@ public class DefaultXmlNamespaceStatement extends Statement {
 		this.semic = semic;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isNotNull(defaultKeyword);

@@ -126,6 +126,7 @@ public class ForStatement extends LoopStatement implements ISemicolonStatement {
 		this.trailingSemic = semic;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);

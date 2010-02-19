@@ -31,6 +31,7 @@ public class AsteriskExpression extends Expression {
 		}
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 		return "*";
 	}

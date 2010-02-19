@@ -42,6 +42,7 @@ public class BooleanLiteral extends Expression {
 		this.text = text;
 	}
 
+	@Override
 	public String toSourceString(String indentionString) {
 
 		Assert.isTrue(sourceStart() >= 0);

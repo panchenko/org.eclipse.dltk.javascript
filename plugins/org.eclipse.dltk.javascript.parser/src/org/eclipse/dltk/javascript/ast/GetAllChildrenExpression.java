@@ -64,6 +64,7 @@ public class GetAllChildrenExpression extends Expression {
 		this.dotdot = dot;
 	}
 
+	@Override
 	public String toSourceString(String indentationString) {
 
 		Assert.isTrue(sourceStart() >= 0);
