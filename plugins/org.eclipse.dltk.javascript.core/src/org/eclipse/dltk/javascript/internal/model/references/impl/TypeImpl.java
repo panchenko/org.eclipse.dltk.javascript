@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.2 2010/02/11 11:20:36 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.3 2010/02/19 13:39:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.internal.model.references.impl;
 
@@ -18,18 +18,13 @@ import java.util.Collection;
 import org.eclipse.dltk.javascript.internal.model.references.Member;
 import org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage;
 import org.eclipse.dltk.javascript.internal.model.references.Type;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -217,14 +212,14 @@ public class TypeImpl extends EObjectImpl implements Type {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: "); //$NON-NLS-1$
+		StringBuffer result = new StringBuffer(getClass().getSimpleName());
+		result.append('(');
 		result.append(name);
 		result.append(')');
 		return result.toString();
