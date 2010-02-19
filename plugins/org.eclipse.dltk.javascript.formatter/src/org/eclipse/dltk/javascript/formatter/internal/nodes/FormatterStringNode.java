@@ -24,14 +24,13 @@ public class FormatterStringNode extends FormatterTextNode {
 		super(document, node.sourceStart(), node.sourceEnd());
 	}
 
+	@Override
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 		visitor.ensureLineStarted(context);
 		IFormatterContext strContext = context.copy();
 		strContext.setIndenting(false);
-		strContext.setComment(true);
 		visitor.write(strContext, getStartOffset(), getEndOffset());
-		strContext.setComment(false);
 	}
 
 }
