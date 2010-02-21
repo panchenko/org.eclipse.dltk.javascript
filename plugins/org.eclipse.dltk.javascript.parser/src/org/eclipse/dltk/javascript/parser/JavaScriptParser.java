@@ -183,6 +183,11 @@ public class JavaScriptParser extends AbstractSourceParser {
 	 */
 	public Script parse(IModuleSource input, IProblemReporter reporter) {
 		Assert.isNotNull(input);
+		if (input.getModelElement() != null) {
+			setTypeInformationEnabled(JavaScriptParserPreferences
+					.isTypeInfoEnabled(input.getModelElement()
+							.getScriptProject().getProject()));
+		}
 		char[] source = input.getContentsAsCharArray();
 		return parse(createTokenStream(source), TextUtils
 				.createLineTracker(source), reporter);
