@@ -14,8 +14,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.ui.rules.FloatNumberRule;
@@ -48,33 +46,23 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 	}
 
 	private static void initProviders() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
-				.getExtensionPoint(
+		final List<IScriptColorProvider> providerList = new ArrayList<IScriptColorProvider>();
+		final IConfigurationElement[] configurationElements = Platform
+				.getExtensionRegistry().getConfigurationElementsFor(
 						"org.eclipse.dltk.javascript.ui.keywordsprovider");
-		IExtension[] extensions = extensionPoint.getExtensions();
-		ArrayList providerList = new ArrayList();
-		for (int a = 0; a < extensions.length; a++) {
-			IConfigurationElement[] configurationElements = extensions[a]
-					.getConfigurationElements();
-			for (int b = 0; b < configurationElements.length; b++) {
-
-				IConfigurationElement configurationElement = configurationElements[b];
-				try {
-					Object createExecutableExtension = configurationElement
-							.createExecutableExtension("class");
-					if (createExecutableExtension instanceof IScriptColorProvider) {
-						providerList.add(createExecutableExtension);
-					}
-				} catch (CoreException e) {
-					e.printStackTrace();
+		for (IConfigurationElement configurationElement : configurationElements) {
+			try {
+				final Object provider = configurationElement
+						.createExecutableExtension("class");
+				if (provider instanceof IScriptColorProvider) {
+					providerList.add((IScriptColorProvider) provider);
 				}
-				// System.out.println(configurationElement.getName());
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		}
-		IScriptColorProvider[] pr = new IScriptColorProvider[providerList
-				.size()];
-		providerList.toArray(pr);
-		providers = pr;
+		providers = providerList.toArray(new IScriptColorProvider[providerList
+				.size()]);
 	}
 
 	public JavascriptCodeScanner(IColorManager manager, IPreferenceStore store) {
@@ -82,12 +70,14 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 		initialize();
 	}
 
+	@Override
 	protected String[] getTokenProperties() {
 		return fgTokenProperties;
 	}
 
-	protected List createRules() {
-		List/* <IRule> */rules = new ArrayList/* <IRule> */();
+	@Override
+	protected List<IRule> createRules() {
+		List<IRule> rules = new ArrayList<IRule>();
 		IToken keyword = getToken(JavascriptColorConstants.JS_KEYWORD);
 		IToken keywordReturn = getToken(JavascriptColorConstants.JS_KEYWORD_RETURN);
 		IToken other = getToken(JavascriptColorConstants.JS_DEFAULT);
