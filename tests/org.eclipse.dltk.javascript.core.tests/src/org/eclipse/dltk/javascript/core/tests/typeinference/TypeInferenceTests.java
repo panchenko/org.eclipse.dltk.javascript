@@ -12,13 +12,14 @@
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import junit.framework.TestCase;
 
 import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.IValueTypeFactory;
@@ -32,18 +33,33 @@ import org.eclipse.dltk.utils.TextUtils;
 public class TypeInferenceTests extends TestCase {
 
 	private static Script parse(String code) {
-		JavaScriptParser parser = new JavaScriptParser();
-		return parser.parse(new ModuleSource(code), null);
+		final JavaScriptParser parser = new JavaScriptParser();
+		final ProblemCollector reporter = new ProblemCollector();
+		final Script script = parser.parse(new ModuleSource(code), reporter);
+		if (reporter.hasErrors()) {
+			fail(reporter.getErrors().toString());
+		}
+		return script;
 	}
 
-	private static Set<Type> getTypes(String name) {
-		return Collections.singleton(IValueTypeFactory.INSTANCE.get(name));
+	private static Set<Type> getTypes(String... names) {
+		final Set<Type> types = new HashSet<Type>();
+		for (String name : names) {
+			final Type type = IValueTypeFactory.INSTANCE.get(name);
+			assertNotNull(type);
+			types.add(type);
+		}
+		return types;
 	}
 
 	private static IValueCollection inference(final String code) {
 		TypeInferencer2 inferencer = new TypeInferencer2();
 		inferencer.doInferencing(parse(code));
 		return inferencer.getCollection();
+	}
+
+	private static IValueCollection inference(List<String> lines) {
+		return inference(TextUtils.join(lines, '\n'));
 	}
 
 	public void testNumberVar() {
@@ -83,7 +99,7 @@ public class TypeInferenceTests extends TestCase {
 		lines.add("  return 1");
 		lines.add("}");
 		lines.add("var z = s.execute()");
-		IValueCollection collection = inference(TextUtils.join(lines, "\n"));
+		IValueCollection collection = inference(lines);
 		IValueReference z = collection.getChild("z");
 		assertEquals(getTypes(ReferenceFactory.NUMBER), z.getTypes());
 	}
@@ -95,7 +111,7 @@ public class TypeInferenceTests extends TestCase {
 		lines.add("  return { a: 1, b: true }");
 		lines.add("}");
 		lines.add("var z = s.execute()");
-		IValueCollection collection = inference(TextUtils.join(lines, "\n"));
+		IValueCollection collection = inference(lines);
 		IValueReference z = collection.getChild("z");
 		assertTrue(z.getTypes().isEmpty());
 		final IValueReference a = z.getChild("a");
@@ -111,7 +127,7 @@ public class TypeInferenceTests extends TestCase {
 		lines.add("var str = (function() {");
 		lines.add("  return 'Hello'");
 		lines.add("})()");
-		IValueCollection collection = inference(TextUtils.join(lines, "\n"));
+		IValueCollection collection = inference(lines);
 		IValueReference str = collection.getChild("str");
 		assertEquals(getTypes(ReferenceFactory.STRING), str.getTypes());
 	}
@@ -120,7 +136,7 @@ public class TypeInferenceTests extends TestCase {
 		List<String> lines = new ArrayList<String>();
 		lines.add("var num = 1");
 		lines.add("var str = num.toString()");
-		IValueCollection collection = inference(TextUtils.join(lines, "\n"));
+		IValueCollection collection = inference(lines);
 		IValueReference str = collection.getChild("str");
 		assertEquals(getTypes(ReferenceFactory.STRING), str.getTypes());
 	}
@@ -131,9 +147,76 @@ public class TypeInferenceTests extends TestCase {
 		lines.add("  return 'Hello'");
 		lines.add("}");
 		lines.add("var str = hello()");
-		IValueCollection collection = inference(TextUtils.join(lines, "\n"));
+		IValueCollection collection = inference(lines);
 		IValueReference str = collection.getChild("str");
 		assertEquals(getTypes(ReferenceFactory.STRING), str.getTypes());
+	}
+
+	public void testIf() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("if (1 == 2) {");
+		lines.add("  x = 1");
+		lines.add("}");
+		lines.add("else {");
+		lines.add("  x = 'No'");
+		lines.add("}");
+		IValueCollection collection = inference(lines);
+		IValueReference x = collection.getChild("x");
+		assertEquals(
+				getTypes(ReferenceFactory.STRING, ReferenceFactory.NUMBER), x
+						.getTypes());
+	}
+
+	public void testFor() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("for (var i = 0; i < 10; ++i) {");
+		lines.add("  x = 'No'");
+		lines.add("}");
+		IValueCollection collection = inference(lines);
+		IValueReference i = collection.getChild("i");
+		assertEquals(getTypes(ReferenceFactory.NUMBER), i.getTypes());
+		IValueReference x = collection.getChild("x");
+		assertEquals(getTypes(ReferenceFactory.STRING), x.getTypes());
+	}
+
+	public void testForIn() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("for (var i in objectWithIterator) {");
+		lines.add("  print(objectWithIterator[i])");
+		lines.add("}");
+		IValueCollection collection = inference(lines);
+		IValueReference i = collection.getChild("i");
+		assertEquals(getTypes(ReferenceFactory.STRING), i.getTypes());
+	}
+
+	public void testWhile() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("while (1 == 2) {");
+		lines.add("  x = 'No'");
+		lines.add("}");
+		IValueCollection collection = inference(lines);
+		IValueReference x = collection.getChild("x");
+		assertEquals(getTypes(ReferenceFactory.STRING), x.getTypes());
+	}
+
+	public void testUnknownVar() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("var x = y");
+		IValueCollection collection = inference(lines);
+		IValueReference x = collection.getChild("x");
+		assertEquals(getTypes(), x.getTypes());
+		assertNull(collection.getChild("y"));
+	}
+
+	public void testSwitch() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("switch(n) {");
+		lines.add("case 0: str = 'Zero'; break;");
+		lines.add("case 1: str = 'One'; break;");
+		lines.add("}");
+		IValueCollection collection = inference(lines);
+		IValueReference x = collection.getChild("str");
+		assertEquals(getTypes(ReferenceFactory.STRING), x.getTypes());
 	}
 
 }
