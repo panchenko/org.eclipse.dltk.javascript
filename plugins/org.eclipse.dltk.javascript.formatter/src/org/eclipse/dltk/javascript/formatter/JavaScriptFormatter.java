@@ -9,12 +9,12 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.formatter;
 
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.core.DLTKCore;
@@ -30,14 +30,17 @@ import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterWriter;
 import org.eclipse.dltk.javascript.formatter.internal.JavascriptFormatterNodeRewriter;
 import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserPreferences;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
+import org.eclipse.dltk.ui.formatter.IScriptFormatterExtension;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
-public class JavaScriptFormatter extends AbstractScriptFormatter {
+public class JavaScriptFormatter extends AbstractScriptFormatter implements
+		IScriptFormatterExtension {
 
 	private final String lineDelimiter;
 
@@ -67,7 +70,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 	private int detectIndentationLevel(String input, int offset) {
 		ParserProblemReporter reporter = new ParserProblemReporter();
 
-		Script ast = new JavaScriptParser().parse(input, reporter);
+		Script ast = createParser().parse(input, reporter);
 
 		if (ast == null || reporter.hasErrors()) {
 			if (DLTKCore.DEBUG)
@@ -105,7 +108,7 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 			throws FormatterException {
 		ParserProblemReporter reporter = new ParserProblemReporter();
 
-		Script root = new JavaScriptParser().parse(source, reporter);
+		Script root = createParser().parse(source, reporter);
 
 		if (root == null || reporter.hasErrors()) {
 			final List<IProblem> errors = reporter.getErrors();
@@ -197,4 +200,18 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 
 		return document;
 	}
+
+	private IProject project;
+
+	public void initialize(IProject project) {
+		this.project = project;
+	}
+
+	private JavaScriptParser createParser() {
+		final JavaScriptParser parser = new JavaScriptParser();
+		parser.setTypeInformationEnabled(JavaScriptParserPreferences
+				.isTypeInfoEnabled(project));
+		return parser;
+	}
+
 }
