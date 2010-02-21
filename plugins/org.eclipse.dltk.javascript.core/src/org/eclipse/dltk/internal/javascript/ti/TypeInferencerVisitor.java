@@ -295,8 +295,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitIdentifier(Identifier node) {
 		IValueReference child = peekContext().getChild(node.getName());
 		if (child == null) {
-			// TODO create proxy!!!
-			child = peekContext().createChild(node.getName());
+			child = new ValueReferenceProxy(peekContext(), node.getName());
 		}
 		return child;
 	}
@@ -370,7 +369,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (child != null) {
 				return child;
 			} else {
-				return object.createChild(name);
+				return new ValueReferenceProxy(object, name);
 			}
 		} else {
 			return null;
