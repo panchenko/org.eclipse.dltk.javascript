@@ -21,10 +21,12 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.dltk.ast.parser.SourceParserManager;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IDLTKContributedExtension;
-import org.eclipse.dltk.internal.core.ModelManager;
+import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.javascript.core.JavaScriptCorePreferences;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserPlugin;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserPreferences;
 import org.eclipse.dltk.ui.preferences.AbstractOptionsBlock;
 import org.eclipse.dltk.ui.preferences.IPreferenceChangeRebuildPrompt;
 import org.eclipse.dltk.ui.preferences.PreferenceChangeRebuildPrompt;
@@ -54,6 +56,8 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 			keys.add(new PreferenceKey(DLTKCore.PLUGIN_ID,
 					DLTKCore.PROJECT_SOURCE_PARSER_ID));
 		}
+		keys.add(new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
+				JavaScriptParserPreferences.ENABLE_TYPE_INFO));
 		return keys.toArray(new PreferenceKey[keys.size()]);
 	}
 
@@ -63,12 +67,12 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 
-		final Composite markersComposite = new Composite(parent, SWT.NULL);
-		markersComposite.setLayout(layout);
-		markersComposite.setFont(parent.getFont());
+		final Composite composite = new Composite(parent, SWT.NULL);
+		composite.setLayout(layout);
+		composite.setFont(parent.getFont());
 
 		if (isProjectPreferencePage()) {
-			SWTFactory.createLabel(markersComposite, "Parser", 1);
+			SWTFactory.createLabel(composite, "Parser", 1);
 			final IDLTKContributedExtension[] extensions = SourceParserManager
 					.getInstance().getContributions(JavaScriptNature.NATURE_ID);
 			final String[] ids = new String[extensions.length];
@@ -77,17 +81,21 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				ids[i] = extensions[i].getId();
 				names[i] = extensions[i].getName();
 			}
-			bindControl(SWTFactory.createCombo(markersComposite, SWT.READ_ONLY,
-					1, 0, names), new PreferenceKey(DLTKCore.PLUGIN_ID,
+			bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
+					names), new PreferenceKey(DLTKCore.PLUGIN_ID,
 					DLTKCore.PROJECT_SOURCE_PARSER_ID), ids);
 		}
 
-		bindControl(SWTFactory.createCheckButton(markersComposite,
+		bindControl(SWTFactory.createCheckButton(composite,
 				JavaScriptPreferenceMessages.ErrorWarning_strictMode, null,
 				false, 2), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
 				JavaScriptCorePreferences.USE_STRICT_MODE), null);
+		bindControl(SWTFactory.createCheckButton(composite,
+				JavaScriptPreferenceMessages.ErrorWarning_enableTypeInfo, null,
+				false, 2), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
+				JavaScriptParserPreferences.ENABLE_TYPE_INFO), null);
 
-		return markersComposite;
+		return composite;
 	}
 
 	@Override
@@ -106,8 +114,7 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 		result[0] = new Job(job0.getName()) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				ModelManager.getModelManager().getSourceModuleInfoCache()
-						.clear();
+				SourceParserUtil.clearCache();
 				return Status.OK_STATUS;
 			}
 		};
