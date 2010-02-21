@@ -1,41 +1,34 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2007 IBM Corporation and others.
+ * Copyright (c) 2010 xored software, Inc.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- 
+ * Contributors:
+ *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text;
 
+import org.eclipse.dltk.compiler.task.ITodoTaskPreferences;
 import org.eclipse.dltk.ui.text.IColorManager;
-import org.eclipse.dltk.ui.text.TodoTaskPreferencesOnPreferenceStore;
+import org.eclipse.dltk.ui.text.ScriptCommentScanner;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-public class JavascriptDocScanner extends JavaScriptScriptCommentScanner {
+public class JavaScriptScriptCommentScanner extends ScriptCommentScanner {
 
-	public JavascriptDocScanner(IColorManager manager, IPreferenceStore store) {
-		super(manager, store, JavascriptColorConstants.JS_DOC,
-				JavascriptColorConstants.JS_TODO_TAG,
-				new TodoTaskPreferencesOnPreferenceStore(store));
+	public JavaScriptScriptCommentScanner(IColorManager manager,
+			IPreferenceStore store, String comment, String todoTag,
+			ITodoTaskPreferences preferences) {
+		super(manager, store, comment, todoTag, preferences);
 	}
 
 	@Override
 	protected int skipCommentChars() {
 		int count = 0;
-		int c = read();
-		while (Character.isWhitespace(c)) {
+		while (read() == '/') {
 			++count;
-			c = read();
-		}
-		while (c == '/') {
-			++count;
-			c = read();
-		}
-		while (c == '*') {
-			++count;
-			c = read();
 		}
 		unread();
 		return count;
