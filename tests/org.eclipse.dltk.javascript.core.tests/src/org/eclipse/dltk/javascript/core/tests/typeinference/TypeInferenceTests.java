@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -206,6 +207,18 @@ public class TypeInferenceTests extends TestCase {
 		IValueReference x = collection.getChild("x");
 		assertEquals(getTypes(), x.getTypes());
 		assertNull(collection.getChild("y"));
+	}
+
+	public void testUnknownProperty() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("var x = {a:1}");
+		lines.add("var y = x.b");
+		IValueCollection collection = inference(lines);
+		IValueReference x = collection.getChild("x");
+		assertEquals(getTypes(), x.getTypes());
+		assertEquals(Collections.singleton("a"), x.getDirectChildren());
+		IValueReference y = collection.getChild("y");
+		assertEquals(getTypes(), y.getTypes());
 	}
 
 	public void testSwitch() {
