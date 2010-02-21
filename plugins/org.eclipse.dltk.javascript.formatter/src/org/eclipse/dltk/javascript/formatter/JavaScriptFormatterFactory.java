@@ -78,6 +78,7 @@ public class JavaScriptFormatterFactory extends AbstractScriptFormatterFactory {
 		return result;
 	}
 
+	@Override
 	public URL getPreviewContent() {
 		return getClass().getResource("FormatterPreview.js"); //$NON-NLS-1$
 	}
