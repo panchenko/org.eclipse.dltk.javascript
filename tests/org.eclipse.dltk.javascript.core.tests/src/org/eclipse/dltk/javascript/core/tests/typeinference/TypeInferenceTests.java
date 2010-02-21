@@ -221,6 +221,16 @@ public class TypeInferenceTests extends TestCase {
 		assertEquals(getTypes(), y.getTypes());
 	}
 
+	public void testUnknownProperty3() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("x.y.z = 1");
+		IValueCollection collection = inference(lines);
+		IValueReference x = collection.getChild("x");
+		IValueReference y = x.getChild("y");
+		IValueReference z = y.getChild("z");
+		assertEquals(getTypes(ReferenceFactory.NUMBER), z.getTypes());
+	}
+
 	public void testSwitch() {
 		List<String> lines = new ArrayList<String>();
 		lines.add("switch(n) {");
