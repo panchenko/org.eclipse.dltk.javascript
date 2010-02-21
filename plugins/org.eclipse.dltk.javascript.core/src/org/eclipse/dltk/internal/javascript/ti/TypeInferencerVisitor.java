@@ -19,6 +19,7 @@ import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.BooleanLiteral;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
 import org.eclipse.dltk.javascript.ast.CallExpression;
+import org.eclipse.dltk.javascript.ast.CaseClause;
 import org.eclipse.dltk.javascript.ast.CommaExpression;
 import org.eclipse.dltk.javascript.ast.ConditionalOperator;
 import org.eclipse.dltk.javascript.ast.ConstStatement;
@@ -53,6 +54,7 @@ import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
+import org.eclipse.dltk.javascript.ast.SwitchComponent;
 import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
@@ -137,7 +139,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return null;
 	}
 
-	private void createVariable(IValueCollection context,
+	private IValueReference createVariable(IValueCollection context,
 			VariableDeclaration declaration) {
 		final String varName = declaration.getIdentifier().getName();
 		final IValueReference reference = context.createChild(varName);
@@ -149,7 +151,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 		}
 		reference.setLocal(true);
-		reference.addValue(visit(declaration.getInitializer()));
+		if (declaration.getInitializer() != null) {
+			reference.addValue(visit(declaration.getInitializer()));
+		}
+		return reference;
 	}
 
 	@Override
@@ -205,13 +210,25 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitForInStatement(ForInStatement node) {
-		// TODO Auto-generated method stub
+		final IValueReference item = visit(node.getItem());
+		if (item != null) {
+			item.addValue(IValueTypeFactory.INSTANCE.createString());
+		}
+		visit(node.getIterator());
+		visit(node.getBody());
 		return null;
 	}
 
 	@Override
 	public IValueReference visitForStatement(ForStatement node) {
-		// TODO Auto-generated method stub
+		if (node.getInitial() != null)
+			visit(node.getInitial());
+		if (node.getCondition() != null)
+			visit(node.getCondition());
+		if (node.getStep() != null)
+			visit(node.getStep());
+		if (node.getBody() != null)
+			visit(node.getBody());
 		return null;
 	}
 
@@ -276,19 +293,23 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitIdentifier(Identifier node) {
-		return peekContext().getChild(node.getName());
+		IValueReference child = peekContext().getChild(node.getName());
+		if (child == null) {
+			// TODO create proxy!!!
+			child = peekContext().createChild(node.getName());
+		}
+		return child;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.dltk.javascript.ast.ASTVisitor#visitIfStatement(org.eclipse
-	 * .dltk.javascript.ast.IfStatement)
-	 */
 	@Override
 	public IValueReference visitIfStatement(IfStatement node) {
-		// TODO Auto-generated method stub
+		visit(node.getCondition());
+		if (node.getThenStatement() != null) {
+			visit(node.getThenStatement());
+		}
+		if (node.getElseStatement() != null) {
+			visit(node.getElseStatement());
+		}
 		return null;
 	}
 
@@ -410,16 +431,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return IValueTypeFactory.INSTANCE.createString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.dltk.javascript.ast.ASTVisitor#visitSwitchStatement(org.eclipse
-	 * .dltk.javascript.ast.SwitchStatement)
-	 */
 	@Override
 	public IValueReference visitSwitchStatement(SwitchStatement node) {
-		// TODO Auto-generated method stub
+		if (node.getCondition() != null)
+			visit(node.getCondition());
+		for (SwitchComponent component : node.getCaseClauses()) {
+			if (component instanceof CaseClause) {
+				visit(((CaseClause) component).getCondition());
+			}
+			visit(component.getStatements());
+		}
 		return null;
 	}
 
@@ -453,10 +474,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitVariableStatment(VariableStatement node) {
 		final IValueCollection context = peekContext();
+		IValueReference result = null;
 		for (VariableDeclaration declaration : node.getVariables()) {
-			createVariable(context, declaration);
+			result = createVariable(context, declaration);
 		}
-		return null;
+		return result;
 	}
 
 	@Override
@@ -473,8 +495,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitWhileStatement(WhileStatement node) {
-		// visit(node.getCondition());
-		// visit(node.getBody());
+		if (node.getCondition() != null)
+			visit(node.getCondition());
+		if (node.getBody() != null)
+			visit(node.getBody());
 		return null;
 	}
 
