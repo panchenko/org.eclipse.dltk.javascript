@@ -27,12 +27,13 @@ public interface IValueParent {
 	IValueReference getChild(String name);
 
 	/**
-	 * Creates the child with the specified name if it doesn't exist yet
+	 * Finds the child with the specified name.
 	 * 
 	 * @param name
-	 * @return
+	 * @return the child found or <code>null</code> if there is no child with
+	 *         such name
 	 */
-	IValueReference createChild(String name);
+	IValueReference getChild(String name, GetMode mode);
 
 	/**
 	 * @param name

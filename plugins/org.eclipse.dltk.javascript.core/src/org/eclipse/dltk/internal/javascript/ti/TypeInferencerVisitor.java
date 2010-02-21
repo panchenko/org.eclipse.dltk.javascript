@@ -142,7 +142,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	private IValueReference createVariable(IValueCollection context,
 			VariableDeclaration declaration) {
 		final String varName = declaration.getIdentifier().getName();
-		final IValueReference reference = context.createChild(varName);
+		final IValueReference reference = context.getChild(varName,
+				GetMode.CREATE);
 		if (declaration.getType() != null) {
 			final Type type = IValueTypeFactory.INSTANCE.get(declaration
 					.getType().getName());
@@ -236,8 +237,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
 		final IValueCollection function = new FunctionValueCollection();
 		for (Argument argument : node.getArguments()) {
-			final IValueReference refArg = function.createChild(argument
-					.getIdentifier().getName());
+			final IValueReference refArg = function.getChild(argument
+					.getIdentifier().getName(), GetMode.CREATE);
 			if (argument.getType() != null) {
 				refArg.setDeclaredType(IValueTypeFactory.INSTANCE.get(argument
 						.getType().getName()));
@@ -251,8 +252,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final ValueReference result = new ValueReference();
 			result.putChild(IValueReference.FUNCTION_OP, returnValue);
 			if (node.getName() != null) {
-				peekContext().createChild(node.getName().getName()).addValue(
-						result);
+				peekContext()
+						.getChild(node.getName().getName(), GetMode.CREATE)
+						.addValue(result);
 			}
 			return result;
 		} else {
@@ -273,8 +275,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (node.getIndex() instanceof StringLiteral) {
 			// TODO extract array type from result?
 			if (array != null) {
-				return array.createChild(((StringLiteral) node.getIndex())
-						.getText());
+				return array.getChild(((StringLiteral) node.getIndex())
+						.getText(), GetMode.CREATE);
 			} else {
 				return null;
 			}
@@ -293,11 +295,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitIdentifier(Identifier node) {
-		IValueReference child = peekContext().getChild(node.getName());
-		if (child == null) {
-			child = new ValueReferenceProxy(peekContext(), node.getName());
-		}
-		return child;
+		return peekContext().getChild(node.getName(), GetMode.CREATE_LAZY);
 	}
 
 	@Override
@@ -344,7 +342,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final PropertyInitializer pi = (PropertyInitializer) part;
 				final String name = extractName(pi.getName());
 				if (name != null) {
-					final IValueReference reference = result.createChild(name);
+					final IValueReference reference = result.getChild(name,
+							GetMode.CREATE);
 					reference.addValue(visit(pi.getValue()));
 				}
 			} else {
@@ -365,12 +364,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference object = visit(node.getObject());
 		final String name = extractName(node.getProperty());
 		if (name != null) {
-			final IValueReference child = object.getChild(name);
-			if (child != null) {
-				return child;
-			} else {
-				return new ValueReferenceProxy(object, name);
-			}
+			return object.getChild(name, GetMode.CREATE_LAZY);
 		} else {
 			return null;
 		}

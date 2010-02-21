@@ -60,17 +60,19 @@ public class ValueReferenceProxy implements IValueReference {
 		resolve().setLocal(local);
 	}
 
-	public IValueReference createChild(String name) {
-		return resolve().createChild(name);
-	}
-
 	public void deleteChild(String name) {
 		resolve().deleteChild(name);
 	}
 
 	public IValueReference getChild(String name) {
-		if (isResolved()) {
-			return resolve().getChild(name);
+		return getChild(name, GetMode.GET);
+	}
+
+	public IValueReference getChild(String name, GetMode mode) {
+		if (mode == GetMode.CREATE || isResolved()) {
+			return resolve().getChild(name, mode);
+		} else if (mode == GetMode.RESOLVE) {
+			return null;
 		} else {
 			return new ValueReferenceProxy(this, name);
 		}
@@ -86,7 +88,7 @@ public class ValueReferenceProxy implements IValueReference {
 
 	private IValueReference resolve() {
 		if (resolved == null) {
-			resolved = parent.createChild(name);
+			resolved = parent.getChild(name, GetMode.CREATE);
 		}
 		return resolved;
 	}
@@ -94,7 +96,14 @@ public class ValueReferenceProxy implements IValueReference {
 	private IValueReference resolved = null;
 
 	private boolean isResolved() {
-		return resolved != null || parent.getChild(name) != null;
+		return resolved != null
+				|| parent.getChild(name, GetMode.RESOLVE) != null;
+	}
+
+	@Override
+	public String toString() {
+		return (parent instanceof IValueReference ? parent.toString() : "ROOT")
+				+ "->" + name;
 	}
 
 }

@@ -58,7 +58,7 @@ public class ValueReference implements IValueReference {
 		for (String childName : value.getDirectChildren()) {
 			final IValueReference child = value.getChild(childName);
 			if (child != null) {
-				createChild(childName).addValue(child);
+				getChild(childName, GetMode.CREATE).addValue(child);
 			}
 		}
 	}
@@ -103,15 +103,6 @@ public class ValueReference implements IValueReference {
 
 	}
 
-	public IValueReference createChild(String name) {
-		IValueReference child = children.get(name);
-		if (child == null) {
-			child = new ValueReference(this, name);
-			children.put(name, child);
-		}
-		return child;
-	}
-
 	public void deleteChild(String name) {
 		deletedChildren.add(name);
 	}
@@ -142,6 +133,10 @@ public class ValueReference implements IValueReference {
 	}
 
 	public IValueReference getChild(String name) {
+		return getChild(name, GetMode.GET);
+	}
+
+	public IValueReference getChild(String name, GetMode mode) {
 		final IValueReference child = children.get(name);
 		if (child != null) {
 			return child;
@@ -151,6 +146,13 @@ public class ValueReference implements IValueReference {
 			if (member instanceof Method) {
 				return new MethodValueReferenceProxy(this, (Method) member);
 			}
+		}
+		if (mode == GetMode.CREATE) {
+			final IValueReference newChild = new ValueReference(this, name);
+			children.put(name, newChild);
+			return newChild;
+		} else if (mode == GetMode.CREATE_LAZY) {
+			return new ValueReferenceProxy(this, name);
 		}
 		return null;
 	}

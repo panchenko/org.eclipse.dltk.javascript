@@ -45,15 +45,6 @@ public class ValueCollection implements IValueCollection {
 		return null;
 	}
 
-	public IValueReference createChild(String name) {
-		IValueReference child = children.get(name);
-		if (child == null) {
-			child = new ValueReference(this, name);
-			children.put(name, child);
-		}
-		return child;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -67,11 +58,30 @@ public class ValueCollection implements IValueCollection {
 	}
 
 	public IValueReference getChild(String name) {
-		return children.get(name);
+		return getChild(name, GetMode.GET);
+	}
+
+	public IValueReference getChild(String name, GetMode mode) {
+		IValueReference child = children.get(name);
+		if (child != null) {
+			return child;
+		}
+		if (mode == GetMode.CREATE) {
+			child = new ValueReference(this, name);
+			children.put(name, child);
+		} else if (mode == GetMode.CREATE_LAZY) {
+			child = new ValueReferenceProxy(this, name);
+		}
+		return child;
 	}
 
 	public boolean isEmpty() {
 		return children.isEmpty();
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + children.keySet();
 	}
 
 }

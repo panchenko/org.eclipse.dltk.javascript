@@ -35,24 +35,16 @@ public class NestedValueCollection implements IValueCollection {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.eclipse.dltk.internal.javascript.ti.IValueParent#createChild(java
-	 * .lang.String)
-	 */
-	public IValueReference createChild(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * org.eclipse.dltk.internal.javascript.ti.IValueParent#deleteChild(java
 	 * .lang.String)
 	 */
 	public void deleteChild(String name) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public IValueReference getChild(String name) {
+		return getChild(name, GetMode.GET);
 	}
 
 	/*
@@ -62,7 +54,7 @@ public class NestedValueCollection implements IValueCollection {
 	 * org.eclipse.dltk.internal.javascript.ti.IValueParent#getChild(java.lang
 	 * .String)
 	 */
-	public IValueReference getChild(String name) {
+	public IValueReference getChild(String name, GetMode mode) {
 		// TODO Auto-generated method stub
 		return null;
 	}

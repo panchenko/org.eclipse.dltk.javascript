@@ -60,13 +60,9 @@ public class MethodValueReferenceProxy implements IValueReference {
 		resolve().setLocal(local);
 	}
 
-	public IValueReference createChild(String name) {
-		return resolve().createChild(name);
-	}
-
 	private IValueReference resolve() {
 		if (resolved == null) {
-			resolved = owner.createChild(method.getName());
+			resolved = owner.getChild(method.getName(), GetMode.CREATE);
 			resolved.addValue(this);
 		}
 		return resolved;
@@ -77,6 +73,10 @@ public class MethodValueReferenceProxy implements IValueReference {
 	}
 
 	public IValueReference getChild(String name) {
+		return getChild(name, GetMode.GET);
+	}
+
+	public IValueReference getChild(String name, GetMode mode) {
 		if (FUNCTION_OP.equals(name)) {
 			return IValueTypeFactory.INSTANCE.create(method.getType());
 		} else {
