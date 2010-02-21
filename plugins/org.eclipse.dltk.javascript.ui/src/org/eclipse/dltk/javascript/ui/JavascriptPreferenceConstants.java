@@ -421,6 +421,8 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 
 	public final static String COMMENT_TASK_TAGS_BOLD = COMMENT_TASK_TAGS
 			+ EDITOR_BOLD_SUFFIX;
+	public final static String COMMENT_TASK_TAGS_ITALIC = COMMENT_TASK_TAGS
+			+ EDITOR_ITALIC_SUFFIX;
 
 	/**
 	 * A preference that controls the selected formatter.
@@ -458,6 +460,13 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 		PreferenceConverter.setDefault(store,
 				JavascriptPreferenceConstants.EDITOR_XML_BODY_ALL, new RGB(240,
 						240, 240));
+		PreferenceConverter.setDefault(store,
+				JavascriptPreferenceConstants.COMMENT_TASK_TAGS, new RGB(127,
+						159, 191));
+		store.setDefault(JavascriptPreferenceConstants.COMMENT_TASK_TAGS_BOLD,
+				true);
+		store.setDefault(
+				JavascriptPreferenceConstants.COMMENT_TASK_TAGS_ITALIC, false);
 		store.setDefault(
 				JavascriptPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_BOLD,
 				false);
