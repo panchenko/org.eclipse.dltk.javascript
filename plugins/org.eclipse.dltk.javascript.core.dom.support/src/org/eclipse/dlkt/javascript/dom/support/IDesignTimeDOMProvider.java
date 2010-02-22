@@ -1,10 +1,9 @@
 package org.eclipse.dlkt.javascript.dom.support;
 
-import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.dltk.core.ISourceModule;
 import org.mozilla.javascript.Scriptable;
 
-public interface IDesignTimeDOMProvider extends IExecutableExtension {
+public interface IDesignTimeDOMProvider {
 
 	/**
 	 * 
