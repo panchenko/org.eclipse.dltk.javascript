@@ -11,11 +11,11 @@ package org.eclipse.dltk.javascript.jdt.integration;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.IScriptProjectFilenames;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.utils.AdaptUtils;
+import org.eclipse.dltk.utils.ResourceUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -37,20 +37,14 @@ public class AddJsNatureAction implements IObjectActionDelegate {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
 			Object[] array = ssel.toArray();
 			for (int a = 0; a < array.length; a++) {
-				final IProject project = AdaptUtils.getAdapter(
-						array[a], IProject.class);
+				final IProject project = AdaptUtils.getAdapter(array[a],
+						IProject.class);
 				if (project == null) {
 					continue;
 				}
 				try {
-					IProjectDescription description = project.getDescription();
-					String[] natureIds = description.getNatureIds();
-					String[] newNStrings = new String[natureIds.length + 1];
-					System.arraycopy(natureIds, 0, newNStrings, 0,
-							natureIds.length);
-					newNStrings[natureIds.length] = JavaScriptNature.NATURE_ID;
-					description.setNatureIds(newNStrings);
-					project.setDescription(description, null);
+					ResourceUtil.addNature(project, null,
+							JavaScriptNature.NATURE_ID);
 					IFile buildpathFile = project
 							.getFile(IScriptProjectFilenames.BUILDPATH_FILENAME);
 					if (!buildpathFile.exists()) {
