@@ -56,8 +56,12 @@ public class ValueReferenceProxy implements IValueReference {
 		resolve().setDeclaredType(type);
 	}
 
-	public void setLocal(boolean local) {
-		resolve().setLocal(local);
+	public ReferenceKind getKind() {
+		return isResolved() ? resolve().getKind() : ReferenceKind.UNKNOWN;
+	}
+
+	public void setKind(ReferenceKind kind) {
+		resolve().setKind(kind);
 	}
 
 	public void deleteChild(String name) {

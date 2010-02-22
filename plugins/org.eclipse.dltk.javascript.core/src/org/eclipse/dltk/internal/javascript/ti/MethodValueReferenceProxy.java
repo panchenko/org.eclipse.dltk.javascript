@@ -56,8 +56,12 @@ public class MethodValueReferenceProxy implements IValueReference {
 		resolve().setDeclaredType(type);
 	}
 
-	public void setLocal(boolean local) {
-		resolve().setLocal(local);
+	public ReferenceKind getKind() {
+		return ReferenceKind.METHOD;
+	}
+
+	public void setKind(ReferenceKind kind) {
+		resolve().setKind(kind);
 	}
 
 	private IValueReference resolve() {

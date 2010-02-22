@@ -11,30 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import java.util.Set;
-
-import org.eclipse.dltk.javascript.internal.model.references.Type;
-
-public interface IValueReference extends IValueParent {
-
-	static final String FUNCTION_OP = "()";
-
-	String getName();
-
-	Set<Type> getTypes();
-
-	Set<String> getDirectChildren();
-
-	void clear();
-
-	void addValue(IValueReference value);
-
-	ReferenceKind getKind();
-
-	void setKind(ReferenceKind kind);
-
-	Type getDeclaredType();
-
-	void setDeclaredType(Type type);
-
+public enum ReferenceKind {
+	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL
 }

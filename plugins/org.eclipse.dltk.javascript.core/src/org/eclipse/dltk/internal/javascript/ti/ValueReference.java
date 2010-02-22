@@ -29,6 +29,7 @@ public class ValueReference implements IValueReference {
 	private final Map<String, IValueReference> children = new HashMap<String, IValueReference>();
 	private final Set<String> deletedChildren = new HashSet<String>();
 	private Type declaredType;
+	private ReferenceKind kind = ReferenceKind.UNKNOWN;
 
 	public ValueReference() {
 		this((String) null);
@@ -92,15 +93,12 @@ public class ValueReference implements IValueReference {
 		this.declaredType = type;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.dltk.internal.javascript.ti.IValueReference#setLocal(boolean)
-	 */
-	public void setLocal(boolean local) {
-		// TODO Auto-generated method stub
+	public ReferenceKind getKind() {
+		return kind;
+	}
 
+	public void setKind(ReferenceKind kind) {
+		this.kind = kind;
 	}
 
 	public void deleteChild(String name) {

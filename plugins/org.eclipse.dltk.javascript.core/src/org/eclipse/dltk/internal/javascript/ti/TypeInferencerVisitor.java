@@ -151,7 +151,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				reference.setDeclaredType(type);
 			}
 		}
-		reference.setLocal(true);
+		reference.setKind(ReferenceKind.LOCAL);
 		if (declaration.getInitializer() != null) {
 			reference.addValue(visit(declaration.getInitializer()));
 		}
@@ -239,6 +239,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		for (Argument argument : node.getArguments()) {
 			final IValueReference refArg = function.getChild(argument
 					.getIdentifier().getName(), GetMode.CREATE);
+			refArg.setKind(ReferenceKind.ARGUMENT);
 			if (argument.getType() != null) {
 				refArg.setDeclaredType(IValueTypeFactory.INSTANCE.get(argument
 						.getType().getName()));
