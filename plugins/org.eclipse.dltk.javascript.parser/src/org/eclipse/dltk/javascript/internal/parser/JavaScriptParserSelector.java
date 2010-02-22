@@ -21,12 +21,14 @@ public class JavaScriptParserSelector extends DLTKPriorityContributionSelector {
 	@Override
 	public IDLTKContributedExtension select(
 			IDLTKContributedExtension[] contributions, IProject project) {
-		final String parserId = DLTKCore.create(project).getOption(
-				DLTKCore.PROJECT_SOURCE_PARSER_ID, false);
-		if (parserId != null) {
-			for (IDLTKContributedExtension extension : contributions) {
-				if (parserId.equals(extension.getId())) {
-					return extension;
+		if (project != null) {
+			final String parserId = DLTKCore.create(project).getOption(
+					DLTKCore.PROJECT_SOURCE_PARSER_ID, false);
+			if (parserId != null) {
+				for (IDLTKContributedExtension extension : contributions) {
+					if (parserId.equals(extension.getId())) {
+						return extension;
+					}
 				}
 			}
 		}
