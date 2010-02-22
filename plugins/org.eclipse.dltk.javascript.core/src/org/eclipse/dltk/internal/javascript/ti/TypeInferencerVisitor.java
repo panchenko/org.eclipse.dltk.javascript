@@ -495,16 +495,18 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.dltk.javascript.ast.ASTVisitor#visitWithStatement(org.eclipse
-	 * .dltk.javascript.ast.WithStatement)
-	 */
 	@Override
 	public IValueReference visitWithStatement(WithStatement node) {
-		// TODO Auto-generated method stub
+		final IValueReference with = visit(node.getExpression());
+		if (with != null) {
+			final WithValueCollection withCollection = new WithValueCollection(
+					peekContext(), with);
+			enterContext(withCollection);
+			visit(node.getStatement());
+			leaveContext();
+		} else {
+			visit(node.getStatement());
+		}
 		return null;
 	}
 
