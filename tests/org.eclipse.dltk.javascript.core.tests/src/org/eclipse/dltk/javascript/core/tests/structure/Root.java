@@ -29,4 +29,9 @@ public class Root extends Member {
 		return getClass().getSimpleName();
 	}
 
+	@Override
+	public String toString() {
+		return children.toString();
+	}
+
 }

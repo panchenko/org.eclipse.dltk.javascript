@@ -18,7 +18,7 @@ public abstract class Member {
 
 	private final String name;
 
-	private final List<Member> children = new ArrayList<Member>();
+	protected final List<Member> children = new ArrayList<Member>();
 
 	public Member(String name) {
 		this.name = name;
@@ -31,11 +31,16 @@ public abstract class Member {
 
 	@Override
 	public String toString() {
-		return describeMember() + children;
+		final StringBuilder sb = new StringBuilder();
+		sb.append(describeMember());
+		if (!children.isEmpty()) {
+			sb.append(children);
+		}
+		return sb.toString();
 	}
 
 	protected String describeMember() {
-		return getClass().getSimpleName() + "[" + name + "]";
+		return getClass().getSimpleName() + " " + name;
 	}
 
 	@Override

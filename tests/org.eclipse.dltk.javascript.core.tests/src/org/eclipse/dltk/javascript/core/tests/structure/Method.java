@@ -41,7 +41,17 @@ public class Method extends Member {
 
 	@Override
 	protected String describeMember() {
-		return super.describeMember() + "(" + parameters + ")";
+		StringBuilder sb = new StringBuilder();
+		sb.append(super.describeMember());
+		sb.append("(");
+		for (int i = 0; i < parameters.size(); ++i) {
+			if (i != 0) {
+				sb.append(",");
+			}
+			sb.append(parameters.get(i));
+		}
+		sb.append(")");
+		return sb.toString();
 	}
 
 	@Override
