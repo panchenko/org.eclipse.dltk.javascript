@@ -242,4 +242,18 @@ public class TypeInferenceTests extends TestCase {
 		assertEquals(getTypes(ReferenceFactory.STRING), x.getTypes());
 	}
 
+	public void testWith() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("var a = {name:1}");
+		lines.add("with (a) {");
+		lines.add("  name = 'Alex'");
+		lines.add("}");
+		IValueCollection collection = inference(lines);
+		IValueReference a = collection.getChild("a");
+		assertEquals(getTypes(), a.getTypes());
+		IValueReference name = a.getChild("name");
+		assertTrue(name.getTypes().containsAll(
+				getTypes(ReferenceFactory.STRING)));
+	}
+
 }
