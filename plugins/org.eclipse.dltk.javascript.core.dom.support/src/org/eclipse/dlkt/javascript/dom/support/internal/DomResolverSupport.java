@@ -1,11 +1,10 @@
 package org.eclipse.dlkt.javascript.dom.support.internal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dlkt.javascript.dom.support.IDesignTimeDOMProvider;
 
@@ -18,34 +17,25 @@ public class DomResolverSupport {
 	}
 
 	private static void initProviders() {
-		IExtensionPoint extensionPoint = Platform
+		List<IDesignTimeDOMProvider> providerList = new ArrayList<IDesignTimeDOMProvider>();
+		IConfigurationElement[] configurationElements = Platform
 				.getExtensionRegistry()
-				.getExtensionPoint(
+				.getConfigurationElementsFor(
 						"org.eclipse.dltk.javascript.core.dom.support.domprovider");
-		IExtension[] extensions = extensionPoint.getExtensions();
-		ArrayList providerList = new ArrayList();
-		for (int a = 0; a < extensions.length; a++) {
-			IConfigurationElement[] configurationElements = extensions[a]
-					.getConfigurationElements();
-			for (int b = 0; b < configurationElements.length; b++) {
-
-				IConfigurationElement configurationElement = configurationElements[b];
-				try {
-					Object createExecutableExtension = configurationElement
-							.createExecutableExtension("class");
-					if (createExecutableExtension instanceof IDesignTimeDOMProvider) {
-						providerList.add(createExecutableExtension);
-					}
-				} catch (CoreException e) {
-					e.printStackTrace();
+		for (int b = 0; b < configurationElements.length; b++) {
+			IConfigurationElement configurationElement = configurationElements[b];
+			try {
+				Object extension = configurationElement
+						.createExecutableExtension("class");
+				if (extension instanceof IDesignTimeDOMProvider) {
+					providerList.add((IDesignTimeDOMProvider) extension);
 				}
-				// System.out.println(configurationElement.getName());
+			} catch (CoreException e) {
+				e.printStackTrace();
 			}
 		}
-		IDesignTimeDOMProvider[] pr = new IDesignTimeDOMProvider[providerList
-				.size()];
-		providerList.toArray(pr);
-		providers = pr;
+		providers = providerList
+				.toArray(new IDesignTimeDOMProvider[providerList.size()]);
 	}
 
 	public static IDesignTimeDOMProvider[] getProviders() {
