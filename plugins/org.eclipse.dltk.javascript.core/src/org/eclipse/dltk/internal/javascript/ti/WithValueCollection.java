@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.Set;
+
 public class WithValueCollection implements IValueCollection {
 
 	private final IValueCollection parent;
@@ -32,6 +34,10 @@ public class WithValueCollection implements IValueCollection {
 
 	public void deleteChild(String name) {
 		with.deleteChild(name);
+	}
+
+	public Set<String> getDirectChildren() {
+		return with.getDirectChildren();
 	}
 
 	public IValueReference getChild(String name) {

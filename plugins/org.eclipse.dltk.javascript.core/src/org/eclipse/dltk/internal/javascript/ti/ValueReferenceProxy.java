@@ -16,7 +16,8 @@ import java.util.Set;
 
 import org.eclipse.dltk.javascript.internal.model.references.Type;
 
-public class ValueReferenceProxy implements IValueReference {
+public class ValueReferenceProxy implements IValueReference,
+		IValueReferenceProxy {
 
 	private final IValueParent parent;
 	private final String name;
@@ -64,6 +65,15 @@ public class ValueReferenceProxy implements IValueReference {
 		resolve().setKind(kind);
 	}
 
+	public ReferenceLocation getLocation() {
+		return isResolved() ? resolve().getLocation()
+				: ReferenceLocation.UNKNOWN;
+	}
+
+	public void setLocation(ReferenceLocation location) {
+		resolve().setLocation(location);
+	}
+
 	public void deleteChild(String name) {
 		resolve().deleteChild(name);
 	}
@@ -90,16 +100,26 @@ public class ValueReferenceProxy implements IValueReference {
 		return isResolved() ? resolve().isEmpty() : true;
 	}
 
-	private IValueReference resolve() {
+	public Object getAttribute(String key) {
+		return isResolved() ? resolve().getAttribute(key) : null;
+	}
+
+	public void setAttribute(String key, Object value) {
+		resolve().setAttribute(key, value);
+	}
+
+	public IValueReference resolve() {
 		if (resolved == null) {
 			resolved = parent.getChild(name, GetMode.CREATE);
+			assert resolved != null;
+			assert !(resolved instanceof ValueReferenceProxy);
 		}
 		return resolved;
 	}
 
 	private IValueReference resolved = null;
 
-	private boolean isResolved() {
+	public boolean isResolved() {
 		return resolved != null
 				|| parent.getChild(name, GetMode.RESOLVE) != null;
 	}
@@ -108,6 +128,20 @@ public class ValueReferenceProxy implements IValueReference {
 	public String toString() {
 		return (parent instanceof IValueReference ? parent.toString() : "ROOT")
 				+ "->" + name;
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode() ^ parent.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ValueReferenceProxy) {
+			final ValueReferenceProxy other = (ValueReferenceProxy) obj;
+			return name.equals(other.name) && parent.equals(other.parent);
+		}
+		return false;
 	}
 
 }

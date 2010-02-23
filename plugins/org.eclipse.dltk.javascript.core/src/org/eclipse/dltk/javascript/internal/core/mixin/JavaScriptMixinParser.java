@@ -55,8 +55,9 @@ public class JavaScriptMixinParser implements IMixinParser {
 		try {
 			ScriptOrFnNode parse = parser.parse(new CharArrayReader(content),
 					"", 0);
-			TypeInferencer interferencer = new TypeInferencer(null,
-					new ReferenceResolverContext(null, Collections.emptyMap()));
+			TypeInferencer interferencer = new TypeInferencer(
+					(ModelElement) module, new ReferenceResolverContext(null,
+							Collections.emptyMap()));
 			// interferencer.setRequestor(fRequestor);
 			interferencer.doInterferencing(parse, Integer.MAX_VALUE);
 			// fRequestor.enterModule();

@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.Set;
+
 public interface IValueParent {
 
 	IValueParent getParent();
 
 	boolean isEmpty();
+
+	Set<String> getDirectChildren();
 
 	/**
 	 * Finds the child with the specified name.

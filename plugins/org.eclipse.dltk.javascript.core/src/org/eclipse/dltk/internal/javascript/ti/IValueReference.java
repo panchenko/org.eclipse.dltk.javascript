@@ -23,8 +23,6 @@ public interface IValueReference extends IValueParent {
 
 	Set<Type> getTypes();
 
-	Set<String> getDirectChildren();
-
 	void clear();
 
 	void addValue(IValueReference value);
@@ -33,8 +31,16 @@ public interface IValueReference extends IValueParent {
 
 	void setKind(ReferenceKind kind);
 
+	ReferenceLocation getLocation();
+
+	void setLocation(ReferenceLocation location);
+
 	Type getDeclaredType();
 
 	void setDeclaredType(Type type);
+
+	Object getAttribute(String key);
+
+	void setAttribute(String key, Object value);
 
 }

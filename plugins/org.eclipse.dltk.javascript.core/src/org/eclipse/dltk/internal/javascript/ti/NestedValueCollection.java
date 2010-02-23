@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.Set;
+
 public class NestedValueCollection implements IValueCollection {
 
 	private final IValueCollection parentCollection;
@@ -41,6 +43,17 @@ public class NestedValueCollection implements IValueCollection {
 	public void deleteChild(String name) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.dltk.internal.javascript.ti.IValueParent#getDirectChildren()
+	 */
+	public Set<String> getDirectChildren() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public IValueReference getChild(String name) {

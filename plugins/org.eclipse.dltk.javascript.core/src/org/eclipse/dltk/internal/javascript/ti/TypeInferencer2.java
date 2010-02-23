@@ -13,14 +13,25 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 
 public class TypeInferencer2 {
 
 	private final TypeInferencerVisitor visitor = new TypeInferencerVisitor();
 
 	public void doInferencing(Script script) {
-		visitor.initialize();
-		visitor.visit(script);
+		try {
+			visitor.initialize();
+			visitor.visit(script);
+		} catch (RuntimeException e) {
+			log(e);
+		} catch (AssertionError e) {
+			log(e);
+		}
+	}
+
+	protected void log(Throwable e) {
+		JavaScriptPlugin.error(e);
 	}
 
 	public IValueReference evaluate(ASTNode node) {

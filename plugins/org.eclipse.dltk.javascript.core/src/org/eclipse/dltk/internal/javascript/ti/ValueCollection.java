@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ValueCollection implements IValueCollection {
 
@@ -57,6 +59,10 @@ public class ValueCollection implements IValueCollection {
 
 	}
 
+	public Set<String> getDirectChildren() {
+		return Collections.unmodifiableSet(children.keySet());
+	}
+
 	public IValueReference getChild(String name) {
 		return getChild(name, GetMode.GET);
 	}
@@ -73,6 +79,10 @@ public class ValueCollection implements IValueCollection {
 			child = new ValueReferenceProxy(this, name);
 		}
 		return child;
+	}
+
+	public void putChild(String name, IValueReference value) {
+		children.put(name, value);
 	}
 
 	public boolean isEmpty() {

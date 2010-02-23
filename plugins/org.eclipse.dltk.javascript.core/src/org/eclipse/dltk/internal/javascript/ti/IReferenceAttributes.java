@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-public enum ReferenceKind {
-	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL, FUNCTION
+public interface IReferenceAttributes {
+
+	String PARAMETERS = "PARAMETERS";
+	String FUNCTION_SCOPE = "FUNCTION_SCOPE";
+
 }

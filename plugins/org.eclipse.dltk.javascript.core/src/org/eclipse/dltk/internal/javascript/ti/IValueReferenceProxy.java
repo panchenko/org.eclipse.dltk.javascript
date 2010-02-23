@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-public enum ReferenceKind {
-	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL, FUNCTION
+public interface IValueReferenceProxy {
+
+	boolean isResolved();
+
+	IValueReference resolve();
+
 }

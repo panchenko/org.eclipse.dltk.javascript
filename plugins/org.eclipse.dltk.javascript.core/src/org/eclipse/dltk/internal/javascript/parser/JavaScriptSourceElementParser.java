@@ -21,6 +21,7 @@ import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.ISourceElementParser;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ResolverManager;
 import org.eclipse.dltk.internal.javascript.typeinference.ContextReference;
@@ -39,8 +40,8 @@ import com.xored.org.mozilla.javascript.ScriptOrFnNode.Position;
 
 public class JavaScriptSourceElementParser implements ISourceElementParser {
 
-	private ISourceElementRequestor fRequestor = null;
-	private IProblemReporter fReporter = null;
+	protected ISourceElementRequestor fRequestor = null;
+	protected IProblemReporter fReporter = null;
 	private ISourceModule module;
 
 	public JavaScriptSourceElementParser() {
@@ -76,8 +77,8 @@ public class JavaScriptSourceElementParser implements ISourceElementParser {
 				resolverContext = new ReferenceResolverContext(null,
 						Collections.emptyMap());
 			}
-			TypeInferencer interferencer = new TypeInferencer(null,
-					resolverContext);
+			TypeInferencer interferencer = new TypeInferencer(
+					(ModelElement) module, resolverContext);
 			interferencer.setRequestor(fRequestor);
 			interferencer.doInterferencing(parse, Integer.MAX_VALUE);
 

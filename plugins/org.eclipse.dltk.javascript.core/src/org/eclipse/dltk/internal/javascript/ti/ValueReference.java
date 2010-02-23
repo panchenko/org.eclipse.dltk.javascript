@@ -30,6 +30,7 @@ public class ValueReference implements IValueReference {
 	private final Set<String> deletedChildren = new HashSet<String>();
 	private Type declaredType;
 	private ReferenceKind kind = ReferenceKind.UNKNOWN;
+	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 
 	public ValueReference() {
 		this((String) null);
@@ -51,16 +52,73 @@ public class ValueReference implements IValueReference {
 		this.name = name;
 	}
 
+	private static final ThreadLocal<Set<IValueReference>> activeAddValue = new ThreadLocal<Set<IValueReference>>() {
+		@Override
+		protected Set<IValueReference> initialValue() {
+			return new HashSet<IValueReference>();
+		}
+	};
+
+	private boolean isParent(IValueReference value) {
+		if (parent == null || parent instanceof IValueCollection) {
+			return false;
+		}
+		IValueParent vParent = value;
+		for (;;) {
+			if (vParent == null)
+				break;
+			if (parent.equals(vParent)) {
+				return true;
+			}
+			vParent = vParent.getParent();
+		}
+		return false;
+	}
+
 	public void addValue(IValueReference value) {
 		if (value == null) {
 			return;
 		}
-		types.addAll(value.getTypes());
-		for (String childName : value.getDirectChildren()) {
-			final IValueReference child = value.getChild(childName);
-			if (child != null) {
-				getChild(childName, GetMode.CREATE).addValue(child);
+		if (value instanceof IValueReferenceProxy) {
+			final IValueReferenceProxy proxy = (IValueReferenceProxy) value;
+			if (proxy.isResolved()) {
+				value = proxy.resolve();
 			}
+		}
+		if (this.equals(value) || isParent(value)) {
+			return;
+		}
+		final Set<IValueReference> processing = activeAddValue.get();
+
+		// assert (processing.size() < 3);
+
+		if (!processing.add(value)) {
+			return;
+		}
+		try {
+			// if (kind == ReferenceKind.UNKNOWN && value.getKind() != kind) {
+			// kind = value.getKind();
+			// }
+			if (location == ReferenceLocation.UNKNOWN
+					&& value.getLocation() != ReferenceLocation.UNKNOWN) {
+				location = value.getLocation();
+			}
+			types.addAll(value.getTypes());
+			for (String childName : value.getDirectChildren()) {
+				final IValueReference child = value.getChild(childName);
+				if (child != null) {
+					final IValueReference myChild = getChild(childName,
+							GetMode.CREATE);
+					if (myChild == null) {
+						putChild(childName, child);
+					} else {
+						assert !(myChild instanceof ValueReferenceProxy);
+						myChild.addValue(child);
+					}
+				}
+			}
+		} finally {
+			processing.remove(value);
 		}
 	}
 
@@ -99,6 +157,14 @@ public class ValueReference implements IValueReference {
 
 	public void setKind(ReferenceKind kind) {
 		this.kind = kind;
+	}
+
+	public ReferenceLocation getLocation() {
+		return location;
+	}
+
+	public void setLocation(ReferenceLocation location) {
+		this.location = location;
 	}
 
 	public void deleteChild(String name) {
@@ -163,8 +229,49 @@ public class ValueReference implements IValueReference {
 	 * @param childName
 	 * @param value
 	 */
-	public void putChild(String childName, IValueReference value) {
+	private void putChild(String childName, IValueReference value) {
 		children.put(childName, value);
+	}
+
+	private Map<String, Object> attributes = null;
+
+	public Object getAttribute(String key) {
+		if (attributes != null) {
+			return attributes.get(key);
+		} else {
+			return null;
+		}
+	}
+
+	public void setAttribute(String key, Object value) {
+		if (key == null) {
+			throw new NullPointerException();
+		}
+		if (value == null) {
+			if (attributes != null) {
+				attributes.remove(key);
+			}
+		} else {
+			if (attributes == null) {
+				attributes = new HashMap<String, Object>();
+			}
+			attributes.put(key, value);
+		}
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		if (parent instanceof IValueReference) {
+			sb.append(parent);
+			sb.append(".");
+		}
+		if (kind != ReferenceKind.UNKNOWN) {
+			sb.append(kind.name());
+			sb.append(" ");
+		}
+		sb.append(name);
+		return sb.toString();
 	}
 
 }

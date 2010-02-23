@@ -64,6 +64,28 @@ public class MethodValueReferenceProxy implements IValueReference {
 		resolve().setKind(kind);
 	}
 
+	public ReferenceLocation getLocation() {
+		return isResolved() ? resolve().getLocation()
+				: ReferenceLocation.UNKNOWN;
+	}
+
+	public void setLocation(ReferenceLocation location) {
+		resolve().setLocation(location);
+	}
+
+	public Object getAttribute(String key) {
+		return isResolved() ? resolve().getAttribute(key) : null;
+	}
+
+	public void setAttribute(String key, Object value) {
+		resolve().setAttribute(key, value);
+	}
+
+	private boolean isResolved() {
+		return resolved != null
+				|| owner.getChild(method.getName(), GetMode.RESOLVE) != null;
+	}
+
 	private IValueReference resolve() {
 		if (resolved == null) {
 			resolved = owner.getChild(method.getName(), GetMode.CREATE);
