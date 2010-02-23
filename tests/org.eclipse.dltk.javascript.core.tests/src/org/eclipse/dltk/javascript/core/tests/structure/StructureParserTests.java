@@ -11,16 +11,21 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.structure;
 
-import org.eclipse.dltk.compiler.env.ModuleSource;
-import org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceElementParser;
-
 import junit.framework.TestCase;
+
+import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.core.ISourceElementParser;
+import org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceElementParser;
 
 public class StructureParserTests extends TestCase {
 
-	private Root parse(String code) {
+	protected ISourceElementParser createParser() {
+		return new JavaScriptSourceElementParser();
+	}
+
+	protected Root parse(String code) {
 		Recorder rec = new Recorder();
-		JavaScriptSourceElementParser parser = new JavaScriptSourceElementParser();
+		ISourceElementParser parser = createParser();
 		parser.setRequestor(rec);
 		parser.parseSourceModule(new ModuleSource(code));
 		return rec.getRoot();

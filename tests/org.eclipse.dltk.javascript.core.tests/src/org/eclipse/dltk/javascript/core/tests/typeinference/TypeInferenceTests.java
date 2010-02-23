@@ -54,7 +54,12 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	private static IValueCollection inference(final String code) {
-		TypeInferencer2 inferencer = new TypeInferencer2();
+		TypeInferencer2 inferencer = new TypeInferencer2() {
+			@Override
+			protected void log(Throwable e) {
+				fail(e.toString());
+			}
+		};
 		inferencer.doInferencing(parse(code));
 		return inferencer.getCollection();
 	}
@@ -254,6 +259,32 @@ public class TypeInferenceTests extends TestCase {
 		IValueReference name = a.getChild("name");
 		assertTrue(name.getTypes().containsAll(
 				getTypes(ReferenceFactory.STRING)));
+	}
+
+	public void testRecursion1() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("context = { 'index': 1, 'prev': context }");
+		lines.add("doSomethind()");
+		lines.add("context = context['prev']");
+		IValueCollection collection = inference(lines);
+		IValueReference context = collection.getChild("context");
+		IValueReference index = context.getChild("index");
+		assertEquals(getTypes(ReferenceFactory.NUMBER), index.getTypes());
+		IValueReference prev = context.getChild("prev");
+		assertNotNull(prev);
+	}
+
+	public void testRecursion2() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("var a = function() { return 1 }");
+		// lines.add("a.operation1 = function() { return '2' }");
+		lines.add("a.operation2 = a");
+		IValueCollection collection = inference(lines);
+		IValueReference a = collection.getChild("a");
+		// IValueReference index = context.getChild("index");
+		// assertEquals(getTypes(ReferenceFactory.NUMBER), index.getTypes());
+		// IValueReference prev = context.getChild("prev");
+		assertNotNull(a);
 	}
 
 }
