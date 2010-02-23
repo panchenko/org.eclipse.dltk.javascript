@@ -37,4 +37,10 @@ public class ReferenceLocation implements IReferenceLocation {
 		return length;
 	}
 
+	@Override
+	public String toString() {
+		return (parent != null ? parent.getElementName() : "") + "[" + offset
+				+ ".." + length + "]";
+	}
+
 }
