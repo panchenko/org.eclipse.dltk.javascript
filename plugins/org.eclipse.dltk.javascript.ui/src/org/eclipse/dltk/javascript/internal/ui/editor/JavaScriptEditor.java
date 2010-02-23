@@ -36,6 +36,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.ITextViewerExtension;
 import org.eclipse.jface.text.TextUtilities;
+import org.eclipse.jface.text.source.ICharacterPairMatcher;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.graphics.Point;
@@ -44,7 +45,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.texteditor.IUpdate;
-import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 
 public class JavaScriptEditor extends ScriptEditor {
 
@@ -136,9 +136,6 @@ public class JavaScriptEditor extends ScriptEditor {
 		}
 	}
 
-	private JavaScriptPairMatcher bracketMatcher = new JavaScriptPairMatcher(
-			"{}[]()".toCharArray());
-
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 
@@ -179,13 +176,9 @@ public class JavaScriptEditor extends ScriptEditor {
 				.getPreferenceStore());
 	}
 
-	protected void configureSourceViewerDecorationSupport(
-			SourceViewerDecorationSupport support) {
-		support.setCharacterPairMatcher(bracketMatcher);
-		support.setMatchingCharacterPainterPreferenceKeys(MATCHING_BRACKETS,
-				MATCHING_BRACKETS_COLOR);
-
-		super.configureSourceViewerDecorationSupport(support);
+	@Override
+	protected ICharacterPairMatcher createBracketMatcher() {
+		return new JavaScriptPairMatcher("{}[]()".toCharArray());
 	}
 
 	protected void connectPartitioningToElement(IEditorInput input,
