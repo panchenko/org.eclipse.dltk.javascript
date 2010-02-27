@@ -29,6 +29,10 @@ public class Recorder extends SourceElementRequestorAdaptor {
 		return root;
 	}
 
+	private Member peek() {
+		return structure.peek();
+	}
+
 	private void push(Member child) {
 		structure.peek().addChild(child);
 		structure.push(child);
@@ -56,6 +60,20 @@ public class Recorder extends SourceElementRequestorAdaptor {
 	@Override
 	public void exitMethod(int declarationEnd) {
 		pop();
+	}
+
+	@Override
+	public void acceptFieldReference(String fieldName, int sourcePosition) {
+		if (fieldName.startsWith("!!!")) {
+			return;
+		}
+		peek().addChild(new FieldRef(fieldName));
+	}
+
+	@Override
+	public void acceptMethodReference(String methodName, int argCount,
+			int sourcePosition, int sourceEndPosition) {
+		peek().addChild(new MethodRef(methodName));
 	}
 
 }
