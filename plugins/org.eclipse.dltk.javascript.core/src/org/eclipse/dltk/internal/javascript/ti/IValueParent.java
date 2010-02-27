@@ -44,4 +44,8 @@ public interface IValueParent {
 	 */
 	void deleteChild(String name);
 
+	Object getAttribute(String key);
+
+	void setAttribute(String key, Object value);
+
 }

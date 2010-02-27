@@ -11,9 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.compiler.IElementRequestor.ElementInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
@@ -28,12 +32,18 @@ import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
+import org.eclipse.dltk.javascript.ast.CallExpression;
+import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
 public class JavaScriptSourceElementParser2 extends
 		JavaScriptSourceElementParser implements IReferenceAttributes {
+
+	public static final String METHOD_REFERENCES = "METHOD_REFERENCES";
 
 	protected boolean isEnabled(IModuleSource module) {
 		if (module.getModelElement() != null) {
@@ -42,6 +52,21 @@ public class JavaScriptSourceElementParser2 extends
 			return JavaScriptParser.PARSER_ID.equals(parserId);
 		}
 		return false;
+	}
+
+	private static class MethodRef {
+		final String name;
+		final int argCount;
+		final int start;
+		final int end;
+
+		public MethodRef(Identifier identifier, int argCount) {
+			this.name = identifier.getName();
+			this.start = identifier.sourceStart();
+			this.end = identifier.sourceEnd();
+			this.argCount = argCount;
+		}
+
 	}
 
 	@Override
@@ -60,6 +85,33 @@ public class JavaScriptSourceElementParser2 extends
 			script = new JavaScriptParser().parse(module, fReporter);
 		}
 		final TypeInferencer2 inferencer = createInferencer();
+		inferencer.setVisitor(new TypeInferencerVisitor() {
+			@Override
+			public IValueReference visitCallExpression(CallExpression node) {
+				reportMethodRef(node.getExpression(), node.getArguments()
+						.size());
+				return super.visitCallExpression(node);
+			}
+
+			private void reportMethodRef(ASTNode expression, int argCount) {
+				if (expression instanceof Identifier) {
+					final IValueCollection context = peekContext();
+					@SuppressWarnings("unchecked")
+					List<MethodRef> references = (List<MethodRef>) context
+							.getAttribute(METHOD_REFERENCES);
+					if (references == null) {
+						references = new ArrayList<MethodRef>();
+						context.setAttribute(METHOD_REFERENCES, references);
+					}
+					references.add(new MethodRef((Identifier) expression,
+							argCount));
+				} else if (expression instanceof PropertyExpression) {
+					reportMethodRef(((PropertyExpression) expression)
+							.getProperty(), argCount);
+				}
+			}
+
+		});
 		inferencer.doInferencing(script);
 		fRequestor.enterModule();
 		processScope(inferencer.getCollection(), new HashSet<IValueReference>());
@@ -75,26 +127,31 @@ public class JavaScriptSourceElementParser2 extends
 	 */
 	private void processScope(IValueParent collection,
 			Set<IValueReference> processed) {
+		@SuppressWarnings("unchecked")
+		final List<MethodRef> methodRefs = (List<MethodRef>) collection
+				.getAttribute(METHOD_REFERENCES);
 		for (String childName : collection.getDirectChildren()) {
 			final IValueReference child = collection.getChild(childName);
 			if (child == null || !processed.add(child))
 				continue;
 			if (child.getKind() == ReferenceKind.LOCAL) {
+				final ReferenceLocation location = child.getLocation();
+				reportMethodRefs(methodRefs, location.getDeclarationStart());
 				final FieldInfo fi = new FieldInfo();
 				fi.name = childName;
 				fi.type = extractType(child);
-				final ReferenceLocation location = child.getLocation();
 				copyLocation(location, fi);
 				fRequestor.enterField(fi);
 				processScope(child, processed);
 				fRequestor.exitField(location.getDeclarationEnd());
 			} else if (child.getKind() == ReferenceKind.FUNCTION
 					|| child.getChild(IValueReference.FUNCTION_OP) != null) {
+				final ReferenceLocation location = child.getLocation();
+				reportMethodRefs(methodRefs, location.getDeclarationStart());
 				final MethodInfo mi = new MethodInfo();
 				mi.name = childName;
 				mi.returnType = extractType(child
 						.getChild(IValueReference.FUNCTION_OP));
-				final ReferenceLocation location = child.getLocation();
 				copyLocation(location, mi);
 				final IValueReference[] parameters = (IValueReference[]) child
 						.getAttribute(PARAMETERS);
@@ -120,6 +177,24 @@ public class JavaScriptSourceElementParser2 extends
 					processScope(functionScope, processed);
 				}
 				fRequestor.exitMethod(location.getDeclarationEnd());
+			}
+		}
+		reportMethodRefs(methodRefs, Integer.MAX_VALUE);
+	}
+
+	private void reportMethodRefs(List<MethodRef> methodRefs, int position) {
+		if (methodRefs == null) {
+			return;
+		}
+		Iterator<MethodRef> i = methodRefs.iterator();
+		while (i.hasNext()) {
+			final MethodRef ref = i.next();
+			if (ref.start < position || position == Integer.MAX_VALUE) {
+				fRequestor.acceptMethodReference(ref.name, ref.argCount,
+						ref.start, ref.end);
+				i.remove();
+			} else {
+				break;
 			}
 		}
 	}

@@ -17,11 +17,23 @@ import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 
 public class TypeInferencer2 {
 
-	private final TypeInferencerVisitor visitor = new TypeInferencerVisitor();
+	private TypeInferencerVisitor visitor = new TypeInferencerVisitor();
+
+	private void initializeVisitor() {
+		if (visitor == null) {
+			visitor = new TypeInferencerVisitor();
+		} else {
+			visitor.initialize();
+		}
+	}
+
+	public void setVisitor(TypeInferencerVisitor visitor) {
+		this.visitor = visitor;
+	}
 
 	public void doInferencing(Script script) {
 		try {
-			visitor.initialize();
+			initializeVisitor();
 			visitor.visit(script);
 		} catch (RuntimeException e) {
 			log(e);
@@ -35,7 +47,7 @@ public class TypeInferencer2 {
 	}
 
 	public IValueReference evaluate(ASTNode node) {
-		visitor.initialize();
+		initializeVisitor();
 		return visitor.visit(node);
 	}
 

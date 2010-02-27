@@ -32,8 +32,16 @@ public abstract class TypeInferencerVisitorBase extends
 		return contexts.pop();
 	}
 
+	public TypeInferencerVisitorBase() {
+		initialize0();
+	}
+
 	public void initialize() {
 		contexts.clear();
+		initialize0();
+	}
+
+	protected void initialize0() {
 		contexts.push(new ValueCollection());
 	}
 
