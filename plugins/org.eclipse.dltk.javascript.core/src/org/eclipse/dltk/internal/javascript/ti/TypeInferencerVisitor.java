@@ -330,17 +330,21 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.dltk.javascript.ast.ASTVisitor#visitNewExpression(org.eclipse
-	 * .dltk.javascript.ast.NewExpression)
-	 */
 	@Override
 	public IValueReference visitNewExpression(NewExpression node) {
-		// TODO Auto-generated method stub
-		return null;
+		final IValueReference result = new ValueReference();
+		final IValueReference clazz = visit(node.getObjectClass());
+		final IValueReference newType = result.getChild(
+				IValueReference.FUNCTION_OP, GetMode.CREATE);
+		if (clazz != null) {
+			final Type type = IValueTypeFactory.INSTANCE.get(clazz.getName());
+			if (type != null) {
+				newType.addValue(IValueTypeFactory.INSTANCE.create(type));
+				return result;
+			}
+		}
+		newType.addValue(IValueTypeFactory.INSTANCE.createObject());
+		return result;
 	}
 
 	@Override
