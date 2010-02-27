@@ -204,16 +204,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.dltk.javascript.ast.ASTVisitor#visitForEachInStatement(org
-	 * .eclipse.dltk.javascript.ast.ForEachInStatement)
-	 */
 	@Override
 	public IValueReference visitForEachInStatement(ForEachInStatement node) {
-		// TODO Auto-generated method stub
+		visit(node.getItem());
+		visit(node.getIterator());
+		visit(node.getBody());
 		return null;
 	}
 
