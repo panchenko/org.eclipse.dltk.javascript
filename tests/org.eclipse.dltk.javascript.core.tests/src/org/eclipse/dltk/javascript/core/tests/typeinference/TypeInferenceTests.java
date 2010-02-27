@@ -289,13 +289,9 @@ public class TypeInferenceTests extends TestCase {
 	public void testRecursion2() {
 		List<String> lines = new ArrayList<String>();
 		lines.add("var a = function() { return 1 }");
-		// lines.add("a.operation1 = function() { return '2' }");
 		lines.add("a.operation2 = a");
 		IValueCollection collection = inference(lines);
 		IValueReference a = collection.getChild("a");
-		// IValueReference index = context.getChild("index");
-		// assertEquals(getTypes(ReferenceFactory.NUMBER), index.getTypes());
-		// IValueReference prev = context.getChild("prev");
 		assertNotNull(a);
 	}
 
