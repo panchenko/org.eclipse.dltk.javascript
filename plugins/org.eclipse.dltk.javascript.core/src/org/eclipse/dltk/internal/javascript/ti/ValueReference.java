@@ -96,9 +96,6 @@ public class ValueReference implements IValueReference {
 			return;
 		}
 		try {
-			// if (kind == ReferenceKind.UNKNOWN && value.getKind() != kind) {
-			// kind = value.getKind();
-			// }
 			if (location == ReferenceLocation.UNKNOWN
 					&& value.getLocation() != ReferenceLocation.UNKNOWN) {
 				location = value.getLocation();

@@ -275,11 +275,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setKind(ReferenceKind.FUNCTION);
 		result.setAttribute(IReferenceAttributes.PARAMETERS, refArgs);
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
-		final IValueReference returnValue = function.getReturnValue();
-		if (returnValue != null && !returnValue.isEmpty()) {
-			result.getChild(IValueReference.FUNCTION_OP, GetMode.CREATE)
-					.addValue(returnValue);
-		}
+		result.getChild(IValueReference.FUNCTION_OP, GetMode.CREATE).addValue(
+				function.getReturnValue());
 		return result;
 	}
 

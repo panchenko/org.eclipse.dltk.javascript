@@ -88,7 +88,8 @@ public class JavaScriptSourceElementParser2 extends
 				fRequestor.enterField(fi);
 				processScope(child, processed);
 				fRequestor.exitField(location.getDeclarationEnd());
-			} else if (child.getKind() == ReferenceKind.FUNCTION) {
+			} else if (child.getKind() == ReferenceKind.FUNCTION
+					|| child.getChild(IValueReference.FUNCTION_OP) != null) {
 				final MethodInfo mi = new MethodInfo();
 				mi.name = childName;
 				mi.returnType = extractType(child
