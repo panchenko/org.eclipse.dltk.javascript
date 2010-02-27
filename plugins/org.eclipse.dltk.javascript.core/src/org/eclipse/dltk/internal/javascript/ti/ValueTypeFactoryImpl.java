@@ -25,6 +25,10 @@ public class ValueTypeFactoryImpl implements IValueTypeFactory {
 		return new ValueReference(type);
 	}
 
+	public IValueReference createObject() {
+		return create(ReferenceFactory.OBJECT);
+	}
+
 	public IValueReference createArray() {
 		return create(ReferenceFactory.ARRAY);
 	}

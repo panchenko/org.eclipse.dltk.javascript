@@ -21,6 +21,8 @@ public interface IValueTypeFactory {
 
 	IValueReference create(Type type);
 
+	IValueReference createObject();
+
 	IValueReference createString();
 
 	IValueReference createRegExp();
