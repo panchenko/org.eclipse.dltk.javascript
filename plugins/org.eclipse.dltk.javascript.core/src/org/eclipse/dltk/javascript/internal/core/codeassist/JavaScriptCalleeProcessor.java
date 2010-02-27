@@ -58,7 +58,6 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 		@Override
 		public void acceptMethodReference(String methodName, int argCount,
 				int sourcePosition, int sourceEndPosition) {
-			String name = new String(methodName);
 			int off = 0;
 			try {
 				off = method.getSourceRange().getOffset() + index;
@@ -67,8 +66,8 @@ public class JavaScriptCalleeProcessor implements ICalleeProcessor {
 			}
 			// TODO RMOVE HACK
 			SimpleReference ref = new SimpleReference(off + sourcePosition, off
-					+ sourceEndPosition + 1, name);
-			IMethod[] methods = findMethods(name, argCount, off
+					+ sourceEndPosition + 1, methodName);
+			IMethod[] methods = findMethods(methodName, argCount, off
 					+ sourcePosition);
 			fSearchResults.put(ref, methods);
 		}

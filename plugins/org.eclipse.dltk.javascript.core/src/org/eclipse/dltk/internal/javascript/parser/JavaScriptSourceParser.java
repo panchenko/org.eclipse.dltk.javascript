@@ -46,7 +46,7 @@ public class JavaScriptSourceParser extends AbstractSourceParser {
 		public void acceptMethodReference(String methodName, int argCount,
 				int sourcePosition, int sourceEndPosition) {
 			references.add(new SimpleReference(sourcePosition,
-					sourceEndPosition, new String(methodName)));
+					sourceEndPosition, methodName));
 		}
 
 	}
