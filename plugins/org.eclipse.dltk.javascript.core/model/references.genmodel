@@ -7,7 +7,7 @@
     complianceLevel="5.0" copyrightFields="false" language="">
   <foreignModel>references.ecore</foreignModel>
   <genPackages prefix="ReferenceModel" basePackage="org.eclipse.dltk.javascript.internal.model"
-      disposableProviderFactory="true" ecorePackage="references.ecore#/">
+      disposableProviderFactory="true" multipleEditorPages="false" ecorePackage="references.ecore#/">
     <genClasses ecoreClass="references.ecore#//Type">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Type/members"/>
