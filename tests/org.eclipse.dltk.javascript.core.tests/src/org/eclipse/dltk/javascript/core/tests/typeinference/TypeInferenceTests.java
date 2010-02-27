@@ -54,12 +54,7 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	private static IValueCollection inference(final String code) {
-		TypeInferencer2 inferencer = new TypeInferencer2() {
-			@Override
-			protected void log(Throwable e) {
-				fail(e.toString());
-			}
-		};
+		TypeInferencer2 inferencer = new TestTypeInferencer2();
 		inferencer.doInferencing(parse(code));
 		return inferencer.getCollection();
 	}
@@ -259,6 +254,23 @@ public class TypeInferenceTests extends TestCase {
 		IValueReference name = a.getChild("name");
 		assertTrue(name.getTypes().containsAll(
 				getTypes(ReferenceFactory.STRING)));
+	}
+
+	public void testNew() {
+		List<String> lines = new ArrayList<String>();
+		lines.add("var str = new String()");
+		lines.add("var num = new Number()");
+		lines.add("var bool = new Boolean()");
+		lines.add("var arr = new Array()");
+		IValueCollection collection = inference(lines);
+		IValueReference str = collection.getChild("str");
+		assertEquals(getTypes(ReferenceFactory.STRING), str.getTypes());
+		IValueReference num = collection.getChild("num");
+		assertEquals(getTypes(ReferenceFactory.NUMBER), num.getTypes());
+		IValueReference bool = collection.getChild("bool");
+		assertEquals(getTypes(ReferenceFactory.BOOLEAN), bool.getTypes());
+		IValueReference arr = collection.getChild("arr");
+		assertEquals(getTypes(ReferenceFactory.ARRAY), arr.getTypes());
 	}
 
 	public void testRecursion1() {
