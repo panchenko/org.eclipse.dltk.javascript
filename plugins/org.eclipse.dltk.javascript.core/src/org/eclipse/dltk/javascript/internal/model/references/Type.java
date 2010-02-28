@@ -9,13 +9,11 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.2 2010/02/11 11:11:47 apanchenk Exp $
+ * $Id: Type.java,v 1.3 2010/02/28 16:04:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.internal.model.references;
 
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,7 +32,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface Type extends EObject {
+public interface Type {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ReferenceModelFactoryImpl.java,v 1.2 2010/02/11 11:20:35 apanchenk Exp $
+ * $Id: ReferenceModelFactoryImpl.java,v 1.3 2010/02/28 16:04:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.internal.model.references.impl;
 
@@ -67,10 +67,10 @@ public class ReferenceModelFactoryImpl extends EFactoryImpl implements Reference
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case ReferenceModelPackage.TYPE: return createType();
-			case ReferenceModelPackage.METHOD: return createMethod();
-			case ReferenceModelPackage.PARAMETER: return createParameter();
-			case ReferenceModelPackage.PROPERTY: return createProperty();
+			case ReferenceModelPackage.TYPE: return (EObject)createType();
+			case ReferenceModelPackage.METHOD: return (EObject)createMethod();
+			case ReferenceModelPackage.PARAMETER: return (EObject)createParameter();
+			case ReferenceModelPackage.PROPERTY: return (EObject)createProperty();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
