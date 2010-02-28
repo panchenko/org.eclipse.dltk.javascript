@@ -43,7 +43,9 @@ import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 public class JavaScriptSourceElementParser2 extends
 		JavaScriptSourceElementParser implements IReferenceAttributes {
 
-	public static final String METHOD_REFERENCES = "METHOD_REFERENCES";
+	public static final String METHOD_REFERENCES = "METHOD_REFERENCES"; //$NON-NLS-1$
+
+	public static final String FIELD_REFERENCES = "FIELD_REFERENCES"; //$NON-NLS-1$
 
 	protected boolean isEnabled(IModuleSource module) {
 		if (module.getModelElement() != null) {
@@ -111,6 +113,32 @@ public class JavaScriptSourceElementParser2 extends
 				}
 			}
 
+			@Override
+			public IValueReference visitIdentifier(Identifier node) {
+				reportFieldRef(node);
+				return super.visitIdentifier(node);
+			}
+
+			@Override
+			public IValueReference visitPropertyExpression(
+					PropertyExpression node) {
+				if (node.getProperty() instanceof Identifier) {
+					reportFieldRef((Identifier) node.getProperty());
+				}
+				return super.visitPropertyExpression(node);
+			}
+
+			private void reportFieldRef(Identifier node) {
+				final IValueCollection context = peekContext();
+				FieldReferenceSet set = (FieldReferenceSet) context
+						.getAttribute(FIELD_REFERENCES);
+				if (set == null) {
+					set = new FieldReferenceSet();
+					context.setAttribute(FIELD_REFERENCES, set);
+				}
+				set.add(node.getName(), node.sourceStart(), node.sourceEnd());
+			}
+
 		});
 		inferencer.doInferencing(script);
 		fRequestor.enterModule();
@@ -130,6 +158,9 @@ public class JavaScriptSourceElementParser2 extends
 		@SuppressWarnings("unchecked")
 		final List<MethodRef> methodRefs = (List<MethodRef>) collection
 				.getAttribute(METHOD_REFERENCES);
+		// final FieldReferenceSet fieldReferences = (FieldReferenceSet)
+		// collection
+		// .getAttribute(FIELD_REFERENCES);
 		for (String childName : collection.getDirectChildren()) {
 			final IValueReference child = collection.getChild(childName);
 			if (child == null || !processed.add(child))
