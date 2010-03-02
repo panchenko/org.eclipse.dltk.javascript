@@ -21,6 +21,7 @@ import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.Tree;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.AssertionFailedException;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
@@ -42,6 +43,7 @@ import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
+import org.eclipse.dltk.javascript.ast.ErrorExpression;
 import org.eclipse.dltk.javascript.ast.ExceptionFilter;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FinallyClause;
@@ -103,6 +105,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	private final List<Token> tokens;
 	private final int[] tokenOffsets;
 	private Stack<ASTNode> parents = new Stack<ASTNode>();
+	private final boolean ignoreUnknown;
 
 	private static final int MAX_RECURSION_DEEP = 512;
 
@@ -112,8 +115,13 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	public JSTransformer(List<Token> tokens) {
+		this(tokens, false);
+	}
+
+	public JSTransformer(List<Token> tokens, boolean ignoreUnknown) {
 		Assert.isNotNull(tokens);
 		this.tokens = tokens;
+		this.ignoreUnknown = ignoreUnknown;
 		tokenOffsets = prepareOffsetMap(tokens);
 	}
 
@@ -153,6 +161,12 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			ASTNode result = visitNode(node);
 			Assert.isNotNull(result, node.toString());
 			return result;
+		} catch (AssertionFailedException e) {
+			if (ignoreUnknown) {
+				return createErrorExpression(node);
+			} else {
+				throw e;
+			}
 		} finally {
 			parents.pop();
 		}
@@ -265,6 +279,21 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 			return voidExpression;
 		}
+	}
+
+	@Override
+	protected ASTNode visitUnknown(Tree node) {
+		if (ignoreUnknown) {
+			return createErrorExpression(node);
+		}
+		return super.visitUnknown(node);
+	}
+
+	private ASTNode createErrorExpression(Tree node) {
+		ErrorExpression error = new ErrorExpression(getParent(), node.getText());
+		error.setStart(getTokenOffset(node.getTokenStartIndex()));
+		error.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+		return error;
 	}
 
 	@Override
@@ -976,9 +1005,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		List<Integer> commas = new ArrayList<Integer>();
 
 		for (int i = 0; i < node.getChildCount(); i++) {
-			initializer
-					.addInitializer((ObjectInitializerPart) transformNode(
-							node.getChild(i), initializer));
+			initializer.addInitializer((ObjectInitializerPart) transformNode(
+					node.getChild(i), initializer));
 
 			if (i > 0)
 				commas.add(getTokenOffset(JSParser.COMMA, node.getChild(i - 1)

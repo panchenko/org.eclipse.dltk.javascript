@@ -250,10 +250,14 @@ public abstract class JSVisitor<E> {
 			return visitYield(node);
 
 		default:
-			throw new UnsupportedOperationException("Unknown token "
-					+ JSParser.tokenNames[node.getType()] + " ("
-					+ node.getText() + ")");
+			return visitUnknown(node);
 		}
+	}
+
+	protected E visitUnknown(Tree node) {
+		throw new UnsupportedOperationException("Unknown token "
+				+ JSParser.tokenNames[node.getType()] + " (" + node.getText()
+				+ ")");
 	}
 
 	protected abstract E visitFunction(Tree node);

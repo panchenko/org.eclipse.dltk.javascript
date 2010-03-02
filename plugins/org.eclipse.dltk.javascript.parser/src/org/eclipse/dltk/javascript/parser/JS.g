@@ -362,6 +362,25 @@ public void setTypeInformationEnabled(boolean value) {
 protected void reportFailure(Throwable t) {
 }
 
+protected void reportRuleError(RecognitionException re) {
+	reportError(re);
+	recover(input,re);
+}
+
+private final Stack<JSParserState> states = new Stack<JSParserState>();
+
+protected void pushState(JSParserRule rule) {
+	states.push(new JSParserState(peekState(), rule));
+}
+
+protected void popState() {
+	states.pop();
+}
+
+public JSParserState peekState() {
+	return states.isEmpty() ? null : states.peek();
+}
+
 private final boolean isLeftHandSideAssign(RuleReturnScope lhs, Object[] cached)
 {
 	if (cached[0] != null)
@@ -499,8 +518,7 @@ private final void promoteEOL(ParserRuleReturnScope rule)
 
 @rulecatch {
 catch (RecognitionException re) {
-	reportError(re);
-	recover(input,re);
+	reportRuleError(re);
 }
 catch (RuntimeException e) {
 	reportFailure(e);
@@ -1077,6 +1095,7 @@ arguments
 	;
 	
 leftHandSideExpression
+@init { pushState(JSParserRule.LEFT_HAND_SIDE_EXPRESSION); }
   :
   (
     memberExpression    -> memberExpression
@@ -1089,6 +1108,9 @@ leftHandSideExpression
     | COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpression expression)
   )*
   ;
+  catch [RecognitionException e] { reportRuleError(e); }
+  catch [RuntimeException e] { reportFailure(e); }
+  finally { popState(); }
 
 rightHandSideExpression
   : parenExpression 
@@ -1731,9 +1753,11 @@ formalParameterList
 	;
 
 functionBody
+@init { pushState(JSParserRule.FUNCTION_BODY); }
 	: lb=LBRACE sourceElement* RBRACE
 	-> ^( BLOCK[$lb, "BLOCK"] sourceElement* )
 	;
+	finally { popState(); }
 
 // $>
 
@@ -1755,6 +1779,7 @@ setMethodDeclaration
 // $<	Program (14)
 
 program
+@init { pushState(JSParserRule.PROGRAM); }
 	: sourceElement* EOF!
 	;
 

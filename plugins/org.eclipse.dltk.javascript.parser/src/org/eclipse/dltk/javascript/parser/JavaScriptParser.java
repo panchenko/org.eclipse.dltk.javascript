@@ -67,25 +67,52 @@ public class JavaScriptParser extends AbstractSourceParser {
 
 		@Override
 		protected void reportFailure(Throwable t) {
-			if (reporter != null) {
+			if (reporter != null && !peekState().hasErrors()) {
 				reporter.reportProblem(new JSProblem(t));
 			}
+		}
+
+		private JSParserMessages messages = null;
+
+		private JSParserMessages getMessages() {
+			if (messages == null) {
+				messages = new JSParserMessages();
+			}
+			return messages;
+		}
+
+		@Override
+		public String getTokenErrorDisplay(Token t) {
+			final String message = getMessages().get(t.getType());
+			if (message != null) {
+				return message;
+			}
+			return super.getTokenErrorDisplay(t);
 		}
 
 		@Override
 		public void displayRecognitionError(String[] tokenNames,
 				RecognitionException re) {
+			peekState().incrementErrorCount();
 			if (reporter == null)
 				return;
 			String message;
 			ISourceRange range;
 			if (re instanceof NoViableAltException) {
 				range = convert(re.token);
-				message = "Unexpected " + getTokenErrorDisplay(re.token);
+				final Token token = getLastToken(re.token);
+				message = getMessages().get(peekState().rule, token.getType());
+				if (message == null) {
+					message = "Unexpected " + getTokenErrorDisplay(re.token);
+				}
 			} else if (re instanceof MismatchedTokenException) {
 				MismatchedTokenException mte = (MismatchedTokenException) re;
 				if (re.token == Token.EOF_TOKEN) {
-					message = tokenNames[mte.expecting] + " expected";
+					message = getMessages().get(mte.expecting);
+					if (message == null) {
+						message = tokenNames[mte.expecting];
+					}
+					message += " expected";
 				} else {
 					message = "Mismatched input "
 							+ getTokenErrorDisplay(re.token);
@@ -118,11 +145,11 @@ public class JavaScriptParser extends AbstractSourceParser {
 							+ range.getLength() : -1, re.line - 1));
 		}
 
-		private ISourceRange convert(Token token) {
+		private Token getLastToken(Token token) {
 			if (token == Token.EOF_TOKEN) {
 				final TokenStream stream = getTokenStream();
 				int index = stream.index();
-				for (;;) {
+				while (index > 0) {
 					--index;
 					final Token prevToken = stream.get(index);
 					if (prevToken.getType() != JSParser.WhiteSpace
@@ -131,9 +158,14 @@ public class JavaScriptParser extends AbstractSourceParser {
 						break;
 					}
 				}
-				if (token == Token.EOF_TOKEN) {
-					return null;
-				}
+			}
+			return token;
+		}
+
+		private ISourceRange convert(Token token) {
+			token = getLastToken(token);
+			if (token == Token.EOF_TOKEN) {
+				return null;
 			}
 			int offset = lineTracker.getLineOffset(token.getLine() - 1)
 					+ Math.max(token.getCharPositionInLine(), 0);
@@ -209,7 +241,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 					lineTracker);
 			parser.setTypeInformationEnabled(typeInformationEnabled);
 			RuleReturnScope root = parser.program();
-			return new JSTransformer(stream.getTokens()).transform(root);
+			return new JSTransformer(stream.getTokens(), parser.peekState()
+					.hasErrors()).transform(root);
 		} catch (Exception e) {
 			if (DLTKCore.DEBUG)
 				e.printStackTrace();

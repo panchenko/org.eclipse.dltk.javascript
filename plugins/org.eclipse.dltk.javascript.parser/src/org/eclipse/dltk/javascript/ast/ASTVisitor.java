@@ -320,6 +320,11 @@ public abstract class ASTVisitor<E> {
 				return visitor.visitYieldOperator((YieldOperator) node);
 			}
 		});
+		HANDLERS.put(ErrorExpression.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitErrorExpression((ErrorExpression) node);
+			}
+		});
 		// HANDLERS.put(.class, new Handler() {
 		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 		// return visitor.(() node);
@@ -511,6 +516,10 @@ public abstract class ASTVisitor<E> {
 			GetAllChildrenExpression node);
 
 	public abstract E visitGetLocalNameExpression(GetLocalNameExpression node);
+
+	public E visitErrorExpression(ErrorExpression node) {
+		return null;
+	}
 
 	/**
 	 * @since 2.0
