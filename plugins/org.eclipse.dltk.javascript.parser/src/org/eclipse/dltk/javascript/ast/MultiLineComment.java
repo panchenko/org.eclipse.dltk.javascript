@@ -19,4 +19,10 @@ public class MultiLineComment extends Comment {
 		return true;
 	}
 
+	@Override
+	public boolean isDocumentation() {
+		final String text = getText();
+		return text != null && text.startsWith("/**");
+	}
+
 }

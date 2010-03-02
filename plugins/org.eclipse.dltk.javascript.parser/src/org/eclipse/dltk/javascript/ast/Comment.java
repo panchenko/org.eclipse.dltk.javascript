@@ -38,4 +38,6 @@ public abstract class Comment extends ASTNode {
 	}
 
 	public abstract boolean isMultiLine();
+
+	public abstract boolean isDocumentation();
 }

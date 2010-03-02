@@ -19,4 +19,9 @@ public class SingleLineComment extends Comment {
 		return false;
 	}
 
+	@Override
+	public boolean isDocumentation() {
+		return false;
+	}
+
 }
