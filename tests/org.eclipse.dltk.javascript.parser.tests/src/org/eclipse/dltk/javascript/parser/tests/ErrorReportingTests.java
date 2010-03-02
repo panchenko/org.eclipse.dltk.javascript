@@ -11,24 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.tests;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.eclipse.dltk.javascript.ast.Script;
 
-public class AllTests {
+public class ErrorReportingTests extends AbstractJSParserTest {
 
-	public static Test suite() {
-		TestSuite suite = new TestSuite(
-				"org.eclipse.dltk.javascript.parser.tests");
-		// $JUnit-BEGIN$
-		suite.addTestSuite(VariableDeclarationTests.class);
-		suite.addTestSuite(ArrayInitializerTests.class);
-		suite.addTestSuite(ObjectInitializerTests.class);
-		suite.addTestSuite(FunctionDeclarationTests.class);
-		suite.addTestSuite(XmlQueryTests.class);
-		suite.addTestSuite(XmlLiteralTests.class);
-		suite.addTestSuite(ErrorReportingTests.class);
-		// $JUnit-END$
-		return suite;
+	public void test1() {
+		Script script = parseRaw("a.");
+		assertTrue(reporter.hasErrors());
+		assertEquals(1, reporter.getErrors().size());
+		System.out.println(reporter.getErrors());
 	}
 
 }

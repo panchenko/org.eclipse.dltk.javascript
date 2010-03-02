@@ -37,8 +37,12 @@ public abstract class AbstractJSParserTest extends TestCase {
 		parser.setTypeInformationEnabled(false);
 	}
 
+	protected Script parseRaw(final String source) {
+		return parser.parse(source, reporter);
+	}
+
 	protected Script parse(final String source) {
-		final Script script = parser.parse(source, reporter);
+		final Script script = parseRaw(source);
 		new ASTVerifier(script, source).verify();
 		assertNotNull(script);
 		for (IProblem problem : reporter.getProblems()) {
