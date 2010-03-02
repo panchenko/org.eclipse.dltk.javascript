@@ -7,7 +7,6 @@ import org.eclipse.dltk.javascript.core.tests.contentassist.CodeCompletion;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CompletionStringParsing;
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
 import org.eclipse.dltk.javascript.core.tests.structure.JSLintModelTests;
-import org.eclipse.dltk.javascript.core.tests.structure.NewStructureParserTests;
 import org.eclipse.dltk.javascript.core.tests.structure.StructureParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinference.TypeInferenceTests;
 
@@ -19,7 +18,6 @@ public class AllTests {
 		// $JUnit-BEGIN$
 		suite.addTestSuite(TypeInferenceTests.class);
 		suite.addTestSuite(StructureParserTests.class);
-		suite.addTestSuite(NewStructureParserTests.class);
 		suite.addTestSuite(JSLintModelTests.class);
 		suite.addTestSuite(CodeCompletion.class);
 		suite.addTestSuite(XMLCompletionTests.class);

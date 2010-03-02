@@ -24,8 +24,10 @@ public abstract class Member {
 		this.name = name;
 	}
 
-	public Member addChild(Member child) {
-		children.add(child);
+	public Member add(Member... children) {
+		for (Member child : children) {
+			this.children.add(child);
+		}
 		return this;
 	}
 

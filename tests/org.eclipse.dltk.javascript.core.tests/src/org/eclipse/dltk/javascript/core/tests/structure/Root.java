@@ -20,7 +20,7 @@ public class Root extends Member {
 	public Root(Member... children) {
 		this();
 		for (Member child : children) {
-			addChild(child);
+			add(child);
 		}
 	}
 
