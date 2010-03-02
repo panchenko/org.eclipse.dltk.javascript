@@ -82,12 +82,4 @@ public class NestedValueCollection implements IValueCollection {
 		return false;
 	}
 
-	public Object getAttribute(String key) {
-		return parentCollection.getAttribute(key);
-	}
-
-	public void setAttribute(String key, Object value) {
-		parentCollection.setAttribute(key, value);
-	}
-
 }

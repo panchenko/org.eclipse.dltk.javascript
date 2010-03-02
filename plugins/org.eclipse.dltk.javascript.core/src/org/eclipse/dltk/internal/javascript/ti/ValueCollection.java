@@ -20,7 +20,6 @@ public class ValueCollection implements IValueCollection {
 
 	private final IValueCollection parent;
 	private final Map<String, IValueReference> children = new HashMap<String, IValueReference>();
-	private final Map<String, Object> attributes = new HashMap<String, Object>();
 
 	public ValueCollection() {
 		this(null);
@@ -93,14 +92,6 @@ public class ValueCollection implements IValueCollection {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + children.keySet();
-	}
-
-	public Object getAttribute(String key) {
-		return attributes.get(key);
-	}
-
-	public void setAttribute(String key, Object value) {
-		attributes.put(key, value);
 	}
 
 }

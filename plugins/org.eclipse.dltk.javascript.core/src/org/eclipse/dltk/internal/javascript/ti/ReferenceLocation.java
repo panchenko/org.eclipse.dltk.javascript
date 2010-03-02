@@ -92,6 +92,43 @@ public abstract class ReferenceLocation {
 
 	}
 
+	private static class RangeLocation extends ReferenceLocation {
+
+		private final int start;
+		private final int end;
+
+		public RangeLocation(int start, int end) {
+			this.start = start;
+			this.end = end;
+		}
+
+		@Override
+		public int getDeclarationEnd() {
+			return end;
+		}
+
+		@Override
+		public int getDeclarationStart() {
+			return start;
+		}
+
+		@Override
+		public int getNameEnd() {
+			return end;
+		}
+
+		@Override
+		public int getNameStart() {
+			return start;
+		}
+
+		@Override
+		public String toString() {
+			return "[" + start + ".." + end + "]";
+		}
+
+	}
+
 	/**
 	 * @param declarationStart
 	 * @param declarationEnd
@@ -103,5 +140,9 @@ public abstract class ReferenceLocation {
 			int declarationEnd, int nameStart, int nameEnd) {
 		return new SimpleLocation(declarationStart, declarationEnd, nameStart,
 				nameEnd);
+	}
+
+	public static ReferenceLocation create(int start, int end) {
+		return new RangeLocation(start, end);
 	}
 }

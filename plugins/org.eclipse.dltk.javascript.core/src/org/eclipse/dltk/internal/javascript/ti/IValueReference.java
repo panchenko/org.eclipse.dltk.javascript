@@ -39,4 +39,8 @@ public interface IValueReference extends IValueParent {
 
 	void setDeclaredType(Type type);
 
+	Object getAttribute(String key);
+
+	void setAttribute(String key, Object value);
+
 }

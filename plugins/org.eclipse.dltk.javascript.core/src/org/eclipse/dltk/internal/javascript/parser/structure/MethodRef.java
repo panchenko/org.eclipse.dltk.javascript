@@ -1,20 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2010 xored software, Inc.  
+ * Copyright (c) 2010 xored software, Inc.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html  
+ * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.parser;
+package org.eclipse.dltk.internal.javascript.parser.structure;
 
-public class FieldReferenceSet {
+class MethodRef {
+	final int argCount;
 
-	public void add(String name, int start, int end) {
-
+	public MethodRef(int argCount) {
+		this.argCount = argCount;
 	}
 
 }

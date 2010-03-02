@@ -57,12 +57,4 @@ public class WithValueCollection implements IValueCollection {
 		return with.isEmpty();
 	}
 
-	public Object getAttribute(String key) {
-		return parent.getAttribute(key);
-	}
-
-	public void setAttribute(String key, Object value) {
-		parent.setAttribute(key, value);
-	}
-
 }
