@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class ForInStatement extends LoopStatement implements ISemicolonStatement {
+public class ForInStatement extends LoopStatement {
 
 	private Keyword forKeyword;
 	private Keyword inKeyword;
@@ -24,35 +24,33 @@ public class ForInStatement extends LoopStatement implements ISemicolonStatement
 	private Expression iterator;
 	private int LP = -1;
 	private int RP = -1;
-	private int semic = -1;
 
 	public ForInStatement(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.javascript.ast.Statement#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (forKeyword != null) forKeyword.traverse(visitor);
-			if (inKeyword != null) inKeyword.traverse(visitor);
-			if (item != null) item.traverse(visitor);
-			if (iterator != null) iterator.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (forKeyword != null)
+				forKeyword.traverse(visitor);
+			if (inKeyword != null)
+				inKeyword.traverse(visitor);
+			if (item != null)
+				item.traverse(visitor);
+			if (iterator != null)
+				iterator.traverse(visitor);
 
 			Statement body = getBody();
-			if (body != null)
-			{
+			if (body != null) {
 				body.traverse(visitor);
 			}
 			visitor.endvisit(this);
 		}
 	}
-
-
 
 	public Expression getItem() {
 		return this.item;
@@ -102,14 +100,6 @@ public class ForInStatement extends LoopStatement implements ISemicolonStatement
 		this.RP = RP;
 	}
 
-	public int getSemicolonPosition() {
-		return this.semic;
-	}
-
-	public void setSemicolonPosition(int semic) {
-		this.semic = semic;
-	}
-
 	@Override
 	public String toSourceString(String indentationString) {
 
@@ -117,8 +107,6 @@ public class ForInStatement extends LoopStatement implements ISemicolonStatement
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LP > 0);
 		Assert.isTrue(RP > 0);
-		Assert.isTrue((getBody() != null && semic < 0)
-				|| (getBody() == null && semic > -1));
 
 		StringBuffer buffer = new StringBuffer();
 
@@ -134,11 +122,7 @@ public class ForInStatement extends LoopStatement implements ISemicolonStatement
 		if (getBody() != null) {
 			buffer.append("\n");
 			buffer.append(getBody().toSourceString(indentationString));
-			if (semic > -1)
-				buffer.append(';');
 		} else {
-			if (semic > -1)
-				buffer.append(';');
 			buffer.append("\n");
 		}
 

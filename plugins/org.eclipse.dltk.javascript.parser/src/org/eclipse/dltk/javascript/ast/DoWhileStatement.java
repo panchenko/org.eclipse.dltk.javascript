@@ -17,9 +17,11 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
-public class DoWhileStatement extends WhileStatement {
+public class DoWhileStatement extends WhileStatement implements
+		ISemicolonStatement {
 
 	private Keyword doKeyword;
+	private int semi = -1;
 
 	public DoWhileStatement(ASTNode parent) {
 		super(parent);
@@ -52,6 +54,14 @@ public class DoWhileStatement extends WhileStatement {
 
 	public void setDoKeyword(Keyword keyword) {
 		this.doKeyword = keyword;
+	}
+
+	public int getSemicolonPosition() {
+		return this.semi;
+	}
+
+	public void setSemicolonPosition(int semi) {
+		this.semi = semi;
 	}
 
 	@Override

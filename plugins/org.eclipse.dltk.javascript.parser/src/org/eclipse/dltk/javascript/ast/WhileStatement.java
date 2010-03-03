@@ -16,13 +16,12 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class WhileStatement extends LoopStatement implements ISemicolonStatement {
+public class WhileStatement extends LoopStatement {
 
 	private Keyword whileKeyword;
 	private Expression condition;
 	private int LP = -1;
 	private int RP = -1;
-	private int semi = -1;
 
 	public WhileStatement(ASTNode parent) {
 		super(parent);
@@ -32,22 +31,21 @@ public class WhileStatement extends LoopStatement implements ISemicolonStatement
 	 * @see org.eclipse.dltk.javascript.ast.Statement#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (whileKeyword != null) whileKeyword.traverse(visitor);
-			if (condition != null) condition.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (whileKeyword != null)
+				whileKeyword.traverse(visitor);
+			if (condition != null)
+				condition.traverse(visitor);
 
 			Statement body = getBody();
-			if (body != null)
-			{
+			if (body != null) {
 				body.traverse(visitor);
 			}
 			visitor.endvisit(this);
 		}
 	}
-	
+
 	public Expression getCondition() {
 		return this.condition;
 	}
@@ -78,14 +76,6 @@ public class WhileStatement extends LoopStatement implements ISemicolonStatement
 
 	public void setRP(int RP) {
 		this.RP = RP;
-	}
-
-	public int getSemicolonPosition() {
-		return this.semi;
-	}
-
-	public void setSemicolonPosition(int semi) {
-		this.semi = semi;
 	}
 
 	@Override

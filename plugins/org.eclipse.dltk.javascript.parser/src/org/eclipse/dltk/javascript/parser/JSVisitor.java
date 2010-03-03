@@ -249,6 +249,9 @@ public abstract class JSVisitor<E> {
 		case JSParser.YIELD:
 			return visitYield(node);
 
+		case JSParser.EMPTY_STATEMENT:
+			return visitEmptyStatement(node);
+
 		default:
 			return visitUnknown(node);
 		}
@@ -367,5 +370,7 @@ public abstract class JSVisitor<E> {
 	protected abstract E visitConst(Tree node);
 
 	protected abstract E visitVoid(Tree node);
+
+	protected abstract E visitEmptyStatement(Tree node);
 
 }

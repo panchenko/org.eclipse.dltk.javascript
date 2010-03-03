@@ -16,8 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class ForEachInStatement extends ForInStatement implements
-		ISemicolonStatement {
+public class ForEachInStatement extends ForInStatement {
 
 	private Keyword eachKeyword;
 
@@ -65,8 +64,6 @@ public class ForEachInStatement extends ForInStatement implements
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(getLP() > 0);
 		Assert.isTrue(getRP() > 0);
-		Assert.isTrue((getBody() != null && getSemicolonPosition() < 0)
-				|| (getBody() == null && getSemicolonPosition() > -1));
 
 		StringBuffer buffer = new StringBuffer();
 
@@ -84,11 +81,7 @@ public class ForEachInStatement extends ForInStatement implements
 		if (getBody() != null) {
 			buffer.append("\n");
 			buffer.append(getBody().toSourceString(indentationString));
-			if (getSemicolonPosition() > -1)
-				buffer.append(';');
 		} else {
-			if (getSemicolonPosition() > -1)
-				buffer.append(';');
 			buffer.append("\n");
 		}
 

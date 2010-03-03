@@ -211,6 +211,7 @@ tokens
 	POS ;
 	XmlAttribute;
 	XML_LITERAL;
+	EMPTY_STATEMENT;
 }
 
 @lexer::header
@@ -1443,7 +1444,7 @@ constStatement
 // $<Empty statement (12.3)
 
 emptyStatement
-	: SEMIC!
+	: SEMIC -> EMPTY_STATEMENT[$SEMIC]
 	;
 
 // $>

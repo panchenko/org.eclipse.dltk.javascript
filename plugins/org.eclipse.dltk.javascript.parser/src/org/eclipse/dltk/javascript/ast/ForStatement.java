@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class ForStatement extends LoopStatement implements ISemicolonStatement {
+public class ForStatement extends LoopStatement {
 
 	private Keyword forKeyword;
 	private Expression initial;
@@ -26,28 +26,28 @@ public class ForStatement extends LoopStatement implements ISemicolonStatement {
 	private int RP = -1;
 	private int initialSemic = -1;
 	private int conditionSemic = -1;
-	private int trailingSemic = -1;
 
 	public ForStatement(ASTNode parent) {
 		super(parent);
 	}
-	
+
 	/**
 	 * @see org.eclipse.dltk.javascript.ast.Statement#traverse(org.eclipse.dltk.ast.ASTVisitor)
 	 */
 	@Override
-	public void traverse(ASTVisitor visitor) throws Exception
-	{
-		if (visitor.visit(this))
-		{
-			if (forKeyword != null) forKeyword.traverse(visitor);
-			if (initial != null) initial.traverse(visitor);
-			if (condition != null) condition.traverse(visitor);
-			if (step != null) step.traverse(visitor);
+	public void traverse(ASTVisitor visitor) throws Exception {
+		if (visitor.visit(this)) {
+			if (forKeyword != null)
+				forKeyword.traverse(visitor);
+			if (initial != null)
+				initial.traverse(visitor);
+			if (condition != null)
+				condition.traverse(visitor);
+			if (step != null)
+				step.traverse(visitor);
 
 			Statement body = getBody();
-			if (body != null)
-			{
+			if (body != null) {
 				body.traverse(visitor);
 			}
 			visitor.endvisit(this);
@@ -118,14 +118,6 @@ public class ForStatement extends LoopStatement implements ISemicolonStatement {
 		this.initialSemic = semic;
 	}
 
-	public int getSemicolonPosition() {
-		return this.trailingSemic;
-	}
-
-	public void setSemicolonPosition(int semic) {
-		this.trailingSemic = semic;
-	}
-
 	@Override
 	public String toSourceString(String indentationString) {
 
@@ -135,8 +127,6 @@ public class ForStatement extends LoopStatement implements ISemicolonStatement {
 		Assert.isTrue(RP > 0);
 		Assert.isTrue(initialSemic > 0);
 		Assert.isTrue(conditionSemic > 0);
-		Assert.isTrue((getBody() != null && trailingSemic < 0)
-				|| (getBody() == null && trailingSemic > 0));
 
 		StringBuffer buffer = new StringBuffer();
 

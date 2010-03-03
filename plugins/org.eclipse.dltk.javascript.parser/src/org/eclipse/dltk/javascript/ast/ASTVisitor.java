@@ -60,16 +60,6 @@ public abstract class ASTVisitor<E> {
 				return visitor.visitCallExpression((CallExpression) node);
 			}
 		});
-		// HANDLERS.put(CaseClause.class, new Handler() {
-		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-		// return visitor.visitCaseClause((CaseClause) node);
-		// }
-		// });
-		// HANDLERS.put(CatchClause.class, new Handler() {
-		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-		// return visitor.visitCatchClause((CatchClause) node);
-		// }
-		// });
 		HANDLERS.put(CommaExpression.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 				return visitor.visitCommaExpression((CommaExpression) node);
@@ -96,11 +86,6 @@ public abstract class ASTVisitor<E> {
 				return visitor.visitDecimalLiteral((DecimalLiteral) node);
 			}
 		});
-		// HANDLERS.put(DefaultClause.class, new Handler() {
-		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-		// return visitor.visitDefaultClause((DefaultClause) node);
-		// }
-		// });
 		HANDLERS.put(DeleteStatement.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 				return visitor.visitDeleteStatement((DeleteStatement) node);
@@ -116,16 +101,6 @@ public abstract class ASTVisitor<E> {
 				return visitor.visitEmptyExpression((EmptyExpression) node);
 			}
 		});
-		// HANDLERS.put(ExceptionFilter.class, new Handler() {
-		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-		// return visitor.visitExceptionFilter((ExceptionFilter) node);
-		// }
-		// });
-		// HANDLERS.put(FinallyClause.class, new Handler() {
-		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-		// return visitor.visitFinallyClause((FinallyClause) node);
-		// }
-		// });
 		HANDLERS.put(ForStatement.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 				return visitor.visitForStatement((ForStatement) node);
@@ -325,26 +300,11 @@ public abstract class ASTVisitor<E> {
 				return visitor.visitErrorExpression((ErrorExpression) node);
 			}
 		});
-		// HANDLERS.put(.class, new Handler() {
-		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-		// return visitor.(() node);
-		// }
-		// });
-		// HANDLERS.put(.class, new Handler() {
-		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-		// return visitor.(() node);
-		// }
-		// });
-		// HANDLERS.put(.class, new Handler() {
-		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-		// return visitor.(() node);
-		// }
-		// });
-		// HANDLERS.put(.class, new Handler() {
-		// public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-		// return visitor.(() node);
-		// }
-		// });
+		HANDLERS.put(EmptyStatement.class, new Handler() {
+			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
+				return visitor.visitEmptyStatement((EmptyStatement) node);
+			}
+		});
 	}
 
 	public E visit(ASTNode node) {
@@ -520,6 +480,8 @@ public abstract class ASTVisitor<E> {
 	public E visitErrorExpression(ErrorExpression node) {
 		return null;
 	}
+
+	public abstract E visitEmptyStatement(EmptyStatement node);
 
 	/**
 	 * @since 2.0

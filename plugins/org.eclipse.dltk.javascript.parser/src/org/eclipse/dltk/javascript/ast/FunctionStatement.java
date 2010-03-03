@@ -30,6 +30,7 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 	private int RP = -1;
 	private int colonPosition = -1;
 	private Type returnType;
+	private Comment documentation;
 
 	public FunctionStatement(ASTNode parent) {
 		super(parent);
@@ -119,6 +120,14 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 
 	public void setReturnType(Type returnType) {
 		this.returnType = returnType;
+	}
+
+	public Comment getDocumentation() {
+		return documentation;
+	}
+
+	public void setDocumentation(Comment documentation) {
+		this.documentation = documentation;
 	}
 
 	@Override

@@ -14,6 +14,8 @@ package org.eclipse.dltk.javascript.ast;
 
 public class MultiLineComment extends Comment {
 
+	public static final String JSDOC_PREFIX = "/**";
+
 	@Override
 	public boolean isMultiLine() {
 		return true;
@@ -22,7 +24,7 @@ public class MultiLineComment extends Comment {
 	@Override
 	public boolean isDocumentation() {
 		final String text = getText();
-		return text != null && text.startsWith("/**");
+		return text != null && text.startsWith(JSDOC_PREFIX);
 	}
 
 }

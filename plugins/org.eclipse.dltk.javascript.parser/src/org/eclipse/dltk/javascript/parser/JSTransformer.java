@@ -14,7 +14,9 @@ package org.eclipse.dltk.javascript.parser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.antlr.runtime.RuleReturnScope;
@@ -43,6 +45,7 @@ import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
+import org.eclipse.dltk.javascript.ast.EmptyStatement;
 import org.eclipse.dltk.javascript.ast.ErrorExpression;
 import org.eclipse.dltk.javascript.ast.ExceptionFilter;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -106,6 +109,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	private final int[] tokenOffsets;
 	private Stack<ASTNode> parents = new Stack<ASTNode>();
 	private final boolean ignoreUnknown;
+	private final Map<Integer, Comment> documentationMap = new HashMap<Integer, Comment>();
 
 	private static final int MAX_RECURSION_DEEP = 512;
 
@@ -131,6 +135,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		if (tree == null)
 			return null;
 		final Script script = new Script();
+		addComments(script);
 		if (tree.getType() != 0) {
 			script.addStatement(transformStatementNode(tree, script));
 		} else {
@@ -139,7 +144,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 						script));
 			}
 		}
-		addComments(script);
 		script.setStart(0);
 		script.setEnd(tokenOffsets[tokenOffsets.length - 1]);
 		return script;
@@ -603,16 +607,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			statement.setBody(transformStatementNode(node.getChild(1),
 					statement));
 
-		if (statement.getBody() == null
-				|| !(statement.getBody() instanceof VoidExpression)
-				|| ((VoidExpression) statement.getBody())
-						.getSemicolonPosition() == -1) {
-
-			statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
-					.getTokenStopIndex(), node.getTokenStopIndex()));
-
-		}
-
 		statement.setStart(statement.getForKeyword().sourceStart());
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
@@ -657,16 +651,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			statement.setBody(transformStatementNode(node.getChild(1),
 					statement));
 
-		if (statement.getBody() == null
-				|| !(statement.getBody() instanceof VoidExpression)
-				|| ((VoidExpression) statement.getBody())
-						.getSemicolonPosition() == -1) {
-
-			statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
-					.getTokenStopIndex(), node.getTokenStopIndex()));
-
-		}
-
 		statement.setStart(statement.getForKeyword().sourceStart());
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
@@ -696,6 +680,25 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitFunction(Tree node) {
 		FunctionStatement fn = new FunctionStatement(getParent());
 
+		int tokenIndex = node.getTokenStartIndex();
+		while (tokenIndex > 0) {
+			--tokenIndex;
+			final Token token = tokens.get(tokenIndex);
+			if (token.getType() == JSParser.WhiteSpace
+					|| token.getType() == JSParser.EOL) {
+				continue;
+			}
+			if (token.getType() == JSParser.MultiLineComment) {
+				final Comment comment = documentationMap.get(token
+						.getTokenIndex());
+				if (comment != null) {
+					assert token.getText().startsWith(
+							MultiLineComment.JSDOC_PREFIX);
+					fn.setDocumentation(comment);
+				}
+			}
+			break;
+		}
 		fn.setFunctionKeyword(createKeyword(node, Keywords.FUNCTION));
 
 		int index = 0;
@@ -1095,16 +1098,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			statement.setBody(transformStatementNode(node.getChild(1),
 					statement));
 
-		if (statement.getBody() == null
-				|| !(statement.getBody() instanceof VoidExpression)
-				|| ((VoidExpression) statement.getBody())
-						.getSemicolonPosition() == -1) {
-
-			statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
-					.getTokenStopIndex(), node.getTokenStopIndex()));
-
-		}
-
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
@@ -1168,16 +1161,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		if (node.getChildCount() > 1)
 			statement.setBody(transformStatementNode(node.getChild(1),
 					statement));
-
-		if (statement.getBody() == null
-				|| !(statement.getBody() instanceof VoidExpression)
-				|| ((VoidExpression) statement.getBody())
-						.getSemicolonPosition() == -1) {
-
-			statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
-					.getTokenStopIndex(), node.getTokenStopIndex()));
-
-		}
 
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -1738,34 +1721,28 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	private void addComments(Script script) {
 		for (int i = 0; i < tokens.size(); i++) {
-			Token token = tokens.get(i);
-			switch (token.getType()) {
-			case JSParser.MultiLineComment:
-				script.addComment(visitMultiLineComment(token));
-				break;
-			case JSParser.SingleLineComment:
-				script.addComment(visitSingleLineComment(token));
-				break;
+			final Token token = tokens.get(i);
+			final Comment comment;
+			if (token.getType() == JSParser.MultiLineComment) {
+				Comment c = new MultiLineComment();
+				c.setText(token.getText());
+				c.setStart(getTokenOffset(token.getTokenIndex()));
+				c.setEnd(c.sourceStart() + token.getText().length());
+				comment = c;
+			} else if (token.getType() == JSParser.SingleLineComment) {
+				Comment c = new SingleLineComment();
+				c.setText(token.getText());
+				c.setStart(getTokenOffset(token.getTokenIndex()));
+				c.setEnd(c.sourceStart() + token.getText().length());
+				comment = c;
+			} else {
+				continue;
+			}
+			script.addComment(comment);
+			if (comment.isDocumentation()) {
+				documentationMap.put(token.getTokenIndex(), comment);
 			}
 		}
-	}
-
-	private Comment visitMultiLineComment(Token token) {
-		Comment comment = new MultiLineComment();
-		comment.setText(token.getText());
-		comment.setStart(getTokenOffset(token.getTokenIndex()));
-		comment.setEnd(comment.sourceStart() + token.getText().length());
-
-		return comment;
-	}
-
-	private Comment visitSingleLineComment(Token token) {
-		Comment comment = new SingleLineComment();
-		comment.setText(token.getText());
-		comment.setStart(getTokenOffset(token.getTokenIndex()));
-		comment.setEnd(comment.sourceStart() + token.getText().length());
-
-		return comment;
 	}
 
 	@Override
@@ -1977,6 +1954,14 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		expression.setEnd(expression.getExpression().sourceEnd());
 
 		return expression;
+	}
+
+	@Override
+	protected ASTNode visitEmptyStatement(Tree node) {
+		final EmptyStatement statement = new EmptyStatement(getParent());
+		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
+		statement.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
+		return statement;
 	}
 
 }
