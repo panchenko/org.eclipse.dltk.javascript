@@ -27,8 +27,8 @@ import org.eclipse.dltk.internal.javascript.ti.IValueTypeFactory;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.internal.model.references.Type;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TypeInferenceTests extends TestCase {
 
