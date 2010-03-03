@@ -22,9 +22,9 @@ while    (true)    break;
 ==
 while (true) break;
 ==== while-contirnue
-while    (true)    contirnue;
+while    (true)    continue;
 ==
-while (true) contirnue;
+while (true) continue;
 ==== while-simple-no-simicolon
 while    (a==100) break
 ==
