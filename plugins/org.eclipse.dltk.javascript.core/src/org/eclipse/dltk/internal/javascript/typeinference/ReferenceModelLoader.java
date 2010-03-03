@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.internal.model.references;
+package org.eclipse.dltk.internal.javascript.typeinference;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,16 +19,6 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeArrayReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeBooleanReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeDateReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeJSObjectReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeNumberReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeStringReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeXMLReference;
-import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
-import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
