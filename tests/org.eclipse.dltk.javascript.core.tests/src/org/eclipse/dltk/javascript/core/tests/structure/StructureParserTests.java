@@ -15,6 +15,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.core.ISourceElementParser;
+import org.eclipse.dltk.core.tests.util.StringList;
 
 public class StructureParserTests extends TestCase {
 
@@ -28,17 +29,6 @@ public class StructureParserTests extends TestCase {
 		parser.setRequestor(rec);
 		parser.parseSourceModule(new ModuleSource(code));
 		return rec.getRoot();
-	}
-
-	protected Root parse(String... code) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < code.length; ++i) {
-			if (i != 0) {
-				sb.append("\n");
-			}
-			sb.append(code[i]);
-		}
-		return parse(sb.toString());
 	}
 
 	public void testMethod() {
@@ -91,8 +81,11 @@ public class StructureParserTests extends TestCase {
 	}
 
 	public void testManyFunctionCalls() {
-		Root root = parse("function a(){x=1} a();fa=1;",
-				"function b(){y=2} b();fb=2;", "function c(){z=3} c();fc=3;");
+		StringList code = new StringList();
+		code.add("function a(){x=1} a();fa=1;");
+		code.add("function b(){y=2} b();fb=2;");
+		code.add("function c(){z=3} c();fc=3;");
+		Root root = parse(code.toString());
 		Root expected = new Root();
 		expected.add(new Method("a").add(new FieldRef("x")),
 				new MethodRef("a"), new FieldRef("fa"));
