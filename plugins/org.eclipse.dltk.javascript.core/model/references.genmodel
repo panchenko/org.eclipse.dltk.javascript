@@ -6,7 +6,7 @@
     modelName="References" nonNLSMarkers="true" rootExtendsInterface="" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="5.0" copyrightFields="false" language="">
   <foreignModel>references.ecore</foreignModel>
-  <genPackages prefix="ReferenceModel" basePackage="org.eclipse.dltk.javascript.internal.model"
+  <genPackages prefix="TypeInfoModel" basePackage="org.eclipse.dltk.javascript.typeinfo"
       disposableProviderFactory="true" multipleEditorPages="false" ecorePackage="references.ecore#/">
     <genClasses ecoreClass="references.ecore#//Type">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/name"/>

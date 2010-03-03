@@ -9,9 +9,9 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ReferenceModelFactory.java,v 1.2 2010/02/11 11:11:44 apanchenk Exp $
+ * $Id: TypeInfoModelFactory.java,v 1.1 2010/03/03 13:14:31 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references;
+package org.eclipse.dltk.javascript.typeinfo.model;
 
 import org.eclipse.emf.ecore.EFactory;
 
@@ -20,17 +20,17 @@ import org.eclipse.emf.ecore.EFactory;
  * The <b>Factory</b> for the model.
  * It provides a create method for each non-abstract class of the model.
  * <!-- end-user-doc -->
- * @see org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage
+ * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage
  * @generated
  */
-public interface ReferenceModelFactory extends EFactory {
+public interface TypeInfoModelFactory extends EFactory {
 	/**
 	 * The singleton instance of the factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	ReferenceModelFactory eINSTANCE = org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelFactoryImpl.init();
+	TypeInfoModelFactory eINSTANCE = org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelFactoryImpl.init();
 
 	/**
 	 * Returns a new object of class '<em>Type</em>'.
@@ -75,6 +75,6 @@ public interface ReferenceModelFactory extends EFactory {
 	 * @return the package supported by this factory.
 	 * @generated
 	 */
-	ReferenceModelPackage getReferenceModelPackage();
+	TypeInfoModelPackage getTypeInfoModelPackage();
 
-} //ReferenceModelFactory
+} //TypeInfoModelFactory

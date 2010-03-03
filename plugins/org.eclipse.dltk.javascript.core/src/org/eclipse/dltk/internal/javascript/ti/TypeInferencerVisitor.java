@@ -74,8 +74,8 @@ import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
-import org.eclipse.dltk.javascript.internal.model.references.Type;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 

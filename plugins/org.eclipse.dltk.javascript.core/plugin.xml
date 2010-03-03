@@ -129,8 +129,8 @@
 
 	<extension point="org.eclipse.emf.ecore.generated_package">
 		<package
-            uri="http://www.eclipse.org/dltk/javascript/references.ecore"
-            class="org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage"
+            uri="http://www.eclipse.org/dltk/javascript/typeinfo.ecore"
+            class="org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage"
             genModel="models/references.genmodel"/>
 	</extension>
 

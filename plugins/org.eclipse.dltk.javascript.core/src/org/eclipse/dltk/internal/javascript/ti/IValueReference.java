@@ -13,7 +13,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.Set;
 
-import org.eclipse.dltk.javascript.internal.model.references.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IValueReference extends IValueParent {
 

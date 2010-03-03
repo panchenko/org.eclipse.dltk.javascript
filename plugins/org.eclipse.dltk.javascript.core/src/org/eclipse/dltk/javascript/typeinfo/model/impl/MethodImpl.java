@@ -9,15 +9,15 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: MethodImpl.java,v 1.2 2010/02/11 11:20:35 apanchenk Exp $
+ * $Id: MethodImpl.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references.impl;
+package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Collection;
 
-import org.eclipse.dltk.javascript.internal.model.references.Method;
-import org.eclipse.dltk.javascript.internal.model.references.Parameter;
-import org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -36,7 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.dltk.javascript.internal.model.references.impl.MethodImpl#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl#getParameters <em>Parameters</em>}</li>
  * </ul>
  * </p>
  *
@@ -69,7 +69,7 @@ public class MethodImpl extends MemberImpl implements Method {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ReferenceModelPackage.Literals.METHOD;
+		return TypeInfoModelPackage.Literals.METHOD;
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class MethodImpl extends MemberImpl implements Method {
 	 */
 	public EList<Parameter> getParameters() {
 		if (parameters == null) {
-			parameters = new EObjectContainmentEList<Parameter>(Parameter.class, this, ReferenceModelPackage.METHOD__PARAMETERS);
+			parameters = new EObjectContainmentEList<Parameter>(Parameter.class, this, TypeInfoModelPackage.METHOD__PARAMETERS);
 		}
 		return parameters;
 	}
@@ -92,7 +92,7 @@ public class MethodImpl extends MemberImpl implements Method {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ReferenceModelPackage.METHOD__PARAMETERS:
+			case TypeInfoModelPackage.METHOD__PARAMETERS:
 				return ((InternalEList<?>)getParameters()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -106,7 +106,7 @@ public class MethodImpl extends MemberImpl implements Method {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ReferenceModelPackage.METHOD__PARAMETERS:
+			case TypeInfoModelPackage.METHOD__PARAMETERS:
 				return getParameters();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -121,7 +121,7 @@ public class MethodImpl extends MemberImpl implements Method {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ReferenceModelPackage.METHOD__PARAMETERS:
+			case TypeInfoModelPackage.METHOD__PARAMETERS:
 				getParameters().clear();
 				getParameters().addAll((Collection<? extends Parameter>)newValue);
 				return;
@@ -137,7 +137,7 @@ public class MethodImpl extends MemberImpl implements Method {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ReferenceModelPackage.METHOD__PARAMETERS:
+			case TypeInfoModelPackage.METHOD__PARAMETERS:
 				getParameters().clear();
 				return;
 		}
@@ -152,7 +152,7 @@ public class MethodImpl extends MemberImpl implements Method {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ReferenceModelPackage.METHOD__PARAMETERS:
+			case TypeInfoModelPackage.METHOD__PARAMETERS:
 				return parameters != null && !parameters.isEmpty();
 		}
 		return super.eIsSet(featureID);

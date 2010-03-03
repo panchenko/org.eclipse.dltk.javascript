@@ -9,11 +9,11 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ReferenceModelFactoryImpl.java,v 1.3 2010/02/28 16:04:43 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references.impl;
+package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
-import org.eclipse.dltk.javascript.internal.model.references.*;
+import org.eclipse.dltk.javascript.typeinfo.model.*;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -29,24 +29,24 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ReferenceModelFactoryImpl extends EFactoryImpl implements ReferenceModelFactory {
+public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoModelFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static ReferenceModelFactory init() {
+	public static TypeInfoModelFactory init() {
 		try {
-			ReferenceModelFactory theReferenceModelFactory = (ReferenceModelFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/dltk/javascript/references.ecore"); //$NON-NLS-1$ 
-			if (theReferenceModelFactory != null) {
-				return theReferenceModelFactory;
+			TypeInfoModelFactory theTypeInfoModelFactory = (TypeInfoModelFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/dltk/javascript/typeinfo.ecore"); //$NON-NLS-1$ 
+			if (theTypeInfoModelFactory != null) {
+				return theTypeInfoModelFactory;
 			}
 		}
 		catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
-		return new ReferenceModelFactoryImpl();
+		return new TypeInfoModelFactoryImpl();
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class ReferenceModelFactoryImpl extends EFactoryImpl implements Reference
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ReferenceModelFactoryImpl() {
+	public TypeInfoModelFactoryImpl() {
 		super();
 	}
 
@@ -67,10 +67,10 @@ public class ReferenceModelFactoryImpl extends EFactoryImpl implements Reference
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case ReferenceModelPackage.TYPE: return (EObject)createType();
-			case ReferenceModelPackage.METHOD: return (EObject)createMethod();
-			case ReferenceModelPackage.PARAMETER: return (EObject)createParameter();
-			case ReferenceModelPackage.PROPERTY: return (EObject)createProperty();
+			case TypeInfoModelPackage.TYPE: return (EObject)createType();
+			case TypeInfoModelPackage.METHOD: return (EObject)createMethod();
+			case TypeInfoModelPackage.PARAMETER: return (EObject)createParameter();
+			case TypeInfoModelPackage.PROPERTY: return (EObject)createProperty();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -121,8 +121,8 @@ public class ReferenceModelFactoryImpl extends EFactoryImpl implements Reference
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ReferenceModelPackage getReferenceModelPackage() {
-		return (ReferenceModelPackage)getEPackage();
+	public TypeInfoModelPackage getTypeInfoModelPackage() {
+		return (TypeInfoModelPackage)getEPackage();
 	}
 
 	/**
@@ -132,8 +132,8 @@ public class ReferenceModelFactoryImpl extends EFactoryImpl implements Reference
 	 * @generated
 	 */
 	@Deprecated
-	public static ReferenceModelPackage getPackage() {
-		return ReferenceModelPackage.eINSTANCE;
+	public static TypeInfoModelPackage getPackage() {
+		return TypeInfoModelPackage.eINSTANCE;
 	}
 
-} //ReferenceModelFactoryImpl
+} //TypeInfoModelFactoryImpl

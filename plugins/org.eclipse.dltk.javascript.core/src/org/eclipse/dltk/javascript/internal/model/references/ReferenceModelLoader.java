@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.model.references;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,10 +30,10 @@ import org.eclipse.dltk.internal.javascript.typeinference.NativeXMLReference;
 import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
 import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompletingReference;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
 public class ReferenceModelLoader {
 
@@ -47,43 +46,12 @@ public class ReferenceModelLoader {
 		return instance;
 	}
 
-	private final Resource resource;
-
 	private ReferenceModelLoader() {
 		registerFactories();
-		resource = loadResources();
-	}
-
-	private static Resource loadResources() {
-		final URI uri = URI.createPlatformPluginURI("/"
-				+ JavaScriptPlugin.PLUGIN_ID
-				+ "/resources/native-references.xml", true);
-		Resource resource = new XMIResourceImpl(uri);
-		try {
-			resource.load(null);
-		} catch (IOException e) {
-			JavaScriptPlugin.error(e);
-			if (!resource.isLoaded()) {
-				resource.getContents().clear();
-			}
-		}
-		return resource;
-	}
-
-	public Type getType(String typeName) {
-		for (EObject object : resource.getContents()) {
-			if (object instanceof Type) {
-				final Type type = (Type) object;
-				if (typeName.equals(type.getName())) {
-					return type;
-				}
-			}
-		}
-		return null;
 	}
 
 	public Collection<IReference> getChildren(String typeName) {
-		final Type type = getType(typeName);
+		final Type type = TypeInfoModelLoader.getInstance().getType(typeName);
 		if (type != null) {
 			return getChildren(type);
 		} else {

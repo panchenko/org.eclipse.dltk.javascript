@@ -9,12 +9,12 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: PropertyImpl.java,v 1.2 2010/02/11 11:20:35 apanchenk Exp $
+ * $Id: PropertyImpl.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references.impl;
+package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
-import org.eclipse.dltk.javascript.internal.model.references.Property;
-import org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
@@ -44,7 +44,7 @@ public class PropertyImpl extends MemberImpl implements Property {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ReferenceModelPackage.Literals.PROPERTY;
+		return TypeInfoModelPackage.Literals.PROPERTY;
 	}
 
 } //PropertyImpl

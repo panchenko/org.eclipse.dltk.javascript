@@ -9,9 +9,9 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Property.java,v 1.2 2010/02/11 11:11:46 apanchenk Exp $
+ * $Id: Property.java,v 1.1 2010/03/03 13:14:31 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references;
+package org.eclipse.dltk.javascript.typeinfo.model;
 
 
 /**
@@ -20,10 +20,9 @@ package org.eclipse.dltk.javascript.internal.model.references;
  * <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage#getProperty()
+ * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getProperty()
  * @model
  * @generated
  */
 public interface Property extends Member {
-
 } // Property

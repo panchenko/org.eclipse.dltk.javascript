@@ -12,8 +12,8 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
-import org.eclipse.dltk.javascript.internal.model.references.ReferenceModelLoader;
-import org.eclipse.dltk.javascript.internal.model.references.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
 public class ValueTypeFactoryImpl implements IValueTypeFactory {
 
@@ -54,6 +54,6 @@ public class ValueTypeFactoryImpl implements IValueTypeFactory {
 	}
 
 	public Type get(String name) {
-		return ReferenceModelLoader.getInstance().getType(name);
+		return TypeInfoModelLoader.getInstance().getType(name);
 	}
 }

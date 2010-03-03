@@ -17,9 +17,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.javascript.internal.model.references.Member;
-import org.eclipse.dltk.javascript.internal.model.references.Method;
-import org.eclipse.dltk.javascript.internal.model.references.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class ValueReference implements IValueReference {
 

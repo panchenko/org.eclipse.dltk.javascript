@@ -9,9 +9,9 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Method.java,v 1.2 2010/02/11 11:11:40 apanchenk Exp $
+ * $Id: Method.java,v 1.1 2010/03/03 13:14:31 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references;
+package org.eclipse.dltk.javascript.typeinfo.model;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -23,18 +23,18 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.dltk.javascript.internal.model.references.Method#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Method#getParameters <em>Parameters</em>}</li>
  * </ul>
  * </p>
  *
- * @see org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage#getMethod()
+ * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMethod()
  * @model
  * @generated
  */
 public interface Method extends Member {
 	/**
 	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.dltk.javascript.internal.model.references.Parameter}.
+	 * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Parameter}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Parameters</em>' containment reference list isn't clear,
@@ -42,7 +42,7 @@ public interface Method extends Member {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parameters</em>' containment reference list.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage#getMethod_Parameters()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMethod_Parameters()
 	 * @model containment="true"
 	 * @generated
 	 */

@@ -9,11 +9,11 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ReferenceModelAdapterFactory.java,v 1.2 2010/02/11 11:20:37 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references.util;
+package org.eclipse.dltk.javascript.typeinfo.model.util;
 
-import org.eclipse.dltk.javascript.internal.model.references.*;
+import org.eclipse.dltk.javascript.typeinfo.model.*;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -27,17 +27,17 @@ import org.eclipse.emf.ecore.EObject;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage
+ * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage
  * @generated
  */
-public class ReferenceModelAdapterFactory extends AdapterFactoryImpl {
+public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
 	/**
 	 * The cached model package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static ReferenceModelPackage modelPackage;
+	protected static TypeInfoModelPackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -45,9 +45,9 @@ public class ReferenceModelAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ReferenceModelAdapterFactory() {
+	public TypeInfoModelAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = ReferenceModelPackage.eINSTANCE;
+			modelPackage = TypeInfoModelPackage.eINSTANCE;
 		}
 	}
 
@@ -76,8 +76,8 @@ public class ReferenceModelAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ReferenceModelSwitch<Adapter> modelSwitch =
-		new ReferenceModelSwitch<Adapter>() {
+	protected TypeInfoModelSwitch<Adapter> modelSwitch =
+		new TypeInfoModelSwitch<Adapter>() {
 			@Override
 			public Adapter caseType(Type object) {
 				return createTypeAdapter();
@@ -119,13 +119,13 @@ public class ReferenceModelAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.internal.model.references.Type <em>Type</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Type
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type
 	 * @generated
 	 */
 	public Adapter createTypeAdapter() {
@@ -133,13 +133,13 @@ public class ReferenceModelAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.internal.model.references.Member <em>Member</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.Member <em>Member</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Member
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member
 	 * @generated
 	 */
 	public Adapter createMemberAdapter() {
@@ -147,13 +147,13 @@ public class ReferenceModelAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.internal.model.references.Method <em>Method</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.Method <em>Method</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Method
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Method
 	 * @generated
 	 */
 	public Adapter createMethodAdapter() {
@@ -161,13 +161,13 @@ public class ReferenceModelAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.internal.model.references.Parameter <em>Parameter</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter <em>Parameter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Parameter
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter
 	 * @generated
 	 */
 	public Adapter createParameterAdapter() {
@@ -175,13 +175,13 @@ public class ReferenceModelAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.internal.model.references.Property <em>Property</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.Property <em>Property</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Property
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Property
 	 * @generated
 	 */
 	public Adapter createPropertyAdapter() {
@@ -200,4 +200,4 @@ public class ReferenceModelAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} //ReferenceModelAdapterFactory
+} //TypeInfoModelAdapterFactory

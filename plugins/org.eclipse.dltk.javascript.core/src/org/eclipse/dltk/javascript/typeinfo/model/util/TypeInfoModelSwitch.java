@@ -9,13 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ReferenceModelSwitch.java,v 1.2 2010/02/11 11:20:37 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references.util;
+package org.eclipse.dltk.javascript.typeinfo.model.util;
 
 import java.util.List;
 
-import org.eclipse.dltk.javascript.internal.model.references.*;
+import org.eclipse.dltk.javascript.typeinfo.model.*;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -30,17 +30,17 @@ import org.eclipse.emf.ecore.EObject;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage
+ * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage
  * @generated
  */
-public class ReferenceModelSwitch<T> {
+public class TypeInfoModelSwitch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static ReferenceModelPackage modelPackage;
+	protected static TypeInfoModelPackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -48,9 +48,9 @@ public class ReferenceModelSwitch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ReferenceModelSwitch() {
+	public TypeInfoModelSwitch() {
 		if (modelPackage == null) {
-			modelPackage = ReferenceModelPackage.eINSTANCE;
+			modelPackage = TypeInfoModelPackage.eINSTANCE;
 		}
 	}
 
@@ -94,32 +94,32 @@ public class ReferenceModelSwitch<T> {
 	 */
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case ReferenceModelPackage.TYPE: {
+			case TypeInfoModelPackage.TYPE: {
 				Type type = (Type)theEObject;
 				T result = caseType(type);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ReferenceModelPackage.MEMBER: {
+			case TypeInfoModelPackage.MEMBER: {
 				Member member = (Member)theEObject;
 				T result = caseMember(member);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ReferenceModelPackage.METHOD: {
+			case TypeInfoModelPackage.METHOD: {
 				Method method = (Method)theEObject;
 				T result = caseMethod(method);
 				if (result == null) result = caseMember(method);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ReferenceModelPackage.PARAMETER: {
+			case TypeInfoModelPackage.PARAMETER: {
 				Parameter parameter = (Parameter)theEObject;
 				T result = caseParameter(parameter);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ReferenceModelPackage.PROPERTY: {
+			case TypeInfoModelPackage.PROPERTY: {
 				Property property = (Property)theEObject;
 				T result = caseProperty(property);
 				if (result == null) result = caseMember(property);
@@ -220,4 +220,4 @@ public class ReferenceModelSwitch<T> {
 		return null;
 	}
 
-} //ReferenceModelSwitch
+} //TypeInfoModelSwitch

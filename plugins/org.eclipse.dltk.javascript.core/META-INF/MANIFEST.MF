@@ -22,8 +22,8 @@ Export-Package: com.xored.org.mozilla.javascript,
  org.eclipse.dltk.javascript.core,
  org.eclipse.dltk.javascript.internal.core.codeassist.completion;x-friends:="org.eclipse.dltk.javascript.core.tests",
  org.eclipse.dltk.javascript.internal.core.codeassist.selection,
- org.eclipse.dltk.javascript.internal.model.references,
- org.eclipse.dltk.javascript.internal.model.references.util;x-internal:=true,
+ org.eclipse.dltk.javascript.typeinfo.model,
+ org.eclipse.dltk.javascript.typeinfo.model.util;x-internal:=true,
  org.eclipse.dltk.javascript.typeinference
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

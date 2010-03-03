@@ -9,17 +9,17 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ReferenceModelPackageImpl.java,v 1.2 2010/02/11 11:20:36 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references.impl;
+package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
-import org.eclipse.dltk.javascript.internal.model.references.Member;
-import org.eclipse.dltk.javascript.internal.model.references.Method;
-import org.eclipse.dltk.javascript.internal.model.references.Parameter;
-import org.eclipse.dltk.javascript.internal.model.references.Property;
-import org.eclipse.dltk.javascript.internal.model.references.ReferenceModelFactory;
-import org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage;
-import org.eclipse.dltk.javascript.internal.model.references.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -34,7 +34,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ReferenceModelPackageImpl extends EPackageImpl implements ReferenceModelPackage {
+public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoModelPackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -81,12 +81,12 @@ public class ReferenceModelPackageImpl extends EPackageImpl implements Reference
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see org.eclipse.dltk.javascript.internal.model.references.ReferenceModelPackage#eNS_URI
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#eNS_URI
 	 * @see #init()
 	 * @generated
 	 */
-	private ReferenceModelPackageImpl() {
-		super(eNS_URI, ReferenceModelFactory.eINSTANCE);
+	private TypeInfoModelPackageImpl() {
+		super(eNS_URI, TypeInfoModelFactory.eINSTANCE);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class ReferenceModelPackageImpl extends EPackageImpl implements Reference
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
 	 * 
-	 * <p>This method is used to initialize {@link ReferenceModelPackage#eINSTANCE} when that field is accessed.
+	 * <p>This method is used to initialize {@link TypeInfoModelPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -108,27 +108,27 @@ public class ReferenceModelPackageImpl extends EPackageImpl implements Reference
 	 * @see #initializePackageContents()
 	 * @generated
 	 */
-	public static ReferenceModelPackage init() {
-		if (isInited) return (ReferenceModelPackage)EPackage.Registry.INSTANCE.getEPackage(ReferenceModelPackage.eNS_URI);
+	public static TypeInfoModelPackage init() {
+		if (isInited) return (TypeInfoModelPackage)EPackage.Registry.INSTANCE.getEPackage(TypeInfoModelPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ReferenceModelPackageImpl theReferenceModelPackage = (ReferenceModelPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ReferenceModelPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ReferenceModelPackageImpl());
+		TypeInfoModelPackageImpl theTypeInfoModelPackage = (TypeInfoModelPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof TypeInfoModelPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new TypeInfoModelPackageImpl());
 
 		isInited = true;
 
 		// Create package meta-data objects
-		theReferenceModelPackage.createPackageContents();
+		theTypeInfoModelPackage.createPackageContents();
 
 		// Initialize created meta-data
-		theReferenceModelPackage.initializePackageContents();
+		theTypeInfoModelPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
-		theReferenceModelPackage.freeze();
+		theTypeInfoModelPackage.freeze();
 
   
 		// Update the registry and return the package
-		EPackage.Registry.INSTANCE.put(ReferenceModelPackage.eNS_URI, theReferenceModelPackage);
-		return theReferenceModelPackage;
+		EPackage.Registry.INSTANCE.put(TypeInfoModelPackage.eNS_URI, theTypeInfoModelPackage);
+		return theTypeInfoModelPackage;
 	}
 
 	/**
@@ -262,8 +262,8 @@ public class ReferenceModelPackageImpl extends EPackageImpl implements Reference
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ReferenceModelFactory getReferenceModelFactory() {
-		return (ReferenceModelFactory)getEFactoryInstance();
+	public TypeInfoModelFactory getTypeInfoModelFactory() {
+		return (TypeInfoModelFactory)getEFactoryInstance();
 	}
 
 	/**
@@ -360,4 +360,4 @@ public class ReferenceModelPackageImpl extends EPackageImpl implements Reference
 		createResource(eNS_URI);
 	}
 
-} //ReferenceModelPackageImpl
+} //TypeInfoModelPackageImpl

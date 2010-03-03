@@ -9,9 +9,9 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ReferenceModelPackage.java,v 1.2 2010/02/11 11:11:27 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.1 2010/03/03 13:14:31 apanchenk Exp $
  */
-package org.eclipse.dltk.javascript.internal.model.references;
+package org.eclipse.dltk.javascript.typeinfo.model;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -29,18 +29,18 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * @see org.eclipse.dltk.javascript.internal.model.references.ReferenceModelFactory
+ * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory
  * @model kind="package"
  * @generated
  */
-public interface ReferenceModelPackage extends EPackage {
+public interface TypeInfoModelPackage extends EPackage {
 	/**
 	 * The package name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNAME = "references"; //$NON-NLS-1$
+	String eNAME = "model"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace URI.
@@ -48,7 +48,7 @@ public interface ReferenceModelPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://www.eclipse.org/dltk/javascript/references.ecore"; //$NON-NLS-1$
+	String eNS_URI = "http://www.eclipse.org/dltk/javascript/typeinfo.ecore"; //$NON-NLS-1$
 
 	/**
 	 * The package namespace name.
@@ -64,14 +64,14 @@ public interface ReferenceModelPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	ReferenceModelPackage eINSTANCE = org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl.init();
+	TypeInfoModelPackage eINSTANCE = org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.TypeImpl <em>Type</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.TypeImpl
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getType()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getType()
 	 * @generated
 	 */
 	int TYPE = 0;
@@ -104,11 +104,11 @@ public interface ReferenceModelPackage extends EPackage {
 	int TYPE_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.MemberImpl <em>Member</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl <em>Member</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.MemberImpl
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getMember()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMember()
 	 * @generated
 	 */
 	int MEMBER = 1;
@@ -150,11 +150,11 @@ public interface ReferenceModelPackage extends EPackage {
 	int MEMBER_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.MethodImpl <em>Method</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.MethodImpl
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getMethod()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMethod()
 	 * @generated
 	 */
 	int METHOD = 2;
@@ -205,11 +205,11 @@ public interface ReferenceModelPackage extends EPackage {
 	int METHOD_FEATURE_COUNT = MEMBER_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.ParameterImpl <em>Parameter</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl <em>Parameter</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ParameterImpl
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getParameter()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameter()
 	 * @generated
 	 */
 	int PARAMETER = 3;
@@ -251,11 +251,11 @@ public interface ReferenceModelPackage extends EPackage {
 	int PARAMETER_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.PropertyImpl <em>Property</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl <em>Property</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.PropertyImpl
-	 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getProperty()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getProperty()
 	 * @generated
 	 */
 	int PROPERTY = 4;
@@ -298,150 +298,150 @@ public interface ReferenceModelPackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.internal.model.references.Type <em>Type</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Type</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Type
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type
 	 * @generated
 	 */
 	EClass getType();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.internal.model.references.Type#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Type#getName()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getName()
 	 * @see #getType()
 	 * @generated
 	 */
 	EAttribute getType_Name();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.internal.model.references.Type#getMembers <em>Members</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Members</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Type#getMembers()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers()
 	 * @see #getType()
 	 * @generated
 	 */
 	EReference getType_Members();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.internal.model.references.Member <em>Member</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Member <em>Member</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Member</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Member
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member
 	 * @generated
 	 */
 	EClass getMember();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.internal.model.references.Member#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Member#getName()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getName()
 	 * @see #getMember()
 	 * @generated
 	 */
 	EAttribute getMember_Name();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.internal.model.references.Member#getType <em>Type</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Type</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Member#getType()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getType()
 	 * @see #getMember()
 	 * @generated
 	 */
 	EReference getMember_Type();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.internal.model.references.Member#getDescription <em>Description</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDescription <em>Description</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Description</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Member#getDescription()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getDescription()
 	 * @see #getMember()
 	 * @generated
 	 */
 	EAttribute getMember_Description();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.internal.model.references.Method <em>Method</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Method <em>Method</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Method</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Method
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Method
 	 * @generated
 	 */
 	EClass getMethod();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.internal.model.references.Method#getParameters <em>Parameters</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Method#getParameters <em>Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Parameters</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Method#getParameters()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Method#getParameters()
 	 * @see #getMethod()
 	 * @generated
 	 */
 	EReference getMethod_Parameters();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.internal.model.references.Parameter <em>Parameter</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter <em>Parameter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Parameter</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Parameter
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter
 	 * @generated
 	 */
 	EClass getParameter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.internal.model.references.Parameter#getName <em>Name</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Parameter#getName()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#getName()
 	 * @see #getParameter()
 	 * @generated
 	 */
 	EAttribute getParameter_Name();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.internal.model.references.Parameter#getType <em>Type</em>}'.
+	 * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Type</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Parameter#getType()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#getType()
 	 * @see #getParameter()
 	 * @generated
 	 */
 	EReference getParameter_Type();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.internal.model.references.Parameter#isOptional <em>Optional</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#isOptional <em>Optional</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Optional</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Parameter#isOptional()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#isOptional()
 	 * @see #getParameter()
 	 * @generated
 	 */
 	EAttribute getParameter_Optional();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.internal.model.references.Property <em>Property</em>}'.
+	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Property <em>Property</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Property</em>'.
-	 * @see org.eclipse.dltk.javascript.internal.model.references.Property
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Property
 	 * @generated
 	 */
 	EClass getProperty();
@@ -453,7 +453,7 @@ public interface ReferenceModelPackage extends EPackage {
 	 * @return the factory that creates the instances of the model.
 	 * @generated
 	 */
-	ReferenceModelFactory getReferenceModelFactory();
+	TypeInfoModelFactory getTypeInfoModelFactory();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -469,11 +469,11 @@ public interface ReferenceModelPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.TypeImpl <em>Type</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.TypeImpl
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getType()
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getType()
 		 * @generated
 		 */
 		EClass TYPE = eINSTANCE.getType();
@@ -495,11 +495,11 @@ public interface ReferenceModelPackage extends EPackage {
 		EReference TYPE__MEMBERS = eINSTANCE.getType_Members();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.MemberImpl <em>Member</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl <em>Member</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.MemberImpl
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getMember()
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMember()
 		 * @generated
 		 */
 		EClass MEMBER = eINSTANCE.getMember();
@@ -529,11 +529,11 @@ public interface ReferenceModelPackage extends EPackage {
 		EAttribute MEMBER__DESCRIPTION = eINSTANCE.getMember_Description();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.MethodImpl <em>Method</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.MethodImpl
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getMethod()
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMethod()
 		 * @generated
 		 */
 		EClass METHOD = eINSTANCE.getMethod();
@@ -547,11 +547,11 @@ public interface ReferenceModelPackage extends EPackage {
 		EReference METHOD__PARAMETERS = eINSTANCE.getMethod_Parameters();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.ParameterImpl <em>Parameter</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl <em>Parameter</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ParameterImpl
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getParameter()
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameter()
 		 * @generated
 		 */
 		EClass PARAMETER = eINSTANCE.getParameter();
@@ -581,15 +581,15 @@ public interface ReferenceModelPackage extends EPackage {
 		EAttribute PARAMETER__OPTIONAL = eINSTANCE.getParameter_Optional();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.internal.model.references.impl.PropertyImpl <em>Property</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl <em>Property</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.PropertyImpl
-		 * @see org.eclipse.dltk.javascript.internal.model.references.impl.ReferenceModelPackageImpl#getProperty()
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getProperty()
 		 * @generated
 		 */
 		EClass PROPERTY = eINSTANCE.getProperty();
 
 	}
 
-} //ReferenceModelPackage
+} //TypeInfoModelPackage
