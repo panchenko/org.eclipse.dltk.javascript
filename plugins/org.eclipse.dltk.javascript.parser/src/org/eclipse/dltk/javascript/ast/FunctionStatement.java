@@ -13,6 +13,7 @@
 package org.eclipse.dltk.javascript.ast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -24,7 +25,7 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 
 	private Keyword functionKeyword;
 	private Identifier name;
-	private final List<Argument> arguments = new ArrayList<Argument>();
+	private List<Argument> arguments = null;
 	private StatementBlock body;
 	private int LP = -1;
 	private int RP = -1;
@@ -75,11 +76,15 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 	}
 
 	public List<Argument> getArguments() {
-		return this.arguments;
+		return arguments != null ? arguments : Collections
+				.<Argument> emptyList();
 	}
 
 	public void addArgument(Argument argument) {
-		this.arguments.add(argument);
+		if (arguments == null) {
+			arguments = new ArrayList<Argument>(4);
+		}
+		arguments.add(argument);
 	}
 
 	public StatementBlock getBody() {
