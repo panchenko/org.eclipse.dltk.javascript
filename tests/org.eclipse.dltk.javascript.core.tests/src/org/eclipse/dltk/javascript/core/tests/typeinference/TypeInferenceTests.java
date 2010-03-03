@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +20,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
+import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.IValueTypeFactory;
@@ -29,7 +29,6 @@ import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.internal.model.references.Type;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
-import org.eclipse.dltk.utils.TextUtils;
 
 public class TypeInferenceTests extends TestCase {
 
@@ -57,10 +56,6 @@ public class TypeInferenceTests extends TestCase {
 		TypeInferencer2 inferencer = new TestTypeInferencer2();
 		inferencer.doInferencing(parse(code));
 		return inferencer.getCollection();
-	}
-
-	private static IValueCollection inference(List<String> lines) {
-		return inference(TextUtils.join(lines, '\n'));
 	}
 
 	public void testNumberVar() {
@@ -94,25 +89,25 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	public void testReturnNumber() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("var s = 1");
 		lines.add("s.execute = function() {");
 		lines.add("  return 1");
 		lines.add("}");
 		lines.add("var z = s.execute()");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference z = collection.getChild("z");
 		assertEquals(getTypes(ReferenceFactory.NUMBER), z.getTypes());
 	}
 
 	public void testReturnObjectProperties() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("var s = 1");
 		lines.add("s.execute = function() {");
 		lines.add("  return { a: 1, b: true }");
 		lines.add("}");
 		lines.add("var z = s.execute()");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference z = collection.getChild("z");
 		assertTrue(z.getTypes().isEmpty());
 		final IValueReference a = z.getChild("a");
@@ -124,44 +119,44 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	public void testInlineFunctionStatementCall() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("var str = (function() {");
 		lines.add("  return 'Hello'");
 		lines.add("})()");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference str = collection.getChild("str");
 		assertEquals(getTypes(ReferenceFactory.STRING), str.getTypes());
 	}
 
 	public void testToStringMethod() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("var num = 1");
 		lines.add("var str = num.toString()");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference str = collection.getChild("str");
 		assertEquals(getTypes(ReferenceFactory.STRING), str.getTypes());
 	}
 
 	public void testFunctionCall() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("function hello() {");
 		lines.add("  return 'Hello'");
 		lines.add("}");
 		lines.add("var str = hello()");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference str = collection.getChild("str");
 		assertEquals(getTypes(ReferenceFactory.STRING), str.getTypes());
 	}
 
 	public void testIf() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("if (1 == 2) {");
 		lines.add("  x = 1");
 		lines.add("}");
 		lines.add("else {");
 		lines.add("  x = 'No'");
 		lines.add("}");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference x = collection.getChild("x");
 		assertEquals(
 				getTypes(ReferenceFactory.STRING, ReferenceFactory.NUMBER), x
@@ -169,11 +164,11 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	public void testFor() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("for (var i = 0; i < 10; ++i) {");
 		lines.add("  x = 'No'");
 		lines.add("}");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference i = collection.getChild("i");
 		assertEquals(getTypes(ReferenceFactory.NUMBER), i.getTypes());
 		IValueReference x = collection.getChild("x");
@@ -181,39 +176,39 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	public void testForIn() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("for (var i in objectWithIterator) {");
 		lines.add("  print(objectWithIterator[i])");
 		lines.add("}");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference i = collection.getChild("i");
 		assertEquals(getTypes(ReferenceFactory.STRING), i.getTypes());
 	}
 
 	public void testWhile() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("while (1 == 2) {");
 		lines.add("  x = 'No'");
 		lines.add("}");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference x = collection.getChild("x");
 		assertEquals(getTypes(ReferenceFactory.STRING), x.getTypes());
 	}
 
 	public void testUnknownVar() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("var x = y");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference x = collection.getChild("x");
 		assertEquals(getTypes(), x.getTypes());
 		assertNull(collection.getChild("y"));
 	}
 
 	public void testUnknownProperty() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("var x = {a:1}");
 		lines.add("var y = x.b");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference x = collection.getChild("x");
 		assertEquals(getTypes(), x.getTypes());
 		assertEquals(Collections.singleton("a"), x.getDirectChildren());
@@ -222,9 +217,9 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	public void testUnknownProperty3() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("x.y.z = 1");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference x = collection.getChild("x");
 		IValueReference y = x.getChild("y");
 		IValueReference z = y.getChild("z");
@@ -232,23 +227,23 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	public void testSwitch() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("switch(n) {");
 		lines.add("case 0: str = 'Zero'; break;");
 		lines.add("case 1: str = 'One'; break;");
 		lines.add("}");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference x = collection.getChild("str");
 		assertEquals(getTypes(ReferenceFactory.STRING), x.getTypes());
 	}
 
 	public void testWith() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("var a = {name:1}");
 		lines.add("with (a) {");
 		lines.add("  name = 'Alex'");
 		lines.add("}");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference a = collection.getChild("a");
 		assertEquals(getTypes(), a.getTypes());
 		IValueReference name = a.getChild("name");
@@ -257,12 +252,12 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	public void testNew() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("var str = new String()");
 		lines.add("var num = new Number()");
 		lines.add("var bool = new Boolean()");
 		lines.add("var arr = new Array()");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference str = collection.getChild("str");
 		assertEquals(getTypes(ReferenceFactory.STRING), str.getTypes());
 		IValueReference num = collection.getChild("num");
@@ -274,11 +269,11 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	public void testRecursion1() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("context = { 'index': 1, 'prev': context }");
 		lines.add("doSomethind()");
 		lines.add("context = context['prev']");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference context = collection.getChild("context");
 		IValueReference index = context.getChild("index");
 		assertEquals(getTypes(ReferenceFactory.NUMBER), index.getTypes());
@@ -287,10 +282,10 @@ public class TypeInferenceTests extends TestCase {
 	}
 
 	public void testRecursion2() {
-		List<String> lines = new ArrayList<String>();
+		List<String> lines = new StringList();
 		lines.add("var a = function() { return 1 }");
 		lines.add("a.operation2 = a");
-		IValueCollection collection = inference(lines);
+		IValueCollection collection = inference(lines.toString());
 		IValueReference a = collection.getChild("a");
 		assertNotNull(a);
 	}
