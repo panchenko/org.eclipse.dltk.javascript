@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
+// TODO implement ISemicolonStatement
 public class DefaultXmlNamespaceStatement extends Statement {
 
 	private Keyword defaultKeyword;
