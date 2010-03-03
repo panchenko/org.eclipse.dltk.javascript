@@ -37,6 +37,7 @@ import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
+import org.eclipse.dltk.javascript.ast.EmptyStatement;
 import org.eclipse.dltk.javascript.ast.FinallyClause;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
@@ -126,7 +127,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterFunctionNod
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterLabelledStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterNewExpressionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterObjectInitializerNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterReturnStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterRootNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterScriptNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterStringNode;
@@ -349,8 +349,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					addChild(new FormatterStringNode(document, node.getLabel()));
 				}
 
-				processOptionalSemicolon(formatterNode, node);
-				return formatterNode;
+				return processOptionalSemicolon(formatterNode, node);
 			}
 
 			@Override
@@ -500,11 +499,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					addChild(new FormatterStringNode(document, node.getLabel()));
 				}
 
-				processOptionalSemicolon(formatterNode, node);
-				return formatterNode;
+				return processOptionalSemicolon(formatterNode, node);
 			}
 
-			private void processOptionalSemicolon(
+			private IFormatterNode processOptionalSemicolon(
 					IFormatterContainerNode formatterNode,
 					ISemicolonStatement node) {
 				int semicolonPosition = node.getSemicolonPosition();
@@ -517,6 +515,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				} else {
 					checkedPop(formatterNode, node.sourceEnd());
 				}
+				return formatterNode;
 			}
 
 			@Override
@@ -560,8 +559,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processParens(node.getLP(), node.getRP(), node.getCondition(),
 						new WhileConditionParensConfiguration(document));
 
-				processOptionalSemicolon(formatterNode, node);
-				return formatterNode;
+				return processOptionalSemicolon(formatterNode, node);
 			}
 
 			@Override
@@ -595,7 +593,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					processBraces(node.getBody(), new BlockBracesConfiguration(
 							document));
 
-				processOptionalSemicolon(formatterNode, node);
+				checkedPop(formatterNode, node.sourceEnd());
 				return formatterNode;
 			}
 
@@ -623,7 +621,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					processBraces(node.getBody(), new BlockBracesConfiguration(
 							document));
 
-				processOptionalSemicolon(formatterNode, node);
+				checkedPop(formatterNode, node.sourceEnd());
 				return formatterNode;
 			}
 
@@ -673,7 +671,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					processBraces(node.getBody(), new BlockBracesConfiguration(
 							document));
 
-				processOptionalSemicolon(formatterNode, node);
+				checkedPop(formatterNode, node.sourceEnd());
 				return formatterNode;
 			}
 
@@ -1225,7 +1223,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			@Override
 			public IFormatterNode visitReturnStatement(ReturnStatement node) {
-				FormatterReturnStatementNode formatterNode = new FormatterReturnStatementNode(
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
 				final IFormatterTextNode keyword = createTextNode(document,
@@ -1240,8 +1238,17 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				if (node.getValue() != null)
 					visit(node.getValue());
 
-				processOptionalSemicolon(formatterNode, node);
-				return formatterNode;
+				return processOptionalSemicolon(formatterNode, node);
+			}
+
+			@Override
+			public IFormatterNode visitEmptyStatement(EmptyStatement node) {
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
+						document);
+				formatterNode.addChild(createEmptyTextNode(document, node
+						.sourceStart()));
+				push(formatterNode);
+				return processOptionalSemicolon(formatterNode, node);
 			}
 
 			@Override
@@ -1368,8 +1375,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				if (node.getException() != null)
 					visit(node.getException());
 
-				processOptionalSemicolon(formatterNode, node);
-				return formatterNode;
+				return processOptionalSemicolon(formatterNode, node);
 			}
 
 			@Override
@@ -1556,8 +1562,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				visit(node.getExpression());
 
-				processOptionalSemicolon(formatterNode, node);
-				return formatterNode;
+				return processOptionalSemicolon(formatterNode, node);
 			}
 
 			@Override
@@ -1579,7 +1584,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 							new WhileBlockBracesConfiguration(document));
 				}
 
-				processOptionalSemicolon(formatterNode, node);
+				checkedPop(formatterNode, node.sourceEnd());
 				return formatterNode;
 			}
 
