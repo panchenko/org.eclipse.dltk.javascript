@@ -15,7 +15,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
@@ -36,6 +35,7 @@ import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
+import org.eclipse.dltk.javascript.ast.EmptyStatement;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
 import org.eclipse.dltk.javascript.ast.ForStatement;
@@ -282,7 +282,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
-		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
 
 		return true;
 	}
@@ -657,7 +656,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
-		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
 
 		return true;
 	}
@@ -703,7 +701,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 		testChar(Keywords.SEMI, node.getConditionalSemicolonPosition());
 		testChar(Keywords.SEMI, node.getInitialSemicolonPosition());
-		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
 		testChar(Keywords.LP, node.getLP());
 		testChar(Keywords.RP, node.getRP());
 
@@ -778,7 +775,9 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	}
 
 	@Override
-	public Boolean visitUnknownNode(ASTNode node) {
+	public Boolean visitEmptyStatement(EmptyStatement node) {
+		testChar(';', node.sourceStart());
 		return false;
 	}
+
 }

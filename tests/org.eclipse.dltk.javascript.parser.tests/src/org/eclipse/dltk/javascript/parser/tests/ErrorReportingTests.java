@@ -11,15 +11,19 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.tests;
 
-import org.eclipse.dltk.javascript.ast.Script;
+import java.util.List;
+
+import org.eclipse.dltk.compiler.problem.IProblem;
 
 public class ErrorReportingTests extends AbstractJSParserTest {
 
 	public void test1() {
-		Script script = parseRaw("a.");
+		parseRaw("a.");
 		assertTrue(reporter.hasErrors());
-		assertEquals(1, reporter.getErrors().size());
-		System.out.println(reporter.getErrors());
+		final List<IProblem> errors = reporter.getErrors();
+		assertEquals(1, errors.size());
+		assertEquals("missing name after . operator", errors.get(0)
+				.getMessage());
 	}
 
 }

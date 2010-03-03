@@ -27,6 +27,7 @@ public class AllTests {
 		suite.addTestSuite(XmlQueryTests.class);
 		suite.addTestSuite(XmlLiteralTests.class);
 		suite.addTestSuite(ErrorReportingTests.class);
+		suite.addTestSuite(FunctionDocumentationTests.class);
 		// $JUnit-END$
 		return suite;
 	}
