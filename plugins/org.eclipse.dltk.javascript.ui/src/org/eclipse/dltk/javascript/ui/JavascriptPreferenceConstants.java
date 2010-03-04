@@ -518,7 +518,7 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 		store.setDefault(PreferenceConstants.APPEARANCE_COMPRESS_PACKAGE_NAMES,
 				false);
 		store.setDefault(PreferenceConstants.APPEARANCE_METHOD_RETURNTYPE,
-				false);
+						true);
 		store.setDefault(PreferenceConstants.APPEARANCE_METHOD_TYPEPARAMETERS,
 				true);
 		store.setDefault(
