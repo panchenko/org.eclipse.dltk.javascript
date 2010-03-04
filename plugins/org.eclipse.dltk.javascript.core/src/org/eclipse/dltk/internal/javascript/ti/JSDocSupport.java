@@ -50,6 +50,9 @@ public class JSDocSupport implements IModelBuilder {
 		int index = comment.indexOf(PARAM_TAG);
 		while (index != -1) {
 			int endLineIndex = comment.indexOf("\n", index);
+			if (endLineIndex == -1) {
+				endLineIndex = comment.length();
+			}
 			StringTokenizer st = new StringTokenizer(comment.substring(index
 					+ PARAM_TAG.length(), endLineIndex));
 			String type = null;
