@@ -96,6 +96,9 @@ public class StructureParserTests extends TestCase {
 		assertEquals(expected, root);
 	}
 
+	/**
+	 * @see org.eclipse.dltk.internal.javascript.ti.JSDocSupport
+	 */
 	public void testJsDocs() {
 		StringList code = new StringList();
 		code.add("/** @type Number */");
