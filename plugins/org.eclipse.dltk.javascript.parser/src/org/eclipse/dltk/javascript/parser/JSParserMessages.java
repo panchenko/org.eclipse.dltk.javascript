@@ -49,6 +49,9 @@ public class JSParserMessages {
 				JSParser.DOT), "missing name after . operator");
 		tokenNames.put(JSParser.RBRACE, "}");
 		tokenNames.put(JSParser.LBRACE, "{");
+		tokenNames.put(JSParser.RPAREN, ")");
+		tokenNames.put(JSParser.LPAREN, "(");
+		
 	}
 
 	public String get(JSParserRule rule, int prevToken) {

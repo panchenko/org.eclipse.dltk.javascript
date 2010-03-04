@@ -117,7 +117,9 @@ public class JavaScriptParser extends AbstractSourceParser {
 					message = "Mismatched input "
 							+ getTokenErrorDisplay(re.token);
 					if (mte.expecting >= 0 && mte.expecting < tokenNames.length) {
-						message += ", " + tokenNames[mte.expecting]
+						String expecting = getMessages().get(mte.expecting);
+						if (expecting == null) expecting = tokenNames[mte.expecting]; 
+						message += ", " + expecting
 								+ " expected";
 					}
 				}
