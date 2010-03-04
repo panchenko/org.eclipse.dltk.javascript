@@ -95,4 +95,15 @@ public class StructureParserTests extends TestCase {
 				new MethodRef("c"), new FieldRef("fc"));
 		assertEquals(expected, root);
 	}
+
+	public void testJsDocs() {
+		StringList code = new StringList();
+		code.add("/** @type Number */");
+		code.add("function a(){}");
+		Method a = new Method("a");
+		a.setType("Number");
+		assertEquals(new Root(a), parse(code.toString()));
+		code.remove(0);
+		assertFalse(new Root(a).equals(parse(code.toString())));
+	}
 }
