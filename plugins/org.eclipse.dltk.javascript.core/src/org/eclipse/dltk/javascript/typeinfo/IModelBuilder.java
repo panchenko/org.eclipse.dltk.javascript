@@ -53,6 +53,14 @@ public interface IModelBuilder {
 		 * @return
 		 */
 		IParameter createParameter();
+
+		/**
+		 * Finds the parameter with the specified name.
+		 * 
+		 * @param token
+		 * @return the parameter found or <code>null</code>
+		 */
+		IParameter getParameter(String name);
 	}
 
 	void processMethod(FunctionStatement statement, IMethod method);

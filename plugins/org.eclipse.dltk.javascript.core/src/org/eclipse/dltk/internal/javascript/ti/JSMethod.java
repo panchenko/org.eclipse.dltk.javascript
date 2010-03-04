@@ -40,6 +40,17 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		return size();
 	}
 
+	public IParameter getParameter(String name) {
+		if (name != null) {
+			for (IParameter parameter : this) {
+				if (name.equals(parameter.getName())) {
+					return parameter;
+				}
+			}
+		}
+		return null;
+	}
+
 	public Type getType() {
 		return type;
 	}
