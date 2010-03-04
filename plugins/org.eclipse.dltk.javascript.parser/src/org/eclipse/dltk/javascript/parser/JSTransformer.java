@@ -133,7 +133,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		Assert.isNotNull(root);
 		final Tree tree = (Tree) root.getTree();
 		if (tree == null)
-			return null;
+			return new Script();
 		final Script script = new Script();
 		addComments(script);
 		if (tree.getType() != 0) {
