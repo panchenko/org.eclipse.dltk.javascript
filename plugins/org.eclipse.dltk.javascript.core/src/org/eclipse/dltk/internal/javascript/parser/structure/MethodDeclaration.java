@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import java.util.List;
+
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 
 class MethodDeclaration extends Declaration implements IReferenceAttributes {
 
@@ -37,20 +41,21 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 		mi.name = childName;
 		mi.returnType = extractType(child.getChild(IValueReference.FUNCTION_OP));
 		copyLocation(location, mi);
-		final IValueReference[] parameters = (IValueReference[]) child
-				.getAttribute(PARAMETERS);
-		if (parameters != null && parameters.length != 0) {
-			for (IValueReference parameter : parameters) {
-				if (extractType(parameter) != null) {
-					mi.parameterTypes = new String[parameters.length];
+		final JSMethod method = (JSMethod) child.getAttribute(PARAMETERS);
+		if (method != null) {
+			final List<IParameter> parameters = method.getParameters();
+			for (IParameter parameter : parameters) {
+				if (parameter.getType() != null) {
+					mi.parameterTypes = new String[method.getParameterCount()];
 					break;
 				}
 			}
-			mi.parameterNames = new String[parameters.length];
-			for (int i = 0; i < parameters.length; ++i) {
-				mi.parameterNames[i] = parameters[i].getName();
+			mi.parameterNames = new String[method.getParameterCount()];
+			for (int i = 0; i < parameters.size(); ++i) {
+				final IParameter parameter = parameters.get(i);
+				mi.parameterNames[i] = parameter.getName();
 				if (mi.parameterTypes != null) {
-					mi.parameterTypes[i] = extractType(parameters[i]);
+					mi.parameterTypes[i] = extractType(parameter.getType());
 				}
 			}
 		}

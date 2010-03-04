@@ -17,18 +17,10 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
 import org.eclipse.dltk.javascript.typeinference.IScriptableTypeProvider;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.mozilla.javascript.Scriptable;
 
-public class ReferenceFactory {
-
-	public static final String XML = "XML";
-	public static final String ARRAY = "Array";
-	public static final String DATE = "Date";
-	public static final String STRING = "String";
-	public static final String NUMBER = "Number";
-	public static final String BOOLEAN = "Boolean";
-	public static final String OBJECT = "Object";
-	public static final String REGEXP = "RegExp";
+public class ReferenceFactory implements ITypeNames {
 
 	private static IScriptableTypeProvider[] providers;
 

@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.internal.javascript.typeinference.ReferenceFactory;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
-public class ValueTypeFactoryImpl implements IValueTypeFactory {
+public class ValueTypeFactoryImpl implements IValueTypeFactory, ITypeNames {
 
 	private IValueReference create(String typeName) {
 		return create(get(typeName));
@@ -26,31 +26,31 @@ public class ValueTypeFactoryImpl implements IValueTypeFactory {
 	}
 
 	public IValueReference createObject() {
-		return create(ReferenceFactory.OBJECT);
+		return create(OBJECT);
 	}
 
 	public IValueReference createArray() {
-		return create(ReferenceFactory.ARRAY);
+		return create(ARRAY);
 	}
 
 	public IValueReference createBoolean() {
-		return create(ReferenceFactory.BOOLEAN);
+		return create(BOOLEAN);
 	}
 
 	public IValueReference createNumber() {
-		return create(ReferenceFactory.NUMBER);
+		return create(NUMBER);
 	}
 
 	public IValueReference createRegExp() {
-		return create(ReferenceFactory.REGEXP);
+		return create(REGEXP);
 	}
 
 	public IValueReference createString() {
-		return create(ReferenceFactory.STRING);
+		return create(STRING);
 	}
 
 	public IValueReference createXML() {
-		return create(ReferenceFactory.XML);
+		return create(XML);
 	}
 
 	public Type get(String name) {

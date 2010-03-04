@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import java.util.List;
-
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
@@ -75,6 +73,9 @@ import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
@@ -150,12 +151,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final String varName = identifier.getName();
 		final IValueReference reference = context.getChild(varName,
 				GetMode.CREATE);
-		if (declaration.getType() != null) {
-			final Type type = IValueTypeFactory.INSTANCE.get(declaration
-					.getType().getName());
-			if (type != null) {
-				reference.setDeclaredType(type);
-			}
+		final org.eclipse.dltk.javascript.ast.Type varType = declaration
+				.getType();
+		if (varType != null) {
+			reference.setDeclaredType(resolveType(varType));
 		}
 		reference.setKind(ReferenceKind.LOCAL);
 		reference.setLocation(ReferenceLocation.create(declaration
@@ -245,28 +244,44 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
 		final IValueCollection function = new FunctionValueCollection();
-		final List<Argument> arguments = node.getArguments();
-		final IValueReference[] refArgs = new IValueReference[arguments.size()];
-		int argIndex = 0;
-		for (Argument argument : arguments) {
-			final IValueReference refArg = function.getChild(argument
-					.getIdentifier().getName(), GetMode.CREATE);
-			refArg.setKind(ReferenceKind.ARGUMENT);
-			if (argument.getType() != null) {
-				refArg.setDeclaredType(IValueTypeFactory.INSTANCE.get(argument
-						.getType().getName()));
+		final JSMethod method = new JSMethod();
+		final Identifier methodName = node.getName();
+		if (methodName != null) {
+			method.setName(methodName.getName());
+		}
+		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
+		if (funcType != null) {
+			method.setType(resolveType(funcType));
+		}
+		for (Argument argument : node.getArguments()) {
+			final IParameter parameter = method.createParameter();
+			parameter.setName(argument.getIdentifier().getName());
+			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
+			if (paramType != null) {
+				parameter.setType(resolveType(paramType));
 			}
-			refArgs[argIndex++] = refArg;
+			method.getParameters().add(parameter);
+		}
+		if (methodName != null) {
+			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
+				extension.processMethod(node, method);
+			}
+		}
+		for (IParameter parameter : method.getParameters()) {
+			final IValueReference refArg = function.getChild(parameter
+					.getName(), GetMode.CREATE);
+			refArg.setKind(ReferenceKind.ARGUMENT);
+			refArg.setDeclaredType(parameter.getType());
 		}
 		enterContext(function);
 		visit(node.getBody());
 		leaveContext();
 		final IValueReference result;
-		final Identifier name = node.getName();
-		if (name != null) {
-			result = peekContext().getChild(name.getName(), GetMode.CREATE);
+		if (methodName != null) {
+			result = peekContext().getChild(method.getName(), GetMode.CREATE);
 			result.setLocation(ReferenceLocation.create(node.sourceStart(),
-					node.sourceEnd(), name.sourceStart(), name.sourceEnd()));
+					node.sourceEnd(), methodName.sourceStart(), methodName
+							.sourceEnd()));
 		} else {
 			result = new ValueReference();
 			final Keyword kw = node.getFunctionKeyword();
@@ -274,11 +289,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					node.sourceEnd(), kw.sourceStart(), kw.sourceEnd()));
 		}
 		result.setKind(ReferenceKind.FUNCTION);
-		result.setAttribute(IReferenceAttributes.PARAMETERS, refArgs);
+		result.setAttribute(IReferenceAttributes.PARAMETERS, method);
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
-		result.getChild(IValueReference.FUNCTION_OP, GetMode.CREATE).addValue(
-				function.getReturnValue());
+		final IValueReference returnValue = result.getChild(
+				IValueReference.FUNCTION_OP, GetMode.CREATE);
+		returnValue.setDeclaredType(method.getType());
+		returnValue.addValue(function.getReturnValue());
 		return result;
+	}
+
+	private Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
+		return IValueTypeFactory.INSTANCE.get(type.getName());
 	}
 
 	@Override

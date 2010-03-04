@@ -14,6 +14,7 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import org.eclipse.dltk.compiler.IElementRequestor.ElementInfo;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 abstract class Declaration implements Comparable<Declaration> {
 
@@ -33,11 +34,12 @@ abstract class Declaration implements Comparable<Declaration> {
 	abstract void report(StructureReporter reporter);
 
 	protected static String extractType(IValueReference reference) {
-		if (reference != null && reference.getDeclaredType() != null) {
-			return reference.getDeclaredType().getName();
-		} else {
-			return null;
-		}
+		return reference != null ? extractType(reference.getDeclaredType())
+				: null;
+	}
+
+	protected static String extractType(final Type type) {
+		return type != null ? type.getName() : null;
 	}
 
 	/**

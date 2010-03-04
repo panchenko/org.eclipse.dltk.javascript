@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
+   <extension-point id="typeinfo" name="JavaScript TypeInfo" schema="schema/typeinfo.exsd"/>
    <extension-point id="resolver" name="Reference Resolver" schema="schema/resolver.exsd"/>
    <extension-point id="customtype" name="Custom JavaScript types provider" schema="schema/customtype.exsd"/>
 
@@ -132,6 +133,10 @@
             uri="http://www.eclipse.org/dltk/javascript/typeinfo.ecore"
             class="org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage"
             genModel="models/references.genmodel"/>
+	</extension>
+
+	<extension point="org.eclipse.dltk.javascript.core.typeinfo">
+    	<model resource="resources/native-references.xml" uri="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml"/>
 	</extension>
 
 </plugin>

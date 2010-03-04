@@ -11,13 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo.model;
 
-import java.io.IOException;
-
-import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
-import org.eclipse.emf.common.util.URI;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 
 public class TypeInfoModelLoader {
 
@@ -30,34 +27,20 @@ public class TypeInfoModelLoader {
 		return instance;
 	}
 
-	private final Resource resource;
+	private final ResourceSet resourceSet;
 
 	private TypeInfoModelLoader() {
-		resource = loadResources();
-	}
-
-	private static Resource loadResources() {
-		final URI uri = URI.createPlatformPluginURI("/"
-				+ JavaScriptPlugin.PLUGIN_ID
-				+ "/resources/native-references.xml", true);
-		Resource resource = new XMIResourceImpl(uri);
-		try {
-			resource.load(null);
-		} catch (IOException e) {
-			JavaScriptPlugin.error(e);
-			if (!resource.isLoaded()) {
-				resource.getContents().clear();
-			}
-		}
-		return resource;
+		resourceSet = TypeInfoManager.loadModelResources();
 	}
 
 	public Type getType(String typeName) {
-		for (EObject object : resource.getContents()) {
-			if (object instanceof Type) {
-				final Type type = (Type) object;
-				if (typeName.equals(type.getName())) {
-					return type;
+		for (Resource resource : resourceSet.getResources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof Type) {
+					final Type type = (Type) object;
+					if (typeName.equals(type.getName())) {
+						return type;
+					}
 				}
 			}
 		}

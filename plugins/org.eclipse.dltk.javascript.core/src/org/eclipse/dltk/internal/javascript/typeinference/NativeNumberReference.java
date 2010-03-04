@@ -6,6 +6,7 @@ package org.eclipse.dltk.internal.javascript.typeinference;
 import java.util.Collections;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 
 /**
  * @author jcompagner
@@ -23,13 +24,13 @@ public class NativeNumberReference extends StandardSelfCompletingReference {
 
 	@Override
 	public Set<String> getTypes() {
-		return Collections.singleton(ReferenceFactory.NUMBER);
+		return Collections.singleton(ITypeNames.NUMBER);
 	}
 
 	@Override
 	protected void createChilds() {
 		addChildren(ReferenceModelLoader.getInstance().getChildren(
-				ReferenceFactory.NUMBER));
+				ITypeNames.NUMBER));
 	}
 
 }

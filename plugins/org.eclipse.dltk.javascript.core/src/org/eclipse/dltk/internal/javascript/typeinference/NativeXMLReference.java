@@ -3,6 +3,7 @@ package org.eclipse.dltk.internal.javascript.typeinference;
 import java.util.Collections;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 
 public class NativeXMLReference extends StandardSelfCompletingReference {
 
@@ -13,12 +14,12 @@ public class NativeXMLReference extends StandardSelfCompletingReference {
 	@Override
 	protected void createChilds() {
 		addChildren(ReferenceModelLoader.getInstance().getChildren(
-				ReferenceFactory.XML));
+				ITypeNames.XML));
 	}
 
 	@Override
 	public Set<String> getTypes() {
-		return Collections.singleton(ReferenceFactory.XML);
+		return Collections.singleton(ITypeNames.XML);
 	}
 
 }

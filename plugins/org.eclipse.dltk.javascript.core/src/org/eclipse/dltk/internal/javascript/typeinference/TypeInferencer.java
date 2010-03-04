@@ -26,6 +26,7 @@ import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.ReferenceResolverContext;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 
 import com.xored.org.mozilla.javascript.FunctionNode;
 import com.xored.org.mozilla.javascript.Node;
@@ -642,7 +643,7 @@ public class TypeInferencer {
 		NewReference ref = new NewReference(key, id, cs);
 		StandardSelfCompletingReference unknownReference = new StandardSelfCompletingReference(
 				key, false);
-		if (id.equals(ReferenceFactory.XML)) {
+		if (id.equals(ITypeNames.XML)) {
 			final Node lastChild = expression.getLastChild();
 			if (lastChild instanceof StringNode) {
 				// parse simple XML fragments

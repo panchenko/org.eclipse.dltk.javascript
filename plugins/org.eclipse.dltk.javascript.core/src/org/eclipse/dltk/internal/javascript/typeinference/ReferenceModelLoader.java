@@ -20,12 +20,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
-public class ReferenceModelLoader {
+public class ReferenceModelLoader implements ITypeNames {
 
 	private static ReferenceModelLoader instance = null;
 
@@ -102,37 +103,37 @@ public class ReferenceModelLoader {
 	private final Map<String, Factory> factories = new HashMap<String, Factory>();
 
 	private void registerFactories() {
-		factories.put(ReferenceFactory.ARRAY, new Factory() {
+		factories.put(ARRAY, new Factory() {
 			public StandardSelfCompletingReference create(String name) {
 				return new NativeArrayReference(name);
 			}
 		});
-		factories.put(ReferenceFactory.BOOLEAN, new Factory() {
+		factories.put(BOOLEAN, new Factory() {
 			public StandardSelfCompletingReference create(String name) {
 				return new NativeBooleanReference(name);
 			}
 		});
-		factories.put(ReferenceFactory.NUMBER, new Factory() {
+		factories.put(NUMBER, new Factory() {
 			public StandardSelfCompletingReference create(String name) {
 				return new NativeNumberReference(name);
 			}
 		});
-		factories.put(ReferenceFactory.STRING, new Factory() {
+		factories.put(STRING, new Factory() {
 			public StandardSelfCompletingReference create(String name) {
 				return new NativeStringReference(name);
 			}
 		});
-		factories.put(ReferenceFactory.XML, new Factory() {
+		factories.put(XML, new Factory() {
 			public StandardSelfCompletingReference create(String name) {
 				return new NativeXMLReference(name);
 			}
 		});
-		factories.put(ReferenceFactory.DATE, new Factory() {
+		factories.put(DATE, new Factory() {
 			public StandardSelfCompletingReference create(String name) {
 				return new NativeDateReference(name);
 			}
 		});
-		factories.put(ReferenceFactory.OBJECT, new Factory() {
+		factories.put(OBJECT, new Factory() {
 			public StandardSelfCompletingReference create(String name) {
 				return new NativeJSObjectReference(name);
 			}
