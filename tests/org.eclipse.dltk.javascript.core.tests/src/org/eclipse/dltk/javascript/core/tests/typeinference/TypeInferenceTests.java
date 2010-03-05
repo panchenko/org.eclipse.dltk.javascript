@@ -23,12 +23,12 @@ import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
-import org.eclipse.dltk.internal.javascript.ti.IValueTypeFactory;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
 public class TypeInferenceTests extends TestCase implements ITypeNames {
 
@@ -45,7 +45,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 	private static Set<Type> getTypes(String... names) {
 		final Set<Type> types = new HashSet<Type>();
 		for (String name : names) {
-			final Type type = IValueTypeFactory.INSTANCE.get(name);
+			final Type type = TypeInfoModelLoader.getInstance().getType(name);
 			assertNotNull(type);
 			types.add(type);
 		}
@@ -135,6 +135,15 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference str = collection.getChild("str");
 		assertEquals(getTypes(STRING), str.getTypes());
+	}
+
+	public void testStringLengthProperty() {
+		List<String> lines = new StringList();
+		lines.add("var str = 'STRING'");
+		lines.add("var len = str.length");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference len = collection.getChild("len");
+		assertEquals(getTypes(STRING), len.getTypes());
 	}
 
 	public void testFunctionCall() {

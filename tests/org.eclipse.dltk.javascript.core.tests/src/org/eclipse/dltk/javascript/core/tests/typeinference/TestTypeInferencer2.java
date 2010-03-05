@@ -18,6 +18,12 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 public class TestTypeInferencer2 extends TypeInferencer2 {
 	@Override
 	protected void log(Throwable e) {
-		Assert.fail(e.toString());
+		if (e instanceof RuntimeException) {
+			throw (RuntimeException) e;
+		} else if (e instanceof Error) {
+			throw (Error) e;
+		} else {
+			Assert.fail(e.toString());
+		}
 	}
 }

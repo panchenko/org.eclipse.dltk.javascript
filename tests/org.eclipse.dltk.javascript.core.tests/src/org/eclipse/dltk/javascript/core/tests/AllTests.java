@@ -9,6 +9,7 @@ import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
 import org.eclipse.dltk.javascript.core.tests.structure.JSLintModelTests;
 import org.eclipse.dltk.javascript.core.tests.structure.StructureParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinference.TypeInferenceTests;
+import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeInfoModelTests;
 
 public class AllTests {
 
@@ -16,6 +17,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"Test for org.eclipse.dltk.javascript.core");
 		// $JUnit-BEGIN$
+		suite.addTestSuite(TypeInfoModelTests.class);
 		suite.addTestSuite(TypeInferenceTests.class);
 		suite.addTestSuite(StructureParserTests.class);
 		suite.addTestSuite(JSLintModelTests.class);
