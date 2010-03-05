@@ -143,7 +143,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var len = str.length");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference len = collection.getChild("len");
-		assertEquals(getTypes(STRING), len.getTypes());
+		assertEquals(getTypes(NUMBER), len.getTypes());
 	}
 
 	public void testFunctionCall() {
