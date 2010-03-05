@@ -16,16 +16,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ValueCollection implements IValueCollection {
+public abstract class ValueCollection implements IValueCollection {
 
 	private final IValueCollection parent;
 	private final Map<String, IValueReference> children = new HashMap<String, IValueReference>();
 
-	public ValueCollection() {
-		this(null);
-	}
-
-	public ValueCollection(IValueCollection parent) {
+	protected ValueCollection(IValueCollection parent) {
 		this.parent = parent;
 	}
 
@@ -92,6 +88,10 @@ public class ValueCollection implements IValueCollection {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + children.keySet();
+	}
+
+	public ITypeInferenceContext getContext() {
+		return parent != null ? parent.getContext() : null;
 	}
 
 }

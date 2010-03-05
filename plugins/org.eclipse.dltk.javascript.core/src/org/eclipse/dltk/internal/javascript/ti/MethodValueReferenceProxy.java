@@ -104,7 +104,7 @@ public class MethodValueReferenceProxy implements IValueReference {
 
 	public IValueReference getChild(String name, GetMode mode) {
 		if (FUNCTION_OP.equals(name)) {
-			return IValueTypeFactory.INSTANCE.create(method.getType());
+			return getContext().getFactory().create(owner, method.getType());
 		} else {
 			return null;
 		}
@@ -116,6 +116,10 @@ public class MethodValueReferenceProxy implements IValueReference {
 
 	public boolean isEmpty() {
 		return false;
+	}
+
+	public ITypeInferenceContext getContext() {
+		return owner.getContext();
 	}
 
 }

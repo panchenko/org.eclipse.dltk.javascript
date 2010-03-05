@@ -11,17 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-public class FunctionValueCollection extends ValueCollection {
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 
-	public FunctionValueCollection(IValueCollection parent) {
-		super(parent);
-	}
+public interface ITypeInferenceContext extends ITypeInfoContext {
 
-	private final IValueReference returnValue = new ValueReference(this);
-
-	@Override
-	public IValueReference getReturnValue() {
-		return returnValue;
-	}
+	IValueTypeFactory getFactory();
 
 }

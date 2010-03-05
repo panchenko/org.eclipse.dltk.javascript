@@ -32,19 +32,15 @@ public class ValueReference implements IValueReference {
 	private ReferenceKind kind = ReferenceKind.UNKNOWN;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 
-	public ValueReference() {
-		this((String) null);
+	public ValueReference(IValueParent parent) {
+		this(parent, (String) null);
 	}
 
-	public ValueReference(Type type) {
-		this((String) null);
+	public ValueReference(IValueParent parent, Type type) {
+		this(parent, (String) null);
 		if (type != null) {
 			this.types.add(type);
 		}
-	}
-
-	public ValueReference(String name) {
-		this(null, name);
 	}
 
 	public ValueReference(IValueParent parent, String name) {
@@ -269,6 +265,10 @@ public class ValueReference implements IValueReference {
 		}
 		sb.append(name);
 		return sb.toString();
+	}
+
+	public ITypeInferenceContext getContext() {
+		return parent.getContext();
 	}
 
 }

@@ -9,19 +9,12 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.ti;
+package org.eclipse.dltk.javascript.typeinfo;
 
-public class FunctionValueCollection extends ValueCollection {
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-	public FunctionValueCollection(IValueCollection parent) {
-		super(parent);
-	}
+public interface ITypeInfoContext {
 
-	private final IValueReference returnValue = new ValueReference(this);
-
-	@Override
-	public IValueReference getReturnValue() {
-		return returnValue;
-	}
+	Type getType(String typeName);
 
 }

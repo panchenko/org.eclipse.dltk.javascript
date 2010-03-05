@@ -44,4 +44,6 @@ public interface IValueParent {
 	 */
 	void deleteChild(String name);
 
+	ITypeInferenceContext getContext();
+
 }

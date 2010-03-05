@@ -11,49 +11,51 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
 public class ValueTypeFactoryImpl implements IValueTypeFactory, ITypeNames {
 
-	private IValueReference create(String typeName) {
-		return create(get(typeName));
+	private final ITypeInfoContext context;
+
+	ValueTypeFactoryImpl(ITypeInfoContext context) {
+		this.context = context;
 	}
 
-	public IValueReference create(final Type type) {
-		return new ValueReference(type);
+	private IValueReference create(IValueParent parent, String typeName) {
+		return create(parent, context.getType(typeName));
 	}
 
-	public IValueReference createObject() {
-		return create(OBJECT);
+	public IValueReference create(IValueParent parent, final Type type) {
+		return new ValueReference(parent, type);
 	}
 
-	public IValueReference createArray() {
-		return create(ARRAY);
+	public IValueReference createObject(IValueParent parent) {
+		return create(parent, OBJECT);
 	}
 
-	public IValueReference createBoolean() {
-		return create(BOOLEAN);
+	public IValueReference createArray(IValueParent parent) {
+		return create(parent, ARRAY);
 	}
 
-	public IValueReference createNumber() {
-		return create(NUMBER);
+	public IValueReference createBoolean(IValueParent parent) {
+		return create(parent, BOOLEAN);
 	}
 
-	public IValueReference createRegExp() {
-		return create(REGEXP);
+	public IValueReference createNumber(IValueParent parent) {
+		return create(parent, NUMBER);
 	}
 
-	public IValueReference createString() {
-		return create(STRING);
+	public IValueReference createRegExp(IValueParent parent) {
+		return create(parent, REGEXP);
 	}
 
-	public IValueReference createXML() {
-		return create(XML);
+	public IValueReference createString(IValueParent parent) {
+		return create(parent, STRING);
 	}
 
-	public Type get(String name) {
-		return TypeInfoModelLoader.getInstance().getType(name);
+	public IValueReference createXML(IValueParent parent) {
+		return create(parent, XML);
 	}
 }

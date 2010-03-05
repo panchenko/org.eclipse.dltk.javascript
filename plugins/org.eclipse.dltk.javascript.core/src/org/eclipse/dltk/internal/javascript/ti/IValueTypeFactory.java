@@ -15,24 +15,20 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IValueTypeFactory {
 
-	public static final IValueTypeFactory INSTANCE = new ValueTypeFactoryImpl();
+	IValueReference create(IValueParent parent, Type type);
 
-	Type get(String name);
+	IValueReference createObject(IValueParent parent);
 
-	IValueReference create(Type type);
+	IValueReference createString(IValueParent parent);
 
-	IValueReference createObject();
+	IValueReference createRegExp(IValueParent parent);
 
-	IValueReference createString();
+	IValueReference createNumber(IValueParent parent);
 
-	IValueReference createRegExp();
+	IValueReference createXML(IValueParent parent);
 
-	IValueReference createNumber();
+	IValueReference createBoolean(IValueParent parent);
 
-	IValueReference createXML();
-
-	IValueReference createBoolean();
-
-	IValueReference createArray();
+	IValueReference createArray(IValueParent parent);
 
 }

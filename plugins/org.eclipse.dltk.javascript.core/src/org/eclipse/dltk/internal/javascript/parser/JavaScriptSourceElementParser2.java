@@ -36,7 +36,8 @@ public class JavaScriptSourceElementParser2 implements ISourceElementParser {
 	public void parseSourceModule(IModuleSource module) {
 		final Script script = parse(module);
 		final TypeInferencer2 inferencer = createInferencer();
-		final StructureReporter reporter = new StructureReporter(fRequestor);
+		final StructureReporter reporter = new StructureReporter(inferencer,
+				fRequestor);
 		inferencer.setVisitor(reporter);
 		inferencer.doInferencing(script);
 		reporter.beginReporting();

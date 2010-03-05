@@ -63,6 +63,7 @@ public interface IModelBuilder {
 		IParameter getParameter(String name);
 	}
 
-	void processMethod(FunctionStatement statement, IMethod method);
+	void processMethod(ITypeInfoContext context, FunctionStatement statement,
+			IMethod method);
 
 }

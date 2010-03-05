@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 
 /**
  * Implements support for javadocs tags .
@@ -26,20 +26,22 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
  */
 public class JSDocSupport implements IModelBuilder {
 
-	public void processMethod(FunctionStatement statement, IMethod method) {
+	public void processMethod(ITypeInfoContext context,
+			FunctionStatement statement, IMethod method) {
 		if (statement.getDocumentation() == null) {
 			return;
 		}
 		final String comment = statement.getDocumentation().getText();
 		if (method.getType() == null) {
-			parseType(method, comment);
+			parseType(context, method, comment);
 		}
-		parseParams(method, comment);
+		parseParams(context, method, comment);
 	}
 
 	private static final String PARAM_TAG = "@param";
 
-	private void parseParams(IMethod method, String comment) {
+	private void parseParams(ITypeInfoContext context, IMethod method,
+			String comment) {
 		int index = comment.indexOf(PARAM_TAG);
 		while (index != -1) {
 			int endLineIndex = comment.indexOf("\n", index);
@@ -56,8 +58,7 @@ public class JSDocSupport implements IModelBuilder {
 				} else if (type != null) {
 					final IParameter parameter = method.getParameter(token);
 					if (parameter != null && parameter.getType() == null) {
-						parameter.setType(TypeInfoModelLoader.getInstance()
-								.getType(type));
+						parameter.setType(context.getType(type));
 					}
 					break;
 				}
@@ -68,7 +69,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	private static final String TYPE_TAG = "@type";
 
-	private void parseType(IMethod method, String comment) {
+	private void parseType(ITypeInfoContext context, IMethod method, String comment) {
 		int index = comment.indexOf(TYPE_TAG);
 		if (index != -1) {
 			int endLineIndex = comment.indexOf("\n", index);
@@ -79,8 +80,7 @@ public class JSDocSupport implements IModelBuilder {
 					+ TYPE_TAG.length(), endLineIndex));
 			if (st.hasMoreTokens()) {
 				final String typeToken = st.nextToken();
-				method.setType(TypeInfoModelLoader.getInstance().getType(
-						typeToken));
+				method.setType(context.getType(typeToken));
 			}
 		}
 	}

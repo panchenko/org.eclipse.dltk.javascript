@@ -144,4 +144,8 @@ public class ValueReferenceProxy implements IValueReference,
 		return false;
 	}
 
+	public ITypeInferenceContext getContext() {
+		return parent.getContext();
+	}
+
 }

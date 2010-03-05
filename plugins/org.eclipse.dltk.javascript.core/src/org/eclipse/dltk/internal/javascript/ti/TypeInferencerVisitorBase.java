@@ -18,6 +18,8 @@ import org.eclipse.dltk.javascript.ast.ASTVisitor;
 public abstract class TypeInferencerVisitorBase extends
 		ASTVisitor<IValueReference> {
 
+	protected final ITypeInferenceContext context;
+
 	private Stack<IValueCollection> contexts = new Stack<IValueCollection>();
 
 	protected IValueCollection peekContext() {
@@ -32,7 +34,8 @@ public abstract class TypeInferencerVisitorBase extends
 		return contexts.pop();
 	}
 
-	public TypeInferencerVisitorBase() {
+	public TypeInferencerVisitorBase(ITypeInferenceContext context) {
+		this.context = context;
 		initialize0();
 	}
 
@@ -42,7 +45,7 @@ public abstract class TypeInferencerVisitorBase extends
 	}
 
 	protected void initialize0() {
-		contexts.push(new ValueCollection());
+		contexts.push(new TopValueCollection(context));
 	}
 
 	public IValueCollection getCollection() {
@@ -54,9 +57,9 @@ public abstract class TypeInferencerVisitorBase extends
 	 * @param value2
 	 * @return
 	 */
-	protected static IValueReference merge(IValueReference value1,
+	protected IValueReference merge(IValueReference value1,
 			IValueReference value2) {
-		final ValueReference reference = new ValueReference();
+		final ValueReference reference = new ValueReference(peekContext());
 		reference.addValue(value1);
 		reference.addValue(value2);
 		return reference;

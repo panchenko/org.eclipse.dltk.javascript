@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
@@ -71,7 +72,9 @@ public class StructureReporter extends TypeInferencerVisitor {
 	final ISourceElementRequestor fRequestor;
 	private ReferenceIterator iterator;
 
-	public StructureReporter(ISourceElementRequestor requestor) {
+	public StructureReporter(ITypeInferenceContext context,
+			ISourceElementRequestor requestor) {
+		super(context);
 		this.fRequestor = requestor;
 	}
 

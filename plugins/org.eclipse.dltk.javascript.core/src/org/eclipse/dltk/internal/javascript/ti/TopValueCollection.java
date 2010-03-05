@@ -11,17 +11,21 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-public class FunctionValueCollection extends ValueCollection {
+public class TopValueCollection extends ValueCollection {
 
-	public FunctionValueCollection(IValueCollection parent) {
-		super(parent);
+	private final ITypeInferenceContext context;
+
+	/**
+	 * @param parent
+	 */
+	public TopValueCollection(ITypeInferenceContext context) {
+		super(null);
+		this.context = context;
 	}
 
-	private final IValueReference returnValue = new ValueReference(this);
-
 	@Override
-	public IValueReference getReturnValue() {
-		return returnValue;
+	public ITypeInferenceContext getContext() {
+		return context;
 	}
 
 }

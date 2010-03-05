@@ -80,14 +80,18 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
+	public TypeInferencerVisitor(ITypeInferenceContext context) {
+		super(context);
+	}
+
 	@Override
 	public IValueReference visitArrayInitializer(ArrayInitializer node) {
-		return IValueTypeFactory.INSTANCE.createArray();
+		return context.getFactory().createArray(peekContext());
 	}
 
 	@Override
 	public IValueReference visitAsteriskExpression(AsteriskExpression node) {
-		return IValueTypeFactory.INSTANCE.createXML();
+		return context.getFactory().createXML(peekContext());
 	}
 
 	@Override
@@ -104,7 +108,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitBooleanLiteral(BooleanLiteral node) {
-		return IValueTypeFactory.INSTANCE.createBoolean();
+		return context.getFactory().createBoolean(peekContext());
 	}
 
 	@Override
@@ -173,7 +177,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitDecimalLiteral(DecimalLiteral node) {
-		return IValueTypeFactory.INSTANCE.createNumber();
+		return context.getFactory().createNumber(peekContext());
 	}
 
 	@Override
@@ -189,7 +193,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (value != null && value.getParent() != null) {
 			value.getParent().deleteChild(value.getName());
 		}
-		return IValueTypeFactory.INSTANCE.createBoolean();
+		return context.getFactory().createBoolean(peekContext());
 	}
 
 	@Override
@@ -221,7 +225,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitForInStatement(ForInStatement node) {
 		final IValueReference item = visit(node.getItem());
 		if (item != null) {
-			item.addValue(IValueTypeFactory.INSTANCE.createString());
+			item.addValue(context.getFactory().createString(peekContext()));
 		}
 		visit(node.getIterator());
 		visit(node.getBody());
@@ -243,7 +247,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
-		final IValueCollection function = new FunctionValueCollection();
+		final IValueCollection function = new FunctionValueCollection(
+				peekContext());
 		final JSMethod method = new JSMethod();
 		final Identifier methodName = node.getName();
 		if (methodName != null) {
@@ -264,7 +269,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		if (methodName != null) {
 			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
-				extension.processMethod(node, method);
+				extension.processMethod(context, node, method);
 			}
 		}
 		for (IParameter parameter : method.getParameters()) {
@@ -283,7 +288,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					node.sourceEnd(), methodName.sourceStart(), methodName
 							.sourceEnd()));
 		} else {
-			result = new ValueReference();
+			result = new ValueReference(peekContext());
 			final Keyword kw = node.getFunctionKeyword();
 			result.setLocation(ReferenceLocation.create(node.sourceStart(),
 					node.sourceEnd(), kw.sourceStart(), kw.sourceEnd()));
@@ -299,13 +304,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	private Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
-		return IValueTypeFactory.INSTANCE.get(type.getName());
+		return context.getType(type.getName());
 	}
 
 	@Override
 	public IValueReference visitGetAllChildrenExpression(
 			GetAllChildrenExpression node) {
-		return IValueTypeFactory.INSTANCE.createXML();
+		return context.getFactory().createXML(peekContext());
 	}
 
 	@Override
@@ -354,18 +359,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitNewExpression(NewExpression node) {
-		final IValueReference result = new ValueReference();
+		final IValueReference result = new ValueReference(peekContext());
 		final IValueReference clazz = visit(node.getObjectClass());
 		final IValueReference newType = result.getChild(
 				IValueReference.FUNCTION_OP, GetMode.CREATE);
 		if (clazz != null) {
-			final Type type = IValueTypeFactory.INSTANCE.get(clazz.getName());
+			final Type type = context.getType(clazz.getName());
 			if (type != null) {
-				newType.addValue(IValueTypeFactory.INSTANCE.create(type));
+				newType.addValue(context.getFactory().create(peekContext(),
+						type));
 				return result;
 			}
 		}
-		newType.addValue(IValueTypeFactory.INSTANCE.createObject());
+		newType.addValue(context.getFactory().createObject(peekContext()));
 		return result;
 	}
 
@@ -376,7 +382,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitObjectInitializer(ObjectInitializer node) {
-		final IValueReference result = new ValueReference();
+		final IValueReference result = new ValueReference(peekContext());
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
@@ -421,7 +427,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitRegExpLiteral(RegExpLiteral node) {
-		return IValueTypeFactory.INSTANCE.createRegExp();
+		return context.getFactory().createRegExp(peekContext());
 	}
 
 	@Override
@@ -460,7 +466,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitStringLiteral(StringLiteral node) {
-		return IValueTypeFactory.INSTANCE.createString();
+		return context.getFactory().createString(peekContext());
 	}
 
 	@Override
@@ -495,7 +501,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitTypeOfExpression(TypeOfExpression node) {
-		return IValueTypeFactory.INSTANCE.createString();
+		return context.getFactory().createString(peekContext());
 	}
 
 	@Override
@@ -552,13 +558,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitXmlLiteral(XmlLiteral node) {
 		// TODO parse XML and extend model
-		return IValueTypeFactory.INSTANCE.createXML();
+		return context.getFactory().createXML(peekContext());
 	}
 
 	@Override
 	public IValueReference visitXmlPropertyIdentifier(
 			XmlAttributeIdentifier node) {
-		return IValueTypeFactory.INSTANCE.createXML();
+		return context.getFactory().createXML(peekContext());
 	}
 
 	@Override

@@ -57,4 +57,8 @@ public class WithValueCollection implements IValueCollection {
 		return with.isEmpty();
 	}
 
+	public ITypeInferenceContext getContext() {
+		return parent.getContext();
+	}
+
 }
