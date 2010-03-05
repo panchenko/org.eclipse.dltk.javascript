@@ -11,16 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser;
 
-import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.ISourceElementParser;
-import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
 public class JavaScriptSourceElementParser2 implements ISourceElementParser {
@@ -37,15 +34,7 @@ public class JavaScriptSourceElementParser2 implements ISourceElementParser {
 	}
 
 	public void parseSourceModule(IModuleSource module) {
-		final Script script;
-		// TODO use cache
-		final IModuleDeclaration declaration = SourceParserUtil.parse(module,
-				JavaScriptNature.NATURE_ID, fReporter);
-		if (declaration instanceof Script) {
-			script = (Script) declaration;
-		} else {
-			script = new JavaScriptParser().parse(module, fReporter);
-		}
+		final Script script = parse(module);
 		final TypeInferencer2 inferencer = createInferencer();
 		final StructureReporter reporter = new StructureReporter(fRequestor);
 		inferencer.setVisitor(reporter);
@@ -53,6 +42,15 @@ public class JavaScriptSourceElementParser2 implements ISourceElementParser {
 		reporter.beginReporting();
 		reporter.processScope(inferencer.getCollection());
 		reporter.endReporting(script.sourceEnd());
+	}
+
+	protected Script parse(IModuleSource module) {
+		// TODO use AST cache
+		return createParser().parse(module, fReporter);
+	}
+
+	protected JavaScriptParser createParser() {
+		return new JavaScriptParser();
 	}
 
 	protected TypeInferencer2 createInferencer() {
