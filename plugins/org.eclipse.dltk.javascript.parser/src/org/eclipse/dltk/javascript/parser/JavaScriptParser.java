@@ -81,6 +81,14 @@ public class JavaScriptParser extends AbstractSourceParser {
 			return messages;
 		}
 
+		private String getTokenName(int token) {
+			String message = getMessages().get(token);
+			if (message == null) {
+				message = getTokenNames()[token];
+			}
+			return message;
+		}
+
 		@Override
 		public String getTokenErrorDisplay(Token t) {
 			final String message = getMessages().get(t.getType());
@@ -108,18 +116,12 @@ public class JavaScriptParser extends AbstractSourceParser {
 			} else if (re instanceof MismatchedTokenException) {
 				MismatchedTokenException mte = (MismatchedTokenException) re;
 				if (re.token == Token.EOF_TOKEN) {
-					message = getMessages().get(mte.expecting);
-					if (message == null) {
-						message = tokenNames[mte.expecting];
-					}
-					message += " expected";
+					message = getTokenName(mte.expecting) + " expected";
 				} else {
 					message = "Mismatched input "
 							+ getTokenErrorDisplay(re.token);
 					if (mte.expecting >= 0 && mte.expecting < tokenNames.length) {
-						String expecting = getMessages().get(mte.expecting);
-						if (expecting == null) expecting = tokenNames[mte.expecting]; 
-						message += ", " + expecting
+						message += ", " + getTokenName(mte.expecting)
 								+ " expected";
 					}
 				}
