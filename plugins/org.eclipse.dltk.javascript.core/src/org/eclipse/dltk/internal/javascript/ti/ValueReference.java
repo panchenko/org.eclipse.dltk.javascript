@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class ValueReference implements IValueReference {
@@ -198,10 +199,15 @@ public class ValueReference implements IValueReference {
 		if (child != null) {
 			return child;
 		}
-		Member member = findMember(name);
-		if (member != null) {
-			if (member instanceof Method) {
-				return new MethodValueReferenceProxy(this, (Method) member);
+		if (mode == GetMode.GET || mode == GetMode.CREATE_LAZY) {
+			Member member = findMember(name);
+			if (member != null) {
+				if (member instanceof Method) {
+					return new MethodValueReferenceProxy(this, (Method) member);
+				} else {
+					return new PropertyValueReferenceProxy(this,
+							(Property) member);
+				}
 			}
 		}
 		if (mode == GetMode.CREATE) {
