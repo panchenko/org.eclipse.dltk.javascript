@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.2 2010/03/05 12:37:47 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.3 2010/03/05 13:24:10 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -18,6 +18,7 @@ import java.util.Collection;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -37,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getMembers <em>Members</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getKind <em>Kind</em>}</li>
  * </ul>
  * </p>
  *
@@ -72,6 +74,26 @@ public class TypeImpl extends EObjectImpl implements Type {
 	 * @ordered
 	 */
 	protected EList<Member> members;
+
+	/**
+	 * The default value of the '{@link #getKind() <em>Kind</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getKind()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final TypeKind KIND_EDEFAULT = TypeKind.UNKNOWN;
+
+	/**
+	 * The cached value of the '{@link #getKind() <em>Kind</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getKind()
+	 * @generated
+	 * @ordered
+	 */
+	protected TypeKind kind = KIND_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -130,6 +152,27 @@ public class TypeImpl extends EObjectImpl implements Type {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public TypeKind getKind() {
+		return kind;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setKind(TypeKind newKind) {
+		TypeKind oldKind = kind;
+		kind = newKind == null ? KIND_EDEFAULT : newKind;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__KIND, oldKind, kind));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -151,6 +194,8 @@ public class TypeImpl extends EObjectImpl implements Type {
 				return getName();
 			case TypeInfoModelPackage.TYPE__MEMBERS:
 				return getMembers();
+			case TypeInfoModelPackage.TYPE__KIND:
+				return getKind();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -171,6 +216,9 @@ public class TypeImpl extends EObjectImpl implements Type {
 				getMembers().clear();
 				getMembers().addAll((Collection<? extends Member>)newValue);
 				return;
+			case TypeInfoModelPackage.TYPE__KIND:
+				setKind((TypeKind)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -189,6 +237,9 @@ public class TypeImpl extends EObjectImpl implements Type {
 			case TypeInfoModelPackage.TYPE__MEMBERS:
 				getMembers().clear();
 				return;
+			case TypeInfoModelPackage.TYPE__KIND:
+				setKind(KIND_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -205,6 +256,8 @@ public class TypeImpl extends EObjectImpl implements Type {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case TypeInfoModelPackage.TYPE__MEMBERS:
 				return members != null && !members.isEmpty();
+			case TypeInfoModelPackage.TYPE__KIND:
+				return kind != KIND_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

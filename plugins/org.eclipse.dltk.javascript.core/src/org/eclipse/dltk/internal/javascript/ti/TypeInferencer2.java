@@ -20,6 +20,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class TypeInferencer2 implements ITypeInferenceContext {
 
@@ -78,6 +79,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 		type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(typeName);
+		type.setKind(TypeKind.UNKNOWN);
 		types.put(typeName, type);
 		return type;
 	}

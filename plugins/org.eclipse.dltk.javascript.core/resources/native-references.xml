@@ -2,12 +2,12 @@
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
   <ref:Type name="void">
   </ref:Type>
-  <ref:Type name="Object">
+  <ref:Type name="Object" kind="PREDEFINED">
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a string representing the specified object."/>
     <members xsi:type="ref:Method" name="toSource" type="String" description="Returns a string representing the source code of the object."/>
     <members xsi:type="ref:Method" name="valueOf" type="Object" description="Returns the primitive value of the specified object."/>
   </ref:Type>
-  <ref:Type name="Array">
+  <ref:Type name="Array" kind="PREDEFINED">
     <members xsi:type="ref:Method" name="concat" type="Array" description="Joins two or more arrays and returns the result.">
       <parameters name="arrayN"/>
       <parameters name="[arrayX]" optional="true"/>
@@ -66,8 +66,8 @@
       <parameters name="[newelementX]" optional="true"/>
     </members>
   </ref:Type>
-  <ref:Type name="Boolean"/>
-  <ref:Type name="Date">
+  <ref:Type name="Boolean" kind="PREDEFINED"/>
+  <ref:Type name="Date" kind="PREDEFINED">
     <members xsi:type="ref:Method" name="getDate" type="Number" description="Returns the day of the month from a Date object (from 1-31)."/>
     <members xsi:type="ref:Method" name="getDay" type="Number" description="Returns the day of the week from a Date object (from 0-6)."/>
     <members xsi:type="ref:Method" name="getFullYear" type="Number" description="Returns the year, as a four-digit number."/>
@@ -163,7 +163,7 @@
     <members xsi:type="ref:Method" name="toUTCString" type="String" description="Converts a Date object, according to universal time, to a string."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a String object."/>
   </ref:Type>
-  <ref:Type name="Number">
+  <ref:Type name="Number" kind="PREDEFINED">
     <members xsi:type="ref:Method" name="toExponential" type="String" description="Converts the value of the object into an exponential notation.">
       <parameters name="numberOfDecimals"/>
     </members>
@@ -178,7 +178,7 @@
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this Number."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a Number object."/>
   </ref:Type>
-  <ref:Type name="String">
+  <ref:Type name="String" kind="PREDEFINED">
     <members xsi:type="ref:Method" name="anchor" type="String" description="Creates an HTML anchor.">
       <parameters name="anchorname"/>
     </members>
@@ -254,7 +254,7 @@
     <members xsi:type="ref:Method" name="toUpperCase" type="String" description="Returns a string in uppercase letters."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a String object."/>
   </ref:Type>
-  <ref:Type name="XML">
+  <ref:Type name="XML" kind="PREDEFINED">
     <members xsi:type="ref:Method" name="addNamespace" type="XML" description="The addNamespace method adds a namespace declaration to the in scope namespaces for this XML object and returns this XML object.">
       <parameters name="namespace"/>
     </members>

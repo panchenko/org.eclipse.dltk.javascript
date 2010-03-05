@@ -8,6 +8,7 @@
         iD="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
         eType="#//Member" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//TypeKind"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Member" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -25,4 +26,10 @@
         defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//Member"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="TypeKind">
+    <eLiterals name="UNKNOWN" value="-1"/>
+    <eLiterals name="PREDEFINED"/>
+    <eLiterals name="USER" value="1"/>
+    <eLiterals name="JAVA" value="2"/>
+  </eClassifiers>
 </ecore:EPackage>

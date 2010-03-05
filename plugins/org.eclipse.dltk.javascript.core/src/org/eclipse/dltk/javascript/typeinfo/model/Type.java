@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.1 2010/03/03 13:14:31 apanchenk Exp $
+ * $Id: Type.java,v 1.2 2010/03/05 13:24:10 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}</li>
  * </ul>
  * </p>
  *
@@ -74,5 +75,34 @@ public interface Type {
 	 * @generated
 	 */
 	EList<Member> getMembers();
+
+	/**
+	 * Returns the value of the '<em><b>Kind</b></em>' attribute.
+	 * The literals are from the enumeration {@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Kind</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Kind</em>' attribute.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+	 * @see #setKind(TypeKind)
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Kind()
+	 * @model
+	 * @generated
+	 */
+	TypeKind getKind();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Kind</em>' attribute.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+	 * @see #getKind()
+	 * @generated
+	 */
+	void setKind(TypeKind value);
 
 } // Type

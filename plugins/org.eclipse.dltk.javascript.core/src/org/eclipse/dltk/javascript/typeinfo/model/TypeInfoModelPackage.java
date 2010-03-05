@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.1 2010/03/03 13:14:31 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.2 2010/03/05 13:24:11 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -56,7 +57,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_PREFIX = "ref"; //$NON-NLS-1$
+	String eNS_PREFIX = "ti"; //$NON-NLS-1$
 
 	/**
 	 * The singleton instance of the package.
@@ -95,13 +96,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int TYPE__MEMBERS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Kind</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPE__KIND = 2;
+
+	/**
 	 * The number of structural features of the '<em>Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPE_FEATURE_COUNT = 2;
+	int TYPE_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl <em>Member</em>}' class.
@@ -298,6 +308,17 @@ public interface TypeInfoModelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
+	 * @generated
+	 */
+	int TYPE_KIND = 5;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -328,6 +349,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getType_Members();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Kind</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getKind()
+	 * @see #getType()
+	 * @generated
+	 */
+	EAttribute getType_Kind();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Member <em>Member</em>}'.
@@ -447,6 +479,16 @@ public interface TypeInfoModelPackage extends EPackage {
 	EClass getProperty();
 
 	/**
+	 * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Type Kind</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+	 * @generated
+	 */
+	EEnum getTypeKind();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -493,6 +535,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TYPE__MEMBERS = eINSTANCE.getType_Members();
+
+		/**
+		 * The meta object literal for the '<em><b>Kind</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TYPE__KIND = eINSTANCE.getType_Kind();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl <em>Member</em>}' class.
@@ -589,6 +639,16 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PROPERTY = eINSTANCE.getProperty();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
+		 * @generated
+		 */
+		EEnum TYPE_KIND = eINSTANCE.getTypeKind();
 
 	}
 

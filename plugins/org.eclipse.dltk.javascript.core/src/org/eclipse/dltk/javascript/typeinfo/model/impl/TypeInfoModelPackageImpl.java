@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.2 2010/03/05 13:24:10 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -21,8 +21,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -69,6 +71,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 * @generated
 	 */
 	private EClass propertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum typeKindEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -156,6 +165,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 */
 	public EReference getType_Members() {
 		return (EReference)typeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getType_Kind() {
+		return (EAttribute)typeEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -262,6 +280,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getTypeKind() {
+		return typeKindEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public TypeInfoModelFactory getTypeInfoModelFactory() {
 		return (TypeInfoModelFactory)getEFactoryInstance();
 	}
@@ -288,6 +315,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		typeEClass = createEClass(TYPE);
 		createEAttribute(typeEClass, TYPE__NAME);
 		createEReference(typeEClass, TYPE__MEMBERS);
+		createEAttribute(typeEClass, TYPE__KIND);
 
 		memberEClass = createEClass(MEMBER);
 		createEAttribute(memberEClass, MEMBER__NAME);
@@ -303,6 +331,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		createEAttribute(parameterEClass, PARAMETER__OPTIONAL);
 
 		propertyEClass = createEClass(PROPERTY);
+
+		// Create enums
+		typeKindEEnum = createEEnum(TYPE_KIND);
 	}
 
 	/**
@@ -340,6 +371,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		initEClass(typeEClass, Type.class, "Type", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getType_Name(), ecorePackage.getEString(), "name", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getType_Members(), this.getMember(), null, "members", null, 0, -1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getType_Kind(), this.getTypeKind(), "kind", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(memberEClass, Member.class, "Member", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getMember_Name(), ecorePackage.getEString(), "name", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -355,6 +387,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		initEAttribute(getParameter_Optional(), ecorePackage.getEBoolean(), "optional", "false", 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		// Initialize enums and add enum literals
+		initEEnum(typeKindEEnum, TypeKind.class, "TypeKind"); //$NON-NLS-1$
+		addEEnumLiteral(typeKindEEnum, TypeKind.UNKNOWN);
+		addEEnumLiteral(typeKindEEnum, TypeKind.PREDEFINED);
+		addEEnumLiteral(typeKindEEnum, TypeKind.USER);
+		addEEnumLiteral(typeKindEEnum, TypeKind.JAVA);
 
 		// Create resource
 		createResource(eNS_URI);
