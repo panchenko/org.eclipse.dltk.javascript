@@ -99,7 +99,7 @@ public class StructureParserTests extends TestCase {
 	/**
 	 * @see org.eclipse.dltk.internal.javascript.ti.JSDocSupport
 	 */
-	public void testJsDocs() {
+	public void testJsDocsType() {
 		StringList code = new StringList();
 		code.add("/** @type Number */");
 		code.add("function a(){}");
@@ -109,4 +109,19 @@ public class StructureParserTests extends TestCase {
 		code.remove(0);
 		assertFalse(new Root(a).equals(parse(code.toString())));
 	}
+
+	/**
+	 * @see org.eclipse.dltk.internal.javascript.ti.JSDocSupport
+	 */
+	public void testJsDocsParam() {
+		StringList code = new StringList();
+		code.add("/** @param {Number} n */");
+		code.add("function a(n,s:String){}");
+		Method a = new Method("a", new Parameter("n", "Number"), new Parameter(
+				"s", "String"));
+		assertEquals(new Root(a), parse(code.toString()));
+		code.remove(0);
+		assertFalse(new Root(a).equals(parse(code.toString())));
+	}
+
 }

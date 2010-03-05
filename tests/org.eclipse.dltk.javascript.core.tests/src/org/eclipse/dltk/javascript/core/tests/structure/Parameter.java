@@ -11,26 +11,52 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.structure;
 
+import org.eclipse.dltk.compiler.CharOperation;
+
 public class Parameter {
 
 	private final String name;
+	private String type;
 
 	public Parameter(String name) {
 		this.name = name;
+	}
+
+	public Parameter(String name, String type) {
+		this(name);
+		setType(type);
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj != null && obj.getClass() == getClass()) {
 			final Parameter other = (Parameter) obj;
-			return name.equals(other.name);
+			return name.equals(other.name)
+					&& CharOperation.equals(type, other.type);
 		}
 		return false;
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		final StringBuilder sb = new StringBuilder();
+		sb.append(name);
+		if (type != null) {
+			sb.append(":").append(type);
+		}
+		return sb.toString();
 	}
 
 }

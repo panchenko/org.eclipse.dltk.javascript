@@ -37,7 +37,12 @@ public class Method extends Member {
 		type = mi.returnType;
 		if (mi.parameterNames != null) {
 			for (String paramName : mi.parameterNames) {
-				parameters.add(new Parameter(paramName));
+				final Parameter parameter = new Parameter(paramName);
+				if (mi.parameterTypes != null
+						&& parameters.size() < mi.parameterTypes.length) {
+					parameter.setType(mi.parameterTypes[parameters.size()]);
+				}
+				parameters.add(parameter);
 			}
 		}
 	}
