@@ -20,13 +20,23 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class TypeInfoModelTests extends TestCase implements ITypeNames {
 
+	public void testPredefinedTypes() {
+		String[] typeNames = { STRING, NUMBER, BOOLEAN, OBJECT, DATE, XML,
+				ARRAY };
+		for (String typeName : typeNames) {
+			Type type = TypeInfoModelLoader.getInstance().getType(typeName);
+			assertNotNull(typeName + " not found", type);
+			assertEquals(typeName + " should be predefined",
+					TypeKind.PREDEFINED, type.getKind());
+		}
+	}
+
 	public void testLoad() {
 		assertTrue(TypeInfoManager.getModelBuilders().length > 0);
-		Type type = TypeInfoModelLoader.getInstance().getType(STRING);
-		assertNotNull(type);
 		// load parser classes
 		final JavaScriptParser parser = new JavaScriptParser();
 		parser.parse(new ModuleSource("x=1"), new ProblemCollector());
