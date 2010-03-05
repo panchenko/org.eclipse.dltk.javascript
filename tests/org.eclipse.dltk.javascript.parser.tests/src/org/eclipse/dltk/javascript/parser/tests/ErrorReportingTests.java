@@ -13,7 +13,11 @@ package org.eclipse.dltk.javascript.parser.tests;
 
 import java.util.List;
 
+import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.Script;
 
 public class ErrorReportingTests extends AbstractJSParserTest {
 
@@ -26,4 +30,13 @@ public class ErrorReportingTests extends AbstractJSParserTest {
 				.getMessage());
 	}
 
+	public void test2() {
+		StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("/* not finished comment");
+		code.add("function b() {}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
 }
