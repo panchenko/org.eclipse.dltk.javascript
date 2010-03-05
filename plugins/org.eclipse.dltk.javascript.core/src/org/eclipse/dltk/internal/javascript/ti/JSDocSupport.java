@@ -30,18 +30,11 @@ public class JSDocSupport implements IModelBuilder {
 		if (statement.getDocumentation() == null) {
 			return;
 		}
-		if (method.getType() != null) {
-			return;
-		}
-		for (IParameter parameter : method.getParameters()) {
-			if (parameter.getType() != null) {
-				return;
-			}
-		}
-		// parse documentation
 		final String comment = statement.getDocumentation().getText();
+		if (method.getType() == null) {
+			parseType(method, comment);
+		}
 		parseParams(method, comment);
-		parseType(method, comment);
 	}
 
 	private static final String PARAM_TAG = "@param";
@@ -61,8 +54,8 @@ public class JSDocSupport implements IModelBuilder {
 				if (token.startsWith("{") && token.endsWith("}")) {
 					type = token.substring(1, token.length() - 1);
 				} else if (type != null) {
-					IParameter parameter = method.getParameter(token);
-					if (parameter != null) {
+					final IParameter parameter = method.getParameter(token);
+					if (parameter != null && parameter.getType() == null) {
 						parameter.setType(TypeInfoModelLoader.getInstance()
 								.getType(type));
 					}
