@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: MemberImpl.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
+ * $Id: MemberImpl.java,v 1.2 2010/03/09 12:20:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#isStatic <em>Static</em>}</li>
  * </ul>
  * </p>
  *
@@ -89,6 +90,26 @@ public abstract class MemberImpl extends EObjectImpl implements Member {
 	 * @ordered
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isStatic() <em>Static</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isStatic()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean STATIC_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isStatic() <em>Static</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isStatic()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean static_ = STATIC_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -177,6 +198,27 @@ public abstract class MemberImpl extends EObjectImpl implements Member {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isStatic() {
+		return static_;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setStatic(boolean newStatic) {
+		boolean oldStatic = static_;
+		static_ = newStatic;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.MEMBER__STATIC, oldStatic, static_));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -186,6 +228,8 @@ public abstract class MemberImpl extends EObjectImpl implements Member {
 				return getType();
 			case TypeInfoModelPackage.MEMBER__DESCRIPTION:
 				return getDescription();
+			case TypeInfoModelPackage.MEMBER__STATIC:
+				return isStatic();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -206,6 +250,9 @@ public abstract class MemberImpl extends EObjectImpl implements Member {
 				return;
 			case TypeInfoModelPackage.MEMBER__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case TypeInfoModelPackage.MEMBER__STATIC:
+				setStatic((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -228,6 +275,9 @@ public abstract class MemberImpl extends EObjectImpl implements Member {
 			case TypeInfoModelPackage.MEMBER__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case TypeInfoModelPackage.MEMBER__STATIC:
+				setStatic(STATIC_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -246,6 +296,8 @@ public abstract class MemberImpl extends EObjectImpl implements Member {
 				return type != null;
 			case TypeInfoModelPackage.MEMBER__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			case TypeInfoModelPackage.MEMBER__STATIC:
+				return static_ != STATIC_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -264,6 +316,8 @@ public abstract class MemberImpl extends EObjectImpl implements Member {
 		result.append(name);
 		result.append(", description: "); //$NON-NLS-1$
 		result.append(description);
+		result.append(", static: "); //$NON-NLS-1$
+		result.append(static_);
 		result.append(')');
 		return result.toString();
 	}

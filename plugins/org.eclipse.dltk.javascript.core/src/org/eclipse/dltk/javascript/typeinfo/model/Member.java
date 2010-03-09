@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Member.java,v 1.1 2010/03/03 13:14:31 apanchenk Exp $
+ * $Id: Member.java,v 1.2 2010/03/09 12:20:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -25,6 +25,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic <em>Static</em>}</li>
  * </ul>
  * </p>
  *
@@ -110,5 +111,31 @@ public interface Member {
 	 * @generated
 	 */
 	void setDescription(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Static</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Static</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Static</em>' attribute.
+	 * @see #setStatic(boolean)
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMember_Static()
+	 * @model
+	 * @generated
+	 */
+	boolean isStatic();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic <em>Static</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Static</em>' attribute.
+	 * @see #isStatic()
+	 * @generated
+	 */
+	void setStatic(boolean value);
 
 } // Member

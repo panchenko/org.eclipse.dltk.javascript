@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.2 2010/03/05 13:24:11 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.3 2010/03/09 12:20:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -151,13 +151,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int MEMBER__DESCRIPTION = 2;
 
 	/**
+	 * The feature id for the '<em><b>Static</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__STATIC = 3;
+
+	/**
 	 * The number of structural features of the '<em>Member</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_FEATURE_COUNT = 3;
+	int MEMBER_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
@@ -195,6 +204,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int METHOD__DESCRIPTION = MEMBER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Static</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METHOD__STATIC = MEMBER__STATIC;
 
 	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
@@ -298,13 +316,31 @@ public interface TypeInfoModelPackage extends EPackage {
 	int PROPERTY__DESCRIPTION = MEMBER__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Static</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__STATIC = MEMBER__STATIC;
+
+	/**
+	 * The feature id for the '<em><b>Read Only</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__READ_ONLY = MEMBER_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Property</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTY_FEATURE_COUNT = MEMBER_FEATURE_COUNT + 0;
+	int PROPERTY_FEATURE_COUNT = MEMBER_FEATURE_COUNT + 1;
 
 
 	/**
@@ -405,6 +441,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	EAttribute getMember_Description();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic <em>Static</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Static</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic()
+	 * @see #getMember()
+	 * @generated
+	 */
+	EAttribute getMember_Static();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Method <em>Method</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -477,6 +524,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getProperty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Property#isReadOnly <em>Read Only</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Read Only</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Property#isReadOnly()
+	 * @see #getProperty()
+	 * @generated
+	 */
+	EAttribute getProperty_ReadOnly();
 
 	/**
 	 * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}'.
@@ -579,6 +637,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		EAttribute MEMBER__DESCRIPTION = eINSTANCE.getMember_Description();
 
 		/**
+		 * The meta object literal for the '<em><b>Static</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MEMBER__STATIC = eINSTANCE.getMember_Static();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -639,6 +705,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PROPERTY = eINSTANCE.getProperty();
+
+		/**
+		 * The meta object literal for the '<em><b>Read Only</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROPERTY__READ_ONLY = eINSTANCE.getProperty_ReadOnly();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.

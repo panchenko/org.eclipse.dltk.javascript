@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.2 2010/03/05 13:24:10 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.3 2010/03/09 12:20:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -217,6 +217,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getMember_Static() {
+		return (EAttribute)memberEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getMethod() {
 		return methodEClass;
 	}
@@ -280,6 +289,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getProperty_ReadOnly() {
+		return (EAttribute)propertyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getTypeKind() {
 		return typeKindEEnum;
 	}
@@ -321,6 +339,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		createEAttribute(memberEClass, MEMBER__NAME);
 		createEReference(memberEClass, MEMBER__TYPE);
 		createEAttribute(memberEClass, MEMBER__DESCRIPTION);
+		createEAttribute(memberEClass, MEMBER__STATIC);
 
 		methodEClass = createEClass(METHOD);
 		createEReference(methodEClass, METHOD__PARAMETERS);
@@ -331,6 +350,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		createEAttribute(parameterEClass, PARAMETER__OPTIONAL);
 
 		propertyEClass = createEClass(PROPERTY);
+		createEAttribute(propertyEClass, PROPERTY__READ_ONLY);
 
 		// Create enums
 		typeKindEEnum = createEEnum(TYPE_KIND);
@@ -377,6 +397,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		initEAttribute(getMember_Name(), ecorePackage.getEString(), "name", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getMember_Type(), this.getType(), null, "type", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getMember_Description(), ecorePackage.getEString(), "description", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getMember_Static(), ecorePackage.getEBoolean(), "static", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(methodEClass, Method.class, "Method", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getMethod_Parameters(), this.getParameter(), null, "parameters", null, 0, -1, Method.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -387,6 +408,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		initEAttribute(getParameter_Optional(), ecorePackage.getEBoolean(), "optional", "false", 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getProperty_ReadOnly(), ecorePackage.getEBoolean(), "readOnly", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(typeKindEEnum, TypeKind.class, "TypeKind"); //$NON-NLS-1$
