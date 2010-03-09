@@ -33,6 +33,7 @@ public class TypeInfoManager {
 	private static final String RESOURCE_ATTR = "resource";
 	private static final String URI_ATTR = "uri";
 	private static final String BUILDER_ELEMENT = "builder";
+	private static final String PROVIDER_ELEMENT = "provider";
 
 	private static String trim(String str) {
 		if (str != null) {
@@ -66,8 +67,24 @@ public class TypeInfoManager {
 		}
 	};
 
+	private static final SimpleExtensionManager<ITypeProvider> providerManager = new SimpleExtensionManager<ITypeProvider>(
+			ITypeProvider.class, EXT_POINT) {
+		@Override
+		protected ITypeProvider createInstance(IConfigurationElement element) {
+			if (PROVIDER_ELEMENT.equals(element.getName())) {
+				return super.createInstance(element);
+			} else {
+				return null;
+			}
+		}
+	};
+
 	public static IModelBuilder[] getModelBuilders() {
 		return modelBuilderManager.getInstances();
+	}
+
+	public static ITypeProvider[] getTypeProviders() {
+		return providerManager.getInstances();
 	}
 
 	public static ResourceSet loadModelResources() {

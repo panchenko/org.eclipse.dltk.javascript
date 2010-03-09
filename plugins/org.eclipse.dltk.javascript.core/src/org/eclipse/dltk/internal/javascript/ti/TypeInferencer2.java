@@ -12,11 +12,15 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -72,7 +76,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		if (type != null) {
 			return type;
 		}
-		type = TypeInfoModelLoader.getInstance().getType(typeName);
+		type = loadType(typeName);
 		if (type != null) {
 			types.put(typeName, type);
 			return type;
@@ -82,6 +86,27 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		type.setKind(TypeKind.UNKNOWN);
 		types.put(typeName, type);
 		return type;
+	}
+
+	private final Set<String> activeTypeRequests = new HashSet<String>();
+
+	private Type loadType(String typeName) {
+		// type providers
+		if (activeTypeRequests.add(typeName)) {
+			try {
+				for (ITypeProvider provider : TypeInfoManager
+						.getTypeProviders()) {
+					final Type type = provider.getType(this, typeName);
+					if (type != null) {
+						return type;
+					}
+				}
+			} finally {
+				activeTypeRequests.remove(typeName);
+			}
+		}
+		// standard library
+		return TypeInfoModelLoader.getInstance().getType(typeName);
 	}
 
 	private IValueTypeFactory factory = new ValueTypeFactoryImpl(this);

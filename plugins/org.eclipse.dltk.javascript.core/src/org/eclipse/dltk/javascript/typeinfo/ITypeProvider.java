@@ -15,6 +15,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface ITypeProvider {
 
-	public Type getType(String typeName, String varName);
+	public Type getType(ITypeInfoContext context, String typeName);
 
 }
