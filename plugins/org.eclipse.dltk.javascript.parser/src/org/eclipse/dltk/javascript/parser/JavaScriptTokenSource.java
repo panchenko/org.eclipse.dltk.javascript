@@ -17,7 +17,8 @@ import org.antlr.runtime.EarlyExitException;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.RecognitionException;
 
-public class JavaScriptTokenSource extends JSLexer implements JSTokenSource {
+public class JavaScriptTokenSource extends JavaScriptLexer implements
+		JSTokenSource {
 
 	public JavaScriptTokenSource(CharStream input) {
 		super(input);

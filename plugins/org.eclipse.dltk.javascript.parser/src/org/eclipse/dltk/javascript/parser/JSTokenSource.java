@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.parser;
 
 import org.antlr.runtime.TokenSource;
+import org.eclipse.dltk.compiler.problem.IProblemReporter;
 
 public interface JSTokenSource extends TokenSource {
 
@@ -27,5 +28,9 @@ public interface JSTokenSource extends TokenSource {
 	 * Set the input cursor to the character position indicated by index.
 	 **/
 	void seek(int index);
+
+	void setReporter(IProblemReporter reporter);
+
+	void setLineTracker(LineTracker lineTracker);
 
 }

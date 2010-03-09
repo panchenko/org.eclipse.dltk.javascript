@@ -33,6 +33,8 @@ import java.util.List;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.TokenStream;
+import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.utils.IntList;
 
 public class DynamicTokenStream implements TokenStream, JSTokenStream {
 
@@ -41,32 +43,6 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	private static final boolean DEBUG = false;
 
 	private final JSTokenSource tokenSource;
-
-	final static class IntList {
-		private int[] values;
-		public int length = 0;
-
-		public IntList() {
-			this(16);
-		}
-
-		public IntList(int initialSize) {
-			this.values = new int[initialSize];
-		}
-
-		public void add(int value) {
-			if (values.length == length) {
-				System.arraycopy(values, 0, values = new int[this.length * 2],
-						0, length);
-			}
-			values[length++] = value;
-		}
-
-		public int get(int index) {
-			assert index < length;
-			return values[index];
-		}
-	}
 
 	/**
 	 * Record every single token pulled from the source so we can reproduce
@@ -115,8 +91,8 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 			t.setTokenIndex(index);
 			tokens.add(t);
 			int offset = t.getText().length();
-			if (offsets.length != 0) {
-				offset += offsets.get(offsets.length - 1);
+			if (offsets.size() != 0) {
+				offset += offsets.get(offsets.size() - 1);
 			}
 			offsets.add(offset);
 			modes.add(currentMode);
@@ -361,12 +337,20 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 				tokens.remove(i);
 			}
 			assert p == tokens.size();
-			offsets.length = p;
-			modes.length = p;
-			assert offsets.length == tokens.size();
+			offsets.setSize(p);
+			modes.setSize(p);
+			assert offsets.size() == tokens.size();
 			// rewind tokenSource
-			tokenSource.seek(offsets.length == 0 ? 0 : offsets
-					.get(offsets.length - 1));
+			tokenSource.seek(offsets.size() == 0 ? 0 : offsets.get(offsets
+					.size() - 1));
 		}
+	}
+
+	public void setLineTracker(LineTracker lineTracker) {
+		tokenSource.setLineTracker(lineTracker);
+	}
+
+	public void setReporter(IProblemReporter reporter) {
+		tokenSource.setReporter(reporter);
 	}
 }

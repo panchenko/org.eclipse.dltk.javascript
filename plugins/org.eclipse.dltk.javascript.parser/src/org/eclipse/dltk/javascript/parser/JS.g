@@ -226,7 +226,8 @@ package org.eclipse.dltk.javascript.parser;
 
 @lexer::members
 {
-private Token last;
+private Token lastCodeToken;
+protected Token lastToken;
 
 final static boolean isIdentifierKeyword(int token)
 {
@@ -239,14 +240,14 @@ final static boolean isIdentifierKeyword(int token)
 
 private final boolean areRegularExpressionsEnabled()
 {
-	if (last == null)
+	if (lastCodeToken == null)
 	{
 		return true;
 	}
-	if (isIdentifierKeyword(last.getType())) {
+	if (isIdentifierKeyword(lastCodeToken.getType())) {
 		return false; 
 	}
-	switch (last.getType())
+	switch (lastCodeToken.getType())
 	{
 	// identifier
 		case Identifier:
@@ -319,33 +320,13 @@ private final boolean isIdentifierStartUnicode(int ch)
 public Token nextToken()
 {
 	Token result = super.nextToken();
-	if (result.getChannel() == Token.DEFAULT_CHANNEL)
-	{
-		last = result;
+	lastToken = result;
+	if (result.getChannel() == Token.DEFAULT_CHANNEL) {
+		lastCodeToken = result;
 	}
 	return result;		
 }
 
-@Override
-public void emitErrorMessage(String msg) {
-// IGNORE
-}
-
-@Override
-public void recoverFromMismatchedToken(IntStream input, RecognitionException e, int ttype, BitSet follow) throws RecognitionException {
-	// if next token is what we are looking for then "delete" this token
-	if ( input.LA(2)==ttype ) {
-		reportError(e);
-		beginResync();
-		input.consume(); // simply delete extra token
-		endResync();
-		input.consume(); // move past ttype token as if all were ok
-		return;
-	}
-	if ( !recoverFromMismatchedElement(input,e,follow) ) {
-		throw e;
-	}
-}
 }
 
 @parser::members

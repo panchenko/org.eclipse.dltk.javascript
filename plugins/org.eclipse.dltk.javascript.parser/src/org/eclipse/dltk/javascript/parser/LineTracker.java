@@ -11,22 +11,32 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
-import java.util.List;
-
 import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenStream;
-import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.core.builder.ISourceLineTracker;
 
-public interface JSTokenStream extends TokenStream {
+class LineTracker {
 
-	List<Token> getTokens();
+	private final ISourceLineTracker lineTracker;
 
-	int getMode();
+	public LineTracker(ISourceLineTracker lineTracker) {
+		this.lineTracker = lineTracker;
+	}
 
-	void setMode(int value);
+	public int getOffset(int line, int column) {
+		return lineTracker.getLineOffset(line - 1) + Math.max(column, 0);
+	}
 
-	void setReporter(IProblemReporter reporter);
+	public int getLength() {
+		return lineTracker.getLength();
+	}
 
-	void setLineTracker(LineTracker lineTracker);
+	public int getOffset(Token token) {
+		return getOffset(token.getLine(), token.getCharPositionInLine());
+	}
+
+	public int length(Token token) {
+		final String sm = token.getText();
+		return sm != null ? sm.length() : 1;
+	}
 
 }

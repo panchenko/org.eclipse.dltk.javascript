@@ -34,7 +34,6 @@ import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceRange;
-import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.core.SourceRange;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.utils.TextUtils;
@@ -56,10 +55,10 @@ public class JavaScriptParser extends AbstractSourceParser {
 	private static class JSInternalParser extends JSParser {
 
 		private final IProblemReporter reporter;
-		private final ISourceLineTracker lineTracker;
+		private final LineTracker lineTracker;
 
 		public JSInternalParser(TokenStream input, IProblemReporter reporter,
-				ISourceLineTracker lineTracker) {
+				LineTracker lineTracker) {
 			super(input);
 			this.reporter = reporter;
 			this.lineTracker = lineTracker;
@@ -171,14 +170,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 			if (token == Token.EOF_TOKEN) {
 				return null;
 			}
-			int offset = lineTracker.getLineOffset(token.getLine() - 1)
-					+ Math.max(token.getCharPositionInLine(), 0);
-			return new SourceRange(offset, length(token));
-		}
-
-		private int length(Token token) {
-			String sm = token.getText();
-			return sm != null ? sm.length() : 1;
+			return new SourceRange(lineTracker.getOffset(token), lineTracker
+					.length(token));
 		}
 
 		private int inputLength() {
@@ -225,8 +218,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 							.getScriptProject().getProject()));
 		}
 		char[] source = input.getContentsAsCharArray();
-		return parse(createTokenStream(source), TextUtils
-				.createLineTracker(source), reporter);
+		return parse(createTokenStream(source), new LineTracker(TextUtils
+				.createLineTracker(source)), reporter);
 	}
 
 	/**
@@ -234,13 +227,15 @@ public class JavaScriptParser extends AbstractSourceParser {
 	 */
 	public Script parse(String source, IProblemReporter reporter) {
 		Assert.isNotNull(source);
-		return parse(createTokenStream(source), TextUtils
-				.createLineTracker(source), reporter);
+		return parse(createTokenStream(source), new LineTracker(TextUtils
+				.createLineTracker(source)), reporter);
 	}
 
-	private Script parse(JSTokenStream stream, ISourceLineTracker lineTracker,
+	private Script parse(JSTokenStream stream, LineTracker lineTracker,
 			IProblemReporter reporter) {
 		try {
+			stream.setLineTracker(lineTracker);
+			stream.setReporter(reporter);
 			JSInternalParser parser = new JSInternalParser(stream, reporter,
 					lineTracker);
 			parser.setTypeInformationEnabled(typeInformationEnabled);
