@@ -30,7 +30,7 @@ public class ErrorReportingTests extends AbstractJSParserTest {
 				.getMessage());
 	}
 
-	public void test2() {
+	public void testNotFinishedComment() {
 		StringList code = new StringList();
 		code.add("function a() {}");
 		code.add("/* not finished comment");
@@ -39,4 +39,25 @@ public class ErrorReportingTests extends AbstractJSParserTest {
 		assertTrue(reporter.hasErrors());
 		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
 	}
+
+	public void testMisplacedDiv() {
+		StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("/");
+		code.add("function b() {}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
+
+	public void testNotFinishedStringLiteral() {
+		StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("\"");
+		code.add("function b() {}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
+
 }
