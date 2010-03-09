@@ -363,6 +363,9 @@ public JSParserState peekState() {
 	return states.isEmpty() ? null : states.peek();
 }
 
+protected void syncToSet() {
+}
+
 private final boolean isLeftHandSideAssign(RuleReturnScope lhs, Object[] cached)
 {
 	if (cached[0] != null)
@@ -1762,8 +1765,15 @@ setMethodDeclaration
 
 program
 @init { pushState(JSParserRule.PROGRAM); }
-	: sourceElement* EOF!
+	: sourceElementSync (sourceElement sourceElementSync)* EOF!
 	;
+
+sourceElementSync
+@init {
+	syncToSet();
+}
+	:
+ 	;	
 
 /*
 By setting k  to 1 for this rule and adding the semantical predicate ANTRL will generate code that will always prefer functionDeclararion over functionExpression

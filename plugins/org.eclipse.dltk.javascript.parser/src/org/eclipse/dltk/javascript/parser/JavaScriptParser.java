@@ -205,6 +205,48 @@ public class JavaScriptParser extends AbstractSourceParser {
 			}
 		}
 
+		@Override
+		protected void syncToSet() {
+			final BitSet follow = following[_fsp];
+			int mark = input.mark();
+			try {
+				Token first = null;
+				Token last = null;
+				// final StringBuilder sb = new StringBuilder();
+				while (!follow.member(input.LA(1))) {
+					if (input.LA(1) == Token.EOF) {
+						input.rewind();
+						mark = -1;
+						return;
+					}
+					last = input.LT(1);
+					// String tokenText = getTokenErrorDisplay(last);
+					// if (tokenText.startsWith("'") && tokenText.endsWith("'"))
+					// {
+					// tokenText = tokenText.substring(1,
+					// tokenText.length() - 1);
+					// }
+					// sb.append(tokenText);
+					if (first == null) {
+						first = last;
+					}
+					input.consume();
+				}
+				if (first != null && reporter != null) {
+					final ISourceRange end = convert(last);
+					reporter.reportProblem(new DefaultProblem(
+							"Unexpected input was discarded", 0, null,
+							ProblemSeverities.Error,
+							convert(first).getOffset(), end.getOffset()
+									+ end.getLength(), first.getLine()));
+				}
+			} finally {
+				if (mark != -1) {
+					input.release(mark);
+				}
+			}
+		}
+
 	}
 
 	/**
