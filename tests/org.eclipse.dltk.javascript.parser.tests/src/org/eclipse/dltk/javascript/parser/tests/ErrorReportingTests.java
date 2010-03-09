@@ -50,6 +50,16 @@ public class ErrorReportingTests extends AbstractJSParserTest {
 		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
 	}
 
+	public void testMisplacedMul() {
+		StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("***");
+		code.add("function b() {}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
+
 	public void testNotFinishedStringLiteral() {
 		StringList code = new StringList();
 		code.add("function a() {}");
