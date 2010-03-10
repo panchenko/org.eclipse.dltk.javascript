@@ -34,6 +34,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	private static Script parse(String code) {
 		final JavaScriptParser parser = new JavaScriptParser();
+		parser.setTypeInformationEnabled(true);
 		final ProblemCollector reporter = new ProblemCollector();
 		final Script script = parser.parse(new ModuleSource(code), reporter);
 		if (reporter.hasErrors()) {
@@ -294,6 +295,15 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference a = collection.getChild("a");
 		assertNotNull(a);
+	}
+
+	public void testExampleTypeProvider() {
+		List<String> lines = new StringList();
+		lines.add("var a:ExampleService");
+		lines.add("var status = a.execute().status");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference status = collection.getChild("status");
+		assertEquals(getTypes(NUMBER), status.getTypes());
 	}
 
 }
