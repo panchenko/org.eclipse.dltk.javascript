@@ -325,4 +325,20 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertTrue(name.getTypes().isEmpty());
 	}
 
+	public void testExampleElementResolver1() {
+		List<String> lines = new StringList();
+		lines.add("var name = ExampleGlobal.execute().service.name");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference name = collection.getChild("name");
+		assertEquals(getTypes(STRING), name.getTypes());
+	}
+
+	public void testExampleElementResolver2() {
+		List<String> lines = new StringList();
+		lines.add("var name = executeExampleGlobal().service.name");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference name = collection.getChild("name");
+		assertEquals(getTypes(STRING), name.getTypes());
+	}
+
 }
