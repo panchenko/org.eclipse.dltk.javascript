@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ParameterImpl.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
+ * $Id: ParameterImpl.java,v 1.2 2010/03/10 05:33:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -21,6 +21,8 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -136,6 +138,23 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	 * @generated
 	 */
 	public Type getType() {
+		if (type != null && ((EObject)type).eIsProxy()) {
+			InternalEObject oldType = (InternalEObject)type;
+			type = (Type)eResolveProxy(oldType);
+			if (type != oldType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.PARAMETER__TYPE, oldType, type));
+			}
+		}
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Type basicGetType() {
 		return type;
 	}
 
@@ -183,7 +202,8 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 			case TypeInfoModelPackage.PARAMETER__NAME:
 				return getName();
 			case TypeInfoModelPackage.PARAMETER__TYPE:
-				return getType();
+				if (resolve) return getType();
+				return basicGetType();
 			case TypeInfoModelPackage.PARAMETER__OPTIONAL:
 				return isOptional();
 		}

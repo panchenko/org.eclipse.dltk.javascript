@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Member.java,v 1.2 2010/03/09 12:20:31 apanchenk Exp $
+ * $Id: Member.java,v 1.3 2010/03/10 05:33:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -71,7 +71,7 @@ public interface Member {
 	 * @return the value of the '<em>Type</em>' reference.
 	 * @see #setType(Type)
 	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMember_Type()
-	 * @model resolveProxies="false"
+	 * @model
 	 * @generated
 	 */
 	Type getType();

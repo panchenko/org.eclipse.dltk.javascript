@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: MemberImpl.java,v 1.2 2010/03/09 12:20:31 apanchenk Exp $
+ * $Id: MemberImpl.java,v 1.3 2010/03/10 05:33:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -21,6 +21,8 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -157,6 +159,23 @@ public abstract class MemberImpl extends EObjectImpl implements Member {
 	 * @generated
 	 */
 	public Type getType() {
+		if (type != null && ((EObject)type).eIsProxy()) {
+			InternalEObject oldType = (InternalEObject)type;
+			type = (Type)eResolveProxy(oldType);
+			if (type != oldType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.MEMBER__TYPE, oldType, type));
+			}
+		}
+		return type;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Type basicGetType() {
 		return type;
 	}
 
@@ -225,7 +244,8 @@ public abstract class MemberImpl extends EObjectImpl implements Member {
 			case TypeInfoModelPackage.MEMBER__NAME:
 				return getName();
 			case TypeInfoModelPackage.MEMBER__TYPE:
-				return getType();
+				if (resolve) return getType();
+				return basicGetType();
 			case TypeInfoModelPackage.MEMBER__DESCRIPTION:
 				return getDescription();
 			case TypeInfoModelPackage.MEMBER__STATIC:
