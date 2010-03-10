@@ -303,7 +303,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return result;
 	}
 
-	private Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
+	protected Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
 		return context.getType(type.getName());
 	}
 

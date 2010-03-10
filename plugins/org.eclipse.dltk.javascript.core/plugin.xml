@@ -126,6 +126,12 @@
             id="org.eclipse.dltk.javascript.buildParticipant.parser">
       </requires>
     </buildParticipant>
+    <buildParticipant
+          class="org.eclipse.dltk.internal.javascript.validation.TypeInfoValidatorFactory"
+          id="org.eclipse.dltk.javascript.core.buildParticipant1"
+          name="TypeInfoValidator"
+          nature="org.eclipse.dltk.javascript.core.nature">
+    </buildParticipant>
   </extension>
 
 	<extension point="org.eclipse.emf.ecore.generated_package">
