@@ -34,6 +34,7 @@ public class TypeInfoManager {
 	private static final String URI_ATTR = "uri";
 	private static final String BUILDER_ELEMENT = "builder";
 	private static final String PROVIDER_ELEMENT = "provider";
+	private static final String RESOLVER_ELEMENT = "resolver";
 
 	private static String trim(String str) {
 		if (str != null) {
@@ -79,12 +80,28 @@ public class TypeInfoManager {
 		}
 	};
 
+	private static final SimpleExtensionManager<IElementResolver> resolverManager = new SimpleExtensionManager<IElementResolver>(
+			IElementResolver.class, EXT_POINT) {
+		@Override
+		protected IElementResolver createInstance(IConfigurationElement element) {
+			if (RESOLVER_ELEMENT.equals(element.getName())) {
+				return super.createInstance(element);
+			} else {
+				return null;
+			}
+		}
+	};
+
 	public static IModelBuilder[] getModelBuilders() {
 		return modelBuilderManager.getInstances();
 	}
 
 	public static ITypeProvider[] getTypeProviders() {
 		return providerManager.getInstances();
+	}
+
+	public static IElementResolver[] getElementResolvers() {
+		return resolverManager.getInstances();
 	}
 
 	public static ResourceSet loadModelResources() {

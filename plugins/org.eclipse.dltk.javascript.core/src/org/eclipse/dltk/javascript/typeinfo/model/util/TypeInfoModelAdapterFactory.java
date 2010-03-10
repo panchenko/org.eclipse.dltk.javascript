@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.1 2010/03/03 13:14:32 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.2 2010/03/10 18:13:48 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -79,6 +79,10 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
 	protected TypeInfoModelSwitch<Adapter> modelSwitch =
 		new TypeInfoModelSwitch<Adapter>() {
 			@Override
+			public Adapter caseElement(Element object) {
+				return createElementAdapter();
+			}
+			@Override
 			public Adapter caseType(Type object) {
 				return createTypeAdapter();
 			}
@@ -117,6 +121,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element
+	 * @generated
+	 */
+	public Adapter createElementAdapter() {
+		return null;
+	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.

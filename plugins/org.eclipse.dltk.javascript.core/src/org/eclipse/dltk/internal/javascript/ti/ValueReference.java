@@ -102,7 +102,7 @@ public class ValueReference implements IValueReference {
 				final IValueReference child = value.getChild(childName);
 				if (child != null) {
 					final IValueReference myChild = getChild(childName,
-							GetMode.CREATE);
+							GetMode.CREATE_NEW);
 					if (myChild == null) {
 						putChild(childName, child);
 					} else {
@@ -210,7 +210,7 @@ public class ValueReference implements IValueReference {
 				}
 			}
 		}
-		if (mode == GetMode.CREATE) {
+		if (mode == GetMode.CREATE || mode == GetMode.CREATE_NEW) {
 			final IValueReference newChild = new ValueReference(this, name);
 			children.put(name, newChild);
 			return newChild;

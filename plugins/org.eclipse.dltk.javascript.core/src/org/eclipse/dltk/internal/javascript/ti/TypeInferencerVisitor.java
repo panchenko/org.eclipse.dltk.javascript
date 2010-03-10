@@ -154,7 +154,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final Identifier identifier = declaration.getIdentifier();
 		final String varName = identifier.getName();
 		final IValueReference reference = context.getChild(varName,
-				GetMode.CREATE);
+				GetMode.CREATE_NEW);
 		final org.eclipse.dltk.javascript.ast.Type varType = declaration
 				.getType();
 		if (varType != null) {
@@ -274,7 +274,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		for (IParameter parameter : method.getParameters()) {
 			final IValueReference refArg = function.getChild(parameter
-					.getName(), GetMode.CREATE);
+					.getName(), GetMode.CREATE_NEW);
 			refArg.setKind(ReferenceKind.ARGUMENT);
 			refArg.setDeclaredType(parameter.getType());
 		}
@@ -283,7 +283,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		leaveContext();
 		final IValueReference result;
 		if (methodName != null) {
-			result = peekContext().getChild(method.getName(), GetMode.CREATE);
+			result = peekContext().getChild(method.getName(),
+					GetMode.CREATE_NEW);
 			result.setLocation(ReferenceLocation.create(node.sourceStart(),
 					node.sourceEnd(), methodName.sourceStart(), methodName
 							.sourceEnd()));
@@ -297,7 +298,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setAttribute(IReferenceAttributes.PARAMETERS, method);
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
 		final IValueReference returnValue = result.getChild(
-				IValueReference.FUNCTION_OP, GetMode.CREATE);
+				IValueReference.FUNCTION_OP, GetMode.CREATE_NEW);
 		returnValue.setDeclaredType(method.getType());
 		returnValue.addValue(function.getReturnValue());
 		return result;
@@ -389,7 +390,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final String name = extractName(pi.getName());
 				final IValueReference value = visit(pi.getValue());
 				if (name != null) {
-					result.getChild(name, GetMode.CREATE).addValue(value);
+					result.getChild(name, GetMode.CREATE_NEW).addValue(value);
 				}
 			} else {
 				// TODO handle get/set methods

@@ -12,9 +12,12 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
 
 public interface ITypeInferenceContext extends ITypeInfoContext {
 
 	IValueTypeFactory getFactory();
+
+	Element resolve(String name);
 
 }

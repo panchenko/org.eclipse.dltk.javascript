@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.3 2010/03/09 12:20:31 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.4 2010/03/10 18:13:46 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -68,14 +68,14 @@ public interface TypeInfoModelPackage extends EPackage {
 	TypeInfoModelPackage eINSTANCE = org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getType()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getElement()
 	 * @generated
 	 */
-	int TYPE = 0;
+	int ELEMENT = 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -84,7 +84,35 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPE__NAME = 0;
+	int ELEMENT__NAME = 0;
+
+	/**
+	 * The number of structural features of the '<em>Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ELEMENT_FEATURE_COUNT = 1;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getType()
+	 * @generated
+	 */
+	int TYPE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPE__NAME = ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Members</b></em>' containment reference list.
@@ -93,7 +121,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPE__MEMBERS = 1;
+	int TYPE__MEMBERS = ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Kind</b></em>' attribute.
@@ -102,7 +130,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPE__KIND = 2;
+	int TYPE__KIND = ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Type</em>' class.
@@ -111,7 +139,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPE_FEATURE_COUNT = 3;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl <em>Member</em>}' class.
@@ -121,7 +149,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMember()
 	 * @generated
 	 */
-	int MEMBER = 1;
+	int MEMBER = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -130,7 +158,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER__NAME = 0;
+	int MEMBER__NAME = ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -139,7 +167,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER__TYPE = 1;
+	int MEMBER__TYPE = ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -148,7 +176,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER__DESCRIPTION = 2;
+	int MEMBER__DESCRIPTION = ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Static</b></em>' attribute.
@@ -157,7 +185,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER__STATIC = 3;
+	int MEMBER__STATIC = ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Member</em>' class.
@@ -166,7 +194,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_FEATURE_COUNT = 4;
+	int MEMBER_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
@@ -176,7 +204,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMethod()
 	 * @generated
 	 */
-	int METHOD = 2;
+	int METHOD = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -240,7 +268,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameter()
 	 * @generated
 	 */
-	int PARAMETER = 3;
+	int PARAMETER = 4;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -286,7 +314,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 4;
+	int PROPERTY = 5;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -351,8 +379,29 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
 	 * @generated
 	 */
-	int TYPE_KIND = 5;
+	int TYPE_KIND = 6;
 
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Element</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element
+	 * @generated
+	 */
+	EClass getElement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element#getName()
+	 * @see #getElement()
+	 * @generated
+	 */
+	EAttribute getElement_Name();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
@@ -363,17 +412,6 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getType();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getName()
-	 * @see #getType()
-	 * @generated
-	 */
-	EAttribute getType_Name();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}'.
@@ -406,17 +444,6 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getMember();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getName()
-	 * @see #getMember()
-	 * @generated
-	 */
-	EAttribute getMember_Name();
 
 	/**
 	 * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getType <em>Type</em>}'.
@@ -569,6 +596,24 @@ public interface TypeInfoModelPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
+		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getElement()
+		 * @generated
+		 */
+		EClass ELEMENT = eINSTANCE.getElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ELEMENT__NAME = eINSTANCE.getElement_Name();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -577,14 +622,6 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass TYPE = eINSTANCE.getType();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TYPE__NAME = eINSTANCE.getType_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Members</b></em>' containment reference list feature.
@@ -611,14 +648,6 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EClass MEMBER = eINSTANCE.getMember();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MEMBER__NAME = eINSTANCE.getMember_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Type</b></em>' reference feature.

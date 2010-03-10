@@ -19,11 +19,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class PropertyValueReferenceProxy implements IValueReference {
 
-	private final IValueReference owner;
+	private final IValueParent owner;
 	private final Property property;
 	private IValueReference resolved = null;
 
-	public PropertyValueReferenceProxy(IValueReference owner, Property property) {
+	public PropertyValueReferenceProxy(IValueParent owner, Property property) {
 		this.owner = owner;
 		this.property = property;
 	}

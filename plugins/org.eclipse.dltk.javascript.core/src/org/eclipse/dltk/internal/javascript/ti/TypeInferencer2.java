@@ -19,8 +19,10 @@ import java.util.Set;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -214,6 +216,17 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	public IValueTypeFactory getFactory() {
 		return factory;
+	}
+
+	public Element resolve(String name) {
+		// TODO cache resolution results
+		for (IElementResolver resolver : TypeInfoManager.getElementResolvers()) {
+			final Element element = resolver.resolveElement(this, name);
+			if (element != null) {
+				return element;
+			}
+		}
+		return null;
 	}
 
 }

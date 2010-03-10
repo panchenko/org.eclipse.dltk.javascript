@@ -16,6 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+
 public abstract class ValueCollection implements IValueCollection {
 
 	private final IValueCollection parent;
@@ -68,7 +73,20 @@ public abstract class ValueCollection implements IValueCollection {
 		if (child != null) {
 			return child;
 		}
-		if (mode == GetMode.CREATE) {
+		if (mode == GetMode.GET || mode == GetMode.CREATE_LAZY) {
+			final Element element = getContext().resolve(name);
+			if (element != null) {
+				if (element instanceof Method) {
+					return new MethodValueReferenceProxy(this, (Method) element);
+				} else if (element instanceof Property) {
+					return new PropertyValueReferenceProxy(this,
+							(Property) element);
+				} else if (element instanceof Type) {
+					return new ValueReference(this, (Type) element);
+				}
+			}
+		}
+		if (mode == GetMode.CREATE || mode == GetMode.CREATE_NEW) {
 			child = new ValueReference(this, name);
 			children.put(name, child);
 		} else if (mode == GetMode.CREATE_LAZY) {

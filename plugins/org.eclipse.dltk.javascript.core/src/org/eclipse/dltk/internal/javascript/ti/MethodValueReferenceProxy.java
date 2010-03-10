@@ -19,11 +19,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class MethodValueReferenceProxy implements IValueReference {
 
-	private final IValueReference owner;
+	private final IValueParent owner;
 	private final Method method;
 	private IValueReference resolved = null;
 
-	public MethodValueReferenceProxy(ValueReference owner, Method method) {
+	public MethodValueReferenceProxy(IValueParent owner, Method method) {
 		this.owner = owner;
 		this.method = method;
 	}

@@ -9,8 +9,10 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.ti;
+package org.eclipse.dltk.javascript.typeinfo;
 
-public enum GetMode {
-	GET, RESOLVE, CREATE, CREATE_NEW, CREATE_LAZY
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
+
+public interface IElementResolver {
+	Element resolveElement(ITypeInfoContext context, String name);
 }
