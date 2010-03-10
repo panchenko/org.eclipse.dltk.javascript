@@ -311,15 +311,18 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var a:ExampleService");
 		lines.add("var name = a.execute().service.name");
 		IValueCollection collection = inference(lines.toString());
-		IValueReference status = collection.getChild("name");
-		assertEquals(getTypes(STRING), status.getTypes());
+		IValueReference name = collection.getChild("name");
+		assertEquals(getTypes(STRING), name.getTypes());
 	}
-	
+
 	public void testExampleTypeProvider3() {
 		List<String> lines = new StringList();
 		lines.add("var a:ExampleService2");
 		lines.add("var name = a.execute().service.name");
 		IValueCollection collection = inference(lines.toString());
+		IValueReference name = collection.getChild("name");
+		assertNotNull(name);
+		assertTrue(name.getTypes().isEmpty());
 	}
 
 }
