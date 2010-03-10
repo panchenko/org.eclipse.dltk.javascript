@@ -25,8 +25,7 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class JavaScriptUILanguageToolkit extends AbstractDLTKUILanguageToolkit {
-	private static ScriptElementLabels sInstance = new ScriptElementLabels() {
-	};
+	private static final ScriptElementLabels sInstance = new JavaScriptElementLabels();
 
 	public ScriptElementLabels getScriptElementLabels() {
 		return sInstance;
