@@ -186,7 +186,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					&& PROXY_OPAQUE_PART.equals(uri.opaquePart())) {
 				final Type type = getType(uri.fragment(), true, false, false,
 						false);
-				if (type instanceof EObject) {
+				if (type == null) {
+					return (EObject) createUnknown(uri.fragment());
+				} else if (type instanceof EObject) {
 					return (EObject) type;
 				} else {
 					JavaScriptPlugin.error("proxy resolved to "
