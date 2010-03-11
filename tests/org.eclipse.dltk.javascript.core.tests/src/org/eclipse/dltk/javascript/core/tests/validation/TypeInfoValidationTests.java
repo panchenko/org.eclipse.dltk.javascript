@@ -18,6 +18,7 @@ import junit.framework.TestCase;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 
@@ -44,6 +45,56 @@ public class TypeInfoValidationTests extends TestCase {
 				"var x:LongString");
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
+	}
+
+	public void testDeprecatedType() throws CoreException {
+		final List<IProblem> problems = validate(new TypeInfoValidator(),
+				"var x:ExampleService2");
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_TYPE, problems.get(0)
+				.getID());
+	}
+
+	public void testValidMethodCall() throws CoreException {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("x.execute()");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertTrue(problems.isEmpty());
+	}
+
+	public void testUndefinedMethodCall() throws CoreException {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("x.run()");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+				.getID());
+	}
+
+	public void testMethodCallWrongParamCount() throws CoreException {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("x.execute(1)");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETER_COUNT, problems.get(0)
+				.getID());
+	}
+
+	public void testDeprecatedMethodCall() throws CoreException {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("x.executeCompatible()");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_METHOD, problems.get(0)
+				.getID());
 	}
 
 }
