@@ -142,7 +142,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 				range = convert(re.token);
 				// stop = start + 1;}
 			}
-			reporter.reportProblem(new DefaultProblem(message, 0, null,
+			reporter.reportProblem(new DefaultProblem(message,
+					JavaScriptParserProblems.SYNTAX_ERROR, null,
 					ProblemSeverities.Error, range != null ? range.getOffset()
 							: -1, range != null ? range.getOffset()
 							+ range.getLength() : -1, re.line - 1));
@@ -235,7 +236,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 				if (first != null && reporter != null) {
 					final ISourceRange end = convert(last);
 					reporter.reportProblem(new DefaultProblem(
-							"Unexpected input was discarded", 0, null,
+							"Unexpected input was discarded",
+							JavaScriptParserProblems.SYNTAX_ERROR, null,
 							ProblemSeverities.Error,
 							convert(first).getOffset(), end.getOffset()
 									+ end.getLength(), first.getLine()));

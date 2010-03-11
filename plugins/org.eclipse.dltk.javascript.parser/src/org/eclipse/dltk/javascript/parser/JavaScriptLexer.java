@@ -58,7 +58,8 @@ public class JavaScriptLexer extends JSLexer {
 		final int start = lastToken != null ? lineTracker.getOffset(lastToken)
 				+ lineTracker.length(lastToken) : 0;
 		final int end = lineTracker.getOffset(e.line, e.charPositionInLine);
-		reporter.reportProblem(new DefaultProblem(msg, 0, null,
+		reporter.reportProblem(new DefaultProblem(msg,
+				JavaScriptParserProblems.LEXER_ERROR, null,
 				ProblemSeverities.Error, start, end, e.line - 1));
 	}
 

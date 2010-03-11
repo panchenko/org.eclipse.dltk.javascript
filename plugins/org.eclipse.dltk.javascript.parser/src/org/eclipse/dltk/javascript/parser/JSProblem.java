@@ -22,7 +22,7 @@ public class JSProblem extends DefaultProblem {
 	public JSProblem(Throwable cause) {
 		super(
 				cause.getClass().getSimpleName() + ": " + cause.getMessage(),
-				0,
+				JavaScriptParserProblems.INTERNAL_ERROR,
 				null,
 				ProblemSeverities.Error,
 				-1,
