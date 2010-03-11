@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.3 2010/03/10 18:13:46 apanchenk Exp $
+ * $Id: Type.java,v 1.4 2010/03/11 05:33:55 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -36,6 +36,7 @@ public interface Type extends Element {
 	/**
 	 * Returns the value of the '<em><b>Members</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Member}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Members</em>' containment reference list isn't clear,
@@ -44,7 +45,8 @@ public interface Type extends Element {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Members</em>' containment reference list.
 	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Members()
-	 * @model containment="true"
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType
+	 * @model opposite="declaringType" containment="true"
 	 * @generated
 	 */
 	EList<Member> getMembers();

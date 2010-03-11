@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Member.java,v 1.4 2010/03/10 18:13:46 apanchenk Exp $
+ * $Id: Member.java,v 1.5 2010/03/11 05:33:55 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -25,6 +25,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic <em>Static</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -110,5 +111,19 @@ public interface Member extends Element {
 	 * @generated
 	 */
 	void setStatic(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Declaring Type</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}'.
+	 * <!-- begin-model-doc -->
+	 * The type in which this member is declared.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Declaring Type</em>' container reference.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMember_DeclaringType()
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers
+	 * @model opposite="members" transient="false" changeable="false"
+	 * @generated
+	 */
+	Type getDeclaringType();
 
 } // Member

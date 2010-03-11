@@ -9,22 +9,19 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: MemberImpl.java,v 1.4 2010/03/10 18:13:47 apanchenk Exp $
+ * $Id: MemberImpl.java,v 1.5 2010/03/11 05:33:55 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,6 +33,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#isStatic <em>Static</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getDeclaringType <em>Declaring Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -196,6 +194,60 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Type getDeclaringType() {
+		if (eContainerFeatureID() != TypeInfoModelPackage.MEMBER__DECLARING_TYPE) return null;
+		return (Type)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return eBasicSetContainer(otherEnd, TypeInfoModelPackage.MEMBER__DECLARING_TYPE, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
+				return eBasicSetContainer(null, TypeInfoModelPackage.MEMBER__DECLARING_TYPE, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
+				return eInternalContainer().eInverseRemove(this, TypeInfoModelPackage.TYPE__MEMBERS, Type.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -206,6 +258,8 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 				return getDescription();
 			case TypeInfoModelPackage.MEMBER__STATIC:
 				return isStatic();
+			case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
+				return getDeclaringType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -266,6 +320,8 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 			case TypeInfoModelPackage.MEMBER__STATIC:
 				return static_ != STATIC_EDEFAULT;
+			case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
+				return getDeclaringType() != null;
 		}
 		return super.eIsSet(featureID);
 	}

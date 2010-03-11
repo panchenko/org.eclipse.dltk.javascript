@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.4 2010/03/10 18:13:46 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.5 2010/03/11 05:33:55 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -188,13 +188,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int MEMBER__STATIC = ELEMENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__DECLARING_TYPE = ELEMENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Member</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 3;
+	int MEMBER_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
@@ -241,6 +250,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int METHOD__STATIC = MEMBER__STATIC;
+
+	/**
+	 * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METHOD__DECLARING_TYPE = MEMBER__DECLARING_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
@@ -351,6 +369,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROPERTY__STATIC = MEMBER__STATIC;
+
+	/**
+	 * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__DECLARING_TYPE = MEMBER__DECLARING_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Read Only</b></em>' attribute.
@@ -477,6 +504,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getMember_Static();
+
+	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Declaring Type</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType()
+	 * @see #getMember()
+	 * @generated
+	 */
+	EReference getMember_DeclaringType();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Method <em>Method</em>}'.
@@ -672,6 +710,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MEMBER__STATIC = eINSTANCE.getMember_Static();
+
+		/**
+		 * The meta object literal for the '<em><b>Declaring Type</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MEMBER__DECLARING_TYPE = eINSTANCE.getMember_DeclaringType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.

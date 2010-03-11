@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.4 2010/03/10 18:13:47 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.5 2010/03/11 05:33:55 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -25,8 +25,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -100,7 +99,7 @@ public class TypeImpl extends ElementImpl implements Type {
 	 */
 	public EList<Member> getMembers() {
 		if (members == null) {
-			members = new EObjectContainmentEList<Member>(Member.class, this, TypeInfoModelPackage.TYPE__MEMBERS);
+			members = new EObjectContainmentWithInverseEList<Member>(Member.class, this, TypeInfoModelPackage.TYPE__MEMBERS, TypeInfoModelPackage.MEMBER__DECLARING_TYPE);
 		}
 		return members;
 	}
@@ -124,6 +123,21 @@ public class TypeImpl extends ElementImpl implements Type {
 		kind = newKind == null ? KIND_EDEFAULT : newKind;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__KIND, oldKind, kind));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case TypeInfoModelPackage.TYPE__MEMBERS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getMembers()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**

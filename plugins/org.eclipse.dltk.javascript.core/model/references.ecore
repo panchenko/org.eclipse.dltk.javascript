@@ -9,13 +9,19 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Type" eSuperTypes="#//Element">
     <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
-        eType="#//Member" containment="true" resolveProxies="false"/>
+        eType="#//Member" containment="true" resolveProxies="false" eOpposite="#//Member/declaringType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//TypeKind"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Member" abstract="true" eSuperTypes="#//Element">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declaringType" eType="#//Type"
+        changeable="false" eOpposite="#//Type/members">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The type in which this member is declared."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//Member">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
