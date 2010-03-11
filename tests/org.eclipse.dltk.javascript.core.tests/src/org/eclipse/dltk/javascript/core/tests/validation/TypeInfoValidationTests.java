@@ -110,4 +110,44 @@ public class TypeInfoValidationTests extends TestCase {
 				.getID());
 	}
 
+	public void testPropertyAccess() throws CoreException {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("var name = x.name");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertTrue(problems.isEmpty());
+	}
+
+	public void testDeprecatedPropertyAccess() throws CoreException {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("var name = x.compatibleName");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
+				.getID());
+	}
+
+	public void testUndefinedPropertyAccess() throws CoreException {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("var name = x.noname");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
+				.getID());
+	}
+
+	public void testMethodAsPropertyAccess() throws CoreException {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("var name = x.execute");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertTrue(problems.isEmpty());
+	}
+
 }
