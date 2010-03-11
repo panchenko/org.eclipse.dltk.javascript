@@ -9,12 +9,20 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.core;
+package org.eclipse.dltk.internal.javascript.validation;
 
-import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.core.builder.IBuildContext;
+import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
-public interface IJavaScriptProblems {
+class JavaScriptValidations {
 
-	public static final int UNKNOWN_TYPE = IProblem.TypeRelated + 1;
+	public static Script parse(IBuildContext context) {
+		// TODO use cached AST
+		final JavaScriptParser parser = new JavaScriptParser();
+		// TODO use option from project
+		parser.setTypeInformationEnabled(true);
+		return parser.parse(context, context.getProblemReporter());
+	}
 
 }
