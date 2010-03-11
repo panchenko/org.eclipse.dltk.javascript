@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeKind.java,v 1.1 2010/03/05 13:24:11 apanchenk Exp $
+ * $Id: TypeKind.java,v 1.2 2010/03/11 07:36:15 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -50,14 +50,14 @@ public enum TypeKind implements Enumerator {
 	PREDEFINED(0, "PREDEFINED", "PREDEFINED"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
-	 * The '<em><b>USER</b></em>' literal object.
+	 * The '<em><b>JAVASCRIPT</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #USER_VALUE
+	 * @see #JAVASCRIPT_VALUE
 	 * @generated
 	 * @ordered
 	 */
-	USER(1, "USER", "USER"), //$NON-NLS-1$ //$NON-NLS-2$
+	JAVASCRIPT(1, "JAVASCRIPT", "JAVASCRIPT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * The '<em><b>JAVA</b></em>' literal object.
@@ -100,19 +100,19 @@ public enum TypeKind implements Enumerator {
 	public static final int PREDEFINED_VALUE = 0;
 
 	/**
-	 * The '<em><b>USER</b></em>' literal value.
+	 * The '<em><b>JAVASCRIPT</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>USER</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>JAVASCRIPT</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #USER
+	 * @see #JAVASCRIPT
 	 * @model
 	 * @generated
 	 * @ordered
 	 */
-	public static final int USER_VALUE = 1;
+	public static final int JAVASCRIPT_VALUE = 1;
 
 	/**
 	 * The '<em><b>JAVA</b></em>' literal value.
@@ -139,7 +139,7 @@ public enum TypeKind implements Enumerator {
 		new TypeKind[] {
 			UNKNOWN,
 			PREDEFINED,
-			USER,
+			JAVASCRIPT,
 			JAVA,
 		};
 
@@ -193,7 +193,7 @@ public enum TypeKind implements Enumerator {
 		switch (value) {
 			case UNKNOWN_VALUE: return UNKNOWN;
 			case PREDEFINED_VALUE: return PREDEFINED;
-			case USER_VALUE: return USER;
+			case JAVASCRIPT_VALUE: return JAVASCRIPT;
 			case JAVA_VALUE: return JAVA;
 		}
 		return null;

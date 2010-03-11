@@ -39,7 +39,7 @@
   <eClassifiers xsi:type="ecore:EEnum" name="TypeKind">
     <eLiterals name="UNKNOWN" value="-1"/>
     <eLiterals name="PREDEFINED"/>
-    <eLiterals name="USER" value="1"/>
+    <eLiterals name="JAVASCRIPT" value="1" literal="JAVASCRIPT"/>
     <eLiterals name="JAVA" value="2"/>
   </eClassifiers>
 </ecore:EPackage>
