@@ -1,0 +1,49 @@
+/*******************************************************************************
+ * Copyright (c) 2010 xored software, Inc.  
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html  
+ *
+ * Contributors:
+ *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
+ *******************************************************************************/
+package org.eclipse.dltk.javascript.core.tests.validation;
+
+import java.util.List;
+
+import junit.framework.TestCase;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
+import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+
+public class TypeInfoValidationTests extends TestCase {
+
+	private List<IProblem> validate(IBuildParticipant validator, String content) {
+		final TestBuildContext context = new TestBuildContext(content);
+		try {
+			validator.build(context);
+		} catch (CoreException e) {
+			fail(e.getMessage());
+		}
+		return context.getProblems();
+	}
+
+	public void testKnownType() throws CoreException {
+		final List<IProblem> problems = validate(new TypeInfoValidator(),
+				"var x:String");
+		assertTrue(problems.isEmpty());
+	}
+
+	public void testUnknownType() throws CoreException {
+		final List<IProblem> problems = validate(new TypeInfoValidator(),
+				"var x:LongString");
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
+	}
+
+}
