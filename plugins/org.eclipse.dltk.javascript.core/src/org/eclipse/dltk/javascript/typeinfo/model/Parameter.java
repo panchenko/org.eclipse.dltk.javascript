@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Parameter.java,v 1.2 2010/03/10 05:33:43 apanchenk Exp $
+ * $Id: Parameter.java,v 1.3 2010/03/11 12:28:44 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -24,7 +24,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#isOptional <em>Optional</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind <em>Kind</em>}</li>
  * </ul>
  * </p>
  *
@@ -86,30 +86,32 @@ public interface Parameter {
 	void setType(Type value);
 
 	/**
-	 * Returns the value of the '<em><b>Optional</b></em>' attribute.
-	 * The default value is <code>"false"</code>.
+	 * Returns the value of the '<em><b>Kind</b></em>' attribute.
+	 * The literals are from the enumeration {@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Optional</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Kind</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Optional</em>' attribute.
-	 * @see #setOptional(boolean)
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getParameter_Optional()
-	 * @model default="false"
+	 * @return the value of the '<em>Kind</em>' attribute.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+	 * @see #setKind(ParameterKind)
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getParameter_Kind()
+	 * @model
 	 * @generated
 	 */
-	boolean isOptional();
+	ParameterKind getKind();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#isOptional <em>Optional</em>}' attribute.
+	 * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind <em>Kind</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Optional</em>' attribute.
-	 * @see #isOptional()
+	 * @param value the new value of the '<em>Kind</em>' attribute.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+	 * @see #getKind()
 	 * @generated
 	 */
-	void setOptional(boolean value);
+	void setKind(ParameterKind value);
 
 } // Parameter

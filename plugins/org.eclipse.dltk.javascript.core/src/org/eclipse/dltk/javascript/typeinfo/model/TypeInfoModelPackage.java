@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.6 2010/03/11 08:50:09 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.7 2010/03/11 12:28:44 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -343,13 +343,13 @@ public interface TypeInfoModelPackage extends EPackage {
 	int PARAMETER__TYPE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * The feature id for the '<em><b>Kind</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARAMETER__OPTIONAL = 2;
+	int PARAMETER__KIND = 2;
 
 	/**
 	 * The number of structural features of the '<em>Parameter</em>' class.
@@ -452,6 +452,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	int TYPE_KIND = 6;
+
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind <em>Parameter Kind</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
+	 * @generated
+	 */
+	int PARAMETER_KIND = 7;
 
 
 	/**
@@ -626,15 +637,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	EReference getParameter_Type();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#isOptional <em>Optional</em>}'.
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind <em>Kind</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Optional</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#isOptional()
+	 * @return the meta object for the attribute '<em>Kind</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind()
 	 * @see #getParameter()
 	 * @generated
 	 */
-	EAttribute getParameter_Optional();
+	EAttribute getParameter_Kind();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Property <em>Property</em>}'.
@@ -666,6 +677,16 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getTypeKind();
+
+	/**
+	 * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind <em>Parameter Kind</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Parameter Kind</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+	 * @generated
+	 */
+	EEnum getParameterKind();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -828,12 +849,12 @@ public interface TypeInfoModelPackage extends EPackage {
 		EReference PARAMETER__TYPE = eINSTANCE.getParameter_Type();
 
 		/**
-		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Kind</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute PARAMETER__OPTIONAL = eINSTANCE.getParameter_Optional();
+		EAttribute PARAMETER__KIND = eINSTANCE.getParameter_Kind();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl <em>Property</em>}' class.
@@ -862,6 +883,16 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum TYPE_KIND = eINSTANCE.getTypeKind();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind <em>Parameter Kind</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
+		 * @generated
+		 */
+		EEnum PARAMETER_KIND = eINSTANCE.getParameterKind();
 
 	}
 

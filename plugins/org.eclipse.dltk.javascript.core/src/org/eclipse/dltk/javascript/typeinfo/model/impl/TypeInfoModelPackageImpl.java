@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.8 2010/03/11 08:50:09 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.9 2010/03/11 12:28:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -17,6 +17,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -86,6 +87,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 * @generated
 	 */
 	private EEnum typeKindEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum parameterKindEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -297,7 +305,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getParameter_Optional() {
+	public EAttribute getParameter_Kind() {
 		return (EAttribute)parameterEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -326,6 +334,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 */
 	public EEnum getTypeKind() {
 		return typeKindEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getParameterKind() {
+		return parameterKindEEnum;
 	}
 
 	/**
@@ -376,13 +393,14 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		parameterEClass = createEClass(PARAMETER);
 		createEAttribute(parameterEClass, PARAMETER__NAME);
 		createEReference(parameterEClass, PARAMETER__TYPE);
-		createEAttribute(parameterEClass, PARAMETER__OPTIONAL);
+		createEAttribute(parameterEClass, PARAMETER__KIND);
 
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__READ_ONLY);
 
 		// Create enums
 		typeKindEEnum = createEEnum(TYPE_KIND);
+		parameterKindEEnum = createEEnum(PARAMETER_KIND);
 	}
 
 	/**
@@ -439,7 +457,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getParameter_Name(), ecorePackage.getEString(), "name", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getParameter_Type(), this.getType(), null, "type", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getParameter_Optional(), ecorePackage.getEBoolean(), "optional", "false", 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getParameter_Kind(), this.getParameterKind(), "kind", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getProperty_ReadOnly(), ecorePackage.getEBoolean(), "readOnly", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -450,6 +468,11 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		addEEnumLiteral(typeKindEEnum, TypeKind.PREDEFINED);
 		addEEnumLiteral(typeKindEEnum, TypeKind.JAVASCRIPT);
 		addEEnumLiteral(typeKindEEnum, TypeKind.JAVA);
+
+		initEEnum(parameterKindEEnum, ParameterKind.class, "ParameterKind"); //$NON-NLS-1$
+		addEEnumLiteral(parameterKindEEnum, ParameterKind.NORMAL);
+		addEEnumLiteral(parameterKindEEnum, ParameterKind.OPTIONAL);
+		addEEnumLiteral(parameterKindEEnum, ParameterKind.VARARGS);
 
 		// Create resource
 		createResource(eNS_URI);

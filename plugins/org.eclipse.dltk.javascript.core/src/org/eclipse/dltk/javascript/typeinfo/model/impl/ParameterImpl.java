@@ -9,11 +9,12 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ParameterImpl.java,v 1.2 2010/03/10 05:33:43 apanchenk Exp $
+ * $Id: ParameterImpl.java,v 1.3 2010/03/11 12:28:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 
@@ -35,7 +36,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl#isOptional <em>Optional</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl#getKind <em>Kind</em>}</li>
  * </ul>
  * </p>
  *
@@ -73,24 +74,24 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	protected Type type;
 
 	/**
-	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * The default value of the '{@link #getKind() <em>Kind</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isOptional()
+	 * @see #getKind()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean OPTIONAL_EDEFAULT = false;
+	protected static final ParameterKind KIND_EDEFAULT = ParameterKind.NORMAL;
 
 	/**
-	 * The cached value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * The cached value of the '{@link #getKind() <em>Kind</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isOptional()
+	 * @see #getKind()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean optional = OPTIONAL_EDEFAULT;
+	protected ParameterKind kind = KIND_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -175,8 +176,8 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isOptional() {
-		return optional;
+	public ParameterKind getKind() {
+		return kind;
 	}
 
 	/**
@@ -184,11 +185,11 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setOptional(boolean newOptional) {
-		boolean oldOptional = optional;
-		optional = newOptional;
+	public void setKind(ParameterKind newKind) {
+		ParameterKind oldKind = kind;
+		kind = newKind == null ? KIND_EDEFAULT : newKind;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__OPTIONAL, oldOptional, optional));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__KIND, oldKind, kind));
 	}
 
 	/**
@@ -204,8 +205,8 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 			case TypeInfoModelPackage.PARAMETER__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case TypeInfoModelPackage.PARAMETER__OPTIONAL:
-				return isOptional();
+			case TypeInfoModelPackage.PARAMETER__KIND:
+				return getKind();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -224,8 +225,8 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 			case TypeInfoModelPackage.PARAMETER__TYPE:
 				setType((Type)newValue);
 				return;
-			case TypeInfoModelPackage.PARAMETER__OPTIONAL:
-				setOptional((Boolean)newValue);
+			case TypeInfoModelPackage.PARAMETER__KIND:
+				setKind((ParameterKind)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -245,8 +246,8 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 			case TypeInfoModelPackage.PARAMETER__TYPE:
 				setType((Type)null);
 				return;
-			case TypeInfoModelPackage.PARAMETER__OPTIONAL:
-				setOptional(OPTIONAL_EDEFAULT);
+			case TypeInfoModelPackage.PARAMETER__KIND:
+				setKind(KIND_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -264,8 +265,8 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case TypeInfoModelPackage.PARAMETER__TYPE:
 				return type != null;
-			case TypeInfoModelPackage.PARAMETER__OPTIONAL:
-				return optional != OPTIONAL_EDEFAULT;
+			case TypeInfoModelPackage.PARAMETER__KIND:
+				return kind != KIND_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -282,8 +283,8 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
-		result.append(", optional: "); //$NON-NLS-1$
-		result.append(optional);
+		result.append(", kind: "); //$NON-NLS-1$
+		result.append(kind);
 		result.append(')');
 		return result.toString();
 	}

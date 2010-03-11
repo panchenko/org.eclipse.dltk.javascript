@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.2 2010/03/05 13:24:10 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.3 2010/03/11 12:28:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -87,6 +87,8 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
 		switch (eDataType.getClassifierID()) {
 			case TypeInfoModelPackage.TYPE_KIND:
 				return createTypeKindFromString(eDataType, initialValue);
+			case TypeInfoModelPackage.PARAMETER_KIND:
+				return createParameterKindFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -102,6 +104,8 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
 		switch (eDataType.getClassifierID()) {
 			case TypeInfoModelPackage.TYPE_KIND:
 				return convertTypeKindToString(eDataType, instanceValue);
+			case TypeInfoModelPackage.PARAMETER_KIND:
+				return convertParameterKindToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -164,6 +168,26 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
 	 * @generated
 	 */
 	public String convertTypeKindToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ParameterKind createParameterKindFromString(EDataType eDataType, String initialValue) {
+		ParameterKind result = ParameterKind.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertParameterKindToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
