@@ -11,10 +11,18 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface ITypeInfoContext {
 
 	Type getType(String typeName);
+
+	/**
+	 * Returns the model element being processed or <code>null</code>
+	 * 
+	 * @return
+	 */
+	IModelElement getModelElement();
 
 }

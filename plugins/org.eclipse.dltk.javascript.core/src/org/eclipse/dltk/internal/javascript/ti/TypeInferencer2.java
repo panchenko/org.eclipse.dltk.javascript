@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
@@ -38,6 +39,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 public class TypeInferencer2 implements ITypeInferenceContext {
 
 	private TypeInferencerVisitor visitor;
+	private IModelElement modelElement;
 
 	private void initializeVisitor() {
 		if (visitor == null) {
@@ -49,6 +51,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	public void setVisitor(TypeInferencerVisitor visitor) {
 		this.visitor = visitor;
+	}
+
+	public void setModelElement(IModelElement modelElement) {
+		this.modelElement = modelElement;
 	}
 
 	public void doInferencing(Script script) {
@@ -83,6 +89,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 		final boolean queryProviders = canQueryTypeProviders();
 		return getType(typeName, queryProviders, true, !queryProviders, true);
+	}
+
+	public IModelElement getModelElement() {
+		return modelElement;
 	}
 
 	private enum TypeResolveMode {

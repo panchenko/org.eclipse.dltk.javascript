@@ -47,6 +47,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 	public void build(IBuildContext context) throws CoreException {
 		final Script script = JavaScriptValidations.parse(context);
 		TypeInferencer2 inferencer = new TypeInferencer2();
+		inferencer.setModelElement(context.getSourceModule());
 		inferencer.setVisitor(new ValidationVisitor(inferencer, context
 				.getProblemReporter(), context.getLineTracker()));
 		inferencer.doInferencing(script);
