@@ -23,7 +23,8 @@ class LineTracker {
 	}
 
 	public int getOffset(int line, int column) {
-		return lineTracker.getLineOffset(line - 1) + Math.max(column, 0);
+		return line > 0 ? lineTracker.getLineOffset(line - 1)
+				+ Math.max(column, 0) : 0;
 	}
 
 	public int getLength() {

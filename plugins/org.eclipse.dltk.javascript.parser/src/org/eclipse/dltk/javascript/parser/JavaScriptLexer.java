@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.parser;
 import org.antlr.runtime.BitSet;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.IntStream;
+import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.RecognitionException;
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
@@ -43,10 +44,13 @@ public class JavaScriptLexer extends JSLexer {
 		/*
 		 * recover() is called TWICE! first in match(), then in nextToken().
 		 */
-		if (lastRecoveryIndex != re.index) {
+		if (re instanceof MismatchedTokenException) {
+			if (re.index <= lastRecoveryIndex) {
+				return;
+			}
 			lastRecoveryIndex = re.index;
-			super.recover(re);
 		}
+		super.recover(re);
 	}
 
 	@Override
@@ -57,7 +61,10 @@ public class JavaScriptLexer extends JSLexer {
 		final String msg = getErrorMessage(e, tokenNames);
 		final int start = lastToken != null ? lineTracker.getOffset(lastToken)
 				+ lineTracker.length(lastToken) : 0;
-		final int end = lineTracker.getOffset(e.line, e.charPositionInLine);
+		int end = lineTracker.getOffset(e.line, e.charPositionInLine);
+		if (end < start) {
+			end = start + 1;
+		}
 		reporter.reportProblem(new DefaultProblem(msg,
 				JavaScriptParserProblems.LEXER_ERROR, null,
 				ProblemSeverities.Error, start, end, e.line - 1));
