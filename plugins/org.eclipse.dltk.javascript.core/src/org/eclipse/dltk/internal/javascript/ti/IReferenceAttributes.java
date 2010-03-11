@@ -13,7 +13,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 public interface IReferenceAttributes {
 
-	String PARAMETERS = "PARAMETERS";
-	String FUNCTION_SCOPE = "FUNCTION_SCOPE";
+	String PARAMETERS = "PARAMETERS"; //$NON-NLS-1$
+	String FUNCTION_SCOPE = "FUNCTION_SCOPE"; //$NON-NLS-1$
 
 }
