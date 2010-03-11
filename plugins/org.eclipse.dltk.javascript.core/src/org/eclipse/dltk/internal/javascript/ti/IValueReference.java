@@ -17,7 +17,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IValueReference extends IValueParent {
 
-	static final String FUNCTION_OP = "()";
+	static final String FUNCTION_OP = "()"; //$NON-NLS-1$
 
 	String getName();
 
