@@ -17,7 +17,8 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-public class MethodValueReferenceProxy implements IValueReference {
+public class MethodValueReferenceProxy implements IValueReference,
+		IMethodValueReference {
 
 	private final IValueParent owner;
 	private final Method method;
@@ -120,6 +121,16 @@ public class MethodValueReferenceProxy implements IValueReference {
 
 	public ITypeInferenceContext getContext() {
 		return owner.getContext();
+	}
+
+	public Method getMethod() {
+		return method;
+	}
+
+	@Override
+	public String toString() {
+		return method.getDeclaringType().getName()
+				+ "." + method.getName() + "()"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

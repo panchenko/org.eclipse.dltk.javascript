@@ -11,9 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
+import java.util.Set;
+
 import org.eclipse.dltk.core.builder.IBuildContext;
+import org.eclipse.dltk.internal.javascript.ti.IValueParent;
+import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 class JavaScriptValidations {
 
@@ -23,6 +28,20 @@ class JavaScriptValidations {
 		// TODO use option from project
 		parser.setTypeInformationEnabled(true);
 		return parser.parse(context, context.getProblemReporter());
+	}
+
+	public static Type typeOf(IValueParent parent) {
+		if (parent instanceof IValueReference) {
+			IValueReference reference = (IValueReference) parent;
+			if (reference.getDeclaredType() != null) {
+				return reference.getDeclaredType();
+			}
+			final Set<Type> types = reference.getTypes();
+			if (types.size() == 1) {
+				return types.toArray(new Type[1])[0];
+			}
+		}
+		return null;
 	}
 
 }

@@ -9,17 +9,12 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.core;
+package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
 
-public interface JavaScriptProblems {
+public interface IMethodValueReference {
 
-	public static final int UNKNOWN_TYPE = IProblem.TypeRelated + 1;
-	public static final int DEPRECATED_TYPE = IProblem.TypeRelated + 2;
-
-	public static final int UNDEFINED_METHOD = IProblem.MethodRelated + 1;
-	public static final int WRONG_PARAMETER_COUNT = IProblem.MethodRelated + 2;
-	public static final int DEPRECATED_METHOD = IProblem.MethodRelated + 3;
+	Method getMethod();
 
 }
