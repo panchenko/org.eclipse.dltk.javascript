@@ -37,9 +37,12 @@ import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
 public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems {
@@ -110,8 +113,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					final Method method = ((IMethodValueReference) reference)
 							.getMethod();
 					// TODO how overloaded methods should be handled?
-					if (method.getParameters().size() != callArgs.size()) {
-						// TODO check optional parameters
+					if (!validateParameterCount(method, callArgs)) {
 						reportProblem(JavaScriptProblems.WRONG_PARAMETER_COUNT,
 								NLS.bind(ValidationMessages.WrongParamCount,
 										method.getDeclaringType().getName(),
@@ -141,6 +143,32 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			} else {
 				return null;
 			}
+		}
+
+		/**
+		 * Validates the parameter count, returns <code>true</code> if correct.
+		 * 
+		 * @param method
+		 * @param callArgs
+		 * 
+		 * @return
+		 */
+		private boolean validateParameterCount(Method method,
+				List<ASTNode> callArgs) {
+			final EList<Parameter> params = method.getParameters();
+			if (params.size() == callArgs.size()) {
+				return true;
+			}
+			if (params.size() < callArgs.size()
+					&& !params.isEmpty()
+					&& params.get(params.size() - 1).getKind() == ParameterKind.VARARGS) {
+				return true;
+			}
+			if (params.size() > callArgs.size()
+					&& params.get(callArgs.size()).getKind() == ParameterKind.OPTIONAL) {
+				return true;
+			}
+			return false;
 		}
 
 		@Override
