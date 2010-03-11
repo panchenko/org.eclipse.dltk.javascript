@@ -416,7 +416,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 	}
 
-	private static String extractName(Expression name) {
+	protected static String extractName(Expression name) {
 		if (name instanceof Identifier) {
 			return ((Identifier) name).getName();
 		} else if (name instanceof StringLiteral) {

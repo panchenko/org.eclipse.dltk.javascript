@@ -17,7 +17,8 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-public class PropertyValueReferenceProxy implements IValueReference {
+public class PropertyValueReferenceProxy implements IValueReference,
+		IPropertyValueReference {
 
 	private final IValueParent owner;
 	private final Property property;
@@ -126,6 +127,10 @@ public class PropertyValueReferenceProxy implements IValueReference {
 			}
 		}
 		return resolved;
+	}
+
+	public Property getProperty() {
+		return property;
 	}
 
 }

@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
@@ -21,16 +24,20 @@ import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
+import org.eclipse.dltk.internal.javascript.ti.GetMode;
 import org.eclipse.dltk.internal.javascript.ti.IMethodValueReference;
+import org.eclipse.dltk.internal.javascript.ti.IPropertyValueReference;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.CallExpression;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.osgi.util.NLS;
@@ -45,6 +52,10 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		inferencer.doInferencing(script);
 	}
 
+	private static enum VisitorMode {
+		NORMAL, CALL
+	}
+
 	private static class ValidationVisitor extends TypeInferencerVisitor {
 
 		private final IProblemReporter reporter;
@@ -57,6 +68,25 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			this.lineTracker = lineTracker;
 		}
 
+		private final Map<ASTNode, VisitorMode> modes = new IdentityHashMap<ASTNode, VisitorMode>();
+
+		private final Stack<ASTNode> visitStack = new Stack<ASTNode>();
+
+		@Override
+		public IValueReference visit(ASTNode node) {
+			visitStack.push(node);
+			try {
+				return super.visit(node);
+			} finally {
+				visitStack.pop();
+			}
+		}
+
+		private VisitorMode currentMode() {
+			final VisitorMode mode = modes.get(visitStack.peek());
+			return mode != null ? mode : VisitorMode.NORMAL;
+		}
+
 		@Override
 		public IValueReference visitCallExpression(CallExpression node) {
 			final ASTNode expression = node.getExpression();
@@ -66,7 +96,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			} else {
 				methodNode = expression;
 			}
+			modes.put(expression, VisitorMode.CALL);
 			final IValueReference reference = visit(expression);
+			modes.remove(expression);
 			final List<ASTNode> callArgs = node.getArguments();
 			IValueReference[] arguments = new IValueReference[callArgs.size()];
 			for (int i = 0, size = callArgs.size(); i < size; ++i) {
@@ -82,8 +114,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 						reportProblem(JavaScriptProblems.WRONG_PARAMETER_COUNT,
 								NLS.bind(ValidationMessages.WrongParamCount,
 										method.getDeclaringType().getName(),
-										reference.getName()),
-								ProblemSeverities.Warning, methodNode
+										reference.getName()), methodNode
 										.sourceStart(), methodNode.sourceEnd());
 					}
 					if (method.isDeprecated()) {
@@ -91,8 +122,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								.bind(ValidationMessages.DeprecatedMethod,
 										reference.getName(), method
 												.getDeclaringType().getName()),
-								ProblemSeverities.Warning, methodNode
-										.sourceStart(), methodNode.sourceEnd());
+								methodNode.sourceStart(), methodNode
+										.sourceEnd());
 					}
 				} else {
 					final Type type = JavaScriptValidations.typeOf(reference
@@ -101,13 +132,54 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 						reportProblem(JavaScriptProblems.UNDEFINED_METHOD, NLS
 								.bind(ValidationMessages.UndefinedMethod,
 										reference.getName(), type.getName()),
-								ProblemSeverities.Warning, methodNode
-										.sourceStart(), methodNode.sourceEnd());
+								methodNode.sourceStart(), methodNode
+										.sourceEnd());
 					}
 				}
 				return reference.getChild(IValueReference.FUNCTION_OP);
 			} else {
 				return null;
+			}
+		}
+
+		@Override
+		public IValueReference visitPropertyExpression(PropertyExpression node) {
+			final IValueReference object = visit(node.getObject());
+			final Expression propName = node.getProperty();
+			final String name = extractName(propName);
+			if (object != null && name != null) {
+				final IValueReference result = object.getChild(name,
+						GetMode.CREATE_LAZY);
+				if (currentMode() != VisitorMode.CALL) {
+					validateProperty(result, propName);
+				}
+				return result;
+			} else {
+				return null;
+			}
+		}
+
+		private void validateProperty(IValueReference result,
+				Expression propName) {
+			if (result instanceof IPropertyValueReference) {
+				final Property property = ((IPropertyValueReference) result)
+						.getProperty();
+				if (property.isDeprecated()) {
+					reportProblem(JavaScriptProblems.DEPRECATED_PROPERTY, NLS
+							.bind(ValidationMessages.DeprecatedProperty, result
+									.getName(), property.getDeclaringType()
+									.getName()), propName.sourceStart(),
+							propName.sourceEnd());
+				}
+			} else if (!(result instanceof IMethodValueReference)) {
+				final Type type = JavaScriptValidations.typeOf(result
+						.getParent());
+				if (type != null && type.getKind() == TypeKind.JAVA) {
+					reportProblem(JavaScriptProblems.UNDEFINED_PROPERTY, NLS
+							.bind(ValidationMessages.UndefinedProperty, result
+									.getName(), type.getName()), propName
+							.sourceStart(), propName.sourceEnd());
+				}
 			}
 		}
 
@@ -118,22 +190,19 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (result.getKind() == TypeKind.UNKNOWN) {
 					reportProblem(JavaScriptProblems.UNKNOWN_TYPE, NLS.bind(
 							ValidationMessages.UnknownType, type.getName()),
-							ProblemSeverities.Warning, type.sourceStart(), type
-									.sourceEnd());
+							type.sourceStart(), type.sourceEnd());
 				} else if (result.isDeprecated()) {
 					reportProblem(JavaScriptProblems.DEPRECATED_TYPE, NLS.bind(
 							ValidationMessages.DeprecatedType, type.getName()),
-							ProblemSeverities.Warning, type.sourceStart(), type
-									.sourceEnd());
+							type.sourceStart(), type.sourceEnd());
 				}
 			}
 			return result;
 		}
 
-		private void reportProblem(int id, String message, int severity,
-				int start, int end) {
+		private void reportProblem(int id, String message, int start, int end) {
 			reporter.reportProblem(new DefaultProblem(message, id, null,
-					severity, start, end, lineTracker
+					ProblemSeverities.Warning, start, end, lineTracker
 							.getLineNumberOfOffset(start)));
 		}
 	}

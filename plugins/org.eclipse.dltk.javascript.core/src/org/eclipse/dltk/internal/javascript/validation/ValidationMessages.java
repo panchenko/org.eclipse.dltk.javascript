@@ -21,6 +21,9 @@ public class ValidationMessages extends NLS {
 	public static String UndefinedMethod;
 	public static String WrongParamCount;
 	public static String DeprecatedMethod;
+
+	public static String UndefinedProperty;
+	public static String DeprecatedProperty;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, ValidationMessages.class);
