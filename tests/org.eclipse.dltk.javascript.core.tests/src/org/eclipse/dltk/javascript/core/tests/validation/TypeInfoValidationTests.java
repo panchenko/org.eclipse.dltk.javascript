@@ -98,4 +98,16 @@ public class TypeInfoValidationTests extends TestCase {
 				.getID());
 	}
 
+	public void testDeprecatedMethodCall_TypeInference() throws CoreException {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("var q = x.execute().service");
+		code.add("q.executeCompatible()");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_METHOD, problems.get(0)
+				.getID());
+	}
+
 }
