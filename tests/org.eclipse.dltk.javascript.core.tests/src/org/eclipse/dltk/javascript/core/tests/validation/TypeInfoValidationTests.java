@@ -122,7 +122,7 @@ public class TypeInfoValidationTests extends TestCase {
 	public void testDeprecatedPropertyAccess() throws CoreException {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
-		code.add("var name = x.compatibleName");
+		code.add("var name = x.nameCompatible");
 		final List<IProblem> problems = validate(new TypeInfoValidator(), code
 				.toString());
 		assertEquals(1, problems.size());
