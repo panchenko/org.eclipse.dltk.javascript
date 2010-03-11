@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.5 2010/03/11 05:33:55 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.6 2010/03/11 08:50:09 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -87,13 +87,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int ELEMENT__NAME = 0;
 
 	/**
+	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ELEMENT__DEPRECATED = 1;
+
+	/**
 	 * The number of structural features of the '<em>Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT_FEATURE_COUNT = 1;
+	int ELEMENT_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
@@ -113,6 +122,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int TYPE__NAME = ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPE__DEPRECATED = ELEMENT__DEPRECATED;
 
 	/**
 	 * The feature id for the '<em><b>Members</b></em>' containment reference list.
@@ -159,6 +177,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int MEMBER__NAME = ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__DEPRECATED = ELEMENT__DEPRECATED;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -223,6 +250,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int METHOD__NAME = MEMBER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METHOD__DEPRECATED = MEMBER__DEPRECATED;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -344,6 +380,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	int PROPERTY__NAME = MEMBER__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__DEPRECATED = MEMBER__DEPRECATED;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -429,6 +474,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getElement_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isDeprecated <em>Deprecated</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Deprecated</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element#isDeprecated()
+	 * @see #getElement()
+	 * @generated
+	 */
+	EAttribute getElement_Deprecated();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
@@ -650,6 +706,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ELEMENT__NAME = eINSTANCE.getElement_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Deprecated</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ELEMENT__DEPRECATED = eINSTANCE.getElement_Deprecated();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.

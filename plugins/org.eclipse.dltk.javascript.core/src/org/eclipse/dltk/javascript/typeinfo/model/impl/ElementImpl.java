@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ElementImpl.java,v 1.1 2010/03/10 18:13:47 apanchenk Exp $
+ * $Id: ElementImpl.java,v 1.2 2010/03/11 08:50:09 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#isDeprecated <em>Deprecated</em>}</li>
  * </ul>
  * </p>
  *
@@ -56,6 +57,26 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isDeprecated() <em>Deprecated</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDeprecated()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DEPRECATED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDeprecated() <em>Deprecated</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDeprecated()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean deprecated = DEPRECATED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -102,11 +123,34 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isDeprecated() {
+		return deprecated;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDeprecated(boolean newDeprecated) {
+		boolean oldDeprecated = deprecated;
+		deprecated = newDeprecated;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__DEPRECATED, oldDeprecated, deprecated));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case TypeInfoModelPackage.ELEMENT__NAME:
 				return getName();
+			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
+				return isDeprecated();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -121,6 +165,9 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 		switch (featureID) {
 			case TypeInfoModelPackage.ELEMENT__NAME:
 				setName((String)newValue);
+				return;
+			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
+				setDeprecated((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -137,6 +184,9 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 			case TypeInfoModelPackage.ELEMENT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
+				setDeprecated(DEPRECATED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -151,6 +201,8 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 		switch (featureID) {
 			case TypeInfoModelPackage.ELEMENT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
+				return deprecated != DEPRECATED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -167,6 +219,8 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
+		result.append(", deprecated: "); //$NON-NLS-1$
+		result.append(deprecated);
 		result.append(')');
 		return result.toString();
 	}

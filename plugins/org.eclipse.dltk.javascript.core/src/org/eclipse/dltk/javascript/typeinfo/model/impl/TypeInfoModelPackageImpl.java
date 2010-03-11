@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.7 2010/03/11 07:36:16 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.8 2010/03/11 08:50:09 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -164,6 +164,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 */
 	public EAttribute getElement_Name() {
 		return (EAttribute)elementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getElement_Deprecated() {
+		return (EAttribute)elementEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -349,6 +358,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		// Create classes and their features
 		elementEClass = createEClass(ELEMENT);
 		createEAttribute(elementEClass, ELEMENT__NAME);
+		createEAttribute(elementEClass, ELEMENT__DEPRECATED);
 
 		typeEClass = createEClass(TYPE);
 		createEReference(typeEClass, TYPE__MEMBERS);
@@ -411,6 +421,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 		// Initialize classes and features; add operations and parameters
 		initEClass(elementEClass, Element.class, "Element", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getElement_Name(), ecorePackage.getEString(), "name", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getElement_Deprecated(), ecorePackage.getEBoolean(), "deprecated", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(typeEClass, Type.class, "Type", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getType_Members(), this.getMember(), this.getMember_DeclaringType(), "members", null, 0, -1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
