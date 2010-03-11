@@ -22,6 +22,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
+@SuppressWarnings("nls")
 public class TypeInfoModelTests extends TestCase implements ITypeNames {
 
 	public void testPredefinedTypes() {

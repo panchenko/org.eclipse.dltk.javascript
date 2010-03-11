@@ -22,6 +22,7 @@ import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 
+@SuppressWarnings("nls")
 public class TypeInfoValidationTests extends TestCase {
 
 	private List<IProblem> validate(IBuildParticipant validator, String content) {

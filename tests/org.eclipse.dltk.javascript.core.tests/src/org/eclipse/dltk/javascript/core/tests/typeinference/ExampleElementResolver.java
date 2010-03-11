@@ -17,6 +17,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
+@SuppressWarnings("nls")
 public class ExampleElementResolver implements IElementResolver {
 
 	public Element resolveElement(ITypeInfoContext context, String name) {

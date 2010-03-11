@@ -20,6 +20,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
+@SuppressWarnings("nls")
 public class ExampleTypeProvider implements ITypeProvider {
 
 	static final String TYPE_SERVICE = "ExampleService";

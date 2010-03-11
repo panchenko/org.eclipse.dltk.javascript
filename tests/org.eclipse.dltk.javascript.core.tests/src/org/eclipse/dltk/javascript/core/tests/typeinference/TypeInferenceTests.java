@@ -30,6 +30,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
+@SuppressWarnings("nls")
 public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	private static Script parse(String code) {
