@@ -105,7 +105,7 @@ public abstract class ValueCollection implements IValueCollection {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + children.keySet();
+		return getClass().getSimpleName() + ':' + children.keySet();
 	}
 
 	public ITypeInferenceContext getContext() {
