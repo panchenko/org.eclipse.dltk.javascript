@@ -12,7 +12,9 @@
 package org.eclipse.dltk.javascript.parser;
 
 import org.antlr.runtime.Token;
+import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
+import org.eclipse.dltk.internal.core.SourceRange;
 
 class LineTracker {
 
@@ -38,6 +40,10 @@ class LineTracker {
 	public int length(Token token) {
 		final String sm = token.getText();
 		return sm != null ? sm.length() : 1;
+	}
+
+	public ISourceRange toSourceRange(Token token) {
+		return new SourceRange(getOffset(token), length(token));
 	}
 
 }

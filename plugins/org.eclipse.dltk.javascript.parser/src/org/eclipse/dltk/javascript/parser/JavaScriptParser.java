@@ -171,8 +171,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 			if (token == Token.EOF_TOKEN) {
 				return null;
 			}
-			return new SourceRange(lineTracker.getOffset(token), lineTracker
-					.length(token));
+			return lineTracker.toSourceRange(token);
 		}
 
 		private int inputLength() {
