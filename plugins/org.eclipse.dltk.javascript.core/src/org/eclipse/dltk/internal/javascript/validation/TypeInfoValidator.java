@@ -27,6 +27,7 @@ import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.GetMode;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
@@ -145,6 +146,15 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			}
 		}
 
+		private <E extends Element> E extractElement(IValueParent reference,
+				Class<E> elementType) {
+			if (reference instanceof IValueReference) {
+				return extractElement((IValueReference) reference, elementType);
+			} else {
+				return null;
+			}
+		}
+
 		/**
 		 * @param reference
 		 * @param elementType
@@ -209,7 +219,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					node.getName(), GetMode.CREATE_LAZY);
 			final Property property = extractElement(result, Property.class);
 			if (property != null && property.isDeprecated()) {
-				reportDeprecatedProperty(property, node);
+				reportDeprecatedProperty(property, null, node);
 			}
 			return result;
 		}
@@ -219,7 +229,16 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			final Property property = extractElement(result, Property.class);
 			if (property != null) {
 				if (property.isDeprecated()) {
-					reportDeprecatedProperty(property, propName);
+					final Property parentProperty = extractElement(result
+							.getParent(), Property.class);
+					if (parentProperty != null
+							&& parentProperty.getDeclaringType() == null) {
+						reportDeprecatedProperty(property, parentProperty,
+								propName);
+					} else {
+						reportDeprecatedProperty(property, property
+								.getDeclaringType(), propName);
+					}
 				}
 			} else if (extractElement(result, Method.class) == null) {
 				final Type type = JavaScriptValidations.typeOf(result
@@ -233,11 +252,15 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			}
 		}
 
-		private void reportDeprecatedProperty(Property property, ASTNode node) {
+		private void reportDeprecatedProperty(Property property, Element owner,
+				ASTNode node) {
 			final String msg;
-			if (property.getDeclaringType() != null) {
+			if (owner instanceof Type) {
 				msg = NLS.bind(ValidationMessages.DeprecatedProperty, property
-						.getName(), property.getDeclaringType().getName());
+						.getName(), owner.getName());
+			} else if (owner instanceof Property) {
+				msg = NLS.bind(ValidationMessages.DeprecatedPropertyOfInstance,
+						property.getName(), owner.getName());
 			} else {
 				msg = NLS.bind(ValidationMessages.DeprecatedPropertyNoType,
 						property.getName());

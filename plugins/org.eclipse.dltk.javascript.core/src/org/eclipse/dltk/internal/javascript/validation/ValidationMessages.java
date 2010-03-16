@@ -24,6 +24,7 @@ public class ValidationMessages extends NLS {
 
 	public static String UndefinedProperty;
 	public static String DeprecatedProperty;
+	public static String DeprecatedPropertyOfInstance;
 	public static String DeprecatedPropertyNoType;
 	static {
 		// initialize resource bundle
