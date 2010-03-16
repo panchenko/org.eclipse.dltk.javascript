@@ -102,6 +102,12 @@ public class ExampleTypeProvider implements ITypeProvider {
 			prop1.setType(context.getType(TYPE_SERVICE));
 			type.getMembers().add(prop1);
 
+			Property prop2 = TypeInfoModelFactory.eINSTANCE.createProperty();
+			prop2.setName("deprecatedName");
+			prop2.setType(context.getType(ITypeNames.STRING));
+			prop2.setDeprecated(true);
+			type.getMembers().add(prop2);
+
 			return type;
 		}
 		return null;

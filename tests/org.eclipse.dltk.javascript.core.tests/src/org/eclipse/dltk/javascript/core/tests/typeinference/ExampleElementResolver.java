@@ -38,6 +38,13 @@ public class ExampleElementResolver implements IElementResolver {
 					.getType(ExampleTypeProvider.TYPE_EXAMPLE_FORMS));
 			property.setName(name);
 			return property;
+		} else if ("myExampleForms".equals(name)) {
+			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
+			property.setType(context
+					.getType(ExampleTypeProvider.TYPE_EXAMPLE_FORMS));
+			property.setName(name);
+			property.setDeprecated(true);
+			return property;
 		}
 		return null;
 	}
