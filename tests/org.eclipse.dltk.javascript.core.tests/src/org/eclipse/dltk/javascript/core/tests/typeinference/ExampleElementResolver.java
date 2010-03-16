@@ -15,7 +15,9 @@ import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 
 @SuppressWarnings("nls")
 public class ExampleElementResolver implements IElementResolver {
@@ -30,6 +32,11 @@ public class ExampleElementResolver implements IElementResolver {
 					return member;
 				}
 			}
+		} else if ("exampleForms".equals(name)) {
+			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
+			property.setType(context.getType("ExampleForms"));
+			property.setName(name);
+			return property;
 		}
 		return null;
 	}

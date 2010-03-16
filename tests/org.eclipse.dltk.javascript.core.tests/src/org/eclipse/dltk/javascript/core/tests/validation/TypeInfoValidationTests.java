@@ -150,4 +150,15 @@ public class TypeInfoValidationTests extends TestCase {
 		assertTrue(problems.isEmpty());
 	}
 
+	public void testElementResolver() throws CoreException {
+		StringList code = new StringList();
+		code.add("exampleForms.service.name");
+		code.add("exampleForms.service.nameCompatible");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
+				.getID());
+	}
+
 }

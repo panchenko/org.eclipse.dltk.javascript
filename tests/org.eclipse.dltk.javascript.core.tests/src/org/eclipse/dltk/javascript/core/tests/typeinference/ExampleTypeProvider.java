@@ -90,6 +90,17 @@ public class ExampleTypeProvider implements ITypeProvider {
 			type.getMembers().add(prop1);
 
 			return type;
+		} else if ("ExampleForms".equals(typeName)) {
+			Type type = TypeInfoModelFactory.eINSTANCE.createType();
+			type.setName(typeName);
+			type.setKind(TypeKind.JAVA);
+
+			Property prop1 = TypeInfoModelFactory.eINSTANCE.createProperty();
+			prop1.setName("service");
+			prop1.setType(context.getType(TYPE_SERVICE));
+			type.getMembers().add(prop1);
+
+			return type;
 		}
 		return null;
 	}
