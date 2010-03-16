@@ -130,6 +130,17 @@ public class TypeInfoValidationTests extends TestCase {
 				.getID());
 	}
 
+	public void testDeprecatedTopLevelProperty() throws CoreException {
+		StringList code = new StringList();
+		code.add("myExampleForms.service");
+		final List<IProblem> problems = validate(new TypeInfoValidator(), code
+				.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
+				.getID());
+		assertTrue(problems.get(0).getMessage().contains("myExampleForms"));
+	}
+
 	public void testUndefinedPropertyAccess() throws CoreException {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
