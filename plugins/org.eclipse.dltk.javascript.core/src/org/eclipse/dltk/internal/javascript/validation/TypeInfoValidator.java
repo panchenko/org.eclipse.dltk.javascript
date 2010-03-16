@@ -32,6 +32,7 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
@@ -202,16 +203,23 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			}
 		}
 
+		@Override
+		public IValueReference visitIdentifier(Identifier node) {
+			final IValueReference result = peekContext().getChild(
+					node.getName(), GetMode.CREATE_LAZY);
+			final Property property = extractElement(result, Property.class);
+			if (property != null && property.isDeprecated()) {
+				reportDeprecatedProperty(property, node);
+			}
+			return result;
+		}
+
 		private void validateProperty(IValueReference result,
 				Expression propName) {
 			final Property property = extractElement(result, Property.class);
 			if (property != null) {
 				if (property.isDeprecated()) {
-					reportProblem(JavaScriptProblems.DEPRECATED_PROPERTY, NLS
-							.bind(ValidationMessages.DeprecatedProperty, result
-									.getName(), property.getDeclaringType()
-									.getName()), propName.sourceStart(),
-							propName.sourceEnd());
+					reportDeprecatedProperty(property, propName);
 				}
 			} else if (extractElement(result, Method.class) == null) {
 				final Type type = JavaScriptValidations.typeOf(result
@@ -223,6 +231,19 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							.sourceStart(), propName.sourceEnd());
 				}
 			}
+		}
+
+		private void reportDeprecatedProperty(Property property, ASTNode node) {
+			final String msg;
+			if (property.getDeclaringType() != null) {
+				msg = NLS.bind(ValidationMessages.DeprecatedProperty, property
+						.getName(), property.getDeclaringType().getName());
+			} else {
+				msg = NLS.bind(ValidationMessages.DeprecatedPropertyNoType,
+						property.getName());
+			}
+			reportProblem(JavaScriptProblems.DEPRECATED_PROPERTY, msg, node
+					.sourceStart(), node.sourceEnd());
 		}
 
 		@Override
