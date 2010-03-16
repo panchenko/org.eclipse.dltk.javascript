@@ -28,6 +28,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 
 	private static final String TYPE_SERVICE2 = "ExampleService2";
 
+	static final String TYPE_EXAMPLE_FORMS = "ExampleForms";
+
 	public Type getType(ITypeInfoContext context, String typeName) {
 		if (TYPE_SERVICE.equals(typeName)) {
 			Type type = TypeInfoModelFactory.eINSTANCE.createType();
@@ -90,7 +92,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 			type.getMembers().add(prop1);
 
 			return type;
-		} else if ("ExampleForms".equals(typeName)) {
+		} else if (TYPE_EXAMPLE_FORMS.equals(typeName)) {
 			Type type = TypeInfoModelFactory.eINSTANCE.createType();
 			type.setName(typeName);
 			type.setKind(TypeKind.JAVA);

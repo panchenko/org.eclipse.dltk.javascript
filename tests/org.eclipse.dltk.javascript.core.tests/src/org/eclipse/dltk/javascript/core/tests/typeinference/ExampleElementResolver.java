@@ -34,7 +34,8 @@ public class ExampleElementResolver implements IElementResolver {
 			}
 		} else if ("exampleForms".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
-			property.setType(context.getType("ExampleForms"));
+			property.setType(context
+					.getType(ExampleTypeProvider.TYPE_EXAMPLE_FORMS));
 			property.setName(name);
 			return property;
 		}
