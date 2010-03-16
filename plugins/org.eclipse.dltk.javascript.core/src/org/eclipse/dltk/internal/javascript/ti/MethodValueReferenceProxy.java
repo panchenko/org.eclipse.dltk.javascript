@@ -17,8 +17,7 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-public class MethodValueReferenceProxy implements IValueReference,
-		IMethodValueReference {
+public class MethodValueReferenceProxy implements IValueReference {
 
 	private final IValueParent owner;
 	private final Method method;
@@ -75,7 +74,13 @@ public class MethodValueReferenceProxy implements IValueReference,
 	}
 
 	public Object getAttribute(String key) {
-		return isResolved() ? resolve().getAttribute(key) : null;
+		if (isResolved()) {
+			return resolve().getAttribute(key);
+		} else if (IReferenceAttributes.ELEMENT.equals(key)) {
+			return method;
+		} else {
+			return null;
+		}
 	}
 
 	public void setAttribute(String key, Object value) {
@@ -90,6 +95,7 @@ public class MethodValueReferenceProxy implements IValueReference,
 	private IValueReference resolve() {
 		if (resolved == null) {
 			resolved = owner.getChild(method.getName(), GetMode.CREATE);
+			resolved.setAttribute(IReferenceAttributes.ELEMENT, method);
 			resolved.addValue(this);
 		}
 		return resolved;

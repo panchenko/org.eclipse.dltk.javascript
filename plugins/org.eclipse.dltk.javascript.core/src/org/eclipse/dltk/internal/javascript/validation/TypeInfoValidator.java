@@ -25,8 +25,7 @@ import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.GetMode;
-import org.eclipse.dltk.internal.javascript.ti.IMethodValueReference;
-import org.eclipse.dltk.internal.javascript.ti.IPropertyValueReference;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -36,6 +35,7 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -109,9 +109,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				arguments[i] = visit(callArgs.get(i));
 			}
 			if (reference != null) {
-				if (reference instanceof IMethodValueReference) {
-					final Method method = ((IMethodValueReference) reference)
-							.getMethod();
+				final Method method = extractElement(reference, Method.class);
+				if (method != null) {
 					// TODO how overloaded methods should be handled?
 					if (!validateParameterCount(method, callArgs)) {
 						reportProblem(JavaScriptProblems.WRONG_PARAMETER_COUNT,
@@ -143,6 +142,21 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			} else {
 				return null;
 			}
+		}
+
+		/**
+		 * @param reference
+		 * @param elementType
+		 * @return
+		 */
+		@SuppressWarnings("unchecked")
+		private <E extends Element> E extractElement(IValueReference reference,
+				Class<E> elementType) {
+			Object value = reference.getAttribute(IReferenceAttributes.ELEMENT);
+			if (elementType.isInstance(value)) {
+				return (E) value;
+			}
+			return null;
 		}
 
 		/**
@@ -190,9 +204,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		private void validateProperty(IValueReference result,
 				Expression propName) {
-			if (result instanceof IPropertyValueReference) {
-				final Property property = ((IPropertyValueReference) result)
-						.getProperty();
+			final Property property = extractElement(result, Property.class);
+			if (property != null) {
 				if (property.isDeprecated()) {
 					reportProblem(JavaScriptProblems.DEPRECATED_PROPERTY, NLS
 							.bind(ValidationMessages.DeprecatedProperty, result
@@ -200,7 +213,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									.getName()), propName.sourceStart(),
 							propName.sourceEnd());
 				}
-			} else if (!(result instanceof IMethodValueReference)) {
+			} else if (extractElement(result, Method.class) == null) {
 				final Type type = JavaScriptValidations.typeOf(result
 						.getParent());
 				if (type != null && type.getKind() == TypeKind.JAVA) {

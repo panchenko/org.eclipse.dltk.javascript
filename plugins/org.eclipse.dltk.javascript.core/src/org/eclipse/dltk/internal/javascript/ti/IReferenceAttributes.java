@@ -15,5 +15,6 @@ public interface IReferenceAttributes {
 
 	String PARAMETERS = "PARAMETERS"; //$NON-NLS-1$
 	String FUNCTION_SCOPE = "FUNCTION_SCOPE"; //$NON-NLS-1$
+	String ELEMENT = "ELEMENT"; //$NON-NLS-1$
 
 }

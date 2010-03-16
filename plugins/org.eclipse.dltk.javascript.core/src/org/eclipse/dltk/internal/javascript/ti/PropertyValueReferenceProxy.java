@@ -17,8 +17,7 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-public class PropertyValueReferenceProxy implements IValueReference,
-		IPropertyValueReference {
+public class PropertyValueReferenceProxy implements IValueReference {
 
 	private final IValueParent owner;
 	private final Property property;
@@ -38,7 +37,13 @@ public class PropertyValueReferenceProxy implements IValueReference,
 	}
 
 	public Object getAttribute(String key) {
-		return isResolved() ? resolve().getAttribute(key) : null;
+		if (isResolved()) {
+			return resolve().getAttribute(key);
+		} else if (IReferenceAttributes.ELEMENT.equals(key)) {
+			return property;
+		} else {
+			return null;
+		}
 	}
 
 	public Type getDeclaredType() {
@@ -122,6 +127,7 @@ public class PropertyValueReferenceProxy implements IValueReference,
 	private IValueReference resolve() {
 		if (resolved == null) {
 			resolved = owner.getChild(property.getName(), GetMode.CREATE);
+			resolved.setAttribute(IReferenceAttributes.ELEMENT, property);
 			if (property.getType() != null) {
 				resolved.setDeclaredType(property.getType());
 			}
