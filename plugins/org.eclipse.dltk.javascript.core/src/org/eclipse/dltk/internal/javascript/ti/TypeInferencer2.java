@@ -228,11 +228,17 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return factory;
 	}
 
+	private Map<String, Element> elements = new HashMap<String, Element>();
+
 	public Element resolve(String name) {
-		// TODO cache resolution results
+		Element element = elements.get(name);
+		if (element != null) {
+			return element;
+		}
 		for (IElementResolver resolver : TypeInfoManager.getElementResolvers()) {
-			final Element element = resolver.resolveElement(this, name);
+			element = resolver.resolveElement(this, name);
 			if (element != null) {
+				elements.put(name, element);
 				return element;
 			}
 		}
