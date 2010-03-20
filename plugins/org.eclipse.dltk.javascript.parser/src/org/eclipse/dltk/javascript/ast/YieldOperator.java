@@ -47,11 +47,11 @@ public class YieldOperator extends Expression {
 		this.expression = expression;
 	}
 
-	public Keyword getVoidKeyword() {
+	public Keyword getYieldKeyword() {
 		return this.yieldKeyword;
 	}
 
-	public void setVoidKeyword(Keyword keyword) {
+	public void setYieldKeyword(Keyword keyword) {
 		this.yieldKeyword = keyword;
 	}
 

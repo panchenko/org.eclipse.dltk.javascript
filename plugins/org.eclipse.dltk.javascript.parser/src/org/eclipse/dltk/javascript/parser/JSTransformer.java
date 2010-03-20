@@ -1945,12 +1945,12 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitYield(Tree node) {
 		YieldOperator expression = new YieldOperator(getParent());
 
-		expression.setVoidKeyword(createKeyword(node, Keywords.YIELD));
+		expression.setYieldKeyword(createKeyword(node, Keywords.YIELD));
 
 		expression.setExpression((Expression) transformNode(node.getChild(0),
 				expression));
 
-		expression.setStart(expression.getVoidKeyword().sourceStart());
+		expression.setStart(expression.getYieldKeyword().sourceStart());
 		expression.setEnd(expression.getExpression().sourceEnd());
 
 		return expression;
