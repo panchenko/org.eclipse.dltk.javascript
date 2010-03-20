@@ -1638,7 +1638,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						document);
 
 				formatterNode.setBegin(createTextNode(document, node
-						.getVoidKeyword()));
+						.getYieldKeyword()));
 
 				push(formatterNode);
 
