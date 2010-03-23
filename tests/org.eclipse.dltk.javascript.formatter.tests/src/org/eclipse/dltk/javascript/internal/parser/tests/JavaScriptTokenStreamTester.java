@@ -17,7 +17,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
@@ -64,8 +63,9 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 				new IProblemReporter() {
 
 					public void reportProblem(IProblem problem) {
-						System.out.println("Parser error: "
-								+ problem.getMessage());
+						System.out.println("Parser "
+								+ (problem.isError() ? "error" : "warning")
+								+ ": " + problem.getMessage());
 					}
 
 					public Object getAdapter(Class adapter) {
