@@ -31,6 +31,7 @@ import org.eclipse.dltk.javascript.formatter.internal.JavascriptFormatterNodeRew
 import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserPreferences;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
 import org.eclipse.dltk.ui.formatter.IScriptFormatterExtension;
@@ -65,6 +66,24 @@ public class JavaScriptFormatter extends AbstractScriptFormatter implements
 	}
 
 	private static class ParserProblemReporter extends ProblemCollector {
+
+		@Override
+		public boolean hasErrors() {
+			if (!problems.isEmpty()) {
+				for (final IProblem problem : problems) {
+					if (problem.isError() && isCritical(problem)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private boolean isCritical(IProblem problem) {
+			return problem.getID() == JavaScriptParserProblems.LEXER_ERROR
+					|| problem.getID() == JavaScriptParserProblems.SYNTAX_ERROR
+					|| problem.getID() == JavaScriptParserProblems.INTERNAL_ERROR;
+		}
 	}
 
 	private int detectIndentationLevel(String input, int offset) {
