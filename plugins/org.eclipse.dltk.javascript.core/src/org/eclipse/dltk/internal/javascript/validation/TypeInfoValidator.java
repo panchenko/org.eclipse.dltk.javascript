@@ -18,12 +18,8 @@ import java.util.Stack;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.compiler.problem.DefaultProblem;
-import org.eclipse.dltk.compiler.problem.IProblemReporter;
-import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.GetMode;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -37,6 +33,7 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -53,8 +50,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		final Script script = JavaScriptValidations.parse(context);
 		TypeInferencer2 inferencer = new TypeInferencer2();
 		inferencer.setModelElement(context.getSourceModule());
-		inferencer.setVisitor(new ValidationVisitor(inferencer, context
-				.getProblemReporter(), context.getLineTracker()));
+		inferencer.setVisitor(new ValidationVisitor(inferencer,
+				JavaScriptValidations.createReporter(context)));
 		inferencer.doInferencing(script);
 	}
 
@@ -62,16 +59,14 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		NORMAL, CALL
 	}
 
-	private static class ValidationVisitor extends TypeInferencerVisitor {
+	public static class ValidationVisitor extends TypeInferencerVisitor {
 
-		private final IProblemReporter reporter;
-		private final ISourceLineTracker lineTracker;
+		private final Reporter reporter;
 
 		public ValidationVisitor(ITypeInferenceContext context,
-				IProblemReporter reporter, ISourceLineTracker lineTracker) {
+				Reporter reporter) {
 			super(context);
 			this.reporter = reporter;
-			this.lineTracker = lineTracker;
 		}
 
 		private final Map<ASTNode, VisitorMode> modes = new IdentityHashMap<ASTNode, VisitorMode>();
@@ -115,15 +110,17 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (method != null) {
 					// TODO how overloaded methods should be handled?
 					if (!validateParameterCount(method, callArgs)) {
-						reportProblem(JavaScriptProblems.WRONG_PARAMETER_COUNT,
+						reporter.reportProblem(
+								JavaScriptProblems.WRONG_PARAMETER_COUNT,
 								NLS.bind(ValidationMessages.WrongParamCount,
 										method.getDeclaringType().getName(),
 										reference.getName()), methodNode
 										.sourceStart(), methodNode.sourceEnd());
 					}
 					if (method.isDeprecated()) {
-						reportProblem(JavaScriptProblems.DEPRECATED_METHOD, NLS
-								.bind(ValidationMessages.DeprecatedMethod,
+						reporter.reportProblem(
+								JavaScriptProblems.DEPRECATED_METHOD, NLS.bind(
+										ValidationMessages.DeprecatedMethod,
 										reference.getName(), method
 												.getDeclaringType().getName()),
 								methodNode.sourceStart(), methodNode
@@ -133,8 +130,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					final Type type = JavaScriptValidations.typeOf(reference
 							.getParent());
 					if (type != null && type.getKind() == TypeKind.JAVA) {
-						reportProblem(JavaScriptProblems.UNDEFINED_METHOD, NLS
-								.bind(ValidationMessages.UndefinedMethod,
+						reporter.reportProblem(
+								JavaScriptProblems.UNDEFINED_METHOD, NLS.bind(
+										ValidationMessages.UndefinedMethod,
 										reference.getName(), type.getName()),
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
@@ -244,10 +242,11 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				final Type type = JavaScriptValidations.typeOf(result
 						.getParent());
 				if (type != null && type.getKind() == TypeKind.JAVA) {
-					reportProblem(JavaScriptProblems.UNDEFINED_PROPERTY, NLS
-							.bind(ValidationMessages.UndefinedProperty, result
-									.getName(), type.getName()), propName
-							.sourceStart(), propName.sourceEnd());
+					reporter.reportProblem(
+							JavaScriptProblems.UNDEFINED_PROPERTY, NLS.bind(
+									ValidationMessages.UndefinedProperty,
+									result.getName(), type.getName()), propName
+									.sourceStart(), propName.sourceEnd());
 				}
 			}
 		}
@@ -265,8 +264,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				msg = NLS.bind(ValidationMessages.DeprecatedPropertyNoType,
 						property.getName());
 			}
-			reportProblem(JavaScriptProblems.DEPRECATED_PROPERTY, msg, node
-					.sourceStart(), node.sourceEnd());
+			reporter.reportProblem(JavaScriptProblems.DEPRECATED_PROPERTY, msg,
+					node.sourceStart(), node.sourceEnd());
 		}
 
 		@Override
@@ -274,22 +273,18 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			final Type result = super.resolveType(type);
 			if (result != null) {
 				if (result.getKind() == TypeKind.UNKNOWN) {
-					reportProblem(JavaScriptProblems.UNKNOWN_TYPE, NLS.bind(
-							ValidationMessages.UnknownType, type.getName()),
-							type.sourceStart(), type.sourceEnd());
+					reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE, NLS
+							.bind(ValidationMessages.UnknownType, type
+									.getName()), type.sourceStart(), type
+							.sourceEnd());
 				} else if (result.isDeprecated()) {
-					reportProblem(JavaScriptProblems.DEPRECATED_TYPE, NLS.bind(
-							ValidationMessages.DeprecatedType, type.getName()),
-							type.sourceStart(), type.sourceEnd());
+					reporter.reportProblem(JavaScriptProblems.DEPRECATED_TYPE,
+							NLS.bind(ValidationMessages.DeprecatedType, type
+									.getName()), type.sourceStart(), type
+									.sourceEnd());
 				}
 			}
 			return result;
-		}
-
-		private void reportProblem(int id, String message, int start, int end) {
-			reporter.reportProblem(new DefaultProblem(message, id, null,
-					ProblemSeverities.Warning, start, end, lineTracker
-							.getLineNumberOfOffset(start)));
 		}
 	}
 

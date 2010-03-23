@@ -13,21 +13,31 @@ package org.eclipse.dltk.internal.javascript.validation;
 
 import java.util.Set;
 
+import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-class JavaScriptValidations {
+public class JavaScriptValidations {
 
 	public static Script parse(IBuildContext context) {
+		final IModuleDeclaration savedAST = (IModuleDeclaration) context
+				.get(IBuildContext.ATTR_MODULE_DECLARATION);
+		if (savedAST instanceof Script) {
+			return (Script) savedAST;
+		}
 		// TODO use cached AST
 		final JavaScriptParser parser = new JavaScriptParser();
 		// TODO use option from project
 		parser.setTypeInformationEnabled(true);
-		return parser.parse(context, context.getProblemReporter());
+		final Script script = parser.parse(context, context
+				.getProblemReporter());
+		context.set(IBuildContext.ATTR_MODULE_DECLARATION, script);
+		return script;
 	}
 
 	public static Type typeOf(IValueParent parent) {
@@ -42,6 +52,11 @@ class JavaScriptValidations {
 			}
 		}
 		return null;
+	}
+
+	protected static Reporter createReporter(IBuildContext context) {
+		return new Reporter(context.getLineTracker(), context
+				.getProblemReporter());
 	}
 
 }
