@@ -33,7 +33,6 @@ import java.util.List;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.TokenStream;
-import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.utils.IntList;
 
 public class DynamicTokenStream implements TokenStream, JSTokenStream {
@@ -346,11 +345,7 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 		}
 	}
 
-	public void setLineTracker(LineTracker lineTracker) {
-		tokenSource.setLineTracker(lineTracker);
-	}
-
-	public void setReporter(IProblemReporter reporter) {
+	public void setReporter(Reporter reporter) {
 		tokenSource.setReporter(reporter);
 	}
 }

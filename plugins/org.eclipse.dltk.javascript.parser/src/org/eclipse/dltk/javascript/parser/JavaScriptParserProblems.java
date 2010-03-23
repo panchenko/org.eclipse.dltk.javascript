@@ -19,4 +19,9 @@ public class JavaScriptParserProblems {
 	public static final int LEXER_ERROR = IProblem.Syntax + 1;
 	public static final int SYNTAX_ERROR = IProblem.Syntax + 2;
 
+	public static final int DUPLICATE_PARAMETER = IProblem.MethodRelated + 1000;
+	public static final int VAR_HIDES_ARGUMENT = IProblem.MethodRelated + 1001;
+	public static final int CONST_HIDES_ARGUMENT = IProblem.MethodRelated + 1002;
+	public static final int FUNCTION_HIDES_ARGUMENT = IProblem.MethodRelated + 1003;
+	public static final int DUPLICATE_VAR_DECLARATION = IProblem.Internal + 1004;
 }

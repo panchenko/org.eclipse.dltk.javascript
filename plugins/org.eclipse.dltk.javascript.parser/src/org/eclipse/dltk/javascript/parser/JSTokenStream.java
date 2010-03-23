@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
-import org.eclipse.dltk.compiler.problem.IProblemReporter;
 
 public interface JSTokenStream extends TokenStream {
 
@@ -25,8 +24,6 @@ public interface JSTokenStream extends TokenStream {
 
 	void setMode(int value);
 
-	void setReporter(IProblemReporter reporter);
-
-	void setLineTracker(LineTracker lineTracker);
+	void setReporter(Reporter reporter);
 
 }

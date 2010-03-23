@@ -29,8 +29,6 @@ public interface JSTokenSource extends TokenSource {
 	 **/
 	void seek(int index);
 
-	void setReporter(IProblemReporter reporter);
-
-	void setLineTracker(LineTracker lineTracker);
+	void setReporter(Reporter reporter);
 
 }

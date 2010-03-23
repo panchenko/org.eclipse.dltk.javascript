@@ -16,9 +16,7 @@ import org.antlr.runtime.CharStream;
 import org.antlr.runtime.IntStream;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.RecognitionException;
-import org.eclipse.dltk.compiler.problem.DefaultProblem;
-import org.eclipse.dltk.compiler.problem.IProblemReporter;
-import org.eclipse.dltk.compiler.problem.ProblemSeverities;
+import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 
 public class JavaScriptLexer extends JSLexer {
 
@@ -26,15 +24,10 @@ public class JavaScriptLexer extends JSLexer {
 		super(input);
 	}
 
-	private IProblemReporter reporter;
-	private LineTracker lineTracker;
+	private Reporter reporter;
 
-	public void setReporter(IProblemReporter reporter) {
+	public void setReporter(Reporter reporter) {
 		this.reporter = reporter;
-	}
-
-	public void setLineTracker(LineTracker lineTracker) {
-		this.lineTracker = lineTracker;
 	}
 
 	private int lastRecoveryIndex = -1;
@@ -59,15 +52,17 @@ public class JavaScriptLexer extends JSLexer {
 		if (reporter == null)
 			return;
 		final String msg = getErrorMessage(e, tokenNames);
-		final int start = lastToken != null ? lineTracker.getOffset(lastToken)
-				+ lineTracker.length(lastToken) : 0;
-		int end = lineTracker.getOffset(e.line, e.charPositionInLine);
+		final int start = lastToken != null ? reporter.getOffset(lastToken)
+				+ reporter.length(lastToken) : 0;
+		int end = reporter.getOffset(e.line, e.charPositionInLine);
 		if (end < start) {
 			end = start + 1;
 		}
-		reporter.reportProblem(new DefaultProblem(msg,
-				JavaScriptParserProblems.LEXER_ERROR, null,
-				ProblemSeverities.Error, start, end, e.line - 1));
+		reporter.setMessage(JavaScriptParserProblems.LEXER_ERROR, msg);
+		reporter.setSeverity(Severity.ERROR);
+		reporter.setRange(start, end);
+		reporter.setLine(e.line - 1);
+		reporter.report();
 	}
 
 	@Override

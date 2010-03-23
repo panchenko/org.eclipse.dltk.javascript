@@ -29,6 +29,10 @@ class LineTracker {
 				+ Math.max(column, 0) : 0;
 	}
 
+	public int getLineNumberOfOffset(int offset) {
+		return lineTracker.getLineNumberOfOffset(offset);
+	}
+
 	public int getLength() {
 		return lineTracker.getLength();
 	}

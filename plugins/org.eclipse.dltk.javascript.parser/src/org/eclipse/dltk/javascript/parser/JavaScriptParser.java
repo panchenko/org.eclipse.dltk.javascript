@@ -29,13 +29,12 @@ import org.antlr.runtime.TokenStream;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.parser.AbstractSourceParser;
 import org.eclipse.dltk.compiler.env.IModuleSource;
-import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
-import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.internal.core.SourceRange;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 import org.eclipse.dltk.utils.TextUtils;
 
 public class JavaScriptParser extends AbstractSourceParser {
@@ -54,14 +53,11 @@ public class JavaScriptParser extends AbstractSourceParser {
 
 	private static class JSInternalParser extends JSParser {
 
-		private final IProblemReporter reporter;
-		private final LineTracker lineTracker;
+		private final Reporter reporter;
 
-		public JSInternalParser(TokenStream input, IProblemReporter reporter,
-				LineTracker lineTracker) {
+		public JSInternalParser(TokenStream input, Reporter reporter) {
 			super(input);
 			this.reporter = reporter;
-			this.lineTracker = lineTracker;
 		}
 
 		@Override
@@ -142,11 +138,14 @@ public class JavaScriptParser extends AbstractSourceParser {
 				range = convert(re.token);
 				// stop = start + 1;}
 			}
-			reporter.reportProblem(new DefaultProblem(message,
-					JavaScriptParserProblems.SYNTAX_ERROR, null,
-					ProblemSeverities.Error, range != null ? range.getOffset()
-							: -1, range != null ? range.getOffset()
-							+ range.getLength() : -1, re.line - 1));
+			reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR, message);
+			reporter.setSeverity(Severity.ERROR);
+			if (range != null) {
+				reporter.setRange(range.getOffset(), range.getOffset()
+						+ range.getLength());
+			}
+			reporter.setLine(re.line - 1);
+			reporter.report();
 		}
 
 		private Token getLastToken(Token token) {
@@ -171,11 +170,11 @@ public class JavaScriptParser extends AbstractSourceParser {
 			if (token == Token.EOF_TOKEN) {
 				return null;
 			}
-			return lineTracker.toSourceRange(token);
+			return reporter.toSourceRange(token);
 		}
 
 		private int inputLength() {
-			return lineTracker.getLength();
+			return reporter.getLength();
 		}
 
 		/*
@@ -234,12 +233,14 @@ public class JavaScriptParser extends AbstractSourceParser {
 				}
 				if (first != null && reporter != null) {
 					final ISourceRange end = convert(last);
-					reporter.reportProblem(new DefaultProblem(
-							"Unexpected input was discarded",
-							JavaScriptParserProblems.SYNTAX_ERROR, null,
-							ProblemSeverities.Error,
-							convert(first).getOffset(), end.getOffset()
-									+ end.getLength(), first.getLine()));
+					reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR,
+							"Unexpected input was discarded");
+					reporter.setSeverity(Severity.ERROR);
+					reporter.setRange(convert(first).getOffset(), end
+							.getOffset()
+							+ end.getLength());
+					reporter.setLine(first.getLine());
+					reporter.report();
 				}
 			} finally {
 				if (mark != -1) {
@@ -261,8 +262,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 							.getScriptProject().getProject()));
 		}
 		char[] source = input.getContentsAsCharArray();
-		return parse(createTokenStream(source), new LineTracker(TextUtils
-				.createLineTracker(source)), reporter);
+		return parse(createTokenStream(source), new Reporter(TextUtils
+				.createLineTracker(source), reporter));
 	}
 
 	/**
@@ -270,21 +271,20 @@ public class JavaScriptParser extends AbstractSourceParser {
 	 */
 	public Script parse(String source, IProblemReporter reporter) {
 		Assert.isNotNull(source);
-		return parse(createTokenStream(source), new LineTracker(TextUtils
-				.createLineTracker(source)), reporter);
+		return parse(createTokenStream(source), new Reporter(TextUtils
+				.createLineTracker(source), reporter));
 	}
 
-	private Script parse(JSTokenStream stream, LineTracker lineTracker,
-			IProblemReporter reporter) {
+	private Script parse(JSTokenStream stream, Reporter reporter) {
 		try {
-			stream.setLineTracker(lineTracker);
 			stream.setReporter(reporter);
-			JSInternalParser parser = new JSInternalParser(stream, reporter,
-					lineTracker);
+			JSInternalParser parser = new JSInternalParser(stream, reporter);
 			parser.setTypeInformationEnabled(typeInformationEnabled);
 			RuleReturnScope root = parser.program();
-			return new JSTransformer(stream.getTokens(), parser.peekState()
-					.hasErrors()).transform(root);
+			JSTransformer transformer = new JSTransformer(stream.getTokens(),
+					parser.peekState().hasErrors());
+			transformer.setReporter(reporter);
+			return transformer.transform(root);
 		} catch (Exception e) {
 			if (DLTKCore.DEBUG)
 				e.printStackTrace();

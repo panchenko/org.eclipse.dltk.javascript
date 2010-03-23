@@ -102,6 +102,8 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.eclipse.dltk.javascript.parser.Reporter.Severity;
+import org.eclipse.osgi.util.NLS;
 
 public class JSTransformer extends JSVisitor<ASTNode> {
 
@@ -110,6 +112,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	private Stack<ASTNode> parents = new Stack<ASTNode>();
 	private final boolean ignoreUnknown;
 	private final Map<Integer, Comment> documentationMap = new HashMap<Integer, Comment>();
+	private Reporter reporter;
+	private SymbolTable scope = new SymbolTable();
 
 	private static final int MAX_RECURSION_DEEP = 512;
 
@@ -127,6 +131,10 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		this.tokens = tokens;
 		this.ignoreUnknown = ignoreUnknown;
 		tokenOffsets = prepareOffsetMap(tokens);
+	}
+
+	public void setReporter(Reporter reporter) {
+		this.reporter = reporter;
 	}
 
 	public Script transform(RuleReturnScope root) {
@@ -713,6 +721,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		fn.setLP(getTokenOffset(JSParser.LPAREN, node.getTokenStartIndex() + 1,
 				argsNode.getTokenStartIndex()));
+		final SymbolTable functionScope = new SymbolTable();
 		for (int i = 0, childCount = argsNode.getChildCount(); i < childCount; ++i) {
 			final Tree argNode = argsNode.getChild(i);
 			Argument argument = transformArgument(argNode, fn);
@@ -722,6 +731,16 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 								i + 1).getTokenStartIndex()));
 			}
 			fn.addArgument(argument);
+			if (functionScope.add(argument.getArgumentName(), SymbolKind.PARAM) != null
+					&& reporter != null) {
+				reporter.setMessage(
+						JavaScriptParserProblems.DUPLICATE_PARAMETER, NLS.bind(
+								"Duplicate parameter {0}", argument
+										.getArgumentName()));
+				reporter.setSeverity(Severity.ERROR);
+				reporter.setRange(argument.sourceStart(), argument.sourceEnd());
+				reporter.report();
+			}
 		}
 		fn.setRP(getTokenOffset(JSParser.RPAREN, argsNode.getTokenStopIndex(),
 				node.getChild(index).getTokenStartIndex()));
@@ -733,10 +752,21 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			fn.setReturnType(transformType(node.getChild(index + 1), fn));
 			index += 2;
 		}
+		final Identifier nameNode = fn.getName();
+		if (nameNode != null
+				&& scope.canAdd(nameNode.getName()) == SymbolKind.PARAM) {
+			reporter.setMessage(
+					JavaScriptParserProblems.FUNCTION_HIDES_ARGUMENT, NLS.bind(
+							"Function {0} hides argument", nameNode.getName()));
+			reporter.setRange(nameNode.sourceStart(), nameNode.sourceEnd());
+			reporter.report();
+		}
 
 		final Tree bodyNode = node.getChild(index);
+		final SymbolTable savedScope = scope;
+		scope = functionScope;
 		fn.setBody((StatementBlock) transformNode(bodyNode, fn));
-
+		scope = savedScope;
 		fn.setStart(fn.getFunctionKeyword().sourceStart());
 		fn.setEnd(fn.getBody().sourceEnd());
 
@@ -978,7 +1008,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		VariableStatement var = new VariableStatement(getParent());
 		var.setVarKeyword(createKeyword(node, Keywords.VAR));
 
-		processVariableDeclarations(node, var);
+		processVariableDeclarations(node, var, SymbolKind.VAR);
 
 		var.setStart(getTokenOffset(node.getTokenStartIndex()));
 		var.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -986,7 +1016,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return var;
 	}
 
-	private void processVariableDeclarations(Tree node, IVariableStatement var) {
+	private void processVariableDeclarations(Tree node, IVariableStatement var,
+			SymbolKind kind) {
 		for (int i = 0, childCount = node.getChildCount(); i < childCount; i++) {
 			final Tree varNode = node.getChild(i);
 			final VariableDeclaration declaration = transformVariableDeclaration(
@@ -996,6 +1027,20 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				declaration.setCommaPosition(getTokenOffset(JSParser.COMMA,
 						varNode.getTokenStopIndex() + 1, node.getChild(i + 1)
 								.getTokenStartIndex()));
+			}
+			if (scope.add(declaration.getVariableName(), kind) != null
+					&& reporter != null) {
+				final Identifier identifier = declaration.getIdentifier();
+				reporter.setRange(identifier.sourceStart(), identifier
+						.sourceEnd());
+				reporter
+						.setMessage(
+								kind == SymbolKind.VAR ? JavaScriptParserProblems.VAR_HIDES_ARGUMENT
+										: JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
+								kind.name() + " "
+										+ declaration.getVariableName()
+										+ " hides argument");
+				reporter.report();
 			}
 		}
 	}
@@ -1708,7 +1753,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		ConstStatement declaration = new ConstStatement(getParent());
 		declaration.setConstKeyword(createKeyword(node, Keywords.CONST));
 
-		processVariableDeclarations(node, declaration);
+		processVariableDeclarations(node, declaration, SymbolKind.CONST);
 
 		declaration.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
 				.getTokenStopIndex(), node.getTokenStopIndex()));
