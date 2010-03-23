@@ -17,26 +17,6 @@ public class JavaScriptTodoParserType extends
 
 	protected IBuildParticipant getBuildParticipant(
 			ITodoTaskPreferences preferences) {
-		return new TodoTaskBuildParticipant(preferences) {
-			protected int findCommentStart(char[] content, int begin, int end) {
-				if (!isCheckRanges()) {
-					begin = skipSpaces(content, begin, end);
-					if (begin + 1 < end
-							&& content[begin] == '/'
-							&& (content[begin + 1] == '/' || content[begin + 1] == '*')) {
-						return begin + 2;
-					}
-					return -1;
-				}
-				for (int i = begin; i < end; ++i) {
-					if (content[i] == '/'
-							&& (i + 1 < end && (content[i + 1] == '/' || content[i + 1] == '*'))
-							&& isValid(i)) {
-						return i + 2;
-					}
-				}
-				return -1;
-			}
-		};
+		return new JavaScriptTodoParser(preferences);
 	}
 }
