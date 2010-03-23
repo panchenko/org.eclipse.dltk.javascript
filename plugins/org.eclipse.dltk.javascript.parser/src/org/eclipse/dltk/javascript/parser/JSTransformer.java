@@ -855,15 +855,28 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				return o1.getTokenStartIndex() - o2.getTokenStartIndex();
 			}
 		});
-
+		int defaultCount = 0;
 		for (Tree child : caseNodes) {
 			switch (child.getType()) {
 			case JSParser.CASE:
-			case JSParser.DEFAULT:
 				statement.addCase((SwitchComponent) transformNode(child,
 						statement));
 				break;
-
+			case JSParser.DEFAULT:
+				if (defaultCount != 0 && reporter != null) {
+					reporter.setMessage(
+							JavaScriptParserProblems.DOUBLE_SWITCH_DEFAULT,
+							"double default label in the switch statement");
+					reporter.setSeverity(Severity.ERROR);
+					reporter.setStart(reporter.getOffset(child.getLine(), child
+							.getCharPositionInLine()));
+					reporter.setEnd(child.getText().length());
+					reporter.report();
+				}
+				++defaultCount;
+				statement.addCase((SwitchComponent) transformNode(child,
+						statement));
+				break;
 			default:
 				throw new UnsupportedOperationException();
 			}

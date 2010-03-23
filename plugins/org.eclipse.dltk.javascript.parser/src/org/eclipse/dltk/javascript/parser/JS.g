@@ -1636,12 +1636,8 @@ withStatement
 // $<The switch statement (12.11)
 
 switchStatement
-@init
-{
-	int defaultClauseCount = 0;
-}
-	: SWITCH LPAREN expression RPAREN LBRACE ( { defaultClauseCount == 0 }?=> defaultClause { defaultClauseCount++; } | caseClause )* RBRACE
-	-> ^( SWITCH expression defaultClause? caseClause* )
+	: SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE
+	-> ^( SWITCH expression defaultClause* caseClause* )
 	;
 
 caseClause
