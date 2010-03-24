@@ -27,4 +27,5 @@ public class JavaScriptParserProblems {
 
 	public static final int DOUBLE_SWITCH_DEFAULT = IProblem.Internal + 1025;
 	public static final int DUPLICATE_LABEL = IProblem.Internal + 1026;
+	public static final int UNDEFINED_LABEL = IProblem.Internal + 1027;
 }

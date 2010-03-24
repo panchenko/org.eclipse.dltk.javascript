@@ -395,19 +395,15 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	@Override
 	protected ASTNode visitBreak(Tree node) {
 		BreakStatement statement = new BreakStatement(getParent());
-
 		statement.setBreakKeyword(createKeyword(node, Keywords.BREAK));
 
 		if (node.getChildCount() > 0) {
 			Label label = new Label(statement);
-			label.setText(node.getChild(0).getText());
-			label
-					.setStart(getTokenOffset(node.getChild(0)
-							.getTokenStartIndex()));
-			label
-					.setEnd(getTokenOffset(node.getChild(0).getTokenStopIndex() + 1));
-
+			final Tree labelNode = node.getChild(0);
+			label.setText(labelNode.getText());
+			setRangeByToken(label, labelNode.getTokenStartIndex());
 			statement.setLabel(label);
+			validateLabel(label);
 		}
 
 		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
@@ -953,21 +949,16 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	@Override
 	protected ASTNode visitContinue(Tree node) {
-
 		ContinueStatement statement = new ContinueStatement(getParent());
-
 		statement.setContinueKeyword(createKeyword(node, Keywords.CONTINUE));
 
 		if (node.getChildCount() > 0) {
 			Label label = new Label(statement);
-			label.setText(node.getChild(0).getText());
-			label
-					.setStart(getTokenOffset(node.getChild(0)
-							.getTokenStartIndex()));
-			label
-					.setEnd(getTokenOffset(node.getChild(0).getTokenStopIndex() + 1));
-
+			final Tree labelNode = node.getChild(0);
+			label.setText(labelNode.getText());
+			setRangeByToken(label, labelNode.getTokenStartIndex());
 			statement.setLabel(label);
+			validateLabel(label);
 		}
 
 		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
@@ -976,6 +967,15 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
 		return statement;
+	}
+
+	private void validateLabel(Label label) {
+		if (!scope.hasLabel(label.getText()) && reporter != null) {
+			reporter.setMessage(JavaScriptParserProblems.UNDEFINED_LABEL,
+					"undefined label");
+			reporter.setRange(label.sourceStart(), label.sourceEnd());
+			reporter.report();
+		}
 	}
 
 	private Type transformType(Tree node, ASTNode parent) {

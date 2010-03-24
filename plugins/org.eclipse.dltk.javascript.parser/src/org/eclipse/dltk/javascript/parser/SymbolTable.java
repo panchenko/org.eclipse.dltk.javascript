@@ -35,4 +35,8 @@ public class SymbolTable {
 	public LabelledStatement getLabel(String label) {
 		return labels.get(label);
 	}
+
+	public boolean hasLabel(String label) {
+		return labels.containsKey(label);
+	}
 }
