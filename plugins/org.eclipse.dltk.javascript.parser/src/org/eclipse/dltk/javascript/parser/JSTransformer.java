@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Stack;
 
@@ -65,6 +66,7 @@ import org.eclipse.dltk.javascript.ast.Keyword;
 import org.eclipse.dltk.javascript.ast.Keywords;
 import org.eclipse.dltk.javascript.ast.Label;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
+import org.eclipse.dltk.javascript.ast.LoopStatement;
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
@@ -403,7 +405,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			label.setText(labelNode.getText());
 			setRangeByToken(label, labelNode.getTokenStartIndex());
 			statement.setLabel(label);
-			validateLabel(label);
+			validateLabel(label, JSParser.BREAK);
 		}
 
 		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
@@ -417,7 +419,10 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		else
 			statement.setEnd(Math.max(statement.getSemicolonPosition() + 1,
 					statement.getBreakKeyword().sourceEnd()));
-
+		if (statement.getLabel() == null) {
+			validateParent(JavaScriptParserProblems.BAD_BREAK, "bad break",
+					statement, LoopStatement.class, SwitchStatement.class);
+		}
 		return statement;
 	}
 
@@ -807,7 +812,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		returnStatement.setStart(returnStatement.getReturnKeyword()
 				.sourceStart());
-
+		validateParent(JavaScriptParserProblems.INVALID_RETURN,
+				"invalid return", returnStatement, FunctionStatement.class);
 		return returnStatement;
 	}
 
@@ -958,24 +964,63 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			label.setText(labelNode.getText());
 			setRangeByToken(label, labelNode.getTokenStartIndex());
 			statement.setLabel(label);
-			validateLabel(label);
+			validateLabel(label, JSParser.CONTINUE);
 		}
 
 		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
 				.getTokenStopIndex(), node.getTokenStopIndex()));
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-
+		if (statement.getLabel() == null) {
+			validateParent(JavaScriptParserProblems.BAD_CONTINUE,
+					"continue must be inside loop", statement,
+					LoopStatement.class);
+		}
 		return statement;
 	}
 
-	private void validateLabel(Label label) {
-		if (!scope.hasLabel(label.getText()) && reporter != null) {
-			reporter.setMessage(JavaScriptParserProblems.UNDEFINED_LABEL,
-					"undefined label");
+	private void validateLabel(Label label, int token) {
+		if (!scope.hasLabel(label.getText())) {
+			if (reporter != null) {
+				reporter.setMessage(JavaScriptParserProblems.UNDEFINED_LABEL,
+						"undefined label");
+				reporter.setSeverity(Severity.ERROR);
+				reporter.setRange(label.sourceStart(), label.sourceEnd());
+				reporter.report();
+			}
+		} else {
+			final LabelledStatement statement = scope.getLabel(label.getText());
+			assert statement != null;
+			if (statement.getStatement() instanceof LoopStatement) {
+				return;
+			}
+			reporter
+					.setMessage(
+							token == JSParser.BREAK ? JavaScriptParserProblems.BREAK_NON_LOOP_LABEL
+									: JavaScriptParserProblems.CONTINUE_NON_LOOP_LABEL,
+							Keywords.fromToken(token)
+									+ " can only use labeles of iteration statements");
+			reporter.setSeverity(Severity.ERROR);
 			reporter.setRange(label.sourceStart(), label.sourceEnd());
 			reporter.report();
 		}
+	}
+
+	private void validateParent(int messageId, String message,
+			Statement statement, Class<?>... classes) {
+		for (ListIterator<ASTNode> i = parents.listIterator(parents.size()); i
+				.hasPrevious();) {
+			ASTNode parent = i.previous();
+			for (Class<?> clazz : classes) {
+				if (clazz.isInstance(parent)) {
+					return;
+				}
+			}
+		}
+		reporter.setMessage(messageId, message);
+		reporter.setRange(statement.sourceStart(), statement.sourceEnd());
+		reporter.setSeverity(Severity.ERROR);
+		reporter.report();
 	}
 
 	private Type transformType(Tree node, ASTNode parent) {
