@@ -9,17 +9,14 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ElementImpl.java,v 1.2 2010/03/11 08:50:09 apanchenk Exp $
+ * $Id: ElementImpl.java,v 1.3 2010/03/24 03:08:15 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -210,13 +207,16 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return getClass().getSimpleName() + "(eProxyURI=" + eProxyURI()
+					+ ')';
+		}
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuffer result = new StringBuffer(eClass().getName());
 		result.append(" (name: "); //$NON-NLS-1$
 		result.append(name);
 		result.append(", deprecated: "); //$NON-NLS-1$

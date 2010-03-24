@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.5 2010/03/11 05:33:55 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.6 2010/03/24 03:08:14 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -231,7 +231,9 @@ public class TypeImpl extends ElementImpl implements Type {
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy()) {
+			return eClass().getName() + "(eProxyURI=" + eProxyURI() + ')';
+		}
 
 		StringBuffer result = new StringBuffer(eClass().getName());
 		result.append('<');
