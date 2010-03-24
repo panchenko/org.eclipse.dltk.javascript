@@ -870,7 +870,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 					reporter.setSeverity(Severity.ERROR);
 					reporter.setStart(reporter.getOffset(child.getLine(), child
 							.getCharPositionInLine()));
-					reporter.setEnd(child.getText().length());
+					reporter.setEnd(reporter.getStart()
+							+ child.getText().length());
 					reporter.report();
 				}
 				++defaultCount;
@@ -1640,8 +1641,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		Label label = new Label(statement);
 		label.setText(node.getChild(0).getText());
-		label.setStart(getTokenOffset(node.getChild(0).getTokenStartIndex()));
-		label.setEnd(getTokenOffset(node.getChild(0).getTokenStopIndex() + 1));
+		setRangeByToken(label, node.getChild(0).getTokenStartIndex());
 		statement.setLabel(label);
 
 		statement.setColonPosition(getTokenOffset(JSParser.COLON, node
@@ -1655,6 +1655,13 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+		if (!scope.addLabel(statement) && reporter != null) {
+			reporter.setMessage(JavaScriptParserProblems.DUPLICATE_LABEL,
+					"duplicate label");
+			reporter.setSeverity(Severity.ERROR);
+			reporter.setRange(label.sourceStart(), label.sourceEnd());
+			reporter.report();
+		}
 
 		return statement;
 	}
