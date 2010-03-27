@@ -138,6 +138,12 @@
           name="Code Validator"
           nature="org.eclipse.dltk.javascript.core.nature">
     </buildParticipant>
+    <buildParticipant
+          class="org.eclipse.dltk.internal.javascript.validation.FlowValidationFactory"
+          id="org.eclipse.dltk.javascript.core.buildParticipant3"
+          name="Code Validator"
+          nature="org.eclipse.dltk.javascript.core.nature">
+    </buildParticipant>
   </extension>
 
 	<extension point="org.eclipse.emf.ecore.generated_package">

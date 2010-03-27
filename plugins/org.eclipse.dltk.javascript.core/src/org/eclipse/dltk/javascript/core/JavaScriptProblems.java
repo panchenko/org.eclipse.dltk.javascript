@@ -28,4 +28,8 @@ public interface JavaScriptProblems {
 	public static final int EQUAL_AS_ASSIGN = IProblem.Internal + 1;
 	public static final int INVALID_ASSIGN_LEFT = IProblem.Internal + 2;
 
+	public static final int UNREACHABLE_CODE = IProblem.Internal + 3;
+	public static final int RETURN_INCONSISTENT = IProblem.Internal + 4;
+	public static final int FUNCTION_NOT_ALWAYS_RETURN_VALUE = IProblem.Internal + 5;
+
 }

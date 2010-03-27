@@ -165,9 +165,9 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 
 	@Override
 	public E visitDoWhileStatement(DoWhileStatement node) {
-		visit(node.getBody());
+		final E result = visit(node.getBody());
 		visitCondition(node.getCondition());
-		return null;
+		return result;
 	}
 
 	protected void visitCondition(Expression condition) {
@@ -188,16 +188,14 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 	public E visitForEachInStatement(ForEachInStatement node) {
 		visit(node.getItem());
 		visit(node.getIterator());
-		visit(node.getBody());
-		return null;
+		return visit(node.getBody());
 	}
 
 	@Override
 	public E visitForInStatement(ForInStatement node) {
 		visit(node.getItem());
 		visit(node.getIterator());
-		visit(node.getBody());
-		return null;
+		return visit(node.getBody());
 	}
 
 	@Override
@@ -205,14 +203,12 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 		visit(node.getInitial());
 		visit(node.getCondition());
 		visit(node.getStep());
-		visit(node.getBody());
-		return null;
+		return visit(node.getBody());
 	}
 
 	@Override
 	public E visitFunctionStatement(FunctionStatement node) {
-		visit(node.getBody());
-		return null;
+		return visit(node.getBody());
 	}
 
 	@Override
@@ -391,8 +387,7 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 	@Override
 	public E visitWhileStatement(WhileStatement node) {
 		visitCondition(node.getCondition());
-		visit(node.getBody());
-		return null;
+		return visit(node.getBody());
 	}
 
 	@Override
