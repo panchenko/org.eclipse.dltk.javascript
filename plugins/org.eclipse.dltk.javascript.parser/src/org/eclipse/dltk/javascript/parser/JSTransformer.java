@@ -531,7 +531,21 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		case JSParser.FORITER:
 			return visitForInStatement(node);
 
+		case JSParser.BLOCK:
+			if (node.getChildCount() == 1) {
+				// TODO error reporting???? "for() {" case
+				final ForStatement statement = new ForStatement(getParent());
+				statement.setForKeyword(createKeyword(node, Keywords.FOR));
+				statement.setInitial(new EmptyExpression(statement));
+				statement.setCondition(new EmptyExpression(statement));
+				statement.setStep(new EmptyExpression(statement));
+				statement.setBody(transformStatementNode(node.getChild(0),
+						statement));
+				return statement;
+			}
+
 		default:
+			// TODO error reporting & recovery
 			throw new IllegalArgumentException("FORSTEP or FORITER expected");
 		}
 	}
