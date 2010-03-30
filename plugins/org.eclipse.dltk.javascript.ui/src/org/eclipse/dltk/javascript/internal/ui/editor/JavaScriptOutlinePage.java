@@ -36,7 +36,7 @@ public class JavaScriptOutlinePage extends ScriptOutlinePage {
 		MemberFilterActionGroup fMemberFilterActionGroup= new MemberFilterActionGroup(fOutlineViewer, fStore); //$NON-NLS-1$
 
 		String title, helpContext;
-		ArrayList actions = new ArrayList(3);
+		ArrayList<MemberFilterAction> actions = new ArrayList<MemberFilterAction>(3);
 
 		// fill-in actions
 
@@ -88,7 +88,7 @@ public class JavaScriptOutlinePage extends ScriptOutlinePage {
 		actions.add(hideNamespaces);
 
 		// order corresponds to order in toolbar
-		MemberFilterAction[] fFilterActions = (MemberFilterAction[]) actions
+		MemberFilterAction[] fFilterActions = actions
 				.toArray(new MemberFilterAction[actions.size()]);
 		
 		fMemberFilterActionGroup.setActions(fFilterActions);
