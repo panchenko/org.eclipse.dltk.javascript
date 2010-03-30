@@ -41,7 +41,7 @@
             canSearchEnclosingProjects="true"
             class="org.eclipse.dltk.javascript.internal.ui.search.JavaScriptSearchPage"
             enabled="true"
-            extensions="js"
+            extensions="js:90"
             icon="/icons/obj16/jsearch_obj.gif"
             id="org.eclipse.dltk.ui.JavaScriptSearchPage"
             label="%DLTKSearchPage.label"
