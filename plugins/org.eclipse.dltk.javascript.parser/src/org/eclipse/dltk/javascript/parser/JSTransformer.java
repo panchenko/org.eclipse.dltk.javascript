@@ -67,6 +67,7 @@ import org.eclipse.dltk.javascript.ast.Keywords;
 import org.eclipse.dltk.javascript.ast.Label;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.LoopStatement;
+import org.eclipse.dltk.javascript.ast.Method;
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
@@ -827,7 +828,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		returnStatement.setStart(returnStatement.getReturnKeyword()
 				.sourceStart());
 		validateParent(JavaScriptParserProblems.INVALID_RETURN,
-				"invalid return", returnStatement, FunctionStatement.class);
+				"invalid return", returnStatement, FunctionStatement.class,
+				Method.class);
 		return returnStatement;
 	}
 
@@ -994,14 +996,14 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	private void validateLabel(Label label, int token) {
+		if (reporter == null)
+			return;
 		if (!scope.hasLabel(label.getText())) {
-			if (reporter != null) {
-				reporter.setMessage(JavaScriptParserProblems.UNDEFINED_LABEL,
-						"undefined label");
-				reporter.setSeverity(Severity.ERROR);
-				reporter.setRange(label.sourceStart(), label.sourceEnd());
-				reporter.report();
-			}
+			reporter.setMessage(JavaScriptParserProblems.UNDEFINED_LABEL,
+					"undefined label");
+			reporter.setSeverity(Severity.ERROR);
+			reporter.setRange(label.sourceStart(), label.sourceEnd());
+			reporter.report();
 		} else {
 			final LabelledStatement statement = scope.getLabel(label.getText());
 			assert statement != null;
@@ -1022,6 +1024,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	private void validateParent(int messageId, String message,
 			Statement statement, Class<?>... classes) {
+		if (reporter == null)
+			return;
 		for (ListIterator<ASTNode> i = parents.listIterator(parents.size()); i
 				.hasPrevious();) {
 			ASTNode parent = i.previous();
