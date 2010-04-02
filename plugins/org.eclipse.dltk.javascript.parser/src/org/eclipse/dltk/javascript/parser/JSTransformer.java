@@ -1730,13 +1730,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				.getChild(0).getTokenStopIndex() + 1,
 				node.getTokenStopIndex() + 1));
 
-		if (node.getChildCount() > 1) {
-			statement.setStatement(transformStatementNode(node.getChild(1),
-					statement));
-		}
-
-		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
-		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 		if (!scope.addLabel(statement) && reporter != null) {
 			reporter.setMessage(JavaScriptParserProblems.DUPLICATE_LABEL,
 					"duplicate label");
@@ -1744,6 +1737,14 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			reporter.setRange(label.sourceStart(), label.sourceEnd());
 			reporter.report();
 		}
+
+		if (node.getChildCount() > 1) {
+			statement.setStatement(transformStatementNode(node.getChild(1),
+					statement));
+		}
+
+		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
+		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
 		return statement;
 	}
