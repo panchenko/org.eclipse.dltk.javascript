@@ -56,26 +56,14 @@ public class ParserValidationsTest extends AbstractJSParserTest {
 		assertEquals(JavaScriptParserProblems.UNDEFINED_LABEL, getProblemId());
 	}
 
-	public void testContinueNonLoopLabel() {
+	public void testDefinedLabel() {
 		StringList code = new StringList();
-		code.add("A: while (!f.isEOF()) {");
-		code.add("READ: s = f.readLine()");
-		code.add("if (s == 'END') continue READ");
+		code.add("LOOP: while (!f.isEOF()) {");
+		code.add("s = f.readLine()");
+		code.add("if (s == 'END') break LOOP");
 		code.add("}");
 		parse(code.toString());
-		assertEquals(JavaScriptParserProblems.CONTINUE_NON_LOOP_LABEL,
-				getProblemId());
-	}
-
-	public void testBreakNonLoopLabel() {
-		StringList code = new StringList();
-		code.add("A: while (!f.isEOF()) {");
-		code.add("READ: s = f.readLine()");
-		code.add("if (s == 'END') break READ");
-		code.add("}");
-		parse(code.toString());
-		assertEquals(JavaScriptParserProblems.BREAK_NON_LOOP_LABEL,
-				getProblemId());
+		assertTrue(reporter.getProblems().isEmpty());
 	}
 
 }
