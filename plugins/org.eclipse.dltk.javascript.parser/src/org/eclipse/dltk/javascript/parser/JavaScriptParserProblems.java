@@ -33,4 +33,5 @@ public class JavaScriptParserProblems {
 	public static final int BAD_BREAK = IProblem.Internal + 1030;
 	public static final int INVALID_RETURN = IProblem.Internal + 1031;
 	public static final int BAD_CONTINUE = IProblem.Internal + 1032;
+	public static final int CATCH_UNREACHABLE = IProblem.Internal + 1033;
 }

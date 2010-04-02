@@ -1427,14 +1427,29 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		statement.setBody((StatementBlock) transformStatementNode(node
 				.getChild(0), statement));
 
+		boolean sawDefaultCatch = false;
 		for (int i = 1 /* miss body */; i < node.getChildCount(); i++) {
 
 			Tree child = node.getChild(i);
 
 			switch (child.getType()) {
 			case JSParser.CATCH:
-				statement.getCatches().add(
-						(CatchClause) transformNode(child, statement));
+				final CatchClause catchClause = (CatchClause) transformNode(
+						child, statement);
+				if (reporter != null && sawDefaultCatch) {
+					reporter
+							.setMessage(
+									JavaScriptParserProblems.CATCH_UNREACHABLE,
+									"any catch clauses following an unqualified catch are unreachable");
+					reporter.setRange(catchClause.sourceStart(), catchClause
+							.getRP() + 1);
+					reporter.report();
+				}
+				if (!sawDefaultCatch
+						&& catchClause.getExceptionFilter() == null) {
+					sawDefaultCatch = true;
+				}
+				statement.getCatches().add(catchClause);
 				break;
 
 			case JSParser.FINALLY:
@@ -1445,7 +1460,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			default:
 				throw new UnsupportedOperationException(
 						"CATCH or FINALLY expected");
-
 			}
 
 		}
@@ -1509,7 +1523,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		int statementIndex = 1;
 
-		if (node.getChild(1).getType() == JSParser.IF) {
+		if (statementIndex < node.getChildCount()
+				&& node.getChild(statementIndex).getType() == JSParser.IF) {
 			statementIndex++;
 
 			ExceptionFilter filter = new ExceptionFilter(catchClause);
@@ -1531,12 +1546,14 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			catchClause.setExceptionFilter(filter);
 		}
 
-		catchClause.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(
-				statementIndex - 1).getTokenStopIndex() + 1, node.getChild(
-				statementIndex).getTokenStartIndex()));
+		if (statementIndex < node.getChildCount()) {
+			catchClause.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(
+					statementIndex - 1).getTokenStopIndex() + 1, node.getChild(
+					statementIndex).getTokenStartIndex()));
 
-		catchClause.setStatement(transformStatementNode(node
-				.getChild(statementIndex), catchClause));
+			catchClause.setStatement(transformStatementNode(node
+					.getChild(statementIndex), catchClause));
+		}
 
 		catchClause.setStart(getTokenOffset(node.getTokenStartIndex()));
 		catchClause.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
