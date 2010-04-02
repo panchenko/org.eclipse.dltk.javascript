@@ -42,4 +42,27 @@ public class CodeValidationTests extends AbstractValidationTest {
 		assertTrue(problemIds.contains(JavaScriptProblems.INVALID_ASSIGN_LEFT));
 	}
 
+	public void testContinueNonLoopLabel() {
+		StringList code = new StringList();
+		code.add("A: while (!f.isEOF()) {");
+		code.add("READ: s = f.readLine()");
+		code.add("if (s == 'END') continue READ");
+		code.add("}");
+		Set<Integer> problemIds = extractIds(validate(code.toString()));
+		assertEquals(1, problemIds.size());
+		assertTrue(problemIds
+				.contains(JavaScriptProblems.CONTINUE_NON_LOOP_LABEL));
+	}
+
+	public void testBreakNonLoopLabel() {
+		StringList code = new StringList();
+		code.add("A: while (!f.isEOF()) {");
+		code.add("READ: s = f.readLine()");
+		code.add("if (s == 'END') break READ");
+		code.add("}");
+		Set<Integer> problemIds = extractIds(validate(code.toString()));
+		assertEquals(1, problemIds.size());
+		assertTrue(problemIds.contains(JavaScriptProblems.BREAK_NON_LOOP_LABEL));
+	}
+
 }
