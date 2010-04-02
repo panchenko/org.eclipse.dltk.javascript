@@ -1568,8 +1568,10 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		finallyClause.setFinallyKeyword(createKeyword(node, Keywords.FINALLY));
 
-		finallyClause.setStatement(transformStatementNode(node.getChild(0),
-				finallyClause));
+		if (node.getChildCount() >= 1) {
+			finallyClause.setStatement(transformStatementNode(node.getChild(0),
+					finallyClause));
+		}
 
 		finallyClause.setStart(getTokenOffset(node.getTokenStartIndex()));
 		finallyClause.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
