@@ -166,7 +166,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 		testKeyword(node.getBreakKeyword());
 		testLabel(node.getLabel());
-		testChar(Keywords.SEMI, node.getSemicolonPosition());
+		testCharIfExists(Keywords.SEMI, node.getSemicolonPosition());
 
 		return true;
 	}
