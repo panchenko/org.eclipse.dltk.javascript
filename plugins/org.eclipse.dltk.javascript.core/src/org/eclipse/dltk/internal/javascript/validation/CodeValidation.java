@@ -11,23 +11,70 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.BreakStatement;
+import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.Keywords;
+import org.eclipse.dltk.javascript.ast.Label;
+import org.eclipse.dltk.javascript.ast.LabelledStatement;
+import org.eclipse.dltk.javascript.ast.LoopStatement;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
+import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 
 public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 		IBuildParticipant {
 	private Reporter reporter;
+	private Scope scope;
+
+	static class LabelInfo {
+		final LabelledStatement statement;
+		boolean finished;
+
+		public LabelInfo(LabelledStatement statement) {
+			this.statement = statement;
+		}
+
+	}
+
+	static class Scope {
+
+		private final Map<String, LabelInfo> labels = new HashMap<String, LabelInfo>();
+
+		public boolean addLabel(LabelledStatement statement) {
+			final String label = statement.getLabel().getText();
+			if (labels.containsKey(label)) {
+				return false;
+			}
+			labels.put(label, new LabelInfo(statement));
+			return true;
+		}
+
+		public LabelInfo getLabel(String label) {
+			return labels.get(label);
+		}
+
+		public void removeLabel(LabelledStatement statement) {
+			LabelInfo info = labels.get(statement.getLabel().getText());
+			if (info != null) {
+				info.finished = true;
+			}
+		}
+	}
 
 	public void build(IBuildContext context) throws CoreException {
 		final Script script = JavaScriptValidations.parse(context);
@@ -35,7 +82,63 @@ public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 			return;
 		}
 		reporter = JavaScriptValidations.createReporter(context);
+		scope = new Scope();
 		visit(script);
+	}
+
+	@Override
+	public Object visitFunctionStatement(FunctionStatement node) {
+		final Scope savedScope = scope;
+		scope = new Scope();
+		final Object result = super.visitFunctionStatement(node);
+		scope = savedScope;
+		return result;
+	}
+
+	@Override
+	public Object visitLabelledStatement(LabelledStatement node) {
+		boolean added = scope.addLabel(node);
+		final Object result = super.visitLabelledStatement(node);
+		if (added) {
+			scope.removeLabel(node);
+		}
+		return result;
+	}
+
+	@Override
+	public Object visitBreakStatement(BreakStatement node) {
+		if (node.getLabel() != null) {
+			validateLabel(node.getLabel(), JSParser.BREAK);
+		}
+		return super.visitBreakStatement(node);
+	}
+
+	@Override
+	public Object visitContinueStatement(ContinueStatement node) {
+		if (node.getLabel() != null) {
+			validateLabel(node.getLabel(), JSParser.CONTINUE);
+		}
+		return super.visitContinueStatement(node);
+	}
+
+	private void validateLabel(Label label, int token) {
+		final LabelInfo info = scope.getLabel(label.getText());
+		if (info == null) {
+			return;
+		}
+		if (!info.finished
+				&& info.statement.getStatement() instanceof LoopStatement) {
+			return;
+		}
+		reporter
+				.setMessage(
+						token == JSParser.BREAK ? JavaScriptProblems.BREAK_NON_LOOP_LABEL
+								: JavaScriptProblems.CONTINUE_NON_LOOP_LABEL,
+						Keywords.fromToken(token)
+								+ " can only use labels of iteration statements");
+		reporter.setSeverity(Severity.ERROR);
+		reporter.setRange(label.sourceStart(), label.sourceEnd());
+		reporter.report();
 	}
 
 	@Override

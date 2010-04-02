@@ -32,4 +32,7 @@ public interface JavaScriptProblems {
 	public static final int RETURN_INCONSISTENT = IProblem.Internal + 4;
 	public static final int FUNCTION_NOT_ALWAYS_RETURN_VALUE = IProblem.Internal + 5;
 
+	public static final int CONTINUE_NON_LOOP_LABEL = IProblem.Internal + 6;
+	public static final int BREAK_NON_LOOP_LABEL = IProblem.Internal + 7;
+
 }
