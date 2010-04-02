@@ -346,12 +346,16 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 		visit(node.getBody());
 		for (CatchClause catchClause : node.getCatches()) {
 			// TODO
-			if (catchClause.getStatement() != null) {
-				visit(catchClause.getStatement());
+			final Statement catchStatement = catchClause.getStatement();
+			if (catchStatement != null) {
+				visit(catchStatement);
 			}
 		}
 		if (node.getFinally() != null) {
-			visit(node.getFinally().getStatement());
+			final Statement finallyStatement = node.getFinally().getStatement();
+			if (finallyStatement != null) {
+				visit(finallyStatement);
+			}
 		}
 		return null;
 	}
