@@ -146,6 +146,9 @@ public class JavascriptSourceViewerConfiguration extends
 				}
 
 				// try to find if the text under the offset is 1 of ),] or }
+				if (offset >= text.length()) {
+					return null;
+				}
 				char ch = text.charAt(offset);
 				char startChar = 0;
 
