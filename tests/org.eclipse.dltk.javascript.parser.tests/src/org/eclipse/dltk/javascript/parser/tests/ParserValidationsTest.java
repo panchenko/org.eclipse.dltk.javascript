@@ -1,8 +1,5 @@
 package org.eclipse.dltk.javascript.parser.tests;
 
-import java.util.List;
-
-import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 
@@ -12,10 +9,8 @@ public class ParserValidationsTest extends AbstractJSParserTest {
 		StringList code = new StringList();
 		code.add("function hello(param1,param1) {}");
 		parse(code.toString());
-		List<IProblem> problems = reporter.getProblems();
-		assertEquals(1, problems.size());
-		assertEquals(JavaScriptParserProblems.DUPLICATE_PARAMETER, problems
-				.get(0).getID());
+		assertEquals(JavaScriptParserProblems.DUPLICATE_PARAMETER,
+				getProblemId());
 	}
 
 	public void testVarHidesParameter() {
@@ -28,10 +23,59 @@ public class ParserValidationsTest extends AbstractJSParserTest {
 		code.add("");
 		code.add("");
 		parse(code.toString());
-		List<IProblem> problems = reporter.getProblems();
-		assertEquals(1, problems.size());
-		assertEquals(JavaScriptParserProblems.VAR_HIDES_ARGUMENT, problems.get(
-				0).getID());
+		assertEquals(JavaScriptParserProblems.VAR_HIDES_ARGUMENT,
+				getProblemId());
+	}
+
+	public void testDoubleSwitchDefault() {
+		StringList code = new StringList();
+		code.add("switch (a) {");
+		code.add("default:");
+		code.add("default:");
+		code.add("}");
+		parse(code.toString());
+		assertEquals(JavaScriptParserProblems.DOUBLE_SWITCH_DEFAULT,
+				getProblemId());
+	}
+
+	public void testDuplicateLabel() {
+		StringList code = new StringList();
+		code.add("A: for (i=0;i<10;++i) a += i");
+		code.add("A: while (!f.isEOF()) f.readLine()");
+		parse(code.toString());
+		assertEquals(JavaScriptParserProblems.DUPLICATE_LABEL, getProblemId());
+	}
+
+	public void testUndefinedLabel() {
+		StringList code = new StringList();
+		code.add("A: while (!f.isEOF()) {");
+		code.add("s = f.readLine()");
+		code.add("if (s == 'END') break READ");
+		code.add("}");
+		parse(code.toString());
+		assertEquals(JavaScriptParserProblems.UNDEFINED_LABEL, getProblemId());
+	}
+
+	public void testContinueNonLoopLabel() {
+		StringList code = new StringList();
+		code.add("A: while (!f.isEOF()) {");
+		code.add("READ: s = f.readLine()");
+		code.add("if (s == 'END') continue READ");
+		code.add("}");
+		parse(code.toString());
+		assertEquals(JavaScriptParserProblems.CONTINUE_NON_LOOP_LABEL,
+				getProblemId());
+	}
+
+	public void testBreakNonLoopLabel() {
+		StringList code = new StringList();
+		code.add("A: while (!f.isEOF()) {");
+		code.add("READ: s = f.readLine()");
+		code.add("if (s == 'END') break READ");
+		code.add("}");
+		parse(code.toString());
+		assertEquals(JavaScriptParserProblems.BREAK_NON_LOOP_LABEL,
+				getProblemId());
 	}
 
 }

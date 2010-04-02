@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.tests;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
@@ -77,6 +79,24 @@ public abstract class AbstractJSParserTest extends TestCase {
 
 	protected static void assertDecimal(String expected, ASTNode decimal) {
 		assertEquals(expected, ((DecimalLiteral) decimal).getText());
+	}
+
+	public int getProblemId() {
+		final Set<Integer> problemIds = getProblemIds();
+		assertEquals(1, problemIds.size());
+		return problemIds.toArray(new Integer[1])[0].intValue();
+	}
+
+	public Set<Integer> getProblemIds() {
+		return extractIds(reporter.getProblems());
+	}
+
+	protected Set<Integer> extractIds(final List<IProblem> problems) {
+		final Set<Integer> ids = new HashSet<Integer>();
+		for (IProblem problem : problems) {
+			ids.add(problem.getID());
+		}
+		return ids;
 	}
 
 }
