@@ -14,6 +14,7 @@ package org.eclipse.dltk.internal.javascript.validation;
 import java.util.Set;
 
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
+import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
@@ -25,6 +26,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public class JavaScriptValidations {
 
 	public static Script parse(IBuildContext context) {
+		final String parserId = context.getSourceModule().getScriptProject()
+				.getOption(DLTKCore.PROJECT_SOURCE_PARSER_ID, false);
+		if (!JavaScriptParser.PARSER_ID.equals(parserId)) {
+			return null;
+		}
 		final IModuleDeclaration savedAST = (IModuleDeclaration) context
 				.get(IBuildContext.ATTR_MODULE_DECLARATION);
 		if (savedAST instanceof Script) {
