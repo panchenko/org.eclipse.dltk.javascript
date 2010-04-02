@@ -64,12 +64,17 @@ public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 
 	@Override
 	public Object visitUnaryOperation(UnaryOperation node) {
-		if (!canAssignTo(node.getExpression())) {
+		if (isIncDec(node.getOperation()) && !canAssignTo(node.getExpression())) {
 			reporter.reportProblem(JavaScriptProblems.INVALID_ASSIGN_LEFT,
 					"Invalid assignment left-hand side.", node.sourceStart(),
 					node.sourceEnd());
 		}
 		return super.visitUnaryOperation(node);
+	}
+
+	private boolean isIncDec(int operation) {
+		return operation == JSParser.INC || operation == JSParser.DEC
+				|| operation == JSParser.PINC || operation == JSParser.PDEC;
 	}
 
 	private boolean canAssignTo(Expression expression) {

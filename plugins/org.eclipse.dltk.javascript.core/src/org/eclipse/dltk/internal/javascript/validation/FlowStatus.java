@@ -20,10 +20,10 @@ public class FlowStatus {
 		if (value != null) {
 			returnValue |= value.returnValue;
 			returnValue |= value.returnWithoutValue;
-			noReturn |= value.noReturn
+			noReturn = value.noReturn
 					|| (!value.returnValue && !value.returnWithoutValue);
 		} else {
-			noReturn |= true;
+			noReturn = true;
 		}
 	}
 

@@ -70,8 +70,9 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 				reporter.setRange(statement.sourceStart(), statement
 						.sourceEnd());
 				reporter.report();
+			} else {
+				status.add(visit(statement));
 			}
-			status.add(visit(statement));
 		}
 		return status;
 	}
@@ -84,6 +85,8 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		}
 		if (node.getElseStatement() != null) {
 			status.add(visit(node.getElseStatement()));
+		} else {
+			status.add(new FlowStatus());
 		}
 		return status;
 	}
