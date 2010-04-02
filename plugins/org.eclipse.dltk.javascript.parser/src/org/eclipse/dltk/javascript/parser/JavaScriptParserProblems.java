@@ -28,8 +28,6 @@ public class JavaScriptParserProblems {
 	public static final int DOUBLE_SWITCH_DEFAULT = IProblem.Internal + 1025;
 	public static final int DUPLICATE_LABEL = IProblem.Internal + 1026;
 	public static final int UNDEFINED_LABEL = IProblem.Internal + 1027;
-	public static final int CONTINUE_NON_LOOP_LABEL = IProblem.Internal + 1028;
-	public static final int BREAK_NON_LOOP_LABEL = IProblem.Internal + 1029;
 	public static final int BAD_BREAK = IProblem.Internal + 1030;
 	public static final int INVALID_RETURN = IProblem.Internal + 1031;
 	public static final int BAD_CONTINUE = IProblem.Internal + 1032;

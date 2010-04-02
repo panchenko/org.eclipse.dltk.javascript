@@ -406,7 +406,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			label.setText(labelNode.getText());
 			setRangeByToken(label, labelNode.getTokenStartIndex());
 			statement.setLabel(label);
-			validateLabel(label, JSParser.BREAK);
+			validateLabel(label);
 		}
 
 		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
@@ -980,7 +980,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			label.setText(labelNode.getText());
 			setRangeByToken(label, labelNode.getTokenStartIndex());
 			statement.setLabel(label);
-			validateLabel(label, JSParser.CONTINUE);
+			validateLabel(label);
 		}
 
 		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
@@ -995,27 +995,12 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return statement;
 	}
 
-	private void validateLabel(Label label, int token) {
+	private void validateLabel(Label label) {
 		if (reporter == null)
 			return;
 		if (!scope.hasLabel(label.getText())) {
 			reporter.setMessage(JavaScriptParserProblems.UNDEFINED_LABEL,
 					"undefined label");
-			reporter.setSeverity(Severity.ERROR);
-			reporter.setRange(label.sourceStart(), label.sourceEnd());
-			reporter.report();
-		} else {
-			final LabelledStatement statement = scope.getLabel(label.getText());
-			assert statement != null;
-			if (statement.getStatement() instanceof LoopStatement) {
-				return;
-			}
-			reporter
-					.setMessage(
-							token == JSParser.BREAK ? JavaScriptParserProblems.BREAK_NON_LOOP_LABEL
-									: JavaScriptParserProblems.CONTINUE_NON_LOOP_LABEL,
-							Keywords.fromToken(token)
-									+ " can only use labeles of iteration statements");
 			reporter.setSeverity(Severity.ERROR);
 			reporter.setRange(label.sourceStart(), label.sourceEnd());
 			reporter.report();

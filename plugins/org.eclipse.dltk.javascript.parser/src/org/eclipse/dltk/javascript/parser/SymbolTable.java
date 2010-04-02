@@ -1,14 +1,16 @@
 package org.eclipse.dltk.javascript.parser;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 
 public class SymbolTable {
 	private final Map<String, SymbolKind> symbols = new HashMap<String, SymbolKind>();
 
-	private final Map<String, LabelledStatement> labels = new HashMap<String, LabelledStatement>();
+	private final Set<String> labels = new HashSet<String>();
 
 	public SymbolKind canAdd(String name) {
 		return symbols.get(name);
@@ -25,18 +27,14 @@ public class SymbolTable {
 
 	public boolean addLabel(LabelledStatement statement) {
 		final String label = statement.getLabel().getText();
-		if (labels.containsKey(label)) {
+		if (labels.contains(label)) {
 			return false;
 		}
-		labels.put(label, statement);
+		labels.add(label);
 		return true;
 	}
 
-	public LabelledStatement getLabel(String label) {
-		return labels.get(label);
-	}
-
 	public boolean hasLabel(String label) {
-		return labels.containsKey(label);
+		return labels.contains(label);
 	}
 }
