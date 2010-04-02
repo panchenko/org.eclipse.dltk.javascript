@@ -13,9 +13,6 @@ package org.eclipse.dltk.javascript.core.tests.validation;
 
 import java.util.List;
 
-import junit.framework.TestCase;
-
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.util.StringList;
@@ -23,150 +20,131 @@ import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 
 @SuppressWarnings("nls")
-public class TypeInfoValidationTests extends TestCase {
+public class TypeInfoValidationTests extends AbstractValidationTest {
 
-	private List<IProblem> validate(IBuildParticipant validator, String content) {
-		final TestBuildContext context = new TestBuildContext(content);
-		try {
-			validator.build(context);
-		} catch (CoreException e) {
-			fail(e.getMessage());
-		}
-		return context.getProblems();
+	@Override
+	protected IBuildParticipant createValidator() {
+		return new TypeInfoValidator();
 	}
 
-	public void testKnownType() throws CoreException {
-		final List<IProblem> problems = validate(new TypeInfoValidator(),
-				"var x:String");
+	public void testKnownType() {
+		final List<IProblem> problems = validate("var x:String");
 		assertTrue(problems.isEmpty());
 	}
 
-	public void testUnknownType() throws CoreException {
-		final List<IProblem> problems = validate(new TypeInfoValidator(),
-				"var x:LongString");
+	public void testUnknownType() {
+		final List<IProblem> problems = validate("var x:LongString");
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
 
-	public void testDeprecatedType() throws CoreException {
-		final List<IProblem> problems = validate(new TypeInfoValidator(),
-				"var x:ExampleService2");
+	public void testDeprecatedType() {
+		final List<IProblem> problems = validate("var x:ExampleService2");
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.DEPRECATED_TYPE, problems.get(0)
 				.getID());
 	}
 
-	public void testValidMethodCall() throws CoreException {
+	public void testValidMethodCall() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
 		code.add("x.execute()");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.isEmpty());
 	}
 
-	public void testUndefinedMethodCall() throws CoreException {
+	public void testUndefinedMethodCall() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
 		code.add("x.run()");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
 				.getID());
 	}
 
-	public void testMethodCallWrongParamCount() throws CoreException {
+	public void testMethodCallWrongParamCount() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
 		code.add("x.execute(1)");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.WRONG_PARAMETER_COUNT, problems.get(0)
 				.getID());
 	}
 
-	public void testDeprecatedMethodCall() throws CoreException {
+	public void testDeprecatedMethodCall() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
 		code.add("x.executeCompatible()");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.DEPRECATED_METHOD, problems.get(0)
 				.getID());
 	}
 
-	public void testDeprecatedMethodCall_TypeInference() throws CoreException {
+	public void testDeprecatedMethodCall_TypeInference() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
 		code.add("var q = x.execute().service");
 		code.add("q.executeCompatible()");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.DEPRECATED_METHOD, problems.get(0)
 				.getID());
 	}
 
-	public void testPropertyAccess() throws CoreException {
+	public void testPropertyAccess() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
 		code.add("var name = x.name");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.isEmpty());
 	}
 
-	public void testDeprecatedPropertyAccess() throws CoreException {
+	public void testDeprecatedPropertyAccess() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
 		code.add("var name = x.nameCompatible");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
 				.getID());
 	}
 
-	public void testDeprecatedTopLevelProperty() throws CoreException {
+	public void testDeprecatedTopLevelProperty() {
 		StringList code = new StringList();
 		code.add("myExampleForms.service");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
 				.getID());
 		assertTrue(problems.get(0).getMessage().contains("myExampleForms"));
 	}
 
-	public void testUndefinedPropertyAccess() throws CoreException {
+	public void testUndefinedPropertyAccess() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
 		code.add("var name = x.noname");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
 				.getID());
 	}
 
-	public void testMethodAsPropertyAccess() throws CoreException {
+	public void testMethodAsPropertyAccess() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
 		code.add("var name = x.execute");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.isEmpty());
 	}
 
-	public void testElementResolver() throws CoreException {
+	public void testElementResolver() {
 		StringList code = new StringList();
 		code.add("exampleForms.service.name");
 		code.add("exampleForms.service.nameCompatible");
-		final List<IProblem> problems = validate(new TypeInfoValidator(), code
-				.toString());
+		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
 				.getID());

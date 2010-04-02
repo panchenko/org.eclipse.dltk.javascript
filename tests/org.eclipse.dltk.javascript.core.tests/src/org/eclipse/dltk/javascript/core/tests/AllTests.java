@@ -10,6 +10,8 @@ import org.eclipse.dltk.javascript.core.tests.structure.JSLintModelTests;
 import org.eclipse.dltk.javascript.core.tests.structure.StructureParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinference.TypeInferenceTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeInfoModelTests;
+import org.eclipse.dltk.javascript.core.tests.validation.CodeValidationTests;
+import org.eclipse.dltk.javascript.core.tests.validation.FlowValidationTests;
 import org.eclipse.dltk.javascript.core.tests.validation.TypeInfoValidationTests;
 
 public class AllTests {
@@ -23,6 +25,8 @@ public class AllTests {
 		suite.addTestSuite(StructureParserTests.class);
 		suite.addTestSuite(TypeInfoValidationTests.class);
 		suite.addTestSuite(JSLintModelTests.class);
+		suite.addTestSuite(CodeValidationTests.class);
+		suite.addTestSuite(FlowValidationTests.class);
 		suite.addTestSuite(CodeCompletion.class);
 		suite.addTestSuite(XMLCompletionTests.class);
 		suite.addTestSuite(CompletionStringParsing.class);
