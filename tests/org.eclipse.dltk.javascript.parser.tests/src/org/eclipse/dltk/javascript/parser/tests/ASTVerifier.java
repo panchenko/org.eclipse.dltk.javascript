@@ -534,9 +534,11 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		for (CatchClause catchClause : node.getCatches()) {
 			testKeyword(catchClause.getCatchKeyword());
 			visit(catchClause.getException());
-			if (catchClause.getExceptionFilter() != null) {
-				testKeyword(catchClause.getExceptionFilter().getIfKeyword());
-				visit(catchClause.getExceptionFilter().getExpression());
+			if (catchClause.getIfKeyword() != null) {
+				testKeyword(catchClause.getIfKeyword());
+			}
+			if (catchClause.getFilterExpression() != null) {
+				visit(catchClause.getFilterExpression());
 			}
 			visit(catchClause.getStatement());
 
