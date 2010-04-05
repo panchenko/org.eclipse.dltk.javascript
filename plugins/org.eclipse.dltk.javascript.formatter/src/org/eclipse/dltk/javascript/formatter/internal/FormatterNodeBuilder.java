@@ -1415,11 +1415,11 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				List<ASTNode> exceptionNodes = new ArrayList<ASTNode>();
 				exceptionNodes.add(catchClause.getException());
-				if (catchClause.getExceptionFilter() != null) {
-					exceptionNodes.add(catchClause.getExceptionFilter()
-							.getIfKeyword());
-					exceptionNodes.add(catchClause.getExceptionFilter()
-							.getExpression());
+				if (catchClause.getIfKeyword() != null) {
+					exceptionNodes.add(catchClause.getIfKeyword());
+				}
+				if (catchClause.getFilterExpression() != null) {
+					exceptionNodes.add(catchClause.getFilterExpression());
 				}
 
 				processParens(catchClause.getLP(), catchClause.getRP(),
