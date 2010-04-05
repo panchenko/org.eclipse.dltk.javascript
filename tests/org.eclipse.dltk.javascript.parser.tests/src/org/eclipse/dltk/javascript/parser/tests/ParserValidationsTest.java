@@ -1,6 +1,10 @@
 package org.eclipse.dltk.javascript.parser.tests;
 
+import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.javascript.ast.BooleanLiteral;
+import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.TryStatement;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 
 public class ParserValidationsTest extends AbstractJSParserTest {
@@ -66,4 +70,67 @@ public class ParserValidationsTest extends AbstractJSParserTest {
 		assertTrue(reporter.getProblems().isEmpty());
 	}
 
+	public void testBadBreak() {
+		StringList code = new StringList();
+		code.add("function a() {");
+		code.add("  break;");
+		code.add("}");
+		parse(code.toString());
+		assertEquals(JavaScriptParserProblems.BAD_BREAK, getProblemId());
+	}
+
+	public void testBadContinue() {
+		StringList code = new StringList();
+		code.add("function a() {");
+		code.add("  continue;");
+		code.add("}");
+		parse(code.toString());
+		assertEquals(JavaScriptParserProblems.BAD_CONTINUE, getProblemId());
+	}
+
+	public void testInvalidReturn() {
+		StringList code = new StringList();
+		code.add("if (a == 0) {");
+		code.add("  return;");
+		code.add("}");
+		parse(code.toString());
+		assertEquals(JavaScriptParserProblems.INVALID_RETURN, getProblemId());
+	}
+
+	public void testTryCatchFilter() {
+		StringList code = new StringList();
+		code.add("try {");
+		code.add("  doSomething()");
+		code.add("}");
+		code.add("catch (e if true) {");
+		code.add("  error = 1");
+		code.add("}");
+		Script script = parse(code.toString());
+		assertTrue(reporter.getProblems().isEmpty());
+		TryStatement tryStatement = uniqueResult(ASTUtil.select(script,
+				TryStatement.class));
+		assertEquals(1, tryStatement.getCatches().size());
+		assertTrue(tryStatement.getCatches().get(0).getFilterExpression() instanceof BooleanLiteral);
+	}
+
+	public void testUnreachableCatch() {
+		StringList code = new StringList();
+		code.add("try {");
+		code.add("  doSomething()");
+		code.add("}");
+		code.add("catch (e if true) {");
+		code.add("  error = 1");
+		code.add("}");
+		code.add("catch (e if e instanceof RuntimeException) {");
+		code.add("  error = 1");
+		code.add("}");
+		code.add("catch (e) {");
+		code.add("  error = 2");
+		code.add("}");
+		code.add("catch (e) {");
+		code.add("  error = 3");
+		code.add("}");
+		parse(code.toString());
+		assertEquals(JavaScriptParserProblems.CATCH_UNREACHABLE, getProblemId());
+	}
 }
