@@ -48,7 +48,6 @@ import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.EmptyStatement;
 import org.eclipse.dltk.javascript.ast.ErrorExpression;
-import org.eclipse.dltk.javascript.ast.ExceptionFilter;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FinallyClause;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
@@ -305,10 +304,15 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	private ASTNode createErrorExpression(Tree node) {
-		ErrorExpression error = new ErrorExpression(getParent(), node.getText());
-		error.setStart(getTokenOffset(node.getTokenStartIndex()));
-		error.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-		return error;
+		if (node != null) {
+			ErrorExpression error = new ErrorExpression(getParent(), node
+					.getText());
+			error.setStart(getTokenOffset(node.getTokenStartIndex()));
+			error.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+			return error;
+		} else {
+			return new ErrorExpression(getParent(), "");
+		}
 	}
 
 	@Override
@@ -1431,7 +1435,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 					reporter.report();
 				}
 				if (!sawDefaultCatch
-						&& catchClause.getExceptionFilter() == null) {
+						&& catchClause.getFilterExpression() == null) {
 					sawDefaultCatch = true;
 				}
 				statement.getCatches().add(catchClause);
@@ -1510,25 +1514,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		if (statementIndex < node.getChildCount()
 				&& node.getChild(statementIndex).getType() == JSParser.IF) {
-			statementIndex++;
+			catchClause.setIfKeyword(createKeyword(node
+					.getChild(statementIndex++), Keywords.IF));
 
-			ExceptionFilter filter = new ExceptionFilter(catchClause);
-
-			Tree filterNode = node.getChild(1);
-
-			Keyword ifKeyword = new Keyword(Keywords.IF);
-			ifKeyword.setStart(getTokenOffset(filterNode.getTokenStartIndex()));
-			ifKeyword
-					.setEnd(getTokenOffset(filterNode.getTokenStartIndex() + 1));
-			filter.setIfKeyword(ifKeyword);
-
-			filter.setExpression((Expression) transformNode(filterNode
-					.getChild(0), filter));
-
-			filter.setStart(getTokenOffset(filterNode.getTokenStartIndex()));
-			filter.setEnd(getTokenOffset(filterNode.getTokenStopIndex() + 1));
-
-			catchClause.setExceptionFilter(filter);
+			catchClause.setFilterExpression((Expression) transformNode(node
+					.getChild(statementIndex++), catchClause));
 		}
 
 		if (statementIndex < node.getChildCount()) {

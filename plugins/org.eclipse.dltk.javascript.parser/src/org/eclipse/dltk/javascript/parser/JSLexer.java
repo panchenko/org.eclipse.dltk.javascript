@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2010-03-23 09:04:19
+// $ANTLR 3.0.1 JS.g 2010-04-05 14:35:55
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -201,10 +201,10 @@ public class JSLexer extends Lexer {
     public static final int EXTENDS=48;
     public static final int BSLASH=152;
     public static final int LF=162;
-    
+
     private Token lastCodeToken;
     protected Token lastToken;
-    
+
     final static boolean isIdentifierKeyword(int token)
     {
     	return token == WXML
@@ -213,7 +213,7 @@ public class JSLexer extends Lexer {
       		|| token == EACH
       		|| token == NAMESPACE; 
     }
-    
+
     private final boolean areRegularExpressionsEnabled()
     {
     	if (lastCodeToken == null)
@@ -247,16 +247,16 @@ public class JSLexer extends Lexer {
     			return true;
     	}
     }
-    
+
     private final boolean isXmlStartEnabled() {
       // TODO
       return ((JSTokenSource)this).getMode() == JSTokenSource.MODE_JS && areRegularExpressionsEnabled();
     }
-    
+
     protected void readFirstXml() throws RecognitionException {
     	throw new EarlyExitException(0, input);
     }
-    
+
     private final void consumeIdentifierUnicodeStart() throws RecognitionException, NoViableAltException
     {
     	int ch = input.LA(1);
@@ -292,7 +292,7 @@ public class JSLexer extends Lexer {
     {
     	return Character.isJavaIdentifierStart((char)ch);
     }
-    
+
     public Token nextToken()
     {
     	Token result = super.nextToken();
@@ -302,7 +302,7 @@ public class JSLexer extends Lexer {
     	}
     	return result;		
     }
-    
+
 
     public JSLexer() {;} 
     public JSLexer(CharStream input) {
@@ -3436,7 +3436,7 @@ public class JSLexer extends Lexer {
     public final void mXMLFragment() throws RecognitionException {
         try {
             int _type = XMLFragment;
-            
+
             	int marker = input.mark();
 
             // JS.g:858:5: ({...}? => LT ( NOT | QUE | 'a' .. 'z' | 'A' .. 'Z' | '_' | ':' | '{' ) )
@@ -3456,7 +3456,7 @@ public class JSLexer extends Lexer {
                 recover(mse);    throw mse;
             }
 
-            
+
             			input.rewind(marker);
             			readFirstXml();
                      

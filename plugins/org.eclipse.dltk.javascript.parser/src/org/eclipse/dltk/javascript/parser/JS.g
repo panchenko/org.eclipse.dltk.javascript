@@ -1691,15 +1691,11 @@ tryStatement
 catchClause
 	: CATCH^ LPAREN! identifier catchFilter? RPAREN! block
 	;
-	
+
 catchFilter
-  : IF^ instanceofExpression 
-  ;
-	
-instanceofExpression
-  : identifier INSTANCEOF^ identifier	
+	: IF expression 
 	;
-	
+
 finallyClause
 	: FINALLY^ block
 	;

@@ -358,11 +358,6 @@ public abstract class ASTVisitor<E> {
 	public abstract E visitEmptyExpression(EmptyExpression node);
 
 	@Deprecated
-	public final E visitExceptionFilter(ExceptionFilter node) {
-		return null;
-	}
-
-	@Deprecated
 	public final E visitFinallyClause(FinallyClause node) {
 		return null;
 	}

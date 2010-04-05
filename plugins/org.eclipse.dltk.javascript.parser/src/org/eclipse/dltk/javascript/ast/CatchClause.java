@@ -20,7 +20,8 @@ public class CatchClause extends Statement {
 
 	private Keyword catchKeyword;
 	private Identifier exception;
-	private ExceptionFilter exceptionFilter = null;
+	private Keyword ifKeyword = null;
+	private Expression filterExpression = null;
 	private Statement statement;
 	private int LP = -1;
 	private int RP = -1;
@@ -39,8 +40,10 @@ public class CatchClause extends Statement {
 				catchKeyword.traverse(visitor);
 			if (exception != null)
 				exception.traverse(visitor);
-			if (exceptionFilter != null)
-				exceptionFilter.traverse(visitor);
+			if (ifKeyword != null)
+				ifKeyword.traverse(visitor);
+			if (filterExpression != null)
+				filterExpression.traverse(visitor);
 			if (statement != null)
 				statement.traverse(visitor);
 
@@ -56,12 +59,20 @@ public class CatchClause extends Statement {
 		this.exception = exception;
 	}
 
-	public ExceptionFilter getExceptionFilter() {
-		return this.exceptionFilter;
+	public Keyword getIfKeyword() {
+		return this.ifKeyword;
 	}
 
-	public void setExceptionFilter(ExceptionFilter filter) {
-		this.exceptionFilter = filter;
+	public void setIfKeyword(Keyword ifKeyword) {
+		this.ifKeyword = ifKeyword;
+	}
+
+	public Expression getFilterExpression() {
+		return filterExpression;
+	}
+
+	public void setFilterExpression(Expression filterExpression) {
+		this.filterExpression = filterExpression;
 	}
 
 	public Statement getStatement() {
@@ -110,9 +121,11 @@ public class CatchClause extends Statement {
 		buffer.append(Keywords.CATCH);
 		buffer.append(" (");
 		buffer.append(this.exception.toSourceString(indentationString));
-		if (this.exceptionFilter != null) {
+		if (ifKeyword != null && filterExpression != null) {
 			buffer.append(' ');
-			buffer.append(exceptionFilter.toSourceString(indentationString));
+			buffer.append(Keywords.IF);
+			buffer.append(' ');
+			buffer.append(filterExpression.toSourceString(indentationString));
 		}
 		buffer.append(")\n");
 
