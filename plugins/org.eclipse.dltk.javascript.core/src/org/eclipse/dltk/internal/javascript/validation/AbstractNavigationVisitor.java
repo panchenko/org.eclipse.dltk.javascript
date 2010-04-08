@@ -40,17 +40,22 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.GetAllChildrenExpression;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
+import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
+import org.eclipse.dltk.javascript.ast.Method;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
+import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
 import org.eclipse.dltk.javascript.ast.ParenthesizedExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
@@ -266,8 +271,25 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 
 	@Override
 	public E visitObjectInitializer(ObjectInitializer node) {
-		// TODO Auto-generated method stub
+		for (ObjectInitializerPart part : node.getInitializers()) {
+			if (part instanceof GetMethod) {
+				visitMethod((GetMethod) part);
+			} else if (part instanceof SetMethod) {
+				visitMethod((SetMethod) part);
+			} else if (part instanceof PropertyInitializer) {
+				final PropertyInitializer pi = (PropertyInitializer) part;
+				visit(pi.getName());
+				visit(pi.getValue());
+			}
+		}
 		return null;
+	}
+
+	/**
+	 * @param part
+	 */
+	protected E visitMethod(Method method) {
+		return visit(method.getBody());
 	}
 
 	@Override
