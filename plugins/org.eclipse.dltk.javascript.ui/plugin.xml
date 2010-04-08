@@ -518,4 +518,19 @@
 	</page>
 </extension>
 
+<extension point="org.eclipse.dltk.ui.folding">
+  <structureProvider 
+   	nature="org.eclipse.dltk.javascript.core.nature"
+   	class="org.eclipse.dltk.ui.text.folding.DelegatingFoldingStructureProvider">
+  </structureProvider>
+  <blockProvider
+    nature="org.eclipse.dltk.javascript.core.nature"
+    class="org.eclipse.dltk.javascript.internal.ui.text.folding.JavaScriptCommentFoldingBlockProvider">
+  </blockProvider>
+  <blockProvider
+    nature="org.eclipse.dltk.javascript.core.nature"
+    class="org.eclipse.dltk.javascript.internal.ui.text.folding.JavaScriptCodeFoldingBlockProvider">
+  </blockProvider>
+</extension>
+
 </plugin>

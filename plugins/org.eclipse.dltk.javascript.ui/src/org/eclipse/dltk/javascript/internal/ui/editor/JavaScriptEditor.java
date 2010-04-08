@@ -21,14 +21,12 @@ import org.eclipse.dltk.internal.ui.editor.ScriptSourceViewer;
 import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.text.JavaScriptPairMatcher;
-import org.eclipse.dltk.javascript.internal.ui.text.folding.JavascriptFoldingStructureProvider;
 import org.eclipse.dltk.javascript.ui.JavascriptPreferenceConstants;
 import org.eclipse.dltk.javascript.ui.actions.JavaScriptGenerateActionGroup;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.actions.DLTKActionConstants;
 import org.eclipse.dltk.ui.actions.IScriptEditorActionDefinitionIds;
 import org.eclipse.dltk.ui.text.ScriptTextTools;
-import org.eclipse.dltk.ui.text.folding.IFoldingStructureProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
@@ -191,15 +189,6 @@ public class JavaScriptEditor extends ScriptEditor {
 				participant.setup(document);
 			}
 		}
-	}
-
-	IFoldingStructureProvider fFoldingProvider = null;
-
-	protected IFoldingStructureProvider getFoldingStructureProvider() {
-		if (fFoldingProvider == null) {
-			fFoldingProvider = new JavascriptFoldingStructureProvider();
-		}
-		return fFoldingProvider;
 	}
 
 	protected FoldingActionGroup createFoldingActionGroup() {
