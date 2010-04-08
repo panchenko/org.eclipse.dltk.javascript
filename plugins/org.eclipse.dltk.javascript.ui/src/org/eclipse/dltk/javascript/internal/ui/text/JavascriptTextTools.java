@@ -70,7 +70,8 @@ public class JavascriptTextTools extends ScriptTextTools {
 						JavascriptPreferenceConstants.EDITOR_XML_ATTR_NAME_COLOR,
 						null),
 				new SH(JavascriptPreferenceConstants.EDITOR_XML_COMMENT_COLOR,
-						null), };
+						null),
+				new SH(JavascriptPreferenceConstants.EDITOR_KEYWORD_COLOR, null), };
 	}
 
 	public ISemanticHighlighter getSemanticPositionUpdater() {

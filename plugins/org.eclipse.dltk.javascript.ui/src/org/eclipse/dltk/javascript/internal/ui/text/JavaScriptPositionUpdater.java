@@ -10,7 +10,11 @@ import org.eclipse.dltk.ast.parser.ISourceParser;
 import org.eclipse.dltk.ast.parser.SourceParserManager;
 import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.javascript.ast.GetMethod;
+import org.eclipse.dltk.javascript.ast.Keyword;
+import org.eclipse.dltk.javascript.ast.Method;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
@@ -22,6 +26,7 @@ final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
 	private static final int HL_XML_TAG = 0;
 	private static final int HL_XML_ATTRIBUTE = 1;
 	private static final int HL_XML_COMMENT = 2;
+	private static final int HL_KEYWORD = 3;
 
 	@Override
 	protected boolean doHighlighting(IModuleSource code) throws Exception {
@@ -58,6 +63,17 @@ final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
 					}
 				}
 			}
+		}
+		for (Method method : ASTUtil.select(declaration, Method.class)) {
+			Keyword keyword;
+			if (method instanceof GetMethod) {
+				keyword = ((GetMethod) method).getGetKeyword();
+			} else if (method instanceof SetMethod) {
+				keyword = ((SetMethod) method).getSetKeyword();
+			} else {
+				continue;
+			}
+			addPosition(keyword.sourceStart(), keyword.sourceEnd(), HL_KEYWORD);
 		}
 		return true;
 	}
