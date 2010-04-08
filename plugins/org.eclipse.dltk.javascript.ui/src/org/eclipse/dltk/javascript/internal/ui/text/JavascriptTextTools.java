@@ -42,13 +42,10 @@ public class JavascriptTextTools extends ScriptTextTools {
 
 	}
 
-	private IPartitionTokenScanner fPartitionScanner;
-
 	public JavascriptTextTools(boolean autoDisposeOnDisplayDispose) {
 		super(IJavaScriptPartitions.JS_PARTITIONING,
 				IJavaScriptPartitions.LEGAL_CONTENT_TYPES,
 				autoDisposeOnDisplayDispose);
-		fPartitionScanner = new JavascriptPartitionScanner();
 	}
 
 	public ScriptSourceViewerConfiguration createSourceViewerConfiguraton(
@@ -59,7 +56,7 @@ public class JavascriptTextTools extends ScriptTextTools {
 	}
 
 	public IPartitionTokenScanner getPartitionScanner() {
-		return fPartitionScanner;
+		return new JavascriptPartitionScanner();
 	}
 
 	public SemanticHighlighting[] getSemanticHighlightings() {
