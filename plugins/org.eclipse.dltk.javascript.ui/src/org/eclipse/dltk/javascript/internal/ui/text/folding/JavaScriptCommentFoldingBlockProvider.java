@@ -24,11 +24,14 @@ public class JavaScriptCommentFoldingBlockProvider extends
 	}
 
 	public void computeFoldableBlocks(IFoldingContent content) {
-		computeBlocksForPartitionType(content,
-				IJavaScriptPartitions.JS_COMMENT,
-				JavaScriptFoldingBlockKind.COMMENT);
-		computeBlocksForPartitionType(content, IJavaScriptPartitions.JS_DOC,
-				JavaScriptFoldingBlockKind.JSDOC);
+		if (isFoldingComments())
+			computeBlocksForPartitionType(content,
+					IJavaScriptPartitions.JS_COMMENT,
+					JavaScriptFoldingBlockKind.COMMENT, isCollapseComments());
+		if (isFoldingDocs())
+			computeBlocksForPartitionType(content,
+					IJavaScriptPartitions.JS_DOC,
+					JavaScriptFoldingBlockKind.JSDOC, isCollapseDocs());
 	}
 
 }

@@ -11,18 +11,29 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text.folding;
 
+import java.util.HashMap;
+
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
+import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.core.IMethod;
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.SourceParserUtil;
+import org.eclipse.dltk.corext.SourceRange;
 import org.eclipse.dltk.internal.javascript.validation.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Method;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.ui.PreferenceConstants;
 import org.eclipse.dltk.ui.text.folding.IFoldingBlockProvider;
 import org.eclipse.dltk.ui.text.folding.IFoldingBlockRequestor;
 import org.eclipse.dltk.ui.text.folding.IFoldingContent;
-import org.eclipse.jface.text.Region;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 public class JavaScriptCodeFoldingBlockProvider extends
 		AbstractNavigationVisitor<Object> implements IFoldingBlockProvider {
@@ -41,33 +52,80 @@ public class JavaScriptCodeFoldingBlockProvider extends
 		return parser.parse(content, null);
 	}
 
+	private boolean collapseMethods;
+
+	public void initializePreferences(IPreferenceStore preferenceStore) {
+		collapseMethods = preferenceStore
+				.getBoolean(PreferenceConstants.EDITOR_FOLDING_INIT_METHODS);
+	}
+
 	private IFoldingBlockRequestor requestor;
 
 	public void setRequestor(IFoldingBlockRequestor requestor) {
 		this.requestor = requestor;
 	}
 
+	@SuppressWarnings("serial")
+	public static class MethodCollector extends
+			HashMap<ISourceRange, IModelElement> implements
+			IModelElementVisitor {
+
+		public boolean visit(IModelElement element) {
+
+			if (element instanceof IMethod) {
+				try {
+					put(((IMethod) element).getNameRange(), element);
+				} catch (ModelException e) {
+					// empty
+				}
+			}
+			return true;
+		}
+
+		/**
+		 * @param offset
+		 * @param length
+		 */
+		public IModelElement get(int offset, int length) {
+			return get(new SourceRange(offset, length));
+		}
+
+	}
+
+	private MethodCollector methodCollector = new MethodCollector();
+
 	public void computeFoldableBlocks(IFoldingContent content) {
 		final Script script = parse(content);
 		if (script != null) {
+			methodCollector.clear();
+			try {
+				content.getModelElement().accept(methodCollector);
+			} catch (ModelException e) {
+				if (DLTKCore.DEBUG) {
+					e.printStackTrace();
+				}
+			}
 			visitScript(script);
 		}
 	}
 
 	@Override
 	public Object visitFunctionStatement(FunctionStatement node) {
-		requestor.acceptBlock(new Region(node.sourceStart(), node.sourceEnd()
-				- node.sourceStart()), JavaScriptFoldingBlockKind.FUNCTION,
-				null);
+		IModelElement element = null;
+		final Identifier name = node.getName();
+		if (name != null) {
+			element = methodCollector.get(name.sourceStart(), name.sourceEnd()
+					- name.sourceStart());
+		}
+		requestor.acceptBlock(node.sourceStart(), node.sourceEnd(),
+				JavaScriptFoldingBlockKind.FUNCTION, element, collapseMethods);
 		return super.visitFunctionStatement(node);
 	}
 
 	@Override
 	protected Object visitMethod(Method method) {
-		requestor.acceptBlock(new Region(method.sourceStart(), method
-				.sourceEnd()
-				- method.sourceStart()), JavaScriptFoldingBlockKind.FUNCTION,
-				null);
+		requestor.acceptBlock(method.sourceStart(), method.sourceEnd(),
+				JavaScriptFoldingBlockKind.FUNCTION, null, collapseMethods);
 		return super.visitMethod(method);
 	}
 
