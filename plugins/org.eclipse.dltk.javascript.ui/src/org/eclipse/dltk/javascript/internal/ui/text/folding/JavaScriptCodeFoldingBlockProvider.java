@@ -59,6 +59,11 @@ public class JavaScriptCodeFoldingBlockProvider extends
 				.getBoolean(PreferenceConstants.EDITOR_FOLDING_INIT_METHODS);
 	}
 
+	public int getMinimalLineCount() {
+		// just fold everything
+		return 0;
+	}
+
 	private IFoldingBlockRequestor requestor;
 
 	public void setRequestor(IFoldingBlockRequestor requestor) {
