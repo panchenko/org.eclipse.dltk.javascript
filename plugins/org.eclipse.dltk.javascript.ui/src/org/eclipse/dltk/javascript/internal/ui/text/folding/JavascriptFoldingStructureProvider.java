@@ -17,6 +17,10 @@ import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.text.folding.AbstractASTFoldingStructureProvider;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 
+/**
+ * TO BE DELETED
+ */
+@Deprecated
 public class JavascriptFoldingStructureProvider extends
 		AbstractASTFoldingStructureProvider {
 
