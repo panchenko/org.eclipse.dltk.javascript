@@ -757,7 +757,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 						JavaScriptParserProblems.DUPLICATE_PARAMETER, NLS.bind(
 								"Duplicate parameter {0}", argument
 										.getArgumentName()));
-				reporter.setSeverity(Severity.ERROR);
 				reporter.setRange(argument.sourceStart(), argument.sourceEnd());
 				reporter.report();
 			}
