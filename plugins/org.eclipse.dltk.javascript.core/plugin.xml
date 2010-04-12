@@ -83,11 +83,11 @@
    </extension>
    <extension
          point="org.eclipse.dltk.core.search">
-      <seachFactory
+      <searchFactory
             class="org.eclipse.dltk.javascript.internal.core.JavaScriptSearchFactory"
             nature="org.eclipse.dltk.javascript.core.nature"
             priority="0">
-      </seachFactory>
+      </searchFactory>
    </extension>
    <extension
          point="org.eclipse.dltk.core.callHierarchy">
