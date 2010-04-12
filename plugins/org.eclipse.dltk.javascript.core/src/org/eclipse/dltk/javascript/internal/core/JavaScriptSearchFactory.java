@@ -9,12 +9,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core;
 
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.dltk.core.search.AbstractSearchFactory;
-import org.eclipse.dltk.core.search.IDLTKSearchScope;
 import org.eclipse.dltk.core.search.IMatchLocatorParser;
-import org.eclipse.dltk.core.search.SearchPattern;
-import org.eclipse.dltk.core.search.SearchRequestor;
 import org.eclipse.dltk.core.search.matching.MatchLocator;
 import org.eclipse.dltk.javascript.core.JavaScriptMatchLocatorParser;
 
@@ -24,9 +20,4 @@ public class JavaScriptSearchFactory extends AbstractSearchFactory {
 		return new JavaScriptMatchLocatorParser(locator);
 	}
 
-	public MatchLocator createMatchLocator(SearchPattern pattern,
-			SearchRequestor requestor, IDLTKSearchScope scope,
-			SubProgressMonitor monitor) {
-		return null;
-	}
 }
