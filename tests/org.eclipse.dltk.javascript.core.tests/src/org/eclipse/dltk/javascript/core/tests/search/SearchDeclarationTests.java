@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.core.tests.search;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
@@ -43,6 +44,24 @@ public class SearchDeclarationTests extends AbstractSingleProjectSearchTests {
 		final IModelElement parent = method.getParent();
 		assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
 		assertEquals("hello2.js", parent.getElementName());
+	}
+
+	public void testVarA() throws CoreException {
+		final TestSearchResults results = search("a", FIELD, DECLARATIONS);
+		assertEquals(1, results.size());
+		final IModelElement method = results.locate(IField.class, "a");
+		final IModelElement parent = method.getParent();
+		assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
+		assertEquals("a.js", parent.getElementName());
+	}
+
+	public void testVarB() throws CoreException {
+		final TestSearchResults results = search("b", FIELD, DECLARATIONS);
+		assertEquals(1, results.size());
+		final IModelElement method = results.locate(IField.class, "b");
+		final IModelElement parent = method.getParent();
+		assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
+		assertEquals("b.js", parent.getElementName());
 	}
 
 }
