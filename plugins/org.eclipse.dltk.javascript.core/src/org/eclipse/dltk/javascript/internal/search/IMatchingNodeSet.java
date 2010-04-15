@@ -11,20 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-public class MatchingNodeSet extends AbstractMatchingNodeSet<MatchingNode> {
+public interface IMatchingNodeSet<E> {
 
-	@Override
-	protected boolean checkRange(MatchingNode node, int start, int end) {
-		return start <= node.sourceStart() && node.sourceEnd() <= end;
-	}
-
-	@Override
-	protected long computeNodeKey(MatchingNode node) {
-		return ((((long) node.sourceStart()) << 32) + node.sourceEnd());
-	}
-
-	public int compare(MatchingNode o1, MatchingNode o2) {
-		return o1.sourceStart() - o2.sourceStart();
-	}
+	MatchLevel addMatch(E node, MatchLevel matchLevel);
 
 }

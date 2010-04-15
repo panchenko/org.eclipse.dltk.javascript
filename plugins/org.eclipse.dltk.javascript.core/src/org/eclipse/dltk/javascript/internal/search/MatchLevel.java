@@ -12,10 +12,10 @@
 package org.eclipse.dltk.javascript.internal.search;
 
 public enum MatchLevel {
-	/**
-	 * 0%
-	 */
-	IMPOSSIBLE_MATCH,
+	// /**
+	// * 0%
+	// */
+	// IMPOSSIBLE_MATCH,
 
 	/**
 	 * 50%

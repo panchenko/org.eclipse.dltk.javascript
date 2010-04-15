@@ -11,20 +11,20 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-public class MatchingNodeSet extends AbstractMatchingNodeSet<MatchingNode> {
+public class PatternLocator<E> {
+	private final IMatchingPredicate<E> predicate;
+	private final IMatchingNodeSet<E> nodeSet;
 
-	@Override
-	protected boolean checkRange(MatchingNode node, int start, int end) {
-		return start <= node.sourceStart() && node.sourceEnd() <= end;
+	public PatternLocator(IMatchingPredicate<E> predicate,
+			IMatchingNodeSet<E> nodeSet) {
+		this.predicate = predicate;
+		this.nodeSet = nodeSet;
 	}
 
-	@Override
-	protected long computeNodeKey(MatchingNode node) {
-		return ((((long) node.sourceStart()) << 32) + node.sourceEnd());
+	public void report(E node) {
+		MatchLevel level = predicate.match(node);
+		if (level != null) {
+			nodeSet.addMatch(node, level);
+		}
 	}
-
-	public int compare(MatchingNode o1, MatchingNode o2) {
-		return o1.sourceStart() - o2.sourceStart();
-	}
-
 }

@@ -110,4 +110,13 @@ public final class HashtableOfLong<E> {
 				s += keyTable[i] + " -> " + object.toString() + "\n"; //$NON-NLS-2$ //$NON-NLS-1$
 		return s;
 	}
+
+	public void clear() {
+		if (elementSize > 0) {
+			for (int i = elementSize; --i >= 0;) {
+				valueTable[i] = null;
+			}
+			elementSize = 0;
+		}
+	}
 }

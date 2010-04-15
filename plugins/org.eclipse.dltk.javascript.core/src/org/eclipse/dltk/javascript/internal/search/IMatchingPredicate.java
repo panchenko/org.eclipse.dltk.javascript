@@ -11,20 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-public class MatchingNodeSet extends AbstractMatchingNodeSet<MatchingNode> {
+public interface IMatchingPredicate<E> {
 
-	@Override
-	protected boolean checkRange(MatchingNode node, int start, int end) {
-		return start <= node.sourceStart() && node.sourceEnd() <= end;
-	}
-
-	@Override
-	protected long computeNodeKey(MatchingNode node) {
-		return ((((long) node.sourceStart()) << 32) + node.sourceEnd());
-	}
-
-	public int compare(MatchingNode o1, MatchingNode o2) {
-		return o1.sourceStart() - o2.sourceStart();
-	}
+	/**
+	 * Tests matching of the specified node to this predicate
+	 * 
+	 * @param node
+	 * @return match level or <code>null</code> if not matches
+	 */
+	MatchLevel match(E node);
 
 }

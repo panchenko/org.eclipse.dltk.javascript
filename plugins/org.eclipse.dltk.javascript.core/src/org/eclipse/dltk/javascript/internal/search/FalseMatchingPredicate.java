@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-public abstract class AbstractPatternLocator implements IPatternLocator {
+public final class FalseMatchingPredicate<E> implements IMatchingPredicate<E> {
+
+	public MatchLevel match(E node) {
+		return null;
+	}
 
 }

@@ -11,20 +11,39 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-public class MatchingNodeSet extends AbstractMatchingNodeSet<MatchingNode> {
+import org.eclipse.dltk.ast.ASTNode;
 
-	@Override
-	protected boolean checkRange(MatchingNode node, int start, int end) {
-		return start <= node.sourceStart() && node.sourceEnd() <= end;
+public abstract class AbstractMatchingNode<E extends ASTNode> extends
+		MatchingNode {
+
+	public final E node;
+
+	public AbstractMatchingNode(E node) {
+		this.node = node;
 	}
 
 	@Override
-	protected long computeNodeKey(MatchingNode node) {
-		return ((((long) node.sourceStart()) << 32) + node.sourceEnd());
+	public int hashCode() {
+		return node.hashCode();
 	}
 
-	public int compare(MatchingNode o1, MatchingNode o2) {
-		return o1.sourceStart() - o2.sourceStart();
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof AbstractMatchingNode<?>) {
+			final AbstractMatchingNode<?> other = (AbstractMatchingNode<?>) obj;
+			return node.equals(other.node);
+		}
+		return false;
+	}
+
+	@Override
+	public int sourceStart() {
+		return node.sourceStart();
+	}
+
+	@Override
+	public int sourceEnd() {
+		return node.sourceEnd();
 	}
 
 }

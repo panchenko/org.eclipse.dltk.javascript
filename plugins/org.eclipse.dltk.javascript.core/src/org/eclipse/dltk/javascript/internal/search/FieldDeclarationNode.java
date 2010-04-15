@@ -11,6 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-public enum MatchResult {
-	MATCH, NO_MATCH
+import org.eclipse.dltk.javascript.ast.Identifier;
+
+public class FieldDeclarationNode extends AbstractMatchingNode<Identifier> {
+
+	/**
+	 * @param node
+	 */
+	public FieldDeclarationNode(Identifier node) {
+		super(node);
+	}
+
 }

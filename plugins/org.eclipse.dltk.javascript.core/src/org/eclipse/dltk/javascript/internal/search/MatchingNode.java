@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-import org.eclipse.dltk.javascript.ast.JSNode;
+public abstract class MatchingNode {
 
-public interface IPatternLocator {
+	public abstract int sourceStart();
 
-	MatchResult match(JSNode node);
+	public abstract int sourceEnd();
 
 }
