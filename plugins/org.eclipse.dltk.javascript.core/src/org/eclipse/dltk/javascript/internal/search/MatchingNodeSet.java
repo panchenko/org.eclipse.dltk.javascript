@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.ast.ASTNode;
-
 /**
  * A set of matches and possible matches, which need to be resolved.
  */
@@ -138,7 +136,7 @@ public abstract class MatchingNodeSet<E> {
 
 	public MatchLevel removeTrustedMatch(E node) {
 		long key = computeNodeKey(node);
-		ASTNode existing = (ASTNode) this.matchingNodesKeys.get(key);
+		E existing = this.matchingNodesKeys.get(key);
 		if (existing == null)
 			return null;
 		this.matchingNodesKeys.put(key, null);
