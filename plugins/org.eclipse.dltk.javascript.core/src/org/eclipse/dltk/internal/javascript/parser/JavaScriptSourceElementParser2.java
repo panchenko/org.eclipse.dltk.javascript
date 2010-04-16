@@ -18,7 +18,7 @@ import org.eclipse.dltk.core.ISourceElementParser;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 
 public class JavaScriptSourceElementParser2 implements ISourceElementParser {
 
@@ -47,12 +47,7 @@ public class JavaScriptSourceElementParser2 implements ISourceElementParser {
 	}
 
 	protected Script parse(IModuleSource module) {
-		// TODO use AST cache
-		return createParser().parse(module, fReporter);
-	}
-
-	protected JavaScriptParser createParser() {
-		return new JavaScriptParser();
+		return JavaScriptParserUtil.parse(module, fReporter);
 	}
 
 	protected TypeInferencer2 createInferencer() {
