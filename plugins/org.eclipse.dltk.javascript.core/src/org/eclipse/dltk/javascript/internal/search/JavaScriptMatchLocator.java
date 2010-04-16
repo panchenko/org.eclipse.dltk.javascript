@@ -16,7 +16,6 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
@@ -35,14 +34,13 @@ import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.core.search.SearchRequestor;
 import org.eclipse.dltk.core.search.matching.IMatchLocator;
 import org.eclipse.dltk.core.search.matching.ModuleFactory;
-import org.eclipse.dltk.core.search.matching2.FalseMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.IMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
-import org.eclipse.dltk.internal.core.search.matching.FieldPattern;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 
 public class JavaScriptMatchLocator implements IMatchLocator,
 		IModelElementVisitor, IModelElementVisitorExtension {
@@ -66,23 +64,26 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 		Assert.isNotNull(requestor);
 		final ModuleFactory moduleFactory = new ModuleFactory(scope);
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
-		final IMatchingPredicate<MatchingNode> predicate = createPredicate();
+		final IMatchingPredicate<MatchingNode> predicate = MatchingPredicateFactory
+				.create(pattern);
 		inferencer2.setVisitor(new JavaScriptMatchingVisitor(inferencer2,
 				new MatchingCollector<MatchingNode>(predicate, nodeSet)));
-		final JavaScriptParser parser = new JavaScriptParser();
 		for (SearchDocument document : searchDocuments) {
+			// TODO report progress
 			final ISourceModule module = moduleFactory.create(document);
 			if (module == null)
 				continue;
 			nodeSet.clear();
 			inferencer2.setModelElement(module);
-			// TODO use AST cache
-			final Script script = parser.parse((IModuleSource) module, null);
+			final Script script = JavaScriptParserUtil.parse(module);
 			inferencer2.doInferencing(script);
 			if (!nodeSet.isEmpty()) {
 				resolvePotentialMatches(nodeSet);
 				participant = document.getParticipant();
 				module.accept(this);
+			}
+			for (MatchingNode matchingNode : nodeSet.matchingNodes()) {
+				report(matchingNode, module);
 			}
 		}
 	}
@@ -99,7 +100,7 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 	}
 
 	public boolean visit(IModelElement element) {
-		return element instanceof IMember;
+		return element instanceof ISourceModule || element instanceof IMember;
 	}
 
 	public void endVisit(IModelElement element) {
@@ -116,19 +117,8 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 				report(node, element);
 			}
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JavaScriptPlugin.error(e);
 		}
-	}
-
-	/**
-	 * @return
-	 */
-	private IMatchingPredicate<MatchingNode> createPredicate() {
-		if (pattern instanceof FieldPattern) {
-			return new FieldPredicate((FieldPattern) pattern);
-		}
-		return new FalseMatchingPredicate<MatchingNode>();
 	}
 
 	protected void report(MatchingNode node, IModelElement element)
