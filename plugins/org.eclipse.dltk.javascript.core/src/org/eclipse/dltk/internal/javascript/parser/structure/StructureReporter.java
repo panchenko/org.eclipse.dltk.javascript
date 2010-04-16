@@ -19,7 +19,10 @@ import java.util.Set;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.compiler.ISourceElementRequestorExtension;
+import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
@@ -27,6 +30,7 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 
 public class StructureReporter extends TypeInferencerVisitor {
 
@@ -56,6 +60,18 @@ public class StructureReporter extends TypeInferencerVisitor {
 	}
 
 	@Override
+	protected IValueReference createVariable(IValueCollection context,
+			VariableDeclaration declaration) {
+		if (isIndexing) {
+			final Identifier node = declaration.getIdentifier();
+			referenceSet.add(node.getName(), node.sourceStart(), node
+					.sourceEnd(), new VarDeclaration(declaration.sourceStart(),
+					declaration.sourceEnd()));
+		}
+		return super.createVariable(context, declaration);
+	}
+
+	@Override
 	public IValueReference visitPropertyExpression(PropertyExpression node) {
 		if (node.getProperty() instanceof Identifier) {
 			reportFieldRef((Identifier) node.getProperty());
@@ -71,11 +87,14 @@ public class StructureReporter extends TypeInferencerVisitor {
 
 	final ISourceElementRequestor fRequestor;
 	private ReferenceIterator iterator;
+	final boolean isIndexing;
 
 	public StructureReporter(ITypeInferenceContext context,
 			ISourceElementRequestor requestor) {
 		super(context);
 		this.fRequestor = requestor;
+		isIndexing = requestor instanceof ISourceElementRequestorExtension
+				&& ((ISourceElementRequestorExtension) requestor).getMode() == ISourceElementRequestorExtension.MODE_INDEX;
 	}
 
 	public void processScope(IValueParent collection) {
@@ -104,24 +123,39 @@ public class StructureReporter extends TypeInferencerVisitor {
 		while (iterator.hasNext()) {
 			final ReferenceKey current = iterator.current();
 			if (current.start < position || position == Integer.MAX_VALUE) {
-				List<Object> values = iterator.getValues();
-				boolean isMethod = false;
-				for (Object value : values) {
-					if (value instanceof MethodRef) {
-						isMethod = true;
-						fRequestor.acceptMethodReference(current.name,
-								((MethodRef) value).argCount, current.start,
-								current.end);
-					}
-				}
-				if (!isMethod) {
-					fRequestor
-							.acceptFieldReference(current.name, current.start);
-				}
+				reportRef(current, iterator.getValues());
 				iterator.moveNext();
 			} else {
 				break;
 			}
+		}
+	}
+
+	private void reportRef(final ReferenceKey current, final List<Object> values) {
+		if (values.contains(Boolean.FALSE)) {
+			return;
+		}
+		boolean processed = false;
+		for (Object value : values) {
+			if (value instanceof MethodRef) {
+				processed = true;
+				fRequestor.acceptMethodReference(current.name,
+						((MethodRef) value).argCount, current.start,
+						current.end);
+			} else if (value instanceof VarDeclaration) {
+				processed = true;
+				final VarDeclaration varDecl = (VarDeclaration) value;
+				final FieldInfo fi = new FieldInfo();
+				fi.name = current.name;
+				fi.declarationStart = varDecl.sourceStart;
+				fi.nameSourceStart = current.start;
+				fi.nameSourceEnd = current.end;
+				fRequestor.enterField(fi);
+				fRequestor.exitField(varDecl.sourceEnd);
+			}
+		}
+		if (!processed) {
+			fRequestor.acceptFieldReference(current.name, current.start);
 		}
 	}
 

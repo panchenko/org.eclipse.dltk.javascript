@@ -83,9 +83,12 @@ class ReferenceSet {
 			if (currentEntry != null && key.equals(currentEntry.getKey())) {
 				currentEntry = null;
 			}
-			references.remove(key);
+			final List<Object> values = references.get(key);
+			if (values != null && !values.contains(Boolean.FALSE)) {
+				values.clear();
+				values.add(Boolean.FALSE);
+			}
 		}
-
 	}
 
 }
