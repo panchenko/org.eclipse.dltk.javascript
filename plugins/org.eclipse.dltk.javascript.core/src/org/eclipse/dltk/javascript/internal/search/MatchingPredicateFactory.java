@@ -12,17 +12,22 @@
 package org.eclipse.dltk.javascript.internal.search;
 
 import org.eclipse.dltk.core.search.SearchPattern;
-import org.eclipse.dltk.core.search.matching2.FalseMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.IMatchingPredicate;
 import org.eclipse.dltk.internal.core.search.matching.FieldPattern;
+import org.eclipse.dltk.internal.core.search.matching.MethodDeclarationPattern;
+import org.eclipse.dltk.internal.core.search.matching.MethodPattern;
 
 public class MatchingPredicateFactory {
 
 	static IMatchingPredicate<MatchingNode> create(SearchPattern pattern) {
 		if (pattern instanceof FieldPattern) {
 			return new FieldPredicate((FieldPattern) pattern);
+		} else if (pattern instanceof MethodPattern) {
+			return new MethodPredicate((MethodPattern) pattern);
+		} else if (pattern instanceof MethodDeclarationPattern) {
+			return new MethodPredicate((MethodDeclarationPattern) pattern);
 		}
-		return new FalseMatchingPredicate<MatchingNode>();
+		return null;
 	}
 
 }

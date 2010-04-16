@@ -27,6 +27,8 @@ import org.eclipse.dltk.core.search.BasicSearchEngine;
 import org.eclipse.dltk.core.search.FieldDeclarationMatch;
 import org.eclipse.dltk.core.search.FieldReferenceMatch;
 import org.eclipse.dltk.core.search.IDLTKSearchScope;
+import org.eclipse.dltk.core.search.MethodDeclarationMatch;
+import org.eclipse.dltk.core.search.MethodReferenceMatch;
 import org.eclipse.dltk.core.search.SearchDocument;
 import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.search.SearchParticipant;
@@ -66,6 +68,9 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		final IMatchingPredicate<MatchingNode> predicate = MatchingPredicateFactory
 				.create(pattern);
+		if (predicate == null) {
+			return;
+		}
 		inferencer2.setVisitor(new JavaScriptMatchingVisitor(inferencer2,
 				new MatchingCollector<MatchingNode>(predicate, nodeSet)));
 		for (SearchDocument document : searchDocuments) {
@@ -135,9 +140,22 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 					/* accuracy */, node.sourceStart(), node.sourceEnd()
 							- node.sourceStart(), true, true, false,
 					participant, element.getResource()));
+		} else if (node instanceof MethodDeclarationNode) {
+			requestor.acceptSearchMatch(new MethodDeclarationMatch(element,
+					SearchMatch.A_ACCURATE, node.sourceStart(), node
+							.sourceEnd()
+							- node.sourceStart(), participant, element
+							.getResource()));
+		} else if (node instanceof MethodReferenceNode) {
+			requestor.acceptSearchMatch(new MethodReferenceMatch(element,
+					SearchMatch.A_ACCURATE, node.sourceStart(), node
+							.sourceEnd()
+							- node.sourceStart(), false, participant, element
+							.getResource()));
+		} else {
+			throw new IllegalArgumentException(node.getClass().getName()
+					+ " support not implemented");
 		}
-		// TODO Auto-generated method stub
-
 	}
 
 	public void setProgressMonitor(IProgressMonitor progressMonitor) {
