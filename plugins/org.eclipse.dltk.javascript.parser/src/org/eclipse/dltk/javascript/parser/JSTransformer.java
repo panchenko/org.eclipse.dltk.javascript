@@ -1118,13 +1118,24 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		List<Integer> commas = new ArrayList<Integer>();
 
 		for (int i = 0; i < node.getChildCount(); i++) {
-			initializer.addInitializer((ObjectInitializerPart) transformNode(
-					node.getChild(i), initializer));
-
-			if (i > 0)
-				commas.add(getTokenOffset(JSParser.COMMA, node.getChild(i - 1)
-						.getTokenStopIndex() + 1, node.getChild(i)
-						.getTokenStartIndex()));
+			final Tree child = node.getChild(i);
+			if (child.getType() == JSParser.COMMA) {
+				commas.add(getTokenOffset(child.getTokenStartIndex()));
+			} else {
+				initializer
+						.addInitializer((ObjectInitializerPart) transformNode(
+								child, initializer));
+			}
+		}
+		if (!commas.isEmpty()
+				&& commas.size() >= initializer.getInitializers().size()) {
+			reporter
+					.setMessage(
+							JavaScriptParserProblems.TRAILING_COMMA_OBJECT_INITIALIZER,
+							"trailing comma is not legal in ECMA-262 object initializers");
+			final int comma = commas.get(commas.size() - 1);
+			reporter.setRange(comma, comma + 1);
+			reporter.report();
 		}
 
 		initializer.setCommas(commas);
