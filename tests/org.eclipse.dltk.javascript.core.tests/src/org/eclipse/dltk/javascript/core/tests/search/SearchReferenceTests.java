@@ -14,7 +14,6 @@ package org.eclipse.dltk.javascript.core.tests.search;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
 
@@ -40,8 +39,27 @@ public class SearchReferenceTests extends AbstractSingleProjectSearchTests {
 	public void testVarA() throws CoreException {
 		final TestSearchResults results = search("a", FIELD, REFERENCES);
 		assertEquals(1, results.size());
-		final IModelElement module = results
-				.locate(ISourceModule.class, "b.js");
-		assertNotNull(module);
+		final IModelElement module = results.locate(IField.class, "b");
+		final IModelElement parent = module.getParent();
+		assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
+		assertEquals("b.js", parent.getElementName());
+	}
+
+	public void testMethodRef() throws CoreException {
+		final TestSearchResults results = search("size", METHOD, REFERENCES);
+		assertEquals(1, results.size());
+		final IModelElement element = results.get(0);
+		final IModelElement parent = element
+				.getAncestor(IModelElement.SOURCE_MODULE);
+		assertEquals("size.js", parent.getElementName());
+	}
+
+	public void testPropertyRef() throws CoreException {
+		final TestSearchResults results = search("length", FIELD, REFERENCES);
+		assertEquals(1, results.size());
+		final IModelElement element = results.get(0);
+		final IModelElement parent = element
+				.getAncestor(IModelElement.SOURCE_MODULE);
+		assertEquals("length.js", parent.getElementName());
 	}
 }
