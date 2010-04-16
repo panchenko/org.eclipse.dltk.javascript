@@ -232,7 +232,7 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="org.eclipse.dltk.javascript.ui"
-            name="DLTK Javascript"
+            name="JavaScript [DLTK]"
             >
       </category>
       <wizard
