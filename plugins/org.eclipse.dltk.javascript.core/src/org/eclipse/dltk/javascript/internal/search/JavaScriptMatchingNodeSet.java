@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-public class MatchingNodeSet extends AbstractMatchingNodeSet<MatchingNode> {
+import org.eclipse.dltk.core.search.matching2.MatchingNodeSet;
+
+public class JavaScriptMatchingNodeSet extends MatchingNodeSet<MatchingNode> {
 
 	@Override
 	protected boolean checkRange(MatchingNode node, int start, int end) {

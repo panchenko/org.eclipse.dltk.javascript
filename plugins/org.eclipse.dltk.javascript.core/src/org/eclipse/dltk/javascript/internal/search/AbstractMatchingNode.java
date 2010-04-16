@@ -13,7 +13,7 @@ package org.eclipse.dltk.javascript.internal.search;
 
 import org.eclipse.dltk.ast.ASTNode;
 
-public abstract class AbstractMatchingNode<E extends ASTNode> extends
+public abstract class AbstractMatchingNode<E extends ASTNode> implements
 		MatchingNode {
 
 	public final E node;
@@ -36,12 +36,10 @@ public abstract class AbstractMatchingNode<E extends ASTNode> extends
 		return false;
 	}
 
-	@Override
 	public int sourceStart() {
 		return node.sourceStart();
 	}
 
-	@Override
 	public int sourceEnd() {
 		return node.sourceEnd();
 	}

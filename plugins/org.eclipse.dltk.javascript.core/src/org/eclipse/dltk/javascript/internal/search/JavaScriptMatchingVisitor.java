@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
+import org.eclipse.dltk.core.search.matching2.MatchingCollector;
 import org.eclipse.dltk.internal.javascript.ti.GetMode;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
@@ -21,13 +22,13 @@ import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 
 public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 
-	private final PatternLocator<MatchingNode> locator;
+	private final MatchingCollector<MatchingNode> locator;
 
 	/**
 	 * @param context
 	 */
 	public JavaScriptMatchingVisitor(ITypeInferenceContext context,
-			PatternLocator<MatchingNode> locator) {
+			MatchingCollector<MatchingNode> locator) {
 		super(context);
 		this.locator = locator;
 	}

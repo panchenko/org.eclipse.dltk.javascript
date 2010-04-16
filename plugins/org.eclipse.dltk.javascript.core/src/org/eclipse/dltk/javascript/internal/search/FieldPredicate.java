@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
+import org.eclipse.dltk.core.search.matching2.AbstractMatchingPredicate;
+import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.internal.core.search.matching.FieldPattern;
 
 public class FieldPredicate extends AbstractMatchingPredicate<MatchingNode> {

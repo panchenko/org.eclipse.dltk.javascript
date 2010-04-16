@@ -12,12 +12,12 @@
 package org.eclipse.dltk.javascript.internal.search;
 
 import java.util.List;
-import java.util.Stack;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.IModelElementVisitorExtension;
@@ -35,12 +35,17 @@ import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.core.search.SearchRequestor;
 import org.eclipse.dltk.core.search.matching.IMatchLocator;
 import org.eclipse.dltk.core.search.matching.ModuleFactory;
+import org.eclipse.dltk.core.search.matching2.FalseMatchingPredicate;
+import org.eclipse.dltk.core.search.matching2.IMatchingPredicate;
+import org.eclipse.dltk.core.search.matching2.MatchLevel;
+import org.eclipse.dltk.core.search.matching2.MatchingCollector;
 import org.eclipse.dltk.internal.core.search.matching.FieldPattern;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
-public class JavaScriptMatchLocator implements IMatchLocator {
+public class JavaScriptMatchLocator implements IMatchLocator,
+		IModelElementVisitor, IModelElementVisitorExtension {
 
 	private IProgressMonitor progressMonitor;
 	private SearchRequestor requestor;
@@ -53,15 +58,17 @@ public class JavaScriptMatchLocator implements IMatchLocator {
 		this.scope = scope;
 	}
 
+	private JavaScriptMatchingNodeSet nodeSet = new JavaScriptMatchingNodeSet();
+	private SearchParticipant participant;
+
 	public void locateMatches(SearchDocument[] searchDocuments)
 			throws CoreException {
 		Assert.isNotNull(requestor);
 		final ModuleFactory moduleFactory = new ModuleFactory(scope);
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
-		final MatchingNodeSet nodeSet = new MatchingNodeSet();
 		final IMatchingPredicate<MatchingNode> predicate = createPredicate();
 		inferencer2.setVisitor(new JavaScriptMatchingVisitor(inferencer2,
-				new PatternLocator<MatchingNode>(predicate, nodeSet)));
+				new MatchingCollector<MatchingNode>(predicate, nodeSet)));
 		final JavaScriptParser parser = new JavaScriptParser();
 		for (SearchDocument document : searchDocuments) {
 			final ISourceModule module = moduleFactory.create(document);
@@ -72,14 +79,17 @@ public class JavaScriptMatchLocator implements IMatchLocator {
 			// TODO use AST cache
 			final Script script = parser.parse((IModuleSource) module, null);
 			inferencer2.doInferencing(script);
-			resolvePotentialMatches(nodeSet);
-			module.accept(new ModelVisitor(document.getParticipant(), nodeSet));
+			if (!nodeSet.isEmpty()) {
+				resolvePotentialMatches(nodeSet);
+				participant = document.getParticipant();
+				module.accept(this);
+			}
 		}
 	}
 
-	private void resolvePotentialMatches(MatchingNodeSet nodeSet) {
+	private void resolvePotentialMatches(JavaScriptMatchingNodeSet nodeSet) {
 		for (MatchingNode node : nodeSet.getPossibleMatchingNodes()) {
-			nodeSet.addMatch(node, MatchLevel.EXACT_MATCH);
+			nodeSet.addMatch(node, MatchLevel.ACCURATE_MATCH);
 		}
 		nodeSet.clearPossibleMatchingNodes();
 		if (BasicSearchEngine.VERBOSE) {
@@ -88,45 +98,26 @@ public class JavaScriptMatchLocator implements IMatchLocator {
 		}
 	}
 
-	private class ModelVisitor implements IModelElementVisitor,
-			IModelElementVisitorExtension {
+	public boolean visit(IModelElement element) {
+		return element instanceof IMember;
+	}
 
-		private final SearchParticipant participant;
-		private final MatchingNodeSet nodeSet;
-		private final Stack<IModelElement> stack = new Stack<IModelElement>();
-
-		public ModelVisitor(SearchParticipant participant,
-				MatchingNodeSet nodeSet) {
-			this.participant = participant;
-			this.nodeSet = nodeSet;
+	public void endVisit(IModelElement element) {
+		if (!(element instanceof IMember)) {
+			return;
 		}
-
-		public boolean visit(IModelElement element) {
-			if (element instanceof ISourceReference) {
-				stack.push(element);
+		try {
+			final ISourceRange range = ((ISourceReference) element)
+					.getSourceRange();
+			List<MatchingNode> matchingNodes = nodeSet.matchingNodes(range
+					.getOffset(), range.getOffset() + range.getLength());
+			for (MatchingNode node : matchingNodes) {
+				nodeSet.removeTrustedMatch(node);
+				report(node, element);
 			}
-			// TODO Auto-generated method stub
-			return true;
-		}
-
-		public void endVisit(IModelElement element) {
-			if (stack.isEmpty() || element != stack.peek()) {
-				return;
-			}
-			try {
-				final ISourceRange range = ((ISourceReference) element)
-						.getSourceRange();
-				List<MatchingNode> matchingNodes = nodeSet.matchingNodes(range
-						.getOffset(), range.getOffset() + range.getLength());
-				for (MatchingNode node : matchingNodes) {
-					nodeSet.removeTrustedMatch(node);
-					report(participant, node, element);
-				}
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			stack.pop();
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -140,8 +131,8 @@ public class JavaScriptMatchLocator implements IMatchLocator {
 		return new FalseMatchingPredicate<MatchingNode>();
 	}
 
-	protected void report(SearchParticipant participant, MatchingNode node,
-			IModelElement element) throws CoreException {
+	protected void report(MatchingNode node, IModelElement element)
+			throws CoreException {
 		if (node instanceof FieldDeclarationNode) {
 			requestor.acceptSearchMatch(new FieldDeclarationMatch(element,
 					SearchMatch.A_ACCURATE
