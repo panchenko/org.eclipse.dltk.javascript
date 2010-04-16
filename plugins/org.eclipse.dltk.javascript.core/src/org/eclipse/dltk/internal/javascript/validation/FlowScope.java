@@ -13,5 +13,6 @@ package org.eclipse.dltk.internal.javascript.validation;
 
 import java.util.HashSet;
 
+@SuppressWarnings("serial")
 public class FlowScope extends HashSet<FlowEndKind> {
 }
