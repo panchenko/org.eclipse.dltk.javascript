@@ -12,10 +12,12 @@
 package org.eclipse.dltk.javascript.parser.tests;
 
 import org.eclipse.dltk.ast.utils.ASTUtil;
+import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 
 public class ObjectInitializerTests extends AbstractJSParserTest {
 
@@ -55,6 +57,15 @@ public class ObjectInitializerTests extends AbstractJSParserTest {
 				.getInitializers().get(1);
 		assertIdentifier("b", p2.getName());
 		assertDecimal("2", p2.getValue());
+	}
+
+	public void testTrailingComma() {
+		StringList code = new StringList();
+		code.add(" var obj = { a:b,b:c,}");
+		parse(code.toString());
+		assertEquals(
+				JavaScriptParserProblems.TRAILING_COMMA_OBJECT_INITIALIZER,
+				getProblemId());
 	}
 
 }
