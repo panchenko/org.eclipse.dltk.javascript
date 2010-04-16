@@ -16,6 +16,7 @@ import java.util.Set;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
@@ -40,10 +41,14 @@ public class JavaScriptValidations {
 		if (savedAST instanceof Script) {
 			return (Script) savedAST;
 		}
-		// TODO use cached AST
+		// TODO pass additional predicate here...
+		final IModuleDeclaration declaration = SourceParserUtil.parse(module,
+				context.getProblemReporter());
+		if (declaration instanceof Script) {
+			context.set(IBuildContext.ATTR_MODULE_DECLARATION, declaration);
+			return (Script) declaration;
+		}
 		final JavaScriptParser parser = new JavaScriptParser();
-		// TODO use option from project
-		parser.setTypeInformationEnabled(true);
 		final Script script = parser.parse(context, context
 				.getProblemReporter());
 		context.set(IBuildContext.ATTR_MODULE_DECLARATION, script);
