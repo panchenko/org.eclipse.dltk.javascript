@@ -88,12 +88,10 @@
             nature="org.eclipse.dltk.javascript.core.nature"
             priority="0">
       </searchFactory>
-      <!-- IN PROGRESS
       <matchLocator
             class="org.eclipse.dltk.javascript.internal.search.JavaScriptMatchLocator"
             nature="org.eclipse.dltk.javascript.core.nature">
       </matchLocator>
-      -->
    </extension>
    <extension
          point="org.eclipse.dltk.core.callHierarchy">
