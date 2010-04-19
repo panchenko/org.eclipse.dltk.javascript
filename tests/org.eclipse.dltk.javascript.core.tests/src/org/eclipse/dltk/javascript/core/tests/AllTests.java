@@ -8,6 +8,7 @@ import org.eclipse.dltk.javascript.core.tests.contentassist.CompletionStringPars
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchDeclarationTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchReferenceTests;
+import org.eclipse.dltk.javascript.core.tests.search.SearchTypeReferenceTests;
 import org.eclipse.dltk.javascript.core.tests.structure.JSLintModelTests;
 import org.eclipse.dltk.javascript.core.tests.structure.StructureParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinference.TypeInferenceTests;
@@ -34,6 +35,7 @@ public class AllTests {
 		suite.addTestSuite(CompletionStringParsing.class);
 		suite.addTest(SearchDeclarationTests.suite());
 		suite.addTest(SearchReferenceTests.suite());
+		suite.addTest(SearchTypeReferenceTests.suite());
 		// $JUnit-END$
 		return suite;
 	}
