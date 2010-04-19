@@ -9,7 +9,7 @@
                description="JavaScript Source Parser"
                id="org.eclipse.dltk.javascript.NewParser"
                name="JavaScript *DLTK* Parser"
-               priority="-1" />
+               priority="1" />
       </parserContribution>
    </extension>
 </plugin>
