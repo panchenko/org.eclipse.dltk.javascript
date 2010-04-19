@@ -18,9 +18,11 @@ import java.util.Stack;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
 import org.eclipse.dltk.internal.javascript.ti.GetMode;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -28,6 +30,7 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
 public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 
@@ -118,41 +121,21 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 			VariableDeclaration declaration) {
 		final IValueReference result = super.createVariable(context,
 				declaration);
-		locator.report(new FieldDeclarationNode(declaration.getIdentifier()));
+		locator.report(new FieldDeclarationNode(declaration.getIdentifier(),
+				result.getDeclaredType()));
 		return result;
 	}
 
 	@Override
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
+		final IValueReference result = super.visitFunctionStatement(node);
 		Identifier name = node.getName();
 		if (name != null) {
-			locator.report(new MethodDeclarationNode(name));
+			IMethod method = (JSMethod) result
+					.getAttribute(IReferenceAttributes.PARAMETERS);
+			locator.report(new MethodDeclarationNode(name, method));
 		}
-		return super.visitFunctionStatement(node);
+		return result;
 	}
-
-	// private <E extends Element> E extractElement(IValueParent reference,
-	// Class<E> elementType) {
-	// if (reference instanceof IValueReference) {
-	// return extractElement((IValueReference) reference, elementType);
-	// } else {
-	// return null;
-	// }
-	// }
-
-	// /**
-	// * @param reference
-	// * @param elementType
-	// * @return
-	// */
-	// @SuppressWarnings("unchecked")
-	// private <E extends Element> E extractElement(IValueReference reference,
-	// Class<E> elementType) {
-	// Object value = reference.getAttribute(IReferenceAttributes.ELEMENT);
-	// if (elementType.isInstance(value)) {
-	// return (E) value;
-	// }
-	// return null;
-	// }
 
 }

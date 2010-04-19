@@ -12,11 +12,15 @@
 package org.eclipse.dltk.javascript.internal.search;
 
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
 public class MethodDeclarationNode extends AbstractMatchingNode<Identifier> {
 
-	public MethodDeclarationNode(Identifier node) {
+	final IMethod method;
+
+	public MethodDeclarationNode(Identifier node, IMethod method) {
 		super(node);
+		this.method = method;
 	}
 
 }

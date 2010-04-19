@@ -18,6 +18,7 @@ import org.eclipse.dltk.internal.core.search.matching.FieldPattern;
 import org.eclipse.dltk.internal.core.search.matching.MethodDeclarationPattern;
 import org.eclipse.dltk.internal.core.search.matching.MethodPattern;
 import org.eclipse.dltk.internal.core.search.matching.OrPattern;
+import org.eclipse.dltk.internal.core.search.matching.TypeReferencePattern;
 
 public class MatchingPredicateFactory {
 
@@ -28,14 +29,18 @@ public class MatchingPredicateFactory {
 			return new MethodPredicate((MethodPattern) pattern);
 		} else if (pattern instanceof MethodDeclarationPattern) {
 			return new MethodPredicate((MethodDeclarationPattern) pattern);
+		} else if (pattern instanceof TypeReferencePattern) {
+			return new TypeReferencePredicate((TypeReferencePattern) pattern);
 		} else if (pattern instanceof OrPattern) {
 			OrMatchingPredicate<MatchingNode> predicate = new OrMatchingPredicate<MatchingNode>();
 			for (SearchPattern p : ((OrPattern) pattern).getPatterns()) {
-				predicate.addPredicate(create(p));
+				final IMatchingPredicate<MatchingNode> pp = create(p);
+				if (pp != null) {
+					predicate.addPredicate(pp);
+				}
 			}
 			return predicate.optimize();
 		}
 		return null;
 	}
-
 }
