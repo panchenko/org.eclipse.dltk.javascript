@@ -38,6 +38,16 @@ public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
 		assertEquals("returnType.js", parent.getElementName());
 	}
 
+	public void testParamType() throws CoreException {
+		final TestSearchResults results = search("Request", TYPE, REFERENCES);
+		assertEquals(1, results.size());
+		final IModelElement method = results.locate(IMethod.class,
+				"executeRequest");
+		final IModelElement parent = method.getParent();
+		assertEquals(IModelElement.SOURCE_MODULE, parent.getElementType());
+		assertEquals("paramType.js", parent.getElementName());
+	}
+
 	public void testVarType() throws CoreException {
 		final TestSearchResults results = search("MyApplication", TYPE,
 				REFERENCES);
