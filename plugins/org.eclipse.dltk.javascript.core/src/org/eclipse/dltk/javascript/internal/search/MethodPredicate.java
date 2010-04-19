@@ -22,7 +22,7 @@ public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 	private final boolean references;
 
 	public MethodPredicate(MethodPattern pattern) {
-		super(pattern, pattern.declaringSimpleName);
+		super(pattern, pattern.selector);
 		this.declarations = pattern.findDeclarations;
 		this.references = pattern.findReferences;
 	}
