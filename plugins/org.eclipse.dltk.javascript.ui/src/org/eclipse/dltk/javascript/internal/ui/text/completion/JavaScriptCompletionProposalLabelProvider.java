@@ -11,7 +11,6 @@ package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
 import java.net.URL;
 
-import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
@@ -23,8 +22,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		String returnType = null;
 		if (methodProposal.extraInfo instanceof SelfCompletingReference) {
 			SelfCompletingReference cm = (SelfCompletingReference) methodProposal.extraInfo;
-			methodProposal.setParameterNames(CharOperation
-					.stringArrayToCharCharArray(cm.getParameterNames()));
+			methodProposal.setParameterNames(cm.getParameterNames());
 			returnType = cm.getReturnType();
 		}
 		StringBuffer nameBuffer = new StringBuffer();
