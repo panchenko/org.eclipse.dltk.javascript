@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.codeassist.IAssistParser;
 import org.eclipse.dltk.codeassist.ScriptSelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKLanguageManager;
@@ -44,10 +43,6 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 
 	public JavaScriptSelectionEngine(/* Map settings */) {
 		// super(settings);
-	}
-
-	public IAssistParser getParser() {
-		return null;
 	}
 
 	IModuleSource cu;

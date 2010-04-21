@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.codeassist.IAssistParser;
 import org.eclipse.dltk.codeassist.RelevanceConstants;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
@@ -71,10 +70,6 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 	}
 
 	protected String processTypeName(IType method, String token) {
-		return null;
-	}
-
-	public IAssistParser getParser() {
 		return null;
 	}
 
