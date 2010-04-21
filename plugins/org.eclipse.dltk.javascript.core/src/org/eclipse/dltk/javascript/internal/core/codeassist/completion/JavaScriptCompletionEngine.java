@@ -375,7 +375,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 
 					if (ref.isFunctionRef()) {
 						Iterator<?> childs = ref.getChilds(true).iterator();
-						List<char[]> al = new ArrayList<char[]>();
+						List<String> al = new ArrayList<String>();
 						while (childs.hasNext()) {
 							Object o = childs.next();
 							if (o instanceof StandardSelfCompletingReference
@@ -388,15 +388,12 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 								}
 								al.set(index,
 										((StandardSelfCompletingReference) o)
-												.getName().toCharArray());
+												.getName());
 							}
 						}
 						if (al.size() > 0) {
-							char[][] parameterNames = new char[al.size()][];
-							for (int i = 0; i < al.size(); i++) {
-								parameterNames[i] = al.get(i);
-							}
-							createProposal.setParameterNames(parameterNames);
+							createProposal.setParameterNames(al
+									.toArray(new String[al.size()]));
 						}
 					}
 					// createProposal.setSignature(name);
@@ -470,11 +467,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 
 						}
 						if (arguments != null && arguments.length > 0) {
-							char[][] args = new char[arguments.length][];
-							for (int j = 0; j < arguments.length; ++j) {
-								args[j] = arguments[j].toCharArray();
-							}
-							proposal.setParameterNames(args);
+							proposal.setParameterNames(arguments);
 						}
 						if (kind == CompletionProposal.METHOD_REF) {
 							StringBuffer sig = new StringBuffer();
