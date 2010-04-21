@@ -29,7 +29,6 @@ import org.eclipse.dltk.core.CompletionContext;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IAccessRule;
-import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IType;
@@ -508,7 +507,4 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		findKeywords(startPart.toCharArray(), keyWordsArray, true);
 	}
 
-	protected String processFieldName(IField field, String token) {
-		return null;
-	}
 }
