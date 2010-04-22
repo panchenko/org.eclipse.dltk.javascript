@@ -143,23 +143,21 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 		names.remove(TypeInferencer.RETURN_VALUE);
 		completeFromMap(position, completion, names);
 		if (names.size() > 0) {
-			char[][] choices = new char[names.size()][];
+			String[] choices = new String[names.size()];
 			int ia = 0;
 			for (Iterator iterator = names.keySet().iterator(); iterator
 					.hasNext();) {
 				String name = (String) iterator.next();
-				choices[ia] = name.toCharArray();
-				ia++;
+				choices[ia++] = name;
 			}
 			findLocalVariables(token, choices, true, false);
 		}
 		if (classes.size() > 0) {
-			char[][] choices = new char[classes.size()][];
+			String[] choices = new String[classes.size()];
 			int ia = 0;
 			for (Iterator iterator = classes.iterator(); iterator.hasNext();) {
 				IReference name = (IReference) iterator.next();
-				choices[ia] = name.getName().toCharArray();
-				ia++;
+				choices[ia++] = name.getName();
 			}
 			findElements(token, choices, true, false,
 					CompletionProposal.TYPE_REF);
@@ -207,11 +205,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			findMethods(token, true, methods);
 			if (!fields.isEmpty()) {
 				completedNames.addAll(fields);
-				char[][] choices = new char[fields.size()][];
-				int ia = 0;
-				for (String field : fields) {
-					choices[ia++] = field.toCharArray();
-				}
+				String[] choices = fields.toArray(new String[fields.size()]);
 				findLocalVariables(token, choices, true, false);
 			}
 			// doCompletionOnFunction(position, pos, completion);
