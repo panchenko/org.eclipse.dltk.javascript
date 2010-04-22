@@ -442,8 +442,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 								name.toCharArray(), false)) {
 					int relevance = computeBaseRelevance();
 					relevance += computeRelevanceForInterestingProposal();
-					relevance += computeRelevanceForCaseMatching(token, name
-							.toCharArray());
+					relevance += computeRelevanceForCaseMatching(token, name);
 					relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE); // no
 
 					// accept result
@@ -496,11 +495,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 
 	private void doCompletionOnKeyword(int position, int pos, String startPart) {
 		String[] keywords = JavaScriptKeywords.getJavaScriptKeywords();
-		char[][] keyWordsArray = new char[keywords.length][];
-		for (int a = 0; a < keywords.length; a++) {
-			keyWordsArray[a] = keywords[a].toCharArray();
-		}
-		findKeywords(startPart.toCharArray(), keyWordsArray, true);
+		findKeywords(startPart.toCharArray(), keywords, true);
 	}
 
 }
