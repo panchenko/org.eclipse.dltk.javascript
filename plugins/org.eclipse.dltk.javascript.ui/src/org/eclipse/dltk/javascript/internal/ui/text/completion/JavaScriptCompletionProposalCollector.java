@@ -73,7 +73,7 @@ public class JavaScriptCompletionProposalCollector extends
 	 * @see org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector#isFiltered(org.eclipse.dltk.core.CompletionProposal)
 	 */
 	protected boolean isFiltered(CompletionProposal proposal) {
-		if (!doubleFilter.add(new String(proposal.getName()))) {
+		if (!doubleFilter.add(proposal.getName())) {
 			return true;
 		}
 		return super.isFiltered(proposal);
