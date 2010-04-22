@@ -349,7 +349,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 				if (startsWith(cm, completionPart)) {
 					CompletionProposal createProposal = this.createProposal(cm
 							.getKind(), this.actualCompletionPosition);
-					char[] name = cm.getName().toCharArray();
+					String name = cm.getName();
 					createProposal.setName(name);
 					createProposal.setCompletion(name);
 					// createProposal.setSignature(name);
@@ -368,7 +368,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 							.isFunctionRef() ? CompletionProposal.METHOD_REF
 							: CompletionProposal.LOCAL_VARIABLE_REF,
 							this.actualCompletionPosition);
-					char[] name = ref.getName().toCharArray();
+					String name = ref.getName();
 					createProposal.setName(name);
 					createProposal.setCompletion(name);
 
@@ -439,15 +439,17 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
 			for (int i = 0; i < methods.size(); i++) {
 				IMethod method = methods.get(i);
 				String qname = processMethodName(method, tok);
-				char[] name = qname.toCharArray();
+				String name = qname;
 				if (DLTKCore.DEBUG_COMPLETION) {
 					System.out.println("Completion:" + qname);
 				}
-				if (length <= name.length
-						&& CharOperation.prefixEquals(token, name, false)) {
+				if (length <= name.length()
+						&& CharOperation.prefixEquals(token,
+								name.toCharArray(), false)) {
 					int relevance = computeBaseRelevance();
 					relevance += computeRelevanceForInterestingProposal();
-					relevance += computeRelevanceForCaseMatching(token, name);
+					relevance += computeRelevanceForCaseMatching(token, name
+							.toCharArray());
 					relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE); // no
 
 					// accept result
