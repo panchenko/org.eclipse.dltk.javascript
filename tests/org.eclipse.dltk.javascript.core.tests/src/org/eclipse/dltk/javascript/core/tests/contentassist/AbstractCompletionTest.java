@@ -62,8 +62,7 @@ public class AbstractCompletionTest extends TestCase {
 		Collections.sort(results, new Comparator<CompletionProposal>() {
 
 			public int compare(CompletionProposal pr, CompletionProposal pr1) {
-				return new String(pr.getName()).compareTo(new String(pr1
-						.getName()));
+				return pr.getName().compareTo(pr1.getName());
 			}
 
 		});
@@ -72,7 +71,7 @@ public class AbstractCompletionTest extends TestCase {
 		int pos = 0;
 		while (it.hasNext()) {
 			CompletionProposal pr = it.next();
-			assertEquals(names[pos], new String(pr.getName()));
+			assertEquals(names[pos], pr.getName());
 			pos++;
 		}
 	}
