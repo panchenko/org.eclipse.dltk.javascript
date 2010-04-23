@@ -14,6 +14,8 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
@@ -21,7 +23,7 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils.PositionCalculator;
-import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
+import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
@@ -60,7 +62,13 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			inferencer2
 					.setModelElement((org.eclipse.dltk.core.ISourceModule) cu);
 		}
-		final Script script = JavaScriptParserUtil.parse(cu, null);
+		final Script script = new JavaScriptParser().parse(new ModuleSource(
+				content) {
+			@Override
+			public IModelElement getModelElement() {
+				return inferencer2.getModelElement();
+			}
+		}, null);
 		inferencer2.doInferencing(script);
 		inferencer2.getCollection();
 
