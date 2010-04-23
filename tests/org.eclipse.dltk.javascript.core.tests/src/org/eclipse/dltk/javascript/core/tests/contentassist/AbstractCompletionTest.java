@@ -26,18 +26,23 @@ import junit.framework.TestCase;
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.CompletionProposal;
+import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeStringReference;
 import org.eclipse.dltk.internal.javascript.typeinference.NativeXMLReference;
-import org.eclipse.dltk.javascript.internal.core.codeassist.completion.JavaScriptCompletionEngine;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 
 public class AbstractCompletionTest extends TestCase {
 
 	protected ICompletionEngine createEngine(List<CompletionProposal> results,
 			boolean useEngine) {
-		JavaScriptCompletionEngine engine = new JavaScriptCompletionEngine();
+		final ICompletionEngine engine = DLTKLanguageManager
+				.getCompletionEngine(JavaScriptNature.NATURE_ID);
 		engine.setRequestor(new TestCompletionRequestor(results));
-		engine.setUseEngine(useEngine);
+		if (engine instanceof JSCompletionEngine) {
+			((JSCompletionEngine) engine).setUseEngine(useEngine);
+		}
 		return engine;
 	}
 
