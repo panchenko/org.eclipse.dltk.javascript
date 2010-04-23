@@ -167,6 +167,7 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.WhileBlockBracesConf
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WhileConditionParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WithBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WithConditionParensConfiguration;
+import org.eclipse.dltk.utils.IntList;
 
 public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
@@ -391,7 +392,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			private IFormatterNode visitCombinedNodeList(
-					List<? extends ASTNode> nodes, List<Integer> punctuations,
+					List<? extends ASTNode> nodes, IntList punctuations,
 					List<IPunctuationConfiguration> configurations) {
 
 				if (nodes.isEmpty())
@@ -408,7 +409,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				for (int i = 0; i < nodes.size(); i++) {
 					visit(nodes.get(i));
 					if (i < punctuations.size() && i + 1 < nodes.size()) {
-						int position = punctuations.get(i).intValue();
+						int position = punctuations.get(i);
 						skipSpacesOnly(formatterNode, position);
 						processPunctuation(position, 1, configurations.get(i));
 						skipSpacesOnly(formatterNode, nodes.get(i + 1)
@@ -421,7 +422,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			private IFormatterNode visitCombinedNodeList(
-					List<? extends ASTNode> nodes, List<Integer> punctuations,
+					List<? extends ASTNode> nodes, IntList punctuations,
 					IPunctuationConfiguration configuration) {
 				return visitCombinedNodeList(nodes, punctuations, Collections
 						.nCopies(punctuations.size(), configuration));
@@ -642,10 +643,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				nodes.add(node.getCondition());
 				nodes.add(node.getStep());
 
-				List<Integer> semicolons = new ArrayList<Integer>();
-				semicolons.add(new Integer(node.getInitialSemicolonPosition()));
-				semicolons.add(new Integer(node
-						.getConditionalSemicolonPosition()));
+				IntList semicolons = new IntList();
+				semicolons.add(node.getInitialSemicolonPosition());
+				semicolons.add(node.getConditionalSemicolonPosition());
 
 				List<IPunctuationConfiguration> semicolonConfigurations = new ArrayList<IPunctuationConfiguration>();
 
@@ -775,8 +775,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				visit(node.getArray());
 
 				processBrackets(node.getLB(), node.getRB(), Collections
-						.<ASTNode> singletonList(node.getIndex()), Collections
-						.<Integer> emptyList(),
+						.<ASTNode> singletonList(node.getIndex()),
+						IntList.EMPTY_LIST,
 						new GetItemArrayBracketsConfiguration(document));
 
 				checkedPop(formatterNode, node.sourceEnd());
@@ -839,8 +839,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			 */
 			private void processParens(int leftParen, int rightParen,
 					List<? extends ASTNode> expressions,
-					IParensConfiguration configuration,
-					List<Integer> punctuations,
+					IParensConfiguration configuration, IntList punctuations,
 					IPunctuationConfiguration punctuationConfiguration) {
 				ParensNode parens = new ParensNode(document, configuration);
 				parens.setBegin(createCharNode(document, leftParen));
@@ -857,8 +856,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			private void processParens(int leftParen, int rightParen,
 					List<ASTNode> expressions,
-					IParensConfiguration configuration,
-					List<Integer> punctuations,
+					IParensConfiguration configuration, IntList punctuations,
 					List<IPunctuationConfiguration> punctuationConfigurations) {
 				ParensNode parens = new ParensNode(document, configuration);
 				parens.setBegin(createCharNode(document, leftParen));
@@ -965,8 +963,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			 * process array initialization
 			 */
 			private IFormatterNode processBrackets(int leftBracket,
-					int rightBracket, List<ASTNode> nodes,
-					List<Integer> commas, IBracketsConfiguration configuration) {
+					int rightBracket, List<ASTNode> nodes, IntList commas,
+					IBracketsConfiguration configuration) {
 				BracketsNode brackets = new BracketsNode(document,
 						configuration);
 
