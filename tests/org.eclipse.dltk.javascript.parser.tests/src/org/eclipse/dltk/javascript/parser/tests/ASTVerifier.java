@@ -83,6 +83,7 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.eclipse.dltk.utils.IntList;
 
 public class ASTVerifier extends ASTVisitor<Boolean> {
 
@@ -108,11 +109,11 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 			Assert.assertEquals(ch, source.charAt(charAt));
 	}
 
-	private void testCharList(char ch, List<Integer> charIndexes) {
+	private void testCharList(char ch, IntList charIndexes) {
 		for (int i = 0; i < charIndexes.size(); i++) {
-			int charAt = charIndexes.get(i).intValue();
-			Assert.assertTrue(charAt > -1);
-			testChar(ch, charAt);
+			int index = charIndexes.get(i);
+			Assert.assertTrue(index > -1);
+			testChar(ch, index);
 		}
 	}
 
