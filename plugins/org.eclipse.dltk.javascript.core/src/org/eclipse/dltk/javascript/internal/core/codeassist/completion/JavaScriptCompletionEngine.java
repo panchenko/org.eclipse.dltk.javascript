@@ -45,10 +45,12 @@ import org.eclipse.dltk.internal.javascript.typeinference.StandardSelfCompleting
 import org.eclipse.dltk.internal.javascript.typeinference.TypeInferencer;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils.PositionCalculator;
 import org.eclipse.dltk.javascript.internal.core.mixin.JavaScriptMixinModel;
 
-public class JavaScriptCompletionEngine extends ScriptCompletionEngine {
+public class JavaScriptCompletionEngine extends ScriptCompletionEngine
+		implements JSCompletionEngine {
 
 	private boolean useEngine = true;
 

@@ -23,7 +23,18 @@ import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils.PositionCalculator;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 
-public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine {
+public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
+		implements JSCompletionEngine {
+
+	private boolean useEngine;
+
+	public boolean isUseEngine() {
+		return useEngine;
+	}
+
+	public void setUseEngine(boolean useEngine) {
+		this.useEngine = useEngine;
+	}
 
 	public void complete(IModuleSource cu, int position, int i) {
 		this.requestor.beginReporting();
