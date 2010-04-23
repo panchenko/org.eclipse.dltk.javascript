@@ -18,12 +18,13 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.utils.IntList;
 
 public class CallExpression extends Expression {
 
 	private ASTNode expression;
 	private final List<ASTNode> arguments = new ArrayList<ASTNode>();
-	private List<Integer> commas;
+	private IntList commas;
 	private int LP = -1;
 	private int RP = -1;
 
@@ -81,11 +82,11 @@ public class CallExpression extends Expression {
 		this.RP = RP;
 	}
 
-	public List<Integer> getCommas() {
+	public IntList getCommas() {
 		return this.commas;
 	}
 
-	public void setCommas(List<Integer> commas) {
+	public void setCommas(IntList commas) {
 		this.commas = commas;
 	}
 

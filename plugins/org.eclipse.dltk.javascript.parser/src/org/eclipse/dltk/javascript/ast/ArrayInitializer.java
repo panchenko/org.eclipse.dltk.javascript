@@ -17,11 +17,12 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.utils.IntList;
 
 public class ArrayInitializer extends Expression {
 
 	private List<ASTNode> items;
-	private List<Integer> commas;
+	private IntList commas;
 	private int LB = -1;
 	private int RB = -1;
 
@@ -52,11 +53,11 @@ public class ArrayInitializer extends Expression {
 		this.items = items;
 	}
 
-	public List<Integer> getCommas() {
+	public IntList getCommas() {
 		return this.commas;
 	}
 
-	public void setCommas(List<Integer> commas) {
+	public void setCommas(IntList commas) {
 		this.commas = commas;
 	}
 

@@ -105,6 +105,7 @@ import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.parser.Reporter.Severity;
+import org.eclipse.dltk.utils.IntList;
 import org.eclipse.osgi.util.NLS;
 
 public class JSTransformer extends JSVisitor<ASTNode> {
@@ -440,7 +441,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		call.setExpression(transformNode(node.getChild(0), call));
 		Tree callArgs = node.getChild(1);
-		List<Integer> commas = new ArrayList<Integer>();
+		IntList commas = new IntList();
 		for (int i = 0; i < callArgs.getChildCount(); ++i) {
 			Tree callArg = callArgs.getChild(i);
 			final ASTNode argument = transformNode(callArg, call);
@@ -1115,7 +1116,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		ObjectInitializer initializer = new ObjectInitializer(getParent());
 
-		List<Integer> commas = new ArrayList<Integer>();
+		IntList commas = new IntList();
 
 		for (int i = 0; i < node.getChildCount(); i++) {
 			final Tree child = node.getChild(i);
@@ -1573,7 +1574,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				node.getTokenStartIndex()));
 
 		List<ASTNode> items = new ArrayList<ASTNode>(node.getChildCount());
-		List<Integer> commas = new ArrayList<Integer>();
+		IntList commas = new IntList();
 
 		for (int i = 0; i < node.getChildCount(); i++) {
 			Tree child = node.getChild(i);
@@ -1632,7 +1633,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		CommaExpression expression = new CommaExpression(getParent());
 
 		List<ASTNode> items = new ArrayList<ASTNode>(node.getChildCount());
-		List<Integer> commas = new ArrayList<Integer>();
+		IntList commas = new IntList();
 
 		for (int i = 0; i < node.getChildCount(); i++) {
 			items.add(transformNode(node.getChild(i), expression));

@@ -17,11 +17,12 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.utils.IntList;
 
 public class CommaExpression extends Expression {
 
 	private List<ASTNode> items;
-	private List<Integer> commas;
+	private IntList commas;
 
 	public CommaExpression(ASTNode parent) {
 		super(parent);
@@ -50,11 +51,11 @@ public class CommaExpression extends Expression {
 		this.items = items;
 	}
 
-	public List<Integer> getCommas() {
+	public IntList getCommas() {
 		return this.commas;
 	}
 
-	public void setCommas(List<Integer> commas) {
+	public void setCommas(IntList commas) {
 		this.commas = commas;
 	}
 

@@ -18,13 +18,14 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.utils.IntList;
 
 public class ObjectInitializer extends Expression {
 
 	private final List<ObjectInitializerPart> initializers = new ArrayList<ObjectInitializerPart>();
 	private int LC = -1;
 	private int RC = -1;
-	private List<Integer> commas;
+	private IntList commas;
 	private boolean multiline;
 
 	public ObjectInitializer(ASTNode parent) {
@@ -70,11 +71,11 @@ public class ObjectInitializer extends Expression {
 		this.RC = RC;
 	}
 
-	public List<Integer> getCommas() {
+	public IntList getCommas() {
 		return this.commas;
 	}
 
-	public void setCommas(List<Integer> commas) {
+	public void setCommas(IntList commas) {
 		this.commas = commas;
 	}
 
