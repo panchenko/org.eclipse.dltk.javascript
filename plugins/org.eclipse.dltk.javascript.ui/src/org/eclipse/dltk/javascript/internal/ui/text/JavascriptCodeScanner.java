@@ -93,18 +93,16 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 		// Add word rule for keywords, types, and constants.
 		JavascriptWordRule wordRule = new JavascriptWordRule(
 				new JavascriptWordDetector(), other, null, def);
-		for (int i = 0; i < JavaScriptKeywords.getJavaScriptKeywords().length; i++) {
-			wordRule.addWord(JavaScriptKeywords.getJavaScriptKeywords()[i],
-					keyword);
+		for (String word : JavaScriptKeywords.getJavaScriptKeywords()) {
+			wordRule.addWord(word, keyword);
 		}
 		wordRule.addWord(fgReturnKeyword, keywordReturn);
 
 		for (int i = 0; i < providers.length; i++) {
 			String[] keywords = providers[i].getKeywords();
 			if (keywords != null) {
-				for (int j = 0; j < keywords.length; j++) {
-					wordRule.addWord(keywords[j], providers[i]
-							.getToken(keywords[j]));
+				for (String word : keywords) {
+					wordRule.addWord(word, providers[i].getToken(word));
 				}
 			}
 		}
