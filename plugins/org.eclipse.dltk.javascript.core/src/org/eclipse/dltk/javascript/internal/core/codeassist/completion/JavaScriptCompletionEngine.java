@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.codeassist.RelevanceConstants;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
@@ -406,21 +405,6 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine
 	private static boolean startsWith(IReference reference, String prefix) {
 		return reference.getName().toLowerCase().startsWith(
 				prefix.toLowerCase());
-	}
-
-	int computeBaseRelevance() {
-		return RelevanceConstants.R_DEFAULT;
-	}
-
-	private int computeRelevanceForInterestingProposal() {
-		return RelevanceConstants.R_INTERESTING;
-	}
-
-	protected int computeRelevanceForRestrictions(int accessRuleKind) {
-		if (accessRuleKind == IAccessRule.K_ACCESSIBLE) {
-			return RelevanceConstants.R_NON_RESTRICTED;
-		}
-		return 0;
 	}
 
 	@Override
