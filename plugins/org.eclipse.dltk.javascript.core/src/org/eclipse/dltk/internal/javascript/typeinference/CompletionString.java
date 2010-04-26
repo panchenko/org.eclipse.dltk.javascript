@@ -27,6 +27,11 @@ public class CompletionString {
 	}
 
 	public static String parse(String id, boolean dotBeforeBrackets) {
+		return parse(id, dotBeforeBrackets, false);
+	}
+
+	public static String parse(String id, boolean dotBeforeBrackets,
+			boolean functionCallParenthesis) {
 		StringBuffer sb = new StringBuffer();
 		int start = 0;
 		int current = id.length();
@@ -70,7 +75,16 @@ public class CompletionString {
 			}
 			if (c == ')') {
 				if (inBrackStack.isEmpty()) {
-					sb.insert(0, id.substring(i + 1, current));
+					if (functionCallParenthesis) {
+						String parens = "()";
+						if (dotBeforeBrackets && i > 0
+								&& ((i - 2) < 0 || id.charAt(i - 2) != '.')) {
+							parens = ".()";
+						}
+						sb.insert(0, parens + id.substring(i + 1, current));
+					} else {
+						sb.insert(0, id.substring(i + 1, current));
+					}
 				}
 				inBrackStack.push(new Bracket('(', i));
 				continue;
@@ -80,7 +94,8 @@ public class CompletionString {
 					if (i + 1 < id.length() && id.charAt(i + 1) == c) {
 						// illegal code like [[xx]. try best guess
 						id = id.substring(0, i) + id.substring(i + 1);
-						return parse(id, dotBeforeBrackets);
+						return parse(id, dotBeforeBrackets,
+								functionCallParenthesis);
 					}
 					return id.substring(i + 1, current) + sb.toString();
 				}
@@ -105,7 +120,7 @@ public class CompletionString {
 			Bracket last = inBrackStack.pop();
 			id = id.substring(start, last.position)
 					+ id.substring(last.position + 1, id.length());
-			return parse(id, dotBeforeBrackets);
+			return parse(id, dotBeforeBrackets, functionCallParenthesis);
 		}
 		sb.insert(0, id.substring(start, current));
 		return sb.toString();
