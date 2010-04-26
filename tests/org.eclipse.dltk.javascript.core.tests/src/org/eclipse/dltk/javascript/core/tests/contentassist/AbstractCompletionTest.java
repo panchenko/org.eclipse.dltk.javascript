@@ -27,11 +27,11 @@ import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKLanguageManager;
-import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeStringReference;
-import org.eclipse.dltk.internal.javascript.typeinference.NativeXMLReference;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
 public class AbstractCompletionTest extends TestCase {
 
@@ -95,10 +95,9 @@ public class AbstractCompletionTest extends TestCase {
 	protected static List<String> getMethodsOfString() {
 		if (stringMethods == null) {
 			List<String> names = new ArrayList<String>();
-			for (Iterator<?> i = new NativeStringReference("").getChilds(false)
-					.iterator(); i.hasNext();) {
-				IReference reference = (IReference) i.next();
-				names.add(reference.getName());
+			for (Member member : TypeInfoModelLoader.getInstance().getType(
+					ITypeNames.STRING).getMembers()) {
+				names.add(member.getName());
 			}
 			assertEquals(36, names.size());
 			stringMethods = Collections.unmodifiableList(names);
@@ -111,10 +110,9 @@ public class AbstractCompletionTest extends TestCase {
 	protected static List<String> getMethodsOfXML() {
 		if (xmlMethods == null) {
 			List<String> names = new ArrayList<String>();
-			for (Iterator<?> i = new NativeXMLReference("").getChilds(false)
-					.iterator(); i.hasNext();) {
-				IReference reference = (IReference) i.next();
-				names.add(reference.getName());
+			for (Member member : TypeInfoModelLoader.getInstance().getType(
+					ITypeNames.XML).getMembers()) {
+				names.add(member.getName());
 			}
 			assertEquals(45, names.size());
 			xmlMethods = Collections.unmodifiableList(names);
