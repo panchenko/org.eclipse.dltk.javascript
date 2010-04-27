@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.AssertionFailedError;
@@ -27,6 +26,7 @@ import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKLanguageManager;
+import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
@@ -62,9 +62,12 @@ public class AbstractCompletionTest extends TestCase {
 		}
 	}
 
-	private void compareNames(List<CompletionProposal> results, String[] names) {
-		assertEquals(names.length, results.size());
-		Collections.sort(results, new Comparator<CompletionProposal>() {
+	private static boolean compareProposalNames(
+			List<CompletionProposal> proposals, String[] names) {
+		if (names.length != proposals.size()) {
+			return false;
+		}
+		Collections.sort(proposals, new Comparator<CompletionProposal>() {
 
 			public int compare(CompletionProposal pr, CompletionProposal pr1) {
 				return pr.getName().compareTo(pr1.getName());
@@ -72,13 +75,21 @@ public class AbstractCompletionTest extends TestCase {
 
 		});
 		Arrays.sort(names);
-		Iterator<CompletionProposal> it = results.iterator();
-		int pos = 0;
-		while (it.hasNext()) {
-			CompletionProposal pr = it.next();
-			assertEquals(names[pos], pr.getName());
-			pos++;
+		for (int i = 0, size = proposals.size(); i < size; ++i) {
+			if (!names[i].equals(proposals.get(i).getName())) {
+				return false;
+			}
 		}
+		return true;
+	}
+
+	private static StringList exractProposalNames(
+			List<CompletionProposal> proposals) {
+		final StringList list = new StringList(proposals.size());
+		for (int i = 0, size = proposals.size(); i < size; ++i) {
+			list.add(proposals.get(i).getName());
+		}
+		return list;
 	}
 
 	protected void basicTest(String mname, int position, String[] compNames) {
@@ -86,8 +97,10 @@ public class AbstractCompletionTest extends TestCase {
 		ICompletionEngine c = createEngine(results, false);
 		c.complete(new TestModule(this.getClass().getResource(mname)),
 				position, 0);
-		// assertEquals(2, results.size());
-		compareNames(results, compNames);
+		if (!compareProposalNames(results, compNames)) {
+			assertEquals(new StringList(compNames).sort().toString(),
+					exractProposalNames(results).sort().toString());
+		}
 	}
 
 	private static List<String> stringMethods = null;
