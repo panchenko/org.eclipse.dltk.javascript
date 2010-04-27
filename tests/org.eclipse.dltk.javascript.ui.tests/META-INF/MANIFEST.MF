@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.eclipse.dltk.javascript.ui.tests
+Bundle-Version: 2.0.0.qualifier
+Bundle-Activator: org.eclipse.dltk.javascript.ui.tests.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.junit,
+ org.eclipse.dltk.core,
+ org.eclipse.dltk.core.tests,
+ org.eclipse.dltk.javascript.ui
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
