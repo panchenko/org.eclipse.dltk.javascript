@@ -1503,7 +1503,7 @@ public class JavascriptAutoEditStrategy extends
 		fIsSmartMode = computeSmartMode();
 	}
 
-	private boolean computeSmartMode() {
+	protected boolean computeSmartMode() {
 		IWorkbenchPage page = DLTKUIPlugin.getActivePage();
 		if (page != null) {
 			IEditorPart part = page.getActiveEditor();
