@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
@@ -343,11 +346,29 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitIfStatement(IfStatement node) {
 		visit(node.getCondition());
+		final List<Statement> statements = new ArrayList<Statement>(2);
 		if (node.getThenStatement() != null) {
-			visit(node.getThenStatement());
+			statements.add(node.getThenStatement());
 		}
 		if (node.getElseStatement() != null) {
-			visit(node.getElseStatement());
+			statements.add(node.getElseStatement());
+		}
+		if (!statements.isEmpty()) {
+			if (statements.size() == 1) {
+				visit(statements.get(0));
+			} else {
+				final List<NestedValueCollection> collections = new ArrayList<NestedValueCollection>(
+						statements.size());
+				for (Statement statement : statements) {
+					final NestedValueCollection nestedCollection = new NestedValueCollection(
+							peekContext());
+					enterContext(nestedCollection);
+					visit(statement);
+					leaveContext();
+					collections.add(nestedCollection);
+				}
+				NestedValueCollection.mergeTo(peekContext(), collections);
+			}
 		}
 		return null;
 	}
