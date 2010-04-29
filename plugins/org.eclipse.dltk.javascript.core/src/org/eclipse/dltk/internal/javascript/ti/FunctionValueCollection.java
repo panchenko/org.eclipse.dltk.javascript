@@ -24,4 +24,11 @@ public class FunctionValueCollection extends ValueCollection {
 		return returnValue;
 	}
 
+	private final IValueReference thisValue = new ValueReference(this);
+
+	@Override
+	public IValueReference getThis() {
+		return thisValue;
+	}
+
 }
