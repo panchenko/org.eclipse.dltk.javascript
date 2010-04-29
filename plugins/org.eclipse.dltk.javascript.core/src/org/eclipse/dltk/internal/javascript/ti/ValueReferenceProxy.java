@@ -96,10 +96,6 @@ public class ValueReferenceProxy implements IValueReference,
 		return parent;
 	}
 
-	public boolean isEmpty() {
-		return isResolved() ? resolve().isEmpty() : true;
-	}
-
 	public Object getAttribute(String key) {
 		return isResolved() ? resolve().getAttribute(key) : null;
 	}

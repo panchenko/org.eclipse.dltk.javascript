@@ -121,10 +121,6 @@ public class MethodValueReferenceProxy implements IValueReference {
 		return owner;
 	}
 
-	public boolean isEmpty() {
-		return false;
-	}
-
 	public ITypeInferenceContext getContext() {
 		return owner.getContext();
 	}

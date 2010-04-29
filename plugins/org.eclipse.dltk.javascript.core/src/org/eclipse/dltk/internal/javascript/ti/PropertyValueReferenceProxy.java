@@ -115,10 +115,6 @@ public class PropertyValueReferenceProxy implements IValueReference {
 		return owner;
 	}
 
-	public boolean isEmpty() {
-		return isResolved() ? resolve().isEmpty() : property.getType() == null;
-	}
-
 	private boolean isResolved() {
 		return resolved != null
 				|| owner.getChild(property.getName(), GetMode.RESOLVE) != null;

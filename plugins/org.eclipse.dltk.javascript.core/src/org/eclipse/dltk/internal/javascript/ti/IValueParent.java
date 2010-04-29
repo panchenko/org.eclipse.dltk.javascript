@@ -17,8 +17,6 @@ public interface IValueParent {
 
 	IValueParent getParent();
 
-	boolean isEmpty();
-
 	Set<String> getDirectChildren();
 
 	/**
