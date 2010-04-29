@@ -220,10 +220,6 @@ public class ValueReference implements IValueReference {
 		return null;
 	}
 
-	public boolean isEmpty() {
-		return types.isEmpty() && children.isEmpty();
-	}
-
 	/**
 	 * @param childName
 	 * @param value
@@ -258,18 +254,34 @@ public class ValueReference implements IValueReference {
 		}
 	}
 
-	@Override
-	public String toString() {
+	private String getShortName() {
 		final StringBuilder sb = new StringBuilder();
-		if (parent instanceof IValueReference) {
-			sb.append(parent);
+		if (parent instanceof ValueReference) {
+			sb.append(((ValueReference) parent).getShortName());
 			sb.append(".");
 		}
 		if (kind != ReferenceKind.UNKNOWN) {
 			sb.append(kind.name());
 			sb.append(" ");
 		}
-		sb.append(name);
+		if (name != null) {
+			sb.append(name);
+		} else {
+			sb.append("Anonymous");
+		}
+		return sb.toString();
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(getShortName());
+		if (!children.isEmpty()) {
+			sb.append(" children:").append(children.keySet());
+		}
+		if (!types.isEmpty()) {
+			sb.append(" types:").append(types);
+		}
 		return sb.toString();
 	}
 
