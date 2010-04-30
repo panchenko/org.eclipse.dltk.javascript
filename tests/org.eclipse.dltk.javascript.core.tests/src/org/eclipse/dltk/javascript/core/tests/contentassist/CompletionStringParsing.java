@@ -5,12 +5,16 @@ package org.eclipse.dltk.javascript.core.tests.contentassist;
 
 import junit.framework.TestCase;
 
-import static org.eclipse.dltk.internal.javascript.typeinference.CompletionString.parse;
+import org.eclipse.dltk.internal.javascript.typeinference.CompletionString;
 
 /**
  * @author jcompagner
  */
 public class CompletionStringParsing extends TestCase {
+
+	public static String parse(String id, boolean dotBeforeBrackets) {
+		return CompletionString.parse(id, dotBeforeBrackets);
+	}
 
 	public void testCompletionWithArrayDotResolving() throws Exception {
 
@@ -109,4 +113,13 @@ public class CompletionStringParsing extends TestCase {
 						"_xml.articulo.art::articulo_catalago.art::articulo_borrador",
 						true));
 	}
+
+	public void testArrayFunction() throws Exception {
+		assertEquals("execute.[]", parse("execute[0]()", true));
+	}
+
+	public void testFunctionArray() throws Exception {
+		assertEquals("execute.[]", parse("execute()[0]", true));
+	}
+
 }

@@ -113,10 +113,10 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference z = collection.getChild("z");
 		assertTrue(z.getTypes().isEmpty());
 		final IValueReference a = z.getChild("a");
-		assertNotNull(a);
+		assertTrue(a.exists());
 		assertEquals(getTypes(NUMBER), a.getTypes());
 		final IValueReference b = z.getChild("b");
-		assertNotNull(b);
+		assertTrue(b.exists());
 		assertEquals(getTypes(BOOLEAN), b.getTypes());
 	}
 
@@ -172,6 +172,19 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(getTypes(STRING, NUMBER), x.getTypes());
 	}
 
+	public void testIf2() {
+		List<String> lines = new StringList();
+		lines.add("if (1 == 2) {");
+		lines.add("  x = 1");
+		lines.add("}");
+		lines.add("else {");
+		lines.add("  y = 'No'");
+		lines.add("}");
+		IValueCollection collection = inference(lines.toString());
+		assertEquals(getTypes(NUMBER), collection.getChild("x").getTypes());
+		assertEquals(getTypes(STRING), collection.getChild("y").getTypes());
+	}
+
 	public void testFor() {
 		List<String> lines = new StringList();
 		lines.add("for (var i = 0; i < 10; ++i) {");
@@ -210,7 +223,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference x = collection.getChild("x");
 		assertEquals(getTypes(), x.getTypes());
-		assertNull(collection.getChild("y"));
+		assertFalse(collection.hasChild("y"));
 	}
 
 	public void testUnknownProperty() {
@@ -284,9 +297,9 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference context = collection.getChild("context");
 		IValueReference index = context.getChild("index");
-		assertEquals(getTypes(NUMBER), index.getTypes());
+		assertFalse(index.exists());
 		IValueReference prev = context.getChild("prev");
-		assertNotNull(prev);
+		assertFalse(prev.exists());
 	}
 
 	public void testRecursion2() {
@@ -295,7 +308,17 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("a.operation2 = a");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference a = collection.getChild("a");
-		assertNotNull(a);
+		assertTrue(a.exists());
+	}
+
+	public void testRecursion3() {
+		List<String> lines = new StringList();
+		lines.add("var a = function() { return 1 }");
+		lines.add("a.operation2 = a");
+		lines.add("var z = a.operation2()");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference z = collection.getChild("z");
+		assertEquals(getTypes(NUMBER), z.getTypes());
 	}
 
 	public void testExampleTypeProvider1() {
@@ -322,7 +345,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var name = a.execute().service.name");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference name = collection.getChild("name");
-		assertNotNull(name);
+		assertTrue(name.exists());
 		assertTrue(name.getTypes().isEmpty());
 	}
 
