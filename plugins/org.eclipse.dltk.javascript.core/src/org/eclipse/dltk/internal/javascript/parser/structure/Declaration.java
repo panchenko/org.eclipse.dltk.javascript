@@ -53,4 +53,9 @@ abstract class Declaration implements Comparable<Declaration> {
 		info.nameSourceEnd = location.getNameEnd() - 1;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "<" + childName + ">=" + child;
+	}
+
 }
