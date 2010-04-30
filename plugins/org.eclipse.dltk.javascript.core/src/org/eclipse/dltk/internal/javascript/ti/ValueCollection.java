@@ -11,23 +11,21 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.javascript.typeinfo.model.Element;
-import org.eclipse.dltk.javascript.typeinfo.model.Method;
-import org.eclipse.dltk.javascript.typeinfo.model.Property;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
-
-public abstract class ValueCollection implements IValueCollection {
+public abstract class ValueCollection implements IValueCollection,
+		IValueProvider {
 
 	private final IValueCollection parent;
-	private final Map<String, IValueReference> children = new HashMap<String, IValueReference>();
+	private final IValue value;
 
 	protected ValueCollection(IValueCollection parent) {
+		this(parent, new Value());
+	}
+
+	protected ValueCollection(IValueCollection parent, IValue value) {
 		this.parent = parent;
+		this.value = value;
 	}
 
 	public IValueParent getParent() {
@@ -38,74 +36,39 @@ public abstract class ValueCollection implements IValueCollection {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.dltk.internal.javascript.ti.IValueCollection#getThis()
-	 */
 	public IValueReference getThis() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.dltk.internal.javascript.ti.IValueParent#deleteChild(java
-	 * .lang.String)
-	 */
-	public void deleteChild(String name) {
-		// TODO Auto-generated method stub
+	public IValue getValue() {
+		return value;
+	}
 
+	public IValue createValue() {
+		return getValue();
 	}
 
 	public Set<String> getDirectChildren() {
-		return Collections.unmodifiableSet(children.keySet());
+		return value.getDirectChildren();
 	}
 
 	public IValueReference getChild(String name) {
 		return getChild(name, GetMode.GET);
 	}
 
+	public boolean hasChild(String name) {
+		IValue value = getValue();
+		return value != null && value.getChild(name) != null;
+	}
+
 	public IValueReference getChild(String name, GetMode mode) {
-		IValueReference child = children.get(name);
-		if (child != null) {
-			return child;
-		}
-		if (mode == GetMode.GET || mode == GetMode.CREATE_LAZY) {
-			final Element element = getContext().resolve(name);
-			if (element != null) {
-				if (element instanceof Method) {
-					return new MethodValueReferenceProxy(this, (Method) element);
-				} else if (element instanceof Property) {
-					return new PropertyValueReferenceProxy(this,
-							(Property) element);
-				} else if (element instanceof Type) {
-					return new ValueReference(this, (Type) element);
-				}
-			}
-		}
-		if (mode == GetMode.CREATE || mode == GetMode.CREATE_NEW) {
-			child = new ValueReference(this, name);
-			children.put(name, child);
-		} else if (mode == GetMode.CREATE_LAZY) {
-			child = new ValueReferenceProxy(this, name);
-		}
-		return child;
-	}
-
-	public void putChild(String name, IValueReference value) {
-		children.put(name, value);
-	}
-
-	public boolean isEmpty() {
-		return children.isEmpty();
+		return new ChildReference(this, name);
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + ':' + children.keySet();
+		return getClass().getSimpleName();
 	}
 
 	public ITypeInferenceContext getContext() {

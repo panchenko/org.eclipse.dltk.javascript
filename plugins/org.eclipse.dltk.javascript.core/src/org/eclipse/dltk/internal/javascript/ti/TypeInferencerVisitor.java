@@ -193,8 +193,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitDeleteStatement(DeleteStatement node) {
 		IValueReference value = visit(node.getExpression());
-		if (value != null && value.getParent() != null) {
-			value.getParent().deleteChild(value.getName());
+		if (value != null) {
+			value.delete();
 		}
 		return context.getFactory().createBoolean(peekContext());
 	}
@@ -250,8 +250,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
-		final IValueCollection function = new FunctionValueCollection(
-				peekContext());
 		final JSMethod method = new JSMethod();
 		final Identifier methodName = node.getName();
 		if (methodName != null) {
@@ -275,6 +273,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				extension.processMethod(context, node, method);
 			}
 		}
+		final IValueCollection function = new FunctionValueCollection(
+				peekContext(), method.getName());
 		for (IParameter parameter : method.getParameters()) {
 			final IValueReference refArg = function.getChild(parameter
 					.getName(), GetMode.CREATE_NEW);
@@ -292,7 +292,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					node.sourceEnd(), methodName.sourceStart(), methodName
 							.sourceEnd()));
 		} else {
-			result = new ValueReference(peekContext());
+			result = new AnonymousValue();
 			final Keyword kw = node.getFunctionKeyword();
 			result.setLocation(ReferenceLocation.create(node.sourceStart(),
 					node.sourceEnd(), kw.sourceStart(), kw.sourceEnd()));
@@ -381,7 +381,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitNewExpression(NewExpression node) {
-		final IValueReference result = new ValueReference(peekContext());
+		final IValueReference result = new AnonymousValue();
 		final IValueReference clazz = visit(node.getObjectClass());
 		final IValueReference newType = result.getChild(
 				IValueReference.FUNCTION_OP, GetMode.CREATE);
@@ -404,7 +404,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitObjectInitializer(ObjectInitializer node) {
-		final IValueReference result = new ValueReference(peekContext());
+		final IValueReference result = new AnonymousValue();
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;

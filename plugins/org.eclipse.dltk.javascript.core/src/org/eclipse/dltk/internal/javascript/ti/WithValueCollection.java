@@ -32,12 +32,12 @@ public class WithValueCollection implements IValueCollection {
 		return parent.getThis();
 	}
 
-	public void deleteChild(String name) {
-		with.deleteChild(name);
-	}
-
 	public Set<String> getDirectChildren() {
 		return with.getDirectChildren();
+	}
+
+	public boolean hasChild(String name) {
+		return with.hasChild(name);
 	}
 
 	public IValueReference getChild(String name) {

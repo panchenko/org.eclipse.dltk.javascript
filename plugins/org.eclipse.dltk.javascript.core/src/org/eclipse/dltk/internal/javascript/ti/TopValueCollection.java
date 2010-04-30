@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
+
 public class TopValueCollection extends ValueCollection {
 
 	private final ITypeInferenceContext context;
@@ -18,8 +20,18 @@ public class TopValueCollection extends ValueCollection {
 	/**
 	 * @param parent
 	 */
-	public TopValueCollection(ITypeInferenceContext context) {
-		super(null);
+	public TopValueCollection(final ITypeInferenceContext context) {
+		super(null, new Value() {
+			@Override
+			protected IValue findMember(String name) {
+				final Element element = context.resolve(name);
+				if (element != null) {
+					return ElementValue.createFor(element);
+				} else {
+					return null;
+				}
+			}
+		});
 		this.context = context;
 	}
 

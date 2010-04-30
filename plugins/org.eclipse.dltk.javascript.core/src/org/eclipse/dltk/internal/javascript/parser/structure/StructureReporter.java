@@ -107,7 +107,7 @@ public class StructureReporter extends TypeInferencerVisitor {
 				children.add(new FieldDeclaration(childName, child));
 
 			} else if (child.getKind() == ReferenceKind.FUNCTION
-					|| child.getChild(IValueReference.FUNCTION_OP) != null) {
+					|| child.hasChild(IValueReference.FUNCTION_OP)) {
 				children.add(new MethodDeclaration(childName, child));
 			}
 		}

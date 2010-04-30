@@ -11,32 +11,40 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-public class FunctionValueCollection extends ValueCollection {
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-	private final String functionName;
+public class ConstantValue extends AbstractReference {
 
-	public FunctionValueCollection(IValueCollection parent, String functionName) {
-		super(parent);
-		this.functionName = functionName;
-	}
+	private final Value value = new Value();
 
-	private final IValueReference returnValue = new AnonymousValue();
-
-	@Override
-	public IValueReference getReturnValue() {
-		return returnValue;
-	}
-
-	private final IValueReference thisValue = new AnonymousValue();
-
-	@Override
-	public IValueReference getThis() {
-		return thisValue;
+	public ConstantValue(Type type) {
+		value.getTypes().add(type);
 	}
 
 	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "<" + functionName + ">";
+	public Value getValue() {
+		return value;
+	}
+
+	@Override
+	public Value createValue() {
+		return getValue();
+	}
+
+	public void delete() {
+		// TODO Auto-generated method stub
+	}
+
+	public String getName() {
+		return "";
+	}
+
+	public ITypeInferenceContext getContext() {
+		return null;
+	}
+
+	public IValueParent getParent() {
+		return null;
 	}
 
 }

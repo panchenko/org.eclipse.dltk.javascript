@@ -30,7 +30,6 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
-import org.eclipse.dltk.javascript.internal.core.codeassist.AssitUtils.PositionCalculator;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -67,9 +66,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						+ content.substring(position);
 			}
 		}
-		final AssitUtils.PositionCalculator calculator = new PositionCalculator(
-				content, position, false);
+		final PositionCalculator calculator = new PositionCalculator(content,
+				position, false);
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
+		final CompletionVisitor visitor = new CompletionVisitor(inferencer2,
+				position);
+		inferencer2.setVisitor(visitor);
 		if (cu instanceof org.eclipse.dltk.core.ISourceModule) {
 			inferencer2
 					.setModelElement((org.eclipse.dltk.core.ISourceModule) cu);
@@ -82,17 +84,16 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			}
 		}, null);
 		inferencer2.doInferencing(script);
-		inferencer2.getCollection();
 
-		String startPart = calculator.getCompletion();
-		this.setSourceRange(position - startPart.length(), position);
+		// this.setSourceRange(position - calculator.getCompletion().length(),
+		// position);
 		// System.out.println(startPart);
 		if (calculator.isMember()) {
-			doCompletionOnMember(inferencer2.getCollection(), startPart,
-					position);
+			doCompletionOnMember(visitor.getCollection(), calculator
+					.getCompletion(), position);
 		} else {
-			doGlobalCompletion(inferencer2.getCollection(), startPart);
-			// doCompletionOnKeyword(startPart);
+			doGlobalCompletion(visitor.getCollection(), calculator
+					.getCompletion(), position);
 		}
 		this.requestor.endReporting();
 	}
@@ -107,7 +108,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		IValueParent item = collection;
 		for (int i = 0; i < path.segmentCount() - 1; ++i) {
 			if (path.isName(i)) {
-				item = item.getChild(path.segment(i));
+				final String segment = path.segment(i);
+				if ("this".equals(segment) && item instanceof IValueCollection) {
+					item = ((IValueCollection) item).getThis();
+				} else {
+					item = item.getChild(segment);
+				}
 				if (item == null)
 					break;
 			} else if (path.isFunction(i)) {
@@ -120,15 +126,30 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				item = null;
 				break;
 			}
-			// if (path.isArray(i))
 		}
 		if (item != null && !path.isEmpty()) {
-			final char[] prefix = path.lastSegment().toCharArray();
-			this.setSourceRange(position - prefix.length, position);
-			final Set<String> processed = new HashSet<String>();
+			final Reporter reporter = new Reporter(path.lastSegment(), position);
+			reporter.report(item);
+		}
+	}
+
+	private class Reporter {
+
+		final char[] prefix;
+		final int position;
+		final Set<String> processed = new HashSet<String>();
+		final Set<Type> processedTypes = new HashSet<Type>();
+
+		public Reporter(String prefix, int position) {
+			this.prefix = prefix.toCharArray();
+			this.position = position;
+			setSourceRange(position - this.prefix.length, position);
+		}
+
+		public void report(IValueParent item) {
 			for (String childName : item.getDirectChildren()) {
-				processed.add(childName);
-				if (CharOperation.prefixEquals(prefix, childName, false)) {
+				if (CharOperation.prefixEquals(prefix, childName, false)
+						&& processed.add(childName)) {
 					IValueReference child = item.getChild(childName);
 					if (child != null) {
 						reportReference(child, prefix, position);
@@ -136,82 +157,54 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				}
 			}
 			if (item instanceof IValueReference) {
-				for (Type type : ((IValueReference) item).getTypes()) {
-					for (Member member : type.getMembers()) {
-						if (processed.add(member.getName())
-								&& CharOperation.prefixEquals(prefix, member
-										.getName(), false)) {
-							reportMember(member, prefix, position);
-						}
+				final IValueReference valueRef = (IValueReference) item;
+				final Type declaredType = valueRef.getDeclaredType();
+				if (declaredType != null) {
+					reportType(declaredType);
+				}
+				for (Type type : valueRef.getTypes()) {
+					reportType(type);
+				}
+			}
+		}
+
+		private void reportType(Type type) {
+			if (processedTypes.add(type)) {
+				for (Member member : type.getMembers()) {
+					if (CharOperation.prefixEquals(prefix, member.getName(),
+							false)
+							&& processed.add(member.getName())) {
+						reportMember(member, prefix, position);
 					}
 				}
 			}
 		}
-	}
 
-	/**
-	 * @param member
-	 * @param position
-	 */
-	private void reportMember(Member member, char[] prefix, int position) {
-		boolean isFunction = member instanceof Method;
-		CompletionProposal proposal = CompletionProposal.create(
-				isFunction ? CompletionProposal.METHOD_REF
-						: CompletionProposal.LOCAL_VARIABLE_REF, position);
+		/**
+		 * @param member
+		 * @param position
+		 */
+		private void reportMember(Member member, char[] prefix, int position) {
+			boolean isFunction = member instanceof Method;
+			CompletionProposal proposal = CompletionProposal.create(
+					isFunction ? CompletionProposal.METHOD_REF
+							: CompletionProposal.LOCAL_VARIABLE_REF, position);
 
-		int relevance = computeBaseRelevance();
-		// relevance += computeRelevanceForInterestingProposal();
-		relevance += computeRelevanceForCaseMatching(prefix, member.getName());
-		relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
-		proposal.setRelevance(relevance);
+			int relevance = computeBaseRelevance();
+			// relevance += computeRelevanceForInterestingProposal();
+			relevance += computeRelevanceForCaseMatching(prefix, member
+					.getName());
+			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
+			proposal.setRelevance(relevance);
 
-		proposal.setCompletion(member.getName());
-		proposal.setName(member.getName());
-		proposal.extraInfo = member;
-		proposal.setReplaceRange(this.startPosition - this.offset,
-				this.endPosition - this.offset);
-		if (isFunction) {
-			Method method = (Method) member;
-			final int paramCount = method.getParameters().size();
-			if (paramCount > 0) {
-				final String[] params = new String[paramCount];
-				for (int i = 0; i < paramCount; ++i) {
-					params[i] = method.getParameters().get(i).getName();
-				}
-				proposal.setParameterNames(params);
-			}
-		}
-		this.requestor.accept(proposal);
-	}
-
-	/**
-	 * @param reference
-	 */
-	private void reportReference(IValueReference reference, char[] prefix,
-			int position) {
-		boolean isFunction = reference.getKind() == ReferenceKind.FUNCTION
-				|| reference.getChild(IValueReference.FUNCTION_OP) != null;
-		CompletionProposal proposal = CompletionProposal.create(
-				isFunction ? CompletionProposal.METHOD_REF
-						: CompletionProposal.LOCAL_VARIABLE_REF, position);
-
-		int relevance = computeBaseRelevance();
-		relevance += computeRelevanceForInterestingProposal();
-		relevance += computeRelevanceForCaseMatching(prefix, reference
-				.getName());
-		relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
-		proposal.setRelevance(relevance);
-
-		proposal.setCompletion(reference.getName());
-		proposal.setName(reference.getName());
-		proposal.extraInfo = reference;
-		proposal.setReplaceRange(this.startPosition - this.offset,
-				this.endPosition - this.offset);
-		if (isFunction) {
-			final IMethod method = (IMethod) reference
-					.getAttribute(IReferenceAttributes.PARAMETERS);
-			if (method != null) {
-				final int paramCount = method.getParameterCount();
+			proposal.setCompletion(member.getName());
+			proposal.setName(member.getName());
+			proposal.extraInfo = member;
+			proposal.setReplaceRange(startPosition - offset, endPosition
+					- offset);
+			if (isFunction) {
+				Method method = (Method) member;
+				final int paramCount = method.getParameters().size();
 				if (paramCount > 0) {
 					final String[] params = new String[paramCount];
 					for (int i = 0; i < paramCount; ++i) {
@@ -220,9 +213,50 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					proposal.setParameterNames(params);
 				}
 			}
+			requestor.accept(proposal);
 		}
-		this.requestor.accept(proposal);
-		// TODO Auto-generated method stub
+
+		/**
+		 * @param reference
+		 */
+		private void reportReference(IValueReference reference, char[] prefix,
+				int position) {
+			boolean isFunction = reference.getKind() == ReferenceKind.FUNCTION
+					|| reference.getChild(IValueReference.FUNCTION_OP) != null;
+			CompletionProposal proposal = CompletionProposal.create(
+					isFunction ? CompletionProposal.METHOD_REF
+							: CompletionProposal.LOCAL_VARIABLE_REF, position);
+
+			int relevance = computeBaseRelevance();
+			relevance += computeRelevanceForInterestingProposal();
+			relevance += computeRelevanceForCaseMatching(prefix, reference
+					.getName());
+			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
+			proposal.setRelevance(relevance);
+
+			proposal.setCompletion(reference.getName());
+			proposal.setName(reference.getName());
+			proposal.extraInfo = reference;
+			proposal.setReplaceRange(startPosition - offset, endPosition
+					- offset);
+			if (isFunction) {
+				final IMethod method = (IMethod) reference
+						.getAttribute(IReferenceAttributes.PARAMETERS);
+				if (method != null) {
+					final int paramCount = method.getParameterCount();
+					if (paramCount > 0) {
+						final String[] params = new String[paramCount];
+						for (int i = 0; i < paramCount; ++i) {
+							params[i] = method.getParameters().get(i).getName();
+						}
+						proposal.setParameterNames(params);
+					}
+				}
+			}
+			requestor.accept(proposal);
+			// TODO Auto-generated method stub
+
+		}
 
 	}
 
@@ -231,28 +265,33 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 * @param startPart
 	 */
 	private void doGlobalCompletion(IValueCollection collection,
-			String startPart) {
-		final char[] prefix = startPart.toCharArray();
-		for (String childName : collection.getDirectChildren()) {
-			if (CharOperation.prefixEquals(prefix, childName, false)) {
-				IValueReference child = collection.getChild(childName);
-				if (child == null)
-					continue;
-				if (child.getKind() == ReferenceKind.LOCAL) {
-					// reportLocalVar(child);
-
-				} else if (child.getKind() == ReferenceKind.FUNCTION
-						|| child.getChild(IValueReference.FUNCTION_OP) != null) {
-					// reportMethodRef(child);
-				}
-
-			}
+			String startPart, int position) {
+		doCompletionOnMember(collection, startPart, position);
+		// final char[] prefix = startPart.toCharArray();
+		// for (String childName : collection.getDirectChildren()) {
+		// if (CharOperation.prefixEquals(prefix, childName, false)) {
+		// IValueReference child = collection.getChild(childName);
+		// if (child == null)
+		// continue;
+		// if (child.getKind() == ReferenceKind.LOCAL) {
+		// // reportLocalVar(child);
+		//
+		// } else if (child.getKind() == ReferenceKind.FUNCTION
+		// || child.getChild(IValueReference.FUNCTION_OP) != null) {
+		// // reportMethodRef(child);
+		// }
+		//
+		// }
+		// }
+		if (useEngine) {
+			doCompletionOnKeyword(startPart, position);
 		}
 		// TODO Auto-generated method stub
 
 	}
 
-	private void doCompletionOnKeyword(String startPart) {
+	private void doCompletionOnKeyword(String startPart, int position) {
+		setSourceRange(position - startPart.length(), position);
 		String[] keywords = JavaScriptKeywords.getJavaScriptKeywords();
 		findKeywords(startPart.toCharArray(), keywords, true);
 	}

@@ -11,32 +11,34 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-public class FunctionValueCollection extends ValueCollection {
+public class AnonymousValue extends AbstractReference {
 
-	private final String functionName;
-
-	public FunctionValueCollection(IValueCollection parent, String functionName) {
-		super(parent);
-		this.functionName = functionName;
-	}
-
-	private final IValueReference returnValue = new AnonymousValue();
+	private final Value value = new Value();
 
 	@Override
-	public IValueReference getReturnValue() {
-		return returnValue;
-	}
-
-	private final IValueReference thisValue = new AnonymousValue();
-
-	@Override
-	public IValueReference getThis() {
-		return thisValue;
+	public Value getValue() {
+		return value;
 	}
 
 	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "<" + functionName + ">";
+	public Value createValue() {
+		return getValue();
+	}
+
+	public void delete() {
+		// TODO Auto-generated method stub
+	}
+
+	public String getName() {
+		return "";
+	}
+
+	public ITypeInferenceContext getContext() {
+		return null;
+	}
+
+	public IValueParent getParent() {
+		return null;
 	}
 
 }

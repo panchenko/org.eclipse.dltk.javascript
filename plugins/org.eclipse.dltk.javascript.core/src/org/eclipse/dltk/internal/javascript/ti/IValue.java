@@ -13,32 +13,40 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.Set;
 
-public interface IValueParent {
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-	IValueParent getParent();
-
-	Set<String> getDirectChildren();
+public interface IValue {
 
 	boolean hasChild(String name);
 
-	/**
-	 * Finds the child with the specified name.
-	 * 
-	 * @param name
-	 * @return the child found or <code>null</code> if there is no child with
-	 *         such name
-	 */
-	IValueReference getChild(String name);
+	Set<String> getDirectChildren();
 
-	/**
-	 * Finds the child with the specified name.
-	 * 
-	 * @param name
-	 * @return the child found or <code>null</code> if there is no child with
-	 *         such name
-	 */
-	IValueReference getChild(String name, GetMode mode);
+	IValue getChild(String name);
 
-	ITypeInferenceContext getContext();
+	IValue createChild(String name);
+
+	Type getDeclaredType();
+
+	void setDeclaredType(Type declaredType);
+
+	Set<Type> getTypes();
+
+	Object getAttribute(String key);
+
+	void removeAttribute(String key);
+
+	void setAttribute(String key, Object value);
+
+	ReferenceKind getKind();
+
+	void setKind(ReferenceKind kind);
+
+	ReferenceLocation getLocation();
+
+	void setLocation(ReferenceLocation location);
+
+	void addValue(IValue src);
+
+	void clear();
 
 }

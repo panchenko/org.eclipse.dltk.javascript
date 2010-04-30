@@ -11,10 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-public interface IValueReferenceProxy {
+public interface IValueProvider {
 
-	boolean isResolved();
+	IValue getValue();
 
-	IValueReference resolve();
+	IValue createValue();
+
+	IValueParent getParent();
+
+	ITypeInferenceContext getContext();
 
 }

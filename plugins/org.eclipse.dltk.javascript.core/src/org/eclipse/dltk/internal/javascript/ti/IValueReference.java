@@ -27,6 +27,8 @@ public interface IValueReference extends IValueParent {
 
 	void addValue(IValueReference value);
 
+	void delete();
+
 	ReferenceKind getKind();
 
 	void setKind(ReferenceKind kind);
@@ -42,5 +44,7 @@ public interface IValueReference extends IValueParent {
 	Object getAttribute(String key);
 
 	void setAttribute(String key, Object value);
+
+	boolean exists();
 
 }

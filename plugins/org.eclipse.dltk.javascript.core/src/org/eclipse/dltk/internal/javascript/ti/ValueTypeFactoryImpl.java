@@ -28,7 +28,7 @@ public class ValueTypeFactoryImpl implements IValueTypeFactory, ITypeNames {
 	}
 
 	public IValueReference create(IValueParent parent, final Type type) {
-		return new ValueReference(parent, type);
+		return new ConstantValue(type);
 	}
 
 	public IValueReference createObject(IValueParent parent) {
