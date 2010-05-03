@@ -53,16 +53,12 @@ public abstract class ValueCollection implements IValueCollection,
 		return value.getDirectChildren();
 	}
 
-	public IValueReference getChild(String name) {
-		return getChild(name, GetMode.GET);
-	}
-
 	public boolean hasChild(String name) {
 		IValue value = getValue();
 		return value != null && value.getChild(name) != null;
 	}
 
-	public IValueReference getChild(String name, GetMode mode) {
+	public IValueReference getChild(String name) {
 		return new ChildReference(this, name);
 	}
 

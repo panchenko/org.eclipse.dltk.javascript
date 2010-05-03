@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.internal.javascript.ti.GetMode;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueParent;
@@ -203,8 +202,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			final Expression propName = node.getProperty();
 			final String name = extractName(propName);
 			if (object != null && name != null) {
-				final IValueReference result = object.getChild(name,
-						GetMode.CREATE_LAZY);
+				final IValueReference result = object.getChild(name);
 				if (currentMode() != VisitorMode.CALL) {
 					validateProperty(result, propName);
 				}
@@ -217,7 +215,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		@Override
 		public IValueReference visitIdentifier(Identifier node) {
 			final IValueReference result = peekContext().getChild(
-					node.getName(), GetMode.CREATE_LAZY);
+					node.getName());
 			final Property property = extractElement(result, Property.class);
 			if (property != null && property.isDeprecated()) {
 				reportDeprecatedProperty(property, null, node);

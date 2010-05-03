@@ -38,7 +38,7 @@ public class NestedValueCollection extends ValueCollection {
 			names.addAll(collection.getValue().getDirectChildren());
 		}
 		for (String childName : names) {
-			IValueReference value = parent.getChild(childName, GetMode.CREATE);
+			IValueReference value = parent.getChild(childName);
 			for (NestedValueCollection collection : collections) {
 				final IValueReference childValue = collection
 						.getChild(childName);

@@ -17,7 +17,6 @@ import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
-import org.eclipse.dltk.internal.javascript.ti.GetMode;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
@@ -86,8 +85,7 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 
 	@Override
 	public IValueReference visitIdentifier(Identifier node) {
-		final IValueReference result = peekContext().getChild(node.getName(),
-				GetMode.CREATE_LAZY);
+		final IValueReference result = peekContext().getChild(node.getName());
 		if (currentMode() == VisitorMode.CALL) {
 			locator.report(new MethodReferenceNode(node));
 		} else {
@@ -110,7 +108,7 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 		}
 		final String name = extractName(property);
 		if (object != null && name != null) {
-			return object.getChild(name, GetMode.CREATE_LAZY);
+			return object.getChild(name);
 		} else {
 			return null;
 		}

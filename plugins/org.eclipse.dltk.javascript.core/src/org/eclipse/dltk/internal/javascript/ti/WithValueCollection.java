@@ -44,10 +44,6 @@ public class WithValueCollection implements IValueCollection {
 		return with.getChild(name);
 	}
 
-	public IValueReference getChild(String name, GetMode mode) {
-		return with.getChild(name, mode);
-	}
-
 	public IValueParent getParent() {
 		// TODO ?
 		return parent;

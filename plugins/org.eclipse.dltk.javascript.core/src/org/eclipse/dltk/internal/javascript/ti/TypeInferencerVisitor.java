@@ -156,8 +156,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			VariableDeclaration declaration) {
 		final Identifier identifier = declaration.getIdentifier();
 		final String varName = identifier.getName();
-		final IValueReference reference = context.getChild(varName,
-				GetMode.CREATE_NEW);
+		final IValueReference reference = context.getChild(varName);
 		final org.eclipse.dltk.javascript.ast.Type varType = declaration
 				.getType();
 		if (varType != null) {
@@ -277,7 +276,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				peekContext(), method.getName());
 		for (IParameter parameter : method.getParameters()) {
 			final IValueReference refArg = function.getChild(parameter
-					.getName(), GetMode.CREATE_NEW);
+					.getName());
 			refArg.setKind(ReferenceKind.ARGUMENT);
 			refArg.setDeclaredType(parameter.getType());
 		}
@@ -286,8 +285,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		leaveContext();
 		final IValueReference result;
 		if (methodName != null) {
-			result = peekContext().getChild(method.getName(),
-					GetMode.CREATE_NEW);
+			result = peekContext().getChild(method.getName());
 			result.setLocation(ReferenceLocation.create(node.sourceStart(),
 					node.sourceEnd(), methodName.sourceStart(), methodName
 							.sourceEnd()));
@@ -300,8 +298,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setKind(ReferenceKind.FUNCTION);
 		result.setAttribute(IReferenceAttributes.PARAMETERS, method);
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
-		final IValueReference returnValue = result.getChild(
-				IValueReference.FUNCTION_OP, GetMode.CREATE_NEW);
+		final IValueReference returnValue = result
+				.getChild(IValueReference.FUNCTION_OP);
 		returnValue.setDeclaredType(method.getType());
 		returnValue.addValue(function.getReturnValue());
 		return result;
@@ -325,8 +323,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (array != null) {
 			// TODO extract array type from result?
 			if (node.getIndex() instanceof StringLiteral) {
-				return array.getChild(extractName(node.getIndex()),
-						GetMode.CREATE_LAZY);
+				return array.getChild(extractName(node.getIndex()));
 			}
 		}
 		return null;
@@ -340,7 +337,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitIdentifier(Identifier node) {
-		return peekContext().getChild(node.getName(), GetMode.CREATE_LAZY);
+		return peekContext().getChild(node.getName());
 	}
 
 	@Override
@@ -383,8 +380,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitNewExpression(NewExpression node) {
 		final IValueReference result = new AnonymousValue();
 		final IValueReference clazz = visit(node.getObjectClass());
-		final IValueReference newType = result.getChild(
-				IValueReference.FUNCTION_OP, GetMode.CREATE);
+		final IValueReference newType = result
+				.getChild(IValueReference.FUNCTION_OP);
 		if (clazz != null) {
 			final Type type = context.getType(clazz.getName());
 			if (type != null) {
@@ -411,7 +408,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final String name = extractName(pi.getName());
 				final IValueReference value = visit(pi.getValue());
 				if (name != null) {
-					result.getChild(name, GetMode.CREATE_NEW).addValue(value);
+					result.getChild(name).addValue(value);
 				}
 			} else {
 				// TODO handle get/set methods
@@ -431,7 +428,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference object = visit(node.getObject());
 		final String name = extractName(node.getProperty());
 		if (object != null && name != null) {
-			return object.getChild(name, GetMode.CREATE_LAZY);
+			return object.getChild(name);
 		} else {
 			return null;
 		}

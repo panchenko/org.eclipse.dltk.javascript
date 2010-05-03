@@ -101,10 +101,6 @@ public abstract class AbstractReference implements IValueReference,
 	}
 
 	public IValueReference getChild(String name) {
-		return getChild(name, GetMode.GET);
-	}
-
-	public IValueReference getChild(String name, GetMode mode) {
 		return new ChildReference(this, name);
 	}
 
