@@ -156,9 +156,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test15() {
-		String[] names = new String[] { "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf" };
+		String[] names = concat(getMethodsOfNumber());
 		String module = "test15.js";
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
@@ -190,9 +188,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test19() {
-		String[] names = new String[] { "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf" };
+		String[] names = concat(getMethodsOfNumber());
 		String module = "test19.js";
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -200,9 +196,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test20() {
-		String[] names = new String[] { "my", "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf" };
+		String[] names = concat(getMethodsOfNumber(), "my");
 		String module = "test20.js";
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -210,9 +204,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test21() {
-		String[] names = new String[] { "favorite", "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf" };
+		String[] names = concat(getMethodsOfNumber(), "favorite");
 		String module = "test21.js";
 		int position = lastPositionInFile("hello.my.", module);
 		basicTest(module, position, names);
@@ -220,9 +212,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test22() {
-		String[] names = new String[] { "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf" };
+		String[] names = concat(getMethodsOfNumber());
 		String module = "test22.js";
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -238,9 +228,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test24() {
-		String[] names = new String[] { "age", "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf", "wine" };
+		String[] names = concat(getMethodsOfNumber(), "age", "wine");
 		String module = "test24.js";
 		int position = lastPositionInFile("hello.olive.", module);
 		basicTest(module, position, names);
@@ -248,9 +236,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test25() {
-		String[] names = new String[] { "age", "my", "olive", "toExponential",
-				"toFixed", "toLocaleString", "toPrecision", "toSource",
-				"toString", "valueOf", "wine" };
+		String[] names = concat(getMethodsOfNumber(), "age", "my", "olive",
+				"wine");
 
 		String module = "test25.js";
 		int position = lastPositionInFile("hello.olive.", module);
@@ -259,9 +246,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test26() {
-		String[] names = new String[] { "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf", "wine" };
+		String[] names = concat(getMethodsOfNumber(), "wine");
 
 		String module = "test26.js";
 		int position = lastPositionInFile("hello.olive.", module);
@@ -278,9 +263,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test28() {
-		String[] names = new String[] { "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf" };
+		String[] names = concat(getMethodsOfNumber());
 		String module = "test28.js";
 		int position = lastPositionInFile("hello.", module);
 		basicTest(module, position, names);
@@ -296,9 +279,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test30() {
-		String[] names = new String[] { "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf", "xsd" };
+		String[] names = concat(getMethodsOfNumber(), "xsd");
 		String module = "test30.js";
 		int position = lastPositionInFile("sz.", module);
 		basicTest(module, position, names);
@@ -338,9 +319,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test35() {
-		String[] names = new String[] { "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf", "x" };
+		String[] names = concat(getMethodsOfNumber(), "x");
 		String module = "test35.js";
 		int position = lastPositionInFile("c.", module);
 		basicTest(module, position, names);
@@ -372,9 +351,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test39() {
-		String[] names = new String[] { "er", "toExponential", "toFixed",
-				"toLocaleString", "toPrecision", "toSource", "toString",
-				"valueOf" };
+		String[] names = concat(getMethodsOfNumber(), "er");
 		String module = "test39.js";
 		int position = lastPositionInFile("eer.", module);
 		basicTest(module, position, names);
