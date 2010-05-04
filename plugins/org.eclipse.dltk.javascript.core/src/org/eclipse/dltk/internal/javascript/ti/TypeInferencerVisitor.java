@@ -13,6 +13,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.Argument;
@@ -88,6 +89,28 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		super(context);
 	}
 
+	private final Stack<Branching> branchings = new Stack<Branching>();
+
+	private class Branching {
+		public void end() {
+			branchings.remove(this);
+		}
+	}
+
+	protected Branching branching() {
+		final Branching branching = new Branching();
+		branchings.add(branching);
+		return branching;
+	}
+
+	protected void assign(IValueReference dest, IValueReference src) {
+		if (branchings.isEmpty()) {
+			dest.setValue(src);
+		} else {
+			dest.addValue(src, false);
+		}
+	}
+
 	@Override
 	public IValueReference visitArrayInitializer(ArrayInitializer node) {
 		return context.getFactory().createArray(peekContext());
@@ -113,7 +136,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	protected IValueReference visitAssign(IValueReference left,
 			IValueReference right) {
 		if (left != null)
-			left.setValue(right);
+			assign(left, right);
 		return right;
 	}
 
@@ -175,7 +198,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				.sourceStart(), declaration.sourceEnd(), identifier
 				.sourceStart(), identifier.sourceEnd()));
 		if (declaration.getInitializer() != null) {
-			reference.setValue(visit(declaration.getInitializer()));
+			assign(reference, visit(declaration.getInitializer()));
 		}
 		return reference;
 	}
@@ -235,7 +258,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitForInStatement(ForInStatement node) {
 		final IValueReference item = visit(node.getItem());
 		if (item != null) {
-			item.setValue(context.getFactory().createString(peekContext()));
+			assign(item, context.getFactory().createString(peekContext()));
 		}
 		visit(node.getIterator());
 		visit(node.getBody());
@@ -370,6 +393,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			statements.add(node.getElseStatement());
 		}
 		if (!statements.isEmpty()) {
+			final Branching branching = branching();
 			if (statements.size() == 1) {
 				visit(statements.get(0));
 			} else {
@@ -385,6 +409,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				}
 				NestedValueCollection.mergeTo(peekContext(), collections);
 			}
+			branching.end();
 		}
 		return null;
 	}
