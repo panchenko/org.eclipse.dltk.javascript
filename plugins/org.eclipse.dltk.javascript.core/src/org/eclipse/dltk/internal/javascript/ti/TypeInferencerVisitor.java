@@ -535,7 +535,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitTryStatement(TryStatement node) {
 		visit(node.getBody());
 		for (CatchClause catchClause : node.getCatches()) {
+			final NestedValueCollection collection = new NestedValueCollection(
+					peekContext());
+			collection.createChild(catchClause.getException().getName());
+			enterContext(collection);
 			visit(catchClause.getStatement());
+			leaveContext();
 		}
 		if (node.getFinally() != null) {
 			visit(node.getFinally().getStatement());
