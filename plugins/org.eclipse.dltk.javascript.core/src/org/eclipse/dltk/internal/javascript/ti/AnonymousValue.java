@@ -15,6 +15,10 @@ public class AnonymousValue extends AbstractReference {
 
 	private final Value value = new Value();
 
+	public boolean isReference() {
+		return false;
+	}
+
 	@Override
 	public Value getValue() {
 		return value;
@@ -26,7 +30,6 @@ public class AnonymousValue extends AbstractReference {
 	}
 
 	public void delete() {
-		// TODO Auto-generated method stub
 	}
 
 	public String getName() {
@@ -37,7 +40,7 @@ public class AnonymousValue extends AbstractReference {
 		return null;
 	}
 
-	public IValueParent getParent() {
+	public IValueReference getParent() {
 		return null;
 	}
 

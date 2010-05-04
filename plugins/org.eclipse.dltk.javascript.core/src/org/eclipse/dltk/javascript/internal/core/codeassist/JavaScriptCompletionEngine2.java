@@ -25,6 +25,7 @@ import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
@@ -83,7 +84,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				return inferencer2.getModelElement();
 			}
 		}, null);
-		inferencer2.doInferencing(script);
+		try {
+			inferencer2.doInferencing(script);
+		} catch (PositionReachedException e) {
+			// e.printStackTrace();
+		}
 
 		// this.setSourceRange(position - calculator.getCompletion().length(),
 		// position);
@@ -96,6 +101,14 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					.getCompletion(), position);
 		}
 		this.requestor.endReporting();
+	}
+
+	private static boolean exists(IValueParent item) {
+		if (item instanceof IValueReference) {
+			return ((IValueReference) item).exists();
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -114,11 +127,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				} else {
 					item = item.getChild(segment);
 				}
-				if (item == null)
+				if (!exists(item))
 					break;
 			} else if (path.isFunction(i)) {
 				item = item.getChild(IValueReference.FUNCTION_OP);
-				if (item == null)
+				if (!exists(item))
 					break;
 			} else {
 				assert path.isArray(i);
@@ -127,9 +140,18 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				break;
 			}
 		}
-		if (item != null && !path.isEmpty()) {
+		if (item != null && exists(item) && !path.isEmpty()) {
 			final Reporter reporter = new Reporter(path.lastSegment(), position);
 			reporter.report(item);
+			if (item instanceof IValueCollection) {
+				IValueCollection coll = (IValueCollection) item;
+				for (;;) {
+					coll = coll.getParent();
+					if (coll == null)
+						break;
+					reporter.report(coll);
+				}
+			}
 		}
 	}
 
@@ -147,20 +169,26 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		public void report(IValueParent item) {
+			final Set<String> deleted = item.getDeletedChildren();
 			for (String childName : item.getDirectChildren()) {
-				if (CharOperation.prefixEquals(prefix, childName, false)
+				if (!deleted.contains(childName)
+						&& CharOperation.prefixEquals(prefix, childName, false)
 						&& processed.add(childName)) {
 					IValueReference child = item.getChild(childName);
-					if (child != null) {
+					if (child.exists()) {
+						// FIXME compatibility
+						if (child.getKind() == ReferenceKind.FUNCTION)
+							continue;
+						if (child.getAttribute(IValueReference.FUNCTION_OP) != null)
+							continue;
 						reportReference(child, prefix, position);
 					}
 				}
 			}
 			if (item instanceof IValueReference) {
 				final IValueReference valueRef = (IValueReference) item;
-				final Type declaredType = valueRef.getDeclaredType();
-				if (declaredType != null) {
-					reportType(declaredType);
+				for (Type type : valueRef.getDeclaredTypes()) {
+					reportType(type);
 				}
 				for (Type type : valueRef.getTypes()) {
 					reportType(type);

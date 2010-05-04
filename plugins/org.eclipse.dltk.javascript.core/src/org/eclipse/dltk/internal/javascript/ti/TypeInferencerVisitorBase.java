@@ -60,8 +60,8 @@ public abstract class TypeInferencerVisitorBase extends
 	protected IValueReference merge(IValueReference value1,
 			IValueReference value2) {
 		final AnonymousValue reference = new AnonymousValue();
-		reference.addValue(value1);
-		reference.addValue(value2);
+		reference.setValue(value1);
+		reference.addValue(value2, false);
 		return reference;
 	}
 

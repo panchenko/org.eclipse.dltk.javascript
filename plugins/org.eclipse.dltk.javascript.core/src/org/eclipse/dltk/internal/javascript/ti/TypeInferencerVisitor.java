@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.ast.BooleanLiteral;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.CaseClause;
+import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.CommaExpression;
 import org.eclipse.dltk.javascript.ast.ConditionalOperator;
 import org.eclipse.dltk.javascript.ast.ConstStatement;
@@ -102,10 +103,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference left = visit(node.getLeftExpression());
 		final IValueReference right = visit(node.getRightExpression());
 		if (JSParser.ASSIGN == node.getOperation()) {
-			if (left != null)
-				left.addValue(right);
+			return visitAssign(left, right);
+		} else {
+			// TODO handle other operations
+			return null;
 		}
-		// TODO handle other operations
+	}
+
+	protected IValueReference visitAssign(IValueReference left,
+			IValueReference right) {
+		if (left != null)
+			left.setValue(right);
 		return right;
 	}
 
@@ -156,7 +164,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			VariableDeclaration declaration) {
 		final Identifier identifier = declaration.getIdentifier();
 		final String varName = identifier.getName();
-		final IValueReference reference = context.getChild(varName);
+		final IValueReference reference = context.createChild(varName);
 		final org.eclipse.dltk.javascript.ast.Type varType = declaration
 				.getType();
 		if (varType != null) {
@@ -167,7 +175,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				.sourceStart(), declaration.sourceEnd(), identifier
 				.sourceStart(), identifier.sourceEnd()));
 		if (declaration.getInitializer() != null) {
-			reference.addValue(visit(declaration.getInitializer()));
+			reference.setValue(visit(declaration.getInitializer()));
 		}
 		return reference;
 	}
@@ -227,7 +235,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitForInStatement(ForInStatement node) {
 		final IValueReference item = visit(node.getItem());
 		if (item != null) {
-			item.addValue(context.getFactory().createString(peekContext()));
+			item.setValue(context.getFactory().createString(peekContext()));
 		}
 		visit(node.getIterator());
 		visit(node.getBody());
@@ -275,7 +283,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueCollection function = new FunctionValueCollection(
 				peekContext(), method.getName());
 		for (IParameter parameter : method.getParameters()) {
-			final IValueReference refArg = function.getChild(parameter
+			final IValueReference refArg = function.createChild(parameter
 					.getName());
 			refArg.setKind(ReferenceKind.ARGUMENT);
 			refArg.setDeclaredType(parameter.getType());
@@ -285,7 +293,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		leaveContext();
 		final IValueReference result;
 		if (methodName != null) {
-			result = peekContext().getChild(method.getName());
+			result = peekContext().createChild(method.getName());
 			result.setLocation(ReferenceLocation.create(node.sourceStart(),
 					node.sourceEnd(), methodName.sourceStart(), methodName
 							.sourceEnd()));
@@ -301,7 +309,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference returnValue = result
 				.getChild(IValueReference.FUNCTION_OP);
 		returnValue.setDeclaredType(method.getType());
-		returnValue.addValue(function.getReturnValue());
+		returnValue.setValue(function.getReturnValue());
 		return result;
 	}
 
@@ -340,14 +348,25 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return peekContext().getChild(node.getName());
 	}
 
+	private Boolean evaluateCondition(Expression condition) {
+		if (condition instanceof BooleanLiteral) {
+			return Boolean.valueOf(((BooleanLiteral) condition).getText());
+		} else {
+			return null;
+		}
+	}
+
 	@Override
 	public IValueReference visitIfStatement(IfStatement node) {
 		visit(node.getCondition());
 		final List<Statement> statements = new ArrayList<Statement>(2);
-		if (node.getThenStatement() != null) {
+		final Boolean condition = evaluateCondition(node.getCondition());
+		if ((condition == null || condition.booleanValue())
+				&& node.getThenStatement() != null) {
 			statements.add(node.getThenStatement());
 		}
-		if (node.getElseStatement() != null) {
+		if ((condition == null || !condition.booleanValue())
+				&& node.getElseStatement() != null) {
 			statements.add(node.getElseStatement());
 		}
 		if (!statements.isEmpty()) {
@@ -385,12 +404,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (clazz != null) {
 			final Type type = context.getType(clazz.getName());
 			if (type != null) {
-				newType.addValue(context.getFactory().create(peekContext(),
+				newType.setValue(context.getFactory().create(peekContext(),
 						type));
 				return result;
 			}
 		}
-		newType.addValue(context.getFactory().createObject(peekContext()));
+		newType.setValue(context.getFactory().createObject(peekContext()));
 		return result;
 	}
 
@@ -408,7 +427,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final String name = extractName(pi.getName());
 				final IValueReference value = visit(pi.getValue());
 				if (name != null) {
-					result.getChild(name).addValue(value);
+					result.getChild(name).setValue(value);
 				}
 			} else {
 				// TODO handle get/set methods
@@ -457,7 +476,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final IValueReference returnValue = peekContext()
 						.getReturnValue();
 				if (returnValue != null) {
-					returnValue.addValue(value);
+					returnValue.addValue(value, true);
 				}
 			}
 		}
@@ -514,7 +533,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitTryStatement(TryStatement node) {
-		// visit(node.getBody());
+		visit(node.getBody());
+		for (CatchClause catchClause : node.getCatches()) {
+			visit(catchClause.getStatement());
+		}
+		if (node.getFinally() != null) {
+			visit(node.getFinally().getStatement());
+		}
 		return null;
 	}
 
@@ -592,7 +617,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (value != null) {
 			final IValueReference reference = peekContext().getReturnValue();
 			if (reference != null) {
-				reference.addValue(value);
+				reference.addValue(value, true);
 			}
 		}
 		return null;

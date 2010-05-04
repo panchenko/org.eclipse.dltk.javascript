@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,14 +22,18 @@ public class NestedValueCollection extends ValueCollection {
 		super(parent);
 	}
 
+	public boolean isScope() {
+		return false;
+	}
+
 	@Override
 	public IValueReference getReturnValue() {
-		return ((IValueCollection) getParent()).getReturnValue();
+		return getParent().getReturnValue();
 	}
 
 	@Override
 	public IValueReference getThis() {
-		return ((IValueCollection) getParent()).getThis();
+		return getParent().getThis();
 	}
 
 	protected static void mergeTo(IValueCollection parent,
@@ -37,14 +42,25 @@ public class NestedValueCollection extends ValueCollection {
 		for (NestedValueCollection collection : collections) {
 			names.addAll(collection.getValue().getDirectChildren());
 		}
+		List<IValueReference> childValues = new ArrayList<IValueReference>();
 		for (String childName : names) {
-			IValueReference value = parent.getChild(childName);
+			childValues.clear();
 			for (NestedValueCollection collection : collections) {
 				final IValueReference childValue = collection
 						.getChild(childName);
 				if (childValue.exists()) {
-					value.addValue(childValue);
+					childValues.add(childValue);
 				}
+			}
+			IValueReference value = parent.getChild(childName);
+			boolean set = collections.size() == 2
+					&& childValues.size() == collections.size();
+			for (IValueReference childValue : childValues) {
+				if (set)
+					value.setValue(childValue);
+				else
+					value.addValue(childValue, false);
+				set = false;
 			}
 		}
 	}

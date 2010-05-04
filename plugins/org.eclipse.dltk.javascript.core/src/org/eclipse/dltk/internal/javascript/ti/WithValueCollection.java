@@ -24,6 +24,10 @@ public class WithValueCollection implements IValueCollection {
 		this.with = with;
 	}
 
+	public boolean isScope() {
+		return false;
+	}
+
 	public IValueReference getReturnValue() {
 		return parent.getReturnValue();
 	}
@@ -36,6 +40,10 @@ public class WithValueCollection implements IValueCollection {
 		return with.getDirectChildren();
 	}
 
+	public Set<String> getDeletedChildren() {
+		return with.getDeletedChildren();
+	}
+
 	public boolean hasChild(String name) {
 		return with.hasChild(name);
 	}
@@ -44,8 +52,12 @@ public class WithValueCollection implements IValueCollection {
 		return with.getChild(name);
 	}
 
-	public IValueParent getParent() {
-		// TODO ?
+	public IValueReference createChild(String name) {
+		// TODO Auto-generated method stub
+		return parent.createChild(name);
+	}
+
+	public IValueCollection getParent() {
 		return parent;
 	}
 

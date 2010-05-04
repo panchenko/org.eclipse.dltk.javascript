@@ -19,13 +19,17 @@ public interface IValueReference extends IValueParent {
 
 	static final String FUNCTION_OP = "()"; //$NON-NLS-1$
 
+	IValueReference getParent();
+
 	String getName();
 
 	Set<Type> getTypes();
 
 	void clear();
 
-	void addValue(IValueReference value);
+	void setValue(IValueReference value);
+
+	void addValue(IValueReference value, boolean copy);
 
 	void delete();
 
@@ -40,6 +44,8 @@ public interface IValueReference extends IValueParent {
 	Type getDeclaredType();
 
 	void setDeclaredType(Type type);
+
+	Set<Type> getDeclaredTypes();
 
 	Object getAttribute(String key);
 

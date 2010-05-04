@@ -13,6 +13,8 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 public interface IValueProvider {
 
+	boolean isReference();
+
 	IValue getValue();
 
 	IValue createValue();

@@ -20,6 +20,10 @@ public class FunctionValueCollection extends ValueCollection {
 		this.functionName = functionName;
 	}
 
+	public boolean isScope() {
+		return true;
+	}
+
 	private final IValueReference returnValue = new AnonymousValue();
 
 	@Override

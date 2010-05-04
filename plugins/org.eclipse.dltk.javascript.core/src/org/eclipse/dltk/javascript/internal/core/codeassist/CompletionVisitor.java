@@ -15,6 +15,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 
 public class CompletionVisitor extends TypeInferencerVisitor {
@@ -33,6 +34,7 @@ public class CompletionVisitor extends TypeInferencerVisitor {
 		final IValueReference result = super.visit(node);
 		if (savedCollection == null && node.sourceEnd() > position) {
 			savedCollection = peekContext();
+			throw new PositionReachedException();
 		}
 		return result;
 	}

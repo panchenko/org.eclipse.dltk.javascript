@@ -61,6 +61,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		try {
 			initializeVisitor();
 			visitor.visit(script);
+		} catch (PositionReachedException e) {
+			throw e;
 		} catch (RuntimeException e) {
 			log(e);
 		} catch (AssertionError e) {

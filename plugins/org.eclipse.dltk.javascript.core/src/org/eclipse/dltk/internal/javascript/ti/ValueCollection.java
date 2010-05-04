@@ -28,7 +28,7 @@ public abstract class ValueCollection implements IValueCollection,
 		this.value = value;
 	}
 
-	public IValueParent getParent() {
+	public IValueCollection getParent() {
 		return parent;
 	}
 
@@ -39,6 +39,10 @@ public abstract class ValueCollection implements IValueCollection,
 	public IValueReference getThis() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public boolean isReference() {
+		return true;
 	}
 
 	public IValue getValue() {
@@ -53,13 +57,49 @@ public abstract class ValueCollection implements IValueCollection,
 		return value.getDirectChildren();
 	}
 
+	public Set<String> getDeletedChildren() {
+		return value.getDeletedChildren();
+	}
+
 	public boolean hasChild(String name) {
 		IValue value = getValue();
 		return value != null && value.getChild(name) != null;
 	}
 
 	public IValueReference getChild(String name) {
+		return newChild(name);
+	}
+
+	private ChildReference newChild(String name) {
 		return new ChildReference(this, name);
+	}
+
+	public IValueReference createChild(String name) {
+		IValueCollection coll = this;
+		for (;;) {
+			IValue childValue = ((IValueProvider) coll).getValue().getChild(
+					name);
+			if (childValue != null) {
+				if (coll != this) {
+					getValue().putChild(name, childValue);
+				}
+				return newChild(name);
+			}
+			coll = coll.getParent();
+			if (coll == null)
+				break;
+			if (coll.isScope())
+				break;
+		}
+		coll = this;
+		while (!coll.isScope()) {
+			coll = coll.getParent();
+		}
+		IValue childValue = getValue().createChild(name);
+		if (coll != this) {
+			getValue().putChild(name, childValue);
+		}
+		return newChild(name);
 	}
 
 	@Override

@@ -21,6 +21,10 @@ public class ConstantValue extends AbstractReference {
 		value.getTypes().add(type);
 	}
 
+	public boolean isReference() {
+		return false;
+	}
+
 	@Override
 	public Value getValue() {
 		return value;
@@ -32,7 +36,6 @@ public class ConstantValue extends AbstractReference {
 	}
 
 	public void delete() {
-		// TODO Auto-generated method stub
 	}
 
 	public String getName() {
@@ -43,7 +46,7 @@ public class ConstantValue extends AbstractReference {
 		return null;
 	}
 
-	public IValueParent getParent() {
+	public IValueReference getParent() {
 		return null;
 	}
 

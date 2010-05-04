@@ -23,7 +23,28 @@ public abstract class AbstractReference implements IValueReference,
 
 	public abstract IValue createValue();
 
-	public void addValue(IValueReference value) {
+	public void setValue(IValueReference value) {
+		IValue val = createValue();
+		if (val != null) {
+			if (value != null) {
+				IValue src = ((IValueProvider) value).getValue();
+				if (src == null)
+					return;
+				if (src instanceof Value
+						&& ((IValueProvider) value).isReference()) {
+					val.clear();
+					val.addReference(src);
+				} else {
+					val.clear();
+					val.addValue(src);
+				}
+			} else {
+				val.clear();
+			}
+		}
+	}
+
+	public void addValue(IValueReference value, boolean copy) {
 		if (value == null) {
 			return;
 		}
@@ -32,7 +53,12 @@ public abstract class AbstractReference implements IValueReference,
 			IValue src = ((IValueProvider) value).getValue();
 			if (src == null)
 				return;
-			val.addValue(src);
+			if (!copy && src instanceof Value
+					&& ((IValueProvider) value).isReference()) {
+				val.addReference(src);
+			} else {
+				val.addValue(src);
+			}
 		}
 	}
 
@@ -55,6 +81,12 @@ public abstract class AbstractReference implements IValueReference,
 	public Type getDeclaredType() {
 		IValue value = getValue();
 		return value != null ? value.getDeclaredType() : null;
+	}
+
+	public Set<Type> getDeclaredTypes() {
+		IValue value = getValue();
+		return value != null ? value.getDeclaredTypes() : Collections
+				.<Type> emptySet();
 	}
 
 	public ReferenceKind getKind() {
@@ -112,6 +144,12 @@ public abstract class AbstractReference implements IValueReference,
 	public Set<String> getDirectChildren() {
 		final IValue value = getValue();
 		return value != null ? value.getDirectChildren() : Collections
+				.<String> emptySet();
+	}
+
+	public Set<String> getDeletedChildren() {
+		final IValue value = getValue();
+		return value != null ? value.getDeletedChildren() : Collections
 				.<String> emptySet();
 	}
 

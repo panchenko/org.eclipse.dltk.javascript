@@ -18,7 +18,6 @@ import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.core.builder.IBuildContext;
-import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
@@ -60,16 +59,13 @@ public class JavaScriptValidations {
 		return script;
 	}
 
-	public static Type typeOf(IValueParent parent) {
-		if (parent instanceof IValueReference) {
-			IValueReference reference = (IValueReference) parent;
-			if (reference.getDeclaredType() != null) {
-				return reference.getDeclaredType();
-			}
-			final Set<Type> types = reference.getTypes();
-			if (types.size() == 1) {
-				return types.toArray(new Type[1])[0];
-			}
+	public static Type typeOf(IValueReference reference) {
+		if (reference.getDeclaredType() != null) {
+			return reference.getDeclaredType();
+		}
+		final Set<Type> types = reference.getTypes();
+		if (types.size() == 1) {
+			return types.toArray(new Type[1])[0];
 		}
 		return null;
 	}

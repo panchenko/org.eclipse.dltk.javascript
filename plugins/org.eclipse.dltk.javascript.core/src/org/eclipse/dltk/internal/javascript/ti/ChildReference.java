@@ -21,18 +21,45 @@ public class ChildReference extends AbstractReference {
 		this.name = name;
 	}
 
+	public boolean isReference() {
+		if (FUNCTION_OP.equals(name)) {
+			return false;
+		}
+		return parent.isReference();
+	}
+
 	@Override
 	public IValue getValue() {
+		if (parent instanceof IValueCollection) {
+			return findChild((IValueCollection) parent, name);
+		}
 		IValue parentValue = parent.getValue();
 		if (parentValue != null) {
 			return parentValue.getChild(name);
-		} else {
-			return null;
 		}
+		return null;
+	}
+
+	private static IValue findChild(IValueCollection collection, String name) {
+		while (collection != null) {
+			final IValue childValue = ((IValueProvider) collection).getValue()
+					.getChild(name);
+			if (childValue != null) {
+				return childValue;
+			}
+			collection = collection.getParent();
+		}
+		return null;
 	}
 
 	@Override
 	public IValue createValue() {
+		if (parent instanceof IValueCollection) {
+			IValue childValue = findChild((IValueCollection) parent, name);
+			if (childValue != null) {
+				return childValue;
+			}
+		}
 		IValue parentValue = parent.createValue();
 		if (parentValue != null) {
 			return parentValue.createChild(name);
@@ -45,18 +72,19 @@ public class ChildReference extends AbstractReference {
 		return parent.getContext();
 	}
 
-	public IValueParent getParent() {
-		// TODO check...
-		if (parent instanceof IValueParent) {
-			return (IValueParent) parent;
+	public IValueReference getParent() {
+		if (parent instanceof IValueReference) {
+			return (IValueReference) parent;
 		} else {
-			return parent.getParent();
+			return null;
 		}
 	}
 
 	public void delete() {
-		// TODO Auto-generated method stub
-
+		final IValue value = parent.getValue();
+		if (value != null) {
+			value.deleteChild(name);
+		}
 	}
 
 	public String getName() {

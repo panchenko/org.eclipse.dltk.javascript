@@ -29,6 +29,8 @@ public interface IValue {
 
 	void setDeclaredType(Type declaredType);
 
+	Set<Type> getDeclaredTypes();
+
 	Set<Type> getTypes();
 
 	Object getAttribute(String key);
@@ -47,6 +49,14 @@ public interface IValue {
 
 	void addValue(IValue src);
 
+	void addReference(IValue src);
+
 	void clear();
+
+	void putChild(String name, IValue value);
+
+	Set<String> getDeletedChildren();
+
+	void deleteChild(String name);
 
 }

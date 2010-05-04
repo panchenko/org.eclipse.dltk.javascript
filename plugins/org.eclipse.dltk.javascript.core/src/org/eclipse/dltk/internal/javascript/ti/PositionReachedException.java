@@ -11,25 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import java.util.Set;
-
-public interface IValueParent {
-
-	Set<String> getDirectChildren();
-
-	Set<String> getDeletedChildren();
-
-	boolean hasChild(String name);
-
-	/**
-	 * Finds the child with the specified name.
-	 * 
-	 * @param name
-	 * @return the child found or <code>null</code> if there is no child with
-	 *         such name
-	 */
-	IValueReference getChild(String name);
-
-	ITypeInferenceContext getContext();
+@SuppressWarnings("serial")
+public class PositionReachedException extends RuntimeException {
 
 }

@@ -17,6 +17,10 @@ public class TopValueCollection extends ValueCollection {
 
 	private final ITypeInferenceContext context;
 
+	public boolean isScope() {
+		return true;
+	}
+
 	/**
 	 * @param parent
 	 */

@@ -22,7 +22,6 @@ import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
-import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
@@ -141,15 +140,6 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					}
 				}
 				return reference.getChild(IValueReference.FUNCTION_OP);
-			} else {
-				return null;
-			}
-		}
-
-		private <E extends Element> E extractElement(IValueParent reference,
-				Class<E> elementType) {
-			if (reference instanceof IValueReference) {
-				return extractElement((IValueReference) reference, elementType);
 			} else {
 				return null;
 			}

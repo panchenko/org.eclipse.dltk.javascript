@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,17 +23,73 @@ public class Value implements IValue {
 
 	private final Set<Type> types = new HashSet<Type>();
 	private final Map<String, Value> children = new HashMap<String, Value>();
+	private final Map<String, IValue> inherited = new HashMap<String, IValue>();
+	private Set<String> deletedChildren = null;
 	private Type declaredType;
 	private ReferenceKind kind = ReferenceKind.UNKNOWN;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 	private Map<String, Object> attributes = null;
+	private Set<Value> references = new HashSet<Value>();
 
-	public Set<Type> getTypes() {
-		return types;
+	private final boolean hasReferences() {
+		return !references.isEmpty();
 	}
 
+	private static interface Handler<R> {
+		void process(Value value, R result);
+	}
+
+	private static <R> void execute(Value value, Handler<R> handler, R result,
+			Set<Value> visited) {
+		if (visited.add(value)) {
+			handler.process(value, result);
+			for (Value child : value.references) {
+				execute(child, handler, result, visited);
+			}
+		}
+	}
+
+	private static final Handler<Set<Type>> GET_TYPES = new Handler<Set<Type>>() {
+		public void process(Value value, Set<Type> result) {
+			result.addAll(value.types);
+		}
+	};
+
+	public Set<Type> getTypes() {
+		if (hasReferences()) {
+			final Set<Type> result = new HashSet<Type>();
+			execute(this, GET_TYPES, result, new HashSet<Value>());
+			return result;
+		} else {
+			return types;
+		}
+	}
+
+	private static final Handler<Set<Type>> GET_DECLARED_TYPES = new Handler<Set<Type>>() {
+		public void process(Value value, Set<Type> result) {
+			result.addAll(value.types);
+		}
+	};
+
 	public Type getDeclaredType() {
-		return declaredType;
+		if (hasReferences()) {
+			final Set<Type> result = new HashSet<Type>();
+			execute(this, GET_DECLARED_TYPES, result, new HashSet<Value>());
+			return !result.isEmpty() ? result.iterator().next() : null;
+		} else {
+			return declaredType;
+		}
+	}
+
+	public Set<Type> getDeclaredTypes() {
+		if (hasReferences()) {
+			final Set<Type> result = new HashSet<Type>();
+			execute(this, GET_DECLARED_TYPES, result, new HashSet<Value>());
+			return result;
+		} else {
+			return declaredType != null ? Collections.singleton(declaredType)
+					: Collections.<Type> emptySet();
+		}
 	}
 
 	public void setDeclaredType(Type declaredType) {
@@ -76,8 +133,35 @@ public class Value implements IValue {
 		attributes.put(key, value);
 	}
 
+	private static final Handler<Set<String>> GET_DIRECT_CHILDREN = new Handler<Set<String>>() {
+		public void process(Value value, Set<String> result) {
+			result.addAll(value.children.keySet());
+		}
+	};
+
 	public Set<String> getDirectChildren() {
-		return children.keySet();
+		if (hasReferences()) {
+			final Set<String> result = new HashSet<String>();
+			execute(this, GET_DIRECT_CHILDREN, result, new HashSet<Value>());
+			return result;
+		} else {
+			return children.keySet();
+		}
+	}
+
+	public Set<String> getDeletedChildren() {
+		if (deletedChildren != null) {
+			return deletedChildren;
+		} else {
+			return Collections.emptySet();
+		}
+	}
+
+	public void deleteChild(String name) {
+		if (deletedChildren == null) {
+			deletedChildren = new HashSet<String>();
+		}
+		deletedChildren.add(name);
 	}
 
 	protected IValue findMember(String name) {
@@ -94,29 +178,92 @@ public class Value implements IValue {
 		return null;
 	}
 
-	public IValue getChild(String name) {
-		IValue child = children.get(name);
-		if (child == null) {
-			child = findMember(name);
+	private static class GetChildHandler implements Handler<Set<Value>> {
+
+		private final String childName;
+
+		public GetChildHandler(String childName) {
+			this.childName = childName;
 		}
-		return child;
+
+		public void process(Value value, Set<Value> result) {
+			Value child = value.children.get(childName);
+			if (child != null) {
+				result.add(child);
+			}
+		}
+	};
+
+	public IValue getChild(String name) {
+		if (hasReferences()) {
+			Set<Value> result = new HashSet<Value>();
+			execute(this, new GetChildHandler(name), result,
+					new HashSet<Value>());
+			if (!result.isEmpty()) {
+				return result.iterator().next();
+			} else {
+				return null;
+			}
+		} else {
+			IValue child = children.get(name);
+			if (child == null) {
+				child = inherited.get(name);
+				if (child == null) {
+					child = findMember(name);
+				}
+			}
+			return child;
+		}
+	}
+
+	public void putChild(String name, IValue value) {
+		inherited.put(name, value);
+	}
+
+	private static class CreateChildOperation implements Handler<Set<Value>> {
+
+		private final String childName;
+
+		public CreateChildOperation(String childName) {
+			this.childName = childName;
+		}
+
+		public void process(Value value, Set<Value> result) {
+			if (result.isEmpty() && !value.hasReferences()) {
+				result.add((Value) value.createChild(childName));
+			}
+		}
+
 	}
 
 	public IValue createChild(String name) {
-		Value child = children.get(name);
+		IValue child = children.get(name);
 		if (child == null) {
-			child = new Value();
-			children.put(name, child);
+			child = inherited.get(name);
+			if (child == null) {
+				if (hasReferences()) {
+					Set<Value> result = new HashSet<Value>();
+					execute(this, new CreateChildOperation(name), result,
+							new HashSet<Value>());
+					if (!result.isEmpty()) {
+						return result.iterator().next();
+					}
+				}
+				child = new Value();
+				children.put(name, (Value) child);
+			}
 		}
 		return child;
 	}
 
 	public boolean hasChild(String name) {
-		return children.containsKey(name);
+		return children.containsKey(name) || inherited.containsKey(name);
 	}
 
 	public void clear() {
+		references.clear();
 		children.clear();
+		inherited.clear();
 		types.clear();
 	}
 
@@ -129,6 +276,14 @@ public class Value implements IValue {
 			}
 			types.addAll(src.getTypes());
 		}
+	}
+
+	public void addReference(IValue src) {
+		assert src != null;
+		if (src == this)
+			return;
+		if (src instanceof Value)
+			references.add((Value) src);
 	}
 
 	private void addValueRecursive(Value src, Set<Value> processing) {

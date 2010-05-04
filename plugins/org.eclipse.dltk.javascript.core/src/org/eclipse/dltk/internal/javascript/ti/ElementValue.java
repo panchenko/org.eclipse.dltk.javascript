@@ -64,6 +64,10 @@ public abstract class ElementValue implements IValue {
 			return type;
 		}
 
+		public Set<Type> getDeclaredTypes() {
+			return Collections.singleton(type);
+		}
+
 	}
 
 	private static class MethodValue extends ElementValue implements IValue {
@@ -95,6 +99,10 @@ public abstract class ElementValue implements IValue {
 			return null;
 		}
 
+		public Set<Type> getDeclaredTypes() {
+			return Collections.emptySet();
+		}
+
 	}
 
 	private static class PropertyValue extends ElementValue implements IValue {
@@ -123,6 +131,14 @@ public abstract class ElementValue implements IValue {
 			return property.getType();
 		}
 
+		public Set<Type> getDeclaredTypes() {
+			if (property.getType() != null) {
+				return Collections.singleton(property.getType());
+			} else {
+				return Collections.emptySet();
+			}
+		}
+
 	}
 
 	protected abstract Element getElement();
@@ -131,6 +147,9 @@ public abstract class ElementValue implements IValue {
 	}
 
 	public final void addValue(IValue src) {
+	}
+
+	public final void addReference(IValue src) {
 	}
 
 	public final Object getAttribute(String key) {
@@ -150,11 +169,22 @@ public abstract class ElementValue implements IValue {
 		return Collections.emptySet();
 	}
 
+	public Set<String> getDeletedChildren() {
+		return Collections.emptySet();
+	}
+
+	public void deleteChild(String name) {
+	}
+
 	public final boolean hasChild(String name) {
 		return false;
 	}
 
 	public final IValue createChild(String name) {
+		throw new UnsupportedOperationException();
+	}
+
+	public void putChild(String name, IValue value) {
 		throw new UnsupportedOperationException();
 	}
 
