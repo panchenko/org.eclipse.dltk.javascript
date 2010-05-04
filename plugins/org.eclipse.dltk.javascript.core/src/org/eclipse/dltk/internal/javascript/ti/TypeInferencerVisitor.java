@@ -383,20 +383,33 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitIfStatement(IfStatement node) {
 		visit(node.getCondition());
 		final List<Statement> statements = new ArrayList<Statement>(2);
+		Statement onlyBranch = null;
 		final Boolean condition = evaluateCondition(node.getCondition());
 		if ((condition == null || condition.booleanValue())
 				&& node.getThenStatement() != null) {
 			statements.add(node.getThenStatement());
+			if (condition != null && condition.booleanValue()) {
+				onlyBranch = node.getThenStatement();
+			}
 		}
 		if ((condition == null || !condition.booleanValue())
 				&& node.getElseStatement() != null) {
 			statements.add(node.getElseStatement());
+			if (condition != null && !condition.booleanValue()) {
+				onlyBranch = node.getElseStatement();
+			}
 		}
 		if (!statements.isEmpty()) {
-			final Branching branching = branching();
 			if (statements.size() == 1) {
-				visit(statements.get(0));
+				if (statements.get(0) == onlyBranch) {
+					visit(statements.get(0));
+				} else {
+					final Branching branching = branching();
+					visit(statements.get(0));
+					branching.end();
+				}
 			} else {
+				final Branching branching = branching();
 				final List<NestedValueCollection> collections = new ArrayList<NestedValueCollection>(
 						statements.size());
 				for (Statement statement : statements) {
@@ -408,8 +421,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					collections.add(nestedCollection);
 				}
 				NestedValueCollection.mergeTo(peekContext(), collections);
+				branching.end();
 			}
-			branching.end();
 		}
 		return null;
 	}
