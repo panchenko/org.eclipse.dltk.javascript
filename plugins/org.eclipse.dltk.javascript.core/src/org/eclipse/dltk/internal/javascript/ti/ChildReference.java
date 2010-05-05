@@ -22,7 +22,7 @@ public class ChildReference extends AbstractReference {
 	}
 
 	public boolean isReference() {
-		if (FUNCTION_OP.equals(name)) {
+		if (FUNCTION_OP.equals(name) || ARRAY_OP.equals(name)) {
 			return false;
 		}
 		return parent.isReference();

@@ -352,9 +352,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference array = visit(node.getArray());
 		visit(node.getIndex());
 		if (array != null) {
-			// TODO extract array type from result?
 			if (node.getIndex() instanceof StringLiteral) {
 				return array.getChild(extractName(node.getIndex()));
+			} else {
+				return array.getChild(IValueReference.ARRAY_OP);
 			}
 		}
 		return null;

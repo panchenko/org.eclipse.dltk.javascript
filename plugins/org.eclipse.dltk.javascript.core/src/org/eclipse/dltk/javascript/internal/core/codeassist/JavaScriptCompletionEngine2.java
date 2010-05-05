@@ -135,9 +135,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					break;
 			} else {
 				assert path.isArray(i);
-				// TODO
-				item = null;
-				break;
+				item = item.getChild(IValueReference.ARRAY_OP);
+				if (!exists(item))
+					break;
 			}
 		}
 		if (item != null && exists(item) && !path.isEmpty()) {
