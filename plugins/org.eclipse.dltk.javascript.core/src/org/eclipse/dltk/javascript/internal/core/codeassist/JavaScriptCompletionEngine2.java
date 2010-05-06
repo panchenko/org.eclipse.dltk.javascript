@@ -250,7 +250,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		private void reportReference(IValueReference reference, char[] prefix,
 				int position) {
 			boolean isFunction = reference.getKind() == ReferenceKind.FUNCTION
-					|| reference.getChild(IValueReference.FUNCTION_OP) != null;
+					|| reference.getChild(IValueReference.FUNCTION_OP).exists();
 			CompletionProposal proposal = CompletionProposal.create(
 					isFunction ? CompletionProposal.METHOD_REF
 							: CompletionProposal.LOCAL_VARIABLE_REF, position);
