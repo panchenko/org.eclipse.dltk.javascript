@@ -60,12 +60,14 @@ public class JavaScriptValidations {
 	}
 
 	public static Type typeOf(IValueReference reference) {
-		if (reference.getDeclaredType() != null) {
-			return reference.getDeclaredType();
-		}
-		final Set<Type> types = reference.getTypes();
-		if (types.size() == 1) {
-			return types.toArray(new Type[1])[0];
+		if (reference != null) {
+			if (reference.getDeclaredType() != null) {
+				return reference.getDeclaredType();
+			}
+			final Set<Type> types = reference.getTypes();
+			if (types.size() == 1) {
+				return types.toArray(new Type[1])[0];
+			}
 		}
 		return null;
 	}
