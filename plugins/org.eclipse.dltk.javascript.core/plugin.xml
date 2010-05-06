@@ -78,7 +78,7 @@
       <completionEngine
             class="org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionEngine2"
             nature="org.eclipse.dltk.javascript.core.nature"
-            priority="-1">
+            priority="1">
       </completionEngine>
    </extension>
    <extension
