@@ -103,6 +103,21 @@ public class AbstractCompletionTest extends TestCase {
 		}
 	}
 
+	private static List<String> objectMethods = null;
+
+	protected static List<String> getMethodsOfObject() {
+		if (objectMethods == null) {
+			List<String> names = new ArrayList<String>();
+			for (Member member : TypeInfoModelLoader.getInstance().getType(
+					ITypeNames.OBJECT).getMembers()) {
+				names.add(member.getName());
+			}
+			assertEquals(3, names.size());
+			objectMethods = Collections.unmodifiableList(names);
+		}
+		return objectMethods;
+	}
+
 	private static List<String> numberMethods = null;
 
 	protected static List<String> getMethodsOfNumber() {

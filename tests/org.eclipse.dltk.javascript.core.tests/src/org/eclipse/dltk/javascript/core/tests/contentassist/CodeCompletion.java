@@ -2,9 +2,10 @@ package org.eclipse.dltk.javascript.core.tests.contentassist;
 
 import java.util.LinkedList;
 
+import junit.framework.TestResult;
+
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.core.CompletionProposal;
-import org.eclipse.dltk.core.tests.TestSupport;
 
 public class CodeCompletion extends AbstractCompletionTest {
 
@@ -44,7 +45,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	 * dumb completion on function
 	 */
 	public void test3() {
-		String[] names = new String[] { "world" };
+		String[] names = concat(getMethodsOfObject(), "world");
 		String module = "test3.js";
 		int position = lastPositionInFile("firstVar.", module);
 		basicTest(module, position, names);
@@ -327,7 +328,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test36() {
-		String[] names = new String[] { "e" };
+		String[] names = new String[] { "c", "object", "e" };
 		String module = "test36.js";
 		int position = lastPositionInFile("{", module);
 		basicTest(module, position, names);
@@ -423,8 +424,6 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test48() {
-		if (TestSupport.notYetImplemented(this))
-			return;
 		String[] names = new String[] { "erer" };
 		String module = "test48.js";
 		int position = lastPositionInFile("this.", module);
