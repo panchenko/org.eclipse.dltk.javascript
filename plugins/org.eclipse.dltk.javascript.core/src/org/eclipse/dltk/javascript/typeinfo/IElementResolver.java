@@ -11,8 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.Set;
+
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 
 public interface IElementResolver {
 	Element resolveElement(ITypeInfoContext context, String name);
+
+	Set<String> resolveGlobals(ITypeInfoContext context);
 }

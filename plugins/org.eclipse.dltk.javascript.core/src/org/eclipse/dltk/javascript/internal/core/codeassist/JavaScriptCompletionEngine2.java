@@ -22,6 +22,7 @@ import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IAccessRule;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
+import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
@@ -33,6 +34,7 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -94,10 +96,10 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		// position);
 		// System.out.println(startPart);
 		if (calculator.isMember()) {
-			doCompletionOnMember(visitor.getCollection(), calculator
-					.getCompletion(), position);
+			doCompletionOnMember(inferencer2, visitor.getCollection(),
+					calculator.getCompletion(), position);
 		} else {
-			doGlobalCompletion(visitor.getCollection(), calculator
+			doGlobalCompletion(inferencer2, visitor.getCollection(), calculator
 					.getCompletion(), position);
 		}
 		this.requestor.endReporting();
@@ -112,11 +114,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	}
 
 	/**
+	 * @param context
 	 * @param collection
 	 * @param startPart
 	 */
-	private void doCompletionOnMember(IValueCollection collection,
-			String startPart, int position) {
+	private void doCompletionOnMember(ITypeInferenceContext context,
+			IValueCollection collection, String startPart, int position) {
 		CompletionPath path = new CompletionPath(startPart);
 		IValueParent item = collection;
 		for (int i = 0; i < path.segmentCount() - 1; ++i) {
@@ -151,6 +154,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						break;
 					reporter.report(coll);
 				}
+				final Set<String> globals = context.resolveGlobals();
+				for (String global : globals) {
+					if (reporter.canReport(global)) {
+						Element element = context.resolve(global);
+						if (element != null) {
+							reporter.report(global, element);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -168,6 +180,17 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			setSourceRange(position - this.prefix.length, position);
 		}
 
+		public void report(String name, Element element) {
+			if (element instanceof Member && processed.add(name)) {
+				reportMember((Member) element, name);
+			}
+		}
+
+		public boolean canReport(String name) {
+			return CharOperation.prefixEquals(prefix, name, false)
+					&& !processed.contains(name);
+		}
+
 		public void report(IValueParent item) {
 			final Set<String> deleted = item.getDeletedChildren();
 			for (String childName : item.getDirectChildren()) {
@@ -183,21 +206,21 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			if (item instanceof IValueReference) {
 				final IValueReference valueRef = (IValueReference) item;
 				for (Type type : valueRef.getDeclaredTypes()) {
-					reportType(type);
+					reportTypeMembers(type);
 				}
 				for (Type type : valueRef.getTypes()) {
-					reportType(type);
+					reportTypeMembers(type);
 				}
 			}
 		}
 
-		private void reportType(Type type) {
+		private void reportTypeMembers(Type type) {
 			if (processedTypes.add(type)) {
 				for (Member member : type.getMembers()) {
 					if (CharOperation.prefixEquals(prefix, member.getName(),
 							false)
 							&& processed.add(member.getName())) {
-						reportMember(member, prefix, position);
+						reportMember(member, member.getName());
 					}
 				}
 			}
@@ -205,23 +228,21 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 		/**
 		 * @param member
-		 * @param position
 		 */
-		private void reportMember(Member member, char[] prefix, int position) {
+		private void reportMember(Member member, String memberName) {
 			boolean isFunction = member instanceof Method;
 			CompletionProposal proposal = CompletionProposal.create(
 					isFunction ? CompletionProposal.METHOD_REF
-							: CompletionProposal.LOCAL_VARIABLE_REF, position);
+							: CompletionProposal.FIELD_REF, position);
 
 			int relevance = computeBaseRelevance();
 			// relevance += computeRelevanceForInterestingProposal();
-			relevance += computeRelevanceForCaseMatching(prefix, member
-					.getName());
+			relevance += computeRelevanceForCaseMatching(prefix, memberName);
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
 			proposal.setRelevance(relevance);
 
-			proposal.setCompletion(member.getName());
-			proposal.setName(member.getName());
+			proposal.setCompletion(memberName);
+			proposal.setName(memberName);
 			proposal.extraInfo = member;
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
@@ -277,19 +298,19 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				}
 			}
 			requestor.accept(proposal);
-			// TODO Auto-generated method stub
-
 		}
 
 	}
 
 	/**
+	 * @param context
 	 * @param collection
 	 * @param startPart
+	 * @param position
 	 */
-	private void doGlobalCompletion(IValueCollection collection,
-			String startPart, int position) {
-		doCompletionOnMember(collection, startPart, position);
+	private void doGlobalCompletion(ITypeInferenceContext context,
+			IValueCollection collection, String startPart, int position) {
+		doCompletionOnMember(context, collection, startPart, position);
 		// final char[] prefix = startPart.toCharArray();
 		// for (String childName : collection.getDirectChildren()) {
 		// if (CharOperation.prefixEquals(prefix, childName, false)) {

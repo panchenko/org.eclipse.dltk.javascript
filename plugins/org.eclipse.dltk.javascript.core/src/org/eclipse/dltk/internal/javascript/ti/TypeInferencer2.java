@@ -247,4 +247,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return null;
 	}
 
+	public Set<String> resolveGlobals() {
+		final Set<String> result = new HashSet<String>();
+		for (IElementResolver resolver : TypeInfoManager.getElementResolvers()) {
+			Set<String> globals = resolver.resolveGlobals(this);
+			if (globals != null) {
+				result.addAll(globals);
+			}
+		}
+		return result;
+	}
+
 }
