@@ -176,11 +176,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						&& processed.add(childName)) {
 					IValueReference child = item.getChild(childName);
 					if (child.exists()) {
-						// FIXME compatibility
-						if (child.getKind() == ReferenceKind.FUNCTION)
-							continue;
-						if (child.getAttribute(IValueReference.FUNCTION_OP) != null)
-							continue;
 						reportReference(child, prefix, position);
 					}
 				}
