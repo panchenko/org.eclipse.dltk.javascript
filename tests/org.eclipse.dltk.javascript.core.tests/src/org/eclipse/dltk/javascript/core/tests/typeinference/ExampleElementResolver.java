@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
+import java.util.Set;
+
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
@@ -24,7 +26,11 @@ public class ExampleElementResolver implements IElementResolver {
 
 	public Element resolveElement(ITypeInfoContext context, String name) {
 		if ("ExampleGlobal".equals(name)) {
-			return context.getType(ExampleTypeProvider.TYPE_SERVICE);
+			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
+			property.setType(context.getType(ExampleTypeProvider.TYPE_SERVICE));
+			property.setName(name);
+			property.setDeprecated(true);
+			return property;
 		} else if ("executeExampleGlobal".equals(name)) {
 			final Type type = context.getType(ExampleTypeProvider.TYPE_SERVICE);
 			for (Member member : type.getMembers()) {
@@ -46,6 +52,10 @@ public class ExampleElementResolver implements IElementResolver {
 			property.setDeprecated(true);
 			return property;
 		}
+		return null;
+	}
+
+	public Set<String> resolveGlobals(ITypeInfoContext context) {
 		return null;
 	}
 
