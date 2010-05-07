@@ -67,6 +67,7 @@ import org.eclipse.dltk.javascript.ast.Label;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.LoopStatement;
 import org.eclipse.dltk.javascript.ast.Method;
+import org.eclipse.dltk.javascript.ast.MissingType;
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
@@ -1038,6 +1039,10 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return type;
 	}
 
+	private boolean isType(Tree node) {
+		return node.getType() == JSParser.Identifier;
+	}
+
 	private VariableDeclaration transformVariableDeclaration(Tree node,
 			IVariableStatement statement) {
 		Assert.isTrue(node.getType() == JSParser.Identifier
@@ -1050,13 +1055,19 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		declaration.setStart(getTokenOffset(node.getTokenStartIndex()));
 		declaration.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 		int i = 0;
-		if (i + 2 <= node.getChildCount()
+		if (i < node.getChildCount()
 				&& node.getChild(i).getType() == JSParser.COLON) {
 			declaration.setColonPosition(getTokenOffset(node.getChild(i)
 					.getTokenStartIndex()));
-			declaration
-					.setType(transformType(node.getChild(i + 1), declaration));
-			i += 2;
+			++i;
+			if (i < node.getChildCount() && isType(node.getChild(i))) {
+				declaration
+						.setType(transformType(node.getChild(i), declaration));
+				++i;
+			} else {
+				declaration.setType(new MissingType(declaration, declaration
+						.getColonPosition()));
+			}
 		}
 		if (i + 2 <= node.getChildCount()
 				&& node.getChild(i).getType() == JSParser.ASSIGN) {

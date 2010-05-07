@@ -366,6 +366,10 @@ public JSParserState peekState() {
 protected void syncToSet() {
 }
 
+protected void typeRefExpected() {
+	throw new UnsupportedOperationException("override typeRefExpected()");
+}
+
 private final boolean isLeftHandSideAssign(RuleReturnScope lhs, Object[] cached)
 {
 	if (cached[0] != null)
@@ -1408,6 +1412,7 @@ variableStatement
 
 typeRef
 	: identifier
+	| { typeRefExpected(); }
 	;
 
 variableDeclaration

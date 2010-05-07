@@ -249,6 +249,19 @@ public class JavaScriptParser extends AbstractSourceParser {
 			}
 		}
 
+		@Override
+		protected void typeRefExpected() {
+			final Token colon = input.LT(-1);
+			final ISourceRange colonRange = convert(colon);
+			reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR,
+					"Type name expected after colon");
+			reporter.setSeverity(Severity.ERROR);
+			reporter.setRange(colonRange.getOffset(), colonRange.getOffset()
+					+ colonRange.getLength());
+			reporter.setLine(colon.getLine());
+			reporter.report();
+		}
+
 	}
 
 	/**
