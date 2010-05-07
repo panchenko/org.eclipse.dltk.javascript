@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -47,4 +51,18 @@ public class TypeInfoModelLoader {
 		return null;
 	}
 
+	public Set<String> listTypes(String prefix) {
+		Set<String> result = new HashSet<String>();
+		for (Resource resource : resourceSet.getResources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof Type) {
+					final Type type = (Type) object;
+					if (CharOperation.prefixEquals(prefix, type.getName())) {
+						result.add(type.getName());
+					}
+				}
+			}
+		}
+		return result;
+	}
 }

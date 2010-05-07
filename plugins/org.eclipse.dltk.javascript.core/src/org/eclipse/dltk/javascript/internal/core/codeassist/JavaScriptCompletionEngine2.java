@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
@@ -30,7 +31,9 @@ import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
+import org.eclipse.dltk.javascript.ast.MissingType;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -52,7 +55,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		this.useEngine = useEngine;
 	}
 
-	public void complete(IModuleSource cu, int position, int i) {
+	public void complete(final IModuleSource cu, int position, int i) {
 		this.requestor.beginReporting();
 		String content = cu.getSourceContents();
 		if (position < 0 || position > content.length()) {
@@ -69,40 +72,57 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						+ content.substring(position);
 			}
 		}
-		final PositionCalculator calculator = new PositionCalculator(content,
-				position, false);
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
-		final CompletionVisitor visitor = new CompletionVisitor(inferencer2,
-				position);
-		inferencer2.setVisitor(visitor);
-		if (cu instanceof org.eclipse.dltk.core.ISourceModule) {
-			inferencer2
-					.setModelElement((org.eclipse.dltk.core.ISourceModule) cu);
-		}
 		final Script script = new JavaScriptParser().parse(new ModuleSource(
 				content) {
 			@Override
 			public IModelElement getModelElement() {
-				return inferencer2.getModelElement();
+				return cu.getModelElement();
 			}
 		}, null);
-		try {
-			inferencer2.doInferencing(script);
-		} catch (PositionReachedException e) {
-			// e.printStackTrace();
-		}
-
-		// this.setSourceRange(position - calculator.getCompletion().length(),
-		// position);
-		// System.out.println(startPart);
-		if (calculator.isMember()) {
-			doCompletionOnMember(inferencer2, visitor.getCollection(),
-					calculator.getCompletion(), position);
+		final ASTNode lastNode = new NodeFinder(position).locate(script);
+		if (lastNode instanceof MissingType || lastNode instanceof SimpleType) {
+			doCompletionOnType(
+					inferencer2,
+					((org.eclipse.dltk.javascript.ast.Type) lastNode).getName(),
+					position);
 		} else {
-			doGlobalCompletion(inferencer2, visitor.getCollection(), calculator
-					.getCompletion(), position);
+			final PositionCalculator calculator = new PositionCalculator(
+					content, position, false);
+			final CompletionVisitor visitor = new CompletionVisitor(
+					inferencer2, position);
+			inferencer2.setVisitor(visitor);
+			if (cu instanceof org.eclipse.dltk.core.ISourceModule) {
+				inferencer2
+						.setModelElement((org.eclipse.dltk.core.ISourceModule) cu);
+			}
+			try {
+				inferencer2.doInferencing(script);
+			} catch (PositionReachedException e) {
+				// e.printStackTrace();
+			}
+
+			if (calculator.isMember()) {
+				doCompletionOnMember(inferencer2, visitor.getCollection(),
+						calculator.getCompletion(), position);
+			} else {
+				doGlobalCompletion(inferencer2, visitor.getCollection(),
+						calculator.getCompletion(), position);
+			}
 		}
 		this.requestor.endReporting();
+	}
+
+	private void doCompletionOnType(ITypeInferenceContext context,
+			String typeNamePrefix, int position) {
+		Set<String> typeNames = context.listTypes(typeNamePrefix);
+		final Reporter reporter = new Reporter(typeNamePrefix, position);
+		for (String typeName : typeNames) {
+			final Type type = context.getType(typeName);
+			if (type != null) {
+				reporter.reportTypeRef(type);
+			}
+		}
 	}
 
 	private static boolean exists(IValueParent item) {
@@ -154,7 +174,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						break;
 					reporter.report(coll);
 				}
-				final Set<String> globals = context.resolveGlobals();
+				final Set<String> globals = context.listGlobals(path
+						.lastSegment());
 				for (String global : globals) {
 					if (reporter.canReport(global)) {
 						Element element = context.resolve(global);
@@ -297,6 +318,22 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					}
 				}
 			}
+			requestor.accept(proposal);
+		}
+
+		public void reportTypeRef(Type type) {
+			CompletionProposal proposal = CompletionProposal.create(
+					CompletionProposal.TYPE_REF, position);
+			int relevance = computeBaseRelevance();
+			// relevance += computeRelevanceForInterestingProposal();
+			relevance += computeRelevanceForCaseMatching(prefix, type.getName());
+			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
+			proposal.setRelevance(relevance);
+			proposal.setCompletion(type.getName());
+			proposal.setName(type.getName());
+			proposal.extraInfo = type;
+			proposal.setReplaceRange(startPosition - offset, endPosition
+					- offset);
 			requestor.accept(proposal);
 		}
 

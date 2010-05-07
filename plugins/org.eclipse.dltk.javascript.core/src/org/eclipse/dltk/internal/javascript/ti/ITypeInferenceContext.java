@@ -22,6 +22,8 @@ public interface ITypeInferenceContext extends ITypeInfoContext {
 
 	Element resolve(String name);
 
-	Set<String> resolveGlobals();
+	Set<String> listGlobals(String prefix);
+
+	Set<String> listTypes(String prefix);
 
 }

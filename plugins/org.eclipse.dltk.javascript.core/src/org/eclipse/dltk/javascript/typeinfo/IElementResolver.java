@@ -18,5 +18,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.Element;
 public interface IElementResolver {
 	Element resolveElement(ITypeInfoContext context, String name);
 
-	Set<String> resolveGlobals(ITypeInfoContext context);
+	/**
+	 * @param context
+	 * @param prefix
+	 *            the prefix, not <code>null</code>
+	 * @return
+	 */
+	Set<String> listGlobals(ITypeInfoContext context, String prefix);
 }

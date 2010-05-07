@@ -93,6 +93,22 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return getType(typeName, queryProviders, true, !queryProviders, true);
 	}
 
+	public Set<String> listTypes(String prefix) {
+		Set<String> result = new HashSet<String>();
+		Set<String> typeNames = TypeInfoModelLoader.getInstance().listTypes(
+				prefix);
+		if (typeNames != null) {
+			result.addAll(typeNames);
+		}
+		for (ITypeProvider provider : TypeInfoManager.getTypeProviders()) {
+			typeNames = provider.listTypes(this, prefix);
+			if (typeNames != null) {
+				result.addAll(typeNames);
+			}
+		}
+		return result;
+	}
+
 	public IModelElement getModelElement() {
 		return modelElement;
 	}
@@ -247,10 +263,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return null;
 	}
 
-	public Set<String> resolveGlobals() {
+	public Set<String> listGlobals(String prefix) {
 		final Set<String> result = new HashSet<String>();
 		for (IElementResolver resolver : TypeInfoManager.getElementResolvers()) {
-			Set<String> globals = resolver.resolveGlobals(this);
+			Set<String> globals = resolver.listGlobals(this, prefix);
 			if (globals != null) {
 				result.addAll(globals);
 			}
