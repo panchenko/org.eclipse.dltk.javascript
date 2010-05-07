@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
@@ -55,8 +57,22 @@ public class ExampleElementResolver implements IElementResolver {
 		return null;
 	}
 
-	public Set<String> resolveGlobals(ITypeInfoContext context) {
-		return null;
+	private static final boolean ENABLE_LIST_GLOBALS = false;
+
+	public Set<String> listGlobals(ITypeInfoContext context, String prefix) {
+		if (ENABLE_LIST_GLOBALS) {
+			Set<String> result = new HashSet<String>();
+			String[] names = new String[] { "ExampleGlobal",
+					"executeExampleGlobal", "exampleForms", "myExampleForms" };
+			for (String name : names) {
+				if (CharOperation.prefixEquals(prefix, name)) {
+					result.add(name);
+				}
+			}
+			return result;
+		} else {
+			return null;
+		}
 	}
 
 }

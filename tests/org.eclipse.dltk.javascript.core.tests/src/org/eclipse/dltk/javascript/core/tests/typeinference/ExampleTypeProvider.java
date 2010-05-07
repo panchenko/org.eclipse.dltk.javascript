@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
@@ -111,6 +115,18 @@ public class ExampleTypeProvider implements ITypeProvider {
 			return type;
 		}
 		return null;
+	}
+
+	public Set<String> listTypes(ITypeInfoContext context, String prefix) {
+		final Set<String> result = new HashSet<String>();
+		final String[] names = new String[] { TYPE_SERVICE, TYPE_SERVICE2,
+				TYPE_RESPONSE, TYPE_EXAMPLE_FORMS };
+		for (String name : names) {
+			if (CharOperation.prefixEquals(prefix, name)) {
+				result.add(name);
+			}
+		}
+		return result;
 	}
 
 }
