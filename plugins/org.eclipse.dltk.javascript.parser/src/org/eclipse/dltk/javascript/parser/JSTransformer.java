@@ -105,6 +105,8 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.eclipse.dltk.javascript.internal.parser.FunctionTypedDeclaration;
+import org.eclipse.dltk.javascript.internal.parser.ITypedDeclaration;
 import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 import org.eclipse.dltk.utils.IntList;
 import org.eclipse.osgi.util.NLS;
@@ -695,14 +697,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		argument.setIdentifier((Identifier) visitIdentifier(node));
 		argument.setStart(getTokenOffset(node.getTokenStartIndex()));
 		argument.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-		int i = 0;
-		if (i + 2 <= node.getChildCount()
-				&& node.getChild(i).getType() == JSParser.COLON) {
-			argument.setColonPosition(getTokenOffset(node.getChild(i)
-					.getTokenStartIndex()));
-			argument.setType(transformType(node.getChild(i + 1), argument));
-			i += 2;
-		}
+		processType(argument, node, 0);
 		return argument;
 	}
 
@@ -765,14 +760,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 		fn.setRP(getTokenOffset(JSParser.RPAREN, argsNode.getTokenStopIndex(),
 				node.getChild(index).getTokenStartIndex()));
-
-		if (index + 2 < node.getChildCount()
-				&& node.getChild(index).getType() == JSParser.COLON) {
-			fn.setColonPosition(getTokenOffset(node.getChild(index)
-					.getTokenStartIndex()));
-			fn.setReturnType(transformType(node.getChild(index + 1), fn));
-			index += 2;
-		}
+		index = processType(new FunctionTypedDeclaration(fn), node, index);
 		final Identifier nameNode = fn.getName();
 		if (nameNode != null
 				&& scope.canAdd(nameNode.getName()) == SymbolKind.PARAM) {
@@ -1043,6 +1031,24 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return node.getType() == JSParser.Identifier;
 	}
 
+	private int processType(ITypedDeclaration target, Tree node, int index) {
+		if (index < node.getChildCount()
+				&& node.getChild(index).getType() == JSParser.COLON) {
+			target.setColonPosition(getTokenOffset(node.getChild(index)
+					.getTokenStartIndex()));
+			++index;
+			if (index < node.getChildCount() && isType(node.getChild(index))) {
+				target.setType(transformType(node.getChild(index),
+						(ASTNode) target));
+				++index;
+			} else {
+				target.setType(new MissingType((ASTNode) target, target
+						.getColonPosition()));
+			}
+		}
+		return index;
+	}
+
 	private VariableDeclaration transformVariableDeclaration(Tree node,
 			IVariableStatement statement) {
 		Assert.isTrue(node.getType() == JSParser.Identifier
@@ -1054,21 +1060,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				.setIdentifier((Identifier) transformNode(node, declaration));
 		declaration.setStart(getTokenOffset(node.getTokenStartIndex()));
 		declaration.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-		int i = 0;
-		if (i < node.getChildCount()
-				&& node.getChild(i).getType() == JSParser.COLON) {
-			declaration.setColonPosition(getTokenOffset(node.getChild(i)
-					.getTokenStartIndex()));
-			++i;
-			if (i < node.getChildCount() && isType(node.getChild(i))) {
-				declaration
-						.setType(transformType(node.getChild(i), declaration));
-				++i;
-			} else {
-				declaration.setType(new MissingType(declaration, declaration
-						.getColonPosition()));
-			}
-		}
+		int i = processType(declaration, node, 0);
 		if (i + 2 <= node.getChildCount()
 				&& node.getChild(i).getType() == JSParser.ASSIGN) {
 			declaration.setAssignPosition(getTokenOffset(node.getChild(i)
