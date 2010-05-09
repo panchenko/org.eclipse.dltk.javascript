@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.parser;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Type;
 
@@ -22,20 +23,16 @@ public class FunctionTypedDeclaration implements ITypedDeclaration {
 		this.function = function;
 	}
 
-	public int getColonPosition() {
-		return function.getColonPosition();
-	}
-
-	public Type getType() {
-		return function.getReturnType();
-	}
-
 	public void setColonPosition(int colonPosition) {
 		function.setColonPosition(colonPosition);
 	}
 
 	public void setType(Type type) {
 		function.setReturnType(type);
+	}
+
+	public ASTNode getNode() {
+		return function;
 	}
 
 }

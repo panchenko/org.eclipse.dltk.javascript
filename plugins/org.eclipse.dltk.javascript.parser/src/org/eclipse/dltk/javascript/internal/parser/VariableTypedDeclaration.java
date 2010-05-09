@@ -13,13 +13,26 @@ package org.eclipse.dltk.javascript.internal.parser;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.Type;
+import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 
-public interface ITypedDeclaration {
+public class VariableTypedDeclaration implements ITypedDeclaration {
 
-	void setColonPosition(int colonPosition);
+	private final VariableDeclaration variable;
 
-	void setType(Type type);
+	public VariableTypedDeclaration(VariableDeclaration variable) {
+		this.variable = variable;
+	}
 
-	ASTNode getNode();
+	public ASTNode getNode() {
+		return variable;
+	}
+
+	public void setColonPosition(int colonPosition) {
+		variable.setColonPosition(colonPosition);
+	}
+
+	public void setType(Type type) {
+		variable.setType(type);
+	}
 
 }

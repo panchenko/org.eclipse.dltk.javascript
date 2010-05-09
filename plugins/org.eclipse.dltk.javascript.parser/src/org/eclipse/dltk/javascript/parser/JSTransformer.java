@@ -26,6 +26,7 @@ import org.antlr.runtime.tree.Tree;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.AssertionFailedException;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
@@ -105,8 +106,10 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.eclipse.dltk.javascript.internal.parser.ArgumentTypedDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.FunctionTypedDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.ITypedDeclaration;
+import org.eclipse.dltk.javascript.internal.parser.VariableTypedDeclaration;
 import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 import org.eclipse.dltk.utils.IntList;
 import org.eclipse.osgi.util.NLS;
@@ -474,14 +477,21 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		caseClause.setCaseKeyword(createKeyword(node, Keywords.CASE));
 
-		caseClause.setCondition((Expression) transformNode(node.getChild(0),
-				caseClause));
+		final Tree condition = node.getChild(0);
+		if (condition != null) {
+			caseClause.setCondition((Expression) transformNode(condition,
+					caseClause));
+			caseClause
+					.setColonPosition(getTokenOffset(JSParser.COLON, condition
+							.getTokenStopIndex() + 1, node.getTokenStopIndex()));
+		} else {
+			caseClause.setCondition(new ErrorExpression(caseClause,
+					Util.EMPTY_STRING));
+			caseClause
+					.setColonPosition(caseClause.getCaseKeyword().sourceEnd());
+		}
 
-		caseClause
-				.setColonPosition(getTokenOffset(JSParser.COLON, node.getChild(
-						0).getTokenStopIndex() + 1, node.getTokenStopIndex()));
-
-		// miss condition
+		// skip condition
 		for (int i = 1; i < node.getChildCount(); i++) {
 			caseClause.getStatements().add(
 					transformStatementNode(node.getChild(i), caseClause));
@@ -697,7 +707,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		argument.setIdentifier((Identifier) visitIdentifier(node));
 		argument.setStart(getTokenOffset(node.getTokenStartIndex()));
 		argument.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-		processType(argument, node, 0);
+		processType(new ArgumentTypedDeclaration(argument), node, 0);
 		return argument;
 	}
 
@@ -1034,16 +1044,16 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	private int processType(ITypedDeclaration target, Tree node, int index) {
 		if (index < node.getChildCount()
 				&& node.getChild(index).getType() == JSParser.COLON) {
-			target.setColonPosition(getTokenOffset(node.getChild(index)
-					.getTokenStartIndex()));
+			final int colonPos = getTokenOffset(node.getChild(index)
+					.getTokenStartIndex());
+			target.setColonPosition(colonPos);
 			++index;
 			if (index < node.getChildCount() && isType(node.getChild(index))) {
-				target.setType(transformType(node.getChild(index),
-						(ASTNode) target));
+				target.setType(transformType(node.getChild(index), target
+						.getNode()));
 				++index;
 			} else {
-				target.setType(new MissingType((ASTNode) target, target
-						.getColonPosition()));
+				target.setType(new MissingType(target.getNode(), colonPos));
 			}
 		}
 		return index;
@@ -1060,7 +1070,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				.setIdentifier((Identifier) transformNode(node, declaration));
 		declaration.setStart(getTokenOffset(node.getTokenStartIndex()));
 		declaration.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-		int i = processType(declaration, node, 0);
+		int i = processType(new VariableTypedDeclaration(declaration), node, 0);
 		if (i + 2 <= node.getChildCount()
 				&& node.getChild(i).getType() == JSParser.ASSIGN) {
 			declaration.setAssignPosition(getTokenOffset(node.getChild(i)
