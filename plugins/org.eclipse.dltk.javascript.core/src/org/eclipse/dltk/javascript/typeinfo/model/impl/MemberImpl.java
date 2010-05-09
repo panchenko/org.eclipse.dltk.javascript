@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: MemberImpl.java,v 1.5 2010/03/11 05:33:55 apanchenk Exp $
+ * $Id: MemberImpl.java,v 1.6 2010/05/09 08:02:12 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -31,7 +31,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#isStatic <em>Static</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getDeclaringType <em>Declaring Type</em>}</li>
  * </ul>
@@ -49,26 +48,6 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 	 * @ordered
 	 */
 	protected Type type;
-
-	/**
-	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDescription()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String DESCRIPTION_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDescription()
-	 * @generated
-	 * @ordered
-	 */
-	protected String description = DESCRIPTION_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isStatic() <em>Static</em>}' attribute.
@@ -145,27 +124,6 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 		type = newType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.MEMBER__TYPE, oldType, type));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDescription(String newDescription) {
-		String oldDescription = description;
-		description = newDescription;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.MEMBER__DESCRIPTION, oldDescription, description));
 	}
 
 	/**
@@ -254,8 +212,6 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 			case TypeInfoModelPackage.MEMBER__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case TypeInfoModelPackage.MEMBER__DESCRIPTION:
-				return getDescription();
 			case TypeInfoModelPackage.MEMBER__STATIC:
 				return isStatic();
 			case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
@@ -275,9 +231,6 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 			case TypeInfoModelPackage.MEMBER__TYPE:
 				setType((Type)newValue);
 				return;
-			case TypeInfoModelPackage.MEMBER__DESCRIPTION:
-				setDescription((String)newValue);
-				return;
 			case TypeInfoModelPackage.MEMBER__STATIC:
 				setStatic((Boolean)newValue);
 				return;
@@ -296,9 +249,6 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 			case TypeInfoModelPackage.MEMBER__TYPE:
 				setType((Type)null);
 				return;
-			case TypeInfoModelPackage.MEMBER__DESCRIPTION:
-				setDescription(DESCRIPTION_EDEFAULT);
-				return;
 			case TypeInfoModelPackage.MEMBER__STATIC:
 				setStatic(STATIC_EDEFAULT);
 				return;
@@ -316,8 +266,6 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 		switch (featureID) {
 			case TypeInfoModelPackage.MEMBER__TYPE:
 				return type != null;
-			case TypeInfoModelPackage.MEMBER__DESCRIPTION:
-				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 			case TypeInfoModelPackage.MEMBER__STATIC:
 				return static_ != STATIC_EDEFAULT;
 			case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
@@ -336,9 +284,7 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (description: "); //$NON-NLS-1$
-		result.append(description);
-		result.append(", static: "); //$NON-NLS-1$
+		result.append(" (static: "); //$NON-NLS-1$
 		result.append(static_);
 		result.append(')');
 		return result.toString();

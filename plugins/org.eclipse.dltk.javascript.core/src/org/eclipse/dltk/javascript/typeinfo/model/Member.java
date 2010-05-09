@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Member.java,v 1.5 2010/03/11 05:33:55 apanchenk Exp $
+ * $Id: Member.java,v 1.6 2010/05/09 08:02:16 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -23,7 +23,6 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getType <em>Type</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic <em>Static</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}</li>
  * </ul>
@@ -59,32 +58,6 @@ public interface Member extends Element {
 	 * @generated
 	 */
 	void setType(Type value);
-
-	/**
-	 * Returns the value of the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Description</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Description</em>' attribute.
-	 * @see #setDescription(String)
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMember_Description()
-	 * @model
-	 * @generated
-	 */
-	String getDescription();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDescription <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Description</em>' attribute.
-	 * @see #getDescription()
-	 * @generated
-	 */
-	void setDescription(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Static</b></em>' attribute.

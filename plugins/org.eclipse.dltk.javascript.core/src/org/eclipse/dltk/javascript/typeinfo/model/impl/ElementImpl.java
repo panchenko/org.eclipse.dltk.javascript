@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ElementImpl.java,v 1.3 2010/03/24 03:08:15 apanchenk Exp $
+ * $Id: ElementImpl.java,v 1.4 2010/05/09 08:02:11 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#isDeprecated <em>Deprecated</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#getDescription <em>Description</em>}</li>
  * </ul>
  * </p>
  *
@@ -74,6 +75,26 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	 * @ordered
 	 */
 	protected boolean deprecated = DEPRECATED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected String description = DESCRIPTION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -141,6 +162,27 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDescription(String newDescription) {
+		String oldDescription = description;
+		description = newDescription;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__DESCRIPTION, oldDescription, description));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -148,6 +190,8 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 				return getName();
 			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
 				return isDeprecated();
+			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
+				return getDescription();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -165,6 +209,9 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 				return;
 			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
 				setDeprecated((Boolean)newValue);
+				return;
+			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
+				setDescription((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -184,6 +231,9 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
 				setDeprecated(DEPRECATED_EDEFAULT);
 				return;
+			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
+				setDescription(DESCRIPTION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -200,6 +250,8 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
 				return deprecated != DEPRECATED_EDEFAULT;
+			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
+				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 		}
 		return super.eIsSet(featureID);
 	}
