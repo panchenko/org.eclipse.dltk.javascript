@@ -9,7 +9,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
-import org.eclipse.dltk.ui.text.completion.ProposalInfo;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposal;
 import org.eclipse.swt.graphics.Image;
 
@@ -20,9 +19,6 @@ public class JavaScriptCompletionProposal extends ScriptCompletionProposal {
 			String displayString, int relevance) {
 		super(replacementString, replacementOffset, replacementLength, image,
 				displayString, relevance);
-		;
-		ProposalInfo proposalInfo = new ProposalInfo(null);
-		this.setProposalInfo(proposalInfo);
 	}
 
 	public JavaScriptCompletionProposal(String replacementString,
@@ -30,8 +26,6 @@ public class JavaScriptCompletionProposal extends ScriptCompletionProposal {
 			String displayString, int relevance, boolean isInDoc) {
 		super(replacementString, replacementOffset, replacementLength, image,
 				displayString, relevance, isInDoc);
-		ProposalInfo proposalInfo = new ProposalInfo(null);
-		this.setProposalInfo(proposalInfo);
 	}
 
 	protected boolean isSmartTrigger(char trigger) {

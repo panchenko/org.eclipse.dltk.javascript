@@ -9,22 +9,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
 import java.util.HashSet;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.core.CompletionProposal;
-import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.internal.javascript.typeinference.IReference;
-import org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider;
 import org.eclipse.dltk.ui.text.completion.AbstractScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
-import org.eclipse.dltk.ui.text.completion.ProposalInfo;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
 import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
@@ -82,58 +74,13 @@ public class JavaScriptCompletionProposalCollector extends
 	// Specific proposals creation. May be use factory?
 	protected IScriptCompletionProposal createScriptCompletionProposal(
 			CompletionProposal proposal) {
-		// TODO Auto-generated method stub
-		final IScriptCompletionProposal createScriptCompletionProposal2 = super
+		AbstractScriptCompletionProposal outProposal = (AbstractScriptCompletionProposal) super
 				.createScriptCompletionProposal(proposal);
-		AbstractScriptCompletionProposal createScriptCompletionProposal = (AbstractScriptCompletionProposal) createScriptCompletionProposal2;
-		final Object ref = (Object) proposal.extraInfo;
-
-		ProposalInfo proposalInfo = new ProposalInfo(null) {
-
-			public String getInfo(IProgressMonitor monitor) {
-
-				if (ref instanceof IReference) {
-					ArrayList ms = new ArrayList();
-					((IReference) ref).addModelElements(ms);
-					if (ms.size() > 0) {
-						Reader contentReader = new ScriptDocumentationProvider()
-								.getInfo((IMember) ms.get(0), true, true);
-						if (contentReader != null) {
-							String string = getString(contentReader);
-							return string;
-						}
-					}
-				} else if (ref instanceof IMember) {
-					Reader contentReader = new ScriptDocumentationProvider()
-							.getInfo((IMember) ref, true, true);
-					if (contentReader != null) {
-						String string = getString(contentReader);
-						return string;
-					}
-				} else if (ref instanceof String) {
-					return (String) ref;
-				}
-				return "Documentation not resolved";
-			}
-
-			/**
-			 * Gets the reader content as a String
-			 */
-			private String getString(Reader reader) {
-				StringBuffer buf = new StringBuffer();
-				char[] buffer = new char[1024];
-				int count;
-				try {
-					while ((count = reader.read(buffer)) != -1)
-						buf.append(buffer, 0, count);
-				} catch (IOException e) {
-					return null;
-				}
-				return buf.toString();
-			}
-		};
-		createScriptCompletionProposal.setProposalInfo(proposalInfo);
-		return createScriptCompletionProposal;
+		if (proposal.extraInfo != null) {
+			outProposal.setProposalInfo(new JavaScriptProposalInfo(
+					proposal.extraInfo));
+		}
+		return outProposal;
 	}
 
 	protected ScriptCompletionProposal createScriptCompletionProposal(
