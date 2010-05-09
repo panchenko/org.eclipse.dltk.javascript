@@ -66,7 +66,7 @@
     </members>
   </ref:Type>
   <ref:Type name="Boolean" kind="PREDEFINED"/>
-  <ref:Type name="Date" kind="PREDEFINED">
+  <ref:Type name="Date" kind="PREDEFINED" description="Creates Date instances which let you work with dates and times.">
     <members xsi:type="ref:Method" name="getDate" type="Number" description="Returns the day of the month from a Date object (from 1-31)."/>
     <members xsi:type="ref:Method" name="getDay" type="Number" description="Returns the day of the week from a Date object (from 0-6)."/>
     <members xsi:type="ref:Method" name="getFullYear" type="Number" description="Returns the year, as a four-digit number."/>
@@ -177,7 +177,7 @@
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this Number."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a Number object."/>
   </ref:Type>
-  <ref:Type name="String" kind="PREDEFINED">
+  <ref:Type name="String" kind="PREDEFINED" description="String is a global object that may be used to construct String  instances.">
     <members xsi:type="ref:Method" name="anchor" type="String" description="Creates an HTML anchor.">
       <parameters name="anchorname"/>
     </members>
