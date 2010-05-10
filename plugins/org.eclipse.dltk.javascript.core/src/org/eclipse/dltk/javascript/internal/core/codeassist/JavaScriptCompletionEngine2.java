@@ -14,11 +14,11 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IAccessRule;
 import org.eclipse.dltk.core.IModelElement;
@@ -31,7 +31,6 @@ import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
-import org.eclipse.dltk.javascript.ast.MissingType;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
@@ -80,12 +79,20 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				return cu.getModelElement();
 			}
 		}, null);
-		final ASTNode lastNode = new NodeFinder(position).locate(script);
-		if (lastNode instanceof MissingType || lastNode instanceof SimpleType) {
-			doCompletionOnType(
-					inferencer2,
-					((org.eclipse.dltk.javascript.ast.Type) lastNode).getName(),
-					position);
+		final NodeFinder nodeFinder = new NodeFinder(content, position);
+		final org.eclipse.dltk.javascript.ast.Type typeNode = nodeFinder
+				.locateType(script);
+		if (typeNode != null) {
+			String typePrefix = Util.EMPTY_STRING;
+			if (typeNode instanceof SimpleType) {
+				typePrefix = typeNode.getName();
+				if (nodeFinder.end >= typeNode.sourceStart()
+						&& nodeFinder.end < typeNode.sourceEnd()) {
+					typePrefix = typePrefix.substring(0, nodeFinder.end
+							- typeNode.sourceStart());
+				}
+			}
+			doCompletionOnType(inferencer2, typePrefix, position);
 		} else {
 			final PositionCalculator calculator = new PositionCalculator(
 					content, position, false);
