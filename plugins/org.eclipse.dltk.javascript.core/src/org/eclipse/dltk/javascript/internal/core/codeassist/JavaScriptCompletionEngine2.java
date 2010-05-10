@@ -126,7 +126,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		final Reporter reporter = new Reporter(typeNamePrefix, position);
 		for (String typeName : typeNames) {
 			final Type type = context.getType(typeName);
-			if (type != null) {
+			if (type != null && type.isVisible()) {
 				reporter.reportTypeRef(type);
 			}
 		}
@@ -186,7 +186,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				for (String global : globals) {
 					if (reporter.canReport(global)) {
 						Element element = context.resolve(global);
-						if (element != null) {
+						if (element != null && element.isVisible()) {
 							reporter.report(global, element);
 						}
 					}
@@ -245,8 +245,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		private void reportTypeMembers(Type type) {
 			if (processedTypes.add(type)) {
 				for (Member member : type.getMembers()) {
-					if (CharOperation.prefixEquals(prefix, member.getName(),
-							false)
+					if (member.isVisible()
+							&& CharOperation.prefixEquals(prefix, member
+									.getName(), false)
 							&& processed.add(member.getName())) {
 						reportMember(member, member.getName());
 					}
