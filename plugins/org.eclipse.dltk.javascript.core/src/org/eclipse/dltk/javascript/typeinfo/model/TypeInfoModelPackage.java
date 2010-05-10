@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.8 2010/05/09 08:02:15 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.9 2010/05/10 13:11:34 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -105,13 +105,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int ELEMENT__DESCRIPTION = 2;
 
 	/**
+	 * The feature id for the '<em><b>Visible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ELEMENT__VISIBLE = 3;
+
+	/**
 	 * The number of structural features of the '<em>Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT_FEATURE_COUNT = 3;
+	int ELEMENT_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
@@ -149,6 +158,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int TYPE__DESCRIPTION = ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Visible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPE__VISIBLE = ELEMENT__VISIBLE;
 
 	/**
 	 * The feature id for the '<em><b>Members</b></em>' containment reference list.
@@ -213,6 +231,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int MEMBER__DESCRIPTION = ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Visible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__VISIBLE = ELEMENT__VISIBLE;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -286,6 +313,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int METHOD__DESCRIPTION = MEMBER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Visible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METHOD__VISIBLE = MEMBER__VISIBLE;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -416,6 +452,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	int PROPERTY__DESCRIPTION = MEMBER__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Visible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__VISIBLE = MEMBER__VISIBLE;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -525,6 +570,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getElement_Description();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isVisible <em>Visible</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Visible</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element#isVisible()
+	 * @see #getElement()
+	 * @generated
+	 */
+	EAttribute getElement_Visible();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
@@ -761,6 +817,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ELEMENT__DESCRIPTION = eINSTANCE.getElement_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Visible</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ELEMENT__VISIBLE = eINSTANCE.getElement_Visible();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.

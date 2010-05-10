@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ElementImpl.java,v 1.4 2010/05/09 08:02:11 apanchenk Exp $
+ * $Id: ElementImpl.java,v 1.5 2010/05/10 13:11:34 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#isDeprecated <em>Deprecated</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#isVisible <em>Visible</em>}</li>
  * </ul>
  * </p>
  *
@@ -95,6 +96,26 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	 * @ordered
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isVisible() <em>Visible</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVisible()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VISIBLE_EDEFAULT = true;
+
+	/**
+	 * The cached value of the '{@link #isVisible() <em>Visible</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVisible()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean visible = VISIBLE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -183,6 +204,27 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isVisible() {
+		return visible;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVisible(boolean newVisible) {
+		boolean oldVisible = visible;
+		visible = newVisible;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__VISIBLE, oldVisible, visible));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -192,6 +234,8 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 				return isDeprecated();
 			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
 				return getDescription();
+			case TypeInfoModelPackage.ELEMENT__VISIBLE:
+				return isVisible();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -212,6 +256,9 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 				return;
 			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case TypeInfoModelPackage.ELEMENT__VISIBLE:
+				setVisible((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -234,6 +281,9 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case TypeInfoModelPackage.ELEMENT__VISIBLE:
+				setVisible(VISIBLE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -252,6 +302,8 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 				return deprecated != DEPRECATED_EDEFAULT;
 			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			case TypeInfoModelPackage.ELEMENT__VISIBLE:
+				return visible != VISIBLE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
