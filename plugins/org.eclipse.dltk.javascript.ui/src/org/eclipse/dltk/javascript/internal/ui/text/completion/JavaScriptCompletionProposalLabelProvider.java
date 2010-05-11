@@ -13,6 +13,8 @@ import java.net.URL;
 
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -25,8 +27,13 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		if (methodProposal.getExtraInfo() instanceof SelfCompletingReference) {
 			SelfCompletingReference cm = (SelfCompletingReference) methodProposal
 					.getExtraInfo();
-			methodProposal.setParameterNames(cm.getParameterNames());
+			// methodProposal.setParameterNames(cm.getParameterNames());
 			returnType = cm.getReturnType();
+		} else if (methodProposal.getExtraInfo() instanceof Method) {
+			Method method = (Method) methodProposal.getExtraInfo();
+			if (method.getType() != null) {
+				returnType = method.getType().getName();
+			}
 		}
 		StringBuffer nameBuffer = new StringBuffer();
 
@@ -46,19 +53,14 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	}
 
 	@Override
-	protected String createOverrideMethodProposalLabel(
-			CompletionProposal methodProposal) {
-		StringBuffer nameBuffer = new StringBuffer();
-
-		// method name
-		nameBuffer.append(methodProposal.getName());
-
-		// parameters
-		nameBuffer.append('(');
-		appendParameterList(nameBuffer, methodProposal);
-		nameBuffer.append(')'); //$NON-NLS-1$
-
-		return nameBuffer.toString();
+	protected String createFieldProposalLabel(CompletionProposal proposal) {
+		if (proposal.getExtraInfo() instanceof Property) {
+			Property property = (Property) proposal.getExtraInfo();
+			if (property.getType() != null) {
+				return proposal.getName() + ": " + property.getType().getName();
+			}
+		}
+		return proposal.getName();
 	}
 
 	/**
