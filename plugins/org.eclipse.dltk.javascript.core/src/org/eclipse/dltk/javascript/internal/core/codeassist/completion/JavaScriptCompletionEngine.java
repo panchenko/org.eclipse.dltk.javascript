@@ -348,7 +348,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine
 					createProposal.setName(name);
 					createProposal.setCompletion(name);
 					// createProposal.setSignature(name);
-					createProposal.extraInfo = cm;
+					createProposal.setExtraInfo(cm);
 					// createProposal.setDeclarationSignature(cm.getDeclarationSignature());
 					// createProposal.setSignature(cm.getSignature());
 					createProposal.setReplaceRange(this.startPosition
@@ -467,7 +467,7 @@ public class JavaScriptCompletionEngine extends ScriptCompletionEngine
 						// proposal.setFlags(Flags.AccDefault);
 						proposal.setReplaceRange(this.startPosition
 								- this.offset, this.endPosition - this.offset);
-						proposal.extraInfo = method;
+						proposal.setExtraInfo(method);
 						proposal.setRelevance(relevance);
 						this.requestor.accept(proposal);
 						if (DEBUG) {

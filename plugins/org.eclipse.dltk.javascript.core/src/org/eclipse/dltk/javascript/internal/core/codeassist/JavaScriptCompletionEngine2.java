@@ -272,7 +272,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 			proposal.setCompletion(memberName);
 			proposal.setName(memberName);
-			proposal.extraInfo = member;
+			proposal.setExtraInfo(member);
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
 			if (isFunction) {
@@ -309,7 +309,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 			proposal.setCompletion(reference.getName());
 			proposal.setName(reference.getName());
-			proposal.extraInfo = reference;
+			proposal.setExtraInfo(reference);
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
 			if (isFunction) {
@@ -339,7 +339,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			proposal.setRelevance(relevance);
 			proposal.setCompletion(type.getName());
 			proposal.setName(type.getName());
-			proposal.extraInfo = type;
+			proposal.setExtraInfo(type);
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
 			requestor.accept(proposal);
