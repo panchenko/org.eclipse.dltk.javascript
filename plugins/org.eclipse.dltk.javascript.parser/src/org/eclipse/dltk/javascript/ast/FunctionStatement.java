@@ -53,6 +53,9 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 					node.traverse(visitor);
 				}
 			}
+			if (returnType != null) {
+				returnType.traverse(visitor);
+			}
 			if (body != null)
 				body.traverse(visitor);
 			visitor.endvisit(this);
