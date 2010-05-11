@@ -13,8 +13,10 @@ import java.net.URL;
 
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
 import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -86,6 +88,12 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			if (imageUrl != null)
 				return decorateImageDescriptor(ImageDescriptor
 						.createFromURL(imageUrl), proposal);
+		} else if (proposal.getExtraInfo() instanceof Element) {
+			final ImageDescriptor descriptor = ElementLabelProviderRegistry
+					.getImageDescriptor((Element) proposal.getExtraInfo());
+			if (descriptor != null) {
+				return decorateImageDescriptor(descriptor, proposal);
+			}
 		}
 		return null;
 	}
