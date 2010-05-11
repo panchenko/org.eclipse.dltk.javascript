@@ -14,12 +14,11 @@ import java.util.HashSet;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.ui.text.completion.AbstractScriptCompletionProposal;
-import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
-import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 import org.eclipse.swt.graphics.Image;
 
 public class JavaScriptCompletionProposalCollector extends
@@ -30,6 +29,7 @@ public class JavaScriptCompletionProposalCollector extends
 
 	private final HashSet doubleFilter = new HashSet();
 
+	@Override
 	protected char[] getVarTrigger() {
 		return VAR_TRIGGER;
 	}
@@ -38,24 +38,10 @@ public class JavaScriptCompletionProposalCollector extends
 		super(module);
 	}
 
-	// Label provider
-	protected CompletionProposalLabelProvider createLabelProvider() {
-		return new JavaScriptCompletionProposalLabelProvider();
-	}
-
-	// Invocation context
-	protected ScriptContentAssistInvocationContext createScriptContentAssistInvocationContext(
-			ISourceModule sourceModule) {
-		return new ScriptContentAssistInvocationContext(sourceModule) {
-			protected CompletionProposalLabelProvider createLabelProvider() {
-				return new JavaScriptCompletionProposalLabelProvider();
-			}
-		};
-	}
-
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector#beginReporting()
 	 */
+	@Override
 	public void beginReporting() {
 		super.beginReporting();
 		doubleFilter.clear();
@@ -72,6 +58,7 @@ public class JavaScriptCompletionProposalCollector extends
 	}
 
 	// Specific proposals creation. May be use factory?
+	@Override
 	protected IScriptCompletionProposal createScriptCompletionProposal(
 			CompletionProposal proposal) {
 		AbstractScriptCompletionProposal outProposal = (AbstractScriptCompletionProposal) super
@@ -83,6 +70,7 @@ public class JavaScriptCompletionProposalCollector extends
 		return outProposal;
 	}
 
+	@Override
 	protected ScriptCompletionProposal createScriptCompletionProposal(
 			String completion, int replaceStart, int length, Image image,
 			String displayString, int i) {
@@ -92,6 +80,7 @@ public class JavaScriptCompletionProposalCollector extends
 		return javaScriptCompletionProposal;
 	}
 
+	@Override
 	protected ScriptCompletionProposal createScriptCompletionProposal(
 			String completion, int replaceStart, int length, Image image,
 			String displayString, int i, boolean isInDoc) {
@@ -101,6 +90,7 @@ public class JavaScriptCompletionProposalCollector extends
 		return javaScriptCompletionProposal;
 	}
 
+	@Override
 	protected ScriptCompletionProposal createOverrideCompletionProposal(
 			IScriptProject scriptProject, ISourceModule compilationUnit,
 			String name, String[] paramTypes, int start, int length,
@@ -110,6 +100,7 @@ public class JavaScriptCompletionProposalCollector extends
 				completionProposal);
 	}
 
+	@Override
 	protected IScriptCompletionProposal createKeywordProposal(
 			CompletionProposal proposal) {
 		String completion = String.valueOf(proposal.getCompletion());
@@ -120,5 +111,10 @@ public class JavaScriptCompletionProposalCollector extends
 		int relevance = computeRelevance(proposal);
 		return createScriptCompletionProposal(completion, start, length, img,
 				label, relevance);
+	}
+
+	@Override
+	protected String getNatureId() {
+		return JavaScriptNature.NATURE_ID;
 	}
 }

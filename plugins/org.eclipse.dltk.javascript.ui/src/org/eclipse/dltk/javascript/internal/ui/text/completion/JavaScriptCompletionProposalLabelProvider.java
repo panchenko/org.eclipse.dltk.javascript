@@ -18,6 +18,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 public class JavaScriptCompletionProposalLabelProvider extends
 		CompletionProposalLabelProvider {
+
+	@Override
 	protected String createMethodProposalLabel(CompletionProposal methodProposal) {
 		String returnType = null;
 		if (methodProposal.getExtraInfo() instanceof SelfCompletingReference) {
@@ -33,7 +35,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 
 		// parameters
 		nameBuffer.append('(');
-		appendUnboundedParameterList(nameBuffer, methodProposal);
+		appendParameterList(nameBuffer, methodProposal);
 		nameBuffer.append(')');
 
 		if (returnType != null) {
@@ -43,6 +45,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		return nameBuffer.toString();
 	}
 
+	@Override
 	protected String createOverrideMethodProposalLabel(
 			CompletionProposal methodProposal) {
 		StringBuffer nameBuffer = new StringBuffer();
@@ -52,7 +55,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 
 		// parameters
 		nameBuffer.append('(');
-		appendUnboundedParameterList(nameBuffer, methodProposal);
+		appendParameterList(nameBuffer, methodProposal);
 		nameBuffer.append(')'); //$NON-NLS-1$
 
 		return nameBuffer.toString();
@@ -61,6 +64,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider#createImageDescriptor(org.eclipse.dltk.core.CompletionProposal)
 	 */
+	@Override
 	public ImageDescriptor createImageDescriptor(CompletionProposal proposal) {
 		ImageDescriptor imageDescriptor = extraImageFromProposal(proposal);
 		if (imageDescriptor != null)
@@ -87,6 +91,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider#createFieldImageDescriptor(org.eclipse.dltk.core.CompletionProposal)
 	 */
+	@Override
 	protected ImageDescriptor createFieldImageDescriptor(
 			CompletionProposal proposal) {
 		ImageDescriptor imageDescriptor = extraImageFromProposal(proposal);
@@ -98,6 +103,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider#createLocalImageDescriptor(org.eclipse.dltk.core.CompletionProposal)
 	 */
+	@Override
 	protected ImageDescriptor createLocalImageDescriptor(
 			CompletionProposal proposal) {
 		ImageDescriptor imageDescriptor = extraImageFromProposal(proposal);
@@ -109,6 +115,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider#createMethodImageDescriptor(org.eclipse.dltk.core.CompletionProposal)
 	 */
+	@Override
 	public ImageDescriptor createMethodImageDescriptor(
 			CompletionProposal proposal) {
 		ImageDescriptor imageDescriptor = extraImageFromProposal(proposal);
@@ -120,6 +127,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider#createPackageImageDescriptor(org.eclipse.dltk.core.CompletionProposal)
 	 */
+	@Override
 	protected ImageDescriptor createPackageImageDescriptor(
 			CompletionProposal proposal) {
 		ImageDescriptor imageDescriptor = extraImageFromProposal(proposal);
@@ -131,6 +139,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider#createTypeImageDescriptor(org.eclipse.dltk.core.CompletionProposal)
 	 */
+	@Override
 	protected ImageDescriptor createTypeImageDescriptor(
 			CompletionProposal proposal) {
 		ImageDescriptor imageDescriptor = extraImageFromProposal(proposal);

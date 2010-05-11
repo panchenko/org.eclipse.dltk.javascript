@@ -19,30 +19,33 @@ import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 public class JavaScriptTemplateCompletionProcessor extends
 		ScriptTemplateCompletionProcessor {
 
-	private static char[] IGNORE = new char[] {'.', ':', '@', '$' };
-	
+	private static char[] IGNORE = new char[] { '.', ':', '@', '$' };
+
 	public JavaScriptTemplateCompletionProcessor(
 			ScriptContentAssistInvocationContext context) {
 		super(context);
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplateCompletionProcessor#getContextTypeId()
+	 * @see ScriptTemplateCompletionProcessor#getContextTypeId()
 	 */
+	@Override
 	protected String getContextTypeId() {
 		return JavaScriptUniversalTemplateContextType.CONTEXT_TYPE_ID;
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplateCompletionProcessor#getIgnore()
+	 * @see ScriptTemplateCompletionProcessor#getIgnore()
 	 */
+	@Override
 	protected char[] getIgnore() {
 		return IGNORE;
 	}
-	
+
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplateCompletionProcessor#getTemplateAccess()
+	 * @see ScriptTemplateCompletionProcessor#getTemplateAccess()
 	 */
+	@Override
 	protected ScriptTemplateAccess getTemplateAccess() {
 		return JavaScriptTemplateAccess.getInstance();
 	}

@@ -430,6 +430,12 @@
 			<partition type="__dftl_partition_content_type"/>
 		</scriptCompletionProposalComputer>		
 	</extension>
+	<extension point="org.eclipse.dltk.ui.completion">
+       <proposalLabelProvider
+             class="org.eclipse.dltk.javascript.internal.ui.text.completion.JavaScriptCompletionProposalLabelProvider"
+             nature="org.eclipse.dltk.javascript.core.nature">
+       </proposalLabelProvider>
+	</extension>
 	
 	 <extension
        point="org.eclipse.dltk.ui.language">

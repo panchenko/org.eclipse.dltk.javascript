@@ -36,9 +36,9 @@ public class JavaScriptTypeCompletionProposalComputer extends
 	@Override
 	public List<IContextInformation> computeContextInformation(
 			ContentAssistInvocationContext context, IProgressMonitor monitor) {
-		System.out.println("Offset: " + context.getInvocationOffset());
-
 		if (DLTKCore.DEBUG) {
+			System.out.println("Offset: " + context.getInvocationOffset());
+
 			System.out
 					.println("TclTypeCompletionProposalComputer.computeContextInformation()");
 		}
@@ -76,21 +76,6 @@ public class JavaScriptTypeCompletionProposalComputer extends
 			list.add(contextInformation);
 		}
 		return list;
-	}
-
-	@Override
-	public String getErrorMessage() {
-		return null;
-	}
-
-	@Override
-	public void sessionEnded() {
-
-	}
-
-	@Override
-	public void sessionStarted() {
-
 	}
 
 	@Override
