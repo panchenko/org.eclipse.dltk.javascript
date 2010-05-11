@@ -20,8 +20,9 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		CompletionProposalLabelProvider {
 	protected String createMethodProposalLabel(CompletionProposal methodProposal) {
 		String returnType = null;
-		if (methodProposal.extraInfo instanceof SelfCompletingReference) {
-			SelfCompletingReference cm = (SelfCompletingReference) methodProposal.extraInfo;
+		if (methodProposal.getExtraInfo() instanceof SelfCompletingReference) {
+			SelfCompletingReference cm = (SelfCompletingReference) methodProposal
+					.getExtraInfo();
 			methodProposal.setParameterNames(cm.getParameterNames());
 			returnType = cm.getReturnType();
 		}
@@ -72,8 +73,9 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	 * @return
 	 */
 	private ImageDescriptor extraImageFromProposal(CompletionProposal proposal) {
-		if (proposal.extraInfo instanceof SelfCompletingReference) {
-			SelfCompletingReference cm = (SelfCompletingReference) proposal.extraInfo;
+		if (proposal.getExtraInfo() instanceof SelfCompletingReference) {
+			SelfCompletingReference cm = (SelfCompletingReference) proposal
+					.getExtraInfo();
 			URL imageUrl = cm.getImageURL();
 			if (imageUrl != null)
 				return decorateImageDescriptor(ImageDescriptor
