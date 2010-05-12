@@ -653,8 +653,8 @@ public final class JavaIndenter {
 				IRegion tmpLine = fDocument
 						.getLineInformationOfOffset(lineOffset - 1);
 				partition = TextUtilities.getPartition(fDocument,
-						IJavaScriptPartitions.JS_PARTITIONING, tmpLine
-								.getOffset(), false);
+						IJavaScriptPartitions.JS_PARTITIONING,
+						tmpLine.getOffset(), false);
 				type = partition.getType();
 				if (type.equals(IJavaScriptPartitions.JS_DOC)
 						|| type.equals(IJavaScriptPartitions.JS_COMMENT)) {
@@ -810,8 +810,8 @@ public final class JavaIndenter {
 			try {
 				IRegion line = fDocument.getLineInformationOfOffset(offset);
 				int lineOffset = line.getOffset();
-				int next = fScanner.nextToken(offset, lineOffset
-						+ line.getLength());
+				int next = fScanner.nextToken(offset,
+						lineOffset + line.getLength());
 				return next;
 			} catch (BadLocationException e) {
 			}
@@ -869,8 +869,9 @@ public final class JavaIndenter {
 				int lineOffset = line.getOffset();
 				int prevPos = Math.max(offset - 1, 0);
 
-				boolean isFirstTokenOnLine = fDocument.get(lineOffset,
-						prevPos + 1 - lineOffset).trim().length() == 0;
+				boolean isFirstTokenOnLine = fDocument
+						.get(lineOffset, prevPos + 1 - lineOffset).trim()
+						.length() == 0;
 				int prevToken = fScanner.previousToken(prevPos,
 						JavaHeuristicScanner.UNBOUND);
 				boolean bracelessBlockStart = fScanner.isBracelessBlockStart(
@@ -1287,6 +1288,7 @@ public final class JavaIndenter {
 	 *         conditional
 	 */
 	private boolean isConditional() {
+		boolean identifierFound = false;
 		while (true) {
 			nextToken();
 			switch (fToken) {
@@ -1294,7 +1296,12 @@ public final class JavaIndenter {
 			// search for case labels, which consist of (possibly qualified)
 			// identifiers or numbers
 			case Symbols.TokenIDENT:
+				if (identifierFound)
+					return false;
+				identifierFound = true;
+				continue;
 			case Symbols.TokenOTHER: // dots for qualified constants
+				identifierFound = false;
 				continue;
 			case Symbols.TokenCASE:
 				return false;
