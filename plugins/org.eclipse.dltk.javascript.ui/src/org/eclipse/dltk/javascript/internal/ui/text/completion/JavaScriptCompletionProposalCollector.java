@@ -9,8 +9,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
-import java.util.HashSet;
-
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
@@ -27,7 +25,7 @@ public class JavaScriptCompletionProposalCollector extends
 	protected final static char[] VAR_TRIGGER = new char[] { '\t', ' ', '=',
 			';', '.' };
 
-	private final HashSet doubleFilter = new HashSet();
+	// private final HashSet doubleFilter = new HashSet();
 
 	@Override
 	protected char[] getVarTrigger() {
@@ -44,16 +42,17 @@ public class JavaScriptCompletionProposalCollector extends
 	@Override
 	public void beginReporting() {
 		super.beginReporting();
-		doubleFilter.clear();
+		// doubleFilter.clear();
 	}
 
 	/**
 	 * @see org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector#isFiltered(org.eclipse.dltk.core.CompletionProposal)
 	 */
+	@Override
 	protected boolean isFiltered(CompletionProposal proposal) {
-		if (!doubleFilter.add(proposal.getName())) {
-			return true;
-		}
+		// if (!doubleFilter.add(proposal.getName())) {
+		// return true;
+		// }
 		return super.isFiltered(proposal);
 	}
 
