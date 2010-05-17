@@ -39,6 +39,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
@@ -199,7 +200,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 		final char[] prefix;
 		final int position;
-		final Set<String> processed = new HashSet<String>();
+		final Set<Object> processed = new HashSet<Object>();
 		final Set<Type> processedTypes = new HashSet<Type>();
 
 		public Reporter(String prefix, int position) {
@@ -248,7 +249,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					if (member.isVisible()
 							&& CharOperation.prefixEquals(prefix, member
 									.getName(), false)
-							&& processed.add(member.getName())) {
+							&& processed.add(MethodKey.createKey(member))) {
 						reportMember(member, member.getName());
 					}
 				}
@@ -347,6 +348,51 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 	}
 
+	static class MethodKey {
+		final String name;
+		final String signature;
+
+		/**
+		 * @param name
+		 */
+		public MethodKey(Method method) {
+			this.name = method.getName();
+			StringBuilder sb = new StringBuilder();
+			for (Parameter parameter : method.getParameters()) {
+				final Type paramType = parameter.getType();
+				if (paramType != null) {
+					sb.append(paramType.getName());
+				}
+				sb.append(',');
+			}
+			this.signature = sb.toString();
+		}
+
+		@Override
+		public int hashCode() {
+			return name.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof MethodKey) {
+				final MethodKey other = (MethodKey) obj;
+				return name.equals(other.name)
+						&& signature.equals(other.signature);
+			}
+			return false;
+		}
+
+		protected static Object createKey(Member member) {
+			if (member instanceof Method) {
+				return new MethodKey((Method) member);
+			} else {
+				return member.getName();
+			}
+		}
+
+	}
+
 	/**
 	 * @param context
 	 * @param collection
@@ -356,27 +402,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	private void doGlobalCompletion(ITypeInferenceContext context,
 			IValueCollection collection, String startPart, int position) {
 		doCompletionOnMember(context, collection, startPart, position);
-		// final char[] prefix = startPart.toCharArray();
-		// for (String childName : collection.getDirectChildren()) {
-		// if (CharOperation.prefixEquals(prefix, childName, false)) {
-		// IValueReference child = collection.getChild(childName);
-		// if (child == null)
-		// continue;
-		// if (child.getKind() == ReferenceKind.LOCAL) {
-		// // reportLocalVar(child);
-		//
-		// } else if (child.getKind() == ReferenceKind.FUNCTION
-		// || child.getChild(IValueReference.FUNCTION_OP) != null) {
-		// // reportMethodRef(child);
-		// }
-		//
-		// }
-		// }
 		if (useEngine) {
 			doCompletionOnKeyword(startPart, position);
 		}
-		// TODO Auto-generated method stub
-
 	}
 
 	private void doCompletionOnKeyword(String startPart, int position) {
@@ -384,15 +412,5 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		String[] keywords = JavaScriptKeywords.getJavaScriptKeywords();
 		findKeywords(startPart.toCharArray(), keywords, true);
 	}
-
-	// @SuppressWarnings("unchecked")
-	// private <E extends Element> E extractElement(IValueReference reference,
-	// Class<E> elementType) {
-	// Object value = reference.getAttribute(IReferenceAttributes.ELEMENT);
-	// if (elementType.isInstance(value)) {
-	// return (E) value;
-	// }
-	// return null;
-	// }
 
 }
