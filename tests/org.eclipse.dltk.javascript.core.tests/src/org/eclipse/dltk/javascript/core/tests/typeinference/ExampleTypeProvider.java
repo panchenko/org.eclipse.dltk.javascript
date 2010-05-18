@@ -19,6 +19,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -61,6 +62,34 @@ public class ExampleTypeProvider implements ITypeProvider {
 			prop2.setType(context.getType(ITypeNames.STRING));
 			prop2.setDeprecated(true);
 			type.getMembers().add(prop2);
+
+			{
+				Method method5 = TypeInfoModelFactory.eINSTANCE.createMethod();
+				method5.setName("run");
+				Parameter p = TypeInfoModelFactory.eINSTANCE.createParameter();
+				p.setName("language");
+				p.setType(context.getType(ITypeNames.STRING));
+				method5.getParameters().add(p);
+				p = TypeInfoModelFactory.eINSTANCE.createParameter();
+				p.setName("code");
+				p.setType(context.getType(ITypeNames.STRING));
+				method5.getParameters().add(p);
+				type.getMembers().add(method5);
+			}
+			{
+				Method method3 = TypeInfoModelFactory.eINSTANCE.createMethod();
+				method3.setName("run");
+				type.getMembers().add(method3);
+			}
+			{
+				Method method4 = TypeInfoModelFactory.eINSTANCE.createMethod();
+				method4.setName("run");
+				Parameter p = TypeInfoModelFactory.eINSTANCE.createParameter();
+				p.setName("code");
+				p.setType(context.getType(ITypeNames.STRING));
+				method4.getParameters().add(p);
+				type.getMembers().add(method4);
+			}
 
 			return type;
 		} else if (TYPE_RESPONSE.equals(typeName)) {

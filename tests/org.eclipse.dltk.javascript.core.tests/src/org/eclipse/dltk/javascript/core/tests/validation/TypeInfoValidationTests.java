@@ -56,10 +56,30 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testUndefinedMethodCall() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
-		code.add("x.run()");
+		code.add("x.runUndefindMethod()");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+				.getID());
+	}
+
+	public void testMethodOverload1() {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("x.run()");
+		code.add("x.run('Hello')");
+		code.add("x.run('Hello','World')");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.isEmpty());
+	}
+
+	public void testMethodOverload2() {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("x.run('Hello','World','!')");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
 
@@ -69,7 +89,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("x.execute(1)");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.WRONG_PARAMETER_COUNT, problems.get(0)
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
 
