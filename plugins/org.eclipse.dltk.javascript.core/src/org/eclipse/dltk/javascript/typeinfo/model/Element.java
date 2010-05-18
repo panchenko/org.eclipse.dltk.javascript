@@ -9,10 +9,11 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Element.java,v 1.4 2010/05/10 13:11:35 apanchenk Exp $
+ * $Id: Element.java,v 1.5 2010/05/18 10:11:37 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import org.eclipse.emf.common.util.EMap;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,6 +27,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isDeprecated <em>Deprecated</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isVisible <em>Visible</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getAttributes <em>Attributes</em>}</li>
  * </ul>
  * </p>
  *
@@ -138,5 +140,38 @@ public interface Element {
 	 * @generated
 	 */
 	void setVisible(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Attributes</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link java.lang.Object},
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Attributes</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Attributes</em>' map.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getElement_Attributes()
+	 * @model mapType="org.eclipse.dltk.javascript.typeinfo.model.AttributeEntry<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EJavaObject>"
+	 * @generated
+	 */
+	EMap<String, Object> getAttributes();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	Object getAttribute(String name);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setAttribute(String name, Object value);
 
 } // Element

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.9 2010/05/10 13:11:34 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.10 2010/05/18 10:11:37 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -114,13 +114,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int ELEMENT__VISIBLE = 3;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ELEMENT__ATTRIBUTES = 4;
+
+	/**
 	 * The number of structural features of the '<em>Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT_FEATURE_COUNT = 4;
+	int ELEMENT_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
@@ -167,6 +176,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int TYPE__VISIBLE = ELEMENT__VISIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPE__ATTRIBUTES = ELEMENT__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Members</b></em>' containment reference list.
@@ -240,6 +258,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int MEMBER__VISIBLE = ELEMENT__VISIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__ATTRIBUTES = ELEMENT__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -322,6 +349,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int METHOD__VISIBLE = MEMBER__VISIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METHOD__ATTRIBUTES = MEMBER__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -461,6 +497,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	int PROPERTY__VISIBLE = MEMBER__VISIBLE;
 
 	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__ATTRIBUTES = MEMBER__ATTRIBUTES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -507,6 +552,43 @@ public interface TypeInfoModelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl <em>Attribute Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAttributeEntry()
+	 * @generated
+	 */
+	int ATTRIBUTE_ENTRY = 6;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Attribute Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE_ENTRY_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -514,7 +596,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
 	 * @generated
 	 */
-	int TYPE_KIND = 6;
+	int TYPE_KIND = 7;
 
 
 	/**
@@ -525,7 +607,7 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
 	 * @generated
 	 */
-	int PARAMETER_KIND = 7;
+	int PARAMETER_KIND = 8;
 
 
 	/**
@@ -581,6 +663,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getElement_Visible();
+
+	/**
+	 * Returns the meta object for the map '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getAttributes <em>Attributes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Attributes</em>'.
+	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element#getAttributes()
+	 * @see #getElement()
+	 * @generated
+	 */
+	EReference getElement_Attributes();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
@@ -743,6 +836,40 @@ public interface TypeInfoModelPackage extends EPackage {
 	EAttribute getProperty_ReadOnly();
 
 	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Attribute Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Attribute Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueDataType="org.eclipse.emf.ecore.EJavaObject"
+	 * @generated
+	 */
+	EClass getAttributeEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getAttributeEntry()
+	 * @generated
+	 */
+	EAttribute getAttributeEntry_Key();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getAttributeEntry()
+	 * @generated
+	 */
+	EAttribute getAttributeEntry_Value();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -825,6 +952,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ELEMENT__VISIBLE = eINSTANCE.getElement_Visible();
+
+		/**
+		 * The meta object literal for the '<em><b>Attributes</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ELEMENT__ATTRIBUTES = eINSTANCE.getElement_Attributes();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
@@ -955,6 +1090,32 @@ public interface TypeInfoModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PROPERTY__READ_ONLY = eINSTANCE.getProperty_ReadOnly();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl <em>Attribute Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl
+		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAttributeEntry()
+		 * @generated
+		 */
+		EClass ATTRIBUTE_ENTRY = eINSTANCE.getAttributeEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ATTRIBUTE_ENTRY__KEY = eINSTANCE.getAttributeEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ATTRIBUTE_ENTRY__VALUE = eINSTANCE.getAttributeEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.

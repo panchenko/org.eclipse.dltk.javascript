@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.2 2010/03/10 18:13:48 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.3 2010/05/18 10:11:37 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
 import java.util.List;
 
+import java.util.Map;
 import org.eclipse.dltk.javascript.typeinfo.model.*;
 
 import org.eclipse.emf.ecore.EClass;
@@ -136,6 +137,12 @@ public class TypeInfoModelSwitch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case TypeInfoModelPackage.ATTRIBUTE_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, Object> attributeEntry = (Map.Entry<String, Object>)theEObject;
+				T result = caseAttributeEntry(attributeEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -227,6 +234,21 @@ public class TypeInfoModelSwitch<T> {
 	 * @generated
 	 */
 	public T caseProperty(Property object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Attribute Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Attribute Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAttributeEntry(Map.Entry<String, Object> object) {
 		return null;
 	}
 

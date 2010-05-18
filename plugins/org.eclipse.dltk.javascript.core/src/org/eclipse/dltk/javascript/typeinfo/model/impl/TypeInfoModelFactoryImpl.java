@@ -9,10 +9,11 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.3 2010/03/11 12:28:43 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.4 2010/05/18 10:11:37 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import java.util.Map;
 import org.eclipse.dltk.javascript.typeinfo.model.*;
 
 import org.eclipse.emf.ecore.EClass;
@@ -72,6 +73,7 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
 			case TypeInfoModelPackage.METHOD: return (EObject)createMethod();
 			case TypeInfoModelPackage.PARAMETER: return (EObject)createParameter();
 			case TypeInfoModelPackage.PROPERTY: return (EObject)createProperty();
+			case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -149,6 +151,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
 	public Property createProperty() {
 		PropertyImpl property = new PropertyImpl();
 		return property;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, Object> createAttributeEntry() {
+		AttributeEntryImpl attributeEntry = new AttributeEntryImpl();
+		return attributeEntry;
 	}
 
 	/**

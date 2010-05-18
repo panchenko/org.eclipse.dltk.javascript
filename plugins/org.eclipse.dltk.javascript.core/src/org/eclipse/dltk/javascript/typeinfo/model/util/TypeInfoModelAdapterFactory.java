@@ -9,10 +9,11 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.2 2010/03/10 18:13:48 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.3 2010/05/18 10:11:37 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
+import java.util.Map;
 import org.eclipse.dltk.javascript.typeinfo.model.*;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -101,6 +102,10 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseProperty(Property object) {
 				return createPropertyAdapter();
+			}
+			@Override
+			public Adapter caseAttributeEntry(Map.Entry<String, Object> object) {
+				return createAttributeEntryAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -203,6 +208,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Attribute Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createAttributeEntryAdapter() {
 		return null;
 	}
 
