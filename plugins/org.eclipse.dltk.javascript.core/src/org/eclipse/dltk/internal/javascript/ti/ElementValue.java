@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
@@ -24,10 +27,15 @@ public abstract class ElementValue implements IValue {
 
 	public static ElementValue findMember(Type type, String name) {
 		if (type != null) {
+			List<Member> selection = new ArrayList<Member>(4);
 			for (Member member : type.getMembers()) {
 				if (name.equals(member.getName())) {
-					return createFor(member);
+					selection.add(member);
 				}
+			}
+			if (!selection.isEmpty()) {
+				return new MemberValue(selection.toArray(new Member[selection
+						.size()]));
 			}
 		}
 		return null;
@@ -39,33 +47,38 @@ public abstract class ElementValue implements IValue {
 		} else if (element instanceof Property) {
 			return new PropertyValue((Property) element);
 		} else {
-			return new TypeValue((Type) element);
+			return new TypeValue(Collections.singleton((Type) element));
 		}
 	}
 
 	private static class TypeValue extends ElementValue implements IValue {
 
-		private final Type type;
+		private final Set<Type> types;
 
-		public TypeValue(Type type) {
-			this.type = type;
+		public TypeValue(Set<Type> types) {
+			this.types = types;
 		}
 
 		@Override
-		protected Element getElement() {
-			return type;
+		protected Type[] getElements() {
+			return types.toArray(new Type[types.size()]);
 		}
 
 		public IValue getChild(String name) {
-			return findMember(type, name);
+			for (Type type : types) {
+				IValue child = findMember(type, name);
+				if (child != null)
+					return child;
+			}
+			return null;
 		}
 
 		public Type getDeclaredType() {
-			return type;
+			return types.iterator().next();
 		}
 
 		public Set<Type> getDeclaredTypes() {
-			return Collections.singleton(type);
+			return types;
 		}
 
 	}
@@ -79,7 +92,7 @@ public abstract class ElementValue implements IValue {
 		}
 
 		@Override
-		protected Element getElement() {
+		protected Method getElements() {
 			return method;
 		}
 
@@ -90,7 +103,10 @@ public abstract class ElementValue implements IValue {
 
 		public IValue getChild(String name) {
 			if (IValueReference.FUNCTION_OP.equals(name)) {
-				return new TypeValue(method.getType());
+				if (method.getType() != null) {
+					return new TypeValue(Collections
+							.singleton(method.getType()));
+				}
 			}
 			return null;
 		}
@@ -114,7 +130,7 @@ public abstract class ElementValue implements IValue {
 		}
 
 		@Override
-		protected Element getElement() {
+		protected Property getElements() {
 			return property;
 		}
 
@@ -141,7 +157,94 @@ public abstract class ElementValue implements IValue {
 
 	}
 
-	protected abstract Element getElement();
+	private static class MemberValue extends ElementValue implements IValue {
+
+		private final Member[] members;
+
+		public MemberValue(Member[] members) {
+			this.members = members;
+		}
+
+		@Override
+		protected Member[] getElements() {
+			return members;
+		}
+
+		@Override
+		public ReferenceKind getKind() {
+			for (Member member : members) {
+				if (member instanceof Method)
+					return ReferenceKind.METHOD;
+			}
+			return ReferenceKind.PROPERTY;
+		}
+
+		public IValue getChild(String name) {
+			if (IValueReference.FUNCTION_OP.equals(name)) {
+				Set<Type> types = null;
+				for (Member member : members) {
+					if (member instanceof Method) {
+						final Method method = (Method) member;
+						if (method.getType() != null) {
+							if (types == null) {
+								types = new HashSet<Type>();
+							}
+							types.add(method.getType());
+						}
+					}
+				}
+				if (types != null) {
+					return new TypeValue(types);
+				}
+			}
+			for (Member member : members) {
+				if (member instanceof Property) {
+					final Property property = (Property) member;
+					final ElementValue child = ElementValue.findMember(property
+							.getType(), name);
+					if (child != null) {
+						return child;
+					}
+				}
+			}
+			return null;
+		}
+
+		public Type getDeclaredType() {
+			for (Member member : members) {
+				if (member instanceof Property) {
+					final Property property = (Property) member;
+					if (property.getType() != null) {
+						return property.getType();
+					}
+				}
+			}
+			return null;
+		}
+
+		public Set<Type> getDeclaredTypes() {
+			Set<Type> types = null;
+			for (Member member : members) {
+				if (member instanceof Property) {
+					final Property property = (Property) member;
+					if (property.getType() != null) {
+						if (types == null) {
+							types = new HashSet<Type>();
+						}
+						types.add(property.getType());
+					}
+				}
+			}
+			if (types != null) {
+				return types;
+			} else {
+				return Collections.emptySet();
+			}
+		}
+
+	}
+
+	protected abstract Object getElements();
 
 	public final void clear() {
 	}
@@ -154,7 +257,7 @@ public abstract class ElementValue implements IValue {
 
 	public final Object getAttribute(String key) {
 		if (IReferenceAttributes.ELEMENT.equals(key)) {
-			return getElement();
+			return getElements();
 		}
 		return null;
 	}

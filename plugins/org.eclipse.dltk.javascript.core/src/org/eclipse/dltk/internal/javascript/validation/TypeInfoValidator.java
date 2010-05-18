@@ -11,9 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.CoreException;
@@ -107,16 +110,45 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				arguments[i] = visit(callArgs.get(i));
 			}
 			if (reference != null) {
-				final Method method = extractElement(reference, Method.class);
-				if (method != null) {
-					// TODO how overloaded methods should be handled?
+				final List<Method> methods = extractElements(reference,
+						Method.class);
+				if (methods != null) {
+					Method method = selectMethod(methods, arguments);
+					if (method == null) {
+						final Type type = JavaScriptValidations
+								.typeOf(reference.getParent());
+						if (type != null && type.getKind() == TypeKind.JAVA) {
+							reporter
+									.reportProblem(
+											JavaScriptProblems.WRONG_PARAMETERS,
+											NLS
+													.bind(
+															ValidationMessages.MethodNotSelected,
+															new String[] {
+																	reference
+																			.getName(),
+																	type
+																			.getName(),
+																	describeArgTypes(arguments) }),
+											methodNode.sourceStart(),
+											methodNode.sourceEnd());
+						}
+						return null;
+					}
 					if (!validateParameterCount(method, callArgs)) {
 						reporter.reportProblem(
-								JavaScriptProblems.WRONG_PARAMETER_COUNT,
-								NLS.bind(ValidationMessages.WrongParamCount,
-										method.getDeclaringType().getName(),
-										reference.getName()), methodNode
-										.sourceStart(), methodNode.sourceEnd());
+								JavaScriptProblems.WRONG_PARAMETERS,
+								NLS.bind(
+										ValidationMessages.MethodNotApplicable,
+										new String[] {
+												method.getName(),
+												describeParamTypes(method
+														.getParameters()),
+												method.getDeclaringType()
+														.getName(),
+												describeArgTypes(arguments) }),
+								methodNode.sourceStart(), methodNode
+										.sourceEnd());
 					}
 					if (method.isDeprecated()) {
 						reporter.reportProblem(
@@ -146,16 +178,106 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		}
 
 		/**
+		 * @param parameters
+		 * @return
+		 */
+		private String describeParamTypes(EList<Parameter> parameters) {
+			StringBuilder sb = new StringBuilder();
+			for (Parameter parameter : parameters) {
+				if (sb.length() != 0) {
+					sb.append(',');
+				}
+				if (parameter.getType() != null) {
+					sb.append(parameter.getType().getName());
+				} else {
+					sb.append('?');
+				}
+			}
+			return sb.toString();
+		}
+
+		/**
+		 * @param arguments
+		 * @return
+		 */
+		private String describeArgTypes(IValueReference[] arguments) {
+			StringBuilder sb = new StringBuilder();
+			for (IValueReference argument : arguments) {
+				if (sb.length() != 0) {
+					sb.append(',');
+				}
+				if (argument.getDeclaredType() != null) {
+					sb.append(argument.getDeclaredType().getName());
+				} else {
+					final Set<Type> types = argument.getTypes();
+					if (types.size() == 1) {
+						sb.append(types.iterator().next().getName());
+					} else {
+						sb.append('?');
+					}
+				}
+			}
+			return sb.toString();
+		}
+
+		/**
+		 * @param methods
+		 * @param arguments
+		 * @return
+		 */
+		private Method selectMethod(List<Method> methods,
+				IValueReference[] arguments) {
+			if (methods.size() == 1) {
+				return methods.get(0);
+			}
+			Method argCountMatches = null;
+			for (Method method : methods) {
+				if (method.getParameters().size() == arguments.length) {
+					if (argCountMatches == null) {
+						argCountMatches = method;
+					} else {
+						argCountMatches = null;
+						break;
+					}
+				}
+			}
+			if (argCountMatches != null) {
+				return argCountMatches;
+			}
+			// TODO implement additional checks
+			return methods.get(0);
+		}
+
+		private <E extends Element> E extractElement(IValueReference reference,
+				Class<E> elementType) {
+			final List<E> elements = extractElements(reference, elementType);
+			return elements != null ? elements.get(0) : null;
+		}
+
+		/**
 		 * @param reference
 		 * @param elementType
 		 * @return
 		 */
 		@SuppressWarnings("unchecked")
-		private <E extends Element> E extractElement(IValueReference reference,
-				Class<E> elementType) {
-			Object value = reference.getAttribute(IReferenceAttributes.ELEMENT);
+		private <E extends Element> List<E> extractElements(
+				IValueReference reference, Class<E> elementType) {
+			final Object value = reference
+					.getAttribute(IReferenceAttributes.ELEMENT);
 			if (elementType.isInstance(value)) {
-				return (E) value;
+				return Collections.singletonList((E) value);
+			} else if (value instanceof Element[]) {
+				final Element[] elements = (Element[]) value;
+				List<E> result = null;
+				for (Element element : elements) {
+					if (elementType.isInstance(element)) {
+						if (result == null) {
+							result = new ArrayList<E>(elements.length);
+						}
+						result.add((E) element);
+					}
+				}
+				return result;
 			}
 			return null;
 		}
@@ -229,7 +351,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								.getDeclaringType(), propName);
 					}
 				}
-			} else if (extractElement(result, Method.class) == null) {
+			} else if (extractElements(result, Method.class) == null) {
 				final Type type = JavaScriptValidations.typeOf(result
 						.getParent());
 				if (type != null && type.getKind() == TypeKind.JAVA) {

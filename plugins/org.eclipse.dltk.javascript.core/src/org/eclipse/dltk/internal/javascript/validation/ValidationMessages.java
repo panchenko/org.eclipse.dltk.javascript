@@ -19,7 +19,8 @@ public class ValidationMessages extends NLS {
 	public static String DeprecatedType;
 
 	public static String UndefinedMethod;
-	public static String WrongParamCount;
+	public static String MethodNotSelected;
+	public static String MethodNotApplicable;
 	public static String DeprecatedMethod;
 
 	public static String UndefinedProperty;
