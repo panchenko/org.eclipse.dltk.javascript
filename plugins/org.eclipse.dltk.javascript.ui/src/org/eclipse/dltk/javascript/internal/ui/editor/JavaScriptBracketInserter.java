@@ -29,6 +29,7 @@ public class JavaScriptBracketInserter extends BracketInserter {
 		super(scriptEditor);
 	}
 
+	@Override
 	public void verifyKey(VerifyEvent event) {
 
 		// early pruning to slow down normal typing as little as possible
@@ -63,7 +64,8 @@ public class JavaScriptBracketInserter extends BracketInserter {
 					.getOffset()
 					+ endLine.getLength());
 			String next = nextToken == Symbols.TokenEOF ? null : document.get(
-					offset, scanner.getPosition() - offset).trim();
+					offset + length, scanner.getPosition() - offset - length)
+					.trim();
 			int prevToken = scanner.previousToken(offset - 1, startLine
 					.getOffset());
 			int prevTokenOffset = scanner.getPosition() + 1;
