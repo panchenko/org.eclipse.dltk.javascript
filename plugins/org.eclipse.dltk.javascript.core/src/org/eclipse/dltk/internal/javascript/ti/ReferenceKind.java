@@ -12,5 +12,5 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 public enum ReferenceKind {
-	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL, FUNCTION
+	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL, FUNCTION, TYPE
 }
