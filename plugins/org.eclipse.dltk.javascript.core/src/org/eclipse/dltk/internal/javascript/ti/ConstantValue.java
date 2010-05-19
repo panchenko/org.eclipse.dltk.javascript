@@ -50,4 +50,9 @@ public class ConstantValue extends AbstractReference {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + value.getTypes();
+	}
+
 }
