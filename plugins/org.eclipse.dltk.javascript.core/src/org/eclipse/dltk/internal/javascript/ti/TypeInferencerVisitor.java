@@ -437,7 +437,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitLabelledStatement(LabelledStatement node) {
-		visit(node.getStatement());
+		if (node.getStatement() != null)
+			visit(node.getStatement());
 		return null;
 	}
 
