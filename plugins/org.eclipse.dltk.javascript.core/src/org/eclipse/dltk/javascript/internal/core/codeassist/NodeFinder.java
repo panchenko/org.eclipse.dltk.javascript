@@ -66,11 +66,19 @@ public class NodeFinder extends ASTVisitor {
 				&& node.sourceStart() <= pos;
 	}
 
-	public org.eclipse.dltk.javascript.ast.Type locateType(Script script) {
+	private boolean traverse(Script script) {
+		after = null;
 		before = null;
 		try {
 			script.traverse(this);
+			return true;
 		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public org.eclipse.dltk.javascript.ast.Type locateType(Script script) {
+		if (!traverse(script)) {
 			return null;
 		}
 		if (before instanceof org.eclipse.dltk.javascript.ast.Type) {
@@ -78,6 +86,21 @@ public class NodeFinder extends ASTVisitor {
 		}
 		if (after instanceof org.eclipse.dltk.javascript.ast.Type) {
 			return (org.eclipse.dltk.javascript.ast.Type) after;
+		}
+		return null;
+	}
+
+	public ASTNode locateNode(Script script) {
+		if (!traverse(script)) {
+			return null;
+		}
+		if (before != null && before.sourceStart() <= end
+				&& before.sourceEnd() >= start) {
+			return before;
+		}
+		if (after != null && after.sourceStart() <= end
+				&& after.sourceEnd() >= start) {
+			return after;
 		}
 		return null;
 	}

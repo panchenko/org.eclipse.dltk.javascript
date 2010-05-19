@@ -11,7 +11,25 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.ast.ASTNode;
+
 @SuppressWarnings("serial")
 public class PositionReachedException extends RuntimeException {
+
+	private final ASTNode node;
+	private final IValueReference reference;
+
+	public PositionReachedException(ASTNode node, IValueReference reference) {
+		this.node = node;
+		this.reference = reference;
+	}
+
+	public ASTNode getNode() {
+		return node;
+	}
+
+	public IValueReference getValue() {
+		return reference;
+	}
 
 }

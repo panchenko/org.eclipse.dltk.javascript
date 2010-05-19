@@ -12,39 +12,57 @@
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
-import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
+import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
+import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-public class CompletionVisitor extends TypeInferencerVisitor {
+public class SelectionVisitor extends TypeInferencerVisitor {
 
-	private final int position;
+	private final ASTNode target;
 
-	public CompletionVisitor(ITypeInferenceContext context, int position) {
+	public SelectionVisitor(ITypeInferenceContext context, ASTNode target) {
 		super(context);
-		this.position = position;
+		this.target = target;
 	}
-
-	private IValueCollection savedCollection = null;
 
 	@Override
 	public IValueReference visit(ASTNode node) {
 		final IValueReference result = super.visit(node);
-		if (savedCollection == null && node.sourceEnd() > position) {
-			savedCollection = peekContext();
+		if (node == target) {
 			throw new PositionReachedException(node, result);
 		}
 		return result;
 	}
 
 	@Override
-	public IValueCollection getCollection() {
-		if (savedCollection != null) {
-			return savedCollection;
+	protected IValueReference extractNamedChild(IValueReference parent,
+			Expression name) {
+		final IValueReference result = super.extractNamedChild(parent, name);
+		if (name == target) {
+			throw new PositionReachedException(name, result);
 		}
-		return super.getCollection();
+		return result;
+	}
+
+	@Override
+	protected Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
+		final Type result = super.resolveType(type);
+		if (type == target) {
+			IValueReference value;
+			if (result != null) {
+				value = new ConstantValue(result);
+				value.setKind(ReferenceKind.TYPE);
+			} else {
+				value = null;
+			}
+			throw new PositionReachedException(type, value);
+		}
+		return result;
 	}
 
 }
