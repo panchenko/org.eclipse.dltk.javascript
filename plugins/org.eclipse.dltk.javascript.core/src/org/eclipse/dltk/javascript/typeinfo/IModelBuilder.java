@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.List;
 
+import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
@@ -26,6 +27,10 @@ public interface IModelBuilder {
 		Type getType();
 
 		void setType(Type type);
+
+		ReferenceLocation getLocation();
+
+		void setLocation(ReferenceLocation location);
 	}
 
 	public interface IMethod {

@@ -67,6 +67,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 		private String name;
 		private Type type;
+		private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 
 		public String getName() {
 			return name;
@@ -82,6 +83,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 		public void setType(Type type) {
 			this.type = type;
+		}
+
+		public ReferenceLocation getLocation() {
+			return location;
+		}
+
+		public void setLocation(ReferenceLocation location) {
+			this.location = location;
 		}
 
 	}

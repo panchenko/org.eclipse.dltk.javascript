@@ -295,6 +295,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
 			if (paramType != null) {
 				parameter.setType(resolveType(paramType));
+				parameter.setLocation(ReferenceLocation.create(argument
+						.sourceStart(), paramType.sourceEnd(), argument
+						.sourceStart(), argument.sourceEnd()));
+			} else {
+				parameter.setLocation(ReferenceLocation.create(argument
+						.sourceStart(), argument.sourceEnd()));
 			}
 			method.getParameters().add(parameter);
 		}
@@ -310,6 +316,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					.getName());
 			refArg.setKind(ReferenceKind.ARGUMENT);
 			refArg.setDeclaredType(parameter.getType());
+			refArg.setLocation(parameter.getLocation());
 		}
 		enterContext(function);
 		visit(node.getBody());
