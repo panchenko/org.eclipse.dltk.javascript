@@ -360,7 +360,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		visit(node.getIndex());
 		if (array != null) {
 			if (node.getIndex() instanceof StringLiteral) {
-				return array.getChild(extractName(node.getIndex()));
+				return extractNamedChild(array, node.getIndex());
 			} else {
 				return array.getChild(IValueReference.ARRAY_OP);
 			}
@@ -471,10 +471,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
-				final String name = extractName(pi.getName());
+				final IValueReference child = extractNamedChild(result, pi
+						.getName());
 				final IValueReference value = visit(pi.getValue());
-				if (name != null) {
-					result.getChild(name).setValue(value);
+				if (child != null) {
+					child.setValue(value);
 				}
 			} else {
 				// TODO handle get/set methods
@@ -492,22 +493,23 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitPropertyExpression(PropertyExpression node) {
 		final IValueReference object = visit(node.getObject());
-		final String name = extractName(node.getProperty());
-		if (object != null && name != null) {
-			return object.getChild(name);
-		} else {
-			return null;
-		}
+		return extractNamedChild(object, node.getProperty());
 	}
 
-	protected static String extractName(Expression name) {
-		if (name instanceof Identifier) {
-			return ((Identifier) name).getName();
-		} else if (name instanceof StringLiteral) {
-			return ((StringLiteral) name).getValue();
-		} else {
-			return null;
+	protected IValueReference extractNamedChild(IValueReference parent,
+			Expression name) {
+		if (parent != null) {
+			final String nameStr;
+			if (name instanceof Identifier) {
+				nameStr = ((Identifier) name).getName();
+			} else if (name instanceof StringLiteral) {
+				nameStr = ((StringLiteral) name).getValue();
+			} else {
+				return null;
+			}
+			return parent.getChild(nameStr);
 		}
+		return null;
 	}
 
 	@Override

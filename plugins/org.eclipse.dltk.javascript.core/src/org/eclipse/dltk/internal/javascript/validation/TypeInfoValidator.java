@@ -137,8 +137,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					}
 					if (!validateParameterCount(method, callArgs)) {
 						reporter.reportProblem(
-								JavaScriptProblems.WRONG_PARAMETERS,
-								NLS.bind(
+								JavaScriptProblems.WRONG_PARAMETERS, NLS.bind(
 										ValidationMessages.MethodNotApplicable,
 										new String[] {
 												method.getName(),
@@ -312,9 +311,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		public IValueReference visitPropertyExpression(PropertyExpression node) {
 			final IValueReference object = visit(node.getObject());
 			final Expression propName = node.getProperty();
-			final String name = extractName(propName);
-			if (object != null && name != null) {
-				final IValueReference result = object.getChild(name);
+			final IValueReference result = extractNamedChild(object, propName);
+			if (result != null) {
 				if (currentMode() != VisitorMode.CALL) {
 					validateProperty(result, propName);
 				}

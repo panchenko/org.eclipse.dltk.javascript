@@ -106,12 +106,7 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 				locator.report(new FieldReferenceNode(prop));
 			}
 		}
-		final String name = extractName(property);
-		if (object != null && name != null) {
-			return object.getChild(name);
-		} else {
-			return null;
-		}
+		return extractNamedChild(object, property);
 	}
 
 	@Override
