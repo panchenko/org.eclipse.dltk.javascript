@@ -15,6 +15,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
@@ -128,6 +129,14 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 	private void testKeyword(Keyword node) {
 		testString(node.getKeyword(), node.sourceStart(), node.sourceEnd());
+	}
+
+	@Override
+	public Boolean visit(ASTNode node) {
+		Assert.assertTrue(node.getClass().getSimpleName()
+				+ " sourceEnd >= sourceStart", node.sourceEnd() >= node
+				.sourceStart());
+		return super.visit(node);
 	}
 
 	@Override
