@@ -1342,7 +1342,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 
 		ifStatement.setStart(ifStatement.getIfKeyword().sourceStart());
-		ifStatement.setEnd(node.getTokenStopIndex() + 1);
+		ifStatement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
 		return ifStatement;
 	}
