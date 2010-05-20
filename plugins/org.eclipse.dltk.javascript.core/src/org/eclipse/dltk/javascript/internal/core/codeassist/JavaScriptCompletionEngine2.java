@@ -45,7 +45,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
 
-	private boolean useEngine;
+	private boolean useEngine = true;
 
 	public boolean isUseEngine() {
 		return useEngine;
@@ -112,10 +112,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 			if (calculator.isMember()) {
 				doCompletionOnMember(inferencer2, visitor.getCollection(),
-						calculator.getCompletion(), position);
+						new CompletionPath(calculator.getCompletion()),
+						position);
 			} else {
 				doGlobalCompletion(inferencer2, visitor.getCollection(),
-						calculator.getCompletion(), position);
+						new CompletionPath(calculator.getCompletion()),
+						position);
 			}
 		}
 		this.requestor.endReporting();
@@ -147,8 +149,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 * @param startPart
 	 */
 	private void doCompletionOnMember(ITypeInferenceContext context,
-			IValueCollection collection, String startPart, int position) {
-		CompletionPath path = new CompletionPath(startPart);
+			IValueCollection collection, CompletionPath path, int position) {
+		;
 		IValueParent item = collection;
 		for (int i = 0; i < path.segmentCount() - 1; ++i) {
 			if (path.isName(i)) {
@@ -400,10 +402,10 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 * @param position
 	 */
 	private void doGlobalCompletion(ITypeInferenceContext context,
-			IValueCollection collection, String startPart, int position) {
-		doCompletionOnMember(context, collection, startPart, position);
+			IValueCollection collection, CompletionPath path, int position) {
+		doCompletionOnMember(context, collection, path, position);
 		if (useEngine) {
-			doCompletionOnKeyword(startPart, position);
+			doCompletionOnKeyword(path.lastSegment(), position);
 		}
 	}
 

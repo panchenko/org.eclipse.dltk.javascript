@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.ISemicolonStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.Statement;
 
@@ -24,7 +25,9 @@ public class NodeFinder extends ASTVisitor {
 
 	public NodeFinder(String content, int position) {
 		int start = position;
-		while (start > 0 && Character.isWhitespace(content.charAt(start - 1))) {
+		while (start > 0
+				&& (content.charAt(start - 1) == ' ' || content
+						.charAt(start - 1) == '\t')) {
 			--start;
 		}
 		this.start = start;
@@ -40,14 +43,22 @@ public class NodeFinder extends ASTVisitor {
 	ASTNode after = null;
 
 	private static boolean isBlock(ASTNode node) {
-		return node instanceof FunctionStatement || node instanceof Statement;
+		return node instanceof Script || node instanceof FunctionStatement
+				|| node instanceof Statement;
 	}
 
 	@Override
 	public boolean visit(ASTNode node) {
-		if (isBlock(node)
-				&& (node.sourceEnd() < start || node.sourceStart() > end)) {
-			return false;
+		if (isBlock(node)) {
+			if (node.sourceEnd() < start || node.sourceStart() > end) {
+				return false;
+			}
+			if (node.sourceEnd() == start
+					&& node instanceof ISemicolonStatement
+					&& ((ISemicolonStatement) node).getSemicolonPosition() >= 0) {
+				return false;
+			}
+			return true;
 		}
 		boolean enter = false;
 		if (before == null || isCloser(node, before, start)) {
@@ -81,10 +92,12 @@ public class NodeFinder extends ASTVisitor {
 		if (!traverse(script)) {
 			return null;
 		}
-		if (before instanceof org.eclipse.dltk.javascript.ast.Type) {
+		if (isValid(before)
+				&& before instanceof org.eclipse.dltk.javascript.ast.Type) {
 			return (org.eclipse.dltk.javascript.ast.Type) before;
 		}
-		if (after instanceof org.eclipse.dltk.javascript.ast.Type) {
+		if (isValid(after)
+				&& after instanceof org.eclipse.dltk.javascript.ast.Type) {
 			return (org.eclipse.dltk.javascript.ast.Type) after;
 		}
 		return null;
@@ -94,15 +107,17 @@ public class NodeFinder extends ASTVisitor {
 		if (!traverse(script)) {
 			return null;
 		}
-		if (before != null && before.sourceStart() <= end
-				&& before.sourceEnd() >= start) {
+		if (isValid(before)) {
 			return before;
 		}
-		if (after != null && after.sourceStart() <= end
-				&& after.sourceEnd() >= start) {
+		if (isValid(after)) {
 			return after;
 		}
 		return null;
+	}
+
+	private boolean isValid(final ASTNode n) {
+		return n != null && n.sourceStart() <= end && n.sourceEnd() >= start;
 	}
 
 }
