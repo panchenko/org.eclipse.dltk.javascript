@@ -58,7 +58,10 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	protected String createFieldProposalLabel(CompletionProposal proposal) {
 		if (proposal.getExtraInfo() instanceof Property) {
 			Property property = (Property) proposal.getExtraInfo();
-			if (property.getType() != null) {
+			// add the type to the label, but only if it is not exactly the same like Constants (MyObject:MyObject)
+			if (property.getType() != null
+					&& !property.getType().getName()
+							.equalsIgnoreCase(proposal.getName())) {
 				return proposal.getName() + ": " + property.getType().getName();
 			}
 		}
@@ -86,8 +89,8 @@ public class JavaScriptCompletionProposalLabelProvider extends
 					.getExtraInfo();
 			URL imageUrl = cm.getImageURL();
 			if (imageUrl != null)
-				return decorateImageDescriptor(ImageDescriptor
-						.createFromURL(imageUrl), proposal);
+				return decorateImageDescriptor(
+						ImageDescriptor.createFromURL(imageUrl), proposal);
 		} else if (proposal.getExtraInfo() instanceof Element) {
 			final ImageDescriptor descriptor = ElementLabelProviderRegistry
 					.getImageDescriptor((Element) proposal.getExtraInfo());
