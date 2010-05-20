@@ -1053,7 +1053,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 						.getNode()));
 				++index;
 			} else {
-				target.setType(new MissingType(target.getNode(), colonPos));
+				target.setType(new MissingType(target.getNode(), colonPos + 1));
 			}
 		}
 		return index;
