@@ -64,7 +64,7 @@ public abstract class ElementValue implements IValue {
 			return types.toArray(new Type[types.size()]);
 		}
 
-		public IValue getChild(String name) {
+		public IValue getChild(String name, boolean resolve) {
 			for (Type type : types) {
 				IValue child = findMember(type, name);
 				if (child != null)
@@ -101,7 +101,7 @@ public abstract class ElementValue implements IValue {
 			return ReferenceKind.METHOD;
 		}
 
-		public IValue getChild(String name) {
+		public IValue getChild(String name, boolean resolve) {
 			if (IValueReference.FUNCTION_OP.equals(name)) {
 				if (method.getType() != null) {
 					return new TypeValue(Collections
@@ -139,7 +139,7 @@ public abstract class ElementValue implements IValue {
 			return ReferenceKind.PROPERTY;
 		}
 
-		public IValue getChild(String name) {
+		public IValue getChild(String name, boolean resolve) {
 			return ElementValue.findMember(property.getType(), name);
 		}
 
@@ -179,7 +179,7 @@ public abstract class ElementValue implements IValue {
 			return ReferenceKind.PROPERTY;
 		}
 
-		public IValue getChild(String name) {
+		public IValue getChild(String name, boolean resolve) {
 			if (IValueReference.FUNCTION_OP.equals(name)) {
 				Set<Type> types = null;
 				for (Member member : members) {

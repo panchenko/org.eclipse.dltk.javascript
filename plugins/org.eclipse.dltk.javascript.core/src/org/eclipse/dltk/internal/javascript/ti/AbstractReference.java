@@ -135,7 +135,7 @@ public abstract class AbstractReference implements IValueReference,
 
 	public boolean hasChild(String name) {
 		IValue value = getValue();
-		return value != null && value.getChild(name) != null;
+		return value != null && value.getChild(name, true) != null;
 	}
 
 	public Set<String> getDirectChildren() {

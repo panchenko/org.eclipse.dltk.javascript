@@ -35,7 +35,7 @@ public class ChildReference extends AbstractReference {
 		}
 		IValue parentValue = parent.getValue();
 		if (parentValue != null) {
-			return parentValue.getChild(name);
+			return parentValue.getChild(name, true);
 		}
 		return null;
 	}
@@ -43,7 +43,7 @@ public class ChildReference extends AbstractReference {
 	private static IValue findChild(IValueCollection collection, String name) {
 		while (collection != null) {
 			final IValue childValue = ((IValueProvider) collection).getValue()
-					.getChild(name);
+					.getChild(name, true);
 			if (childValue != null) {
 				return childValue;
 			}

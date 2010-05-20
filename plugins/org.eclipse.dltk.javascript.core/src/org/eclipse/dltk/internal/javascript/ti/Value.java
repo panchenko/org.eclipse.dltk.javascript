@@ -164,7 +164,7 @@ public class Value implements IValue {
 		deletedChildren.add(name);
 	}
 
-	protected IValue findMember(String name) {
+	protected IValue findMember(String name, boolean resolve) {
 		IValue member = ElementValue.findMember(declaredType, name);
 		if (member != null) {
 			return member;
@@ -194,7 +194,7 @@ public class Value implements IValue {
 		}
 	};
 
-	public IValue getChild(String name) {
+	public IValue getChild(String name, boolean resolve) {
 		if (hasReferences()) {
 			Set<Value> result = new HashSet<Value>();
 			execute(this, new GetChildHandler(name), result,
@@ -209,7 +209,7 @@ public class Value implements IValue {
 			if (child == null) {
 				child = inherited.get(name);
 				if (child == null) {
-					child = findMember(name);
+					child = findMember(name, resolve);
 				}
 			}
 			return child;

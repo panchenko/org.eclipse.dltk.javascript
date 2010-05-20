@@ -21,7 +21,7 @@ public interface IValue {
 
 	Set<String> getDirectChildren();
 
-	IValue getChild(String name);
+	IValue getChild(String name, boolean resolve);
 
 	IValue createChild(String name);
 

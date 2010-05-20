@@ -27,13 +27,14 @@ public class TopValueCollection extends ValueCollection {
 	public TopValueCollection(final ITypeInferenceContext context) {
 		super(null, new Value() {
 			@Override
-			protected IValue findMember(String name) {
-				final Element element = context.resolve(name);
-				if (element != null) {
-					return ElementValue.createFor(element);
-				} else {
-					return null;
+			protected IValue findMember(String name, boolean resolve) {
+				if (resolve) {
+					final Element element = context.resolve(name);
+					if (element != null) {
+						return ElementValue.createFor(element);
+					}
 				}
+				return null;
 			}
 		});
 		this.context = context;

@@ -63,7 +63,7 @@ public abstract class ValueCollection implements IValueCollection,
 
 	public boolean hasChild(String name) {
 		IValue value = getValue();
-		return value != null && value.getChild(name) != null;
+		return value != null && value.getChild(name, true) != null;
 	}
 
 	public IValueReference getChild(String name) {
@@ -78,7 +78,7 @@ public abstract class ValueCollection implements IValueCollection,
 		IValueCollection coll = this;
 		for (;;) {
 			IValue childValue = ((IValueProvider) coll).getValue().getChild(
-					name);
+					name, false);
 			if (childValue != null) {
 				if (coll != this) {
 					getValue().putChild(name, childValue);
