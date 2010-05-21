@@ -30,9 +30,6 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 	private static final boolean DEBUG = false;
 
 	public IModelElement[] select(IModuleSource module, int position, int i) {
-		if (module.getModelElement() == null) {
-			return null;
-		}
 		String content = module.getSourceContents();
 		if (position < 0 || position > content.length()) {
 			return null;
