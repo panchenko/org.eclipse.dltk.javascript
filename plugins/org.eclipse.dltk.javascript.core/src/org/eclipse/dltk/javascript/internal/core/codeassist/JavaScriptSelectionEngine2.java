@@ -14,7 +14,12 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.codeassist.ScriptSelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IModelElementVisitor;
+import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.model.LocalVariable;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
@@ -29,7 +34,48 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 
 	private static final boolean DEBUG = false;
 
+	@SuppressWarnings("serial")
+	private static class ModelElementFound extends RuntimeException {
+		private final IModelElement element;
+
+		public ModelElementFound(IModelElement element) {
+			this.element = element;
+		}
+
+	}
+
+	private static class Visitor implements IModelElementVisitor {
+
+		private final int nameStart;
+		private final int nameEnd;
+
+		public Visitor(int nameStart, int nameEnd) {
+			this.nameStart = nameStart;
+			this.nameEnd = nameEnd;
+		}
+
+		public boolean visit(IModelElement element) {
+			if (element instanceof IMember) {
+				IMember member = (IMember) element;
+				try {
+					ISourceRange range = member.getNameRange();
+					if (range.getOffset() == nameStart
+							&& range.getLength() == nameEnd - nameStart) {
+						throw new ModelElementFound(element);
+					}
+				} catch (ModelException e) {
+					// 
+				}
+			}
+			return true;
+		}
+
+	}
+
 	public IModelElement[] select(IModuleSource module, int position, int i) {
+		if (!(module.getModelElement() instanceof ISourceModule)) {
+			return null;
+		}
 		String content = module.getSourceContents();
 		if (position < 0 || position > content.length()) {
 			return null;
@@ -64,21 +110,32 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				if (DEBUG) {
 					System.out.println(value + "," + kind);
 				}
+				final ReferenceLocation location = value.getLocation();
+				if (DEBUG) {
+					System.out.println(location);
+				}
+				if (location == ReferenceLocation.UNKNOWN) {
+					return null;
+				}
 				if (kind == ReferenceKind.ARGUMENT
-						|| kind == ReferenceKind.LOCAL
-						|| kind == ReferenceKind.FUNCTION) {
-					final ReferenceLocation location = value.getLocation();
-					if (DEBUG) {
-						System.out.println(location);
-					}
-					if (location == ReferenceLocation.UNKNOWN) {
-						return null;
-					}
+						|| kind == ReferenceKind.LOCAL) {
 					return new IModelElement[] { new LocalVariable(module
 							.getModelElement(), value.getName(), location
 							.getDeclarationStart(), location
 							.getDeclarationEnd(), location.getNameStart(),
 							location.getNameEnd() - 1, null) };
+				} else if (kind == ReferenceKind.FUNCTION) {
+					final ISourceModule m = (ISourceModule) module
+							.getModelElement();
+					try {
+						m.reconcile(false, null, null);
+						m.accept(new Visitor(location.getNameStart(), location
+								.getNameEnd()));
+					} catch (ModelException e) {
+						e.printStackTrace();
+					} catch (ModelElementFound e) {
+						return new IModelElement[] { e.element };
+					}
 				}
 			}
 		}
