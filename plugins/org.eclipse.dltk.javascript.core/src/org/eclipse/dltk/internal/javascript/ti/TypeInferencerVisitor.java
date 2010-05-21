@@ -319,8 +319,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			refArg.setLocation(parameter.getLocation());
 		}
 		enterContext(function);
-		visit(node.getBody());
-		leaveContext();
+		try {
+			visitFunctionBody(node);
+		} finally {
+			leaveContext();
+		}
 		final IValueReference result;
 		if (methodName != null) {
 			result = peekContext().createChild(method.getName());
@@ -341,6 +344,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		returnValue.setDeclaredType(method.getType());
 		returnValue.setValue(function.getReturnValue());
 		return result;
+	}
+
+	protected void visitFunctionBody(FunctionStatement node) {
+		visit(node.getBody());
 	}
 
 	protected Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
