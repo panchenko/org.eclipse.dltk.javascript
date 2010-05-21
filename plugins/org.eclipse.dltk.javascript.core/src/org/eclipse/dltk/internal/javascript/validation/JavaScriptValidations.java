@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
@@ -18,10 +21,12 @@ import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.core.builder.IBuildContext;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class JavaScriptValidations {
@@ -75,6 +80,34 @@ public class JavaScriptValidations {
 	protected static Reporter createReporter(IBuildContext context) {
 		return new Reporter(context.getLineTracker(), context
 				.getProblemReporter());
+	}
+
+	/**
+	 * @param reference
+	 * @param elementType
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E extends Element> List<E> extractElements(
+			IValueReference reference, Class<E> elementType) {
+		final Object value = reference
+				.getAttribute(IReferenceAttributes.ELEMENT);
+		if (elementType.isInstance(value)) {
+			return Collections.singletonList((E) value);
+		} else if (value instanceof Element[]) {
+			final Element[] elements = (Element[]) value;
+			List<E> result = null;
+			for (Element element : elements) {
+				if (elementType.isInstance(element)) {
+					if (result == null) {
+						result = new ArrayList<E>(elements.length);
+					}
+					result.add((E) element);
+				}
+			}
+			return result;
+		}
+		return null;
 	}
 
 }

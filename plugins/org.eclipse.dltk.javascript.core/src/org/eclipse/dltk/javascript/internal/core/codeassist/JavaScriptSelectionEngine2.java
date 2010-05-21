@@ -11,12 +11,20 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.eclipse.core.runtime.Path;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.codeassist.ScriptSelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
+import org.eclipse.dltk.core.IParent;
+import org.eclipse.dltk.core.IProjectFragment;
+import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
@@ -25,10 +33,15 @@ import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 
@@ -110,23 +123,30 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				if (DEBUG) {
 					System.out.println(value + "," + kind);
 				}
-				final ReferenceLocation location = value.getLocation();
-				if (DEBUG) {
-					System.out.println(location);
-				}
-				if (location == ReferenceLocation.UNKNOWN) {
-					return null;
-				}
+				final ISourceModule m = (ISourceModule) module
+						.getModelElement();
 				if (kind == ReferenceKind.ARGUMENT
 						|| kind == ReferenceKind.LOCAL) {
+					final ReferenceLocation location = value.getLocation();
+					if (DEBUG) {
+						System.out.println(location);
+					}
+					if (location == ReferenceLocation.UNKNOWN) {
+						return null;
+					}
 					return new IModelElement[] { new LocalVariable(module
 							.getModelElement(), value.getName(), location
 							.getDeclarationStart(), location
 							.getDeclarationEnd(), location.getNameStart(),
 							location.getNameEnd() - 1, null) };
 				} else if (kind == ReferenceKind.FUNCTION) {
-					final ISourceModule m = (ISourceModule) module
-							.getModelElement();
+					final ReferenceLocation location = value.getLocation();
+					if (DEBUG) {
+						System.out.println(location);
+					}
+					if (location == ReferenceLocation.UNKNOWN) {
+						return null;
+					}
 					try {
 						m.reconcile(false, null, null);
 						m.accept(new Visitor(location.getNameStart(), location
@@ -136,11 +156,105 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					} catch (ModelElementFound e) {
 						return new IModelElement[] { e.element };
 					}
+				} else if (kind == ReferenceKind.METHOD
+						|| kind == ReferenceKind.PROPERTY) {
+					final Collection<Member> members = JavaScriptValidations
+							.extractElements(value, Member.class);
+					if (members != null) {
+						return convert(m, members);
+					}
+				} else if (kind == ReferenceKind.TYPE) {
+					final Collection<Type> types = value.getTypes();
+					if (types != null) {
+						return convert(m, types);
+					}
 				}
 			}
 		}
 
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * @param module
+	 * @param elements
+	 * @return
+	 */
+	private IModelElement[] convert(ISourceModule module,
+			Collection<? extends Element> elements) {
+		List<IModelElement> result = new ArrayList<IModelElement>();
+		for (Element element : elements) {
+			try {
+				IModelElement me = convert(module, element);
+				if (me != null) {
+					result.add(me);
+				}
+			} catch (ModelException e) {
+				// 
+			}
+		}
+		return result.toArray(new IModelElement[result.size()]);
+	}
+
+	/**
+	 * @param module
+	 * @param element
+	 * @return
+	 * @throws ModelException
+	 */
+	private IModelElement convert(ISourceModule module, Element element)
+			throws ModelException {
+		Type type;
+		if (element instanceof Type) {
+			type = (Type) element;
+		} else {
+			type = ((Member) element).getDeclaringType();
+		}
+		if (type != null && type.getKind() == TypeKind.PREDEFINED) {
+			final List<String> path = new ArrayList<String>();
+			path.add(type.getName());
+			if (element != type) {
+				path.add(element.getName());
+			}
+			return resolveBuiltin(module.getScriptProject(), path);
+		}
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * @param project
+	 * @param segments
+	 * @return
+	 * @throws ModelException
+	 */
+	private IModelElement resolveBuiltin(IScriptProject project,
+			List<String> segments) throws ModelException {
+		for (IProjectFragment fragment : project.getProjectFragments()) {
+			if (fragment.isBuiltin()) {
+				ISourceModule m = fragment.getScriptFolder(Path.EMPTY)
+						.getSourceModule("builtins.js");
+				if (!m.exists()) {
+					return null;
+				}
+				IModelElement me = m;
+				SEGMENT_LOOP: for (String segment : segments) {
+					if (me instanceof IParent) {
+						final IModelElement[] children = ((IParent) me)
+								.getChildren();
+						for (IModelElement child : children) {
+							if (segment.equals(child.getElementName())) {
+								me = child;
+								continue SEGMENT_LOOP;
+							}
+						}
+					}
+					return null;
+				}
+				return me;
+			}
+		}
 		return null;
 	}
 }

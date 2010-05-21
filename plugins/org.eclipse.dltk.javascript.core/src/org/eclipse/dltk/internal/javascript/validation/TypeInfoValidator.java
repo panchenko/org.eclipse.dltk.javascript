@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +21,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -110,8 +107,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				arguments[i] = visit(callArgs.get(i));
 			}
 			if (reference != null) {
-				final List<Method> methods = extractElements(reference,
-						Method.class);
+				final List<Method> methods = JavaScriptValidations
+						.extractElements(reference, Method.class);
 				if (methods != null) {
 					Method method = selectMethod(methods, arguments);
 					if (method == null) {
@@ -249,36 +246,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		private <E extends Element> E extractElement(IValueReference reference,
 				Class<E> elementType) {
-			final List<E> elements = extractElements(reference, elementType);
+			final List<E> elements = JavaScriptValidations.extractElements(
+					reference, elementType);
 			return elements != null ? elements.get(0) : null;
-		}
-
-		/**
-		 * @param reference
-		 * @param elementType
-		 * @return
-		 */
-		@SuppressWarnings("unchecked")
-		private <E extends Element> List<E> extractElements(
-				IValueReference reference, Class<E> elementType) {
-			final Object value = reference
-					.getAttribute(IReferenceAttributes.ELEMENT);
-			if (elementType.isInstance(value)) {
-				return Collections.singletonList((E) value);
-			} else if (value instanceof Element[]) {
-				final Element[] elements = (Element[]) value;
-				List<E> result = null;
-				for (Element element : elements) {
-					if (elementType.isInstance(element)) {
-						if (result == null) {
-							result = new ArrayList<E>(elements.length);
-						}
-						result.add((E) element);
-					}
-				}
-				return result;
-			}
-			return null;
 		}
 
 		/**
@@ -349,7 +319,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								.getDeclaringType(), propName);
 					}
 				}
-			} else if (extractElements(result, Method.class) == null) {
+			} else if (JavaScriptValidations.extractElements(result,
+					Method.class) == null) {
 				final Type type = JavaScriptValidations.typeOf(result
 						.getParent());
 				if (type != null && type.getKind() == TypeKind.JAVA) {
