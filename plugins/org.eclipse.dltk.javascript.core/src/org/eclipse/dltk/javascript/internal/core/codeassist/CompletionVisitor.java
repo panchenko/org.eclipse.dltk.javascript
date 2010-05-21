@@ -11,12 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
+import java.util.Stack;
+
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
 
 public class CompletionVisitor extends TypeInferencerVisitor {
 
@@ -27,16 +30,58 @@ public class CompletionVisitor extends TypeInferencerVisitor {
 		this.position = position;
 	}
 
+	static class Level {
+		boolean enabled;
+	}
+
+	private Stack<Level> levels = new Stack<Level>();
+
 	private IValueCollection savedCollection = null;
+
+	private PositionReachedException positionReached = null;
 
 	@Override
 	public IValueReference visit(ASTNode node) {
+		if (node instanceof FunctionStatement) {
+			if (levels.isEmpty() && positionReached == null
+					&& node.sourceStart() >= position) {
+				return null;
+			}
+			return super.visit(node);
+		}
 		final IValueReference result = super.visit(node);
+		if (!levels.isEmpty() && levels.peek().enabled) {
+			return result;
+		}
 		if (savedCollection == null && node.sourceEnd() > position) {
 			savedCollection = peekContext();
 			throw new PositionReachedException(node, result);
 		}
 		return result;
+	}
+
+	@Override
+	public IValueReference visitFunctionStatement(FunctionStatement node) {
+		final Level level = new Level();
+		level.enabled = node.sourceEnd() < position
+				|| node.sourceStart() > position;
+		levels.push(level);
+		IValueReference result;
+		try {
+			result = super.visitFunctionStatement(node);
+		} finally {
+			levels.pop();
+		}
+		return result;
+	}
+
+	@Override
+	protected void visitFunctionBody(FunctionStatement node) {
+		try {
+			super.visitFunctionBody(node);
+		} catch (PositionReachedException e) {
+			positionReached = e;
+		}
 	}
 
 	@Override
