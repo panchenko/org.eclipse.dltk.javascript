@@ -2,8 +2,6 @@ package org.eclipse.dltk.javascript.core.tests.contentassist;
 
 import java.util.LinkedList;
 
-import junit.framework.TestResult;
-
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.core.CompletionProposal;
 
@@ -435,6 +433,13 @@ public class CodeCompletion extends AbstractCompletionTest {
 		String[] names = new String[] { "a", "b" };
 		String module = "test-return-value.js";
 		int position = lastPositionInFile("execute().", module);
+		basicTest(module, position, names);
+	}
+
+	public void testFunctionRefs() {
+		String[] names = new String[] { "test1", "test2", "test3" };
+		String module = "test-function-refs.js";
+		int position = lastPositionInFile("a = test", module);
 		basicTest(module, position, names);
 	}
 
