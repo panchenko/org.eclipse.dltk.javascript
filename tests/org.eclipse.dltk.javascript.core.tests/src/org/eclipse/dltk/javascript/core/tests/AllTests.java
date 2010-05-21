@@ -5,6 +5,7 @@ import junit.framework.TestSuite;
 
 import org.eclipse.dltk.javascript.core.tests.contentassist.CodeCompletion;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CompletionStringParsing;
+import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchDeclarationTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchReferenceTests;
@@ -36,6 +37,7 @@ public class AllTests {
 		suite.addTest(SearchDeclarationTests.suite());
 		suite.addTest(SearchReferenceTests.suite());
 		suite.addTest(SearchTypeReferenceTests.suite());
+		suite.addTest(SelectionTests.suite());
 		// $JUnit-END$
 		return suite;
 	}
