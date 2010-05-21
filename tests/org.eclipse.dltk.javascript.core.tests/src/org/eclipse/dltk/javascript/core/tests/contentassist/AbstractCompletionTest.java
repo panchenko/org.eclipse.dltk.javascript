@@ -11,19 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.contentassist;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
-
 import org.eclipse.dltk.codeassist.ICompletionEngine;
-import org.eclipse.dltk.compiler.util.Util;
+import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.tests.util.StringList;
@@ -33,7 +28,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
-public class AbstractCompletionTest extends TestCase {
+public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 
 	protected ICompletionEngine createEngine(List<CompletionProposal> results,
 			boolean useEngine) {
@@ -44,22 +39,6 @@ public class AbstractCompletionTest extends TestCase {
 			((JSCompletionEngine) engine).setUseEngine(useEngine);
 		}
 		return engine;
-	}
-
-	protected int lastPositionInFile(String string, String moduleName) {
-		URL resource = this.getClass().getResource(moduleName);
-		try {
-			final String content = new String(Util.getInputStreamAsCharArray(
-					resource.openStream(), -1, "UTF-8"));
-			final int position = content.lastIndexOf(string);
-			if (position >= 0) {
-				return position + string.length();
-			} else {
-				throw new AssertionFailedError("Not found");
-			}
-		} catch (IOException e) {
-			throw new AssertionFailedError(e.toString());
-		}
 	}
 
 	private static boolean compareProposalNames(
@@ -92,11 +71,11 @@ public class AbstractCompletionTest extends TestCase {
 		return list;
 	}
 
-	protected void basicTest(String mname, int position, String[] compNames) {
+	protected void basicTest(IModuleSource module, int position,
+			String[] compNames) {
 		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
 		ICompletionEngine c = createEngine(results, false);
-		c.complete(new TestModule(this.getClass().getResource(mname)),
-				position, 0);
+		c.complete(module, position, 0);
 		if (!compareProposalNames(results, compNames)) {
 			assertEquals(new StringList(compNames).sort().toString(),
 					exractProposalNames(results).sort().toString());
