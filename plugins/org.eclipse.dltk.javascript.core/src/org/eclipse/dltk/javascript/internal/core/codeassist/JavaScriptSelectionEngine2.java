@@ -17,7 +17,6 @@ import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.model.LocalVariable;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
-import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -56,21 +55,13 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 						inferencer2, node);
 				inferencer2.setVisitor(visitor);
 				inferencer2.setModelElement(module.getModelElement());
-				IValueReference value;
-				try {
-					inferencer2.doInferencing(script);
+				inferencer2.doInferencing(script);
+				final IValueReference value = visitor.getValue();
+				if (value == null) {
 					if (DEBUG) {
-						System.out.println("node not found");
+						System.out.println("value is null or not found");
 					}
 					return null;
-				} catch (PositionReachedException e) {
-					value = e.getValue();
-					if (value == null) {
-						if (DEBUG) {
-							System.out.println("node found, but value is null");
-						}
-						return null;
-					}
 				}
 				final ReferenceKind kind = value.getKind();
 				if (DEBUG) {

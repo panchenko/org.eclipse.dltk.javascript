@@ -15,7 +15,6 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
-import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -24,17 +23,22 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public class SelectionVisitor extends TypeInferencerVisitor {
 
 	private final ASTNode target;
+	private IValueReference value;
 
 	public SelectionVisitor(ITypeInferenceContext context, ASTNode target) {
 		super(context);
 		this.target = target;
 	}
 
+	public IValueReference getValue() {
+		return value;
+	}
+
 	@Override
 	public IValueReference visit(ASTNode node) {
 		final IValueReference result = super.visit(node);
 		if (node == target) {
-			throw new PositionReachedException(node, result);
+			value = result;
 		}
 		return result;
 	}
@@ -44,7 +48,7 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 			Expression name) {
 		final IValueReference result = super.extractNamedChild(parent, name);
 		if (name == target) {
-			throw new PositionReachedException(name, result);
+			value = result;
 		}
 		return result;
 	}
@@ -53,14 +57,12 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 	protected Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
 		final Type result = super.resolveType(type);
 		if (type == target) {
-			IValueReference value;
 			if (result != null) {
 				value = new ConstantValue(result);
 				value.setKind(ReferenceKind.TYPE);
 			} else {
 				value = null;
 			}
-			throw new PositionReachedException(type, value);
 		}
 		return result;
 	}
