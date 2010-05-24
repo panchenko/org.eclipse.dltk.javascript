@@ -35,6 +35,7 @@ public class TypeInfoManager {
 	private static final String BUILDER_ELEMENT = "builder";
 	private static final String PROVIDER_ELEMENT = "provider";
 	private static final String RESOLVER_ELEMENT = "resolver";
+	private static final String CONVERTER_ELEMENT = "converter";
 
 	private static String trim(String str) {
 		if (str != null) {
@@ -92,6 +93,18 @@ public class TypeInfoManager {
 		}
 	};
 
+	private static final SimpleExtensionManager<IElementConverter> converterManager = new SimpleExtensionManager<IElementConverter>(
+			IElementConverter.class, EXT_POINT) {
+		@Override
+		protected IElementConverter createInstance(IConfigurationElement element) {
+			if (CONVERTER_ELEMENT.equals(element.getName())) {
+				return super.createInstance(element);
+			} else {
+				return null;
+			}
+		}
+	};
+
 	public static IModelBuilder[] getModelBuilders() {
 		return modelBuilderManager.getInstances();
 	}
@@ -102,6 +115,10 @@ public class TypeInfoManager {
 
 	public static IElementResolver[] getElementResolvers() {
 		return resolverManager.getInstances();
+	}
+
+	public static IElementConverter[] getElementConverters() {
+		return converterManager.getInstances();
 	}
 
 	public static ResourceSet loadModelResources() {

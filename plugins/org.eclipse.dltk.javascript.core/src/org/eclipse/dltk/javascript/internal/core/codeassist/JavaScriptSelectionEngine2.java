@@ -38,6 +38,8 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -218,6 +220,13 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				path.add(element.getName());
 			}
 			return resolveBuiltin(module.getScriptProject(), path);
+		}
+		for (IElementConverter converter : TypeInfoManager
+				.getElementConverters()) {
+			IModelElement result = converter.convert(module, element);
+			if (result != null) {
+				return result;
+			}
 		}
 		// TODO Auto-generated method stub
 		return null;
