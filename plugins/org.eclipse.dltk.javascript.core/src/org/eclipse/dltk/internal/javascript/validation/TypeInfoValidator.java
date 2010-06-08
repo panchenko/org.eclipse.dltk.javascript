@@ -202,7 +202,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (sb.length() != 0) {
 					sb.append(',');
 				}
-				if (argument.getDeclaredType() != null) {
+				if (argument == null) {
+					sb.append("null");
+				} else if (argument.getDeclaredType() != null) {
 					sb.append(argument.getDeclaredType().getName());
 				} else {
 					final Set<Type> types = argument.getTypes();
