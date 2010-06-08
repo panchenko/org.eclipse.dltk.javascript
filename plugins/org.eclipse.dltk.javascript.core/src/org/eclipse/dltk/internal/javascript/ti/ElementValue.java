@@ -104,8 +104,8 @@ public abstract class ElementValue implements IValue {
 		public IValue getChild(String name, boolean resolve) {
 			if (IValueReference.FUNCTION_OP.equals(name)) {
 				if (method.getType() != null) {
-					return new TypeValue(Collections
-							.singleton(method.getType()));
+					return new TypeValue(
+							Collections.singleton(method.getType()));
 				}
 			}
 			return null;
@@ -200,8 +200,8 @@ public abstract class ElementValue implements IValue {
 			for (Member member : members) {
 				if (member instanceof Property) {
 					final Property property = (Property) member;
-					final ElementValue child = ElementValue.findMember(property
-							.getType(), name);
+					final ElementValue child = ElementValue.findMember(
+							property.getType(), name);
 					if (child != null) {
 						return child;
 					}
@@ -284,7 +284,8 @@ public abstract class ElementValue implements IValue {
 	}
 
 	public final IValue createChild(String name) {
-		throw new UnsupportedOperationException();
+		return getChild(name, true);
+		// throw new UnsupportedOperationException();
 	}
 
 	public void putChild(String name, IValue value) {
