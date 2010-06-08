@@ -365,4 +365,10 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(getTypes(STRING), name.getTypes());
 	}
 
+	public void testAssignToResolvedProperty() {
+		List<String> lines = new StringList();
+		lines.add("ExampleGlobal.abcdef = 1");
+		inference(lines.toString());
+	}
+
 }
