@@ -14,7 +14,6 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ISourceReference;
 import org.eclipse.dltk.core.ModelException;
-import org.eclipse.dltk.internal.ui.actions.FoldingActionGroup;
 import org.eclipse.dltk.internal.ui.editor.ScriptEditor;
 import org.eclipse.dltk.internal.ui.editor.ScriptOutlinePage;
 import org.eclipse.dltk.internal.ui.editor.ScriptSourceViewer;
@@ -134,6 +133,7 @@ public class JavaScriptEditor extends ScriptEditor {
 		}
 	}
 
+	@Override
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 
@@ -155,20 +155,24 @@ public class JavaScriptEditor extends ScriptEditor {
 		// installOccurrencesFinder(false);
 	}
 
+	@Override
 	protected void initializeEditor() {
 		super.initializeEditor();
 		setEditorContextMenuId(EDITOR_CONTEXT);
 		setRulerContextMenuId(RULER_CONTEXT);
 	}
 
+	@Override
 	protected IPreferenceStore getScriptPreferenceStore() {
 		return JavaScriptUI.getDefault().getPreferenceStore();
 	}
 
+	@Override
 	public ScriptTextTools getTextTools() {
 		return JavaScriptUI.getDefault().getTextTools();
 	}
 
+	@Override
 	protected ScriptOutlinePage doCreateOutlinePage() {
 		return new JavaScriptOutlinePage(this, JavaScriptUI.getDefault()
 				.getPreferenceStore());
@@ -179,6 +183,7 @@ public class JavaScriptEditor extends ScriptEditor {
 		return new JavaScriptPairMatcher("{}[]()".toCharArray());
 	}
 
+	@Override
 	protected void connectPartitioningToElement(IEditorInput input,
 			IDocument document) {
 		if (document instanceof IDocumentExtension3) {
@@ -191,23 +196,22 @@ public class JavaScriptEditor extends ScriptEditor {
 		}
 	}
 
-	protected FoldingActionGroup createFoldingActionGroup() {
-		return new FoldingActionGroup(this, getViewer(), JavaScriptUI
-				.getDefault().getPreferenceStore());
-	}
-
+	@Override
 	public String getEditorId() {
 		return EDITOR_ID;
 	}
 
+	@Override
 	public IDLTKLanguageToolkit getLanguageToolkit() {
 		return JavaScriptLanguageToolkit.getDefault();
 	}
 
+	@Override
 	public String getCallHierarchyID() {
 		return "org.eclipse.dltk.callhierarchy.view";
 	}
 
+	@Override
 	public void dispose() {
 		ISourceViewer sourceViewer = getSourceViewer();
 		if (sourceViewer instanceof ITextViewerExtension)
@@ -275,10 +279,12 @@ public class JavaScriptEditor extends ScriptEditor {
 	 * @seeorg.eclipse.ui.texteditor.AbstractDecoratedTextEditor#
 	 * initializeKeyBindingScopes()
 	 */
+	@Override
 	protected void initializeKeyBindingScopes() {
 		setKeyBindingScopes(new String[] { "org.eclipse.dltk.ui.javascriptEditorScope" }); //$NON-NLS-1$
 	}
 
+	@Override
 	protected void createActions() {
 		super.createActions();
 
@@ -289,10 +295,12 @@ public class JavaScriptEditor extends ScriptEditor {
 		markAsStateDependentAction("QuickFormat", true); //$NON-NLS-1$
 		setAction(DLTKActionConstants.FORMAT_ELEMENT, action);
 		markAsStateDependentAction(DLTKActionConstants.FORMAT_ELEMENT, true);
-
-		ActionGroup generateActions = new JavaScriptGenerateActionGroup(this,
-				ITextEditorActionConstants.GROUP_EDIT);
-		fActionGroups.addGroup(generateActions);
-		fContextMenuGroup.addGroup(generateActions);
 	}
+
+	@Override
+	protected ActionGroup createGenerateActionGroup() {
+		return new JavaScriptGenerateActionGroup(this,
+				ITextEditorActionConstants.GROUP_EDIT);
+	}
+
 }
