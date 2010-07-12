@@ -28,6 +28,7 @@ public class JavaScriptCompletionProposal extends ScriptCompletionProposal {
 				displayString, relevance, isInDoc);
 	}
 
+	@Override
 	protected boolean isSmartTrigger(char trigger) {
 		if (trigger == '$') {
 			return true;
