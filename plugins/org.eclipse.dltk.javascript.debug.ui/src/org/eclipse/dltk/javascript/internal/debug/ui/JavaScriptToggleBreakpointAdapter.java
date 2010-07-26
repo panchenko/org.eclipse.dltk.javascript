@@ -10,9 +10,12 @@ import org.eclipse.dltk.debug.ui.breakpoints.BreakpointUtils;
 import org.eclipse.dltk.debug.ui.breakpoints.ScriptToggleBreakpointAdapter;
 import org.eclipse.dltk.internal.ui.editor.ScriptEditor;
 import org.eclipse.dltk.javascript.internal.debug.JavaScriptDebugConstants;
+import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.DLTKUIPlugin;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.BadPartitioningException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -54,28 +57,41 @@ public class JavaScriptToggleBreakpointAdapter extends
 							.getDocument();
 
 					IRegion region = doc.getLineInformation(lineNumber - 1);
-					String string = doc.get(region.getOffset(), region
-							.getLength());
-					int index = string.indexOf("function");
+					String string = doc.get(region.getOffset(),
+							region.getLength());
+					int index = string.indexOf("function ");
 					if (index != -1) {
-						string = string.substring(index + "function".length())
-								.trim();
-						int apos = string.indexOf('(');
-						if (apos >= 0) {
-							string = string.substring(0, apos).trim();
+						String contentType = IDocument.DEFAULT_CONTENT_TYPE;
+						if (doc instanceof IDocumentExtension3) {
+							contentType = ((IDocumentExtension3) doc)
+									.getContentType(
+											IJavaScriptPartitions.JS_PARTITIONING,
+											region.getOffset() + index, true);
 						}
+						if (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType)) {
 
-						BreakpointUtils.addMethodEntryBreakpoint(textEditor,
-								lineNumber, string);
+							string = string.substring(
+									index + "function ".length()).trim();
+							int apos = string.indexOf('(');
+							if (apos >= 0) {
+								string = string.substring(0, apos).trim();
+							}
 
-						return;
+							BreakpointUtils.addMethodEntryBreakpoint(
+									textEditor, lineNumber, string);
+
+							return;
+						}
 					}
 				} catch (BadLocationException e) {
 					DLTKDebugPlugin.log(e);
 					return;
+				} catch (BadPartitioningException e) {
+					DLTKDebugPlugin.log(e);
+					return;
 				}
 			}
-			//else
+			// else
 			BreakpointUtils.addLineBreakpoint(textEditor, lineNumber);
 		}
 	}
@@ -104,8 +120,8 @@ public class JavaScriptToggleBreakpointAdapter extends
 							.getDocument();
 					IRegion region = doc.getLineInformation(textSelection
 							.getStartLine());
-					String string = doc.get(region.getOffset(), region
-							.getLength());
+					String string = doc.get(region.getOffset(),
+							region.getLength());
 
 					return string.indexOf('=') != -1
 							|| string.trim().startsWith("var ");
@@ -148,8 +164,8 @@ public class JavaScriptToggleBreakpointAdapter extends
 					IDocument doc = scriptEditor.getScriptSourceViewer()
 							.getDocument();
 					IRegion region = doc.getLineInformation(lineNumber - 1);
-					String string = doc.get(region.getOffset(), region
-							.getLength());
+					String string = doc.get(region.getOffset(),
+							region.getLength());
 
 					int index = string.indexOf('=');
 					if (index != -1) {
