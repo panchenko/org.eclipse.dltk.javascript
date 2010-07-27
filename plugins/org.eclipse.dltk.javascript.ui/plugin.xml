@@ -431,6 +431,11 @@
      <provider
            class="org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider"
            id="org.eclipse.dltk.javascript.ui.javascriptDocumentationProvider"
+           nature="org.eclipse.dltk.javascript.core.nature">           
+     </provider>
+     <provider
+           class="org.eclipse.dltk.javascript.scriptdoc.BuiltinElementDocumentationProvider"
+           id="org.eclipse.dltk.javascript.ui.builtinDocumentationProvider"
            nature="org.eclipse.dltk.javascript.core.nature">
      </provider>
   </extension>   
