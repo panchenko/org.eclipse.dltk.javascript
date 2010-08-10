@@ -438,6 +438,11 @@
            id="org.eclipse.dltk.javascript.ui.builtinDocumentationProvider"
            nature="org.eclipse.dltk.javascript.core.nature">
      </provider>
+     <provider
+           class="org.eclipse.dltk.javascript.scriptdoc.ElementDocumentationProvider"
+           id="org.eclipse.dltk.javascript.ui.builtinDocumentationProvider"
+           nature="org.eclipse.dltk.javascript.core.nature">
+     </provider>
   </extension>   
   <extension
        point="org.eclipse.ui.editors.templates">

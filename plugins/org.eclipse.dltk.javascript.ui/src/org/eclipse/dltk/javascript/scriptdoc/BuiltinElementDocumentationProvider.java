@@ -12,10 +12,10 @@
 package org.eclipse.dltk.javascript.scriptdoc;
 
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.dltk.core.IDocumentableElement;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IProjectFragment;
@@ -24,24 +24,17 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProvider;
-import org.eclipse.dltk.ui.documentation.IScriptDocumentationProviderExtension2;
-import org.eclipse.dltk.ui.documentation.TextDocumentationResponse;
 
 public class BuiltinElementDocumentationProvider implements
-		IScriptDocumentationProvider, IScriptDocumentationProviderExtension2 {
-
-	public Reader getInfo(IMember element, boolean lookIntoParents,
-			boolean lookIntoExternal) {
-		return null;
-	}
+		IScriptDocumentationProvider {
 
 	public Reader getInfo(String content) {
 		return null;
 	}
 
-	public IDocumentationResponse getDocumentationFor(IDocumentableElement element) {
+	public Reader getInfo(IMember element, boolean lookIntoParents,
+			boolean lookIntoExternal) {
 		final IProjectFragment fragment = (IProjectFragment) element
 				.getAncestor(IModelElement.PROJECT_FRAGMENT);
 		if (fragment != null && fragment.isBuiltin()) {
@@ -77,11 +70,10 @@ public class BuiltinElementDocumentationProvider implements
 	 * @param type
 	 * @return
 	 */
-	private static IDocumentationResponse documentationFor(
-			IDocumentableElement element, Element type) {
+	private static Reader documentationFor(IMember element, Element type) {
 		if (type.getDescription() != null
 				&& type.getDescription().length() != 0) {
-			return new TextDocumentationResponse(element, type.getDescription());
+			return new StringReader(type.getDescription());
 		}
 		return null;
 	}
