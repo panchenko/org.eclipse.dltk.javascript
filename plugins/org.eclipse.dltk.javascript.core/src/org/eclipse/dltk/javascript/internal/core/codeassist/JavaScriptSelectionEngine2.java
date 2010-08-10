@@ -79,7 +79,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 						throw new ModelElementFound(element);
 					}
 				} catch (ModelException e) {
-					// 
+					//
 				}
 			}
 			return true;
@@ -136,11 +136,12 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					if (location == ReferenceLocation.UNKNOWN) {
 						return null;
 					}
-					return new IModelElement[] { new LocalVariable(module
-							.getModelElement(), value.getName(), location
-							.getDeclarationStart(), location
-							.getDeclarationEnd(), location.getNameStart(),
-							location.getNameEnd() - 1, null) };
+					return new IModelElement[] { new LocalVariable(
+							module.getModelElement(), value.getName(),
+							location.getDeclarationStart(),
+							location.getDeclarationEnd(),
+							location.getNameStart(), location.getNameEnd() - 1,
+							null) };
 				} else if (kind == ReferenceKind.FUNCTION) {
 					final ReferenceLocation location = value.getLocation();
 					if (DEBUG) {
@@ -191,9 +192,11 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				IModelElement me = convert(module, element);
 				if (me != null) {
 					result.add(me);
+				} else {
+					reportForeignElement(element);
 				}
 			} catch (ModelException e) {
-				// 
+				//
 			}
 		}
 		return result.toArray(new IModelElement[result.size()]);
