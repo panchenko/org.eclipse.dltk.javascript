@@ -87,13 +87,13 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 
 	}
 
-	public void select(IModuleSource module, int position, int i) {
+	public IModelElement[] select(IModuleSource module, int position, int i) {
 		if (!(module.getModelElement() instanceof ISourceModule)) {
-			return;
+			return null;
 		}
 		String content = module.getSourceContents();
 		if (position < 0 || position > content.length()) {
-			return;
+			return null;
 		}
 		if (DEBUG) {
 			System.out.println("select in " + module.getFileName() + " at "
@@ -119,7 +119,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					if (DEBUG) {
 						System.out.println("value is null or not found");
 					}
-					return;
+					return null;
 				}
 				final ReferenceKind kind = value.getKind();
 				if (DEBUG) {
@@ -134,21 +134,20 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 						System.out.println(location);
 					}
 					if (location == ReferenceLocation.UNKNOWN) {
-						return;
+						return null;
 					}
-					reportModelElement(new LocalVariable(module.getModelElement(), value
-							.getName(), location.getDeclarationStart(),
-							location.getDeclarationEnd(), location
-									.getNameStart(), location.getNameEnd() - 1,
-							null));
-					return;
+					return new IModelElement[] { new LocalVariable(module
+							.getModelElement(), value.getName(), location
+							.getDeclarationStart(), location
+							.getDeclarationEnd(), location.getNameStart(),
+							location.getNameEnd() - 1, null) };
 				} else if (kind == ReferenceKind.FUNCTION) {
 					final ReferenceLocation location = value.getLocation();
 					if (DEBUG) {
 						System.out.println(location);
 					}
 					if (location == ReferenceLocation.UNKNOWN) {
-						return;
+						return null;
 					}
 					try {
 						m.reconcile(false, null, null);
@@ -157,29 +156,26 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					} catch (ModelException e) {
 						e.printStackTrace();
 					} catch (ModelElementFound e) {
-						reportModelElement(e.element);
-						return;
+						return new IModelElement[] { e.element };
 					}
 				} else if (kind == ReferenceKind.METHOD
 						|| kind == ReferenceKind.PROPERTY) {
 					final Collection<Member> members = JavaScriptValidations
 							.extractElements(value, Member.class);
 					if (members != null) {
-						reportModelElements(convert(m, members));
-						return;
+						return convert(m, members);
 					}
 				} else if (kind == ReferenceKind.TYPE) {
 					final Collection<Type> types = value.getTypes();
 					if (types != null) {
-						reportModelElements(convert(m, types));
-						return;
+						return convert(m, types);
 					}
 				}
 			}
 		}
 
 		// TODO Auto-generated method stub
-		return;
+		return null;
 	}
 
 	/**

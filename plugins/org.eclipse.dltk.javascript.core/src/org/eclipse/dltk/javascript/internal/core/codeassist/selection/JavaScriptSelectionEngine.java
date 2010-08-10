@@ -47,7 +47,7 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 
 	IModuleSource cu;
 
-	public void select(IModuleSource cu, int offset, int i) {
+	public IModelElement[] select(IModuleSource cu, int offset, int i) {
 		String content = cu.getSourceContents();
 		String fileName = cu.getFileName();
 		this.cu = cu;
@@ -81,7 +81,9 @@ public class JavaScriptSelectionEngine extends ScriptSelectionEngine {
 				result.remove(j);
 			}
 		}
-		reportModelElements(result);
+		IModelElement[] resultA = new IModelElement[result.size()];
+		result.toArray(resultA);
+		return resultA;
 	}
 
 	private void processGlobals(ReferenceResolverContext rc, final List result,
