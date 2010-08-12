@@ -11,9 +11,9 @@ package org.eclipse.dltk.internal.javascript.reference.resolvers;
 
 import java.io.Reader;
 
+@Deprecated
 public interface IResolvableMember {
 
-	Reader getInfo(boolean lookIntoParents,
-			boolean lookIntoExternal);
+	Reader getInfo(boolean lookIntoParents, boolean lookIntoExternal);
 
 }
