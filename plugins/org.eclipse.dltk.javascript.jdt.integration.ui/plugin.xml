@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.dltk.javascript.jdt.integration.objectContribution2"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="org.eclipse.dltk.javascript.jdt.integration.ui.AddJsNatureAction"
+               enablesFor="1"
+               icon="icons/javascript.gif"
+               id="org.eclipse.dltk.javascript.jdt.integration.action2"
+               label="Add JavaScript Nature"
+               menubarPath="org.eclipse.ui.projectConfigure/additions"
+               style="push">
+         </action>
+         <visibility>
+         	<and>
+         		<objectState
+                  name="nature"
+                  value="org.eclipse.jdt.core.javanature">
+            	</objectState>
+				<not>
+				<objectState
+                  name="nature"
+                  value="org.eclipse.dltk.javascript.core.nature">
+            	</objectState>
+				</not>            			
+         	</and>
+         </visibility>            
+      </objectContribution>
+   </extension>
+   <extension point="org.eclipse.dltk.ui.editorAdapter">
+      <adapter class="org.eclipse.dltk.javascript.jdt.integration.ui.JavaEditorAdapter">
+      </adapter>
+   </extension>
+</plugin>
