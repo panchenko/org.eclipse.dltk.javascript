@@ -14,19 +14,13 @@ package org.eclipse.dltk.javascript.jdt.integration;
 
 import java.io.Reader;
 
-import org.eclipse.dltk.core.IForeignElement;
 import org.eclipse.dltk.internal.core.ModelElement;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableMember;
 import org.eclipse.dltk.internal.javascript.typeinference.FakeField;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMember;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jdt.ui.JavadocContentAccess;
-import org.eclipse.ui.PartInitException;
 
-final class JavaReferenceFakeField extends FakeField implements
-		IForeignElement, IResolvableMember {
+public class JavaReferenceFakeField extends FakeField implements
+		IResolvableMember {
 
 	final IJavaElement element;
 
@@ -36,28 +30,20 @@ final class JavaReferenceFakeField extends FakeField implements
 		this.element = res;
 	}
 
-	public void codeSelect() {
-		try {
-			JavaUI.openInEditor(element, true, true);
-		} catch (PartInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JavaModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	public IJavaElement getJavaElement() {
+		return element;
 	}
 
 	public Reader getInfo(boolean lookIntoParents, boolean lookIntoExternal) {
-		try {
-			Reader contentReader = JavadocContentAccess.getHTMLContentReader(
-					(IMember) element, true, true);
-			// System.out.println(element);
-			return contentReader;
-		} catch (JavaModelException e) {
-			return null;
-		}
+		// try {
+		// FIXME Reader contentReader =
+		// JavadocContentAccess.getHTMLContentReader(
+		// (IMember) element, true, true);
+		// // System.out.println(element);
+		// return contentReader;
+		// } catch (JavaModelException e) {
+		return null;
+		// }
 
 	}
 
