@@ -20,6 +20,9 @@ import org.eclipse.dltk.ui.documentation.IScriptDocumentationProvider;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProviderExtension2;
 import org.eclipse.dltk.ui.documentation.TextDocumentationResponse;
 
+/**
+ * @since 3.0
+ */
 public class ElementDocumentationProvider implements
 		IScriptDocumentationProvider, IScriptDocumentationProviderExtension2 {
 

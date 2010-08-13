@@ -26,6 +26,9 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProvider;
 
+/**
+ * @since 3.0
+ */
 public class BuiltinElementDocumentationProvider implements
 		IScriptDocumentationProvider {
 
