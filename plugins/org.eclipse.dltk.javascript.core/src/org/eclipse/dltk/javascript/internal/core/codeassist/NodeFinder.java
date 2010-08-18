@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
@@ -23,15 +28,15 @@ public class NodeFinder extends ASTVisitor {
 	final int start;
 	final int end;
 
-	public NodeFinder(String content, int position) {
-		int start = position;
+	public NodeFinder(String content, int s, int e) {
+		int start = s;
 		while (start > 0
 				&& (content.charAt(start - 1) == ' ' || content
 						.charAt(start - 1) == '\t')) {
 			--start;
 		}
 		this.start = start;
-		int end = position;
+		int end = e;
 		while (end < content.length()
 				&& Character.isWhitespace(content.charAt(end))) {
 			++end;
@@ -107,11 +112,24 @@ public class NodeFinder extends ASTVisitor {
 		if (!traverse(script)) {
 			return null;
 		}
+		final List<ASTNode> nodes = new ArrayList<ASTNode>();
 		if (isValid(before)) {
-			return before;
+			nodes.add(before);
 		}
 		if (isValid(after)) {
-			return after;
+			nodes.add(after);
+		}
+		if (!nodes.isEmpty()) {
+			if (nodes.size() > 1) {
+				Collections.sort(nodes, new Comparator<ASTNode>() {
+					public int compare(ASTNode o1, ASTNode o2) {
+						int distance1 = ((o1.sourceEnd() + o1.sourceStart()) - (start + end)) / 2;
+						int distance2 = ((o2.sourceEnd() + o2.sourceStart()) - (start + end)) / 2;
+						return Math.abs(distance1) - Math.abs(distance2);
+					}
+				});
+			}
+			return nodes.get(0);
 		}
 		return null;
 	}

@@ -80,7 +80,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				return cu.getModelElement();
 			}
 		}, null);
-		final NodeFinder nodeFinder = new NodeFinder(content, position);
+		final NodeFinder nodeFinder = new NodeFinder(content, position, i);
 		final org.eclipse.dltk.javascript.ast.Type typeNode = nodeFinder
 				.locateType(script);
 		if (typeNode != null) {
