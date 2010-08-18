@@ -32,8 +32,8 @@
          </visibility>            
       </objectContribution>
    </extension>
-   <extension point="org.eclipse.dltk.ui.editorAdapter">
-      <adapter class="org.eclipse.dltk.javascript.jdt.integration.ui.JavaEditorAdapter">
-      </adapter>
+   <extension point="org.eclipse.dltk.ui.openDelegate">
+      <delegate class="org.eclipse.dltk.javascript.jdt.integration.ui.JavaEditorAdapter">
+      </delegate>
    </extension>
 </plugin>
