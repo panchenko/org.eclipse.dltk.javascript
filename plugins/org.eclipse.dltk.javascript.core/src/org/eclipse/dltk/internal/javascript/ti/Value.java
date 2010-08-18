@@ -241,6 +241,10 @@ public class Value implements IValue {
 		if (child == null) {
 			child = inherited.get(name);
 			if (child == null) {
+				child = findMember(name, true);
+				if (child != null) {
+					return child;
+				}
 				if (hasReferences()) {
 					Set<Value> result = new HashSet<Value>();
 					execute(this, new CreateChildOperation(name), result,
