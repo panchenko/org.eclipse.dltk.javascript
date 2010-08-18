@@ -51,55 +51,60 @@ public class SelectionTests extends AbstractModelTests {
 				.getSelectionEngine(JavaScriptNature.NATURE_ID);
 	}
 
-	public void test1() throws ModelException {
+	private IModelElement[] select(IModuleSource module, final int position) {
 		ISelectionEngine engine = getEngine();
+		return engine.select(module, position, position);
+	}
+
+	public void test1() throws ModelException {
 		IModuleSource module = (IModuleSource) getSourceModule("selection",
 				"src", "selection1.js");
-		IModelElement[] elements = engine.select(module, lastPositionInFile(
-				"test1()", module, false), 0);
+		IModelElement[] elements = select(module,
+				lastPositionInFile("test1()", module, false));
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
 		final int offset = method.getSourceRange().getOffset();
-		assertEquals("function", module.getSourceContents().substring(offset,
-				offset + 8));
+		assertEquals("function",
+				module.getSourceContents().substring(offset, offset + 8));
 		final ISourceRange nameRange = method.getNameRange();
-		assertEquals("test1", module.getSourceContents().substring(
-				nameRange.getOffset(),
-				nameRange.getOffset() + nameRange.getLength()));
+		assertEquals(
+				"test1",
+				module.getSourceContents().substring(nameRange.getOffset(),
+						nameRange.getOffset() + nameRange.getLength()));
 	}
 
 	public void test2() throws ModelException {
-		ISelectionEngine engine = getEngine();
 		IModuleSource module = (IModuleSource) getSourceModule("selection",
 				"src", "selection1.js");
-		IModelElement[] elements = engine.select(module, lastPositionInFile(
-				"test2()", module, false), 0);
+		IModelElement[] elements = select(module,
+				lastPositionInFile("test2()", module, false));
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
 		final int offset = method.getSourceRange().getOffset();
-		assertEquals("function", module.getSourceContents().substring(offset,
-				offset + 8));
+		assertEquals("function",
+				module.getSourceContents().substring(offset, offset + 8));
 		final ISourceRange nameRange = method.getNameRange();
-		assertEquals("test2", module.getSourceContents().substring(
-				nameRange.getOffset(),
-				nameRange.getOffset() + nameRange.getLength()));
+		assertEquals(
+				"test2",
+				module.getSourceContents().substring(nameRange.getOffset(),
+						nameRange.getOffset() + nameRange.getLength()));
 	}
 
 	public void test3() throws ModelException {
-		ISelectionEngine engine = getEngine();
 		IModuleSource module = (IModuleSource) getSourceModule("selection",
 				"src", "selection1.js");
-		IModelElement[] elements = engine.select(module, lastPositionInFile(
-				"test3()", module, false), 0);
+		IModelElement[] elements = select(module,
+				lastPositionInFile("test3()", module, false));
 		assertEquals(1, elements.length);
 		final IMethod method = (IMethod) elements[0];
 		final int offset = method.getSourceRange().getOffset();
-		assertEquals("function", module.getSourceContents().substring(offset,
-				offset + 8));
+		assertEquals("function",
+				module.getSourceContents().substring(offset, offset + 8));
 		final ISourceRange nameRange = method.getNameRange();
-		assertEquals("test3", module.getSourceContents().substring(
-				nameRange.getOffset(),
-				nameRange.getOffset() + nameRange.getLength()));
+		assertEquals(
+				"test3",
+				module.getSourceContents().substring(nameRange.getOffset(),
+						nameRange.getOffset() + nameRange.getLength()));
 	}
 
 }
