@@ -40,8 +40,9 @@ public class ElementDocumentationProvider implements
 			final Element jsElement = (Element) element;
 			if (jsElement.getDescription() != null
 					&& jsElement.getDescription().length() != 0) {
+				// TODO improve
 				return new TextDocumentationResponse(element,
-						jsElement.getDescription());
+						jsElement.getDescription(), jsElement.getName());
 			}
 		}
 		return null;
