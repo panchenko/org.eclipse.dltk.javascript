@@ -20,6 +20,7 @@ import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.core.ScriptModelUtil;
 import org.eclipse.dltk.core.tests.model.AbstractModelTests;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 
@@ -53,7 +54,9 @@ public class SelectionTests extends AbstractModelTests {
 
 	private IModelElement[] select(IModuleSource module, final int position) {
 		ISelectionEngine engine = getEngine();
-		return engine.select(module, position, position);
+		final IModelElement[] result = engine
+				.select(module, position, position);
+		return result != null ? result : ScriptModelUtil.NO_ELEMENTS;
 	}
 
 	public void test1() throws ModelException {
