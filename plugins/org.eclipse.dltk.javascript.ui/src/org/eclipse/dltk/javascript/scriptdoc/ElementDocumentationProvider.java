@@ -15,6 +15,10 @@ import java.io.Reader;
 
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProvider;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProviderExtension2;
@@ -40,12 +44,51 @@ public class ElementDocumentationProvider implements
 			final Element jsElement = (Element) element;
 			if (jsElement.getDescription() != null
 					&& jsElement.getDescription().length() != 0) {
-				// TODO improve
 				return new TextDocumentationResponse(element,
-						jsElement.getDescription(), jsElement.getName());
+						getElementTitle(jsElement), jsElement.getDescription());
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @param element
+	 * @return
+	 */
+	private String getElementTitle(Element element) {
+		final StringBuilder sb = new StringBuilder();
+		if (element instanceof Member) {
+			final Member member = (Member) element;
+			if (member.getDeclaringType() != null) {
+				sb.append(member.getDeclaringType().getName());
+				sb.append('.');
+			}
+		}
+		sb.append(element.getName());
+		if (element instanceof Property) {
+			final Property property = (Property) element;
+			if (property.getType() != null) {
+				sb.append(": "); //$NON-NLS-1$
+				sb.append(property.getType().getName());
+			}
+		} else if (element instanceof Method) {
+			final Method method = (Method) element;
+			sb.append('(');
+			int paramCount = 0;
+			for (Parameter parameter : method.getParameters()) {
+				if (paramCount != 0) {
+					sb.append(", "); //$NON-NLS-1$
+				}
+				sb.append(parameter.getName());
+				++paramCount;
+			}
+			sb.append(')');
+			if (method.getType() != null) {
+				sb.append(": "); //$NON-NLS-1$
+				sb.append(method.getType().getName());
+			}
+		}
+		return sb.toString();
 	}
 
 }
