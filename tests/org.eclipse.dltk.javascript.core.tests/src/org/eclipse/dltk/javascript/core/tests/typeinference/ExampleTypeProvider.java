@@ -66,6 +66,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 			{
 				Method method5 = TypeInfoModelFactory.eINSTANCE.createMethod();
 				method5.setName("run");
+				method5.setDescription("description for run(language,code)");
 				Parameter p = TypeInfoModelFactory.eINSTANCE.createParameter();
 				p.setName("language");
 				p.setType(context.getType(ITypeNames.STRING));
@@ -79,11 +80,13 @@ public class ExampleTypeProvider implements ITypeProvider {
 			{
 				Method method3 = TypeInfoModelFactory.eINSTANCE.createMethod();
 				method3.setName("run");
+				method3.setDescription("description for run()");
 				type.getMembers().add(method3);
 			}
 			{
 				Method method4 = TypeInfoModelFactory.eINSTANCE.createMethod();
 				method4.setName("run");
+				method4.setDescription("description for run(code)");
 				Parameter p = TypeInfoModelFactory.eINSTANCE.createParameter();
 				p.setName("code");
 				p.setType(context.getType(ITypeNames.STRING));
