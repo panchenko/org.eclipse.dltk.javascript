@@ -30,6 +30,7 @@ import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.model.LocalVariable;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -113,7 +114,11 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 						inferencer2, node);
 				inferencer2.setVisitor(visitor);
 				inferencer2.setModelElement(module.getModelElement());
-				inferencer2.doInferencing(script);
+				try {
+					inferencer2.doInferencing(script);
+				} catch (PositionReachedException e) {
+					//
+				}
 				final IValueReference value = visitor.getValue();
 				if (value == null) {
 					if (DEBUG) {

@@ -15,6 +15,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -39,6 +40,7 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 		final IValueReference result = super.visit(node);
 		if (node == target) {
 			value = result;
+			earlyExit();
 		}
 		return result;
 	}
@@ -49,6 +51,7 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 		final IValueReference result = super.extractNamedChild(parent, name);
 		if (name == target) {
 			value = result;
+			earlyExit();
 		}
 		return result;
 	}
@@ -63,8 +66,15 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 			} else {
 				value = null;
 			}
+			earlyExit();
 		}
 		return result;
+	}
+
+	private void earlyExit() {
+		if (value == null || value.getKind() != ReferenceKind.UNKNOWN) {
+			throw new PositionReachedException(target, value);
+		}
 	}
 
 }
