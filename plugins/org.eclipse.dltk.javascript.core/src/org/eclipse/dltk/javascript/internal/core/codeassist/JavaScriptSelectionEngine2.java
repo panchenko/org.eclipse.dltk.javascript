@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.Path;
@@ -43,6 +44,8 @@ import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
@@ -164,12 +167,23 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					} catch (ModelElementFound e) {
 						return new IModelElement[] { e.element };
 					}
-				} else if (kind == ReferenceKind.METHOD
-						|| kind == ReferenceKind.PROPERTY) {
-					final Collection<Member> members = JavaScriptValidations
-							.extractElements(value, Member.class);
-					if (members != null) {
-						return convert(m, members);
+				} else if (kind == ReferenceKind.PROPERTY) {
+					final Collection<Property> properties = JavaScriptValidations
+							.extractElements(value, Property.class);
+					if (properties != null) {
+						return convert(m, properties);
+					}
+				} else if (kind == ReferenceKind.METHOD) {
+					final List<Method> methods = JavaScriptValidations
+							.extractElements(value, Method.class);
+					if (methods != null) {
+						IValueReference[] arguments = visitor.getArguments();
+						if (arguments == null) {
+							arguments = new IValueReference[0];
+						}
+						final Method method = JavaScriptValidations
+								.selectMethod(methods, arguments);
+						return convert(m, Collections.singletonList(method));
 					}
 				} else if (kind == ReferenceKind.TYPE) {
 					final Collection<Type> types = value.getTypes();

@@ -27,6 +27,7 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class JavaScriptValidations {
@@ -58,8 +59,8 @@ public class JavaScriptValidations {
 		if (module == null) {
 			parser.setTypeInformationEnabled(true);
 		}
-		final Script script = parser.parse(context, context
-				.getProblemReporter());
+		final Script script = parser.parse(context,
+				context.getProblemReporter());
 		context.set(IBuildContext.ATTR_MODULE_DECLARATION, script);
 		return script;
 	}
@@ -78,8 +79,8 @@ public class JavaScriptValidations {
 	}
 
 	protected static Reporter createReporter(IBuildContext context) {
-		return new Reporter(context.getLineTracker(), context
-				.getProblemReporter());
+		return new Reporter(context.getLineTracker(),
+				context.getProblemReporter());
 	}
 
 	/**
@@ -108,6 +109,34 @@ public class JavaScriptValidations {
 			return result;
 		}
 		return null;
+	}
+
+	/**
+	 * @param methods
+	 * @param arguments
+	 * @return
+	 */
+	public static Method selectMethod(List<Method> methods,
+			IValueReference[] arguments) {
+		if (methods.size() == 1) {
+			return methods.get(0);
+		}
+		Method argCountMatches = null;
+		for (Method method : methods) {
+			if (method.getParameters().size() == arguments.length) {
+				if (argCountMatches == null) {
+					argCountMatches = method;
+				} else {
+					argCountMatches = null;
+					break;
+				}
+			}
+		}
+		if (argCountMatches != null) {
+			return argCountMatches;
+		}
+		// TODO implement additional checks
+		return methods.get(0);
 	}
 
 }

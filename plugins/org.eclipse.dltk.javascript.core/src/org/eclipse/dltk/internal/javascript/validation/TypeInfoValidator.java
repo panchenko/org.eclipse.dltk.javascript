@@ -110,25 +110,21 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				final List<Method> methods = JavaScriptValidations
 						.extractElements(reference, Method.class);
 				if (methods != null) {
-					Method method = selectMethod(methods, arguments);
+					Method method = JavaScriptValidations.selectMethod(methods,
+							arguments);
 					if (method == null) {
 						final Type type = JavaScriptValidations
 								.typeOf(reference.getParent());
 						if (type != null && type.getKind() == TypeKind.JAVA) {
-							reporter
-									.reportProblem(
-											JavaScriptProblems.WRONG_PARAMETERS,
-											NLS
-													.bind(
-															ValidationMessages.MethodNotSelected,
-															new String[] {
-																	reference
-																			.getName(),
-																	type
-																			.getName(),
-																	describeArgTypes(arguments) }),
-											methodNode.sourceStart(),
-											methodNode.sourceEnd());
+							reporter.reportProblem(
+									JavaScriptProblems.WRONG_PARAMETERS,
+									NLS.bind(
+											ValidationMessages.MethodNotSelected,
+											new String[] { reference.getName(),
+													type.getName(),
+													describeArgTypes(arguments) }),
+									methodNode.sourceStart(), methodNode
+											.sourceEnd());
 						}
 						return null;
 					}
@@ -218,34 +214,6 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			return sb.toString();
 		}
 
-		/**
-		 * @param methods
-		 * @param arguments
-		 * @return
-		 */
-		private Method selectMethod(List<Method> methods,
-				IValueReference[] arguments) {
-			if (methods.size() == 1) {
-				return methods.get(0);
-			}
-			Method argCountMatches = null;
-			for (Method method : methods) {
-				if (method.getParameters().size() == arguments.length) {
-					if (argCountMatches == null) {
-						argCountMatches = method;
-					} else {
-						argCountMatches = null;
-						break;
-					}
-				}
-			}
-			if (argCountMatches != null) {
-				return argCountMatches;
-			}
-			// TODO implement additional checks
-			return methods.get(0);
-		}
-
 		private <E extends Element> E extractElement(IValueReference reference,
 				Class<E> elementType) {
 			final List<E> elements = JavaScriptValidations.extractElements(
@@ -310,15 +278,15 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			final Property property = extractElement(result, Property.class);
 			if (property != null) {
 				if (property.isDeprecated()) {
-					final Property parentProperty = extractElement(result
-							.getParent(), Property.class);
+					final Property parentProperty = extractElement(
+							result.getParent(), Property.class);
 					if (parentProperty != null
 							&& parentProperty.getDeclaringType() == null) {
 						reportDeprecatedProperty(property, parentProperty,
 								propName);
 					} else {
-						reportDeprecatedProperty(property, property
-								.getDeclaringType(), propName);
+						reportDeprecatedProperty(property,
+								property.getDeclaringType(), propName);
 					}
 				}
 			} else if (JavaScriptValidations.extractElements(result,
@@ -339,8 +307,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				ASTNode node) {
 			final String msg;
 			if (owner instanceof Type) {
-				msg = NLS.bind(ValidationMessages.DeprecatedProperty, property
-						.getName(), owner.getName());
+				msg = NLS.bind(ValidationMessages.DeprecatedProperty,
+						property.getName(), owner.getName());
 			} else if (owner instanceof Property) {
 				msg = NLS.bind(ValidationMessages.DeprecatedPropertyOfInstance,
 						property.getName(), owner.getName());
@@ -357,15 +325,17 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			final Type result = super.resolveType(type);
 			if (result != null) {
 				if (result.getKind() == TypeKind.UNKNOWN) {
-					reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE, NLS
-							.bind(ValidationMessages.UnknownType, type
-									.getName()), type.sourceStart(), type
-							.sourceEnd());
+					reporter.reportProblem(
+							JavaScriptProblems.UNKNOWN_TYPE,
+							NLS.bind(ValidationMessages.UnknownType,
+									type.getName()), type.sourceStart(),
+							type.sourceEnd());
 				} else if (result.isDeprecated()) {
-					reporter.reportProblem(JavaScriptProblems.DEPRECATED_TYPE,
-							NLS.bind(ValidationMessages.DeprecatedType, type
-									.getName()), type.sourceStart(), type
-									.sourceEnd());
+					reporter.reportProblem(
+							JavaScriptProblems.DEPRECATED_TYPE,
+							NLS.bind(ValidationMessages.DeprecatedType,
+									type.getName()), type.sourceStart(),
+							type.sourceEnd());
 				}
 			}
 			return result;
