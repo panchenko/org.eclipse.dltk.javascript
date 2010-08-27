@@ -23,6 +23,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	private String name;
 	private Type type;
+	private boolean deprecated;
 
 	public IParameter createParameter() {
 		return new Parameter();
@@ -61,6 +62,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public boolean isDeprecated() {
+		return deprecated;
+	}
+
+	public void setDeprecated(boolean deprecated) {
+		this.deprecated = deprecated;
 	}
 
 	private static class Parameter implements IParameter {

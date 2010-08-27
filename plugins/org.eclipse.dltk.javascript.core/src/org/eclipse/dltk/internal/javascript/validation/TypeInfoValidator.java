@@ -21,8 +21,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.CallExpression;
@@ -161,7 +163,26 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 										reference.getName(), type.getName()),
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
+					} else {
+						Object attribute = reference.getAttribute(
+								IReferenceAttributes.PARAMETERS);
+						if (attribute instanceof JSMethod
+								&& ((JSMethod) attribute).isDeprecated()) {
+							reporter.reportProblem(
+									JavaScriptProblems.DEPRECATED_METHOD,
+									NLS.bind(
+											// TODO there is no type so i guess
+											// we need
+											// ValidationMessages.DeprecatedFunction
+											// ?
+											ValidationMessages.DeprecatedMethod,
+											reference.getName(), null),
+									methodNode.sourceStart(), methodNode
+											.sourceEnd());
+
+						}
 					}
+
 				}
 				return reference.getChild(IValueReference.FUNCTION_OP);
 			} else {

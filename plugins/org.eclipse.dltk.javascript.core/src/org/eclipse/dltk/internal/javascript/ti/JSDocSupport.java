@@ -36,6 +36,17 @@ public class JSDocSupport implements IModelBuilder {
 			parseType(context, method, comment);
 		}
 		parseParams(context, method, comment);
+
+		parseDeprecation(method, comment);
+	}
+
+	private static final String DEPRECATED = "@deprecated";
+
+	private void parseDeprecation(IMethod method, String comment) {
+		int index = comment.indexOf(DEPRECATED);
+		if (index != -1) {
+			method.setDeprecated(true);
+		}
 	}
 
 	private static final String PARAM_TAG = "@param";

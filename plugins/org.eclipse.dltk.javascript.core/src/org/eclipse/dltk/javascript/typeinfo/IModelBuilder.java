@@ -66,6 +66,10 @@ public interface IModelBuilder {
 		 * @return the parameter found or <code>null</code>
 		 */
 		IParameter getParameter(String name);
+
+		void setDeprecated(boolean deprecated);
+
+		boolean isDeprecated();
 	}
 
 	void processMethod(ITypeInfoContext context, FunctionStatement statement,
