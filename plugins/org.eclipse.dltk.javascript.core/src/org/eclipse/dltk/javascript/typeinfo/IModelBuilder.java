@@ -67,8 +67,14 @@ public interface IModelBuilder {
 		 */
 		IParameter getParameter(String name);
 
+		/**
+		 * @since 3.0
+		 */
 		void setDeprecated(boolean deprecated);
 
+		/**
+		 * @since 3.0
+		 */
 		boolean isDeprecated();
 	}
 

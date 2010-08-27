@@ -164,25 +164,19 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
 					} else {
-						Object attribute = reference.getAttribute(
-								IReferenceAttributes.PARAMETERS);
+						Object attribute = reference
+								.getAttribute(IReferenceAttributes.PARAMETERS);
 						if (attribute instanceof JSMethod
 								&& ((JSMethod) attribute).isDeprecated()) {
 							reporter.reportProblem(
-									JavaScriptProblems.DEPRECATED_METHOD,
+									JavaScriptProblems.DEPRECATED_FUNCTION,
 									NLS.bind(
-											// TODO there is no type so i guess
-											// we need
-											// ValidationMessages.DeprecatedFunction
-											// ?
-											ValidationMessages.DeprecatedMethod,
-											reference.getName(), null),
-									methodNode.sourceStart(), methodNode
+											ValidationMessages.DeprecatedFunction,
+											reference.getName()), methodNode
+											.sourceStart(), methodNode
 											.sourceEnd());
-
 						}
 					}
-
 				}
 				return reference.getChild(IValueReference.FUNCTION_OP);
 			} else {

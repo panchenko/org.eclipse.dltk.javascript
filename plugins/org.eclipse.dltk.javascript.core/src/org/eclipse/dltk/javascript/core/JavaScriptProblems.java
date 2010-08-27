@@ -21,6 +21,10 @@ public interface JavaScriptProblems {
 	public static final int UNDEFINED_METHOD = IProblem.MethodRelated + 1;
 	public static final int WRONG_PARAMETERS = IProblem.MethodRelated + 2;
 	public static final int DEPRECATED_METHOD = IProblem.MethodRelated + 3;
+	/**
+	 * @since 3.0
+	 */
+	public static final int DEPRECATED_FUNCTION = IProblem.MethodRelated + 4;
 
 	public static final int UNDEFINED_PROPERTY = IProblem.FieldRelated + 1;
 	public static final int DEPRECATED_PROPERTY = IProblem.FieldRelated + 2;
