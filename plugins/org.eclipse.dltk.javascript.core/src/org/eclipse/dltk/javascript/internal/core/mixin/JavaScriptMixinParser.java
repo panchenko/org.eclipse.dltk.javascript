@@ -93,6 +93,8 @@ public class JavaScriptMixinParser implements IMixinParser {
 			Set<IReference> recursive) {
 		Set<IReference> sm = ref.getChilds(false);
 		String key = ref.getName();
+		if (key == null)
+			key = "";
 		if (sma != null)
 			key = sma + '.' + key;
 		for (IReference refa : sm) {

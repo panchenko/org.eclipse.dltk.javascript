@@ -30,10 +30,10 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 
 import com.xored.org.mozilla.javascript.FunctionNode;
 import com.xored.org.mozilla.javascript.Node;
-import com.xored.org.mozilla.javascript.ScriptOrFnNode;
-import com.xored.org.mozilla.javascript.Token;
 import com.xored.org.mozilla.javascript.Node.Jump;
 import com.xored.org.mozilla.javascript.Node.StringNode;
+import com.xored.org.mozilla.javascript.ScriptOrFnNode;
+import com.xored.org.mozilla.javascript.Token;
 
 public class TypeInferencer {
 
@@ -398,7 +398,9 @@ public class TypeInferencer {
 			final IReference evaluateReference = evaluateReference(fieldId,
 					node.getLastChild(), cs);
 
-			int pos = objId.indexOf('.');
+			int pos = -1;
+			if (objId != null)
+				pos = objId.indexOf('.');
 			String rootName = pos == -1 ? objId : objId.substring(0, pos);
 			IReference root = collection.getReferenceNoParentContext(rootName);
 			if (root == null) {
@@ -442,7 +444,7 @@ public class TypeInferencer {
 			collection.addTransparent(transparentRef);
 			transparentRef.setLocationInformation(new ReferenceLocation(module,
 					node.getPosition(), fieldId.length()));
-			if (root.getName().equals("this")) {
+			if (root.getName() != null && root.getName().equals("this")) {
 				collection.add(transparentRef.getName(), transparentRef);
 			}
 			root.setChild(fieldId, transparentRef);
