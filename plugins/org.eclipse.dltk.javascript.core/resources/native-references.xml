@@ -292,10 +292,12 @@
     <members xsi:type="ref:Property" name="ignoreWhitespace" type="Boolean"/>
     <members xsi:type="ref:Method" name="inScopeNamespaces" type="Array" description="The inScopeNamespaces method returns an Array of Namespace objects representing the namespaces in scope for this XML object in the context of its parent. If the parent of this XML object is modified, the associated namespace declarations may change. The set of namespaces returned by this method may be a super set of the namespaces used by this value."/>
     <members xsi:type="ref:Method" name="insertChildAfter" type="XML" description="The insertChildAfter method inserts the given child2 after the given child1 in this XML object and returns this XML object. If child1 is null, the insertChildAfter method inserts child2 before all children of this XML object (i.e., after none of them). If child1 does not exist in this XML object, it returns without modifying this XML object.">
-      <parameters name="child1 , child2" kind="OPTIONAL"/>
+      <parameters name="child1"/>
+      <parameters name="[child2]" kind="OPTIONAL"/>
     </members>
-    <members xsi:type="ref:Method" name="insertChildBefore" type="XML" description="he insertChildBefore method inserts the given child2 before the given child1 in this XML object and returns this XML object. If child1 is null, the insertChildBefore method inserts child2 after all children in this XML object (i.e., before none of them). If child1 does not exist in this XML object, it returns without modifying this XML object.">
-      <parameters name="child1 , child2" kind="OPTIONAL"/>
+    <members xsi:type="ref:Method" name="insertChildBefore" type="XML" description="The insertChildBefore method inserts the given child2 before the given child1 in this XML object and returns this XML object. If child1 is null, the insertChildBefore method inserts child2 after all children in this XML object (i.e., before none of them). If child1 does not exist in this XML object, it returns without modifying this XML object.">
+      <parameters name="child1"/>
+      <parameters name="[child2]" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Property" name="length" type="Number" description="The length method always returns the integer 1 for XML objects. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value"/>
     <members xsi:type="ref:Method" name="localName" type="String"/>
@@ -316,14 +318,15 @@
       <parameters name="[name]" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="propertyIsEnumerable" type="Boolean" description="The propertyIsEnumerable method returns a Boolean value indicating whether the property P will be included in the set of properties iterated over when this XML object is used in a for-in statement. This method returns truewhen ToString(P) is &quot;0&quot;; otherwise, it returns false. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value">
-      <parameters name=" P " kind="OPTIONAL"/>
+      <parameters name="property"/>
     </members>
     <members xsi:type="ref:Property" name="prototype" type="XML"/>
     <members xsi:type="ref:Method" name="removeNamespace" type="XML" description="The removeNamespace method removes the given namespace from the in scope namespaces of this object and all its descendents, then returns a copy of this XML object. The removeNamespaces method will not remove a namespace from an object where it is referenced by that object�s QName or the QNames of that object�s attributes">
       <parameters name="namespace"/>
     </members>
     <members xsi:type="ref:Method" name="replace" type="XML" description="The replace method replaces the XML properties of this XML object specified by propertyName with value and returns this XML object. If this XML object contains no properties that match propertyName, the replace method returns without modifying this XML object. The propertyName parameter may be a numeric property name, an unqualified name for a set of XML elements, a qualified name for a set of XML elements or the properties wildcard &quot;*&quot;. When the propertyName parameter is an unqualified name, it identifies XML elements in the default namespace. The value parameter may be an XML object, XMLList object or any value that may be converted to a String with ToString(). ">
-      <parameters name="propertyName , value" kind="OPTIONAL"/>
+      <parameters name="propertyName"/>
+      <parameters name="[value]" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="setChildren" type="XML" description="The setChildren method replaces the XML properties of this XML object with a new set of XML properties from value. value may be a single XML object or an XMLList. setChildren returns this XML object.">
       <parameters name="value"/>
