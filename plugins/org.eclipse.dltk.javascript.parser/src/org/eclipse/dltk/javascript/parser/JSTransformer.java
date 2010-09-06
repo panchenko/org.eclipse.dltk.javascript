@@ -1116,7 +1116,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 						.setMessage(
 								kind == SymbolKind.VAR ? JavaScriptParserProblems.VAR_HIDES_ARGUMENT
 										: JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
-								kind.name() + " "
+								kind.name().toLowerCase() + " "
 										+ declaration.getVariableName()
 										+ " hides argument");
 				reporter.report();
