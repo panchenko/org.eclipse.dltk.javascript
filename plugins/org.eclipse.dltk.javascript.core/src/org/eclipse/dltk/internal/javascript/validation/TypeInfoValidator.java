@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		private final Reporter reporter;
 
+		private final List<CallExpression> unresolvedCallExpressions = new ArrayList<CallExpression>();
+
 		public ValidationVisitor(ITypeInferenceContext context,
 				Reporter reporter) {
 			super(context);
@@ -78,10 +81,20 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		@Override
 		public IValueReference visit(ASTNode node) {
+			boolean rootNode = visitStack.isEmpty();
 			visitStack.push(node);
 			try {
 				return super.visit(node);
 			} finally {
+				if (rootNode && !unresolvedCallExpressions.isEmpty()) {
+					CallExpression[] copy = unresolvedCallExpressions
+							.toArray(new CallExpression[unresolvedCallExpressions
+									.size()]);
+					unresolvedCallExpressions.clear();
+					for (CallExpression expression : copy) {
+						visitCallExpressionImpl(expression, true);
+					}
+				}
 				visitStack.pop();
 			}
 		}
@@ -93,6 +106,15 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		@Override
 		public IValueReference visitCallExpression(CallExpression node) {
+			return visitCallExpressionImpl(node, false);
+		}
+
+		/**
+		 * @param node
+		 * @return
+		 */
+		private IValueReference visitCallExpressionImpl(CallExpression node,
+				boolean reportNotUsedCalls) {
 			final ASTNode expression = node.getExpression();
 			final ASTNode methodNode;
 			if (expression instanceof PropertyExpression) {
@@ -103,15 +125,16 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			modes.put(expression, VisitorMode.CALL);
 			final IValueReference reference = visit(expression);
 			modes.remove(expression);
-			final List<ASTNode> callArgs = node.getArguments();
-			IValueReference[] arguments = new IValueReference[callArgs.size()];
-			for (int i = 0, size = callArgs.size(); i < size; ++i) {
-				arguments[i] = visit(callArgs.get(i));
-			}
 			if (reference != null) {
 				final List<Method> methods = JavaScriptValidations
 						.extractElements(reference, Method.class);
 				if (methods != null) {
+					final List<ASTNode> callArgs = node.getArguments();
+					IValueReference[] arguments = new IValueReference[callArgs
+							.size()];
+					for (int i = 0, size = callArgs.size(); i < size; ++i) {
+						arguments[i] = visit(callArgs.get(i));
+					}
 					Method method = JavaScriptValidations.selectMethod(methods,
 							arguments);
 					if (method == null) {
@@ -164,8 +187,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
 					} else {
-						Object attribute = reference
-								.getAttribute(IReferenceAttributes.PARAMETERS);
+						Object attribute = reference.getAttribute(
+								IReferenceAttributes.PARAMETERS);
 						if (attribute instanceof JSMethod
 								&& ((JSMethod) attribute).isDeprecated()) {
 							reporter.reportProblem(
@@ -175,6 +198,18 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 											reference.getName()), methodNode
 											.sourceStart(), methodNode
 											.sourceEnd());
+						} else if (attribute == null) {
+							if (reportNotUsedCalls) {
+								reporter.reportProblem(
+										JavaScriptProblems.UNDEFINED_METHOD,
+										NLS.bind(
+												ValidationMessages.UndefinedMethodInScript,
+												reference.getName()),
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
+							} else {
+								unresolvedCallExpressions.add(node);
+							}
 						}
 					}
 				}
