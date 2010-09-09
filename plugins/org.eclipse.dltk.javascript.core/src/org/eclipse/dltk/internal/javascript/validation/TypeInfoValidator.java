@@ -24,6 +24,7 @@ import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -35,6 +36,7 @@ import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -67,7 +69,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		private final Reporter reporter;
 
-		private final List<CallExpression> unresolvedCallExpressions = new ArrayList<CallExpression>();
+		private final List<Object[]> unresolvedCallExpressions = new ArrayList<Object[]>();
 
 		public ValidationVisitor(ITypeInferenceContext context,
 				Reporter reporter) {
@@ -87,12 +89,14 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				return super.visit(node);
 			} finally {
 				if (rootNode && !unresolvedCallExpressions.isEmpty()) {
-					CallExpression[] copy = unresolvedCallExpressions
-							.toArray(new CallExpression[unresolvedCallExpressions
-									.size()]);
-					unresolvedCallExpressions.clear();
-					for (CallExpression expression : copy) {
-						visitCallExpressionImpl(expression, true);
+					for (Object[] expression : unresolvedCallExpressions) {
+						enterContext((IValueCollection) expression[1]);
+						try {
+							visitCallExpressionImpl(
+									(CallExpression) expression[0], true);
+						} finally {
+							leaveContext();
+						}
 					}
 				}
 				visitStack.pop();
@@ -140,7 +144,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					if (method == null) {
 						final Type type = JavaScriptValidations
 								.typeOf(reference.getParent());
-						if (type != null && type.getKind() == TypeKind.JAVA) {
+						if (type != null) {
+							if (type.getKind() == TypeKind.JAVA) {
 							reporter.reportProblem(
 									JavaScriptProblems.WRONG_PARAMETERS,
 									NLS.bind(
@@ -150,6 +155,11 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 													describeArgTypes(arguments) }),
 									methodNode.sourceStart(), methodNode
 											.sourceEnd());
+
+							} else {
+								// TODO also a JS error (that should be
+								// configurable)
+							}
 						}
 						return null;
 					}
@@ -179,37 +189,63 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				} else {
 					final Type type = JavaScriptValidations.typeOf(reference
 							.getParent());
-					if (type != null && type.getKind() == TypeKind.JAVA) {
+					if (type != null) {
+						if (type.getKind() == TypeKind.JAVA) {
 						reporter.reportProblem(
 								JavaScriptProblems.UNDEFINED_METHOD, NLS.bind(
 										ValidationMessages.UndefinedMethod,
 										reference.getName(), type.getName()),
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
+						} else {
+							// TODO also report a JS error (that should be
+							// configurable)
+						}
 					} else {
 						Object attribute = reference.getAttribute(
 								IReferenceAttributes.PARAMETERS);
-						if (attribute instanceof JSMethod
-								&& ((JSMethod) attribute).isDeprecated()) {
-							reporter.reportProblem(
-									JavaScriptProblems.DEPRECATED_FUNCTION,
-									NLS.bind(
-											ValidationMessages.DeprecatedFunction,
-											reference.getName()), methodNode
-											.sourceStart(), methodNode
-											.sourceEnd());
-						} else if (attribute == null) {
-							if (reportNotUsedCalls) {
+						if (attribute instanceof JSMethod) {
+							JSMethod method = (JSMethod) attribute;
+							if (method.isDeprecated()) {
 								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD,
+										JavaScriptProblems.DEPRECATED_FUNCTION,
 										NLS.bind(
-												ValidationMessages.UndefinedMethodInScript,
+												ValidationMessages.DeprecatedFunction,
 												reference.getName()),
 										methodNode.sourceStart(), methodNode
 												.sourceEnd());
-							} else {
-								unresolvedCallExpressions.add(node);
 							}
+							List<IParameter> parameters = method
+									.getParameters();
+							final List<ASTNode> callArgs = node.getArguments();
+							IValueReference[] arguments = new IValueReference[callArgs
+									.size()];
+							for (int i = 0, size = callArgs.size(); i < size; ++i) {
+								arguments[i] = visit(callArgs.get(i));
+							}
+							if (!validateParameters(parameters, arguments)) {
+								reporter.reportProblem(
+										JavaScriptProblems.WRONG_PARAMETERS,
+										NLS.bind(
+												ValidationMessages.MethodNotApplicableInScript,
+												new String[] {
+														method.getName(),
+														describeParamTypes(parameters),
+														describeArgTypes(arguments) }),
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
+							}
+						} else if (reportNotUsedCalls) {
+							reporter.reportProblem(
+									JavaScriptProblems.UNDEFINED_METHOD,
+									NLS.bind(
+											ValidationMessages.UndefinedMethodInScript,
+											reference.getName()), methodNode
+											.sourceStart(), methodNode
+											.sourceEnd());
+						} else {
+							unresolvedCallExpressions.add(new Object[] { node,
+									peekContext() });
 						}
 					}
 				}
@@ -219,6 +255,35 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			}
 		}
 
+		private boolean validateParameters(List<IParameter> parameters,
+				IValueReference[] arguments) {
+			if (arguments.length > parameters.size())
+				return false;
+			int testTypesSize = parameters.size();
+			if (parameters.size() != arguments.length) {
+				for (int i = arguments.length; i < parameters.size(); i++) {
+					if (!parameters.get(i).isOptional())
+						return false;
+				}
+				testTypesSize = arguments.length;
+			}
+
+			for (int i = 0; i < testTypesSize; i++) {
+				Type param = parameters.get(i).getType();
+				Type argumentType = arguments[i].getDeclaredType();
+				if (argumentType == null) {
+					if (!arguments[i].getTypes().isEmpty()) {
+						argumentType = arguments[i].getTypes().iterator()
+								.next();
+					}
+				}
+				if (param != null && argumentType != null
+						&& !param.getName().equals(argumentType.getName()))
+					return false;
+			}
+			return true;
+		}
+
 		/**
 		 * @param parameters
 		 * @return
@@ -226,6 +291,21 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		private String describeParamTypes(EList<Parameter> parameters) {
 			StringBuilder sb = new StringBuilder();
 			for (Parameter parameter : parameters) {
+				if (sb.length() != 0) {
+					sb.append(',');
+				}
+				if (parameter.getType() != null) {
+					sb.append(parameter.getType().getName());
+				} else {
+					sb.append('?');
+				}
+			}
+			return sb.toString();
+		}
+
+		private String describeParamTypes(List<IParameter> parameters) {
+			StringBuilder sb = new StringBuilder();
+			for (IParameter parameter : parameters) {
 				if (sb.length() != 0) {
 					sb.append(',');
 				}

@@ -77,6 +77,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		private String name;
 		private Type type;
 		private ReferenceLocation location = ReferenceLocation.UNKNOWN;
+		private boolean optional;
 
 		public String getName() {
 			return name;
@@ -100,6 +101,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 		public void setLocation(ReferenceLocation location) {
 			this.location = location;
+		}
+
+		public void setOptional(boolean b) {
+			optional = b;
+		}
+
+		public boolean isOptional() {
+			return optional;
 		}
 
 	}

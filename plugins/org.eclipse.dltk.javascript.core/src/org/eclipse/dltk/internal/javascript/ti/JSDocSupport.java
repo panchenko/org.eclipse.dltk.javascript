@@ -68,8 +68,12 @@ public class JSDocSupport implements IModelBuilder {
 					type = token.substring(1, token.length() - 1);
 				} else if (type != null) {
 					final IParameter parameter = method.getParameter(token);
-					if (parameter != null && parameter.getType() == null) {
+					if (parameter != null) {
+						if (parameter.getType() == null)
 						parameter.setType(context.getType(type));
+						if (comment.indexOf("optional") != -1) {
+							parameter.setOptional(true);
+						}
 					}
 					break;
 				}

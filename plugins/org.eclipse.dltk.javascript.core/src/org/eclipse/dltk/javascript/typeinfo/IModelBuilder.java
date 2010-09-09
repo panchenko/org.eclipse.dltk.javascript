@@ -31,6 +31,10 @@ public interface IModelBuilder {
 		ReferenceLocation getLocation();
 
 		void setLocation(ReferenceLocation location);
+
+		void setOptional(boolean optional);
+
+		boolean isOptional();
 	}
 
 	public interface IMethod {
