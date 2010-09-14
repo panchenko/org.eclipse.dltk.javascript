@@ -32,6 +32,7 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
@@ -235,17 +236,30 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 										methodNode.sourceStart(), methodNode
 												.sourceEnd());
 							}
-						} else if (reportNotUsedCalls) {
-							reporter.reportProblem(
-									JavaScriptProblems.UNDEFINED_METHOD,
-									NLS.bind(
-											ValidationMessages.UndefinedMethodInScript,
-											reference.getName()), methodNode
-											.sourceStart(), methodNode
-											.sourceEnd());
 						} else {
-							unresolvedCallExpressions.add(new Object[] { node,
-									peekContext() });
+							if (expression instanceof NewExpression) {
+								Object value = reference
+										.getChild(IValueReference.FUNCTION_OP);
+								if (value instanceof IValueReference) {
+									Type newType = JavaScriptValidations
+											.typeOf((IValueReference) value);
+									if (newType != null) {
+										return (IValueReference) value;
+									}
+								}
+							}
+							if (reportNotUsedCalls) {
+								reporter.reportProblem(
+										JavaScriptProblems.UNDEFINED_METHOD,
+										NLS.bind(
+												ValidationMessages.UndefinedMethodInScript,
+												reference.getName()),
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
+							} else {
+								unresolvedCallExpressions.add(new Object[] {
+										node, peekContext() });
+							}
 						}
 					}
 				}
@@ -270,6 +284,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 			for (int i = 0; i < testTypesSize; i++) {
 				Type param = parameters.get(i).getType();
+				if (arguments[i] == null)
+					continue;
 				Type argumentType = arguments[i].getDeclaredType();
 				if (argumentType == null) {
 					if (!arguments[i].getTypes().isEmpty()) {
