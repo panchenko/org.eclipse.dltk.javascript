@@ -19,6 +19,12 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IModelElementVisitor;
+import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
@@ -56,7 +62,45 @@ class JavaScriptProposalInfo extends ProposalInfo {
 			return (String) ref;
 		} else if (ref instanceof Element) {
 			return ((Element) ref).getDescription();
+		} else if (ref instanceof IValueReference) {
+			ITypeInferenceContext context = ((IValueReference) ref)
+					.getContext();
+			final ReferenceLocation location = ((IValueReference) ref)
+					.getLocation();
+			try {
+				context.getModelElement().accept(new IModelElementVisitor() {
+
+					public boolean visit(IModelElement element) {
+						if (element instanceof IMember) {
+							try {
+								ISourceRange nameRange = ((IMember) element)
+										.getNameRange();
+								if (location.getNameStart() >= nameRange
+										.getOffset()
+										&& location.getNameEnd() <= (nameRange
+												.getOffset() + nameRange
+												.getLength())) {
+									throw new ModelElementFound(element);
+								}
+							} catch (ModelException e) {
+								e.printStackTrace();
+							}
+						}
+						return true;
+					}
+				});
+			} catch (ModelException e) {
+				e.printStackTrace();
+			} catch (ModelElementFound found) {
+				Reader contentReader = new ScriptDocumentationProvider()
+						.getInfo((IMember) found.element, true, true);
+				if (contentReader != null) {
+					String string = getString(contentReader);
+					return string;
+				}
+			}
 		}
+
 		return null;
 	}
 
@@ -75,4 +119,14 @@ class JavaScriptProposalInfo extends ProposalInfo {
 		}
 		return buf.toString();
 	}
+
+	private static class ModelElementFound extends RuntimeException {
+		private final IModelElement element;
+
+		public ModelElementFound(IModelElement element) {
+			this.element = element;
+		}
+
+	}
+
 }
