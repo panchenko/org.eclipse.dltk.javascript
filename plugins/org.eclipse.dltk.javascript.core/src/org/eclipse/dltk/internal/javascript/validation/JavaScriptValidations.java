@@ -37,7 +37,8 @@ public class JavaScriptValidations {
 		if (module != null) {
 			final String parserId = module.getScriptProject().getOption(
 					DLTKCore.PROJECT_SOURCE_PARSER_ID, false);
-			if (!JavaScriptParser.PARSER_ID.equals(parserId)) {
+			if (parserId != null
+					&& !JavaScriptParser.PARSER_ID.equals(parserId)) {
 				return null;
 			}
 		}
@@ -69,6 +70,10 @@ public class JavaScriptValidations {
 		if (reference != null) {
 			if (reference.getDeclaredType() != null) {
 				return reference.getDeclaredType();
+			}
+			Set<Type> declaredTypes = reference.getDeclaredTypes();
+			if (declaredTypes.size() == 1) {
+				return declaredTypes.toArray(new Type[1])[0];
 			}
 			final Set<Type> types = reference.getTypes();
 			if (types.size() == 1) {
