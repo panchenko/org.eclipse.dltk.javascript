@@ -59,19 +59,20 @@ public class JSDocSupport implements IModelBuilder {
 			if (endLineIndex == -1) {
 				endLineIndex = comment.length();
 			}
-			StringTokenizer st = new StringTokenizer(comment.substring(index
-					+ PARAM_TAG.length(), endLineIndex));
+			String parameterString = comment.substring(index
+					+ PARAM_TAG.length(), endLineIndex);
+			StringTokenizer st = new StringTokenizer(parameterString);
 			String type = null;
 			while (st.hasMoreTokens()) {
 				final String token = st.nextToken();
 				if (token.startsWith("{") && token.endsWith("}")) {
 					type = token.substring(1, token.length() - 1);
-				} else if (type != null) {
+				} else {
 					final IParameter parameter = method.getParameter(token);
 					if (parameter != null) {
-						if (parameter.getType() == null)
+						if (type != null && parameter.getType() == null)
 						parameter.setType(context.getType(type));
-						if (comment.indexOf("optional") != -1) {
+						if (parameterString.indexOf("optional") != -1) {
 							parameter.setOptional(true);
 						}
 					}
