@@ -68,13 +68,21 @@ public class JSDocSupport implements IModelBuilder {
 				if (token.startsWith("{") && token.endsWith("}")) {
 					type = token.substring(1, token.length() - 1);
 				} else {
-					final IParameter parameter = method.getParameter(token);
+					final IParameter parameter;
+					boolean optional = false;
+					if (token.startsWith("[") && token.endsWith("]")) {
+						optional = true;
+						parameter = method.getParameter(token.substring(1,
+								token.length() - 1));
+					} else {
+						parameter = method.getParameter(token);
+					}
 					if (parameter != null) {
 						if (type != null && parameter.getType() == null)
-						parameter.setType(context.getType(type));
-						if (parameterString.indexOf("optional") != -1) {
-							parameter.setOptional(true);
-						}
+							parameter.setType(context.getType(type));
+						if (!optional && parameterString.contains("optional"))
+							optional = true;
+						parameter.setOptional(optional);
 					}
 					break;
 				}
