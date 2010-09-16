@@ -32,8 +32,14 @@ public interface IModelBuilder {
 
 		void setLocation(ReferenceLocation location);
 
+		/**
+		 * @since 3.0
+		 */
 		void setOptional(boolean optional);
 
+		/**
+		 * @since 3.0
+		 */
 		boolean isOptional();
 	}
 
