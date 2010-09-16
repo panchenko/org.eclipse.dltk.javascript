@@ -346,8 +346,8 @@ public class JavascriptAutoEditStrategy extends
 					StringBuffer reference = null;
 					int nonWS = findEndOfWhiteSpace(d, start, lineEnd);
 					if (nonWS < c.offset && d.getChar(nonWS) == '{')
-						reference = new StringBuffer(d
-								.get(start, nonWS - start));
+						reference = new StringBuffer(
+								d.get(start, nonWS - start));
 					else
 						reference = indenter.getReferenceIndentation(c.offset);
 
@@ -398,8 +398,8 @@ public class JavascriptAutoEditStrategy extends
 				index = line + 1;
 				IRegion nextLine = null;
 				while ((nextLine = d.getLineInformation(index++)) != null) {
-					String strNextLine = d.get(nextLine.getOffset(), nextLine
-							.getLength());
+					String strNextLine = d.get(nextLine.getOffset(),
+							nextLine.getLength());
 					int stComment = strNextLine.indexOf("/*");
 					int endComment = strNextLine.indexOf("*/");
 
@@ -760,8 +760,8 @@ public class JavascriptAutoEditStrategy extends
 			int firstLine = 1; // don't format the first line per default, as
 			// it has other content before it
 			IRegion line = document.getLineInformationOfOffset(offset);
-			String notSelected = document.get(line.getOffset(), offset
-					- line.getOffset());
+			String notSelected = document.get(line.getOffset(),
+					offset - line.getOffset());
 			if (notSelected.trim().length() == 0) {
 				newLength += notSelected.length();
 				newOffset = line.getOffset();
@@ -847,8 +847,8 @@ public class JavascriptAutoEditStrategy extends
 			}
 
 			temp.stopRewriteSession(session);
-			newText = temp.get(prefix.length(), temp.getLength()
-					- prefix.length());
+			newText = temp.get(prefix.length(),
+					temp.getLength() - prefix.length());
 
 			command.offset = newOffset;
 			command.length = newLength;
@@ -1498,8 +1498,7 @@ public class JavascriptAutoEditStrategy extends
 	}
 
 	private void clearCachedValues() {
-		IPreferenceStore preferenceStore = getPreferenceStore();
-		fCloseBrace = true;// preferenceStore.getBoolean(PreferenceConstants.EDITOR_CLOSE_BRACES);
+		fCloseBrace = prefs.closeBrackets();
 		fIsSmartMode = computeSmartMode();
 	}
 
@@ -1523,8 +1522,8 @@ public class JavascriptAutoEditStrategy extends
 			IRegion sourceRange = scanner.findSurroundingBlock(offset);
 			if (sourceRange == null)
 				return null;
-			String source = document.get(sourceRange.getOffset(), sourceRange
-					.getLength());
+			String source = document.get(sourceRange.getOffset(),
+					sourceRange.getLength());
 
 			StringBuffer contents = new StringBuffer();
 			contents.append("class ____C{void ____m()"); //$NON-NLS-1$
