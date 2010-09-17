@@ -862,6 +862,7 @@ XMLFragment
     : { isXmlStartEnabled() }?=>
       LT ( NOT
          | QUE
+         | GT
          | 'a'..'z' 
          | 'A'..'Z' 
          | '_' 
