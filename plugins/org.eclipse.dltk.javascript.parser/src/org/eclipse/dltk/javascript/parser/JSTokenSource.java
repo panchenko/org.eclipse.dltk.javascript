@@ -12,7 +12,6 @@
 package org.eclipse.dltk.javascript.parser;
 
 import org.antlr.runtime.TokenSource;
-import org.eclipse.dltk.compiler.problem.IProblemReporter;
 
 public interface JSTokenSource extends TokenSource {
 
