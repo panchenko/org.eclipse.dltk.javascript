@@ -68,6 +68,11 @@ public class XmlLiteralTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 	}
 
+	public void testXmlLiteralEmptyTagName() {
+		parse("var x = <></>;");
+		assertFalse(reporter.hasErrors());
+	}
+
 	public void testXmlLiteralExpressions() throws Exception {
 		Script script = parse("var x = <xml>{value}</xml>;");
 		assertFalse(reporter.getErrors().toString(), reporter.hasErrors());
@@ -86,8 +91,8 @@ public class XmlLiteralTests extends AbstractJSParserTest {
 		assertTrue(literal.getFragments().get(0) instanceof XmlTextFragment);
 		assertTrue(literal.getFragments().get(1) instanceof XmlExpressionFragment);
 		assertTrue(literal.getFragments().get(2) instanceof XmlTextFragment);
-		assertEquals("<xml>", ((XmlTextFragment) literal.getFragments().get(0))
-				.getXml());
+		assertEquals("<xml>",
+				((XmlTextFragment) literal.getFragments().get(0)).getXml());
 		Expression expression = ((XmlExpressionFragment) literal.getFragments()
 				.get(1)).getExpression();
 		assertTrue(expression instanceof Identifier);
