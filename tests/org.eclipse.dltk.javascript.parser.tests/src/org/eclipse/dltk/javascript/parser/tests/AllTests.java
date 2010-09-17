@@ -26,6 +26,7 @@ public class AllTests {
 		suite.addTestSuite(FunctionDeclarationTests.class);
 		suite.addTestSuite(XmlQueryTests.class);
 		suite.addTestSuite(XmlLiteralTests.class);
+		suite.addTestSuite(XmlLiteralTokenTests.class);
 		suite.addTestSuite(ErrorReportingTests.class);
 		suite.addTestSuite(FunctionDocumentationTests.class);
 		suite.addTestSuite(ParserValidationsTest.class);
