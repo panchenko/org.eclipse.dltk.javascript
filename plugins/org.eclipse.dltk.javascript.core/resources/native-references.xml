@@ -194,8 +194,12 @@
       <parameters name="stringN"/>
       <parameters name="[StringX]" kind="OPTIONAL"/>
     </members>
-    <members xsi:type="ref:Method" name="equals" type="Boolean"/>
-    <members xsi:type="ref:Method" name="equalsIgnoreCase" type="Boolean"/>
+    <members xsi:type="ref:Method" name="equals" type="Boolean">
+      <parameters name="object"/>
+    </members>
+    <members xsi:type="ref:Method" name="equalsIgnoreCase" type="Boolean">
+      <parameters name="otherString"/>
+    </members>
     <members xsi:type="ref:Method" name="fixed" type="String" description="Returns a string as teletype text."/>
     <members xsi:type="ref:Method" name="fontcolor" type="String" description="Returns a string in a specified color.">
       <parameters name="color"/>
