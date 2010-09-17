@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
@@ -29,15 +30,26 @@ class LineTracker {
 				+ Math.max(column, 0) : 0;
 	}
 
-	public int getLineNumberOfOffset(int offset) {
+	public final int getLineNumberOfOffset(int offset) {
 		return lineTracker.getLineNumberOfOffset(offset);
 	}
 
-	public int getLength() {
+	public final int getLength() {
 		return lineTracker.getLength();
 	}
 
+	public final int getNumberOfLines() {
+		return lineTracker.getNumberOfLines();
+	}
+
 	public int getOffset(Token token) {
+		if (token.getLine() >= lineTracker.getNumberOfLines()
+				&& token instanceof CommonToken) {
+			final CommonToken commonToken = (CommonToken) token;
+			if (commonToken.getStartIndex() <= lineTracker.getLength()) {
+				return commonToken.getStartIndex();
+			}
+		}
 		return getOffset(token.getLine(), token.getCharPositionInLine());
 	}
 

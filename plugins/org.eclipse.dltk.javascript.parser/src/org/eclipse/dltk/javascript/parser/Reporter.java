@@ -48,6 +48,9 @@ public class Reporter extends LineTracker implements IProblemReporter {
 		if (line == -1 && start != -1) {
 			line = getLineNumberOfOffset(start);
 		}
+		if (line > getNumberOfLines() && start >= 0 && start <= getLength()) {
+			line = getLineNumberOfOffset(start);
+		}
 		return new DefaultProblem(message, id, null,
 				severity == Severity.ERROR ? ProblemSeverities.Error
 						: ProblemSeverities.Warning, start, end, line);
@@ -123,7 +126,8 @@ public class Reporter extends LineTracker implements IProblemReporter {
 
 	public void reportProblem(int id, String message, int start, int end) {
 		reportProblem(new DefaultProblem(message, id, null,
-				ProblemSeverities.Warning, start, end, getLineNumberOfOffset(start)));
+				ProblemSeverities.Warning, start, end,
+				getLineNumberOfOffset(start)));
 	}
 
 }
