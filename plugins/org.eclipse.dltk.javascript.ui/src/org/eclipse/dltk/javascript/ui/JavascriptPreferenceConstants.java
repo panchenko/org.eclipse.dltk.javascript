@@ -435,6 +435,10 @@ public class JavascriptPreferenceConstants extends PreferenceConstants {
 		PreferenceConverter.setDefault(store,
 				JavascriptPreferenceConstants.JAVASCRIPT_DOC_COLOR, new RGB(71,
 						102, 194));
+		PreferenceConverter.setDefault(store,
+				JavascriptColorConstants.JS_DOC_TAGS, new RGB(71, 102, 194));
+		store.setDefault(JavascriptColorConstants.JS_DOC_TAGS
+				+ PreferenceConstants.EDITOR_BOLD_SUFFIX, true);
 
 		PreferenceConverter.setDefault(store,
 				JavascriptPreferenceConstants.EDITOR_SINGLE_LINE_COMMENT_COLOR,

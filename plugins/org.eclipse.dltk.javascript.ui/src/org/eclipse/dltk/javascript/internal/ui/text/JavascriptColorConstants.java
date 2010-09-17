@@ -28,7 +28,9 @@ public final class JavascriptColorConstants {
 	/**
 	 * The color key for Javascript doc.
 	 */
-	public static final String JS_DOC = "JS_DOC"; //$NON-NLS-1$	
+	public static final String JS_DOC = "JS_DOC"; //$NON-NLS-1$
+
+	public static final String JS_DOC_TAGS = "JS_DOC_TAGS"; //$NON-NLS-1$	
 
 	/**
 	 * The color key for Javascript numbers.

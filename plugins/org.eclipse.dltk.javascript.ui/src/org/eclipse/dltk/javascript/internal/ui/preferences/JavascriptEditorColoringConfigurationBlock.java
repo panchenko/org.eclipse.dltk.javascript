@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import org.eclipse.dltk.internal.ui.editor.ScriptSourceViewer;
 import org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptDocumentSetupParticipant;
 import org.eclipse.dltk.javascript.internal.ui.text.JavascriptCodeScanner;
+import org.eclipse.dltk.javascript.internal.ui.text.JavascriptColorConstants;
 import org.eclipse.dltk.javascript.internal.ui.text.SimpleJavascriptSourceViewerConfiguration;
 import org.eclipse.dltk.javascript.ui.JavascriptPreferenceConstants;
 import org.eclipse.dltk.javascript.ui.scriptcolor.provider.IColorProviderCategoryItem;
@@ -77,6 +78,9 @@ public class JavascriptEditorColoringConfigurationBlock extends
 					sCommentsCategory },
 			{ "JS Doc", JavascriptPreferenceConstants.JAVASCRIPT_DOC_COLOR,
 					sCommentsCategory },
+			{ "JS Doc Tags", JavascriptColorConstants.JS_DOC_TAGS,
+					sCommentsCategory },
+
 			{ PreferencesMessages.DLTKEditorPreferencePage_keywords,
 					JavascriptPreferenceConstants.EDITOR_KEYWORD_COLOR,
 					sCoreCategory },
@@ -228,8 +232,8 @@ public class JavascriptEditorColoringConfigurationBlock extends
 							while (it.hasNext()) {
 								IColorProviderCategoryItem subItem = (IColorProviderCategoryItem) it
 										.next();
-								result = getIsCategoryParent(entry, subItem
-										.getCategoryItems());
+								result = getIsCategoryParent(entry,
+										subItem.getCategoryItems());
 								if (result != null)
 									return result;
 							}
@@ -277,8 +281,8 @@ public class JavascriptEditorColoringConfigurationBlock extends
 
 				for (int p = 0; p < categories.length; p++) {
 					IColorProviderCategoryItem category = categories[p];
-					checkForColorItems(list, category, category
-							.getCategoryItems());
+					checkForColorItems(list, category,
+							category.getCategoryItems());
 				}
 			}
 
@@ -349,7 +353,8 @@ public class JavascriptEditorColoringConfigurationBlock extends
 			customStores = new HashMap();
 
 			for (int i = 0; i < providers.length; i++) {
-				customStores.put(providers[i].getPreferenceKeyPrefix(),
+				customStores.put(
+						providers[i].getPreferenceKeyPrefix(),
 						new OverlayPreferenceStore(providers[i]
 								.getPreferenceStore(), new OverlayKey[0]));
 			}
