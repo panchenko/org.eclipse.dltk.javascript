@@ -13,12 +13,18 @@ import java.net.URL;
 
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
+import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
+import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DecorationOverlayIcon;
+import org.eclipse.jface.viewers.IDecoration;
 
 public class JavaScriptCompletionProposalLabelProvider extends
 		CompletionProposalLabelProvider {
@@ -58,7 +64,8 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	protected String createFieldProposalLabel(CompletionProposal proposal) {
 		if (proposal.getExtraInfo() instanceof Property) {
 			Property property = (Property) proposal.getExtraInfo();
-			// add the type to the label, but only if it is not exactly the same like Constants (MyObject:MyObject)
+			// add the type to the label, but only if it is not exactly the same
+			// like Constants (MyObject:MyObject)
 			if (property.getType() != null
 					&& !property.getType().getName()
 							.equalsIgnoreCase(proposal.getName())) {
@@ -159,5 +166,30 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		if (imageDescriptor != null)
 			return imageDescriptor;
 		return super.createTypeImageDescriptor(proposal);
+	}
+
+	@Override
+	protected ImageDescriptor decorateImageDescriptor(
+			ImageDescriptor descriptor, CompletionProposal proposal) {
+		// TODO other proposal kinds?
+		if (proposal.getKind() == CompletionProposal.METHOD_REF
+				&& isDeprecated(proposal)) {
+			return new DecorationOverlayIcon(descriptor.createImage(),
+					DLTKPluginImages.DESC_OVR_DEPRECATED, IDecoration.UNDERLAY);
+		}
+		return super.decorateImageDescriptor(descriptor, proposal);
+	}
+
+	private boolean isDeprecated(CompletionProposal proposal) {
+		if (proposal.getExtraInfo() instanceof Element) {
+			return ((Element) proposal.getExtraInfo()).isDeprecated();
+		} else if (proposal.getExtraInfo() instanceof IValueReference) {
+			final IValueReference reference = (IValueReference) proposal
+					.getExtraInfo();
+			final IMethod method = (IMethod) reference
+					.getAttribute(IReferenceAttributes.PARAMETERS);
+			return method != null && method.isDeprecated();
+		}
+		return false;
 	}
 }
