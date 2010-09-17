@@ -66,4 +66,5 @@ public class XmlLiteralTokenTests extends AbstractJSParserTest {
 		assertEquals(JSParser.EOL, tokens.get(12).getType());
 		assertEquals(JSParser.EOL, tokens.get(13).getType());
 	}
+
 }

@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.parser.tests;
 import java.util.List;
 
 import org.eclipse.dltk.ast.utils.ASTUtil;
+import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -71,6 +72,18 @@ public class XmlLiteralTests extends AbstractJSParserTest {
 	public void testXmlLiteralEmptyTagName() {
 		parse("var x = <></>;");
 		assertFalse(reporter.hasErrors());
+	}
+
+	public void testXmlLiteralExtraRightBrace() {
+		final StringList code = new StringList();
+		code.add("var TOC = <xml>");
+		code.add("<entry label={homePageTitle}/>");
+		code.add("</xml>");
+		code.add("}");
+		code.add("");
+
+		parse(code.toString());
+		assertTrue(reporter.hasErrors());
 	}
 
 	public void testXmlLiteralExpressions() throws Exception {
