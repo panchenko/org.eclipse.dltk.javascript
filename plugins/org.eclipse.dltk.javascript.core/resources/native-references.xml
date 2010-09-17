@@ -85,7 +85,7 @@
     <members xsi:type="ref:Method" name="getUTCMinutes" type="Number" description="Returns the minutes of a date according to universal time (from 0-59)"/>
     <members xsi:type="ref:Method" name="getUTCMonth" type="Number" description="Returns the month from a Date object according to universal time (from 0-11)"/>
     <members xsi:type="ref:Method" name="getUTCSeconds" type="Number" description="Returns the seconds of a date according to universal time (from 0-59)"/>
-    <members xsi:type="ref:Method" name="getYear" type="Number" description="Returns the year, as a two-digit or a three/four-digit number, depending on the browser. Use getFullYear() instead!!"/>
+    <members xsi:type="ref:Method" name="getYear" type="Number" deprecated="true" description="Returns the year, as a two-digit or a three/four-digit number, depending on the browser. Use getFullYear() instead!!"/>
     <members xsi:type="ref:Method" name="setDate" type="Number" description="Sets the day of the month from a Date object (from 1-31).">
       <parameters name="day"/>
     </members>
@@ -149,7 +149,7 @@
       <parameters name="seconds"/>
       <parameters name="[millis]" kind="OPTIONAL"/>
     </members>
-    <members xsi:type="ref:Method" name="setYear" type="Number" description="Sets the year, as a two-digit or a three/four-digit number, depending on the browser. Use setFullYear() instead!!">
+    <members xsi:type="ref:Method" name="setYear" type="Number" deprecated="true" description="Sets the year, as a two-digit or a three/four-digit number, depending on the browser. Use setFullYear() instead!!">
       <parameters name="year"/>
     </members>
     <members xsi:type="ref:Method" name="toDateString" type="String" description="Returns the date portion of a Date object in readable form"/>

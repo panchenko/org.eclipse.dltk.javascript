@@ -14,6 +14,7 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.List;
 
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
+import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
@@ -34,8 +35,8 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 	@Override
 	public void report(StructureReporter reporter) {
 		final ReferenceLocation location = child.getLocation();
-		reporter.removeReference(childName, location.getNameStart(), location
-				.getNameEnd());
+		reporter.removeReference(childName, location.getNameStart(),
+				location.getNameEnd());
 		reporter.reportRefs(location.getDeclarationStart());
 		final MethodInfo mi = new MethodInfo();
 		mi.name = childName;
@@ -43,6 +44,9 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 		copyLocation(location, mi);
 		final JSMethod method = (JSMethod) child.getAttribute(PARAMETERS);
 		if (method != null) {
+			if (method.isDeprecated()) {
+				mi.modifiers |= JSModifiers.DEPRECATED;
+			}
 			final List<IParameter> parameters = method.getParameters();
 			for (IParameter parameter : parameters) {
 				if (parameter.getType() != null) {
