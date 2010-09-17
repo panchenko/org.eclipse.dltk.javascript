@@ -26,6 +26,10 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
  */
 public class JSDocSupport implements IModelBuilder {
 
+	public static String[] getTags() {
+		return new String[] { DEPRECATED, PARAM_TAG, TYPE_TAG };
+	}
+
 	public void processMethod(ITypeInfoContext context,
 			FunctionStatement statement, IMethod method) {
 		if (statement.getDocumentation() == null) {
@@ -59,8 +63,8 @@ public class JSDocSupport implements IModelBuilder {
 			if (endLineIndex == -1) {
 				endLineIndex = comment.length();
 			}
-			String parameterString = comment.substring(index
-					+ PARAM_TAG.length(), endLineIndex);
+			String parameterString = comment.substring(
+					index + PARAM_TAG.length(), endLineIndex);
 			StringTokenizer st = new StringTokenizer(parameterString);
 			String type = null;
 			while (st.hasMoreTokens()) {
@@ -94,7 +98,8 @@ public class JSDocSupport implements IModelBuilder {
 
 	private static final String TYPE_TAG = "@type";
 
-	private void parseType(ITypeInfoContext context, IMethod method, String comment) {
+	private void parseType(ITypeInfoContext context, IMethod method,
+			String comment) {
 		int index = comment.indexOf(TYPE_TAG);
 		if (index != -1) {
 			int endLineIndex = comment.indexOf("\n", index);
