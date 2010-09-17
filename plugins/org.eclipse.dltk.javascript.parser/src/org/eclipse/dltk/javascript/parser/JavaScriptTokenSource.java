@@ -13,7 +13,6 @@
 package org.eclipse.dltk.javascript.parser;
 
 import org.antlr.runtime.CharStream;
-import org.antlr.runtime.EarlyExitException;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.RecognitionException;
 
@@ -42,6 +41,13 @@ public class JavaScriptTokenSource extends JavaScriptLexer implements
 	public void mTokens() throws RecognitionException {
 		if (xmlMode == MODE_XML) {
 			readNextXml();
+		} else if (xmlMode == MODE_EXPRESSION) {
+			try {
+				super.mTokens();
+			} catch (RecognitionException e) {
+				type = XMLFragmentError;
+				emit();
+			}
 		} else {
 			super.mTokens();
 		}
@@ -60,7 +66,7 @@ public class JavaScriptTokenSource extends JavaScriptLexer implements
 		readNextXml();
 	}
 
-	private void readNextXml() throws EarlyExitException {
+	private void readNextXml() {
 		try {
 			type = readXmlToken();
 			emit();

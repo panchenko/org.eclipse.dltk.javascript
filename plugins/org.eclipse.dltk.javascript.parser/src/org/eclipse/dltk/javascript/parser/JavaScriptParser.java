@@ -32,6 +32,7 @@ import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.core.SourceRange;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.Reporter.Severity;
@@ -141,8 +142,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 			reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR, message);
 			reporter.setSeverity(Severity.ERROR);
 			if (range != null) {
-				reporter.setRange(range.getOffset(), range.getOffset()
-						+ range.getLength());
+				reporter.setRange(range.getOffset(),
+						range.getOffset() + range.getLength());
 			}
 			reporter.setLine(re.line - 1);
 			reporter.report();
@@ -236,9 +237,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 					reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR,
 							"Unexpected input was discarded");
 					reporter.setSeverity(Severity.ERROR);
-					reporter.setRange(convert(first).getOffset(), end
-							.getOffset()
-							+ end.getLength());
+					reporter.setRange(convert(first).getOffset(),
+							end.getOffset() + end.getLength());
 					reporter.setLine(first.getLine());
 					reporter.report();
 				}
@@ -275,8 +275,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 							.getScriptProject().getProject()));
 		}
 		char[] source = input.getContentsAsCharArray();
-		return parse(createTokenStream(source), new Reporter(TextUtils
-				.createLineTracker(source), reporter));
+		return parse(createTokenStream(source),
+				new Reporter(TextUtils.createLineTracker(source), reporter));
 	}
 
 	/**
@@ -284,11 +284,16 @@ public class JavaScriptParser extends AbstractSourceParser {
 	 */
 	public Script parse(String source, IProblemReporter reporter) {
 		Assert.isNotNull(source);
-		return parse(createTokenStream(source), new Reporter(TextUtils
-				.createLineTracker(source), reporter));
+		return parse(createTokenStream(source),
+				TextUtils.createLineTracker(source), reporter);
 	}
 
-	private Script parse(JSTokenStream stream, Reporter reporter) {
+	protected Script parse(JSTokenStream stream,
+			ISourceLineTracker lineTracker, IProblemReporter reporter) {
+		return parse(stream, new Reporter(lineTracker, reporter));
+	}
+
+	protected Script parse(JSTokenStream stream, Reporter reporter) {
 		try {
 			stream.setReporter(reporter);
 			JSInternalParser parser = new JSInternalParser(stream, reporter);
