@@ -90,7 +90,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				return super.visit(node);
 			} finally {
 				if (rootNode && !unresolvedCallExpressions.isEmpty()) {
-					for (Object[] expression : unresolvedCallExpressions) {
+					for (Object[] expression : (Object[][]) unresolvedCallExpressions
+							.toArray(new Object[unresolvedCallExpressions
+									.size()][])) {
 						enterContext((IValueCollection) expression[1]);
 						try {
 							visitCallExpressionImpl(
@@ -131,6 +133,11 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			final IValueReference reference = visit(expression);
 			modes.remove(expression);
 			if (reference != null) {
+				if (reference.getName() == IValueReference.ARRAY_OP) {
+					// ignore array lookup function calls like: array[1](),
+					// those are dynamic.
+					return reference.getChild(IValueReference.FUNCTION_OP);
+				}
 				final List<Method> methods = JavaScriptValidations
 						.extractElements(reference, Method.class);
 				if (methods != null) {
