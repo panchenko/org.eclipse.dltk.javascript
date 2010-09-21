@@ -312,8 +312,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	private ASTNode createErrorExpression(Tree node) {
 		if (node != null) {
-			ErrorExpression error = new ErrorExpression(getParent(), node
-					.getText());
+			ErrorExpression error = new ErrorExpression(getParent(),
+					node.getText());
 			error.setStart(getTokenOffset(node.getTokenStartIndex()));
 			error.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 			return error;
@@ -345,8 +345,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		operation.setLeftExpression((Expression) transformNode(
 				node.getChild(0), operation));
 
-		operation.setRightExpression((Expression) transformNode(node
-				.getChild(1), operation));
+		operation.setRightExpression((Expression) transformNode(
+				node.getChild(1), operation));
 
 		operation.setOperationPosition(getTokenOffset(node.getType(),
 				getRealTokenStopIndex(node.getChild(0)) + 1, node.getChild(1)
@@ -420,8 +420,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			validateLabel(label);
 		}
 
-		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
-				.getTokenStopIndex(), node.getTokenStopIndex()));
+		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC,
+				node.getTokenStopIndex(), node.getTokenStopIndex()));
 
 		statement.setStart(statement.getBreakKeyword().sourceStart());
 
@@ -452,9 +452,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			Tree callArg = callArgs.getChild(i);
 			final ASTNode argument = transformNode(callArg, call);
 			if (i > 0) {
-				commas.add(getTokenOffset(JSParser.COMMA, callArgs.getChild(
-						i - 1).getTokenStopIndex() + 1, callArg
-						.getTokenStartIndex()));
+				commas.add(getTokenOffset(JSParser.COMMA,
+						callArgs.getChild(i - 1).getTokenStopIndex() + 1,
+						callArg.getTokenStartIndex()));
 			}
 			call.addArgument(argument);
 		}
@@ -482,8 +482,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			caseClause.setCondition((Expression) transformNode(condition,
 					caseClause));
 			caseClause
-					.setColonPosition(getTokenOffset(JSParser.COLON, condition
-							.getTokenStopIndex() + 1, node.getTokenStopIndex()));
+					.setColonPosition(getTokenOffset(JSParser.COLON,
+							condition.getTokenStopIndex() + 1,
+							node.getTokenStopIndex()));
 		} else {
 			caseClause.setCondition(new ErrorExpression(caseClause,
 					Util.EMPTY_STRING));
@@ -519,8 +520,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		defaultClause.setDefaultKeyword(createKeyword(node, Keywords.DEFAULT));
 
-		defaultClause.setColonPosition(getTokenOffset(JSParser.COLON, node
-				.getTokenStartIndex() + 1, node.getTokenStopIndex() + 1));
+		defaultClause.setColonPosition(getTokenOffset(JSParser.COLON,
+				node.getTokenStartIndex() + 1, node.getTokenStopIndex() + 1));
 
 		for (int i = 0; i < node.getChildCount(); i++) {
 			defaultClause.getStatements().add(
@@ -574,8 +575,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		statement.setForKeyword(createKeyword(node, Keywords.FOR));
 
-		statement.setLP(getTokenOffset(JSParser.LPAREN, node
-				.getTokenStartIndex() + 1, node.getTokenStopIndex()));
+		statement.setLP(getTokenOffset(JSParser.LPAREN,
+				node.getTokenStartIndex() + 1, node.getTokenStopIndex()));
 
 		statement.setInitial((Expression) transformNode(node.getChild(0)
 				.getChild(0), statement));
@@ -583,13 +584,13 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		statement.setCondition((Expression) transformNode(node.getChild(0)
 				.getChild(1), statement));
 
-		statement.setStep((Expression) transformNode(node.getChild(0).getChild(
-				2), statement));
+		statement.setStep((Expression) transformNode(
+				node.getChild(0).getChild(2), statement));
 
 		if (statement.getInitial() instanceof EmptyExpression) {
 			statement.setInitialSemicolonPosition(getTokenOffset(
-					JSParser.SEMIC, node.getTokenStartIndex() + 2, node
-							.getTokenStopIndex()));
+					JSParser.SEMIC, node.getTokenStartIndex() + 2,
+					node.getTokenStopIndex()));
 
 			statement.getInitial().setStart(
 					statement.getInitialSemicolonPosition());
@@ -598,8 +599,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 			if (statement.getCondition() instanceof EmptyExpression) {
 				statement.setConditionalSemicolonPosition((getTokenOffset(
-						JSParser.SEMIC, node.getTokenStartIndex(), node
-								.getTokenStopIndex(), 1)));
+						JSParser.SEMIC, node.getTokenStartIndex(),
+						node.getTokenStopIndex(), 1)));
 
 				statement.getCondition().setStart(
 						statement.getConditionalSemicolonPosition());
@@ -609,8 +610,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			} else {
 				statement.setConditionalSemicolonPosition((getTokenOffset(
 						JSParser.SEMIC, node.getChild(0).getChild(1)
-								.getTokenStopIndex() + 1, node
-								.getTokenStopIndex())));
+								.getTokenStopIndex() + 1,
+						node.getTokenStopIndex())));
 
 			}
 
@@ -622,8 +623,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			if (statement.getCondition() instanceof EmptyExpression) {
 				statement.setConditionalSemicolonPosition((getTokenOffset(
 						JSParser.SEMIC, node.getChild(0).getChild(0)
-								.getTokenStopIndex() + 1, node
-								.getTokenStopIndex(), 1)));
+								.getTokenStopIndex() + 1,
+						node.getTokenStopIndex(), 1)));
 
 				statement.getCondition().setStart(
 						statement.getConditionalSemicolonPosition());
@@ -664,8 +665,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				.getTokenStartIndex() + 1, node.getChild(0)
 				.getTokenStartIndex()));
 
-		statement.setItem((Expression) transformNode(node.getChild(0).getChild(
-				0), statement));
+		statement.setItem((Expression) transformNode(
+				node.getChild(0).getChild(0), statement));
 
 		Keyword inKeyword = new Keyword(Keywords.IN);
 
@@ -754,16 +755,16 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			Argument argument = transformArgument(argNode, fn);
 			if (i + 1 < childCount) {
 				argument.setCommaPosition(getTokenOffset(JSParser.COMMA,
-						argNode.getTokenStopIndex() + 1, argsNode.getChild(
-								i + 1).getTokenStartIndex()));
+						argNode.getTokenStopIndex() + 1,
+						argsNode.getChild(i + 1).getTokenStartIndex()));
 			}
 			fn.addArgument(argument);
 			if (functionScope.add(argument.getArgumentName(), SymbolKind.PARAM) != null
 					&& reporter != null) {
 				reporter.setMessage(
-						JavaScriptParserProblems.DUPLICATE_PARAMETER, NLS.bind(
-								"Duplicate parameter {0}", argument
-										.getArgumentName()));
+						JavaScriptParserProblems.DUPLICATE_PARAMETER,
+						NLS.bind("Duplicate parameter {0}",
+								argument.getArgumentName()));
 				reporter.setRange(argument.sourceStart(), argument.sourceEnd());
 				reporter.report();
 			}
@@ -775,8 +776,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		if (nameNode != null
 				&& scope.canAdd(nameNode.getName()) == SymbolKind.PARAM) {
 			reporter.setMessage(
-					JavaScriptParserProblems.FUNCTION_HIDES_ARGUMENT, NLS.bind(
-							"Function {0} hides argument", nameNode.getName()));
+					JavaScriptParserProblems.FUNCTION_HIDES_ARGUMENT,
+					NLS.bind("Function {0} hides argument", nameNode.getName()));
 			reporter.setRange(nameNode.sourceStart(), nameNode.sourceEnd());
 			reporter.report();
 		}
@@ -811,8 +812,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		returnStatement.setReturnKeyword(createKeyword(node, Keywords.RETURN));
 
 		if (node.getChildCount() > 0) {
-			returnStatement.setValue((Expression) transformNode(node
-					.getChild(0), returnStatement));
+			returnStatement.setValue((Expression) transformNode(
+					node.getChild(0), returnStatement));
 		}
 
 		Token token = tokens.get(node.getTokenStopIndex());
@@ -889,8 +890,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 							JavaScriptParserProblems.DOUBLE_SWITCH_DEFAULT,
 							"double default label in the switch statement");
 					reporter.setSeverity(Severity.ERROR);
-					reporter.setStart(reporter.getOffset(child.getLine(), child
-							.getCharPositionInLine()));
+					reporter.setStart(reporter.getOffset(child.getLine(),
+							child.getCharPositionInLine()));
 					reporter.setEnd(reporter.getStart()
 							+ child.getText().length());
 					reporter.report();
@@ -904,8 +905,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			}
 		}
 
-		statement.setRC(getTokenOffset(JSParser.RBRACE, node
-				.getTokenStopIndex(), node.getTokenStopIndex()));
+		statement.setRC(getTokenOffset(JSParser.RBRACE,
+				node.getTokenStopIndex(), node.getTokenStopIndex()));
 
 		statement.setStart(statement.getSwitchKeyword().sourceStart());
 		statement.setEnd(statement.getRC() + 1);
@@ -927,8 +928,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 					.getChild(0).getTokenStopIndex() + 1, node
 					.getTokenStopIndex()));
 		else
-			operation.setOperationPosition(getTokenOffset(operationType, node
-					.getTokenStartIndex(), node.getTokenStopIndex()));
+			operation.setOperationPosition(getTokenOffset(operationType,
+					node.getTokenStartIndex(), node.getTokenStopIndex()));
 
 		if (operation.getOperationPosition() == -1) {
 
@@ -953,8 +954,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 			if (operation.isPostfix())
 				operation.setOperationPosition(getTokenOffset(operationType,
-						node.getChild(0).getTokenStopIndex() + 1, node
-								.getTokenStopIndex()));
+						node.getChild(0).getTokenStopIndex() + 1,
+						node.getTokenStopIndex()));
 			else
 				operation.setOperationPosition(getTokenOffset(operationType,
 						node.getTokenStartIndex(), node.getTokenStopIndex()));
@@ -986,8 +987,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			validateLabel(label);
 		}
 
-		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
-				.getTokenStopIndex(), node.getTokenStopIndex()));
+		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC,
+				node.getTokenStopIndex(), node.getTokenStopIndex()));
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 		if (statement.getLabel() == null) {
@@ -1049,8 +1050,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			target.setColonPosition(colonPos);
 			++index;
 			if (index < node.getChildCount() && isType(node.getChild(index))) {
-				target.setType(transformType(node.getChild(index), target
-						.getNode()));
+				target.setType(transformType(node.getChild(index),
+						target.getNode()));
 				++index;
 			} else {
 				target.setType(new MissingType(target.getNode(), colonPos + 1));
@@ -1075,8 +1076,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				&& node.getChild(i).getType() == JSParser.ASSIGN) {
 			declaration.setAssignPosition(getTokenOffset(node.getChild(i)
 					.getTokenStartIndex()));
-			declaration.setInitializer((Expression) transformNode(node
-					.getChild(i + 1), declaration));
+			declaration.setInitializer((Expression) transformNode(
+					node.getChild(i + 1), declaration));
 			i += 2;
 		}
 		return declaration;
@@ -1110,15 +1111,14 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			if (scope.add(declaration.getVariableName(), kind) != null
 					&& reporter != null) {
 				final Identifier identifier = declaration.getIdentifier();
-				reporter.setRange(identifier.sourceStart(), identifier
-						.sourceEnd());
-				reporter
-						.setMessage(
-								kind == SymbolKind.VAR ? JavaScriptParserProblems.VAR_HIDES_ARGUMENT
-										: JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
-								kind.name().toLowerCase() + " "
-										+ declaration.getVariableName()
-										+ " hides argument");
+				reporter.setRange(identifier.sourceStart(),
+						identifier.sourceEnd());
+				reporter.setMessage(
+						kind == SymbolKind.VAR ? JavaScriptParserProblems.VAR_HIDES_ARGUMENT
+								: JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
+						kind.name().toLowerCase() + " "
+								+ declaration.getVariableName()
+								+ " hides argument");
 				reporter.report();
 			}
 		}
@@ -1143,10 +1143,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 		if (!commas.isEmpty()
 				&& commas.size() >= initializer.getInitializers().size()) {
-			reporter
-					.setMessage(
-							JavaScriptParserProblems.TRAILING_COMMA_OBJECT_INITIALIZER,
-							"trailing comma is not legal in ECMA-262 object initializers");
+			reporter.setMessage(
+					JavaScriptParserProblems.TRAILING_COMMA_OBJECT_INITIALIZER,
+					"trailing comma is not legal in ECMA-262 object initializers");
 			final int comma = commas.get(commas.size() - 1);
 			reporter.setRange(comma, comma + 1);
 			reporter.report();
@@ -1197,8 +1196,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		statement.setForKeyword(createKeyword(node, Keywords.FOR));
 
 		Keyword eachKeyword = new Keyword(Keywords.EACH);
-		eachKeyword.setStart(getTokenOffset(JSParser.EACH, node
-				.getTokenStartIndex(), node.getTokenStopIndex()));
+		eachKeyword.setStart(getTokenOffset(JSParser.EACH,
+				node.getTokenStartIndex(), node.getTokenStopIndex()));
 		eachKeyword.setEnd(eachKeyword.sourceStart() + Keywords.EACH.length());
 		statement.setEachKeyword(eachKeyword);
 
@@ -1206,8 +1205,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				.getTokenStartIndex() + 1, node.getChild(0)
 				.getTokenStartIndex()));
 
-		statement.setItem((Expression) transformNode(node.getChild(0).getChild(
-				0), statement));
+		statement.setItem((Expression) transformNode(
+				node.getChild(0).getChild(0), statement));
 
 		Keyword inKeyword = new Keyword(Keywords.IN);
 		int iteratorStart = node.getChild(0).getChild(1).getTokenStartIndex();
@@ -1246,8 +1245,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 					.getChild(node.getChildCount() - 1));
 
 		if (node.getChildCount() > 0) {
-			return Math.max(node.getTokenStopIndex(),
-					getRealTokenStopIndex(node
+			return Math
+					.max(node.getTokenStopIndex(), getRealTokenStopIndex(node
 							.getChild(node.getChildCount() - 1)));
 		}
 
@@ -1320,8 +1319,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			ifStatement.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
 					.getTokenStopIndex() + 1, node.getChild(1)
 					.getTokenStartIndex()));
-			ifStatement.setThenStatement(transformStatementNode(node
-					.getChild(1), ifStatement));
+			ifStatement.setThenStatement(transformStatementNode(
+					node.getChild(1), ifStatement));
 		} else {
 			ifStatement.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
 					.getTokenStopIndex() + 1, node.getChild(0)
@@ -1337,8 +1336,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 					+ Keywords.ELSE.length());
 			ifStatement.setElseKeyword(elseKeyword);
 
-			ifStatement.setElseStatement(transformStatementNode(node
-					.getChild(2), ifStatement));
+			ifStatement.setElseStatement(transformStatementNode(
+					node.getChild(2), ifStatement));
 		}
 
 		ifStatement.setStart(ifStatement.getIfKeyword().sourceStart());
@@ -1402,9 +1401,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				.getChild(0).getTokenStopIndex() + 1, node.getChild(1)
 				.getTokenStartIndex()));
 
-		operator.setColonPosition(getTokenOffset(JSParser.COLON, node.getChild(
-				1).getTokenStopIndex() + 1, node.getChild(2)
-				.getTokenStartIndex()));
+		operator.setColonPosition(getTokenOffset(JSParser.COLON,
+				node.getChild(1).getTokenStopIndex() + 1, node.getChild(2)
+						.getTokenStartIndex()));
 
 		operator.setStart(getTokenOffset(node.getTokenStartIndex()));
 		operator.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -1437,8 +1436,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		statement.setTryKeyword(createKeyword(node, Keywords.TRY));
 
-		statement.setBody((StatementBlock) transformStatementNode(node
-				.getChild(0), statement));
+		statement.setBody((StatementBlock) transformStatementNode(
+				node.getChild(0), statement));
 
 		boolean sawDefaultCatch = false;
 		for (int i = 1 /* miss body */; i < node.getChildCount(); i++) {
@@ -1450,12 +1449,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				final CatchClause catchClause = (CatchClause) transformNode(
 						child, statement);
 				if (reporter != null && sawDefaultCatch) {
-					reporter
-							.setMessage(
-									JavaScriptParserProblems.CATCH_UNREACHABLE,
-									"any catch clauses following an unqualified catch are unreachable");
-					reporter.setRange(catchClause.sourceStart(), catchClause
-							.getRP() + 1);
+					reporter.setMessage(
+							JavaScriptParserProblems.CATCH_UNREACHABLE,
+							"any catch clauses following an unqualified catch are unreachable");
+					reporter.setRange(catchClause.sourceStart(),
+							catchClause.getRP() + 1);
 					reporter.report();
 				}
 				if (!sawDefaultCatch
@@ -1495,8 +1493,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 					statement));
 		}
 
-		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
-				.getTokenStopIndex(), node.getTokenStopIndex()));
+		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC,
+				node.getTokenStopIndex(), node.getTokenStopIndex()));
 
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -1538,20 +1536,20 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		if (statementIndex < node.getChildCount()
 				&& node.getChild(statementIndex).getType() == JSParser.IF) {
-			catchClause.setIfKeyword(createKeyword(node
-					.getChild(statementIndex++), Keywords.IF));
+			catchClause.setIfKeyword(createKeyword(
+					node.getChild(statementIndex++), Keywords.IF));
 
-			catchClause.setFilterExpression((Expression) transformNode(node
-					.getChild(statementIndex++), catchClause));
+			catchClause.setFilterExpression((Expression) transformNode(
+					node.getChild(statementIndex++), catchClause));
 		}
 
 		if (statementIndex < node.getChildCount()) {
-			catchClause.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(
-					statementIndex - 1).getTokenStopIndex() + 1, node.getChild(
-					statementIndex).getTokenStartIndex()));
+			catchClause.setRP(getTokenOffset(JSParser.RPAREN,
+					node.getChild(statementIndex - 1).getTokenStopIndex() + 1,
+					node.getChild(statementIndex).getTokenStartIndex()));
 
-			catchClause.setStatement(transformStatementNode(node
-					.getChild(statementIndex), catchClause));
+			catchClause.setStatement(transformStatementNode(
+					node.getChild(statementIndex), catchClause));
 		}
 
 		catchClause.setStart(getTokenOffset(node.getTokenStartIndex()));
@@ -1773,15 +1771,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		method.setName((Identifier) transformNode(node.getChild(0), method));
 
-		method
-				.setLP(getTokenOffset(JSParser.LPAREN, node.getChild(0)
-						.getTokenStopIndex() + 1, node.getChild(1)
-						.getTokenStartIndex()));
+		method.setLP(getTokenOffset(JSParser.LPAREN, node.getChild(0)
+				.getTokenStopIndex() + 1, node.getChild(1).getTokenStartIndex()));
 
-		method
-				.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
-						.getTokenStopIndex() + 1, node.getChild(1)
-						.getTokenStartIndex()));
+		method.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
+				.getTokenStopIndex() + 1, node.getChild(1).getTokenStartIndex()));
 
 		method.setBody((StatementBlock) transformStatementNode(
 				node.getChild(1), method));
@@ -1800,19 +1794,13 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		method.setName((Identifier) transformNode(node.getChild(0), method));
 
-		method
-				.setLP(getTokenOffset(JSParser.LPAREN, node.getChild(0)
-						.getTokenStopIndex() + 1, node.getChild(1)
-						.getTokenStartIndex()));
+		method.setLP(getTokenOffset(JSParser.LPAREN, node.getChild(0)
+				.getTokenStopIndex() + 1, node.getChild(1).getTokenStartIndex()));
 
-		method
-				.setArgument((Identifier) transformNode(node.getChild(1),
-						method));
+		method.setArgument((Identifier) transformNode(node.getChild(1), method));
 
-		method
-				.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
-						.getTokenStopIndex() + 1, node.getChild(2)
-						.getTokenStartIndex()));
+		method.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
+				.getTokenStopIndex() + 1, node.getChild(2).getTokenStartIndex()));
 
 		method.setBody((StatementBlock) transformStatementNode(
 				node.getChild(2), method));
@@ -1857,8 +1845,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		processVariableDeclarations(node, declaration, SymbolKind.CONST);
 
-		declaration.setSemicolonPosition(getTokenOffset(JSParser.SEMIC, node
-				.getTokenStopIndex(), node.getTokenStopIndex()));
+		declaration.setSemicolonPosition(getTokenOffset(JSParser.SEMIC,
+				node.getTokenStopIndex(), node.getTokenStopIndex()));
 
 		declaration.setStart(getTokenOffset(node.getTokenStartIndex()));
 		declaration.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
@@ -1968,8 +1956,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		statement.setXmlKeyword(createKeyword(node.getChild(1), Keywords.XML));
 
 		Keyword namespaceKeyword = new Keyword(Keywords.NAMESPACE);
-		namespaceKeyword.setStart(getTokenOffset(JSParser.NAMESPACE, node
-				.getTokenStartIndex(), node.getTokenStopIndex()));
+		namespaceKeyword.setStart(getTokenOffset(JSParser.NAMESPACE,
+				node.getTokenStartIndex(), node.getTokenStopIndex()));
 		namespaceKeyword.setEnd(namespaceKeyword.sourceStart()
 				+ Keywords.NAMESPACE.length());
 		statement.setNamespaceKeyword(namespaceKeyword);
@@ -2001,8 +1989,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitXmlAttribute(Tree node) {
 
 		XmlAttributeIdentifier id = new XmlAttributeIdentifier(getParent());
-		final Expression expression = (Expression) transformNode(node
-				.getChild(1), id);
+		final Expression expression = (Expression) transformNode(
+				node.getChild(1), id);
 		id.setExpression(expression);
 
 		id.setStart(getTokenOffset(node.getTokenStartIndex()));
