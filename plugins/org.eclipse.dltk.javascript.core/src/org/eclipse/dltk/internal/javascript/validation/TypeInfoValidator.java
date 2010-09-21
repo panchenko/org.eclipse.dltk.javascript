@@ -66,11 +66,22 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		NORMAL, CALL
 	}
 
+	private static class UnresolvedCall {
+		final IValueCollection collection;
+		final CallExpression expression;
+
+		public UnresolvedCall(IValueCollection collection,
+				CallExpression expression) {
+			this.collection = collection;
+			this.expression = expression;
+		}
+	}
+
 	public static class ValidationVisitor extends TypeInferencerVisitor {
 
 		private final Reporter reporter;
 
-		private final List<Object[]> unresolvedCallExpressions = new ArrayList<Object[]>();
+		private final List<UnresolvedCall> unresolvedCallExpressions = new ArrayList<UnresolvedCall>();
 
 		public ValidationVisitor(ITypeInferenceContext context,
 				Reporter reporter) {
@@ -90,13 +101,12 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				return super.visit(node);
 			} finally {
 				if (rootNode && !unresolvedCallExpressions.isEmpty()) {
-					for (Object[] expression : (Object[][]) unresolvedCallExpressions
-							.toArray(new Object[unresolvedCallExpressions
-									.size()][])) {
-						enterContext((IValueCollection) expression[1]);
+					for (UnresolvedCall call : unresolvedCallExpressions
+							.toArray(new UnresolvedCall[unresolvedCallExpressions
+									.size()])) {
+						enterContext(call.collection);
 						try {
-							visitCallExpressionImpl(
-									(CallExpression) expression[0], true);
+							visitCallExpressionImpl(call.expression, true);
 						} finally {
 							leaveContext();
 						}
@@ -154,15 +164,16 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								.typeOf(reference.getParent());
 						if (type != null) {
 							if (type.getKind() == TypeKind.JAVA) {
-							reporter.reportProblem(
-									JavaScriptProblems.WRONG_PARAMETERS,
-									NLS.bind(
-											ValidationMessages.MethodNotSelected,
-											new String[] { reference.getName(),
-													type.getName(),
-													describeArgTypes(arguments) }),
-									methodNode.sourceStart(), methodNode
-											.sourceEnd());
+								reporter.reportProblem(
+										JavaScriptProblems.WRONG_PARAMETERS,
+										NLS.bind(
+												ValidationMessages.MethodNotSelected,
+												new String[] {
+														reference.getName(),
+														type.getName(),
+														describeArgTypes(arguments) }),
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
 
 							} else {
 								// TODO also a JS error (that should be
@@ -199,19 +210,20 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							.getParent());
 					if (type != null) {
 						if (type.getKind() == TypeKind.JAVA) {
-						reporter.reportProblem(
-								JavaScriptProblems.UNDEFINED_METHOD, NLS.bind(
-										ValidationMessages.UndefinedMethod,
-										reference.getName(), type.getName()),
-								methodNode.sourceStart(), methodNode
-										.sourceEnd());
+							reporter.reportProblem(
+									JavaScriptProblems.UNDEFINED_METHOD,
+									NLS.bind(
+											ValidationMessages.UndefinedMethod,
+											reference.getName(), type.getName()),
+									methodNode.sourceStart(), methodNode
+											.sourceEnd());
 						} else {
 							// TODO also report a JS error (that should be
 							// configurable)
 						}
 					} else {
-						Object attribute = reference.getAttribute(
-								IReferenceAttributes.PARAMETERS);
+						Object attribute = reference
+								.getAttribute(IReferenceAttributes.PARAMETERS);
 						if (attribute instanceof JSMethod) {
 							JSMethod method = (JSMethod) attribute;
 							if (method.isDeprecated()) {
@@ -264,8 +276,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 										methodNode.sourceStart(), methodNode
 												.sourceEnd());
 							} else {
-								unresolvedCallExpressions.add(new Object[] {
-										node, peekContext() });
+								unresolvedCallExpressions
+										.add(new UnresolvedCall(peekContext(),
+												node));
 							}
 						}
 					}
