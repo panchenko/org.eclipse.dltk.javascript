@@ -38,5 +38,7 @@ public interface JavaScriptProblems {
 
 	public static final int CONTINUE_NON_LOOP_LABEL = IProblem.Internal + 6;
 	public static final int BREAK_NON_LOOP_LABEL = IProblem.Internal + 7;
+	public static final int BREAK_OUTSIDE_LABEL = IProblem.Internal + 8;
+	public static final int CONTINUE_OUTSIDE_LABEL = IProblem.Internal + 9;
 
 }

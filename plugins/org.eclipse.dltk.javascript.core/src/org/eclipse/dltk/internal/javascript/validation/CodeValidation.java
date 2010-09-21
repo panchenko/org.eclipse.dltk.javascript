@@ -108,7 +108,7 @@ public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 	@Override
 	public Object visitBreakStatement(BreakStatement node) {
 		if (node.getLabel() != null) {
-			validateLabel(node.getLabel(), JSParser.BREAK);
+			validateLabel(node.getLabel(), node.sourceStart(), JSParser.BREAK);
 		}
 		return super.visitBreakStatement(node);
 	}
@@ -116,28 +116,39 @@ public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 	@Override
 	public Object visitContinueStatement(ContinueStatement node) {
 		if (node.getLabel() != null) {
-			validateLabel(node.getLabel(), JSParser.CONTINUE);
+			validateLabel(node.getLabel(), node.sourceStart(),
+					JSParser.CONTINUE);
 		}
 		return super.visitContinueStatement(node);
 	}
 
-	private void validateLabel(Label label, int token) {
+	private void validateLabel(Label label, int statementStart, int token) {
 		final LabelInfo info = scope.getLabel(label.getText());
 		if (info == null) {
+			return;
+		}
+		if (info.finished) {
+			reporter.setMessage(
+					token == JSParser.BREAK ? JavaScriptProblems.BREAK_OUTSIDE_LABEL
+							: JavaScriptProblems.CONTINUE_OUTSIDE_LABEL,
+					Keywords.fromToken(token)
+							+ " outside of labelled statement");
+			reporter.setSeverity(Severity.ERROR);
+			reporter.setRange(statementStart, label.sourceEnd());
+			reporter.report();
 			return;
 		}
 		if (!info.finished
 				&& info.statement.getStatement() instanceof LoopStatement) {
 			return;
 		}
-		reporter
-				.setMessage(
-						token == JSParser.BREAK ? JavaScriptProblems.BREAK_NON_LOOP_LABEL
-								: JavaScriptProblems.CONTINUE_NON_LOOP_LABEL,
-						Keywords.fromToken(token)
-								+ " can only use labels of iteration statements");
+		if (token == JSParser.BREAK) {
+			return;
+		}
+		reporter.setMessage(JavaScriptProblems.CONTINUE_NON_LOOP_LABEL,
+				"continue can only use labels of iteration statements");
 		reporter.setSeverity(Severity.ERROR);
-		reporter.setRange(label.sourceStart(), label.sourceEnd());
+		reporter.setRange(statementStart, label.sourceEnd());
 		reporter.report();
 	}
 
