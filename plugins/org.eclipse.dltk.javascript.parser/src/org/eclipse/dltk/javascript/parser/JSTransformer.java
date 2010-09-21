@@ -1004,7 +1004,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			return;
 		if (!scope.hasLabel(label.getText())) {
 			reporter.setMessage(JavaScriptParserProblems.UNDEFINED_LABEL,
-					"undefined label");
+					"undefined label " + label.getText());
 			reporter.setSeverity(Severity.ERROR);
 			reporter.setRange(label.sourceStart(), label.sourceEnd());
 			reporter.report();
