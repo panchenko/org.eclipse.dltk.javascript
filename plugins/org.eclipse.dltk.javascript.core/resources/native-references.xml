@@ -7,10 +7,89 @@
     <members xsi:type="ref:Method" name="toSource" type="String" description="Returns a string representing the source code of the object."/>
     <members xsi:type="ref:Method" name="valueOf" type="Object" description="Returns the primitive value of the specified object."/>
   </ref:Type>
+  <ref:Type name="RegExp" kind="PREDEFINED">
+  	<members xsi:type="ref:Property" name="prototype" type="RegExp" static="true" description="Allows the addition of properties to a RegExp object."/>
+    <members xsi:type="ref:Property" name="global" type="Boolean" description="Whether to test the regular expression against all possible matches in a string, or only against the first." />
+    <members xsi:type="ref:Property" name="ignoreCase" type="Boolean" description="Whether to ignore case while attempting a match in a string." />
+    <members xsi:type="ref:Property" name="lastIndex" type="Number" description="The index at which to start the next match." />
+    <members xsi:type="ref:Property" name="multiline" type="Boolean" description="Whether or not to search in strings across multiple lines." />
+    <members xsi:type="ref:Property" name="source" type="String" description="The text of the pattern." />
+	<members xsi:type="ref:Method" name="exec" type="Array" description="Executes a search for a match in its string parameter." >
+    	<parameters name="str" type="String"/>
+    </members>
+	<members xsi:type="ref:Method" name="test" type="Boolean" description="Tests for a match in its string parameter." >
+    	<parameters name="str" type="String"/>
+    </members>
+  </ref:Type>
+  <ref:Type name="Math" kind="PREDEFINED">
+    <members xsi:type="ref:Property" name="E" type="Number" description="Euler's constant and the base of natural logarithms, approximately 2.718." static="true"/>
+    <members xsi:type="ref:Property" name="LN2" type="Number" description="Natural logarithm of 2, approximately 0.693." static="true"/>
+    <members xsi:type="ref:Property" name="LN10" type="Number" description="Natural logarithm of 10, approximately 2.302." static="true"/>
+    <members xsi:type="ref:Property" name="LOG2E" type="Number" description="Base 2 logarithm of E, approximately 1.442." static="true"/>
+    <members xsi:type="ref:Property" name="LOG10E" type="Number" description="Base 10 logarithm of E, approximately 0.434." static="true"/>
+    <members xsi:type="ref:Property" name="PI" type="Number" description="Ratio of the circumference of a circle to its diameter, approximately 3.14159." static="true"/>
+    <members xsi:type="ref:Property" name="SQRT1_2" type="Number" description="Square root of 1/2; equivalently, 1 over the square root of 2, approximately 0.707." static="true"/>
+    <members xsi:type="ref:Property" name="SQRT2" type="Number" description="Square root of 2, approximately 1.414." static="true"/>
+    <members xsi:type="ref:Method" name="abs" type="Number" description="Returns the absolute value of a number." static="true">
+    	<parameters name="x"/>
+    </members>
+    <members xsi:type="ref:Method" name="acos" type="Number" description="Returns the arccosine of a number." static="true">
+    	<parameters name="x" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="asin" type="Number" description="Returns the arcsine of a number." static="true">
+    	<parameters name="x" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="atan" type="Number" description="Returns the arctangent of a number." static="true">
+    	<parameters name="x" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="atan2" type="Number" description="Returns the arctangent of the quotient of its arguments." static="true">
+    	<parameters name="y" type="Number"/>
+    	<parameters name="x" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="ceil" type="Number" description="Returns the smallest integer greater than or equal to a number." static="true">
+    	<parameters name="x"/>
+    </members>
+    <members xsi:type="ref:Method" name="cos" type="Number" description="Returns the arctangent of the quotient of its arguments." static="true">
+    	<parameters name="x"/>
+    </members>
+    <members xsi:type="ref:Method" name="exp" type="Number" description="Returns Enumber, where number is the argument, and E is Euler's constant (2.718...), the base of the natural logarithm." static="true">
+    	<parameters name="x"/>
+    </members>
+    <members xsi:type="ref:Method" name="floor" type="Number" description="Returns the largest integer less than or equal to a number." static="true">
+    	<parameters name="x"/>
+    </members>
+    <members xsi:type="ref:Method" name="log" type="Number" description="Returns the natural logarithm (loge, also ln) of a number." static="true">
+    	<parameters name="x"/>
+    </members>
+    <members xsi:type="ref:Method" name="max" type="Number" description="Returns the largest of zero or more numbers." static="true">
+    	<parameters name="[value1,valueN]" kind="VARARGS" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="min" type="Number" description="Returns the smallest of zero or more numbers." static="true">
+    	<parameters name="[value1,valueN]" kind="VARARGS" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="pow" type="Number" description="Returns base to the exponent power, that is, baseexponent." static="true">
+    	<parameters name="base" type="Number"/>
+    	<parameters name="exponent" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="random" type="Number" description="Returns a pseudo-random number between 0 and 1." static="true">
+    </members>
+    <members xsi:type="ref:Method" name="round" type="Number" description="Returns the value of a number rounded to the nearest integer." static="true">
+    	<parameters name="x" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="sin" type="Number" description="Returns the sine of a number." static="true">
+    	<parameters name="x" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="sqrt" type="Number" description="Returns the positive square root of a number." static="true">
+    	<parameters name="x" type="Number"/>
+    </members>
+    <members xsi:type="ref:Method" name="tan" type="Number" description="Returns the tangent of a number." static="true">
+    	<parameters name="x" type="Number"/>
+    </members>
+  </ref:Type>
   <ref:Type name="Array" kind="PREDEFINED">
+  	<members xsi:type="ref:Property" name="prototype" type="Array" static="true" description="Allows the addition of properties to a Array object."/>
     <members xsi:type="ref:Method" name="concat" type="Array" description="Joins two or more arrays and returns the result.">
-      <parameters name="arrayN"/>
-      <parameters name="[arrayX]" kind="OPTIONAL"/>
+      <parameters name="[array1,arrayN]" kind="VARARGS"/>
     </members>
     <members xsi:type="ref:Method" name="every" type="Boolean" description="Tests whether all elements in the array pass the test implemented by the provided function.">
       <parameters name="callback"/>
@@ -38,7 +117,7 @@
     </members>
     <members xsi:type="ref:Method" name="pop" type="Object" description="Removes and returns the last element of an array."/>
     <members xsi:type="ref:Method" name="push" type="Number" description="Adds one or more elements to the end of an array and returns the new length">
-      <parameters name="element" kind="VARARGS"/>
+      <parameters name="[element1,elementN]" kind="VARARGS"/>
     </members>
     <members xsi:type="ref:Method" name="reverse" type="Array" description="Reverses the order of the elements in an array."/>
     <members xsi:type="ref:Method" name="shift" type="Array" description="Removes and returns the first element of an array."/>
@@ -50,23 +129,25 @@
       <parameters name="callback"/>
     </members>
     <members xsi:type="ref:Method" name="sort" type="Array" description="Sorts the elements of an array.">
-      <parameters name="sortByFunction" kind="OPTIONAL"/>
+      <parameters name="[sortByFunction]" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="splice" type="Array" description="Removes and adds new elements to an array.">
       <parameters name="index"/>
       <parameters name="howmany"/>
-      <parameters name="[newelementX]" kind="OPTIONAL"/>
+      <parameters name="[element1,elementN]" kind="VARARGS"/>
     </members>
     <members xsi:type="ref:Method" name="toLocaleString" type="String"/>
     <members xsi:type="ref:Method" name="toSource" type="String" description="The toSource() method represents the source code of an object."/>
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for Array."/>
     <members xsi:type="ref:Method" name="unshift" type="Number" description="Adds one or more elements to the beginning of an array and returns the new length.">
-      <parameters name="newelement1"/>
-      <parameters name="[newelementX]" kind="OPTIONAL"/>
+      <parameters name="[element1,elementN]" kind="VARARGS"/>
     </members>
   </ref:Type>
-  <ref:Type name="Boolean" kind="PREDEFINED"/>
+  <ref:Type name="Boolean" kind="PREDEFINED">
+  	<members xsi:type="ref:Property" name="prototype" type="Boolean" static="true" description="Allows the addition of properties to a Boolean object."/>
+  </ref:Type>
   <ref:Type name="Date" kind="PREDEFINED" description="Creates Date instances which let you work with dates and times.">
+    <members xsi:type="ref:Property" name="prototype" type="Date" static="true" description="Allows the addition of properties to a Date object."/>
     <members xsi:type="ref:Method" name="getDate" type="Number" description="Returns the day of the month from a Date object (from 1-31)."/>
     <members xsi:type="ref:Method" name="getDay" type="Number" description="Returns the day of the week from a Date object (from 0-6)."/>
     <members xsi:type="ref:Method" name="getFullYear" type="Number" description="Returns the year, as a four-digit number."/>
@@ -166,6 +247,12 @@
     </members>
   </ref:Type>
   <ref:Type name="Number" kind="PREDEFINED">
+  	<members xsi:type="ref:Property" name="MAX_VALUE" type="Number" static="true" description="The largest representable number."/>
+  	<members xsi:type="ref:Property" name="MIN_VALUE" type="Number" static="true" description="The smallest representable number."/>
+  	<members xsi:type="ref:Property" name="NaN" type="Number" static="true" description="Special 'not a number' value."/>
+  	<members xsi:type="ref:Property" name="NEGATIVE_INFINITY" type="Number" static="true" description="Special value representing negative infinity; returned on overflow."/>
+  	<members xsi:type="ref:Property" name="POSITIVE_INFINITY" type="Number" static="true" description="Special value representing infinity; returned on overflow."/>
+  	<members xsi:type="ref:Property" name="prototype" type="Number" static="true" description="The prototype object of the Number constructor can be modified to affect all Number instances"/>
     <members xsi:type="ref:Method" name="toExponential" type="String" description="Converts the value of the object into an exponential notation.">
       <parameters name="numberOfDecimals"/>
     </members>
@@ -181,6 +268,10 @@
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a Number object."/>
   </ref:Type>
   <ref:Type name="String" kind="PREDEFINED" description="String is a global object that may be used to construct String  instances.">
+  	<members xsi:type="ref:Property" name="prototype" type="String" static="true" description="Allows the addition of properties to a String object."/>
+  	<members xsi:type="ref:Method" name="fromCharCode" type="String" static="true" description="Returns a string created by using the specified sequence of Unicode values.">
+  	    <parameters name="[num1,numN]" kind="VARARGS"/>
+    </members>
     <members xsi:type="ref:Method" name="anchor" type="String" description="Creates an HTML anchor.">
       <parameters name="anchorname"/>
     </members>
