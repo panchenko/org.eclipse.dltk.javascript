@@ -28,6 +28,7 @@ import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.IValueParent;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
+import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -198,27 +199,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						}
 					}
 				}
-			} else if (item instanceof IValueReference) {
-				final Type type = context.getType(((IValueReference) item)
-						.getName());
-				if (type != null) {
-					reporter.reportTypeMembers(type, STATIC);
-				}
 			}
 		}
 	}
-
-	private static final Predicate<Member> ALWAYS_TRUE = new Predicate<Member>() {
-		public boolean evaluate(Member member) {
-			return true;
-		}
-	};
-
-	private static final Predicate<Member> STATIC = new Predicate<Member>() {
-		public boolean evaluate(Member member) {
-			return member.isStatic();
-		}
-	};
 
 	private class Reporter {
 
@@ -258,13 +241,24 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			}
 			if (item instanceof IValueReference) {
 				final IValueReference valueRef = (IValueReference) item;
+				final Predicate<Member> predicate;
+				if (isStatic(valueRef)) {
+					predicate = MemberPredicates.STATIC;
+				} else {
+					predicate = MemberPredicates.ALWAYS_TRUE;
+				}
 				for (Type type : valueRef.getDeclaredTypes()) {
-					reportTypeMembers(type, ALWAYS_TRUE);
+					reportTypeMembers(type, predicate);
 				}
 				for (Type type : valueRef.getTypes()) {
-					reportTypeMembers(type, ALWAYS_TRUE);
+					reportTypeMembers(type, predicate);
 				}
 			}
+		}
+
+		private boolean isStatic(IValueReference valueRef) {
+			return Boolean.TRUE == valueRef
+					.getAttribute(IReferenceAttributes.STATIC);
 		}
 
 		protected void reportTypeMembers(Type type, Predicate<Member> predicate) {
@@ -427,8 +421,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	private void doGlobalCompletion(ITypeInferenceContext context,
 			IValueCollection collection, CompletionPath path, int position) {
 		doCompletionOnMember(context, collection, path, position);
-		doCompletionOnType(context, path.lastSegment(), position);
 		if (useEngine) {
+			doCompletionOnType(context, path.lastSegment(), position);
 			doCompletionOnKeyword(path.lastSegment(), position);
 		}
 	}

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
+import org.eclipse.dltk.internal.javascript.typeinference.CompletionString;
+
 public class PositionCalculator {
 
 	private boolean isMember;
@@ -35,7 +37,7 @@ public class PositionCalculator {
 			} else
 				pos = maxPos;
 		}
-		completion = conString.substring(0, pos);
+		completion = CompletionString.parse(conString.substring(0, pos), false);
 		int lastDot = completion.lastIndexOf('.');
 		if (lastDot != -1) {
 			isMember = true;

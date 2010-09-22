@@ -12,6 +12,7 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TopValueCollection extends ValueCollection {
 
@@ -32,6 +33,10 @@ public class TopValueCollection extends ValueCollection {
 					final Element element = context.resolve(name);
 					if (element != null) {
 						return ElementValue.createFor(element);
+					}
+					final Type type = context.getKnownType(name);
+					if (type != null) {
+						return ElementValue.createStatic(type);
 					}
 				}
 				return null;

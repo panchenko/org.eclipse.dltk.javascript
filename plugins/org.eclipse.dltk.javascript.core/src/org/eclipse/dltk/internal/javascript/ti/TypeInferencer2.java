@@ -93,6 +93,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return getType(typeName, queryProviders, true, !queryProviders, true);
 	}
 
+	public Type getKnownType(String typeName) {
+		if (typeName == null || typeName.length() == 0) {
+			return null;
+		}
+		final boolean queryProviders = canQueryTypeProviders();
+		return getType(typeName, queryProviders, true, !queryProviders, false);
+	}
+
 	public Set<String> listTypes(String prefix) {
 		Set<String> result = new HashSet<String>();
 		Set<String> typeNames = TypeInfoModelLoader.getInstance().listTypes(

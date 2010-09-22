@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -26,10 +27,15 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public abstract class ElementValue implements IValue {
 
 	public static ElementValue findMember(Type type, String name) {
+		return findMember(type, name, MemberPredicates.ALWAYS_TRUE);
+	}
+
+	public static ElementValue findMember(Type type, String name,
+			Predicate<Member> predicate) {
 		if (type != null) {
 			List<Member> selection = new ArrayList<Member>(4);
 			for (Member member : type.getMembers()) {
-				if (name.equals(member.getName())) {
+				if (name.equals(member.getName()) && predicate.evaluate(member)) {
 					selection.add(member);
 				}
 			}
@@ -47,8 +53,13 @@ public abstract class ElementValue implements IValue {
 		} else if (element instanceof Property) {
 			return new PropertyValue((Property) element);
 		} else {
+			assert element instanceof Type;
 			return new TypeValue(Collections.singleton((Type) element));
 		}
+	}
+
+	public static ElementValue createStatic(Type type) {
+		return new StaticTypeValue(Collections.singleton(type));
 	}
 
 	private static class TypeValue extends ElementValue implements IValue {
@@ -79,6 +90,47 @@ public abstract class ElementValue implements IValue {
 
 		public Set<Type> getDeclaredTypes() {
 			return types;
+		}
+
+	}
+
+	private static class StaticTypeValue extends ElementValue implements IValue {
+
+		private final Set<Type> types;
+
+		public StaticTypeValue(Set<Type> types) {
+			this.types = types;
+		}
+
+		@Override
+		protected Type[] getElements() {
+			return types.toArray(new Type[types.size()]);
+		}
+
+		public IValue getChild(String name, boolean resolve) {
+			for (Type type : types) {
+				IValue child = findMember(type, name, MemberPredicates.STATIC);
+				if (child != null)
+					return child;
+			}
+			return null;
+		}
+
+		public Type getDeclaredType() {
+			return types.iterator().next();
+		}
+
+		public Set<Type> getDeclaredTypes() {
+			return types;
+		}
+
+		@Override
+		public Object getAttribute(String key) {
+			if (IReferenceAttributes.STATIC.equals(key)) {
+				return Boolean.TRUE;
+			} else {
+				return super.getAttribute(key);
+			}
 		}
 
 	}
@@ -255,7 +307,7 @@ public abstract class ElementValue implements IValue {
 	public final void addReference(IValue src) {
 	}
 
-	public final Object getAttribute(String key) {
+	public Object getAttribute(String key) {
 		if (IReferenceAttributes.ELEMENT.equals(key)) {
 			return getElements();
 		}

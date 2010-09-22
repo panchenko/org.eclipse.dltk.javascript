@@ -9,22 +9,22 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.typeinfo;
+package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.core.Predicate;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
-public interface ITypeInfoContext {
+public class MemberPredicates {
 
-	Type getType(String typeName);
-
-	Type getKnownType(String typeName);
-
-	/**
-	 * Returns the model element being processed or <code>null</code>
-	 * 
-	 * @return
-	 */
-	IModelElement getModelElement();
+	public static final Predicate<Member> STATIC = new Predicate<Member>() {
+		public boolean evaluate(Member member) {
+			return member.isStatic();
+		}
+	};
+	public static final Predicate<Member> ALWAYS_TRUE = new Predicate<Member>() {
+		public boolean evaluate(Member member) {
+			return true;
+		}
+	};
 
 }
