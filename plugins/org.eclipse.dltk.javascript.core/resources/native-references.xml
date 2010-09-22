@@ -161,6 +161,9 @@
     <members xsi:type="ref:Method" name="toTimeString" type="String" description="Returns the time portion of a Date object in readable form."/>
     <members xsi:type="ref:Method" name="toUTCString" type="String" description="Converts a Date object, according to universal time, to a string."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a String object."/>
+    <members xsi:type="ref:Method" name="parse" type="Number" description="Parses a string representation of a date, and returns the number of milliseconds since midnight Jan 1, 1970" static="true">
+      <parameters name="dateString" type="String"/>
+    </members>
   </ref:Type>
   <ref:Type name="Number" kind="PREDEFINED">
     <members xsi:type="ref:Method" name="toExponential" type="String" description="Converts the value of the object into an exponential notation.">
