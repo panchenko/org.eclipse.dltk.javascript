@@ -80,7 +80,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				return cu.getModelElement();
 			}
 		}, null);
-		final NodeFinder nodeFinder = new NodeFinder(content, position, i);
+		final NodeFinder nodeFinder = new NodeFinder(content, position,
+				position);
 		final org.eclipse.dltk.javascript.ast.Type typeNode = nodeFinder
 				.locateType(script);
 		if (typeNode != null) {
@@ -249,8 +250,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			if (processedTypes.add(type)) {
 				for (Member member : type.getMembers()) {
 					if (member.isVisible()
-							&& CharOperation.prefixEquals(prefix, member
-									.getName(), false)
+							&& CharOperation.prefixEquals(prefix,
+									member.getName(), false)
 							&& processed.add(MethodKey.createKey(member))) {
 						reportMember(member, member.getName());
 					}
@@ -305,8 +306,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 			int relevance = computeBaseRelevance();
 			relevance += computeRelevanceForInterestingProposal();
-			relevance += computeRelevanceForCaseMatching(prefix, reference
-					.getName());
+			relevance += computeRelevanceForCaseMatching(prefix,
+					reference.getName());
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
 			proposal.setRelevance(relevance);
 
