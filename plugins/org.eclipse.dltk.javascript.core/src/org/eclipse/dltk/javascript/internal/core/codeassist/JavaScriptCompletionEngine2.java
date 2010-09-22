@@ -22,6 +22,7 @@ import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IAccessRule;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
@@ -174,30 +175,50 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					break;
 			}
 		}
-		if (item != null && exists(item) && !path.isEmpty()) {
+		if (item != null && !path.isEmpty()) {
 			final Reporter reporter = new Reporter(path.lastSegment(), position);
-			reporter.report(item);
-			if (item instanceof IValueCollection) {
-				IValueCollection coll = (IValueCollection) item;
-				for (;;) {
-					coll = coll.getParent();
-					if (coll == null)
-						break;
-					reporter.report(coll);
-				}
-				final Set<String> globals = context.listGlobals(path
-						.lastSegment());
-				for (String global : globals) {
-					if (reporter.canReport(global)) {
-						Element element = context.resolve(global);
-						if (element != null && element.isVisible()) {
-							reporter.report(global, element);
+			if (exists(item)) {
+				reporter.report(item);
+				if (item instanceof IValueCollection) {
+					IValueCollection coll = (IValueCollection) item;
+					for (;;) {
+						coll = coll.getParent();
+						if (coll == null)
+							break;
+						reporter.report(coll);
+					}
+					final Set<String> globals = context.listGlobals(path
+							.lastSegment());
+					for (String global : globals) {
+						if (reporter.canReport(global)) {
+							Element element = context.resolve(global);
+							if (element != null && element.isVisible()) {
+								reporter.report(global, element);
+							}
 						}
 					}
+				}
+			} else if (item instanceof IValueReference) {
+				final Type type = context.getType(((IValueReference) item)
+						.getName());
+				if (type != null) {
+					reporter.reportTypeMembers(type, STATIC);
 				}
 			}
 		}
 	}
+
+	private static final Predicate<Member> ALWAYS_TRUE = new Predicate<Member>() {
+		public boolean evaluate(Member member) {
+			return true;
+		}
+	};
+
+	private static final Predicate<Member> STATIC = new Predicate<Member>() {
+		public boolean evaluate(Member member) {
+			return member.isStatic();
+		}
+	};
 
 	private class Reporter {
 
@@ -238,20 +259,21 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			if (item instanceof IValueReference) {
 				final IValueReference valueRef = (IValueReference) item;
 				for (Type type : valueRef.getDeclaredTypes()) {
-					reportTypeMembers(type);
+					reportTypeMembers(type, ALWAYS_TRUE);
 				}
 				for (Type type : valueRef.getTypes()) {
-					reportTypeMembers(type);
+					reportTypeMembers(type, ALWAYS_TRUE);
 				}
 			}
 		}
 
-		private void reportTypeMembers(Type type) {
+		protected void reportTypeMembers(Type type, Predicate<Member> predicate) {
 			if (processedTypes.add(type)) {
 				for (Member member : type.getMembers()) {
 					if (member.isVisible()
 							&& CharOperation.prefixEquals(prefix,
 									member.getName(), false)
+							&& predicate.evaluate(member)
 							&& processed.add(MethodKey.createKey(member))) {
 						reportMember(member, member.getName());
 					}
