@@ -2,6 +2,21 @@
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
   <ref:Type name="void">
   </ref:Type>
+  <ref:Type name="Error" kind="PREDEFINED">
+  	<members xsi:type="ref:Property" name="prototype" type="Error" static="true" description="Allows the addition of properties to a Error object."/>
+  </ref:Type>
+  <ref:Type name="Function" kind="PREDEFINED">
+  	<members xsi:type="ref:Property" name="prototype" type="Function" static="true" description="Allows the addition of properties to a Function object."/>
+  	<members xsi:type="ref:Property" name="length" type="Number"  description="Specifies the number of arguments expected by the function."/>
+  	<members xsi:type="ref:Method" name="apply" type="Object" description="Applies the method of another object in the context of a different object (the calling object); arguments can be passed as an Array object." >
+    	<parameters name="thisArg"/>
+    	<parameters name="[argsArray]" type="Array"/>
+    </members>
+  	<members xsi:type="ref:Method" name="call" type="Boolean" description="Calls (executes) a method of another object in the context of a different object (the calling object); arguments can be passed as they are." >
+    	<parameters name="thisArg"/>
+    	<parameters name="[arg1,argN]" type="VARARGS"/>
+    </members>
+  </ref:Type>
   <ref:Type name="Object" kind="PREDEFINED">
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a string representing the specified object."/>
     <members xsi:type="ref:Method" name="toSource" type="String" description="Returns a string representing the source code of the object."/>
