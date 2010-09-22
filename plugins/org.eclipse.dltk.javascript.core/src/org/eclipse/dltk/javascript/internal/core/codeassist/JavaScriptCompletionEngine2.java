@@ -405,6 +405,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	private void doGlobalCompletion(ITypeInferenceContext context,
 			IValueCollection collection, CompletionPath path, int position) {
 		doCompletionOnMember(context, collection, path, position);
+		doCompletionOnType(context, path.lastSegment(), position);
 		if (useEngine) {
 			doCompletionOnKeyword(path.lastSegment(), position);
 		}
