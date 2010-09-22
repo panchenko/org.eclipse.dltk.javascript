@@ -33,18 +33,24 @@ public abstract class ElementValue implements IValue {
 	public static ElementValue findMember(Type type, String name,
 			Predicate<Member> predicate) {
 		if (type != null) {
-			List<Member> selection = new ArrayList<Member>(4);
-			for (Member member : type.getMembers()) {
-				if (name.equals(member.getName()) && predicate.evaluate(member)) {
-					selection.add(member);
-				}
-			}
+			List<Member> selection = findMembers(type, name, predicate);
 			if (!selection.isEmpty()) {
 				return new MemberValue(selection.toArray(new Member[selection
 						.size()]));
 			}
 		}
 		return null;
+	}
+
+	public static List<Member> findMembers(Type type, String name,
+			Predicate<Member> predicate) {
+		List<Member> selection = new ArrayList<Member>(4);
+		for (Member member : type.getMembers()) {
+			if (name.equals(member.getName()) && predicate.evaluate(member)) {
+				selection.add(member);
+			}
+		}
+		return selection;
 	}
 
 	public static ElementValue createFor(Element element) {

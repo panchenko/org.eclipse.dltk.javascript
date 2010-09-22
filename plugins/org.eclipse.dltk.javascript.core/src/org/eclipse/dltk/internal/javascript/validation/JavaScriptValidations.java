@@ -144,4 +144,9 @@ public class JavaScriptValidations {
 		return methods.get(0);
 	}
 
+	public static boolean isStatic(IValueReference valueRef) {
+		return Boolean.TRUE == valueRef
+				.getAttribute(IReferenceAttributes.STATIC);
+	}
+
 }

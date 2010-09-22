@@ -21,6 +21,13 @@ public class MemberPredicates {
 			return member.isStatic();
 		}
 	};
+
+	public static final Predicate<Member> NON_STATIC = new Predicate<Member>() {
+		public boolean evaluate(Member member) {
+			return !member.isStatic();
+		}
+	};
+
 	public static final Predicate<Member> ALWAYS_TRUE = new Predicate<Member>() {
 		public boolean evaluate(Member member) {
 			return true;

@@ -33,6 +33,7 @@ import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
@@ -242,7 +243,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			if (item instanceof IValueReference) {
 				final IValueReference valueRef = (IValueReference) item;
 				final Predicate<Member> predicate;
-				if (isStatic(valueRef)) {
+				if (JavaScriptValidations.isStatic(valueRef)) {
 					predicate = MemberPredicates.STATIC;
 				} else {
 					predicate = MemberPredicates.ALWAYS_TRUE;
@@ -254,11 +255,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					reportTypeMembers(type, predicate);
 				}
 			}
-		}
-
-		private boolean isStatic(IValueReference valueRef) {
-			return Boolean.TRUE == valueRef
-					.getAttribute(IReferenceAttributes.STATIC);
 		}
 
 		protected void reportTypeMembers(Type type, Predicate<Member> predicate) {
