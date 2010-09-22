@@ -170,5 +170,17 @@
     	<builder class="org.eclipse.dltk.internal.javascript.ti.JSDocSupport"/>
 	</extension>
 
-</plugin>
+	<extension
+		point="org.eclipse.core.resources.markers"
+		id="jsproblem"
+		name="JavaScript Problem">
+		<persistent value="true"/>
+		<super type="org.eclipse.dltk.core.problem"/>
+	</extension>
+	<extension point="org.eclipse.dltk.core.problemFactory">
+	      <problemFactory
+             class="org.eclipse.dltk.javascript.internal.core.JSProblemFactory"
+             nature="org.eclipse.dltk.javascript.core.nature"/>
+	</extension>
 
+</plugin>
