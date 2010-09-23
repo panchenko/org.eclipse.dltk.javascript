@@ -18,6 +18,7 @@
     </members>
   </ref:Type>
   <ref:Type name="Object" kind="PREDEFINED">
+  	<members xsi:type="ref:Property" name="prototype" type="Object" static="true" description="Allows the addition of properties to a Object object."/>
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a string representing the specified object."/>
     <members xsi:type="ref:Method" name="toSource" type="String" description="Returns a string representing the source code of the object."/>
     <members xsi:type="ref:Method" name="valueOf" type="Object" description="Returns the primitive value of the specified object."/>
