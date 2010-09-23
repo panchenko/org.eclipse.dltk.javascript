@@ -39,6 +39,7 @@ import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -331,19 +332,20 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
 			if (isFunction) {
-				final IMethod method = (IMethod) reference
-						.getAttribute(IReferenceAttributes.PARAMETERS);
+				final IMethod method = (IMethod) reference.getAttribute(
+						IReferenceAttributes.PARAMETERS);
 				if (method != null) {
 					int paramCount = method.getParameterCount();
-					while (paramCount > 0
-							&& method.getParameters().get(paramCount - 1)
-									.isOptional()) {
-						--paramCount;
-					}
 					if (paramCount > 0) {
 						final String[] params = new String[paramCount];
 						for (int i = 0; i < paramCount; ++i) {
-							params[i] = method.getParameters().get(i).getName();
+							IParameter parameter = method.getParameters()
+									.get(i);
+							if (parameter.isOptional()) {
+								params[i] = "[" + parameter.getName() + "]";
+							} else {
+								params[i] = parameter.getName();
+							}
 						}
 						proposal.setParameterNames(params);
 					}
