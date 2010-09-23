@@ -35,12 +35,16 @@ public class Value implements IValue {
 		return !references.isEmpty();
 	}
 
+	public Set<Value> getReferences() {
+		return references;
+	}
+
 	private static interface Handler<R> {
 		void process(Value value, R result);
 	}
 
 	private static <R> void execute(Value value, Handler<R> handler, R result,
-			Set<Value> visited) {
+			Set<IValue> visited) {
 		if (visited.add(value)) {
 			handler.process(value, result);
 			for (Value child : value.references) {
@@ -51,14 +55,18 @@ public class Value implements IValue {
 
 	private static final Handler<Set<Type>> GET_TYPES = new Handler<Set<Type>>() {
 		public void process(Value value, Set<Type> result) {
-			result.addAll(value.types);
+			if (value.hasReferences()) {
+				result.addAll(value.types);
+			} else {
+				result.addAll(value.getTypes());
+			}
 		}
 	};
 
 	public Set<Type> getTypes() {
 		if (hasReferences()) {
 			final Set<Type> result = new HashSet<Type>();
-			execute(this, GET_TYPES, result, new HashSet<Value>());
+			execute(this, GET_TYPES, result, new HashSet<IValue>());
 			return result;
 		} else {
 			return types;
@@ -67,14 +75,15 @@ public class Value implements IValue {
 
 	private static final Handler<Set<Type>> GET_DECLARED_TYPES = new Handler<Set<Type>>() {
 		public void process(Value value, Set<Type> result) {
-			result.addAll(value.types);
+			if (value.declaredType != null)
+				result.add(value.declaredType);
 		}
 	};
 
 	public Type getDeclaredType() {
 		if (hasReferences()) {
 			final Set<Type> result = new HashSet<Type>();
-			execute(this, GET_DECLARED_TYPES, result, new HashSet<Value>());
+			execute(this, GET_DECLARED_TYPES, result, new HashSet<IValue>());
 			return !result.isEmpty() ? result.iterator().next() : null;
 		} else {
 			return declaredType;
@@ -84,7 +93,7 @@ public class Value implements IValue {
 	public Set<Type> getDeclaredTypes() {
 		if (hasReferences()) {
 			final Set<Type> result = new HashSet<Type>();
-			execute(this, GET_DECLARED_TYPES, result, new HashSet<Value>());
+			execute(this, GET_DECLARED_TYPES, result, new HashSet<IValue>());
 			return result;
 		} else {
 			return declaredType != null ? Collections.singleton(declaredType)
@@ -112,12 +121,23 @@ public class Value implements IValue {
 		this.location = location;
 	}
 
-	public Object getAttribute(String key) {
+	public final Object getAttribute(String key) {
+		return getAttribute(key, false);
+	}
+
+	public Object getAttribute(String key, boolean includeReferences) {
+		Object attribute = null;
 		if (attributes != null) {
-			return attributes.get(key);
-		} else {
-			return null;
+			attribute = attributes.get(key);
 		}
+		if (includeReferences && attribute == null && !references.isEmpty()) {
+			for (Value reference : references) {
+				attribute = reference.getAttribute(key, includeReferences);
+				if (attribute != null)
+					break;
+			}
+		}
+		return attribute;
 	}
 
 	public void removeAttribute(String key) {
@@ -142,7 +162,7 @@ public class Value implements IValue {
 	public Set<String> getDirectChildren() {
 		if (hasReferences()) {
 			final Set<String> result = new HashSet<String>();
-			execute(this, GET_DIRECT_CHILDREN, result, new HashSet<Value>());
+			execute(this, GET_DIRECT_CHILDREN, result, new HashSet<IValue>());
 			return result;
 		} else {
 			return children.keySet();
@@ -178,7 +198,7 @@ public class Value implements IValue {
 		return null;
 	}
 
-	private static class GetChildHandler implements Handler<Set<Value>> {
+	private static class GetChildHandler implements Handler<Set<IValue>> {
 
 		private final String childName;
 
@@ -186,19 +206,37 @@ public class Value implements IValue {
 			this.childName = childName;
 		}
 
-		public void process(Value value, Set<Value> result) {
+		public void process(Value value, Set<IValue> result) {
 			Value child = value.children.get(childName);
 			if (child != null) {
 				result.add(child);
+			} else {
+				IValue member = ElementValue.findMember(value.declaredType,
+						childName);
+				if (member != null) {
+					result.add(member);
+				}
+				Set<Type> valueTypes = null;
+				if (value.hasReferences()) {
+					valueTypes = value.types;
+				} else {
+					valueTypes = value.getTypes();
+				}
+				for (Type type : valueTypes) {
+					member = ElementValue.findMember(type, childName);
+					if (member != null) {
+						result.add(member);
+					}
+				}
 			}
 		}
 	};
 
 	public IValue getChild(String name, boolean resolve) {
 		if (hasReferences()) {
-			Set<Value> result = new HashSet<Value>();
+			Set<IValue> result = new HashSet<IValue>();
 			execute(this, new GetChildHandler(name), result,
-					new HashSet<Value>());
+					new HashSet<IValue>());
 			if (!result.isEmpty()) {
 				return result.iterator().next();
 			} else {
@@ -248,7 +286,7 @@ public class Value implements IValue {
 				if (hasReferences()) {
 					Set<Value> result = new HashSet<Value>();
 					execute(this, new CreateChildOperation(name), result,
-							new HashSet<Value>());
+							new HashSet<IValue>());
 					if (!result.isEmpty()) {
 						return result.iterator().next();
 					}
@@ -296,11 +334,26 @@ public class Value implements IValue {
 				types.add(src.declaredType);
 			}
 			types.addAll(src.types);
+			references.addAll(src.references);
+			if (src.attributes != null) {
+				if (attributes == null) {
+					attributes = new HashMap<String, Object>();
+				}
+				attributes.putAll(src.attributes);
+			}
 			for (Map.Entry<String, Value> entry : src.children.entrySet()) {
 				Value child = (Value) createChild(entry.getKey());
 				if (child != null) {
 					child.addValueRecursive(entry.getValue(), processing);
 				}
+			}
+			if (src.kind != ReferenceKind.UNKNOWN
+					&& kind == ReferenceKind.UNKNOWN) {
+				kind = src.kind;
+			}
+			if (src.location != ReferenceLocation.UNKNOWN
+					&& location == ReferenceLocation.UNKNOWN) {
+				location = src.location;
 			}
 		}
 	}

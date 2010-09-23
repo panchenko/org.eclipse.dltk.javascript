@@ -48,10 +48,11 @@ public interface IValueReference extends IValueParent {
 
 	Set<Type> getDeclaredTypes();
 
+	Object getAttribute(String key, boolean includeReferences);
+	
 	Object getAttribute(String key);
 
 	void setAttribute(String key, Object value);
 
 	boolean exists();
-
 }

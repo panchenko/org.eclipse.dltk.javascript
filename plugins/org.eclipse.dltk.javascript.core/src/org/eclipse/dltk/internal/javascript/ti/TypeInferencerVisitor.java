@@ -13,9 +13,11 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
@@ -81,7 +83,15 @@ import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.emf.common.util.EList;
 
 public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
@@ -127,6 +137,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference right = visit(node.getRightExpression());
 		if (JSParser.ASSIGN == node.getOperation()) {
 			return visitAssign(left, right);
+		} else if (left == null && right instanceof ConstantValue) {
+			return right;
 		} else {
 			// TODO handle other operations
 			return null;
@@ -337,12 +349,20 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					node.sourceEnd(), kw.sourceStart(), kw.sourceEnd()));
 		}
 		result.setKind(ReferenceKind.FUNCTION);
+		result.setDeclaredType(context.getKnownType("Function"));
 		result.setAttribute(IReferenceAttributes.PARAMETERS, method);
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
 		final IValueReference returnValue = result
 				.getChild(IValueReference.FUNCTION_OP);
 		returnValue.setDeclaredType(method.getType());
 		returnValue.setValue(function.getReturnValue());
+		Set<String> thisChildren = function.getThis().getDirectChildren();
+		for (String childName : thisChildren) {
+			IValueReference child = returnValue.getChild(childName);
+			IValueReference originalChild = function.getThis().getChild(
+					childName);
+			child.addValue(originalChild, true);
+		}
 		return result;
 	}
 
@@ -455,16 +475,80 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference clazz = visit(node.getObjectClass());
 		final IValueReference newType = result
 				.getChild(IValueReference.FUNCTION_OP);
-		if (clazz != null) {
-			final Type type = context.getType(clazz.getName());
-			if (type != null) {
+		if (clazz != null && clazz.getName() != null
+				&& !clazz.getName().trim().equals("")) {
+			final Type type = resolveJavaScriptType(context, clazz.getName(),
+					peekContext());
+			if (type.getKind() != TypeKind.UNKNOWN) {
 				newType.setValue(context.getFactory().create(peekContext(),
 						type));
-				return result;
+			} else {
+				newType.setValue(new LazyReference(context, clazz.getName(),
+						peekContext()));
 			}
+			return result;
 		}
 		newType.setValue(context.getFactory().createObject(peekContext()));
 		return result;
+	}
+
+	public static Type resolveJavaScriptType(ITypeInferenceContext context,
+			String className,
+			IValueCollection collection) {
+		if (className == null)
+			return null;
+
+		Type type = context.getType(className);
+		if (type.getKind() == TypeKind.UNKNOWN) {
+			IValueReference functionType = collection.getChild(className);
+			if (functionType != null && functionType.exists()) {
+				type.setKind(TypeKind.JAVASCRIPT);
+				EList<Member> members = type.getMembers();
+				IValueReference functionCallChild = functionType.getChild(
+						IValueReference.FUNCTION_OP);
+				Set<String> functionFields = functionCallChild.getDirectChildren();
+				for (String fieldName : functionFields) {
+					if (fieldName.equals(IValueReference.FUNCTION_OP))
+						continue;
+					IValueReference child = functionCallChild
+							.getChild(fieldName);
+					// test if it is a function.
+					if (child.hasChild(IValueReference.FUNCTION_OP)) {
+						Method method = TypeInfoModelFactory.eINSTANCE
+								.createMethod();
+						method.setName(fieldName);
+						method.setType(JavaScriptValidations.typeOf(child));
+
+						JSMethod jsmethod = (JSMethod) child.getAttribute(
+								IReferenceAttributes.PARAMETERS, true);
+						if (jsmethod != null
+								&& jsmethod.getParameterCount() > 0) {
+							EList<Parameter> parameters = method
+									.getParameters();
+							List<IParameter> jsParameters = jsmethod
+									.getParameters();
+							for (IParameter jsParameter : jsParameters) {
+								Parameter parameter = TypeInfoModelFactory.eINSTANCE
+										.createParameter();
+								parameter.setKind(ParameterKind.OPTIONAL);
+								parameter.setType(jsParameter.getType());
+								parameter.setName(jsParameter.getName());
+								parameters.add(parameter);
+							}
+						}
+						members.add(method);
+					} else {
+						Property property = TypeInfoModelFactory.eINSTANCE
+								.createProperty();
+						property.setName(fieldName);
+						property.setType(JavaScriptValidations.typeOf(child));
+						members.add(property);
+					}
+				}
+				return type;
+			}
+		}
+		return type;
 	}
 
 	@Override
@@ -506,9 +590,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			// TODO check is this also a local reference kind or should this be
 			// a special one?
 			child.setKind(ReferenceKind.LOCAL);
-			child.setLocation(ReferenceLocation.create(node.sourceStart(),
-					node.sourceEnd(), property.sourceStart(),
-					property.sourceEnd()));
+			child.setLocation(ReferenceLocation.create(node.sourceStart(), node
+					.sourceEnd(), property.sourceStart(), property.sourceEnd()));
 		}
 		return child;
 	}

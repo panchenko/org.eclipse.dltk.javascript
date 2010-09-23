@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class FunctionValueCollection extends ValueCollection {
 
 	private final String functionName;
@@ -22,6 +25,27 @@ public class FunctionValueCollection extends ValueCollection {
 
 	public boolean isScope() {
 		return true;
+	}
+
+	@Override
+	public IValueReference getChild(String name) {
+		if (!super.hasChild(name) && thisValue.hasChild(name)) {
+			return thisValue.getChild(name);
+		}
+		return super.getChild(name);
+	}
+
+	@Override
+	public Set<String> getDirectChildren() {
+		Set<String> directChildren = super.getDirectChildren();
+		Set<String> thisChildren = thisValue.getDirectChildren();
+		if (thisChildren.isEmpty())
+			return directChildren;
+		if (directChildren.isEmpty())
+			return thisChildren;
+		HashSet<String> hs = new HashSet<String>(directChildren);
+		hs.addAll(thisChildren);
+		return hs;
 	}
 
 	private final IValueReference returnValue = new AnonymousValue();

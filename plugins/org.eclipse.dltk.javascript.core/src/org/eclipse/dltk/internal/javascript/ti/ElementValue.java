@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
 public abstract class ElementValue implements IValue {
 
@@ -131,11 +132,11 @@ public abstract class ElementValue implements IValue {
 		}
 
 		@Override
-		public Object getAttribute(String key) {
+		public Object getAttribute(String key, boolean b) {
 			if (IReferenceAttributes.STATIC.equals(key)) {
 				return Boolean.TRUE;
 			} else {
-				return super.getAttribute(key);
+				return super.getAttribute(key, b);
 			}
 		}
 
@@ -291,6 +292,12 @@ public abstract class ElementValue implements IValue {
 						}
 						types.add(property.getType());
 					}
+				} else if (member instanceof Method) {
+					if (types == null) {
+						types = new HashSet<Type>();
+					}
+					types.add(TypeInfoModelLoader.getInstance().getType(
+							"Function"));
 				}
 			}
 			if (types != null) {
@@ -313,7 +320,11 @@ public abstract class ElementValue implements IValue {
 	public final void addReference(IValue src) {
 	}
 
-	public Object getAttribute(String key) {
+	public final Object getAttribute(String key) {
+		return getAttribute(key, false);
+	}
+
+	public Object getAttribute(String key, boolean includeReferences) {
 		if (IReferenceAttributes.ELEMENT.equals(key)) {
 			return getElements();
 		}

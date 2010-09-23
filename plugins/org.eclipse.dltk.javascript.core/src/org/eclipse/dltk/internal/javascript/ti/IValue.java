@@ -33,6 +33,8 @@ public interface IValue {
 
 	Set<Type> getTypes();
 
+	Object getAttribute(String key, boolean includeReferences);
+	
 	Object getAttribute(String key);
 
 	void removeAttribute(String key);

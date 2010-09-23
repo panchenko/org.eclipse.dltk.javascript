@@ -70,9 +70,14 @@ public abstract class AbstractReference implements IValueReference,
 		return getValue() != null;
 	}
 
-	public Object getAttribute(String key) {
+	public final Object getAttribute(String key) {
+		return getAttribute(key, false);
+	}
+
+	public Object getAttribute(String key, boolean includeReferences) {
 		IValue value = getValue();
-		return value != null ? value.getAttribute(key) : null;
+		return value != null ? value.getAttribute(key, includeReferences)
+				: null;
 	}
 
 	public Type getDeclaredType() {

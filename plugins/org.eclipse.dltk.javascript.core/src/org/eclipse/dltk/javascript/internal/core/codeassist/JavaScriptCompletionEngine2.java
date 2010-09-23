@@ -230,6 +230,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		public void report(IValueParent item) {
 			final Set<String> deleted = item.getDeletedChildren();
 			for (String childName : item.getDirectChildren()) {
+				if (childName.equals(IValueReference.FUNCTION_OP))
+					continue;
 				if (!deleted.contains(childName)
 						&& CharOperation.prefixEquals(prefix, childName, false)
 						&& processed.add(childName)) {
@@ -334,7 +336,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					- offset);
 			if (isFunction) {
 				final IMethod method = (IMethod) reference.getAttribute(
-						IReferenceAttributes.PARAMETERS);
+						IReferenceAttributes.PARAMETERS, true);
 				if (method != null) {
 					int paramCount = method.getParameterCount();
 					if (paramCount > 0) {
