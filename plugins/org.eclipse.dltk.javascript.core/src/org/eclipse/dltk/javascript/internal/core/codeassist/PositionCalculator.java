@@ -37,7 +37,8 @@ public class PositionCalculator {
 			} else
 				pos = maxPos;
 		}
-		completion = CompletionString.parse(conString.substring(0, pos), false);
+		completion = CompletionString.parse(conString.substring(0, pos), false,
+				true);
 		int lastDot = completion.lastIndexOf('.');
 		if (lastDot != -1) {
 			isMember = true;
