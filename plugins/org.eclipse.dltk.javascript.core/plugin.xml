@@ -167,6 +167,7 @@
 
 	<extension point="org.eclipse.dltk.javascript.core.typeinfo">
     	<model resource="resources/native-references.xml" uri="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml"/>
+    	<model resource="resources/functions.xml" uri="http://www.eclipse.org/dltk/javascript/typeinfo/functions.xml"/>
     	<builder class="org.eclipse.dltk.internal.javascript.ti.JSDocSupport"/>
 	</extension>
 

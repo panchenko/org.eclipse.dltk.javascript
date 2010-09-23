@@ -65,4 +65,34 @@ public class TypeInfoModelLoader {
 		}
 		return result;
 	}
+
+	public Member getMember(String memberName) {
+		for (Resource resource : resourceSet.getResources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof Member) {
+					final Member member = (Member) object;
+					if (memberName.equals(member.getName())) {
+						return member;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public Set<Member> listMembers(String prefix) {
+		Set<Member> result = new HashSet<Member>();
+		for (Resource resource : resourceSet.getResources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof Member) {
+					final Member member = (Member) object;
+					if (CharOperation.prefixEquals(prefix, member.getName())) {
+						result.add(member);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 }

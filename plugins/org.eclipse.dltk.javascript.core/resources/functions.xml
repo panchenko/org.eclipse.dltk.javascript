@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
+  	<ref:Method name="parseInt" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="Parses a string argument and returns an integer of the specified radix or base">
+    	<parameters name="string" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+    	<parameters name="radix" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" kind="OPTIONAL"/>
+    </ref:Method>
+</xmi:XMI>

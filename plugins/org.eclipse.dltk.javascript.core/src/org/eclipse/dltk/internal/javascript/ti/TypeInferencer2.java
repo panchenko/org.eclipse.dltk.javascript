@@ -24,6 +24,7 @@ import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -263,6 +264,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		if (element != null) {
 			return element;
 		}
+		final Member member = TypeInfoModelLoader.getInstance().getMember(name);
+		if (member != null) {
+			return member;
+		}
 		for (IElementResolver resolver : TypeInfoManager.getElementResolvers()) {
 			element = resolver.resolveElement(this, name);
 			if (element != null) {
@@ -275,6 +280,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	public Set<String> listGlobals(String prefix) {
 		final Set<String> result = new HashSet<String>();
+		for (Member member : TypeInfoModelLoader.getInstance().listMembers(
+				prefix)) {
+			result.add(member.getName());
+		}
 		for (IElementResolver resolver : TypeInfoManager.getElementResolvers()) {
 			Set<String> globals = resolver.listGlobals(this, prefix);
 			if (globals != null) {
