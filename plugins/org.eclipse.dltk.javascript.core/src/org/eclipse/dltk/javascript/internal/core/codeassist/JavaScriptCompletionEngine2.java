@@ -293,14 +293,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			if (isFunction) {
 				Method method = (Method) member;
 				int paramCount = method.getParameters().size();
-				while (paramCount > 0
-						&& method.getParameters().get(paramCount - 1).getKind() == ParameterKind.OPTIONAL) {
-					--paramCount;
-				}
 				if (paramCount > 0) {
 					final String[] params = new String[paramCount];
 					for (int i = 0; i < paramCount; ++i) {
-						params[i] = method.getParameters().get(i).getName();
+						Parameter parameter = method.getParameters().get(i);
+						if (parameter.getKind() == ParameterKind.OPTIONAL) {
+							params[i] = '[' + parameter.getName() + ']';
+						} else {
+							params[i] = parameter.getName();
+						}
 					}
 					proposal.setParameterNames(params);
 				}
@@ -342,7 +343,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 							IParameter parameter = method.getParameters()
 									.get(i);
 							if (parameter.isOptional()) {
-								params[i] = "[" + parameter.getName() + "]";
+								params[i] = '[' + parameter.getName() + ']';
 							} else {
 								params[i] = parameter.getName();
 							}
