@@ -4,4 +4,28 @@
     	<parameters name="string" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
     	<parameters name="radix" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" kind="OPTIONAL"/>
     </ref:Method>
+  	<ref:Method name="parseFloat" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="Parses a string argument and returns a floating point number">
+    	<parameters name="string" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+    </ref:Method>
+  	<ref:Method name="decodeURI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine.">
+    	<parameters name="encodedURI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+    </ref:Method>
+  	<ref:Method name="decodeURIComponent" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine.">
+    	<parameters name="encodedURI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+    </ref:Method>
+  	<ref:Method name="encodeURI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two 'surrogate' characters).">
+    	<parameters name="URI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+    </ref:Method>
+  	<ref:Method name="encodeURIComponent" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two 'surrogate' characters).">
+    	<parameters name="str" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+    </ref:Method>
+  	<ref:Method name="eval" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object" description="Evaluates a string of JavaScript code without reference to a particular object.">
+    	<parameters name="str" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+    </ref:Method>
+  	<ref:Method name="isFinite" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean" description="Evaluates an argument to determine whether it is a finite number.">
+    	<parameters name="number" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" />
+    </ref:Method>
+  	<ref:Method name="isNaN" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean" description="Evaluates an argument to determine if it is not a number.">
+    	<parameters name="testValue" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object" />
+    </ref:Method>
 </xmi:XMI>
