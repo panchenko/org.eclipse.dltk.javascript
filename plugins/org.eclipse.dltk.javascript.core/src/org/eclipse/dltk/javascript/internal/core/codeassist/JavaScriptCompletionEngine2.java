@@ -154,7 +154,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 */
 	private void doCompletionOnMember(ITypeInferenceContext context,
 			IValueCollection collection, CompletionPath path, int position) {
-		;
 		IValueParent item = collection;
 		for (int i = 0; i < path.segmentCount() - 1; ++i) {
 			if (path.isName(i)) {
@@ -177,9 +176,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					break;
 			}
 		}
-		if (item != null && !path.isEmpty()) {
+		if (item != null && !path.isEmpty() && exists(item)) {
 			final Reporter reporter = new Reporter(path.lastSegment(), position);
-			if (exists(item)) {
 				reporter.report(item);
 				if (item instanceof IValueCollection) {
 					IValueCollection coll = (IValueCollection) item;
@@ -199,7 +197,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 							}
 						}
 					}
-				}
 			}
 		}
 	}
@@ -418,7 +415,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			IValueCollection collection, CompletionPath path, int position) {
 		doCompletionOnMember(context, collection, path, position);
 		if (useEngine) {
-			doCompletionOnType(context, path.lastSegment(), position);
+		doCompletionOnType(context, path.lastSegment(), position);
 			doCompletionOnKeyword(path.lastSegment(), position);
 		}
 	}
