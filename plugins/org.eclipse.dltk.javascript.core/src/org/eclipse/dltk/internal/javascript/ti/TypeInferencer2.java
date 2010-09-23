@@ -257,6 +257,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	private Map<String, Element> elements = new HashMap<String, Element>();
 
 	public Element resolve(String name) {
+		if (name == null)
+			return null;
 		Element element = elements.get(name);
 		if (element != null) {
 			return element;
