@@ -43,6 +43,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
@@ -178,25 +179,25 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 		if (item != null && !path.isEmpty() && exists(item)) {
 			final Reporter reporter = new Reporter(path.lastSegment(), position);
-				reporter.report(item);
-				if (item instanceof IValueCollection) {
-					IValueCollection coll = (IValueCollection) item;
-					for (;;) {
-						coll = coll.getParent();
-						if (coll == null)
-							break;
-						reporter.report(coll);
-					}
-					final Set<String> globals = context.listGlobals(path
-							.lastSegment());
-					for (String global : globals) {
-						if (reporter.canReport(global)) {
-							Element element = context.resolve(global);
-							if (element != null && element.isVisible()) {
-								reporter.report(global, element);
-							}
+			reporter.report(item);
+			if (item instanceof IValueCollection) {
+				IValueCollection coll = (IValueCollection) item;
+				for (;;) {
+					coll = coll.getParent();
+					if (coll == null)
+						break;
+					reporter.report(coll);
+				}
+				final Set<String> globals = context.listGlobals(path
+						.lastSegment());
+				for (String global : globals) {
+					if (reporter.canReport(global)) {
+						Element element = context.resolve(global);
+						if (element != null && element.isVisible()) {
+							reporter.report(global, element);
 						}
 					}
+				}
 			}
 		}
 	}
@@ -290,7 +291,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					- offset);
 			if (isFunction) {
 				Method method = (Method) member;
-				final int paramCount = method.getParameters().size();
+				int paramCount = method.getParameters().size();
+				while (paramCount > 0
+						&& method.getParameters().get(paramCount - 1).getKind() == ParameterKind.OPTIONAL) {
+					--paramCount;
+				}
 				if (paramCount > 0) {
 					final String[] params = new String[paramCount];
 					for (int i = 0; i < paramCount; ++i) {
@@ -329,7 +334,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				final IMethod method = (IMethod) reference
 						.getAttribute(IReferenceAttributes.PARAMETERS);
 				if (method != null) {
-					final int paramCount = method.getParameterCount();
+					int paramCount = method.getParameterCount();
+					while (paramCount > 0
+							&& method.getParameters().get(paramCount - 1)
+									.isOptional()) {
+						--paramCount;
+					}
 					if (paramCount > 0) {
 						final String[] params = new String[paramCount];
 						for (int i = 0; i < paramCount; ++i) {
@@ -415,7 +425,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			IValueCollection collection, CompletionPath path, int position) {
 		doCompletionOnMember(context, collection, path, position);
 		if (useEngine) {
-		doCompletionOnType(context, path.lastSegment(), position);
+			doCompletionOnType(context, path.lastSegment(), position);
 			doCompletionOnKeyword(path.lastSegment(), position);
 		}
 	}
