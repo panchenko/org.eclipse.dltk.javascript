@@ -243,6 +243,22 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			}
 			return resolveBuiltin(module.getScriptProject(), path);
 		}
+		if (type != null && type.getKind() == TypeKind.JAVASCRIPT) {
+			// TODO this only goes 1 deep, need support for nested types..
+			IModelElement[] children = module.getChildren();
+			for (IModelElement modelElement : children) {
+				if (modelElement.getElementType() == IModelElement.METHOD
+						&& modelElement.getElementName().equals(type.getName())) {
+					IModelElement[] children2 = ((IParent) modelElement)
+							.getChildren();
+					for (IModelElement child : children2) {
+						if (child.getElementName().equals(element.getName()))
+							return child;
+					}
+					return modelElement;
+				}
+			}
+		}
 		for (IElementConverter converter : TypeInfoManager
 				.getElementConverters()) {
 			IModelElement result = converter.convert(module, element);

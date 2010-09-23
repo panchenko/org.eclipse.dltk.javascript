@@ -429,12 +429,10 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		@Override
 		public IValueReference visitPropertyExpression(PropertyExpression node) {
-			final IValueReference object = visit(node.getObject());
-			final Expression propName = node.getProperty();
-			final IValueReference result = extractNamedChild(object, propName);
+			final IValueReference result = super.visitPropertyExpression(node);
 			if (result != null) {
 				if (currentMode() != VisitorMode.CALL) {
-					validateProperty(result, propName);
+					validateProperty(result, node.getProperty());
 				}
 				return result;
 			} else {

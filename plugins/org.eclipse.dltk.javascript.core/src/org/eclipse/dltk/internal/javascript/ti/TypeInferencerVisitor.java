@@ -79,8 +79,8 @@ import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
@@ -500,7 +500,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitPropertyExpression(PropertyExpression node) {
 		final IValueReference object = visit(node.getObject());
-		return extractNamedChild(object, node.getProperty());
+		Expression property = node.getProperty();
+		IValueReference child = extractNamedChild(object, property);
+		if (node.getObject() instanceof ThisExpression) {
+			// TODO check is this also a local reference kind or should this be
+			// a special one?
+			child.setKind(ReferenceKind.LOCAL);
+			child.setLocation(ReferenceLocation.create(node.sourceStart(),
+					node.sourceEnd(), property.sourceStart(),
+					property.sourceEnd()));
+		}
+		return child;
 	}
 
 	protected IValueReference extractNamedChild(IValueReference parent,
