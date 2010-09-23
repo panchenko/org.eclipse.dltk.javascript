@@ -31,6 +31,7 @@
             id="sourceResolver">
       </resolver>
    </extension>
+   <!--
    <extension
       point="org.eclipse.dltk.core.projectIndexer">
       <enable
@@ -45,6 +46,7 @@
             nature="org.eclipse.dltk.javascript.core.nature">
       </mixin>
    </extension>
+   -->
    <extension
          point="org.eclipse.dltk.core.sourceParsers">
       <parserContribution
