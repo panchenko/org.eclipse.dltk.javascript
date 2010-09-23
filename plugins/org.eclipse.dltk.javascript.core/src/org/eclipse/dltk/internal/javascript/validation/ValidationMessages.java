@@ -27,6 +27,7 @@ public class ValidationMessages extends NLS {
 	public static String DeprecatedFunction;
 
 	public static String UndefinedProperty;
+	public static String UndefinedPropertyInScript;
 	public static String DeprecatedProperty;
 	public static String DeprecatedPropertyOfInstance;
 	public static String DeprecatedPropertyNoType;

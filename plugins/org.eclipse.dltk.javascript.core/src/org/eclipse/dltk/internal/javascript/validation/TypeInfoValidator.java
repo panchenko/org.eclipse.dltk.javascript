@@ -477,6 +477,15 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									ValidationMessages.UndefinedProperty,
 									result.getName(), type.getName()), propName
 									.sourceStart(), propName.sourceEnd());
+				} else if (type != null
+						&& (type.getKind() == TypeKind.JAVASCRIPT || type
+								.getKind() == TypeKind.PREDEFINED)) {
+					reporter.reportProblem(
+							JavaScriptProblems.UNDEFINED_PROPERTY,
+							NLS.bind(
+									ValidationMessages.UndefinedPropertyInScript,
+									result.getName(), type.getName()), propName
+									.sourceStart(), propName.sourceEnd());
 				}
 			}
 		}
