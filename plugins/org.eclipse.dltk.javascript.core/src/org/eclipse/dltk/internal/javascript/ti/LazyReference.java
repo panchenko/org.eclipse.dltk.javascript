@@ -8,11 +8,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class LazyReference extends AbstractReference {
 
-	private final Value value = new Value()
-	{
+	private final Value value = new Value() {
 		Set<Type> types = null;
 
-		public java.util.Set<org.eclipse.dltk.javascript.typeinfo.model.Type> getTypes() {
+		@Override
+		public Set<Type> getTypes() {
 
 			if (types == null) {
 				types = new HashSet<Type>();
