@@ -357,8 +357,8 @@
       <parameters name="[length]" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="substring" type="String" description="Extracts the characters in a string between two specified indices">
-      <parameters name="start"/>
-      <parameters name="[stop]" kind="OPTIONAL"/>
+      <parameters name="beginIndex" type="Number"/>
+      <parameters name="endIndex" type="Number" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="sup" type="String" description="Returns a string as superscript."/>
     <members xsi:type="ref:Method" name="toLocaleLowerCase" type="String"/>
