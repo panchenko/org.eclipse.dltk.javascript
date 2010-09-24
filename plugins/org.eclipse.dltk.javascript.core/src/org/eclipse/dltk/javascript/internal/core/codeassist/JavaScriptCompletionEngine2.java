@@ -277,8 +277,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				if (JavaScriptValidations.isStatic(valueRef)) {
 					predicate = MemberPredicates.STATIC;
 				} else {
-					// MemberPredicates.NON_STATIC ?
-					predicate = MemberPredicates.ALWAYS_TRUE;
+					predicate = MemberPredicates.NON_STATIC;
 				}
 				for (Type type : valueRef.getDeclaredTypes()) {
 					reportTypeMembers(type, predicate);
