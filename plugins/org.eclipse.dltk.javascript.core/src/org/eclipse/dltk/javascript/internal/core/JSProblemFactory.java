@@ -19,10 +19,6 @@ public class JSProblemFactory extends DefaultProblemFactory {
 	public static final String JS_PROBLEM = JavaScriptPlugin.PLUGIN_ID
 			+ ".jsproblem";
 
-	public JSProblemFactory() {
-		System.out.println("new " + getClass().getSimpleName());
-	}
-
 	@Override
 	public String getProblemMarker() {
 		return JS_PROBLEM;
