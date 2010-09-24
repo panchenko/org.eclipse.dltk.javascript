@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
@@ -66,14 +67,19 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		if (position < 0 || position > content.length()) {
 			return;
 		}
+		String generatedIdentifier = null;
 		if (position > 0) {
+			generatedIdentifier = "e"
+					+ UUID.randomUUID().toString().replace('-', '_');
 			if (content.charAt(position - 1) == '.') {
 				// special case;
-				content = content.substring(0, position) + " \n\r e"
+				content = content.substring(0, position) + " "
+						+ Util.LINE_SEPARATOR + " " + generatedIdentifier
 						+ content.substring(position);
 			} else if (content.charAt(position - 1) == '=') {
 				// special case;
-				content = content.substring(0, position) + " \n\r e"
+				content = content.substring(0, position) + " "
+						+ Util.LINE_SEPARATOR + " " + generatedIdentifier
 						+ content.substring(position);
 			}
 		}
@@ -99,7 +105,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 							- typeNode.sourceStart());
 				}
 			}
-			doCompletionOnType(inferencer2, typePrefix, position);
+			doCompletionOnType(inferencer2, new Reporter(typePrefix, position));
 		} else {
 			final PositionCalculator calculator = new PositionCalculator(
 					content, position, false);
@@ -116,23 +122,27 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				// e.printStackTrace();
 			}
 
-			if (calculator.isMember()) {
+			final CompletionPath path = new CompletionPath(
+					calculator.getCompletion());
+			final Reporter reporter = new Reporter(path.lastSegment(), position);
+			if (generatedIdentifier != null) {
+				reporter.ignore(generatedIdentifier);
+			}
+			if (calculator.isMember() && !path.isEmpty()
+					&& path.lastSegment() != null) {
 				doCompletionOnMember(inferencer2, visitor.getCollection(),
-						new CompletionPath(calculator.getCompletion()),
-						position);
+						path, reporter);
 			} else {
 				doGlobalCompletion(inferencer2, visitor.getCollection(),
-						new CompletionPath(calculator.getCompletion()),
-						position);
+						reporter);
 			}
 		}
 		this.requestor.endReporting();
 	}
 
 	private void doCompletionOnType(ITypeInferenceContext context,
-			String typeNamePrefix, int position) {
-		Set<String> typeNames = context.listTypes(typeNamePrefix);
-		final Reporter reporter = new Reporter(typeNamePrefix, position);
+			Reporter reporter) {
+		Set<String> typeNames = context.listTypes(reporter.getPrefix());
 		for (String typeName : typeNames) {
 			final Type type = context.getType(typeName);
 			if (type != null && type.isVisible()) {
@@ -155,7 +165,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 * @param startPart
 	 */
 	private void doCompletionOnMember(ITypeInferenceContext context,
-			IValueCollection collection, CompletionPath path, int position) {
+			IValueCollection collection, CompletionPath path, Reporter reporter) {
 		IValueParent item = collection;
 		for (int i = 0; i < path.segmentCount() - 1; ++i) {
 			if (path.isName(i)) {
@@ -178,26 +188,32 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					break;
 			}
 		}
-		if (item != null && !path.isEmpty() && exists(item)) {
-			final Reporter reporter = new Reporter(path.lastSegment(), position);
-			reporter.report(item);
-			if (item instanceof IValueCollection) {
-				IValueCollection coll = (IValueCollection) item;
-				for (;;) {
-					coll = coll.getParent();
-					if (coll == null)
-						break;
-					reporter.report(coll);
-				}
-				final Set<String> globals = context.listGlobals(path
-						.lastSegment());
-				for (String global : globals) {
-					if (reporter.canReport(global)) {
-						Element element = context.resolve(global);
-						if (element != null && element.isVisible()) {
-							reporter.report(global, element);
-						}
-					}
+		if (item != null && exists(item)) {
+			reportItems(reporter, item);
+		}
+	}
+
+	protected void reportItems(Reporter reporter, IValueParent item) {
+		reporter.report(item);
+		if (item instanceof IValueCollection) {
+			IValueCollection coll = (IValueCollection) item;
+			for (;;) {
+				coll = coll.getParent();
+				if (coll == null)
+					break;
+				reporter.report(coll);
+			}
+		}
+	}
+
+	protected void reportGlobals(ITypeInferenceContext context,
+			Reporter reporter) {
+		final Set<String> globals = context.listGlobals(reporter.getPrefix());
+		for (String global : globals) {
+			if (reporter.canReport(global)) {
+				Element element = context.resolve(global);
+				if (element != null && element.isVisible()) {
+					reporter.report(global, element);
 				}
 			}
 		}
@@ -206,14 +222,28 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	private class Reporter {
 
 		final char[] prefix;
+		private final String prefixStr;
 		final int position;
 		final Set<Object> processed = new HashSet<Object>();
 		final Set<Type> processedTypes = new HashSet<Type>();
 
 		public Reporter(String prefix, int position) {
-			this.prefix = prefix.toCharArray();
+			this.prefixStr = prefix != null ? prefix : "";
+			this.prefix = prefixStr.toCharArray();
 			this.position = position;
 			setSourceRange(position - this.prefix.length, position);
+		}
+
+		public void ignore(String generatedIdentifier) {
+			processed.add(generatedIdentifier);
+		}
+
+		public String getPrefix() {
+			return prefixStr;
+		}
+
+		public int getPosition() {
+			return position;
 		}
 
 		public void report(String name, Element element) {
@@ -247,6 +277,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				if (JavaScriptValidations.isStatic(valueRef)) {
 					predicate = MemberPredicates.STATIC;
 				} else {
+					// MemberPredicates.NON_STATIC ?
 					predicate = MemberPredicates.ALWAYS_TRUE;
 				}
 				for (Type type : valueRef.getDeclaredTypes()) {
@@ -423,15 +454,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	/**
 	 * @param context
 	 * @param collection
-	 * @param startPart
-	 * @param position
+	 * @param reporter
 	 */
 	private void doGlobalCompletion(ITypeInferenceContext context,
-			IValueCollection collection, CompletionPath path, int position) {
-		doCompletionOnMember(context, collection, path, position);
+			IValueCollection collection, Reporter reporter) {
+		reportItems(reporter, collection);
 		if (useEngine) {
-			doCompletionOnType(context, path.lastSegment(), position);
-			doCompletionOnKeyword(path.lastSegment(), position);
+			doCompletionOnType(context, reporter);
+			doCompletionOnKeyword(reporter.getPrefix(), reporter.getPosition());
+			reportGlobals(context, reporter);
 		}
 	}
 
