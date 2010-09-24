@@ -87,17 +87,21 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return TypeInfoModelLoader.getInstance().getType(typeName);
 	}
 
+	private static List<String> getMembers(final String typeName) {
+		List<String> names = new ArrayList<String>();
+		for (Member member : getType(typeName).getMembers()) {
+			if (!member.isStatic())
+				names.add(member.getName());
+		}
+		return Collections.unmodifiableList(names);
+	}
+
 	private static List<String> objectMethods = null;
 
 	protected static List<String> getMethodsOfObject() {
 		if (objectMethods == null) {
-			List<String> names = new ArrayList<String>();
-			for (Member member : getType(ITypeNames.OBJECT).getMembers()) {
-				if (!member.isStatic())
-					names.add(member.getName());
-			}
-			assertEquals(3, names.size());
-			objectMethods = Collections.unmodifiableList(names);
+			objectMethods = getMembers(ITypeNames.OBJECT);
+			assertEquals(3, objectMethods.size());
 		}
 		return objectMethods;
 	}
@@ -106,13 +110,8 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 
 	protected static List<String> getMethodsOfNumber() {
 		if (numberMethods == null) {
-			List<String> names = new ArrayList<String>();
-			for (Member member : getType(ITypeNames.NUMBER).getMembers()) {
-				if (!member.isStatic())
-					names.add(member.getName());
-			}
-			assertEquals(7, names.size());
-			numberMethods = Collections.unmodifiableList(names);
+			numberMethods = getMembers(ITypeNames.NUMBER);
+			assertEquals(7, numberMethods.size());
 		}
 		return numberMethods;
 	}
@@ -121,13 +120,8 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 
 	protected static List<String> getMethodsOfString() {
 		if (stringMethods == null) {
-			List<String> names = new ArrayList<String>();
-			for (Member member : getType(ITypeNames.STRING).getMembers()) {
-				if (!member.isStatic())
-					names.add(member.getName());
-			}
-			assertEquals(36, names.size());
-			stringMethods = Collections.unmodifiableList(names);
+			stringMethods = getMembers(ITypeNames.STRING);
+			assertEquals(36, stringMethods.size());
 		}
 		return stringMethods;
 	}
@@ -136,13 +130,8 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 
 	protected static List<String> getMethodsOfXML() {
 		if (xmlMethods == null) {
-			List<String> names = new ArrayList<String>();
-			for (Member member : getType(ITypeNames.XML).getMembers()) {
-				if (!member.isStatic())
-					names.add(member.getName());
-			}
-			assertEquals(45, names.size());
-			xmlMethods = Collections.unmodifiableList(names);
+			xmlMethods = getMembers(ITypeNames.XML);
+			assertEquals(45, xmlMethods.size());
 		}
 		return xmlMethods;
 	}
