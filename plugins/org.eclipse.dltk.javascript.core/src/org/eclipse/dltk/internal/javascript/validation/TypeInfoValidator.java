@@ -185,27 +185,11 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 						return null;
 					}
 					if (!validateParameterCount(method, callArgs)) {
-						reporter.reportProblem(
-								JavaScriptProblems.WRONG_PARAMETERS, NLS.bind(
-										ValidationMessages.MethodNotApplicable,
-										new String[] {
-												method.getName(),
-												describeParamTypes(method
-														.getParameters()),
-												method.getDeclaringType()
-														.getName(),
-												describeArgTypes(arguments) }),
-								methodNode.sourceStart(), methodNode
-										.sourceEnd());
+						reportMethodParameterError(methodNode, arguments,
+								method);
 					}
 					if (method.isDeprecated()) {
-						reporter.reportProblem(
-								JavaScriptProblems.DEPRECATED_METHOD, NLS.bind(
-										ValidationMessages.DeprecatedMethod,
-										reference.getName(), method
-												.getDeclaringType().getName()),
-								methodNode.sourceStart(), methodNode
-										.sourceEnd());
+						reportDeprecatedMethod(methodNode, reference, method);
 					}
 				} else {
 					final Type type = JavaScriptValidations.typeOf(reference
@@ -303,6 +287,46 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			}
 		}
 
+		private void reportDeprecatedMethod(ASTNode methodNode,
+				IValueReference reference, Method method) {
+			if (method.getDeclaringType() != null) {
+				reporter.reportProblem(
+						JavaScriptProblems.DEPRECATED_METHOD,
+						NLS.bind(ValidationMessages.DeprecatedMethod, reference
+								.getName(), method.getDeclaringType().getName()),
+						methodNode.sourceStart(), methodNode.sourceEnd());
+			} else {
+				reporter.reportProblem(JavaScriptProblems.DEPRECATED_METHOD,
+						NLS.bind(ValidationMessages.DeprecatedTopLevelMethod,
+								reference.getName()), methodNode.sourceStart(),
+						methodNode.sourceEnd());
+			}
+		}
+
+		private void reportMethodParameterError(ASTNode methodNode,
+				IValueReference[] arguments, Method method) {
+			if (method.getDeclaringType() != null) {
+				reporter.reportProblem(JavaScriptProblems.WRONG_PARAMETERS, NLS
+						.bind(ValidationMessages.MethodNotApplicable,
+								new String[] {
+										method.getName(),
+										describeParamTypes(method
+												.getParameters()),
+										method.getDeclaringType().getName(),
+										describeArgTypes(arguments) }),
+						methodNode.sourceStart(), methodNode.sourceEnd());
+			} else {
+				reporter.reportProblem(JavaScriptProblems.WRONG_PARAMETERS, NLS
+						.bind(ValidationMessages.TopLevelMethodNotApplicable,
+								new String[] {
+										method.getName(),
+										describeParamTypes(method
+												.getParameters()),
+										describeArgTypes(arguments) }),
+						methodNode.sourceStart(), methodNode.sourceEnd());
+			}
+		}
+
 		private boolean validateParameters(List<IParameter> parameters,
 				IValueReference[] arguments) {
 			if (arguments.length > parameters.size())
@@ -344,11 +368,15 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (sb.length() != 0) {
 					sb.append(',');
 				}
+				if (parameter.getKind() == ParameterKind.OPTIONAL)
+					sb.append('[');
 				if (parameter.getType() != null) {
 					sb.append(parameter.getType().getName());
 				} else {
 					sb.append('?');
 				}
+				if (parameter.getKind() == ParameterKind.OPTIONAL)
+					sb.append(']');
 			}
 			return sb.toString();
 		}
