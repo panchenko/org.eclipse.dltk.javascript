@@ -39,6 +39,7 @@ class JavaScriptProposalInfo extends ProposalInfo {
 		this.ref = ref;
 	}
 
+	@Override
 	public String getInfo(IProgressMonitor monitor) {
 		if (ref instanceof IReference) {
 			List<IModelElement> ms = new ArrayList<IModelElement>();
@@ -63,44 +64,48 @@ class JavaScriptProposalInfo extends ProposalInfo {
 		} else if (ref instanceof Element) {
 			return ((Element) ref).getDescription();
 		} else if (ref instanceof IValueReference) {
-			ITypeInferenceContext context = ((IValueReference) ref)
-					.getContext();
-			final ReferenceLocation location = ((IValueReference) ref)
-					.getLocation();
-			try {
-				context.getModelElement().accept(new IModelElementVisitor() {
+			return getInfo((IValueReference) ref);
+		}
+		return null;
+	}
 
-					public boolean visit(IModelElement element) {
-						if (element instanceof IMember) {
-							try {
-								ISourceRange nameRange = ((IMember) element)
-										.getNameRange();
-								if (location.getNameStart() >= nameRange
-										.getOffset()
-										&& location.getNameEnd() <= (nameRange
-												.getOffset() + nameRange
-												.getLength())) {
-									throw new ModelElementFound(element);
-								}
-							} catch (ModelException e) {
-								e.printStackTrace();
+	private String getInfo(IValueReference ref) {
+		final ITypeInferenceContext context = ref.getContext();
+		if (context == null || context.getModelElement() == null)
+			return null;
+		final ReferenceLocation location = ref.getLocation();
+		if (location == ReferenceLocation.UNKNOWN)
+			return null;
+		try {
+			context.getModelElement().accept(new IModelElementVisitor() {
+				public boolean visit(IModelElement element) {
+					if (element instanceof IMember) {
+						try {
+							ISourceRange nameRange = ((IMember) element)
+									.getNameRange();
+							if (location.getNameStart() >= nameRange
+									.getOffset()
+									&& location.getNameEnd() <= (nameRange
+											.getOffset() + nameRange
+											.getLength())) {
+								throw new ModelElementFound(element);
 							}
+						} catch (ModelException e) {
+							e.printStackTrace();
 						}
-						return true;
 					}
-				});
-			} catch (ModelException e) {
-				e.printStackTrace();
-			} catch (ModelElementFound found) {
-				Reader contentReader = new ScriptDocumentationProvider()
-						.getInfo((IMember) found.element, true, true);
-				if (contentReader != null) {
-					String string = getString(contentReader);
-					return string;
+					return true;
 				}
+			});
+		} catch (ModelException e) {
+			e.printStackTrace();
+		} catch (ModelElementFound found) {
+			Reader contentReader = new ScriptDocumentationProvider().getInfo(
+					(IMember) found.element, true, true);
+			if (contentReader != null) {
+				return getString(contentReader);
 			}
 		}
-
 		return null;
 	}
 
@@ -120,6 +125,7 @@ class JavaScriptProposalInfo extends ProposalInfo {
 		return buf.toString();
 	}
 
+	@SuppressWarnings("serial")
 	private static class ModelElementFound extends RuntimeException {
 		private final IModelElement element;
 
