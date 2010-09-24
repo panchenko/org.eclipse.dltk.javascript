@@ -51,7 +51,7 @@ public class CodeValidationTests extends AbstractValidationTest {
 		Set<Integer> problemIds = extractIds(validate(code.toString()));
 		assertEquals(1, problemIds.size());
 		assertTrue(problemIds
-				.contains(JavaScriptProblems.CONTINUE_NON_LOOP_LABEL));
+				.contains(JavaScriptProblems.CONTINUE_OUTSIDE_LABEL));
 	}
 
 	public void testBreakNonLoopLabel() {
@@ -62,7 +62,7 @@ public class CodeValidationTests extends AbstractValidationTest {
 		code.add("}");
 		Set<Integer> problemIds = extractIds(validate(code.toString()));
 		assertEquals(1, problemIds.size());
-		assertTrue(problemIds.contains(JavaScriptProblems.BREAK_NON_LOOP_LABEL));
+		assertTrue(problemIds.contains(JavaScriptProblems.BREAK_OUTSIDE_LABEL));
 	}
 
 }
