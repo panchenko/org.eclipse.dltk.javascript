@@ -26,6 +26,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
 public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
@@ -82,13 +83,16 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		}
 	}
 
+	private static Type getType(String typeName) {
+		return TypeInfoModelLoader.getInstance().getType(typeName);
+	}
+
 	private static List<String> objectMethods = null;
 
 	protected static List<String> getMethodsOfObject() {
 		if (objectMethods == null) {
 			List<String> names = new ArrayList<String>();
-			for (Member member : TypeInfoModelLoader.getInstance().getType(
-					ITypeNames.OBJECT).getMembers()) {
+			for (Member member : getType(ITypeNames.OBJECT).getMembers()) {
 				names.add(member.getName());
 			}
 			assertEquals(4, names.size());
@@ -102,8 +106,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	protected static List<String> getMethodsOfNumber() {
 		if (numberMethods == null) {
 			List<String> names = new ArrayList<String>();
-			for (Member member : TypeInfoModelLoader.getInstance().getType(
-					ITypeNames.NUMBER).getMembers()) {
+			for (Member member : getType(ITypeNames.NUMBER).getMembers()) {
 				names.add(member.getName());
 			}
 			assertEquals(13, names.size());
@@ -117,8 +120,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	protected static List<String> getMethodsOfString() {
 		if (stringMethods == null) {
 			List<String> names = new ArrayList<String>();
-			for (Member member : TypeInfoModelLoader.getInstance().getType(
-					ITypeNames.STRING).getMembers()) {
+			for (Member member : getType(ITypeNames.STRING).getMembers()) {
 				names.add(member.getName());
 			}
 			assertEquals(38, names.size());
@@ -132,8 +134,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	protected static List<String> getMethodsOfXML() {
 		if (xmlMethods == null) {
 			List<String> names = new ArrayList<String>();
-			for (Member member : TypeInfoModelLoader.getInstance().getType(
-					ITypeNames.XML).getMembers()) {
+			for (Member member : getType(ITypeNames.XML).getMembers()) {
 				names.add(member.getName());
 			}
 			assertEquals(45, names.size());
