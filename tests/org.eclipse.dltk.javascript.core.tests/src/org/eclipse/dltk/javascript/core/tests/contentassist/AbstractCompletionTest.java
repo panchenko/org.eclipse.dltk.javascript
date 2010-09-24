@@ -93,9 +93,10 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		if (objectMethods == null) {
 			List<String> names = new ArrayList<String>();
 			for (Member member : getType(ITypeNames.OBJECT).getMembers()) {
-				names.add(member.getName());
+				if (!member.isStatic())
+					names.add(member.getName());
 			}
-			assertEquals(4, names.size());
+			assertEquals(3, names.size());
 			objectMethods = Collections.unmodifiableList(names);
 		}
 		return objectMethods;
@@ -107,9 +108,10 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		if (numberMethods == null) {
 			List<String> names = new ArrayList<String>();
 			for (Member member : getType(ITypeNames.NUMBER).getMembers()) {
-				names.add(member.getName());
+				if (!member.isStatic())
+					names.add(member.getName());
 			}
-			assertEquals(13, names.size());
+			assertEquals(7, names.size());
 			numberMethods = Collections.unmodifiableList(names);
 		}
 		return numberMethods;
@@ -121,9 +123,10 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		if (stringMethods == null) {
 			List<String> names = new ArrayList<String>();
 			for (Member member : getType(ITypeNames.STRING).getMembers()) {
-				names.add(member.getName());
+				if (!member.isStatic())
+					names.add(member.getName());
 			}
-			assertEquals(38, names.size());
+			assertEquals(36, names.size());
 			stringMethods = Collections.unmodifiableList(names);
 		}
 		return stringMethods;
@@ -135,7 +138,8 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		if (xmlMethods == null) {
 			List<String> names = new ArrayList<String>();
 			for (Member member : getType(ITypeNames.XML).getMembers()) {
-				names.add(member.getName());
+				if (!member.isStatic())
+					names.add(member.getName());
 			}
 			assertEquals(45, names.size());
 			xmlMethods = Collections.unmodifiableList(names);
