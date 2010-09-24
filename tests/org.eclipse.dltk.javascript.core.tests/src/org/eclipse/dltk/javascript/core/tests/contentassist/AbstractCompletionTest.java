@@ -91,7 +91,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 					ITypeNames.OBJECT).getMembers()) {
 				names.add(member.getName());
 			}
-			assertEquals(3, names.size());
+			assertEquals(4, names.size());
 			objectMethods = Collections.unmodifiableList(names);
 		}
 		return objectMethods;
@@ -106,7 +106,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 					ITypeNames.NUMBER).getMembers()) {
 				names.add(member.getName());
 			}
-			assertEquals(7, names.size());
+			assertEquals(13, names.size());
 			numberMethods = Collections.unmodifiableList(names);
 		}
 		return numberMethods;
@@ -121,7 +121,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 					ITypeNames.STRING).getMembers()) {
 				names.add(member.getName());
 			}
-			assertEquals(36, names.size());
+			assertEquals(38, names.size());
 			stringMethods = Collections.unmodifiableList(names);
 		}
 		return stringMethods;
