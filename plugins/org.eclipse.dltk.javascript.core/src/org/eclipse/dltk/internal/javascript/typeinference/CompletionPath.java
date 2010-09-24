@@ -80,7 +80,7 @@ public class CompletionPath {
 	}
 
 	public String lastSegment() {
-		return segments[segments.length - 1].name;
+		return !isEmpty() ? segments[segments.length - 1].name : null;
 	}
 
 	@Override
