@@ -461,6 +461,8 @@ public class JavascriptAutoEditStrategy extends
 			lastClosed = 0;
 		while (lastOpen > lastClosed) {
 			start = sm.lastIndexOf("function ", lastOpen);
+			if (start == -1)
+				start = 0;
 			lastOpen = sm.lastIndexOf("{", start);
 			if (lastOpen == -1)
 				lastOpen = 0;
