@@ -472,18 +472,21 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitNewExpression(NewExpression node) {
 		final IValueReference result = new AnonymousValue();
-		final IValueReference clazz = visit(node.getObjectClass());
+		Expression objectClass = node.getObjectClass();
+		visit(objectClass);
+		String className = objectClass.toSourceString("");
+
+		// final IValueReference clazz = visit(node.getObjectClass());
 		final IValueReference newType = result
 				.getChild(IValueReference.FUNCTION_OP);
-		if (clazz != null && clazz.getName() != null
-				&& !clazz.getName().trim().equals("")) {
-			final Type type = resolveJavaScriptType(context, clazz.getName(),
+		if (!className.trim().equals("")) {
+			final Type type = resolveJavaScriptType(context, className,
 					peekContext());
 			if (type.getKind() != TypeKind.UNKNOWN) {
 				newType.setValue(context.getFactory().create(peekContext(),
 						type));
 			} else {
-				newType.setValue(new LazyReference(context, clazz.getName(),
+				newType.setValue(new LazyReference(context, className,
 						peekContext()));
 			}
 			return result;
@@ -500,7 +503,15 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 		Type type = context.getType(className);
 		if (type.getKind() == TypeKind.UNKNOWN) {
-			IValueReference functionType = collection.getChild(className);
+			String[] scopes = className.split("\\.");
+			IValueReference functionType = null;
+			for (String scope : scopes) {
+				if (functionType == null) {
+					functionType = collection.getChild(scope);
+				} else {
+					functionType = functionType.getChild(scope);
+				}
+			}
 			if (functionType != null && functionType.exists()) {
 				type.setKind(TypeKind.JAVASCRIPT);
 				EList<Member> members = type.getMembers();
@@ -516,6 +527,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					if (child.hasChild(IValueReference.FUNCTION_OP)) {
 						Method method = TypeInfoModelFactory.eINSTANCE
 								.createMethod();
+						method.setAttribute(IReferenceAttributes.LOCATION,
+								child.getLocation());
 						method.setName(fieldName);
 						method.setType(JavaScriptValidations.typeOf(child));
 
@@ -540,6 +553,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					} else {
 						Property property = TypeInfoModelFactory.eINSTANCE
 								.createProperty();
+						property.setAttribute(IReferenceAttributes.LOCATION,
+								child.getLocation());
 						property.setName(fieldName);
 						property.setType(JavaScriptValidations.typeOf(child));
 						members.add(property);
@@ -567,6 +582,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final IValueReference value = visit(pi.getValue());
 				if (child != null) {
 					child.setValue(value);
+					child.setLocation(ReferenceLocation.create(pi.getName()
+							.sourceStart(), pi.getName().sourceEnd()));
+					if (child.getKind() == ReferenceKind.UNKNOWN) {
+						child.setKind(ReferenceKind.LOCAL);
+					}
 				}
 			} else {
 				// TODO handle get/set methods
@@ -586,7 +606,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference object = visit(node.getObject());
 		Expression property = node.getProperty();
 		IValueReference child = extractNamedChild(object, property);
-		if (node.getObject() instanceof ThisExpression) {
+		if (child != null && node.getObject() instanceof ThisExpression) {
 			// TODO check is this also a local reference kind or should this be
 			// a special one?
 			child.setKind(ReferenceKind.LOCAL);
