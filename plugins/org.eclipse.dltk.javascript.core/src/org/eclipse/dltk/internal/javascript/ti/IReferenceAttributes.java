@@ -14,8 +14,9 @@ package org.eclipse.dltk.internal.javascript.ti;
 public interface IReferenceAttributes {
 
 	String PARAMETERS = "PARAMETERS"; //$NON-NLS-1$
+	String LOCATION = "LOCATION"; //$NON-NLS-1$
 	String FUNCTION_SCOPE = "FUNCTION_SCOPE"; //$NON-NLS-1$
 	String ELEMENT = "ELEMENT"; //$NON-NLS-1$
-	String STATIC = "STATIC";
+	String STATIC = "STATIC"; //$NON-NLS-1$
 
 }

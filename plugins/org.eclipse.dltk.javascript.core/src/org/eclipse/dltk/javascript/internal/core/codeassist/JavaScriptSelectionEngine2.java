@@ -30,6 +30,7 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.model.LocalVariable;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.ReferenceKind;
@@ -244,18 +245,42 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			return resolveBuiltin(module.getScriptProject(), path);
 		}
 		if (type != null && type.getKind() == TypeKind.JAVASCRIPT) {
-			// TODO this only goes 1 deep, need support for nested types..
-			IModelElement[] children = module.getChildren();
-			for (IModelElement modelElement : children) {
-				if (modelElement.getElementType() == IModelElement.METHOD
-						&& modelElement.getElementName().equals(type.getName())) {
-					IModelElement[] children2 = ((IParent) modelElement)
-							.getChildren();
-					for (IModelElement child : children2) {
-						if (child.getElementName().equals(element.getName()))
-							return child;
+			ReferenceLocation location = (ReferenceLocation) element
+					.getAttribute(IReferenceAttributes.LOCATION);
+			if (location != null && location != ReferenceLocation.UNKNOWN) {
+				if (element instanceof Property) {
+					return new LocalVariable(module, element.getName(),
+							location.getDeclarationStart(),
+							location.getDeclarationEnd(),
+							location.getNameStart(), location.getNameEnd() - 1,
+							null);
+				} else {
+					try {
+						module.reconcile(false, null, null);
+						module.accept(new Visitor(location.getNameStart(),
+								location.getNameEnd()));
+					} catch (ModelException e) {
+						e.printStackTrace();
+					} catch (ModelElementFound e) {
+						return e.element;
 					}
-					return modelElement;
+				}
+			} else {
+				// TODO this only goes 1 deep, need support for nested types..
+				IModelElement[] children = module.getChildren();
+				for (IModelElement modelElement : children) {
+					if (modelElement.getElementType() == IModelElement.METHOD
+							&& modelElement.getElementName().equals(
+									type.getName())) {
+						IModelElement[] children2 = ((IParent) modelElement)
+								.getChildren();
+						for (IModelElement child : children2) {
+							if (child.getElementName()
+									.equals(element.getName()))
+								return child;
+						}
+						return modelElement;
+					}
 				}
 			}
 		}
