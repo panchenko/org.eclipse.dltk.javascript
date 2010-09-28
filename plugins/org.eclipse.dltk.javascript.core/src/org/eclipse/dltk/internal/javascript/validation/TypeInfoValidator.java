@@ -266,13 +266,27 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								}
 							}
 							if (reportNotUsedCalls) {
-								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD,
-										NLS.bind(
-												ValidationMessages.UndefinedMethodInScript,
-												reference.getName()),
-										methodNode.sourceStart(), methodNode
-												.sourceEnd());
+								if (expression instanceof NewExpression) {
+
+									reporter.reportProblem(
+											JavaScriptProblems.UNKNOWN_TYPE,
+											NLS.bind(
+													ValidationMessages.UnknownType,
+													((NewExpression) expression)
+															.getObjectClass()
+															.toSourceString("")),
+											methodNode.sourceStart(),
+											methodNode.sourceEnd());
+
+								} else {
+									reporter.reportProblem(
+											JavaScriptProblems.UNDEFINED_METHOD,
+											NLS.bind(
+													ValidationMessages.UndefinedMethodInScript,
+													reference.getName()),
+											methodNode.sourceStart(),
+											methodNode.sourceEnd());
+								}
 							} else {
 								unresolvedCallExpressions
 										.add(new UnresolvedCall(peekContext(),
