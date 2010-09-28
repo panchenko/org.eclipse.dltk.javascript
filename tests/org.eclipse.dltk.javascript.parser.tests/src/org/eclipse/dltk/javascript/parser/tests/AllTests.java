@@ -20,6 +20,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"org.eclipse.dltk.javascript.parser.tests");
 		// $JUnit-BEGIN$
+		suite.addTestSuite(NewTests.class);
 		suite.addTestSuite(VariableDeclarationTests.class);
 		suite.addTestSuite(ArrayInitializerTests.class);
 		suite.addTestSuite(ObjectInitializerTests.class);
