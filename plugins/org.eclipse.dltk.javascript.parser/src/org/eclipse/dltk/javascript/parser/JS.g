@@ -1075,7 +1075,7 @@ memberExpression
 	;
 
 newExpression
-	: NEW^ memberExpression
+	: NEW^ leftHandSideExpressionTail
 	;
 
 	
@@ -1101,6 +1101,19 @@ leftHandSideExpression
   catch [RecognitionException e] { reportRuleError(e); }
   catch [RuntimeException e] { reportFailure(e); }
   finally { popState(); }
+
+leftHandSideExpressionTail
+  :
+  (
+    memberExpression    -> memberExpression
+  )
+  (
+    LBRACK expression RBRACK  -> ^( BYINDEX $leftHandSideExpressionTail expression )
+    | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpressionTail DOT rightHandSideExpression )
+    | DOTDOT rightHandSideExpression -> ^(ALLCHILDREN $leftHandSideExpressionTail rightHandSideExpression)
+    | COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpressionTail expression)
+  )*
+  ;
 
 rightHandSideExpression
   : parenExpression 
