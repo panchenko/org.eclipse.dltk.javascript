@@ -80,6 +80,7 @@ import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
@@ -472,14 +473,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitNewExpression(NewExpression node) {
 		final IValueReference result = new AnonymousValue();
-		Expression objectClass = node.getObjectClass();
+		final Expression objectClass = node.getObjectClass();
 		visit(objectClass);
-		String className = objectClass.toSourceString("");
+		final String className = PropertyExpressionUtils.getPath(objectClass);
 
 		// final IValueReference clazz = visit(node.getObjectClass());
 		final IValueReference newType = result
 				.getChild(IValueReference.FUNCTION_OP);
-		if (!className.trim().equals("")) {
+		if (className != null) {
 			final Type type = resolveJavaScriptType(context, className,
 					peekContext());
 			if (type.getKind() != TypeKind.UNKNOWN) {
