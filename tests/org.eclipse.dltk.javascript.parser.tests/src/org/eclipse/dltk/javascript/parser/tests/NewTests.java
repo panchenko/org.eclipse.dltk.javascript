@@ -17,6 +17,7 @@ import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 
 public class NewTests extends AbstractJSParserTest {
 
@@ -27,6 +28,8 @@ public class NewTests extends AbstractJSParserTest {
 				VariableDeclaration.class));
 		CallExpression call = (CallExpression) var.getInitializer();
 		NewExpression newExpr = (NewExpression) call.getExpression();
+		assertEquals("a",
+				PropertyExpressionUtils.getPath(newExpr.getObjectClass()));
 		assertIdentifier("a", newExpr.getObjectClass());
 	}
 
@@ -37,6 +40,8 @@ public class NewTests extends AbstractJSParserTest {
 				VariableDeclaration.class));
 		CallExpression call = (CallExpression) var.getInitializer();
 		NewExpression newExpr = (NewExpression) call.getExpression();
+		assertEquals("a.b",
+				PropertyExpressionUtils.getPath(newExpr.getObjectClass()));
 		PropertyExpression property = (PropertyExpression) newExpr
 				.getObjectClass();
 		assertIdentifier("a", property.getObject());
@@ -50,6 +55,8 @@ public class NewTests extends AbstractJSParserTest {
 				VariableDeclaration.class));
 		CallExpression call = (CallExpression) var.getInitializer();
 		NewExpression newExpr = (NewExpression) call.getExpression();
+		assertEquals("a.b.c",
+				PropertyExpressionUtils.getPath(newExpr.getObjectClass()));
 		PropertyExpression property = (PropertyExpression) newExpr
 				.getObjectClass();
 		PropertyExpression property2 = (PropertyExpression) property
