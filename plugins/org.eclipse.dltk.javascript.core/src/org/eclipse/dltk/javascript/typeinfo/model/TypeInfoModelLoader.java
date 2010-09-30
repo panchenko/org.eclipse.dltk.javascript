@@ -66,6 +66,9 @@ public class TypeInfoModelLoader {
 		return result;
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	public Member getMember(String memberName) {
 		for (Resource resource : resourceSet.getResources()) {
 			for (EObject object : resource.getContents()) {
@@ -80,6 +83,9 @@ public class TypeInfoModelLoader {
 		return null;
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	public Set<Member> listMembers(String prefix) {
 		Set<Member> result = new HashSet<Member>();
 		for (Resource resource : resourceSet.getResources()) {

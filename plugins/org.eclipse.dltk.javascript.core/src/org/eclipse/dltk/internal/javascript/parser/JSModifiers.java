@@ -13,6 +13,9 @@ package org.eclipse.dltk.internal.javascript.parser;
 
 import org.eclipse.dltk.ast.Modifiers;
 
+/**
+ * @since 3.0
+ */
 public class JSModifiers {
 	public static final int DEPRECATED = 1 << Modifiers.USER_MODIFIER;
 }

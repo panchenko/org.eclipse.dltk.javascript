@@ -25,6 +25,9 @@ public interface JavaScriptProblems {
 	 * @since 3.0
 	 */
 	public static final int DEPRECATED_FUNCTION = IProblem.MethodRelated + 4;
+	/**
+	 * @since 3.0
+	 */
 	public static final int NON_STATIC_METHOD = IProblem.MethodRelated + 5;
 
 	public static final int UNDEFINED_PROPERTY = IProblem.FieldRelated + 1;
@@ -39,7 +42,13 @@ public interface JavaScriptProblems {
 
 	public static final int CONTINUE_NON_LOOP_LABEL = IProblem.Internal + 6;
 	public static final int BREAK_NON_LOOP_LABEL = IProblem.Internal + 7;
+	/**
+	 * @since 3.0
+	 */
 	public static final int BREAK_OUTSIDE_LABEL = IProblem.Internal + 8;
+	/**
+	 * @since 3.0
+	 */
 	public static final int CONTINUE_OUTSIDE_LABEL = IProblem.Internal + 9;
 
 }

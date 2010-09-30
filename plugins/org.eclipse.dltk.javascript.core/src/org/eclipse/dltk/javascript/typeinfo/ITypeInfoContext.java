@@ -18,6 +18,9 @@ public interface ITypeInfoContext {
 
 	Type getType(String typeName);
 
+	/**
+	 * @since 3.0
+	 */
 	Type getKnownType(String typeName);
 
 	/**

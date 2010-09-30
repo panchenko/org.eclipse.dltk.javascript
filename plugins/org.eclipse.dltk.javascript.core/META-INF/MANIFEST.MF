@@ -16,7 +16,7 @@ Bundle-Activator: org.eclipse.dltk.javascript.core.JavaScriptPlugin
 Export-Package: com.xored.org.mozilla.javascript,
  org.eclipse.dltk.internal.javascript.parser,
  org.eclipse.dltk.internal.javascript.reference.resolvers,
- org.eclipse.dltk.internal.javascript.ti,
+ org.eclipse.dltk.internal.javascript.ti;x-internal:=true,
  org.eclipse.dltk.internal.javascript.typeinference,
  org.eclipse.dltk.internal.javascript.validation;x-internal:=true,
  org.eclipse.dltk.javascript.core,
