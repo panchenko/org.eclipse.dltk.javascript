@@ -220,8 +220,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							// configurable)
 						}
 					} else {
-						Object attribute = reference
-								.getAttribute(IReferenceAttributes.PARAMETERS);
+						Object attribute = reference.getAttribute(
+								IReferenceAttributes.PARAMETERS, true);
 						if (attribute instanceof JSMethod) {
 							JSMethod method = (JSMethod) attribute;
 							if (method.isDeprecated()) {
