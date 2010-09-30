@@ -23,6 +23,9 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+/**
+ * @since 3.0
+ */
 public class JSModelLabelProvider extends BaseLabelProvider implements
 		ILabelProvider {
 

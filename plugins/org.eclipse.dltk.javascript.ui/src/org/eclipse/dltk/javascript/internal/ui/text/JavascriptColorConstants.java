@@ -30,6 +30,9 @@ public final class JavascriptColorConstants {
 	 */
 	public static final String JS_DOC = "JS_DOC"; //$NON-NLS-1$
 
+	/**
+	 * @since 3.0
+	 */
 	public static final String JS_DOC_TAGS = "JS_DOC_TAGS"; //$NON-NLS-1$	
 
 	/**
