@@ -17,6 +17,7 @@ import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
@@ -176,8 +177,23 @@ public class JavaScriptCompletionProposalLabelProvider extends
 				&& isDeprecated(proposal)) {
 			return new DecorationOverlayIcon(descriptor.createImage(),
 					DLTKPluginImages.DESC_OVR_DEPRECATED, IDecoration.UNDERLAY);
+		} else if (isStatic(proposal)) {
+			return new DecorationOverlayIcon(descriptor.createImage(),
+					DLTKPluginImages.DESC_OVR_STATIC, IDecoration.TOP_RIGHT);
 		}
 		return super.decorateImageDescriptor(descriptor, proposal);
+	}
+
+	/**
+	 * @param proposal
+	 * @return
+	 */
+	private boolean isStatic(CompletionProposal proposal) {
+		if (proposal.getExtraInfo() instanceof Member) {
+			return ((Member) proposal.getExtraInfo()).isStatic();
+		} else {
+			return false;
+		}
 	}
 
 	private boolean isDeprecated(CompletionProposal proposal) {
