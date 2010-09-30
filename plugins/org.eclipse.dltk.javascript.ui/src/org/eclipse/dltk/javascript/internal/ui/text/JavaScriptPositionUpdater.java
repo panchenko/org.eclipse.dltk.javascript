@@ -6,8 +6,6 @@ package org.eclipse.dltk.javascript.internal.ui.text;
 import java.io.StringReader;
 import java.util.List;
 
-import org.eclipse.dltk.ast.parser.ISourceParser;
-import org.eclipse.dltk.ast.parser.SourceParserManager;
 import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.javascript.ast.GetMethod;
@@ -18,7 +16,7 @@ import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
-import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.ui.editor.highlighting.AbstractSemanticHighlighter;
 
 final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
@@ -30,12 +28,8 @@ final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
 
 	@Override
 	protected boolean doHighlighting(IModuleSource code) throws Exception {
-		final ISourceParser parser = SourceParserManager.getInstance()
-				.getSourceParserById(JavaScriptParser.PARSER_ID);
-		if (parser == null) {
-			return false;
-		}
-		final Script declaration = (Script) parser.parse(code, null);
+		final Script declaration = (Script) JavaScriptParserUtil.parse(code,
+				null);
 		if (declaration == null) {
 			return false;
 		}
@@ -43,8 +37,8 @@ final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
 			for (XmlFragment fragment : literal.getFragments()) {
 				if (fragment instanceof XmlTextFragment) {
 					final XMLTokenizer tokenizer = new XMLTokenizer(
-							new StringReader(((XmlTextFragment) fragment)
-									.getXml()));
+							new StringReader(
+									((XmlTextFragment) fragment).getXml()));
 					final int offset = fragment.sourceStart();
 					@SuppressWarnings("unchecked")
 					final List<Token> tokens = tokenizer.getRegions();
