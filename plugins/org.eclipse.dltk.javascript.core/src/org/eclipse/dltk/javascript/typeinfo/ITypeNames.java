@@ -13,13 +13,14 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 public interface ITypeNames {
 
-	public static final String XML = "XML";
-	public static final String ARRAY = "Array";
-	public static final String DATE = "Date";
-	public static final String STRING = "String";
-	public static final String NUMBER = "Number";
-	public static final String BOOLEAN = "Boolean";
-	public static final String OBJECT = "Object";
-	public static final String REGEXP = "RegExp";
+	public static final String XML = "XML"; //$NON-NLS-1$
+	public static final String ARRAY = "Array"; //$NON-NLS-1$
+	public static final String DATE = "Date"; //$NON-NLS-1$
+	public static final String STRING = "String"; //$NON-NLS-1$
+	public static final String NUMBER = "Number"; //$NON-NLS-1$
+	public static final String BOOLEAN = "Boolean"; //$NON-NLS-1$
+	public static final String OBJECT = "Object"; //$NON-NLS-1$
+	public static final String REGEXP = "RegExp"; //$NON-NLS-1$
+	public static final String FUNCTION = "Function"; //$NON-NLS-1$
 
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.core.Predicate;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -163,8 +164,8 @@ public abstract class ElementValue implements IValue {
 		public IValue getChild(String name, boolean resolve) {
 			if (IValueReference.FUNCTION_OP.equals(name)) {
 				if (method.getType() != null) {
-					return new TypeValue(
-							Collections.singleton(method.getType()));
+					return new TypeValue(Collections
+							.singleton(method.getType()));
 				}
 			}
 			return null;
@@ -259,8 +260,8 @@ public abstract class ElementValue implements IValue {
 			for (Member member : members) {
 				if (member instanceof Property) {
 					final Property property = (Property) member;
-					final ElementValue child = ElementValue.findMember(
-							property.getType(), name);
+					final ElementValue child = ElementValue.findMember(property
+							.getType(), name);
 					if (child != null) {
 						return child;
 					}
@@ -297,7 +298,7 @@ public abstract class ElementValue implements IValue {
 						types = new HashSet<Type>();
 					}
 					types.add(TypeInfoModelLoader.getInstance().getType(
-							"Function"));
+							ITypeNames.FUNCTION));
 				}
 			}
 			if (types != null) {

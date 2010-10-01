@@ -82,6 +82,7 @@ import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -350,7 +351,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					node.sourceEnd(), kw.sourceStart(), kw.sourceEnd()));
 		}
 		result.setKind(ReferenceKind.FUNCTION);
-		result.setDeclaredType(context.getKnownType("Function"));
+		result.setDeclaredType(context.getKnownType(ITypeNames.FUNCTION));
 		result.setAttribute(IReferenceAttributes.PARAMETERS, method);
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
 		final IValueReference returnValue = result
