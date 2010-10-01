@@ -17,7 +17,6 @@ import java.util.Set;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
-import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -26,7 +25,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 @SuppressWarnings("nls")
 public class ExampleElementResolver implements IElementResolver {
 
-	public Element resolveElement(ITypeInfoContext context, String name) {
+	public Member resolveElement(ITypeInfoContext context, String name) {
 		if ("ExampleGlobal".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setType(context.getType(ExampleTypeProvider.TYPE_SERVICE));
