@@ -357,13 +357,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				.getChild(IValueReference.FUNCTION_OP);
 		returnValue.setDeclaredType(method.getType());
 		returnValue.setValue(function.getReturnValue());
-		Set<String> thisChildren = function.getThis().getDirectChildren();
-		for (String childName : thisChildren) {
-			IValueReference child = returnValue.getChild(childName);
-			IValueReference originalChild = function.getThis().getChild(
-					childName);
-			child.addValue(originalChild, true);
-		}
 		return result;
 	}
 
@@ -516,8 +509,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (functionType != null && functionType.exists()) {
 				type.setKind(TypeKind.JAVASCRIPT);
 				EList<Member> members = type.getMembers();
-				IValueReference functionCallChild = functionType.getChild(
-						IValueReference.FUNCTION_OP);
+				FunctionValueCollection functionCollection = (FunctionValueCollection) functionType
+						.getAttribute(IReferenceAttributes.FUNCTION_SCOPE, true);
+				IValueReference functionCallChild = null;
+				if (functionCollection != null) {
+					functionCallChild = functionCollection.getThis();
+				} else {
+					functionCallChild = functionType
+							.getChild(IValueReference.FUNCTION_OP);
+				}
+
 				Set<String> functionFields = functionCallChild.getDirectChildren();
 				for (String fieldName : functionFields) {
 					if (fieldName.equals(IValueReference.FUNCTION_OP))
