@@ -23,7 +23,6 @@ import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
-import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -255,18 +254,18 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return factory;
 	}
 
-	private Map<String, Element> elements = new HashMap<String, Element>();
+	private Map<String, Member> elements = new HashMap<String, Member>();
 
-	public Element resolve(String name) {
+	public Member resolve(String name) {
 		if (name == null)
 			return null;
-		Element element = elements.get(name);
+		Member element = elements.get(name);
 		if (element != null) {
 			return element;
 		}
-		final Member member = TypeInfoModelLoader.getInstance().getMember(name);
-		if (member != null) {
-			return member;
+		element = TypeInfoModelLoader.getInstance().getMember(name);
+		if (element != null) {
+			return element;
 		}
 		for (IElementResolver resolver : TypeInfoManager.getElementResolvers()) {
 			element = resolver.resolveElement(this, name);

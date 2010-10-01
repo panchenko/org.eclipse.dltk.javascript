@@ -13,10 +13,10 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.Set;
 
-import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
 public interface IElementResolver {
-	Element resolveElement(ITypeInfoContext context, String name);
+	Member resolveElement(ITypeInfoContext context, String name);
 
 	/**
 	 * @param context

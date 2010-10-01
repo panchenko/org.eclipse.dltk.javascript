@@ -14,13 +14,13 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
-import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
 public interface ITypeInferenceContext extends ITypeInfoContext {
 
 	IValueTypeFactory getFactory();
 
-	Element resolve(String name);
+	Member resolve(String name);
 
 	Set<String> listGlobals(String prefix);
 

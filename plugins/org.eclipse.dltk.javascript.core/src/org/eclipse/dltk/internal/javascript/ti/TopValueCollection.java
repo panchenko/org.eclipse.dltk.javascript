@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TopValueCollection extends ValueCollection {
@@ -30,7 +30,7 @@ public class TopValueCollection extends ValueCollection {
 			@Override
 			protected IValue findMember(String name, boolean resolve) {
 				if (resolve) {
-					final Element element = context.resolve(name);
+					final Member element = context.resolve(name);
 					if (element != null) {
 						return ElementValue.createFor(element);
 					}

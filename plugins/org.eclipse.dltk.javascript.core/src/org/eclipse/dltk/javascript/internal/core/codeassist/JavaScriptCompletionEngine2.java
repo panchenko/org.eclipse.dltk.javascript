@@ -211,7 +211,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		final Set<String> globals = context.listGlobals(reporter.getPrefix());
 		for (String global : globals) {
 			if (reporter.canReport(global)) {
-				Element element = context.resolve(global);
+				Member element = context.resolve(global);
 				if (element != null && element.isVisible()) {
 					reporter.report(global, element);
 				}
