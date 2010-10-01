@@ -11,17 +11,24 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core;
 
+import static org.eclipse.dltk.javascript.core.JavaScriptPlugin.PLUGIN_ID;
+
 import org.eclipse.dltk.compiler.problem.DefaultProblemFactory;
-import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 
 public class JSProblemFactory extends DefaultProblemFactory {
 
-	public static final String JS_PROBLEM = JavaScriptPlugin.PLUGIN_ID
-			+ ".jsproblem";
+	public static final String JS_PROBLEM = PLUGIN_ID + ".jsproblem"; //$NON-NLS-1$
+
+	public static final String JS_TASK = PLUGIN_ID + ".jstask"; //$NON-NLS-1$
 
 	@Override
 	public String getProblemMarker() {
 		return JS_PROBLEM;
+	}
+
+	@Override
+	public String getTaskMarker() {
+		return JS_TASK;
 	}
 
 }

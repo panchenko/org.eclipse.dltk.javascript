@@ -180,6 +180,13 @@
 		<persistent value="true"/>
 		<super type="org.eclipse.dltk.core.problem"/>
 	</extension>
+	<extension
+		point="org.eclipse.core.resources.markers"
+		id="jstask"
+		name="JavaScript Task">
+		<persistent value="true"/>
+		<super type="org.eclipse.dltk.core.task"/>
+	</extension>
 	<extension point="org.eclipse.dltk.core.problemFactory">
 	      <problemFactory
              class="org.eclipse.dltk.javascript.internal.core.JSProblemFactory"
