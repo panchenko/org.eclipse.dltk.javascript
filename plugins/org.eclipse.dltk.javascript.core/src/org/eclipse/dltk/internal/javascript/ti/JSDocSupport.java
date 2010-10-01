@@ -44,7 +44,7 @@ public class JSDocSupport implements IModelBuilder {
 		parseDeprecation(method, comment);
 	}
 
-	private static final String DEPRECATED = "@deprecated";
+	private static final String DEPRECATED = "@deprecated"; //$NON-NLS-1$
 
 	private void parseDeprecation(IMethod method, String comment) {
 		int index = comment.indexOf(DEPRECATED);
@@ -53,7 +53,7 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	private static final String PARAM_TAG = "@param";
+	private static final String PARAM_TAG = "@param"; //$NON-NLS-1$
 
 	private void parseParams(ITypeInfoContext context, IMethod method,
 			String comment) {
@@ -63,8 +63,8 @@ public class JSDocSupport implements IModelBuilder {
 			if (endLineIndex == -1) {
 				endLineIndex = comment.length();
 			}
-			String parameterString = comment.substring(
-					index + PARAM_TAG.length(), endLineIndex);
+			String parameterString = comment.substring(index
+					+ PARAM_TAG.length(), endLineIndex);
 			StringTokenizer st = new StringTokenizer(parameterString);
 			String type = null;
 			while (st.hasMoreTokens()) {
@@ -96,7 +96,7 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	private static final String TYPE_TAG = "@type";
+	private static final String TYPE_TAG = "@type"; //$NON-NLS-1$
 
 	private void parseType(ITypeInfoContext context, IMethod method,
 			String comment) {
