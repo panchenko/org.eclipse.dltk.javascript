@@ -265,6 +265,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 		element = TypeInfoModelLoader.getInstance().getMember(name);
 		if (element != null) {
+			elements.put(name, element);
 			return element;
 		}
 		for (IElementResolver resolver : TypeInfoManager.getElementResolvers()) {
