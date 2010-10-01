@@ -4,5 +4,6 @@
 	<extension point="org.eclipse.dltk.javascript.core.typeinfo">
     	<provider class="org.eclipse.dltk.javascript.core.tests.typeinference.ExampleTypeProvider"/>
     	<resolver class="org.eclipse.dltk.javascript.core.tests.typeinference.ExampleElementResolver"/>
+    	<evaluator class="org.eclipse.dltk.javascript.core.tests.typeinference.ExampleMemberEvaluator"/>
 	</extension>
 </plugin>
