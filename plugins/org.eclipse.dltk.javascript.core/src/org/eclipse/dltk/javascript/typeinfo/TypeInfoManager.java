@@ -36,6 +36,7 @@ public class TypeInfoManager {
 	private static final String PROVIDER_ELEMENT = "provider";
 	private static final String RESOLVER_ELEMENT = "resolver";
 	private static final String CONVERTER_ELEMENT = "converter";
+	private static final String EVALUATOR_ELEMENT = "evaluator";
 
 	private static String trim(String str) {
 		if (str != null) {
@@ -105,6 +106,18 @@ public class TypeInfoManager {
 		}
 	};
 
+	private static final SimpleExtensionManager<IMemberEvaluator> evaluatorManager = new SimpleExtensionManager<IMemberEvaluator>(
+			IMemberEvaluator.class, EXT_POINT) {
+		@Override
+		protected IMemberEvaluator createInstance(IConfigurationElement element) {
+			if (EVALUATOR_ELEMENT.equals(element.getName())) {
+				return super.createInstance(element);
+			} else {
+				return null;
+			}
+		}
+	};
+
 	public static IModelBuilder[] getModelBuilders() {
 		return modelBuilderManager.getInstances();
 	}
@@ -121,6 +134,10 @@ public class TypeInfoManager {
 		return converterManager.getInstances();
 	}
 
+	public static IMemberEvaluator[] getMemberEvaluators() {
+		return evaluatorManager.getInstances();
+	}
+
 	public static ResourceSet loadModelResources() {
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		for (IConfigurationElement element : getConfigurationElements()) {
@@ -131,9 +148,11 @@ public class TypeInfoManager {
 				try {
 					if (uri != null) {
 						if (resource != null) {
-							resourceSet.getURIConverter().getURIMap().put(
-									URI.createURI(uri),
-									createURI(element, resource));
+							resourceSet
+									.getURIConverter()
+									.getURIMap()
+									.put(URI.createURI(uri),
+											createURI(element, resource));
 							resourceSet.getResources().add(
 									new XMIResourceImpl(URI.createURI(uri)));
 						}

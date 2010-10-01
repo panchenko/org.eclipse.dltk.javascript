@@ -9,23 +9,17 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.ti;
+package org.eclipse.dltk.javascript.typeinfo;
 
-import java.util.Set;
-
-import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
-public interface ITypeInferenceContext extends ITypeInfoContext {
+public interface IMemberEvaluator {
 
-	IValueTypeFactory getFactory();
-
-	Member resolve(String name);
-
-	Set<String> listGlobals(String prefix);
-
-	Set<String> listTypes(String prefix);
-
-	IValue valueOf(Member member);
+	/**
+	 * @param member
+	 * @return
+	 */
+	IValueCollection valueOf(Member member);
 
 }

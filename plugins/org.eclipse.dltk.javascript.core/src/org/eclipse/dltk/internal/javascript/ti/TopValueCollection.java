@@ -32,7 +32,7 @@ public class TopValueCollection extends ValueCollection {
 				if (resolve) {
 					final Member element = context.resolve(name);
 					if (element != null) {
-						return ElementValue.createFor(element);
+						return context.valueOf(element);
 					}
 					final Type type = context.getKnownType(name);
 					if (type != null) {

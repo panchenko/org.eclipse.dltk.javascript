@@ -21,6 +21,7 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
+import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -276,6 +277,20 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 		}
 		return null;
+	}
+
+	public IValue valueOf(Member member) {
+		for (IMemberEvaluator evaluator : TypeInfoManager.getMemberEvaluators()) {
+			final IValueCollection collection = evaluator.valueOf(member);
+			if (collection != null) {
+				if (collection instanceof IValueProvider) {
+					return ((IValueProvider) collection).getValue();
+				} else {
+					break;
+				}
+			}
+		}
+		return ElementValue.createFor(member);
 	}
 
 	public Set<String> listGlobals(String prefix) {
