@@ -1,5 +1,7 @@
 package org.eclipse.dltk.javascript.core.tests.contentassist;
 
+import static org.eclipse.dltk.core.tests.TestSupport.notYetImplemented;
+
 import java.util.LinkedList;
 
 import org.eclipse.dltk.codeassist.ICompletionEngine;
@@ -211,6 +213,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test22() {
+		if (notYetImplemented(this))
+			return;
 		String[] names = concat(getMethodsOfNumber());
 		IModuleSource module = createModule("test22.js");
 		int position = lastPositionInFile("hello.", module);
@@ -245,6 +249,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test26() {
+		if (notYetImplemented(this))
+			return;
 		String[] names = concat(getMethodsOfNumber(), "wine");
 
 		IModuleSource module = createModule("test26.js");
@@ -406,6 +412,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test46() {
+		if (notYetImplemented(this))
+			return;
 		String[] names = new String[] { "aaa", "baa", "my", "prototype" };
 		IModuleSource module = createModule("test46.js");
 		int position = lastPositionInFile("x.", module);
