@@ -106,6 +106,7 @@ public class CompletionString {
 				continue;
 			}
 			if (c != '.'
+					&& c != '@'
 					&& c != ':'
 					&& inBrackStack.isEmpty()
 					&& (Character.isWhitespace(c) || !Character

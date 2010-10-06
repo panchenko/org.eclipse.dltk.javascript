@@ -11,10 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
@@ -77,13 +81,15 @@ import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
+import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
+import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
-import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -94,6 +100,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.common.util.EList;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
@@ -627,6 +638,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				nameStr = ((Identifier) name).getName();
 			} else if (name instanceof StringLiteral) {
 				nameStr = ((StringLiteral) name).getValue();
+			} else if (name instanceof XmlAttributeIdentifier) {
+				nameStr = ((XmlAttributeIdentifier) name).getAttributeName();
 			} else {
 				return null;
 			}
@@ -778,8 +791,70 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitXmlLiteral(XmlLiteral node) {
-		// TODO parse XML and extend model
-		return context.getFactory().createXML(peekContext());
+		IValueReference xmlValueReference = context.getFactory().createXML(
+				peekContext());
+
+		if (xmlValueReference instanceof IValueProvider) {
+			Type xmlType = context.getKnownType(ITypeNames.XML);
+			IValue xmlValue = ((IValueProvider) xmlValueReference).getValue();
+			List<XmlFragment> fragments = node.getFragments();
+			for (XmlFragment xmlFragment : fragments) {
+				if (xmlFragment instanceof XmlTextFragment) {
+					String xml = ((XmlTextFragment) xmlFragment).getXml();
+					DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
+							.newInstance();
+					try {
+						DocumentBuilder docBuilder = docBuilderFactory
+								.newDocumentBuilder();
+						Document doc = docBuilder.parse(new InputSource(
+								new StringReader(xml)));
+						NodeList nl = doc.getChildNodes();
+						if (nl.getLength() == 1) {
+							Node item = nl.item(0);
+							NamedNodeMap attributes = item.getAttributes();
+							for (int a = 0; a < attributes.getLength(); a++) {
+								Node attribute = attributes.item(a);
+								xmlValue.createChild("@"
+										+ attribute.getNodeName());
+							}
+							createXmlChilds(xmlType, xmlValue,
+									item.getChildNodes());
+						} else {
+							System.err.println("root should be 1 child?? "
+									+ xml);
+						}
+					} catch (Exception e) {
+					}
+
+				}
+			}
+		}
+		return xmlValueReference;
+	}
+
+	/**
+	 * @param xmlType
+	 * @param xmlValue
+	 * @param nl
+	 */
+	private void createXmlChilds(Type xmlType, IValue xmlValue, NodeList nl) {
+		for (int i = 0; i < nl.getLength(); i++) {
+			Node item = nl.item(i);
+			if (item.getNodeType() == Node.TEXT_NODE) {
+				String value = item.getNodeValue();
+				if (value == null || "".equals(value.trim())) {
+					continue;
+				}
+			}
+			IValue nodeValue = xmlValue.createChild(item.getNodeName());
+			nodeValue.setDeclaredType(xmlType);
+			NamedNodeMap attributes = item.getAttributes();
+			for (int a = 0; a < attributes.getLength(); a++) {
+				Node attribute = attributes.item(a);
+				nodeValue.createChild("@" + attribute.getNodeName());
+			}
+			createXmlChilds(xmlType, nodeValue, item.getChildNodes());
+		}
 	}
 
 	@Override
