@@ -50,4 +50,12 @@ public class XmlAttributeIdentifier extends Expression {
 		}
 	}
 
+	public String getAttributeName() {
+		if (expression instanceof Identifier)
+		{
+			return '@' + ((Identifier)expression).getName();
+		}
+		return null;
+	}
+
 }
