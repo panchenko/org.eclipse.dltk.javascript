@@ -288,6 +288,17 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 											methodNode.sourceEnd());
 								}
 							} else {
+								IValueReference parent = reference.getParent();
+								while (parent != null) {
+									if (parent.getName() == IValueReference.ARRAY_OP) {
+										// ignore array lookup function calls
+										// like: array[1](),
+										// those are dynamic.
+										return reference
+												.getChild(IValueReference.FUNCTION_OP);
+									}
+									parent = parent.getParent();
+								}
 								unresolvedCallExpressions
 										.add(new UnresolvedCall(peekContext(),
 												node));
@@ -521,7 +532,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									.sourceStart(), propName.sourceEnd());
 				} else if (type != null
 						&& (type.getKind() == TypeKind.JAVASCRIPT || type
-								.getKind() == TypeKind.PREDEFINED)) {
+								.getKind() == TypeKind.PREDEFINED)
+						&& !result.exists()) {
 					reporter.reportProblem(
 							JavaScriptProblems.UNDEFINED_PROPERTY,
 							NLS.bind(
