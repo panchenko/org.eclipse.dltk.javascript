@@ -17,7 +17,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
-public class FinallyClause extends Statement {
+public class FinallyClause extends JSNode {
 
 	private Keyword finallyKeyword;
 	private Statement statement;

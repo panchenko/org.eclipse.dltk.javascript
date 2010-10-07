@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class CatchClause extends Statement {
+public class CatchClause extends JSNode {
 
 	private Keyword catchKeyword;
 	private Identifier exception;
