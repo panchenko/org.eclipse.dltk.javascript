@@ -15,6 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class IfStatement extends Statement implements ISourceableBlock {
 
@@ -129,7 +130,7 @@ public class IfStatement extends Statement implements ISourceableBlock {
 		if (getElseStatement() != null) {
 			buffer.append(indentationString);
 			buffer.append(Keywords.ELSE);
-			buffer.append("\n");
+			buffer.append(JSLiterals.EOL);
 			buffer.append(getElseStatement().toSourceString(
 					isBlock(getElseStatement()) ? indentationString
 							: indentationString + INDENT));

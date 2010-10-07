@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class VariableStatement extends Expression implements
 		IVariableStatement {
@@ -70,7 +71,7 @@ public class VariableStatement extends Expression implements
 		StringBuffer buffer = new StringBuffer();
 
 		buffer.append(Keywords.VAR);
-		buffer.append(" ");
+		buffer.append(JSLiterals.SPACE);
 
 		for (int i = 0; i < variables.size(); i++) {
 			if (i > 0)

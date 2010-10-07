@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class Keyword extends ASTNode implements ISourceable {
 
@@ -30,7 +31,7 @@ public class Keyword extends ASTNode implements ISourceable {
 
 	@Override
 	public String toString() {
-		return toSourceString("");
+		return toSourceString(JSLiterals.EMPTY);
 	}
 
 	public String toSourceString(String indentationString) {

@@ -15,6 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class TypeOfExpression extends Expression {
 
@@ -64,7 +65,7 @@ public class TypeOfExpression extends Expression {
 		StringBuffer buffer = new StringBuffer();
 
 		buffer.append(Keywords.TYPEOF);
-		buffer.append(" ");
+		buffer.append(JSLiterals.SPACE);
 		buffer.append(expression.toSourceString(indentationString));
 
 		return buffer.toString();

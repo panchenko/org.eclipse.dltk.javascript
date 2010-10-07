@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class CaseClause extends SwitchComponent {
 
@@ -76,7 +77,7 @@ public class CaseClause extends SwitchComponent {
 		buffer.append(indentationString);
 
 		buffer.append(Keywords.CASE);
-		buffer.append(" ");
+		buffer.append(JSLiterals.SPACE);
 		buffer.append(this.getCondition().toSourceString(indentationString));
 		buffer.append(":\n");
 

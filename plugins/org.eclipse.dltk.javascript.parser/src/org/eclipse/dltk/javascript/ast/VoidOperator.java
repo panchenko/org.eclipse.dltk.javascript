@@ -15,6 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class VoidOperator extends Expression {
 
@@ -65,7 +66,7 @@ public class VoidOperator extends Expression {
 
 		buffer.append(indentationString);
 		buffer.append(Keywords.VOID);
-		buffer.append(" ");
+		buffer.append(JSLiterals.SPACE);
 		buffer.append(expression.toSourceString(indentationString));
 
 		return buffer.toString();

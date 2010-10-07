@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class ConstStatement extends Statement implements IVariableStatement {
 
@@ -79,7 +80,7 @@ public class ConstStatement extends Statement implements IVariableStatement {
 
 		buffer.append(indentationString);
 		buffer.append(Keywords.CONST);
-		buffer.append(" ");
+		buffer.append(JSLiterals.SPACE);
 
 		for (int i = 0; i < consts.size(); i++) {
 			if (i > 0)

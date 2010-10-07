@@ -15,6 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class ReturnStatement extends Statement implements ISemicolonStatement {
 
@@ -82,8 +83,8 @@ public class ReturnStatement extends Statement implements ISemicolonStatement {
 		}
 
 		if (this.semic > -1)
-			buffer.append(";");
-		buffer.append("\n");
+			buffer.append(JSLiterals.SEMICOLON);
+		buffer.append(JSLiterals.EOL);
 
 		return buffer.toString();
 	}

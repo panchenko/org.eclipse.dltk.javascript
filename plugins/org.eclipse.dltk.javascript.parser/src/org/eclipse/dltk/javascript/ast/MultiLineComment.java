@@ -14,7 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 
 public class MultiLineComment extends Comment {
 
-	public static final String JSDOC_PREFIX = "/**";
+	public static final String JSDOC_PREFIX = "/**"; //$NON-NLS-1$
 
 	@Override
 	public boolean isMultiLine() {

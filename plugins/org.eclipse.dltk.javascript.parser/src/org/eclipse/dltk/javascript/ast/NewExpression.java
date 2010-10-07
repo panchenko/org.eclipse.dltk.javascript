@@ -15,6 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class NewExpression extends Expression {
 
@@ -70,7 +71,7 @@ public class NewExpression extends Expression {
 		StringBuffer buffer = new StringBuffer();
 
 		buffer.append(Keywords.NEW);
-		buffer.append(" ");
+		buffer.append(JSLiterals.SPACE);
 		buffer.append(objectClass.toSourceString(indentationString));
 
 		return buffer.toString();

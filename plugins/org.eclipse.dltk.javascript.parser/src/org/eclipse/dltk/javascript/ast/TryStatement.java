@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class TryStatement extends Statement {
 
@@ -90,7 +91,7 @@ public class TryStatement extends Statement {
 
 		buffer.append(indentationString);
 		buffer.append(Keywords.TRY);
-		buffer.append("\n");
+		buffer.append(JSLiterals.EOL);
 		buffer.append(body.toSourceString(indentationString));
 
 		for (int i = 0; i < getCatches().size(); i++) {

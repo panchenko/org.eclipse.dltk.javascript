@@ -75,7 +75,7 @@ public class ThrowStatement extends Statement implements ISemicolonStatement {
 		StringBuffer buffer = new StringBuffer();
 
 		buffer.append(indentationString);
-		buffer.append("throw");
+		buffer.append(Keywords.THROW);
 
 		if (this.exception != null) {
 			buffer.append(' ');
