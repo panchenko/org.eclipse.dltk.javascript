@@ -15,7 +15,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.CharOperation;
-import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IScriptFolder;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
@@ -41,17 +44,24 @@ public class ExampleElementResolver implements IElementResolver {
 		} else if ("GLOBALS".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setName(name);
+			final ISourceModule module = context.getSource().getSourceModule();
+			if (module != null) {
+				final IScriptFolder folder = (IScriptFolder) module
+						.getAncestor(IModelElement.SCRIPT_FOLDER);
+				final ISourceModule globals = folder
+						.getSourceModule("globals.js");
+				if (globals.exists()) {
+					final Script script = new JavaScriptParser().parse(
+							(IModuleSource) globals, null);
+					if (script != null) {
+						TypeInferencer2 inferencer = new TypeInferencer2();
+						inferencer.setModelElement(globals);
+						inferencer.doInferencing(script);
+						property.setAttribute(MEMBER_VALUE,
+								inferencer.getCollection());
+					}
 
-			StringList code = new StringList();
-			code.add("function hello() { return 'Hello'; }");
-			code.add("var name = 'Alex'");
-
-			final Script script = new JavaScriptParser().parse(code.toString(),
-					null);
-			if (script != null) {
-				TypeInferencer2 inferencer = new TypeInferencer2();
-				inferencer.doInferencing(script);
-				property.setAttribute(MEMBER_VALUE, inferencer.getCollection());
+				}
 			}
 			return property;
 		} else if ("executeExampleGlobal".equals(name)) {
