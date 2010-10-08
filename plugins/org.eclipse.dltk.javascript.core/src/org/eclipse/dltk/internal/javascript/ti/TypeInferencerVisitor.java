@@ -90,6 +90,7 @@ import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -124,6 +125,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final Branching branching = new Branching();
 		branchings.add(branching);
 		return branching;
+	}
+
+	private ReferenceSource getSource() {
+		final ReferenceSource source = context.getSource();
+		return source != null ? source : ReferenceSource.UNKNOWN;
 	}
 
 	protected void assign(IValueReference dest, IValueReference src) {
@@ -219,9 +225,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			reference.setDeclaredType(resolveType(varType));
 		}
 		reference.setKind(ReferenceKind.LOCAL);
-		reference.setLocation(ReferenceLocation.create(declaration
-				.sourceStart(), declaration.sourceEnd(), identifier
-				.sourceStart(), identifier.sourceEnd()));
+		reference.setLocation(ReferenceLocation.create(getSource(),
+				declaration.sourceStart(), declaration.sourceEnd(),
+				identifier.sourceStart(), identifier.sourceEnd()));
 		if (declaration.getInitializer() != null) {
 			assign(reference, visit(declaration.getInitializer()));
 		}
@@ -320,12 +326,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
 			if (paramType != null) {
 				parameter.setType(resolveType(paramType));
-				parameter.setLocation(ReferenceLocation.create(argument
-						.sourceStart(), paramType.sourceEnd(), argument
-						.sourceStart(), argument.sourceEnd()));
+				parameter.setLocation(ReferenceLocation.create(getSource(),
+						argument.sourceStart(), paramType.sourceEnd(),
+						argument.sourceStart(), argument.sourceEnd()));
 			} else {
-				parameter.setLocation(ReferenceLocation.create(argument
-						.sourceStart(), argument.sourceEnd()));
+				parameter.setLocation(ReferenceLocation.create(getSource(),
+						argument.sourceStart(), argument.sourceEnd()));
 			}
 			method.getParameters().add(parameter);
 		}
@@ -352,14 +358,15 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference result;
 		if (methodName != null) {
 			result = peekContext().createChild(method.getName());
-			result.setLocation(ReferenceLocation.create(node.sourceStart(),
-					node.sourceEnd(), methodName.sourceStart(), methodName
-							.sourceEnd()));
+			result.setLocation(ReferenceLocation.create(getSource(),
+					node.sourceStart(), node.sourceEnd(),
+					methodName.sourceStart(), methodName.sourceEnd()));
 		} else {
 			result = new AnonymousValue();
 			final Keyword kw = node.getFunctionKeyword();
-			result.setLocation(ReferenceLocation.create(node.sourceStart(),
-					node.sourceEnd(), kw.sourceStart(), kw.sourceEnd()));
+			result.setLocation(ReferenceLocation.create(getSource(),
+					node.sourceStart(), node.sourceEnd(), kw.sourceStart(),
+					kw.sourceEnd()));
 		}
 		result.setKind(ReferenceKind.FUNCTION);
 		result.setDeclaredType(context.getKnownType(ITypeNames.FUNCTION));
@@ -502,8 +509,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	public static Type resolveJavaScriptType(ITypeInferenceContext context,
-			String className,
-			IValueCollection collection) {
+			String className, IValueCollection collection) {
 		if (className == null)
 			return null;
 
@@ -531,7 +537,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							.getChild(IValueReference.FUNCTION_OP);
 				}
 
-				Set<String> functionFields = functionCallChild.getDirectChildren();
+				Set<String> functionFields = functionCallChild
+						.getDirectChildren();
 				for (String fieldName : functionFields) {
 					if (fieldName.equals(IValueReference.FUNCTION_OP))
 						continue;
@@ -591,13 +598,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
-				final IValueReference child = extractNamedChild(result, pi
-						.getName());
+				final IValueReference child = extractNamedChild(result,
+						pi.getName());
 				final IValueReference value = visit(pi.getValue());
 				if (child != null) {
 					child.setValue(value);
-					child.setLocation(ReferenceLocation.create(pi.getName()
-							.sourceStart(), pi.getName().sourceEnd()));
+					child.setLocation(ReferenceLocation.create(getSource(), pi
+							.getName().sourceStart(), pi.getName().sourceEnd()));
 					if (child.getKind() == ReferenceKind.UNKNOWN) {
 						child.setKind(ReferenceKind.LOCAL);
 					}
@@ -624,8 +631,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			// TODO check is this also a local reference kind or should this be
 			// a special one?
 			child.setKind(ReferenceKind.LOCAL);
-			child.setLocation(ReferenceLocation.create(node.sourceStart(), node
-					.sourceEnd(), property.sourceStart(), property.sourceEnd()));
+			child.setLocation(ReferenceLocation.create(getSource(),
+					node.sourceStart(), node.sourceEnd(),
+					property.sourceStart(), property.sourceEnd()));
 		}
 		return child;
 	}

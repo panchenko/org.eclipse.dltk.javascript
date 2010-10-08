@@ -12,29 +12,25 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.core.ISourceModule;
 
-public interface ITypeInfoContext {
+public class ReferenceSource {
 
-	Type getType(String typeName);
+	public static final ReferenceSource UNKNOWN = new ReferenceSource(null);
 
-	/**
-	 * @since 3.0
-	 */
-	Type getKnownType(String typeName);
+	private final IModelElement modelElement;
 
-	/**
-	 * Returns the model element being processed or <code>null</code>
-	 * 
-	 * @return
-	 */
-	IModelElement getModelElement();
+	public ReferenceSource(IModelElement modelElement) {
+		this.modelElement = modelElement;
+	}
 
-	/**
-	 * Returns the source being processed or <code>null</code>
-	 * 
-	 * @return
-	 */
-	ReferenceSource getSource();
+	public IModelElement getModelElement() {
+		return modelElement;
+	}
+
+	public ISourceModule getSourceModule() {
+		return modelElement instanceof ISourceModule ? (ISourceModule) modelElement
+				: null;
+	}
 
 }

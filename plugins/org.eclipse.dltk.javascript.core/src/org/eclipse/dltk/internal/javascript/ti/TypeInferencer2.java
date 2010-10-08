@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
+import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -40,7 +41,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 public class TypeInferencer2 implements ITypeInferenceContext {
 
 	private TypeInferencerVisitor visitor;
-	private IModelElement modelElement;
+	private ReferenceSource source;
 
 	private void initializeVisitor() {
 		if (visitor == null) {
@@ -55,7 +56,11 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	}
 
 	public void setModelElement(IModelElement modelElement) {
-		this.modelElement = modelElement;
+		setSource(new ReferenceSource(modelElement));
+	}
+
+	public void setSource(ReferenceSource source) {
+		this.source = source;
 	}
 
 	public void doInferencing(Script script) {
@@ -118,8 +123,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return result;
 	}
 
+	/**
+	 * @return the source
+	 */
+	public ReferenceSource getSource() {
+		return source;
+	}
+
 	public IModelElement getModelElement() {
-		return modelElement;
+		return source != null ? source.getModelElement() : null;
 	}
 
 	private enum TypeResolveMode {

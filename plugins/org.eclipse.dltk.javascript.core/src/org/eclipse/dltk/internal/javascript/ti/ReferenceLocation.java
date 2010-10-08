@@ -13,7 +13,28 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.text.MessageFormat;
 
+import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
+
 public abstract class ReferenceLocation {
+
+	/**
+	 * Returns the source of this file, not <code>null</code>
+	 * 
+	 * @return
+	 */
+	public abstract ReferenceSource getSource();
+
+	/**
+	 * Returns the source module of this location, or <code>null</code>.
+	 * 
+	 * It's a helper method delegating to getSource()
+	 * 
+	 * @return
+	 */
+	public ISourceModule getSourceModule() {
+		return getSource().getSourceModule();
+	}
 
 	public abstract int getDeclarationStart();
 
@@ -24,6 +45,11 @@ public abstract class ReferenceLocation {
 	public abstract int getNameEnd();
 
 	public static final ReferenceLocation UNKNOWN = new ReferenceLocation() {
+
+		@Override
+		public ReferenceSource getSource() {
+			return ReferenceSource.UNKNOWN;
+		}
 
 		@Override
 		public int getNameStart() {
@@ -53,17 +79,24 @@ public abstract class ReferenceLocation {
 
 	private static class SimpleLocation extends ReferenceLocation {
 
+		private final ReferenceSource source;
 		private final int declarationStart;
 		private final int declarationEnd;
 		private final int nameStart;
 		private final int nameEnd;
 
-		public SimpleLocation(int declarationStart, int declarationEnd,
-				int nameStart, int nameEnd) {
+		public SimpleLocation(ReferenceSource source, int declarationStart,
+				int declarationEnd, int nameStart, int nameEnd) {
+			this.source = source;
 			this.declarationStart = declarationStart;
 			this.declarationEnd = declarationEnd;
 			this.nameStart = nameStart;
 			this.nameEnd = nameEnd;
+		}
+
+		@Override
+		public ReferenceSource getSource() {
+			return source;
 		}
 
 		@Override
@@ -94,13 +127,19 @@ public abstract class ReferenceLocation {
 	}
 
 	private static class RangeLocation extends ReferenceLocation {
-
+		private final ReferenceSource source;
 		private final int start;
 		private final int end;
 
-		public RangeLocation(int start, int end) {
+		public RangeLocation(ReferenceSource source, int start, int end) {
+			this.source = source;
 			this.start = start;
 			this.end = end;
+		}
+
+		@Override
+		public ReferenceSource getSource() {
+			return source;
 		}
 
 		@Override
@@ -137,13 +176,14 @@ public abstract class ReferenceLocation {
 	 * @param nameEnd
 	 * @return
 	 */
-	public static ReferenceLocation create(int declarationStart,
-			int declarationEnd, int nameStart, int nameEnd) {
-		return new SimpleLocation(declarationStart, declarationEnd, nameStart,
-				nameEnd);
+	public static ReferenceLocation create(ReferenceSource source,
+			int declarationStart, int declarationEnd, int nameStart, int nameEnd) {
+		return new SimpleLocation(source, declarationStart, declarationEnd,
+				nameStart, nameEnd);
 	}
 
-	public static ReferenceLocation create(int start, int end) {
-		return new RangeLocation(start, end);
+	public static ReferenceLocation create(ReferenceSource source, int start,
+			int end) {
+		return new RangeLocation(source, start, end);
 	}
 }

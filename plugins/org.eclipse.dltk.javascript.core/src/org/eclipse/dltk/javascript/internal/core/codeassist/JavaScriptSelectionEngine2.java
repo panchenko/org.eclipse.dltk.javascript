@@ -134,8 +134,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				if (DEBUG) {
 					System.out.println(value + "," + kind); //$NON-NLS-1$
 				}
-				final ISourceModule m = (ISourceModule) module
-						.getModelElement();
+				ISourceModule m = (ISourceModule) module.getModelElement();
 				if (kind == ReferenceKind.ARGUMENT
 						|| kind == ReferenceKind.LOCAL) {
 					final ReferenceLocation location = value.getLocation();
@@ -145,10 +144,14 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					if (location == ReferenceLocation.UNKNOWN) {
 						return null;
 					}
-					return new IModelElement[] { new LocalVariable(m, value
-							.getName(), location.getDeclarationStart(),
-							location.getDeclarationEnd(), location
-									.getNameStart(), location.getNameEnd() - 1,
+					m = location.getSourceModule();
+					if (m == null) {
+						return null;
+					}
+					return new IModelElement[] { new LocalVariable(m,
+							value.getName(), location.getDeclarationStart(),
+							location.getDeclarationEnd(),
+							location.getNameStart(), location.getNameEnd() - 1,
 							null) };
 				} else if (kind == ReferenceKind.FUNCTION) {
 					final ReferenceLocation location = value.getLocation();
@@ -156,6 +159,10 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 						System.out.println(location);
 					}
 					if (location == ReferenceLocation.UNKNOWN) {
+						return null;
+					}
+					m = location.getSourceModule();
+					if (m == null) {
 						return null;
 					}
 					try {
@@ -249,9 +256,9 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			if (location != null && location != ReferenceLocation.UNKNOWN) {
 				if (element instanceof Property) {
 					return new LocalVariable(module, element.getName(),
-							location.getDeclarationStart(), location
-									.getDeclarationEnd(), location
-									.getNameStart(), location.getNameEnd() - 1,
+							location.getDeclarationStart(),
+							location.getDeclarationEnd(),
+							location.getNameStart(), location.getNameEnd() - 1,
 							null);
 				} else {
 					try {
