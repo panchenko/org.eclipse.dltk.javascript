@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.text.MessageFormat;
+
 public abstract class ReferenceLocation {
 
 	public abstract int getDeclarationStart();
@@ -45,7 +47,7 @@ public abstract class ReferenceLocation {
 
 		@Override
 		public String toString() {
-			return "UNKNOWN";
+			return "UNKNOWN"; //$NON-NLS-1$
 		}
 	};
 
@@ -86,10 +88,9 @@ public abstract class ReferenceLocation {
 
 		@Override
 		public String toString() {
-			return "[" + declarationStart + ".." + declarationEnd + ","
-					+ nameStart + ".." + nameEnd + "]";
+			return MessageFormat.format("[{0}..{1},{2}..{3}]", //$NON-NLS-1$
+					declarationStart, declarationEnd, nameStart, nameEnd);
 		}
-
 	}
 
 	private static class RangeLocation extends ReferenceLocation {
@@ -124,7 +125,7 @@ public abstract class ReferenceLocation {
 
 		@Override
 		public String toString() {
-			return "[" + start + ".." + end + "]";
+			return "[" + start + ".." + end + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 
 	}

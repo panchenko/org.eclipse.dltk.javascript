@@ -101,8 +101,8 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			return null;
 		}
 		if (DEBUG) {
-			System.out.println("select in " + module.getFileName() + " at "
-					+ position);
+			System.out
+					.println("select in " + module.getFileName() + " at " + position); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		final Script script = new JavaScriptParser().parse(module, null);
 
@@ -110,7 +110,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		ASTNode node = finder.locateNode(script);
 		if (node != null) {
 			if (DEBUG) {
-				System.out.println(node.getClass().getName() + "=" + node);
+				System.out.println(node.getClass().getName() + "=" + node); //$NON-NLS-1$
 			}
 			if (node instanceof Identifier || node instanceof SimpleType) {
 				final TypeInferencer2 inferencer2 = new TypeInferencer2();
@@ -126,13 +126,13 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				final IValueReference value = visitor.getValue();
 				if (value == null) {
 					if (DEBUG) {
-						System.out.println("value is null or not found");
+						System.out.println("value is null or not found"); //$NON-NLS-1$
 					}
 					return null;
 				}
 				final ReferenceKind kind = value.getKind();
 				if (DEBUG) {
-					System.out.println(value + "," + kind);
+					System.out.println(value + "," + kind); //$NON-NLS-1$
 				}
 				final ISourceModule m = (ISourceModule) module
 						.getModelElement();
@@ -145,11 +145,10 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					if (location == ReferenceLocation.UNKNOWN) {
 						return null;
 					}
-					return new IModelElement[] { new LocalVariable(
-							module.getModelElement(), value.getName(),
-							location.getDeclarationStart(),
-							location.getDeclarationEnd(),
-							location.getNameStart(), location.getNameEnd() - 1,
+					return new IModelElement[] { new LocalVariable(m, value
+							.getName(), location.getDeclarationStart(),
+							location.getDeclarationEnd(), location
+									.getNameStart(), location.getNameEnd() - 1,
 							null) };
 				} else if (kind == ReferenceKind.FUNCTION) {
 					final ReferenceLocation location = value.getLocation();
@@ -250,9 +249,9 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			if (location != null && location != ReferenceLocation.UNKNOWN) {
 				if (element instanceof Property) {
 					return new LocalVariable(module, element.getName(),
-							location.getDeclarationStart(),
-							location.getDeclarationEnd(),
-							location.getNameStart(), location.getNameEnd() - 1,
+							location.getDeclarationStart(), location
+									.getDeclarationEnd(), location
+									.getNameStart(), location.getNameEnd() - 1,
 							null);
 				} else {
 					try {
@@ -306,7 +305,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		for (IProjectFragment fragment : project.getProjectFragments()) {
 			if (fragment.isBuiltin()) {
 				ISourceModule m = fragment.getScriptFolder(Path.EMPTY)
-						.getSourceModule("builtins.js");
+						.getSourceModule("builtins.js"); //$NON-NLS-1$
 				if (!m.exists()) {
 					return null;
 				}
