@@ -13,13 +13,19 @@ package org.eclipse.dltk.javascript.core.tests.typeinference;
 
 import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
 public class ExampleMemberEvaluator implements IMemberEvaluator {
 
-	public IValueCollection valueOf(Member member) {
+	public IValueCollection valueOf(ITypeInfoContext context,Member member) {
 		return (IValueCollection) member
 				.getAttribute(ExampleElementResolver.MEMBER_VALUE);
+	}
+
+	public IValueCollection getTopValueCollection(ITypeInfoContext context) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
