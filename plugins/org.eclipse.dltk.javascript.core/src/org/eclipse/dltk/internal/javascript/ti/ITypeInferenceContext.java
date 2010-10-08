@@ -28,4 +28,6 @@ public interface ITypeInferenceContext extends ITypeInfoContext {
 
 	IValue valueOf(Member member);
 
+	IValueCollection getTopValueCollection();
+
 }

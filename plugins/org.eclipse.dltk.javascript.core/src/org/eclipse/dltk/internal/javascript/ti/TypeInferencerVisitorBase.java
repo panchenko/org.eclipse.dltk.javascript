@@ -36,7 +36,6 @@ public abstract class TypeInferencerVisitorBase extends
 
 	public TypeInferencerVisitorBase(ITypeInferenceContext context) {
 		this.context = context;
-		initialize0();
 	}
 
 	public void initialize() {

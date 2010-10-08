@@ -46,9 +46,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	private void initializeVisitor() {
 		if (visitor == null) {
 			visitor = new TypeInferencerVisitor(this);
-		} else {
-			visitor.initialize();
 		}
+		visitor.initialize();
 	}
 
 	public void setVisitor(TypeInferencerVisitor visitor) {
@@ -122,12 +121,24 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * @return the source
 	 */
 	public ReferenceSource getSource() {
 		return source;
+	}
+
+	public IValueCollection getTopValueCollection() {
+
+		for (IMemberEvaluator evaluator : TypeInfoManager.getMemberEvaluators()) {
+			final IValueCollection collection = evaluator
+					.getTopValueCollection(this);
+			if (collection != null) {
+				return collection;
+			}
+		}
+		return null;
 	}
 
 	public IModelElement getModelElement() {
@@ -293,7 +304,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	public IValue valueOf(Member member) {
 		for (IMemberEvaluator evaluator : TypeInfoManager.getMemberEvaluators()) {
-			final IValueCollection collection = evaluator.valueOf(member);
+			final IValueCollection collection = evaluator.valueOf(this, member);
 			if (collection != null) {
 				if (collection instanceof IValueProvider) {
 					return ((IValueProvider) collection).getValue();

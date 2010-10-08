@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
@@ -27,22 +30,39 @@ public class TopValueCollection extends ValueCollection {
 	 */
 	public TopValueCollection(final ITypeInferenceContext context) {
 		super(null, new Value() {
+
+			private final Map<String, IValue> memberCache = new HashMap<String, IValue>();
 			@Override
 			protected IValue findMember(String name, boolean resolve) {
 				if (resolve) {
+					IValue value = memberCache.get(name);
+					if (value != null)
+						return value;
 					final Member element = context.resolve(name);
 					if (element != null) {
-						return context.valueOf(element);
+						value = context.valueOf(element);
+						if (value != null)
+							memberCache.put(name, value);
+						return value;
 					}
 					final Type type = context.getKnownType(name);
 					if (type != null) {
-						return ElementValue.createStatic(type);
+						value = ElementValue
+								.createStatic(type);
+						memberCache.put(name, value);
+						return value;
 					}
 				}
 				return null;
 			}
 		});
 		this.context = context;
+
+		IValueCollection topValueCollection = context.getTopValueCollection();
+		if (topValueCollection instanceof IValueProvider) {
+			getValue().addValue(
+					((IValueProvider) topValueCollection).getValue());
+		}
 	}
 
 	@Override

@@ -20,6 +20,8 @@ public interface IMemberEvaluator {
 	 * @param member
 	 * @return
 	 */
-	IValueCollection valueOf(Member member);
+	IValueCollection valueOf(ITypeInfoContext context, Member member);
+
+	IValueCollection getTopValueCollection(ITypeInfoContext context);
 
 }
