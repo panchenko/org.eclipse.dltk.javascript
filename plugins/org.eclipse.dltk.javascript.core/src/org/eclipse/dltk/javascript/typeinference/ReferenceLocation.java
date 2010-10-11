@@ -121,7 +121,7 @@ public abstract class ReferenceLocation {
 
 		@Override
 		public String toString() {
-			return MessageFormat.format("[{0}..{1},{2}..{3}]", //$NON-NLS-1$
+			return source + MessageFormat.format("[{0}..{1},{2}..{3}]", //$NON-NLS-1$
 					declarationStart, declarationEnd, nameStart, nameEnd);
 		}
 	}
@@ -164,7 +164,7 @@ public abstract class ReferenceLocation {
 
 		@Override
 		public String toString() {
-			return "[" + start + ".." + end + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			return source + "[" + start + ".." + end + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 
 	}
