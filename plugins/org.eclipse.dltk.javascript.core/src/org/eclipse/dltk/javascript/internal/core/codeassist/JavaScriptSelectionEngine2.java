@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.codeassist.ScriptSelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
@@ -148,7 +149,11 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					if (m == null) {
 						return null;
 					}
-					// TODO return as field if in top level
+					final IModelElement result = locateModelElement(m, location);
+					if (result != null
+							&& result.getElementType() == IModelElement.FIELD) {
+						return new IModelElement[] { result };
+					}
 					return new IModelElement[] { new LocalVariable(m,
 							value.getName(), location.getDeclarationStart(),
 							location.getDeclarationEnd(),
@@ -166,14 +171,9 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					if (m == null) {
 						return null;
 					}
-					try {
-						m.reconcile(false, null, null);
-						m.accept(new Visitor(location.getNameStart(), location
-								.getNameEnd()));
-					} catch (ModelException e) {
-						e.printStackTrace();
-					} catch (ModelElementFound e) {
-						return new IModelElement[] { e.element };
+					final IModelElement result = locateModelElement(m, location);
+					if (result != null) {
+						return new IModelElement[] { result };
 					}
 				} else if (kind == ReferenceKind.PROPERTY) {
 					final Collection<Property> properties = JavaScriptValidations
@@ -261,16 +261,11 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 							location.getDeclarationEnd(),
 							location.getNameStart(), location.getNameEnd() - 1,
 							null);
-				} else {
-					try {
-						module.reconcile(false, null, null);
-						module.accept(new Visitor(location.getNameStart(),
-								location.getNameEnd()));
-					} catch (ModelException e) {
-						e.printStackTrace();
-					} catch (ModelElementFound e) {
-						return e.element;
-					}
+				}
+				final IModelElement result = locateModelElement(module,
+						location);
+				if (result != null) {
+					return result;
 				}
 			} else {
 				// TODO this only goes 1 deep, need support for nested types..
@@ -299,6 +294,22 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			}
 		}
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private IModelElement locateModelElement(ISourceModule module,
+			ReferenceLocation location) {
+		try {
+			module.reconcile(false, null, null);
+			module.accept(new Visitor(location.getNameStart(), location
+					.getNameEnd()));
+		} catch (ModelException e) {
+			if (DLTKCore.DEBUG) {
+				e.printStackTrace();
+			}
+		} catch (ModelElementFound e) {
+			return e.element;
+		}
 		return null;
 	}
 
