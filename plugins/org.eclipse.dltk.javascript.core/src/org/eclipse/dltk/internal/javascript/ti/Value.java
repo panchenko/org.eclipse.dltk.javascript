@@ -260,7 +260,7 @@ public class Value implements IValue {
 		inherited.put(name, value);
 	}
 
-	private static class CreateChildOperation implements Handler<Set<Value>> {
+	private static class CreateChildOperation implements Handler<Set<IValue>> {
 
 		private final String childName;
 
@@ -268,9 +268,9 @@ public class Value implements IValue {
 			this.childName = childName;
 		}
 
-		public void process(Value value, Set<Value> result) {
+		public void process(Value value, Set<IValue> result) {
 			if (result.isEmpty() && !value.hasReferences()) {
-				result.add((Value) value.createChild(childName));
+				result.add(value.createChild(childName));
 			}
 		}
 
@@ -286,7 +286,7 @@ public class Value implements IValue {
 					return child;
 				}
 				if (hasReferences()) {
-					Set<Value> result = new HashSet<Value>();
+					Set<IValue> result = new HashSet<IValue>();
 					execute(this, new CreateChildOperation(name), result,
 							new HashSet<IValue>());
 					if (!result.isEmpty()) {
