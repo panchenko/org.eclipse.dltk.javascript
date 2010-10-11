@@ -20,13 +20,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
-import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
-import org.eclipse.dltk.internal.javascript.ti.IValueReference;
-import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.ui.text.completion.ProposalInfo;
 
@@ -70,14 +70,14 @@ class JavaScriptProposalInfo extends ProposalInfo {
 	}
 
 	private String getInfo(IValueReference ref) {
-		final ITypeInferenceContext context = ref.getContext();
-		if (context == null || context.getModelElement() == null)
-			return null;
 		final ReferenceLocation location = ref.getLocation();
 		if (location == ReferenceLocation.UNKNOWN)
 			return null;
+		final ISourceModule m = location.getSourceModule();
+		if (m == null)
+			return null;
 		try {
-			context.getModelElement().accept(new IModelElementVisitor() {
+			m.accept(new IModelElementVisitor() {
 				public boolean visit(IModelElement element) {
 					if (element instanceof IMember) {
 						try {
