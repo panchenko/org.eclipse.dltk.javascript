@@ -148,6 +148,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					if (m == null) {
 						return null;
 					}
+					// TODO return as field if in top level
 					return new IModelElement[] { new LocalVariable(m,
 							value.getName(), location.getDeclarationStart(),
 							location.getDeclarationEnd(),
