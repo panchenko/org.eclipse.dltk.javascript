@@ -292,7 +292,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			}
 
 			Assert.isTrue(expression.sourceStart() >= 0);
-			Assert.isTrue(expression.sourceEnd() > 0);
+//			Assert.isTrue(expression.sourceEnd() > 0);
 
 			voidExpression.setStart(expression.sourceStart());
 			voidExpression.setEnd(Math.max(expression.sourceEnd(),
@@ -785,8 +785,13 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		final Tree bodyNode = node.getChild(index);
 		final SymbolTable savedScope = scope;
 		scope = functionScope;
-		fn.setBody((StatementBlock) transformNode(bodyNode, fn));
+		ASTNode functionBlock = transformNode(bodyNode, fn);
 		scope = savedScope;
+		if (functionBlock instanceof StatementBlock)
+			fn.setBody((StatementBlock)functionBlock );
+		else {
+			return functionBlock;
+		}
 		fn.setStart(fn.getFunctionKeyword().sourceStart());
 		fn.setEnd(fn.getBody().sourceEnd());
 
