@@ -13,6 +13,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 

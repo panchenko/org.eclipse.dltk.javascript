@@ -9,24 +9,35 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.ti;
+package org.eclipse.dltk.javascript.typeinference;
 
-public interface IValueCollection extends IValueParent {
+import java.util.Set;
 
-	boolean isScope();
+import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 
-	IValueCollection getParent();
+public interface IValueParent {
+
+	Set<String> getDirectChildren();
+
+	Set<String> getDeletedChildren();
+
+	boolean hasChild(String name);
 
 	/**
-	 * Creates the local child with the specified name.
+	 * Finds the child with the specified name.
 	 * 
 	 * @param name
+	 * @return the child found or <code>null</code> if there is no child with
+	 *         such name
+	 */
+	IValueReference getChild(String name);
+
+	/**
+	 * TODO delete sometime
+	 * 
 	 * @return
 	 */
-	IValueReference createChild(String name);
-
-	IValueReference getReturnValue();
-
-	IValueReference getThis();
+	@Deprecated
+	ITypeInferenceContext getContext();
 
 }

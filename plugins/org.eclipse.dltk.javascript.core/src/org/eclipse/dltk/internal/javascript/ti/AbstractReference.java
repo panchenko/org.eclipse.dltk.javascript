@@ -14,6 +14,9 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.Collections;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public abstract class AbstractReference implements IValueReference,

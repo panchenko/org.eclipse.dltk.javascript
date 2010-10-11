@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.javascript.typeinference.IValueParent;
+
 public interface IValueProvider {
 
 	boolean isReference();

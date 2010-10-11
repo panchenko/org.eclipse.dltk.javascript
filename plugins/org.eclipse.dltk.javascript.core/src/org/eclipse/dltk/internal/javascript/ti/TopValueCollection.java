@@ -14,6 +14,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 

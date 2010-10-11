@@ -16,6 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+
 public class NestedValueCollection extends ValueCollection {
 
 	protected NestedValueCollection(IValueCollection parent) {

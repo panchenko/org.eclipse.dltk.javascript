@@ -9,8 +9,25 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.ti;
+package org.eclipse.dltk.javascript.typeinference;
 
-public enum ReferenceKind {
-	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL, FUNCTION, TYPE
+
+public interface IValueCollection extends IValueParent {
+
+	boolean isScope();
+
+	IValueCollection getParent();
+
+	/**
+	 * Creates the local child with the specified name.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	IValueReference createChild(String name);
+
+	IValueReference getReturnValue();
+
+	IValueReference getThis();
+
 }

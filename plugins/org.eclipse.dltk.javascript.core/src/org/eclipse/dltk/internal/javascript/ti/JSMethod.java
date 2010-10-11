@@ -14,6 +14,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;

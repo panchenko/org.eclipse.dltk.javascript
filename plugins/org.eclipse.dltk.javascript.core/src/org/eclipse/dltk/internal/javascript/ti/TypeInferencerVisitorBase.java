@@ -14,6 +14,8 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.Stack;
 
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 
 public abstract class TypeInferencerVisitorBase extends
 		ASTVisitor<IValueReference> {

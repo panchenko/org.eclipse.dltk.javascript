@@ -12,8 +12,8 @@
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
 import org.eclipse.dltk.compiler.IElementRequestor.ElementInfo;
-import org.eclipse.dltk.internal.javascript.ti.IValueReference;
-import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 abstract class Declaration implements Comparable<Declaration> {

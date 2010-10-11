@@ -12,6 +12,7 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 
 @SuppressWarnings("serial")
 public class PositionReachedException extends RuntimeException {

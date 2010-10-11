@@ -16,7 +16,12 @@ import org.eclipse.dltk.core.ISourceModule;
 
 public class ReferenceSource {
 
-	public static final ReferenceSource UNKNOWN = new ReferenceSource(null);
+	public static final ReferenceSource UNKNOWN = new ReferenceSource(null) {
+		@Override
+		public String toString() {
+			return "UNKNOWN";
+		}
+	};
 
 	private final IModelElement modelElement;
 
@@ -31,6 +36,12 @@ public class ReferenceSource {
 	public ISourceModule getSourceModule() {
 		return modelElement instanceof ISourceModule ? (ISourceModule) modelElement
 				: null;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
 	}
 
 }

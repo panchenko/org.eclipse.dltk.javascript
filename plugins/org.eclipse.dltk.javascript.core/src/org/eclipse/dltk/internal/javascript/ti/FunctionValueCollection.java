@@ -14,6 +14,9 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+
 public class FunctionValueCollection extends ValueCollection {
 
 	private final String functionName;

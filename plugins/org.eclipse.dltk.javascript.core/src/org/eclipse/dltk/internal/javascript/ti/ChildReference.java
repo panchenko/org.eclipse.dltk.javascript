@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+
 public class ChildReference extends AbstractReference {
 
 	private final IValueProvider parent;

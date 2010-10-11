@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+
 public class AnonymousValue extends AbstractReference {
 
 	private final Value value = new Value();

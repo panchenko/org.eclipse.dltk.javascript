@@ -13,6 +13,8 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IValue {

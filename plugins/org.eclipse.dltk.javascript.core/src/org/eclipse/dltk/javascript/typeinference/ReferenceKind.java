@@ -9,27 +9,8 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.ti;
+package org.eclipse.dltk.javascript.typeinference;
 
-import java.util.Set;
-
-public interface IValueParent {
-
-	Set<String> getDirectChildren();
-
-	Set<String> getDeletedChildren();
-
-	boolean hasChild(String name);
-
-	/**
-	 * Finds the child with the specified name.
-	 * 
-	 * @param name
-	 * @return the child found or <code>null</code> if there is no child with
-	 *         such name
-	 */
-	IValueReference getChild(String name);
-
-	ITypeInferenceContext getContext();
-
+public enum ReferenceKind {
+	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL, FUNCTION, TYPE
 }

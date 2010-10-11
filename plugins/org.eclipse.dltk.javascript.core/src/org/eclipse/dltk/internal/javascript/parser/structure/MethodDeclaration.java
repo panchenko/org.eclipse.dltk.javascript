@@ -16,10 +16,10 @@ import java.util.List;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
-import org.eclipse.dltk.internal.javascript.ti.IValueCollection;
-import org.eclipse.dltk.internal.javascript.ti.IValueReference;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
-import org.eclipse.dltk.internal.javascript.ti.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 
 class MethodDeclaration extends Declaration implements IReferenceAttributes {
