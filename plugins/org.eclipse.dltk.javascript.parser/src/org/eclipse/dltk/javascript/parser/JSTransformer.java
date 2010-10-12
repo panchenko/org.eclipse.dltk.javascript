@@ -124,11 +124,12 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	private Reporter reporter;
 	private SymbolTable scope = new SymbolTable();
 
-	private static final int MAX_RECURSION_DEEP = 512;
+	private static final int MAX_RECURSION_DEPTH = 512;
 
-	private void checkRecursionDeep() {
-		if (parents.size() > MAX_RECURSION_DEEP)
-			throw new IllegalArgumentException("Too many AST deep");
+	private final void checkRecursionDepth() {
+		if (parents.size() > MAX_RECURSION_DEPTH) {
+			throw new IllegalArgumentException("Too nested AST");
+		}
 	}
 
 	public JSTransformer(List<Token> tokens) {
@@ -175,10 +176,10 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	private ASTNode transformNode(Tree node, ASTNode parent) {
-		checkRecursionDeep();
+		checkRecursionDepth();
 		parents.push(parent);
 		try {
-			checkRecursionDeep();
+			checkRecursionDepth();
 			ASTNode result = visitNode(node);
 			Assert.isNotNull(result, node.toString());
 			return result;
@@ -292,7 +293,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			}
 
 			Assert.isTrue(expression.sourceStart() >= 0);
-//			Assert.isTrue(expression.sourceEnd() > 0);
+			Assert.isTrue(expression.sourceEnd() > 0);
 
 			voidExpression.setStart(expression.sourceStart());
 			voidExpression.setEnd(Math.max(expression.sourceEnd(),
@@ -466,7 +467,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				.getTokenStopIndex(), node.getChild(1).getTokenStopIndex()));
 
 		call.setStart(call.getExpression().sourceStart());
-		call.setEnd(call.getRP() + 1);
+		if (call.getRP() > -1) {
+			call.setEnd(call.getRP() + 1);
+		} else {
+			call.setEnd(call.getExpression().sourceEnd());
+		}
 
 		return call;
 	}
@@ -784,13 +789,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		final Tree bodyNode = node.getChild(index);
 		final SymbolTable savedScope = scope;
-		scope = functionScope;
-		ASTNode functionBlock = transformNode(bodyNode, fn);
-		scope = savedScope;
-		if (functionBlock instanceof StatementBlock)
-			fn.setBody((StatementBlock)functionBlock );
-		else {
-			return functionBlock;
+		try {
+			scope = functionScope;
+			fn.setBody((StatementBlock) transformNode(bodyNode, fn));
+		} finally {
+			scope = savedScope;
 		}
 		fn.setStart(fn.getFunctionKeyword().sourceStart());
 		fn.setEnd(fn.getBody().sourceEnd());
