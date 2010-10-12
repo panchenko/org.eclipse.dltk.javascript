@@ -15,6 +15,7 @@ import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -33,15 +34,31 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	@Override
 	protected String createMethodProposalLabel(CompletionProposal methodProposal) {
 		String returnType = null;
-		if (methodProposal.getExtraInfo() instanceof SelfCompletingReference) {
-			SelfCompletingReference cm = (SelfCompletingReference) methodProposal
-					.getExtraInfo();
+		String source = null;
+		final Object info = methodProposal.getExtraInfo();
+		if (info instanceof SelfCompletingReference) {
+			SelfCompletingReference cm = (SelfCompletingReference) info;
 			// methodProposal.setParameterNames(cm.getParameterNames());
 			returnType = cm.getReturnType();
-		} else if (methodProposal.getExtraInfo() instanceof Method) {
-			Method method = (Method) methodProposal.getExtraInfo();
+		} else if (info instanceof Method) {
+			Method method = (Method) info;
 			if (method.getType() != null) {
 				returnType = method.getType().getName();
+			}
+			if (method.getDeclaringType() != null) {
+				source = method.getDeclaringType().getName();
+			}
+		} else if (info instanceof IValueReference) {
+			final IValueReference reference = (IValueReference) info;
+			final IValueReference result = reference
+					.getChild(IValueReference.FUNCTION_OP);
+			if (result != null && result.getDeclaredType() != null) {
+				returnType = result.getDeclaredType().getName();
+			}
+			final ReferenceLocation loc = reference.getLocation();
+			if (loc != ReferenceLocation.UNKNOWN
+					&& loc.getSourceModule() != null) {
+				source = loc.getSourceModule().getPath().toString();
 			}
 		}
 		StringBuffer nameBuffer = new StringBuffer();
@@ -57,6 +74,11 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		if (returnType != null) {
 			nameBuffer.append(": ");
 			nameBuffer.append(returnType);
+		}
+		// TODO use different color
+		if (source != null) {
+			nameBuffer.append(" - ");
+			nameBuffer.append(source);
 		}
 		return nameBuffer.toString();
 	}
