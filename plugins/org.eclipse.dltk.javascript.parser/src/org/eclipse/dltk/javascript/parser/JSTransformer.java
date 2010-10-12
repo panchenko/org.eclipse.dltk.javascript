@@ -1638,10 +1638,14 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				.getChild(0)) + 1, node.getChild(1).getTokenStartIndex()));
 
 		item.setRB(getTokenOffset(JSParser.RBRACK, node.getChild(1)
-				.getTokenStopIndex() + 1, tokens.size() + 1));
+				.getTokenStopIndex() + 1, tokens.size() - 1));
 
 		item.setStart(item.getArray().sourceStart());
-		item.setEnd(item.getRB() + 1);
+		if (item.getRB() > -1) {
+			item.setEnd(item.getRB() + 1);
+		} else {
+			item.setEnd(item.getIndex().sourceEnd());
+		}
 
 		return item;
 	}
