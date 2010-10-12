@@ -132,12 +132,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	}
 
 	public IValueCollection getTopValueCollection() {
-
-		for (IMemberEvaluator evaluator : TypeInfoManager.getMemberEvaluators()) {
-			final IValueCollection collection = evaluator
-					.getTopValueCollection(this);
-			if (collection != null) {
-				return collection;
+		if (resolve) {
+			for (IMemberEvaluator evaluator : TypeInfoManager
+					.getMemberEvaluators()) {
+				final IValueCollection collection = evaluator
+						.getTopValueCollection(this);
+				if (collection != null) {
+					return collection;
+				}
 			}
 		}
 		return null;
@@ -280,6 +282,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return factory;
 	}
 
+	private boolean resolve = true;
+
 	private Map<String, Member> elements = new HashMap<String, Member>();
 
 	public Member resolve(String name) {
@@ -294,11 +298,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			elements.put(name, element);
 			return element;
 		}
-		for (IElementResolver resolver : TypeInfoManager.getElementResolvers()) {
-			element = resolver.resolveElement(this, name);
-			if (element != null) {
-				elements.put(name, element);
-				return element;
+		if (resolve) {
+			for (IElementResolver resolver : TypeInfoManager
+					.getElementResolvers()) {
+				element = resolver.resolveElement(this, name);
+				if (element != null) {
+					elements.put(name, element);
+					return element;
+				}
 			}
 		}
 		return null;
@@ -315,7 +322,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				}
 			}
 		}
-		return ElementValue.createFor(member);
+		return ElementValue.createFor(member, this);
 	}
 
 	public Set<String> listGlobals(String prefix) {
@@ -331,6 +338,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 		}
 		return result;
+	}
+
+	public void setDoResolve(boolean resolve) {
+		this.resolve = resolve;
 	}
 
 }

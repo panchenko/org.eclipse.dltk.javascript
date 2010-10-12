@@ -192,66 +192,68 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 						reportDeprecatedMethod(methodNode, reference, method);
 					}
 				} else {
-					final Type type = JavaScriptValidations.typeOf(reference
-							.getParent());
-					if (type != null) {
-						if (type.getKind() == TypeKind.JAVA) {
+					Object attribute = reference.getAttribute(
+							IReferenceAttributes.PARAMETERS, true);
+					if (attribute instanceof JSMethod) {
+						JSMethod method = (JSMethod) attribute;
+						if (method.isDeprecated()) {
 							reporter.reportProblem(
-									JavaScriptProblems.UNDEFINED_METHOD,
+									JavaScriptProblems.DEPRECATED_FUNCTION,
 									NLS.bind(
-											ValidationMessages.UndefinedMethod,
-											reference.getName(), type.getName()),
+											ValidationMessages.DeprecatedFunction,
+											reference.getName()), methodNode
+											.sourceStart(), methodNode
+											.sourceEnd());
+						}
+						List<IParameter> parameters = method.getParameters();
+						final List<ASTNode> callArgs = node.getArguments();
+						IValueReference[] arguments = new IValueReference[callArgs
+								.size()];
+						for (int i = 0, size = callArgs.size(); i < size; ++i) {
+							arguments[i] = visit(callArgs.get(i));
+						}
+						if (!validateParameters(parameters, arguments)) {
+							reporter.reportProblem(
+									JavaScriptProblems.WRONG_PARAMETERS,
+									NLS.bind(
+											ValidationMessages.MethodNotApplicableInScript,
+											new String[] {
+													method.getName(),
+													describeParamTypes(parameters),
+													describeArgTypes(arguments) }),
 									methodNode.sourceStart(), methodNode
 											.sourceEnd());
-						} else if (JavaScriptValidations.isStatic(reference
-								.getParent())
-								&& !ElementValue.findMembers(type,
-										reference.getName(),
-										MemberPredicates.NON_STATIC).isEmpty()) {
-							reporter.reportProblem(
-									JavaScriptProblems.NON_STATIC_METHOD,
-									NLS.bind(
-											"Cannot make a static reference to the non-static method {0}() from {1}",
-											reference.getName(), type.getName()),
-									methodNode.sourceStart(), methodNode
-											.sourceEnd());
-						} else {
-							// TODO also report a JS error (that should be
-							// configurable)
 						}
 					} else {
-						Object attribute = reference.getAttribute(
-								IReferenceAttributes.PARAMETERS, true);
-						if (attribute instanceof JSMethod) {
-							JSMethod method = (JSMethod) attribute;
-							if (method.isDeprecated()) {
+						final Type type = JavaScriptValidations
+								.typeOf(reference.getParent());
+						if (type != null) {
+							if (type.getKind() == TypeKind.JAVA) {
 								reporter.reportProblem(
-										JavaScriptProblems.DEPRECATED_FUNCTION,
+										JavaScriptProblems.UNDEFINED_METHOD,
 										NLS.bind(
-												ValidationMessages.DeprecatedFunction,
-												reference.getName()),
-										methodNode.sourceStart(), methodNode
+												ValidationMessages.UndefinedMethod,
+												reference.getName(),
+												type.getName()), methodNode
+												.sourceStart(), methodNode
 												.sourceEnd());
-							}
-							List<IParameter> parameters = method
-									.getParameters();
-							final List<ASTNode> callArgs = node.getArguments();
-							IValueReference[] arguments = new IValueReference[callArgs
-									.size()];
-							for (int i = 0, size = callArgs.size(); i < size; ++i) {
-								arguments[i] = visit(callArgs.get(i));
-							}
-							if (!validateParameters(parameters, arguments)) {
+							} else if (JavaScriptValidations.isStatic(reference
+									.getParent())
+									&& !ElementValue.findMembers(type,
+											reference.getName(),
+											MemberPredicates.NON_STATIC)
+											.isEmpty()) {
 								reporter.reportProblem(
-										JavaScriptProblems.WRONG_PARAMETERS,
+										JavaScriptProblems.NON_STATIC_METHOD,
 										NLS.bind(
-												ValidationMessages.MethodNotApplicableInScript,
-												new String[] {
-														method.getName(),
-														describeParamTypes(parameters),
-														describeArgTypes(arguments) }),
-										methodNode.sourceStart(), methodNode
+												"Cannot make a static reference to the non-static method {0}() from {1}",
+												reference.getName(),
+												type.getName()), methodNode
+												.sourceStart(), methodNode
 												.sourceEnd());
+							} else {
+								// TODO also report a JS error (that should be
+								// configurable)
 							}
 						} else {
 							if (expression instanceof NewExpression) {

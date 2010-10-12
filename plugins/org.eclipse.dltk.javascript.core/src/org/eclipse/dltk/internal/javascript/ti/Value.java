@@ -242,7 +242,7 @@ public class Value implements IValue {
 			if (!result.isEmpty()) {
 				return result.iterator().next();
 			} else {
-				return null;
+				return findMember(name, resolve);
 			}
 		} else {
 			IValue child = children.get(name);
@@ -344,9 +344,10 @@ public class Value implements IValue {
 				attributes.putAll(src.attributes);
 			}
 			for (Map.Entry<String, Value> entry : src.children.entrySet()) {
-				Value child = (Value) createChild(entry.getKey());
-				if (child != null) {
-					child.addValueRecursive(entry.getValue(), processing);
+				IValue child = createChild(entry.getKey());
+				if (child instanceof Value) {
+					((Value) child).addValueRecursive(entry.getValue(),
+							processing);
 				}
 			}
 			if (src.kind != ReferenceKind.UNKNOWN
@@ -358,5 +359,9 @@ public class Value implements IValue {
 				location = src.location;
 			}
 		}
+	}
+
+	public void putDirectChild(String name, Value value) {
+		children.put(name, value);
 	}
 }

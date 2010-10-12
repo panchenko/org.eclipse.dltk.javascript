@@ -13,8 +13,10 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.core.Predicate;
@@ -58,11 +60,12 @@ public abstract class ElementValue implements IValue {
 		return selection;
 	}
 
-	public static ElementValue createFor(Element element) {
+	public static ElementValue createFor(Element element,
+			ITypeInferenceContext context) {
 		if (element instanceof Method) {
 			return new MethodValue((Method) element);
 		} else if (element instanceof Property) {
-			return new PropertyValue((Property) element);
+			return new PropertyValue((Property) element, context);
 		} else {
 			assert element instanceof Type;
 			return new TypeValue(Collections.singleton((Type) element));
@@ -84,6 +87,11 @@ public abstract class ElementValue implements IValue {
 		@Override
 		protected Type[] getElements() {
 			return types.toArray(new Type[types.size()]);
+		}
+
+		@Override
+		public IValue resolveValue(ITypeInferenceContext context) {
+			return this;
 		}
 
 		public IValue getChild(String name, boolean resolve) {
@@ -160,6 +168,11 @@ public abstract class ElementValue implements IValue {
 		}
 
 		@Override
+		public IValue resolveValue(ITypeInferenceContext context) {
+			return context.valueOf(method);
+		}
+
+		@Override
 		public ReferenceKind getKind() {
 			return ReferenceKind.METHOD;
 		}
@@ -187,9 +200,12 @@ public abstract class ElementValue implements IValue {
 	private static class PropertyValue extends ElementValue implements IValue {
 
 		private final Property property;
+		private final ITypeInferenceContext context;
+		private final Map<String, IValue> children = new HashMap<String, IValue>();
 
-		public PropertyValue(Property property) {
+		public PropertyValue(Property property, ITypeInferenceContext context) {
 			this.property = property;
+			this.context = context;
 		}
 
 		@Override
@@ -198,12 +214,26 @@ public abstract class ElementValue implements IValue {
 		}
 
 		@Override
+		public IValue resolveValue(ITypeInferenceContext context) {
+			return context.valueOf(property);
+		}
+
+		@Override
 		public ReferenceKind getKind() {
 			return ReferenceKind.PROPERTY;
 		}
 
 		public IValue getChild(String name, boolean resolve) {
-			return ElementValue.findMember(property.getType(), name);
+			IValue child = children.get(name);
+			if (child == null) {
+				ElementValue eValue = ElementValue.findMember(
+						property.getType(), name);
+				if (eValue != null) {
+					child = eValue.resolveValue(context);
+					children.put(name, child);
+				}
+			}
+			return child;
 		}
 
 		public Type getDeclaredType() {
@@ -231,6 +261,19 @@ public abstract class ElementValue implements IValue {
 		@Override
 		protected Member[] getElements() {
 			return members;
+		}
+
+		@Override
+		public IValue resolveValue(ITypeInferenceContext context) {
+			if (members.length == 1) {
+				IValue value = context.valueOf(members[0]);
+				// copy over the properties of this value.
+				value.setDeclaredType(getDeclaredType());
+				value.setAttribute(IReferenceAttributes.ELEMENT,
+						getAttribute(IReferenceAttributes.ELEMENT));
+				return value;
+			}
+			return this;
 		}
 
 		@Override
@@ -315,6 +358,10 @@ public abstract class ElementValue implements IValue {
 
 	protected abstract Object getElements();
 
+	public IValue resolveValue(ITypeInferenceContext context) {
+		return this;
+	}
+
 	public final void clear() {
 	}
 
@@ -385,5 +432,4 @@ public abstract class ElementValue implements IValue {
 
 	public final void setLocation(ReferenceLocation location) {
 	}
-
 }
