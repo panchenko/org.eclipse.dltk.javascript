@@ -20,6 +20,40 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TopValueCollection extends ValueCollection {
 
+	private static final class TopValue extends Value {
+
+		private final ITypeInferenceContext context;
+
+		private TopValue(ITypeInferenceContext context) {
+			this.context = context;
+		}
+
+		private final Map<String, IValue> memberCache = new HashMap<String, IValue>();
+
+		@Override
+		protected IValue findMember(String name, boolean resolve) {
+			if (resolve) {
+				IValue value = memberCache.get(name);
+				if (value != null)
+					return value;
+				final Member element = context.resolve(name);
+				if (element != null) {
+					value = context.valueOf(element);
+					if (value != null)
+						memberCache.put(name, value);
+					return value;
+				}
+				final Type type = context.getKnownType(name);
+				if (type != null) {
+					value = ElementValue.createStatic(type);
+					memberCache.put(name, value);
+					return value;
+				}
+			}
+			return super.findMember(name, resolve);
+		}
+	}
+
 	private final ITypeInferenceContext context;
 
 	public boolean isScope() {
@@ -30,33 +64,7 @@ public class TopValueCollection extends ValueCollection {
 	 * @param parent
 	 */
 	public TopValueCollection(final ITypeInferenceContext context) {
-		super(null, new Value() {
-
-			private final Map<String, IValue> memberCache = new HashMap<String, IValue>();
-			@Override
-			protected IValue findMember(String name, boolean resolve) {
-				if (resolve) {
-					IValue value = memberCache.get(name);
-					if (value != null)
-						return value;
-					final Member element = context.resolve(name);
-					if (element != null) {
-						value = context.valueOf(element);
-						if (value != null)
-							memberCache.put(name, value);
-						return value;
-					}
-					final Type type = context.getKnownType(name);
-					if (type != null) {
-						value = ElementValue
-								.createStatic(type);
-						memberCache.put(name, value);
-						return value;
-					}
-				}
-				return null;
-			}
-		});
+		super(null, new TopValue(context));
 		this.context = context;
 
 		IValueCollection topValueCollection = context.getTopValueCollection();
