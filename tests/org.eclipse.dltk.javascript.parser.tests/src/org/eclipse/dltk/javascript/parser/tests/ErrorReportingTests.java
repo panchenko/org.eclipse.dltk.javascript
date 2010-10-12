@@ -18,6 +18,7 @@ import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 
 public class ErrorReportingTests extends AbstractJSParserTest {
 
@@ -67,6 +68,17 @@ public class ErrorReportingTests extends AbstractJSParserTest {
 		code.add("function b() {}");
 		Script script = parseRaw(code.toString());
 		assertTrue(reporter.hasErrors());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
+
+	public void testNotFinishedCall() {
+		StringList code = new StringList();
+		code.add("function test(event) {");
+		code.add("application.output(e");
+		code.add("}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertEquals(JavaScriptParserProblems.SYNTAX_ERROR, getProblemId());
 		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
 	}
 
