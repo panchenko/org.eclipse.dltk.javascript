@@ -33,6 +33,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 public class ExampleElementResolver implements IElementResolver {
 
 	public static final String MEMBER_VALUE = "AAAAAAAAAAAAAAAAAAAA";
+	public static final String LAZY_MEMBER_VALUE = "LAZY_AAAAAAAAAAAAAAAAAAAA";
 
 	public Member resolveElement(ITypeInfoContext context, String name) {
 		if ("ExampleGlobal".equals(name)) {
@@ -62,6 +63,22 @@ public class ExampleElementResolver implements IElementResolver {
 					}
 
 				}
+			}
+			return property;
+		} else if ("GLOBALSLAZY".equals(name)) {
+			// this is a lazy created value collection that also has a String type (combined js file and a type)
+			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
+			property.setName(name);
+			final ISourceModule module = context.getSource().getSourceModule();
+			if (module != null) {
+				final IScriptFolder folder = (IScriptFolder) module
+						.getAncestor(IModelElement.SCRIPT_FOLDER);
+				final ISourceModule globals = folder
+						.getSourceModule("globals.js");
+				// set the lazy value
+				property.setAttribute(LAZY_MEMBER_VALUE,globals);
+				// set the type besides the lazy value
+				property.setType(context.getType("String"));
 			}
 			return property;
 		} else if ("executeExampleGlobal".equals(name)) {
