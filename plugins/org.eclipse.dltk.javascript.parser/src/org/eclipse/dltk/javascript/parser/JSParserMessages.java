@@ -51,7 +51,9 @@ public class JSParserMessages {
 		tokenNames.put(JSParser.LBRACE, "{");
 		tokenNames.put(JSParser.RPAREN, ")");
 		tokenNames.put(JSParser.LPAREN, "(");
-		
+		tokenNames.put(JSParser.LBRACK, "[");
+		tokenNames.put(JSParser.RBRACK, "]");
+
 	}
 
 	public String get(JSParserRule rule, int prevToken) {
