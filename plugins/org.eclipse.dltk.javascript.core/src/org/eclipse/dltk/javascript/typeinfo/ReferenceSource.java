@@ -40,8 +40,7 @@ public class ReferenceSource {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		return modelElement != null ? modelElement.getElementName() : "null";
 	}
 
 }
