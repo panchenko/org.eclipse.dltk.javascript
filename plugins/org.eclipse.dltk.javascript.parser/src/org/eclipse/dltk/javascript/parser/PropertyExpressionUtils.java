@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.parser;
 
 import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 
@@ -36,6 +37,11 @@ public class PropertyExpressionUtils {
 				return false;
 			buffer.append('.');
 			if (!buildPath(buffer, propertyExpression.getProperty()))
+				return false;
+			return true;
+		}  else if (expression instanceof FunctionStatement) {
+			final FunctionStatement functionStatement = (FunctionStatement) expression;
+			if (!buildPath(buffer, functionStatement.getName()))
 				return false;
 			return true;
 		} else {
