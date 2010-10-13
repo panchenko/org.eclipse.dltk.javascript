@@ -32,7 +32,7 @@ public class ExampleMemberEvaluator implements IMemberEvaluator {
 		if (collection == null)
 		{
 			ISourceModule globals = (ISourceModule) member.getAttribute(ExampleElementResolver.LAZY_MEMBER_VALUE);
-			if (globals.exists()) {
+			if (globals != null && globals.exists()) {
 				final Script script = new JavaScriptParser().parse(
 						(IModuleSource) globals, null);
 				if (script != null) {
