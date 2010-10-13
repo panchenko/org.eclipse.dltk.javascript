@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
-  <ref:Type name="void">
-  </ref:Type>
   <ref:Type name="Error" kind="PREDEFINED">
   	<members xsi:type="ref:Property" name="prototype" type="Error" static="true" description="Allows the addition of properties to a Error object."/>
   </ref:Type>
@@ -376,24 +374,24 @@
     <members xsi:type="ref:Method" name="appendChild" type="XML" description="The appendChild method appends the given child to the end of this XML object�s properties and returns this XML object.">
       <parameters name="child"/>
     </members>
-    <members xsi:type="ref:Method" name="attribute" type="XML" description="The attribute method returns an XMLList containing zero or one XML attributes associated with this XML object that have the given attributeName. ">
+    <members xsi:type="ref:Method" name="attribute" type="XMLList" description="The attribute method returns an XMLList containing zero or one XML attributes associated with this XML object that have the given attributeName. ">
       <parameters name="child"/>
     </members>
-    <members xsi:type="ref:Method" name="attributes" type="XML" description="The attributes method returns an XMLList containing the XML attributes of this object."/>
-    <members xsi:type="ref:Method" name="child" type="XML" description="The child method returns the list of children in this XML object matching the given propertyName.">
+    <members xsi:type="ref:Method" name="attributes" type="XMLList" description="The attributes method returns an XMLList containing the XML attributes of this object."/>
+    <members xsi:type="ref:Method" name="child" type="XMLList" description="The child method returns the list of children in this XML object matching the given propertyName.">
       <parameters name="propertyName"/>
     </members>
     <members xsi:type="ref:Method" name="childIndex" type="Number" description="The childIndex method returns a Number representing the ordinal position of this XML object within the context of its parent."/>
-    <members xsi:type="ref:Method" name="children" type="XML" description="The children method returns an XMLList containing all the properties of this XML object in order"/>
-    <members xsi:type="ref:Method" name="comments" type="XML" description="The comments method returns an XMLList containing the properties of this XML object that represent XML comments."/>
+    <members xsi:type="ref:Method" name="children" type="XMLList" description="The children method returns an XMLList containing all the properties of this XML object in order"/>
+    <members xsi:type="ref:Method" name="comments" type="XMLList" description="The comments method returns an XMLList containing the properties of this XML object that represent XML comments."/>
     <members xsi:type="ref:Method" name="contains" type="Boolean" description="The contains method returns the result of comparing this XML object with the given value.">
       <parameters name="value"/>
     </members>
     <members xsi:type="ref:Method" name="copy" type="XML" description="The copy method returns a deep copy of this XML object with the internal [[Parent]] property set to null."/>
-    <members xsi:type="ref:Method" name="descendants" type="XML" description="The descendants method returns all the XML valued descendants (children, grandchildren, great-grandchildren, etc.) of this XML object with the given name. If the name parameter is omitted, it returns all descendants of this XML object.">
+    <members xsi:type="ref:Method" name="descendants" type="XMLList" description="The descendants method returns all the XML valued descendants (children, grandchildren, great-grandchildren, etc.) of this XML object with the given name. If the name parameter is omitted, it returns all descendants of this XML object.">
       <parameters name="[name]" kind="OPTIONAL"/>
     </members>
-    <members xsi:type="ref:Method" name="elements" type="XML" description="When the elements method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are XML elements with the given name. When the elements method is called with no parameters, it returns an XMLList containing all the children of this XML object that are XML elements regardless of their name.">
+    <members xsi:type="ref:Method" name="elements" type="XMLList" description="When the elements method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are XML elements with the given name. When the elements method is called with no parameters, it returns an XMLList containing all the children of this XML object that are XML elements regardless of their name.">
       <parameters name="[name]" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="hasComplexContent" type="Boolean" description="The hasComplexContent method returns a Boolean value indicating whether this XML object contains complex content. An XML object is considered to contain complex content if it represents an XML element that has child elements. XML objects representing attributes, comments, processing instructions and text nodes do not have complex content. The existence of attributes, comments, processing instructions and text nodes within an XML object is not significant in determining if it has complex content."/>
@@ -428,7 +426,7 @@
     </members>
     <members xsi:type="ref:Property" name="prettyIndent" type="Number"/>
     <members xsi:type="ref:Property" name="prettyPrinting" type="Boolean"/>
-    <members xsi:type="ref:Method" name="processingInstructions" type="XML" description="When the processingInstructions method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are processing-instructions with the given name. When the processingInstructions method is called with no parameters, it returns an XMLList containing all the children of this XML object that are processing-instructions regardless of their name">
+    <members xsi:type="ref:Method" name="processingInstructions" type="XMLList" description="When the processingInstructions method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are processing-instructions with the given name. When the processingInstructions method is called with no parameters, it returns an XMLList containing all the children of this XML object that are processing-instructions regardless of their name">
       <parameters name="[name]" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="propertyIsEnumerable" type="Boolean" description="The propertyIsEnumerable method returns a Boolean value indicating whether the property P will be included in the set of properties iterated over when this XML object is used in a for-in statement. This method returns truewhen ToString(P) is &quot;0&quot;; otherwise, it returns false. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value">
@@ -459,4 +457,42 @@
     <members xsi:type="ref:Method" name="toXMLString" type="String" description="Returns a String value for this object."/>
     <members xsi:type="ref:Method" name="valueOf" type="XML" description="The valueOf method returns this XML object"/>
   </ref:Type>
+  <ref:Type name="XMLList" kind="PREDEFINED">
+      <members xsi:type="ref:Method" name="attribute" type="XMLList" description="The attribute method returns an XMLList containing zero or one XML attributes associated with this XML object that have the given attributeName. ">
+      <parameters name="child"/>
+    </members>
+    <members xsi:type="ref:Method" name="attributes" type="XMLList" description="The attributes method returns an XMLList containing the XML attributes of this object."/>
+    <members xsi:type="ref:Method" name="child" type="XML" description="The child method returns the list of children in this XML object matching the given propertyName.">
+      <parameters name="propertyName"/>
+    </members>
+    <members xsi:type="ref:Method" name="children" type="XML" description="The children method returns an XMLList containing all the properties of this XML object in order"/>
+  	<members xsi:type="ref:Method" name="comments" type="XMLList" description="The comments method returns an XMLList containing the properties of this XML object that represent XML comments."/>
+    <members xsi:type="ref:Method" name="copy" type="XML" description="The copy method returns a deep copy of this XML object with the internal [[Parent]] property set to null."/>
+    <members xsi:type="ref:Method" name="descendants" type="XMLList" description="The descendants method returns all the XML valued descendants (children, grandchildren, great-grandchildren, etc.) of this XML object with the given name. If the name parameter is omitted, it returns all descendants of this XML object.">
+      <parameters name="[name]" kind="OPTIONAL"/>
+    </members>
+    <members xsi:type="ref:Method" name="elements" type="XMLList" description="When the elements method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are XML elements with the given name. When the elements method is called with no parameters, it returns an XMLList containing all the children of this XML object that are XML elements regardless of their name.">
+      <parameters name="[name]" kind="OPTIONAL"/>
+    </members>
+    <members xsi:type="ref:Method" name="hasComplexContent" type="Boolean" description="The hasComplexContent method returns a Boolean value indicating whether this XML object contains complex content. An XML object is considered to contain complex content if it represents an XML element that has child elements. XML objects representing attributes, comments, processing instructions and text nodes do not have complex content. The existence of attributes, comments, processing instructions and text nodes within an XML object is not significant in determining if it has complex content."/>
+    <members xsi:type="ref:Method" name="hasOwnProperty" type="Boolean" description="The hasOwnProperty method returns a Boolean value indicating whether this object has the property specified by P. For all XML objects except the XML prototype object, this is the same result returned by the internal method [[HasProperty]]. For the XML prototype object, hasOwnProperty also examines the list of local properties to determine if there is a method property with the given name.">
+      <parameters name=" P " kind="OPTIONAL"/>
+    </members>
+    <members xsi:type="ref:Method" name="hasSimpleContent" type="Boolean" description="The hasSimpleContent method returns a Boolean value indicating whether this XML object contains simple content. An XML object is considered to contain simple content if it represents a text node, represents an attribute node or if it represents an XML element that has no child elements. XML objects representing comments and processing instructions do not have simple content. The existence of attributes, comments, processing instructions and text nodes within an XML object is not significant in determining if it has simple content."/>
+    <members xsi:type="ref:Method" name="elements" type="XMLList" description="When the elements method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are XML elements with the given name. When the elements method is called with no parameters, it returns an XMLList containing all the children of this XML object that are XML elements regardless of their name.">
+      <parameters name="[name]" kind="OPTIONAL"/>
+    </members>
+    <members xsi:type="ref:Method" name="normalize" type="XMLList" description="The normalize method puts all text nodes in this and all descendant XMLList objects into a normal form by merging adjacent text nodes and eliminating empty text nodes. It returns this XML object."/>
+    <members xsi:type="ref:Method" name="parent" type="XML" description="The parent method returns the parent of this XML object."/>
+    <members xsi:type="ref:Method" name="processingInstructions" type="XMLList" description="When the processingInstructions method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are processing-instructions with the given name. When the processingInstructions method is called with no parameters, it returns an XMLList containing all the children of this XML object that are processing-instructions regardless of their name">
+      <parameters name="[name]" kind="OPTIONAL"/>
+    </members>
+    <members xsi:type="ref:Method" name="propertyIsEnumerable" type="Boolean" description="The propertyIsEnumerable method returns a Boolean value indicating whether the property P will be included in the set of properties iterated over when this XML object is used in a for-in statement. This method returns truewhen ToString(P) is &quot;0&quot;; otherwise, it returns false. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value">
+      <parameters name="property"/>
+    </members>
+    <members xsi:type="ref:Method" name="text" type="String" description="The text() method represents the source code of an object."/>
+    <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this object."/>
+    <members xsi:type="ref:Method" name="toXMLString" type="String" description="Returns a String value for this object."/>
+    <members xsi:type="ref:Method" name="valueOf" type="XMLList" description="The valueOf method returns this XMLList object"/>
+ </ref:Type>
 </xmi:XMI>
