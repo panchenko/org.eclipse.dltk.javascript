@@ -490,25 +490,23 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitNewExpression(NewExpression node) {
 		final IValueReference result = new AnonymousValue();
 		final Expression objectClass = node.getObjectClass();
-		visit(objectClass);
+		IValueReference visit = visit(objectClass);
 		final String className = PropertyExpressionUtils.getPath(objectClass);
 
-		// final IValueReference clazz = visit(node.getObjectClass());
-		final IValueReference newType = result
-				.getChild(IValueReference.FUNCTION_OP);
 		if (className != null) {
 			final Type type = resolveJavaScriptType(context, className,
 					peekContext());
 			if (type.getKind() != TypeKind.UNKNOWN) {
-				newType.setValue(context.getFactory().create(peekContext(),
+				result.setValue(context.getFactory()
+						.create(peekContext(),
 						type));
 			} else {
-				newType.setValue(new LazyReference(context, className,
+				result.setValue(new LazyReference(context, className,
 						peekContext()));
 			}
 			return result;
 		}
-		newType.setValue(context.getFactory().createObject(peekContext()));
+		result.setValue(context.getFactory().createObject(peekContext()));
 		return result;
 	}
 
