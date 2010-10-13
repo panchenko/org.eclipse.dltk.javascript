@@ -100,7 +100,7 @@ public class ValueCollectionFactory {
 	public static void copyInto(IValueCollection target, IValueCollection source) {
 		if (target instanceof IValueProvider
 				&& source instanceof IValueProvider) {
-			((IValueProvider) target).getValue().addReference(
+			((IValueProvider) target).getValue().addValue(
 					((IValueProvider) source).getValue());
 
 		}
