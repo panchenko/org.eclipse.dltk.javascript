@@ -76,8 +76,15 @@ public class JSDocSupport implements IModelBuilder {
 					boolean optional = false;
 					if (token.startsWith("[") && token.endsWith("]")) {
 						optional = true;
-						parameter = method.getParameter(token.substring(1,
-								token.length() - 1));
+						String parameterName = token.substring(1,
+								token.length() - 1);
+						int defaultValueSeperatorIndex = parameterName
+								.indexOf('=');
+						if (defaultValueSeperatorIndex != -1) {
+							parameterName = parameterName.substring(0,
+									defaultValueSeperatorIndex);
+						}
+						parameter = method.getParameter(parameterName);
 					} else {
 						parameter = method.getParameter(token);
 					}
