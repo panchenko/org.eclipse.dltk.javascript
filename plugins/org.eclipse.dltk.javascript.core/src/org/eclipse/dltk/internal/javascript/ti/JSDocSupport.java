@@ -11,11 +11,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 
 /**
  * Implements support for javadocs tags .
@@ -58,6 +63,8 @@ public class JSDocSupport implements IModelBuilder {
 	private void parseParams(ITypeInfoContext context, IMethod method,
 			String comment) {
 		int index = comment.indexOf(PARAM_TAG);
+		Map<String, Type> objectPropertiesTypes = new HashMap<String, Type>();
+
 		while (index != -1) {
 			int endLineIndex = comment.indexOf("\n", index);
 			if (endLineIndex == -1) {
@@ -86,7 +93,32 @@ public class JSDocSupport implements IModelBuilder {
 						}
 						parameter = method.getParameter(parameterName);
 					} else {
-						parameter = method.getParameter(token);
+						String parameterName = token;
+						int propertiesObjectIndex = parameterName.indexOf('.');
+						Type propertiesType = null;
+						if (propertiesObjectIndex != -1) {
+							String propertyName = parameterName
+									.substring(propertiesObjectIndex + 1);
+							parameterName = parameterName.substring(0,
+									propertiesObjectIndex);
+
+							propertiesType = objectPropertiesTypes
+									.get(parameterName);
+							if (propertiesType == null) {
+								propertiesType = TypeInfoModelFactory.eINSTANCE
+										.createType();
+								objectPropertiesTypes.put(parameterName,
+										propertiesType);
+							}
+							Property property = TypeInfoModelFactory.eINSTANCE
+									.createProperty();
+							property.setName(propertyName);
+							propertiesType.getMembers().add(property);
+						}
+						parameter = method.getParameter(parameterName);
+
+						if (parameter != null && propertiesType != null)
+							parameter.setType(propertiesType);
 					}
 					if (parameter != null) {
 						if (type != null && parameter.getType() == null)

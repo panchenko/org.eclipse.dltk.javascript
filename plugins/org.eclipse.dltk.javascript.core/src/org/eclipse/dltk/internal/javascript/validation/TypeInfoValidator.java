@@ -385,7 +385,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								.next();
 					}
 				}
-				if (param != null && argumentType != null
+				if (param != null && param.getName() != null
+						&& argumentType != null
 						&& !param.getName().equals(argumentType.getName()))
 					return false;
 			}
