@@ -254,6 +254,13 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							} else {
 								// TODO also report a JS error (that should be
 								// configurable)
+								reporter.reportProblem(
+										JavaScriptProblems.UNDEFINED_METHOD,
+										NLS.bind(
+												ValidationMessages.UndefinedMethodInScript,
+												reference.getName()),
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
 							}
 						} else {
 							if (expression instanceof NewExpression) {
