@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright (c) 2010 xored software, Inc.
  *
@@ -403,11 +404,30 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference array = visit(node.getArray());
 		visit(node.getIndex());
 		if (array != null) {
-			if (node.getIndex() instanceof StringLiteral) {
-				return extractNamedChild(array, node.getIndex());
-			} else {
-				return array.getChild(IValueReference.ARRAY_OP);
+			// always just create the ARRAY_OP child (for code completion)
+			IValueReference child = array.getChild(IValueReference.ARRAY_OP);
+			Type arrayType = null;
+			if (array.getDeclaredType() != null) {
+				arrayType = (Type) array.getDeclaredType().getAttribute(
+						"GENERIC_ARRAY_TYPE");
 			}
+			else
+			{
+				Set<Type> types = array.getTypes();
+				if (types.size() > 0)
+					arrayType = (Type) types.iterator().next()
+							.getAttribute("GENERIC_ARRAY_TYPE");
+			}
+			if (arrayType != null && child.getDeclaredType() == null) {
+				child.setDeclaredType(arrayType);
+			}
+			if (node.getIndex() instanceof StringLiteral) {
+				child = extractNamedChild(array, node.getIndex());
+				if (arrayType != null && child.getDeclaredType() == null) {
+					child.setDeclaredType(arrayType);
+				}
+			}
+			return child;
 		}
 		return null;
 	}

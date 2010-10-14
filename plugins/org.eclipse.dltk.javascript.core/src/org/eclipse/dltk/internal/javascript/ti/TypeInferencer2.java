@@ -28,10 +28,14 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -209,10 +213,86 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 		}
 		if (queryPredefined) {
-			final Type type = TypeInfoModelLoader.getInstance().getType(
+			Type type = TypeInfoModelLoader.getInstance().getType(
 					typeName);
 			if (type != null) {
 				return type;
+			}
+			String arrayType = null;
+			if (typeName.endsWith("[]")) {
+				arrayType = typeName.substring(0, typeName.length() - 2);
+			}
+			if (typeName.startsWith("Array<") && typeName.endsWith(">")) {
+				arrayType = typeName.substring(6, typeName.length() - 1);
+			}
+			if (arrayType != null) {
+
+				type = TypeInfoModelLoader.getInstance().getType("Array");
+
+				Type genericType = getType(arrayType, true, true, false, false);
+				if (genericType == null || type == null)
+					return type;
+
+				Type typedArray = TypeInfoModelFactory.eINSTANCE.createType();
+				typedArray.setName(typeName);
+				typedArray.setDescription(type.getDescription());
+				typedArray.setKind(type.getKind());
+				typedArray.setAttribute("GENERIC_ARRAY_TYPE", genericType);
+
+				EList<Member> arrayMembers = type.getMembers();
+				EList<Member> typedArrayMembers = typedArray.getMembers();
+
+				
+				
+				for (Member member : arrayMembers) {
+					if (member instanceof Method) {
+						String memberName = member.getName();
+						Method method = TypeInfoModelFactory.eINSTANCE
+								.createMethod();
+						method.setName(memberName);
+						method.setDescription(member.getDescription());
+						method.setStatic(member.isStatic());
+						method.setDeprecated(member.isDeprecated());
+						method.setVisible(member.isVisible());
+						EList<Parameter> parameters = method.getParameters();
+
+						EList<Parameter> original = ((Method) member)
+								.getParameters();
+						for (Parameter parameter : original) {
+							Parameter clone = TypeInfoModelFactory.eINSTANCE
+									.createParameter();
+							clone.setKind(parameter.getKind());
+							clone.setName(parameter.getName());
+							clone.setType(parameter.getType());
+							parameters.add(clone);
+						}
+
+						if ("pop".equals(memberName)
+								|| "shift".equals(memberName)) {
+							method.setType(genericType);
+						} else if ("filter".equals(memberName)
+								|| "reverse".equals(memberName)
+								|| "slice".equals(memberName)
+								|| "sort".equals(memberName)
+								|| "splice".equals(memberName)) {
+							method.setType(typedArray);
+						} else {
+							method.setType(member.getType());
+						}
+						typedArrayMembers.add(method);
+					} else {
+						Property property = TypeInfoModelFactory.eINSTANCE
+								.createProperty();
+						property.setDescription(member.getDescription());
+						property.setDeprecated(member.isDeprecated());
+						property.setName(member.getName());
+						property.setReadOnly(((Property) member).isReadOnly());
+						property.setStatic(member.isStatic());
+						property.setVisible(member.isVisible());
+						typedArrayMembers.add(property);
+					}
+				}
+				return typedArray;
 			}
 		}
 		return null;
