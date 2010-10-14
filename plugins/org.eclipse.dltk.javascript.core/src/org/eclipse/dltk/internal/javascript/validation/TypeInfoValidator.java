@@ -264,15 +264,11 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							}
 						} else {
 							if (expression instanceof NewExpression) {
-								Object value = reference
-										.getChild(IValueReference.FUNCTION_OP);
-								if (value instanceof IValueReference) {
 									Type newType = JavaScriptValidations
-											.typeOf((IValueReference) value);
+										.typeOf((IValueReference) reference);
 									if (newType != null) {
-										return (IValueReference) value;
+									return (IValueReference) reference;
 									}
-								}
 							}
 							if (reportNotUsedCalls) {
 								if (expression instanceof NewExpression) {
