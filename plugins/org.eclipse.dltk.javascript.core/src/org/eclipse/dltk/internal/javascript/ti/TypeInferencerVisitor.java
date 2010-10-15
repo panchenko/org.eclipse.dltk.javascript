@@ -442,6 +442,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitIdentifier(Identifier node) {
 		return peekContext().getChild(node.getName());
+
 	}
 
 	private Boolean evaluateCondition(Expression condition) {
@@ -509,9 +510,15 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitNewExpression(NewExpression node) {
-		final IValueReference result = new AnonymousValue();
+		final IValueReference result = new AnonymousValue() {
+			public IValueReference getChild(String name) {
+				if (name.equals(IValueReference.FUNCTION_OP))
+					return this;
+				return super.getChild(name);
+			}
+		};
 		final Expression objectClass = node.getObjectClass();
-		IValueReference visit = visit(objectClass);
+		visit(objectClass);
 		final String className = PropertyExpressionUtils.getPath(objectClass);
 
 		if (className != null) {
@@ -548,6 +555,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				}
 			}
 			if (functionType != null && functionType.exists()) {
+				// test first if it could be a Java type (Packages.xx support)
+				Type javaType = (Type) functionType.getAttribute(
+						IReferenceAttributes.JAVA_OBJECT_TYPE, true);
+				if (javaType != null) {
+					return javaType;
+				}
 				type.setKind(TypeKind.JAVASCRIPT);
 				EList<Member> members = type.getMembers();
 				FunctionValueCollection functionCollection = (FunctionValueCollection) functionType
