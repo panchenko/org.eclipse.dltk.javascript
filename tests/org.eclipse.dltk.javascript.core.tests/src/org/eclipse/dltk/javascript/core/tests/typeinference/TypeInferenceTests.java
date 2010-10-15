@@ -63,6 +63,24 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		inferencer.doInferencing(parse(code));
 		return inferencer.getCollection();
 	}
+	
+	public void testNewFunction() throws Exception {
+		IValueCollection collection = inference("var test = new function Test() {this.p = 10;};");
+		IValueReference a = collection.getChild("test");
+		assertEquals(1, a.getTypes().size());
+		assertEquals("Test", a.getTypes().iterator().next().getName());
+		assertEquals(1, a.getTypes().iterator().next().getMembers().size());
+		assertEquals("p", a.getTypes().iterator().next().getMembers().get(0).getName());
+	}
+
+	public void testNewType() throws Exception {
+		IValueCollection collection = inference("function Test() {this.p = 10;};var test = new Test();");
+		IValueReference a = collection.getChild("test");
+		assertEquals(1, a.getTypes().size());
+		assertEquals("Test", a.getTypes().iterator().next().getName());
+		assertEquals(1, a.getTypes().iterator().next().getMembers().size());
+		assertEquals("p", a.getTypes().iterator().next().getMembers().get(0).getName());
+	}
 
 	public void testNumberVar() {
 		IValueCollection collection = inference("var a = 1");
