@@ -229,7 +229,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 				type = TypeInfoModelLoader.getInstance().getType("Array");
 
-				Type genericType = getType(arrayType, true, true, false, false);
+				Type genericType = getType(arrayType, canQueryTypeProviders(),
+						true, true, false);
 				if (genericType == null || type == null)
 					return type;
 
@@ -237,7 +238,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				typedArray.setName(typeName);
 				typedArray.setDescription(type.getDescription());
 				typedArray.setKind(type.getKind());
-				typedArray.setAttribute("GENERIC_ARRAY_TYPE", genericType);
+				typedArray.setAttribute(GENERIC_ARRAY_TYPE, arrayType);
 
 				EList<Member> arrayMembers = type.getMembers();
 				EList<Member> typedArrayMembers = typedArray.getMembers();
@@ -396,7 +397,11 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			final IValueCollection collection = evaluator.valueOf(this, member);
 			if (collection != null) {
 				if (collection instanceof IValueProvider) {
-					return ((IValueProvider) collection).getValue();
+					IValue value = ((IValueProvider) collection).getValue();
+					if (member.getType() != null) {
+						value.setDeclaredType(member.getType());
+					}
+					return value;
 				} else {
 					break;
 				}

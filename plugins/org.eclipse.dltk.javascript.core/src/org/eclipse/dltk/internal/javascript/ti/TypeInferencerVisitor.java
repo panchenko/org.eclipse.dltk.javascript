@@ -406,25 +406,26 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (array != null) {
 			// always just create the ARRAY_OP child (for code completion)
 			IValueReference child = array.getChild(IValueReference.ARRAY_OP);
-			Type arrayType = null;
+			String arrayType = null;
 			if (array.getDeclaredType() != null) {
-				arrayType = (Type) array.getDeclaredType().getAttribute(
-						"GENERIC_ARRAY_TYPE");
+				arrayType = (String) array.getDeclaredType().getAttribute(
+						ITypeInferenceContext.GENERIC_ARRAY_TYPE);
 			}
 			else
 			{
 				Set<Type> types = array.getTypes();
 				if (types.size() > 0)
-					arrayType = (Type) types.iterator().next()
-							.getAttribute("GENERIC_ARRAY_TYPE");
+					arrayType = (String) types.iterator().next()
+							.getAttribute(
+									ITypeInferenceContext.GENERIC_ARRAY_TYPE);
 			}
 			if (arrayType != null && child.getDeclaredType() == null) {
-				child.setDeclaredType(arrayType);
+				child.setDeclaredType(context.getType(arrayType));
 			}
 			if (node.getIndex() instanceof StringLiteral) {
 				child = extractNamedChild(array, node.getIndex());
 				if (arrayType != null && child.getDeclaredType() == null) {
-					child.setDeclaredType(arrayType);
+					child.setDeclaredType(context.getType(arrayType));
 				}
 			}
 			return child;
