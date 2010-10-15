@@ -50,6 +50,12 @@ public class TopValueCollection extends ValueCollection {
 					return value;
 				}
 			}
+			if ("Packages".equals(name)) {
+				return new PackagesValue();
+			}
+			if ("java".equals(name)) {
+				return new PackageOrClassValue("java");
+			}
 			return super.findMember(name, resolve);
 		}
 	}
