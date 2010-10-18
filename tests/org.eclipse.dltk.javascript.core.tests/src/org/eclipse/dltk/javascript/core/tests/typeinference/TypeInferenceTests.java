@@ -81,6 +81,42 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(1, a.getTypes().iterator().next().getMembers().size());
 		assertEquals("p", a.getTypes().iterator().next().getMembers().get(0).getName());
 	}
+	
+	public void testNestedFunctionType() throws Exception {
+		IValueCollection collection = inference("function Test() {this.newNode = function newNode():Node {return new Node();}; function Node(){this.a = 10; this.toString = function toString():String {return 'Node';};};};  var test = new Test();");
+		IValueReference test = collection.getChild("test");
+		assertEquals(true, test.exists());
+		assertEquals(0, test.getDirectChildren().size());
+		assertEquals(1, test.getTypes().size());
+		assertEquals("Test", test.getTypes().iterator().next().getName());
+
+		test = test.getChild("newNode");
+		assertEquals(true, test.exists());
+		assertEquals(1, test.getDeclaredTypes().size());
+		assertEquals("Function", test.getDeclaredTypes().iterator().next().getName());
+		
+		test = test.getChild(IValueReference.FUNCTION_OP);
+		assertEquals(0, test.getDirectChildren().size());
+		assertNotNull(test.getDeclaredType());
+		assertEquals("Node", test.getDeclaredType().getName());
+		
+		IValueReference a = test.getChild("a");
+		assertEquals(true, a.exists());
+		assertEquals(1, a.getDeclaredTypes().size());
+		assertEquals("Number", a.getDeclaredTypes().iterator().next().getName());
+
+		IValueReference toString = test.getChild("toString");
+		assertEquals(true, toString.exists());
+		assertEquals(1, toString.getDeclaredTypes().size());
+		assertEquals("Function", toString.getDeclaredTypes().iterator().next().getName());
+		
+		toString = toString.getChild(IValueReference.FUNCTION_OP);
+		assertEquals(true, toString.exists());
+		assertEquals(1, toString.getDeclaredTypes().size());
+		assertEquals("String", toString.getDeclaredTypes().iterator().next().getName());
+
+		
+	}
 
 	public void testNumberVar() {
 		IValueCollection collection = inference("var a = 1");
