@@ -145,11 +145,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					if (location == ReferenceLocation.UNKNOWN) {
 						return null;
 					}
-					m = location.getSourceModule();
-					if (m == null) {
-						return null;
-					}
-					final IModelElement result = locateModelElement(m, location);
+					final IModelElement result = locateModelElement(location);
 					if (result != null
 							&& result.getElementType() == IModelElement.FIELD) {
 						return new IModelElement[] { result };
@@ -167,11 +163,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					if (location == ReferenceLocation.UNKNOWN) {
 						return null;
 					}
-					m = location.getSourceModule();
-					if (m == null) {
-						return null;
-					}
-					final IModelElement result = locateModelElement(m, location);
+					final IModelElement result = locateModelElement(location);
 					if (result != null) {
 						return new IModelElement[] { result };
 					}
@@ -262,8 +254,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 							location.getNameStart(), location.getNameEnd() - 1,
 							null);
 				}
-				final IModelElement result = locateModelElement(module,
-						location);
+				final IModelElement result = locateModelElement(location);
 				if (result != null) {
 					return result;
 				}
@@ -297,18 +288,20 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		return null;
 	}
 
-	private IModelElement locateModelElement(ISourceModule module,
-			ReferenceLocation location) {
-		try {
-			module.reconcile(false, null, null);
-			module.accept(new Visitor(location.getNameStart(), location
-					.getNameEnd()));
-		} catch (ModelException e) {
-			if (DLTKCore.DEBUG) {
-				e.printStackTrace();
+	private IModelElement locateModelElement(ReferenceLocation location) {
+		ISourceModule module = location.getSourceModule();
+		if (module != null) {
+			try {
+				module.reconcile(false, null, null);
+				module.accept(new Visitor(location.getNameStart(), location
+						.getNameEnd()));
+			} catch (ModelException e) {
+				if (DLTKCore.DEBUG) {
+					e.printStackTrace();
+				}
+			} catch (ModelElementFound e) {
+				return e.element;
 			}
-		} catch (ModelElementFound e) {
-			return e.element;
 		}
 		return null;
 	}
