@@ -213,38 +213,40 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 		}
 		if (queryPredefined) {
-			Type type = TypeInfoModelLoader.getInstance().getType(
-					typeName);
+			Type type = TypeInfoModelLoader.getInstance().getType(typeName);
 			if (type != null) {
 				return type;
 			}
-			String arrayType = null;
-			if (typeName.endsWith("[]")) {
-				arrayType = typeName.substring(0, typeName.length() - 2);
+			String arrayType = typeName;
+			String genericArrayType = null;
+			if (arrayType.endsWith("[]")) {
+				genericArrayType = arrayType.substring(0,
+						arrayType.length() - 2);
+				arrayType = "Array<" + genericArrayType + '>';
+			} else if (arrayType.startsWith("Array<")
+					&& arrayType.endsWith(">")) {
+				genericArrayType = arrayType.substring(6,
+						arrayType.length() - 1);
 			}
-			if (typeName.startsWith("Array<") && typeName.endsWith(">")) {
-				arrayType = typeName.substring(6, typeName.length() - 1);
-			}
-			if (arrayType != null) {
+
+			if (genericArrayType != null) {
 
 				type = TypeInfoModelLoader.getInstance().getType("Array");
 
-				Type genericType = getType(arrayType, canQueryTypeProviders(),
-						true, true, false);
+				Type genericType = getType(genericArrayType,
+						canQueryTypeProviders(), true, true, false);
 				if (genericType == null || type == null)
 					return type;
 
 				Type typedArray = TypeInfoModelFactory.eINSTANCE.createType();
-				typedArray.setName(typeName);
+				typedArray.setName(arrayType);
 				typedArray.setDescription(type.getDescription());
 				typedArray.setKind(type.getKind());
-				typedArray.setAttribute(GENERIC_ARRAY_TYPE, arrayType);
+				typedArray.setAttribute(GENERIC_ARRAY_TYPE, genericArrayType);
 
 				EList<Member> arrayMembers = type.getMembers();
 				EList<Member> typedArrayMembers = typedArray.getMembers();
 
-				
-				
 				for (Member member : arrayMembers) {
 					if (member instanceof Method) {
 						String memberName = member.getName();
