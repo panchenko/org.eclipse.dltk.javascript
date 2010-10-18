@@ -527,7 +527,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					}
 				}
 			} else if (JavaScriptValidations.extractElements(result,
-					Method.class) == null) {
+					Method.class) == null && !result.exists()) {
 				final Type type = JavaScriptValidations.typeOf(result
 						.getParent());
 				if (type != null && type.getKind() == TypeKind.JAVA) {
@@ -546,7 +546,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									ValidationMessages.UndefinedPropertyInScriptType,
 									result.getName(), type.getName()), propName
 									.sourceStart(), propName.sourceEnd());
-				} else if (!result.exists()) {
+				} else {
 					reporter.reportProblem(
 							JavaScriptProblems.UNDEFINED_PROPERTY,
 							NLS.bind(
