@@ -585,10 +585,27 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					if (child.hasChild(IValueReference.FUNCTION_OP)) {
 						Method method = TypeInfoModelFactory.eINSTANCE
 								.createMethod();
-						method.setAttribute(IReferenceAttributes.LOCATION,
-								child.getLocation());
+						if (child.getKind() == ReferenceKind.LOCAL)
+						{
+							Set<Value> references = ((Value)((IValueProvider)child).getValue()).getReferences();
+							if (references.isEmpty())
+							{
+								method.setAttribute(IReferenceAttributes.LOCATION,
+										child.getLocation());
+							}
+							else
+							{
+								method.setAttribute(IReferenceAttributes.LOCATION,references.iterator().next().getLocation());
+							}
+						}
+						else
+						{
+							method.setAttribute(IReferenceAttributes.LOCATION,
+									child.getLocation());
+						}
 						method.setName(fieldName);
-						method.setType(JavaScriptValidations.typeOf(child));
+						method.setType(JavaScriptValidations.typeOf(child
+								.getChild(IValueReference.FUNCTION_OP)));
 
 						JSMethod jsmethod = (JSMethod) child.getAttribute(
 								IReferenceAttributes.PARAMETERS, true);
