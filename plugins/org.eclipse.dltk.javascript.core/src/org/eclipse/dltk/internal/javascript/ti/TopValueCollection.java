@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class TopValueCollection extends ValueCollection {
 
@@ -44,7 +45,7 @@ public class TopValueCollection extends ValueCollection {
 					return value;
 				}
 				final Type type = context.getKnownType(name);
-				if (type != null) {
+				if (type != null && type.getKind() != TypeKind.UNKNOWN) {
 					value = ElementValue.createStatic(type);
 					memberCache.put(name, value);
 					return value;
