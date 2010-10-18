@@ -82,6 +82,7 @@ import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
+import org.eclipse.dltk.javascript.ast.XmlExpressionFragment;
 import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
@@ -842,34 +843,38 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			Type xmlType = context.getKnownType(ITypeNames.XML);
 			IValue xmlValue = ((IValueProvider) xmlValueReference).getValue();
 			List<XmlFragment> fragments = node.getFragments();
+			StringBuilder xml = new StringBuilder();
 			for (XmlFragment xmlFragment : fragments) {
-				if (xmlFragment instanceof XmlTextFragment) {
-					String xml = ((XmlTextFragment) xmlFragment).getXml();
-					DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-							.newInstance();
-					try {
-						DocumentBuilder docBuilder = docBuilderFactory
-								.newDocumentBuilder();
-						Document doc = docBuilder.parse(new InputSource(
-								new StringReader(xml)));
-						NodeList nl = doc.getChildNodes();
-						if (nl.getLength() == 1) {
-							Node item = nl.item(0);
-							NamedNodeMap attributes = item.getAttributes();
-							for (int a = 0; a < attributes.getLength(); a++) {
-								Node attribute = attributes.item(a);
-								xmlValue.createChild("@"
-										+ attribute.getNodeName());
-							}
-							createXmlChilds(xmlType, xmlValue,
-									item.getChildNodes());
-						} else {
-							System.err.println("root should be 1 child?? "
-									+ xml);
-						}
-					} catch (Exception e) {
-					}
+				if (xmlFragment instanceof XmlTextFragment
+						&& !((XmlTextFragment) xmlFragment).getXml().equals(
+								"<></>")) {
+					xml.append(((XmlTextFragment) xmlFragment).getXml());
+				} else if (xmlFragment instanceof XmlExpressionFragment) {
+					xml.append("\"\"");
+				}
+			}
 
+			if (xml.length() > 0) {
+				DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
+						.newInstance();
+				try {
+					DocumentBuilder docBuilder = docBuilderFactory
+							.newDocumentBuilder();
+					Document doc = docBuilder.parse(new InputSource(
+							new StringReader(xml.toString())));
+					NodeList nl = doc.getChildNodes();
+					if (nl.getLength() == 1) {
+						Node item = nl.item(0);
+						NamedNodeMap attributes = item.getAttributes();
+						for (int a = 0; a < attributes.getLength(); a++) {
+							Node attribute = attributes.item(a);
+							xmlValue.createChild("@" + attribute.getNodeName());
+						}
+						createXmlChilds(xmlType, xmlValue, item.getChildNodes());
+					} else {
+						System.err.println("root should be 1 child?? " + xml);
+					}
+				} catch (Exception e) {
 				}
 			}
 		}
