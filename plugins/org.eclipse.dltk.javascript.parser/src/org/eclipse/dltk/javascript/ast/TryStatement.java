@@ -22,88 +22,86 @@ import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class TryStatement extends Statement {
 
-	private Keyword tryKeyword;
-	private StatementBlock body;
-	private List<CatchClause> catchClauses = new ArrayList<CatchClause>();
-	private FinallyClause finallyClause;
+    private Keyword tryKeyword;
+    private StatementBlock body;
+    private List<CatchClause> catchClauses = new ArrayList<CatchClause>();
+    private FinallyClause finallyClause;
 
-	public TryStatement(ASTNode parent) {
-		super(parent);
-	}
+    public TryStatement(ASTNode parent) {
+        super(parent);
+    }
 
-	/**
-	 * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
-	 */
-	@Override
-	public void traverse(ASTVisitor visitor) throws Exception {
-		if (visitor.visit(this)) {
-			if (tryKeyword != null)
-				tryKeyword.traverse(visitor);
-			if (body != null)
-				body.traverse(visitor);
+    /**
+     * @see org.eclipse.dltk.ast.ASTNode#traverse(org.eclipse.dltk.ast.ASTVisitor)
+     */
+    @Override
+    public void traverse(ASTVisitor visitor) throws Exception {
+        if (visitor.visit(this)) {
+            if (tryKeyword != null)
+                tryKeyword.traverse(visitor);
+            if (body != null)
+                body.traverse(visitor);
 
-			if (catchClauses != null) {
-				for (CatchClause ctch : catchClauses) {
-					ctch.traverse(visitor);
-				}
-			}
-			if (finallyClause != null)
-				finallyClause.traverse(visitor);
-			visitor.endvisit(this);
-		}
-	}
+            if (catchClauses != null) {
+                for (CatchClause ctch : catchClauses) {
+                    ctch.traverse(visitor);
+                }
+            }
+            if (finallyClause != null)
+                finallyClause.traverse(visitor);
+            visitor.endvisit(this);
+        }
+    }
 
-	public Statement getBody() {
-		return this.body;
-	}
+    public Statement getBody() {
+        return this.body;
+    }
 
-	public void setBody(StatementBlock body) {
-		this.body = body;
-	}
+    public void setBody(StatementBlock body) {
+        this.body = body;
+    }
 
-	public FinallyClause getFinally() {
-		return this.finallyClause;
-	}
+    public FinallyClause getFinally() {
+        return this.finallyClause;
+    }
 
-	public void setFinally(FinallyClause finallyClause) {
-		this.finallyClause = finallyClause;
-	}
+    public void setFinally(FinallyClause finallyClause) {
+        this.finallyClause = finallyClause;
+    }
 
-	public List<CatchClause> getCatches() {
-		return this.catchClauses;
-	}
+    public List<CatchClause> getCatches() {
+        return this.catchClauses;
+    }
 
-	public Keyword getTryKeyword() {
-		return this.tryKeyword;
-	}
+    public Keyword getTryKeyword() {
+        return this.tryKeyword;
+    }
 
-	public void setTryKeyword(Keyword keyword) {
-		this.tryKeyword = keyword;
-	}
+    public void setTryKeyword(Keyword keyword) {
+        this.tryKeyword = keyword;
+    }
 
-	@Override
-	public String toSourceString(String indentationString) {
+    @Override
+    public String toSourceString(String indentationString) {
 
-		Assert.isTrue(sourceStart() >= 0);
-		Assert.isTrue(sourceEnd() > 0);
+        Assert.isTrue(sourceStart() >= 0);
+        Assert.isTrue(sourceEnd() > 0);
 
-		StringBuffer buffer = new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
 
-		buffer.append(indentationString);
-		buffer.append(Keywords.TRY);
-		buffer.append(JSLiterals.EOL);
-		buffer.append(body.toSourceString(indentationString));
+        buffer.append(indentationString);
+        buffer.append(Keywords.TRY);
+        buffer.append(JSLiterals.EOL);
+        buffer.append(body.toSourceString(indentationString));
 
-		for (int i = 0; i < getCatches().size(); i++) {
-			buffer.append(((ISourceable) getCatches().get(i))
-					.toSourceString(indentationString));
-		}
+        for (int i = 0; i < getCatches().size(); i++) {
+            buffer.append(getCatches().get(i).toSourceString(indentationString));
+        }
 
-		if (getFinally() != null) {
-			buffer.append(getFinally().toSourceString(indentationString));
-		}
+        if (getFinally() != null) {
+            buffer.append(getFinally().toSourceString(indentationString));
+        }
 
-		return buffer.toString();
-	}
-
+        return buffer.toString();
+    }
 }
