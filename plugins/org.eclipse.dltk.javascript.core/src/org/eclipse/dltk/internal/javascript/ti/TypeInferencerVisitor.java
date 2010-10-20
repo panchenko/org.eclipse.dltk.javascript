@@ -148,7 +148,30 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitArrayInitializer(ArrayInitializer node) {
-		return context.getFactory().createArray(peekContext());
+		List<ASTNode> items = node.getItems();
+		int type = -1; // -1 = not set, 0 = mixed, 1 = string, 2 = number
+		for (ASTNode astNode : items) {
+			if (astNode instanceof StringLiteral) {
+				if (type == -1 || type == 1)
+					type = 1;
+				else
+					type = 0;
+			} else if (astNode instanceof DecimalLiteral) {
+				if (type == -1 || type == 2)
+					type = 2;
+				else
+					type = 0;
+			}
+		}
+		if (type == 1) {
+			return context.getFactory().create(peekContext(),
+					context.getKnownType(ITypeNames.ARRAY + "<String>"));
+		} else if (type == 2) {
+			return context.getFactory().create(peekContext(),
+					context.getKnownType(ITypeNames.ARRAY + "<Number>"));
+		} else {
+			return context.getFactory().createArray(peekContext());
+		}
 	}
 
 	@Override
