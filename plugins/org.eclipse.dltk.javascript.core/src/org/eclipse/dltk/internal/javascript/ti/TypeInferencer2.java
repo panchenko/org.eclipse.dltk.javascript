@@ -24,6 +24,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
@@ -219,11 +220,12 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 			String arrayType = typeName;
 			String genericArrayType = null;
+			String arrayGenericStart = ITypeNames.ARRAY + '<';
 			if (arrayType.endsWith("[]")) {
 				genericArrayType = arrayType.substring(0,
 						arrayType.length() - 2);
-				arrayType = "Array<" + genericArrayType + '>';
-			} else if (arrayType.startsWith("Array<")
+				arrayType = arrayGenericStart + genericArrayType + '>';
+			} else if (arrayType.startsWith(arrayGenericStart)
 					&& arrayType.endsWith(">")) {
 				genericArrayType = arrayType.substring(6,
 						arrayType.length() - 1);
@@ -231,7 +233,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 			if (genericArrayType != null) {
 
-				type = TypeInfoModelLoader.getInstance().getType("Array");
+				type = TypeInfoModelLoader.getInstance().getType(
+						ITypeNames.ARRAY);
 
 				Type genericType = getType(genericArrayType,
 						canQueryTypeProviders(), true, true, false);
