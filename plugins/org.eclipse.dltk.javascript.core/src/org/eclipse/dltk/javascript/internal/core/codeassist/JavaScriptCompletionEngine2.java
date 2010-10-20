@@ -26,6 +26,7 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -267,7 +268,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						&& processed.add(childName)) {
 					IValueReference child = item.getChild(childName);
 					if (child.exists()) {
-						reportReference(child, prefix, position);
+						JSMethod method = (JSMethod) child
+								.getAttribute(IReferenceAttributes.PARAMETERS);
+						if (method == null || !method.isPrivate()) {
+							reportReference(child, prefix, position);
+						}
 					}
 				}
 			}

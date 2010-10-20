@@ -86,6 +86,16 @@ public interface IModelBuilder {
 		 * @since 3.0
 		 */
 		boolean isDeprecated();
+
+		/**
+		 * @since 3.0
+		 */
+		void setPrivate(boolean priv);
+
+		/**
+		 * @since 3.0
+		 */
+		boolean isPrivate();
 	}
 
 	void processMethod(ITypeInfoContext context, FunctionStatement statement,

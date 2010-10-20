@@ -40,6 +40,7 @@ import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -201,6 +202,15 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									JavaScriptProblems.DEPRECATED_FUNCTION,
 									NLS.bind(
 											ValidationMessages.DeprecatedFunction,
+											reference.getName()), methodNode
+											.sourceStart(), methodNode
+											.sourceEnd());
+						}
+						if (method.isPrivate() && reference.getParent() != null) {
+							reporter.reportProblem(
+									JavaScriptProblems.PRIVATE_FUNCTION,
+									NLS.bind(
+											ValidationMessages.PrivateFunction,
 											reference.getName()), methodNode
 											.sourceStart(), methodNode
 											.sourceEnd());
@@ -383,8 +393,13 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				}
 				if (param != null && param.getName() != null
 						&& argumentType != null
-						&& !param.getName().equals(argumentType.getName()))
+						&& !param.getName().equals(argumentType.getName())) {
+					if (param.getName().equals(ITypeNames.ARRAY)
+							&& argumentType.getName().startsWith(
+									ITypeNames.ARRAY + '<'))
+						continue;
 					return false;
+				}
 			}
 			return true;
 		}

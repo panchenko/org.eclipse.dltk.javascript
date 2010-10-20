@@ -32,8 +32,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 public class JSDocSupport implements IModelBuilder {
 
 	public static String[] getTags() {
-		return new String[] { DEPRECATED, PARAM_TAG, TYPE_TAG };
+		return new String[] { DEPRECATED, PARAM_TAG, TYPE_TAG, PRIVATE_TAG };
 	}
+
+	private static final String PRIVATE_TAG = "@private";
 
 	public void processMethod(ITypeInfoContext context,
 			FunctionStatement statement, IMethod method) {
@@ -47,6 +49,10 @@ public class JSDocSupport implements IModelBuilder {
 		parseParams(context, method, comment);
 
 		parseDeprecation(method, comment);
+		
+		if (comment.indexOf(PRIVATE_TAG) != -1) {
+			method.setPrivate(true);
+		}
 	}
 
 	private static final String DEPRECATED = "@deprecated"; //$NON-NLS-1$
