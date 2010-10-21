@@ -46,6 +46,7 @@ public class ExampleMemberEvaluator implements IMemberEvaluator {
 
     public IValueCollection getTopValueCollection(ITypeInfoContext context) {
         if (context.getSource() != null && context.getSource().getSourceModule() != null
+                && context.getSource().getSourceModule().getResource() != null
                 && context.getSource().getSourceModule().getResource().getName().equals("globals1.js")) {
             IFile file2 = context
                     .getSource()
