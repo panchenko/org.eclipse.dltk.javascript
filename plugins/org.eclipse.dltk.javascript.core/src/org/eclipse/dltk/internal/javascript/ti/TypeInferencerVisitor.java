@@ -1,4 +1,3 @@
-
 /*******************************************************************************
  * Copyright (c) 2010 xored software, Inc.
  *
@@ -146,27 +145,26 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 	}
 
+	private static final int K_NUMBER = 1;
+	private static final int K_STRING = 2;
+	private static final int K_OTHER = 4;
+
 	@Override
 	public IValueReference visitArrayInitializer(ArrayInitializer node) {
-		List<ASTNode> items = node.getItems();
-		int type = -1; // -1 = not set, 0 = mixed, 1 = string, 2 = number
-		for (ASTNode astNode : items) {
+		int kind = 0;
+		for (ASTNode astNode : node.getItems()) {
 			if (astNode instanceof StringLiteral) {
-				if (type == -1 || type == 1)
-					type = 1;
-				else
-					type = 0;
+				kind |= K_STRING;
 			} else if (astNode instanceof DecimalLiteral) {
-				if (type == -1 || type == 2)
-					type = 2;
-				else
-					type = 0;
+				kind |= K_NUMBER;
+			} else {
+				kind |= K_OTHER;
 			}
 		}
-		if (type == 1) {
+		if (kind == K_STRING) {
 			return context.getFactory().create(peekContext(),
 					context.getKnownType(ITypeNames.ARRAY + "<String>"));
-		} else if (type == 2) {
+		} else if (kind == K_NUMBER) {
 			return context.getFactory().create(peekContext(),
 					context.getKnownType(ITypeNames.ARRAY + "<Number>"));
 		} else {
@@ -434,12 +432,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (array.getDeclaredType() != null) {
 				arrayType = (String) array.getDeclaredType().getAttribute(
 						ITypeInferenceContext.GENERIC_ARRAY_TYPE);
-			}
-			else
-			{
+			} else {
 				Set<Type> types = array.getTypes();
 				if (types.size() > 0)
-					arrayType = (String) types.iterator().next()
+					arrayType = (String) types
+							.iterator()
+							.next()
 							.getAttribute(
 									ITypeInferenceContext.GENERIC_ARRAY_TYPE);
 			}
@@ -550,8 +548,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					peekContext());
 			if (type.getKind() != TypeKind.UNKNOWN) {
 				result.setValue(context.getFactory()
-						.create(peekContext(),
-						type));
+						.create(peekContext(), type));
 			} else {
 				result.setValue(new LazyReference(context, className,
 						peekContext()));
@@ -608,21 +605,20 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					if (child.hasChild(IValueReference.FUNCTION_OP)) {
 						Method method = TypeInfoModelFactory.eINSTANCE
 								.createMethod();
-						if (child.getKind() == ReferenceKind.LOCAL)
-						{
-							Set<Value> references = ((Value)((IValueProvider)child).getValue()).getReferences();
-							if (references.isEmpty())
-							{
-								method.setAttribute(IReferenceAttributes.LOCATION,
+						if (child.getKind() == ReferenceKind.LOCAL) {
+							Set<Value> references = ((Value) ((IValueProvider) child)
+									.getValue()).getReferences();
+							if (references.isEmpty()) {
+								method.setAttribute(
+										IReferenceAttributes.LOCATION,
 										child.getLocation());
+							} else {
+								method.setAttribute(
+										IReferenceAttributes.LOCATION,
+										references.iterator().next()
+												.getLocation());
 							}
-							else
-							{
-								method.setAttribute(IReferenceAttributes.LOCATION,references.iterator().next().getLocation());
-							}
-						}
-						else
-						{
+						} else {
 							method.setAttribute(IReferenceAttributes.LOCATION,
 									child.getLocation());
 						}
