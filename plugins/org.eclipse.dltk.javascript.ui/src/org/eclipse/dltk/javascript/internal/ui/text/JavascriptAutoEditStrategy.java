@@ -449,71 +449,118 @@ public class JavascriptAutoEditStrategy extends
 
 	private boolean isClosed(IDocument d, int offset, int length) {
 		String sm = d.get();
-		int start = sm.lastIndexOf("function ", offset);
-		if (start == -1) {
-			start = 0;
-		}
-		int lastOpen = sm.lastIndexOf("{", start);
-		if (lastOpen == -1)
-			lastOpen = 0;
-		int lastClosed = sm.lastIndexOf("}", start);
-		if (lastClosed == -1)
-			lastClosed = 0;
-		while (lastOpen > lastClosed) {
-			start = sm.lastIndexOf("function ", lastOpen);
-			if (start == -1)
-				start = 0;
-			lastOpen = sm.lastIndexOf("{", start);
-			if (lastOpen == -1)
-				lastOpen = 0;
-			lastClosed = sm.lastIndexOf("}", start);
-			if (lastClosed == -1)
-				lastClosed = 0;
+		int levelBefore = countBrackets(sm, 0, offset);
+		return levelBefore <= (countBrackets(sm, offset, sm.length()) * -1);
+	}
 
-		}
-
-		int end = sm.indexOf("function ", offset);
-		if (end == -1) {
-			end = sm.length();
-		} else {
-			lastOpen = sm.lastIndexOf("{", end);
-			if (lastOpen == -1)
-				lastOpen = 0;
-			lastClosed = sm.lastIndexOf("}", end);
-			if (lastClosed == -1)
-				lastClosed = 0;
-			while (lastOpen > lastClosed) {
-				int end2 = sm.indexOf("function ", lastOpen);
-				if (end == end2)
-					break;
-				end = end2;
-				lastOpen = sm.lastIndexOf("{", end);
-				if (lastOpen == -1)
-					lastOpen = 0;
-				lastClosed = sm.lastIndexOf("}", end);
-				if (lastClosed == -1)
-					lastClosed = 0;
-
-			}
-		}
+	/**
+	 * @param offset
+	 * @param sm
+	 * @param levelBefore
+	 */
+	private int countBrackets(String sm, int start, int end) {
+		boolean inSingleQuote = false;
+		boolean inDoubleQuote = false;
+		boolean escapeChar = false;
 		int level = 0;
-		boolean qm = false;
-		char charp = 0;
 		for (int a = start; a < end; a++) {
 			char charAt = sm.charAt(a);
-			if (!qm) {
-				if (charAt == '{')
+			switch (charAt) {
+			case '\'': {
+				if (inSingleQuote && !escapeChar)
+					inSingleQuote = false;
+				else if (!inDoubleQuote)
+					inSingleQuote = true;
+				break;
+			}
+			case '"': {
+				if (inDoubleQuote && !escapeChar)
+					inDoubleQuote = false;
+				else if (!inSingleQuote)
+					inDoubleQuote = true;
+				break;
+			}
+			case '/': {
+				if (!inSingleQuote && !inDoubleQuote) {
+					int aPlus1 = a + 1;
+					if (aPlus1 < end) {
+						// test if single line comment
+						if (sm.charAt(aPlus1) == '/') {
+							// skip it all.
+							a = sm.indexOf('\n', aPlus1);
+							if (a == -1)
+								a = sm.length();
+						} else if (sm.charAt(aPlus1) == '*') {
+							// start of doc search for the end..
+							a = sm.indexOf("*/", aPlus1);
+							if (a == -1)
+								a = sm.length();
+							else
+								a = a + 2;
+						} else // regexp?
+						{
+							aPlus1++;
+							while (aPlus1 < end) {
+								char c = sm.charAt(aPlus1);
+								aPlus1++;
+								if (c == '/') {
+									// reg exp found (/xxx/)
+									a = aPlus1;
+									break;
+								}
+								if (c == '\n')
+									break;
+							}
+						}
+					}
+				}
+				break;
+			}
+			case '<': {
+				// XML
+				if (!inSingleQuote && !inDoubleQuote) {
+					int aPlus1 = a + 1;
+					StringBuilder sb = new StringBuilder(5);
+					sb.append("</");
+					while (aPlus1 < end) {
+						char c = sm.charAt(aPlus1);
+						if (Character.isJavaIdentifierPart(c)) {
+							sb.append(c);
+							aPlus1++;
+						} else if ((c == '>' || c == ' ') && sb.length() > 2) {
+							// search for close tag.
+							int index = sm.indexOf(sb.toString(), aPlus1);
+							if (index != -1) {
+								a = index + sb.length();
+								break;
+							}
+						} else {
+							break;
+						}
+					}
+				}
+				break;
+			}
+			case '{': {
+				if (!inSingleQuote && !inDoubleQuote) {
 					level++;
-				if (charAt == '}')
+				}
+				break;
+			}
+			case '}': {
+				if (!inSingleQuote && !inDoubleQuote) {
 					level--;
+				}
+				break;
 			}
-			if (charAt == '"' || charAt == '\'') {
-				if (charp != '\\')
-					qm = !qm;
+			case '\\': {
+				escapeChar = true;
+				continue;
 			}
-			charp = charAt;
+			}
+			escapeChar = false;
 		}
-		return level <= 0;
+		return level;
 	}
 
 	/**
