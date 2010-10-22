@@ -51,8 +51,16 @@ public class JSDocSupport implements IModelBuilder {
 
 		parseDeprecation(method, comment);
 		
+		parsePrivate(method, comment);
+	}
+
+	/**
+	 * @param method
+	 * @param comment
+	 */
+	private void parsePrivate(IMember member, final String comment) {
 		if (comment.indexOf(PRIVATE_TAG) != -1) {
-			method.setPrivate(true);
+			member.setPrivate(true);
 		}
 	}
 
@@ -67,9 +75,7 @@ public class JSDocSupport implements IModelBuilder {
 		}
 		parseDeprecation(variable, comment);
 
-		if (comment.indexOf(PRIVATE_TAG) != -1) {
-			variable.setPrivate(true);
-		}
+		parsePrivate(variable, comment);
 	}
 
 	private static final String DEPRECATED = "@deprecated"; //$NON-NLS-1$
