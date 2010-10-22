@@ -1094,6 +1094,27 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	@Override
 	protected ASTNode visitVarDeclaration(Tree node) {
 		VariableStatement var = new VariableStatement(getParent());
+		
+		int tokenIndex = node.getTokenStartIndex();
+		while (tokenIndex > 0) {
+			--tokenIndex;
+			final Token token = tokens.get(tokenIndex);
+			if (token.getType() == JSParser.WhiteSpace
+					|| token.getType() == JSParser.EOL) {
+				continue;
+			}
+			if (token.getType() == JSParser.MultiLineComment) {
+				final Comment comment = documentationMap.get(token
+						.getTokenIndex());
+				if (comment != null) {
+					assert token.getText().startsWith(
+							MultiLineComment.JSDOC_PREFIX);
+					var.setDocumentation(comment);
+				}
+			}
+			break;
+		}
+		
 		var.setVarKeyword(createKeyword(node, Keywords.VAR));
 
 		processVariableDeclarations(node, var, SymbolKind.VAR);

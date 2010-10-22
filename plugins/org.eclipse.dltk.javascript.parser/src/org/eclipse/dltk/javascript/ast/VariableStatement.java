@@ -25,6 +25,7 @@ public class VariableStatement extends Expression implements
 
 	private Keyword varKeyword;
 	private final List<VariableDeclaration> variables = new ArrayList<VariableDeclaration>();
+	private Comment documentation;
 
 	public VariableStatement(ASTNode parent) {
 		super(parent);
@@ -82,4 +83,11 @@ public class VariableStatement extends Expression implements
 
 		return buffer.toString();
 	}
-}
+
+	public Comment getDocumentation() {
+		return documentation;
+	}
+
+	public void setDocumentation(Comment documentation) {
+		this.documentation = documentation;
+	}}
