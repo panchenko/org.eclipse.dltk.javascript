@@ -40,6 +40,7 @@ import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -568,6 +569,25 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									ValidationMessages.UndefinedPropertyInScript,
 									result.getName()), propName.sourceStart(),
 							propName.sourceEnd());
+				}
+			} else {
+				IVariable variable = (IVariable) result
+						.getAttribute(IReferenceAttributes.VARIABLE);
+				if (variable != null) {
+					if (variable.isDeprecated()) {
+						reporter.reportProblem(
+								JavaScriptProblems.DEPRECATED_VARIABLE,
+								NLS.bind(ValidationMessages.DeprecatedVariable,
+										variable.getName()), propName
+										.sourceStart(), propName.sourceEnd());
+					}
+					if (variable.isPrivate() && result.getParent() != null) {
+						reporter.reportProblem(
+								JavaScriptProblems.PRIVATE_VARIABLE, NLS.bind(
+										ValidationMessages.PrivateVariable,
+										variable.getName()), propName
+										.sourceStart(), propName.sourceEnd());
+					}
 				}
 			}
 		}

@@ -14,12 +14,13 @@ package org.eclipse.dltk.javascript.typeinfo;
 import java.util.List;
 
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IModelBuilder {
 
-	public interface IParameter {
+	public interface IMember {
 		String getName();
 
 		void setName(String name);
@@ -27,6 +28,10 @@ public interface IModelBuilder {
 		Type getType();
 
 		void setType(Type type);
+
+	}
+
+	public interface IParameter extends IMember {
 
 		ReferenceLocation getLocation();
 
@@ -43,14 +48,7 @@ public interface IModelBuilder {
 		boolean isOptional();
 	}
 
-	public interface IMethod {
-		String getName();
-
-		void setName(String name);
-
-		Type getType();
-
-		void setType(Type type);
+	public interface IMethod extends IMember {
 
 		int getParameterCount();
 
@@ -98,7 +96,33 @@ public interface IModelBuilder {
 		boolean isPrivate();
 	}
 
+	public interface IVariable extends IMember {
+		/**
+		 * @since 3.0
+		 */
+		void setDeprecated(boolean deprecated);
+
+		/**
+		 * @since 3.0
+		 */
+		boolean isDeprecated();
+
+		/**
+		 * @since 3.0
+		 */
+		void setPrivate(boolean priv);
+
+		/**
+		 * @since 3.0
+		 */
+		boolean isPrivate();
+
+	}
+
 	void processMethod(ITypeInfoContext context, FunctionStatement statement,
 			IMethod method);
+
+	void processVariable(ITypeInfoContext context, VariableStatement statement,
+			IVariable variabe);
 
 }

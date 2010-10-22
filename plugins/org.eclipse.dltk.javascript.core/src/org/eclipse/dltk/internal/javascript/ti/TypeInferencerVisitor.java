@@ -826,10 +826,21 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitVariableStatment(VariableStatement node) {
-		final IValueCollection context = peekContext();
+		final IValueCollection collection = peekContext();
 		IValueReference result = null;
 		for (VariableDeclaration declaration : node.getVariables()) {
-			result = createVariable(context, declaration);
+			JSVariable variable = new JSVariable();
+			result = createVariable(collection, declaration);
+			variable.setName(declaration.getVariableName());
+			org.eclipse.dltk.javascript.ast.Type varType = declaration
+					.getType();
+			if (varType != null) {
+				variable.setType(resolveType(varType));
+			}
+			result.setAttribute(IReferenceAttributes.VARIABLE, variable);
+			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
+				extension.processVariable(context, node, variable);
+			}
 		}
 		return result;
 	}

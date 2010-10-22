@@ -36,6 +36,14 @@ public interface JavaScriptProblems {
 
 	public static final int UNDEFINED_PROPERTY = IProblem.FieldRelated + 1;
 	public static final int DEPRECATED_PROPERTY = IProblem.FieldRelated + 2;
+	/**
+	 * @since 3.0
+	 */
+	public static final int DEPRECATED_VARIABLE = IProblem.FieldRelated + 3;
+	/**
+	 * @since 3.0
+	 */
+	public static final int PRIVATE_VARIABLE = IProblem.FieldRelated + 4;
 
 	public static final int EQUAL_AS_ASSIGN = IProblem.Internal + 1;
 	public static final int INVALID_ASSIGN_LEFT = IProblem.Internal + 2;

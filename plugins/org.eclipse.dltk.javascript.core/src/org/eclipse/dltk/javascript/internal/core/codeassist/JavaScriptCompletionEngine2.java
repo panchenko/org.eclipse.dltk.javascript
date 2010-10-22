@@ -26,7 +26,6 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
-import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -42,6 +41,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -268,9 +268,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						&& processed.add(childName)) {
 					IValueReference child = item.getChild(childName);
 					if (child.exists()) {
-						JSMethod method = (JSMethod) child
+						IMethod method = (IMethod) child
 								.getAttribute(IReferenceAttributes.PARAMETERS);
-						if (method == null || !method.isPrivate()) {
+						IVariable variable = (IVariable) child
+								.getAttribute(IReferenceAttributes.VARIABLE);
+						if ((method == null || !method.isPrivate())
+								&& (variable == null || !variable.isPrivate())) {
 							reportReference(child, prefix, position);
 						}
 					}

@@ -19,5 +19,6 @@ public interface IReferenceAttributes {
 	String ELEMENT = "ELEMENT"; //$NON-NLS-1$
 	String STATIC = "STATIC"; //$NON-NLS-1$
 	String JAVA_OBJECT_TYPE = "JAVA_OBJECT_TYPE"; //$NON-NLS-1$
+	String VARIABLE = "VARIABLE"; //$NON-NLS-1$s
 
 }

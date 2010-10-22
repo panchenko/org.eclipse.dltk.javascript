@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
@@ -55,6 +56,22 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
+	public void processVariable(ITypeInfoContext context,
+			VariableStatement statement, IVariable variable) {
+		if (statement.getDocumentation() == null) {
+			return;
+		}
+		final String comment = statement.getDocumentation().getText();
+		if (variable.getType() == null) {
+			parseType(context, variable, comment);
+		}
+		parseDeprecation(variable, comment);
+
+		if (comment.indexOf(PRIVATE_TAG) != -1) {
+			variable.setPrivate(true);
+		}
+	}
+
 	private static final String DEPRECATED = "@deprecated"; //$NON-NLS-1$
 
 	private void parseDeprecation(IMethod method, String comment) {
@@ -64,6 +81,12 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
+	private void parseDeprecation(IVariable variable, String comment) {
+		int index = comment.indexOf(DEPRECATED);
+		if (index != -1) {
+			variable.setDeprecated(true);
+		}
+	}
 	private static final String PARAM_TAG = "@param"; //$NON-NLS-1$
 
 	private void parseParams(ITypeInfoContext context, IMethod method,
@@ -143,7 +166,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	private static final String TYPE_TAG = "@type"; //$NON-NLS-1$
 
-	private void parseType(ITypeInfoContext context, IMethod method,
+	private void parseType(ITypeInfoContext context, IMember member,
 			String comment) {
 		int index = comment.indexOf(TYPE_TAG);
 		if (index != -1) {
@@ -155,7 +178,7 @@ public class JSDocSupport implements IModelBuilder {
 					+ TYPE_TAG.length(), endLineIndex));
 			if (st.hasMoreTokens()) {
 				final String typeToken = st.nextToken();
-				method.setType(context.getType(typeToken));
+				member.setType(context.getType(typeToken));
 			}
 		}
 	}
