@@ -190,19 +190,20 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			}
 		}
 		if (item != null && exists(item)) {
-			reportItems(reporter, item);
+			reportItems(reporter, item, true);
 		}
 	}
 
-	protected void reportItems(Reporter reporter, IValueParent item) {
-		reporter.report(item);
+	protected void reportItems(Reporter reporter, IValueParent item,
+			boolean testPrivate) {
+		reporter.report(item, testPrivate);
 		if (item instanceof IValueCollection) {
 			IValueCollection coll = (IValueCollection) item;
 			for (;;) {
 				coll = coll.getParent();
 				if (coll == null)
 					break;
-				reporter.report(coll);
+				reporter.report(coll, testPrivate);
 			}
 		}
 	}
@@ -258,7 +259,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					&& !processed.contains(name);
 		}
 
-		public void report(IValueParent item) {
+		public void report(IValueParent item, boolean testPrivate) {
 			final Set<String> deleted = item.getDeletedChildren();
 			for (String childName : item.getDirectChildren()) {
 				if (childName.equals(IValueReference.FUNCTION_OP))
@@ -268,14 +269,18 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						&& processed.add(childName)) {
 					IValueReference child = item.getChild(childName);
 					if (child.exists()) {
-						IMethod method = (IMethod) child
-								.getAttribute(IReferenceAttributes.PARAMETERS);
-						IVariable variable = (IVariable) child
-								.getAttribute(IReferenceAttributes.VARIABLE);
-						if ((method == null || !method.isPrivate())
-								&& (variable == null || !variable.isPrivate())) {
-							reportReference(child, prefix, position);
+						if (testPrivate) {
+							IMethod method = (IMethod) child
+									.getAttribute(IReferenceAttributes.PARAMETERS);
+							IVariable variable = (IVariable) child
+									.getAttribute(IReferenceAttributes.VARIABLE);
+							if ((method != null && method.isPrivate())
+									|| (variable != null && variable
+											.isPrivate())) {
+								continue;
+							}
 						}
+						reportReference(child, prefix, position);
 					}
 				}
 			}
@@ -465,7 +470,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 */
 	private void doGlobalCompletion(ITypeInferenceContext context,
 			IValueCollection collection, Reporter reporter) {
-		reportItems(reporter, collection);
+		reportItems(reporter, collection, false);
 		if (useEngine) {
 			doCompletionOnType(context, reporter);
 			doCompletionOnKeyword(reporter.getPrefix(), reporter.getPosition());
