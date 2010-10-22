@@ -20,7 +20,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IModelBuilder {
 
-	public interface IMember {
+	public interface IElement {
 		String getName();
 
 		void setName(String name);
@@ -31,7 +31,30 @@ public interface IModelBuilder {
 
 	}
 
-	public interface IParameter extends IMember {
+	public interface IMember extends IElement {
+
+		/**
+		 * @since 3.0
+		 */
+		void setDeprecated(boolean deprecated);
+
+		/**
+		 * @since 3.0
+		 */
+		boolean isDeprecated();
+
+		/**
+		 * @since 3.0
+		 */
+		void setPrivate(boolean priv);
+
+		/**
+		 * @since 3.0
+		 */
+		boolean isPrivate();
+	}
+
+	public interface IParameter extends IElement {
 
 		ReferenceLocation getLocation();
 
@@ -74,49 +97,9 @@ public interface IModelBuilder {
 		 * @return the parameter found or <code>null</code>
 		 */
 		IParameter getParameter(String name);
-
-		/**
-		 * @since 3.0
-		 */
-		void setDeprecated(boolean deprecated);
-
-		/**
-		 * @since 3.0
-		 */
-		boolean isDeprecated();
-
-		/**
-		 * @since 3.0
-		 */
-		void setPrivate(boolean priv);
-
-		/**
-		 * @since 3.0
-		 */
-		boolean isPrivate();
 	}
 
 	public interface IVariable extends IMember {
-		/**
-		 * @since 3.0
-		 */
-		void setDeprecated(boolean deprecated);
-
-		/**
-		 * @since 3.0
-		 */
-		boolean isDeprecated();
-
-		/**
-		 * @since 3.0
-		 */
-		void setPrivate(boolean priv);
-
-		/**
-		 * @since 3.0
-		 */
-		boolean isPrivate();
-
 	}
 
 	void processMethod(ITypeInfoContext context, FunctionStatement statement,

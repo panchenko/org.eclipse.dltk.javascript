@@ -74,19 +74,13 @@ public class JSDocSupport implements IModelBuilder {
 
 	private static final String DEPRECATED = "@deprecated"; //$NON-NLS-1$
 
-	private void parseDeprecation(IMethod method, String comment) {
+	private void parseDeprecation(IMember member, String comment) {
 		int index = comment.indexOf(DEPRECATED);
 		if (index != -1) {
-			method.setDeprecated(true);
+			member.setDeprecated(true);
 		}
 	}
 
-	private void parseDeprecation(IVariable variable, String comment) {
-		int index = comment.indexOf(DEPRECATED);
-		if (index != -1) {
-			variable.setDeprecated(true);
-		}
-	}
 	private static final String PARAM_TAG = "@param"; //$NON-NLS-1$
 
 	private void parseParams(ITypeInfoContext context, IMethod method,
@@ -166,7 +160,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	private static final String TYPE_TAG = "@type"; //$NON-NLS-1$
 
-	private void parseType(ITypeInfoContext context, IMember member,
+	private void parseType(ITypeInfoContext context, IElement member,
 			String comment) {
 		int index = comment.indexOf(TYPE_TAG);
 		if (index != -1) {
