@@ -9,21 +9,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text;
 
-import java.util.regex.Pattern;
-
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.compiler.InvalidInputException;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
-import org.eclipse.dltk.javascript.scriptdoc.IScanner;
-import org.eclipse.dltk.javascript.scriptdoc.ITerminalSymbols;
 import org.eclipse.dltk.javascript.scriptdoc.JavaHeuristicScanner;
 import org.eclipse.dltk.javascript.scriptdoc.JavaIndenter;
-import org.eclipse.dltk.javascript.scriptdoc.PublicScanner;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.DLTKUIPlugin;
 import org.eclipse.dltk.ui.PreferenceConstants;
-import org.eclipse.dltk.ui.text.util.AutoEditUtils;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
@@ -34,7 +27,6 @@ import org.eclipse.jface.text.DocumentRewriteSessionType;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITypedRegion;
-import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.IEditorPart;
@@ -50,24 +42,12 @@ public class JavascriptAutoEditStrategy extends
 	/** The line comment introducer. Value is "{@value} " */
 	private static final String LINE_COMMENT = "//"; //$NON-NLS-1$
 
-	private static class CompilationUnitInfo {
-
-		char[] buffer;
-		int delta;
-
-		CompilationUnitInfo(char[] buffer, int delta) {
-			this.buffer = buffer;
-			this.delta = delta;
-		}
-	}
-
 	private boolean fCloseBrace;
 	private boolean fIsSmartMode;
 
 	private String fPartitioning;
 	final IScriptProject fProject;
-	private static IScanner fgScanner = new PublicScanner(false, false, false,
-			3, null, null, false);
+	JsPreferenceInterpreter prefs;
 
 	/**
 	 * Creates a new Java auto indent strategy for the given document
@@ -87,73 +67,6 @@ public class JavascriptAutoEditStrategy extends
 				.getPreferenceStore());
 	}
 
-	private int getBracketCount(IDocument d, int startOffset, int endOffset,
-			boolean ignoreCloseBrackets) throws BadLocationException {
-
-		int bracketCount = 0;
-		while (startOffset < endOffset) {
-			char curr = d.getChar(startOffset);
-			startOffset++;
-			switch (curr) {
-			case '/':
-				if (startOffset < endOffset) {
-					char next = d.getChar(startOffset);
-					if (next == '*') {
-						// a comment starts, advance to the comment end
-						startOffset = getCommentEnd(d, startOffset + 1,
-								endOffset);
-					} else if (next == '/') {
-						// '//'-comment: nothing to do anymore on this line
-						startOffset = endOffset;
-					}
-				}
-				break;
-			case '*':
-				if (startOffset < endOffset) {
-					char next = d.getChar(startOffset);
-					if (next == '/') {
-						// we have been in a comment: forget what we read before
-						bracketCount = 0;
-						startOffset++;
-					}
-				}
-				break;
-			case '{':
-				bracketCount++;
-				ignoreCloseBrackets = false;
-				break;
-			case '}':
-				if (!ignoreCloseBrackets) {
-					bracketCount--;
-				}
-				break;
-			case '"':
-			case '\'':
-				startOffset = getStringEnd(d, startOffset, endOffset, curr);
-				break;
-			default:
-			}
-		}
-		return bracketCount;
-	}
-
-	// ----------- bracket counting
-	// ------------------------------------------------------
-
-	private int getCommentEnd(IDocument d, int offset, int endOffset)
-			throws BadLocationException {
-		while (offset < endOffset) {
-			char curr = d.getChar(offset);
-			offset++;
-			if (curr == '*') {
-				if (offset < endOffset && d.getChar(offset) == '/') {
-					return offset + 1;
-				}
-			}
-		}
-		return endOffset;
-	}
-
 	private String getIndentOfLine(IDocument d, int line)
 			throws BadLocationException {
 		if (line > -1) {
@@ -166,17 +79,16 @@ public class JavascriptAutoEditStrategy extends
 		}
 	}
 
-	private int getStringEnd(IDocument d, int offset, int endOffset, char ch)
-			throws BadLocationException {
+	private int getStringEnd(String d, int offset, int endOffset, char ch) {
 		while (offset < endOffset) {
-			char curr = d.getChar(offset);
-			offset++;
+			char curr = d.charAt(offset);
 			if (curr == '\\') {
 				// ignore escaped characters
 				offset++;
 			} else if (curr == ch) {
 				return offset;
 			}
+			offset++;
 		}
 		return endOffset;
 	}
@@ -305,8 +217,7 @@ public class JavascriptAutoEditStrategy extends
 				}
 			}
 			// insert closing brace on new line after an unclosed opening brace
-			else if (getBracketCount(d, start, c.offset, true) > 0
-					&& closeBrace() && !isClosed(d, c.offset, c.length)) {
+			else if (closeBrace() && !isClosed(d, c.offset, c.length)) {
 				c.caretOffset = c.offset + buf.length();
 				c.shiftsCaret = false;
 
@@ -459,106 +370,84 @@ public class JavascriptAutoEditStrategy extends
 	 * @param levelBefore
 	 */
 	private int countBrackets(String sm, int start, int end) {
-		boolean inSingleQuote = false;
-		boolean inDoubleQuote = false;
-		boolean escapeChar = false;
 		int level = 0;
 		for (int a = start; a < end; a++) {
 			char charAt = sm.charAt(a);
 			switch (charAt) {
 			case '\'': {
-				if (inSingleQuote && !escapeChar)
-					inSingleQuote = false;
-				else if (!inDoubleQuote)
-					inSingleQuote = true;
+				a = getStringEnd(sm, a + 1, end, '\'');
 				break;
 			}
 			case '"': {
-				if (inDoubleQuote && !escapeChar)
-					inDoubleQuote = false;
-				else if (!inSingleQuote)
-					inDoubleQuote = true;
+				a = getStringEnd(sm, a + 1, end, '"');
 				break;
 			}
 			case '/': {
-				if (!inSingleQuote && !inDoubleQuote) {
-					int aPlus1 = a + 1;
-					if (aPlus1 < end) {
-						// test if single line comment
-						if (sm.charAt(aPlus1) == '/') {
-							// skip it all.
-							a = sm.indexOf('\n', aPlus1);
-							if (a == -1)
-								a = sm.length();
-						} else if (sm.charAt(aPlus1) == '*') {
-							// start of doc search for the end..
-							a = sm.indexOf("*/", aPlus1);
-							if (a == -1)
-								a = sm.length();
-							else
-								a = a + 2;
-						} else // regexp?
-						{
+				int aPlus1 = a + 1;
+				if (aPlus1 < end) {
+					// test if single line comment
+					if (sm.charAt(aPlus1) == '/') {
+						// skip it all.
+						a = sm.indexOf('\n', aPlus1);
+						if (a == -1)
+							a = sm.length();
+					} else if (sm.charAt(aPlus1) == '*') {
+						// start of doc search for the end..
+						a = sm.indexOf("*/", aPlus1);
+						if (a == -1)
+							a = sm.length();
+						else
+							a = a + 2;
+					} else // regexp?
+					{
+						aPlus1++;
+						while (aPlus1 < end) {
+							char c = sm.charAt(aPlus1);
 							aPlus1++;
-							while (aPlus1 < end) {
-								char c = sm.charAt(aPlus1);
-								aPlus1++;
-								if (c == '/') {
-									// reg exp found (/xxx/)
-									a = aPlus1;
-									break;
-								}
-								if (c == '\n')
-									break;
+							if (c == '/') {
+								// reg exp found (/xxx/)
+								a = aPlus1;
+								break;
 							}
+							if (c == '\n')
+								break;
 						}
 					}
 				}
 				break;
 			}
 			case '<': {
-				// XML
-				if (!inSingleQuote && !inDoubleQuote) {
-					int aPlus1 = a + 1;
-					StringBuilder sb = new StringBuilder(5);
-					sb.append("</");
-					while (aPlus1 < end) {
-						char c = sm.charAt(aPlus1);
-						if (Character.isJavaIdentifierPart(c)) {
-							sb.append(c);
-							aPlus1++;
-						} else if ((c == '>' || c == ' ') && sb.length() > 2) {
-							// search for close tag.
-							int index = sm.indexOf(sb.toString(), aPlus1);
-							if (index != -1) {
-								a = index + sb.length();
-								break;
-							}
-						} else {
+				// xml test
+				int aPlus1 = a + 1;
+				StringBuilder sb = new StringBuilder(5);
+				sb.append("</");
+				while (aPlus1 < end) {
+					char c = sm.charAt(aPlus1);
+					if (Character.isJavaIdentifierPart(c)) {
+						sb.append(c);
+						aPlus1++;
+					} else if ((c == '>' || c == ' ') && sb.length() > 2) {
+						// search for close tag.
+						int index = sm.indexOf(sb.toString(), aPlus1);
+						if (index != -1) {
+							a = index + sb.length();
 							break;
 						}
+					} else {
+						break;
 					}
 				}
 				break;
 			}
 			case '{': {
-				if (!inSingleQuote && !inDoubleQuote) {
-					level++;
-				}
+				level++;
 				break;
 			}
 			case '}': {
-				if (!inSingleQuote && !inDoubleQuote) {
-					level--;
-				}
+				level--;
 				break;
 			}
-			case '\\': {
-				escapeChar = true;
-				continue;
 			}
-			}
-			escapeChar = false;
 		}
 		return level;
 	}
@@ -1278,114 +1167,6 @@ public class JavascriptAutoEditStrategy extends
 		return false;
 	}
 
-	/**
-	 * Processes command in work with brackets, strings, etc
-	 * 
-	 * @param d
-	 * @param c
-	 */
-	JsPreferenceInterpreter prefs;
-
-	private void autoClose(IDocument d, DocumentCommand c) {
-		if (c.offset == -1)
-			return;
-		try {
-			if (d.getChar(c.offset - 1) == '\\')
-				return;
-		} catch (BadLocationException e1) {
-		}
-		if ('\"' == c.text.charAt(0) && !prefs.closeStrings())
-			return;
-		if ('\'' == c.text.charAt(0) && !prefs.closeStrings())
-			return;
-		if (!prefs.closeBrackets()
-				&& ('[' == c.text.charAt(0) || '(' == c.text.charAt(0) || '{' == c.text
-						.charAt(0)))
-			return;
-		try {
-
-			switch (c.text.charAt(0)) {
-			case '\"':
-			case '\'':
-				// if we close existing quote, do nothing
-				if ('\"' == c.text.charAt(0) && c.offset > 0
-						&& "\"".equals(d.get(c.offset - 1, 1)))
-					return;
-
-				if ('\'' == c.text.charAt(0) && c.offset > 0
-						&& "\'".equals(d.get(c.offset - 1, 1)))
-					return;
-
-				if (c.offset != d.getLength()
-						&& c.text.charAt(0) == d.get(c.offset, 1).charAt(0))
-					c.text = "";
-				else {
-					c.text += c.text;
-					// dont set the length, because of the length > 0 then a
-					// selection has to be replaced
-					// c.length = 0;
-				}
-
-				c.shiftsCaret = false;
-				c.caretOffset = c.offset + 1;
-				break;
-			case '(':
-			case '{':
-			case '[':
-				// check partition
-				if (AutoEditUtils.getRegionType(d, fPartitioning, c.offset) != IDocument.DEFAULT_CONTENT_TYPE)
-					return;
-				if (c.offset != d.getLength()
-						&& c.text.charAt(0) == d.get(c.offset, 1).charAt(0))
-					return;
-
-				try { // in class closing
-					String regex = "^\\s*class\\s+.*";
-					String regex2 = ".*\\(.*\\).*";
-					int start = d.getLineOffset(d.getLineOfOffset(c.offset));
-					String curLine = d.get(start, c.offset - start);
-					if (Pattern.matches(regex, curLine)
-							&& !Pattern.matches(regex2, curLine)) {
-						c.text = "():";
-						c.shiftsCaret = false;
-						c.caretOffset = c.offset + 1;
-						return;
-					}
-				} catch (BadLocationException e) {
-				}
-
-				// add closing peer
-				c.text = c.text + AutoEditUtils.getBracePair(c.text.charAt(0));
-				// dont set the length, because of the length > 0 then a
-				// selection has to be replaced
-				// c.length = 0;
-
-				c.shiftsCaret = false;
-				c.caretOffset = c.offset + 1;
-				break;
-			case '}':
-			case ']':
-			case ')':
-				// check partition
-				if (AutoEditUtils.getRegionType(d, fPartitioning, c.offset) != IDocument.DEFAULT_CONTENT_TYPE)
-					return;
-				if (!prefs.closeBrackets())
-					return;
-				// if we already have bracket we should jump over it
-				if (c.offset != d.getLength()
-						&& c.text.charAt(0) == d.get(c.offset, 1).charAt(0)) {
-					c.text = "";
-					c.shiftsCaret = false;
-					c.caretOffset = c.offset + 1;
-					return;
-				}
-				break;
-			}
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private void smartIndentOnKeypress(IDocument document,
 			DocumentCommand command) {
 		switch (command.text.charAt(0)) {
@@ -1561,98 +1342,5 @@ public class JavascriptAutoEditStrategy extends
 			}
 		}
 		return false;
-	}
-
-	private static CompilationUnitInfo getCompilationUnitForMethod(
-			IDocument document, int offset, String partitioning) {
-		try {
-			JavaHeuristicScanner scanner = new JavaHeuristicScanner(document);
-
-			IRegion sourceRange = scanner.findSurroundingBlock(offset);
-			if (sourceRange == null)
-				return null;
-			String source = document.get(sourceRange.getOffset(),
-					sourceRange.getLength());
-
-			StringBuffer contents = new StringBuffer();
-			contents.append("class ____C{void ____m()"); //$NON-NLS-1$
-			final int methodOffset = contents.length();
-			contents.append(source);
-			contents.append('}');
-
-			char[] buffer = contents.toString().toCharArray();
-
-			return new CompilationUnitInfo(buffer, sourceRange.getOffset()
-					- methodOffset);
-
-		} catch (BadLocationException e) {
-			DLTKUIPlugin.log(e);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the block balance, i.e. zero if the blocks are balanced at
-	 * <code>offset</code>, a negative number if there are more closing than
-	 * opening braces, and a positive number if there are more opening than
-	 * closing braces.
-	 * 
-	 * @param document
-	 * @param offset
-	 * @param partitioning
-	 * @return the block balance
-	 */
-	private static int getBlockBalance(IDocument document, int offset,
-			String partitioning) {
-		if (offset < 1)
-			return -1;
-		if (offset >= document.getLength())
-			return 1;
-
-		int begin = offset;
-		int end = offset - 1;
-
-		JavaHeuristicScanner scanner = new JavaHeuristicScanner(document);
-
-		while (true) {
-			begin = scanner.findOpeningPeer(begin - 1, '{', '}');
-			end = scanner.findClosingPeer(end + 1, '{', '}');
-			if (begin == -1 && end == -1)
-				return 0;
-			if (begin == -1)
-				return -1;
-			if (end == -1)
-				return 1;
-		}
-	}
-
-	private static IRegion getToken(IDocument document, IRegion scanRegion,
-			int tokenId) {
-
-		try {
-
-			final String source = document.get(scanRegion.getOffset(),
-					scanRegion.getLength());
-
-			fgScanner.setSource(source.toCharArray());
-
-			int id = fgScanner.getNextToken();
-			while (id != ITerminalSymbols.TokenNameEOF && id != tokenId)
-				id = fgScanner.getNextToken();
-
-			if (id == ITerminalSymbols.TokenNameEOF)
-				return null;
-
-			int tokenOffset = fgScanner.getCurrentTokenStartPosition();
-			int tokenLength = fgScanner.getCurrentTokenEndPosition() + 1
-					- tokenOffset; // inclusive end
-			return new Region(tokenOffset + scanRegion.getOffset(), tokenLength);
-
-		} catch (InvalidInputException x) {
-			return null;
-		} catch (BadLocationException x) {
-			return null;
-		}
 	}
 }
