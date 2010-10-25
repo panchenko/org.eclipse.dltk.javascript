@@ -29,11 +29,11 @@ public abstract class AbstractReference implements IValueReference,
 	public void setValue(IValueReference value) {
 		IValue val = createValue();
 		if (val != null) {
-			val.clear();
 			if (value != null) {
 				IValue src = ((IValueProvider) value).getValue();
 				if (src == null)
 					return;
+				val.clear();
 				if (src instanceof Value
 						&& ((IValueProvider) value).isReference()) {
 					val.addReference(src);
