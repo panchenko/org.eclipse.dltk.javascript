@@ -102,6 +102,12 @@ public class ExampleElementResolver implements IElementResolver {
 			property.setName(name);
 			property.setDeprecated(true);
 			return property;
+		} else if ("myGenericArrayTest".equals(name)) {
+			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
+			property.setType(context
+					.getType(ExampleTypeProvider.TYPE_GENERIC_ARRAY_METHOD));
+			property.setName(name);
+			return property;
 		}
 		return null;
 	}
@@ -112,7 +118,7 @@ public class ExampleElementResolver implements IElementResolver {
 		if (ENABLE_LIST_GLOBALS) {
 			Set<String> result = new HashSet<String>();
 			String[] names = new String[] { "ExampleGlobal", "GLOBALS",
-					"executeExampleGlobal", "exampleForms", "myExampleForms" };
+					"executeExampleGlobal", "exampleForms", "myExampleForms","myGenericArrayTest" };
 			for (String name : names) {
 				if (CharOperation.prefixEquals(prefix, name)) {
 					result.add(name);

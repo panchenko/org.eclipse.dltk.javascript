@@ -526,6 +526,36 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertTrue(name.getTypes().isEmpty());
 	}
 
+	public void testGenericArrayTypeMethod() {
+		List<String> lines = new StringList();
+		lines.add("var a:" + ExampleTypeProvider.TYPE_GENERIC_ARRAY_METHOD);
+		lines.add("var name = a.execute();");
+		lines.add("var name2 = a.execute()[0];");
+		IValueCollection collection = inference(lines.toString());
+		
+		IValueReference name = collection.getChild("name");
+		assertTrue(name.exists());
+		assertEquals(1, name.getTypes().size());
+		assertEquals("Array<String>", name.getTypes().iterator().next().getName());
+
+		IValueReference name2 = collection.getChild("name2");
+		assertTrue(name2.exists());
+		assertEquals(1, name2.getTypes().size());
+		assertEquals("String", name2.getTypes().iterator().next().getName());
+	}
+
+	public void testGenericArrayResolverMethod() {
+		List<String> lines = new StringList();
+		lines.add("var name = myGenericArrayTest.execute()[0];");
+		IValueCollection collection = inference(lines.toString());
+		
+		IValueReference name = collection.getChild("name");
+		assertTrue(name.exists());
+		assertEquals(1, name.getTypes().size());
+		assertEquals("String", name.getTypes().iterator().next().getName());
+
+	}
+
 	public void testExampleElementResolver1() {
 		List<String> lines = new StringList();
 		lines.add("var name = ExampleGlobal.execute().service.name");

@@ -34,6 +34,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 	private static final String TYPE_SERVICE2 = "ExampleService2";
 
 	static final String TYPE_EXAMPLE_FORMS = "ExampleForms";
+	
+	static final String TYPE_GENERIC_ARRAY_METHOD = "ExampleArrayMethod";
 
 	public Type getType(ITypeInfoContext context, String typeName) {
 		if (TYPE_SERVICE.equals(typeName)) {
@@ -145,6 +147,16 @@ public class ExampleTypeProvider implements ITypeProvider {
 			type.getMembers().add(prop2);
 
 			return type;
+		} else if (TYPE_GENERIC_ARRAY_METHOD.equals(typeName)) {
+			Type type = TypeInfoModelFactory.eINSTANCE.createType();
+			type.setName(typeName);
+			type.setKind(TypeKind.JAVA);
+
+			Method method1 = TypeInfoModelFactory.eINSTANCE.createMethod();
+			method1.setName("execute");
+			method1.setType(context.getType("Array<String>"));
+			type.getMembers().add(method1);
+			return type;
 		}
 		return null;
 	}
@@ -152,7 +164,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 	public Set<String> listTypes(ITypeInfoContext context, String prefix) {
 		final Set<String> result = new HashSet<String>();
 		final String[] names = new String[] { TYPE_SERVICE, TYPE_SERVICE2,
-				TYPE_RESPONSE, TYPE_EXAMPLE_FORMS };
+				TYPE_RESPONSE, TYPE_EXAMPLE_FORMS,TYPE_GENERIC_ARRAY_METHOD };
 		for (String name : names) {
 			if (CharOperation.prefixEquals(prefix, name)) {
 				result.add(name);
