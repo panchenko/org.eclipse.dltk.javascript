@@ -49,7 +49,7 @@ public class Value implements IValue {
 			Set<IValue> visited) {
 		if (visited.add(value)) {
 			handler.process(value, result);
-			for (Value child : value.references) {
+			for (Value child : value.getReferences()) {
 				execute(child, handler, result, visited);
 			}
 		}

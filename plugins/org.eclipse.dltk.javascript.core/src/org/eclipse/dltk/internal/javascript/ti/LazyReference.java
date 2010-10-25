@@ -1,33 +1,36 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 
 public class LazyReference extends AbstractReference {
 
 	private final Value value = new Value() {
-		Set<Type> types = null;
+		public java.util.Set<Value> getReferences() {
+			Set<Value> references = super.getReferences();
+			if (references.isEmpty() && getTypes().isEmpty()) {
+				IValueReference createChild = collection.getChild(className);
+				if (createChild.exists()) {
+					ValueCollection collection = (ValueCollection) createChild
+							.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+					if (collection != null && collection.getThis() != null) {
+						createChild = collection.getThis();
+					}
 
-		@Override
-		public Set<Type> getTypes() {
+					IValue src = ((IValueProvider) createChild).getValue();
+					if (src instanceof Value) {
+						references.add((Value) src);
+					} else if (src != null) {
+						addValue(src);
+					}
+					setKind(ReferenceKind.TYPE);
 
-			if (types == null) {
-				types = new HashSet<Type>();
-			}
-
-			if (types.size() == 0) {
-				Type type = TypeInferencerVisitor.resolveJavaScriptType(
-						context, className, collection);
-				if (type != null && type.getKind() != TypeKind.UNKNOWN) {
-					types.add(type);
 				}
 			}
-			return types;
+			return references;
 		};
 	};
 	private final ITypeInferenceContext context;
@@ -40,6 +43,12 @@ public class LazyReference extends AbstractReference {
 		this.className = className;
 		this.collection = collection;
 
+	}
+
+	public IValueReference getChild(String name) {
+		if (name.equals(IValueReference.FUNCTION_OP))
+			return this;
+		return super.getChild(name);
 	}
 
 	public IValueReference getParent() {
@@ -63,6 +72,7 @@ public class LazyReference extends AbstractReference {
 
 	@Override
 	public IValue getValue() {
+		value.getReferences();
 		return value;
 	}
 

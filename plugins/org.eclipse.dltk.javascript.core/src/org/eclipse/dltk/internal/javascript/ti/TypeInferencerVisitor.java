@@ -21,7 +21,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
@@ -97,15 +96,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
-import org.eclipse.dltk.javascript.typeinfo.model.Method;
-import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
-import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
-import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.emf.common.util.EList;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -532,132 +523,24 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitNewExpression(NewExpression node) {
-		final IValueReference result = new AnonymousValue() {
-			public IValueReference getChild(String name) {
-				if (name.equals(IValueReference.FUNCTION_OP))
-					return this;
-				return super.getChild(name);
-			}
-		};
 		final Expression objectClass = node.getObjectClass();
 		visit(objectClass);
+
 		final String className = PropertyExpressionUtils.getPath(objectClass);
-
+		IValueCollection contextValueCollection = peekContext();
+		final IValueReference result = new LazyReference(context, className,
+				contextValueCollection);
 		if (className != null) {
-			final Type type = resolveJavaScriptType(context, className,
-					peekContext());
-			if (type.getKind() != TypeKind.UNKNOWN) {
-				result.setValue(context.getFactory()
-						.create(peekContext(), type));
-			} else {
-				result.setValue(new LazyReference(context, className,
-						peekContext()));
+			Type knownType = context.getKnownType(className);
+			if (knownType != null) {
+				result.setValue(context.getFactory().create(
+						contextValueCollection, knownType));
 			}
-			return result;
+		} else {
+			result.setValue(context.getFactory().createObject(
+					contextValueCollection));
 		}
-		result.setValue(context.getFactory().createObject(peekContext()));
 		return result;
-	}
-
-	public static Type resolveJavaScriptType(ITypeInferenceContext context,
-			String className, IValueCollection collection) {
-		if (className == null)
-			return null;
-
-		Type type = context.getType(className);
-		if (type.getKind() == TypeKind.UNKNOWN) {
-			String[] scopes = className.split("\\.");
-			IValueReference functionType = null;
-			for (String scope : scopes) {
-				if (functionType == null) {
-					functionType = collection.getChild(scope);
-				} else {
-					functionType = functionType.getChild(scope);
-				}
-			}
-			if (functionType != null && functionType.exists()) {
-				// test first if it could be a Java type (Packages.xx support)
-				Type javaType = (Type) functionType.getAttribute(
-						IReferenceAttributes.JAVA_OBJECT_TYPE, true);
-				if (javaType != null) {
-					return javaType;
-				}
-				type.setKind(TypeKind.JAVASCRIPT);
-				EList<Member> members = type.getMembers();
-				FunctionValueCollection functionCollection = (FunctionValueCollection) functionType
-						.getAttribute(IReferenceAttributes.FUNCTION_SCOPE, true);
-				IValueReference functionCallChild = null;
-				if (functionCollection != null) {
-					functionCallChild = functionCollection.getThis();
-				} else {
-					functionCallChild = functionType
-							.getChild(IValueReference.FUNCTION_OP);
-				}
-
-				Set<String> functionFields = functionCallChild
-						.getDirectChildren();
-				for (String fieldName : functionFields) {
-					if (fieldName.equals(IValueReference.FUNCTION_OP))
-						continue;
-					IValueReference child = functionCallChild
-							.getChild(fieldName);
-					// test if it is a function.
-					if (child.hasChild(IValueReference.FUNCTION_OP)) {
-						Method method = TypeInfoModelFactory.eINSTANCE
-								.createMethod();
-						if (child.getKind() == ReferenceKind.LOCAL) {
-							Set<Value> references = ((Value) ((IValueProvider) child)
-									.getValue()).getReferences();
-							if (references.isEmpty()) {
-								method.setAttribute(
-										IReferenceAttributes.LOCATION,
-										child.getLocation());
-							} else {
-								method.setAttribute(
-										IReferenceAttributes.LOCATION,
-										references.iterator().next()
-												.getLocation());
-							}
-						} else {
-							method.setAttribute(IReferenceAttributes.LOCATION,
-									child.getLocation());
-						}
-						method.setName(fieldName);
-						method.setType(JavaScriptValidations.typeOf(child
-								.getChild(IValueReference.FUNCTION_OP)));
-
-						JSMethod jsmethod = (JSMethod) child.getAttribute(
-								IReferenceAttributes.PARAMETERS, true);
-						if (jsmethod != null
-								&& jsmethod.getParameterCount() > 0) {
-							EList<Parameter> parameters = method
-									.getParameters();
-							List<IParameter> jsParameters = jsmethod
-									.getParameters();
-							for (IParameter jsParameter : jsParameters) {
-								Parameter parameter = TypeInfoModelFactory.eINSTANCE
-										.createParameter();
-								parameter.setKind(ParameterKind.OPTIONAL);
-								parameter.setType(jsParameter.getType());
-								parameter.setName(jsParameter.getName());
-								parameters.add(parameter);
-							}
-						}
-						members.add(method);
-					} else {
-						Property property = TypeInfoModelFactory.eINSTANCE
-								.createProperty();
-						property.setAttribute(IReferenceAttributes.LOCATION,
-								child.getLocation());
-						property.setName(fieldName);
-						property.setType(JavaScriptValidations.typeOf(child));
-						members.add(property);
-					}
-				}
-				return type;
-			}
-		}
-		return type;
 	}
 
 	@Override
@@ -742,7 +625,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final IValueReference returnValue = peekContext()
 						.getReturnValue();
 				if (returnValue != null) {
-					returnValue.addValue(value, true);
+					returnValue.addValue(value,
+							!(value instanceof LazyReference));
 				}
 			}
 		}
