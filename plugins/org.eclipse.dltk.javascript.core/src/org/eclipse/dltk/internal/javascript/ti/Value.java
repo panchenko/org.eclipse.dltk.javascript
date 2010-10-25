@@ -24,14 +24,16 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public class Value implements IValue {
 
 	private final Set<Type> types = new HashSet<Type>();
-	private final Map<String, Value> children = new HashMap<String, Value>();
-	private final Map<String, IValue> inherited = new HashMap<String, IValue>();
+	private final Map<String, Value> children = new HashMap<String, Value>(4);
+	private final Map<String, IValue> inherited = new HashMap<String, IValue>(4);
+	private final Map<String, IValue> elementValues = new HashMap<String, IValue>(4);
 	private Set<String> deletedChildren = null;
 	private Type declaredType;
 	private ReferenceKind kind = ReferenceKind.UNKNOWN;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 	private Map<String, Object> attributes = null;
 	private Set<Value> references = new HashSet<Value>();
+
 
 	private final boolean hasReferences() {
 		return !references.isEmpty();
@@ -187,17 +189,22 @@ public class Value implements IValue {
 	}
 
 	protected IValue findMember(String name, boolean resolve) {
-		IValue member = ElementValue.findMember(declaredType, name);
-		if (member != null) {
-			return member;
-		}
-		for (Type type : types) {
-			member = ElementValue.findMember(type, name);
-			if (member != null) {
-				return member;
+		IValue value = elementValues.get(name);
+		if (value == null) {
+			value = ElementValue.findMember(declaredType, name);
+			if (value != null) {
+				elementValues.put(name, value);
+				return value;
+			}
+			for (Type type : types) {
+				value = ElementValue.findMember(type, name);
+				if (value != null) {
+					elementValues.put(name, value);
+					return value;
+				}
 			}
 		}
-		return null;
+		return value;
 	}
 
 	private static class GetChildHandler implements Handler<Set<IValue>> {

@@ -78,6 +78,7 @@ public abstract class ElementValue implements IValue {
 
 	private static class TypeValue extends ElementValue implements IValue {
 
+		private Value arrayLookup;
 		private final Set<Type> types;
 
 		public TypeValue(Set<Type> types) {
@@ -95,6 +96,11 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public IValue getChild(String name, boolean resolve) {
+			if (name.equals(IValueReference.ARRAY_OP)) {
+				if (arrayLookup == null)
+					arrayLookup = new Value();
+				return arrayLookup;
+			}
 			for (Type type : types) {
 				IValue child = findMember(type, name);
 				if (child != null)
@@ -156,6 +162,7 @@ public abstract class ElementValue implements IValue {
 
 	private static class MethodValue extends ElementValue implements IValue {
 
+		private TypeValue functionOperator;
 		private final Method method;
 
 		public MethodValue(Method method) {
@@ -180,8 +187,12 @@ public abstract class ElementValue implements IValue {
 		public IValue getChild(String name, boolean resolve) {
 			if (IValueReference.FUNCTION_OP.equals(name)) {
 				if (method.getType() != null) {
-					return new TypeValue(Collections
+					if (functionOperator == null) {
+						functionOperator = new TypeValue(
+								Collections
 							.singleton(method.getType()));
+					}
+					return functionOperator;
 				}
 			}
 			return null;
@@ -252,6 +263,7 @@ public abstract class ElementValue implements IValue {
 
 	private static class MemberValue extends ElementValue implements IValue {
 
+		private TypeValue functionOperator;
 		private final Member[] members;
 
 		public MemberValue(Member[] members) {
@@ -300,7 +312,10 @@ public abstract class ElementValue implements IValue {
 					}
 				}
 				if (types != null) {
-					return new TypeValue(types);
+					if (functionOperator == null) {
+						functionOperator = new TypeValue(types);
+					}
+					return functionOperator;
 				}
 			}
 			for (Member member : members) {
