@@ -541,6 +541,15 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("name");
 		assertEquals(getTypes(STRING), name.getTypes());
 	}
+	
+	public void testname() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("var str = '10';");
+		lines.add("str = str.big();");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference name = collection.getChild("str");
+		assertEquals(getTypes(STRING), name.getTypes());
+	}
 
 	public void testAssignToResolvedProperty() {
 		List<String> lines = new StringList();
