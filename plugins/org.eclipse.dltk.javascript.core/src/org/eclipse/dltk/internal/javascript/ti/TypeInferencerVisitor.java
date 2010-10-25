@@ -829,18 +829,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueCollection collection = peekContext();
 		IValueReference result = null;
 		for (VariableDeclaration declaration : node.getVariables()) {
-			JSVariable variable = new JSVariable();
 			result = createVariable(collection, declaration);
+			final JSVariable variable = new JSVariable();
 			variable.setName(declaration.getVariableName());
-			org.eclipse.dltk.javascript.ast.Type varType = declaration
-					.getType();
-			if (varType != null) {
-				variable.setType(resolveType(varType));
-			}
-			result.setAttribute(IReferenceAttributes.VARIABLE, variable);
+			variable.setType(result.getDeclaredType());
 			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
 				extension.processVariable(context, node, variable);
 			}
+			result.setAttribute(IReferenceAttributes.VARIABLE, variable);
 		}
 		return result;
 	}
