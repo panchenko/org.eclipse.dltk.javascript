@@ -23,6 +23,7 @@ import org.eclipse.dltk.ui.templates.ScriptTemplateContext;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.templates.Template;
 import org.eclipse.jface.text.templates.TemplateBuffer;
@@ -36,6 +37,11 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 			IDocument document, int completionOffset, int completionLength,
 			ISourceModule sourceModule) {
 		super(type, document, completionOffset, completionLength, sourceModule);
+	}
+
+	public JavaScriptTemplateContext(TemplateContextType type,
+			IDocument document, Position position, ISourceModule sourceModule) {
+		super(type, document, position, sourceModule);
 	}
 
 	@Override
@@ -55,16 +61,15 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 				final Map<String, String> remeberedVariables = new HashMap<String, String>();
 				final String encoded = encodeVariables(template.getPattern(),
 						remeberedVariables);
-				final TextEdit edit = formatter.format(encoded, 0, encoded
-						.length(), 0);
+				final TextEdit edit = formatter.format(encoded, 0,
+						encoded.length(), 0);
 				if (edit != null) {
 					final Document document = new Document(encoded);
 					edit.apply(document);
-					template = new Template(
-							template.getName(),
+					template = new Template(template.getName(),
 							template.getDescription(),
-							template.getContextTypeId(),
-							restoreVariables(document.get(), remeberedVariables),
+							template.getContextTypeId(), restoreVariables(
+									document.get(), remeberedVariables),
 							template.isAutoInsertable());
 				}
 			} catch (FormatterException e) {

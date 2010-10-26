@@ -14,12 +14,14 @@ import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptEditor;
+import org.eclipse.dltk.javascript.internal.ui.templates.JavaScriptTemplateAccess;
 import org.eclipse.dltk.javascript.internal.ui.text.SimpleJavascriptSourceViewerConfiguration;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.AbstractDLTKUILanguageToolkit;
 import org.eclipse.dltk.ui.ScriptElementLabels;
 import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
 import org.eclipse.dltk.ui.text.ScriptTextTools;
+import org.eclipse.dltk.ui.text.templates.ITemplateAccess;
 import org.eclipse.dltk.ui.viewsupport.ScriptUILabelProvider;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -100,5 +102,10 @@ public class JavaScriptUILanguageToolkit extends AbstractDLTKUILanguageToolkit {
 
 	public String[] getEditorPreferencePages() {
 		return EDITOR_PREFERENCE_PAGES_IDS;
+	}
+
+	@Override
+	public ITemplateAccess getEditorTemplates() {
+		return JavaScriptTemplateAccess.getInstance();
 	}
 }

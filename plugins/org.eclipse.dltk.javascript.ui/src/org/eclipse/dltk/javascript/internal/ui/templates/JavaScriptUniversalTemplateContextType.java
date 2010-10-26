@@ -13,16 +13,17 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.ui.templates.ScriptTemplateContext;
 import org.eclipse.dltk.ui.templates.ScriptTemplateContextType;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.Position;
 
 public class JavaScriptUniversalTemplateContextType extends
 		ScriptTemplateContextType {
-	
+
 	public static final String CONTEXT_TYPE_ID = "javascriptUniversalTemplateContextType";
 
 	public JavaScriptUniversalTemplateContextType() {
 		// empty constructor
 	}
-	
+
 	public JavaScriptUniversalTemplateContextType(String id) {
 		super(id);
 	}
@@ -34,6 +35,13 @@ public class JavaScriptUniversalTemplateContextType extends
 	public ScriptTemplateContext createContext(IDocument document, int offset,
 			int length, ISourceModule sourceModule) {
 		return new JavaScriptTemplateContext(this, document, offset, length,
+				sourceModule);
+	}
+
+	@Override
+	public ScriptTemplateContext createContext(IDocument document,
+			Position position, ISourceModule sourceModule) {
+		return new JavaScriptTemplateContext(this, document, position,
 				sourceModule);
 	}
 }
