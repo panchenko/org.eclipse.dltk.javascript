@@ -5,13 +5,15 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class LazyReference extends AbstractReference {
 
+	boolean resolved = false;
 	private final Value value = new Value() {
 		public java.util.Set<Value> getReferences() {
 			Set<Value> references = super.getReferences();
-			if (references.isEmpty() && getTypes().isEmpty()) {
+			if (!resolved) {
 				IValueReference createChild = collection.getChild(className);
 				if (createChild.exists()) {
 					ValueCollection collection = (ValueCollection) createChild
@@ -21,13 +23,17 @@ public class LazyReference extends AbstractReference {
 					}
 
 					IValue src = ((IValueProvider) createChild).getValue();
-					if (src instanceof Value) {
+					Type type = (Type) src.getAttribute(
+							IReferenceAttributes.JAVA_OBJECT_TYPE, true);
+					if (type != null) {
+						setDeclaredType(type);
+					} else if (src instanceof Value) {
 						references.add((Value) src);
 					} else if (src != null) {
 						addValue(src);
 					}
 					setKind(ReferenceKind.TYPE);
-
+					resolved = true;
 				}
 			}
 			return references;

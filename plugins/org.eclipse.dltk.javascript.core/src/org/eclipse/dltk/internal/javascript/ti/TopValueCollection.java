@@ -50,12 +50,22 @@ public class TopValueCollection extends ValueCollection {
 					memberCache.put(name, value);
 					return value;
 				}
-			}
-			if ("Packages".equals(name)) {
-				return new PackagesValue();
-			}
-			if ("java".equals(name)) {
-				return new PackageOrClassValue("java");
+				if ("Packages".equals(name)) {
+					value = new PackagesValue();
+					memberCache.put(name, value);
+					return value;
+				}
+				if (name.startsWith("Packages.")) {
+					value = new PackageOrClassValue(name.substring("Packages."
+							.length()));
+					memberCache.put(name, value);
+					return value;
+				}
+				if ("java".equals(name) || name.startsWith("java.")) {
+					value = new PackageOrClassValue(name);
+					memberCache.put(name, value);
+					return value;
+				}
 			}
 			return super.findMember(name, resolve);
 		}
