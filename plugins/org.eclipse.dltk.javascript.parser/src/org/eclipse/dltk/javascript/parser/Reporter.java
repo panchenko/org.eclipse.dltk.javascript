@@ -21,6 +21,8 @@ public class Reporter extends LineTracker implements IProblemReporter {
 	private int end;
 	private Severity severity;
 
+	private int problemCount;
+
 	public Reporter(ISourceLineTracker lineTracker,
 			IProblemReporter problemReporter) {
 		super(lineTracker);
@@ -39,7 +41,7 @@ public class Reporter extends LineTracker implements IProblemReporter {
 
 	public void report() {
 		if (problemReporter != null && message != null) {
-			problemReporter.reportProblem(createProblem());
+			reportProblem(createProblem());
 		}
 		reset();
 	}
@@ -116,6 +118,7 @@ public class Reporter extends LineTracker implements IProblemReporter {
 
 	public void reportProblem(IProblem problem) {
 		if (problemReporter != null) {
+			problemCount++;
 			problemReporter.reportProblem(problem);
 		}
 	}
@@ -128,6 +131,10 @@ public class Reporter extends LineTracker implements IProblemReporter {
 		reportProblem(new DefaultProblem(message, id, null,
 				ProblemSeverities.Warning, start, end,
 				getLineNumberOfOffset(start)));
+	}
+
+	public int getProblemCount() {
+		return problemCount;
 	}
 
 }
