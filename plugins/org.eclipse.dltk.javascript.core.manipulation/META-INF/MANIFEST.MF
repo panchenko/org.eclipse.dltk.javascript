@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.dltk.javascript.core.manipulation;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Bundle-Activator: org.eclipse.dltk.internal.javascript.core.manipulation.JavascriptManipulationPlugin
+Bundle-Vendor: %pluginProvider
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ltk.core.refactoring,
+ org.eclipse.dltk.core,
+ org.eclipse.dltk.core.manipulation,
+ org.eclipse.dltk.javascript.core,
+ org.eclipse.text
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Import-Package: com.ibm.icu.text
