@@ -31,6 +31,7 @@ import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
+import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
@@ -97,7 +98,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				position);
 		final org.eclipse.dltk.javascript.ast.Type typeNode = nodeFinder
 				.locateType(script);
-		if (typeNode != null) {
+		boolean completeTypes = typeNode != null;
+		if (!completeTypes) {
+			if (nodeFinder.before instanceof Identifier
+					&& nodeFinder.before == nodeFinder.after
+					&& content.charAt(position - 1) == ':') {
+				completeTypes = true;
+			}
+		}
+		if (completeTypes) {
 			String typePrefix = Util.EMPTY_STRING;
 			if (typeNode instanceof SimpleType) {
 				typePrefix = typeNode.getName();
@@ -473,7 +482,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			IValueCollection collection, Reporter reporter) {
 		reportItems(reporter, collection, false);
 		if (useEngine) {
-			doCompletionOnType(context, reporter);
+			// doCompletionOnType(context, reporter);
 			doCompletionOnKeyword(reporter.getPrefix(), reporter.getPosition());
 			reportGlobals(context, reporter);
 		}
