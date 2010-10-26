@@ -85,6 +85,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			}
 		}
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
+		inferencer2.setModelElement(cu.getModelElement());
 		final Script script = new JavaScriptParser().parse(new ModuleSource(
 				content) {
 			@Override
