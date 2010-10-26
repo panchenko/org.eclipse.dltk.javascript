@@ -144,9 +144,17 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			} else {
 				methodNode = expression;
 			}
+			int problemCount = reporter.getProblemCount();
 			modes.put(expression, VisitorMode.CALL);
 			final IValueReference reference = visit(expression);
 			modes.remove(expression);
+			if (reporter.getProblemCount() != problemCount) {
+				// problems already reported for this expression dont report
+				// anything else
+				if (reference != null)
+					return reference.getChild(IValueReference.FUNCTION_OP);
+				return null;
+			}
 			if (reference != null) {
 				if (reference.getName() == IValueReference.ARRAY_OP) {
 					// ignore array lookup function calls like: array[1](),
@@ -509,9 +517,11 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		@Override
 		public IValueReference visitPropertyExpression(PropertyExpression node) {
+			int problemCount = reporter.getProblemCount();
 			final IValueReference result = super.visitPropertyExpression(node);
 			if (result != null) {
-				if (currentMode() != VisitorMode.CALL) {
+				if (currentMode() != VisitorMode.CALL
+						&& problemCount == reporter.getProblemCount()) {
 					validateProperty(result, node.getProperty());
 				}
 				return result;
