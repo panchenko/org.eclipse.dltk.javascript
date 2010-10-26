@@ -546,6 +546,16 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 						reportDeprecatedProperty(property,
 								property.getDeclaringType(), propName);
 					}
+				} else if (!property.isVisible()) {
+					final Property parentProperty = extractElement(
+							result.getParent(), Property.class);
+					if (parentProperty != null
+							&& parentProperty.getDeclaringType() == null) {
+						reportHiddenProperty(property, parentProperty, propName);
+					} else {
+						reportHiddenProperty(property,
+								property.getDeclaringType(), propName);
+					}
 				}
 			} else if (JavaScriptValidations.extractElements(result,
 					Method.class) == null && !result.exists()) {
@@ -611,6 +621,23 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 						property.getName());
 			}
 			reporter.reportProblem(JavaScriptProblems.DEPRECATED_PROPERTY, msg,
+					node.sourceStart(), node.sourceEnd());
+		}
+
+		private void reportHiddenProperty(Property property, Element owner,
+				ASTNode node) {
+			final String msg;
+			if (owner instanceof Type) {
+				msg = NLS.bind(ValidationMessages.HiddenProperty,
+						property.getName(), owner.getName());
+			} else if (owner instanceof Property) {
+				msg = NLS.bind(ValidationMessages.HiddenPropertyOfInstance,
+						property.getName(), owner.getName());
+			} else {
+				msg = NLS.bind(ValidationMessages.HiddenPropertyNoType,
+						property.getName());
+			}
+			reporter.reportProblem(JavaScriptProblems.HIDDEN_PROPERTY, msg,
 					node.sourceStart(), node.sourceEnd());
 		}
 

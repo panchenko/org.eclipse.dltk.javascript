@@ -37,6 +37,9 @@ public class ValidationMessages extends NLS {
 	public static String DeprecatedPropertyNoType;
 	public static String DeprecatedVariable;
 	public static String PrivateVariable;
+	public static String HiddenProperty;
+	public static String HiddenPropertyOfInstance;
+	public static String HiddenPropertyNoType;
 
 	static {
 		// initialize resource bundle
