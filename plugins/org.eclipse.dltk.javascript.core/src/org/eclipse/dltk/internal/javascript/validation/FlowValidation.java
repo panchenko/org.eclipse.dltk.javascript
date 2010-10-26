@@ -63,18 +63,24 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 	@Override
 	public FlowStatus visitStatementBlock(StatementBlock node) {
 		FlowStatus status = new FlowStatus();
-		boolean unreachableReported = false;
+		int startRange = -1;
+		int endRange = -1;
 		for (Statement statement : node.getStatements()) {
-			if (status.isReturned() && !unreachableReported) {
-				unreachableReported = true;
-				reporter.setMessage(JavaScriptProblems.UNREACHABLE_CODE,
-						"uneachable code");
-				reporter.setRange(statement.sourceStart(), statement
-						.sourceEnd());
-				reporter.report();
+			if (status.isReturned()) {
+				if (startRange < statement.sourceStart())
+					startRange = statement.sourceStart();
+				if (endRange < statement.sourceEnd())
+					endRange = statement.sourceEnd();
+
 			} else {
 				status.add(visit(statement));
 			}
+		}
+		if (startRange != -1) {
+			reporter.setMessage(JavaScriptProblems.UNREACHABLE_CODE,
+					"unreachable code");
+			reporter.setRange(startRange, endRange);
+			reporter.report();
 		}
 		return status;
 	}
