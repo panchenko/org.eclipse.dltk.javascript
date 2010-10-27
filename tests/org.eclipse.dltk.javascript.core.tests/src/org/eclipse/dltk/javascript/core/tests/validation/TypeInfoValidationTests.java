@@ -169,5 +169,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
 				.getID());
 	}
+	
+	
+	public void testLazyJSObject() {
+		StringList code = new StringList();
+		code.add("var x = new function x(){");
+		code.add("this.newNode = function newNode(){");
+		code.add("return new Node()");
+		code.add("}");
+		code.add("function Node() {");
+		code.add("this.a=10;");
+		code.add("}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
+	}
 
 }
