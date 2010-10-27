@@ -542,6 +542,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					&& ((IValueCollection) fs).getThis() != null) {
 				result = new AnonymousNewValue();
 				result.setValue(((IValueCollection) fs).getThis());
+				result.setKind(ReferenceKind.TYPE);
 			}
 		}
 		if (result == null) {
@@ -554,6 +555,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					result = new AnonymousNewValue();
 					result.setValue(context.getFactory().create(
 							contextValueCollection, knownType));
+					result.setKind(ReferenceKind.TYPE);
 				} else {
 					result = new LazyReference(context, className,
 							contextValueCollection);
