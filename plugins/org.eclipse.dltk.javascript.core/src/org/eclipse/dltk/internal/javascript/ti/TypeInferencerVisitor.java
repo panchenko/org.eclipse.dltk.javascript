@@ -521,24 +521,48 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return null;
 	}
 
+	private class AnonymousNewValue extends AnonymousValue {
+		@Override
+		public IValueReference getChild(String name) {
+			if (name.equals(IValueReference.FUNCTION_OP))
+				return this;
+			return super.getChild(name);
+		}
+	}
+
 	@Override
 	public IValueReference visitNewExpression(NewExpression node) {
 		final Expression objectClass = node.getObjectClass();
-		visit(objectClass);
+		IValueReference visit = visit(objectClass);
 
-		final String className = PropertyExpressionUtils.getPath(objectClass);
-		IValueCollection contextValueCollection = peekContext();
-		final IValueReference result = new LazyReference(context, className,
-				contextValueCollection);
-		if (className != null) {
-			Type knownType = context.getKnownType(className);
-			if (knownType != null) {
-				result.setValue(context.getFactory().create(
-						contextValueCollection, knownType));
+		IValueReference result = null;
+		if (visit.getKind() == ReferenceKind.FUNCTION) {
+			Object fs = visit.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+			if (fs instanceof IValueCollection
+					&& ((IValueCollection) fs).getThis() != null) {
+				result = new AnonymousNewValue();
+				result.setValue(((IValueCollection) fs).getThis());
 			}
-		} else {
-			result.setValue(context.getFactory().createObject(
-					contextValueCollection));
+		}
+		if (result == null) {
+			final String className = PropertyExpressionUtils
+					.getPath(objectClass);
+			IValueCollection contextValueCollection = peekContext();
+			if (className != null) {
+				Type knownType = context.getKnownType(className);
+				if (knownType != null) {
+					result = new AnonymousNewValue();
+					result.setValue(context.getFactory().create(
+							contextValueCollection, knownType));
+				} else {
+					result = new LazyReference(context, className,
+							contextValueCollection);
+				}
+			} else {
+				result = new AnonymousNewValue();
+				result.setValue(context.getFactory().createObject(
+						contextValueCollection));
+			}
 		}
 		return result;
 	}
