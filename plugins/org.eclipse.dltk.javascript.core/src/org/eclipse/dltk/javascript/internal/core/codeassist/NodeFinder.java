@@ -24,11 +24,14 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.Statement;
 
 public class NodeFinder extends ASTVisitor {
-
+	final int originStart;
+	final int originEnd;
 	final int start;
 	final int end;
 
 	public NodeFinder(String content, int s, int e) {
+		this.originStart = s;
+		this.originEnd = e;
 		int start = s;
 		while (start > 0
 				&& (content.charAt(start - 1) == ' ' || content
@@ -123,9 +126,20 @@ public class NodeFinder extends ASTVisitor {
 			if (nodes.size() > 1) {
 				Collections.sort(nodes, new Comparator<ASTNode>() {
 					public int compare(ASTNode o1, ASTNode o2) {
-						int distance1 = ((o1.sourceEnd() + o1.sourceStart()) - (start + end)) / 2;
-						int distance2 = ((o2.sourceEnd() + o2.sourceStart()) - (start + end)) / 2;
+						int distance1 = distanceTo(o1);
+						int distance2 = distanceTo(o2);
 						return Math.abs(distance1) - Math.abs(distance2);
+					}
+
+					private int distanceTo(ASTNode o1) {
+						if (o1.sourceStart() >= originStart
+								&& o1.sourceStart() <= originEnd
+								|| o1.sourceEnd() >= originStart
+								&& o1.sourceEnd() <= originEnd) {
+							return 0;
+						} else {
+							return ((o1.sourceEnd() + o1.sourceStart()) - (originStart + originEnd)) / 2;
+						}
 					}
 				});
 			}
