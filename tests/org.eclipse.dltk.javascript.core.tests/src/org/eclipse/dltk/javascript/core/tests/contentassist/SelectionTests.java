@@ -16,6 +16,7 @@ import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractConte
 import org.eclipse.dltk.codeassist.ISelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKLanguageManager;
+import org.eclipse.dltk.core.ILocalVariable;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceRange;
@@ -25,6 +26,8 @@ import org.eclipse.dltk.core.tests.model.AbstractModelTests;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 
 public class SelectionTests extends AbstractModelTests {
+
+	private static final String PRJ_NAME = "selection";
 
 	public SelectionTests(String name) {
 		super("org.eclipse.dltk.javascript.core.tests", name);
@@ -37,13 +40,13 @@ public class SelectionTests extends AbstractModelTests {
 	@Override
 	public void setUpSuite() throws Exception {
 		super.setUpSuite();
-		setUpScriptProject("selection");
+		setUpScriptProject(PRJ_NAME);
 		waitUntilIndexesReady();
 	}
 
 	@Override
 	public void tearDownSuite() throws Exception {
-		deleteProject("selection");
+		deleteProject(PRJ_NAME);
 		super.tearDownSuite();
 	}
 
@@ -60,8 +63,7 @@ public class SelectionTests extends AbstractModelTests {
 	}
 
 	public void test1() throws ModelException {
-		IModuleSource module = (IModuleSource) getSourceModule("selection",
-				"src", "selection1.js");
+		IModuleSource module = getModule("selection1.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("test1()", module, false));
 		assertEquals(1, elements.length);
@@ -76,9 +78,12 @@ public class SelectionTests extends AbstractModelTests {
 						nameRange.getOffset() + nameRange.getLength()));
 	}
 
+	private IModuleSource getModule(String path) throws ModelException {
+		return (IModuleSource) getSourceModule(PRJ_NAME, "src", path);
+	}
+
 	public void test2() throws ModelException {
-		IModuleSource module = (IModuleSource) getSourceModule("selection",
-				"src", "selection1.js");
+		IModuleSource module = getModule("selection1.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("test2()", module, false));
 		assertEquals(1, elements.length);
@@ -94,8 +99,7 @@ public class SelectionTests extends AbstractModelTests {
 	}
 
 	public void test3() throws ModelException {
-		IModuleSource module = (IModuleSource) getSourceModule("selection",
-				"src", "selection1.js");
+		IModuleSource module = getModule("selection1.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("test3()", module, false));
 		assertEquals(1, elements.length);
@@ -108,6 +112,28 @@ public class SelectionTests extends AbstractModelTests {
 				"test3",
 				module.getSourceContents().substring(nameRange.getOffset(),
 						nameRange.getOffset() + nameRange.getLength()));
+	}
+
+	public void testLocalVar() throws ModelException {
+		IModuleSource module = getModule("locals.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("beta", module, false));
+		assertEquals(1, elements.length);
+		final ILocalVariable local = (ILocalVariable) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("beta"), nameRange.getOffset());
+	}
+
+	public void testArgument() throws ModelException {
+		IModuleSource module = getModule("locals.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("alpha", module, false));
+		assertEquals(1, elements.length);
+		final ILocalVariable local = (ILocalVariable) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("alpha"), nameRange.getOffset());
 	}
 
 }
