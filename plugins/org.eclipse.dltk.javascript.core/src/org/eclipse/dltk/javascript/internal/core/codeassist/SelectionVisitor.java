@@ -18,8 +18,13 @@ import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
+import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -86,6 +91,27 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 			earlyExit();
 		}
 		return result;
+	}
+
+	private void check(Identifier node) {
+		if (node == target) {
+			value = visit(node);
+			earlyExit();
+		}
+	}
+
+	@Override
+	protected void visitFunctionBody(FunctionStatement node) {
+		for (Argument argument : node.getArguments()) {
+			check(argument.getIdentifier());
+		}
+		super.visitFunctionBody(node);
+	}
+
+	protected IValueReference createVariable(IValueCollection context,
+			VariableDeclaration declaration) {
+		check(declaration.getIdentifier());
+		return super.createVariable(context, declaration);
 	}
 
 	@Override
