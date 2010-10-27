@@ -42,7 +42,7 @@ public class JavaScriptSourceElementParser2 implements ISourceElementParser {
 		inferencer.setVisitor(reporter);
 		inferencer.doInferencing(script);
 		reporter.beginReporting();
-		reporter.processScope(inferencer.getCollection());
+		reporter.processScope(inferencer.getCollection(), true);
 		reporter.endReporting(script.sourceEnd());
 	}
 

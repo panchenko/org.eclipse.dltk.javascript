@@ -25,18 +25,22 @@ class FieldDeclaration extends Declaration {
 	}
 
 	@Override
-	public void report(StructureReporter reporter) {
+	public void report(StructureReporter reporter, boolean allowFields) {
 		final ReferenceLocation location = child.getLocation();
-		reporter.removeReference(childName, location.getNameStart(), location
-				.getNameEnd());
-		reporter.reportRefs(location.getDeclarationStart());
-		final FieldInfo fi = new FieldInfo();
-		fi.name = childName;
-		fi.type = extractType(child);
-		copyLocation(location, fi);
-		reporter.fRequestor.enterField(fi);
-		reporter.processScope(child);
-		reporter.fRequestor.exitField(location.getDeclarationEnd());
+		if (allowFields) {
+			reporter.removeReference(childName, location.getNameStart(),
+					location.getNameEnd());
+			reporter.reportRefs(location.getDeclarationStart());
+			final FieldInfo fi = new FieldInfo();
+			fi.name = childName;
+			fi.type = extractType(child);
+			copyLocation(location, fi);
+			reporter.fRequestor.enterField(fi);
+		}
+		reporter.processScope(child, false);
+		if (allowFields) {
+			reporter.fRequestor.exitField(location.getDeclarationEnd());
+		}
 	}
 
 }

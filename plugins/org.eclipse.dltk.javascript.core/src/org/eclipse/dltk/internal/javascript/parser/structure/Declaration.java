@@ -31,7 +31,7 @@ abstract class Declaration implements Comparable<Declaration> {
 				- o.child.getLocation().getNameStart();
 	}
 
-	abstract void report(StructureReporter reporter);
+	abstract void report(StructureReporter reporter, boolean allowFields);
 
 	protected static String extractType(IValueReference reference) {
 		return reference != null ? extractType(reference.getDeclaredType())

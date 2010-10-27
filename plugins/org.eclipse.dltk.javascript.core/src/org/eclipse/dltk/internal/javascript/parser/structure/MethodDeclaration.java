@@ -33,7 +33,7 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 	}
 
 	@Override
-	public void report(StructureReporter reporter) {
+	public void report(StructureReporter reporter, boolean allowFields) {
 		final ReferenceLocation location = child.getLocation();
 		reporter.removeReference(childName, location.getNameStart(),
 				location.getNameEnd());
@@ -67,7 +67,7 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 		final IValueCollection functionScope = (IValueCollection) child
 				.getAttribute(FUNCTION_SCOPE);
 		if (functionScope != null) {
-			reporter.processScope(functionScope);
+			reporter.processScope(functionScope, false);
 		}
 		reporter.reportRefs(location.getDeclarationEnd());
 		reporter.fRequestor.exitMethod(location.getDeclarationEnd());

@@ -36,6 +36,15 @@ public abstract class TypeInferencerVisitorBase extends
 		return contexts.pop();
 	}
 
+	protected boolean inFunction() {
+		for (int i = contexts.size(); --i >= 0;) {
+			if (contexts.get(i) instanceof FunctionValueCollection) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public TypeInferencerVisitorBase(ITypeInferenceContext context) {
 		this.context = context;
 	}
