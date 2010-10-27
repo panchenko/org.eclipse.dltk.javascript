@@ -67,9 +67,21 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		return inferencer.getCollection();
 	}
 	
-	public void testNewFunction() throws Exception {
+	public void testNewNamedFunction() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("var test = new function Test() {");
+		lines.add("this.p = 10;");
+		lines.add("}");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference a = collection.getChild("test");
+		assertEquals(0, a.getTypes().size());
+		assertEquals(1, a.getDirectChildren().size());
+		assertEquals("p", a.getDirectChildren().iterator().next());
+	}
+
+	public void testNewFunction() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("var test = new function() {");
 		lines.add("this.p = 10;");
 		lines.add("}");
 		IValueCollection collection = inference(lines.toString());
@@ -575,7 +587,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(getTypes(STRING), name.getTypes());
 	}
 	
-	public void testname() throws Exception {
+	public void testSelfReferenceAssignment() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("var str = '10';");
 		lines.add("str = str.big();");
