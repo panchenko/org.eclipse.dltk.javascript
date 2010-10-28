@@ -710,7 +710,34 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 		Type type = (Type) strClz.getAttribute(IReferenceAttributes.JAVA_OBJECT_TYPE,true);
 		assertNull(type);
+	}
+	
+	public void testJSDocParamWithDefaultProperties() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("/**");
+		lines.add(" * @param node a nice node");
+		lines.add(" * @param node.name the name of the node");
+		lines.add(" * @param node.value the value of the node");
+		lines.add(" */");
+		lines.add("function addChild(node) {");
+		lines.add("}");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference addChild = collection.getChild("addChild");
+		assertEquals(1, addChild.getDirectChildren().size());
+		assertEquals(IValueReference.FUNCTION_OP, addChild.getDirectChildren().iterator().next());
 		
+		IValueCollection functionCollection  = (IValueCollection) addChild.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		assertNotNull(functionCollection);
+		
+		IValueReference node = functionCollection.getChild("node");
+		assertEquals(0, node.getDirectChildren().size());
+		
+		assertNotNull(node.getDeclaredType());
+		
+		assertEquals(2, node.getDeclaredType().getMembers().size());
+		
+		assertEquals("name", node.getDeclaredType().getMembers().get(0).getName());
+		assertEquals("value", node.getDeclaredType().getMembers().get(1).getName());
 		
 	}
 }

@@ -185,4 +185,61 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(0, problems.size());
 	}
 
+	
+	public void testLazyReturnTypeWithJSDocParam() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Node} node");
+		code.add(" */");
+		code.add("function addChild(node) {");
+		code.add("	return node;");
+		code.add("}");
+		code.add("function TestObject() {");
+		code.add("	var x = addChild(new Node());");
+		code.add("	x.a;");
+		code.add("}");
+		code.add("function Node() {");
+		code.add("	this.a = 10;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
+	}
+	
+	public void testLazyReturnTypeWithTypeInfo() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param node");
+		code.add(" */");
+		code.add("function addChild(node:Node) {");
+		code.add("	return node;");
+		code.add("}");
+		code.add("function TestObject() {");
+		code.add("	var x = addChild(new Node());");
+		code.add("	x.a;");
+		code.add("}");
+		code.add("function Node() {");
+		code.add("	this.a = 10;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
+	}
+	
+	public void testLazyReturnTypeWithNoTypeParamInfo() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param node");
+		code.add(" */");
+		code.add("function addChild(node) {");
+		code.add("	return node;");
+		code.add("}");
+		code.add("function TestObject() {");
+		code.add("	var x = addChild(new Node());");
+		code.add("	x.a;");
+		code.add("}");
+		code.add("function Node() {");
+		code.add("	this.a = 10;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+	}
 }
