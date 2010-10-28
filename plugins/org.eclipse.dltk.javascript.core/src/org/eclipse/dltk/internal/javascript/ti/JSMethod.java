@@ -23,7 +23,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	private String name;
-	private Type type;
+	private String type;
 	private boolean deprecated;
 	private boolean priv;
 
@@ -54,7 +54,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		return null;
 	}
 
-	public Type getType() {
+	public String getType() {
 		return type;
 	}
 
@@ -62,7 +62,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		this.name = name;
 	}
 
-	public void setType(Type type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
@@ -85,15 +85,16 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	private static class Parameter implements IParameter {
 
 		private String name;
-		private Type type;
+		private String type;
 		private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 		private boolean optional;
+		private Type propertiesType;
 
 		public String getName() {
 			return name;
 		}
 
-		public Type getType() {
+		public String getType() {
 			return type;
 		}
 
@@ -101,7 +102,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 			this.name = name;
 		}
 
-		public void setType(Type type) {
+		public void setType(String type) {
 			this.type = type;
 		}
 
@@ -119,6 +120,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 		public boolean isOptional() {
 			return optional;
+		}
+
+		public Type getPropertiesType() {
+			return propertiesType;
+		}
+
+		public void setPropertiesType(Type propertiesType) {
+			this.propertiesType = propertiesType;
 		}
 
 	}

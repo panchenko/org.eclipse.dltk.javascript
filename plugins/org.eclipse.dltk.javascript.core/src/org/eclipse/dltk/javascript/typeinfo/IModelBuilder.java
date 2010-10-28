@@ -25,9 +25,9 @@ public interface IModelBuilder {
 
 		void setName(String name);
 
-		Type getType();
+		String getType();
 
-		void setType(Type type);
+		void setType(String type);
 
 	}
 
@@ -69,6 +69,16 @@ public interface IModelBuilder {
 		 * @since 3.0
 		 */
 		boolean isOptional();
+
+		/**
+		 * @since 3.0
+		 */
+		void setPropertiesType(Type type);
+
+		/**
+		 * @since 3.0
+		 */
+		Type getPropertiesType();
 	}
 
 	public interface IMethod extends IMember {

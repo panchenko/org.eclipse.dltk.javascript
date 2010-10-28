@@ -31,12 +31,12 @@ public class TypeReferencePredicate extends
 	public MatchLevel match(MatchingNode node) {
 		if (node instanceof MethodDeclarationNode) {
 			MethodDeclarationNode mNode = (MethodDeclarationNode) node;
-			MatchLevel level = matchType(mNode.method.getType());
+			MatchLevel level = matchName(mNode.method.getType());
 			if (level != null) {
 				return level;
 			}
 			for (IParameter parameter : mNode.method.getParameters()) {
-				level = matchType(parameter.getType());
+				level = matchName(parameter.getType());
 				if (level != null) {
 					return level;
 				}

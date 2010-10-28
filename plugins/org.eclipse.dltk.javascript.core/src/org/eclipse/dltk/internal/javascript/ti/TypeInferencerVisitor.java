@@ -336,14 +336,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
 		if (funcType != null) {
-			method.setType(resolveType(funcType));
+			method.setType(funcType.getName());
 		}
 		for (Argument argument : node.getArguments()) {
 			final IParameter parameter = method.createParameter();
 			parameter.setName(argument.getIdentifier().getName());
 			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
 			if (paramType != null) {
-				parameter.setType(resolveType(paramType));
+				parameter.setType(paramType.getName());
 				parameter.setLocation(ReferenceLocation.create(getSource(),
 						argument.sourceStart(), paramType.sourceEnd(),
 						argument.sourceStart(), argument.sourceEnd()));
@@ -364,7 +364,18 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final IValueReference refArg = function.createChild(parameter
 					.getName());
 			refArg.setKind(ReferenceKind.ARGUMENT);
-			refArg.setDeclaredType(parameter.getType());
+			if (parameter.getPropertiesType() != null) {
+				refArg.setDeclaredType(parameter.getPropertiesType());
+			} else {
+				Type paramType = context.getKnownType(parameter.getType());
+				if (paramType != null)
+					refArg.setDeclaredType(paramType);
+				else if (parameter.getType() != null) {
+					refArg.addValue(
+							new LazyReference(context, parameter.getType(),
+									peekContext()), false);
+				}
+			}
 			refArg.setLocation(parameter.getLocation());
 		}
 		enterContext(function);
@@ -392,7 +403,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
 		final IValueReference returnValue = result
 				.getChild(IValueReference.FUNCTION_OP);
-		returnValue.setDeclaredType(method.getType());
+		Type methodType = context.getKnownType(method.getType());
+		if (methodType != null)
+			returnValue.setDeclaredType(methodType);
+		else if (method.getType() != null) {
+			returnValue.addValue(new LazyReference(context, method.getType(),
+					peekContext()), true);
+		}
 		returnValue.setValue(function.getReturnValue());
 		return result;
 	}
@@ -742,7 +759,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			result = createVariable(collection, declaration);
 			final JSVariable variable = new JSVariable();
 			variable.setName(declaration.getVariableName());
-			variable.setType(result.getDeclaredType());
+			if (result.getDeclaredType() != null)
+				variable.setType(result.getDeclaredType().getName());
 			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
 				extension.processVariable(context, node, variable);
 			}

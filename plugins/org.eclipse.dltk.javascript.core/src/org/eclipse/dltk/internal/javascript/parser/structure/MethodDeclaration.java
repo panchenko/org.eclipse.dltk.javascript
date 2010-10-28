@@ -59,7 +59,7 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 				final IParameter parameter = parameters.get(i);
 				mi.parameterNames[i] = parameter.getName();
 				if (mi.parameterTypes != null) {
-					mi.parameterTypes[i] = extractType(parameter.getType());
+					mi.parameterTypes[i] = parameter.getType();
 				}
 			}
 		}

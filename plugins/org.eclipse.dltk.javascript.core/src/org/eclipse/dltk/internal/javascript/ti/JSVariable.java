@@ -1,12 +1,11 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class JSVariable implements IVariable {
 
 	private String name;
-	private Type type;
+	private String type;
 	private boolean deprecated;
 	private boolean priv;
 
@@ -18,11 +17,11 @@ public class JSVariable implements IVariable {
 		this.name = name;
 	}
 
-	public Type getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

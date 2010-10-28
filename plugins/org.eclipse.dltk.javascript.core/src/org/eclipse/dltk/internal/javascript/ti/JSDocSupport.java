@@ -147,11 +147,11 @@ public class JSDocSupport implements IModelBuilder {
 						parameter = method.getParameter(parameterName);
 
 						if (parameter != null && propertiesType != null)
-							parameter.setType(propertiesType);
+							parameter.setPropertiesType(propertiesType);
 					}
 					if (parameter != null) {
 						if (type != null && parameter.getType() == null)
-							parameter.setType(context.getType(type));
+							parameter.setType(type);
 						if (!optional && st.hasMoreTokens()
 								&& st.nextToken().equals("optional"))
 							optional = true;
@@ -178,7 +178,7 @@ public class JSDocSupport implements IModelBuilder {
 					+ TYPE_TAG.length(), endLineIndex));
 			if (st.hasMoreTokens()) {
 				final String typeToken = st.nextToken();
-				member.setType(context.getType(typeToken));
+				member.setType(typeToken);
 			}
 		}
 	}

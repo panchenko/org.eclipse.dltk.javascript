@@ -37,7 +37,6 @@ import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
-import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
@@ -71,14 +70,65 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		NORMAL, CALL
 	}
 
-	private static class UnresolvedCall {
-		final IValueCollection collection;
-		final CallExpression expression;
+	private interface ExpressionValidator {
+		void call();
+	}
 
-		public UnresolvedCall(IValueCollection collection,
-				CallExpression expression) {
-			this.collection = collection;
-			this.expression = expression;
+	private static class StackedExpressionValidator implements
+			ExpressionValidator {
+
+		private final List<ExpressionValidator> stacked = new ArrayList<TypeInfoValidator.ExpressionValidator>();
+		private final Reporter reporter;
+
+		public StackedExpressionValidator(Reporter reporter) {
+			this.reporter = reporter;
+		}
+		public void call() {
+			for (ExpressionValidator validator : stacked) {
+				int count = reporter.getProblemCount();
+				validator.call();
+				if (reporter.getProblemCount() != count)
+					break;
+			}
+		}
+
+		public void push(ExpressionValidator expressionValidator) {
+			stacked.add(expressionValidator);
+		}
+	}
+
+	private static class CallExpressionValidator implements ExpressionValidator {
+		private final CallExpression node;
+		private final IValueReference reference;
+		private final ValidationVisitor visitor;
+
+		public CallExpressionValidator(CallExpression node,
+				IValueReference reference, ValidationVisitor visitor) {
+			this.node = node;
+			this.reference = reference;
+			this.visitor = visitor;
+		}
+
+		public void call() {
+			visitor.validateCallExpression(node, reference);
+		}
+	}
+
+	private static class PropertyExpressionHolder implements
+			ExpressionValidator {
+		private final PropertyExpression node;
+		private final IValueReference reference;
+		private final ValidationVisitor visitor;
+
+		public PropertyExpressionHolder(PropertyExpression node,
+				IValueReference reference, ValidationVisitor visitor) {
+			this.node = node;
+			this.reference = reference;
+			this.visitor = visitor;
+		}
+
+		public void call() {
+			visitor.validateProperty(node, reference);
 		}
 	}
 
@@ -86,7 +136,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		private final Reporter reporter;
 
-		private final List<UnresolvedCall> unresolvedCallExpressions = new ArrayList<UnresolvedCall>();
+		private final List<ExpressionValidator> expressionValidators = new ArrayList<ExpressionValidator>();
 
 		public ValidationVisitor(ITypeInferenceContext context,
 				Reporter reporter) {
@@ -98,6 +148,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		private final Stack<ASTNode> visitStack = new Stack<ASTNode>();
 
+		private StackedExpressionValidator stackedExpressionValidator;
+
 		@Override
 		public IValueReference visit(ASTNode node) {
 			boolean rootNode = visitStack.isEmpty();
@@ -105,16 +157,11 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			try {
 				return super.visit(node);
 			} finally {
-				if (rootNode && !unresolvedCallExpressions.isEmpty()) {
-					for (UnresolvedCall call : unresolvedCallExpressions
-							.toArray(new UnresolvedCall[unresolvedCallExpressions
+				if (rootNode) {
+					for (ExpressionValidator call : expressionValidators
+							.toArray(new ExpressionValidator[expressionValidators
 									.size()])) {
-						enterContext(call.collection);
-						try {
-							visitCallExpressionImpl(call.expression, true);
-						} finally {
-							leaveContext();
-						}
+						call.call();
 					}
 				}
 				visitStack.pop();
@@ -128,15 +175,59 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		@Override
 		public IValueReference visitCallExpression(CallExpression node) {
-			return visitCallExpressionImpl(node, false);
+			final ASTNode expression = node.getExpression();
+			modes.put(expression, VisitorMode.CALL);
+
+			boolean started = startExpressionValidator();
+			try {
+				final IValueReference reference = visit(expression);
+				modes.remove(expression);
+				if (reference == null)
+					return null;
+				pushExpressionValidator(new CallExpressionValidator(node,
+						reference, this));
+				return reference.getChild(IValueReference.FUNCTION_OP);
+			} finally {
+				if (started)
+					stopExpressionValidator();
+			}
+		}
+
+		private void pushExpressionValidator(
+				ExpressionValidator expressionValidator) {
+			if (stackedExpressionValidator != null) {
+				stackedExpressionValidator.push(expressionValidator);
+			} else {
+				expressionValidators.add(expressionValidator);
+			}
+
+		}
+
+		private void stopExpressionValidator() {
+			if (stackedExpressionValidator != null) {
+				expressionValidators.add(stackedExpressionValidator);
+				stackedExpressionValidator = null;
+			}
+
+		}
+
+		private boolean startExpressionValidator() {
+			if (stackedExpressionValidator == null) {
+				stackedExpressionValidator = new StackedExpressionValidator(
+						reporter);
+				return true;
+			}
+			return false;
 		}
 
 		/**
 		 * @param node
+		 * @param reference
 		 * @return
 		 */
-		private IValueReference visitCallExpressionImpl(CallExpression node,
-				boolean reportNotUsedCalls) {
+		private IValueReference validateCallExpression(CallExpression node,
+				final IValueReference reference) {
+
 			final ASTNode expression = node.getExpression();
 			final ASTNode methodNode;
 			if (expression instanceof PropertyExpression) {
@@ -144,201 +235,175 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			} else {
 				methodNode = expression;
 			}
-			int problemCount = reporter.getProblemCount();
-			modes.put(expression, VisitorMode.CALL);
-			final IValueReference reference = visit(expression);
-			modes.remove(expression);
-			if (reporter.getProblemCount() != problemCount) {
-				// problems already reported for this expression dont report
-				// anything else
-				if (reference != null)
-					return reference.getChild(IValueReference.FUNCTION_OP);
-				return null;
-			}
-			if (reference != null) {
-				if (reference.getName() == IValueReference.ARRAY_OP) {
-					// ignore array lookup function calls like: array[1](),
-					// those are dynamic.
-					return reference.getChild(IValueReference.FUNCTION_OP);
+
+			final List<Method> methods = JavaScriptValidations
+					.extractElements(reference, Method.class);
+			if (methods != null) {
+				final List<ASTNode> callArgs = node.getArguments();
+				IValueReference[] arguments = new IValueReference[callArgs
+						.size()];
+				for (int i = 0, size = callArgs.size(); i < size; ++i) {
+					arguments[i] = visit(callArgs.get(i));
 				}
-				final List<Method> methods = JavaScriptValidations
-						.extractElements(reference, Method.class);
-				if (methods != null) {
+				Method method = JavaScriptValidations.selectMethod(methods,
+						arguments);
+				if (method == null) {
+					final Type type = JavaScriptValidations
+							.typeOf(reference.getParent());
+					if (type != null) {
+						if (type.getKind() == TypeKind.JAVA) {
+							reporter.reportProblem(
+									JavaScriptProblems.WRONG_PARAMETERS,
+									NLS.bind(
+											ValidationMessages.MethodNotSelected,
+											new String[] {
+													reference.getName(),
+													type.getName(),
+													describeArgTypes(arguments) }),
+									methodNode.sourceStart(), methodNode
+											.sourceEnd());
+
+						} else {
+							// TODO also a JS error (that should be
+							// configurable)
+						}
+					}
+					return null;
+				}
+				if (!validateParameterCount(method, callArgs)) {
+					reportMethodParameterError(methodNode, arguments,
+							method);
+				}
+				if (method.isDeprecated()) {
+					reportDeprecatedMethod(methodNode, reference, method);
+				}
+			} else {
+				Object attribute = reference.getAttribute(
+						IReferenceAttributes.PARAMETERS, true);
+				if (attribute instanceof JSMethod) {
+					JSMethod method = (JSMethod) attribute;
+					if (method.isDeprecated()) {
+						reporter.reportProblem(
+								JavaScriptProblems.DEPRECATED_FUNCTION,
+								NLS.bind(
+										ValidationMessages.DeprecatedFunction,
+										reference.getName()), methodNode
+										.sourceStart(), methodNode
+										.sourceEnd());
+					}
+					if (method.isPrivate() && reference.getParent() != null) {
+						reporter.reportProblem(
+								JavaScriptProblems.PRIVATE_FUNCTION,
+								NLS.bind(
+										ValidationMessages.PrivateFunction,
+										reference.getName()), methodNode
+										.sourceStart(), methodNode
+										.sourceEnd());
+					}
+					List<IParameter> parameters = method.getParameters();
 					final List<ASTNode> callArgs = node.getArguments();
 					IValueReference[] arguments = new IValueReference[callArgs
 							.size()];
 					for (int i = 0, size = callArgs.size(); i < size; ++i) {
 						arguments[i] = visit(callArgs.get(i));
 					}
-					Method method = JavaScriptValidations.selectMethod(methods,
-							arguments);
-					if (method == null) {
-						final Type type = JavaScriptValidations
-								.typeOf(reference.getParent());
-						if (type != null) {
-							if (type.getKind() == TypeKind.JAVA) {
-								reporter.reportProblem(
-										JavaScriptProblems.WRONG_PARAMETERS,
-										NLS.bind(
-												ValidationMessages.MethodNotSelected,
-												new String[] {
-														reference.getName(),
-														type.getName(),
-														describeArgTypes(arguments) }),
-										methodNode.sourceStart(), methodNode
-												.sourceEnd());
-
-							} else {
-								// TODO also a JS error (that should be
-								// configurable)
-							}
-						}
-						return null;
-					}
-					if (!validateParameterCount(method, callArgs)) {
-						reportMethodParameterError(methodNode, arguments,
-								method);
-					}
-					if (method.isDeprecated()) {
-						reportDeprecatedMethod(methodNode, reference, method);
+					if (!validateParameters(parameters, arguments)) {
+						reporter.reportProblem(
+								JavaScriptProblems.WRONG_PARAMETERS,
+								NLS.bind(
+										ValidationMessages.MethodNotApplicableInScript,
+										new String[] {
+												method.getName(),
+												describeParamTypes(parameters),
+												describeArgTypes(arguments) }),
+								methodNode.sourceStart(), methodNode
+										.sourceEnd());
 					}
 				} else {
-					Object attribute = reference.getAttribute(
-							IReferenceAttributes.PARAMETERS, true);
-					if (attribute instanceof JSMethod) {
-						JSMethod method = (JSMethod) attribute;
-						if (method.isDeprecated()) {
+					final Type type = JavaScriptValidations
+							.typeOf(reference.getParent());
+					if (type != null) {
+						if (type.getKind() == TypeKind.JAVA) {
 							reporter.reportProblem(
-									JavaScriptProblems.DEPRECATED_FUNCTION,
+									JavaScriptProblems.UNDEFINED_METHOD,
 									NLS.bind(
-											ValidationMessages.DeprecatedFunction,
-											reference.getName()), methodNode
+											ValidationMessages.UndefinedMethod,
+											reference.getName(),
+											type.getName()), methodNode
 											.sourceStart(), methodNode
 											.sourceEnd());
-						}
-						if (method.isPrivate() && reference.getParent() != null) {
+						} else if (JavaScriptValidations.isStatic(reference
+								.getParent())
+								&& !ElementValue.findMembers(type,
+										reference.getName(),
+										MemberPredicates.NON_STATIC)
+										.isEmpty()) {
 							reporter.reportProblem(
-									JavaScriptProblems.PRIVATE_FUNCTION,
+									JavaScriptProblems.NON_STATIC_METHOD,
 									NLS.bind(
-											ValidationMessages.PrivateFunction,
-											reference.getName()), methodNode
+											"Cannot make a static reference to the non-static method {0}() from {1}",
+											reference.getName(),
+											type.getName()), methodNode
 											.sourceStart(), methodNode
 											.sourceEnd());
-						}
-						List<IParameter> parameters = method.getParameters();
-						final List<ASTNode> callArgs = node.getArguments();
-						IValueReference[] arguments = new IValueReference[callArgs
-								.size()];
-						for (int i = 0, size = callArgs.size(); i < size; ++i) {
-							arguments[i] = visit(callArgs.get(i));
-						}
-						if (!validateParameters(parameters, arguments)) {
+						} else {
+							// TODO also report a JS error (that should be
+							// configurable)
 							reporter.reportProblem(
-									JavaScriptProblems.WRONG_PARAMETERS,
+									JavaScriptProblems.UNDEFINED_METHOD,
 									NLS.bind(
-											ValidationMessages.MethodNotApplicableInScript,
-											new String[] {
-													method.getName(),
-													describeParamTypes(parameters),
-													describeArgTypes(arguments) }),
+											ValidationMessages.UndefinedMethodInScript,
+											reference.getName()),
 									methodNode.sourceStart(), methodNode
 											.sourceEnd());
 						}
 					} else {
-						final Type type = JavaScriptValidations
-								.typeOf(reference.getParent());
-						if (type != null) {
-							if (type.getKind() == TypeKind.JAVA) {
-								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD,
-										NLS.bind(
-												ValidationMessages.UndefinedMethod,
-												reference.getName(),
-												type.getName()), methodNode
-												.sourceStart(), methodNode
-												.sourceEnd());
-							} else if (JavaScriptValidations.isStatic(reference
-									.getParent())
-									&& !ElementValue.findMembers(type,
-											reference.getName(),
-											MemberPredicates.NON_STATIC)
-											.isEmpty()) {
-								reporter.reportProblem(
-										JavaScriptProblems.NON_STATIC_METHOD,
-										NLS.bind(
-												"Cannot make a static reference to the non-static method {0}() from {1}",
-												reference.getName(),
-												type.getName()), methodNode
-												.sourceStart(), methodNode
-												.sourceEnd());
-							} else {
-								// TODO also report a JS error (that should be
-								// configurable)
-								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD,
-										NLS.bind(
-												ValidationMessages.UndefinedMethodInScript,
-												reference.getName()),
-										methodNode.sourceStart(), methodNode
-												.sourceEnd());
+						if (expression instanceof NewExpression) {
+							if (reference.getKind() == ReferenceKind.TYPE) {
+								return reference;
 							}
+							Type newType = JavaScriptValidations
+									.typeOf(reference);
+							if (newType != null) {
+								return reference;
+							}
+
+						}
+						IValueReference parent = reference;
+						while (parent != null) {
+							if (parent.getName() == IValueReference.ARRAY_OP) {
+								// ignore array lookup function calls
+								// like: array[1](),
+								// those are dynamic.
+								return reference
+										.getChild(IValueReference.FUNCTION_OP);
+							}
+							parent = parent.getParent();
+						}
+						if (expression instanceof NewExpression) {
+
+							reporter.reportProblem(
+									JavaScriptProblems.UNKNOWN_TYPE, NLS.bind(
+											ValidationMessages.UnknownType,
+											((NewExpression) expression)
+													.getObjectClass()
+													.toSourceString("")),
+									methodNode.sourceStart(), methodNode
+											.sourceEnd());
+
 						} else {
-							if (expression instanceof NewExpression) {
-								if (reference.getKind() == ReferenceKind.TYPE) {
-									return reference;
-								}
-								Type newType = JavaScriptValidations
-										.typeOf(reference);
-								if (newType != null) {
-									return reference;
-								}
-
-							}
-							if (reportNotUsedCalls) {
-								if (expression instanceof NewExpression) {
-
-									reporter.reportProblem(
-											JavaScriptProblems.UNKNOWN_TYPE,
-											NLS.bind(
-													ValidationMessages.UnknownType,
-													((NewExpression) expression)
-															.getObjectClass()
-															.toSourceString("")),
-											methodNode.sourceStart(),
-											methodNode.sourceEnd());
-
-								} else {
-									reporter.reportProblem(
-											JavaScriptProblems.UNDEFINED_METHOD,
-											NLS.bind(
-													ValidationMessages.UndefinedMethodInScript,
-													reference.getName()),
-											methodNode.sourceStart(),
-											methodNode.sourceEnd());
-								}
-							} else {
-								IValueReference parent = reference.getParent();
-								while (parent != null) {
-									if (parent.getName() == IValueReference.ARRAY_OP) {
-										// ignore array lookup function calls
-										// like: array[1](),
-										// those are dynamic.
-										return reference
-												.getChild(IValueReference.FUNCTION_OP);
-									}
-									parent = parent.getParent();
-								}
-								unresolvedCallExpressions
-										.add(new UnresolvedCall(peekContext(),
-												node));
-							}
+							reporter.reportProblem(
+									JavaScriptProblems.UNDEFINED_METHOD,
+									NLS.bind(
+											ValidationMessages.UndefinedMethodInScript,
+											reference.getName()), methodNode
+											.sourceStart(), methodNode
+											.sourceEnd());
 						}
 					}
 				}
-				return reference.getChild(IValueReference.FUNCTION_OP);
-			} else {
-				return null;
 			}
+			return reference.getChild(IValueReference.FUNCTION_OP);
 		}
 
 		private void reportDeprecatedMethod(ASTNode methodNode,
@@ -395,7 +460,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			}
 
 			for (int i = 0; i < testTypesSize; i++) {
-				Type param = parameters.get(i).getType();
+				String param = parameters.get(i).getType();
 				if (arguments[i] == null)
 					continue;
 				Type argumentType = arguments[i].getDeclaredType();
@@ -405,10 +470,10 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								.next();
 					}
 				}
-				if (param != null && param.getName() != null
+				if (param != null && param != null
 						&& argumentType != null
-						&& !param.getName().equals(argumentType.getName())) {
-					if (param.getName().equals(ITypeNames.ARRAY)
+						&& !param.equals(argumentType.getName())) {
+					if (param.equals(ITypeNames.ARRAY)
 							&& argumentType.getName().startsWith(
 									ITypeNames.ARRAY + '<'))
 						continue;
@@ -448,7 +513,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					sb.append(',');
 				}
 				if (parameter.getType() != null) {
-					sb.append(parameter.getType().getName());
+					sb.append(parameter.getType());
 				} else {
 					sb.append('?');
 				}
@@ -517,23 +582,28 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		@Override
 		public IValueReference visitPropertyExpression(PropertyExpression node) {
-			int problemCount = reporter.getProblemCount();
-			final IValueReference result = super.visitPropertyExpression(node);
-			if (result != null) {
-				if (currentMode() != VisitorMode.CALL
-						&& problemCount == reporter.getProblemCount()) {
-					validateProperty(result, node.getProperty());
+			boolean started = startExpressionValidator();
+			try {
+				final IValueReference result = super
+						.visitPropertyExpression(node);
+				if (result != null) {
+					if (currentMode() != VisitorMode.CALL) {
+						pushExpressionValidator(new PropertyExpressionHolder(
+								node, result, this));
+					}
+					return result;
+				} else {
+					return null;
 				}
-				return result;
-			} else {
-				return null;
+			} finally {
+				if (started)
+					stopExpressionValidator();
 			}
 		}
 
 		@Override
 		public IValueReference visitIdentifier(Identifier node) {
-			final IValueReference result = peekContext().getChild(
-					node.getName());
+			final IValueReference result = super.visitIdentifier(node);
 			final Property property = extractElement(result, Property.class);
 			if (property != null && property.isDeprecated()) {
 				reportDeprecatedProperty(property, null, node);
@@ -541,8 +611,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			return result;
 		}
 
-		private void validateProperty(IValueReference result,
-				Expression propName) {
+		private void validateProperty(PropertyExpression propertyExpression,
+				IValueReference result) {
+			final Expression propName = propertyExpression.getProperty();
 			final Property property = extractElement(result, Property.class);
 			if (property != null) {
 				if (property.isDeprecated()) {
@@ -579,8 +650,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									.sourceStart(), propName.sourceEnd());
 				} else if (type != null
 						&& (type.getKind() == TypeKind.JAVASCRIPT || type
-								.getKind() == TypeKind.PREDEFINED)
-						&& !result.exists()) {
+								.getKind() == TypeKind.PREDEFINED)) {
 					reporter.reportProblem(
 							JavaScriptProblems.UNDEFINED_PROPERTY,
 							NLS.bind(

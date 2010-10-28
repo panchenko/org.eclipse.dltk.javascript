@@ -60,12 +60,11 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 
 	@Override
 	public IValueReference visitCallExpression(CallExpression node) {
-		final boolean noValue = value == null;
 		final IValueReference reference;
 		try {
 			reference = visit(node.getExpression());
 		} finally {
-			if (noValue && value != null && this.arguments == null) {
+			if (value == null && this.arguments == null) {
 				final List<ASTNode> callArgs = node.getArguments();
 				final IValueReference[] arguments = new IValueReference[callArgs
 						.size()];

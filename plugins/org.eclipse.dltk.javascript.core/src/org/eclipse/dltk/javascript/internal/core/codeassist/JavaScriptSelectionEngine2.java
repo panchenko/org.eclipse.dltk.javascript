@@ -31,6 +31,8 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.model.LocalVariable;
+import org.eclipse.dltk.internal.core.ModelElement;
+import org.eclipse.dltk.internal.core.SourceRange;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -288,7 +290,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		return null;
 	}
 
-	private IModelElement locateModelElement(ReferenceLocation location) {
+	private IModelElement locateModelElement(final ReferenceLocation location) {
 		ISourceModule module = location.getSourceModule();
 		if (module != null) {
 			try {
@@ -304,6 +306,28 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			}
 		}
 		return null;
+//		return new org.eclipse.dltk.internal.core.Member((ModelElement) module) {
+//
+//			public int getElementType() {
+//				return 0;
+//			}
+//
+//			@Override
+//			protected char getHandleMementoDelimiter() {
+//				return 0;
+//			}
+//
+//			@Override
+//			public ISourceRange getNameRange() throws ModelException {
+//				return new SourceRange(location.getNameStart(),
+//						(location.getNameEnd() - location.getNameStart()));
+//			}
+//
+//			@Override
+//			public ISourceRange getSourceRange() throws ModelException {
+//				return getNameRange();
+//			}
+//		};
 	}
 
 	/**
