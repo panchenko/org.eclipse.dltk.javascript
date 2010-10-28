@@ -60,5 +60,42 @@ public class FlowValidationTests extends AbstractValidationTest {
 				.contains(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE));
 		assertTrue(problemIds.contains(JavaScriptProblems.RETURN_INCONSISTENT));
 	}
+	
+	public void testFunctionWithIfThenNotAllReturningValuesWithReturn() {
+		StringList code = new StringList();
+		code.add("function q(a) {");
+		code.add("  if (a ==1) return 1");
+		code.add("  else a = 1");
+		code.add("  return 1");
+		code.add("}");
+		final Set<Integer> problemIds = extractIds(validate(code.toString()));
+		assertEquals(0, problemIds.size());
+	}
+	
+	public void testFunctionWithIfThenNotAllReturningValues() {
+		StringList code = new StringList();
+		code.add("function q(a) {");
+		code.add("  if (a ==1) return 1");
+		code.add("  else if (a == 2) a = 1");
+		code.add("  else if (a == 3) a = 1");
+		code.add("  else return 2");
+		code.add("}");
+		final Set<Integer> problemIds = extractIds(validate(code.toString()));
+		assertEquals(1, problemIds.size());
+		assertTrue(problemIds
+				.contains(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE));
+	}
+	
+	public void testFunctionWithIfThenAllReturningValues() {
+		StringList code = new StringList();
+		code.add("function q(a) {");
+		code.add("  if (a ==1) return 1");
+		code.add("  else if (a == 2) return 2");
+		code.add("  else if (a == 3) return 3");
+		code.add("  else return -1");
+		code.add("}");
+		final Set<Integer> problemIds = extractIds(validate(code.toString()));
+		assertEquals(0, problemIds.size());
+	}
 
 }
