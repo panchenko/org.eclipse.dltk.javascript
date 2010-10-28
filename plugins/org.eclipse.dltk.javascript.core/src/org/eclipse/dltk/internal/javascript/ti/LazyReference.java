@@ -9,11 +9,12 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class LazyReference extends AbstractReference {
 
-	boolean resolved = false;
-	private final Value value = new Value() {
-		public java.util.Set<Value> getReferences() {
-			Set<Value> references = super.getReferences();
+	private final class LazyValue extends Value implements ILazyValue {
+		boolean resolved = false;
+
+		public void resolve() {
 			if (!resolved) {
+				Set<Value> references = super.getReferences();
 				IValueReference createChild = collection.getChild(className);
 				if (createChild.exists()) {
 					ValueCollection collection = (ValueCollection) createChild
@@ -36,9 +37,10 @@ public class LazyReference extends AbstractReference {
 					resolved = true;
 				}
 			}
-			return references;
-		};
-	};
+		}
+	}
+
+	private final LazyValue value = new LazyValue();
 	private final ITypeInferenceContext context;
 	private final String className;
 	private final IValueCollection collection;
@@ -78,7 +80,7 @@ public class LazyReference extends AbstractReference {
 
 	@Override
 	public IValue getValue() {
-		value.getReferences();
+		value.resolve();
 		return value;
 	}
 

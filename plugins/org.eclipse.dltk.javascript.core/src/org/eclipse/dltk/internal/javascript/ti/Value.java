@@ -50,8 +50,10 @@ public class Value implements IValue {
 	private static <R> void execute(Value value, Handler<R> handler, R result,
 			Set<IValue> visited) {
 		if (visited.add(value)) {
+			if (value instanceof ILazyValue)
+				((ILazyValue) value).resolve();
 			handler.process(value, result);
-			for (Value child : value.getReferences()) {
+			for (Value child : value.references) {
 				execute(child, handler, result, visited);
 			}
 		}
@@ -59,11 +61,7 @@ public class Value implements IValue {
 
 	private static final Handler<Set<Type>> GET_TYPES = new Handler<Set<Type>>() {
 		public void process(Value value, Set<Type> result) {
-			if (value.hasReferences()) {
-				result.addAll(value.types);
-			} else {
-				result.addAll(value.getTypes());
-			}
+			result.addAll(value.types);
 		}
 	};
 
