@@ -63,11 +63,11 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 	@Override
 	public FlowStatus visitStatementBlock(StatementBlock node) {
 		FlowStatus status = new FlowStatus();
-		int startRange = -1;
+		int startRange = Integer.MAX_VALUE;
 		int endRange = -1;
 		for (Statement statement : node.getStatements()) {
 			if (status.isReturned()) {
-				if (startRange < statement.sourceStart())
+				if (startRange > statement.sourceStart())
 					startRange = statement.sourceStart();
 				if (endRange < statement.sourceEnd())
 					endRange = statement.sourceEnd();
@@ -76,7 +76,7 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 				status.add(visit(statement));
 			}
 		}
-		if (startRange != -1) {
+		if (startRange != Integer.MAX_VALUE) {
 			reporter.setMessage(JavaScriptProblems.UNREACHABLE_CODE,
 					"unreachable code");
 			reporter.setRange(startRange, endRange);
@@ -87,15 +87,35 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 
 	@Override
 	public FlowStatus visitIfStatement(IfStatement node) {
+
 		FlowStatus status = new FlowStatus();
+		status.noReturn = true;
+
 		if (node.getThenStatement() != null) {
-			status.add(visit(node.getThenStatement()));
+			FlowStatus thenFlow = visit(node.getThenStatement());
+			if (thenFlow != null) {
+				status.noReturn = thenFlow.noReturn;
+				status.returnValue = thenFlow.returnValue;
+				status.returnWithoutValue = thenFlow.returnWithoutValue;
+			}
 		}
 		if (node.getElseStatement() != null) {
-			status.add(visit(node.getElseStatement()));
+			FlowStatus elseFlow = visit(node.getElseStatement());
+			if (elseFlow != null) {
+				if (status.noReturn != elseFlow.noReturn)
+					status.noReturn = true;
+				if (status.returnValue != elseFlow.returnValue)
+					status.returnValue = true;
+				if (status.returnWithoutValue != elseFlow.returnWithoutValue)
+					status.returnWithoutValue = true;
+			} else {
+				status.noReturn = true;
+			}
+
 		} else {
-			status.add(new FlowStatus());
+			status.noReturn = true;
 		}
+
 		return status;
 	}
 

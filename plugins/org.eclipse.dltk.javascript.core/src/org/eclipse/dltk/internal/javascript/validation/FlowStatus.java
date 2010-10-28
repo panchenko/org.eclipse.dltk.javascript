@@ -19,7 +19,7 @@ public class FlowStatus {
 	public void add(FlowStatus value) {
 		if (value != null) {
 			returnValue |= value.returnValue;
-			returnValue |= value.returnWithoutValue;
+			returnWithoutValue |= value.returnWithoutValue;
 			noReturn = value.noReturn
 					|| (!value.returnValue && !value.returnWithoutValue);
 		} else {
