@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2010-09-28 20:52:27
+// $ANTLR 3.0.1 JS.g 2010-10-28 13:14:49
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -223,46 +223,46 @@ public class JSParser extends Parser {
     public String[] getTokenNames() { return tokenNames; }
     public String getGrammarFileName() { return "JS.g"; }
 
-
+    
     private boolean typeInformationEnabled;
-
+    
     public final boolean isTypeInformationEnabled() {
     	return typeInformationEnabled;
     }
-
+    
     public void setTypeInformationEnabled(boolean value) {
     	this.typeInformationEnabled = value;
     }
-
+    
     protected void reportFailure(Throwable t) {
     }
-
+    
     protected void reportRuleError(RecognitionException re) {
     	reportError(re);
     	recover(input,re);
     }
-
+    
     private final Stack<JSParserState> states = new Stack<JSParserState>();
-
+    
     protected void pushState(JSParserRule rule) {
     	states.push(new JSParserState(peekState(), rule));
     }
-
+    
     protected void popState() {
     	states.pop();
     }
-
+    
     public JSParserState peekState() {
     	return states.isEmpty() ? null : states.peek();
     }
-
+    
     protected void syncToSet() {
     }
-
+    
     protected void typeRefExpected() {
     	throw new UnsupportedOperationException("override typeRefExpected()");
     }
-
+    
     private final boolean isLeftHandSideAssign(RuleReturnScope lhs, Object[] cached)
     {
     	if (cached[0] != null)
@@ -302,7 +302,7 @@ public class JSParser extends Parser {
     	cached[0] = Boolean.valueOf(result);
     	return result;
     }
-
+    
     private final static boolean isLeftHandSideExpression(RuleReturnScope lhs)
     {
     	if (lhs.getTree() == null) // e.g. during backtracking
@@ -360,7 +360,7 @@ public class JSParser extends Parser {
     	cached[0] = new Boolean(result);
     	return result;
     }
-
+    
     private final void promoteEOL(ParserRuleReturnScope rule)
     {
     	// Get current token and its type (the possibly offending token).
@@ -708,7 +708,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -897,7 +897,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -954,7 +954,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1011,7 +1011,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1068,7 +1068,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1148,7 +1148,7 @@ public class JSParser extends Parser {
                     stream_identifier.add(identifier17.getTree());
 
                     // AST REWRITE
-                    // elements: identifier, AT
+                    // elements: AT, identifier
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1189,7 +1189,7 @@ public class JSParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: MUL, AT
+                    // elements: AT, MUL
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1225,7 +1225,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1282,7 +1282,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1454,7 +1454,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1549,7 +1549,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: expression, XMLFragmentEnd, XMLFragment
+            // elements: XMLFragmentEnd, expression, XMLFragment
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1594,7 +1594,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1652,7 +1652,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1709,7 +1709,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1911,7 +1911,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -1999,7 +1999,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -2224,7 +2224,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -2339,7 +2339,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -2522,7 +2522,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -2664,7 +2664,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -2720,7 +2720,7 @@ public class JSParser extends Parser {
             stream_assignmentExpression.add(assignmentExpression57.getTree());
 
             // AST REWRITE
-            // elements: propertyName, assignmentExpression
+            // elements: assignmentExpression, propertyName
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2754,7 +2754,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -2889,7 +2889,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -3017,7 +3017,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -3074,7 +3074,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -3222,7 +3222,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -3358,7 +3358,7 @@ public class JSParser extends Parser {
             	    stream_arguments.add(arguments73.getTree());
 
             	    // AST REWRITE
-            	    // elements: arguments, leftHandSideExpression
+            	    // elements: leftHandSideExpression, arguments
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3446,7 +3446,7 @@ public class JSParser extends Parser {
             	    stream_rightHandSideExpression.add(rightHandSideExpression78.getTree());
 
             	    // AST REWRITE
-            	    // elements: leftHandSideExpression, rightHandSideExpression, DOT
+            	    // elements: DOT, rightHandSideExpression, leftHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3531,7 +3531,7 @@ public class JSParser extends Parser {
             	    stream_expression.add(expression82.getTree());
 
             	    // AST REWRITE
-            	    // elements: leftHandSideExpression, expression
+            	    // elements: expression, leftHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3709,7 +3709,7 @@ public class JSParser extends Parser {
 
 
             	    // AST REWRITE
-            	    // elements: expression, leftHandSideExpressionTail
+            	    // elements: leftHandSideExpressionTail, expression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3751,7 +3751,7 @@ public class JSParser extends Parser {
             	    stream_rightHandSideExpression.add(rightHandSideExpression88.getTree());
 
             	    // AST REWRITE
-            	    // elements: leftHandSideExpressionTail, DOT, rightHandSideExpression
+            	    // elements: DOT, leftHandSideExpressionTail, rightHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3794,7 +3794,7 @@ public class JSParser extends Parser {
             	    stream_rightHandSideExpression.add(rightHandSideExpression90.getTree());
 
             	    // AST REWRITE
-            	    // elements: rightHandSideExpression, leftHandSideExpressionTail
+            	    // elements: leftHandSideExpressionTail, rightHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3836,7 +3836,7 @@ public class JSParser extends Parser {
             	    stream_expression.add(expression92.getTree());
 
             	    // AST REWRITE
-            	    // elements: expression, leftHandSideExpressionTail
+            	    // elements: leftHandSideExpressionTail, expression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3879,7 +3879,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -4012,7 +4012,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -4090,7 +4090,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -4174,7 +4174,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -4265,7 +4265,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -4513,7 +4513,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -4532,7 +4532,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start namespaceStatement
-    // JS.g:1168:1: namespaceStatement : DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN StringLiteral ) ;
+    // JS.g:1168:1: namespaceStatement : DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) ;
     public final namespaceStatement_return namespaceStatement() throws RecognitionException {
         namespaceStatement_return retval = new namespaceStatement_return();
         retval.start = input.LT(1);
@@ -4543,7 +4543,8 @@ public class JSParser extends Parser {
         Token WXML111=null;
         Token NAMESPACE112=null;
         Token ASSIGN113=null;
-        Token StringLiteral114=null;
+        expression_return expression114 = null;
+
         semic_return semic115 = null;
 
 
@@ -4551,16 +4552,15 @@ public class JSParser extends Parser {
         Object WXML111_tree=null;
         Object NAMESPACE112_tree=null;
         Object ASSIGN113_tree=null;
-        Object StringLiteral114_tree=null;
-        RewriteRuleTokenStream stream_StringLiteral=new RewriteRuleTokenStream(adaptor,"token StringLiteral");
         RewriteRuleTokenStream stream_WXML=new RewriteRuleTokenStream(adaptor,"token WXML");
         RewriteRuleTokenStream stream_NAMESPACE=new RewriteRuleTokenStream(adaptor,"token NAMESPACE");
         RewriteRuleTokenStream stream_DEFAULT=new RewriteRuleTokenStream(adaptor,"token DEFAULT");
         RewriteRuleTokenStream stream_ASSIGN=new RewriteRuleTokenStream(adaptor,"token ASSIGN");
+        RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // JS.g:1169:3: ( DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN StringLiteral ) )
-            // JS.g:1169:5: DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic
+            // JS.g:1169:3: ( DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) )
+            // JS.g:1169:5: DEFAULT WXML NAMESPACE ASSIGN expression semic
             {
             DEFAULT110=(Token)input.LT(1);
             match(input,DEFAULT,FOLLOW_DEFAULT_in_namespaceStatement4546); 
@@ -4578,10 +4578,11 @@ public class JSParser extends Parser {
             match(input,ASSIGN,FOLLOW_ASSIGN_in_namespaceStatement4552); 
             stream_ASSIGN.add(ASSIGN113);
 
-            StringLiteral114=(Token)input.LT(1);
-            match(input,StringLiteral,FOLLOW_StringLiteral_in_namespaceStatement4554); 
-            stream_StringLiteral.add(StringLiteral114);
+            pushFollow(FOLLOW_expression_in_namespaceStatement4554);
+            expression114=expression();
+            _fsp--;
 
+            stream_expression.add(expression114.getTree());
             pushFollow(FOLLOW_semic_in_namespaceStatement4556);
             semic115=semic();
             _fsp--;
@@ -4589,7 +4590,7 @@ public class JSParser extends Parser {
             stream_semic.add(semic115.getTree());
 
             // AST REWRITE
-            // elements: WXML, StringLiteral, DEFAULT, ASSIGN
+            // elements: DEFAULT, WXML, expression, ASSIGN
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4598,9 +4599,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1170:5: -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN StringLiteral )
+            // 1170:5: -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
             {
-                // JS.g:1170:8: ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN StringLiteral )
+                // JS.g:1170:8: ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(DEFAULT_XML_NAMESPACE, "DEFAULT_XML_NAMESPACE"), root_1);
@@ -4608,7 +4609,7 @@ public class JSParser extends Parser {
                 adaptor.addChild(root_1, stream_DEFAULT.next());
                 adaptor.addChild(root_1, stream_WXML.next());
                 adaptor.addChild(root_1, stream_ASSIGN.next());
-                adaptor.addChild(root_1, stream_StringLiteral.next());
+                adaptor.addChild(root_1, stream_expression.next());
 
                 adaptor.addChild(root_0, root_1);
                 }
@@ -4625,7 +4626,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -4720,7 +4721,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -4815,7 +4816,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -4910,7 +4911,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5008,7 +5009,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5103,7 +5104,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5198,7 +5199,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5293,7 +5294,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5381,7 +5382,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5469,7 +5470,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5557,7 +5558,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5645,7 +5646,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5733,7 +5734,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5821,7 +5822,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5909,7 +5910,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -5997,7 +5998,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6085,7 +6086,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6173,7 +6174,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6265,7 +6266,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6357,7 +6358,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6391,7 +6392,7 @@ public class JSParser extends Parser {
 
 
 
-
+        
         	Object[] isLhs = new Object[1];
 
         try {
@@ -6448,7 +6449,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6505,7 +6506,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6539,7 +6540,7 @@ public class JSParser extends Parser {
 
 
 
-
+        
         	Object[] isLhs = new Object[1];
 
         try {
@@ -6596,7 +6597,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6723,7 +6724,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6850,7 +6851,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -6888,7 +6889,7 @@ public class JSParser extends Parser {
         Object EOL187_tree=null;
         Object MultiLineComment188_tree=null;
 
-
+        
         	// Mark current position so we can unconsume a RBRACE.
         	int marker = input.mark();
         	// Promote EOL if appropriate	
@@ -7005,7 +7006,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -7105,7 +7106,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -7499,7 +7500,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -7616,7 +7617,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -7710,7 +7711,7 @@ public class JSParser extends Parser {
             stream_semic.add(semic212.getTree());
 
             // AST REWRITE
-            // elements: VAR, variableDeclaration
+            // elements: variableDeclaration, VAR
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -7750,7 +7751,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -7828,7 +7829,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -7943,7 +7944,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8058,7 +8059,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8192,7 +8193,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8258,7 +8259,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8314,7 +8315,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8422,7 +8423,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: IF, expression, statement
+            // elements: IF, statement, expression
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8463,7 +8464,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8599,7 +8600,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8684,7 +8685,7 @@ public class JSParser extends Parser {
             stream_semic.add(semic249.getTree());
 
             // AST REWRITE
-            // elements: DO, expression, statement
+            // elements: DO, statement, expression
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8718,7 +8719,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8790,7 +8791,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8901,7 +8902,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -8985,7 +8986,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -9057,7 +9058,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -9197,7 +9198,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -9297,7 +9298,7 @@ public class JSParser extends Parser {
                     stream_expression.add(expression273.getTree());
 
                     // AST REWRITE
-                    // elements: variableDeclarationNoIn, VAR, expression
+                    // elements: VAR, expression, variableDeclarationNoIn
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -9437,7 +9438,7 @@ public class JSParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ex1, VAR, variableDeclarationNoIn, ex2
+                    // elements: variableDeclarationNoIn, VAR, ex2, ex1
                     // token labels: 
                     // rule labels: retval, ex2, ex1
                     // token list labels: 
@@ -9524,7 +9525,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -9567,7 +9568,7 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_SEMIC=new RewriteRuleTokenStream(adaptor,"token SEMIC");
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_expressionNoIn=new RewriteRuleSubtreeStream(adaptor,"rule expressionNoIn");
-
+        
         	Object[] isLhs = new Object[1];
 
         try {
@@ -9616,7 +9617,7 @@ public class JSParser extends Parser {
                     stream_expression.add(ex2.getTree());
 
                     // AST REWRITE
-                    // elements: ex1, ex2
+                    // elements: ex2, ex1
                     // token labels: 
                     // rule labels: retval, ex2, ex1
                     // token list labels: 
@@ -9725,7 +9726,7 @@ public class JSParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ex2, ex3, ex1
+                    // elements: ex2, ex1, ex3
                     // token labels: 
                     // rule labels: retval, ex3, ex2, ex1
                     // token list labels: 
@@ -9806,7 +9807,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -9901,7 +9902,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: ex2, ex1
+            // elements: ex1, ex2
             // token labels: 
             // rule labels: retval, ex2, ex1
             // token list labels: 
@@ -9970,7 +9971,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10051,7 +10052,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10132,7 +10133,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10213,7 +10214,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10285,7 +10286,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10410,7 +10411,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: SWITCH, defaultClause, caseClause, expression
+            // elements: expression, caseClause, SWITCH, defaultClause
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -10455,7 +10456,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10556,7 +10557,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10650,7 +10651,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10740,7 +10741,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10804,7 +10805,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -10960,7 +10961,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -11056,7 +11057,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -11113,7 +11114,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -11170,7 +11171,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -11269,7 +11270,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody337.getTree());
 
             // AST REWRITE
-            // elements: name, FUNCTION, formalParameterList, COLON, functionBody, typeRef
+            // elements: functionBody, formalParameterList, COLON, FUNCTION, name, typeRef
             // token labels: 
             // rule labels: retval, name
             // token list labels: 
@@ -11317,7 +11318,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -11433,7 +11434,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody342.getTree());
 
             // AST REWRITE
-            // elements: name, formalParameterList, FUNCTION, functionBody
+            // elements: name, functionBody, FUNCTION, formalParameterList
             // token labels: 
             // rule labels: retval, name
             // token list labels: 
@@ -11474,7 +11475,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -11558,7 +11559,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -11706,7 +11707,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -11824,7 +11825,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -11929,7 +11930,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -12006,7 +12007,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody358.getTree());
 
             // AST REWRITE
-            // elements: name, param, functionBody
+            // elements: functionBody, name, param
             // token labels: 
             // rule labels: retval, param, name
             // token list labels: 
@@ -12043,7 +12044,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -12136,7 +12137,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -12162,7 +12163,7 @@ public class JSParser extends Parser {
 
         Object root_0 = null;
 
-
+        
         	syncToSet();
 
         try {
@@ -12272,7 +12273,7 @@ public class JSParser extends Parser {
                 adaptor.setTokenBoundaries(retval.tree, retval.start, retval.stop);
 
         }
-
+        
         catch (RecognitionException re) {
         	reportRuleError(re);
         }
@@ -12408,8 +12409,8 @@ public class JSParser extends Parser {
     public static final BitSet FOLLOW_DEFAULT_in_namespaceStatement4546 = new BitSet(new long[]{0x0000001000000000L});
     public static final BitSet FOLLOW_WXML_in_namespaceStatement4548 = new BitSet(new long[]{0x0000002000000000L});
     public static final BitSet FOLLOW_NAMESPACE_in_namespaceStatement4550 = new BitSet(new long[]{0x0000000000000000L,0x0000010000000000L});
-    public static final BitSet FOLLOW_ASSIGN_in_namespaceStatement4552 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000080000000000L});
-    public static final BitSet FOLLOW_StringLiteral_in_namespaceStatement4554 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x0000030000000000L});
+    public static final BitSet FOLLOW_ASSIGN_in_namespaceStatement4552 = new BitSet(new long[]{0x0000003E52461070L,0x0320000C0CC002A0L,0x01C6080000000000L});
+    public static final BitSet FOLLOW_expression_in_namespaceStatement4554 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001040L,0x0000030000000000L});
     public static final BitSet FOLLOW_semic_in_namespaceStatement4556 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_unaryExpression_in_multiplicativeExpression4588 = new BitSet(new long[]{0x0000000000000002L,0x0008000003000000L});
     public static final BitSet FOLLOW_set_in_multiplicativeExpression4592 = new BitSet(new long[]{0x0000003E52461070L,0x0320000C0CC002A0L,0x01C6080000000000L});

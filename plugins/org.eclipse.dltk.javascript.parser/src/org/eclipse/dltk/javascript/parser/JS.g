@@ -1166,8 +1166,8 @@ unaryOperator
 // $>
 
 namespaceStatement
-  : DEFAULT WXML NAMESPACE ASSIGN StringLiteral semic
-    -> ^(DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN StringLiteral)
+  : DEFAULT WXML NAMESPACE ASSIGN expression semic
+    -> ^(DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression)
   ;
 
 // $<Multiplicative operators (11.5)

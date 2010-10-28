@@ -1094,7 +1094,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	@Override
 	protected ASTNode visitVarDeclaration(Tree node) {
 		VariableStatement var = new VariableStatement(getParent());
-		
+
 		int tokenIndex = node.getTokenStartIndex();
 		while (tokenIndex > 0) {
 			--tokenIndex;
@@ -1114,7 +1114,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			}
 			break;
 		}
-		
+
 		var.setVarKeyword(createKeyword(node, Keywords.VAR));
 
 		processVariableDeclarations(node, var, SymbolKind.VAR);
@@ -1998,11 +1998,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		statement.setAssignOperation(getTokenOffset(node.getChild(2)
 				.getTokenStartIndex()));
 
-		StringLiteral value = new StringLiteral(statement);
-		value.setStart(getTokenOffset(node.getChild(3).getTokenStartIndex()));
-		value.setEnd(getTokenOffset(node.getChild(3).getTokenStartIndex()) + 1);
-		value.setText(node.getChild(3).getText());
-		statement.setValue(value);
+		statement.setValue((Expression) transformNode(node.getChild(3),
+				statement));
 
 		Token token = tokens.get(node.getTokenStopIndex());
 		if (token.getType() == JSParser.SEMIC) {

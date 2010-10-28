@@ -15,6 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 // TODO implement ISemicolonStatement
 public class DefaultXmlNamespaceStatement extends Statement {
@@ -23,7 +24,7 @@ public class DefaultXmlNamespaceStatement extends Statement {
 	private Keyword xmlKeyword;
 	private Keyword namespaceKeyword;
 	private int assignOperation = -1;
-	private StringLiteral value;
+	private Expression value;
 	private int semic = -1;
 
 	public DefaultXmlNamespaceStatement(ASTNode parent) {
@@ -81,11 +82,11 @@ public class DefaultXmlNamespaceStatement extends Statement {
 		this.assignOperation = operation;
 	}
 
-	public StringLiteral getValue() {
+	public Expression getValue() {
 		return this.value;
 	}
 
-	public void setValue(StringLiteral value) {
+	public void setValue(Expression value) {
 		this.value = value;
 	}
 
@@ -115,7 +116,7 @@ public class DefaultXmlNamespaceStatement extends Statement {
 		buffer.append(" ");
 		buffer.append(Keywords.NAMESPACE);
 		buffer.append(" = ");
-		buffer.append(this.value.getText());
+		buffer.append(this.value.toSourceString(JSLiterals.EMPTY));
 		if (semic > 0)
 			buffer.append(";");
 
