@@ -431,8 +431,8 @@ public class JavascriptAutoEditStrategy extends
 						int index = sm.indexOf(sb.toString(), aPlus1);
 						if (index != -1) {
 							a = index + sb.length();
-							break;
 						}
+						break;
 					} else {
 						break;
 					}
