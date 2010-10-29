@@ -1137,17 +1137,27 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 						varNode.getTokenStopIndex() + 1, node.getChild(i + 1)
 								.getTokenStartIndex()));
 			}
-			if (scope.add(declaration.getVariableName(), kind) != null
+			SymbolKind replaced = scope.add(declaration.getVariableName(), kind); 
+			if (replaced != null
 					&& reporter != null) {
 				final Identifier identifier = declaration.getIdentifier();
 				reporter.setRange(identifier.sourceStart(),
 						identifier.sourceEnd());
-				reporter.setMessage(
-						kind == SymbolKind.VAR ? JavaScriptParserProblems.VAR_HIDES_ARGUMENT
-								: JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
-						kind.name().toLowerCase() + " "
-								+ declaration.getVariableName()
-								+ " hides argument");
+				String message;
+				if (replaced == SymbolKind.VAR || replaced == SymbolKind.CONST)
+				{
+					message = "redeclaration of " + replaced.name().toLowerCase() + " " + declaration.getVariableName();
+					reporter.setMessage(JavaScriptParserProblems.DUPLICATE_VAR_DECLARATION,
+									message);
+				}
+				else 
+				{
+					message = kind.name().toLowerCase() + " " + declaration.getVariableName() + " hides parameter";
+					reporter.setMessage(
+							kind == SymbolKind.VAR ? JavaScriptParserProblems.VAR_HIDES_ARGUMENT
+									: JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
+									message);
+				}
 				reporter.report();
 			}
 		}
