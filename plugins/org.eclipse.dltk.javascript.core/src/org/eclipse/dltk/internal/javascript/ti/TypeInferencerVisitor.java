@@ -360,6 +360,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		final IValueCollection function = new FunctionValueCollection(
 				peekContext(), method.getName());
+		IValueReference arguments = function.createChild("arguments");
+		IValueReference argumentsLength = arguments.getChild("length");
+		argumentsLength.setDeclaredType(context.getKnownType("Number"));
+
 		for (IParameter parameter : method.getParameters()) {
 			final IValueReference refArg = function.createChild(parameter
 					.getName());
