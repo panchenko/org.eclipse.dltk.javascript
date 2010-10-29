@@ -362,7 +362,6 @@ public class JavascriptAutoEditStrategy extends
 		String sm = d.get();
 		int levelBefore = countBrackets(sm, 0, offset);
 		int levelAfter = countBrackets(sm, offset, sm.length());
-		System.err.println(levelBefore + " :: " + levelAfter);
 		return levelBefore <= (levelAfter * -1);
 	}
 
