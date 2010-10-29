@@ -18,11 +18,9 @@ import java.util.UUID;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
-import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IAccessRule;
-import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -35,7 +33,7 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
-import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueParent;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -87,13 +85,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		inferencer2.setModelElement(cu.getModelElement());
-		final Script script = new JavaScriptParser().parse(new ModuleSource(
-				content) {
-			@Override
-			public IModelElement getModelElement() {
-				return cu.getModelElement();
-			}
-		}, null);
+		final Script script = JavaScriptParserUtil.parse(cu, null);
 		final NodeFinder nodeFinder = new NodeFinder(content, position,
 				position);
 		final org.eclipse.dltk.javascript.ast.Type typeNode = nodeFinder

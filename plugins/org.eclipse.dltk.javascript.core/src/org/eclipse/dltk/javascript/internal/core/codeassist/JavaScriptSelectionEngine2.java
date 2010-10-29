@@ -31,8 +31,6 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.model.LocalVariable;
-import org.eclipse.dltk.internal.core.ModelElement;
-import org.eclipse.dltk.internal.core.SourceRange;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -40,7 +38,7 @@ import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SimpleType;
-import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
@@ -107,7 +105,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			System.out
 					.println("select in " + module.getFileName() + " at " + position); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		final Script script = new JavaScriptParser().parse(module, null);
+		final Script script = JavaScriptParserUtil.parse(module, null);
 
 		NodeFinder finder = new NodeFinder(content, position, i);
 		ASTNode node = finder.locateNode(script);
