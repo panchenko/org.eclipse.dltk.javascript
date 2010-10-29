@@ -275,8 +275,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 							.getScriptProject().getProject()));
 		}
 		char[] source = input.getContentsAsCharArray();
-		return parse(createTokenStream(source),
-				new Reporter(TextUtils.createLineTracker(source), reporter));
+		return parse(createTokenStream(source), reporter == null ? null
+				: new Reporter(TextUtils.createLineTracker(source), reporter));
 	}
 
 	/**
