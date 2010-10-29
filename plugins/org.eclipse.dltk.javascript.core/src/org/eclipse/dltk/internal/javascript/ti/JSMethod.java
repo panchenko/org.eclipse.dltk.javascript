@@ -82,6 +82,11 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		return priv;
 	}
 
+	@Override
+	public String toString() {
+		return name + super.toString() + (type != null ? ":" + type : "");
+	}
+
 	private static class Parameter implements IParameter {
 
 		private String name;
@@ -128,6 +133,11 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 		public void setPropertiesType(Type propertiesType) {
 			this.propertiesType = propertiesType;
+		}
+
+		@Override
+		public String toString() {
+			return type != null ? name + ':' + type : name;
 		}
 
 	}
