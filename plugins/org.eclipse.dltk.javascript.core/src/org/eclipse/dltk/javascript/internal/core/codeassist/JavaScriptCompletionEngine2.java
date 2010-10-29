@@ -13,7 +13,6 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
@@ -67,22 +66,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		if (position < 0 || position > content.length()) {
 			return;
 		}
-		String generatedIdentifier = null;
-		if (position > 0) {
-			generatedIdentifier = "e"
-					+ UUID.randomUUID().toString().replace('-', '_');
-			if (content.charAt(position - 1) == '.') {
-				// special case;
-				content = content.substring(0, position) + " "
-						+ Util.LINE_SEPARATOR + " " + generatedIdentifier
-						+ content.substring(position);
-			} else if (content.charAt(position - 1) == '=') {
-				// special case;
-				content = content.substring(0, position) + " "
-						+ Util.LINE_SEPARATOR + " " + generatedIdentifier
-						+ content.substring(position);
-			}
-		}
+
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		inferencer2.setModelElement(cu.getModelElement());
 		final Script script = JavaScriptParserUtil.parse(cu, null);
@@ -128,9 +112,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			final CompletionPath path = new CompletionPath(
 					calculator.getCompletion());
 			final Reporter reporter = new Reporter(path.lastSegment(), position);
-			if (generatedIdentifier != null) {
-				reporter.ignore(generatedIdentifier);
-			}
 			if (calculator.isMember() && !path.isEmpty()
 					&& path.lastSegment() != null) {
 				doCompletionOnMember(inferencer2, visitor.getCollection(),
