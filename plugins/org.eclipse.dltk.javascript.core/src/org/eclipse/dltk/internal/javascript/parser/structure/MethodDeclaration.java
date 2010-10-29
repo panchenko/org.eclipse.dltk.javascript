@@ -44,6 +44,9 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 		copyLocation(location, mi);
 		final JSMethod method = (JSMethod) child.getAttribute(PARAMETERS);
 		if (method != null) {
+			if (mi.returnType == null) {
+				mi.returnType = method.getType();
+			}
 			if (method.isDeprecated()) {
 				mi.modifiers |= JSModifiers.DEPRECATED;
 			}
