@@ -133,6 +133,11 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public IValue getChild(String name, boolean resolve) {
+			// just guess that if the child is the function operator it is a new
+			// expression of this type. return then the none static type.
+			if (name.equals(IValueReference.FUNCTION_OP)) {
+				return new TypeValue(types);
+			}
 			for (Type type : types) {
 				IValue child = findMember(type, name, MemberPredicates.STATIC);
 				if (child != null)
