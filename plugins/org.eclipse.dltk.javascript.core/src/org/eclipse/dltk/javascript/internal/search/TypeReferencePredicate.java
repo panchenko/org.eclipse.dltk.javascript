@@ -31,12 +31,12 @@ public class TypeReferencePredicate extends
 	public MatchLevel match(MatchingNode node) {
 		if (node instanceof MethodDeclarationNode) {
 			MethodDeclarationNode mNode = (MethodDeclarationNode) node;
-			MatchLevel level = matchName(mNode.method.getType());
+			MatchLevel level = matchTypeName(mNode.method.getType());
 			if (level != null) {
 				return level;
 			}
 			for (IParameter parameter : mNode.method.getParameters()) {
-				level = matchName(parameter.getType());
+				level = matchTypeName(parameter.getType());
 				if (level != null) {
 					return level;
 				}
@@ -46,6 +46,12 @@ public class TypeReferencePredicate extends
 			return matchType(fNode.declaredType);
 		}
 		return null;
+	}
+
+	private MatchLevel matchTypeName(String typeName) {
+		if (typeName == null)
+			return null;
+		return matchName(typeName);
 	}
 
 	/**
