@@ -361,7 +361,9 @@ public class JavascriptAutoEditStrategy extends
 	private boolean isClosed(IDocument d, int offset, int length) {
 		String sm = d.get();
 		int levelBefore = countBrackets(sm, 0, offset);
-		return levelBefore <= (countBrackets(sm, offset, sm.length()) * -1);
+		int levelAfter = countBrackets(sm, offset, sm.length());
+		System.err.println(levelBefore + " :: " + levelAfter);
+		return levelBefore <= (levelAfter * -1);
 	}
 
 	/**
@@ -404,6 +406,11 @@ public class JavascriptAutoEditStrategy extends
 						while (aPlus1 < end) {
 							char c = sm.charAt(aPlus1);
 							aPlus1++;
+							if (c == '\\') {
+								// escape char add one mre
+								aPlus1++;
+								continue;
+							}
 							if (c == '/') {
 								// reg exp found (/xxx/)
 								a = aPlus1;
