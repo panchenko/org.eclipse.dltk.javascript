@@ -41,7 +41,6 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
-import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -101,16 +100,19 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		private final CallExpression node;
 		private final IValueReference reference;
 		private final ValidationVisitor visitor;
+		private final IValueReference[] arguments;
 
 		public CallExpressionValidator(CallExpression node,
-				IValueReference reference, ValidationVisitor visitor) {
+				IValueReference reference, IValueReference[] arguments,
+				ValidationVisitor visitor) {
 			this.node = node;
 			this.reference = reference;
+			this.arguments = arguments;
 			this.visitor = visitor;
 		}
 
 		public void call() {
-			visitor.validateCallExpression(node, reference);
+			visitor.validateCallExpression(node, reference, arguments);
 		}
 	}
 
@@ -184,8 +186,14 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				modes.remove(expression);
 				if (reference == null)
 					return null;
+				final List<ASTNode> callArgs = node.getArguments();
+				IValueReference[] arguments = new IValueReference[callArgs
+						.size()];
+				for (int i = 0, size = callArgs.size(); i < size; ++i) {
+					arguments[i] = visit(callArgs.get(i));
+				}
 				pushExpressionValidator(new CallExpressionValidator(node,
-						reference, this));
+						reference, arguments, this));
 				return reference.getChild(IValueReference.FUNCTION_OP);
 			} finally {
 				if (started)
@@ -225,8 +233,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		 * @param reference
 		 * @return
 		 */
-		private IValueReference validateCallExpression(CallExpression node,
-				final IValueReference reference) {
+		private void validateCallExpression(CallExpression node,
+				final IValueReference reference, IValueReference[] arguments) {
 
 			final ASTNode expression = node.getExpression();
 			final ASTNode methodNode;
@@ -240,11 +248,6 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					.extractElements(reference, Method.class);
 			if (methods != null) {
 				final List<ASTNode> callArgs = node.getArguments();
-				IValueReference[] arguments = new IValueReference[callArgs
-						.size()];
-				for (int i = 0, size = callArgs.size(); i < size; ++i) {
-					arguments[i] = visit(callArgs.get(i));
-				}
 				Method method = JavaScriptValidations.selectMethod(methods,
 						arguments);
 				if (method == null) {
@@ -268,7 +271,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							// configurable)
 						}
 					}
-					return null;
+					return;
 				}
 				if (!validateParameterCount(method, callArgs)) {
 					reportMethodParameterError(methodNode, arguments,
@@ -301,12 +304,6 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 										.sourceEnd());
 					}
 					List<IParameter> parameters = method.getParameters();
-					final List<ASTNode> callArgs = node.getArguments();
-					IValueReference[] arguments = new IValueReference[callArgs
-							.size()];
-					for (int i = 0, size = callArgs.size(); i < size; ++i) {
-						arguments[i] = visit(callArgs.get(i));
-					}
 					if (!validateParameters(parameters, arguments)) {
 						reporter.reportProblem(
 								JavaScriptProblems.WRONG_PARAMETERS,
@@ -360,12 +357,12 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					} else {
 						if (expression instanceof NewExpression) {
 							if (reference.getKind() == ReferenceKind.TYPE) {
-								return reference;
+								return;
 							}
 							Type newType = JavaScriptValidations
 									.typeOf(reference);
 							if (newType != null) {
-								return reference;
+								return;
 							}
 
 						}
@@ -375,8 +372,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								// ignore array lookup function calls
 								// like: array[1](),
 								// those are dynamic.
-								return reference
-										.getChild(IValueReference.FUNCTION_OP);
+								return;
 							}
 							parent = parent.getParent();
 						}
@@ -403,7 +399,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					}
 				}
 			}
-			return reference.getChild(IValueReference.FUNCTION_OP);
+			return;
 		}
 
 		private void reportDeprecatedMethod(ASTNode methodNode,
@@ -473,9 +469,12 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (param != null && param != null
 						&& argumentType != null
 						&& !param.equals(argumentType.getName())) {
-					if (param.equals(ITypeNames.ARRAY)
-							&& argumentType.getName().startsWith(
-									ITypeNames.ARRAY + '<'))
+					String argumentName = argumentType.getName();
+					int index = argumentName.indexOf('<');
+					if (index != -1) {
+						argumentName = argumentName.substring(0, index);
+					}
+					if (param.equals(argumentName))
 						continue;
 					return false;
 				}
