@@ -242,4 +242,51 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 	}
+	
+	
+	
+	public void testGenericParamWtihNoneGenericCall() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Array<String>} array the value of the node");
+		code.add(" */");
+		code.add("function testArray(array) {");
+		code.add("}");
+		code.add("function test() {");
+		code.add("testArray(new Array());");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+	
+	public void testGenericParamWtihGenericCall() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Array<String>} array the value of the node");
+		code.add(" */");
+		code.add("function testArray(array) {");
+		code.add("}");
+		code.add("function test() {");
+		code.add("testArray(['test','test2']);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
+	}
+	
+	public void testNoneGenericParamWtihGenericCall() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Array} array the value of the node");
+		code.add(" */");
+		code.add("function testArray(array) {");
+		code.add("}");
+		code.add("function test() {");
+		code.add("testArray(['test','test2']);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
+	}
+
 }
