@@ -20,7 +20,9 @@ import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IAccessRule;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.Predicate;
+import org.eclipse.dltk.internal.core.ModelManager;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
@@ -69,6 +71,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		inferencer2.setModelElement(cu.getModelElement());
+
+		if (cu instanceof ISourceModule) {
+			ModelManager.getModelManager().getSourceModuleInfoCache()
+					.remove((ISourceModule) cu);
+		}
+
 		final Script script = JavaScriptParserUtil.parse(cu, null);
 		final NodeFinder nodeFinder = new NodeFinder(content, position,
 				position);
@@ -172,6 +180,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					break;
 			}
 		}
+
 		if (item != null && exists(item)) {
 			reportItems(reporter, item, true);
 		}
