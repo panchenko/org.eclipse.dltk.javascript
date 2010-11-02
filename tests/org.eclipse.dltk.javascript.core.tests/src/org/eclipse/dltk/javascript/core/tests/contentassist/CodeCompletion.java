@@ -10,6 +10,8 @@ import org.eclipse.dltk.core.CompletionProposal;
 
 public class CodeCompletion extends AbstractCompletionTest {
 
+	private static final String ARGUMENTS = "arguments";
+
 	/**
 	 * dumb completion on keyword
 	 */
@@ -126,7 +128,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test11() {
-		String[] names = new String[] { "firstVar", "secondVar", "main" };
+		String[] names = new String[] { ARGUMENTS, "firstVar", "secondVar",
+				"main" };
 		IModuleSource module = createModule("test11.js");
 		int position = lastPositionInFile("{", module);
 		basicTest(module, position, names);
@@ -276,7 +279,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test29() {
-		String[] names = new String[] { "x", "main" };
+		String[] names = new String[] { ARGUMENTS, "x", "main" };
 		IModuleSource module = createModule("test29.js");
 		int position = lastPositionInFile("{", module);
 		basicTest(module, position, names);
@@ -308,7 +311,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test33() {
-		String[] names = new String[] { "object", "objectVariable", "main" };
+		String[] names = new String[] { ARGUMENTS, "object", "objectVariable",
+				"main" };
 		IModuleSource module = createModule("test33.js");
 		int position = lastPositionInFile("{", module);
 		basicTest(module, position, names);
@@ -332,7 +336,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test36() {
-		String[] names = new String[] { "c", "object", "e", "main" };
+		String[] names = new String[] { ARGUMENTS, "c", "object", "e", "main" };
 		IModuleSource module = createModule("test36.js");
 		int position = lastPositionInFile("{", module);
 		basicTest(module, position, names);
@@ -340,7 +344,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test37() {
-		String[] names = new String[] { "forward", "hello", "object", "main" };
+		String[] names = new String[] { ARGUMENTS, "forward", "hello",
+				"object", "main" };
 		IModuleSource module = createModule("test37.js");
 		int position = lastPositionInFile("{", module);
 		basicTest(module, position, names);
@@ -388,7 +393,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 
 	public void test43() {
-		String[] names = new String[] { "main" };
+		String[] names = new String[] { ARGUMENTS, "main" };
 		IModuleSource module = createModule("test43.js");
 		int position = lastPositionInFile(";", module);
 		basicTest(module, position, names);
