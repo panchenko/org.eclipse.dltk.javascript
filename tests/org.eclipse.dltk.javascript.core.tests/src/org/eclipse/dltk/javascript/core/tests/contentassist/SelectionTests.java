@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.contentassist;
 
+import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
 import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.lastPositionInFile;
 
 import org.eclipse.dltk.codeassist.ISelectionEngine;
@@ -30,7 +31,7 @@ public class SelectionTests extends AbstractModelTests {
 	private static final String PRJ_NAME = "selection";
 
 	public SelectionTests(String name) {
-		super("org.eclipse.dltk.javascript.core.tests", name);
+		super(PLUGIN_ID, name);
 	}
 
 	public static Suite suite() {

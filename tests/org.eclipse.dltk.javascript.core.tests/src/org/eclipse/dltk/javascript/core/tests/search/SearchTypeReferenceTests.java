@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.search;
 
+import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IMethod;
@@ -21,7 +23,7 @@ import org.eclipse.dltk.core.tests.model.TestSearchResults;
 public class SearchTypeReferenceTests extends AbstractSingleProjectSearchTests {
 
 	public SearchTypeReferenceTests(String testName) {
-		super("org.eclipse.dltk.javascript.core.tests", testName, "search");
+		super(PLUGIN_ID, testName, "search");
 	}
 
 	public static Suite suite() {
