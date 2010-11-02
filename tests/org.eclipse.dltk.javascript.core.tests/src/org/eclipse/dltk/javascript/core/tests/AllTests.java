@@ -3,6 +3,7 @@ package org.eclipse.dltk.javascript.core.tests;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.eclipse.dltk.javascript.core.tests.builder.BuildChangeTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CodeCompletion;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CompletionStringParsing;
 import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
@@ -20,10 +21,13 @@ import org.eclipse.dltk.javascript.core.tests.validation.TypeInfoValidationTests
 
 public class AllTests {
 
+	public static final String PLUGIN_ID = "org.eclipse.dltk.javascript.core.tests";
+
 	public static Test suite() {
 		TestSuite suite = new TestSuite(
 				"Test for org.eclipse.dltk.javascript.core");
 		// $JUnit-BEGIN$
+		suite.addTestSuite(BuildChangeTests.class);
 		suite.addTestSuite(TypeInfoModelTests.class);
 		suite.addTestSuite(TypeInferenceTests.class);
 		suite.addTestSuite(StructureParserTests.class);
