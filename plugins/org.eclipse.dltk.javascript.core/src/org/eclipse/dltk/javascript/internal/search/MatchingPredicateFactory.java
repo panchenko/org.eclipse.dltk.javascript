@@ -15,6 +15,7 @@ import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.core.search.matching2.IMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.OrMatchingPredicate;
 import org.eclipse.dltk.internal.core.search.matching.FieldPattern;
+import org.eclipse.dltk.internal.core.search.matching.LocalVariablePattern;
 import org.eclipse.dltk.internal.core.search.matching.MethodDeclarationPattern;
 import org.eclipse.dltk.internal.core.search.matching.MethodPattern;
 import org.eclipse.dltk.internal.core.search.matching.OrPattern;
@@ -31,6 +32,8 @@ public class MatchingPredicateFactory {
 			return new MethodPredicate((MethodDeclarationPattern) pattern);
 		} else if (pattern instanceof TypeReferencePattern) {
 			return new TypeReferencePredicate((TypeReferencePattern) pattern);
+		} else if (pattern instanceof LocalVariablePattern) {
+			return new LocalVariablePredicate((LocalVariablePattern) pattern);
 		} else if (pattern instanceof OrPattern) {
 			OrMatchingPredicate<MatchingNode> predicate = new OrMatchingPredicate<MatchingNode>();
 			for (SearchPattern p : ((OrPattern) pattern).getPatterns()) {

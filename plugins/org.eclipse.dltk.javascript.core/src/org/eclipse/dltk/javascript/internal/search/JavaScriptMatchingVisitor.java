@@ -86,7 +86,10 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 	@Override
 	public IValueReference visitIdentifier(Identifier node) {
 		final IValueReference result = peekContext().getChild(node.getName());
-		if (currentMode() == VisitorMode.CALL) {
+		if (result != null && result.getKind().isLocal() && inFunction()) {
+			locator.report(new LocalVariableReferenceNode(node, result
+					.getLocation()));
+		} else if (currentMode() == VisitorMode.CALL) {
 			locator.report(new MethodReferenceNode(node));
 		} else {
 			locator.report(new FieldReferenceNode(node));
@@ -114,8 +117,14 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 			VariableDeclaration declaration) {
 		final IValueReference result = super.createVariable(context,
 				declaration);
-		locator.report(new FieldDeclarationNode(declaration.getIdentifier(),
-				result.getDeclaredType()));
+		if (inFunction()) {
+			locator.report(new LocalVariableDeclarationNode(declaration
+					.getIdentifier(), getSource().getSourceModule(), result
+					.getDeclaredType()));
+		} else {
+			locator.report(new FieldDeclarationNode(
+					declaration.getIdentifier(), result.getDeclaredType()));
+		}
 		return result;
 	}
 

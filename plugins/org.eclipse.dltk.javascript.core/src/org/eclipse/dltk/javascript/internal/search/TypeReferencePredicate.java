@@ -44,6 +44,9 @@ public class TypeReferencePredicate extends
 		} else if (node instanceof FieldDeclarationNode) {
 			FieldDeclarationNode fNode = (FieldDeclarationNode) node;
 			return matchType(fNode.declaredType);
+		} else if (node instanceof LocalVariableDeclarationNode) {
+			LocalVariableDeclarationNode vNode = (LocalVariableDeclarationNode) node;
+			return matchType(vNode.declaredType);
 		}
 		return null;
 	}

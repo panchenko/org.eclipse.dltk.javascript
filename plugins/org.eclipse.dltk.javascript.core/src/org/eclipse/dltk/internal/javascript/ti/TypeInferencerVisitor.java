@@ -123,7 +123,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return branching;
 	}
 
-	private ReferenceSource getSource() {
+	protected ReferenceSource getSource() {
 		final ReferenceSource source = context.getSource();
 		return source != null ? source : ReferenceSource.UNKNOWN;
 	}

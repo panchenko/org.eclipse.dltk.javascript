@@ -27,6 +27,8 @@ import org.eclipse.dltk.core.search.BasicSearchEngine;
 import org.eclipse.dltk.core.search.FieldDeclarationMatch;
 import org.eclipse.dltk.core.search.FieldReferenceMatch;
 import org.eclipse.dltk.core.search.IDLTKSearchScope;
+import org.eclipse.dltk.core.search.LocalVariableDeclarationMatch;
+import org.eclipse.dltk.core.search.LocalVariableReferenceMatch;
 import org.eclipse.dltk.core.search.MethodDeclarationMatch;
 import org.eclipse.dltk.core.search.MethodReferenceMatch;
 import org.eclipse.dltk.core.search.SearchDocument;
@@ -115,8 +117,8 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 		try {
 			final ISourceRange range = ((ISourceReference) element)
 					.getSourceRange();
-			List<MatchingNode> matchingNodes = nodeSet.matchingNodes(range
-					.getOffset(), range.getOffset() + range.getLength());
+			List<MatchingNode> matchingNodes = nodeSet.matchingNodes(
+					range.getOffset(), range.getOffset() + range.getLength());
 			for (MatchingNode node : matchingNodes) {
 				nodeSet.removeTrustedMatch(node);
 				report(node, element);
@@ -129,29 +131,38 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 	protected void report(MatchingNode node, IModelElement element)
 			throws CoreException {
 		if (node instanceof FieldDeclarationNode) {
-			requestor.acceptSearchMatch(new FieldDeclarationMatch(element,
-					SearchMatch.A_ACCURATE
-					/* accuracy */, node.sourceStart(), node.sourceEnd()
-							- node.sourceStart(), participant, element
-							.getResource()));
+			requestor
+					.acceptSearchMatch(new FieldDeclarationMatch(element,
+							SearchMatch.A_ACCURATE, node.sourceStart(), node
+									.sourceLength(), participant, element
+									.getResource()));
 		} else if (node instanceof FieldReferenceNode) {
 			requestor.acceptSearchMatch(new FieldReferenceMatch(element,
-					((FieldReferenceNode) node).node, SearchMatch.A_ACCURATE
-					/* accuracy */, node.sourceStart(), node.sourceEnd()
-							- node.sourceStart(), true, true, false,
+					((FieldReferenceNode) node).node, SearchMatch.A_ACCURATE,
+					node.sourceStart(), node.sourceLength(), true, true, false,
 					participant, element.getResource()));
 		} else if (node instanceof MethodDeclarationNode) {
-			requestor.acceptSearchMatch(new MethodDeclarationMatch(element,
-					SearchMatch.A_ACCURATE, node.sourceStart(), node
-							.sourceEnd()
-							- node.sourceStart(), participant, element
-							.getResource()));
+			requestor
+					.acceptSearchMatch(new MethodDeclarationMatch(element,
+							SearchMatch.A_ACCURATE, node.sourceStart(), node
+									.sourceLength(), participant, element
+									.getResource()));
 		} else if (node instanceof MethodReferenceNode) {
 			requestor.acceptSearchMatch(new MethodReferenceMatch(element,
 					SearchMatch.A_ACCURATE, node.sourceStart(), node
-							.sourceEnd()
-							- node.sourceStart(), false, participant, element
+							.sourceLength(), false, participant, element
 							.getResource()));
+		} else if (node instanceof LocalVariableDeclarationNode) {
+			requestor
+					.acceptSearchMatch(new LocalVariableDeclarationMatch(
+							element, SearchMatch.A_ACCURATE,
+							node.sourceStart(), node.sourceLength(),
+							participant, element.getResource()));
+		} else if (node instanceof LocalVariableReferenceNode) {
+			requestor.acceptSearchMatch(new LocalVariableReferenceMatch(
+					element, SearchMatch.A_ACCURATE, node.sourceStart(), node
+							.sourceLength(), true, true, false, participant,
+					element.getResource()));
 		} else {
 			throw new IllegalArgumentException(node.getClass().getName()
 					+ " support not implemented");

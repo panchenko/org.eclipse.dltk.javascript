@@ -9,12 +9,26 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.typeinference;
+package org.eclipse.dltk.javascript.internal.search;
 
-public enum ReferenceKind {
-	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL, FUNCTION, TYPE;
+import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-	public boolean isLocal() {
-		return this == LOCAL || this == ARGUMENT;
+public class LocalVariableDeclarationNode extends
+		AbstractMatchingNode<Identifier> {
+
+	final ISourceModule module;
+	final Type declaredType;
+
+	/**
+	 * @param node
+	 */
+	public LocalVariableDeclarationNode(Identifier node, ISourceModule module,
+			Type declaredType) {
+		super(node);
+		this.module = module;
+		this.declaredType = declaredType;
 	}
+
 }
