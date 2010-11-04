@@ -21,7 +21,6 @@ import junit.framework.Assert;
 import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
-import org.eclipse.dltk.ast.declarations.ModuleDeclaration;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.javascript.ast.ISourceable;
 import org.eclipse.dltk.javascript.ast.Script;
