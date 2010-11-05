@@ -31,6 +31,8 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.model.LocalVariable;
+import org.eclipse.dltk.internal.core.ModelElement;
+import org.eclipse.dltk.internal.core.SourceRange;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -155,7 +157,9 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 							location.getDeclarationEnd(),
 							location.getNameStart(), location.getNameEnd() - 1,
 							null) };
-				} else if (kind == ReferenceKind.FUNCTION) {
+				} else if (kind == ReferenceKind.FUNCTION
+						|| kind == ReferenceKind.GLOBAL
+						|| kind == ReferenceKind.FIELD) {
 					final ReferenceLocation location = value.getLocation();
 					if (DEBUG) {
 						System.out.println(location);
@@ -304,7 +308,8 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			}
 		}
 		return null;
-//		return new org.eclipse.dltk.internal.core.Member((ModelElement) module) {
+//		return new org.eclipse.dltk.internal.core.NamedMember(
+//				(ModelElement) module, "test") {
 //
 //			public int getElementType() {
 //				return 0;

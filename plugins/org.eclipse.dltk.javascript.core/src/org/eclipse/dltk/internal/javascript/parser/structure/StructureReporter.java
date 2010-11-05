@@ -107,7 +107,9 @@ public class StructureReporter extends TypeInferencerVisitor {
 			final IValueReference child = collection.getChild(childName);
 			if (child == null || !processed.add(child))
 				continue;
-			if (child.getKind() == ReferenceKind.LOCAL) {
+			if (child.getKind() == ReferenceKind.LOCAL
+					|| child.getKind() == ReferenceKind.FIELD
+					|| child.getKind() == ReferenceKind.GLOBAL) {
 				children.add(new FieldDeclaration(childName, child));
 			} else if (child.getKind() == ReferenceKind.FUNCTION
 					|| child.hasChild(IValueReference.FUNCTION_OP)) {

@@ -12,7 +12,7 @@
 package org.eclipse.dltk.javascript.typeinference;
 
 public enum ReferenceKind {
-	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL, FUNCTION, TYPE;
+	UNKNOWN, METHOD, PROPERTY, ARGUMENT, LOCAL, GLOBAL, FIELD, FUNCTION, TYPE;
 
 	public boolean isLocal() {
 		return this == LOCAL || this == ARGUMENT;

@@ -242,7 +242,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (varType != null) {
 			reference.setDeclaredType(resolveType(varType));
 		}
-		reference.setKind(ReferenceKind.LOCAL);
+		reference.setKind(inFunction() ? ReferenceKind.LOCAL
+				: ReferenceKind.GLOBAL);
 		reference.setLocation(ReferenceLocation.create(getSource(),
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
@@ -609,7 +610,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					child.setLocation(ReferenceLocation.create(getSource(), pi
 							.getName().sourceStart(), pi.getName().sourceEnd()));
 					if (child.getKind() == ReferenceKind.UNKNOWN) {
-						child.setKind(ReferenceKind.LOCAL);
+						child.setKind(ReferenceKind.FIELD);
 					}
 				}
 			} else {
@@ -631,9 +632,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		Expression property = node.getProperty();
 		IValueReference child = extractNamedChild(object, property);
 		if (child != null && node.getObject() instanceof ThisExpression) {
-			// TODO check is this also a local reference kind or should this be
-			// a special one?
-			child.setKind(ReferenceKind.LOCAL);
+			child.setKind(ReferenceKind.FIELD);
 			child.setLocation(ReferenceLocation.create(getSource(),
 					node.sourceStart(), node.sourceEnd(),
 					property.sourceStart(), property.sourceEnd()));
