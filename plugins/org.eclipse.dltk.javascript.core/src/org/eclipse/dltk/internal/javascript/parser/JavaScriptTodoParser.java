@@ -12,7 +12,7 @@
 package org.eclipse.dltk.internal.javascript.parser;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.dltk.compiler.task.ITaskReporter;
+import org.eclipse.dltk.compiler.task.DelegatingTaskReporter;
 import org.eclipse.dltk.compiler.task.ITodoTaskPreferences;
 import org.eclipse.dltk.compiler.task.TodoTaskSimpleParser;
 import org.eclipse.dltk.core.builder.IBuildContext;
@@ -28,39 +28,15 @@ public class JavaScriptTodoParser extends TodoTaskSimpleParser implements
 		super(preferences);
 	}
 
-	private static class DelegatingTaskReporter implements ITaskReporter {
-
-		private final ITaskReporter taskReporter;
-		int lineOffset;
-		int locationOffset;
-
-		public DelegatingTaskReporter(ITaskReporter taskReporter) {
-			this.taskReporter = taskReporter;
-		}
-
-		public void reportTask(String message, int lineNumber, int priority,
-				int charStart, int charEnd) {
-			taskReporter.reportTask(message, lineNumber + lineOffset, priority,
-					charStart + locationOffset, charEnd + locationOffset);
-		}
-
-		public Object getAdapter(Class adapter) {
-			return null;
-		}
-
-	}
-
 	public void build(IBuildContext context) throws CoreException {
 		final Script script = JavaScriptValidations.parse(context);
 		if (script == null) {
 			return;
 		}
 		final DelegatingTaskReporter taskReporter = new DelegatingTaskReporter(
-				context.getTaskReporter());
+				context.getTaskReporter(), context.getLineTracker());
 		for (Comment comment : script.getComments()) {
-			taskReporter.locationOffset = comment.sourceStart();
-			taskReporter.lineOffset = context.getLineTracker()
-					.getLineNumberOfOffset(comment.sourceStart());
+			taskReporter.setOffset(comment.sourceStart());
 			parse(taskReporter, comment.getText().toCharArray());
 		}
 	}
