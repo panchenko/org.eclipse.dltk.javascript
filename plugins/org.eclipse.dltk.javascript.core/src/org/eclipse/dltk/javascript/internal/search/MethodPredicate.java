@@ -11,26 +11,62 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
+import org.eclipse.dltk.core.IMember;
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.core.search.matching2.AbstractMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.internal.core.search.matching.MethodDeclarationPattern;
 import org.eclipse.dltk.internal.core.search.matching.MethodPattern;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
 public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 
 	private final boolean declarations;
 	private final boolean references;
 
+	private final ISourceModule module;
+	private final int nameStart;
+	private final int nameEnd;
+
 	public MethodPredicate(MethodPattern pattern) {
-		super(pattern, pattern.selector);
-		this.declarations = pattern.findDeclarations;
-		this.references = pattern.findReferences;
+		this(pattern, pattern.selector, pattern.findDeclarations,
+				pattern.findReferences);
 	}
 
 	public MethodPredicate(MethodDeclarationPattern pattern) {
-		super(pattern, pattern.simpleName);
-		this.declarations = true;
-		this.references = false;
+		this(pattern, pattern.simpleName, true, false);
+	}
+
+	private MethodPredicate(SearchPattern pattern, char[] pat,
+			boolean declarations, boolean references) {
+		super(pattern, pat);
+		this.declarations = declarations;
+		this.references = references;
+		ISourceRange nameRange = null;
+		if (pattern.focus instanceof IMember) {
+			try {
+				nameRange = ((IMember) pattern.focus).getNameRange();
+			} catch (ModelException e) {
+			}
+		}
+
+		if (nameRange != null) {
+			nameStart = nameRange.getOffset();
+			nameEnd = nameStart + nameRange.getLength();
+			if (pattern.focus != null)
+				module = (ISourceModule) pattern.focus
+						.getAncestor(IModelElement.SOURCE_MODULE);
+			else
+				module = null;
+		} else {
+			nameStart = -1;
+			nameEnd = -1;
+			module = null;
+		}
 	}
 
 	public MatchLevel match(MatchingNode node) {
@@ -43,10 +79,21 @@ public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 			if (!references)
 				return null;
 			final MethodReferenceNode mNode = (MethodReferenceNode) node;
-			return matchName(mNode.node.getName());
-		} else {
-			return null;
+			final ReferenceLocation location = mNode.getReferenceLocation();
+			if (location != null && nameStart != -1 && nameEnd != -1) {
+				if (location.getNameStart() == nameStart
+						&& location.getNameEnd() == nameEnd
+						&& isSame(location.getSourceModule())) {
+					return matchName(mNode.node.getName());
+				}
+			} else {
+				return matchName(mNode.node.getName());
+			}
 		}
+		return null;
 	}
 
+	private boolean isSame(ISourceModule module) {
+		return module != null && module.equals(this.module);
+	}
 }

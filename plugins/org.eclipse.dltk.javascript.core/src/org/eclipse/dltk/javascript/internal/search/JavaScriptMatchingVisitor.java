@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.core.search.matching2.MatchingCollector;
+import org.eclipse.dltk.core.search.matching2.IMatchingCollector;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
@@ -33,13 +33,13 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
 public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 
-	private final MatchingCollector<MatchingNode> locator;
+	private final IMatchingCollector<MatchingNode> locator;
 
 	/**
 	 * @param context
 	 */
 	public JavaScriptMatchingVisitor(ITypeInferenceContext context,
-			MatchingCollector<MatchingNode> locator) {
+			IMatchingCollector<MatchingNode> locator) {
 		super(context);
 		this.locator = locator;
 	}
@@ -90,26 +90,26 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 			locator.report(new LocalVariableReferenceNode(node, result
 					.getLocation()));
 		} else if (currentMode() == VisitorMode.CALL) {
-			locator.report(new MethodReferenceNode(node));
+			locator.report(new MethodReferenceNode(node, result));
 		} else {
-			locator.report(new FieldReferenceNode(node));
+			locator.report(new FieldReferenceNode(node, result));
 		}
 		return result;
 	}
 
 	@Override
 	public IValueReference visitPropertyExpression(PropertyExpression node) {
-		final IValueReference object = visit(node.getObject());
+		final IValueReference object = super.visitPropertyExpression(node);
 		final Expression property = node.getProperty();
 		if (property instanceof Identifier) {
 			final Identifier prop = (Identifier) property;
 			if (currentMode() == VisitorMode.CALL) {
-				locator.report(new MethodReferenceNode(prop));
+				locator.report(new MethodReferenceNode(prop, object));
 			} else {
-				locator.report(new FieldReferenceNode(prop));
+				locator.report(new FieldReferenceNode(prop, object));
 			}
 		}
-		return extractNamedChild(object, property);
+		return object;
 	}
 
 	@Override
