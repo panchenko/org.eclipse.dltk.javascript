@@ -128,6 +128,14 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 		return result;
 	}
 
+	@Override
+	public IValueReference visitFunctionStatement(FunctionStatement node) {
+		IValueReference fs = super.visitFunctionStatement(node);
+		visit(node.getName());
+		return fs;
+
+	}
+
 	private void earlyExit() {
 		if (value == null || value.getKind() != ReferenceKind.UNKNOWN) {
 			throw new PositionReachedException(target, value);
