@@ -25,6 +25,8 @@ public class MethodReferenceNode extends AbstractMatchingNode<Identifier> {
 	}
 
 	ReferenceLocation getReferenceLocation() {
-		return reference.getLocation();
+		if (reference != null)
+			return reference.getLocation();
+		return null;
 	}
 }
