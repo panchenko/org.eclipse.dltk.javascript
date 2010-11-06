@@ -105,7 +105,11 @@ public class StructureReporter extends TypeInferencerVisitor {
 		List<Declaration> children = new ArrayList<Declaration>();
 		for (String childName : collection.getDirectChildren()) {
 			final IValueReference child = collection.getChild(childName);
-			if (child == null || !processed.add(child))
+			if (child == null
+					|| !processed.add(child)
+					|| (child.getLocation() != null && child.getLocation()
+							.getSourceModule() != context
+							.getSource().getSourceModule()))
 				continue;
 			if (child.getKind() == ReferenceKind.LOCAL
 					|| child.getKind() == ReferenceKind.FIELD
