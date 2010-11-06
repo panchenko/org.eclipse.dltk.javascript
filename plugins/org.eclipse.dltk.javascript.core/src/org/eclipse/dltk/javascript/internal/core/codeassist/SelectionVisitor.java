@@ -131,7 +131,8 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 	@Override
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
 		IValueReference fs = super.visitFunctionStatement(node);
-		visit(node.getName());
+		if (node.getName() != null)
+			visit(node.getName());
 		return fs;
 
 	}
