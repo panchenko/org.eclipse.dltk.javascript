@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.dltk.javascript.core.manipulation/generated"
+    editDirectory="/org.eclipse.dltk.javascript.core.dom.edit/src" editorDirectory="/org.eclipse.dltk.javascript.core.dom.editor/src"
+    modelPluginID="org.eclipse.dltk.javascript.core.manipulation" modelName="Javascript"
+    editPluginClass="org.eclipse.dltk.javascript.core.dom.provider.JavascriptEditPlugin"
+    editorPluginClass="org.eclipse.dltk.javascript.core.dom.presentation.JavascriptEditorPlugin"
+    updateClasspath="false" testSuiteClass="org.eclipse.dltk.javascript.core.dom.tests.JavascriptAllTests"
+    importerID="org.eclipse.emf.importer.java" complianceLevel="6.0" copyrightFields="false">
+  <foreignModel>@model</foreignModel>
+  <genPackages prefix="Dom" basePackage="org.eclipse.dltk.javascript.core" disposableProviderFactory="true"
+      contentTypeIdentifier="" ecorePackage="dom.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="dom.ecore#//UnaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/postfixInc"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/postfixDec"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/delete"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/void"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/typeof"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/prefixInc"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/prefixDec"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/unaryPlus"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/numNeg"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/bwNot"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/not"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//UnaryOperator/yield"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="dom.ecore#//BinaryOperator">
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/mul"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/div"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/mod"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/add"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/sub"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/lsh"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/rsh"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/ursh"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/less"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/greater"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/leq"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/geq"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/instanceof"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/in"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/eq"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/neq"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/same"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/nsame"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/bwAnd"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/bwXor"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/bwOr"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/logAnd"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/logOr"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/assign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/mulAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/divAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/modAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/addAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/subAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/lshAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/rshAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/urshAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/andAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/xorAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/orAssign"/>
+      <genEnumLiterals ecoreEnumLiteral="dom.ecore#//BinaryOperator/comma"/>
+    </genEnums>
+    <genClasses image="false" ecoreClass="dom.ecore#//Node">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//Node/begin"/>
+      <genFeatures createChild="false" propertyCategory="" ecoreFeature="ecore:EAttribute dom.ecore#//Node/end"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//Comment"/>
+    <genClasses ecoreClass="dom.ecore#//MutliLineComment"/>
+    <genClasses ecoreClass="dom.ecore#//SingleLineComment"/>
+    <genClasses ecoreClass="dom.ecore#//Identifier">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//Identifier/name"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//VariableReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//VariableReference/variable"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//Label">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//Label/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//Expression"/>
+    <genClasses ecoreClass="dom.ecore#//NullLiteral"/>
+    <genClasses ecoreClass="dom.ecore#//BooleanLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//BooleanLiteral/text"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//NumericLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//NumericLiteral/text"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//StringLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//StringLiteral/text"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//RegularExpressionLiteral">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//RegularExpressionLiteral/text"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ThisExpression"/>
+    <genClasses ecoreClass="dom.ecore#//ArrayLiteral">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ArrayLiteral/elements"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//IArrayElement"/>
+    <genClasses ecoreClass="dom.ecore#//Elision"/>
+    <genClasses ecoreClass="dom.ecore#//ObjectLiteral">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ObjectLiteral/properties"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//PropertyAssignment">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//PropertyAssignment/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//IPropertyName"/>
+    <genClasses ecoreClass="dom.ecore#//SimplePropertyAssignment">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//SimplePropertyAssignment/initializer"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//AccessorAssignment">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//AccessorAssignment/body"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//GetterAssignment"/>
+    <genClasses ecoreClass="dom.ecore#//SetterAssignment">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//SetterAssignment/parameter"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ParenthesizedExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ParenthesizedExpression/enclosed"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ArrayAccessExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ArrayAccessExpression/array"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ArrayAccessExpression/index"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//PropertyAccessExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//PropertyAccessExpression/object"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//PropertyAccessExpression/property"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//NewExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//NewExpression/constructor"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//NewExpression/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//CallExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//CallExpression/applicant"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//CallExpression/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//UnaryExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//UnaryExpression/argument"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//UnaryExpression/operation"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//BinaryExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//BinaryExpression/left"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//BinaryExpression/right"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//BinaryExpression/operation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//BinaryExpression/operatorPosition"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ConditionalExpression">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ConditionalExpression/predicate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ConditionalExpression/consequent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ConditionalExpression/alternative"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//Statement"/>
+    <genClasses ecoreClass="dom.ecore#//BlockStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//BlockStatement/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//VariableStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//VariableStatement/declarations"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//VariableDeclaration">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//VariableDeclaration/identifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//VariableDeclaration/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//VariableDeclaration/initializer"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//EmptyStatement"/>
+    <genClasses ecoreClass="dom.ecore#//ExpressionStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ExpressionStatement/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//IfStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//IfStatement/predicate"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//IfStatement/consequent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//IfStatement/alternative"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//IterationStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//IterationStatement/body"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//DoStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//DoStatement/condition"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//WhileStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//WhileStatement/condition"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ForStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ForStatement/initialization"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ForStatement/condition"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ForStatement/increment"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//IForInitializer"/>
+    <genClasses ecoreClass="dom.ecore#//ForInStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ForInStatement/item"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ForInStatement/collection"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ContinueStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ContinueStatement/label"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//BreakStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//BreakStatement/label"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ReturnStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ReturnStatement/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//WithStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//WithStatement/expression"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//WithStatement/statement"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//SwitchStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//SwitchStatement/selector"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//SwitchStatement/elements"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//SwitchElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//SwitchElement/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//CaseClause">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//CaseClause/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//DefaultClause"/>
+    <genClasses ecoreClass="dom.ecore#//LabeledStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//LabeledStatement/label"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//LabeledStatement/statement"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ThrowStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//ThrowStatement/exception"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//TryStatement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//TryStatement/body"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//TryStatement/catches"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//TryStatement/finallyClause"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//CatchClause">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//CatchClause/exception"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//CatchClause/filter"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//CatchClause/body"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//FinallyClause">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//FinallyClause/body"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//FunctionExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//FunctionExpression/identifier"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//FunctionExpression/parameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//FunctionExpression/returnType"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//FunctionExpression/body"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//Parameter">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//Parameter/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//Parameter/type"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//Source">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dom.ecore#//Source/statements"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ConstStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//ConstStatement/declarations"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//PropertyIdentifier"/>
+    <genClasses image="false" ecoreClass="dom.ecore#//IProperty"/>
+    <genClasses ecoreClass="dom.ecore#//XmlInitializer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//XmlInitializer/fragments"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//AttributeIdentifier">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//AttributeIdentifier/selector"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//ISelector"/>
+    <genClasses ecoreClass="dom.ecore#//QualifiedIdentifier">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//QualifiedIdentifier/namespace"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//QualifiedIdentifier/member"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//IUnqualifiedSelector"/>
+    <genClasses ecoreClass="dom.ecore#//WildcardIdentifier"/>
+    <genClasses image="false" ecoreClass="dom.ecore#//IPropertySelector"/>
+    <genClasses ecoreClass="dom.ecore#//ExpressionSelector">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//ExpressionSelector/index"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="dom.ecore#//XmlFragment"/>
+    <genClasses ecoreClass="dom.ecore#//XmlTextFragment">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//XmlTextFragment/text"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//XmlExpressionFragment">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//XmlExpressionFragment/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//DescendantAccessExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//DescendantAccessExpression/object"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//DescendantAccessExpression/property"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//FilterExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//FilterExpression/object"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//FilterExpression/filter"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//DefaultXmlNamespaceStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//DefaultXmlNamespaceStatement/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//ForEachInStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//ForEachInStatement/item"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dom.ecore#//ForEachInStatement/collection"/>
+    </genClasses>
+    <genClasses ecoreClass="dom.ecore#//Type">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dom.ecore#//Type/name"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
