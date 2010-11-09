@@ -740,4 +740,94 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals("value", node.getDeclaredType().getMembers().get(1).getName());
 		
 	}
+	
+	public void testJSDocTypeTagFunction() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("/**");
+		lines.add(" * @type String");
+		lines.add(" */");
+		lines.add("function getChild() {");
+		lines.add("}");
+		lines.add("function test() {");
+		lines.add("var x = getChild();");
+		lines.add("}");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference test = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference x = functionScope.getChild("x");
+		assertEquals(1, x.getTypes().size());
+		assertEquals("String", x.getTypes().iterator().next().getName());
+	}
+	
+	public void testJSDocReturnsTagFunction() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("/**");
+		lines.add(" * @returns {String} a nice string");
+		lines.add(" */");
+		lines.add("function getChild() {");
+		lines.add("}");
+		lines.add("function test() {");
+		lines.add("var x = getChild();");
+		lines.add("}");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference test = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference x = functionScope.getChild("x");
+		assertEquals(1, x.getTypes().size());
+		assertEquals("String", x.getTypes().iterator().next().getName());
+	}
+	
+	public void testJSDocReturnsTagLazyFunction() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("function test() {");
+		lines.add("var x = getChild();");
+		lines.add("}");
+		lines.add("/**");
+		lines.add(" * @returns {String} a nice string");
+		lines.add(" */");
+		lines.add("function getChild() {");
+		lines.add("}");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference test = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference x = functionScope.getChild("x");
+		assertEquals(1, x.getTypes().size());
+		assertEquals("String", x.getTypes().iterator().next().getName());
+	}
+
+	
+	public void testJSDocTypeTagVariable() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("/**");
+		lines.add(" * @type String");
+		lines.add(" */");
+		lines.add("var str;");
+		lines.add("function test() {");
+		lines.add("var x = str;");
+		lines.add("}");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference test = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference x = functionScope.getChild("x");
+		assertNotNull(x.getDeclaredType());
+		assertEquals("String", x.getDeclaredType().getName());
+	}
+	
+	public void testJSDocTypeTagVariableLazy() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("function test() {");
+		lines.add("var x = str;");
+		lines.add("}");
+		lines.add("/**");
+		lines.add(" * @type String");
+		lines.add(" */");
+		lines.add("var str;");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference test = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference x = functionScope.getChild("x");
+		assertNotNull(x.getDeclaredType());
+		assertEquals("String", x.getDeclaredType().getName());
+	}
+
 }
