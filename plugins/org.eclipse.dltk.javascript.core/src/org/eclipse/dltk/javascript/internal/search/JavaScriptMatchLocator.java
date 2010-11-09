@@ -83,6 +83,7 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 			if (module == null)
 				continue;
 			nodeSet.clear();
+			lazyCollector.reset();
 			inferencer2.setModelElement(module);
 			final Script script = JavaScriptParserUtil.parse(module);
 			inferencer2.doInferencing(script);
@@ -134,42 +135,39 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 	protected void report(MatchingNode node, IModelElement element)
 			throws CoreException {
 		if (node instanceof FieldDeclarationNode) {
-			requestor
-					.acceptSearchMatch(new FieldDeclarationMatch(element,
-							SearchMatch.A_ACCURATE, node.sourceStart(), node
-									.sourceLength(), participant, element
-									.getResource()));
+			requestor.acceptSearchMatch(new FieldDeclarationMatch(element,
+					SearchMatch.A_ACCURATE, node.sourceStart(), length(node),
+					participant, element.getResource()));
 		} else if (node instanceof FieldReferenceNode) {
 			requestor.acceptSearchMatch(new FieldReferenceMatch(element,
 					((FieldReferenceNode) node).node, SearchMatch.A_ACCURATE,
-					node.sourceStart(), node.sourceLength(), true, true, false,
+					node.sourceStart(), length(node), true, true, false,
 					participant, element.getResource()));
 		} else if (node instanceof MethodDeclarationNode) {
-			requestor
-					.acceptSearchMatch(new MethodDeclarationMatch(element,
-							SearchMatch.A_ACCURATE, node.sourceStart(), node
-									.sourceLength(), participant, element
-									.getResource()));
+			requestor.acceptSearchMatch(new MethodDeclarationMatch(element,
+					SearchMatch.A_ACCURATE, node.sourceStart(), length(node),
+					participant, element.getResource()));
 		} else if (node instanceof MethodReferenceNode) {
 			requestor.acceptSearchMatch(new MethodReferenceMatch(element,
-					SearchMatch.A_ACCURATE, node.sourceStart(), node
-							.sourceLength(), false, participant, element
-							.getResource()));
+					SearchMatch.A_ACCURATE, node.sourceStart(), length(node),
+					false, participant, element.getResource()));
 		} else if (node instanceof LocalVariableDeclarationNode) {
-			requestor
-					.acceptSearchMatch(new LocalVariableDeclarationMatch(
-							element, SearchMatch.A_ACCURATE,
-							node.sourceStart(), node.sourceLength(),
-							participant, element.getResource()));
+			requestor.acceptSearchMatch(new LocalVariableDeclarationMatch(
+					element, SearchMatch.A_ACCURATE, node.sourceStart(),
+					length(node), participant, element.getResource()));
 		} else if (node instanceof LocalVariableReferenceNode) {
 			requestor.acceptSearchMatch(new LocalVariableReferenceMatch(
-					element, SearchMatch.A_ACCURATE, node.sourceStart(), node
-							.sourceLength(), true, true, false, participant,
-					element.getResource()));
+					element, SearchMatch.A_ACCURATE, node.sourceStart(),
+					length(node), true, true, false, participant, element
+							.getResource()));
 		} else {
 			throw new IllegalArgumentException(node.getClass().getName()
 					+ " support not implemented");
 		}
+	}
+
+	private static int length(MatchingNode node) {
+		return node.sourceEnd() - node.sourceStart();
 	}
 
 	public void setProgressMonitor(IProgressMonitor progressMonitor) {

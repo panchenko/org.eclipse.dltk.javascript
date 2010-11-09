@@ -22,6 +22,10 @@ public class BufferingMatchingCollector<E> implements IMatchingCollector<E> {
 		for (E node : nodes) {
 			collector.report(node);
 		}
+		reset();
+	}
+
+	public void reset() {
 		nodes.clear();
 	}
 }

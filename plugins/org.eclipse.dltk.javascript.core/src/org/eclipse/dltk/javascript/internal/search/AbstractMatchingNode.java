@@ -44,10 +44,6 @@ public abstract class AbstractMatchingNode<E extends ASTNode> implements
 		return node.sourceEnd();
 	}
 
-	public int sourceLength() {
-		return node.sourceEnd() - node.sourceStart();
-	}
-
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + "(" + node + ")";

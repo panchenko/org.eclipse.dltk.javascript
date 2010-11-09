@@ -17,6 +17,4 @@ public interface MatchingNode {
 
 	int sourceEnd();
 
-	int sourceLength();
-
 }
