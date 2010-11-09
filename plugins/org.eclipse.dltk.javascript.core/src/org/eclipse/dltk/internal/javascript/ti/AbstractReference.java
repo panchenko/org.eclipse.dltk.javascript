@@ -31,8 +31,11 @@ public abstract class AbstractReference implements IValueReference,
 		if (val != null) {
 			if (value != null) {
 				IValue src = ((IValueProvider) value).getValue();
-				if (src == null)
+				if (src == null) {
+					src = new LazyReferenceValue(value);
+					val.addReference(src);
 					return;
+				}
 				val.clear();
 				if (src instanceof Value
 						&& ((IValueProvider) value).isReference()) {
@@ -158,4 +161,27 @@ public abstract class AbstractReference implements IValueReference,
 				.<String> emptySet();
 	}
 
+	private class LazyReferenceValue extends Value implements ILazyValue {
+		private final IValueReference reference;
+		private boolean resolved = false;
+
+		public LazyReferenceValue(IValueReference value) {
+			this.reference = value;
+		}
+
+		public void resolve() {
+			if (!resolved) {
+				IValue value = ((IValueProvider) reference).getValue();
+				if (value != null) {
+					resolved = true;
+					if (value instanceof Value
+							&& ((IValueProvider) reference).isReference()) {
+						addReference(value);
+					} else {
+						addValue(value);
+					}
+				}
+			}
+		}
+	}
 }
