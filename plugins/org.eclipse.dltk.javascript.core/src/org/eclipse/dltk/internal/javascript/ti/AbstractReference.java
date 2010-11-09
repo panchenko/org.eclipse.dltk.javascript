@@ -171,15 +171,17 @@ public abstract class AbstractReference implements IValueReference,
 
 		public void resolve() {
 			if (!resolved) {
+				resolved = true;
 				IValue value = ((IValueProvider) reference).getValue();
 				if (value != null) {
-					resolved = true;
 					if (value instanceof Value
 							&& ((IValueProvider) reference).isReference()) {
 						addReference(value);
 					} else {
 						addValue(value);
 					}
+				} else {
+					resolved = false;
 				}
 			}
 		}
