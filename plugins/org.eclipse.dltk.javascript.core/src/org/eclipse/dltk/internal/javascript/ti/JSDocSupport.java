@@ -33,7 +33,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 public class JSDocSupport implements IModelBuilder {
 
 	public static String[] getTags() {
-		return new String[] { DEPRECATED, PARAM_TAG, TYPE_TAG, PRIVATE_TAG };
+		return new String[] { DEPRECATED, PARAM_TAG, TYPE_TAG, RETURNS_TAG,
+				PRIVATE_TAG };
 	}
 
 	private static final String PRIVATE_TAG = "@private";
@@ -165,7 +166,14 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	private static final String TYPE_TAG = "@type"; //$NON-NLS-1$
+	private static final String RETURNS_TAG = "@returns";
 
+	/**
+	 * @see St
+	 * @param context
+	 * @param member
+	 * @param comment
+	 */
 	private void parseType(ITypeInfoContext context, IElement member,
 			String comment) {
 		int index = comment.indexOf(TYPE_TAG);
@@ -180,6 +188,23 @@ public class JSDocSupport implements IModelBuilder {
 				final String typeToken = st.nextToken();
 				member.setType(typeToken);
 			}
+		}
+		else
+		{
+			index = comment.indexOf(RETURNS_TAG);
+			if (index != -1)
+			{
+				int begingBrace = comment
+						.indexOf('{', index + RETURNS_TAG.length());
+				if (begingBrace != -1) {
+					int endBrace = comment.indexOf('}', begingBrace);
+					if (endBrace != -1) {
+						member.setType(comment.substring(begingBrace + 1,
+								endBrace).trim());
+					}
+				}
+			}
+			
 		}
 	}
 }
