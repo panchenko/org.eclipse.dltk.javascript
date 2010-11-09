@@ -767,6 +767,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
 				extension.processVariable(context, node, variable);
 			}
+			if (result.getDeclaredType() == null && variable.getType() != null) {
+				result.setDeclaredType(context.getType(variable.getType()));
+			}
 			result.setAttribute(IReferenceAttributes.VARIABLE, variable);
 		}
 		return result;
