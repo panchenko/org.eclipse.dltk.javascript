@@ -76,8 +76,8 @@ public class JavaScriptEditor extends ScriptEditor {
 				try {
 					viewer.setRedraw(false);
 
-					final String type = TextUtilities.getContentType(viewer
-							.getDocument(),
+					final String type = TextUtilities.getContentType(
+							viewer.getDocument(),
 							IJavaScriptPartitions.JS_PARTITIONING, selection.x,
 							true);
 					if (type.equals(IDocument.DEFAULT_CONTENT_TYPE)
@@ -97,12 +97,10 @@ public class JavaScriptEditor extends ScriptEditor {
 											.getSourceRange();
 
 									if (range != null) {
-										viewer
-												.setSelectedRange(range
-														.getOffset(), range
-														.getLength());
-										viewer
-												.doOperation(ISourceViewer.FORMAT);
+										viewer.setSelectedRange(
+												range.getOffset(),
+												range.getLength());
+										viewer.doOperation(ISourceViewer.FORMAT);
 									}
 								}
 							}
@@ -289,8 +287,7 @@ public class JavaScriptEditor extends ScriptEditor {
 		super.createActions();
 
 		Action action = new FormatElementAction();
-		action
-				.setActionDefinitionId(IScriptEditorActionDefinitionIds.QUICK_FORMAT);
+		action.setActionDefinitionId(IScriptEditorActionDefinitionIds.QUICK_FORMAT);
 		setAction("QuickFormat", action); //$NON-NLS-1$
 		markAsStateDependentAction("QuickFormat", true); //$NON-NLS-1$
 		setAction(DLTKActionConstants.FORMAT_ELEMENT, action);

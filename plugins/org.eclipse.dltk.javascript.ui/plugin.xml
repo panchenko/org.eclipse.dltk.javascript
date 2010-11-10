@@ -531,5 +531,13 @@
     class="org.eclipse.dltk.javascript.internal.ui.text.folding.JavaScriptCodeFoldingBlockProvider">
   </blockProvider>
 </extension>
+<extension point="org.eclipse.dltk.ui.refactoring">
+	<action
+		nature="org.eclipse.dltk.javascript.core.nature"
+		class="org.eclipse.dltk.javascript.ui.actions.ExtractTempAction"
+		id="org.eclipse.dltk.javascript.ui.action.extract.local"
+		label="%Refactoring.Actions.ExtractTemp">
+	</action>
+</extension>
 
 </plugin>
