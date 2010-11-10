@@ -611,6 +611,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 		case JSParser.NOT:
 			r = UnaryOperator.NOT;
 			break;
+		case JSParser.NEG:
 		case JSParser.SUB:
 			r = UnaryOperator.NUM_NEG;
 			break;
