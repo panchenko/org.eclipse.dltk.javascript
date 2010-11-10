@@ -64,13 +64,13 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 		try {
 			reference = visit(node.getExpression());
 		} finally {
-			if (value == null && this.arguments == null) {
-				final List<ASTNode> callArgs = node.getArguments();
-				final IValueReference[] arguments = new IValueReference[callArgs
-						.size()];
-				for (int i = 0, size = callArgs.size(); i < size; ++i) {
-					arguments[i] = visit(callArgs.get(i));
-				}
+			final List<ASTNode> callArgs = node.getArguments();
+			final IValueReference[] arguments = new IValueReference[callArgs
+					.size()];
+			for (int i = 0, size = callArgs.size(); i < size; ++i) {
+				arguments[i] = visit(callArgs.get(i));
+			}
+			if (value != null && this.arguments == null) {
 				this.arguments = arguments;
 			}
 		}
