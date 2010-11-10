@@ -5,6 +5,7 @@ import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.manipulation.IRefactoringEngine;
 import org.eclipse.dltk.internal.corext.refactoring.rename.ScriptRenameProcessor;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.Checks;
+import org.eclipse.dltk.internal.javascript.corext.refactoring.rename.RenameFunctionProcessor;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.rename.RenameLocalVariableProcessor;
 
 public class RefactoringEngine implements IRefactoringEngine {
@@ -29,8 +30,9 @@ public class RefactoringEngine implements IRefactoringEngine {
 //		case IModelElement.TYPE_PARAMETER:
 //			return RenameSupport.create((ITypeParameter) element, newName, flags);
 		case IModelElement.TYPE:
-		case IModelElement.FIELD:
 		case IModelElement.METHOD:
+			return new RenameFunctionProcessor(element);
+		case IModelElement.FIELD:
 		case IModelElement.LOCAL_VARIABLE:
 			return new RenameLocalVariableProcessor(element);
 		}

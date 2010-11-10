@@ -11,8 +11,9 @@ public class NodeFinder {
 			Node cur = (Node)it.next();
 			if (right <= cur.getBegin() || cur.getEnd() <= left)
 				it.prune();
-			if (left <= cur.getBegin() && cur.getEnd() <= right)
+			if (left <= cur.getBegin() && cur.getEnd() <= right) {
 				return cur;
+			}
 		}
 		return null;
 	}

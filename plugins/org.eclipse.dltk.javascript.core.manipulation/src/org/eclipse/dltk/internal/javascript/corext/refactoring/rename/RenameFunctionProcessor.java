@@ -9,10 +9,10 @@ import org.eclipse.dltk.internal.javascript.corext.refactoring.RefactoringCoreMe
 import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-public class RenameLocalVariableProcessor extends RenameModelElementProcessor {
-	public static final String IDENTIFIER= "org.eclipse.dltk.javascript.renameLocalVariableProcessor"; //$NON-NLS-1$
-	public RenameLocalVariableProcessor(IModelElement localVariable) {
-		super(localVariable);
+public class RenameFunctionProcessor extends RenameModelElementProcessor {
+	public static final String IDENTIFIER= "org.eclipse.dltk.javascript.renameFunctionProcessor"; //$NON-NLS-1$
+	public RenameFunctionProcessor(IModelElement function) {
+		super(function);
 	}
 
 	@Override
@@ -35,6 +35,6 @@ public class RenameLocalVariableProcessor extends RenameModelElementProcessor {
 
 	@Override
 	public String getProcessorName() {
-		return RefactoringCoreMessages.RenameTempRefactoring_rename;
+		return RefactoringCoreMessages.RenameMethodRefactoring_name;
 	}
 }

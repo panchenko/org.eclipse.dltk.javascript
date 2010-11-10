@@ -239,6 +239,7 @@ public class ExtractTempRefactoring extends Refactoring {
 	//private CompilationUnitRewrite fCURewrite;
 
 	private ISourceModule fCu;
+	private String fSource;
 
 	/*private boolean fDeclareFinal;
 
@@ -561,6 +562,7 @@ public class ExtractTempRefactoring extends Refactoring {
 			}
 			pm.worked(3);
 
+			fSource = fCu.getSource();
 			result.merge(checkSelection(new SubProgressMonitor(pm, 3)));
 			//if (!result.hasFatalError() && isLiteralNodeSelected())
 			//	fReplaceAllOccurrences = false;
@@ -816,6 +818,10 @@ public class ExtractTempRefactoring extends Refactoring {
 			return fSelectedExpression;
 		Node node = NodeFinder.findNode(fCompilationUnitNode, fSelectionStart, fSelectionStart+fSelectionLength);
 		if (node == null) return null;
+		for(int i=fSelectionStart;i<node.getBegin();i++)
+			if (!Character.isWhitespace(fSource.charAt(i))) return null;
+		for(int i=node.getEnd();i<fSelectionStart+fSelectionLength;i++)
+			if (!Character.isWhitespace(fSource.charAt(i))) return null;
 		if (node instanceof ExpressionStatement)
 			return fSelectedExpression = ((ExpressionStatement)node).getExpression();
 		if (node instanceof Expression)
