@@ -54,6 +54,7 @@ public class JavaScriptTokenSource extends JavaScriptLexer implements
 	}
 
 	private int xmlOpenTagsCount;
+	@SuppressWarnings("unused")
 	private boolean xmlIsAttribute;
 	private boolean xmlIsTagContent;
 

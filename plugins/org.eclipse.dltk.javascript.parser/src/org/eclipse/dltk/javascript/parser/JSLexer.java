@@ -8,6 +8,7 @@ import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
 
+@SuppressWarnings({"unused"})
 public class JSLexer extends Lexer {
     public static final int PACKAGE=58;
     public static final int FUNCTION=18;
