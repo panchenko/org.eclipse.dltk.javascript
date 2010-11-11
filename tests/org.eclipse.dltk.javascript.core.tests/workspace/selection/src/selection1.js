@@ -12,3 +12,10 @@ function test3(/* params */) {
 	test1()
 	return 3
 }
+
+function test4(/* params */) {
+    var testArgument = "10";
+	test1(testArgument)
+	test1(testArgument);
+	return 3
+}

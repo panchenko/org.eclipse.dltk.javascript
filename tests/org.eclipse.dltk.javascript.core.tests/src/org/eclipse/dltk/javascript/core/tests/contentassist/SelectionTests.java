@@ -114,6 +114,19 @@ public class SelectionTests extends AbstractModelTests {
 				module.getSourceContents().substring(nameRange.getOffset(),
 						nameRange.getOffset() + nameRange.getLength()));
 	}
+	
+	public void test4() throws ModelException {
+		IModuleSource module = getModule("selection1.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("testArgument", module, false));
+		assertEquals(1, elements.length);
+		final ILocalVariable variable = (ILocalVariable) elements[0];
+		final ISourceRange nameRange = variable.getNameRange();
+		assertEquals(
+				"testArgument",
+				module.getSourceContents().substring(nameRange.getOffset(),
+						nameRange.getOffset() + nameRange.getLength()));
+	}
 
 	public void testLocalVar() throws ModelException {
 		IModuleSource module = getModule("locals.js");
