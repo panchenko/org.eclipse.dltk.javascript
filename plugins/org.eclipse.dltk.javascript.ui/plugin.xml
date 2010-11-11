@@ -540,4 +540,16 @@
 	</action>
 </extension>
 
+<extension point="org.eclipse.compare.contentMergeViewers">
+<viewer
+	extensions="js"
+	class="org.eclipse.dltk.javascript.internal.ui.compare.JSMergeViewerCreator"
+	id="org.eclipse.dltk.javascript.internal.ui.compare.JSMergeViewer">
+</viewer>
+<contentTypeBinding
+	contentTypeId="org.eclipse.dltk.javascriptContentType"
+	contentMergeViewerId="org.eclipse.dltk.javascript.internal.ui.compare.JSMergeViewer">
+</contentTypeBinding>
+</extension>
+
 </plugin>
