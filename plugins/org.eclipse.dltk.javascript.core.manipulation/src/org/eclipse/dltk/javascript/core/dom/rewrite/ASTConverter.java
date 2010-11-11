@@ -392,7 +392,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 	@Override
 	public Node visitFunctionStatement(FunctionStatement node) {
 		FunctionExpression res = DomFactory.eINSTANCE.createFunctionExpression();
-		res.setIdentifier(createIdentifier(node.getName()));
+		if (node.getName() != null) res.setIdentifier(createIdentifier(node.getName()));
 		for(Argument arg : node.getArguments()) {
 			Parameter prm = DomFactory.eINSTANCE.createParameter();
 			prm.setName(createIdentifier(arg.getIdentifier()));
