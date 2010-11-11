@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2010 xored software, Inc.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     xored software, Inc. - initial API and Implementation (Vladislav Kuzkokov)
+ *******************************************************************************/
 package org.eclipse.dltk.javascript.core.manipulation;
 
 import org.eclipse.dltk.core.IModelElement;
@@ -17,18 +28,6 @@ public class RefactoringEngine implements IRefactoringEngine {
 
 	public ScriptRenameProcessor createRenameProcessor(IModelElement element) {
 		switch (element.getElementType()) {
-//		case IModelElement.TYPE:
-//			return RenameSupport.create((IType) element, newName, flags);
-//		case IModelElement.METHOD:
-//			final IMethod method= (IMethod) element;
-//			if (method.isConstructor())
-//				return createRenameSupport(method.getDeclaringType(), newName, flags);
-//			else
-//				return RenameSupport.create((IMethod) element, newName, flags);
-//		case IModelElement.FIELD:
-//			return RenameSupport.create((IField) element, newName, flags);
-//		case IModelElement.TYPE_PARAMETER:
-//			return RenameSupport.create((ITypeParameter) element, newName, flags);
 		case IModelElement.TYPE:
 		case IModelElement.METHOD:
 			return new RenameFunctionProcessor(element);

@@ -399,6 +399,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 			prm.setType((Type)visit(arg.getType()));
 			prm.setBegin(arg.sourceStart());
 			prm.setEnd(arg.sourceEnd());
+			res.getParameters().add(prm);
 		}
 		res.setReturnType((Type)visit(node.getReturnType()));
 		res.setBody((org.eclipse.dltk.javascript.core.dom.BlockStatement)visit(node.getBody()));
@@ -463,20 +464,20 @@ public class ASTConverter extends ASTVisitor<Node> {
 			if (part instanceof PropertyInitializer) {
 				PropertyInitializer pi = (PropertyInitializer)part;
 				SimplePropertyAssignment elem = DomFactory.eINSTANCE.createSimplePropertyAssignment();
-				elem.setName((IPropertyName)visit(pi.getName()));
-				elem.setInitializer((Expression)pi.getValue());
-				cur = elem; 
+				elem.setName(createPropertyName(pi.getName()));
+				elem.setInitializer((Expression)visit(pi.getValue()));
+				cur = elem;
 			} else if (part instanceof GetMethod) {
 				GetMethod gm = (GetMethod)part;
 				GetterAssignment elem = DomFactory.eINSTANCE.createGetterAssignment();
-				elem.setName((IPropertyName)visit(gm.getName()));
+				elem.setName(createPropertyName(gm.getName()));
 				elem.setBody((BlockStatement)visit(gm.getBody()));
 				cur = elem;
 				res.getProperties().add(elem);
 			} else if (part instanceof SetMethod) {
 				SetMethod sm = (SetMethod)part;
 				SetterAssignment elem = DomFactory.eINSTANCE.createSetterAssignment();
-				elem.setName((IPropertyName)visit(sm.getName()));
+				elem.setName(createPropertyName(sm.getName()));
 				elem.setParameter(createIdentifier(sm.getArgument()));
 				elem.setBody((BlockStatement)visit(sm.getBody()));
 				cur = elem;
@@ -488,6 +489,12 @@ public class ASTConverter extends ASTVisitor<Node> {
 			res.getProperties().add(cur);
 		}
 		return res;
+	}
+
+	private IPropertyName createPropertyName(org.eclipse.dltk.javascript.ast.Expression name) {
+		if (name instanceof Identifier)
+			return createIdentifier((Identifier)name);
+		return (IPropertyName)visit(name);
 	}
 
 	@Override

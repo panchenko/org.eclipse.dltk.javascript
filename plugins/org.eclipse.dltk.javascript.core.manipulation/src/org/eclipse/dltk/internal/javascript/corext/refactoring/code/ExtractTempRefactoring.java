@@ -11,9 +11,11 @@
 package org.eclipse.dltk.internal.javascript.corext.refactoring.code;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -26,6 +28,7 @@ import org.eclipse.dltk.core.manipulation.RefactoringChecks;
 import org.eclipse.dltk.core.manipulation.SourceModuleChange;
 import org.eclipse.dltk.internal.corext.refactoring.ScriptRefactoringDescriptor;
 import org.eclipse.dltk.internal.corext.refactoring.util.ResourceUtil;
+import org.eclipse.dltk.internal.javascript.core.manipulation.JavascriptManipulationPlugin;
 import org.eclipse.dltk.internal.javascript.core.manipulation.Messages;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.Checks;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.RefactoringCoreMessages;
@@ -44,6 +47,7 @@ import org.eclipse.dltk.javascript.core.dom.VariableStatement;
 import org.eclipse.dltk.javascript.core.dom.rewrite.ASTConverter;
 import org.eclipse.dltk.javascript.core.dom.rewrite.NodeFinder;
 import org.eclipse.dltk.javascript.core.dom.rewrite.RewriteAnalyzer;
+import org.eclipse.dltk.javascript.core.dom.rewrite.VariableLookup;
 import org.eclipse.dltk.javascript.core.refactoring.descriptors.ExtractLocalDescriptor;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.emf.common.util.EList;
@@ -241,11 +245,11 @@ public class ExtractTempRefactoring extends Refactoring {
 	private ISourceModule fCu;
 	private String fSource;
 
-	/*private boolean fDeclareFinal;
+	//private boolean fDeclareFinal;
 
 	private String[] fExcludedVariableNames;
 
-	private boolean fReplaceAllOccurrences;*/
+	//private boolean fReplaceAllOccurrences;
 
 	// caches:
 	private Expression fSelectedExpression;
@@ -616,11 +620,12 @@ public class ExtractTempRefactoring extends Refactoring {
 
 	public RefactoringStatus checkTempName(String newName) {
 		RefactoringStatus status = Checks.validateIdentifier(newName);
-		// TODO: check visible scope 
-		//if (Arrays.asList(getExcludedVariableNames()).contains(newName))
-		//	status.addWarning(Messages
-		//			.format(RefactoringCoreMessages.ExtractTempRefactoring_another_variable,
-		//					BasicElementLabels.getJavaElementName(newName)));
+		if (status.hasFatalError())
+			return status;
+		if (Arrays.asList(getExcludedVariableNames()).contains(newName))
+			status.addWarning(Messages
+					.format(RefactoringCoreMessages.ExtractTempRefactoring_another_variable,
+							newName /*BasicElementLabels.getJavaElementName(newName)*/));
 		return status;
 	}
 
@@ -732,48 +737,22 @@ public class ExtractTempRefactoring extends Refactoring {
 		}
 	}
 
-	/*private void createTempDeclaration() throws CoreException {
-		if (shouldReplaceSelectedExpressionWithTempDeclaration())
-			replaceSelectedExpressionWithTempDeclaration();
-		else
-			createAndInsertTempDeclaration();
-	}
-
-	public boolean declareFinal() {
-		return fDeclareFinal;
-	}
-
-	private ASTNode[] findDeepestCommonSuperNodePathForReplacedNodes()
-			throws JavaModelException {
-		ASTNode[] matchNodes = getMatchNodes();
-
-		ASTNode[][] matchingNodesParents = new ASTNode[matchNodes.length][];
-		for (int i = 0; i < matchNodes.length; i++) {
-			matchingNodesParents[i] = getParents(matchNodes[i]);
-		}
-		List l = Arrays.asList(getLongestArrayPrefix(matchingNodesParents));
-		return (ASTNode[]) l.toArray(new ASTNode[l.size()]);
-	}*/
-
-	/*private String[] getExcludedVariableNames() {
+	private String[] getExcludedVariableNames() {
 		if (fExcludedVariableNames == null) {
 			try {
-				IBinding[] bindings = new ScopeAnalyzer(fCompilationUnitNode)
-						.getDeclarationsInScope(getSelectedExpression()
-								.getStartPosition(), ScopeAnalyzer.VARIABLES
-								| ScopeAnalyzer.CHECK_VISIBILITY);
-				fExcludedVariableNames = new String[bindings.length];
-				for (int i = 0; i < bindings.length; i++) {
-					fExcludedVariableNames[i] = bindings[i].getName();
-				}
-			} catch (JavaModelException e) {
+				//ScopeLookup look = new ScopeLookup();
+				//look.findNamesInScope(getSelectedExpression());
+				Set<String> visible = new VariableLookup().getVisibleNames(getSelectedExpression());
+				fExcludedVariableNames = visible.toArray(new String[visible.size()]);
+			} catch (ModelException e) {
+				JavascriptManipulationPlugin.log(e); //who cares, but still
 				fExcludedVariableNames = new String[0];
 			}
 		}
 		return fExcludedVariableNames;
 	}
 
-	private IExpressionFragment getFirstReplacedExpression()
+	/*private IExpressionFragment getFirstReplacedExpression()
 			throws JavaModelException {
 		if (!fReplaceAllOccurrences)
 			return getSelectedExpression();
@@ -816,7 +795,7 @@ public class ExtractTempRefactoring extends Refactoring {
 	private Expression getSelectedExpression() throws ModelException {
 		if (fSelectedExpression != null)
 			return fSelectedExpression;
-		Node node = NodeFinder.findNode(fCompilationUnitNode, fSelectionStart, fSelectionStart+fSelectionLength);
+		Node node = NodeFinder.findExpression(fCompilationUnitNode, fSelectionStart, fSelectionStart+fSelectionLength);
 		if (node == null) return null;
 		for(int i=fSelectionStart;i<node.getBegin();i++)
 			if (!Character.isWhitespace(fSource.charAt(i))) return null;

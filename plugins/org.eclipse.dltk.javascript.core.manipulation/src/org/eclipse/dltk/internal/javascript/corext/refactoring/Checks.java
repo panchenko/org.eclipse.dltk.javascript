@@ -6,6 +6,7 @@ import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.javascript.core.manipulation.Messages;
+import org.eclipse.dltk.javascript.ast.Keywords;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class Checks {
@@ -48,6 +49,6 @@ public class Checks {
         for (int i = 1; i < str.length(); i++)
             if (!Character.isJavaIdentifierPart(str.charAt(i)))
                 return false;
-        return str.length() > 0 && Character.isJavaIdentifierStart(str.charAt(0));
+        return str.length() > 0 && Character.isJavaIdentifierStart(str.charAt(0)) && !Keywords.isKeyword(str);
     }
 }
