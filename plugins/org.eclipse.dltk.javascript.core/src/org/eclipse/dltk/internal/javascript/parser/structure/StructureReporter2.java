@@ -5,6 +5,9 @@ import java.util.List;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
+import org.eclipse.dltk.internal.javascript.ti.JSMethod;
+import org.eclipse.dltk.internal.javascript.ti.JSVariable;
 import org.eclipse.dltk.internal.javascript.validation.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -16,6 +19,9 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 
 public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
@@ -34,39 +40,58 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		MethodInfo methodInfo = new MethodInfo();
 		try {
 			methodInfo.declarationStart = node.sourceStart();
+			final JSMethod method = new JSMethod();
 			if (node.getName() != null) {
-				methodInfo.name = node.getName().getName();
+				method.setName(node.getName().getName());
 				methodInfo.nameSourceStart = node.getName().sourceStart();
 				methodInfo.nameSourceEnd = node.getName().sourceEnd() - 1;
 			} else {
-				methodInfo.name = "anon_function";
+				method.setName("anon_function");
 				methodInfo.nameSourceStart = node.getFunctionKeyword()
 						.sourceStart();
 				methodInfo.nameSourceEnd = node.getFunctionKeyword()
 						.sourceEnd() - 1;
 			}
+			
+			org.eclipse.dltk.javascript.ast.Type funcType = node
+					.getReturnType();
+			if (funcType != null) {
+				method.setType(funcType.getName());
+			}
+			for (Argument argument : node.getArguments()) {
+				final IParameter parameter = method.createParameter();
+				parameter.setName(argument.getIdentifier().getName());
+				org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
+				if (paramType != null) {
+					parameter.setType(paramType.getName());
+				}
+				method.getParameters().add(parameter);
+			}
+			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
+				extension.processMethod(node, method);
+			}
 
-			// TODO JSDoc support for @constructor
-			methodInfo.isConstructor = false;
+			methodInfo.name = method.getName();
 
-			// TODO JSDoc support for @type
-			methodInfo.returnType = node.getReturnType() != null ? node
-					.getReturnType().getName() : null;
+			methodInfo.isConstructor = method.isConstructor();
 
-			// TODO JSDoc support for @private and @deprecated
-			// methodInfo.modifiers =
+			methodInfo.returnType = method.getType();
 
-			List<Argument> arguments = node.getArguments();
-			if (arguments != null && arguments.size() > 0) {
-				String[] paramNames = new String[arguments.size()];
-				String[] paramTypes = new String[arguments.size()];
-				for (int i = 0; i < arguments.size(); i++) {
-					Argument argument = arguments.get(i);
-					paramNames[i] = argument.getArgumentName();
-					// TODO if no type set we should try to get it from JSDoc ?
-					// (See JSDocSupport)
-					paramTypes[i] = argument.getType() != null ? argument
-							.getType().getName() : null;
+			if (method.isDeprecated()) {
+				methodInfo.modifiers |= JSModifiers.DEPRECATED;
+			}
+			if (method.isPrivate()) {
+				methodInfo.modifiers |= JSModifiers.PRIVATE;
+			}
+
+			List<IParameter> parameters = method.getParameters();
+			if (parameters != null && parameters.size() > 0) {
+				String[] paramNames = new String[parameters.size()];
+				String[] paramTypes = new String[parameters.size()];
+				for (int i = 0; i < parameters.size(); i++) {
+					IParameter parameter = parameters.get(i);
+					paramNames[i] = parameter.getName();
+					paramTypes[i] = parameter.getType();
 				}
 				methodInfo.parameterNames = paramNames;
 				methodInfo.parameterTypes = paramTypes;
@@ -84,13 +109,28 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		if (!inFunction) {
 			List<VariableDeclaration> variables = node.getVariables();
 			for (VariableDeclaration variableDeclaration : variables) {
+				
+				final JSVariable variable = new JSVariable();
+				variable.setName(variableDeclaration.getVariableName());
+				if (variableDeclaration.getType() != null)
+					variable.setType(variableDeclaration.getType().getName());
+				for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
+					extension.processVariable(node, variable);
+				}
+
 				FieldInfo info = new FieldInfo();
+				info.name = variable.getName();
 				info.declarationStart = node.sourceStart();
-				info.name = variableDeclaration.getVariableName();
-				info.nameSourceStart = variableDeclaration.sourceStart();
-				info.nameSourceEnd = variableDeclaration.sourceEnd() - 1;
-				info.type = variableDeclaration.getType() != null ? variableDeclaration
-						.getType().getName() : null;
+				if (variableDeclaration.getIdentifier() != null) {
+					info.nameSourceStart = variableDeclaration.getIdentifier()
+							.sourceStart();
+					info.nameSourceEnd = variableDeclaration.getIdentifier()
+							.sourceEnd() - 1;
+				} else {
+					info.nameSourceStart = variableDeclaration.sourceStart();
+					info.nameSourceEnd = variableDeclaration.sourceEnd() - 1;
+				}
+				info.type = variable.getType();
 				fRequestor.enterField(info);
 				try {
 					if (variableDeclaration.getInitializer() != null) {
