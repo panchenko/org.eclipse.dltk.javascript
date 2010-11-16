@@ -2,6 +2,7 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 
 import java.util.List;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
@@ -10,6 +11,7 @@ import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.JSVariable;
 import org.eclipse.dltk.internal.javascript.validation.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
@@ -31,6 +33,33 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 	public StructureReporter2(ISourceElementRequestor fRequestor) {
 		this.fRequestor = fRequestor;
+	}
+
+	private void reportMethodRef(ASTNode expression, int argCount) {
+		if (expression instanceof Identifier) {
+			final Identifier id = (Identifier) expression;
+			fRequestor.acceptMethodReference(id.getName(), argCount,
+					expression.sourceStart(), expression.sourceEnd() - 1);
+		} else if (expression instanceof PropertyExpression) {
+			reportMethodRef(((PropertyExpression) expression).getProperty(),
+					argCount);
+		}
+	}
+
+	private void reportFieldRef(Identifier node) {
+		fRequestor.acceptFieldReference(node.getName(), node.sourceStart());
+	}
+
+	@Override
+	public Object visitIdentifier(Identifier node) {
+		reportFieldRef(node);
+		return super.visitIdentifier(node);
+	}
+
+	@Override
+	public Object visitCallExpression(CallExpression node) {
+		reportMethodRef(node.getExpression(), node.getArguments().size());
+		return super.visitCallExpression(node);
 	}
 
 	@Override
@@ -148,7 +177,8 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 	@Override
 	public Object visitPropertyExpression(PropertyExpression node) {
-		if (node.getObject() instanceof ThisExpression) {
+		if (node.getObject() instanceof ThisExpression
+				&& !(node.getParent() instanceof CallExpression)) {
 			Expression name = node.getProperty();
 			String nameStr = null;
 			if (name instanceof Identifier) {
@@ -172,6 +202,8 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 						fRequestor.exitField(node.sourceEnd());
 				}
 			}
+		} else if (node.getProperty() instanceof Identifier) {
+			reportFieldRef((Identifier) node.getProperty());
 		}
 
 		return super.visitPropertyExpression(node);
