@@ -15,7 +15,7 @@ import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.ISourceElementParser;
-import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter;
+import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
@@ -35,15 +35,22 @@ public class JavaScriptSourceElementParser2 implements ISourceElementParser {
 
 	public void parseSourceModule(IModuleSource module) {
 		final Script script = parse(module);
-		final TypeInferencer2 inferencer = createInferencer();
-		inferencer.setModelElement(module.getModelElement());
-		final StructureReporter reporter = new StructureReporter(inferencer,
-				fRequestor);
-		inferencer.setVisitor(reporter);
-		inferencer.doInferencing(script);
-		reporter.beginReporting();
-		reporter.processScope(inferencer.getCollection(), true);
-		reporter.endReporting(script.sourceEnd());
+
+		fRequestor.enterModule();
+		try {
+			script.visitAll(new StructureReporter2(fRequestor));
+		} finally {
+			fRequestor.exitModule(script.sourceEnd());
+		}
+		// final TypeInferencer2 inferencer = createInferencer();
+		// inferencer.setModelElement(module.getModelElement());
+		// final StructureReporter reporter = new StructureReporter(inferencer,
+		// fRequestor);
+		// inferencer.setVisitor(reporter);
+		// IValueCollection collection = inferencer.doInferencing(script);
+		// reporter.beginReporting();
+		// reporter.processScope(collection, true);
+		// reporter.endReporting(script.sourceEnd());
 	}
 
 	protected Script parse(IModuleSource module) {
