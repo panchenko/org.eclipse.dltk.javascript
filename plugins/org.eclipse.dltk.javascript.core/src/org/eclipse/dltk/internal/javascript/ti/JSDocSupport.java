@@ -18,7 +18,6 @@ import java.util.StringTokenizer;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
-import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -39,19 +38,18 @@ public class JSDocSupport implements IModelBuilder {
 
 	private static final String PRIVATE_TAG = "@private";
 
-	public void processMethod(ITypeInfoContext context,
-			FunctionStatement statement, IMethod method) {
+	public void processMethod(FunctionStatement statement, IMethod method) {
 		if (statement.getDocumentation() == null) {
 			return;
 		}
 		final String comment = statement.getDocumentation().getText();
 		if (method.getType() == null) {
-			parseType(context, method, comment);
+			parseType(method, comment);
 		}
-		parseParams(context, method, comment);
+		parseParams(method, comment);
 
 		parseDeprecation(method, comment);
-		
+
 		parsePrivate(method, comment);
 	}
 
@@ -65,14 +63,13 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	public void processVariable(ITypeInfoContext context,
-			VariableStatement statement, IVariable variable) {
+	public void processVariable(VariableStatement statement, IVariable variable) {
 		if (statement.getDocumentation() == null) {
 			return;
 		}
 		final String comment = statement.getDocumentation().getText();
 		if (variable.getType() == null) {
-			parseType(context, variable, comment);
+			parseType(variable, comment);
 		}
 		parseDeprecation(variable, comment);
 
@@ -90,8 +87,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	private static final String PARAM_TAG = "@param"; //$NON-NLS-1$
 
-	private void parseParams(ITypeInfoContext context, IMethod method,
-			String comment) {
+	private void parseParams(IMethod method, String comment) {
 		int index = comment.indexOf(PARAM_TAG);
 		Map<String, Type> objectPropertiesTypes = new HashMap<String, Type>();
 
@@ -100,8 +96,8 @@ public class JSDocSupport implements IModelBuilder {
 			if (endLineIndex == -1) {
 				endLineIndex = comment.length();
 			}
-			String parameterString = comment.substring(index
-					+ PARAM_TAG.length(), endLineIndex);
+			String parameterString = comment.substring(
+					index + PARAM_TAG.length(), endLineIndex);
 			StringTokenizer st = new StringTokenizer(parameterString);
 			String type = null;
 			while (st.hasMoreTokens()) {
@@ -174,8 +170,7 @@ public class JSDocSupport implements IModelBuilder {
 	 * @param member
 	 * @param comment
 	 */
-	private void parseType(ITypeInfoContext context, IElement member,
-			String comment) {
+	private void parseType(IElement member, String comment) {
 		int index = comment.indexOf(TYPE_TAG);
 		if (index != -1) {
 			int endLineIndex = comment.indexOf("\n", index);
@@ -188,14 +183,11 @@ public class JSDocSupport implements IModelBuilder {
 				final String typeToken = st.nextToken();
 				member.setType(typeToken);
 			}
-		}
-		else
-		{
+		} else {
 			index = comment.indexOf(RETURNS_TAG);
-			if (index != -1)
-			{
-				int begingBrace = comment
-						.indexOf('{', index + RETURNS_TAG.length());
+			if (index != -1) {
+				int begingBrace = comment.indexOf('{',
+						index + RETURNS_TAG.length());
 				if (begingBrace != -1) {
 					int endBrace = comment.indexOf('}', begingBrace);
 					if (endBrace != -1) {
@@ -204,7 +196,7 @@ public class JSDocSupport implements IModelBuilder {
 					}
 				}
 			}
-			
+
 		}
 	}
 }

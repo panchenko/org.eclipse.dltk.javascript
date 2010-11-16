@@ -112,10 +112,10 @@ public interface IModelBuilder {
 	public interface IVariable extends IMember {
 	}
 
-	void processMethod(ITypeInfoContext context, FunctionStatement statement,
+	void processMethod(FunctionStatement statement,
 			IMethod method);
 
-	void processVariable(ITypeInfoContext context, VariableStatement statement,
+	void processVariable(VariableStatement statement,
 			IVariable variabe);
 
 }

@@ -356,7 +356,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		if (methodName != null) {
 			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
-				extension.processMethod(context, node, method);
+				extension.processMethod(node, method);
 			}
 		}
 		final IValueCollection function = new FunctionValueCollection(
@@ -765,7 +765,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (result.getDeclaredType() != null)
 				variable.setType(result.getDeclaredType().getName());
 			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
-				extension.processVariable(context, node, variable);
+				extension.processVariable(node, variable);
 			}
 			if (result.getDeclaredType() == null && variable.getType() != null) {
 				result.setDeclaredType(context.getType(variable.getType()));
