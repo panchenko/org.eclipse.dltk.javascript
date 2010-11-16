@@ -107,6 +107,16 @@ public interface IModelBuilder {
 		 * @return the parameter found or <code>null</code>
 		 */
 		IParameter getParameter(String name);
+
+		/**
+		 * Is this a constructor method/function
+		 */
+		boolean isConstructor();
+
+		/**
+		 * Set to true if this method is meant to be a constructor (type)
+		 */
+		void setConstructor(boolean constructor);
 	}
 
 	public interface IVariable extends IMember {

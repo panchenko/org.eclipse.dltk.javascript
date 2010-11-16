@@ -38,6 +38,8 @@ public class JSDocSupport implements IModelBuilder {
 
 	private static final String PRIVATE_TAG = "@private";
 
+	private static final String CONSTRUCTOR_TAG = "@constructor";
+
 	public void processMethod(FunctionStatement statement, IMethod method) {
 		if (statement.getDocumentation() == null) {
 			return;
@@ -51,6 +53,14 @@ public class JSDocSupport implements IModelBuilder {
 		parseDeprecation(method, comment);
 
 		parsePrivate(method, comment);
+
+		parseConstructor(method, comment);
+	}
+
+	private void parseConstructor(IMethod method, String comment) {
+		if (comment.indexOf(CONSTRUCTOR_TAG) != -1) {
+			method.setConstructor(true);
+		}
 	}
 
 	/**

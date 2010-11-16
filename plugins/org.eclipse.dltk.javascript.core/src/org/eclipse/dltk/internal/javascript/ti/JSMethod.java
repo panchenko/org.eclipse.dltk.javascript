@@ -26,6 +26,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	private String type;
 	private boolean deprecated;
 	private boolean priv;
+	private boolean constructor;
 
 	public IParameter createParameter() {
 		return new Parameter();
@@ -80,6 +81,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	public boolean isPrivate() {
 		return priv;
+	}
+
+	public boolean isConstructor() {
+		return constructor;
+	}
+
+	public void setConstructor(boolean constructor) {
+		this.constructor = constructor;
 	}
 
 	@Override
