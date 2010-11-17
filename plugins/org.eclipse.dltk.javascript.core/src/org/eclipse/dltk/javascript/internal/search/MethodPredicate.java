@@ -89,6 +89,19 @@ public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 			} else {
 				return matchName(mNode.node.getName());
 			}
+		} else if (node instanceof FieldReferenceNode) {
+			if (!references)
+				return null;
+			// also test if the field does reference that function.
+			final FieldReferenceNode mNode = (FieldReferenceNode) node;
+			final ReferenceLocation location = mNode.getReferenceLocation();
+			if (location != null && nameStart != -1 && nameEnd != -1) {
+				if (location.getNameStart() == nameStart
+						&& location.getNameEnd() == nameEnd
+						&& isSame(location.getSourceModule())) {
+					return matchName(mNode.node.getName());
+				}
+			}
 		}
 		return null;
 	}

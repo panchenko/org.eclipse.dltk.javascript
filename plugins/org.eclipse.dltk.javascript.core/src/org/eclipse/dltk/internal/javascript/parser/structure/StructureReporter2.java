@@ -1,14 +1,21 @@
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.search.indexing.IIndexRequestor;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
+import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.JSVariable;
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.internal.javascript.validation.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.CallExpression;
@@ -16,11 +23,14 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
@@ -31,8 +41,28 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 	private boolean inFunction = false;
 
+	private final boolean indexer;
+
 	public StructureReporter2(ISourceElementRequestor fRequestor) {
 		this.fRequestor = fRequestor;
+		indexer = fRequestor instanceof IIndexRequestor;
+	}
+
+	public void beginReporting() {
+		inFunction = false;
+		fRequestor.enterModule();
+	}
+
+	public void endReporting(Script script, IModelElement element) {
+		if (indexer) {
+			final TypeInferencer2 inferencer = new TypeInferencer2();
+			inferencer.setModelElement(element);
+			IdentifierLookupVisitor visitor = new IdentifierLookupVisitor(inferencer);
+			inferencer.setVisitor(visitor);
+			inferencer.doInferencing(script);
+			visitor.processUnknowReferences();
+		}
+		fRequestor.exitModule(script.sourceEnd());
 	}
 
 	private void reportMethodRef(ASTNode expression, int argCount) {
@@ -46,19 +76,11 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		}
 	}
 
-	private void reportFieldRef(Identifier node) {
-		fRequestor.acceptFieldReference(node.getName(), node.sourceStart());
-	}
-
-	@Override
-	public Object visitIdentifier(Identifier node) {
-		reportFieldRef(node);
-		return super.visitIdentifier(node);
-	}
-
 	@Override
 	public Object visitCallExpression(CallExpression node) {
-		reportMethodRef(node.getExpression(), node.getArguments().size());
+		if (indexer) {
+			reportMethodRef(node.getExpression(), node.getArguments().size());
+		}
 		return super.visitCallExpression(node);
 	}
 
@@ -202,10 +224,58 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 						fRequestor.exitField(node.sourceEnd());
 				}
 			}
-		} else if (node.getProperty() instanceof Identifier) {
-			reportFieldRef((Identifier) node.getProperty());
+		}
+		return super.visitPropertyExpression(node);
+	}
+
+	private class IdentifierLookupVisitor extends TypeInferencerVisitor {
+
+		private HashMap<Identifier, IValueReference> unknownKinds = new HashMap<Identifier, IValueReference>();
+
+		public IdentifierLookupVisitor(ITypeInferenceContext context) {
+			super(context);
 		}
 
-		return super.visitPropertyExpression(node);
+		public void processUnknowReferences() {
+			for (Map.Entry<Identifier, IValueReference> references : unknownKinds
+					.entrySet()) {
+				reportIdentifer(references.getKey(), references.getValue(),
+						false);
+			}
+		}
+
+		private void reportIdentifer(Identifier node,
+				IValueReference reference, boolean reportUnknown) {
+			if (reference == null)
+				return;
+
+			ReferenceKind kind = reference.getKind();
+			if (kind == ReferenceKind.FIELD || kind == ReferenceKind.GLOBAL) {
+				fRequestor.acceptFieldReference(node.getName(),
+						node.sourceStart());
+			} else if (kind == ReferenceKind.FUNCTION) {
+				fRequestor.acceptMethodReference(node.getName(), 0,
+						node.sourceStart(), node.sourceEnd() - 1);
+			} else if (reportUnknown && kind == ReferenceKind.UNKNOWN) {
+				unknownKinds.put(node, reference);
+			}
+		}
+
+		@Override
+		public IValueReference visitIdentifier(Identifier node) {
+			IValueReference reference = super.visitIdentifier(node);
+			reportIdentifer(node, reference, true);
+			return reference;
+		}
+
+		@Override
+		public IValueReference visitPropertyExpression(PropertyExpression node) {
+			IValueReference reference = super.visitPropertyExpression(node);
+			if (node.getProperty() instanceof Identifier) {
+				reportIdentifer((Identifier) node.getProperty(), reference,
+						true);
+			}
+			return reference;
+		}
 	}
 }
