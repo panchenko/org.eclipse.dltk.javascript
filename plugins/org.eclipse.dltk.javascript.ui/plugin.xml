@@ -538,6 +538,12 @@
 		id="org.eclipse.dltk.javascript.ui.action.extract.local"
 		label="%Refactoring.Actions.ExtractTemp">
 	</action>
+ <action
+       class="org.eclipse.dltk.javascript.ui.actions.ModifyParametersAction"
+       id="org.eclipse.dltk.javascript.ui.action.modify.parameters"
+       label="%Refactoring.Actions.ModifyParameters"
+       nature="org.eclipse.dltk.javascript.core.nature">
+ </action>
 </extension>
 
 <extension point="org.eclipse.compare.contentMergeViewers">
