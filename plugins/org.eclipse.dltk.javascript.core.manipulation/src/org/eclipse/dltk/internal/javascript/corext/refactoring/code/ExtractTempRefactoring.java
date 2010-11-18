@@ -447,7 +447,6 @@ public class ExtractTempRefactoring extends Refactoring {
 			RewriteAnalyzer ra = new RewriteAnalyzer(cd, fCu.getSource());
 			ra.rewrite(fCompilationUnitNode);
 			SourceModuleChange change = new SourceModuleChange(RefactoringCoreMessages.ExtractTempRefactoring_name, fCu);
-			change.setTextType("js");
 			change.setEdit(ra.getEdit());
 			fChange = change;
 			return new RefactoringStatus();

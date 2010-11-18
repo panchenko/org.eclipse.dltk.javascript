@@ -96,6 +96,8 @@ public final class RefactoringCoreMessages extends NLS {
 
 	public static String ChangeSignatureRefactoring_descriptor_description_short;
 
+	public static String ChangeSignatureRefactoring_different_num_of_args;
+
 	public static String ChangeSignatureRefactoring_duplicate_name;
 
 	public static String ChangeSignatureRefactoring_invalid_expression;
@@ -207,6 +209,8 @@ public final class RefactoringCoreMessages extends NLS {
 	public static String ChangeTypeRefactoring_typeParametersNotSupported;
 
 	public static String ChangeTypeRefactoring_unhandledSearchException;
+	
+	public static String ChangeSignatureRefactoring_unknown_reference;
 
 	public static String Checks_all_excluded;
 

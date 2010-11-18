@@ -8,5 +8,10 @@
             natureID="org.eclipse.dltk.javascript.core.nature">
       </refactoringEngine>
    </extension>
-
+<extension point="org.eclipse.emf.ecore.generated_package">
+   <package
+      uri = "http:///org/eclipse/dltk/javascript/core/dom/dom.ecore"
+      class = "org.eclipse.dltk.javascript.core.dom.DomPackage"
+      genModel = "model/javascript.genmodel" />
+ </extension>
 </plugin>

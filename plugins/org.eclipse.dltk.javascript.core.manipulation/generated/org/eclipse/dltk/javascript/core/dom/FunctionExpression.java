@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: FunctionExpression.java,v 1.1 2010/11/08 00:20:21 apanchenk Exp $
+ * $Id: FunctionExpression.java,v 1.2 2010/11/18 12:18:26 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getParameters <em>Parameters</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getBody <em>Body</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getParametersPosition <em>Parameters Position</em>}</li>
  * </ul>
  * </p>
  *
@@ -121,5 +122,31 @@ public interface FunctionExpression extends Expression {
 	 * @generated
 	 */
 	void setBody(BlockStatement value);
+
+	/**
+	 * Returns the value of the '<em><b>Parameters Position</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Parameters Position</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Parameters Position</em>' attribute.
+	 * @see #setParametersPosition(int)
+	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getFunctionExpression_ParametersPosition()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getParametersPosition();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getParametersPosition <em>Parameters Position</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Parameters Position</em>' attribute.
+	 * @see #getParametersPosition()
+	 * @generated
+	 */
+	void setParametersPosition(int value);
 
 } // FunctionExpression

@@ -11,10 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.dom.rewrite;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.dltk.javascript.core.dom.BinaryExpression;
 import org.eclipse.dltk.javascript.core.dom.BinaryOperator;
 import org.eclipse.dltk.javascript.core.dom.CatchClause;
 import org.eclipse.dltk.javascript.core.dom.DomPackage;
+import org.eclipse.dltk.javascript.core.dom.FunctionExpression;
 import org.eclipse.dltk.javascript.core.dom.Identifier;
 import org.eclipse.dltk.javascript.core.dom.Label;
 import org.eclipse.dltk.javascript.core.dom.Node;
@@ -24,6 +28,7 @@ import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
 import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
 import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -40,6 +45,7 @@ import org.eclipse.text.edits.TextEdit;
 
 public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	private final ChangeDescription cd;
+	private final Set<Node> generated = new HashSet<Node>();
 	private final String text;
 	private final TextEdit edit;
 	public RewriteAnalyzer(ChangeDescription cd, String text) {
@@ -65,28 +71,47 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			edit.addChild(new ReplaceEdit(off,len,value));
 			return;
 		}
-		EList<Object> list = (EList<Object>)node.eGet(fc.getFeature());
-		boolean[] deleted = new boolean[list.size()];
-		for(ListChange lc : fc.getListChanges())
-			if (lc.getKind() != ChangeKind.ADD_LITERAL)// {
-				deleted[lc.getIndex()] = true;
-		int first;
-		for(first=0; first<list.size() && deleted[first]; first++);
-		boolean empty = first == list.size(); 
+		EList<? extends Node> original = (EList<? extends Node>)node.eGet(fc.getFeature());
+		EList<Object> dst = new BasicEList<Object>();
+		dst.addAll(original);
+		Set<Node> deleted = new HashSet<Node>();
+		Set<Node> generated = new HashSet<Node>();
 		for(ListChange lc : fc.getListChanges()) {
-			if (lc.getKind() != ChangeKind.REMOVE_LITERAL) {
-				int dest = lc.getKind() == ChangeKind.ADD_LITERAL ? lc.getIndex() : lc.getMoveToIndex();
-				int off = dest == list.size() ? calcOffset(node,fc.getFeature()) : ((Node)list.get(dest)).getBegin();
-				edit.addChild(new InsertEdit(off, generateElement((Node)lc.getReferenceValues().get(0),dest <= first,empty,off)));
-				empty = false;
-			}
-			if (lc.getKind() != ChangeKind.ADD_LITERAL) {
-				int idx = lc.getIndex();
-				int start = idx < first ? ((Node)list.get(idx)).getBegin() : ((Node)list.get(idx-1)).getEnd();
-				int end = idx < first && list.size() > 1 ? ((Node)list.get(idx+1)).getBegin() : ((Node)list.get(idx)).getEnd();
-				edit.addChild(new DeleteEdit(start,end - start));
-				break;
-			}
+			if (lc.getKind() != ChangeKind.ADD_LITERAL)
+				deleted.add((Node)dst.get(lc.getIndex()));
+			if (lc.getKind() == ChangeKind.MOVE_LITERAL)
+				generated.add((Node)dst.get(lc.getIndex()));
+			lc.apply(dst);
+			if (lc.getKind() == ChangeKind.ADD_LITERAL)
+				generated.add((Node)dst.get(lc.getIndex()));
+		}
+		int i=0;
+		boolean first=true;
+		for(Node item : original) {
+			if (deleted.contains(item)) {
+				int off = first ? item.getBegin() : original.get(i-1).getEnd();
+				int end = first && i < original.size()-1 ? original.get(i+1).getBegin() : item.getEnd();
+				edit.addChild(new DeleteEdit(off,end - off));
+			} else
+				first=false;
+			i++;
+		}
+		Node last=null;
+		for(Object obj : dst) {
+			Node item = (Node)obj;
+			if (generated.contains(item)) {
+				int off;
+				if (last == null)
+					if (first)
+						off = calcOffset(node, fc.getFeature());
+					else
+						off = ((Node)original.get(0)).getBegin();
+				else
+					off = last.getEnd();
+				edit.addChild(new InsertEdit(off, generateElement(item,last == null,first,off)));
+				first = false;
+			} else
+				last = item;
 		}
 	}
 
@@ -96,7 +121,8 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				processFeature(node, fc);
 		for(EObject obj : node.eContents())
-			rewrite((Node)obj);
+			if (!generated.contains(obj))
+				rewrite((Node)obj);
 		return true;
 	}
 
@@ -120,7 +146,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 					}
 				} else
 					processFeature(node,fc);
-		return true;
+		return null;
 	}
 	private static boolean isPostfix(Object op) {
 		return op == UnaryOperator.POSTFIX_INC || op == UnaryOperator.POSTFIX_DEC;
@@ -135,7 +161,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				if (fc.getFeature() == DomPackage.eINSTANCE.getIdentifier_Name())
 					edit.addChild(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), (String)fc.getValue()));
-		return null;
+		return true;
 	}
 
 	@Override
@@ -144,7 +170,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				if (fc.getFeature() == DomPackage.eINSTANCE.getLabel_Name())
 					edit.addChild(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), (String)fc.getValue()));
-		return null;
+		return true;
 	}
 
 	@Override
@@ -153,7 +179,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				if (fc.getFeature() == DomPackage.eINSTANCE.getType_Name())
 					edit.addChild(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), (String)fc.getValue()));
-		return null;
+		return true;
 	}
 
 	@Override
@@ -172,7 +198,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 					edit.addChild(new ReplaceEdit(pos, len, r));
 				} else
 					processFeature(node, fc);
-		return true;
+		return null;
 	}
 	private static boolean isTextBinary(Object op) {
 		return op == BinaryOperator.IN || op == BinaryOperator.INSTANCEOF;
@@ -211,16 +237,19 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 				return ts.getFinallyClause().getBegin();
 			return node.getEnd();
 		case DomPackage.FUNCTION_EXPRESSION:
+			FunctionExpression expr = (FunctionExpression)node;
 			if (ref == DomPackage.eINSTANCE.getFunctionExpression_Identifier())
-				return node.getBegin()+8; // skip "function"
+				return expr.getParametersPosition()-2;
+			else
+				return expr.getParametersPosition();
 		}
 		return -1;
 	}
 	public String generateElement(Node node,boolean first,boolean empty,int pos) {
 		Generator gen = new Generator(cd, text, pos);
 		if (node instanceof Statement) {
-			gen.generate(node);
 			gen.newLine();
+			gen.generate(node);
 			return gen.toString();
 		}
 		if (!first)
@@ -228,6 +257,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		gen.generate(node);
 		if (first && !empty)
 			gen.append(",");
+		generated.add(node);
 		return gen.toString();
 	}
 	public String generate(Node node, Node parent, boolean wasNull,int pos) {
@@ -241,6 +271,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		if (wasNull && node.eContainmentFeature() == DomPackage.eINSTANCE.getCatchClause_Filter())
 			gen.append(" if ");
 		gen.generate(node);
+		generated.add(node);
 		return gen.toString();
 	}
 }

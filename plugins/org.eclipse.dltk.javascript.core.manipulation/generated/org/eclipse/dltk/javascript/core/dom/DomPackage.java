@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DomPackage.java,v 1.1 2010/11/08 00:20:21 apanchenk Exp $
+ * $Id: DomPackage.java,v 1.2 2010/11/18 12:18:26 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -320,7 +320,7 @@ public interface DomPackage extends EPackage {
 	int VARIABLE_REFERENCE__END = EXPRESSION__END;
 
 	/**
-	 * The feature id for the '<em><b>Variable</b></em>' reference.
+	 * The feature id for the '<em><b>Variable</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3019,13 +3019,22 @@ public interface DomPackage extends EPackage {
 	int FUNCTION_EXPRESSION__BODY = EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Parameters Position</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUNCTION_EXPRESSION__PARAMETERS_POSITION = EXPRESSION_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Function Expression</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FUNCTION_EXPRESSION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 4;
+	int FUNCTION_EXPRESSION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.core.dom.impl.ParameterImpl <em>Parameter</em>}' class.
@@ -4062,10 +4071,10 @@ public interface DomPackage extends EPackage {
 	EClass getVariableReference();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.core.dom.VariableReference#getVariable <em>Variable</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.core.dom.VariableReference#getVariable <em>Variable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Variable</em>'.
+	 * @return the meta object for the containment reference '<em>Variable</em>'.
 	 * @see org.eclipse.dltk.javascript.core.dom.VariableReference#getVariable()
 	 * @see #getVariableReference()
 	 * @generated
@@ -5362,6 +5371,17 @@ public interface DomPackage extends EPackage {
 	EReference getFunctionExpression_Body();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getParametersPosition <em>Parameters Position</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Parameters Position</em>'.
+	 * @see org.eclipse.dltk.javascript.core.dom.FunctionExpression#getParametersPosition()
+	 * @see #getFunctionExpression()
+	 * @generated
+	 */
+	EAttribute getFunctionExpression_ParametersPosition();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.core.dom.Parameter <em>Parameter</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5907,7 +5927,7 @@ public interface DomPackage extends EPackage {
 		EClass VARIABLE_REFERENCE = eINSTANCE.getVariableReference();
 
 		/**
-		 * The meta object literal for the '<em><b>Variable</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Variable</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -6995,6 +7015,14 @@ public interface DomPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FUNCTION_EXPRESSION__BODY = eINSTANCE.getFunctionExpression_Body();
+
+		/**
+		 * The meta object literal for the '<em><b>Parameters Position</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FUNCTION_EXPRESSION__PARAMETERS_POSITION = eINSTANCE.getFunctionExpression_ParametersPosition();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.core.dom.impl.ParameterImpl <em>Parameter</em>}' class.

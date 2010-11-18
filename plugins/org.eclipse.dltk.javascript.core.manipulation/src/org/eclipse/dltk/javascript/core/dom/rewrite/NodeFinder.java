@@ -11,8 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.dom.rewrite;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.Node;
+import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 
@@ -42,5 +48,43 @@ public class NodeFinder {
 			}
 		}
 		return null;
+	}
+	public static Node findNode(Node node, int left,int right) {
+		TreeIterator<EObject> it = node.eAllContents();
+		while(it.hasNext()) {
+			Node cur = (Node)it.next();
+			if (right <= cur.getBegin() || cur.getEnd() <= left) {
+				it.prune();
+			}
+			if (left <= cur.getBegin() && cur.getEnd() <= right) {
+				return cur;
+			}
+		}
+		return null;
+	}
+	public static Node[] findNodes(Source cuNode, SearchMatch[] searchResults) {
+		List<Node> result= new ArrayList<Node>(searchResults.length);
+		for (int i= 0; i < searchResults.length; i++) {
+			Node node= findNode(cuNode, searchResults[i]);
+			if (node != null)
+				result.add(node);
+		}
+		return (Node[]) result.toArray(new Node[result.size()]);
+	}
+
+	public static Node findNode(Source cuNode, SearchMatch searchResult) {
+		Node selectedNode= NodeFinder.findNode(cuNode, searchResult.getOffset(),
+				searchResult.getOffset()+searchResult.getLength());
+		if (selectedNode == null)
+			return null;
+		return selectedNode;
+	}
+
+	public static Node findNode(Source cuNode, ISourceRange sourceRange) {
+		Node selectedNode= NodeFinder.findNode(cuNode, sourceRange.getOffset(),
+				sourceRange.getOffset()+sourceRange.getLength());
+		if (selectedNode == null)
+			return null;
+		return selectedNode;
 	}
 }

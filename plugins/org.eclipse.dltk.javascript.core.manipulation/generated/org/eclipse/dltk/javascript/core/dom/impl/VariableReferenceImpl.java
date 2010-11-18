@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: VariableReferenceImpl.java,v 1.1 2010/11/08 00:20:19 apanchenk Exp $
+ * $Id: VariableReferenceImpl.java,v 1.2 2010/11/18 12:18:26 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -12,6 +12,7 @@ import org.eclipse.dltk.javascript.core.dom.VariableReference;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -32,7 +33,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class VariableReferenceImpl extends ExpressionImpl implements VariableReference {
 	/**
-	 * The cached value of the '{@link #getVariable() <em>Variable</em>}' reference.
+	 * The cached value of the '{@link #getVariable() <em>Variable</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getVariable()
@@ -66,14 +67,6 @@ public class VariableReferenceImpl extends ExpressionImpl implements VariableRef
 	 * @generated
 	 */
 	public Identifier getVariable() {
-		if (variable != null && variable.eIsProxy()) {
-			InternalEObject oldVariable = (InternalEObject)variable;
-			variable = (Identifier)eResolveProxy(oldVariable);
-			if (variable != oldVariable) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DomPackage.VARIABLE_REFERENCE__VARIABLE, oldVariable, variable));
-			}
-		}
 		return variable;
 	}
 
@@ -82,8 +75,14 @@ public class VariableReferenceImpl extends ExpressionImpl implements VariableRef
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Identifier basicGetVariable() {
-		return variable;
+	public NotificationChain basicSetVariable(Identifier newVariable, NotificationChain msgs) {
+		Identifier oldVariable = variable;
+		variable = newVariable;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.VARIABLE_REFERENCE__VARIABLE, oldVariable, newVariable);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -92,10 +91,31 @@ public class VariableReferenceImpl extends ExpressionImpl implements VariableRef
 	 * @generated
 	 */
 	public void setVariable(Identifier newVariable) {
-		Identifier oldVariable = variable;
-		variable = newVariable;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.VARIABLE_REFERENCE__VARIABLE, oldVariable, variable));
+		if (newVariable != variable) {
+			NotificationChain msgs = null;
+			if (variable != null)
+				msgs = ((InternalEObject)variable).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.VARIABLE_REFERENCE__VARIABLE, null, msgs);
+			if (newVariable != null)
+				msgs = ((InternalEObject)newVariable).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.VARIABLE_REFERENCE__VARIABLE, null, msgs);
+			msgs = basicSetVariable(newVariable, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.VARIABLE_REFERENCE__VARIABLE, newVariable, newVariable));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case DomPackage.VARIABLE_REFERENCE__VARIABLE:
+				return basicSetVariable(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -107,8 +127,7 @@ public class VariableReferenceImpl extends ExpressionImpl implements VariableRef
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DomPackage.VARIABLE_REFERENCE__VARIABLE:
-				if (resolve) return getVariable();
-				return basicGetVariable();
+				return getVariable();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}

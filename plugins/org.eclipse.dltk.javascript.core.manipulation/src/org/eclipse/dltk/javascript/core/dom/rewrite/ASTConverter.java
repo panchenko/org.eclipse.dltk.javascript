@@ -403,6 +403,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 		}
 		res.setReturnType((Type)visit(node.getReturnType()));
 		res.setBody((org.eclipse.dltk.javascript.core.dom.BlockStatement)visit(node.getBody()));
+		res.setParametersPosition(node.getLP()+1);
 		return res;
 	}
 

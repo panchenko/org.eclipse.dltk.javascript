@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: VariableReference.java,v 1.1 2010/11/08 00:20:21 apanchenk Exp $
+ * $Id: VariableReference.java,v 1.2 2010/11/18 12:18:26 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -25,26 +25,26 @@ package org.eclipse.dltk.javascript.core.dom;
  */
 public interface VariableReference extends Expression {
 	/**
-	 * Returns the value of the '<em><b>Variable</b></em>' reference.
+	 * Returns the value of the '<em><b>Variable</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Variable</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Variable</em>' reference.
+	 * @return the value of the '<em>Variable</em>' containment reference.
 	 * @see #setVariable(Identifier)
 	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getVariableReference_Variable()
-	 * @model required="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	Identifier getVariable();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.VariableReference#getVariable <em>Variable</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.VariableReference#getVariable <em>Variable</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Variable</em>' reference.
+	 * @param value the new value of the '<em>Variable</em>' containment reference.
 	 * @see #getVariable()
 	 * @generated
 	 */

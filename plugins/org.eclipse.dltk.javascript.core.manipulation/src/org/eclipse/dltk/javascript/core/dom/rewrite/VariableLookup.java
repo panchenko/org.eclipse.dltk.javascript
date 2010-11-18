@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.dom.rewrite;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.core.dom.CatchClause;
@@ -62,10 +64,38 @@ public class VariableLookup {
 			}
 			if (innerMost && body != null) {
 				innerMost = false;
-				findReferences(body);
+				doFindReferences(body);
 			}
 		}
 		return result;
+	}
+	
+	public static List<VariableReference> findReferences(Node root, Set<String> names) {
+		return findReferences(root,names,false);
+	}
+	
+	public static List<VariableReference> findReferences(final Node root, Set<String> names,
+			final boolean firstOnly) {
+		final Set<String> wanted;
+		if (firstOnly) {
+			wanted = new HashSet<String>();
+			wanted.addAll(names);
+		} else
+			wanted = names;
+		return new VariableLookup() {
+			List<VariableReference> refs = new ArrayList<VariableReference>();
+			List<VariableReference> getResult() {
+				doFindReferences(root);
+				return refs;
+			}
+			protected void addReference(VariableReference node) {
+				if (wanted.contains(node.getVariable().getName())) {
+					refs.add(node);
+					if (firstOnly)
+						wanted.remove(node.getVariable().getName());
+				}
+			}
+		}.getResult();
 	}
 
 	private void addName(Identifier id,Set<String> dst) {
@@ -95,14 +125,14 @@ public class VariableLookup {
 			findDeclarations((Node)obj,dst);
 	}
 
-	private void findReferences(Node node) {
+	protected void doFindReferences(Node node) {
 		switch(node.eClass().getClassifierID()) {
 		case DomPackage.CATCH_CLAUSE:
 			String str = ((CatchClause)node).getException().getName();
 			if (!hidden.contains(str)) {
 				hidden.add(str);
 				for(EObject obj : node.eContents())
-					findReferences((Node)obj);
+					doFindReferences((Node)obj);
 				hidden.remove(str);
 				return;
 			}
@@ -123,12 +153,16 @@ public class VariableLookup {
 			return;
 		}
 		case DomPackage.VARIABLE_REFERENCE: {
-			addName(((VariableReference)node).getVariable(), result);
+			addReference((VariableReference)node);
 			return;
 		}
 		}
 		for(EObject obj : node.eContents())
-			findReferences((Node)obj);
+			doFindReferences((Node)obj);
+	}
+
+	protected void addReference(VariableReference node) {
+		addName(node.getVariable(), result);
 	}
 
 	private Set<String> resolveSetterScope(SetterAssignment setter) {
@@ -156,7 +190,7 @@ public class VariableLookup {
 
 	private void findInScope(Node node, Set<String> scope) {
 		hidden.addAll(scope);
-		findReferences(node);
+		doFindReferences(node);
 		hidden.removeAll(scope);
 	}
 }

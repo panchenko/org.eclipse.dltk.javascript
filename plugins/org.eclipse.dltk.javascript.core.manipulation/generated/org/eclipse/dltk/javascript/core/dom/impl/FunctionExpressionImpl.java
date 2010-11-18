@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: FunctionExpressionImpl.java,v 1.1 2010/11/08 00:20:19 apanchenk Exp $
+ * $Id: FunctionExpressionImpl.java,v 1.2 2010/11/18 12:18:26 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getParameters <em>Parameters</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getBody <em>Body</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getParametersPosition <em>Parameters Position</em>}</li>
  * </ul>
  * </p>
  *
@@ -84,6 +85,26 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 	 * @ordered
 	 */
 	protected BlockStatement body;
+
+	/**
+	 * The default value of the '{@link #getParametersPosition() <em>Parameters Position</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getParametersPosition()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PARAMETERS_POSITION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getParametersPosition() <em>Parameters Position</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getParametersPosition()
+	 * @generated
+	 * @ordered
+	 */
+	protected int parametersPosition = PARAMETERS_POSITION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -250,6 +271,27 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getParametersPosition() {
+		return parametersPosition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setParametersPosition(int newParametersPosition) {
+		int oldParametersPosition = parametersPosition;
+		parametersPosition = newParametersPosition;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.FUNCTION_EXPRESSION__PARAMETERS_POSITION, oldParametersPosition, parametersPosition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -281,6 +323,8 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 				return getReturnType();
 			case DomPackage.FUNCTION_EXPRESSION__BODY:
 				return getBody();
+			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS_POSITION:
+				return new Integer(getParametersPosition());
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -307,6 +351,9 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 			case DomPackage.FUNCTION_EXPRESSION__BODY:
 				setBody((BlockStatement)newValue);
 				return;
+			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS_POSITION:
+				setParametersPosition(((Integer)newValue).intValue());
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -331,6 +378,9 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 			case DomPackage.FUNCTION_EXPRESSION__BODY:
 				setBody((BlockStatement)null);
 				return;
+			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS_POSITION:
+				setParametersPosition(PARAMETERS_POSITION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -351,8 +401,26 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 				return returnType != null;
 			case DomPackage.FUNCTION_EXPRESSION__BODY:
 				return body != null;
+			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS_POSITION:
+				return parametersPosition != PARAMETERS_POSITION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (parametersPosition: ");
+		result.append(parametersPosition);
+		result.append(')');
+		return result.toString();
 	}
 
 } //FunctionExpressionImpl
