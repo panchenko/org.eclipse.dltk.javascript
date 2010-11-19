@@ -19,5 +19,4 @@ Bundle-ActivationPolicy: lazy
 Import-Package: com.ibm.icu.text
 Export-Package: org.eclipse.dltk.internal.javascript.corext.refactoring,
  org.eclipse.dltk.internal.javascript.corext.refactoring.code,
- org.eclipse.dltk.internal.javascript.corext.refactoring.structure,
- org.eclipse.dltk.javascript.scriptdoc
+ org.eclipse.dltk.internal.javascript.corext.refactoring.structure
