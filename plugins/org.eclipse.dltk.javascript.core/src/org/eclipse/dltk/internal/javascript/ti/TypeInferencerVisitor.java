@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
+
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -363,7 +365,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				peekContext(), method.getName());
 		IValueReference arguments = function.createChild("arguments");
 		IValueReference argumentsLength = arguments.getChild("length");
-		argumentsLength.setDeclaredType(context.getKnownType("Number"));
+		argumentsLength.setDeclaredType(context.getKnownType(NUMBER));
 
 		for (IParameter parameter : method.getParameters()) {
 			final IValueReference refArg = function.createChild(parameter
