@@ -31,8 +31,6 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.model.LocalVariable;
-import org.eclipse.dltk.internal.core.ModelElement;
-import org.eclipse.dltk.internal.core.SourceRange;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -149,7 +147,8 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					}
 					final IModelElement result = locateModelElement(location);
 					if (result != null
-							&& result.getElementType() == IModelElement.FIELD) {
+							&& (result.getElementType() == IModelElement.FIELD || result
+									.getElementType() == IModelElement.METHOD)) {
 						return new IModelElement[] { result };
 					}
 					return new IModelElement[] { new LocalVariable(m,
