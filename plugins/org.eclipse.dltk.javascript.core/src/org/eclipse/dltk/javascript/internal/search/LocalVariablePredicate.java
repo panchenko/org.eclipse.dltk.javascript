@@ -41,6 +41,15 @@ public class LocalVariablePredicate extends
 					&& isSame(varNode.module)) {
 				return matchName(varNode.node.getName());
 			}
+		} else if (node instanceof ArgumentDeclarationNode) {
+			if (!declarations)
+				return null;
+			final ArgumentDeclarationNode varNode = (ArgumentDeclarationNode) node;
+			if (varNode.node.sourceStart() == nameStart
+					&& varNode.node.sourceEnd() == nameEnd
+					&& isSame(varNode.module)) {
+				return matchName(varNode.node.getArgumentName());
+			}
 		} else if (node instanceof LocalVariableReferenceNode) {
 			if (!references)
 				return null;

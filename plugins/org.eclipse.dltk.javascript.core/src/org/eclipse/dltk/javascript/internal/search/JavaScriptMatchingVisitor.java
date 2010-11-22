@@ -21,6 +21,7 @@ import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
+import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
@@ -140,4 +141,15 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 		return result;
 	}
 
+	@Override
+	protected void visitFunctionBody(FunctionStatement node) {
+		final IValueCollection currentContext = peekContext();
+		for (Argument argument : node.getArguments()) {
+			final IValueReference reference = currentContext.getChild(argument
+					.getArgumentName());
+			locator.report(new ArgumentDeclarationNode(argument, getSource()
+					.getSourceModule(), reference.getDeclaredType()));
+		}
+		super.visitFunctionBody(node);
+	}
 }
