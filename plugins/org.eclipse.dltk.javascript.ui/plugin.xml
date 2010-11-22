@@ -558,4 +558,11 @@
 </contentTypeBinding>
 </extension>
 
+<extension point="org.eclipse.dltk.ui.search">
+   <occurrencesFinder
+         class="org.eclipse.dltk.ui.search.ModelElementOccurrencesFinder"
+         nature="org.eclipse.dltk.javascript.core.nature">
+   </occurrencesFinder>
+</extension>
+
 </plugin>
