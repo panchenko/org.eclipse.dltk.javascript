@@ -22,7 +22,9 @@ import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.ObjectInitializer;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
@@ -93,9 +95,21 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			methodInfo.declarationStart = node.sourceStart();
 			final JSMethod method = new JSMethod();
 			if (node.getName() != null) {
-				method.setName(node.getName().getName());
-				methodInfo.nameSourceStart = node.getName().sourceStart();
-				methodInfo.nameSourceEnd = node.getName().sourceEnd() - 1;
+				setNameProperties(node.getName(), methodInfo, method);
+			} else if (node.getParent() instanceof PropertyInitializer
+					&& ((PropertyInitializer) node.getParent()).getName() instanceof Identifier) {
+				setNameProperties(
+						(Identifier) ((PropertyInitializer) node
+						.getParent())
+								.getName(),
+						methodInfo, method);
+
+			} else if (node.getParent() instanceof VariableDeclaration
+					&& ((VariableDeclaration) node.getParent()).getIdentifier() != null) {
+				setNameProperties(
+						((VariableDeclaration) node.getParent())
+								.getIdentifier(),
+						methodInfo, method);
 			} else {
 				method.setName("anon_function");
 				methodInfo.nameSourceStart = node.getFunctionKeyword()
@@ -152,6 +166,45 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		} finally {
 			inFunction = isInFunction;
 			fRequestor.exitMethod(node.sourceEnd());
+		}
+	}
+
+	/**
+	 * @param node
+	 * @param methodInfo
+	 * @param method
+	 */
+	private void setNameProperties(Identifier node,
+			MethodInfo methodInfo, final JSMethod method) {
+		method.setName(node.getName());
+		methodInfo.nameSourceStart = node.sourceStart();
+		methodInfo.nameSourceEnd = node.sourceEnd() - 1;
+	}
+
+	@Override
+	public Object visitObjectInitializer(ObjectInitializer node) {
+		if (inFunction) {
+			FieldInfo info = new FieldInfo();
+			info.name = "anon_scope";
+			info.nameSourceStart = node.sourceStart();
+			info.nameSourceEnd = node.sourceEnd() - 1;
+			if (node.getParent() instanceof VariableDeclaration
+					&& ((VariableDeclaration) node.getParent()).getIdentifier() != null) {
+				Identifier identifier = ((VariableDeclaration) node.getParent())
+						.getIdentifier();
+				info.name = identifier.getName();
+				info.nameSourceStart = identifier.sourceStart();
+				info.nameSourceEnd = identifier.sourceEnd() - 1;
+			}
+			info.declarationStart = node.sourceStart();
+			fRequestor.enterField(info);
+		}
+		try {
+			return super.visitObjectInitializer(node);
+		} finally {
+			if (inFunction) {
+				fRequestor.exitField(node.sourceEnd());
+			}
 		}
 	}
 
