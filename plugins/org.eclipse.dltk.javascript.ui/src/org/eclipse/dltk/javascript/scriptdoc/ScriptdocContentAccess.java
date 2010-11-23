@@ -22,6 +22,7 @@ import org.eclipse.dltk.core.IOpenable;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.corext.documentation.SingleCharReader;
 import org.eclipse.dltk.internal.javascript.typeinference.IProposalHolder;
 
@@ -222,8 +223,8 @@ public class ScriptdocContentAccess {
 					JavaDocCommentReader reader = new JavaDocCommentReader(buf,
 							javadocRange.getOffset(), javadocRange.getOffset()
 									+ javadocRange.getLength() - 1);
-					if (!containsOnlyInheritDoc(reader, javadocRange
-							.getLength())) {
+					if (!containsOnlyInheritDoc(reader,
+							javadocRange.getLength())) {
 						reader.reset();
 
 						if (member instanceof IProposalHolder
@@ -317,8 +318,8 @@ public class ScriptdocContentAccess {
 		}
 		if (member instanceof IProposalHolder
 				&& ((IProposalHolder) member).getProposalInfo() != null) {
-			return new StringReader(((IProposalHolder) member)
-					.getProposalInfo());
+			return new StringReader(
+					((IProposalHolder) member).getProposalInfo());
 		}
 		return null;
 	}
