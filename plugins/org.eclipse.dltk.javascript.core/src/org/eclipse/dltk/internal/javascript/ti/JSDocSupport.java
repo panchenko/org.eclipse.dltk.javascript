@@ -188,7 +188,7 @@ public class JSDocSupport implements IModelBuilder {
 				endLineIndex = comment.length();
 			}
 			StringTokenizer st = new StringTokenizer(comment.substring(index
-					+ TYPE_TAG.length(), endLineIndex));
+					+ TYPE_TAG.length(), endLineIndex), " \t\n\r\f*");
 			if (st.hasMoreTokens()) {
 				final String typeToken = st.nextToken();
 				member.setType(typeToken);
