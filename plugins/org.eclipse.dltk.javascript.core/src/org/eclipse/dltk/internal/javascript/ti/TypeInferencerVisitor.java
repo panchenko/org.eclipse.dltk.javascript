@@ -826,10 +826,15 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			for (XmlFragment xmlFragment : fragments) {
 				if (xmlFragment instanceof XmlTextFragment) {
 					String xmlText = ((XmlTextFragment) xmlFragment).getXml();
-					if (!(xmlText.startsWith("<>") && xmlText.endsWith("</>")))
+					if (xmlText.equals("<></>"))
+						continue;
+					if (xmlText.startsWith("<>") && xmlText.endsWith("</>"))
 					{
-						xml.append(xmlText);
+						xmlText = "<xml>"
+								+ xmlText.substring(2, xmlText.length() - 3)
+								+ "</xml>";
 					}
+					xml.append(xmlText);
 				} else if (xmlFragment instanceof XmlExpressionFragment) {
 					xml.append("\"\"");
 				}
