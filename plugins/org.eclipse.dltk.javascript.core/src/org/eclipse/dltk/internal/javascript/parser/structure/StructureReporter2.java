@@ -111,7 +111,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 								.getIdentifier(),
 						methodInfo, method);
 			} else {
-				method.setName("anon_function");
+				method.setName("");
 				methodInfo.nameSourceStart = node.getFunctionKeyword()
 						.sourceStart();
 				methodInfo.nameSourceEnd = node.getFunctionKeyword()
@@ -183,26 +183,35 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 	@Override
 	public Object visitObjectInitializer(ObjectInitializer node) {
+		FieldInfo info = null;
 		if (inFunction) {
-			FieldInfo info = new FieldInfo();
-			info.name = "anon_scope";
-			info.nameSourceStart = node.sourceStart();
-			info.nameSourceEnd = node.sourceEnd() - 1;
 			if (node.getParent() instanceof VariableDeclaration
 					&& ((VariableDeclaration) node.getParent()).getIdentifier() != null) {
 				Identifier identifier = ((VariableDeclaration) node.getParent())
 						.getIdentifier();
+				info = new FieldInfo();
+				info.name = identifier.getName();
+				info.nameSourceStart = identifier.sourceStart();
+				info.nameSourceEnd = identifier.sourceEnd() - 1;
+				info.declarationStart = node.sourceStart();
+			} else if (node.getParent() instanceof PropertyInitializer
+					&& ((PropertyInitializer) node.getParent()).getName() instanceof Identifier) {
+				Identifier identifier = (Identifier) ((PropertyInitializer) node
+						.getParent()).getName();
+				info = new FieldInfo();
 				info.name = identifier.getName();
 				info.nameSourceStart = identifier.sourceStart();
 				info.nameSourceEnd = identifier.sourceEnd() - 1;
 			}
-			info.declarationStart = node.sourceStart();
-			fRequestor.enterField(info);
+			if (info != null) {
+				info.declarationStart = node.sourceStart();
+				fRequestor.enterField(info);
+			}
 		}
 		try {
 			return super.visitObjectInitializer(node);
 		} finally {
-			if (inFunction) {
+			if (inFunction && info != null) {
 				fRequestor.exitField(node.sourceEnd());
 			}
 		}
