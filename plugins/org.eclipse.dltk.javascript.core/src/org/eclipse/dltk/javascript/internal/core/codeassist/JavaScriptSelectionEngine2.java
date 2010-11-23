@@ -94,7 +94,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 	}
 
 	public IModelElement[] select(IModuleSource module, int position, int i) {
-		if (!(module.getModelElement() instanceof ISourceModule)) {
+		if (!(module.getModelElement() instanceof ISourceModule) || i == -1) {
 			return null;
 		}
 		String content = module.getSourceContents();
