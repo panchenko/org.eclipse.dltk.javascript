@@ -288,6 +288,12 @@
            id="javascriptTemplatePreferencePage"
            name="%JavaScriptEditorTemplatesPreferencePage.name">
      </page>
+     <page
+     	   category="org.eclipse.dltk.javascript.ui.EditorPreferences"
+           class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptMarkOccurrencesPreferencePage"
+           id="org.eclipse.dltk.javascript.ui.editor.MarkOccurrencesPreference"
+           name="Mark Occurrences">
+     </page>
        <page
              category="org.eclipse.dltk.javascript.ui.javascript"
              class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptErrorWarningPreferencePage"
