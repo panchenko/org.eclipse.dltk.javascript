@@ -289,6 +289,9 @@ public class JavascriptAutoEditStrategy extends
 			IRegion prevLine, int line, ITypedRegion region, IDocument d,
 			DocumentCommand c) {
 		int index = str.indexOf("/*");
+		// if it is directly closed then there is no doc to append.
+		if (str.indexOf("*/", index + 2) != -1)
+			index = -1;
 
 		// handle the start comment character prefix;
 		if (index != -1 && prevLine.getOffset() + index < c.offset) {
@@ -398,7 +401,7 @@ public class JavascriptAutoEditStrategy extends
 						if (a == -1)
 							a = sm.length();
 						else
-							a = a + 2;
+							a = a + 1;
 					} else // regexp?
 					{
 						aPlus1++;
