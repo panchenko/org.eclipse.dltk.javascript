@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-import java.util.IdentityHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
@@ -26,15 +26,22 @@ import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.ObjectInitializer;
+import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
 public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 
 	private final IMatchingCollector<MatchingNode> locator;
+
+	private final List<LazyCheck> unresolved = new ArrayList<LazyCheck>();
 
 	/**
 	 * @param context
@@ -44,12 +51,6 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 		super(context);
 		this.locator = locator;
 	}
-
-	private static enum VisitorMode {
-		NORMAL, CALL
-	}
-
-	private final Map<ASTNode, VisitorMode> modes = new IdentityHashMap<ASTNode, VisitorMode>();
 
 	private final Stack<ASTNode> visitStack = new Stack<ASTNode>();
 
@@ -63,17 +64,10 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 		}
 	}
 
-	private VisitorMode currentMode() {
-		final VisitorMode mode = modes.get(visitStack.peek());
-		return mode != null ? mode : VisitorMode.NORMAL;
-	}
-
 	@Override
 	public IValueReference visitCallExpression(CallExpression node) {
 		final ASTNode expression = node.getExpression();
-		modes.put(expression, VisitorMode.CALL);
 		final IValueReference reference = visit(expression);
-		modes.remove(expression);
 		for (ASTNode argument : node.getArguments()) {
 			visit(argument);
 		}
@@ -87,13 +81,46 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 	@Override
 	public IValueReference visitIdentifier(Identifier node) {
 		final IValueReference result = peekContext().getChild(node.getName());
-		if (result != null && result.getKind().isLocal() && inFunction()) {
+		if (!checkIdentifer(node, result, true)) {
+			unresolved.add(new IdentiferCheck(node, result));
+		}
+		return result;
+	}
+
+	/**
+	 * @param node
+	 * @param result
+	 */
+	private boolean checkIdentifer(Identifier node,
+			final IValueReference result, boolean check) {
+		if (check && result.getLocation() == ReferenceLocation.UNKNOWN)
+			return false;
+
+		if (result.getAttribute(IReferenceAttributes.PARAMETERS) != null) {
+			locator.report(new MethodReferenceNode(node, result));
+		} else if (result != null && result.getKind().isLocal() && inFunction()) {
 			locator.report(new LocalVariableReferenceNode(node, result
 					.getLocation()));
-		} else if (currentMode() == VisitorMode.CALL) {
-			locator.report(new MethodReferenceNode(node, result));
 		} else {
 			locator.report(new FieldReferenceNode(node, result));
+		}
+		return true;
+	}
+
+	@Override
+	public IValueReference visitObjectInitializer(ObjectInitializer node) {
+		IValueReference result = super.visitObjectInitializer(node);
+		for (ObjectInitializerPart part : node.getInitializers()) {
+			if (part instanceof PropertyInitializer) {
+				final PropertyInitializer pi = (PropertyInitializer) part;
+				if (pi.getName() instanceof Identifier) {
+					Identifier id = (Identifier) pi.getName();
+					final IValueReference child = result.getChild(id.getName());
+					if (!checkIdentifer(id, child, true)) {
+						unresolved.add(new IdentiferCheck(id, result));
+					}
+				}
+			}
 		}
 		return result;
 	}
@@ -103,11 +130,9 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 		final IValueReference object = super.visitPropertyExpression(node);
 		final Expression property = node.getProperty();
 		if (property instanceof Identifier) {
-			final Identifier prop = (Identifier) property;
-			if (currentMode() == VisitorMode.CALL) {
-				locator.report(new MethodReferenceNode(prop, object));
-			} else {
-				locator.report(new FieldReferenceNode(prop, object));
+			if (!checkIdentifer((Identifier) property, object, true)) {
+				unresolved
+						.add(new IdentiferCheck((Identifier) property, object));
 			}
 		}
 		return object;
@@ -118,15 +143,39 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 			VariableDeclaration declaration) {
 		final IValueReference result = super.createVariable(context,
 				declaration);
-		if (inFunction()) {
+		if (!checkVariable(declaration, result, true)) {
+			unresolved.add(new VariableCheck(declaration, result));
+		}
+		return result;
+	}
+
+	/**
+	 * @param declaration
+	 * @param result
+	 */
+	private boolean checkVariable(VariableDeclaration declaration,
+			final IValueReference result, boolean check) {
+		if (check && result.getLocation() == ReferenceLocation.UNKNOWN)
+			return false;
+
+		if (result.getAttribute(IReferenceAttributes.PARAMETERS) != null) {
+			locator.report(new MethodDeclarationNode(declaration
+					.getIdentifier(), (IMethod) result
+					.getAttribute(IReferenceAttributes.PARAMETERS)));
+		} else if (inFunction()
+				&& !(declaration.getInitializer() instanceof ObjectInitializer)) {
 			locator.report(new LocalVariableDeclarationNode(declaration
 					.getIdentifier(), getSource().getSourceModule(), result
 					.getDeclaredType()));
 		} else {
+			// make sure that all references to this field are seen as
+			// FieldReferences not Local
+			result.setKind(ReferenceKind.FIELD);
 			locator.report(new FieldDeclarationNode(
 					declaration.getIdentifier(), result.getDeclaredType()));
 		}
-		return result;
+
+		return true;
 	}
 
 	@Override
@@ -151,5 +200,46 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 					.getSourceModule(), reference.getDeclaredType()));
 		}
 		super.visitFunctionBody(node);
+	}
+
+	public void flush() {
+		for (LazyCheck check : unresolved) {
+			check.check();
+		}
+		unresolved.clear();
+	}
+
+	interface LazyCheck {
+		void check();
+	}
+
+	class IdentiferCheck implements LazyCheck {
+		private final Identifier node;
+		private final IValueReference result;
+
+		public IdentiferCheck(Identifier node, IValueReference result) {
+			this.node = node;
+			this.result = result;
+		}
+
+		public void check() {
+			checkIdentifer(node, result, false);
+		}
+	}
+
+	public class VariableCheck implements LazyCheck {
+
+		private final VariableDeclaration declaration;
+		private final IValueReference result;
+
+		public VariableCheck(VariableDeclaration declaration,
+				IValueReference result) {
+			this.declaration = declaration;
+			this.result = result;
+		}
+
+		public void check() {
+			checkVariable(declaration, result, false);
+		}
 	}
 }

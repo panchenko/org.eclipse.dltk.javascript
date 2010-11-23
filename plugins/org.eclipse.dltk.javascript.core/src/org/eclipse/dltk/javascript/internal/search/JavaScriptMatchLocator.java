@@ -74,21 +74,20 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 			return;
 		}
 
-		BufferingMatchingCollector<MatchingNode> lazyCollector = new BufferingMatchingCollector<MatchingNode>(
-				new MatchingCollector<MatchingNode>(predicate, nodeSet));
-		inferencer2.setVisitor(new JavaScriptMatchingVisitor(inferencer2,
-				lazyCollector));
+		JavaScriptMatchingVisitor visitor = new JavaScriptMatchingVisitor(
+				inferencer2, new MatchingCollector<MatchingNode>(predicate,
+						nodeSet));
 		for (SearchDocument document : searchDocuments) {
 			// TODO report progress
 			final ISourceModule module = moduleFactory.create(document);
 			if (module == null)
 				continue;
 			nodeSet.clear();
-			lazyCollector.reset();
 			inferencer2.setModelElement(module);
 			final Script script = JavaScriptParserUtil.parse(module);
+			inferencer2.setVisitor(visitor);
 			inferencer2.doInferencing(script);
-			lazyCollector.flush();
+			visitor.flush();
 			if (!nodeSet.isEmpty()) {
 				resolvePotentialMatches(nodeSet);
 				participant = document.getParticipant();
