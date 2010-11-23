@@ -434,7 +434,6 @@
     <members xsi:type="ref:Method" name="propertyIsEnumerable" type="Boolean" description="The propertyIsEnumerable method returns a Boolean value indicating whether the property P will be included in the set of properties iterated over when this XML object is used in a for-in statement. This method returns truewhen ToString(P) is &quot;0&quot;; otherwise, it returns false. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value">
       <parameters name="property"/>
     </members>
-    <members xsi:type="ref:Property" name="prototype" type="XML"/>
     <members xsi:type="ref:Method" name="removeNamespace" type="XML" description="The removeNamespace method removes the given namespace from the in scope namespaces of this object and all its descendents, then returns a copy of this XML object. The removeNamespaces method will not remove a namespace from an object where it is referenced by that object�s QName or the QNames of that object�s attributes">
       <parameters name="namespace"/>
     </members>
