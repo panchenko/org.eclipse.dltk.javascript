@@ -121,20 +121,6 @@
                id="org.eclipse.dltk.ui.actions.Indent">
          </action>
          <action
-               definitionId="org.eclipse.ui.edit.text.shiftLeft"
-               label="%ShiftLeftAction.label"
-               retarget="true"
-               menubarPath="org.eclipse.dltk.ui.source.menu/editGroup"
-               id="org.eclipse.dltk.ui.actions.ShiftLeft">
-         </action>
-         <action
-               definitionId="org.eclipse.ui.edit.text.shiftRight"
-               label="%ShiftRightAction.label"
-               retarget="true"
-               menubarPath="org.eclipse.dltk.ui.source.menu/editGroup"
-               id="org.eclipse.dltk.ui.actions.ShiftRight">
-         </action>
-         <action
                definitionId="org.eclipse.dltk.ui.edit.text.script.uncomment"
                label="%UncommentAction.label"
                retarget="true"
