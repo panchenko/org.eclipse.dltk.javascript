@@ -52,8 +52,6 @@ import org.eclipse.ui.PlatformUI;
  * This class may be instantiated; it is not intended to be subclassed.
  * </p>
  * 
- * @since 2.0
- * 
  * @noextend This class is not intended to be subclassed by clients.
  */
 public class AddJavaDocStubAction extends SelectionDispatchAction {
@@ -156,6 +154,11 @@ public class AddJavaDocStubAction extends SelectionDispatchAction {
 					.getElementAtOffset(fEditor);
 			if (!ActionUtil.isEditable(fEditor, getShell(), element))
 				return;
+			while ((element instanceof IType || element instanceof IMethod)
+					&& element.getElementName().length() == 0) {
+				// anonymous type/function
+				element = element.getParent();
+			}
 			int type = element != null ? element.getElementType() : -1;
 			if (type != IModelElement.METHOD && type != IModelElement.TYPE
 					&& type != IModelElement.FIELD) {
@@ -241,9 +244,9 @@ public class AddJavaDocStubAction extends SelectionDispatchAction {
 					} else if (!cu.equals(member.getSourceModule())) {
 						return null;
 					}
-					if (member instanceof IType
+					if ((member instanceof IType || member instanceof IMethod)
 							&& member.getElementName().length() == 0) {
-						return null; // anonymous type
+						return null; // anonymous type/function
 					}
 					res[i] = member;
 				} else {
