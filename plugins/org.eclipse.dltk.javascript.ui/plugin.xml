@@ -92,13 +92,13 @@
             </separator>
          </menu>
          <!-- Comment Group -->
-         <!--action
-               definitionId="org.eclipse.jdt.ui.edit.text.java.add.javadoc.comment"
+         <action
+               definitionId="org.eclipse.dltk.ui.edit.text.script.add.javadoc.comment"
                label="%AddJavaDocCommentAction.label"
                retarget="true"
-               menubarPath="org.eclipse.jdt.ui.source.menu/commentGroup"
-               id="org.eclipse.jdt.ui.actions.AddJavaDocComment">
-         </action-->
+               menubarPath="org.eclipse.dltk.ui.source.menu/commentGroup"
+               id="org.eclipse.dltk.ui.actions.AddJavadocComment">
+         </action>
          <action
                definitionId="org.eclipse.dltk.ui.edit.text.script.quick.format"
                label="%FormatElementAction.label"
@@ -159,13 +159,6 @@
                retarget="true"
                menubarPath="org.eclipse.dltk.ui.source.menu/commentGroup"
                id="org.eclipse.dltk.ui.actions.AddBlockComment">
-         </action>
-         <action
-               definitionId="org.eclipse.dltk.ui.edit.text.add.javadoc.comment"
-               label="%AddJavaDocCommentAction.label"
-               retarget="true"
-               menubarPath="org.eclipse.dltk.ui.source.menu/commentGroup"
-               id="org.eclipse.dltk.ui.actions.AddJavadocComment">
          </action>
       </actionSet>
         <actionSet
@@ -404,12 +397,6 @@
             id="org.eclipse.javascript.ui.navigate.open.method"
             name="%ActionDefinition.OpenMethod.name">
       </command>      
-      <command
-            name="%ActionDefinition.addJavadocComment.name"
-            description="%ActionDefinition.addJavadocComment.description"
-            categoryId="org.eclipse.dltk.ui.category.source"
-            id="org.eclipse.dltk.ui.edit.text.add.javadoc.comment">
-      </command>
   </extension>
   <extension
          point="org.eclipse.ui.contexts">

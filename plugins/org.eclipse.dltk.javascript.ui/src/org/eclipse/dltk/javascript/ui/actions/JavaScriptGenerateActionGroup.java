@@ -54,10 +54,9 @@ public class JavaScriptGenerateActionGroup extends GenerateActionGroup {
 	}
 
 	@Override
-	protected int addEditorCommentActions(IMenuManager source) {
-		return super.addEditorCommentActions(source)
-				+ addEditorAction(source,
-						DLTKActionConstants.ADD_JAVA_DOC_COMMENT);
+	protected int fillEditorSubMenu(IMenuManager source) {
+		return super.fillEditorSubMenu(source)
+				+ addAction(source, GROUP_COMMENT, fAddJavaDocStub);
 	}
 
 	@Override
