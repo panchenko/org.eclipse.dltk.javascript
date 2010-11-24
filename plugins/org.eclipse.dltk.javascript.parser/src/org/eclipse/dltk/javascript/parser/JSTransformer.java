@@ -22,6 +22,7 @@ import java.util.Stack;
 
 import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.Token;
+import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.AssertionFailedException;
@@ -1137,26 +1138,28 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 						varNode.getTokenStopIndex() + 1, node.getChild(i + 1)
 								.getTokenStartIndex()));
 			}
-			SymbolKind replaced = scope.add(declaration.getVariableName(), kind); 
-			if (replaced != null
-					&& reporter != null) {
+			SymbolKind replaced = scope
+					.add(declaration.getVariableName(), kind);
+			if (replaced != null && reporter != null) {
 				final Identifier identifier = declaration.getIdentifier();
 				reporter.setRange(identifier.sourceStart(),
 						identifier.sourceEnd());
 				String message;
-				if (replaced == SymbolKind.VAR || replaced == SymbolKind.CONST)
-				{
-					message = "redeclaration of " + replaced.name().toLowerCase() + " " + declaration.getVariableName();
-					reporter.setMessage(JavaScriptParserProblems.DUPLICATE_VAR_DECLARATION,
-									message);
-				}
-				else 
-				{
-					message = kind.name().toLowerCase() + " " + declaration.getVariableName() + " hides parameter";
+				if (replaced == SymbolKind.VAR || replaced == SymbolKind.CONST) {
+					message = "redeclaration of "
+							+ replaced.name().toLowerCase() + " "
+							+ declaration.getVariableName();
+					reporter.setMessage(
+							JavaScriptParserProblems.DUPLICATE_VAR_DECLARATION,
+							message);
+				} else {
+					message = kind.name().toLowerCase() + " "
+							+ declaration.getVariableName()
+							+ " hides parameter";
 					reporter.setMessage(
 							kind == SymbolKind.VAR ? JavaScriptParserProblems.VAR_HIDES_ARGUMENT
 									: JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
-									message);
+							message);
 				}
 				reporter.report();
 			}
@@ -1663,13 +1666,17 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		GetArrayItemExpression item = new GetArrayItemExpression(getParent());
 
 		item.setArray((Expression) transformNode(node.getChild(0), item));
-		item.setIndex((Expression) transformNode(node.getChild(1), item));
-
-		item.setLB(getTokenOffset(JSParser.LBRACK, getRealTokenStopIndex(node
-				.getChild(0)) + 1, node.getChild(1).getTokenStartIndex()));
-
-		item.setRB(getTokenOffset(JSParser.RBRACK, node.getChild(1)
-				.getTokenStopIndex() + 1, tokens.size() - 1));
+		item.setLB(getTokenOffset(((CommonTree) node).getToken()
+				.getTokenIndex()));
+		if (node.getChildCount() == 2) {
+			item.setIndex((Expression) transformNode(node.getChild(1), item));
+			item.setRB(getTokenOffset(JSParser.RBRACK, node.getChild(1)
+					.getTokenStopIndex() + 1, tokens.size() - 1));
+		} else {
+			item.setIndex(new ErrorExpression(item, Util.EMPTY_STRING));
+			item.setRB(getTokenOffset(JSParser.RBRACK, node.getChild(0)
+					.getTokenStopIndex() + 1, tokens.size() - 1));
+		}
 
 		item.setStart(item.getArray().sourceStart());
 		if (item.getRB() > -1) {
