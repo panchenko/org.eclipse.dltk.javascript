@@ -32,8 +32,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 public class JSDocSupport implements IModelBuilder {
 
 	public static String[] getTags() {
-		return new String[] { DEPRECATED, PARAM_TAG, TYPE_TAG, RETURNS_TAG,
-				PRIVATE_TAG };
+		return new String[] { DEPRECATED, PARAM_TAG, TYPE_TAG, RETURN_TAG,
+				RETURNS_TAG, PRIVATE_TAG };
 	}
 
 	private static final String PRIVATE_TAG = "@private";
@@ -172,7 +172,10 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	private static final String TYPE_TAG = "@type"; //$NON-NLS-1$
+	private static final String RETURN_TAG = "@return";
 	private static final String RETURNS_TAG = "@returns";
+
+	private static final String[] RETURN_TAGS = { RETURNS_TAG, RETURN_TAG };
 
 	/**
 	 * @see St
@@ -194,19 +197,21 @@ public class JSDocSupport implements IModelBuilder {
 				member.setType(typeToken);
 			}
 		} else {
-			index = comment.indexOf(RETURNS_TAG);
-			if (index != -1) {
-				int begingBrace = comment.indexOf('{',
-						index + RETURNS_TAG.length());
-				if (begingBrace != -1) {
-					int endBrace = comment.indexOf('}', begingBrace);
-					if (endBrace != -1) {
-						member.setType(comment.substring(begingBrace + 1,
-								endBrace).trim());
+			for (String tag : RETURN_TAGS) {
+				index = comment.indexOf(tag);
+				if (index != -1) {
+					int begingBrace = comment
+							.indexOf('{', index + tag.length());
+					if (begingBrace != -1) {
+						int endBrace = comment.indexOf('}', begingBrace);
+						if (endBrace != -1) {
+							member.setType(comment.substring(begingBrace + 1,
+									endBrace).trim());
+							break;
+						}
 					}
 				}
 			}
-
 		}
 	}
 }
