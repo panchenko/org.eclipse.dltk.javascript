@@ -131,7 +131,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	protected static List<String> getMethodsOfXML() {
 		if (xmlMethods == null) {
 			xmlMethods = getMembers(ITypeNames.XML);
-			assertEquals(45, xmlMethods.size());
+			assertEquals(44, xmlMethods.size());
 		}
 		return xmlMethods;
 	}
