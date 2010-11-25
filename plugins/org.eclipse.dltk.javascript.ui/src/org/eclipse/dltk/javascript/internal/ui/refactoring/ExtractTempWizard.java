@@ -19,6 +19,8 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -53,7 +55,7 @@ public class ExtractTempWizard extends RefactoringWizard {
 	private static class ExtractTempInputPage extends TextInputWizardPage {
 
 		//private static final String DECLARE_FINAL = "declareFinal"; //$NON-NLS-1$
-		//private static final String REPLACE_ALL = "replaceOccurrences"; //$NON-NLS-1$
+		private static final String REPLACE_ALL = "replaceOccurrences"; //$NON-NLS-1$
 
 		private final boolean fInitialValid;
 		private static final String DESCRIPTION = RefactoringMessages.ExtractTempInputPage_enter_name;
@@ -91,7 +93,7 @@ public class ExtractTempWizard extends RefactoringWizard {
 
 			layouter.perform(label, text, 1);
 
-			// addReplaceAllCheckbox(result, layouter);
+			addReplaceAllCheckbox(result, layouter);
 			// addDeclareFinalCheckbox(result, layouter);
 
 			validateTextField(text.getText());
@@ -108,27 +110,33 @@ public class ExtractTempWizard extends RefactoringWizard {
 				fSettings = getDialogSettings().addNewSection(
 						ExtractTempWizard.DIALOG_SETTING_SECTION);
 				// fSettings.put(DECLARE_FINAL, false);
-				// fSettings.put(REPLACE_ALL, true);
+				fSettings.put(REPLACE_ALL, true);
 			}
 			// getExtractTempRefactoring().setDeclareFinal(
 			// fSettings.getBoolean(DECLARE_FINAL));
-			// getExtractTempRefactoring().setReplaceAllOccurrences(
-			// fSettings.getBoolean(REPLACE_ALL));
+			getExtractTempRefactoring().setReplaceAllOccurrences(
+					fSettings.getBoolean(REPLACE_ALL));
+		}
+
+		private void addReplaceAllCheckbox(Composite result,
+				RowLayouter layouter) {
+			String title = RefactoringMessages.ExtractTempInputPage_replace_all;
+			boolean defaultValue = getExtractTempRefactoring()
+					.replaceAllOccurrences();
+			final Button checkBox = createCheckbox(result, title, defaultValue,
+					layouter);
+			getExtractTempRefactoring().setReplaceAllOccurrences(
+					checkBox.getSelection());
+			checkBox.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					fSettings.put(REPLACE_ALL, checkBox.getSelection());
+					getExtractTempRefactoring().setReplaceAllOccurrences(
+							checkBox.getSelection());
+				}
+			});
 		}
 
 		/*
-		 * private void addReplaceAllCheckbox(Composite result, RowLayouter
-		 * layouter) { String title =
-		 * RefactoringMessages.ExtractTempInputPage_replace_all; boolean
-		 * defaultValue = getExtractTempRefactoring() .replaceAllOccurrences();
-		 * final Button checkBox = createCheckbox(result, title, defaultValue,
-		 * layouter); getExtractTempRefactoring().setReplaceAllOccurrences(
-		 * checkBox.getSelection()); checkBox.addSelectionListener(new
-		 * SelectionAdapter() { public void widgetSelected(SelectionEvent e) {
-		 * fSettings.put(REPLACE_ALL, checkBox.getSelection());
-		 * getExtractTempRefactoring().setReplaceAllOccurrences(
-		 * checkBox.getSelection()); } }); }
-		 * 
 		 * private void addDeclareFinalCheckbox(Composite result, RowLayouter
 		 * layouter) { String title =
 		 * RefactoringMessages.ExtractTempInputPage_declare_final; boolean
