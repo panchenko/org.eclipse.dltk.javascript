@@ -218,6 +218,16 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		node.setEnd(getTokenOffset(tokenIndex + 1));
 	}
 
+	private void setRange(ASTNode node, Tree treeNode) {
+		node.setStart(getTokenOffset(treeNode.getTokenStartIndex()));
+		int stopIndex = treeNode.getTokenStopIndex();
+		while (stopIndex >= 0
+				&& tokens.get(stopIndex).getType() == JSParser.EOL) {
+			--stopIndex;
+		}
+		node.setEnd(getTokenOffset(stopIndex + 1));
+	}
+
 	private int getTokenOffset(int tokenType, int startTokenIndex,
 			int endTokenIndex) {
 
@@ -976,8 +986,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		operation.setExpression((Expression) transformNode(node.getChild(0),
 				operation));
 
-		operation.setStart(getTokenOffset(node.getTokenStartIndex()));
-		operation.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+		setRange(operation, node);
 
 		return operation;
 	}
@@ -998,8 +1007,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC,
 				node.getTokenStopIndex(), node.getTokenStopIndex()));
-		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
-		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+		setRange(statement, node);
 		if (statement.getLabel() == null) {
 			validateParent(JavaScriptParserProblems.BAD_CONTINUE,
 					"continue must be inside loop", statement,
@@ -1120,8 +1128,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		processVariableDeclarations(node, var, SymbolKind.VAR);
 
-		var.setStart(getTokenOffset(node.getTokenStartIndex()));
-		var.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+		setRange(var, node);
 
 		return var;
 	}
