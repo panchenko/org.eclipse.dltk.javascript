@@ -3,6 +3,8 @@ package org.eclipse.dltk.javascript.ui.tests.autoedit;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptDocumentSetupParticipant;
 import org.eclipse.jface.text.DocumentCommand;
 import org.eclipse.jface.text.IDocument;
 
@@ -56,6 +58,12 @@ public class JSAutoEditStrategyTestCase extends TestCase {
 		cmd.caretOffset = offset;
 		cmd.shiftsCaret = true;
 		return cmd;
+	}
+
+	protected Document createDocument(StringList code) {
+		final Document document = new Document(code);
+		new JavaScriptDocumentSetupParticipant().setup(document);
+		return document;
 	}
 
 }

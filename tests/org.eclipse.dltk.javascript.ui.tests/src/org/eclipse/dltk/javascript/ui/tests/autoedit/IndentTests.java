@@ -12,8 +12,6 @@
 package org.eclipse.dltk.javascript.ui.tests.autoedit;
 
 import org.eclipse.dltk.core.tests.util.StringList;
-import org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptDocumentSetupParticipant;
-import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.jface.text.BadLocationException;
 
 public class IndentTests extends JSAutoEditStrategyTestCase {
@@ -51,7 +49,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 	public void testAfterFunction() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
-		final Document document = new Document(code);
+		final Document document = createDocument(code);
 		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
 		StringList expected = new StringList();
 		expected.add("function test() {");
@@ -65,7 +63,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		code.add("/*");
 		code.add("function test() {");
 		code.add("}");
-		final Document document = new Document(code);
+		final Document document = createDocument(code);
 		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
 		StringList expected = new StringList();
 		expected.add("/*");
@@ -83,14 +81,9 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		code.add(" */");
 		code.add("function test() {");
 		code.add("}");
-		final Document document = new Document(code);
-		// TODO setup all strategies
-		new JavaScriptDocumentSetupParticipant().setup(document);
+		final Document document = createDocument(code);
 		// TODO find correct strategy for offset
 		execute(document, createCommand(ENTER, document.getEndOfLineOffset(1)));
-		// remove partitioner
-		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING,
-				null);
 		StringList expected = new StringList();
 		expected.add("/*");
 		expected.add(" * ");
