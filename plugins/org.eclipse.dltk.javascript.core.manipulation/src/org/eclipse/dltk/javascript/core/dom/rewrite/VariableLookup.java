@@ -30,8 +30,8 @@ import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.emf.ecore.EObject;
 
 public class VariableLookup {
-	Set<String> result;
-	Set<String> hidden = new HashSet<String>();
+	protected Set<String> result;
+	protected Set<String> hidden = new HashSet<String>();
 	public Set<String> getVisibleNames(Node node) {
 		result = new HashSet<String>();
 		boolean innerMost=true;
@@ -89,10 +89,11 @@ public class VariableLookup {
 				return refs;
 			}
 			protected void addReference(VariableReference node) {
-				if (wanted.contains(node.getVariable().getName())) {
+				String str = node.getVariable().getName();
+				if (wanted.contains(str) && !hidden.contains(str)) {
 					refs.add(node);
 					if (firstOnly)
-						wanted.remove(node.getVariable().getName());
+						wanted.remove(str);
 				}
 			}
 		}.getResult();

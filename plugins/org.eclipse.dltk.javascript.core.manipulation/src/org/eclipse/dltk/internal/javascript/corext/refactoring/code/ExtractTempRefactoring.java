@@ -13,6 +13,7 @@ package org.eclipse.dltk.internal.javascript.corext.refactoring.code;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,17 +52,21 @@ import org.eclipse.dltk.javascript.core.dom.rewrite.VariableLookup;
 import org.eclipse.dltk.javascript.core.refactoring.descriptors.ExtractLocalDescriptor;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.change.util.ChangeRecorder;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.core.refactoring.RefactoringChangeDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.text.edits.TextEdit;
+import org.eclipse.text.edits.TextEditGroup;
 
 /**
  * Extract Local Variable (from selected expression inside method or
@@ -249,7 +254,7 @@ public class ExtractTempRefactoring extends Refactoring {
 
 	private String[] fExcludedVariableNames;
 
-	//private boolean fReplaceAllOccurrences;
+	private boolean fReplaceAllOccurrences;
 
 	// caches:
 	private Expression fSelectedExpression;
@@ -290,7 +295,7 @@ public class ExtractTempRefactoring extends Refactoring {
 		fCu = unit;
 		fCompilationUnitNode = null;
 
-		//fReplaceAllOccurrences = true; // default
+		fReplaceAllOccurrences = true; // default
 		//fDeclareFinal = false; // default
 		fTempName = ""; //$NON-NLS-1$
 
@@ -392,62 +397,67 @@ public class ExtractTempRefactoring extends Refactoring {
 			pm.beginTask(
 					RefactoringCoreMessages.ExtractTempRefactoring_checking_preconditions,
 					4);
+			ChangeRecorder cr = new ChangeRecorder(fCompilationUnitNode);
 			// Expression
 			Expression selected = getSelectedExpression();
-			EReference exprRef = selected.eContainmentFeature();
+			Expression[] expressions;
+			if (fReplaceAllOccurrences) {
+				expressions = findSimilarExpressions(selected);
+			} else {
+				expressions = new Expression[]{ selected };
+			}
 			// Statement
-			EObject node = selected;
-			while (node.eContainmentFeature().getEReferenceType() != DomPackage.eINSTANCE.getStatement())
-				node = node.eContainer();
-			Statement stmt = (Statement)node;
+			Statement stmt = findFirstStatement(expressions[0],expressions[expressions.length-1]);
 			EReference stmtRef = stmt.eContainmentFeature();
-			// Reference
-			Identifier refId = DomFactory.eINSTANCE.createIdentifier();
-			refId.setName(fTempName);
-			VariableReference varRef = DomFactory.eINSTANCE.createVariableReference();
-			varRef.setVariable(refId);
+			// Expression -> Reference
+			for(Expression expr : expressions) {
+				Identifier refId = DomFactory.eINSTANCE.createIdentifier();
+				refId.setName(fTempName);
+				VariableReference varRef = DomFactory.eINSTANCE.createVariableReference();
+				varRef.setVariable(refId);
+				EReference exprRef = expr.eContainmentFeature();
+				if (exprRef.isMany()) {
+					EList<Expression> exprList = (EList<Expression>)expr.eContainer().eGet(exprRef);
+					exprList.set(exprList.lastIndexOf(expr), varRef);
+				} else {
+					expr.eContainer().eSet(exprRef, varRef);
+				}
+			}
 			// Declaration
 			Identifier declId = DomFactory.eINSTANCE.createIdentifier();
 			declId.setName(fTempName);
 			VariableDeclaration decl = DomFactory.eINSTANCE.createVariableDeclaration();
 			decl.setIdentifier(declId);
+			decl.setInitializer(selected);
 			VariableStatement varStmt = DomFactory.eINSTANCE.createVariableStatement();
 			varStmt.getDeclarations().add(decl);
-			// Recording init
-			List<Node> roots = new ArrayList<Node>(2);
-			roots.add(fCompilationUnitNode);
-			BlockStatement block = null;
-			if (stmtRef.isMany()) {
-				roots.add(varStmt);
-			} else {
-				block = DomFactory.eINSTANCE.createBlockStatement();
-				block.getStatements().add(varStmt);
-				roots.add(block);
-			}
-			ChangeRecorder cr = new ChangeRecorder(roots);
-			// Expression -> Reference
-			if (exprRef.isMany()) {
-				EList<Expression> exprList = (EList<Expression>)selected.eContainer().eGet(exprRef);
-				exprList.set(exprList.lastIndexOf(selected), varRef);
-			} else {
-				selected.eContainer().eSet(exprRef, varRef);
-			}
 			// << Declaration
-			decl.setInitializer((Expression)EcoreUtil.copy(selected));
 			if (stmtRef.isMany()) {
 				EList<Statement> stmtList = (EList<Statement>)stmt.eContainer().eGet(stmtRef);
 				stmtList.add(stmtList.lastIndexOf(stmt), varStmt);
 			} else {
-				EObject cont = stmt.eContainer();
+				BlockStatement block = DomFactory.eINSTANCE.createBlockStatement();
+				block.getStatements().add(varStmt);
+				stmt.eContainer().eSet(stmtRef, block);
 				block.getStatements().add(stmt);
-				cont.eSet(stmtRef, block);
 			}
 			ChangeDescription cd = cr.endRecording();
-			cd.applyAndReverse();
-			RewriteAnalyzer ra = new RewriteAnalyzer(cd, fCu.getSource());
-			ra.rewrite(fCompilationUnitNode);
-			SourceModuleChange change = new SourceModuleChange(RefactoringCoreMessages.ExtractTempRefactoring_name, fCu);
+			final SourceModuleChange change = new SourceModuleChange(RefactoringCoreMessages.ExtractTempRefactoring_name, fCu);
+			final TextEditGroup addDecl = new TextEditGroup(RefactoringCoreMessages.ExtractTempRefactoring_declare_local_variable);
+			RewriteAnalyzer ra = new RewriteAnalyzer(cd, fCu.getSource()) {
+				@Override
+				protected void addEdit(TextEdit edit, Node node) {
+					if (node instanceof VariableReference)
+						change.addTextEditGroup(new TextEditGroup(RefactoringCoreMessages.ExtractTempRefactoring_replace, edit));
+					else
+						addDecl.addTextEdit(edit);
+					super.addEdit(edit, node);
+				}
+			};
 			change.setEdit(ra.getEdit());
+			ra.rewrite(fCompilationUnitNode);
+			change.addTextEditGroup(addDecl);
+			cd.apply();
 			fChange = change;
 			return new RefactoringStatus();
 		} finally {
@@ -455,7 +465,94 @@ public class ExtractTempRefactoring extends Refactoring {
 		}
 	}
 	
-	private final ExtractLocalDescriptor createRefactoringDescriptor() {
+	private static Expression[] findSimilarExpressions(Expression expr) {
+		List<Expression> res = new ArrayList<Expression>();
+		Node root = (Node)expr.eContainer();
+		while (true) {
+			int cl = root.eClass().getClassifierID();
+			if (cl == DomPackage.GETTER_ASSIGNMENT
+					|| cl == DomPackage.SETTER_ASSIGNMENT
+					|| cl == DomPackage.FUNCTION_EXPRESSION
+					|| cl == DomPackage.SOURCE) break;
+			root = (Node)root.eContainer();
+		}
+		Set<VariableReference> set = new HashSet<VariableReference>();
+		set.addAll(VariableLookup.findReferences(root, new VariableLookup().getVisibleNames(expr)));
+		TreeIterator<EObject> it = root.eAllContents();
+		while(it.hasNext()) {
+			Node cur = (Node)it.next();
+			if (match(expr,cur,set)) {
+				res.add((Expression)cur);
+				it.prune();
+			}
+		}
+		return res.toArray(new Expression[res.size()]);
+	}
+	
+	private static boolean match(Node one, Node another, Set<VariableReference> resolved) {
+		if (one == null)
+			return another == null;
+		EClass cl = one.eClass();
+		if (cl != another.eClass()) {
+			return false;
+		}
+		if (cl.getClassifierID() == DomPackage.VARIABLE_REFERENCE) {
+			return resolved.contains(one) == resolved.contains(another);
+		}
+		for(EAttribute attr : cl.getEAllAttributes()) {
+			if (attr.getFeatureID() == DomPackage.NODE__BEGIN
+					|| attr.getFeatureID() == DomPackage.NODE__END
+					|| attr == DomPackage.eINSTANCE.getBinaryExpression_OperatorPosition()
+					|| attr == DomPackage.eINSTANCE.getFunctionExpression_ParametersPosition()) continue;
+			if (!one.eGet(attr).equals(another.eGet(attr)))
+				return false;
+		}
+		for(EReference ref : cl.getEAllReferences()) {
+			if (ref.isMany()) {
+				List<? extends Node> first = (List<? extends Node>)one.eGet(ref);
+				List<? extends Node> second = (List<? extends Node>)another.eGet(ref);
+				if (first.size() != second.size())
+					return false;
+				for(int i=0;i<first.size();i++)
+					if (!match(first.get(i),second.get(i),resolved))
+						return false;
+			} else
+				if (!match((Node)one.eGet(ref),(Node)another.eGet(ref),resolved))
+					return false;
+		}
+		return true;
+	}
+	
+	private static Statement findFirstStatement(EObject first,EObject last) {
+		int x = getDepth(first);
+		int y = getDepth(last);
+		while (x>y) {
+			x--;
+			first = first.eContainer();
+		}
+		while (y>x) {
+			y--;
+			last = last.eContainer();
+		}
+		while (first.eContainer() != last.eContainer()) {
+			first = first.eContainer();
+			last = last.eContainer();
+		}
+		while (first.eContainmentFeature().getEReferenceType() != DomPackage.eINSTANCE.getStatement())
+			first = first.eContainer();
+		return (Statement)first;
+	}
+	
+	private static int getDepth(EObject node) {
+		int i=0;
+		while (node != null) {
+			i++;
+			node = node.eContainer();
+		}
+		return i;
+	}
+	
+	private ExtractLocalDescriptor createRefactoringDescriptor() {
 		String project = null;
 		IScriptProject scriptProject = fCu.getScriptProject();
 		if (scriptProject != null)
@@ -946,13 +1043,13 @@ public class ExtractTempRefactoring extends Refactoring {
 				SuperConstructorInvocation.class) != null)
 			return true;
 		return false;
-	}
+	}*/
 
 	public boolean replaceAllOccurrences() {
 		return fReplaceAllOccurrences;
 	}
 
-	private void replaceSelectedExpressionWithTempDeclaration()
+	/*private void replaceSelectedExpressionWithTempDeclaration()
 			throws CoreException {
 		ASTRewrite rewrite = fCURewrite.getASTRewrite();
 		Expression selectedExpression = getSelectedExpression()
@@ -980,11 +1077,11 @@ public class ExtractTempRefactoring extends Refactoring {
 
 	public void setDeclareFinal(boolean declareFinal) {
 		fDeclareFinal = declareFinal;
-	}
+	}*/
 
 	public void setReplaceAllOccurrences(boolean replaceAllOccurrences) {
 		fReplaceAllOccurrences = replaceAllOccurrences;
-	}*/
+	}
 
 	public void setTempName(String newName) {
 		fTempName = newName;

@@ -85,7 +85,6 @@ import org.eclipse.dltk.javascript.core.dom.XmlTextFragment;
 import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.change.ChangeDescription;
-import org.eclipse.emf.ecore.change.FeatureChange;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.TextEdit;
@@ -121,9 +120,6 @@ public class Generator extends DomSwitch<StringBuilder> {
 				JavascriptManipulationPlugin.log(e);
 			}
 		}
-		if (cd.getObjectChanges().get(node) != null)
-			for(FeatureChange fc : cd.getObjectChanges().get(node))
-				fc.apply(node);
 		doSwitch(node);
 		return sb;
 	}
@@ -139,6 +135,9 @@ public class Generator extends DomSwitch<StringBuilder> {
 	}
 	private void unindent() {
 		nlStr = nlStr.substring(0,nlStr.length()-1);
+	}
+	public String getIndentation() {
+		return nlStr;
 	}
 	public void newLine() {
 		sb.append(nlStr);

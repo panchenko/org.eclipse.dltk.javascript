@@ -32,6 +32,7 @@ import org.eclipse.dltk.core.manipulation.RefactoringChecks;
 import org.eclipse.dltk.core.manipulation.SourceModuleChange;
 import org.eclipse.dltk.core.search.IDLTKSearchConstants;
 import org.eclipse.dltk.core.search.IDLTKSearchScope;
+import org.eclipse.dltk.core.search.SearchMatch;
 import org.eclipse.dltk.core.search.SearchPattern;
 import org.eclipse.dltk.internal.corext.refactoring.CollectingSearchRequestor;
 import org.eclipse.dltk.internal.corext.refactoring.RefactoringScopeFactory;
@@ -47,7 +48,6 @@ import org.eclipse.dltk.internal.javascript.core.manipulation.Messages;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.Checks;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.ParameterInfo;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.RefactoringCoreMessages;
-import org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit;
 import org.eclipse.dltk.javascript.core.dom.CallExpression;
 import org.eclipse.dltk.javascript.core.dom.DomFactory;
 import org.eclipse.dltk.javascript.core.dom.DomPackage;
@@ -63,7 +63,6 @@ import org.eclipse.dltk.javascript.core.dom.rewrite.NodeFinder;
 import org.eclipse.dltk.javascript.core.dom.rewrite.RewriteAnalyzer;
 import org.eclipse.dltk.javascript.core.dom.rewrite.VariableLookup;
 import org.eclipse.dltk.javascript.core.refactoring.descriptors.ChangeMethodSignatureDescriptor;
-import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.change.ChangeDescription;
@@ -1290,95 +1289,97 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		}else{
 			pm.worked(1);
 		}*/
+		boolean decl = false;
 		for (int i= 0; i < fReferences.length; i++) {
-			if (pm.isCanceled())
-				throw new OperationCanceledException();
 			SearchResultGroup group= fReferences[i];
 			ISourceModule cu= group.getSourceModule();
-			if (cu == null)
-				continue;
-			/*SourceModuleRewrite cuRewrite;
-			if (cu.equals(getCu())) {
-				cuRewrite= fBaseCuRewrite;
-			} else {
-				cuRewrite= new SourceModuleRewrite(cu);
-				cuRewrite.getASTRewrite().setTargetSourceRangeComputer(new TightSourceRangeComputer());
-			}*/
-			Source root = (Source)ASTConverter.convert(JavaScriptParserUtil.parse(cu));
-			Node[] nodes= NodeFinder.findNodes(root, group.getSearchResults());
-			ChangeRecorder cr = new ChangeRecorder(root);
-			for(Node node : nodes) {
-				if (isFunctionReference(node)) {
-					VariableReference ref = (VariableReference)node;
-					ref.getVariable().setName(fMethodName);
-					CallExpression call = (CallExpression)node.eContainer();
-					if (call.getArguments().size() != fMethod.getParameters().length)
-						result.addWarning(RefactoringCoreMessages.ChangeSignatureRefactoring_different_num_of_args,
-								ScriptStatusContext.create(cu, new SourceRange(node.getBegin(), node.getEnd()-node.getBegin())));
-					reshuffleElements(call.getArguments(),new NewElementsProvider<Expression>(){
-						@Override
-						Expression createElement(ParameterInfo info) {
-							// XXX Dirty hack indeed
-							VariableReference ref = DomFactory.eINSTANCE.createVariableReference(); 
-							Identifier id = DomFactory.eINSTANCE.createIdentifier();
-							if (info.getDefaultValue() == null) {
-								id.setName(ParameterInfo.DEFAULT_VALUE);
-							} else
-								id.setName(info.getDefaultValue());
-							ref.setVariable(id);
-							return ref;
-						}
-					});
-				} else
-					result.addError(RefactoringCoreMessages.ChangeSignatureRefactoring_unknown_reference,
-							ScriptStatusContext.create(cu, new SourceRange(node.getBegin(), node.getEnd()-node.getBegin())));
-			}
-			if (cu == fMethod.getSourceModule()) {
-				Node node = NodeFinder.findNode(root, fMethod.getNameRange());
-				if (node != null && isFunctionDeclaration(node)) {
-					FunctionExpression expr = (FunctionExpression)node.eContainer();
-					expr.getIdentifier().setName(fMethodName);
-					reshuffleElements(expr.getParameters(),new NewElementsProvider<Parameter>(){
-						@Override
-						Parameter createElement(ParameterInfo info) {
-							Parameter param = DomFactory.eINSTANCE.createParameter();
-							Identifier id = DomFactory.eINSTANCE.createIdentifier();
-							id.setName(info.getNewName());
-							param.setName(id);
-							return param;
-						}
-					});
-					modifyElements(expr.getParameters());
-					result.merge(checkIfDeletedParametersUsed(expr.getBody(),cu));
-					updateBody(expr.getBody());
-				} else
-					result.addError(RefactoringCoreMessages.ChangeSignatureRefactoring_unknown_reference,
-							ScriptStatusContext.create(cu, new SourceRange(node.getBegin(), node.getEnd()-node.getBegin())));
-			}
-			ChangeDescription cd = cr.endRecording();
-			cd.applyAndReverse();
-			RewriteAnalyzer rewrite = new RewriteAnalyzer(cd, cu.getSource());
-			rewrite.rewrite(root);
-			TextChange change = new SourceModuleChange(cu.getElementName(), cu);
-			change.setEdit(rewrite.getEdit());
-			fChangeManager.manage(cu, change);
-			/*if (isNoArgConstructor && namedSubclassMapping.containsKey(cu)){
-				//only non-anonymous subclasses may have noArgConstructors to modify - see bug 43444
-				Set subtypes= (Set)namedSubclassMapping.get(cu);
-				for (Iterator iter= subtypes.iterator(); iter.hasNext();) {
-					IType subtype= (IType) iter.next();
-					AbstractTypeDeclaration subtypeNode= ASTNodeSearchUtil.getAbstractTypeDeclarationNode(subtype, cuRewrite.getRoot());
-					if (subtypeNode != null)
-						modifyImplicitCallsToNoArgConstructor(subtypeNode, cuRewrite);
-				}
-			}
-			TextChange change= cuRewrite.createChange(true);
-			if (change != null)
-				fChangeManager.manage(cu, change);*/
+			if (pm.isCanceled())
+				throw new OperationCanceledException();
+			processCu(cu,group.getSearchResults(),result);
+			if (cu == fMethod.getSourceModule())
+				decl = true;
 		}
-
+		if (!decl) {
+			if (pm.isCanceled())
+				throw new OperationCanceledException();
+			processCu(fMethod.getSourceModule(),new SearchMatch[0],result);
+		}
 		pm.done();
 		return fChangeManager;
+	}
+	private void processCu(ISourceModule cu, SearchMatch[] searchResults, RefactoringStatus result)
+			throws ModelException {
+		if (cu == null)
+			return;
+		/*SourceModuleRewrite cuRewrite;
+		if (cu.equals(getCu())) {
+			cuRewrite= fBaseCuRewrite;
+		} else {
+			cuRewrite= new SourceModuleRewrite(cu);
+			cuRewrite.getASTRewrite().setTargetSourceRangeComputer(new TightSourceRangeComputer());
+		}*/
+		Source root = (Source)ASTConverter.convert(JavaScriptParserUtil.parse(cu));
+		Node[] nodes= NodeFinder.findNodes(root, searchResults);
+		ChangeRecorder cr = new ChangeRecorder(root);
+		for(Node node : nodes) {
+			if (isFunctionReference(node)) {
+				VariableReference ref = (VariableReference)node;
+				ref.getVariable().setName(fMethodName);
+				CallExpression call = (CallExpression)node.eContainer();
+				if (call.getArguments().size() != fMethod.getParameters().length)
+					result.addWarning(RefactoringCoreMessages.ChangeSignatureRefactoring_different_num_of_args,
+							ScriptStatusContext.create(cu, new SourceRange(node.getBegin(), node.getEnd()-node.getBegin())));
+				reshuffleElements(call.getArguments(),new NewElementsProvider<Expression>(){
+					@Override
+					Expression createElement(ParameterInfo info) {
+						// XXX Dirty hack indeed
+						VariableReference ref = DomFactory.eINSTANCE.createVariableReference(); 
+						Identifier id = DomFactory.eINSTANCE.createIdentifier();
+						if (info.getDefaultValue() == null) {
+							id.setName(ParameterInfo.DEFAULT_VALUE);
+						} else
+							id.setName(info.getDefaultValue());
+						ref.setVariable(id);
+						return ref;
+					}
+				});
+			} else {
+				result.addError(RefactoringCoreMessages.ChangeSignatureRefactoring_unknown_reference,
+						ScriptStatusContext.create(cu, new SourceRange(node.getBegin(), node.getEnd()-node.getBegin())));
+				tryRename(node);
+			}
+		}
+		if (cu == fMethod.getSourceModule()) {
+			Node node = NodeFinder.findNode(root, fMethod.getNameRange());
+			if (node != null && isFunctionDeclaration(node)) {
+				FunctionExpression expr = (FunctionExpression)node.eContainer();
+				expr.getIdentifier().setName(fMethodName);
+				reshuffleElements(expr.getParameters(),new NewElementsProvider<Parameter>(){
+					@Override
+					Parameter createElement(ParameterInfo info) {
+						Parameter param = DomFactory.eINSTANCE.createParameter();
+						Identifier id = DomFactory.eINSTANCE.createIdentifier();
+						id.setName(info.getNewName());
+						param.setName(id);
+						return param;
+					}
+				});
+				modifyElements(expr.getParameters());
+				result.merge(checkIfDeletedParametersUsed(expr.getBody(),cu));
+				updateBody(expr.getBody());
+			} else {
+				result.addError(RefactoringCoreMessages.ChangeSignatureRefactoring_unknown_reference,
+						ScriptStatusContext.create(cu, new SourceRange(node.getBegin(), node.getEnd()-node.getBegin())));
+				tryRename(node);
+			}
+		}
+		ChangeDescription cd = cr.endRecording();
+		RewriteAnalyzer rewrite = new RewriteAnalyzer(cd, cu.getSource());
+		rewrite.rewrite(root);
+		cd.apply();
+		TextChange change = new SourceModuleChange(cu.getElementName(), cu);
+		change.setEdit(rewrite.getEdit());
+		fChangeManager.manage(cu, change);
 	}
 	private RefactoringStatus checkIfDeletedParametersUsed(Node node, ISourceModule cu) {
 		Set<String> deleted = new HashSet<String>();
@@ -1506,7 +1507,6 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		return info.getNewName() + ("".equals(info.getNewTypeName()) ? "" : ":" + info.getNewTypeName()); //$NON-NL0S-1$
 	}
 
-
 	private static boolean isFunctionReference(Node node){
 		return node instanceof VariableReference
 			&& node.eContainingFeature() == DomPackage.eINSTANCE.getCallExpression_Applicant();
@@ -1514,6 +1514,13 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 	
 	private static boolean isFunctionDeclaration(Node node) {
 		return node.eContainingFeature() == DomPackage.eINSTANCE.getFunctionExpression_Identifier();
+	}
+	
+	private void tryRename(Node node) {
+		if (node instanceof Identifier)
+			((Identifier) node).setName(fMethodName);
+		if (node instanceof VariableReference)
+			((VariableReference) node).getVariable().setName(fMethodName);
 	}
 
 	public Object[] getElements() {

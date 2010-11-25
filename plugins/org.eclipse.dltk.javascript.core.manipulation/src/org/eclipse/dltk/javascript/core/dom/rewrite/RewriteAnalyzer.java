@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.dom.rewrite;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.core.dom.BinaryExpression;
@@ -30,6 +32,7 @@ import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
 import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -59,39 +62,47 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	public TextEdit getEdit() {
 		return edit;
 	}
+	protected void addEdit(TextEdit edit, Node node) {
+		this.edit.addChild(edit);
+	}
 
 	// Processes EReference only
 	private void processFeature(Node node, FeatureChange fc) {
+		if (fc.getFeature() instanceof EAttribute)
+			return;
 		if (!fc.getFeature().isMany()) {
-			Node o = (Node)node.eGet(fc.getFeature());
-			Node n = (Node)fc.getReferenceValue();
+			Node n = (Node)node.eGet(fc.getFeature());
+			Node o = (Node)fc.getReferenceValue();
 			int off = o == null ? calcOffset(node,fc.getFeature()) : o.getBegin();
 			int len = o == null ? 0 : o.getEnd()-o.getBegin();
 			String value = n == null ? "" : generate(n, node, o == null, off);
-			edit.addChild(new ReplaceEdit(off,len,value));
+			addEdit(new ReplaceEdit(off,len,value),n);
 			return;
 		}
-		EList<? extends Node> original = (EList<? extends Node>)node.eGet(fc.getFeature());
-		EList<Object> dst = new BasicEList<Object>();
-		dst.addAll(original);
+		EList<? extends Node> dst = (EList<? extends Node>)node.eGet(fc.getFeature());
+		EList<Object> src = new BasicEList<Object>();
+		src.addAll(dst);
 		Set<Node> deleted = new HashSet<Node>();
 		Set<Node> generated = new HashSet<Node>();
 		for(ListChange lc : fc.getListChanges()) {
 			if (lc.getKind() != ChangeKind.ADD_LITERAL)
-				deleted.add((Node)dst.get(lc.getIndex()));
+				generated.add((Node)src.get(lc.getIndex()));
 			if (lc.getKind() == ChangeKind.MOVE_LITERAL)
-				generated.add((Node)dst.get(lc.getIndex()));
-			lc.apply(dst);
+				deleted.add((Node)src.get(lc.getIndex()));
+			lc.apply((EList<Object>)src);
 			if (lc.getKind() == ChangeKind.ADD_LITERAL)
-				generated.add((Node)dst.get(lc.getIndex()));
+				deleted.add((Node)src.get(lc.getIndex()));
 		}
+		List<Node> original = new ArrayList<Node>(src.size());
+		for(Object obj : src)
+			original.add((Node)obj);
 		int i=0;
 		boolean first=true;
 		for(Node item : original) {
 			if (deleted.contains(item)) {
 				int off = first ? item.getBegin() : original.get(i-1).getEnd();
 				int end = first && i < original.size()-1 ? original.get(i+1).getBegin() : item.getEnd();
-				edit.addChild(new DeleteEdit(off,end - off));
+				addEdit(new DeleteEdit(off,end - off),item);
 			} else
 				first=false;
 			i++;
@@ -108,7 +119,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 						off = ((Node)original.get(0)).getBegin();
 				else
 					off = last.getEnd();
-				edit.addChild(new InsertEdit(off, generateElement(item,last == null,first,off)));
+				addEdit(new InsertEdit(off, generateElement(item,last == null,first,off)),item);
 				first = false;
 			} else
 				last = item;
@@ -131,22 +142,24 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		if (cd.getObjectChanges().get(node) != null)
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				if (fc.getFeature() == DomPackage.eINSTANCE.getUnaryExpression_Operation()) {
-					int len = node.getOperation().toString().length();
-					if (isPostfix(node.getOperation()))
-						edit.addChild(new DeleteEdit(node.getEnd()-len,len));
+					UnaryOperator n = node.getOperation();
+					UnaryOperator o = (UnaryOperator)fc.getValue();
+					int len = o.toString().length();
+					if (isPostfix(o))
+						addEdit(new DeleteEdit(node.getEnd()-len,len),node);
 					else
-						edit.addChild(new DeleteEdit(node.getBegin(),len));
-					if (isPostfix(fc.getValue()))
-						edit.addChild(new InsertEdit(node.getEnd(),fc.getValue().toString()));
+						addEdit(new DeleteEdit(node.getBegin(),len),node);
+					if (isPostfix(n))
+						addEdit(new InsertEdit(node.getEnd(),n.toString()),node);
 					else {
-						String r = fc.getValue().toString();
-						if (isTextUnary(fc.getValue()))
+						String r = n.toString();
+						if (isTextUnary(n))
 							r += ' ';
-						edit.addChild(new InsertEdit(node.getBegin(),r));
+						addEdit(new InsertEdit(node.getBegin(),r),node);
 					}
 				} else
-					processFeature(node,fc);
-		return null;
+					processFeature(node, fc);
+		return true;
 	}
 	private static boolean isPostfix(Object op) {
 		return op == UnaryOperator.POSTFIX_INC || op == UnaryOperator.POSTFIX_DEC;
@@ -160,7 +173,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		if (cd.getObjectChanges().get(node) != null)
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				if (fc.getFeature() == DomPackage.eINSTANCE.getIdentifier_Name())
-					edit.addChild(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), (String)fc.getValue()));
+					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), node.getName()),node);
 		return true;
 	}
 
@@ -169,7 +182,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		if (cd.getObjectChanges().get(node) != null)
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				if (fc.getFeature() == DomPackage.eINSTANCE.getLabel_Name())
-					edit.addChild(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), (String)fc.getValue()));
+					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), node.getName()),node);
 		return true;
 	}
 
@@ -178,7 +191,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		if (cd.getObjectChanges().get(node) != null)
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				if (fc.getFeature() == DomPackage.eINSTANCE.getType_Name())
-					edit.addChild(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), (String)fc.getValue()));
+					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), node.getName()),node);
 		return true;
 	}
 
@@ -188,17 +201,13 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				if (fc.getFeature() == DomPackage.eINSTANCE.getBinaryExpression_Operation()) {
 					BinaryExpression be = (BinaryExpression)node;
-					//String s = text.substring(be.getLeft().getEnd(),be.getRight().getBegin());
-					int pos = be.getOperatorPosition();
-					//int pos = be.getLeft().getEnd()+JsParser.getParser().parse(s, JsParser.SEPARATOR).getEnd();
-					int len = be.getOperation().toString().length();
-					String r = fc.getValue().toString();
+					String r = be.getOperation().toString();
 					if (isTextBinary(fc.getValue()))
 						r = ' '+r+' ';
-					edit.addChild(new ReplaceEdit(pos, len, r));
+					addEdit(new ReplaceEdit(be.getOperatorPosition(), fc.getValue().toString().length(), r),node);
 				} else
 					processFeature(node, fc);
-		return null;
+		return true;
 	}
 	private static boolean isTextBinary(Object op) {
 		return op == BinaryOperator.IN || op == BinaryOperator.INSTANCEOF;
@@ -248,8 +257,13 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	public String generateElement(Node node,boolean first,boolean empty,int pos) {
 		Generator gen = new Generator(cd, text, pos);
 		if (node instanceof Statement) {
-			gen.newLine();
+			if (pos != 0 && text.charAt(pos-1) == ';') 
+				gen.append(gen.getIndentation());
 			gen.generate(node);
+			if (pos == 0 || text.charAt(pos-1) != ';') 
+				gen.newLine();
+			else
+				gen.append(";");
 			return gen.toString();
 		}
 		if (!first)
