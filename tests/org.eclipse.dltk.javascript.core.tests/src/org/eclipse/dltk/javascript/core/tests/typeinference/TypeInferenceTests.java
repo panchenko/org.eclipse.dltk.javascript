@@ -65,6 +65,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		TypeInferencer2 inferencer = new TestTypeInferencer2();
 		inferencer.doInferencing(parse(code));
 		return inferencer.getCollection();
+
 	}
 	
 	public void testNewNamedFunction() throws Exception {
@@ -609,27 +610,33 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var x = new str()");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
-		assertNotNull(strClz.getDeclaredType());
-		assertEquals("java.lang.String",strClz.getDeclaredType().getName());
+		assertEquals(1, strClz.getTypes().size());
+		Type type = strClz.getTypes().iterator().next();
+		assertEquals("java.lang.String",type.getName());
 
 		boolean valueOfFound = false;
-		for (Member member : strClz.getDeclaredType().getMembers()) {
+		for (Member member : type.getMembers()) {
 			valueOfFound = member.getName().equals("valueOf");
-			if (valueOfFound) break;
+			if (valueOfFound)
+			{
+				assertEquals(true, member.isStatic());
+				break;
+			}
 		}
 		assertEquals(true, valueOfFound);
 
-		Type type = (Type) strClz.getAttribute(IReferenceAttributes.JAVA_OBJECT_TYPE,true);
-		assertNotNull(type);
-		
 		IValueReference str = collection.getChild("x");
-		assertNotNull(str.getDeclaredType());
-		assertEquals(type,str.getDeclaredType());
+		assertEquals(1, str.getTypes().size());
+		assertEquals(type, str.getTypes().iterator().next());
 
 		boolean toStringFound = false;
 		for (Member member : type.getMembers()) {
 			toStringFound = member.getName().equals("toString");
-			if (toStringFound) break;
+			if (toStringFound)
+			{
+				assertEquals(false, member.isStatic());
+				break;
+			}
 		}
 		assertEquals(true, toStringFound);
 
@@ -642,27 +649,35 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var x = new str()");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
-		assertNotNull(strClz.getDeclaredType());
-		assertEquals("java.lang.String",strClz.getDeclaredType().getName());
+		assertEquals(1, strClz.getTypes().size());
+		Type type = strClz.getTypes().iterator().next();
+		assertEquals("java.lang.String",type.getName());
 		
 		boolean valueOfFound = false;
-		for (Member member : strClz.getDeclaredType().getMembers()) {
+		for (Member member : type.getMembers()) {
 			valueOfFound = member.getName().equals("valueOf");
-			if (valueOfFound) break;
+			if (valueOfFound)
+			{
+				assertEquals(true, member.isStatic());
+				break;
+			}
+
 		}
 		assertEquals(true, valueOfFound);
 		
-		Type type = (Type) strClz.getAttribute(IReferenceAttributes.JAVA_OBJECT_TYPE,true);
-		assertNotNull(type);
-		
 		IValueReference str = collection.getChild("x");
-		assertNotNull(str.getDeclaredType());
-		assertEquals(type,str.getDeclaredType());
+		assertEquals(1, str.getTypes().size());
+		assertEquals(type, str.getTypes().iterator().next());
 		
 		boolean toStringFound = false;
 		for (Member member : type.getMembers()) {
 			toStringFound = member.getName().equals("toString");
-			if (toStringFound) break;
+			if (toStringFound)
+			{
+				assertEquals(false, member.isStatic());
+				break;
+			}
+
 		}
 		assertEquals(true, toStringFound);
 
@@ -674,21 +689,22 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var str = new java.lang.String()");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
-		assertNotNull(strClz.getDeclaredType());
-		assertEquals("java.lang.String",strClz.getDeclaredType().getName());
+		assertEquals(1, strClz.getTypes().size());
+		Type type = strClz.getTypes().iterator().next();
+		assertEquals("java.lang.String",type.getName());
 		
 		boolean toStringFound = false;
-		for (Member member : strClz.getDeclaredType().getMembers()) {
+		for (Member member : type.getMembers()) {
 			toStringFound = member.getName().equals("toString");
-			if (toStringFound) break;
+			if (toStringFound)
+			{
+				assertEquals(false, member.isStatic());
+				break;
+			}
+
 		}
 		
 		assertEquals(true, toStringFound);
-
-		Type type = (Type) strClz.getAttribute(IReferenceAttributes.JAVA_OBJECT_TYPE,true);
-		assertNull(type);
-		
-		
 	}
 	
 	public void testJavaIntegrationWithPackagesPrefix()
@@ -697,19 +713,21 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var str = new Packages.java.lang.String()");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
-		assertNotNull(strClz.getDeclaredType());
-		assertEquals("java.lang.String",strClz.getDeclaredType().getName());
+		assertEquals(1, strClz.getTypes().size());
+		Type type = strClz.getTypes().iterator().next();
+		assertEquals("java.lang.String",type.getName());
 		
 		boolean toStringFound = false;
-		for (Member member : strClz.getDeclaredType().getMembers()) {
+		for (Member member : type.getMembers()) {
 			toStringFound = member.getName().equals("toString");
-			if (toStringFound) break;
+			if (toStringFound)
+			{
+				assertEquals(false, member.isStatic());
+				break;
+			}
 		}
 		
 		assertEquals(true, toStringFound);
-
-		Type type = (Type) strClz.getAttribute(IReferenceAttributes.JAVA_OBJECT_TYPE,true);
-		assertNull(type);
 	}
 	
 	public void testJSDocParamWithDefaultProperties() throws Exception {
