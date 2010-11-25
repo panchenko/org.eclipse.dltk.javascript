@@ -129,7 +129,8 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 	public IValueReference visitPropertyExpression(PropertyExpression node) {
 		final IValueReference object = super.visitPropertyExpression(node);
 		final Expression property = node.getProperty();
-		if (property instanceof Identifier) {
+		// TODO (alex) other null checks
+		if (property instanceof Identifier && object != null) {
 			if (!checkIdentifer((Identifier) property, object, true)) {
 				unresolved
 						.add(new IdentiferCheck((Identifier) property, object));
