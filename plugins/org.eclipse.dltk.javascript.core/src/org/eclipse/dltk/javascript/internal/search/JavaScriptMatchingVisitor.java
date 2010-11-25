@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.internal.search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
@@ -36,6 +37,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 
@@ -93,16 +95,35 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 	 */
 	private boolean checkIdentifer(Identifier node,
 			final IValueReference result, boolean check) {
-		if (check && result.getLocation() == ReferenceLocation.UNKNOWN)
+		if (result != null && check
+				&& result.getLocation() == ReferenceLocation.UNKNOWN)
 			return false;
 
-		if (result.getAttribute(IReferenceAttributes.PARAMETERS) != null) {
-			locator.report(new MethodReferenceNode(node, result));
+		if (result != null
+				&& result.getAttribute(IReferenceAttributes.PARAMETERS) != null) {
+			if (node.getParent() instanceof PropertyInitializer) {
+				// if property initializer then it is a variable or function
+				// declaration
+				locator.report(new MethodDeclarationNode(node, (IMethod) result
+						.getAttribute(IReferenceAttributes.PARAMETERS)));
+			} else {
+				locator.report(new MethodReferenceNode(node, result));
+			}
 		} else if (result != null && result.getKind().isLocal() && inFunction()) {
 			locator.report(new LocalVariableReferenceNode(node, result
 					.getLocation()));
 		} else {
-			locator.report(new FieldReferenceNode(node, result));
+			if (node.getParent() instanceof PropertyInitializer) {
+				// if property initializer then it is a variable or function
+				// declaration
+				Set<Type> types = result.getTypes();
+				Type type = null;
+				if (types.size() > 0)
+					type = types.iterator().next();
+				locator.report(new FieldDeclarationNode(node, type));
+			} else {
+				locator.report(new FieldReferenceNode(node, result));
+			}
 		}
 		return true;
 	}
