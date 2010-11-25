@@ -1545,8 +1545,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		statement.setSemicolonPosition(getTokenOffset(JSParser.SEMIC,
 				node.getTokenStopIndex(), node.getTokenStopIndex()));
 
-		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
-		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+		setRange(statement, node);
 
 		return statement;
 	}
