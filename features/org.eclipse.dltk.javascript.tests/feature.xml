@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.dltk.javascript.tests"
       label="%featureName"
-      version="1.0.0.qualifier"
+      version="3.0.0.qualifier"
       provider-name="%featureProvider">
 
    <description>
@@ -31,6 +31,12 @@
 
    <plugin
          id="org.eclipse.dltk.javascript.parser.tests"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.eclipse.dltk.javascript.ui.tests"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
