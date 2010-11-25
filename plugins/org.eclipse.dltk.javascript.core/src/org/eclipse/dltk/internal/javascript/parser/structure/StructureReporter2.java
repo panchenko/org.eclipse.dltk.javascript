@@ -18,6 +18,7 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.internal.javascript.validation.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
@@ -31,6 +32,8 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
+import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
@@ -94,6 +97,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		try {
 			methodInfo.declarationStart = node.sourceStart();
 			final JSMethod method = new JSMethod();
+			Identifier thisIdentifier;
 			if (node.getName() != null) {
 				setNameProperties(node.getName(), methodInfo, method);
 			} else if (node.getParent() instanceof PropertyInitializer
@@ -110,7 +114,19 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 						((VariableDeclaration) node.getParent())
 								.getIdentifier(),
 						methodInfo, method);
-			} else {
+			} else if ((thisIdentifier = getThisIdentifier(node)) != null) {
+				setNameProperties(thisIdentifier, methodInfo, method);
+
+			} else if (node.getParent() instanceof BinaryOperation
+					&& ((BinaryOperation) node.getParent()).getOperation() == JSParser.ASSIGN
+					&& ((BinaryOperation) node.getParent()).getLeftExpression() instanceof PropertyExpression) {
+				Expression expression = ((BinaryOperation) node.getParent())
+						.getLeftExpression();
+				method.setName(PropertyExpressionUtils.getPath(expression));
+				methodInfo.nameSourceStart = expression.sourceStart();
+				methodInfo.nameSourceEnd = expression.sourceEnd() - 1;
+			}
+			else {
 				method.setName("");
 				methodInfo.nameSourceStart = node.getFunctionKeyword()
 						.sourceStart();
@@ -171,6 +187,26 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 	/**
 	 * @param node
+	 * @return
+	 */
+	private Identifier getThisIdentifier(FunctionStatement fs) {
+		ASTNode node = fs.getParent();
+		if (node instanceof BinaryOperation) {
+			node = ((BinaryOperation) node).getLeftExpression();
+			if (node instanceof PropertyExpression) {
+				Expression property = ((PropertyExpression) node).getProperty();
+				node = ((PropertyExpression) node).getObject();
+				if (node instanceof ThisExpression
+						&& property instanceof Identifier) {
+					return (Identifier) property;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param node
 	 * @param methodInfo
 	 * @param method
 	 */
@@ -223,6 +259,10 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			List<VariableDeclaration> variables = node.getVariables();
 			for (VariableDeclaration variableDeclaration : variables) {
 				
+				if (variableDeclaration.getInitializer() instanceof FunctionStatement) {
+					visit(variableDeclaration.getInitializer());
+					continue;
+				}
 				final JSVariable variable = new JSVariable();
 				variable.setName(variableDeclaration.getVariableName());
 				if (variableDeclaration.getType() != null)
@@ -261,8 +301,11 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 	@Override
 	public Object visitPropertyExpression(PropertyExpression node) {
+		ASTNode parent = node.getParent();
 		if (node.getObject() instanceof ThisExpression
-				&& !(node.getParent() instanceof CallExpression)) {
+				&& !(parent instanceof CallExpression)
+				&& (!(parent instanceof BinaryOperation) || (parent instanceof BinaryOperation && !(((BinaryOperation) parent)
+						.getRightExpression() instanceof FunctionStatement)))) {
 			Expression name = node.getProperty();
 			String nameStr = null;
 			if (name instanceof Identifier) {
