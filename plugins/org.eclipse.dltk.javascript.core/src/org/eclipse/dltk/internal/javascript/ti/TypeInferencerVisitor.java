@@ -725,7 +725,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitThrowStatement(ThrowStatement node) {
-		visit(node.getException());
+		if (node.getException() != null)
+			visit(node.getException());
 		return null;
 	}
 
