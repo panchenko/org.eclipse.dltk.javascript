@@ -5,7 +5,6 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class LazyReference extends AbstractReference {
 
@@ -24,11 +23,7 @@ public class LazyReference extends AbstractReference {
 					}
 
 					IValue src = ((IValueProvider) createChild).getValue();
-					Type type = (Type) src.getAttribute(
-							IReferenceAttributes.JAVA_OBJECT_TYPE, true);
-					if (type != null) {
-						setDeclaredType(type);
-					} else if (src instanceof Value) {
+					if (src instanceof Value) {
 						references.add((Value) src);
 					} else if (src != null) {
 						addValue(src);

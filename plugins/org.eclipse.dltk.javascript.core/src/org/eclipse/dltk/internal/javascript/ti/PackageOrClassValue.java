@@ -40,8 +40,8 @@ public class PackageOrClassValue extends Value {
 		}
 
 		if (type != null) {
-			setAttribute(IReferenceAttributes.JAVA_OBJECT_TYPE, type);
-			setDeclaredType((Type) types.get(name + "_$static$"));
+			setAttribute(IReferenceAttributes.STATIC, Boolean.TRUE);
+			getTypes().add(type);
 		}
 	}
 
@@ -75,18 +75,18 @@ public class PackageOrClassValue extends Value {
 		type.setName(name);
 		type.setKind(TypeKind.JAVA);
 
-		Type staticType = TypeInfoModelFactory.eINSTANCE.createType();
-		staticType.setName(name);
-		staticType.setKind(TypeKind.JAVA);
+//		Type staticType = TypeInfoModelFactory.eINSTANCE.createType();
+//		staticType.setName(name);
+//		staticType.setKind(TypeKind.JAVA);
 
 		types.put(name, type);
-		types.put(name + "_$static$", staticType);
+//		types.put(name + "_$static$", staticType);
 
 		Method[] methods = clz.getMethods();
 		Field[] fields = clz.getFields();
 
 		EList<Member> members = type.getMembers();
-		EList<Member> staticMembers = staticType.getMembers();
+//		EList<Member> staticMembers = staticType.getMembers();
 
 		for (Field field : fields) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
@@ -95,10 +95,9 @@ public class PackageOrClassValue extends Value {
 			if (fieldType != null)
 				property.setType(getType(fieldType, fieldType.getName()));
 			if (Modifier.isStatic(field.getModifiers())) {
-				staticMembers.add(property);
-			} else {
-				members.add(property);
-			}
+				property.setStatic(true);
+			} 
+			members.add(property);
 		}
 		for (Method method : methods) {
 			org.eclipse.dltk.javascript.typeinfo.model.Method m = TypeInfoModelFactory.eINSTANCE
@@ -120,10 +119,9 @@ public class PackageOrClassValue extends Value {
 				parameters.add(parameter);
 			}
 			if (Modifier.isStatic(method.getModifiers())) {
-				staticMembers.add(m);
-			} else {
+				m.setStatic(true);
+			} 
 				members.add(m);
-			}
 		}
 		return type;
 	}
