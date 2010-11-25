@@ -11,31 +11,24 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ui.tests.autoedit;
 
-import junit.framework.TestCase;
-
 import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.javascript.internal.ui.editor.JavaScriptDocumentSetupParticipant;
+import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.jface.text.BadLocationException;
 
-public class IndentTests extends TestCase {
-
-	private final TestStrategy strategy = new TestStrategy();
-
-	protected void apply(Document document, Cmd cmd) {
-		strategy.customizeDocumentCommand(document, cmd);
-		cmd.apply(document);
-	}
+public class IndentTests extends JSAutoEditStrategyTestCase {
 
 	public void testAfterVarStatement() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
-		code.add("\t" + "var x = null;");
+		code.add(TAB + "var x = null;");
 		code.add("}");
-		final Document document = new Document(code.toString());
-		apply(document, new Cmd("\n", document.getEndOfLineOffset(1)));
+		final Document document = new Document(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(1)));
 		StringList expected = new StringList();
 		expected.add("function test() {");
-		expected.add("\t" + "var x = null;");
-		expected.add("\t");
+		expected.add(TAB + "var x = null;");
+		expected.add(TAB);
 		expected.add("}");
 		assertEquals(expected.toString(), document.get());
 	}
@@ -43,14 +36,67 @@ public class IndentTests extends TestCase {
 	public void testAfterTypedVarStatement() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
-		code.add("\t" + "var x:String = null;");
+		code.add(TAB + "var x:String = null;");
 		code.add("}");
-		final Document document = new Document(code.toString());
-		apply(document, new Cmd("\n", document.getEndOfLineOffset(1)));
+		final Document document = new Document(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(1)));
 		StringList expected = new StringList();
 		expected.add("function test() {");
-		expected.add("\t" + "var x:String = null;");
-		expected.add("\t");
+		expected.add(TAB + "var x:String = null;");
+		expected.add(TAB);
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testAfterFunction() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("function test() {");
+		final Document document = new Document(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
+		StringList expected = new StringList();
+		expected.add("function test() {");
+		expected.add(TAB);
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testJsDocOpen() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("/*");
+		code.add("function test() {");
+		code.add("}");
+		final Document document = new Document(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
+		StringList expected = new StringList();
+		expected.add("/*");
+		expected.add(" * ");
+		expected.add(" */");
+		expected.add("function test() {");
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testJsDocContinue() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("/*");
+		code.add(" * ");
+		code.add(" */");
+		code.add("function test() {");
+		code.add("}");
+		final Document document = new Document(code);
+		// TODO setup all strategies
+		new JavaScriptDocumentSetupParticipant().setup(document);
+		// TODO find correct strategy for offset
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(1)));
+		// remove partitioner
+		document.setDocumentPartitioner(IJavaScriptPartitions.JS_PARTITIONING,
+				null);
+		StringList expected = new StringList();
+		expected.add("/*");
+		expected.add(" * ");
+		expected.add(" * ");
+		expected.add(" */");
+		expected.add("function test() {");
 		expected.add("}");
 		assertEquals(expected.toString(), document.get());
 	}

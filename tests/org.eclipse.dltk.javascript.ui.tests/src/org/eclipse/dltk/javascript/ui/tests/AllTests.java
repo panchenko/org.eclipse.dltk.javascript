@@ -19,8 +19,7 @@ import junit.framework.TestSuite;
 public class AllTests {
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite(
-				"Test for org.eclipse.dltk.javascript.ui.tests.autoedit");
+		TestSuite suite = new TestSuite("org.eclipse.dltk.javascript.ui.tests");
 		// $JUnit-BEGIN$
 		suite.addTestSuite(IndentTests.class);
 		// $JUnit-END$
