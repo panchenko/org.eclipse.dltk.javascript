@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.10 2010/05/18 10:11:37 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.11 2010/11/25 16:38:35 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -36,870 +36,939 @@ import org.eclipse.emf.ecore.EReference;
  */
 public interface TypeInfoModelPackage extends EPackage {
 	/**
-	 * The package name.
-	 * <!-- begin-user-doc -->
+     * The package name.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	String eNAME = "model"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace URI.
-	 * <!-- begin-user-doc -->
+     * The package namespace URI.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	String eNS_URI = "http://www.eclipse.org/dltk/javascript/typeinfo.ecore"; //$NON-NLS-1$
 
 	/**
-	 * The package namespace name.
-	 * <!-- begin-user-doc -->
+     * The package namespace name.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	String eNS_PREFIX = "ti"; //$NON-NLS-1$
 
 	/**
-	 * The singleton instance of the package.
-	 * <!-- begin-user-doc -->
+     * The singleton instance of the package.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	TypeInfoModelPackage eINSTANCE = org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
-	 * <!-- begin-user-doc -->
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getElement()
-	 * @generated
-	 */
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getElement()
+     * @generated
+     */
 	int ELEMENT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int ELEMENT__NAME = 0;
 
 	/**
-	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int ELEMENT__DEPRECATED = 1;
 
 	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int ELEMENT__DESCRIPTION = 2;
 
 	/**
-	 * The feature id for the '<em><b>Visible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int ELEMENT__VISIBLE = 3;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' map.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Attributes</b></em>' map.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int ELEMENT__ATTRIBUTES = 4;
 
 	/**
-	 * The number of structural features of the '<em>Element</em>' class.
-	 * <!-- begin-user-doc -->
+     * The number of structural features of the '<em>Element</em>' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int ELEMENT_FEATURE_COUNT = 5;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
-	 * <!-- begin-user-doc -->
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getType()
-	 * @generated
-	 */
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getType()
+     * @generated
+     */
 	int TYPE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int TYPE__NAME = ELEMENT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int TYPE__DEPRECATED = ELEMENT__DEPRECATED;
 
 	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int TYPE__DESCRIPTION = ELEMENT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Visible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int TYPE__VISIBLE = ELEMENT__VISIBLE;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' map.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Attributes</b></em>' map.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int TYPE__ATTRIBUTES = ELEMENT__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Members</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Members</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int TYPE__MEMBERS = ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Kind</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Kind</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int TYPE__KIND = ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of structural features of the '<em>Type</em>' class.
-	 * <!-- begin-user-doc -->
+     * The number of structural features of the '<em>Type</em>' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl <em>Member</em>}' class.
-	 * <!-- begin-user-doc -->
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeAlias()
+     * @generated
+     */
+    int TYPE_ALIAS = 2;
+
+    /**
+     * The feature id for the '<em><b>Source</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_ALIAS__SOURCE = 0;
+
+    /**
+     * The feature id for the '<em><b>Target</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_ALIAS__TARGET = 1;
+
+    /**
+     * The number of structural features of the '<em>Type Alias</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_ALIAS_FEATURE_COUNT = 2;
+
+    /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl <em>Member</em>}' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMember()
-	 * @generated
-	 */
-	int MEMBER = 2;
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMember()
+     * @generated
+     */
+	int MEMBER = 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int MEMBER__NAME = ELEMENT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int MEMBER__DEPRECATED = ELEMENT__DEPRECATED;
 
 	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int MEMBER__DESCRIPTION = ELEMENT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Visible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int MEMBER__VISIBLE = ELEMENT__VISIBLE;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' map.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Attributes</b></em>' map.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int MEMBER__ATTRIBUTES = ELEMENT__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Type</b></em>' reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int MEMBER__TYPE = ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Static</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Static</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int MEMBER__STATIC = ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int MEMBER__DECLARING_TYPE = ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The number of structural features of the '<em>Member</em>' class.
-	 * <!-- begin-user-doc -->
+     * The number of structural features of the '<em>Member</em>' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int MEMBER_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
-	 * <!-- begin-user-doc -->
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMethod()
-	 * @generated
-	 */
-	int METHOD = 3;
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMethod()
+     * @generated
+     */
+	int METHOD = 4;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD__NAME = MEMBER__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD__DEPRECATED = MEMBER__DEPRECATED;
 
 	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD__DESCRIPTION = MEMBER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Visible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD__VISIBLE = MEMBER__VISIBLE;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' map.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Attributes</b></em>' map.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD__ATTRIBUTES = MEMBER__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Type</b></em>' reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD__TYPE = MEMBER__TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Static</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Static</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD__STATIC = MEMBER__STATIC;
 
 	/**
-	 * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD__DECLARING_TYPE = MEMBER__DECLARING_TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD__PARAMETERS = MEMBER_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Method</em>' class.
-	 * <!-- begin-user-doc -->
+     * The number of structural features of the '<em>Method</em>' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int METHOD_FEATURE_COUNT = MEMBER_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl <em>Parameter</em>}' class.
-	 * <!-- begin-user-doc -->
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl <em>Parameter</em>}' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameter()
-	 * @generated
-	 */
-	int PARAMETER = 4;
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameter()
+     * @generated
+     */
+	int PARAMETER = 5;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PARAMETER__NAME = 0;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Type</b></em>' reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PARAMETER__TYPE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Kind</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Kind</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PARAMETER__KIND = 2;
 
 	/**
-	 * The number of structural features of the '<em>Parameter</em>' class.
-	 * <!-- begin-user-doc -->
+     * The number of structural features of the '<em>Parameter</em>' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PARAMETER_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl <em>Property</em>}' class.
-	 * <!-- begin-user-doc -->
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl <em>Property</em>}' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getProperty()
-	 * @generated
-	 */
-	int PROPERTY = 5;
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getProperty()
+     * @generated
+     */
+	int PROPERTY = 6;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY__NAME = MEMBER__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Deprecated</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY__DEPRECATED = MEMBER__DEPRECATED;
 
 	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY__DESCRIPTION = MEMBER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Visible</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY__VISIBLE = MEMBER__VISIBLE;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' map.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Attributes</b></em>' map.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY__ATTRIBUTES = MEMBER__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Type</b></em>' reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY__TYPE = MEMBER__TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Static</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Static</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY__STATIC = MEMBER__STATIC;
 
 	/**
-	 * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY__DECLARING_TYPE = MEMBER__DECLARING_TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Read Only</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Read Only</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY__READ_ONLY = MEMBER_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Property</em>' class.
-	 * <!-- begin-user-doc -->
+     * The number of structural features of the '<em>Property</em>' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int PROPERTY_FEATURE_COUNT = MEMBER_FEATURE_COUNT + 1;
 
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl <em>Attribute Entry</em>}' class.
-	 * <!-- begin-user-doc -->
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl <em>Attribute Entry</em>}' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAttributeEntry()
-	 * @generated
-	 */
-	int ATTRIBUTE_ENTRY = 6;
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAttributeEntry()
+     * @generated
+     */
+	int ATTRIBUTE_ENTRY = 7;
 
 	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Key</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int ATTRIBUTE_ENTRY__KEY = 0;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * The feature id for the '<em><b>Value</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int ATTRIBUTE_ENTRY__VALUE = 1;
 
 	/**
-	 * The number of structural features of the '<em>Attribute Entry</em>' class.
-	 * <!-- begin-user-doc -->
+     * The number of structural features of the '<em>Attribute Entry</em>' class.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
+     * @generated
+     * @ordered
+     */
 	int ATTRIBUTE_ENTRY_FEATURE_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
-	 * <!-- begin-user-doc -->
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
-	 * @generated
-	 */
-	int TYPE_KIND = 7;
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
+     * @generated
+     */
+	int TYPE_KIND = 8;
 
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind <em>Parameter Kind</em>}' enum.
-	 * <!-- begin-user-doc -->
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind <em>Parameter Kind</em>}' enum.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
-	 * @generated
-	 */
-	int PARAMETER_KIND = 8;
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
+     * @generated
+     */
+	int PARAMETER_KIND = 9;
 
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Element</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element
-	 * @generated
-	 */
+     * @return the meta object for class '<em>Element</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Element
+     * @generated
+     */
 	EClass getElement();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getName <em>Name</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element#getName()
-	 * @see #getElement()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Name</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Element#getName()
+     * @see #getElement()
+     * @generated
+     */
 	EAttribute getElement_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isDeprecated <em>Deprecated</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isDeprecated <em>Deprecated</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Deprecated</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element#isDeprecated()
-	 * @see #getElement()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Deprecated</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Element#isDeprecated()
+     * @see #getElement()
+     * @generated
+     */
 	EAttribute getElement_Deprecated();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getDescription <em>Description</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getDescription <em>Description</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Description</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element#getDescription()
-	 * @see #getElement()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Description</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Element#getDescription()
+     * @see #getElement()
+     * @generated
+     */
 	EAttribute getElement_Description();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isVisible <em>Visible</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isVisible <em>Visible</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Visible</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element#isVisible()
-	 * @see #getElement()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Visible</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Element#isVisible()
+     * @see #getElement()
+     * @generated
+     */
 	EAttribute getElement_Visible();
 
 	/**
-	 * Returns the meta object for the map '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getAttributes <em>Attributes</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the map '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getAttributes <em>Attributes</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Attributes</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Element#getAttributes()
-	 * @see #getElement()
-	 * @generated
-	 */
+     * @return the meta object for the map '<em>Attributes</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Element#getAttributes()
+     * @see #getElement()
+     * @generated
+     */
 	EReference getElement_Attributes();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Type</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type
-	 * @generated
-	 */
+     * @return the meta object for class '<em>Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type
+     * @generated
+     */
 	EClass getType();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Members</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers()
-	 * @see #getType()
-	 * @generated
-	 */
+     * @return the meta object for the containment reference list '<em>Members</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers()
+     * @see #getType()
+     * @generated
+     */
 	EReference getType_Members();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Kind</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getKind()
-	 * @see #getType()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Kind</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getKind()
+     * @see #getType()
+     * @generated
+     */
 	EAttribute getType_Kind();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Member <em>Member</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeAlias <em>Type Alias</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Type Alias</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeAlias
+     * @generated
+     */
+    EClass getTypeAlias();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeAlias#getSource <em>Source</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Source</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeAlias#getSource()
+     * @see #getTypeAlias()
+     * @generated
+     */
+    EAttribute getTypeAlias_Source();
+
+    /**
+     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeAlias#getTarget <em>Target</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Target</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeAlias#getTarget()
+     * @see #getTypeAlias()
+     * @generated
+     */
+    EReference getTypeAlias_Target();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Member <em>Member</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Member</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member
-	 * @generated
-	 */
+     * @return the meta object for class '<em>Member</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Member
+     * @generated
+     */
 	EClass getMember();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getType <em>Type</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Type</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getType()
-	 * @see #getMember()
-	 * @generated
-	 */
+     * @return the meta object for the reference '<em>Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getType()
+     * @see #getMember()
+     * @generated
+     */
 	EReference getMember_Type();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic <em>Static</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic <em>Static</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Static</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic()
-	 * @see #getMember()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Static</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic()
+     * @see #getMember()
+     * @generated
+     */
 	EAttribute getMember_Static();
 
 	/**
-	 * Returns the meta object for the container reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the container reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Declaring Type</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType()
-	 * @see #getMember()
-	 * @generated
-	 */
+     * @return the meta object for the container reference '<em>Declaring Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType()
+     * @see #getMember()
+     * @generated
+     */
 	EReference getMember_DeclaringType();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Method <em>Method</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Method <em>Method</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Method</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Method
-	 * @generated
-	 */
+     * @return the meta object for class '<em>Method</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Method
+     * @generated
+     */
 	EClass getMethod();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Method#getParameters <em>Parameters</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Method#getParameters <em>Parameters</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Parameters</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Method#getParameters()
-	 * @see #getMethod()
-	 * @generated
-	 */
+     * @return the meta object for the containment reference list '<em>Parameters</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Method#getParameters()
+     * @see #getMethod()
+     * @generated
+     */
 	EReference getMethod_Parameters();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter <em>Parameter</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter <em>Parameter</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Parameter</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter
-	 * @generated
-	 */
+     * @return the meta object for class '<em>Parameter</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter
+     * @generated
+     */
 	EClass getParameter();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getName <em>Name</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#getName()
-	 * @see #getParameter()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Name</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#getName()
+     * @see #getParameter()
+     * @generated
+     */
 	EAttribute getParameter_Name();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getType <em>Type</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Type</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#getType()
-	 * @see #getParameter()
-	 * @generated
-	 */
+     * @return the meta object for the reference '<em>Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#getType()
+     * @see #getParameter()
+     * @generated
+     */
 	EReference getParameter_Type();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind <em>Kind</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind <em>Kind</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Kind</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind()
-	 * @see #getParameter()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Kind</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind()
+     * @see #getParameter()
+     * @generated
+     */
 	EAttribute getParameter_Kind();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Property <em>Property</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Property <em>Property</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Property</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Property
-	 * @generated
-	 */
+     * @return the meta object for class '<em>Property</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Property
+     * @generated
+     */
 	EClass getProperty();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Property#isReadOnly <em>Read Only</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Property#isReadOnly <em>Read Only</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Read Only</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Property#isReadOnly()
-	 * @see #getProperty()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Read Only</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Property#isReadOnly()
+     * @see #getProperty()
+     * @generated
+     */
 	EAttribute getProperty_ReadOnly();
 
 	/**
-	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Attribute Entry</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for class '{@link java.util.Map.Entry <em>Attribute Entry</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Attribute Entry</em>'.
-	 * @see java.util.Map.Entry
-	 * @model keyDataType="org.eclipse.emf.ecore.EString"
-	 *        valueDataType="org.eclipse.emf.ecore.EJavaObject"
-	 * @generated
-	 */
+     * @return the meta object for class '<em>Attribute Entry</em>'.
+     * @see java.util.Map.Entry
+     * @model keyDataType="org.eclipse.emf.ecore.EString"
+     *        valueDataType="org.eclipse.emf.ecore.EJavaObject"
+     * @generated
+     */
 	EClass getAttributeEntry();
 
 	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getAttributeEntry()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Key</em>'.
+     * @see java.util.Map.Entry
+     * @see #getAttributeEntry()
+     * @generated
+     */
 	EAttribute getAttributeEntry_Key();
 
 	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getAttributeEntry()
-	 * @generated
-	 */
+     * @return the meta object for the attribute '<em>Value</em>'.
+     * @see java.util.Map.Entry
+     * @see #getAttributeEntry()
+     * @generated
+     */
 	EAttribute getAttributeEntry_Value();
 
 	/**
-	 * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Type Kind</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
-	 * @generated
-	 */
+     * @return the meta object for enum '<em>Type Kind</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+     * @generated
+     */
 	EEnum getTypeKind();
 
 	/**
-	 * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind <em>Parameter Kind</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind <em>Parameter Kind</em>}'.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Parameter Kind</em>'.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
-	 * @generated
-	 */
+     * @return the meta object for enum '<em>Parameter Kind</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+     * @generated
+     */
 	EEnum getParameterKind();
 
 	/**
-	 * Returns the factory that creates the instances of the model.
-	 * <!-- begin-user-doc -->
+     * Returns the factory that creates the instances of the model.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the factory that creates the instances of the model.
-	 * @generated
-	 */
+     * @return the factory that creates the instances of the model.
+     * @generated
+     */
 	TypeInfoModelFactory getTypeInfoModelFactory();
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
 	 *   <li>each class,</li>
@@ -908,233 +977,259 @@ public interface TypeInfoModelPackage extends EPackage {
 	 *   <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getElement()
-		 * @generated
-		 */
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getElement()
+         * @generated
+         */
 		EClass ELEMENT = eINSTANCE.getElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute ELEMENT__NAME = eINSTANCE.getElement_Name();
 
 		/**
-		 * The meta object literal for the '<em><b>Deprecated</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Deprecated</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute ELEMENT__DEPRECATED = eINSTANCE.getElement_Deprecated();
 
 		/**
-		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute ELEMENT__DESCRIPTION = eINSTANCE.getElement_Description();
 
 		/**
-		 * The meta object literal for the '<em><b>Visible</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Visible</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute ELEMENT__VISIBLE = eINSTANCE.getElement_Visible();
 
 		/**
-		 * The meta object literal for the '<em><b>Attributes</b></em>' map feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Attributes</b></em>' map feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EReference ELEMENT__ATTRIBUTES = eINSTANCE.getElement_Attributes();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getType()
-		 * @generated
-		 */
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getType()
+         * @generated
+         */
 		EClass TYPE = eINSTANCE.getType();
 
 		/**
-		 * The meta object literal for the '<em><b>Members</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Members</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EReference TYPE__MEMBERS = eINSTANCE.getType_Members();
 
 		/**
-		 * The meta object literal for the '<em><b>Kind</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Kind</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute TYPE__KIND = eINSTANCE.getType_Kind();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl <em>Member</em>}' class.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeAlias()
+         * @generated
+         */
+        EClass TYPE_ALIAS = eINSTANCE.getTypeAlias();
+
+        /**
+         * The meta object literal for the '<em><b>Source</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute TYPE_ALIAS__SOURCE = eINSTANCE.getTypeAlias_Source();
+
+        /**
+         * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference TYPE_ALIAS__TARGET = eINSTANCE.getTypeAlias_Target();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl <em>Member</em>}' class.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMember()
-		 * @generated
-		 */
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMember()
+         * @generated
+         */
 		EClass MEMBER = eINSTANCE.getMember();
 
 		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Type</b></em>' reference feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EReference MEMBER__TYPE = eINSTANCE.getMember_Type();
 
 		/**
-		 * The meta object literal for the '<em><b>Static</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Static</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute MEMBER__STATIC = eINSTANCE.getMember_Static();
 
 		/**
-		 * The meta object literal for the '<em><b>Declaring Type</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Declaring Type</b></em>' container reference feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EReference MEMBER__DECLARING_TYPE = eINSTANCE.getMember_DeclaringType();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMethod()
-		 * @generated
-		 */
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMethod()
+         * @generated
+         */
 		EClass METHOD = eINSTANCE.getMethod();
 
 		/**
-		 * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EReference METHOD__PARAMETERS = eINSTANCE.getMethod_Parameters();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl <em>Parameter</em>}' class.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl <em>Parameter</em>}' class.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameter()
-		 * @generated
-		 */
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameter()
+         * @generated
+         */
 		EClass PARAMETER = eINSTANCE.getParameter();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute PARAMETER__NAME = eINSTANCE.getParameter_Name();
 
 		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Type</b></em>' reference feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EReference PARAMETER__TYPE = eINSTANCE.getParameter_Type();
 
 		/**
-		 * The meta object literal for the '<em><b>Kind</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Kind</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute PARAMETER__KIND = eINSTANCE.getParameter_Kind();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl <em>Property</em>}' class.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl <em>Property</em>}' class.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getProperty()
-		 * @generated
-		 */
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.PropertyImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getProperty()
+         * @generated
+         */
 		EClass PROPERTY = eINSTANCE.getProperty();
 
 		/**
-		 * The meta object literal for the '<em><b>Read Only</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Read Only</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute PROPERTY__READ_ONLY = eINSTANCE.getProperty_ReadOnly();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl <em>Attribute Entry</em>}' class.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl <em>Attribute Entry</em>}' class.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAttributeEntry()
-		 * @generated
-		 */
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.AttributeEntryImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAttributeEntry()
+         * @generated
+         */
 		EClass ATTRIBUTE_ENTRY = eINSTANCE.getAttributeEntry();
 
 		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute ATTRIBUTE_ENTRY__KEY = eINSTANCE.getAttributeEntry_Key();
 
 		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
+         * @generated
+         */
 		EAttribute ATTRIBUTE_ENTRY__VALUE = eINSTANCE.getAttributeEntry_Value();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
-		 * @generated
-		 */
+         * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
+         * @generated
+         */
 		EEnum TYPE_KIND = eINSTANCE.getTypeKind();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind <em>Parameter Kind</em>}' enum.
-		 * <!-- begin-user-doc -->
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind <em>Parameter Kind</em>}' enum.
+         * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
-		 * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
-		 * @generated
-		 */
+         * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
+         * @generated
+         */
 		EEnum PARAMETER_KIND = eINSTANCE.getParameterKind();
 
 	}

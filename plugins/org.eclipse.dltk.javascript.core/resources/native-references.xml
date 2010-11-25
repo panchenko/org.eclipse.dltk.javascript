@@ -162,6 +162,7 @@
   <ref:Type name="Boolean" kind="PREDEFINED">
   	<members xsi:type="ref:Property" name="prototype" type="Boolean" static="true" description="Allows the addition of properties to a Boolean object."/>
   </ref:Type>
+  <ref:TypeAlias source="boolean" target="Boolean"/>
   <ref:Type name="Date" kind="PREDEFINED" description="Creates Date instances which let you work with dates and times.">
     <members xsi:type="ref:Property" name="prototype" type="Date" static="true" description="Allows the addition of properties to a Date object."/>
     <members xsi:type="ref:Method" name="getDate" type="Number" description="Returns the day of the month from a Date object (from 1-31)."/>
@@ -283,6 +284,7 @@
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this Number."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a Number object."/>
   </ref:Type>
+  <ref:TypeAlias source="number" target="Number"/>
   <ref:Type name="String" kind="PREDEFINED" description="String is a global object that may be used to construct String  instances.">
   	<members xsi:type="ref:Property" name="prototype" type="String" static="true" description="Allows the addition of properties to a String object."/>
   	<members xsi:type="ref:Method" name="fromCharCode" type="String" static="true" description="Returns a string created by using the specified sequence of Unicode values.">
@@ -369,6 +371,7 @@
     <members xsi:type="ref:Method" name="toUpperCase" type="String" description="Returns a string in uppercase letters."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a String object."/>
   </ref:Type>
+  <ref:TypeAlias source="string" target="String"/>
   <ref:Type name="XML" kind="PREDEFINED">
     <members xsi:type="ref:Method" name="addNamespace" type="XML" description="The addNamespace method adds a namespace declaration to the in scope namespaces for this XML object and returns this XML object.">
       <parameters name="namespace"/>

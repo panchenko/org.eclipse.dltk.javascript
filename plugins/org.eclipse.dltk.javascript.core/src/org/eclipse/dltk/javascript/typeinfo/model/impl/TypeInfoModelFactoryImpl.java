@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.4 2010/05/18 10:11:37 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.5 2010/11/25 16:38:34 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -33,194 +33,205 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  */
 public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoModelFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
+     * Creates the default factory implementation.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public static TypeInfoModelFactory init() {
-		try {
-			TypeInfoModelFactory theTypeInfoModelFactory = (TypeInfoModelFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/dltk/javascript/typeinfo.ecore"); //$NON-NLS-1$ 
-			if (theTypeInfoModelFactory != null) {
-				return theTypeInfoModelFactory;
-			}
-		}
-		catch (Exception exception) {
-			EcorePlugin.INSTANCE.log(exception);
-		}
-		return new TypeInfoModelFactoryImpl();
-	}
+        try {
+            TypeInfoModelFactory theTypeInfoModelFactory = (TypeInfoModelFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/dltk/javascript/typeinfo.ecore"); //$NON-NLS-1$ 
+            if (theTypeInfoModelFactory != null) {
+                return theTypeInfoModelFactory;
+            }
+        }
+        catch (Exception exception) {
+            EcorePlugin.INSTANCE.log(exception);
+        }
+        return new TypeInfoModelFactoryImpl();
+    }
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
+     * Creates an instance of the factory.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public TypeInfoModelFactoryImpl() {
-		super();
-	}
+        super();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public EObject create(EClass eClass) {
-		switch (eClass.getClassifierID()) {
-			case TypeInfoModelPackage.TYPE: return (EObject)createType();
-			case TypeInfoModelPackage.METHOD: return (EObject)createMethod();
-			case TypeInfoModelPackage.PARAMETER: return (EObject)createParameter();
-			case TypeInfoModelPackage.PROPERTY: return (EObject)createProperty();
-			case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
+        switch (eClass.getClassifierID()) {
+            case TypeInfoModelPackage.TYPE: return (EObject)createType();
+            case TypeInfoModelPackage.TYPE_ALIAS: return (EObject)createTypeAlias();
+            case TypeInfoModelPackage.METHOD: return (EObject)createMethod();
+            case TypeInfoModelPackage.PARAMETER: return (EObject)createParameter();
+            case TypeInfoModelPackage.PROPERTY: return (EObject)createProperty();
+            case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
+            default:
+                throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
-		switch (eDataType.getClassifierID()) {
-			case TypeInfoModelPackage.TYPE_KIND:
-				return createTypeKindFromString(eDataType, initialValue);
-			case TypeInfoModelPackage.PARAMETER_KIND:
-				return createParameterKindFromString(eDataType, initialValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
+        switch (eDataType.getClassifierID()) {
+            case TypeInfoModelPackage.TYPE_KIND:
+                return createTypeKindFromString(eDataType, initialValue);
+            case TypeInfoModelPackage.PARAMETER_KIND:
+                return createParameterKindFromString(eDataType, initialValue);
+            default:
+                throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
-		switch (eDataType.getClassifierID()) {
-			case TypeInfoModelPackage.TYPE_KIND:
-				return convertTypeKindToString(eDataType, instanceValue);
-			case TypeInfoModelPackage.PARAMETER_KIND:
-				return convertParameterKindToString(eDataType, instanceValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
+        switch (eDataType.getClassifierID()) {
+            case TypeInfoModelPackage.TYPE_KIND:
+                return convertTypeKindToString(eDataType, instanceValue);
+            case TypeInfoModelPackage.PARAMETER_KIND:
+                return convertParameterKindToString(eDataType, instanceValue);
+            default:
+                throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Type createType() {
-		TypeImpl type = new TypeImpl();
-		return type;
-	}
+        TypeImpl type = new TypeImpl();
+        return type;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public TypeAlias createTypeAlias() {
+        TypeAliasImpl typeAlias = new TypeAliasImpl();
+        return typeAlias;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Method createMethod() {
-		MethodImpl method = new MethodImpl();
-		return method;
-	}
+        MethodImpl method = new MethodImpl();
+        return method;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Parameter createParameter() {
-		ParameterImpl parameter = new ParameterImpl();
-		return parameter;
-	}
+        ParameterImpl parameter = new ParameterImpl();
+        return parameter;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Property createProperty() {
-		PropertyImpl property = new PropertyImpl();
-		return property;
-	}
+        PropertyImpl property = new PropertyImpl();
+        return property;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Map.Entry<String, Object> createAttributeEntry() {
-		AttributeEntryImpl attributeEntry = new AttributeEntryImpl();
-		return attributeEntry;
-	}
+        AttributeEntryImpl attributeEntry = new AttributeEntryImpl();
+        return attributeEntry;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public TypeKind createTypeKindFromString(EDataType eDataType, String initialValue) {
-		TypeKind result = TypeKind.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		return result;
-	}
+        TypeKind result = TypeKind.get(initialValue);
+        if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return result;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public String convertTypeKindToString(EDataType eDataType, Object instanceValue) {
-		return instanceValue == null ? null : instanceValue.toString();
-	}
+        return instanceValue == null ? null : instanceValue.toString();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public ParameterKind createParameterKindFromString(EDataType eDataType, String initialValue) {
-		ParameterKind result = ParameterKind.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		return result;
-	}
+        ParameterKind result = ParameterKind.get(initialValue);
+        if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return result;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public String convertParameterKindToString(EDataType eDataType, Object instanceValue) {
-		return instanceValue == null ? null : instanceValue.toString();
-	}
+        return instanceValue == null ? null : instanceValue.toString();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public TypeInfoModelPackage getTypeInfoModelPackage() {
-		return (TypeInfoModelPackage)getEPackage();
-	}
+        return (TypeInfoModelPackage)getEPackage();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @deprecated
-	 * @generated
-	 */
+     * @deprecated
+     * @generated
+     */
 	@Deprecated
 	public static TypeInfoModelPackage getPackage() {
-		return TypeInfoModelPackage.eINSTANCE;
-	}
+        return TypeInfoModelPackage.eINSTANCE;
+    }
 
 } //TypeInfoModelFactoryImpl
