@@ -8,8 +8,8 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
+import org.eclipse.dltk.compiler.SourceElementRequestorKind;
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.core.search.indexing.IIndexRequestor;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -56,7 +56,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 	public StructureReporter2(ISourceElementRequestor fRequestor) {
 		this.fRequestor = fRequestor;
-		indexer = fRequestor instanceof IIndexRequestor;
+		indexer = SourceElementRequestorKind.INDEXER.matches(fRequestor);
 	}
 
 	public void beginReporting(Script script, IModelElement element) {
@@ -66,13 +66,13 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		if (indexer) {
 			final TypeInferencer2 inferencer = new TypeInferencer2();
 			inferencer.setModelElement(element);
-			IdentifierLookupVisitor visitor = new IdentifierLookupVisitor(inferencer);
+			IdentifierLookupVisitor visitor = new IdentifierLookupVisitor(
+					inferencer);
 			inferencer.setVisitor(visitor);
 			inferencer.doInferencing(script);
 			visitor.processUnknowReferences();
 
-			resolvedIdentifiers = visitor
-					.getResolvedIdentifiers();
+			resolvedIdentifiers = visitor.getResolvedIdentifiers();
 		}
 	}
 
@@ -124,7 +124,6 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		return super.visitIdentifier(node);
 	}
 
-
 	@Override
 	public Object visitFunctionStatement(FunctionStatement node) {
 		boolean isInFunction = inFunction;
@@ -139,8 +138,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			} else if (node.getParent() instanceof PropertyInitializer
 					&& ((PropertyInitializer) node.getParent()).getName() instanceof Identifier) {
 				setNameProperties(
-						(Identifier) ((PropertyInitializer) node
-						.getParent())
+						(Identifier) ((PropertyInitializer) node.getParent())
 								.getName(),
 						methodInfo, method);
 
@@ -159,17 +157,19 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 				Expression expression = ((BinaryOperation) node.getParent())
 						.getLeftExpression();
 				method.setName(PropertyExpressionUtils.getPath(expression));
+				if (method.getName() == null) {
+					method.setName("");
+				}
 				methodInfo.nameSourceStart = expression.sourceStart();
 				methodInfo.nameSourceEnd = expression.sourceEnd() - 1;
-			}
-			else {
+			} else {
 				method.setName("");
 				methodInfo.nameSourceStart = node.getFunctionKeyword()
 						.sourceStart();
 				methodInfo.nameSourceEnd = node.getFunctionKeyword()
 						.sourceEnd() - 1;
 			}
-			
+
 			org.eclipse.dltk.javascript.ast.Type funcType = node
 					.getReturnType();
 			if (funcType != null) {
@@ -178,7 +178,8 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			for (Argument argument : node.getArguments()) {
 				final IParameter parameter = method.createParameter();
 				parameter.setName(argument.getIdentifier().getName());
-				org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
+				org.eclipse.dltk.javascript.ast.Type paramType = argument
+						.getType();
 				if (paramType != null) {
 					parameter.setType(paramType.getName());
 				}
@@ -246,8 +247,8 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 	 * @param methodInfo
 	 * @param method
 	 */
-	private void setNameProperties(Identifier node,
-			MethodInfo methodInfo, final JSMethod method) {
+	private void setNameProperties(Identifier node, MethodInfo methodInfo,
+			final JSMethod method) {
 		method.setName(node.getName());
 		methodInfo.nameSourceStart = node.sourceStart();
 		methodInfo.nameSourceEnd = node.sourceEnd() - 1;
@@ -294,7 +295,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		if (!inFunction) {
 			List<VariableDeclaration> variables = node.getVariables();
 			for (VariableDeclaration variableDeclaration : variables) {
-				
+
 				if (variableDeclaration.getInitializer() instanceof FunctionStatement) {
 					visit(variableDeclaration.getInitializer());
 					continue;
@@ -303,7 +304,8 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 				variable.setName(variableDeclaration.getVariableName());
 				if (variableDeclaration.getType() != null)
 					variable.setType(variableDeclaration.getType().getName());
-				for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
+				for (IModelBuilder extension : TypeInfoManager
+						.getModelBuilders()) {
 					extension.processVariable(node, variable);
 				}
 
