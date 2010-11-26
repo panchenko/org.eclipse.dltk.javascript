@@ -245,7 +245,9 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 	@Override
 	public E visitIfStatement(IfStatement node) {
 		visitCondition(node.getCondition());
-		visit(node.getThenStatement());
+		if (node.getThenStatement() != null) {
+			visit(node.getThenStatement());
+		}
 		if (node.getElseStatement() != null) {
 			visit(node.getElseStatement());
 		}
