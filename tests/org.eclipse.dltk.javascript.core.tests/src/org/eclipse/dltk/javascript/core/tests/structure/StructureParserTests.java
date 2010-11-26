@@ -53,7 +53,7 @@ public class StructureParserTests extends TestCase {
 
 	public void testMethodFieldMethod() {
 		Root root = parse("function hello() { var a = { z: function() { } } }");
-		assertEquals(new Root(new Method("hello").add(new Method("z"))), root);
+		assertEquals(new Root(new Method("hello").add(new Field("a").add(new Method("z")))), root);
 	}
 
 	public void testMethodMethod() {
@@ -69,21 +69,20 @@ public class StructureParserTests extends TestCase {
 
 	public void testFieldReference() {
 		Root root = parse("var x = database.get()");
-		assertEquals(new Root(new Field("x"), new FieldRef("database"),
-				new MethodRef("get")), root);
+		assertEquals(new Root(new Field("x").add(new MethodRef("get"))), root);
 	}
 
 	public void testFieldReference1() {
 		Root root = parse("var a = 1; var x = a");
 		assertEquals(
-				new Root(new Field("a"), new Field("x"), new FieldRef("a")),
+				new Root(new Field("a"), new Field("x").add(new FieldRef("a"))),
 				root);
 	}
 
 	public void testFunctionFieldReference() {
-		Root root = parse("function run() {var x = database.get()}");
+		Root root = parse("var database;function run() {var x = database.get()}");
 		assertEquals(
-				new Root(new Method("run").add(new FieldRef("database"),
+				new Root(new Field("database"), new Method("run").add(new FieldRef("database"),
 						new MethodRef("get"))), root);
 	}
 
@@ -99,12 +98,12 @@ public class StructureParserTests extends TestCase {
 		code.add("function c(){z=3} c();fc=3;");
 		Root root = parse(code.toString());
 		Root expected = new Root();
-		expected.add(new Method("a").add(new FieldRef("x")),
-				new MethodRef("a"), new FieldRef("fa"));
-		expected.add(new Method("b").add(new FieldRef("y")),
-				new MethodRef("b"), new FieldRef("fb"));
-		expected.add(new Method("c").add(new FieldRef("z")),
-				new MethodRef("c"), new FieldRef("fc"));
+		expected.add(new Method("a"),
+				new MethodRef("a"));
+		expected.add(new Method("b"),
+				new MethodRef("b"));
+		expected.add(new Method("c"),
+				new MethodRef("c"));
 		assertEquals(expected, root);
 	}
 
