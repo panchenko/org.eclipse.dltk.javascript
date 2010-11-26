@@ -64,7 +64,7 @@ public class StructureParserTests extends TestCase {
 
 	public void testMethodReference() {
 		Root root = parse("var x = calculate()");
-		assertEquals(new Root(new Field("x"), new MethodRef("calculate")), root);
+		assertEquals(new Root(new Field("x").add(new MethodRef("calculate"))), root);
 	}
 
 	public void testFieldReference() {

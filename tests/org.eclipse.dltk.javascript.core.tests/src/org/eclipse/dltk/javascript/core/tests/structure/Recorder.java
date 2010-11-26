@@ -14,8 +14,9 @@ package org.eclipse.dltk.javascript.core.tests.structure;
 import java.util.Stack;
 
 import org.eclipse.dltk.compiler.SourceElementRequestorAdaptor;
+import org.eclipse.dltk.core.search.indexing.IIndexRequestor;
 
-public class Recorder extends SourceElementRequestorAdaptor {
+public class Recorder extends SourceElementRequestorAdaptor implements IIndexRequestor{
 
 	private final Stack<Member> structure = new Stack<Member>();
 
