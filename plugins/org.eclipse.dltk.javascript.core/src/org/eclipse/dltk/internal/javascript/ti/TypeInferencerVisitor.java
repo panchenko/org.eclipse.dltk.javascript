@@ -178,10 +178,18 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return visitAssign(left, right);
 		} else if (left == null && right instanceof ConstantValue) {
 			return right;
+		} else if (isNumber(left) && isNumber(right)) {
+			return context.getFactory().createNumber(peekContext());
+		} else if (node.getOperation() == JSParser.ADD) {
+			return left;
 		} else {
 			// TODO handle other operations
 			return null;
 		}
+	}
+
+	private boolean isNumber(IValueReference ref) {
+		return ref != null && ref.getTypes().contains(context.getType(NUMBER));
 	}
 
 	protected IValueReference visitAssign(IValueReference left,
