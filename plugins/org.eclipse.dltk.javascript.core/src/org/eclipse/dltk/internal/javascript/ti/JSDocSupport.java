@@ -21,6 +21,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
 /**
  * Implements support for javadocs tags .
@@ -158,7 +159,7 @@ public class JSDocSupport implements IModelBuilder {
 					}
 					if (parameter != null) {
 						if (type != null && parameter.getType() == null)
-							parameter.setType(type);
+							parameter.setType(translateTypeName(type));
 						if (!optional && st.hasMoreTokens()
 								&& st.nextToken().equals("optional"))
 							optional = true;
@@ -193,8 +194,7 @@ public class JSDocSupport implements IModelBuilder {
 			StringTokenizer st = new StringTokenizer(comment.substring(index
 					+ TYPE_TAG.length(), endLineIndex), " \t\n\r\f*");
 			if (st.hasMoreTokens()) {
-				final String typeToken = st.nextToken();
-				member.setType(typeToken);
+				member.setType(translateTypeName(st.nextToken()));
 			}
 		} else {
 			for (String tag : RETURN_TAGS) {
@@ -205,13 +205,17 @@ public class JSDocSupport implements IModelBuilder {
 					if (begingBrace != -1) {
 						int endBrace = comment.indexOf('}', begingBrace);
 						if (endBrace != -1) {
-							member.setType(comment.substring(begingBrace + 1,
-									endBrace).trim());
+							member.setType(translateTypeName(comment.substring(
+									begingBrace + 1, endBrace).trim()));
 							break;
 						}
 					}
 				}
 			}
 		}
+	}
+
+	private String translateTypeName(String typeName) {
+		return TypeInfoModelLoader.getInstance().translateTypeName(typeName);
 	}
 }

@@ -56,6 +56,23 @@ public class TypeInfoModelLoader {
 		return null;
 	}
 
+	public String translateTypeName(String typeName) {
+		for (Resource resource : resourceSet.getResources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof TypeAlias) {
+					final TypeAlias alias = (TypeAlias) object;
+					if (typeName.equals(alias.getSource())) {
+						if (alias.getTarget() != null) {
+							return alias.getTarget().getName();
+						}
+						break;
+					}
+				}
+			}
+		}
+		return typeName;
+	}
+
 	public Set<String> listTypes(String prefix) {
 		Set<String> result = new HashSet<String>();
 		for (Resource resource : resourceSet.getResources()) {
