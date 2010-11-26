@@ -11,6 +11,7 @@ import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.search.indexing.IIndexRequestor;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.JSVariable;
@@ -37,6 +38,7 @@ import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 
@@ -48,17 +50,19 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 	private final boolean indexer;
 
+	private Script script;
+
+	private Map<Identifier, Integer> resolvedIdentifiers;
+
 	public StructureReporter2(ISourceElementRequestor fRequestor) {
 		this.fRequestor = fRequestor;
 		indexer = fRequestor instanceof IIndexRequestor;
 	}
 
-	public void beginReporting() {
+	public void beginReporting(Script script, IModelElement element) {
+		this.script = script;
 		inFunction = false;
 		fRequestor.enterModule();
-	}
-
-	public void endReporting(Script script, IModelElement element) {
 		if (indexer) {
 			final TypeInferencer2 inferencer = new TypeInferencer2();
 			inferencer.setModelElement(element);
@@ -66,28 +70,49 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			inferencer.setVisitor(visitor);
 			inferencer.doInferencing(script);
 			visitor.processUnknowReferences();
+
+			resolvedIdentifiers = visitor
+					.getResolvedIdentifiers();
 		}
+	}
+
+	public void endReporting() {
 		fRequestor.exitModule(script.sourceEnd());
 	}
 
-	private void reportMethodRef(ASTNode expression, int argCount) {
-		if (expression instanceof Identifier) {
-			final Identifier id = (Identifier) expression;
-			fRequestor.acceptMethodReference(id.getName(), argCount,
-					expression.sourceStart(), expression.sourceEnd() - 1);
-		} else if (expression instanceof PropertyExpression) {
-			reportMethodRef(((PropertyExpression) expression).getProperty(),
-					argCount);
+	@Override
+	public Object visitIdentifier(Identifier node) {
+		if (indexer) {
+			Integer argCount = resolvedIdentifiers.get(node);
+			if (argCount != null) {
+				if (argCount == -1) {
+					fRequestor.acceptFieldReference(node.getName(),
+							node.sourceStart());
+				} else {
+					fRequestor.acceptMethodReference(node.getName(),
+							argCount.intValue(), node.sourceStart(),
+							node.sourceEnd() - 1);
+				}
+			} else {
+				ASTNode parent = node.getParent();
+				if (parent instanceof PropertyExpression
+						&& ((PropertyExpression) parent).getProperty() == node) {
+				while (parent instanceof PropertyExpression) {
+					parent = ((PropertyExpression) parent).getParent();
+				}
+				}
+				if (parent instanceof CallExpression) {
+					// it was a none resolved function call, do report it so
+					// that searches will be able to find them.
+					fRequestor.acceptMethodReference(node.getName(),
+							((CallExpression) parent).getArguments().size(),
+							node.sourceStart(), node.sourceEnd() - 1);
+				}
+			}
 		}
+		return super.visitIdentifier(node);
 	}
 
-	@Override
-	public Object visitCallExpression(CallExpression node) {
-		if (indexer) {
-			reportMethodRef(node.getExpression(), node.getArguments().size());
-		}
-		return super.visitCallExpression(node);
-	}
 
 	@Override
 	public Object visitFunctionStatement(FunctionStatement node) {
@@ -333,12 +358,18 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		return super.visitPropertyExpression(node);
 	}
 
-	private class IdentifierLookupVisitor extends TypeInferencerVisitor {
+	private static class IdentifierLookupVisitor extends TypeInferencerVisitor {
 
 		private HashMap<Identifier, IValueReference> unknownKinds = new HashMap<Identifier, IValueReference>();
 
+		private Map<Identifier, Integer> resolvedIdentifiers = new HashMap<Identifier, Integer>();
+
 		public IdentifierLookupVisitor(ITypeInferenceContext context) {
 			super(context);
+		}
+
+		public Map<Identifier, Integer> getResolvedIdentifiers() {
+			return resolvedIdentifiers;
 		}
 
 		public void processUnknowReferences() {
@@ -356,11 +387,12 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 			ReferenceKind kind = reference.getKind();
 			if (kind == ReferenceKind.FIELD || kind == ReferenceKind.GLOBAL) {
-				fRequestor.acceptFieldReference(node.getName(),
-						node.sourceStart());
+				resolvedIdentifiers.put(node, Integer.valueOf(-1));
 			} else if (kind == ReferenceKind.FUNCTION) {
-				fRequestor.acceptMethodReference(node.getName(), 0,
-						node.sourceStart(), node.sourceEnd() - 1);
+				IMethod method = (IMethod) reference
+						.getAttribute(IReferenceAttributes.PARAMETERS);
+				resolvedIdentifiers.put(node,
+						Integer.valueOf(method.getParameterCount()));
 			} else if (reportUnknown && kind == ReferenceKind.UNKNOWN) {
 				unknownKinds.put(node, reference);
 			}

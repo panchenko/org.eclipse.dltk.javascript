@@ -36,11 +36,11 @@ public class JavaScriptSourceElementParser2 implements ISourceElementParser {
 		final Script script = parse(module);
 
 		StructureReporter2 sr = new StructureReporter2(fRequestor);
-		sr.beginReporting();
+		sr.beginReporting(script, module.getModelElement());
 		try {
 			script.visitAll(sr);
 		} finally {
-			sr.endReporting(script, module.getModelElement());
+			sr.endReporting();
 		}
 	}
 
