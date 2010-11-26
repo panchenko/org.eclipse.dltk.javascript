@@ -122,7 +122,18 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 					type = types.iterator().next();
 				locator.report(new FieldDeclarationNode(node, type));
 			} else {
-				locator.report(new FieldReferenceNode(node, result));
+				ASTNode parent = node.getParent();
+				if (parent instanceof PropertyExpression
+						&& ((PropertyExpression) parent).getProperty() == node) {
+					while (parent instanceof PropertyExpression) {
+						parent = ((PropertyExpression) parent).getParent();
+					}
+				}
+				if (parent instanceof CallExpression) {
+					locator.report(new MethodReferenceNode(node, result));
+				} else {
+					locator.report(new FieldReferenceNode(node, result));
+				}
 			}
 		}
 		return true;

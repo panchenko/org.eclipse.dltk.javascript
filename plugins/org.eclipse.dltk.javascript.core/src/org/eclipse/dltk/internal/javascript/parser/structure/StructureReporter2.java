@@ -85,21 +85,26 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		if (indexer) {
 			Integer argCount = resolvedIdentifiers.get(node);
 			if (argCount != null) {
-				if (argCount == -1) {
-					fRequestor.acceptFieldReference(node.getName(),
-							node.sourceStart());
-				} else {
-					fRequestor.acceptMethodReference(node.getName(),
-							argCount.intValue(), node.sourceStart(),
-							node.sourceEnd() - 1);
+				// ignore locals.
+				if (argCount != -2) {
+					// report fields.
+					if (argCount == -1) {
+						fRequestor.acceptFieldReference(node.getName(),
+								node.sourceStart());
+					} else {
+						// else methods.
+						fRequestor.acceptMethodReference(node.getName(),
+								argCount.intValue(), node.sourceStart(),
+								node.sourceEnd() - 1);
+					}
 				}
 			} else {
 				ASTNode parent = node.getParent();
 				if (parent instanceof PropertyExpression
 						&& ((PropertyExpression) parent).getProperty() == node) {
-				while (parent instanceof PropertyExpression) {
-					parent = ((PropertyExpression) parent).getParent();
-				}
+					while (parent instanceof PropertyExpression) {
+						parent = ((PropertyExpression) parent).getParent();
+					}
 				}
 				if (parent instanceof CallExpression) {
 					// it was a none resolved function call, do report it so
@@ -107,6 +112,12 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 					fRequestor.acceptMethodReference(node.getName(),
 							((CallExpression) parent).getArguments().size(),
 							node.sourceStart(), node.sourceEnd() - 1);
+				} else if (!(parent instanceof PropertyInitializer)) {
+					// else it is a not resolved field reference, also report
+					// this one.
+					// that searches will be able to find them.
+					fRequestor.acceptFieldReference(node.getName(),
+							node.sourceStart());
 				}
 			}
 		}
@@ -386,7 +397,10 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 				return;
 
 			ReferenceKind kind = reference.getKind();
-			if (kind == ReferenceKind.FIELD || kind == ReferenceKind.GLOBAL) {
+			if (kind == ReferenceKind.ARGUMENT || kind == ReferenceKind.LOCAL) {
+				resolvedIdentifiers.put(node, Integer.valueOf(-2));
+			} else if (kind == ReferenceKind.FIELD
+					|| kind == ReferenceKind.GLOBAL) {
 				resolvedIdentifiers.put(node, Integer.valueOf(-1));
 			} else if (kind == ReferenceKind.FUNCTION) {
 				IMethod method = (IMethod) reference
