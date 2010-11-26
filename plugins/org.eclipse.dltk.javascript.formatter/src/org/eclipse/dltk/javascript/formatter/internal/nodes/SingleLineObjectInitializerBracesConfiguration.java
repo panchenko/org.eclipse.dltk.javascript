@@ -26,7 +26,7 @@ public class SingleLineObjectInitializerBracesConfiguration extends
 	}
 
 	public int insertBeforeOpenBrace() {
-		return IBracesConfiguration.ONE_SPACE;
+		return IBracesConfiguration.EMPTY_SPACE;
 	}
 
 	public int insertAfterOpenBrace() {
