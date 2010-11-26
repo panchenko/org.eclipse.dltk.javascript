@@ -13,10 +13,11 @@ package org.eclipse.dltk.javascript.core.tests.structure;
 
 import java.util.Stack;
 
+import org.eclipse.dltk.compiler.ISourceElementRequestorExtension;
 import org.eclipse.dltk.compiler.SourceElementRequestorAdaptor;
-import org.eclipse.dltk.core.search.indexing.IIndexRequestor;
 
-public class Recorder extends SourceElementRequestorAdaptor implements IIndexRequestor{
+public class Recorder extends SourceElementRequestorAdaptor implements
+		ISourceElementRequestorExtension {
 
 	private final Stack<Member> structure = new Stack<Member>();
 
@@ -75,6 +76,10 @@ public class Recorder extends SourceElementRequestorAdaptor implements IIndexReq
 	public void acceptMethodReference(String methodName, int argCount,
 			int sourcePosition, int sourceEndPosition) {
 		peek().add(new MethodRef(methodName));
+	}
+
+	public int getMode() {
+		return MODE_INDEX;
 	}
 
 }
