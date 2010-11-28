@@ -149,7 +149,7 @@
       </actionSet>
         <actionSet
               description="%JavaScriptActionSet.description"
-              id="org.eclipse.dltk.tcl.ui.JavaScriptActionSet"
+              id="org.eclipse.dltk.javascript.ui.JavaScriptActionSet"
               label="%JavaScriptActionSet.label">
            <action
                  class="org.eclipse.dltk.javascript.ui.actions.OpenMethodAction"
@@ -462,8 +462,13 @@
             targetID="org.eclipse.dltk.javascript.ui.CodingActionSet">
          <part id="org.eclipse.dltk.javascript.ui.editor.JavascriptEditor"/>
 	     <part id="org.eclipse.dltk.ui.ScriptExplorer"/>
+      </actionSetPartAssociation>
+
+      <actionSetPartAssociation
+            targetID="org.eclipse.dltk.javascript.ui.JavaScriptActionSet">
+         <part id="org.eclipse.dltk.javascript.ui.editor.JavascriptEditor"/>
       </actionSetPartAssociation>   
-         
+
       <actionSetPartAssociation
             targetID="org.eclipse.dltk.ui.ScriptCodingActionSet">
          <part id="org.eclipse.dltk.javascript.ui.editor.JavascriptEditor"/>
