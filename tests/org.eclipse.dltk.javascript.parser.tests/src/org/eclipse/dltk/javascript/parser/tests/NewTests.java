@@ -26,11 +26,10 @@ public class NewTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		VariableDeclaration var = uniqueResult(ASTUtil.select(script,
 				VariableDeclaration.class));
-		CallExpression call = (CallExpression) var.getInitializer();
-		NewExpression newExpr = (NewExpression) call.getExpression();
-		assertEquals("a",
-				PropertyExpressionUtils.getPath(newExpr.getObjectClass()));
-		assertIdentifier("a", newExpr.getObjectClass());
+		NewExpression newExpr = (NewExpression) var.getInitializer();
+		CallExpression call = (CallExpression) newExpr.getObjectClass();
+		assertEquals("a", PropertyExpressionUtils.getPath(call.getExpression()));
+		assertIdentifier("a", call.getExpression());
 	}
 
 	public void testNewPath2() {
@@ -38,12 +37,11 @@ public class NewTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		VariableDeclaration var = uniqueResult(ASTUtil.select(script,
 				VariableDeclaration.class));
-		CallExpression call = (CallExpression) var.getInitializer();
-		NewExpression newExpr = (NewExpression) call.getExpression();
+		NewExpression newExpr = (NewExpression) var.getInitializer();
+		CallExpression call = (CallExpression) newExpr.getObjectClass();
 		assertEquals("a.b",
-				PropertyExpressionUtils.getPath(newExpr.getObjectClass()));
-		PropertyExpression property = (PropertyExpression) newExpr
-				.getObjectClass();
+				PropertyExpressionUtils.getPath(call.getExpression()));
+		PropertyExpression property = (PropertyExpression) call.getExpression();
 		assertIdentifier("a", property.getObject());
 		assertIdentifier("b", property.getProperty());
 	}
@@ -53,16 +51,27 @@ public class NewTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		VariableDeclaration var = uniqueResult(ASTUtil.select(script,
 				VariableDeclaration.class));
-		CallExpression call = (CallExpression) var.getInitializer();
-		NewExpression newExpr = (NewExpression) call.getExpression();
+		NewExpression newExpr = (NewExpression) var.getInitializer();
+		CallExpression call = (CallExpression) newExpr.getObjectClass();
 		assertEquals("a.b.c",
-				PropertyExpressionUtils.getPath(newExpr.getObjectClass()));
-		PropertyExpression property = (PropertyExpression) newExpr
-				.getObjectClass();
+				PropertyExpressionUtils.getPath(call.getExpression()));
+		PropertyExpression property = (PropertyExpression) call.getExpression();
 		PropertyExpression property2 = (PropertyExpression) property
 				.getObject();
 		assertIdentifier("a", property2.getObject());
 		assertIdentifier("b", property2.getProperty());
 		assertIdentifier("c", property.getProperty());
+	}
+
+	public void testNewNew() {
+		Script script = parse("var x = new new A()()");
+		assertFalse(reporter.hasErrors());
+		VariableDeclaration var = uniqueResult(ASTUtil.select(script,
+				VariableDeclaration.class));
+		NewExpression newExpr1 = (NewExpression) var.getInitializer();
+		CallExpression call1 = (CallExpression) newExpr1.getObjectClass();
+		NewExpression new2 = (NewExpression) call1.getExpression();
+		CallExpression call2 = (CallExpression) new2.getObjectClass();
+		assertIdentifier("A", call2.getExpression());
 	}
 }
