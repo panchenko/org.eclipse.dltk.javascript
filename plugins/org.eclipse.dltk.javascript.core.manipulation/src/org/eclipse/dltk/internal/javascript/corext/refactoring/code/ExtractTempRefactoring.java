@@ -476,8 +476,8 @@ public class ExtractTempRefactoring extends Refactoring {
 					|| cl == DomPackage.SOURCE) break;
 			root = (Node)root.eContainer();
 		}
-		Set<VariableReference> set = new HashSet<VariableReference>();
-		set.addAll(VariableLookup.findReferences(root, new VariableLookup().getVisibleNames(expr)));
+		Set<Identifier> set = new HashSet<Identifier>();
+		set.addAll(VariableLookup.findReferences(root, VariableLookup.getVisibleNames(expr)));
 		TreeIterator<EObject> it = root.eAllContents();
 		while(it.hasNext()) {
 			Node cur = (Node)it.next();
@@ -489,16 +489,15 @@ public class ExtractTempRefactoring extends Refactoring {
 		return res.toArray(new Expression[res.size()]);
 	}
 	
-	private static boolean match(Node one, Node another, Set<VariableReference> resolved) {
+	private static boolean match(Node one, Node another, Set<Identifier> resolved) {
 		if (one == null)
 			return another == null;
 		EClass cl = one.eClass();
 		if (cl != another.eClass()) {
 			return false;
 		}
-		if (cl.getClassifierID() == DomPackage.VARIABLE_REFERENCE) {
-			return resolved.contains(one) == resolved.contains(another);
-		}
+		if (resolved.contains(one) != resolved.contains(another))
+			return false;
 		for(EAttribute attr : cl.getEAllAttributes()) {
 			if (attr.getFeatureID() == DomPackage.NODE__BEGIN
 					|| attr.getFeatureID() == DomPackage.NODE__END
@@ -838,7 +837,7 @@ public class ExtractTempRefactoring extends Refactoring {
 			try {
 				//ScopeLookup look = new ScopeLookup();
 				//look.findNamesInScope(getSelectedExpression());
-				Set<String> visible = new VariableLookup().getVisibleNames(getSelectedExpression());
+				Set<String> visible = VariableLookup.getVisibleNames(getSelectedExpression());
 				fExcludedVariableNames = visible.toArray(new String[visible.size()]);
 			} catch (ModelException e) {
 				JavascriptManipulationPlugin.log(e); //who cares, but still

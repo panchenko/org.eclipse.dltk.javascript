@@ -56,6 +56,7 @@ import org.eclipse.dltk.javascript.core.dom.FunctionExpression;
 import org.eclipse.dltk.javascript.core.dom.Identifier;
 import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Parameter;
+import org.eclipse.dltk.javascript.core.dom.SimplePropertyAssignment;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.dltk.javascript.core.dom.rewrite.ASTConverter;
@@ -1296,7 +1297,7 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 			if (pm.isCanceled())
 				throw new OperationCanceledException();
 			processCu(cu,group.getSearchResults(),result);
-			if (cu == fMethod.getSourceModule())
+			if (cu.equals(fMethod.getSourceModule()))
 				decl = true;
 		}
 		if (!decl) {
@@ -1322,10 +1323,10 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		Node[] nodes= NodeFinder.findNodes(root, searchResults);
 		ChangeRecorder cr = new ChangeRecorder(root);
 		for(Node node : nodes) {
-			if (isFunctionReference(node)) {
-				VariableReference ref = (VariableReference)node;
-				ref.getVariable().setName(fMethodName);
-				CallExpression call = (CallExpression)node.eContainer();
+			CallExpression call = getFunctionReference(node);
+			if (call != null) {
+				Identifier id = (node instanceof Identifier) ? (Identifier)node : ((VariableReference)node).getVariable();
+				id.setName(fMethodName);
 				if (call.getArguments().size() != fMethod.getParameters().length)
 					result.addWarning(RefactoringCoreMessages.ChangeSignatureRefactoring_different_num_of_args,
 							ScriptStatusContext.create(cu, new SourceRange(node.getBegin(), node.getEnd()-node.getBegin())));
@@ -1349,11 +1350,11 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 				tryRename(node);
 			}
 		}
-		if (cu == fMethod.getSourceModule()) {
+		if (cu.equals(fMethod.getSourceModule())) {
 			Node node = NodeFinder.findNode(root, fMethod.getNameRange());
-			if (node != null && isFunctionDeclaration(node)) {
-				FunctionExpression expr = (FunctionExpression)node.eContainer();
-				expr.getIdentifier().setName(fMethodName);
+			FunctionExpression expr = node == null ? null : getFunctionDeclaration(node);
+			if (expr != null) {
+				((Identifier)node).setName(fMethodName);
 				reshuffleElements(expr.getParameters(),new NewElementsProvider<Parameter>(){
 					@Override
 					Parameter createElement(ParameterInfo info) {
@@ -1387,12 +1388,12 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 			if (info.isDeleted())
 				deleted.add(info.getOldName());
 		}
-		List<VariableReference> refs = VariableLookup.findReferences(node,deleted,true);
+		List<Identifier> refs = VariableLookup.findReferences(node,deleted,true);
 		RefactoringStatus status = new RefactoringStatus();
-		for(VariableReference ref : refs) {
+		for(Identifier ref : refs) {
 			SourceRange range = new SourceRange(ref.getBegin(), ref.getEnd()-ref.getBegin());
 			RefactoringStatusContext context= ScriptStatusContext.create(cu, range);
-			String[] keys= new String[]{ ref.getVariable().getName(), fMethodName };
+			String[] keys= new String[]{ ref.getName(), fMethodName };
 			String msg= Messages.format(RefactoringCoreMessages.ChangeSignatureRefactoring_parameter_used, keys);
 			status.addWarning(msg, context);
 		}
@@ -1405,10 +1406,9 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 			if (!info.isDeleted())
 				renaming.put(info.getOldName(),info.getNewName());
 		}
-		List<VariableReference> refs = VariableLookup.findReferences(node,renaming.keySet());
-		for(VariableReference ref : refs) {
-			Identifier id = ref.getVariable();
-			id.setName(renaming.get(id.getName()));
+		List<Identifier> refs = VariableLookup.findReferences(node,renaming.keySet());
+		for(Identifier ref : refs) {
+			ref.setName(renaming.get(ref.getName()));
 		}
 	}
 	
@@ -1507,13 +1507,26 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		return info.getNewName() + ("".equals(info.getNewTypeName()) ? "" : ":" + info.getNewTypeName()); //$NON-NL0S-1$
 	}
 
-	private static boolean isFunctionReference(Node node){
-		return node instanceof VariableReference
-			&& node.eContainingFeature() == DomPackage.eINSTANCE.getCallExpression_Applicant();
+	private static CallExpression getFunctionReference(Node node){
+		if (node.eContainingFeature() == DomPackage.eINSTANCE.getCallExpression_Applicant())
+			return (CallExpression)node.eContainer();
+		if (node.eContainingFeature() == DomPackage.eINSTANCE.getPropertyAccessExpression_Property())
+			return getFunctionReference((Node)node.eContainer());
+		return null;
 	}
 	
-	private static boolean isFunctionDeclaration(Node node) {
-		return node.eContainingFeature() == DomPackage.eINSTANCE.getFunctionExpression_Identifier();
+	private static FunctionExpression getFunctionDeclaration(Node node) {
+		if (node.eContainingFeature() == DomPackage.eINSTANCE.getFunctionExpression_Identifier())
+			return (FunctionExpression)node.eContainer();
+		if (node.eContainingFeature() == DomPackage.eINSTANCE.getPropertyAssignment_Name()) {
+			Node parent = (Node)node.eContainer();
+			if (parent instanceof SimplePropertyAssignment) {
+				Node func = ((SimplePropertyAssignment)parent).getInitializer();
+				if (func instanceof FunctionExpression)
+					return (FunctionExpression)func;
+			}
+		}
+		return null;
 	}
 	
 	private void tryRename(Node node) {

@@ -93,21 +93,23 @@ public class Generator extends DomSwitch<StringBuilder> {
 	private final StringBuilder sb = new StringBuilder();
 	private final ChangeDescription cd;
 	private final String text;
+	private final String lineDelimiter;
 	private String nlStr;
-	public Generator(ChangeDescription cd, String text, int pos) {
+	public Generator(ChangeDescription cd, String text, int pos, String lineDelimiter) {
 		this.cd = cd;
 		this.text = text;
+		this.lineDelimiter = lineDelimiter;
 		int st,end=pos;
 		for(st=pos-1;st>=0;st--) {
 			char c = text.charAt(st);
 			if (c == '\n') break;
 			if (c != ' ' && c != '\t') end = st;
 		}
-		nlStr = '\n' + text.substring(st+1,end);
+		nlStr = lineDelimiter + text.substring(st+1,end);
 	}
 	public StringBuilder generate(Node node) {
-		if (node.getBegin() != -1) {
-			RewriteAnalyzer ra = new RewriteAnalyzer(cd,text);
+		if (node.getBegin() != -1 && cd != null) {
+			RewriteAnalyzer ra = new RewriteAnalyzer(cd, text, lineDelimiter);
 			ra.rewrite(node);
 			Document doc = new Document(text.substring(node.getBegin(), node.getEnd()));
 			try {
@@ -115,10 +117,11 @@ public class Generator extends DomSwitch<StringBuilder> {
 				if (edit.hasChildren())
 					edit.moveTree(-node.getBegin());
 				edit.apply(doc);
-				return sb.append(doc.get());
+				sb.append(doc.get());
 			} catch (BadLocationException e) {
 				JavascriptManipulationPlugin.log(e);
 			}
+			return sb;
 		}
 		doSwitch(node);
 		return sb;
@@ -217,7 +220,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		for(int i=0; i<list.size(); i++) {
 			generate(list.get(i));
 			if (i == list.size()-1) unindent();
-			sb.append(nlStr);
+			newLine();
 		}
 	}
 	@Override

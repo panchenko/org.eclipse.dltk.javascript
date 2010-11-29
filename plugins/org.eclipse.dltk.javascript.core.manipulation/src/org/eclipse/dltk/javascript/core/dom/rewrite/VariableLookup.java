@@ -12,8 +12,10 @@
 package org.eclipse.dltk.javascript.core.dom.rewrite;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.core.dom.CatchClause;
@@ -25,56 +27,169 @@ import org.eclipse.dltk.javascript.core.dom.Identifier;
 import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Parameter;
 import org.eclipse.dltk.javascript.core.dom.SetterAssignment;
+import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
+import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
 import org.eclipse.emf.ecore.EObject;
 
-public class VariableLookup {
-	protected Set<String> result;
-	protected Set<String> hidden = new HashSet<String>();
-	public Set<String> getVisibleNames(Node node) {
-		result = new HashSet<String>();
-		boolean innerMost=true;
-		while (node.eContainer() != null) {
-			node = (Node)node.eContainer();
-			Node body = null;
-			switch(node.eClass().getClassifierID()) {
-			case DomPackage.CATCH_CLAUSE:
-				result.add(((CatchClause)node).getException().getName());
-				break;
-			case DomPackage.FUNCTION_EXPRESSION:
-				FunctionExpression expr = (FunctionExpression)node;
-				result.addAll(resolveFunctionScope(expr));
-				body = expr.getBody(); 
-				break;
-			case DomPackage.GETTER_ASSIGNMENT:
-				GetterAssignment getter = (GetterAssignment)node;
-				result.addAll(resolveGetterScope(getter));
-				body = getter.getBody();
-				break;
-			case DomPackage.SETTER_ASSIGNMENT:
-				SetterAssignment setter = (SetterAssignment)node;
-				result.addAll(resolveSetterScope(setter));
-				body = setter.getBody();
-				break;
-			case DomPackage.SOURCE:
-				findDeclarations(node,result);
-				body = node;
-				break;
+public abstract class VariableLookup extends DomSwitch<Boolean> {
+	private Map<String,List<Identifier>> decls = new HashMap<String,List<Identifier>>();
+	private Set<String> scope = new HashSet<String>();
+	
+	protected abstract void reportDeclaration(Identifier decl);
+	protected abstract void reportReference(Identifier ref,Identifier decl);
+	
+	public final void traverse(Node node) {
+		if (doSwitch(node) == null)
+			for(EObject obj : node.eContents())
+				traverse((Node)obj);
+	}
+	
+	private void addDeclaration(Identifier id) {
+		if (scope.contains(id.getName())) {
+			List<Identifier> list = decls.get(id.getName());
+			reportReference(id, list.get(list.size()-1));
+			return;
+		}
+		reportDeclaration(id);
+		List<Identifier> list = decls.get(id.getName());
+		if (list == null) {
+			list = new ArrayList<Identifier>();
+			decls.put(id.getName(), list);
+		}
+		list.add(id);
+		scope.add(id.getName());
+	}
+	
+	private void popScope(Set<String> outerScope) {
+		for(String str : scope) {
+			List<Identifier> list = decls.get(str);
+			list.remove(list.size()-1);
+		}
+		scope = outerScope;
+	}
+	
+	protected final void findDeclarations(Node node) {
+		switch(node.eClass().getClassifierID()) {
+		case DomPackage.EXPRESSION_STATEMENT:
+			ExpressionStatement stmt = (ExpressionStatement)node;
+			if (stmt.getExpression() instanceof FunctionExpression) {
+				Identifier id = ((FunctionExpression)stmt.getExpression()).getIdentifier();
+				if (id != null)
+					addDeclaration(id);
+				return;
 			}
-			if (innerMost && body != null) {
-				innerMost = false;
-				doFindReferences(body);
+			break;
+		case DomPackage.FUNCTION_EXPRESSION:
+			return;
+		case DomPackage.VARIABLE_DECLARATION:
+			addDeclaration(((VariableDeclaration)node).getIdentifier());
+			break;
+		}
+		for(EObject obj : node.eContents())
+			findDeclarations((Node)obj);
+	}
+	
+	private Set<String> pushScope() {
+		Set<String> outerScope = scope;
+		scope = new HashSet<String>();
+		return outerScope;
+	}
+
+	@Override
+	public Boolean caseVariableReference(VariableReference node) {
+		Identifier id = node.getVariable();
+		List<Identifier> list = decls.get(id.getName());
+		if (list == null || list.size() == 0)
+			reportReference(id, null);
+		else
+			reportReference(id, list.get(list.size()-1));
+		return true;
+	}
+	@Override
+	public Boolean caseGetterAssignment(GetterAssignment node) {
+		Set<String> outerScope = pushScope();
+		findDeclarations(node.getBody());
+		traverse(node.getBody());
+		popScope(outerScope);
+		return true;
+	}
+	@Override
+	public Boolean caseSetterAssignment(SetterAssignment node) {
+		Set<String> outerScope = pushScope();
+		addDeclaration(node.getParameter());
+		findDeclarations(node.getBody());
+		traverse(node.getBody());
+		popScope(outerScope);
+		return true;
+	}
+	@Override
+	public Boolean caseCatchClause(CatchClause node) {
+		Set<String> outerScope = pushScope();
+		addDeclaration(node.getException());
+		traverse(node.getBody());
+		popScope(outerScope);
+		return true;
+	}
+	@Override
+	public Boolean caseFunctionExpression(FunctionExpression node) {
+		Set<String> outerScope = pushScope();
+		if (node.getIdentifier() != null && !(node.eContainer() instanceof ExpressionStatement))
+			addDeclaration(node.getIdentifier());
+		for(Parameter param : node.getParameters())
+			addDeclaration(param.getName());
+		findDeclarations(node.getBody());
+		traverse(node.getBody());
+		popScope(outerScope);
+		return true;
+	}
+	@Override
+	public Boolean caseSource(Source node) {
+		Set<String> outerScope = pushScope();
+		findDeclarations(node);
+		for (EObject obj : node.getStatements())
+			traverse((Node)obj);
+		popScope(outerScope);
+		return true;
+	}
+	public static Set<String> getVisibleNames(Node node) {
+		final Set<String> result = new HashSet<String>();
+		final Boolean[] reportDecls = new Boolean[]{true};
+		VariableLookup lookup = new VariableLookup() {
+			@Override
+			protected void reportDeclaration(Identifier decl) {
+				if (reportDecls[0])
+					result.add(decl.getName());
+			}
+			@Override
+			protected void reportReference(Identifier ref, Identifier decl) {
+				if (decl == null)
+					result.add(ref.getName());
+			}
+		};
+		boolean ok = true;
+		while (ok) {
+			node = (Node)node.eContainer();
+			switch(node.eClass().getClassifierID()) {
+			case DomPackage.FUNCTION_EXPRESSION:
+			case DomPackage.GETTER_ASSIGNMENT:
+			case DomPackage.SETTER_ASSIGNMENT:
+			case DomPackage.SOURCE:
+				ok = false;
 			}
 		}
+		lookup.findDeclarations(node);
+		reportDecls[0] = false;
+		lookup.traverse(node);
 		return result;
 	}
 	
-	public static List<VariableReference> findReferences(Node root, Set<String> names) {
+	public static List<Identifier> findReferences(Node root, Set<String> names) {
 		return findReferences(root,names,false);
 	}
 	
-	public static List<VariableReference> findReferences(final Node root, Set<String> names,
+	public static List<Identifier> findReferences(final Node root, Set<String> names,
 			final boolean firstOnly) {
 		final Set<String> wanted;
 		if (firstOnly) {
@@ -82,116 +197,26 @@ public class VariableLookup {
 			wanted.addAll(names);
 		} else
 			wanted = names;
-		return new VariableLookup() {
-			List<VariableReference> refs = new ArrayList<VariableReference>();
-			List<VariableReference> getResult() {
-				doFindReferences(root);
-				return refs;
+		final List<Identifier> refs = new ArrayList<Identifier>();
+		VariableLookup lookup =  new VariableLookup() {
+			@Override
+			protected void reportDeclaration(Identifier decl) {
+				// do nothing
 			}
-			protected void addReference(VariableReference node) {
-				String str = node.getVariable().getName();
-				if (wanted.contains(str) && !hidden.contains(str)) {
-					refs.add(node);
+
+			@Override
+			protected void reportReference(Identifier ref, Identifier decl) {
+				if (decl != null)
+					return;
+				String str = ref.getName();
+				if (wanted.contains(str)) {
+					refs.add(ref);
 					if (firstOnly)
 						wanted.remove(str);
 				}
 			}
-		}.getResult();
-	}
-
-	private void addName(Identifier id,Set<String> dst) {
-		String str = id.getName();
-		if (!hidden.contains(str))
-			dst.add(str);
-	}
-	
-	private void findDeclarations(Node node, Set<String> dst) {
-		switch(node.eClass().getClassifierID()) {
-		case DomPackage.EXPRESSION_STATEMENT:
-			ExpressionStatement stmt = (ExpressionStatement)node;
-			if (stmt.getExpression() instanceof FunctionExpression) {
-				Identifier id = ((FunctionExpression)stmt.getExpression()).getIdentifier();
-				if (id != null)
-					addName(id,dst);
-				return;
-			}
-			break;
-		case DomPackage.FUNCTION_EXPRESSION:
-			return;
-		case DomPackage.VARIABLE_DECLARATION:
-			addName(((VariableDeclaration)node).getIdentifier(),dst);
-			break;
-		}
-		for(EObject obj : node.eContents())
-			findDeclarations((Node)obj,dst);
-	}
-
-	protected void doFindReferences(Node node) {
-		switch(node.eClass().getClassifierID()) {
-		case DomPackage.CATCH_CLAUSE:
-			String str = ((CatchClause)node).getException().getName();
-			if (!hidden.contains(str)) {
-				hidden.add(str);
-				for(EObject obj : node.eContents())
-					doFindReferences((Node)obj);
-				hidden.remove(str);
-				return;
-			}
-			break;
-		case DomPackage.FUNCTION_EXPRESSION: {
-			FunctionExpression expr = (FunctionExpression)node;
-			findInScope(expr.getBody(), resolveFunctionScope(expr));
-			return;
-		}
-		case DomPackage.GETTER_ASSIGNMENT: {
-			GetterAssignment getter = (GetterAssignment)node;
-			findInScope(getter.getBody(), resolveGetterScope(getter));
-			return;
-		}
-		case DomPackage.SETTER_ASSIGNMENT: {
-			SetterAssignment setter = (SetterAssignment)node;
-			findInScope(setter.getBody(), resolveSetterScope(setter));
-			return;
-		}
-		case DomPackage.VARIABLE_REFERENCE: {
-			addReference((VariableReference)node);
-			return;
-		}
-		}
-		for(EObject obj : node.eContents())
-			doFindReferences((Node)obj);
-	}
-
-	protected void addReference(VariableReference node) {
-		addName(node.getVariable(), result);
-	}
-
-	private Set<String> resolveSetterScope(SetterAssignment setter) {
-		Set<String> scope = new HashSet<String>();
-		addName(setter.getParameter(), scope);
-		findDeclarations(setter.getBody(),scope);
-		return scope;
-	}
-
-	private Set<String> resolveGetterScope(GetterAssignment getter) {
-		Set<String> scope = new HashSet<String>();
-		findDeclarations(getter.getBody(),scope);
-		return scope;
-	}
-
-	private Set<String> resolveFunctionScope(FunctionExpression expr) {
-		Set<String> scope = new HashSet<String>();
-		if (expr.getIdentifier() != null)
-			addName(expr.getIdentifier(),scope);
-		for(Parameter param : expr.getParameters())
-			addName(param.getName(),scope);
-		findDeclarations(expr.getBody(),scope);
-		return scope;
-	}
-
-	private void findInScope(Node node, Set<String> scope) {
-		hidden.addAll(scope);
-		doFindReferences(node);
-		hidden.removeAll(scope);
+		};
+		lookup.traverse(root);
+		return refs;
 	}
 }

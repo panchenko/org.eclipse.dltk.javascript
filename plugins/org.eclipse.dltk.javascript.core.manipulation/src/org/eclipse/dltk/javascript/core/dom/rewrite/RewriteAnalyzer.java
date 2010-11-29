@@ -40,6 +40,7 @@ import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.change.ChangeKind;
 import org.eclipse.emf.ecore.change.FeatureChange;
 import org.eclipse.emf.ecore.change.ListChange;
+import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
@@ -50,14 +51,25 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	private final ChangeDescription cd;
 	private final Set<Node> generated = new HashSet<Node>();
 	private final String text;
+	private final String lineDelimiter;
 	private final TextEdit edit;
 	public RewriteAnalyzer(ChangeDescription cd, String text) {
 		this.cd = cd;
 		this.text = text;
+		this.lineDelimiter = new Document(text).getDefaultLineDelimiter();
+		edit = new MultiTextEdit();
+	}
+	public RewriteAnalyzer(ChangeDescription cd, String text, String lineDelimiter) {
+		this.cd = cd;
+		this.text = text;
+		this.lineDelimiter = lineDelimiter;
 		edit = new MultiTextEdit();
 	}
 	public void rewrite(Node node) {
 		doSwitch(node);
+		for(EObject obj : node.eContents())
+			if (!generated.contains(obj))
+				rewrite((Node)obj);
 	}
 	public TextEdit getEdit() {
 		return edit;
@@ -131,9 +143,6 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		if (cd.getObjectChanges().get(node) != null)
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
 				processFeature(node, fc);
-		for(EObject obj : node.eContents())
-			if (!generated.contains(obj))
-				rewrite((Node)obj);
 		return true;
 	}
 
@@ -255,15 +264,12 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		return -1;
 	}
 	public String generateElement(Node node,boolean first,boolean empty,int pos) {
-		Generator gen = new Generator(cd, text, pos);
+		Generator gen = new Generator(cd, text, pos, lineDelimiter);
 		if (node instanceof Statement) {
-			if (pos != 0 && text.charAt(pos-1) == ';') 
-				gen.append(gen.getIndentation());
+			if (!first) gen.newLine();
 			gen.generate(node);
-			if (pos == 0 || text.charAt(pos-1) != ';') 
-				gen.newLine();
-			else
-				gen.append(";");
+			if (first) gen.newLine();
+			generated.add(node);
 			return gen.toString();
 		}
 		if (!first)
@@ -275,7 +281,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		return gen.toString();
 	}
 	public String generate(Node node, Node parent, boolean wasNull,int pos) {
-		Generator gen = new Generator(cd, text, pos);
+		Generator gen = new Generator(cd, text, pos, lineDelimiter);
 		if (wasNull && parent.eClass() == DomPackage.eINSTANCE.getVariableDeclaration())
 			gen.append("=");
 		if (wasNull && parent.eClass() == DomPackage.eINSTANCE.getFunctionExpression())
