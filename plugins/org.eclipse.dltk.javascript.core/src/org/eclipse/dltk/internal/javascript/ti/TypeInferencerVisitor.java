@@ -564,11 +564,18 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitNewExpression(NewExpression node) {
-		final Expression objectClass = node.getObjectClass();
+		Expression objectClass = node.getObjectClass();
+		if (objectClass instanceof CallExpression) {
+			final CallExpression call = (CallExpression) objectClass;
+			for (ASTNode argument : call.getArguments()) {
+				visit(argument);
+			}
+			objectClass = call.getExpression();
+		}
 		IValueReference visit = visit(objectClass);
 
 		IValueReference result = null;
-		if (visit.getKind() == ReferenceKind.FUNCTION) {
+		if (visit != null && visit.getKind() == ReferenceKind.FUNCTION) {
 			Object fs = visit.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 			if (fs instanceof IValueCollection
 					&& ((IValueCollection) fs).getThis() != null) {
@@ -746,7 +753,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					peekContext());
 			collection.createChild(catchClause.getException().getName());
 			enterContext(collection);
-			visit(catchClause.getStatement());
+			if (catchClause.getStatement() != null) {
+				visit(catchClause.getStatement());
+			}
 			leaveContext();
 		}
 		if (node.getFinally() != null) {
