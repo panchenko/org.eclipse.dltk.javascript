@@ -128,7 +128,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * @return the source
 	 */
@@ -183,7 +183,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return null;
 	}
 
-	private Type createUnknown(String typeName) {
+	private static Type createUnknown(String typeName) {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(typeName);
 		type.setKind(TypeKind.UNKNOWN);
