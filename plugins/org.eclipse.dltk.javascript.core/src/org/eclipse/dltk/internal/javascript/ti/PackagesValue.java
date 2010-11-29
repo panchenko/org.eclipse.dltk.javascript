@@ -2,7 +2,10 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 public class PackagesValue extends Value {
 
-	public PackagesValue() {
+	private final ITypeInferenceContext context;
+
+	public PackagesValue(ITypeInferenceContext context) {
+		this.context = context;
 	}
 
 	@Override
@@ -22,7 +25,7 @@ public class PackagesValue extends Value {
 	}
 
 	private Value createChildImpl(String name) {
-		return new PackageOrClassValue(name);
+		return new PackageOrClassValue(name, context);
 	}
 
 }

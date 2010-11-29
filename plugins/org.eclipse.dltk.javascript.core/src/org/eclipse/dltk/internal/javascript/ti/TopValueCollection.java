@@ -51,18 +51,18 @@ public class TopValueCollection extends ValueCollection {
 					return value;
 				}
 				if ("Packages".equals(name)) {
-					value = new PackagesValue();
+					value = new PackagesValue(context);
 					memberCache.put(name, value);
 					return value;
 				}
 				if (name.startsWith("Packages.")) {
 					value = new PackageOrClassValue(name.substring("Packages."
-							.length()));
+							.length()), context);
 					memberCache.put(name, value);
 					return value;
 				}
 				if ("java".equals(name) || name.startsWith("java.")) {
-					value = new PackageOrClassValue(name);
+					value = new PackageOrClassValue(name, context);
 					memberCache.put(name, value);
 					return value;
 				}
