@@ -328,7 +328,7 @@
       <parameters name="searchValue"/>
       <parameters name="fromIndex" kind="OPTIONAL"/>
     </members>
-    <members xsi:type="ref:Property" name="length" type="Number"/>
+    <members xsi:type="ref:Property" name="length" type="Number" description="The length of a string"/>
     <members xsi:type="ref:Method" name="link" type="String" description="Returns a string as a hyperlink.">
       <parameters name="url"/>
     </members>
