@@ -457,7 +457,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		Assert.isNotNull(node.getChild(0));
 		Assert.isNotNull(node.getChild(1));
 
-		call.setExpression(transformNode(node.getChild(0), call));
+		call.setExpression((Expression) transformNode(node.getChild(0), call));
 		Tree callArgs = node.getChild(1);
 		IntList commas = new IntList();
 		for (int i = 0; i < callArgs.getChildCount(); ++i) {

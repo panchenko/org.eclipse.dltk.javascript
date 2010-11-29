@@ -1075,7 +1075,7 @@ memberExpression
 	;
 
 newExpression
-	: NEW^ leftHandSideExpressionTail
+	: NEW^ newExpressionTail
 	;
 
 	
@@ -1102,17 +1102,20 @@ leftHandSideExpression
   catch [RuntimeException e] { reportFailure(e); }
   finally { popState(); }
 
-leftHandSideExpressionTail
+newExpressionTail
   :
   (
     memberExpression    -> memberExpression
   )
   (
-    LBRACK expression RBRACK  -> ^( BYINDEX $leftHandSideExpressionTail expression )
-    | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpressionTail DOT rightHandSideExpression )
-    | DOTDOT rightHandSideExpression -> ^(ALLCHILDREN $leftHandSideExpressionTail rightHandSideExpression)
-    | COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpressionTail expression)
+    LBRACK expression RBRACK  -> ^( BYINDEX[$LBRACK] $newExpressionTail expression )
+    | DOT rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression )
+    | DOTDOT rightHandSideExpression -> ^(ALLCHILDREN $newExpressionTail rightHandSideExpression)
+    | COLONCOLON expression -> ^(LOCALNAME $newExpressionTail expression)
   )*
+  (
+    arguments     -> ^( CALL $newExpressionTail arguments )
+  )?
   ;
 
 rightHandSideExpression

@@ -22,7 +22,7 @@ import org.eclipse.dltk.utils.IntList;
 
 public class CallExpression extends Expression {
 
-	private ASTNode expression;
+	private Expression expression;
 	private final List<ASTNode> arguments = new ArrayList<ASTNode>();
 	private IntList commas;
 	private int LP = -1;
@@ -50,11 +50,11 @@ public class CallExpression extends Expression {
 		}
 	}
 
-	public ASTNode getExpression() {
+	public Expression getExpression() {
 		return this.expression;
 	}
 
-	public void setExpression(ASTNode expression) {
+	public void setExpression(Expression expression) {
 		this.expression = expression;
 	}
 
