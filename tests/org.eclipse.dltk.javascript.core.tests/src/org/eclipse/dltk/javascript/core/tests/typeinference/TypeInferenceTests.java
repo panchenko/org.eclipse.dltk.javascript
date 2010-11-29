@@ -58,7 +58,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	private static IValueCollection inference(final String code) {
 		TypeInferencer2 inferencer = new TestTypeInferencer2();
-		return inferencer.doInferencing(parse(code));
+		inferencer.doInferencing(parse(code));
+		return inferencer.getCollection();
 	}
 	
 	public void testNewNamedFunction() throws Exception {
