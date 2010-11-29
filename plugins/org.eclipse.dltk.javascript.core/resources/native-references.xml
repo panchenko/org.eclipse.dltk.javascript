@@ -19,9 +19,13 @@
   </ref:Type>
   <ref:Type name="Object" kind="PREDEFINED">
   	<members xsi:type="ref:Property" name="prototype" type="Object" static="true" description="Allows the addition of properties to a Object object."/>
+  	<members xsi:type="ref:Property" name="constructor" type="Object" description="Returns a reference to the Object function that created the instance's prototype."/>
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a string representing the specified object."/>
-    <members xsi:type="ref:Method" name="toSource" type="String" description="Returns a string representing the source code of the object."/>
+    <members xsi:type="ref:Method" name="toLocaleString" type="Returns a string representing the object. This method is meant to be overriden by derived objects for locale-specific purposes."/>
     <members xsi:type="ref:Method" name="valueOf" type="Object" description="Returns the primitive value of the specified object."/>
+    <members xsi:type="ref:Method" name="hasOwnProperty" type="Returns a boolean indicating whether an object contains the specified property as a direct property of that object and not inherited through the prototype chain."/>
+    <members xsi:type="ref:Method" name="isPrototypeOf" type="Returns a boolean indication whether the specified object is in the prototype chain of the object this method is called upon."/>
+    <members xsi:type="ref:Method" name="propertyIsEnumerable" type="Returns a boolean indicating if the internal ECMAScript DontEnum attribute is set."/>
   </ref:Type>
   <ref:Type name="RegExp" kind="PREDEFINED">
   	<members xsi:type="ref:Property" name="prototype" type="RegExp" static="true" description="Allows the addition of properties to a RegExp object."/>
@@ -153,7 +157,6 @@
       <parameters name="[element1,elementN]" kind="VARARGS"/>
     </members>
     <members xsi:type="ref:Method" name="toLocaleString" type="String"/>
-    <members xsi:type="ref:Method" name="toSource" type="String" description="The toSource() method represents the source code of an object."/>
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for Array."/>
     <members xsi:type="ref:Method" name="unshift" type="Number" description="Adds one or more elements to the beginning of an array and returns the new length.">
       <parameters name="[element1,elementN]" kind="VARARGS"/>
@@ -254,7 +257,6 @@
     <members xsi:type="ref:Method" name="toLocaleDateString" type="String" description="Converts a Date object, according to local time, to a string and returns the date portion."/>
     <members xsi:type="ref:Method" name="toLocaleString" type="String" description="Converts a Date object, according to local time, to a string."/>
     <members xsi:type="ref:Method" name="toLocaleTimeString" type="String" description="Converts a Date object, according to local time, to a string and returns the time portion."/>
-    <members xsi:type="ref:Method" name="toSource" type="String" description="The toSource() method represents the source code of an object."/>
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this object."/>
     <members xsi:type="ref:Method" name="toTimeString" type="String" description="Returns the time portion of a Date object in readable form."/>
     <members xsi:type="ref:Method" name="toUTCString" type="String" description="Converts a Date object, according to universal time, to a string."/>
@@ -280,7 +282,6 @@
     <members xsi:type="ref:Method" name="toPrecision" type="String" description="Converts a number into an exponential notation if it has more digits than specified.">
       <parameters name="numberOfDigits"/>
     </members>
-    <members xsi:type="ref:Method" name="toSource" type="String" description="The toSource() method represents the source code of an object."/>
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this Number."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a Number object."/>
   </ref:Type>
@@ -366,7 +367,6 @@
     <members xsi:type="ref:Method" name="toLocaleLowerCase" type="String"/>
     <members xsi:type="ref:Method" name="toLocaleUpperCase" type="String"/>
     <members xsi:type="ref:Method" name="toLowerCase" type="String" description="Returns a string in lowercase letters."/>
-    <members xsi:type="ref:Method" name="toSource" type="String" description="The toSource() method represents the source code of an object."/>
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this object."/>
     <members xsi:type="ref:Method" name="toUpperCase" type="String" description="Returns a string in uppercase letters."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a String object."/>
