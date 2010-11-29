@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,12 +20,14 @@ import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.emf.common.util.EList;
 
 @SuppressWarnings("nls")
 public class ExampleTypeProvider implements ITypeProvider {
@@ -158,7 +162,67 @@ public class ExampleTypeProvider implements ITypeProvider {
 			type.getMembers().add(method1);
 			return type;
 		}
+		else if (typeName.startsWith("Packages."))
+		{
+			String name = typeName.substring("Packages.".length());
+			try
+			{
+				Class< ? > clz = Class.forName(name, false, Thread.currentThread().getContextClassLoader());
+				return getClassType(clz, name, context);
+			}
+			catch (ClassNotFoundException e)
+			{
+			}
+		}
 		return null;
+	}
+	
+	private static Type getClassType(Class< ? > clz, String name, ITypeInfoContext context)
+	{
+		Type type = TypeInfoModelFactory.eINSTANCE.createType();
+		type.setName(name);
+		type.setKind(TypeKind.JAVA);
+
+		java.lang.reflect.Method[] methods = clz.getMethods();
+		Field[] fields = clz.getFields();
+
+		EList<Member> members = type.getMembers();
+
+		for (Field field : fields)
+		{
+			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
+			property.setName(field.getName());
+			Class< ? > fieldType = field.getType();
+			if (fieldType != null) property.setType(context.getKnownType("Packages." + fieldType.getName()));
+			if (Modifier.isStatic(field.getModifiers()))
+			{
+				property.setStatic(true);
+			}
+			members.add(property);
+		}
+		for (java.lang.reflect.Method method : methods)
+		{
+			org.eclipse.dltk.javascript.typeinfo.model.Method m = TypeInfoModelFactory.eINSTANCE.createMethod();
+			m.setName(method.getName());
+			Class< ? > methodType = method.getReturnType();
+			if (methodType != null) m.setType(context.getKnownType("Packages." + methodType.getName()));
+
+			EList<Parameter> parameters = m.getParameters();
+			Class< ? >[] parameterTypes = method.getParameterTypes();
+			for (int i = 0; i < parameterTypes.length; i++)
+			{
+				Parameter parameter = TypeInfoModelFactory.eINSTANCE.createParameter();
+				parameter.setName(parameterTypes[i].getSimpleName() + " arg" + i);
+				parameter.setType(context.getKnownType("Packages." + parameterTypes[i].getName()));
+				parameters.add(parameter);
+			}
+			if (Modifier.isStatic(method.getModifiers()))
+			{
+				m.setStatic(true);
+			}
+			members.add(m);
+		}
+		return type;
 	}
 
 	public Set<String> listTypes(ITypeInfoContext context, String prefix) {
