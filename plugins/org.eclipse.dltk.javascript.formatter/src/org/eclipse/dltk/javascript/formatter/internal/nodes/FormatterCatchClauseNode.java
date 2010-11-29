@@ -30,8 +30,10 @@ public class FormatterCatchClauseNode extends FormatterBlockNode {
 
 		if (isNewLineBreaking())
 			visitor.writeLineBreak(context);
-		else
-			visitor.appendToPreviousLine(context, JSLiterals.SPACE);
+		else {
+			visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
+			visitor.writeText(context, JSLiterals.SPACE);
+		}
 
 		super.accept(context, visitor);
 	}

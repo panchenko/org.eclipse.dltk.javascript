@@ -133,22 +133,22 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 
 	private void printBeforeOpenBrace(IFormatterContext context,
 			IFormatterWriter visitor) throws Exception {
-
 		switch (configuration.insertBeforeOpenBrace()) {
-
 		case IBracesConfiguration.LINE_BREAK:
 			if (isStatementNewLine()) {
 				context.setBlankLines(-1);
 				visitor.writeLineBreak(context);
 			}
 			break;
-
 		case IBracesConfiguration.ONE_SPACE:
 			visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
 			visitor.writeText(context, JSLiterals.SPACE);
 			visitor.skipNextLineBreaks(context);
 			break;
-
+		case IBracesConfiguration.EMPTY_SPACE:
+			visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
+			visitor.skipNextLineBreaks(context);
+			break;
 		}
 	}
 

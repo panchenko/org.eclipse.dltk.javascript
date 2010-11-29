@@ -33,17 +33,7 @@ public class MultiLineObjectInitializerBracesConfiguration extends
 
 	@Override
 	public int insertBeforeOpenBrace() {
-		if (canBreak()) {
-			return super.insertBeforeOpenBrace();
-		}
-		return IBracesConfiguration.ONE_SPACE;
-	}
-
-	private boolean canBreak() {
-		if (node.getParent() instanceof ReturnStatement) {
-			return false;
-		}
-		return true;
+		return IBracesConfiguration.EMPTY_SPACE;
 	}
 
 }
