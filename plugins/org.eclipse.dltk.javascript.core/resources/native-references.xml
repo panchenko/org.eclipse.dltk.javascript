@@ -21,11 +21,11 @@
   	<members xsi:type="ref:Property" name="prototype" type="Object" static="true" description="Allows the addition of properties to a Object object."/>
   	<members xsi:type="ref:Property" name="constructor" type="Object" description="Returns a reference to the Object function that created the instance's prototype."/>
     <members xsi:type="ref:Method" name="toString" type="String" description="Returns a string representing the specified object."/>
-    <members xsi:type="ref:Method" name="toLocaleString" type="Returns a string representing the object. This method is meant to be overriden by derived objects for locale-specific purposes."/>
+    <members xsi:type="ref:Method" name="toLocaleString" description="Returns a string representing the object. This method is meant to be overriden by derived objects for locale-specific purposes."/>
     <members xsi:type="ref:Method" name="valueOf" type="Object" description="Returns the primitive value of the specified object."/>
-    <members xsi:type="ref:Method" name="hasOwnProperty" type="Returns a boolean indicating whether an object contains the specified property as a direct property of that object and not inherited through the prototype chain."/>
-    <members xsi:type="ref:Method" name="isPrototypeOf" type="Returns a boolean indication whether the specified object is in the prototype chain of the object this method is called upon."/>
-    <members xsi:type="ref:Method" name="propertyIsEnumerable" type="Returns a boolean indicating if the internal ECMAScript DontEnum attribute is set."/>
+    <members xsi:type="ref:Method" name="hasOwnProperty" description="Returns a boolean indicating whether an object contains the specified property as a direct property of that object and not inherited through the prototype chain."/>
+    <members xsi:type="ref:Method" name="isPrototypeOf" description="Returns a boolean indication whether the specified object is in the prototype chain of the object this method is called upon."/>
+    <members xsi:type="ref:Method" name="propertyIsEnumerable" description="Returns a boolean indicating if the internal ECMAScript DontEnum attribute is set."/>
   </ref:Type>
   <ref:Type name="RegExp" kind="PREDEFINED">
   	<members xsi:type="ref:Property" name="prototype" type="RegExp" static="true" description="Allows the addition of properties to a RegExp object."/>
