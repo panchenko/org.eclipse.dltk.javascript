@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ElementImpl.java,v 1.6 2010/05/18 10:11:37 apanchenk Exp $
+ * $Id: ElementImpl.java,v 1.7 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -45,209 +45,209 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public abstract class ElementImpl extends EObjectImpl implements Element {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
 	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isDeprecated() <em>Deprecated</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The default value of the '{@link #isDeprecated() <em>Deprecated</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isDeprecated()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #isDeprecated()
+     * @generated
+     * @ordered
+     */
 	protected static final boolean DEPRECATED_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isDeprecated() <em>Deprecated</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #isDeprecated() <em>Deprecated</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isDeprecated()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #isDeprecated()
+     * @generated
+     * @ordered
+     */
 	protected boolean deprecated = DEPRECATED_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDescription()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getDescription()
+     * @generated
+     * @ordered
+     */
 	protected static final String DESCRIPTION_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDescription()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getDescription()
+     * @generated
+     * @ordered
+     */
 	protected String description = DESCRIPTION_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isVisible() <em>Visible</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The default value of the '{@link #isVisible() <em>Visible</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isVisible()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #isVisible()
+     * @generated
+     * @ordered
+     */
 	protected static final boolean VISIBLE_EDEFAULT = true;
 
 	/**
-	 * The cached value of the '{@link #isVisible() <em>Visible</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #isVisible() <em>Visible</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isVisible()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #isVisible()
+     * @generated
+     * @ordered
+     */
 	protected boolean visible = VISIBLE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' map.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' map.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAttributes()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getAttributes()
+     * @generated
+     * @ordered
+     */
 	protected EMap<String, Object> attributes;
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	protected ElementImpl() {
-		super();
-	}
+        super();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	protected EClass eStaticClass() {
-		return TypeInfoModelPackage.Literals.ELEMENT;
-	}
+        return TypeInfoModelPackage.Literals.ELEMENT;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public String getName() {
-		return name;
-	}
+        return name;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__NAME, oldName, name));
-	}
+        String oldName = name;
+        name = newName;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__NAME, oldName, name));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public boolean isDeprecated() {
-		return deprecated;
-	}
+        return deprecated;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setDeprecated(boolean newDeprecated) {
-		boolean oldDeprecated = deprecated;
-		deprecated = newDeprecated;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__DEPRECATED, oldDeprecated, deprecated));
-	}
+        boolean oldDeprecated = deprecated;
+        deprecated = newDeprecated;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__DEPRECATED, oldDeprecated, deprecated));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public String getDescription() {
-		return description;
-	}
+        return description;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setDescription(String newDescription) {
-		String oldDescription = description;
-		description = newDescription;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__DESCRIPTION, oldDescription, description));
-	}
+        String oldDescription = description;
+        description = newDescription;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__DESCRIPTION, oldDescription, description));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public boolean isVisible() {
-		return visible;
-	}
+        return visible;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setVisible(boolean newVisible) {
-		boolean oldVisible = visible;
-		visible = newVisible;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__VISIBLE, oldVisible, visible));
-	}
+        boolean oldVisible = visible;
+        visible = newVisible;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__VISIBLE, oldVisible, visible));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public EMap<String, Object> getAttributes() {
-		if (attributes == null) {
-			attributes = new EcoreEMap<String,Object>(TypeInfoModelPackage.Literals.ATTRIBUTE_ENTRY, AttributeEntryImpl.class, this, TypeInfoModelPackage.ELEMENT__ATTRIBUTES);
-		}
-		return attributes;
-	}
+        if (attributes == null) {
+            attributes = new EcoreEMap<String,Object>(TypeInfoModelPackage.Literals.ATTRIBUTE_ENTRY, AttributeEntryImpl.class, this, TypeInfoModelPackage.ELEMENT__ATTRIBUTES);
+        }
+        return attributes;
+    }
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -272,117 +272,117 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
-				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
+                return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case TypeInfoModelPackage.ELEMENT__NAME:
-				return getName();
-			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
-				return isDeprecated();
-			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
-				return getDescription();
-			case TypeInfoModelPackage.ELEMENT__VISIBLE:
-				return isVisible();
-			case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
-				if (coreType) return getAttributes();
-				else return getAttributes().map();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.ELEMENT__NAME:
+                return getName();
+            case TypeInfoModelPackage.ELEMENT__DEPRECATED:
+                return isDeprecated();
+            case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
+                return getDescription();
+            case TypeInfoModelPackage.ELEMENT__VISIBLE:
+                return isVisible();
+            case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
+                if (coreType) return getAttributes();
+                else return getAttributes().map();
+        }
+        return super.eGet(featureID, resolve, coreType);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case TypeInfoModelPackage.ELEMENT__NAME:
-				setName((String)newValue);
-				return;
-			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
-				setDeprecated((Boolean)newValue);
-				return;
-			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
-				setDescription((String)newValue);
-				return;
-			case TypeInfoModelPackage.ELEMENT__VISIBLE:
-				setVisible((Boolean)newValue);
-				return;
-			case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
-				((EStructuralFeature.Setting)getAttributes()).set(newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.ELEMENT__NAME:
+                setName((String)newValue);
+                return;
+            case TypeInfoModelPackage.ELEMENT__DEPRECATED:
+                setDeprecated((Boolean)newValue);
+                return;
+            case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
+                setDescription((String)newValue);
+                return;
+            case TypeInfoModelPackage.ELEMENT__VISIBLE:
+                setVisible((Boolean)newValue);
+                return;
+            case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
+                ((EStructuralFeature.Setting)getAttributes()).set(newValue);
+                return;
+        }
+        super.eSet(featureID, newValue);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case TypeInfoModelPackage.ELEMENT__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
-				setDeprecated(DEPRECATED_EDEFAULT);
-				return;
-			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
-				setDescription(DESCRIPTION_EDEFAULT);
-				return;
-			case TypeInfoModelPackage.ELEMENT__VISIBLE:
-				setVisible(VISIBLE_EDEFAULT);
-				return;
-			case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
-				getAttributes().clear();
-				return;
-		}
-		super.eUnset(featureID);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.ELEMENT__NAME:
+                setName(NAME_EDEFAULT);
+                return;
+            case TypeInfoModelPackage.ELEMENT__DEPRECATED:
+                setDeprecated(DEPRECATED_EDEFAULT);
+                return;
+            case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
+                setDescription(DESCRIPTION_EDEFAULT);
+                return;
+            case TypeInfoModelPackage.ELEMENT__VISIBLE:
+                setVisible(VISIBLE_EDEFAULT);
+                return;
+            case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
+                getAttributes().clear();
+                return;
+        }
+        super.eUnset(featureID);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case TypeInfoModelPackage.ELEMENT__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case TypeInfoModelPackage.ELEMENT__DEPRECATED:
-				return deprecated != DEPRECATED_EDEFAULT;
-			case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
-				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
-			case TypeInfoModelPackage.ELEMENT__VISIBLE:
-				return visible != VISIBLE_EDEFAULT;
-			case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
-				return attributes != null && !attributes.isEmpty();
-		}
-		return super.eIsSet(featureID);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.ELEMENT__NAME:
+                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+            case TypeInfoModelPackage.ELEMENT__DEPRECATED:
+                return deprecated != DEPRECATED_EDEFAULT;
+            case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
+                return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+            case TypeInfoModelPackage.ELEMENT__VISIBLE:
+                return visible != VISIBLE_EDEFAULT;
+            case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
+                return attributes != null && !attributes.isEmpty();
+        }
+        return super.eIsSet(featureID);
+    }
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -294,7 +294,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		protected void reportTypeMembers(Type type, Predicate<Member> predicate) {
-			if (processedTypes.add(type)) {
+			for (;;) {
+				if (!processedTypes.add(type))
+					break;
 				for (Member member : type.getMembers()) {
 					if (member.isVisible()
 							&& CharOperation.prefixEquals(prefix,
@@ -304,6 +306,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						reportMember(member, member.getName());
 					}
 				}
+				type = type.getSuperType();
+				if (type == null)
+					break;
 			}
 		}
 

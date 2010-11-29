@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ParameterImpl.java,v 1.3 2010/03/11 12:28:43 apanchenk Exp $
+ * $Id: ParameterImpl.java,v 1.4 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -44,249 +44,249 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  */
 public class ParameterImpl extends EObjectImpl implements Parameter {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
 	protected static final String NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' reference.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getType() <em>Type</em>}' reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getType()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getType()
+     * @generated
+     * @ordered
+     */
 	protected Type type;
 
 	/**
-	 * The default value of the '{@link #getKind() <em>Kind</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The default value of the '{@link #getKind() <em>Kind</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getKind()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getKind()
+     * @generated
+     * @ordered
+     */
 	protected static final ParameterKind KIND_EDEFAULT = ParameterKind.NORMAL;
 
 	/**
-	 * The cached value of the '{@link #getKind() <em>Kind</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getKind() <em>Kind</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getKind()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getKind()
+     * @generated
+     * @ordered
+     */
 	protected ParameterKind kind = KIND_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	protected ParameterImpl() {
-		super();
-	}
+        super();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	protected EClass eStaticClass() {
-		return TypeInfoModelPackage.Literals.PARAMETER;
-	}
+        return TypeInfoModelPackage.Literals.PARAMETER;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public String getName() {
-		return name;
-	}
+        return name;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__NAME, oldName, name));
-	}
+        String oldName = name;
+        name = newName;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__NAME, oldName, name));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Type getType() {
-		if (type != null && ((EObject)type).eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (Type)eResolveProxy(oldType);
-			if (type != oldType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.PARAMETER__TYPE, oldType, type));
-			}
-		}
-		return type;
-	}
+        if (type != null && ((EObject)type).eIsProxy()) {
+            InternalEObject oldType = (InternalEObject)type;
+            type = (Type)eResolveProxy(oldType);
+            if (type != oldType) {
+                if (eNotificationRequired())
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.PARAMETER__TYPE, oldType, type));
+            }
+        }
+        return type;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Type basicGetType() {
-		return type;
-	}
+        return type;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setType(Type newType) {
-		Type oldType = type;
-		type = newType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__TYPE, oldType, type));
-	}
+        Type oldType = type;
+        type = newType;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__TYPE, oldType, type));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public ParameterKind getKind() {
-		return kind;
-	}
+        return kind;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setKind(ParameterKind newKind) {
-		ParameterKind oldKind = kind;
-		kind = newKind == null ? KIND_EDEFAULT : newKind;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__KIND, oldKind, kind));
-	}
+        ParameterKind oldKind = kind;
+        kind = newKind == null ? KIND_EDEFAULT : newKind;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__KIND, oldKind, kind));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case TypeInfoModelPackage.PARAMETER__NAME:
-				return getName();
-			case TypeInfoModelPackage.PARAMETER__TYPE:
-				if (resolve) return getType();
-				return basicGetType();
-			case TypeInfoModelPackage.PARAMETER__KIND:
-				return getKind();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.PARAMETER__NAME:
+                return getName();
+            case TypeInfoModelPackage.PARAMETER__TYPE:
+                if (resolve) return getType();
+                return basicGetType();
+            case TypeInfoModelPackage.PARAMETER__KIND:
+                return getKind();
+        }
+        return super.eGet(featureID, resolve, coreType);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case TypeInfoModelPackage.PARAMETER__NAME:
-				setName((String)newValue);
-				return;
-			case TypeInfoModelPackage.PARAMETER__TYPE:
-				setType((Type)newValue);
-				return;
-			case TypeInfoModelPackage.PARAMETER__KIND:
-				setKind((ParameterKind)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.PARAMETER__NAME:
+                setName((String)newValue);
+                return;
+            case TypeInfoModelPackage.PARAMETER__TYPE:
+                setType((Type)newValue);
+                return;
+            case TypeInfoModelPackage.PARAMETER__KIND:
+                setKind((ParameterKind)newValue);
+                return;
+        }
+        super.eSet(featureID, newValue);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case TypeInfoModelPackage.PARAMETER__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case TypeInfoModelPackage.PARAMETER__TYPE:
-				setType((Type)null);
-				return;
-			case TypeInfoModelPackage.PARAMETER__KIND:
-				setKind(KIND_EDEFAULT);
-				return;
-		}
-		super.eUnset(featureID);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.PARAMETER__NAME:
+                setName(NAME_EDEFAULT);
+                return;
+            case TypeInfoModelPackage.PARAMETER__TYPE:
+                setType((Type)null);
+                return;
+            case TypeInfoModelPackage.PARAMETER__KIND:
+                setKind(KIND_EDEFAULT);
+                return;
+        }
+        super.eUnset(featureID);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case TypeInfoModelPackage.PARAMETER__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case TypeInfoModelPackage.PARAMETER__TYPE:
-				return type != null;
-			case TypeInfoModelPackage.PARAMETER__KIND:
-				return kind != KIND_EDEFAULT;
-		}
-		return super.eIsSet(featureID);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.PARAMETER__NAME:
+                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+            case TypeInfoModelPackage.PARAMETER__TYPE:
+                return type != null;
+            case TypeInfoModelPackage.PARAMETER__KIND:
+                return kind != KIND_EDEFAULT;
+        }
+        return super.eIsSet(featureID);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+        if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: "); //$NON-NLS-1$
-		result.append(name);
-		result.append(", kind: "); //$NON-NLS-1$
-		result.append(kind);
-		result.append(')');
-		return result.toString();
-	}
+        StringBuffer result = new StringBuffer(super.toString());
+        result.append(" (name: "); //$NON-NLS-1$
+        result.append(name);
+        result.append(", kind: "); //$NON-NLS-1$
+        result.append(kind);
+        result.append(')');
+        return result.toString();
+    }
 
 } //ParameterImpl

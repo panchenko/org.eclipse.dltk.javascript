@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Method.java,v 1.1 2010/03/03 13:14:31 apanchenk Exp $
+ * $Id: Method.java,v 1.2 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -33,19 +33,19 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface Method extends Member {
 	/**
-	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Parameter}.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Parameters</b></em>' containment reference list.
+     * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Parameter}.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Parameters</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Parameters</em>' containment reference list.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMethod_Parameters()
-	 * @model containment="true"
-	 * @generated
-	 */
+     * @return the value of the '<em>Parameters</em>' containment reference list.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMethod_Parameters()
+     * @model containment="true"
+     * @generated
+     */
 	EList<Parameter> getParameters();
 
 } // Method

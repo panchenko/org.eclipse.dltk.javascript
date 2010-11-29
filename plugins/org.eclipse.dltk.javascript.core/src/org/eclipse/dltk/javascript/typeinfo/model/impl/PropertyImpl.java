@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: PropertyImpl.java,v 1.2 2010/03/09 12:20:31 apanchenk Exp $
+ * $Id: PropertyImpl.java,v 1.3 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -35,136 +35,136 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class PropertyImpl extends MemberImpl implements Property {
 	/**
-	 * The default value of the '{@link #isReadOnly() <em>Read Only</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The default value of the '{@link #isReadOnly() <em>Read Only</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isReadOnly()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #isReadOnly()
+     * @generated
+     * @ordered
+     */
 	protected static final boolean READ_ONLY_EDEFAULT = false;
 	/**
-	 * The cached value of the '{@link #isReadOnly() <em>Read Only</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #isReadOnly() <em>Read Only</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isReadOnly()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #isReadOnly()
+     * @generated
+     * @ordered
+     */
 	protected boolean readOnly = READ_ONLY_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	protected PropertyImpl() {
-		super();
-	}
+        super();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	protected EClass eStaticClass() {
-		return TypeInfoModelPackage.Literals.PROPERTY;
-	}
+        return TypeInfoModelPackage.Literals.PROPERTY;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public boolean isReadOnly() {
-		return readOnly;
-	}
+        return readOnly;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setReadOnly(boolean newReadOnly) {
-		boolean oldReadOnly = readOnly;
-		readOnly = newReadOnly;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PROPERTY__READ_ONLY, oldReadOnly, readOnly));
-	}
+        boolean oldReadOnly = readOnly;
+        readOnly = newReadOnly;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PROPERTY__READ_ONLY, oldReadOnly, readOnly));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case TypeInfoModelPackage.PROPERTY__READ_ONLY:
-				return isReadOnly();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.PROPERTY__READ_ONLY:
+                return isReadOnly();
+        }
+        return super.eGet(featureID, resolve, coreType);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case TypeInfoModelPackage.PROPERTY__READ_ONLY:
-				setReadOnly((Boolean)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.PROPERTY__READ_ONLY:
+                setReadOnly((Boolean)newValue);
+                return;
+        }
+        super.eSet(featureID, newValue);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case TypeInfoModelPackage.PROPERTY__READ_ONLY:
-				setReadOnly(READ_ONLY_EDEFAULT);
-				return;
-		}
-		super.eUnset(featureID);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.PROPERTY__READ_ONLY:
+                setReadOnly(READ_ONLY_EDEFAULT);
+                return;
+        }
+        super.eUnset(featureID);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case TypeInfoModelPackage.PROPERTY__READ_ONLY:
-				return readOnly != READ_ONLY_EDEFAULT;
-		}
-		return super.eIsSet(featureID);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.PROPERTY__READ_ONLY:
+                return readOnly != READ_ONLY_EDEFAULT;
+        }
+        return super.eIsSet(featureID);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+        if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (readOnly: "); //$NON-NLS-1$
-		result.append(readOnly);
-		result.append(')');
-		return result.toString();
-	}
+        StringBuffer result = new StringBuffer(super.toString());
+        result.append(" (readOnly: "); //$NON-NLS-1$
+        result.append(readOnly);
+        result.append(')');
+        return result.toString();
+    }
 
 } //PropertyImpl

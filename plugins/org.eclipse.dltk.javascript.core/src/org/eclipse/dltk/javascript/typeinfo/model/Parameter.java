@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Parameter.java,v 1.3 2010/03/11 12:28:44 apanchenk Exp $
+ * $Id: Parameter.java,v 1.4 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -34,84 +34,84 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  */
 public interface Parameter {
 	/**
-	 * Returns the value of the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Name</em>' attribute.
-	 * @see #setName(String)
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getParameter_Name()
-	 * @model
-	 * @generated
-	 */
+     * @return the value of the '<em>Name</em>' attribute.
+     * @see #setName(String)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getParameter_Name()
+     * @model
+     * @generated
+     */
 	String getName();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getName <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getName <em>Name</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
-	 * @see #getName()
-	 * @generated
-	 */
+     * @param value the new value of the '<em>Name</em>' attribute.
+     * @see #getName()
+     * @generated
+     */
 	void setName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Type</b></em>' reference.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Type</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Type</em>' reference.
-	 * @see #setType(Type)
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getParameter_Type()
-	 * @model
-	 * @generated
-	 */
+     * @return the value of the '<em>Type</em>' reference.
+     * @see #setType(Type)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getParameter_Type()
+     * @model
+     * @generated
+     */
 	Type getType();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getType <em>Type</em>}' reference.
-	 * <!-- begin-user-doc -->
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getType <em>Type</em>}' reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Type</em>' reference.
-	 * @see #getType()
-	 * @generated
-	 */
+     * @param value the new value of the '<em>Type</em>' reference.
+     * @see #getType()
+     * @generated
+     */
 	void setType(Type value);
 
 	/**
-	 * Returns the value of the '<em><b>Kind</b></em>' attribute.
-	 * The literals are from the enumeration {@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind}.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Kind</b></em>' attribute.
+     * The literals are from the enumeration {@link org.eclipse.dltk.javascript.typeinfo.model.ParameterKind}.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Kind</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Kind</em>' attribute.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
-	 * @see #setKind(ParameterKind)
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getParameter_Kind()
-	 * @model
-	 * @generated
-	 */
+     * @return the value of the '<em>Kind</em>' attribute.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+     * @see #setKind(ParameterKind)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getParameter_Kind()
+     * @model
+     * @generated
+     */
 	ParameterKind getKind();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind <em>Kind</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter#getKind <em>Kind</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Kind</em>' attribute.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
-	 * @see #getKind()
-	 * @generated
-	 */
+     * @param value the new value of the '<em>Kind</em>' attribute.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterKind
+     * @see #getKind()
+     * @generated
+     */
 	void setKind(ParameterKind value);
 
 } // Parameter

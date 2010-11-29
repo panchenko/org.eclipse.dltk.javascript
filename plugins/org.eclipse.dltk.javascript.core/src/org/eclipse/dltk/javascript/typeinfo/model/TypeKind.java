@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeKind.java,v 1.2 2010/03/11 07:36:15 apanchenk Exp $
+ * $Id: TypeKind.java,v 1.3 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -30,244 +30,244 @@ import org.eclipse.emf.common.util.Enumerator;
  */
 public enum TypeKind implements Enumerator {
 	/**
-	 * The '<em><b>UNKNOWN</b></em>' literal object.
-	 * <!-- begin-user-doc -->
+     * The '<em><b>UNKNOWN</b></em>' literal object.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #UNKNOWN_VALUE
-	 * @generated
-	 * @ordered
-	 */
+     * @see #UNKNOWN_VALUE
+     * @generated
+     * @ordered
+     */
 	UNKNOWN(-1, "UNKNOWN", "UNKNOWN"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
-	 * The '<em><b>PREDEFINED</b></em>' literal object.
-	 * <!-- begin-user-doc -->
+     * The '<em><b>PREDEFINED</b></em>' literal object.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #PREDEFINED_VALUE
-	 * @generated
-	 * @ordered
-	 */
+     * @see #PREDEFINED_VALUE
+     * @generated
+     * @ordered
+     */
 	PREDEFINED(0, "PREDEFINED", "PREDEFINED"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
-	 * The '<em><b>JAVASCRIPT</b></em>' literal object.
-	 * <!-- begin-user-doc -->
+     * The '<em><b>JAVASCRIPT</b></em>' literal object.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #JAVASCRIPT_VALUE
-	 * @generated
-	 * @ordered
-	 */
+     * @see #JAVASCRIPT_VALUE
+     * @generated
+     * @ordered
+     */
 	JAVASCRIPT(1, "JAVASCRIPT", "JAVASCRIPT"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
-	 * The '<em><b>JAVA</b></em>' literal object.
-	 * <!-- begin-user-doc -->
+     * The '<em><b>JAVA</b></em>' literal object.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #JAVA_VALUE
-	 * @generated
-	 * @ordered
-	 */
+     * @see #JAVA_VALUE
+     * @generated
+     * @ordered
+     */
 	JAVA(2, "JAVA", "JAVA"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
-	 * The '<em><b>UNKNOWN</b></em>' literal value.
-	 * <!-- begin-user-doc -->
+     * The '<em><b>UNKNOWN</b></em>' literal value.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>UNKNOWN</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #UNKNOWN
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
+     * @see #UNKNOWN
+     * @model
+     * @generated
+     * @ordered
+     */
 	public static final int UNKNOWN_VALUE = -1;
 
 	/**
-	 * The '<em><b>PREDEFINED</b></em>' literal value.
-	 * <!-- begin-user-doc -->
+     * The '<em><b>PREDEFINED</b></em>' literal value.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>PREDEFINED</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #PREDEFINED
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
+     * @see #PREDEFINED
+     * @model
+     * @generated
+     * @ordered
+     */
 	public static final int PREDEFINED_VALUE = 0;
 
 	/**
-	 * The '<em><b>JAVASCRIPT</b></em>' literal value.
-	 * <!-- begin-user-doc -->
+     * The '<em><b>JAVASCRIPT</b></em>' literal value.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>JAVASCRIPT</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #JAVASCRIPT
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
+     * @see #JAVASCRIPT
+     * @model
+     * @generated
+     * @ordered
+     */
 	public static final int JAVASCRIPT_VALUE = 1;
 
 	/**
-	 * The '<em><b>JAVA</b></em>' literal value.
-	 * <!-- begin-user-doc -->
+     * The '<em><b>JAVA</b></em>' literal value.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of '<em><b>JAVA</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #JAVA
-	 * @model
-	 * @generated
-	 * @ordered
-	 */
+     * @see #JAVA
+     * @model
+     * @generated
+     * @ordered
+     */
 	public static final int JAVA_VALUE = 2;
 
 	/**
-	 * An array of all the '<em><b>Type Kind</b></em>' enumerators.
-	 * <!-- begin-user-doc -->
+     * An array of all the '<em><b>Type Kind</b></em>' enumerators.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	private static final TypeKind[] VALUES_ARRAY =
 		new TypeKind[] {
-			UNKNOWN,
-			PREDEFINED,
-			JAVASCRIPT,
-			JAVA,
-		};
+            UNKNOWN,
+            PREDEFINED,
+            JAVASCRIPT,
+            JAVA,
+        };
 
 	/**
-	 * A public read-only list of all the '<em><b>Type Kind</b></em>' enumerators.
-	 * <!-- begin-user-doc -->
+     * A public read-only list of all the '<em><b>Type Kind</b></em>' enumerators.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public static final List<TypeKind> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
-	 * Returns the '<em><b>Type Kind</b></em>' literal with the specified literal value.
-	 * <!-- begin-user-doc -->
+     * Returns the '<em><b>Type Kind</b></em>' literal with the specified literal value.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public static TypeKind get(String literal) {
-		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			TypeKind result = VALUES_ARRAY[i];
-			if (result.toString().equals(literal)) {
-				return result;
-			}
-		}
-		return null;
-	}
+        for (int i = 0; i < VALUES_ARRAY.length; ++i) {
+            TypeKind result = VALUES_ARRAY[i];
+            if (result.toString().equals(literal)) {
+                return result;
+            }
+        }
+        return null;
+    }
 
 	/**
-	 * Returns the '<em><b>Type Kind</b></em>' literal with the specified name.
-	 * <!-- begin-user-doc -->
+     * Returns the '<em><b>Type Kind</b></em>' literal with the specified name.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public static TypeKind getByName(String name) {
-		for (int i = 0; i < VALUES_ARRAY.length; ++i) {
-			TypeKind result = VALUES_ARRAY[i];
-			if (result.getName().equals(name)) {
-				return result;
-			}
-		}
-		return null;
-	}
+        for (int i = 0; i < VALUES_ARRAY.length; ++i) {
+            TypeKind result = VALUES_ARRAY[i];
+            if (result.getName().equals(name)) {
+                return result;
+            }
+        }
+        return null;
+    }
 
 	/**
-	 * Returns the '<em><b>Type Kind</b></em>' literal with the specified integer value.
-	 * <!-- begin-user-doc -->
+     * Returns the '<em><b>Type Kind</b></em>' literal with the specified integer value.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public static TypeKind get(int value) {
-		switch (value) {
-			case UNKNOWN_VALUE: return UNKNOWN;
-			case PREDEFINED_VALUE: return PREDEFINED;
-			case JAVASCRIPT_VALUE: return JAVASCRIPT;
-			case JAVA_VALUE: return JAVA;
-		}
-		return null;
-	}
+        switch (value) {
+            case UNKNOWN_VALUE: return UNKNOWN;
+            case PREDEFINED_VALUE: return PREDEFINED;
+            case JAVASCRIPT_VALUE: return JAVASCRIPT;
+            case JAVA_VALUE: return JAVA;
+        }
+        return null;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	private final int value;
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	private final String name;
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	private final String literal;
 
 	/**
-	 * Only this class can construct instances.
-	 * <!-- begin-user-doc -->
+     * Only this class can construct instances.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	private TypeKind(int value, String name, String literal) {
-		this.value = value;
-		this.name = name;
-		this.literal = literal;
-	}
+        this.value = value;
+        this.name = name;
+        this.literal = literal;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public int getValue() {
-	  return value;
-	}
+      return value;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public String getName() {
-	  return name;
-	}
+      return name;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public String getLiteral() {
-	  return literal;
-	}
+      return literal;
+    }
 
 	/**
-	 * Returns the literal value of the enumerator, which is its string representation.
-	 * <!-- begin-user-doc -->
+     * Returns the literal value of the enumerator, which is its string representation.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public String toString() {
-		return literal;
-	}
+        return literal;
+    }
 	
 } //TypeKind

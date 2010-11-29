@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.11 2010/11/25 16:38:35 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.12 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -205,13 +205,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int TYPE__KIND = ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+     * The feature id for the '<em><b>Super Type</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE__SUPER_TYPE = ELEMENT_FEATURE_COUNT + 2;
+
+    /**
      * The number of structural features of the '<em>Type</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 2;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 3;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
@@ -745,6 +754,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	EAttribute getType_Kind();
 
 	/**
+     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType <em>Super Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Super Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType()
+     * @see #getType()
+     * @generated
+     */
+    EReference getType_SuperType();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeAlias <em>Type Alias</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1057,6 +1077,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		EAttribute TYPE__KIND = eINSTANCE.getType_Kind();
 
 		/**
+         * The meta object literal for the '<em><b>Super Type</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference TYPE__SUPER_TYPE = eINSTANCE.getType_SuperType();
+
+        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->

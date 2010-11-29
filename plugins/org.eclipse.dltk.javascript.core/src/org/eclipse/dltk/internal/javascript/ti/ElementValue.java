@@ -52,10 +52,18 @@ public abstract class ElementValue implements IValue {
 	public static List<Member> findMembers(Type type, String name,
 			Predicate<Member> predicate) {
 		List<Member> selection = new ArrayList<Member>(4);
-		for (Member member : type.getMembers()) {
-			if (name.equals(member.getName()) && predicate.evaluate(member)) {
-				selection.add(member);
+		final Set<Type> processedTypes = new HashSet<Type>(4);
+		for (;;) {
+			if (!processedTypes.add(type))
+				break;
+			for (Member member : type.getMembers()) {
+				if (name.equals(member.getName()) && predicate.evaluate(member)) {
+					selection.add(member);
+				}
 			}
+			type = type.getSuperType();
+			if (type == null)
+				break;
 		}
 		return selection;
 	}
@@ -194,8 +202,7 @@ public abstract class ElementValue implements IValue {
 				if (method.getType() != null) {
 					if (functionOperator == null) {
 						functionOperator = new TypeValue(
-								Collections
-							.singleton(method.getType()));
+								Collections.singleton(method.getType()));
 					}
 					return functionOperator;
 				}
@@ -326,8 +333,8 @@ public abstract class ElementValue implements IValue {
 			for (Member member : members) {
 				if (member instanceof Property) {
 					final Property property = (Property) member;
-					final ElementValue child = ElementValue.findMember(property
-							.getType(), name);
+					final ElementValue child = ElementValue.findMember(
+							property.getType(), name);
 					if (child != null) {
 						return child;
 					}

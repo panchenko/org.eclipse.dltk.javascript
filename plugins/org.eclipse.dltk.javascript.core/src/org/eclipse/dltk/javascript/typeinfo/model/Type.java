@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.4 2010/03/11 05:33:55 apanchenk Exp $
+ * $Id: Type.java,v 1.5 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType <em>Super Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -34,50 +35,76 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface Type extends Element {
 	/**
-	 * Returns the value of the '<em><b>Members</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Member}.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}'.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Members</b></em>' containment reference list.
+     * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Member}.
+     * It is bidirectional and its opposite is '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}'.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Members</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Members</em>' containment reference list.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Members()
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType
-	 * @model opposite="declaringType" containment="true"
-	 * @generated
-	 */
+     * @return the value of the '<em>Members</em>' containment reference list.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Members()
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType
+     * @model opposite="declaringType" containment="true"
+     * @generated
+     */
 	EList<Member> getMembers();
 
 	/**
-	 * Returns the value of the '<em><b>Kind</b></em>' attribute.
-	 * The literals are from the enumeration {@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind}.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Kind</b></em>' attribute.
+     * The literals are from the enumeration {@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind}.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Kind</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Kind</em>' attribute.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
-	 * @see #setKind(TypeKind)
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Kind()
-	 * @model
-	 * @generated
-	 */
+     * @return the value of the '<em>Kind</em>' attribute.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+     * @see #setKind(TypeKind)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Kind()
+     * @model
+     * @generated
+     */
 	TypeKind getKind();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Kind</em>' attribute.
-	 * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
-	 * @see #getKind()
-	 * @generated
-	 */
+     * @param value the new value of the '<em>Kind</em>' attribute.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeKind
+     * @see #getKind()
+     * @generated
+     */
 	void setKind(TypeKind value);
+
+    /**
+     * Returns the value of the '<em><b>Super Type</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Super Type</em>' reference isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Super Type</em>' reference.
+     * @see #setSuperType(Type)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_SuperType()
+     * @model
+     * @generated
+     */
+    Type getSuperType();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType <em>Super Type</em>}' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Super Type</em>' reference.
+     * @see #getSuperType()
+     * @generated
+     */
+    void setSuperType(Type value);
 
 } // Type

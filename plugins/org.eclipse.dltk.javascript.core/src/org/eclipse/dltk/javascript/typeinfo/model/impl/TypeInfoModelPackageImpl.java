@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.13 2010/11/25 16:38:34 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.14 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -257,6 +257,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    public EReference getType_SuperType() {
+        return (EReference)typeEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getTypeAlias() {
         return typeAliasEClass;
     }
@@ -470,6 +479,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         typeEClass = createEClass(TYPE);
         createEReference(typeEClass, TYPE__MEMBERS);
         createEAttribute(typeEClass, TYPE__KIND);
+        createEReference(typeEClass, TYPE__SUPER_TYPE);
 
         typeAliasEClass = createEClass(TYPE_ALIAS);
         createEAttribute(typeAliasEClass, TYPE_ALIAS__SOURCE);
@@ -551,6 +561,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEClass(typeEClass, Type.class, "Type", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getType_Members(), this.getMember(), this.getMember_DeclaringType(), "members", null, 0, -1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEAttribute(getType_Kind(), this.getTypeKind(), "kind", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEReference(getType_SuperType(), this.getType(), null, "superType", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(typeAliasEClass, TypeAlias.class, "TypeAlias", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEAttribute(getTypeAlias_Source(), ecorePackage.getEString(), "source", null, 0, 1, TypeAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.6 2010/03/24 03:08:14 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.7 2010/11/29 16:28:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -23,6 +23,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
@@ -37,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getMembers <em>Members</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getKind <em>Kind</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getSuperType <em>Super Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -44,185 +46,244 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class TypeImpl extends ElementImpl implements Type {
 	/**
-	 * The cached value of the '{@link #getMembers() <em>Members</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getMembers() <em>Members</em>}' containment reference list.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMembers()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getMembers()
+     * @generated
+     * @ordered
+     */
 	protected EList<Member> members;
 
 	/**
-	 * The default value of the '{@link #getKind() <em>Kind</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The default value of the '{@link #getKind() <em>Kind</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getKind()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getKind()
+     * @generated
+     * @ordered
+     */
 	protected static final TypeKind KIND_EDEFAULT = TypeKind.UNKNOWN;
 
 	/**
-	 * The cached value of the '{@link #getKind() <em>Kind</em>}' attribute.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getKind() <em>Kind</em>}' attribute.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getKind()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getKind()
+     * @generated
+     * @ordered
+     */
 	protected TypeKind kind = KIND_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getSuperType() <em>Super Type</em>}' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getSuperType()
+     * @generated
+     * @ordered
+     */
+    protected Type superType;
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	protected TypeImpl() {
-		super();
-	}
+        super();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	protected EClass eStaticClass() {
-		return TypeInfoModelPackage.Literals.TYPE;
-	}
+        return TypeInfoModelPackage.Literals.TYPE;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public EList<Member> getMembers() {
-		if (members == null) {
-			members = new EObjectContainmentWithInverseEList<Member>(Member.class, this, TypeInfoModelPackage.TYPE__MEMBERS, TypeInfoModelPackage.MEMBER__DECLARING_TYPE);
-		}
-		return members;
-	}
+        if (members == null) {
+            members = new EObjectContainmentWithInverseEList<Member>(Member.class, this, TypeInfoModelPackage.TYPE__MEMBERS, TypeInfoModelPackage.MEMBER__DECLARING_TYPE);
+        }
+        return members;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public TypeKind getKind() {
-		return kind;
-	}
+        return kind;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setKind(TypeKind newKind) {
-		TypeKind oldKind = kind;
-		kind = newKind == null ? KIND_EDEFAULT : newKind;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__KIND, oldKind, kind));
-	}
+        TypeKind oldKind = kind;
+        kind = newKind == null ? KIND_EDEFAULT : newKind;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__KIND, oldKind, kind));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public Type getSuperType() {
+        if (superType != null && ((EObject)superType).eIsProxy()) {
+            InternalEObject oldSuperType = (InternalEObject)superType;
+            superType = (Type)eResolveProxy(oldSuperType);
+            if (superType != oldSuperType) {
+                if (eNotificationRequired())
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.TYPE__SUPER_TYPE, oldSuperType, superType));
+            }
+        }
+        return superType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public Type basicGetSuperType() {
+        return superType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setSuperType(Type newSuperType) {
+        Type oldSuperType = superType;
+        superType = newSuperType;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__SUPER_TYPE, oldSuperType, superType));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case TypeInfoModelPackage.TYPE__MEMBERS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getMembers()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.TYPE__MEMBERS:
+                return ((InternalEList<InternalEObject>)(InternalEList<?>)getMembers()).basicAdd(otherEnd, msgs);
+        }
+        return super.eInverseAdd(otherEnd, featureID, msgs);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case TypeInfoModelPackage.TYPE__MEMBERS:
-				return ((InternalEList<?>)getMembers()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.TYPE__MEMBERS:
+                return ((InternalEList<?>)getMembers()).basicRemove(otherEnd, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case TypeInfoModelPackage.TYPE__MEMBERS:
-				return getMembers();
-			case TypeInfoModelPackage.TYPE__KIND:
-				return getKind();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.TYPE__MEMBERS:
+                return getMembers();
+            case TypeInfoModelPackage.TYPE__KIND:
+                return getKind();
+            case TypeInfoModelPackage.TYPE__SUPER_TYPE:
+                if (resolve) return getSuperType();
+                return basicGetSuperType();
+        }
+        return super.eGet(featureID, resolve, coreType);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case TypeInfoModelPackage.TYPE__MEMBERS:
-				getMembers().clear();
-				getMembers().addAll((Collection<? extends Member>)newValue);
-				return;
-			case TypeInfoModelPackage.TYPE__KIND:
-				setKind((TypeKind)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.TYPE__MEMBERS:
+                getMembers().clear();
+                getMembers().addAll((Collection<? extends Member>)newValue);
+                return;
+            case TypeInfoModelPackage.TYPE__KIND:
+                setKind((TypeKind)newValue);
+                return;
+            case TypeInfoModelPackage.TYPE__SUPER_TYPE:
+                setSuperType((Type)newValue);
+                return;
+        }
+        super.eSet(featureID, newValue);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case TypeInfoModelPackage.TYPE__MEMBERS:
-				getMembers().clear();
-				return;
-			case TypeInfoModelPackage.TYPE__KIND:
-				setKind(KIND_EDEFAULT);
-				return;
-		}
-		super.eUnset(featureID);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.TYPE__MEMBERS:
+                getMembers().clear();
+                return;
+            case TypeInfoModelPackage.TYPE__KIND:
+                setKind(KIND_EDEFAULT);
+                return;
+            case TypeInfoModelPackage.TYPE__SUPER_TYPE:
+                setSuperType((Type)null);
+                return;
+        }
+        super.eUnset(featureID);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case TypeInfoModelPackage.TYPE__MEMBERS:
-				return members != null && !members.isEmpty();
-			case TypeInfoModelPackage.TYPE__KIND:
-				return kind != KIND_EDEFAULT;
-		}
-		return super.eIsSet(featureID);
-	}
+        switch (featureID) {
+            case TypeInfoModelPackage.TYPE__MEMBERS:
+                return members != null && !members.isEmpty();
+            case TypeInfoModelPackage.TYPE__KIND:
+                return kind != KIND_EDEFAULT;
+            case TypeInfoModelPackage.TYPE__SUPER_TYPE:
+                return superType != null;
+        }
+        return super.eIsSet(featureID);
+    }
 
 	/**
 	 * <!-- begin-user-doc -->

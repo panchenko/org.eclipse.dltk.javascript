@@ -265,7 +265,7 @@
       <parameters name="dateString" type="String"/>
     </members>
   </ref:Type>
-  <ref:Type name="Number" kind="PREDEFINED">
+  <ref:Type name="Number" kind="PREDEFINED" superType="Object">
   	<members xsi:type="ref:Property" name="MAX_VALUE" type="Number" static="true" description="The largest representable number."/>
   	<members xsi:type="ref:Property" name="MIN_VALUE" type="Number" static="true" description="The smallest representable number."/>
   	<members xsi:type="ref:Property" name="NaN" type="Number" static="true" description="Special 'not a number' value."/>
@@ -278,11 +278,9 @@
     <members xsi:type="ref:Method" name="toFixed" type="String" description="Formats a number to the specified number of decimals.">
       <parameters name="numberOfDecimals"/>
     </members>
-    <members xsi:type="ref:Method" name="toLocaleString" type="String"/>
     <members xsi:type="ref:Method" name="toPrecision" type="String" description="Converts a number into an exponential notation if it has more digits than specified.">
       <parameters name="numberOfDigits"/>
     </members>
-    <members xsi:type="ref:Method" name="toString" type="String" description="Returns a String value for this Number."/>
     <members xsi:type="ref:Method" name="valueOf" type="String" description="Returns the primitive value of a Number object."/>
   </ref:Type>
   <ref:TypeAlias source="number" target="Number"/>
