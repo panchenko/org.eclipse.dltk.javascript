@@ -84,14 +84,14 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 	@Override
 	public Object visitIdentifier(Identifier node) {
 		if (indexer) {
+			// if this is a function declaration, skip this, will be
+			// reported by visit functionStatement
+			if (isFunctionDeclaration(node))
+				return super.visitIdentifier(node);
 			Integer argCount = resolvedIdentifiers.get(node);
 			if (argCount != null) {
 				// ignore locals.
 				if (argCount != -2) {
-					// if this is a function declaration, skip this, will be
-					// reported by visit functionStatement
-					if (isFunctionDeclaration(node))
-						return super.visitIdentifier(node);
 					// report fields.
 					if (argCount == -1) {
 						fRequestor.acceptFieldReference(node.getName(),
@@ -422,13 +422,9 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 				info.name = nameStr;
 				info.nameSourceStart = name.sourceStart();
 				info.nameSourceEnd = name.sourceEnd() - 1;
-				boolean added = fRequestor.enterFieldCheckDuplicates(info);
-				try {
-					return super.visitPropertyExpression(node);
-				} finally {
-					if (added)
-						fRequestor.exitField(node.sourceEnd());
-				}
+				if (fRequestor.enterFieldCheckDuplicates(info))
+					fRequestor.exitField(node.sourceEnd());
+				return null;
 			}
 		}
 		return super.visitPropertyExpression(node);

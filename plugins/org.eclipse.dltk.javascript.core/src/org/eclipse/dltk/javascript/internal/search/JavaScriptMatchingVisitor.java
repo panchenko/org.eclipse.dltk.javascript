@@ -32,6 +32,7 @@ import org.eclipse.dltk.javascript.ast.ObjectInitializer;
 import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
+import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -127,6 +128,9 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 				if (types.size() > 0)
 					type = types.iterator().next();
 				locator.report(new FieldDeclarationNode(node, type));
+			} else if (node.getParent() instanceof PropertyExpression
+					&& ((PropertyExpression) node.getParent()).getObject() instanceof ThisExpression) {
+				locator.report(new FieldDeclarationNode(node, null));
 			} else {
 				ASTNode parent = node.getParent();
 				if (parent instanceof PropertyExpression
