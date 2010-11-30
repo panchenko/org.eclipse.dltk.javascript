@@ -48,6 +48,14 @@ public class Recorder extends SourceElementRequestorAdaptor implements
 	public void enterField(FieldInfo info) {
 		push(new Field(info.name));
 	}
+	
+	@Override
+	public boolean enterFieldCheckDuplicates(FieldInfo info) {
+		Field field = new Field(info.name);
+		if (structure.contains(field)) return false;
+		push(field);
+		return true;
+	}
 
 	@Override
 	public void exitField(int declarationEnd) {

@@ -284,5 +284,17 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(0, problems.size());
 	}
+	
+	public void testObjectInitalizerWithPropertyAndFunction()
+	{
+		List<String> code = new StringList();
+		code.add("var initializer = {x:10,y:function(z){}};");
+		code.add("function testInitializer() {");
+		code.add("var a = initializer.x;");
+		code.add("var b = initializer.y(a);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
+	}
 
 }

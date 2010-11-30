@@ -111,6 +111,11 @@ public class StructureParserTests extends TestCase {
 		assertEquals(new Root(new Method("hello").add(new Field("a").add(new Method("b")))), root);
 	}
 
+	public void testThisVariableUnnamedFunctionReferenceWithArgumentAssignment() {
+		Root root = parse("function hello() { var x = function(a){this.b =a;}}");
+		assertEquals(new Root(new Method("hello").add(new Method("x", new Parameter("a")).add(new Field("b")))), root);
+	}
+
 	public void testManyFunctionCalls() {
 		StringList code = new StringList();
 		code.add("function a(){x=1} a();fa=1;");
