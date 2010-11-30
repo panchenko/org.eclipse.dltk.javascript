@@ -90,6 +90,26 @@ public class StructureParserTests extends TestCase {
 		Root root = parse("function hello() { var a = 1; var x = a }");
 		assertEquals(new Root(new Method("hello")), root);
 	}
+	
+	public void testThisVariableUnnamedFunctionReference() {
+		Root root = parse("function hello() { this.a = function(){} }");
+		assertEquals(new Root(new Method("hello").add(new Method("a"))), root);
+	}
+	
+	public void testThisVariableSameNamedFunctionReference() {
+		Root root = parse("function hello() { this.a = function a(){} }");
+		assertEquals(new Root(new Method("hello").add(new Method("a"),new Method("a"))), root);
+	}
+
+	public void testThisVariableNamedFunctionReference() {
+		Root root = parse("function hello() { this.a = function b(){} }");
+		assertEquals(new Root(new Method("hello").add(new Method("a"),new Method("b"))), root);
+	}
+
+	public void testObjectInitializerFunctionReference() {
+		Root root = parse("function hello() { var a = {b: function(){}} }");
+		assertEquals(new Root(new Method("hello").add(new Field("a").add(new Method("b")))), root);
+	}
 
 	public void testManyFunctionCalls() {
 		StringList code = new StringList();
