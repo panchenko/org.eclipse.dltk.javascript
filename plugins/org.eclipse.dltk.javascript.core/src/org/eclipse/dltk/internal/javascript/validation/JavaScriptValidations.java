@@ -26,7 +26,7 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
@@ -94,16 +94,26 @@ public class JavaScriptValidations {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <E extends Element> List<E> extractElements(
+	public static <E extends Member> List<E> extractElements(
 			IValueReference reference, Class<E> elementType) {
 		final Object value = reference
 				.getAttribute(IReferenceAttributes.ELEMENT);
+		boolean staticValue = false;
+		if (reference.getParent() != null)
+			staticValue = Boolean.TRUE.equals(reference.getParent()
+				.getAttribute(IReferenceAttributes.STATIC));
 		if (elementType.isInstance(value)) {
+			if (staticValue != ((E) value).isStatic())
+				return null;
+
 			return Collections.singletonList((E) value);
-		} else if (value instanceof Element[]) {
-			final Element[] elements = (Element[]) value;
+		} else if (value instanceof Member[]) {
+			final Member[] elements = (Member[]) value;
 			List<E> result = null;
-			for (Element element : elements) {
+			for (Member element : elements) {
+				if (staticValue != element.isStatic())
+					continue;
+
 				if (elementType.isInstance(element)) {
 					if (result == null) {
 						result = new ArrayList<E>(elements.length);

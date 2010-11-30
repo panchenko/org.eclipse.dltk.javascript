@@ -323,6 +323,10 @@ public class Value implements IValue {
 			if (src.getDeclaredType() != null) {
 				types.add(src.getDeclaredType());
 			}
+			if (Boolean.TRUE.equals(src
+					.getAttribute(IReferenceAttributes.STATIC))) {
+				setAttribute(IReferenceAttributes.STATIC, Boolean.TRUE);
+			}
 			types.addAll(src.getTypes());
 		}
 	}

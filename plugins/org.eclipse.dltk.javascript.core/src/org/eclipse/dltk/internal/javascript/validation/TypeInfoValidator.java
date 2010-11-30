@@ -42,6 +42,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -546,7 +547,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			return sb.toString();
 		}
 
-		private <E extends Element> E extractElement(IValueReference reference,
+		private <E extends Member> E extractElement(IValueReference reference,
 				Class<E> elementType) {
 			final List<E> elements = JavaScriptValidations.extractElements(
 					reference, elementType);
@@ -680,6 +681,38 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								JavaScriptProblems.PRIVATE_VARIABLE, NLS.bind(
 										ValidationMessages.PrivateVariable,
 										variable.getName()), propName
+										.sourceStart(), propName.sourceEnd());
+					}
+				}
+
+				final Type type = JavaScriptValidations.typeOf(result
+						.getParent());
+				if (type != null) {
+					if (type.getKind() == TypeKind.JAVA) {
+						reporter.reportProblem(
+								JavaScriptProblems.UNDEFINED_PROPERTY,
+								NLS.bind(ValidationMessages.UndefinedProperty,
+										result.getName(), type.getName()),
+								propName.sourceStart(), propName.sourceEnd());
+					} else if (JavaScriptValidations.isStatic(result
+							.getParent())
+							&& !ElementValue.findMembers(type,
+									result.getName(),
+									MemberPredicates.NON_STATIC).isEmpty()) {
+						reporter.reportProblem(
+								JavaScriptProblems.NON_STATIC_PROPERTY,
+								NLS.bind(
+										"Cannot make a static reference to the non-static field {0} from {1}",
+										result.getName(), type.getName()),
+								propName.sourceStart(), propName.sourceEnd());
+					} else {
+						// TODO also report a JS error (that should be
+						// configurable)
+						reporter.reportProblem(
+								JavaScriptProblems.UNDEFINED_PROPERTY,
+								NLS.bind(
+										ValidationMessages.UndefinedMethodInScript,
+										result.getName()), propName
 										.sourceStart(), propName.sourceEnd());
 					}
 				}
