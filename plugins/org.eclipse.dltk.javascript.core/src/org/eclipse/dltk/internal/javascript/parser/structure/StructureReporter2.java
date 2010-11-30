@@ -87,6 +87,10 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			if (argCount != null) {
 				// ignore locals.
 				if (argCount != -2) {
+					// if this is a function declaration, skip this, will be
+					// reported by visit functionStatement
+					if (isFunctionDeclaration(node))
+						return super.visitIdentifier(node);
 					// report fields.
 					if (argCount == -1) {
 						fRequestor.acceptFieldReference(node.getName(),
@@ -129,12 +133,25 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		boolean isInFunction = inFunction;
 		inFunction = true;
 		MethodInfo methodInfo = new MethodInfo();
+		MethodInfo thisMethod = null;
 		try {
 			methodInfo.declarationStart = node.sourceStart();
 			final JSMethod method = new JSMethod();
 			Identifier thisIdentifier;
 			if (node.getName() != null) {
 				setNameProperties(node.getName(), methodInfo, method);
+				if ((thisIdentifier = getThisIdentifier(node)) != null) {
+					// this is a function that has a name and an assignment to
+					// the this property.
+					// also a field should be created.
+					thisMethod = new MethodInfo();
+					thisMethod.nameSourceStart = thisIdentifier.sourceStart();
+					thisMethod.nameSourceEnd = thisIdentifier.sourceEnd() - 1;
+					thisMethod.declarationStart = thisIdentifier.getParent()
+							.sourceStart();
+					thisMethod.name = thisIdentifier.getName();
+				}
+
 			} else if (node.getParent() instanceof PropertyInitializer
 					&& ((PropertyInitializer) node.getParent()).getName() instanceof Identifier) {
 				setNameProperties(
@@ -214,9 +231,21 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 				methodInfo.parameterNames = paramNames;
 				methodInfo.parameterTypes = paramTypes;
 			}
+
+			if (thisMethod != null) {
+				thisMethod.isConstructor = methodInfo.isConstructor;
+				thisMethod.returnType = methodInfo.returnType;
+				thisMethod.modifiers = methodInfo.modifiers;
+				thisMethod.parameterNames = methodInfo.parameterNames;
+				thisMethod.parameterTypes = methodInfo.parameterTypes;
+				fRequestor.enterMethod(thisMethod);
+				fRequestor.exitMethod(node.sourceEnd());
+			}
+
 			fRequestor.enterMethod(methodInfo);
 			return super.visitFunctionStatement(node);
-		} finally {
+		}
+		finally {
 			inFunction = isInFunction;
 			fRequestor.exitMethod(node.sourceEnd());
 		}
@@ -226,7 +255,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 	 * @param node
 	 * @return
 	 */
-	private Identifier getThisIdentifier(FunctionStatement fs) {
+	public static Identifier getThisIdentifier(FunctionStatement fs) {
 		ASTNode node = fs.getParent();
 		if (node instanceof BinaryOperation) {
 			node = ((BinaryOperation) node).getLeftExpression();
@@ -240,6 +269,17 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			}
 		}
 		return null;
+	}
+
+	public static boolean isFunctionDeclaration(Identifier identifier) {
+		if (identifier.getParent() instanceof PropertyExpression) {
+			PropertyExpression pe = (PropertyExpression) identifier.getParent();
+			if (pe.getObject() instanceof ThisExpression
+					&& pe.getParent() instanceof BinaryOperation) {
+				return ((BinaryOperation) pe.getParent()).getRightExpression() instanceof FunctionStatement;
+			}
+		}
+		return false;
 	}
 
 	/**

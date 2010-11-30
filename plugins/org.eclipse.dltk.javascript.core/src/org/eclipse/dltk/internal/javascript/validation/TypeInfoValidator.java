@@ -614,32 +614,45 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		private void validateProperty(PropertyExpression propertyExpression,
 				IValueReference result) {
 			final Expression propName = propertyExpression.getProperty();
-			final Property property = extractElement(result, Property.class);
-			if (property != null) {
-				if (property.isDeprecated()) {
+			final Member member = extractElement(result, Member.class);
+			if (member != null) {
+				if (member.isDeprecated()) {
 					final Property parentProperty = extractElement(
 							result.getParent(), Property.class);
 					if (parentProperty != null
 							&& parentProperty.getDeclaringType() == null) {
-						reportDeprecatedProperty(property, parentProperty,
-								propName);
+						if (member instanceof Property)
+							reportDeprecatedProperty((Property) member,
+									parentProperty,
+									propName);
+						else if (member instanceof Method)
+							reportDeprecatedMethod(propName, result,
+									(Method) member);
 					} else {
-						reportDeprecatedProperty(property,
-								property.getDeclaringType(), propName);
+						if (member instanceof Property)
+							reportDeprecatedProperty((Property) member,
+									member.getDeclaringType(), propName);
+						else if (member instanceof Method)
+							reportDeprecatedMethod(propName, result,
+									(Method) member);
 					}
-				} else if (!property.isVisible()) {
+				} else if (!member.isVisible()) {
 					final Property parentProperty = extractElement(
 							result.getParent(), Property.class);
 					if (parentProperty != null
 							&& parentProperty.getDeclaringType() == null) {
-						reportHiddenProperty(property, parentProperty, propName);
-					} else {
-						reportHiddenProperty(property,
-								property.getDeclaringType(), propName);
+						if (member instanceof Property)
+							reportHiddenProperty((Property) member,
+									parentProperty, propName);
+						// else if (member instanceof Method)
+						// reportDeprecatedMethod(propName, result,
+						// (Method) member);
+					} else if (member instanceof Property) {
+						reportHiddenProperty((Property) member,
+								member.getDeclaringType(), propName);
 					}
 				}
-			} else if (JavaScriptValidations.extractElements(result,
-					Method.class) == null && !result.exists()) {
+			} else if (!result.exists()) {
 				final Type type = JavaScriptValidations.typeOf(result
 						.getParent());
 				if (type != null && type.getKind() == TypeKind.JAVA) {
