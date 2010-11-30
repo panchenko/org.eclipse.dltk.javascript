@@ -393,11 +393,6 @@ public abstract class ASTVisitor<E> {
 		return null;
 	}
 
-	@Deprecated
-	public final E visitLabel(Label node) {
-		return null;
-	}
-
 	public abstract E visitLabelledStatement(LabelledStatement node);
 
 	public abstract E visitNewExpression(NewExpression node);
