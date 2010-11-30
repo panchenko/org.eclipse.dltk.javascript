@@ -15,7 +15,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
@@ -87,53 +91,46 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return TypeInfoModelLoader.getInstance().getType(typeName);
 	}
 
-	private static List<String> getMembers(final String typeName) {
-		List<String> names = new ArrayList<String>();
-		for (Member member : getType(typeName).getMembers()) {
-			if (!member.isStatic())
-				names.add(member.getName());
+	private static List<String> loadMembers(final String typeName) {
+		final List<String> names = new ArrayList<String>();
+		final Set<Type> types = new HashSet<Type>();
+		Type type = getType(typeName);
+		while (type != null && types.add(type)) {
+			for (Member member : type.getMembers()) {
+				if (!member.isStatic() && !names.contains(member.getName()))
+					names.add(member.getName());
+			}
+			type = type.getSuperType();
 		}
 		return Collections.unmodifiableList(names);
 	}
 
-	private static List<String> objectMethods = null;
+	private static final Map<String, List<String>> members = new HashMap<String, List<String>>();
+
+	private static List<String> getMembers(String typeName, int expectedCount) {
+		List<String> m = members.get(typeName);
+		if (m == null) {
+			m = loadMembers(typeName);
+			assertEquals(expectedCount, m.size());
+			members.put(typeName, m);
+		}
+		return m;
+	}
 
 	protected static List<String> getMethodsOfObject() {
-		if (objectMethods == null) {
-			objectMethods = getMembers(ITypeNames.OBJECT);
-			assertEquals(3, objectMethods.size());
-		}
-		return objectMethods;
+		return getMembers(ITypeNames.OBJECT, 7);
 	}
-
-	private static List<String> numberMethods = null;
 
 	protected static List<String> getMethodsOfNumber() {
-		if (numberMethods == null) {
-			numberMethods = getMembers(ITypeNames.NUMBER);
-			assertEquals(7, numberMethods.size());
-		}
-		return numberMethods;
+		return getMembers(ITypeNames.NUMBER, 10);
 	}
-
-	private static List<String> stringMethods = null;
 
 	protected static List<String> getMethodsOfString() {
-		if (stringMethods == null) {
-			stringMethods = getMembers(ITypeNames.STRING);
-			assertEquals(36, stringMethods.size());
-		}
-		return stringMethods;
+		return getMembers(ITypeNames.STRING, 35);
 	}
 
-	private static List<String> xmlMethods = null;
-
 	protected static List<String> getMethodsOfXML() {
-		if (xmlMethods == null) {
-			xmlMethods = getMembers(ITypeNames.XML);
-			assertEquals(44, xmlMethods.size());
-		}
-		return xmlMethods;
+		return getMembers(ITypeNames.XML, 44);
 	}
 
 	protected static String[] concat(List<String> values, String... addition) {
