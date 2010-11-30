@@ -18,6 +18,7 @@ import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.search.matching2.IMatchingCollector;
+import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter2;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
@@ -98,6 +99,11 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 		if (result != null && check
 				&& result.getLocation() == ReferenceLocation.UNKNOWN)
 			return false;
+
+		// if this is a function declaration, skip this, will be
+		// reported by visit functionStatement
+		if (StructureReporter2.isFunctionDeclaration(node))
+			return true;
 
 		if (result != null
 				&& result.getAttribute(IReferenceAttributes.PARAMETERS) != null) {
@@ -215,6 +221,12 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
 		final IValueReference result = super.visitFunctionStatement(node);
 		Identifier name = node.getName();
+		if (name != null) {
+			IMethod method = (JSMethod) result
+					.getAttribute(IReferenceAttributes.PARAMETERS);
+			locator.report(new MethodDeclarationNode(name, method));
+		}
+		name = StructureReporter2.getThisIdentifier(node);
 		if (name != null) {
 			IMethod method = (JSMethod) result
 					.getAttribute(IReferenceAttributes.PARAMETERS);
