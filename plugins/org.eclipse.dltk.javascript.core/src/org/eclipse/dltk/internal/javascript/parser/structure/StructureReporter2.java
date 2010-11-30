@@ -272,13 +272,15 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		return null;
 	}
 
-	public static boolean isFunctionDeclaration(Identifier identifier) {
-		if (identifier.getParent() instanceof PropertyExpression) {
-			PropertyExpression pe = (PropertyExpression) identifier.getParent();
-			if (pe.getObject() instanceof ThisExpression
-					&& pe.getParent() instanceof BinaryOperation) {
-				return ((BinaryOperation) pe.getParent()).getRightExpression() instanceof FunctionStatement;
-			}
+	public static boolean isFunctionDeclaration(Expression expression) {
+		PropertyExpression pe = null;
+		if (expression instanceof PropertyExpression)
+			pe = (PropertyExpression) expression;
+		else if (expression.getParent() instanceof PropertyExpression)
+			pe = (PropertyExpression) expression.getParent();
+		if (pe != null && pe.getObject() instanceof ThisExpression
+				&& pe.getParent() instanceof BinaryOperation) {
+			return ((BinaryOperation) pe.getParent()).getRightExpression() instanceof FunctionStatement;
 		}
 		return false;
 	}
@@ -468,8 +470,11 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			} else if (kind == ReferenceKind.FUNCTION) {
 				IMethod method = (IMethod) reference
 						.getAttribute(IReferenceAttributes.PARAMETERS);
-				resolvedIdentifiers.put(node,
-						Integer.valueOf(method.getParameterCount()));
+				if (method == null)
+					unknownKinds.put(node, reference);
+				else
+					resolvedIdentifiers.put(node,
+							Integer.valueOf(method.getParameterCount()));
 			} else if (reportUnknown && kind == ReferenceKind.UNKNOWN) {
 				unknownKinds.put(node, reference);
 			}

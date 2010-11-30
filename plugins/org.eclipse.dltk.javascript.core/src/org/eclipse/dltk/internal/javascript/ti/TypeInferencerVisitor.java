@@ -23,6 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter2;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
@@ -656,7 +657,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		Expression property = node.getProperty();
 		IValueReference child = extractNamedChild(object, property);
 		if (child != null && node.getObject() instanceof ThisExpression) {
-			child.setKind(ReferenceKind.FIELD);
+			if (StructureReporter2.isFunctionDeclaration(node))
+				child.setKind(ReferenceKind.FUNCTION);
+			else
+				child.setKind(ReferenceKind.FIELD);
 			child.setLocation(ReferenceLocation.create(getSource(),
 					node.sourceStart(), node.sourceEnd(),
 					property.sourceStart(), property.sourceEnd()));
