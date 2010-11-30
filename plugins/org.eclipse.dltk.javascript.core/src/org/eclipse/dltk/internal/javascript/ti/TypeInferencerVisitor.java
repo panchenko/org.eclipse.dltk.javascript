@@ -258,7 +258,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
 		if (declaration.getInitializer() != null) {
-			assign(reference, visit(declaration.getInitializer()));
+			IValueReference assignment = visit(declaration.getInitializer());
+			assign(reference, assignment);
+			if (assignment.getKind() == ReferenceKind.FUNCTION
+					&& reference.getAttribute(IReferenceAttributes.PARAMETERS) != null)
+				reference.setKind(ReferenceKind.FUNCTION);
 		}
 		return reference;
 	}
