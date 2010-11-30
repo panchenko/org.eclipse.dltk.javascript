@@ -590,6 +590,21 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("str");
 		assertEquals(getTypes(STRING), name.getTypes());
 	}
+	
+	public void testStaticTypeAssignment() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("var num = Number;");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference name = collection.getChild("num");
+		assertEquals(getTypes(NUMBER), name.getTypes());
+		
+		assertEquals(true, name.getAttribute(IReferenceAttributes.STATIC));
+		
+		// TODO should a static reference getchild really return existing none static childs?
+//		assertEquals(true, name.getChild("prototype").exists());
+//		assertEquals(false, name.getChild("toFixed").exists());
+		
+	}
 
 	public void testAssignToResolvedProperty() {
 		List<String> lines = new StringList();
