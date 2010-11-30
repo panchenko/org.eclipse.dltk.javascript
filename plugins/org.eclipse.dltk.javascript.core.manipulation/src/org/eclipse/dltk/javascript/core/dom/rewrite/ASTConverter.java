@@ -34,6 +34,7 @@ import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
+import org.eclipse.dltk.javascript.ast.Label;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
@@ -126,6 +127,15 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public static Node convert(ASTNode node) {
 		ASTConverter converter = new ASTConverter();
 		return converter.visit(node);
+	}
+
+	private org.eclipse.dltk.javascript.core.dom.Label visitLabel(Label label) {
+		org.eclipse.dltk.javascript.core.dom.Label res = DOM_FACTORY
+				.createLabel();
+		res.setBegin(label.sourceStart());
+		res.setEnd(label.sourceEnd());
+		res.setName(label.getText());
+		return res;
 	}
 
 	@Override
@@ -271,8 +281,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitBreakStatement(BreakStatement node) {
 		org.eclipse.dltk.javascript.core.dom.BreakStatement res = DOM_FACTORY
 				.createBreakStatement();
-		res.setLabel((org.eclipse.dltk.javascript.core.dom.Label) visit(node
-				.getLabel()));
+		res.setLabel(visitLabel(node.getLabel()));
 		return res;
 	}
 
@@ -327,8 +336,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitContinueStatement(ContinueStatement node) {
 		org.eclipse.dltk.javascript.core.dom.ContinueStatement res = DOM_FACTORY
 				.createContinueStatement();
-		res.setLabel((org.eclipse.dltk.javascript.core.dom.Label) visit(node
-				.getLabel()));
+		res.setLabel(visitLabel(node.getLabel()));
 		return res;
 	}
 
@@ -461,8 +469,8 @@ public class ASTConverter extends ASTVisitor<Node> {
 	@Override
 	public Node visitLabelledStatement(LabelledStatement node) {
 		LabeledStatement res = DOM_FACTORY.createLabeledStatement();
-		res.setLabel((org.eclipse.dltk.javascript.core.dom.Label) visit(node
-				.getLabel()));
+		res.setLabel(visitLabel(node.getLabel()));
+		res.setStatement((Statement) visit(node.getStatement()));
 		return res;
 	}
 
