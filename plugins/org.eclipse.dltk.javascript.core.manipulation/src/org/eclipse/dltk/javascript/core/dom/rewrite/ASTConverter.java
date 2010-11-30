@@ -349,15 +349,12 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitDeleteStatement(DeleteStatement node) {
-		org.eclipse.dltk.javascript.core.dom.ExpressionStatement res = DOM_FACTORY
-				.createExpressionStatement();
 		UnaryExpression expr = DOM_FACTORY.createUnaryExpression();
 		expr.setBegin(node.sourceStart());
 		expr.setEnd(node.sourceEnd());
 		expr.setOperation(UnaryOperator.DELETE);
 		expr.setArgument((Expression) visit(node.getExpression()));
-		res.setExpression(expr);
-		return res;
+		return expr;
 	}
 
 	@Override
