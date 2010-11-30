@@ -220,7 +220,10 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	private void setRange(ASTNode node, Tree treeNode) {
 		node.setStart(getTokenOffset(treeNode.getTokenStartIndex()));
-		int stopIndex = treeNode.getTokenStopIndex();
+		setEndByTokenIndex(node, treeNode.getTokenStopIndex());
+	}
+
+	private void setEndByTokenIndex(ASTNode node, int stopIndex) {
 		while (stopIndex >= 0
 				&& tokens.get(stopIndex).getType() == JSParser.EOL) {
 			--stopIndex;
@@ -1390,7 +1393,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 
 		ifStatement.setStart(ifStatement.getIfKeyword().sourceStart());
-		ifStatement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
+		setEndByTokenIndex(ifStatement, node.getTokenStopIndex());
 
 		return ifStatement;
 	}
