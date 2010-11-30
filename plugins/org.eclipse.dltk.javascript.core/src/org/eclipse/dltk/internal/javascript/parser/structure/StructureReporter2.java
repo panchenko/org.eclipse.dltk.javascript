@@ -25,6 +25,7 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
+import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -322,6 +323,26 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			}
 		}
 		try {
+			for (ObjectInitializerPart part : node.getInitializers()) {
+				if (part instanceof PropertyInitializer) {
+					final PropertyInitializer pi = (PropertyInitializer) part;
+					// function statements will be reported in the
+					// visitFunctionStatement
+					if (pi.getValue() instanceof FunctionStatement)
+						continue;
+					if (pi.getName() instanceof Identifier) {
+						Identifier identifier = (Identifier) pi.getName();
+						FieldInfo piInfo = new FieldInfo();
+						piInfo.name = identifier.getName();
+						piInfo.nameSourceStart = identifier.sourceStart();
+						piInfo.nameSourceEnd = identifier.sourceEnd() - 1;
+						piInfo.declarationStart = pi.sourceStart();
+						fRequestor.enterField(piInfo);
+						fRequestor.exitField(pi.sourceEnd());
+					}
+
+				}
+			}
 			return super.visitObjectInitializer(node);
 		} finally {
 			if (inFunction && info != null) {
