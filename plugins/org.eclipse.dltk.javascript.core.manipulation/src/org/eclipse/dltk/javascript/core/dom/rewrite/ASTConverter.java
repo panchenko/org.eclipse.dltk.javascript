@@ -122,18 +122,18 @@ public class ASTConverter extends ASTVisitor<Node> {
 	}
 
 	public static Node convert(ASTNode node) {
-		ASTConverter converter = new ASTConverter(); 
+		ASTConverter converter = new ASTConverter();
 		return converter.visit(node);
 	}
 
 	@Override
 	public Node visitArrayInitializer(ArrayInitializer node) {
 		ArrayLiteral res = DomFactory.eINSTANCE.createArrayLiteral();
-		for(ASTNode item : node.getItems())
-			res.getElements().add((IArrayElement)visit(item));
+		for (ASTNode item : node.getItems())
+			res.getElements().add((IArrayElement) visit(item));
 		return res;
 	}
-	
+
 	@Override
 	public Node visitBinaryOperation(BinaryOperation node) {
 		BinaryExpression res = DomFactory.eINSTANCE.createBinaryExpression();
@@ -214,7 +214,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 		case JSParser.MULASS:
 			r = BinaryOperator.MUL_ASSIGN;
 			break;
-		case JSParser.NEQ:		
+		case JSParser.NEQ:
 			r = BinaryOperator.NEQ;
 			break;
 		case JSParser.NSAME:
@@ -252,43 +252,49 @@ public class ASTConverter extends ASTVisitor<Node> {
 		}
 		res.setOperation(r);
 		res.setOperatorPosition(node.getOperationPosition());
-		res.setLeft((Expression)visit(node.getLeftExpression()));
-		res.setRight((Expression)visit(node.getRightExpression()));
+		res.setLeft((Expression) visit(node.getLeftExpression()));
+		res.setRight((Expression) visit(node.getRightExpression()));
 		return res;
 	}
 
 	@Override
 	public Node visitBooleanLiteral(BooleanLiteral node) {
-		org.eclipse.dltk.javascript.core.dom.BooleanLiteral res = DomFactory.eINSTANCE.createBooleanLiteral();
+		org.eclipse.dltk.javascript.core.dom.BooleanLiteral res = DomFactory.eINSTANCE
+				.createBooleanLiteral();
 		res.setText(node.getText());
 		return res;
 	}
 
 	@Override
 	public Node visitBreakStatement(BreakStatement node) {
-		org.eclipse.dltk.javascript.core.dom.BreakStatement res = DomFactory.eINSTANCE.createBreakStatement(); 
-		res.setLabel((org.eclipse.dltk.javascript.core.dom.Label)visit(node.getLabel()));
+		org.eclipse.dltk.javascript.core.dom.BreakStatement res = DomFactory.eINSTANCE
+				.createBreakStatement();
+		res.setLabel((org.eclipse.dltk.javascript.core.dom.Label) visit(node
+				.getLabel()));
 		return res;
 	}
 
 	@Override
 	public Node visitCallExpression(CallExpression node) {
-		org.eclipse.dltk.javascript.core.dom.CallExpression res = DomFactory.eINSTANCE.createCallExpression();
-		res.setApplicant((Expression)visit(node.getExpression()));
-		for(ASTNode arg : node.getArguments())
-			res.getArguments().add((Expression)visit(arg));
+		org.eclipse.dltk.javascript.core.dom.CallExpression res = DomFactory.eINSTANCE
+				.createCallExpression();
+		res.setApplicant((Expression) visit(node.getExpression()));
+		for (ASTNode arg : node.getArguments())
+			res.getArguments().add((Expression) visit(arg));
 		return res;
 	}
 
 	@Override
 	public Node visitCommaExpression(CommaExpression node) {
 		Iterator<ASTNode> it = node.getItems().iterator();
-		Expression res = (Expression)visit(it.next());
-		while(it.hasNext()) {
-			BinaryExpression tmp = DomFactory.eINSTANCE.createBinaryExpression();;
+		Expression res = (Expression) visit(it.next());
+		while (it.hasNext()) {
+			BinaryExpression tmp = DomFactory.eINSTANCE
+					.createBinaryExpression();
+			;
 			tmp.setOperation(BinaryOperator.COMMA);
 			tmp.setLeft(res);
-			tmp.setRight((Expression)visit(it.next()));
+			tmp.setRight((Expression) visit(it.next()));
 			if (it.hasNext()) {
 				tmp.setBegin(res.getBegin());
 				tmp.setEnd(tmp.getRight().getEnd());
@@ -300,25 +306,29 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitConditionalOperator(ConditionalOperator node) {
-		ConditionalExpression res = DomFactory.eINSTANCE.createConditionalExpression();
-		res.setPredicate((Expression)visit(node.getCondition()));
-		res.setConsequent((Expression)visit(node.getTrueValue()));
-		res.setAlternative((Expression)visit(node.getFalseValue()));
+		ConditionalExpression res = DomFactory.eINSTANCE
+				.createConditionalExpression();
+		res.setPredicate((Expression) visit(node.getCondition()));
+		res.setConsequent((Expression) visit(node.getTrueValue()));
+		res.setAlternative((Expression) visit(node.getFalseValue()));
 		return res;
 	}
 
 	@Override
 	public Node visitConstDeclaration(ConstStatement node) {
-		org.eclipse.dltk.javascript.core.dom.ConstStatement res = DomFactory.eINSTANCE.createConstStatement();
-		for(VariableDeclaration decl : node.getVariables())
+		org.eclipse.dltk.javascript.core.dom.ConstStatement res = DomFactory.eINSTANCE
+				.createConstStatement();
+		for (VariableDeclaration decl : node.getVariables())
 			res.getDeclarations().add(createVariableDeclaration(decl));
 		return res;
 	}
 
 	@Override
 	public Node visitContinueStatement(ContinueStatement node) {
-		org.eclipse.dltk.javascript.core.dom.ContinueStatement res = DomFactory.eINSTANCE.createContinueStatement();
-		res.setLabel((org.eclipse.dltk.javascript.core.dom.Label)visit(node.getLabel()));
+		org.eclipse.dltk.javascript.core.dom.ContinueStatement res = DomFactory.eINSTANCE
+				.createContinueStatement();
+		res.setLabel((org.eclipse.dltk.javascript.core.dom.Label) visit(node
+				.getLabel()));
 		return res;
 	}
 
@@ -331,12 +341,13 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitDeleteStatement(DeleteStatement node) {
-		org.eclipse.dltk.javascript.core.dom.ExpressionStatement res = DomFactory.eINSTANCE.createExpressionStatement();
+		org.eclipse.dltk.javascript.core.dom.ExpressionStatement res = DomFactory.eINSTANCE
+				.createExpressionStatement();
 		UnaryExpression expr = DomFactory.eINSTANCE.createUnaryExpression();
 		expr.setBegin(node.sourceStart());
 		expr.setEnd(node.sourceEnd());
 		expr.setOperation(UnaryOperator.DELETE);
-		expr.setArgument((Expression)visit(node.getExpression()));
+		expr.setArgument((Expression) visit(node.getExpression()));
 		res.setExpression(expr);
 		return res;
 	}
@@ -344,8 +355,8 @@ public class ASTConverter extends ASTVisitor<Node> {
 	@Override
 	public Node visitDoWhileStatement(DoWhileStatement node) {
 		DoStatement res = DomFactory.eINSTANCE.createDoStatement();
-		res.setBody((Statement)visit(node.getBody()));
-		res.setCondition((Expression)visit(node.getCondition()));
+		res.setBody((Statement) visit(node.getBody()));
+		res.setCondition((Expression) visit(node.getCondition()));
 		return res;
 	}
 
@@ -356,34 +367,39 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitForStatement(ForStatement node) {
-		org.eclipse.dltk.javascript.core.dom.ForStatement res = DomFactory.eINSTANCE.createForStatement();
-		res.setInitialization((IForInitializer)visit(node.getInitial()));
-		res.setCondition((Expression)visit(node.getCondition()));
-		res.setIncrement((Expression)visit(node.getStep()));
-		res.setBody((Statement)visit(node.getBody()));
+		org.eclipse.dltk.javascript.core.dom.ForStatement res = DomFactory.eINSTANCE
+				.createForStatement();
+		res.setInitialization((IForInitializer) visit(node.getInitial()));
+		res.setCondition((Expression) visit(node.getCondition()));
+		res.setIncrement((Expression) visit(node.getStep()));
+		res.setBody((Statement) visit(node.getBody()));
 		return res;
 	}
 
 	@Override
 	public Node visitForInStatement(ForInStatement node) {
-		org.eclipse.dltk.javascript.core.dom.ForInStatement res = DomFactory.eINSTANCE.createForInStatement();
-		res.setItem((IForInitializer)visit(node.getIterator()));
-		res.setCollection((Expression)visit(node.getItem()));
-		res.setBody((Statement)visit(node.getBody()));
+		org.eclipse.dltk.javascript.core.dom.ForInStatement res = DomFactory.eINSTANCE
+				.createForInStatement();
+		res.setItem((IForInitializer) visit(node.getIterator()));
+		res.setCollection((Expression) visit(node.getItem()));
+		res.setBody((Statement) visit(node.getBody()));
 		return res;
 	}
 
 	@Override
 	public Node visitForEachInStatement(ForEachInStatement node) {
-		org.eclipse.dltk.javascript.core.dom.ForEachInStatement res = DomFactory.eINSTANCE.createForEachInStatement();
-		res.setItem((IForInitializer)visit(node.getIterator()));
-		res.setCollection((Expression)visit(node.getItem()));
-		res.setBody((Statement)visit(node.getBody()));
+		org.eclipse.dltk.javascript.core.dom.ForEachInStatement res = DomFactory.eINSTANCE
+				.createForEachInStatement();
+		res.setItem((IForInitializer) visit(node.getIterator()));
+		res.setCollection((Expression) visit(node.getItem()));
+		res.setBody((Statement) visit(node.getBody()));
 		return res;
 	}
-	
-	private static org.eclipse.dltk.javascript.core.dom.Identifier createIdentifier(Identifier id) {
-		org.eclipse.dltk.javascript.core.dom.Identifier res = DomFactory.eINSTANCE.createIdentifier();
+
+	private static org.eclipse.dltk.javascript.core.dom.Identifier createIdentifier(
+			Identifier id) {
+		org.eclipse.dltk.javascript.core.dom.Identifier res = DomFactory.eINSTANCE
+				.createIdentifier();
 		res.setName(id.getName());
 		res.setBegin(id.sourceStart());
 		res.setEnd(id.sourceEnd());
@@ -392,27 +408,31 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitFunctionStatement(FunctionStatement node) {
-		FunctionExpression res = DomFactory.eINSTANCE.createFunctionExpression();
-		if (node.getName() != null) res.setIdentifier(createIdentifier(node.getName()));
-		for(Argument arg : node.getArguments()) {
+		FunctionExpression res = DomFactory.eINSTANCE
+				.createFunctionExpression();
+		if (node.getName() != null)
+			res.setIdentifier(createIdentifier(node.getName()));
+		for (Argument arg : node.getArguments()) {
 			Parameter prm = DomFactory.eINSTANCE.createParameter();
 			prm.setName(createIdentifier(arg.getIdentifier()));
-			prm.setType((Type)visit(arg.getType()));
+			prm.setType((Type) visit(arg.getType()));
 			prm.setBegin(arg.sourceStart());
 			prm.setEnd(arg.sourceEnd());
 			res.getParameters().add(prm);
 		}
-		res.setReturnType((Type)visit(node.getReturnType()));
-		res.setBody((org.eclipse.dltk.javascript.core.dom.BlockStatement)visit(node.getBody()));
-		res.setParametersPosition(node.getLP()+1);
+		res.setReturnType((Type) visit(node.getReturnType()));
+		res.setBody((org.eclipse.dltk.javascript.core.dom.BlockStatement) visit(node
+				.getBody()));
+		res.setParametersPosition(node.getLP() + 1);
 		return res;
 	}
 
 	@Override
 	public Node visitGetArrayItemExpression(GetArrayItemExpression node) {
-		ArrayAccessExpression res = DomFactory.eINSTANCE.createArrayAccessExpression();
-		res.setArray((Expression)visit(node.getArray()));
-		res.setIndex((Expression)visit(node.getIndex()));
+		ArrayAccessExpression res = DomFactory.eINSTANCE
+				.createArrayAccessExpression();
+		res.setArray((Expression) visit(node.getArray()));
+		res.setIndex((Expression) visit(node.getIndex()));
 		return res;
 	}
 
@@ -432,24 +452,27 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitIfStatement(IfStatement node) {
-		org.eclipse.dltk.javascript.core.dom.IfStatement res = DomFactory.eINSTANCE.createIfStatement();
-		res.setPredicate((Expression)visit(node.getCondition()));
-		res.setConsequent((Statement)visit(node.getThenStatement()));
-		res.setAlternative((Statement)visit(node.getElseStatement()));
+		org.eclipse.dltk.javascript.core.dom.IfStatement res = DomFactory.eINSTANCE
+				.createIfStatement();
+		res.setPredicate((Expression) visit(node.getCondition()));
+		res.setConsequent((Statement) visit(node.getThenStatement()));
+		res.setAlternative((Statement) visit(node.getElseStatement()));
 		return res;
 	}
 
 	@Override
 	public Node visitLabelledStatement(LabelledStatement node) {
 		LabeledStatement res = DomFactory.eINSTANCE.createLabeledStatement();
-		res.setLabel((org.eclipse.dltk.javascript.core.dom.Label)visit(node.getLabel()));
+		res.setLabel((org.eclipse.dltk.javascript.core.dom.Label) visit(node
+				.getLabel()));
 		return res;
 	}
 
 	@Override
 	public Node visitNewExpression(NewExpression node) {
-		org.eclipse.dltk.javascript.core.dom.NewExpression res = DomFactory.eINSTANCE.createNewExpression();
-		res.setConstructor((Expression)visit(node.getObjectClass()));
+		org.eclipse.dltk.javascript.core.dom.NewExpression res = DomFactory.eINSTANCE
+				.createNewExpression();
+		res.setConstructor((Expression) visit(node.getObjectClass()));
 		return res;
 	}
 
@@ -461,31 +484,35 @@ public class ASTConverter extends ASTVisitor<Node> {
 	@Override
 	public Node visitObjectInitializer(ObjectInitializer node) {
 		ObjectLiteral res = DomFactory.eINSTANCE.createObjectLiteral();
-		for(ObjectInitializerPart part : node.getInitializers()) {
+		for (ObjectInitializerPart part : node.getInitializers()) {
 			PropertyAssignment cur = null;
 			if (part instanceof PropertyInitializer) {
-				PropertyInitializer pi = (PropertyInitializer)part;
-				SimplePropertyAssignment elem = DomFactory.eINSTANCE.createSimplePropertyAssignment();
+				PropertyInitializer pi = (PropertyInitializer) part;
+				SimplePropertyAssignment elem = DomFactory.eINSTANCE
+						.createSimplePropertyAssignment();
 				elem.setName(createPropertyName(pi.getName()));
-				elem.setInitializer((Expression)visit(pi.getValue()));
+				elem.setInitializer((Expression) visit(pi.getValue()));
 				cur = elem;
 			} else if (part instanceof GetMethod) {
-				GetMethod gm = (GetMethod)part;
-				GetterAssignment elem = DomFactory.eINSTANCE.createGetterAssignment();
+				GetMethod gm = (GetMethod) part;
+				GetterAssignment elem = DomFactory.eINSTANCE
+						.createGetterAssignment();
 				elem.setName(createPropertyName(gm.getName()));
-				elem.setBody((BlockStatement)visit(gm.getBody()));
+				elem.setBody((BlockStatement) visit(gm.getBody()));
 				cur = elem;
 				res.getProperties().add(elem);
 			} else if (part instanceof SetMethod) {
-				SetMethod sm = (SetMethod)part;
-				SetterAssignment elem = DomFactory.eINSTANCE.createSetterAssignment();
+				SetMethod sm = (SetMethod) part;
+				SetterAssignment elem = DomFactory.eINSTANCE
+						.createSetterAssignment();
 				elem.setName(createPropertyName(sm.getName()));
 				elem.setParameter(createIdentifier(sm.getArgument()));
-				elem.setBody((BlockStatement)visit(sm.getBody()));
+				elem.setBody((BlockStatement) visit(sm.getBody()));
 				cur = elem;
 				res.getProperties().add(elem);
 			} else
-				throw new UnsupportedOperationException("Unknown initializer type");
+				throw new UnsupportedOperationException(
+						"Unknown initializer type");
 			cur.setBegin(part.sourceStart());
 			cur.setEnd(part.sourceEnd());
 			res.getProperties().add(cur);
@@ -493,63 +520,71 @@ public class ASTConverter extends ASTVisitor<Node> {
 		return res;
 	}
 
-	private IPropertyName createPropertyName(org.eclipse.dltk.javascript.ast.Expression name) {
+	private IPropertyName createPropertyName(
+			org.eclipse.dltk.javascript.ast.Expression name) {
 		if (name instanceof Identifier)
-			return createIdentifier((Identifier)name);
-		return (IPropertyName)visit(name);
+			return createIdentifier((Identifier) name);
+		return (IPropertyName) visit(name);
 	}
 
 	@Override
 	public Node visitParenthesizedExpression(ParenthesizedExpression node) {
-		org.eclipse.dltk.javascript.core.dom.ParenthesizedExpression res = DomFactory.eINSTANCE.createParenthesizedExpression();
-		res.setEnclosed((Expression)visit(node.getExpression()));
+		org.eclipse.dltk.javascript.core.dom.ParenthesizedExpression res = DomFactory.eINSTANCE
+				.createParenthesizedExpression();
+		res.setEnclosed((Expression) visit(node.getExpression()));
 		return res;
 	}
 
 	@Override
 	public Node visitPropertyExpression(PropertyExpression node) {
-		PropertyAccessExpression res = DomFactory.eINSTANCE.createPropertyAccessExpression();
-		res.setObject((Expression)visit(node.getObject()));
+		PropertyAccessExpression res = DomFactory.eINSTANCE
+				.createPropertyAccessExpression();
+		res.setObject((Expression) visit(node.getObject()));
 		if (node.getProperty() instanceof Identifier)
-			res.setProperty(createIdentifier((Identifier)node.getProperty()));
+			res.setProperty(createIdentifier((Identifier) node.getProperty()));
 		else
-			res.setProperty((IProperty)visit(node.getProperty()));
+			res.setProperty((IProperty) visit(node.getProperty()));
 		return res;
 	}
 
 	@Override
 	public Node visitRegExpLiteral(RegExpLiteral node) {
-		RegularExpressionLiteral res = DomFactory.eINSTANCE.createRegularExpressionLiteral();
+		RegularExpressionLiteral res = DomFactory.eINSTANCE
+				.createRegularExpressionLiteral();
 		res.setText(node.getText());
 		return res;
 	}
 
 	@Override
 	public Node visitReturnStatement(ReturnStatement node) {
-		org.eclipse.dltk.javascript.core.dom.ReturnStatement res = DomFactory.eINSTANCE.createReturnStatement();
-		res.setExpression((Expression)visit(node.getValue()));
+		org.eclipse.dltk.javascript.core.dom.ReturnStatement res = DomFactory.eINSTANCE
+				.createReturnStatement();
+		res.setExpression((Expression) visit(node.getValue()));
 		return res;
 	}
 
 	@Override
 	public Node visitScript(Script node) {
 		Source res = DomFactory.eINSTANCE.createSource();
-		for(org.eclipse.dltk.javascript.ast.Statement stmt : node.getStatements())
-			res.getStatements().add((Statement)visit(stmt));
+		for (org.eclipse.dltk.javascript.ast.Statement stmt : node
+				.getStatements())
+			res.getStatements().add((Statement) visit(stmt));
 		return res;
 	}
 
 	@Override
 	public Node visitStatementBlock(StatementBlock node) {
 		BlockStatement res = DomFactory.eINSTANCE.createBlockStatement();
-		for(org.eclipse.dltk.javascript.ast.Statement stmt : node.getStatements())
-			res.getStatements().add((Statement)visit(stmt));
+		for (org.eclipse.dltk.javascript.ast.Statement stmt : node
+				.getStatements())
+			res.getStatements().add((Statement) visit(stmt));
 		return res;
 	}
 
 	@Override
 	public Node visitStringLiteral(StringLiteral node) {
-		org.eclipse.dltk.javascript.core.dom.StringLiteral res = DomFactory.eINSTANCE.createStringLiteral();
+		org.eclipse.dltk.javascript.core.dom.StringLiteral res = DomFactory.eINSTANCE
+				.createStringLiteral();
 		res.setText(node.getText());
 		return res;
 	}
@@ -588,27 +623,31 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitThrowStatement(ThrowStatement node) {
-		org.eclipse.dltk.javascript.core.dom.ThrowStatement res = DomFactory.eINSTANCE.createThrowStatement();
-		res.setException((Expression)visit(node.getException()));
+		org.eclipse.dltk.javascript.core.dom.ThrowStatement res = DomFactory.eINSTANCE
+				.createThrowStatement();
+		res.setException((Expression) visit(node.getException()));
 		return res;
 	}
 
 	@Override
 	public Node visitTryStatement(TryStatement node) {
-		org.eclipse.dltk.javascript.core.dom.TryStatement res = DomFactory.eINSTANCE.createTryStatement();
-		for(CatchClause cc : node.getCatches()) {
-			org.eclipse.dltk.javascript.core.dom.CatchClause ccr = DomFactory.eINSTANCE.createCatchClause();
+		org.eclipse.dltk.javascript.core.dom.TryStatement res = DomFactory.eINSTANCE
+				.createTryStatement();
+		for (CatchClause cc : node.getCatches()) {
+			org.eclipse.dltk.javascript.core.dom.CatchClause ccr = DomFactory.eINSTANCE
+					.createCatchClause();
 			ccr.setException(createIdentifier(cc.getException()));
-			ccr.setFilter((Expression)visit(cc.getFilterExpression()));
-			ccr.setBody((BlockStatement)visit(cc.getStatement()));
+			ccr.setFilter((Expression) visit(cc.getFilterExpression()));
+			ccr.setBody((BlockStatement) visit(cc.getStatement()));
 			ccr.setBegin(cc.sourceStart());
 			ccr.setEnd(cc.sourceEnd());
 			res.getCatches().add(ccr);
 		}
 		if (node.getFinally() != null) {
 			FinallyClause fc = node.getFinally();
-			org.eclipse.dltk.javascript.core.dom.FinallyClause fcr = DomFactory.eINSTANCE.createFinallyClause();
-			fcr.setBody((BlockStatement)visit(fc.getStatement()));
+			org.eclipse.dltk.javascript.core.dom.FinallyClause fcr = DomFactory.eINSTANCE
+					.createFinallyClause();
+			fcr.setBody((BlockStatement) visit(fc.getStatement()));
 			fcr.setBegin(fc.sourceStart());
 			fcr.setEnd(fc.sourceEnd());
 			res.setFinallyClause(fcr);
@@ -620,7 +659,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitTypeOfExpression(TypeOfExpression node) {
 		UnaryExpression res = DomFactory.eINSTANCE.createUnaryExpression();
 		res.setOperation(UnaryOperator.TYPEOF);
-		res.setArgument((Expression)visit(node.getExpression()));
+		res.setArgument((Expression) visit(node.getExpression()));
 		return res;
 	}
 
@@ -667,23 +706,26 @@ public class ASTConverter extends ASTVisitor<Node> {
 			throw new IllegalStateException("Unknown binary operator");
 		}
 		res.setOperation(r);
-		res.setArgument((Expression)visit(node.getExpression()));
+		res.setArgument((Expression) visit(node.getExpression()));
 		return res;
 	}
 
 	@Override
 	public Node visitVariableStatment(VariableStatement node) {
-		org.eclipse.dltk.javascript.core.dom.VariableStatement res = DomFactory.eINSTANCE.createVariableStatement();
-		for(VariableDeclaration decl : node.getVariables())
+		org.eclipse.dltk.javascript.core.dom.VariableStatement res = DomFactory.eINSTANCE
+				.createVariableStatement();
+		for (VariableDeclaration decl : node.getVariables())
 			res.getDeclarations().add(createVariableDeclaration(decl));
 		return res;
 	}
-	
-	private org.eclipse.dltk.javascript.core.dom.VariableDeclaration createVariableDeclaration(VariableDeclaration decl) {
-		org.eclipse.dltk.javascript.core.dom.VariableDeclaration res = DomFactory.eINSTANCE.createVariableDeclaration();
+
+	private org.eclipse.dltk.javascript.core.dom.VariableDeclaration createVariableDeclaration(
+			VariableDeclaration decl) {
+		org.eclipse.dltk.javascript.core.dom.VariableDeclaration res = DomFactory.eINSTANCE
+				.createVariableDeclaration();
 		res.setIdentifier(createIdentifier(decl.getIdentifier()));
-		res.setType((Type)visit(decl.getType()));
-		res.setInitializer((Expression)visit(decl.getInitializer()));
+		res.setType((Type) visit(decl.getType()));
+		res.setInitializer((Expression) visit(decl.getInitializer()));
 		res.setBegin(decl.sourceStart());
 		res.setEnd(decl.sourceEnd());
 		return res;
@@ -693,8 +735,9 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitVoidExpression(VoidExpression node) {
 		if (node.getExpression() instanceof VariableStatement)
 			return visit(node.getExpression());
-		ExpressionStatement res = DomFactory.eINSTANCE.createExpressionStatement();
-		res.setExpression((Expression)visit(node.getExpression()));
+		ExpressionStatement res = DomFactory.eINSTANCE
+				.createExpressionStatement();
+		res.setExpression((Expression) visit(node.getExpression()));
 		return res;
 	}
 
@@ -702,7 +745,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitVoidOperator(VoidOperator node) {
 		UnaryExpression res = DomFactory.eINSTANCE.createUnaryExpression();
 		res.setOperation(UnaryOperator.VOID);
-		res.setArgument((Expression)visit(node.getExpression()));
+		res.setArgument((Expression) visit(node.getExpression()));
 		return res;
 	}
 
@@ -710,40 +753,44 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitYieldOperator(YieldOperator node) {
 		UnaryExpression res = DomFactory.eINSTANCE.createUnaryExpression();
 		res.setOperation(UnaryOperator.YIELD);
-		res.setArgument((Expression)visit(node.getExpression()));
+		res.setArgument((Expression) visit(node.getExpression()));
 		return res;
 	}
 
 	@Override
 	public Node visitWhileStatement(WhileStatement node) {
-		org.eclipse.dltk.javascript.core.dom.WhileStatement res = DomFactory.eINSTANCE.createWhileStatement();
-		res.setCondition((Expression)visit(node.getCondition()));
-		res.setBody((Statement)visit(node.getBody()));
+		org.eclipse.dltk.javascript.core.dom.WhileStatement res = DomFactory.eINSTANCE
+				.createWhileStatement();
+		res.setCondition((Expression) visit(node.getCondition()));
+		res.setBody((Statement) visit(node.getBody()));
 		return res;
 	}
 
 	@Override
 	public Node visitWithStatement(WithStatement node) {
-		org.eclipse.dltk.javascript.core.dom.WithStatement res = DomFactory.eINSTANCE.createWithStatement();
-		res.setExpression((Expression)visit(node.getExpression()));
-		res.setStatement((Statement)visit(node.getStatement()));
+		org.eclipse.dltk.javascript.core.dom.WithStatement res = DomFactory.eINSTANCE
+				.createWithStatement();
+		res.setExpression((Expression) visit(node.getExpression()));
+		res.setStatement((Statement) visit(node.getStatement()));
 		return res;
 	}
 
 	@Override
 	public Node visitXmlLiteral(XmlLiteral node) {
 		XmlInitializer res = DomFactory.eINSTANCE.createXmlInitializer();
-		for(XmlFragment fragment : node.getFragments()) {
+		for (XmlFragment fragment : node.getFragments()) {
 			org.eclipse.dltk.javascript.core.dom.XmlFragment cur = null;
 			if (fragment instanceof XmlTextFragment) {
-				XmlTextFragment text = (XmlTextFragment)fragment;
-				org.eclipse.dltk.javascript.core.dom.XmlTextFragment elem = DomFactory.eINSTANCE.createXmlTextFragment();
+				XmlTextFragment text = (XmlTextFragment) fragment;
+				org.eclipse.dltk.javascript.core.dom.XmlTextFragment elem = DomFactory.eINSTANCE
+						.createXmlTextFragment();
 				elem.setText(text.getXml());
 				cur = elem;
 			} else if (fragment instanceof XmlExpressionFragment) {
-				XmlExpressionFragment expr = (XmlExpressionFragment)fragment;
-				org.eclipse.dltk.javascript.core.dom.XmlExpressionFragment elem = DomFactory.eINSTANCE.createXmlExpressionFragment();
-				elem.setExpression((Expression)visit(expr.getExpression()));
+				XmlExpressionFragment expr = (XmlExpressionFragment) fragment;
+				org.eclipse.dltk.javascript.core.dom.XmlExpressionFragment elem = DomFactory.eINSTANCE
+						.createXmlExpressionFragment();
+				elem.setExpression((Expression) visit(expr.getExpression()));
 				cur = elem;
 			}
 			cur.setBegin(fragment.sourceStart());
@@ -755,15 +802,17 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitDefaultXmlNamespace(DefaultXmlNamespaceStatement node) {
-		org.eclipse.dltk.javascript.core.dom.DefaultXmlNamespaceStatement res = DomFactory.eINSTANCE.createDefaultXmlNamespaceStatement();
-		res.setExpression((Expression)visit(node.getValue()));
+		org.eclipse.dltk.javascript.core.dom.DefaultXmlNamespaceStatement res = DomFactory.eINSTANCE
+				.createDefaultXmlNamespaceStatement();
+		res.setExpression((Expression) visit(node.getValue()));
 		return res;
 	}
 
 	@Override
 	public Node visitXmlPropertyIdentifier(XmlAttributeIdentifier node) {
-		AttributeIdentifier res = DomFactory.eINSTANCE.createAttributeIdentifier();
-		res.setSelector((ISelector)visit(node.getExpression()));
+		AttributeIdentifier res = DomFactory.eINSTANCE
+				.createAttributeIdentifier();
+		res.setSelector((ISelector) visit(node.getExpression()));
 		return res;
 	}
 
@@ -774,17 +823,19 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitGetAllChildrenExpression(GetAllChildrenExpression node) {
-		DescendantAccessExpression res = DomFactory.eINSTANCE.createDescendantAccessExpression();
-		res.setObject((Expression)visit(node.getObject()));
-		res.setProperty((IProperty)visit(node.getProperty()));
+		DescendantAccessExpression res = DomFactory.eINSTANCE
+				.createDescendantAccessExpression();
+		res.setObject((Expression) visit(node.getObject()));
+		res.setProperty((IProperty) visit(node.getProperty()));
 		return res;
 	}
 
 	@Override
 	public Node visitGetLocalNameExpression(GetLocalNameExpression node) {
-		QualifiedIdentifier res = DomFactory.eINSTANCE.createQualifiedIdentifier();
-		res.setNamespace((IPropertySelector)visit(node.getNamespace()));
-		res.setMember((IUnqualifiedSelector)visit(node.getLocalName()));
+		QualifiedIdentifier res = DomFactory.eINSTANCE
+				.createQualifiedIdentifier();
+		res.setNamespace((IPropertySelector) visit(node.getNamespace()));
+		res.setMember((IUnqualifiedSelector) visit(node.getLocalName()));
 		return res;
 	}
 
