@@ -105,6 +105,10 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			if (lc.getKind() == ChangeKind.ADD_LITERAL)
 				deleted.add((Node)src.get(lc.getIndex()));
 		}
+		if (fc.getListChanges().isEmpty()) {
+			src.clear();
+			generated.addAll(dst);
+		}
 		List<Node> original = new ArrayList<Node>(src.size());
 		for(Object obj : src)
 			original.add((Node)obj);

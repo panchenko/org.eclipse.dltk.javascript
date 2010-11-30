@@ -102,7 +102,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		int st,end=pos;
 		for(st=pos-1;st>=0;st--) {
 			char c = text.charAt(st);
-			if (c == '\n') break;
+			if (c == '\n' || c == '\r') break;
 			if (c != ' ' && c != '\t') end = st;
 		}
 		nlStr = lineDelimiter + text.substring(st+1,end);
@@ -117,7 +117,18 @@ public class Generator extends DomSwitch<StringBuilder> {
 				if (edit.hasChildren())
 					edit.moveTree(-node.getBegin());
 				edit.apply(doc);
-				sb.append(doc.get());
+				String res = doc.get();
+				if (res.contains(lineDelimiter)) {
+					int st,end=node.getBegin();
+					for(st=node.getBegin()-1;st>=0;st--) {
+						char c = text.charAt(st);
+						if (c == '\n' || c == '\r') break;
+						if (c != ' ' && c != '\t') end = st;
+					}
+					String nl = lineDelimiter + text.substring(st+1,end);
+					sb.append(res.replace(nl, nlStr));
+			} else
+					sb.append(res);
 			} catch (BadLocationException e) {
 				JavascriptManipulationPlugin.log(e);
 			}

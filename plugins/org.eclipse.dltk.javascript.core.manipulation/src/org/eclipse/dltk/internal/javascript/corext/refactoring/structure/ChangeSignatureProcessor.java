@@ -1417,29 +1417,32 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 	}
 	
 	private final <T extends Node> void reshuffleElements(EList<T> original, NewElementsProvider<T> provider) {
-		Map<Integer,T> dst = new HashMap<Integer,T>();
-		Set<T> deleted = new HashSet<T>(); 
+		List<T> dst = new ArrayList<T>();
+		Set<T> deleted = new HashSet<T>();
 		{
-			int i=0;
 			for(ParameterInfo info : fParameterInfos) {
-				if (info.isDeleted() && info.getOldIndex() < original.size())
+				if (info.isDeleted())
 					deleted.add(original.get(info.getOldIndex()));
-				else if (!info.isAdded() && info.getOldIndex() < original.size())
-					dst.put(i,original.get(info.getOldIndex()));
-				i++;
+				else {
+					if (info.isAdded())
+						dst.add(provider.createElement(info));
+					else
+						dst.add(original.get(info.getOldIndex()));
+				}
 			}
 		}
-		for(int i=0;i<fParameterInfos.size();i++) {
+		for(int i=0;i<dst.size()+1;i++) {
 			while (i < original.size() && deleted.contains(original.get(i)))
 				original.remove(i);
+			if (i == dst.size())
+				break;
 			T node = dst.get(i);
-			if (node == null) {
-				if (fParameterInfos.get(i).isDeleted()) break;
-				original.add(i, provider.createElement(fParameterInfos.get(i)));
+			if (i < original.size() && original.get(i) == node)
 				continue;
-			}
-			if (original.get(i) != node)
+			if (original.contains(node))
 				original.move(i, node);
+			else
+				original.add(i, dst.get(i));
 		}
 	}
 	
