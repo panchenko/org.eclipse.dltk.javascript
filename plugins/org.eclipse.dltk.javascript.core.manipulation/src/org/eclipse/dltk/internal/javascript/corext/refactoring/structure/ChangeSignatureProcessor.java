@@ -48,6 +48,8 @@ import org.eclipse.dltk.internal.javascript.core.manipulation.Messages;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.Checks;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.ParameterInfo;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.RefactoringCoreMessages;
+import org.eclipse.dltk.javascript.core.dom.BinaryExpression;
+import org.eclipse.dltk.javascript.core.dom.BinaryOperator;
 import org.eclipse.dltk.javascript.core.dom.CallExpression;
 import org.eclipse.dltk.javascript.core.dom.DomFactory;
 import org.eclipse.dltk.javascript.core.dom.DomPackage;
@@ -1534,6 +1536,19 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 			Expression initializer = ((VariableDeclaration)node.eContainer()).getInitializer();
 			if (initializer instanceof FunctionExpression)
 				return (FunctionExpression)initializer;
+		}
+		if (node.eContainingFeature() == DomPackage.eINSTANCE
+				.getPropertyAccessExpression_Property()) {
+			Node parent = (Node) node.eContainer();
+			if (parent.eContainingFeature() == DomPackage.eINSTANCE
+					.getBinaryExpression_Left()) {
+				BinaryExpression expr = (BinaryExpression) parent.eContainer();
+				if (expr.getOperation() == BinaryOperator.ASSIGN) {
+					Expression right = expr.getRight();
+					if (right instanceof FunctionExpression)
+						return (FunctionExpression) right;
+				}
+			}
 		}
 		return null;
 	}
