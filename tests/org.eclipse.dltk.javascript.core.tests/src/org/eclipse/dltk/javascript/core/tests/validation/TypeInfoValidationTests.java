@@ -157,7 +157,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var x:ExampleService");
 		code.add("var name = x.execute");
 		final List<IProblem> problems = validate(code.toString());
-		assertTrue(problems.isEmpty());
+		assertTrue(problems.toString(), problems.isEmpty());
 	}
 
 	public void testElementResolver() {
@@ -169,8 +169,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
 				.getID());
 	}
-	
-	
+
 	public void testLazyJSObject() {
 		StringList code = new StringList();
 		code.add("var x = new function x(){");
@@ -185,7 +184,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(0, problems.size());
 	}
 
-	
 	public void testLazyReturnTypeWithJSDocParam() {
 		StringList code = new StringList();
 		code.add("/**");
@@ -204,7 +202,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(0, problems.size());
 	}
-	
+
 	public void testLazyReturnTypeWithTypeInfo() {
 		StringList code = new StringList();
 		code.add("/**");
@@ -223,7 +221,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(0, problems.size());
 	}
-	
+
 	public void testLazyReturnTypeWithNoTypeParamInfo() {
 		StringList code = new StringList();
 		code.add("/**");
@@ -242,9 +240,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 	}
-	
-	
-	
+
 	public void testGenericParamWtihNoneGenericCall() throws Exception {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -260,7 +256,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
-	
+
 	public void testGenericParamWtihGenericCall() throws Exception {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -274,7 +270,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(0, problems.size());
 	}
-	
+
 	public void testNoneGenericParamWtihGenericCall() throws Exception {
 		List<String> code = new StringList();
 		code.add("/**");
