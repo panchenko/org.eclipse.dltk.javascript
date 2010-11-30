@@ -58,6 +58,7 @@ import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Parameter;
 import org.eclipse.dltk.javascript.core.dom.SimplePropertyAssignment;
 import org.eclipse.dltk.javascript.core.dom.Source;
+import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.dltk.javascript.core.dom.rewrite.ASTConverter;
 import org.eclipse.dltk.javascript.core.dom.rewrite.NodeFinder;
@@ -1528,6 +1529,11 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 				if (func instanceof FunctionExpression)
 					return (FunctionExpression)func;
 			}
+		}
+		if (node.eContainingFeature() == DomPackage.eINSTANCE.getVariableDeclaration_Identifier()) {
+			Expression initializer = ((VariableDeclaration)node.eContainer()).getInitializer();
+			if (initializer instanceof FunctionExpression)
+				return (FunctionExpression)initializer;
 		}
 		return null;
 	}
