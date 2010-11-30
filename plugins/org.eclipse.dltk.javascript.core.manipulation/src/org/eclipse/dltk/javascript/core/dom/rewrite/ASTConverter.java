@@ -11,6 +11,7 @@ import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.BooleanLiteral;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
 import org.eclipse.dltk.javascript.ast.CallExpression;
+import org.eclipse.dltk.javascript.ast.CaseClause;
 import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.CommaExpression;
 import org.eclipse.dltk.javascript.ast.ConditionalOperator;
@@ -555,10 +556,28 @@ public class ASTConverter extends ASTVisitor<Node> {
 
 	@Override
 	public Node visitSwitchStatement(SwitchStatement node) {
-		org.eclipse.dltk.javascript.core.dom.SwitchStatement res = DomFactory.eINSTANCE.createSwitchStatement();
-		res.setSelector((Expression)visit(node.getCondition()));
-		for(SwitchComponent elem : node.getCaseClauses())
-			res.getElements().add((SwitchElement)visit(elem));
+		org.eclipse.dltk.javascript.core.dom.SwitchStatement res = DomFactory.eINSTANCE
+				.createSwitchStatement();
+		res.setSelector((Expression) visit(node.getCondition()));
+		for (SwitchComponent elem : node.getCaseClauses()) {
+			final SwitchElement element;
+			if (elem instanceof CaseClause) {
+				final org.eclipse.dltk.javascript.core.dom.CaseClause caseClause = DomFactory.eINSTANCE
+						.createCaseClause();
+				caseClause.setExpression((Expression) visit(((CaseClause) elem)
+						.getCondition()));
+				element = caseClause;
+			} else {
+				element = DomFactory.eINSTANCE.createDefaultClause();
+			}
+			element.setBegin(elem.sourceStart());
+			element.setEnd(elem.sourceEnd());
+			for (org.eclipse.dltk.javascript.ast.Statement statement : elem
+					.getStatements()) {
+				element.getStatements().add((Statement) visit(statement));
+			}
+			res.getElements().add(element);
+		}
 		return res;
 	}
 
