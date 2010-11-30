@@ -359,8 +359,7 @@ public class Value implements IValue {
 							processing);
 				}
 			}
-			if (src.kind != ReferenceKind.UNKNOWN
-					&& kind == ReferenceKind.UNKNOWN) {
+			if (src.kind != ReferenceKind.UNKNOWN) {
 				kind = src.kind;
 			}
 			if (src.location != ReferenceLocation.UNKNOWN
