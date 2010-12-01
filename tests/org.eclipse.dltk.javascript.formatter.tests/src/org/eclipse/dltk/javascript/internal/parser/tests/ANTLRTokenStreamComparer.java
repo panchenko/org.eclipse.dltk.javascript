@@ -9,7 +9,6 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.internal.parser.tests;
 
 import java.util.ArrayList;
@@ -24,16 +23,16 @@ import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
 public class ANTLRTokenStreamComparer {
 
-	private static List getTokens(String source, List comments) {
+	private static List<String> getTokens(String source, List<String> comments) {
 
 		JSTokenStream stream = JavaScriptParser.createTokenStream(source);
 
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 
-		List tokens = stream.getTokens();
+		List<Token> tokens = stream.getTokens();
 
 		for (int i = 0; i < tokens.size(); i++) {
-			Token token = (Token) tokens.get(i);
+			Token token = tokens.get(i);
 
 			switch (token.getType()) {
 
@@ -55,8 +54,8 @@ public class ANTLRTokenStreamComparer {
 		return list;
 	}
 
-	private static void printTokens(List sourceTokens, List targetTokens,
-			int count) {
+	private static void printTokens(List<String> sourceTokens,
+			List<String> targetTokens, int count) {
 		for (int i = Math.max(0, count - 30); i < count; i++) {
 			System.out.print(i);
 			System.out.print(". ");
@@ -67,10 +66,11 @@ public class ANTLRTokenStreamComparer {
 		System.out.println("-------------------------------------------");
 	}
 
-	private static void printComments(List sourceComments, List targetComments) {
+	private static void printComments(List<String> sourceComments,
+			List<String> targetComments) {
 
-		for (int i = 0; i < Math.max(sourceComments.size(), targetComments
-				.size()); i++) {
+		for (int i = 0; i < Math.max(sourceComments.size(),
+				targetComments.size()); i++) {
 
 			System.out
 					.println("==============================================================");
@@ -89,17 +89,17 @@ public class ANTLRTokenStreamComparer {
 	public static void compare(String source, String target,
 			boolean compareComments) {
 
-		List sourceComments = new ArrayList();
-		List targetComments = new ArrayList();
+		List<String> sourceComments = new ArrayList<String>();
+		List<String> targetComments = new ArrayList<String>();
 
-		List sourceTokens = getTokens(source, sourceComments);
-		List targetTokens = getTokens(target, targetComments);
+		List<String> sourceTokens = getTokens(source, sourceComments);
+		List<String> targetTokens = getTokens(target, targetComments);
 
 		int errorPos = -1;
 
 		for (int i = 0; i < sourceTokens.size(); i++) {
-			String sourceToken = (String) sourceTokens.get(i);
-			String targetToken = (String) targetTokens.get(i);
+			String sourceToken = sourceTokens.get(i);
+			String targetToken = targetTokens.get(i);
 
 			// if (sourceToken.getType() == JSParser.XML
 			// && targetToken.getType() == JSParser.XML)
@@ -121,16 +121,16 @@ public class ANTLRTokenStreamComparer {
 			System.out
 					.println("TOKENS --------------------------------------------");
 			printTokens(sourceTokens, targetTokens, errorPos + 1);
-			Assert.assertEquals(sourceTokens.get(errorPos), targetTokens
-					.get(errorPos));
+			Assert.assertEquals(sourceTokens.get(errorPos),
+					targetTokens.get(errorPos));
 		}
 
 		if (compareComments) {
 
 			if (sourceComments.size() != targetComments.size()) {
 				printComments(sourceComments, targetComments);
-				Assert.assertEquals(sourceComments.size(), targetComments
-						.size());
+				Assert.assertEquals(sourceComments.size(),
+						targetComments.size());
 			}
 		}
 

@@ -9,7 +9,6 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.internal.parser.tests;
 
 import java.io.IOException;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.antlr.runtime.Token;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
@@ -28,8 +28,8 @@ import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 public class JavaScriptTokenStreamTester extends AbstractTester {
 
 	public static void tokenize(String resourceName) throws IOException {
-		tokenize(resourceName, JavaScriptFormatterTestsPlugin.CONTEXT
-				.getCharset());
+		tokenize(resourceName,
+				JavaScriptFormatterTestsPlugin.CONTEXT.getCharset());
 	}
 
 	public static void tokenize(String resourceName, String charset)
@@ -39,7 +39,7 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 
 		JSTokenStream stream = JavaScriptParser.createTokenStream(source);
 
-		List tokens = stream.getTokens();
+		List<Token> tokens = stream.getTokens();
 
 		Assert.assertTrue(tokens.size() > 0);
 
@@ -68,7 +68,8 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 								+ ": " + problem.getMessage());
 					}
 
-					public Object getAdapter(Class adapter) {
+					public Object getAdapter(
+							@SuppressWarnings("rawtypes") Class adapter) {
 						return null;
 					}
 				});
