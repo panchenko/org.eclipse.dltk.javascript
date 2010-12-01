@@ -130,6 +130,8 @@ public class ASTConverter extends ASTVisitor<Node> {
 	}
 
 	private org.eclipse.dltk.javascript.core.dom.Label visitLabel(Label label) {
+		if (label == null)
+			return null;
 		org.eclipse.dltk.javascript.core.dom.Label res = DOM_FACTORY
 				.createLabel();
 		res.setBegin(label.sourceStart());
