@@ -374,11 +374,22 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitForStatement(ForStatement node) {
 		org.eclipse.dltk.javascript.core.dom.ForStatement res = DOM_FACTORY
 				.createForStatement();
-		res.setInitialization((IForInitializer) visit(node.getInitial()));
-		res.setCondition((Expression) visit(node.getCondition()));
-		res.setIncrement((Expression) visit(node.getStep()));
+		if (!isEmpty(node.getInitial())) {
+			res.setInitialization((IForInitializer) visit(node.getInitial()));
+		}
+		if (!isEmpty(node.getCondition())) {
+			res.setCondition((Expression) visit(node.getCondition()));
+		}
+		if (!isEmpty(node.getStep())) {
+			res.setIncrement((Expression) visit(node.getStep()));
+		}
 		res.setBody((Statement) visit(node.getBody()));
 		return res;
+	}
+
+	private boolean isEmpty(
+			org.eclipse.dltk.javascript.ast.Expression expression) {
+		return expression == null || expression instanceof EmptyExpression;
 	}
 
 	@Override

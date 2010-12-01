@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: ArrayLiteral.java,v 1.1 2010/11/08 00:20:20 apanchenk Exp $
+ * $Id: ArrayLiteral.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -26,19 +26,19 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface ArrayLiteral extends Expression {
 	/**
-	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.dltk.javascript.core.dom.IArrayElement}.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
+     * The list contents are of type {@link org.eclipse.dltk.javascript.core.dom.IArrayElement}.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Elements</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Elements</em>' containment reference list.
-	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getArrayLiteral_Elements()
-	 * @model containment="true"
-	 * @generated
-	 */
+     * @return the value of the '<em>Elements</em>' containment reference list.
+     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getArrayLiteral_Elements()
+     * @model containment="true"
+     * @generated
+     */
 	EList<IArrayElement> getElements();
 
 } // ArrayLiteral

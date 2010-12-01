@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: SetterAssignmentImpl.java,v 1.1 2010/11/08 00:20:20 apanchenk Exp $
+ * $Id: SetterAssignmentImpl.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -33,147 +33,147 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class SetterAssignmentImpl extends AccessorAssignmentImpl implements SetterAssignment {
 	/**
-	 * The cached value of the '{@link #getParameter() <em>Parameter</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getParameter() <em>Parameter</em>}' containment reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getParameter()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getParameter()
+     * @generated
+     * @ordered
+     */
 	protected Identifier parameter;
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	protected SetterAssignmentImpl() {
-		super();
-	}
+        super();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	protected EClass eStaticClass() {
-		return DomPackage.Literals.SETTER_ASSIGNMENT;
-	}
+        return DomPackage.Literals.SETTER_ASSIGNMENT;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Identifier getParameter() {
-		return parameter;
-	}
+        return parameter;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public NotificationChain basicSetParameter(Identifier newParameter, NotificationChain msgs) {
-		Identifier oldParameter = parameter;
-		parameter = newParameter;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.SETTER_ASSIGNMENT__PARAMETER, oldParameter, newParameter);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
+        Identifier oldParameter = parameter;
+        parameter = newParameter;
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.SETTER_ASSIGNMENT__PARAMETER, oldParameter, newParameter);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setParameter(Identifier newParameter) {
-		if (newParameter != parameter) {
-			NotificationChain msgs = null;
-			if (parameter != null)
-				msgs = ((InternalEObject)parameter).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.SETTER_ASSIGNMENT__PARAMETER, null, msgs);
-			if (newParameter != null)
-				msgs = ((InternalEObject)newParameter).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.SETTER_ASSIGNMENT__PARAMETER, null, msgs);
-			msgs = basicSetParameter(newParameter, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.SETTER_ASSIGNMENT__PARAMETER, newParameter, newParameter));
-	}
+        if (newParameter != parameter) {
+            NotificationChain msgs = null;
+            if (parameter != null)
+                msgs = ((InternalEObject)parameter).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.SETTER_ASSIGNMENT__PARAMETER, null, msgs);
+            if (newParameter != null)
+                msgs = ((InternalEObject)newParameter).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.SETTER_ASSIGNMENT__PARAMETER, null, msgs);
+            msgs = basicSetParameter(newParameter, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.SETTER_ASSIGNMENT__PARAMETER, newParameter, newParameter));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
-				return basicSetParameter(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+        switch (featureID) {
+            case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
+                return basicSetParameter(null, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
-				return getParameter();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+        switch (featureID) {
+            case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
+                return getParameter();
+        }
+        return super.eGet(featureID, resolve, coreType);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
-				setParameter((Identifier)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+        switch (featureID) {
+            case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
+                setParameter((Identifier)newValue);
+                return;
+        }
+        super.eSet(featureID, newValue);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
-				setParameter((Identifier)null);
-				return;
-		}
-		super.eUnset(featureID);
-	}
+        switch (featureID) {
+            case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
+                setParameter((Identifier)null);
+                return;
+        }
+        super.eUnset(featureID);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
-				return parameter != null;
-		}
-		return super.eIsSet(featureID);
-	}
+        switch (featureID) {
+            case DomPackage.SETTER_ASSIGNMENT__PARAMETER:
+                return parameter != null;
+        }
+        return super.eIsSet(featureID);
+    }
 
 } //SetterAssignmentImpl

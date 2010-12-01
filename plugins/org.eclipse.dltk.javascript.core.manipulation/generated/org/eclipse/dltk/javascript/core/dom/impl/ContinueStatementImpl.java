@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: ContinueStatementImpl.java,v 1.1 2010/11/08 00:20:19 apanchenk Exp $
+ * $Id: ContinueStatementImpl.java,v 1.2 2010/12/01 09:31:17 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -33,147 +33,147 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class ContinueStatementImpl extends NodeImpl implements ContinueStatement {
 	/**
-	 * The cached value of the '{@link #getLabel() <em>Label</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getLabel() <em>Label</em>}' containment reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLabel()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getLabel()
+     * @generated
+     * @ordered
+     */
 	protected Label label;
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	protected ContinueStatementImpl() {
-		super();
-	}
+        super();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	protected EClass eStaticClass() {
-		return DomPackage.Literals.CONTINUE_STATEMENT;
-	}
+        return DomPackage.Literals.CONTINUE_STATEMENT;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Label getLabel() {
-		return label;
-	}
+        return label;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public NotificationChain basicSetLabel(Label newLabel, NotificationChain msgs) {
-		Label oldLabel = label;
-		label = newLabel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.CONTINUE_STATEMENT__LABEL, oldLabel, newLabel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
+        Label oldLabel = label;
+        label = newLabel;
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.CONTINUE_STATEMENT__LABEL, oldLabel, newLabel);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setLabel(Label newLabel) {
-		if (newLabel != label) {
-			NotificationChain msgs = null;
-			if (label != null)
-				msgs = ((InternalEObject)label).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.CONTINUE_STATEMENT__LABEL, null, msgs);
-			if (newLabel != null)
-				msgs = ((InternalEObject)newLabel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.CONTINUE_STATEMENT__LABEL, null, msgs);
-			msgs = basicSetLabel(newLabel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.CONTINUE_STATEMENT__LABEL, newLabel, newLabel));
-	}
+        if (newLabel != label) {
+            NotificationChain msgs = null;
+            if (label != null)
+                msgs = ((InternalEObject)label).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.CONTINUE_STATEMENT__LABEL, null, msgs);
+            if (newLabel != null)
+                msgs = ((InternalEObject)newLabel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.CONTINUE_STATEMENT__LABEL, null, msgs);
+            msgs = basicSetLabel(newLabel, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.CONTINUE_STATEMENT__LABEL, newLabel, newLabel));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DomPackage.CONTINUE_STATEMENT__LABEL:
-				return basicSetLabel(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+        switch (featureID) {
+            case DomPackage.CONTINUE_STATEMENT__LABEL:
+                return basicSetLabel(null, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case DomPackage.CONTINUE_STATEMENT__LABEL:
-				return getLabel();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+        switch (featureID) {
+            case DomPackage.CONTINUE_STATEMENT__LABEL:
+                return getLabel();
+        }
+        return super.eGet(featureID, resolve, coreType);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case DomPackage.CONTINUE_STATEMENT__LABEL:
-				setLabel((Label)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+        switch (featureID) {
+            case DomPackage.CONTINUE_STATEMENT__LABEL:
+                setLabel((Label)newValue);
+                return;
+        }
+        super.eSet(featureID, newValue);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case DomPackage.CONTINUE_STATEMENT__LABEL:
-				setLabel((Label)null);
-				return;
-		}
-		super.eUnset(featureID);
-	}
+        switch (featureID) {
+            case DomPackage.CONTINUE_STATEMENT__LABEL:
+                setLabel((Label)null);
+                return;
+        }
+        super.eUnset(featureID);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case DomPackage.CONTINUE_STATEMENT__LABEL:
-				return label != null;
-		}
-		return super.eIsSet(featureID);
-	}
+        switch (featureID) {
+            case DomPackage.CONTINUE_STATEMENT__LABEL:
+                return label != null;
+        }
+        return super.eIsSet(featureID);
+    }
 
 } //ContinueStatementImpl

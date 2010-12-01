@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: ForInStatement.java,v 1.1 2010/11/08 00:20:20 apanchenk Exp $
+ * $Id: ForInStatement.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -26,55 +26,55 @@ package org.eclipse.dltk.javascript.core.dom;
  */
 public interface ForInStatement extends IterationStatement {
 	/**
-	 * Returns the value of the '<em><b>Item</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Item</b></em>' containment reference.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Item</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Item</em>' containment reference.
-	 * @see #setItem(IForInitializer)
-	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getForInStatement_Item()
-	 * @model containment="true" required="true"
-	 * @generated
-	 */
+     * @return the value of the '<em>Item</em>' containment reference.
+     * @see #setItem(IForInitializer)
+     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getForInStatement_Item()
+     * @model containment="true" required="true"
+     * @generated
+     */
 	IForInitializer getItem();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.ForInStatement#getItem <em>Item</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.ForInStatement#getItem <em>Item</em>}' containment reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Item</em>' containment reference.
-	 * @see #getItem()
-	 * @generated
-	 */
+     * @param value the new value of the '<em>Item</em>' containment reference.
+     * @see #getItem()
+     * @generated
+     */
 	void setItem(IForInitializer value);
 
 	/**
-	 * Returns the value of the '<em><b>Collection</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Collection</b></em>' containment reference.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Collection</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Collection</em>' containment reference.
-	 * @see #setCollection(Expression)
-	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getForInStatement_Collection()
-	 * @model containment="true" required="true"
-	 * @generated
-	 */
+     * @return the value of the '<em>Collection</em>' containment reference.
+     * @see #setCollection(Expression)
+     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getForInStatement_Collection()
+     * @model containment="true" required="true"
+     * @generated
+     */
 	Expression getCollection();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.ForInStatement#getCollection <em>Collection</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.ForInStatement#getCollection <em>Collection</em>}' containment reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Collection</em>' containment reference.
-	 * @see #getCollection()
-	 * @generated
-	 */
+     * @param value the new value of the '<em>Collection</em>' containment reference.
+     * @see #getCollection()
+     * @generated
+     */
 	void setCollection(Expression value);
 
 } // ForInStatement

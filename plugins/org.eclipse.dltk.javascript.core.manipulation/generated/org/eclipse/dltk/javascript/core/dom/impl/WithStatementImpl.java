@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: WithStatementImpl.java,v 1.1 2010/11/08 00:20:20 apanchenk Exp $
+ * $Id: WithStatementImpl.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -35,212 +35,212 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class WithStatementImpl extends StatementImpl implements WithStatement {
 	/**
-	 * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getExpression()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getExpression()
+     * @generated
+     * @ordered
+     */
 	protected Expression expression;
 
 	/**
-	 * The cached value of the '{@link #getStatement() <em>Statement</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+     * The cached value of the '{@link #getStatement() <em>Statement</em>}' containment reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getStatement()
-	 * @generated
-	 * @ordered
-	 */
+     * @see #getStatement()
+     * @generated
+     * @ordered
+     */
 	protected Statement statement;
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	protected WithStatementImpl() {
-		super();
-	}
+        super();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	protected EClass eStaticClass() {
-		return DomPackage.Literals.WITH_STATEMENT;
-	}
+        return DomPackage.Literals.WITH_STATEMENT;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Expression getExpression() {
-		return expression;
-	}
+        return expression;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public NotificationChain basicSetExpression(Expression newExpression, NotificationChain msgs) {
-		Expression oldExpression = expression;
-		expression = newExpression;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.WITH_STATEMENT__EXPRESSION, oldExpression, newExpression);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
+        Expression oldExpression = expression;
+        expression = newExpression;
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.WITH_STATEMENT__EXPRESSION, oldExpression, newExpression);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setExpression(Expression newExpression) {
-		if (newExpression != expression) {
-			NotificationChain msgs = null;
-			if (expression != null)
-				msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.WITH_STATEMENT__EXPRESSION, null, msgs);
-			if (newExpression != null)
-				msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.WITH_STATEMENT__EXPRESSION, null, msgs);
-			msgs = basicSetExpression(newExpression, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.WITH_STATEMENT__EXPRESSION, newExpression, newExpression));
-	}
+        if (newExpression != expression) {
+            NotificationChain msgs = null;
+            if (expression != null)
+                msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.WITH_STATEMENT__EXPRESSION, null, msgs);
+            if (newExpression != null)
+                msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.WITH_STATEMENT__EXPRESSION, null, msgs);
+            msgs = basicSetExpression(newExpression, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.WITH_STATEMENT__EXPRESSION, newExpression, newExpression));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public Statement getStatement() {
-		return statement;
-	}
+        return statement;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public NotificationChain basicSetStatement(Statement newStatement, NotificationChain msgs) {
-		Statement oldStatement = statement;
-		statement = newStatement;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.WITH_STATEMENT__STATEMENT, oldStatement, newStatement);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
+        Statement oldStatement = statement;
+        statement = newStatement;
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.WITH_STATEMENT__STATEMENT, oldStatement, newStatement);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	public void setStatement(Statement newStatement) {
-		if (newStatement != statement) {
-			NotificationChain msgs = null;
-			if (statement != null)
-				msgs = ((InternalEObject)statement).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.WITH_STATEMENT__STATEMENT, null, msgs);
-			if (newStatement != null)
-				msgs = ((InternalEObject)newStatement).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.WITH_STATEMENT__STATEMENT, null, msgs);
-			msgs = basicSetStatement(newStatement, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.WITH_STATEMENT__STATEMENT, newStatement, newStatement));
-	}
+        if (newStatement != statement) {
+            NotificationChain msgs = null;
+            if (statement != null)
+                msgs = ((InternalEObject)statement).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.WITH_STATEMENT__STATEMENT, null, msgs);
+            if (newStatement != null)
+                msgs = ((InternalEObject)newStatement).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.WITH_STATEMENT__STATEMENT, null, msgs);
+            msgs = basicSetStatement(newStatement, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.WITH_STATEMENT__STATEMENT, newStatement, newStatement));
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DomPackage.WITH_STATEMENT__EXPRESSION:
-				return basicSetExpression(null, msgs);
-			case DomPackage.WITH_STATEMENT__STATEMENT:
-				return basicSetStatement(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+        switch (featureID) {
+            case DomPackage.WITH_STATEMENT__EXPRESSION:
+                return basicSetExpression(null, msgs);
+            case DomPackage.WITH_STATEMENT__STATEMENT:
+                return basicSetStatement(null, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case DomPackage.WITH_STATEMENT__EXPRESSION:
-				return getExpression();
-			case DomPackage.WITH_STATEMENT__STATEMENT:
-				return getStatement();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+        switch (featureID) {
+            case DomPackage.WITH_STATEMENT__EXPRESSION:
+                return getExpression();
+            case DomPackage.WITH_STATEMENT__STATEMENT:
+                return getStatement();
+        }
+        return super.eGet(featureID, resolve, coreType);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case DomPackage.WITH_STATEMENT__EXPRESSION:
-				setExpression((Expression)newValue);
-				return;
-			case DomPackage.WITH_STATEMENT__STATEMENT:
-				setStatement((Statement)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+        switch (featureID) {
+            case DomPackage.WITH_STATEMENT__EXPRESSION:
+                setExpression((Expression)newValue);
+                return;
+            case DomPackage.WITH_STATEMENT__STATEMENT:
+                setStatement((Statement)newValue);
+                return;
+        }
+        super.eSet(featureID, newValue);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case DomPackage.WITH_STATEMENT__EXPRESSION:
-				setExpression((Expression)null);
-				return;
-			case DomPackage.WITH_STATEMENT__STATEMENT:
-				setStatement((Statement)null);
-				return;
-		}
-		super.eUnset(featureID);
-	}
+        switch (featureID) {
+            case DomPackage.WITH_STATEMENT__EXPRESSION:
+                setExpression((Expression)null);
+                return;
+            case DomPackage.WITH_STATEMENT__STATEMENT:
+                setStatement((Statement)null);
+                return;
+        }
+        super.eUnset(featureID);
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case DomPackage.WITH_STATEMENT__EXPRESSION:
-				return expression != null;
-			case DomPackage.WITH_STATEMENT__STATEMENT:
-				return statement != null;
-		}
-		return super.eIsSet(featureID);
-	}
+        switch (featureID) {
+            case DomPackage.WITH_STATEMENT__EXPRESSION:
+                return expression != null;
+            case DomPackage.WITH_STATEMENT__STATEMENT:
+                return statement != null;
+        }
+        return super.eIsSet(featureID);
+    }
 
 } //WithStatementImpl

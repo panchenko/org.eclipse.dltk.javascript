@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: SwitchStatement.java,v 1.1 2010/11/08 00:20:20 apanchenk Exp $
+ * $Id: SwitchStatement.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -27,45 +27,45 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface SwitchStatement extends Statement {
 	/**
-	 * Returns the value of the '<em><b>Selector</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Selector</b></em>' containment reference.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Selector</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Selector</em>' containment reference.
-	 * @see #setSelector(Expression)
-	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getSwitchStatement_Selector()
-	 * @model containment="true" required="true"
-	 * @generated
-	 */
+     * @return the value of the '<em>Selector</em>' containment reference.
+     * @see #setSelector(Expression)
+     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getSwitchStatement_Selector()
+     * @model containment="true" required="true"
+     * @generated
+     */
 	Expression getSelector();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.SwitchStatement#getSelector <em>Selector</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.SwitchStatement#getSelector <em>Selector</em>}' containment reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Selector</em>' containment reference.
-	 * @see #getSelector()
-	 * @generated
-	 */
+     * @param value the new value of the '<em>Selector</em>' containment reference.
+     * @see #getSelector()
+     * @generated
+     */
 	void setSelector(Expression value);
 
 	/**
-	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.dltk.javascript.core.dom.SwitchElement}.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
+     * The list contents are of type {@link org.eclipse.dltk.javascript.core.dom.SwitchElement}.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Elements</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Elements</em>' containment reference list.
-	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getSwitchStatement_Elements()
-	 * @model containment="true"
-	 * @generated
-	 */
+     * @return the value of the '<em>Elements</em>' containment reference list.
+     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getSwitchStatement_Elements()
+     * @model containment="true"
+     * @generated
+     */
 	EList<SwitchElement> getElements();
 
 } // SwitchStatement

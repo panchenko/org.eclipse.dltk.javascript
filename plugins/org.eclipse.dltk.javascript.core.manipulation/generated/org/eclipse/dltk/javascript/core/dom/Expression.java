@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: Expression.java,v 1.1 2010/11/08 00:20:21 apanchenk Exp $
+ * $Id: Expression.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -17,5 +17,5 @@ package org.eclipse.dltk.javascript.core.dom;
  * @model abstract="true"
  * @generated
  */
-public interface Expression extends Node, IArrayElement {
+public interface Expression extends Node, IArrayElement, IForInitializer {
 } // Expression

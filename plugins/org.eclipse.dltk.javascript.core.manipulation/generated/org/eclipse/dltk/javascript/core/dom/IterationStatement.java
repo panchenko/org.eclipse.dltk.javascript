@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: IterationStatement.java,v 1.1 2010/11/08 00:20:21 apanchenk Exp $
+ * $Id: IterationStatement.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -25,29 +25,29 @@ package org.eclipse.dltk.javascript.core.dom;
  */
 public interface IterationStatement extends Statement {
 	/**
-	 * Returns the value of the '<em><b>Body</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
+     * Returns the value of the '<em><b>Body</b></em>' containment reference.
+     * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Body</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Body</em>' containment reference.
-	 * @see #setBody(Statement)
-	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getIterationStatement_Body()
-	 * @model containment="true" required="true"
-	 * @generated
-	 */
+     * @return the value of the '<em>Body</em>' containment reference.
+     * @see #setBody(Statement)
+     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getIterationStatement_Body()
+     * @model containment="true" required="true"
+     * @generated
+     */
 	Statement getBody();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.IterationStatement#getBody <em>Body</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.IterationStatement#getBody <em>Body</em>}' containment reference.
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Body</em>' containment reference.
-	 * @see #getBody()
-	 * @generated
-	 */
+     * @param value the new value of the '<em>Body</em>' containment reference.
+     * @see #getBody()
+     * @generated
+     */
 	void setBody(Statement value);
 
 } // IterationStatement

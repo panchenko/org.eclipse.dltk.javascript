@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: ThisExpressionImpl.java,v 1.1 2010/11/08 00:20:20 apanchenk Exp $
+ * $Id: ThisExpressionImpl.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -22,22 +22,22 @@ import org.eclipse.emf.ecore.EClass;
  */
 public class ThisExpressionImpl extends ExpressionImpl implements ThisExpression {
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	protected ThisExpressionImpl() {
-		super();
-	}
+        super();
+    }
 
 	/**
-	 * <!-- begin-user-doc -->
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * @generated
+     */
 	@Override
 	protected EClass eStaticClass() {
-		return DomPackage.Literals.THIS_EXPRESSION;
-	}
+        return DomPackage.Literals.THIS_EXPRESSION;
+    }
 
 } //ThisExpressionImpl
