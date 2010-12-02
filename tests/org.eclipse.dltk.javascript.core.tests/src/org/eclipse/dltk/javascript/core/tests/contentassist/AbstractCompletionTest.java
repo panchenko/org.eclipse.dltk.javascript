@@ -107,30 +107,29 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 
 	private static final Map<String, List<String>> members = new HashMap<String, List<String>>();
 
-	private static List<String> getMembers(String typeName, int expectedCount) {
+	private static List<String> getMembers(String typeName) {
 		List<String> m = members.get(typeName);
 		if (m == null) {
 			m = loadMembers(typeName);
-			assertEquals(expectedCount, m.size());
 			members.put(typeName, m);
 		}
 		return m;
 	}
 
 	protected static List<String> getMethodsOfObject() {
-		return getMembers(ITypeNames.OBJECT, 7);
+		return getMembers(ITypeNames.OBJECT);
 	}
 
 	protected static List<String> getMethodsOfNumber() {
-		return getMembers(ITypeNames.NUMBER, 10);
+		return getMembers(ITypeNames.NUMBER);
 	}
 
 	protected static List<String> getMethodsOfString() {
-		return getMembers(ITypeNames.STRING, 35);
+		return getMembers(ITypeNames.STRING);
 	}
 
 	protected static List<String> getMethodsOfXML() {
-		return getMembers(ITypeNames.XML, 44);
+		return getMembers(ITypeNames.XML);
 	}
 
 	protected static String[] concat(List<String> values, String... addition) {

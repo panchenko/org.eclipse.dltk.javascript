@@ -7,6 +7,7 @@ import org.eclipse.dltk.javascript.core.tests.builder.BuildChangeTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CodeCompletion;
 import org.eclipse.dltk.javascript.core.tests.contentassist.CompletionStringParsing;
 import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
+import org.eclipse.dltk.javascript.core.tests.contentassist.StandardTypeMemberTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchDeclarationTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchReferenceTests;
@@ -35,6 +36,7 @@ public class AllTests {
 		suite.addTestSuite(JSLintModelTests.class);
 		suite.addTestSuite(CodeValidationTests.class);
 		suite.addTestSuite(FlowValidationTests.class);
+		suite.addTestSuite(StandardTypeMemberTests.class);
 		suite.addTestSuite(CodeCompletion.class);
 		suite.addTestSuite(XMLCompletionTests.class);
 		suite.addTestSuite(CompletionStringParsing.class);
