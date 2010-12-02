@@ -67,7 +67,7 @@ public class ParenthesizedExpression extends Expression {
 
 		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(LP > 0);
+		Assert.isTrue(LP >= 0);
 		Assert.isTrue(RP > 0);
 
 		StringBuffer buffer = new StringBuffer();
