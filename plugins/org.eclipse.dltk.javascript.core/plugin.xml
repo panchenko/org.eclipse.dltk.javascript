@@ -24,13 +24,6 @@
             class="org.eclipse.dltk.javascript.core.JavaScriptLanguageToolkit"
             nature="org.eclipse.dltk.javascript.core.nature"/>
 </extension>
-   <extension
-         point="org.eclipse.dltk.javascript.core.resolver">
-      <resolver
-            class="org.eclipse.dltk.internal.javascript.reference.resolvers.SourceBasedResolverFactory"
-            id="sourceResolver">
-      </resolver>
-   </extension>
    <!--
    <extension
       point="org.eclipse.dltk.core.projectIndexer">
@@ -48,32 +41,12 @@
    </extension>
    -->
    <extension
-         point="org.eclipse.dltk.core.sourceParsers">
-      <parserContribution
-            natureId="org.eclipse.dltk.javascript.core.nature">
-         <parser
-               class="org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceParserFactory"
-               description="JavaScript Source Parser"
-               id="org.eclipse.dltk.javascript.sourceParser"
-               name="JavaScript *Rhino* Parser"
-               priority="0" />
-      </parserContribution>
-   </extension>
-   <extension
          point="org.eclipse.dltk.core.sourceElementParsers">
       <parser
             class="org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceElementParser2"
             nature="org.eclipse.dltk.javascript.core.nature"
             priority="0">
       </parser>
-   </extension>
-   <extension
-         point="org.eclipse.dltk.core.completionEngine">
-      <completionEngine
-            class="org.eclipse.dltk.javascript.internal.core.codeassist.completion.JavaScriptCompletionEngine"
-            nature="org.eclipse.dltk.javascript.core.nature"
-            priority="0">
-      </completionEngine>
    </extension>
    <extension
          point="org.eclipse.dltk.core.completionEngine">
@@ -93,11 +66,6 @@
    </extension>
    <extension
          point="org.eclipse.dltk.core.search">
-      <searchFactory
-            class="org.eclipse.dltk.javascript.internal.core.JavaScriptSearchFactory"
-            nature="org.eclipse.dltk.javascript.core.nature"
-            priority="0">
-      </searchFactory>
       <matchLocator
             class="org.eclipse.dltk.javascript.internal.search.JavaScriptMatchLocator"
             nature="org.eclipse.dltk.javascript.core.nature">
