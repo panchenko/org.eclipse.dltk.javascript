@@ -44,8 +44,11 @@ import org.eclipse.dltk.javascript.core.dom.Identifier;
 import org.eclipse.dltk.javascript.core.dom.Label;
 import org.eclipse.dltk.javascript.core.dom.LabeledStatement;
 import org.eclipse.dltk.javascript.core.dom.Node;
+import org.eclipse.dltk.javascript.core.dom.Parameter;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
+import org.eclipse.dltk.javascript.core.dom.Type;
+import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.WhileStatement;
 import org.eclipse.dltk.javascript.core.dom.rewrite.VariableLookup;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -73,8 +76,8 @@ import com.ibm.icu.text.MessageFormat;
 	private int fMaxVariableId;
 
 	private int fReturnKind;
-	/*private Type fReturnType;
-	private ITypeBinding fReturnTypeBinding;*/
+	private String fReturnTypeName;
+	//private ITypeBinding fReturnTypeBinding;
 
 	private FlowInfo fInputFlowInfo;
 	private FlowContext fInputFlowContext;
@@ -108,13 +111,13 @@ import com.ibm.icu.text.MessageFormat;
 
 	/*public boolean extractsExpression() {
 		return fReturnKind == EXPRESSION;
+	}*/
+
+	public String getReturnTypeName() {
+		return fReturnTypeName;
 	}
 
-	public Type getReturnType() {
-		return fReturnType;
-	}
-
-	public ITypeBinding getReturnTypeBinding() {
+	/*public ITypeBinding getReturnTypeBinding() {
 		return fReturnTypeBinding;
 	}
 
@@ -186,7 +189,7 @@ import com.ibm.icu.text.MessageFormat;
 			addFatalError(result, RefactoringCoreMessages.ExtractMethodAnalyzer_ambiguous_return_value);
 			return result;
 		}
-		//initReturnType(rewriter);
+		initReturnType();
 		return result;
 	}
 	
@@ -200,19 +203,15 @@ import com.ibm.icu.text.MessageFormat;
 		status.addError(message, ScriptStatusContext.create(fCUnit, range));
 	}
 
-	/*private void initReturnType(ImportRewrite rewriter) {
-		AST ast= fEnclosingNode.getAST();
-		fReturnType= null;
-		fReturnTypeBinding= null;
+	private void initReturnType() {
+		fReturnTypeName = null;
+		//fReturnTypeBinding= null;
 		switch (fReturnKind) {
 			case ACCESS_TO_LOCAL:
-				VariableDeclaration declaration= ASTNodes.findVariableDeclaration(fReturnValue, fEnclosingNode);
-				fReturnType= ASTNodeFactory.newType(ast, declaration);
-				if (declaration.resolveBinding() != null) {
-					fReturnTypeBinding= declaration.resolveBinding().getType();
-				}
+				fReturnTypeName = fReturnValue.getTypeName();
 				break;
-			case EXPRESSION:
+			// TODO here's where type inference is to be used
+			/*case EXPRESSION:
 				Expression expression= (Expression)getFirstSelectedNode();
 				if (expression.getNodeType() == ASTNode.CLASS_INSTANCE_CREATION) {
 					fExpressionBinding= ((ClassInstanceCreation)expression).getType().resolveBinding();
@@ -235,24 +234,26 @@ import com.ibm.icu.text.MessageFormat;
 					fReturnTypeBinding= ast.resolveWellKnownType("void"); //$NON-NLS-1$
 					getStatus().addError(RefactoringCoreMessages.ExtractMethodAnalyzer_cannot_determine_return_type, JavaStatusContext.create(fCUnit, expression));
 				}
-				break;
+				break;*/
 			case RETURN_STATEMENT_VALUE:
-				if (fEnclosingNode.getNodeType() == ASTNode.METHOD_DECLARATION) {
-					fReturnType= ((MethodDeclaration) fEnclosingNode).getReturnType2();
-					fReturnTypeBinding= fReturnType != null ? fReturnType.resolveBinding() : null;
+				if (fEnclosingNode.eClass().getClassifierID() == DomPackage.FUNCTION_EXPRESSION) {
+					Type type = ((FunctionExpression) fEnclosingNode).getReturnType();
+					if (type != null)
+						fReturnTypeName = type.getName();
+					//fReturnTypeBinding= fReturnType != null ? fReturnType.resolveBinding() : null;
 				}
 				break;
 			default:
-				fReturnType= ast.newPrimitiveType(PrimitiveType.VOID);
-				fReturnTypeBinding= ast.resolveWellKnownType("void"); //$NON-NLS-1$
+				//fReturnType= ast.newPrimitiveType(PrimitiveType.VOID);
+				//fReturnTypeBinding= ast.resolveWellKnownType("void");
 		}
-		if (fReturnType == null)
+		/*if (fReturnType == null)
 			fReturnType= ast.newPrimitiveType(PrimitiveType.VOID);
-			fReturnTypeBinding= ast.resolveWellKnownType("void"); //$NON-NLS-1$
+			fReturnTypeBinding= ast.resolveWellKnownType("void");*/
 	}
 
 	//	 !!! -- +/- same as in ExtractTempRefactoring
-	public boolean isLiteralNodeSelected() {
+	/*public boolean isLiteralNodeSelected() {
 		ASTNode[] nodes= getSelectedNodes();
 		if (nodes.length != 1)
 			return false;
@@ -331,7 +332,18 @@ import com.ibm.icu.text.MessageFormat;
 		VariableLookup lookup = new VariableLookup(){
 			@Override
 			protected void reportDeclaration(Identifier decl) {
-				bindings.put(decl, new VariableBinding(decl.getName(), fMaxVariableId, decl));
+				Node parent = (Node)decl.eContainer();
+				Type type = null;
+				switch (parent.eClass().getClassifierID()) {
+				case DomPackage.VARIABLE_DECLARATION:
+					type = ((VariableDeclaration)parent).getType();
+					break;
+				case DomPackage.PARAMETER:
+					type = ((Parameter)parent).getType();
+					break;
+				}
+				String typeName = type == null ? null : type.getName();
+				bindings.put(decl, new VariableBinding(decl.getName(), fMaxVariableId, decl, typeName));
 				fMaxVariableId++;
 			}
 			@Override

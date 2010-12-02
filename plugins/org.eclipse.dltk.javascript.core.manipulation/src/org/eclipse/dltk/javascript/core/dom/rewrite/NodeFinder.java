@@ -87,4 +87,19 @@ public class NodeFinder {
 			return null;
 		return selectedNode;
 	}
+	
+	public static Node findEnclosingNode(Node node) {
+		while (true) {
+			node = (Node)node.eContainer();
+			if (node == null)
+				return null;
+			switch(node.eClass().getClassifierID()) {
+			case DomPackage.FUNCTION_EXPRESSION:
+			case DomPackage.GETTER_ASSIGNMENT:
+			case DomPackage.SETTER_ASSIGNMENT:
+			case DomPackage.SOURCE:
+				return node;
+			}
+		}
+	}
 }

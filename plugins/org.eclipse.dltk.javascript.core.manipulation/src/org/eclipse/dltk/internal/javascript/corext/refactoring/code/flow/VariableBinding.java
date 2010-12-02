@@ -6,10 +6,12 @@ public class VariableBinding {
 	private String name;
 	private int variableId;
 	private Identifier declaration;
-	public VariableBinding(String name, int variableId, Identifier declaration) {
+	private String type;
+	public VariableBinding(String name, int variableId, Identifier declaration, String type) {
 		this.name = name;
 		this.variableId = variableId;
 		this.declaration = declaration;
+		this.type = type;
 	}
 	public String getName() {
 		return name;
@@ -19,5 +21,8 @@ public class VariableBinding {
 	}
 	public Identifier getDeclaration() {
 		return declaration;
+	}
+	public String getTypeName() {
+		return type;
 	}
 }

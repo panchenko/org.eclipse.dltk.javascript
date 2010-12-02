@@ -50,6 +50,7 @@ import org.eclipse.dltk.javascript.core.dom.Parameter;
 import org.eclipse.dltk.javascript.core.dom.ReturnStatement;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
+import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.dltk.javascript.core.dom.VariableStatement;
@@ -548,7 +549,7 @@ public class ExtractMethodRefactoring extends Refactoring {
 			// add declaration
 			ExpressionStatement stmt = DomFactory.eINSTANCE.createExpressionStatement();
 			stmt.setExpression(mm);
-			Node enclosing = this.fDestination;
+			Node enclosing = fDestination;
 			EReference ref = enclosing.eContainmentFeature();
 			assert ref.isMany();
 			EList<Statement> list = (EList<Statement>)enclosing.eContainer().eGet(ref);
@@ -708,7 +709,7 @@ public class ExtractMethodRefactoring extends Refactoring {
 	public String getSignature(String methodName) {
 		FunctionExpression methodDecl= createNewMethodDeclaration();
 		String str = new Generator(null,"",0,"").generate(methodDecl).toString();
-		return str.substring(0, str.indexOf(')')+1);
+		return str.substring(0, str.indexOf('{')-1);
 	}
 
 	/*
@@ -749,8 +750,11 @@ public class ExtractMethodRefactoring extends Refactoring {
 		VariableBinding[] arguments= fAnalyzer.getArguments();
 		fParameterInfos= new ArrayList<ParameterInfo>(arguments.length);
 		for (int i= 0; i < arguments.length; i++) {
-			String argument= arguments[i].getName();
-			fParameterInfos.add(new ParameterInfo("", argument, i));
+			String argument = arguments[i].getName();
+			String type = arguments[i].getTypeName();
+			if (type == null)
+				type = "";
+			fParameterInfos.add(new ParameterInfo(type, argument, i));
 		}
 	}
 
@@ -841,6 +845,11 @@ public class ExtractMethodRefactoring extends Refactoring {
 
 		result.modifiers().addAll(ASTNodeFactory.newModifiers(fAST, modifiers));
 		result.setReturnType2((Type)ASTNode.copySubtree(fAST, fAnalyzer.getReturnType()));*/
+		if (fAnalyzer.getReturnTypeName() != null) {
+			Type type = DomFactory.eINSTANCE.createType();
+			type.setName(fAnalyzer.getReturnTypeName());
+			result.setReturnType(type);
+		}
 		Identifier id = DomFactory.eINSTANCE.createIdentifier();
 		id.setName(fMethodName);
 		result.setIdentifier(id);
@@ -848,14 +857,15 @@ public class ExtractMethodRefactoring extends Refactoring {
 		List<Parameter> parameters= result.getParameters();
 		for (int i= 0; i < fParameterInfos.size(); i++) {
 			ParameterInfo info= (ParameterInfo)fParameterInfos.get(i);
-			//VariableDeclaration infoDecl= getVariableDeclaration(info);
 			Parameter parameter= DomFactory.eINSTANCE.createParameter();
 			Identifier prmName = DomFactory.eINSTANCE.createIdentifier();
 			prmName.setName(info.getNewName());
-			//parameter.modifiers().addAll(ASTNodeFactory.newModifiers(fAST, ASTNodes.getModifiers(infoDecl)));
-			//parameter.setType(ASTNodeFactory.newType(fAST, infoDecl));
 			parameter.setName(prmName);
-			//parameter.setVarargs(info.isNewVarargs());
+			if (!"".equals(info.getNewTypeName())) { //$NON-NLS-1
+				Type type = DomFactory.eINSTANCE.createType();
+				type.setName(info.getNewTypeName());
+				parameter.setType(type);
+			}
 			parameters.add(parameter);
 		}
 
@@ -920,6 +930,10 @@ public class ExtractMethodRefactoring extends Refactoring {
 		id.setName(name.getName());
 		VariableDeclaration decl = DomFactory.eINSTANCE.createVariableDeclaration();
 		decl.setIdentifier(id);
+		if (name.getTypeName() != null) {
+			Type type = DomFactory.eINSTANCE.createType();
+			type.setName(name.getTypeName());
+		}
 		if (initializer != null)
 			decl.setInitializer(initializer);
 		VariableStatement result = DomFactory.eINSTANCE.createVariableStatement();

@@ -1424,10 +1424,11 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		Set<T> deleted = new HashSet<T>();
 		{
 			for(ParameterInfo info : fParameterInfos) {
-				if (info.isDeleted())
-					deleted.add(original.get(info.getOldIndex()));
-				else {
-					if (info.isAdded())
+				if (info.isDeleted()) {
+					if (info.getOldIndex() < original.size())
+						deleted.add(original.get(info.getOldIndex()));
+				} else {
+					if (info.isAdded() || info.getOldIndex() >= original.size())
 						dst.add(provider.createElement(info));
 					else
 						dst.add(original.get(info.getOldIndex()));
