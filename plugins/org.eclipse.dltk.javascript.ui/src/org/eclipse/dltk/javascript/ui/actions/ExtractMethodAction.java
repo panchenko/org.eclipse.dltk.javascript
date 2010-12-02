@@ -43,23 +43,6 @@ public class ExtractMethodAction implements IEditorActionDelegate {
 	private ScriptEditor editor;
 	private ITextSelection selection;
 
-	/**
-	 * Note: This constructor is for internal use only. Clients should not call
-	 * this constructor.
-	 * 
-	 * @param editor
-	 *            the script editor
-	 * 
-	 * @noreference This method is not intended to be referenced by clients.
-	 * 
-	 *              public ExtractMethodAction(ScriptEditor editor) {
-	 *              setText(RefactoringMessages.ExtractMethodAction_label);
-	 *              setEnabled
-	 *              (SelectionConverter.getInputAsCompilationUnit(fEditor) !=
-	 *              null); PlatformUI.getWorkbench().getHelpSystem()
-	 *              .setHelp(this, IJavaHelpContextIds.EXTRACT_METHOD_ACTION); }
-	 */
-
 	public void selectionChanged(IAction action, ISelection selection) {
 		if (selection instanceof ITextSelection)
 			this.selection = (ITextSelection) selection;
@@ -83,7 +66,7 @@ public class ExtractMethodAction implements IEditorActionDelegate {
 					&& editor != null
 					&& SelectionConverter.getInputAsSourceModule(editor) != null);
 		} catch (StringIndexOutOfBoundsException e) {
-			// How (-1,-1) selection is better than null really?
+			// Maybe it's a bug in SelectionConverter
 		}
 	}
 

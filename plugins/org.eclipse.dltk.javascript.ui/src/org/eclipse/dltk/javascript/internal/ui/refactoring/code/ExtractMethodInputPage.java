@@ -90,28 +90,24 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 
 		layouter.perform(label, fTextField, 1);
 
-		/*Node[] destinations = fRefactoring.getDestinations();
-		if (destinations.length > 1) {
-			label = new Label(result, SWT.NONE);
-			label.setText(RefactoringMessages.ExtractMethodInputPage_destination_type);
-			final Combo combo = new Combo(result, SWT.READ_ONLY | SWT.DROP_DOWN);
-			SWTUtil.setDefaultVisibleItemCount(combo);
-			for (int i = 0; i < destinations.length; i++) {
-				Node declaration = destinations[i];
-				combo.add(getLabel(declaration));
-			}
-			combo.select(0);
-			combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			combo.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					fRefactoring.setDestination(combo.getSelectionIndex());
-					updatePreview(getText());
-				}
-			});
-		}*/
+		/*
+		 * Node[] destinations = fRefactoring.getDestinations(); if
+		 * (destinations.length > 1) { label = new Label(result, SWT.NONE);
+		 * label
+		 * .setText(RefactoringMessages.ExtractMethodInputPage_destination_type
+		 * ); final Combo combo = new Combo(result, SWT.READ_ONLY |
+		 * SWT.DROP_DOWN); SWTUtil.setDefaultVisibleItemCount(combo); for (int i
+		 * = 0; i < destinations.length; i++) { Node declaration =
+		 * destinations[i]; combo.add(getLabel(declaration)); } combo.select(0);
+		 * combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		 * combo.addSelectionListener(new SelectionAdapter() { public void
+		 * widgetSelected(SelectionEvent e) {
+		 * fRefactoring.setDestination(combo.getSelectionIndex());
+		 * updatePreview(getText()); } }); }
+		 */
 
-		//label = new Label(result, SWT.NONE);
-		//label.setText(RefactoringMessages.ExtractMethodInputPage_access_Modifiers);
+		// label = new Label(result, SWT.NONE);
+		// label.setText(RefactoringMessages.ExtractMethodInputPage_access_Modifiers);
 
 		Composite group = new Composite(result, SWT.NONE);
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -120,30 +116,25 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 		layout.marginWidth = 0;
 		group.setLayout(layout);
 
-		/*String[] labels = new String[] {
-				RefactoringMessages.ExtractMethodInputPage_public,
-				RefactoringMessages.ExtractMethodInputPage_protected,
-				RefactoringMessages.ExtractMethodInputPage_default,
-				RefactoringMessages.ExtractMethodInputPage_private };
-		Integer[] data = new Integer[] { new Integer(Modifier.PUBLIC),
-				new Integer(Modifier.PROTECTED), new Integer(Modifier.NONE),
-				new Integer(Modifier.PRIVATE) };
-		Integer visibility = new Integer(fRefactoring.getVisibility());
-		for (int i = 0; i < labels.length; i++) {
-			Button radio = new Button(group, SWT.RADIO);
-			radio.setText(labels[i]);
-			radio.setData(data[i]);
-			if (data[i].equals(visibility))
-				radio.setSelection(true);
-			radio.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent event) {
-					final Integer selectedModifier = (Integer) event.widget
-							.getData();
-					fSettings.put(ACCESS_MODIFIER, selectedModifier.intValue());
-					setVisibility(selectedModifier);
-				}
-			});
-		}*/
+		/*
+		 * String[] labels = new String[] {
+		 * RefactoringMessages.ExtractMethodInputPage_public,
+		 * RefactoringMessages.ExtractMethodInputPage_protected,
+		 * RefactoringMessages.ExtractMethodInputPage_default,
+		 * RefactoringMessages.ExtractMethodInputPage_private }; Integer[] data
+		 * = new Integer[] { new Integer(Modifier.PUBLIC), new
+		 * Integer(Modifier.PROTECTED), new Integer(Modifier.NONE), new
+		 * Integer(Modifier.PRIVATE) }; Integer visibility = new
+		 * Integer(fRefactoring.getVisibility()); for (int i = 0; i <
+		 * labels.length; i++) { Button radio = new Button(group, SWT.RADIO);
+		 * radio.setText(labels[i]); radio.setData(data[i]); if
+		 * (data[i].equals(visibility)) radio.setSelection(true);
+		 * radio.addSelectionListener(new SelectionAdapter() { public void
+		 * widgetSelected(SelectionEvent event) { final Integer selectedModifier
+		 * = (Integer) event.widget .getData(); fSettings.put(ACCESS_MODIFIER,
+		 * selectedModifier.intValue()); setVisibility(selectedModifier); } });
+		 * }
+		 */
 		layouter.perform(label, group, 1);
 
 		if (!fRefactoring.getParameterInfos().isEmpty()) {
@@ -169,48 +160,42 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 			cp.setInput(fRefactoring.getParameterInfos());
 		}
 
-		/*Button checkBox = new Button(result, SWT.CHECK);
-		checkBox.setText(RefactoringMessages.ExtractMethodInputPage_throwRuntimeExceptions);
-		checkBox.setSelection(fSettings.getBoolean(THROW_RUNTIME_EXCEPTIONS));
-		checkBox.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				setRethrowRuntimeException(((Button) e.widget).getSelection());
-			}
-		});
-		layouter.perform(checkBox);
-
-		checkBox = new Button(result, SWT.CHECK);
-		checkBox.setText(RefactoringMessages.ExtractMethodInputPage_generateJavadocComment);
-		boolean generate = computeGenerateJavadoc();
-		setGenerateJavadoc(generate);
-		checkBox.setSelection(generate);
-		checkBox.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				setGenerateJavadoc(((Button) e.widget).getSelection());
-			}
-		});
-		layouter.perform(checkBox);
-
-		int duplicates = fRefactoring.getNumberOfDuplicates();
-		checkBox = new Button(result, SWT.CHECK);
-		if (duplicates == 0) {
-			checkBox.setText(RefactoringMessages.ExtractMethodInputPage_duplicates_none);
-		} else if (duplicates == 1) {
-			checkBox.setText(RefactoringMessages.ExtractMethodInputPage_duplicates_single);
-		} else {
-			checkBox.setText(Messages
-					.format(RefactoringMessages.ExtractMethodInputPage_duplicates_multi,
-							new Integer(duplicates)));
-		}
-		checkBox.setSelection(fRefactoring.getReplaceDuplicates());
-		checkBox.setEnabled(duplicates > 0);
-		checkBox.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				fRefactoring.setReplaceDuplicates(((Button) e.widget)
-						.getSelection());
-			}
-		});
-		layouter.perform(checkBox);*/
+		/*
+		 * Button checkBox = new Button(result, SWT.CHECK);
+		 * checkBox.setText(RefactoringMessages
+		 * .ExtractMethodInputPage_throwRuntimeExceptions);
+		 * checkBox.setSelection
+		 * (fSettings.getBoolean(THROW_RUNTIME_EXCEPTIONS));
+		 * checkBox.addSelectionListener(new SelectionAdapter() { public void
+		 * widgetSelected(SelectionEvent e) {
+		 * setRethrowRuntimeException(((Button) e.widget).getSelection()); } });
+		 * layouter.perform(checkBox);
+		 * 
+		 * checkBox = new Button(result, SWT.CHECK);
+		 * checkBox.setText(RefactoringMessages
+		 * .ExtractMethodInputPage_generateJavadocComment); boolean generate =
+		 * computeGenerateJavadoc(); setGenerateJavadoc(generate);
+		 * checkBox.setSelection(generate); checkBox.addSelectionListener(new
+		 * SelectionAdapter() { public void widgetSelected(SelectionEvent e) {
+		 * setGenerateJavadoc(((Button) e.widget).getSelection()); } });
+		 * layouter.perform(checkBox);
+		 * 
+		 * int duplicates = fRefactoring.getNumberOfDuplicates(); checkBox = new
+		 * Button(result, SWT.CHECK); if (duplicates == 0) {
+		 * checkBox.setText(RefactoringMessages
+		 * .ExtractMethodInputPage_duplicates_none); } else if (duplicates == 1)
+		 * { checkBox.setText(RefactoringMessages.
+		 * ExtractMethodInputPage_duplicates_single); } else {
+		 * checkBox.setText(Messages
+		 * .format(RefactoringMessages.ExtractMethodInputPage_duplicates_multi,
+		 * new Integer(duplicates))); }
+		 * checkBox.setSelection(fRefactoring.getReplaceDuplicates());
+		 * checkBox.setEnabled(duplicates > 0);
+		 * checkBox.addSelectionListener(new SelectionAdapter() { public void
+		 * widgetSelected(SelectionEvent e) {
+		 * fRefactoring.setReplaceDuplicates(((Button) e.widget)
+		 * .getSelection()); } }); layouter.perform(checkBox);
+		 */
 
 		label = new Label(result, SWT.SEPARATOR | SWT.HORIZONTAL);
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -219,32 +204,28 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 		createSignaturePreview(result, layouter);
 
 		Dialog.applyDialogFont(result);
-		/*PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(getControl(),
-						IJavaHelpContextIds.EXTRACT_METHOD_WIZARD_PAGE);*/
+		/*
+		 * PlatformUI .getWorkbench() .getHelpSystem() .setHelp(getControl(),
+		 * IJavaHelpContextIds.EXTRACT_METHOD_WIZARD_PAGE);
+		 */
 	}
 
-	/*private String getLabel(ASTNode node) {
-		if (node instanceof AbstractTypeDeclaration) {
-			return ((AbstractTypeDeclaration) node).getName().getIdentifier();
-		} else if (node instanceof AnonymousClassDeclaration) {
-			if (node.getLocationInParent() == ClassInstanceCreation.ANONYMOUS_CLASS_DECLARATION_PROPERTY) {
-				ClassInstanceCreation creation = (ClassInstanceCreation) node
-						.getParent();
-				return Messages
-						.format(RefactoringMessages.ExtractMethodInputPage_anonymous_type_label,
-								BasicElementLabels.getJavaElementName(ASTNodes
-										.asString(creation.getType())));
-			} else if (node.getLocationInParent() == EnumConstantDeclaration.ANONYMOUS_CLASS_DECLARATION_PROPERTY) {
-				EnumConstantDeclaration decl = (EnumConstantDeclaration) node
-						.getParent();
-				return decl.getName().getIdentifier();
-			}
-		}
-		return "UNKNOWN"; //$NON-NLS-1$
-	}*/
+	/*
+	 * private String getLabel(ASTNode node) { if (node instanceof
+	 * AbstractTypeDeclaration) { return ((AbstractTypeDeclaration)
+	 * node).getName().getIdentifier(); } else if (node instanceof
+	 * AnonymousClassDeclaration) { if (node.getLocationInParent() ==
+	 * ClassInstanceCreation.ANONYMOUS_CLASS_DECLARATION_PROPERTY) {
+	 * ClassInstanceCreation creation = (ClassInstanceCreation) node
+	 * .getParent(); return Messages
+	 * .format(RefactoringMessages.ExtractMethodInputPage_anonymous_type_label,
+	 * BasicElementLabels.getJavaElementName(ASTNodes
+	 * .asString(creation.getType()))); } else if (node.getLocationInParent() ==
+	 * EnumConstantDeclaration.ANONYMOUS_CLASS_DECLARATION_PROPERTY) {
+	 * EnumConstantDeclaration decl = (EnumConstantDeclaration) node
+	 * .getParent(); return decl.getName().getIdentifier(); } } return
+	 * "UNKNOWN"; //$NON-NLS-1$ }
+	 */
 
 	private Text createTextInputField(Composite parent, int style) {
 		Text result = new Text(parent, style);
@@ -267,28 +248,24 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 		return RefactoringMessages.ExtractMethodInputPage_label_text;
 	}
 
-	/*private void setVisibility(Integer visibility) {
-		fRefactoring.setVisibility(visibility.intValue());
-		updatePreview(getText());
-	}
-
-	private void setRethrowRuntimeException(boolean value) {
-		fSettings.put(THROW_RUNTIME_EXCEPTIONS, value);
-		fRefactoring.setThrowRuntimeExceptions(value);
-		updatePreview(getText());
-	}
-
-	private boolean computeGenerateJavadoc() {
-		boolean result = fRefactoring.getGenerateJavadoc();
-		if (result)
-			return result;
-		return fSettings.getBoolean(GENERATE_JAVADOC);
-	}
-
-	private void setGenerateJavadoc(boolean value) {
-		fSettings.put(GENERATE_JAVADOC, value);
-		fRefactoring.setGenerateJavadoc(value);
-	}*/
+	/*
+	 * private void setVisibility(Integer visibility) {
+	 * fRefactoring.setVisibility(visibility.intValue());
+	 * updatePreview(getText()); }
+	 * 
+	 * private void setRethrowRuntimeException(boolean value) {
+	 * fSettings.put(THROW_RUNTIME_EXCEPTIONS, value);
+	 * fRefactoring.setThrowRuntimeExceptions(value); updatePreview(getText());
+	 * }
+	 * 
+	 * private boolean computeGenerateJavadoc() { boolean result =
+	 * fRefactoring.getGenerateJavadoc(); if (result) return result; return
+	 * fSettings.getBoolean(GENERATE_JAVADOC); }
+	 * 
+	 * private void setGenerateJavadoc(boolean value) {
+	 * fSettings.put(GENERATE_JAVADOC, value);
+	 * fRefactoring.setGenerateJavadoc(value); }
+	 */
 
 	private void createSignaturePreview(Composite composite,
 			RowLayouter layouter) {
@@ -298,16 +275,16 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 		layouter.perform(previewLabel);
 
 		IDLTKUILanguageToolkit toolkit = DLTKUILanguageManager
-			.getLanguageToolkit(JavaScriptNature.NATURE_ID);
+				.getLanguageToolkit(JavaScriptNature.NATURE_ID);
 		IPreferenceStore store = toolkit.getCombinedPreferenceStore();
-		fSignaturePreview = new ScriptSourceViewer(composite, null, null, false,
+		fSignaturePreview = new ScriptSourceViewer(composite, null, null,
+				false,
 				SWT.READ_ONLY | SWT.V_SCROLL | SWT.WRAP /* | SWT.BORDER */,
 				store);
 		fSignaturePreview.configure(new JavascriptSourceViewerConfiguration(
-				toolkit.getTextTools().getColorManager(),
-				store, null, null));
-		//fSignaturePreview.getTextWidget().setFont(
-		//		JFaceResources.getFont(PreferenceConstants.EDITOR_TEXT_FONT));
+				toolkit.getTextTools().getColorManager(), store, null, null));
+		// fSignaturePreview.getTextWidget().setFont(
+		// JFaceResources.getFont(PreferenceConstants.EDITOR_TEXT_FONT));
 		fSignaturePreview.getTextWidget().setBackground(
 				composite.getBackground());
 		fSignaturePreview.setDocument(fSignaturePreviewDocument);
@@ -349,27 +326,27 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 		if (fSettings == null) {
 			fSettings = getDialogSettings().addNewSection(
 					ExtractMethodWizard.DIALOG_SETTING_SECTION);
-			/*fSettings.put(THROW_RUNTIME_EXCEPTIONS, false);
-			fSettings
-					.put(GENERATE_JAVADOC,
-							JavaPreferencesSettings
-									.getCodeGenerationSettings(fRefactoring
-											.getCompilationUnit()
-											.getJavaProject()).createComments);
-			fSettings.put(ACCESS_MODIFIER, Modifier.PRIVATE);*/
+			/*
+			 * fSettings.put(THROW_RUNTIME_EXCEPTIONS, false); fSettings
+			 * .put(GENERATE_JAVADOC, JavaPreferencesSettings
+			 * .getCodeGenerationSettings(fRefactoring .getCompilationUnit()
+			 * .getJavaProject()).createComments);
+			 * fSettings.put(ACCESS_MODIFIER, Modifier.PRIVATE);
+			 */
 		}
-		/*fRefactoring.setThrowRuntimeExceptions(fSettings
-				.getBoolean(THROW_RUNTIME_EXCEPTIONS));
-		final String accessModifier = fSettings.get(ACCESS_MODIFIER);
-		if (accessModifier != null) {
-			fRefactoring.setVisibility(Integer.parseInt(accessModifier));
-		}*/
+		/*
+		 * fRefactoring.setThrowRuntimeExceptions(fSettings
+		 * .getBoolean(THROW_RUNTIME_EXCEPTIONS)); final String accessModifier =
+		 * fSettings.get(ACCESS_MODIFIER); if (accessModifier != null) {
+		 * fRefactoring.setVisibility(Integer.parseInt(accessModifier)); }
+		 */
 	}
 
 	// ---- Input validation
 	// ------------------------------------------------------
 
-	/*public void setVisible(boolean visible) {
+	@Override
+	public void setVisible(boolean visible) {
 		if (visible) {
 			if (fFirstTime) {
 				fFirstTime = false;
@@ -381,7 +358,7 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 			}
 		}
 		super.setVisible(visible);
-	}*/
+	}
 
 	private void textModified(String text) {
 		fRefactoring.setMethodName(text);
@@ -433,7 +410,7 @@ public class ExtractMethodInputPage extends UserInputWizardPage {
 			}
 		}
 		result.merge(fRefactoring.checkParameterNames());
-		//result.merge(fRefactoring.checkVarargOrder());
+		// result.merge(fRefactoring.checkVarargOrder());
 		return result;
 	}
 }
