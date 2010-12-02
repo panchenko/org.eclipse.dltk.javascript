@@ -484,6 +484,10 @@ public final class RefactoringCoreMessages extends NLS {
 
 	public static String ExtractMethodAnalyzer_assignments_to_local;
 
+	public static String ExtractMethodAnalyzer_branch_break_mismatch;
+
+	public static String ExtractMethodAnalyzer_branch_continue_mismatch;
+
 	public static String ExtractMethodAnalyzer_branch_mismatch;
 
 	public static String ExtractMethodAnalyzer_cannot_determine_return_type;
