@@ -2,12 +2,5 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="domprovider" name="Design time DOM providers" schema="schema/domprovider.exsd"/>
-   <extension
-         point="org.eclipse.dltk.javascript.core.resolver">
-      <resolver
-            class="org.eclipse.dlkt.javascript.dom.support.internal.DomResolverFactory"
-            id="domResolver">
-      </resolver>
-   </extension>
 
 </plugin>
