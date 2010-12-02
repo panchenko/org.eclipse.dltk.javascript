@@ -58,8 +58,8 @@ import org.eclipse.swt.widgets.TableItem;
  * A special control to edit and reorder method parameters.
  */
 public class ChangeParametersControl extends Composite {
-	enum Mode {
-		CHANGE_METHOD_SIGNATURE, INTRODUCE_PARAMETER;
+	public enum Mode {
+		EXTRACT_METHOD, CHANGE_METHOD_SIGNATURE, INTRODUCE_PARAMETER;
 		/*
 		 * private final String fName; private Mode(String name) { fName= name;
 		 * } public static final Mode EXTRACT_METHOD= new
