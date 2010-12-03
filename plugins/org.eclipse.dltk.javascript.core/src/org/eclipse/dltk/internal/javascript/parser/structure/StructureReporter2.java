@@ -245,8 +245,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 			fRequestor.enterMethod(methodInfo);
 			return super.visitFunctionStatement(node);
-		}
-		finally {
+		} finally {
 			inFunction = isInFunction;
 			fRequestor.exitMethod(node.sourceEnd());
 		}
@@ -354,7 +353,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 	}
 
 	@Override
-	public Object visitVariableStatment(VariableStatement node) {
+	public Object visitVariableStatement(VariableStatement node) {
 		if (!inFunction) {
 			List<VariableDeclaration> variables = node.getVariables();
 			for (VariableDeclaration variableDeclaration : variables) {
@@ -396,7 +395,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			}
 			return null;
 		} else {
-			return super.visitVariableStatment(node);
+			return super.visitVariableStatement(node);
 		}
 	}
 
