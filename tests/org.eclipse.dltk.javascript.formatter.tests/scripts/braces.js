@@ -14,9 +14,9 @@ var size3 =
 	};
 ==
 var size3 = {
-		width: 10,
-		height: 20
-	};
+	width: 10,
+	height: 20
+};
 ==== braces-object-initializer-with-comment
 // aaaaaaa
 var a = { 		b		:		 100		, 			c			:			 '567'		};
