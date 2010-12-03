@@ -232,7 +232,7 @@ public abstract class ASTVisitor<E> {
 		});
 		HANDLERS.put(VariableStatement.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitVariableStatment((VariableStatement) node);
+				return visitor.visitVariableStatement((VariableStatement) node);
 			}
 		});
 		HANDLERS.put(VoidExpression.class, new Handler() {
@@ -437,7 +437,7 @@ public abstract class ASTVisitor<E> {
 
 	public abstract E visitUnaryOperation(UnaryOperation node);
 
-	public abstract E visitVariableStatment(VariableStatement node);
+	public abstract E visitVariableStatement(VariableStatement node);
 
 	@Deprecated
 	public final E visitVariableDeclaration(VariableDeclaration node) {
