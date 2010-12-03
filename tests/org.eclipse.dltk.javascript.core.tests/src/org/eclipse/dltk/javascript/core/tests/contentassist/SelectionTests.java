@@ -57,7 +57,7 @@ public class SelectionTests extends AbstractModelTests {
 				.getSelectionEngine(JavaScriptNature.NATURE_ID);
 	}
 
-	private IModelElement[] select(IModuleSource module, final int position) {
+	public IModelElement[] select(IModuleSource module, final int position) {
 		ISelectionEngine engine = getEngine();
 		final IModelElement[] result = engine
 				.select(module, position, position);

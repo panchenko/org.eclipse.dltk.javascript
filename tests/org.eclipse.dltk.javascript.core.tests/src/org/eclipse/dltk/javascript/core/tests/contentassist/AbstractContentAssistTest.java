@@ -22,12 +22,12 @@ public abstract class AbstractContentAssistTest extends TestCase {
 		return new TestModule(getClass().getResource(moduleName));
 	}
 
-	protected static int lastPositionInFile(String string, IModuleSource source) {
+	public static int lastPositionInFile(String string, IModuleSource source) {
 		return lastPositionInFile(string, source, true);
 	}
 
-	protected static int lastPositionInFile(String string,
-			IModuleSource source, boolean after) {
+	public static int lastPositionInFile(String string, IModuleSource source,
+			boolean after) {
 		int position = source.getSourceContents().lastIndexOf(string);
 		if (position >= 0) {
 			if (after) {
