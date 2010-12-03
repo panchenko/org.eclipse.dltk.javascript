@@ -586,7 +586,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	}
 
 	@Override
-	public Boolean visitVariableStatment(VariableStatement node) {
+	public Boolean visitVariableStatement(VariableStatement node) {
 
 		testKeyword(node.getVarKeyword());
 		visitVariableDeclarations(node.getVariables());
