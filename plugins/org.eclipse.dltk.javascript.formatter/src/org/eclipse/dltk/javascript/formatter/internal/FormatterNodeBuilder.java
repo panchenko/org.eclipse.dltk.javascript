@@ -38,6 +38,7 @@ import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.EmptyStatement;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FinallyClause;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
@@ -114,7 +115,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterBinaryOpera
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterBreakNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterCaseNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterCatchClauseNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterConstDeclarationNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterContinueNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterDeleteStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterElseIfNode;
@@ -469,8 +469,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			@Override
 			public IFormatterNode visitConstDeclaration(ConstStatement node) {
 
-				FormatterConstDeclarationNode formatterNode = new FormatterConstDeclarationNode(
-						document);
+				FormatterVariableDeclarationNode formatterNode = new FormatterVariableDeclarationNode(
+						document, isIndentVariableStatement(node));
 
 				formatterNode.setBegin(createTextNode(document,
 						node.getConstKeyword()));
@@ -1485,9 +1485,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			}
 
 			@Override
-			public IFormatterNode visitVariableStatment(VariableStatement node) {
+			public IFormatterNode visitVariableStatement(VariableStatement node) {
 				FormatterVariableDeclarationNode formatterNode = new FormatterVariableDeclarationNode(
-						document);
+						document, isIndentVariableStatement(node));
 
 				formatterNode.setBegin(createTextNode(document,
 						node.getVarKeyword()));
@@ -1499,6 +1499,20 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				checkedPop(formatterNode, node.sourceEnd());
 
 				return formatterNode;
+			}
+
+			private boolean isIndentVariableStatement(IVariableStatement node) {
+				if (node.getVariables().size() == 1) {
+					final Expression expression = node.getVariables().get(0)
+							.getInitializer();
+					if (expression instanceof FunctionStatement
+							|| expression instanceof ObjectInitializer
+							|| (expression instanceof NewExpression && ((NewExpression) expression)
+									.getObjectClass() instanceof FunctionStatement)) {
+						return false;
+					}
+				}
+				return true;
 			}
 
 			private void processVariableDeclarations(IVariableStatement node) {

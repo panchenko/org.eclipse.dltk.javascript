@@ -17,8 +17,17 @@ import org.eclipse.dltk.formatter.IFormatterDocument;
 public class FormatterVariableDeclarationNode extends
 		FormatterBlockWithBeginNode {
 
-	public FormatterVariableDeclarationNode(IFormatterDocument document) {
+	private final boolean indenting;
+
+	public FormatterVariableDeclarationNode(IFormatterDocument document,
+			boolean indenting) {
 		super(document);
+		this.indenting = indenting;
+	}
+
+	@Override
+	protected boolean isIndenting() {
+		return indenting;
 	}
 
 }
