@@ -725,7 +725,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 	}
 
 	@Override
-	public Node visitVariableStatment(VariableStatement node) {
+	public Node visitVariableStatement(VariableStatement node) {
 		org.eclipse.dltk.javascript.core.dom.VariableStatement res = DOM_FACTORY
 				.createVariableStatement();
 		for (VariableDeclaration decl : node.getVariables())
