@@ -73,7 +73,7 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			inferencer.doInferencing(script);
 			visitor.processUnknowReferences();
 
-			resolvedIdentifiers = visitor.getResolvedIdentifiers();
+			resolvedIdentifiers = visitor.resolvedIdentifiers;
 		}
 	}
 
@@ -91,9 +91,9 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 			Integer argCount = resolvedIdentifiers.get(node);
 			if (argCount != null) {
 				// ignore locals.
-				if (argCount != -2) {
+				if (argCount != IDKIND_LOCAL) {
 					// report fields.
-					if (argCount == -1) {
+					if (argCount == IDKIND_GLOBAL) {
 						fRequestor.acceptFieldReference(node.getName(),
 								node.sourceStart());
 					} else {
@@ -429,18 +429,18 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 		return super.visitPropertyExpression(node);
 	}
 
+	private static final Integer IDKIND_LOCAL = new Integer(-2);
+
+	private static final Integer IDKIND_GLOBAL = new Integer(-1);
+
 	private static class IdentifierLookupVisitor extends TypeInferencerVisitor {
 
 		private HashMap<Identifier, IValueReference> unknownKinds = new HashMap<Identifier, IValueReference>();
 
-		private Map<Identifier, Integer> resolvedIdentifiers = new HashMap<Identifier, Integer>();
+		final Map<Identifier, Integer> resolvedIdentifiers = new HashMap<Identifier, Integer>();
 
 		public IdentifierLookupVisitor(ITypeInferenceContext context) {
 			super(context);
-		}
-
-		public Map<Identifier, Integer> getResolvedIdentifiers() {
-			return resolvedIdentifiers;
 		}
 
 		public void processUnknowReferences() {
@@ -458,10 +458,10 @@ public class StructureReporter2 extends AbstractNavigationVisitor<Object> {
 
 			ReferenceKind kind = reference.getKind();
 			if (kind == ReferenceKind.ARGUMENT || kind == ReferenceKind.LOCAL) {
-				resolvedIdentifiers.put(node, Integer.valueOf(-2));
+				resolvedIdentifiers.put(node, IDKIND_LOCAL);
 			} else if (kind == ReferenceKind.FIELD
 					|| kind == ReferenceKind.GLOBAL) {
-				resolvedIdentifiers.put(node, Integer.valueOf(-1));
+				resolvedIdentifiers.put(node, IDKIND_GLOBAL);
 			} else if (kind == ReferenceKind.FUNCTION) {
 				IMethod method = (IMethod) reference
 						.getAttribute(IReferenceAttributes.PARAMETERS);
