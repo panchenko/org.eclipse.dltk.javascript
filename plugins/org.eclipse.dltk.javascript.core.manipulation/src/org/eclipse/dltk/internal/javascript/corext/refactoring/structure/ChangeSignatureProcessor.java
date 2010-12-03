@@ -107,10 +107,10 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 	/*private int fVisibility;
 
 	private StubTypeContext fContextCuStartEnd;
-	private int fOldVarargIndex; // initialized in checkVarargs()
+	private int fOldVarargIndex; // initialized in checkVarargs()*/
 
 	private BodyUpdater fBodyUpdater;
-	private IDefaultValueAdvisor fDefaultValueAdvisor;
+	/*private IDefaultValueAdvisor fDefaultValueAdvisor;
 
 	private ITypeHierarchy fCachedTypeHierarchy= null;
 	private boolean fDelegateUpdating;
@@ -175,9 +175,9 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		return RefactoringCoreMessages.ChangeSignatureRefactoring_modify_Parameters;
 	}
 
-	/*public IMethod getMethod() {
+	public IMethod getMethod() {
 		return fMethod;
-	}*/
+	}
 
 	public String getMethodName() {
 		return fMethodName;
@@ -255,13 +255,13 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 	 */
 	/*public List getExceptionInfos(){
 		return fExceptionInfos;
-	}
+	}*/
 
 	public void setBodyUpdater(BodyUpdater bodyUpdater) {
 		fBodyUpdater= bodyUpdater;
 	}
 
-	public CompilationUnitRewrite getBaseCuRewrite() {
+	/*public CompilationUnitRewrite getBaseCuRewrite() {
 		return fBaseCuRewrite;
 	}
 
@@ -1371,6 +1371,8 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 				modifyElements(expr.getParameters());
 				result.merge(checkIfDeletedParametersUsed(expr.getBody(),cu));
 				updateBody(expr.getBody());
+				if (fBodyUpdater != null)
+					fBodyUpdater.updateBody(expr);
 			} else {
 				result.addError(RefactoringCoreMessages.ChangeSignatureRefactoring_unknown_reference,
 						ScriptStatusContext.create(cu, new SourceRange(node.getBegin(), node.getEnd()-node.getBegin())));
