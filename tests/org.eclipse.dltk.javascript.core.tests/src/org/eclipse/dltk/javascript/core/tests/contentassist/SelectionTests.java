@@ -17,6 +17,7 @@ import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractConte
 import org.eclipse.dltk.codeassist.ISelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKLanguageManager;
+import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.ILocalVariable;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
@@ -114,7 +115,7 @@ public class SelectionTests extends AbstractModelTests {
 				module.getSourceContents().substring(nameRange.getOffset(),
 						nameRange.getOffset() + nameRange.getLength()));
 	}
-	
+
 	public void test4() throws ModelException {
 		IModuleSource module = getModule("selection1.js");
 		IModelElement[] elements = select(module,
@@ -148,6 +149,17 @@ public class SelectionTests extends AbstractModelTests {
 		final ISourceRange nameRange = local.getNameRange();
 		final String contents = module.getSourceContents();
 		assertEquals(contents.indexOf("alpha"), nameRange.getOffset());
+	}
+
+	public void testField() throws ModelException {
+		IModuleSource module = getModule("fields.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("aa", module, false));
+		assertEquals(1, elements.length);
+		final IField local = (IField) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("aa"), nameRange.getOffset());
 	}
 
 }
