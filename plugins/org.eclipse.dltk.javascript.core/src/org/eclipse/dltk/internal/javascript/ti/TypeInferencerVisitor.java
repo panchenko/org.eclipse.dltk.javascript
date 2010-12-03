@@ -786,7 +786,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	@Override
-	public IValueReference visitVariableStatment(VariableStatement node) {
+	public IValueReference visitVariableStatement(VariableStatement node) {
 		final IValueCollection collection = peekContext();
 		IValueReference result = null;
 		for (VariableDeclaration declaration : node.getVariables()) {

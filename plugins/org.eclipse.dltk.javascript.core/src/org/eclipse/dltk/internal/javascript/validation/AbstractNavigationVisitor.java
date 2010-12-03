@@ -397,7 +397,7 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 	}
 
 	@Override
-	public E visitVariableStatment(VariableStatement node) {
+	public E visitVariableStatement(VariableStatement node) {
 		processVariables(node.getVariables());
 		return null;
 	}
