@@ -549,6 +549,12 @@
        label="%Refactoring.Actions.ExtractMethod"
        nature="org.eclipse.dltk.javascript.core.nature">
  </action>
+ <action
+       class="org.eclipse.dltk.javascript.ui.actions.IntroduceParameterAction"
+       id="org.eclipse.dltk.javascript.ui.action.introduce.parameter"
+       label="%Refactoring.Actions.IntroduceParameter"
+       nature="org.eclipse.dltk.javascript.core.nature">
+ </action>
 </extension>
 
 <extension point="org.eclipse.compare.contentMergeViewers">
