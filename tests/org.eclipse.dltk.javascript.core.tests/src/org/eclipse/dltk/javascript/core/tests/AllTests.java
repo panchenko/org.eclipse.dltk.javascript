@@ -11,6 +11,7 @@ import org.eclipse.dltk.javascript.core.tests.contentassist.StandardTypeMemberTe
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchDeclarationTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchFieldTests;
+import org.eclipse.dltk.javascript.core.tests.search.SearchFunctionTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchReferenceTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchTypeReferenceTests;
 import org.eclipse.dltk.javascript.core.tests.structure.JSLintModelTests;
@@ -46,6 +47,7 @@ public class AllTests {
 		suite.addTest(SearchTypeReferenceTests.suite());
 		suite.addTest(SelectionTests.suite());
 		suite.addTest(SearchFieldTests.suite());
+		suite.addTest(SearchFunctionTests.suite());
 		// $JUnit-END$
 		return suite;
 	}
