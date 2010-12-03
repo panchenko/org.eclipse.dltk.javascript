@@ -18,7 +18,6 @@ import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
-import org.eclipse.dltk.javascript.core.tests.AllTests;
 
 public class SearchReferenceTests extends AbstractSingleProjectSearchTests {
 
