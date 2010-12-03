@@ -125,7 +125,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForInStatem
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterForStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterFunctionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterLabelledStatementNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterNewExpressionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterObjectInitializerNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterRootNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterScriptNode;
@@ -297,8 +296,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					configuration = new EmptyArrayBracketsConfiguration(
 							document, node);
 
-				return processBrackets(node.getLB(), node.getRB(), node
-						.getItems(), node.getCommas(), configuration);
+				return processBrackets(node.getLB(), node.getRB(),
+						node.getItems(), node.getCommas(), configuration);
 			}
 
 			@Override
@@ -307,8 +306,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBinaryOperationNode formatterNode = new FormatterBinaryOperationNode(
 						document);
 
-				formatterNode.setBegin(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.setBegin(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
@@ -341,8 +340,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBreakNode formatterNode = new FormatterBreakNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getBreakKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getBreakKeyword()));
 
 				push(formatterNode);
 
@@ -359,8 +358,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
@@ -401,8 +400,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, nodes.get(
-						0).sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						nodes.get(0).sourceStart()));
 
 				push(formatterNode);
 
@@ -424,8 +423,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			private IFormatterNode visitCombinedNodeList(
 					List<? extends ASTNode> nodes, IntList punctuations,
 					IPunctuationConfiguration configuration) {
-				return visitCombinedNodeList(nodes, punctuations, Collections
-						.nCopies(punctuations.size(), configuration));
+				return visitCombinedNodeList(nodes, punctuations,
+						Collections.nCopies(punctuations.size(), configuration));
 			}
 
 			@Override
@@ -441,8 +440,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
@@ -473,8 +472,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterConstDeclarationNode formatterNode = new FormatterConstDeclarationNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getConstKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getConstKeyword()));
 
 				push(formatterNode);
 
@@ -491,8 +490,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterContinueNode formatterNode = new FormatterContinueNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getContinueKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getContinueKeyword()));
 
 				push(formatterNode);
 
@@ -529,8 +528,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterDeleteStatementNode formatterNode = new FormatterDeleteStatementNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getDeleteKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getDeleteKeyword()));
 
 				push(formatterNode);
 
@@ -546,8 +545,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getDoKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						node.getDoKeyword()));
 
 				push(formatterNode);
 
@@ -576,8 +575,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterForInStatementNode formatterNode = new FormatterForInStatementNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getForKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getForKeyword()));
 
 				push(formatterNode);
 
@@ -604,8 +603,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterForInStatementNode formatterNode = new FormatterForInStatementNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getForKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getForKeyword()));
 
 				push(formatterNode);
 
@@ -632,8 +631,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterForStatementNode formatterNode = new FormatterForStatementNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getForKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getForKeyword()));
 
 				push(formatterNode);
 
@@ -681,8 +680,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterFunctionNode formatterNode = new FormatterFunctionNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getFunctionKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						node.getFunctionKeyword()));
 
 				push(formatterNode);
 
@@ -767,15 +766,15 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
 				visit(node.getArray());
 
-				processBrackets(node.getLB(), node.getRB(), Collections
-						.<ASTNode> singletonList(node.getIndex()),
+				processBrackets(node.getLB(), node.getRB(),
+						Collections.<ASTNode> singletonList(node.getIndex()),
 						IntList.EMPTY_LIST,
 						new GetItemArrayBracketsConfiguration(document));
 
@@ -788,8 +787,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getGetKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						node.getGetKeyword()));
 
 				push(formatterNode);
 
@@ -928,9 +927,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						BracesNode braces = new BracesNode(document,
 								configuration);
 
-						braces
-								.setBegin(createCharNode(document, block
-										.getLC()));
+						braces.setBegin(createCharNode(document, block.getLC()));
 						push(braces);
 						visitNodeList(block.getStatements());
 						checkedPop(braces, block.getRC());
@@ -939,8 +936,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					} else {
 						final FormatterBlockNode formatter = new FormatterIndentedBlockNode(
 								document, configuration.isIndenting());
-						formatter.addChild(createEmptyTextNode(document, node
-								.sourceStart()));
+						formatter.addChild(createEmptyTextNode(document,
+								node.sourceStart()));
 						push(formatter);
 						visitNodeList(block.getStatements());
 						checkedPop(formatter, node.sourceEnd());
@@ -950,8 +947,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				} else {
 					final FormatterBlockNode block = new FormatterIndentedBlockNode(
 							document, configuration.isIndenting());
-					block.addChild(createEmptyTextNode(document, node
-							.sourceStart()));
+					block.addChild(createEmptyTextNode(document,
+							node.sourceStart()));
 					push(block);
 					visit(node);
 					checkedPop(block, node.sourceEnd());
@@ -980,8 +977,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 							commas.size(),
 							(IPunctuationConfiguration) configuration));
 				} else {
-					visitCombinedNodeList(nodes, commas, Collections
-							.<IPunctuationConfiguration> emptyList());
+					visitCombinedNodeList(nodes, commas,
+							Collections.<IPunctuationConfiguration> emptyList());
 				}
 				if (!nodes.isEmpty()) {
 					// TODO introduce option for: spaces before closing bracket
@@ -995,8 +992,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			private void processElseIf(ASTNode node,
 					IBracesConfiguration configuration) {
 				BracesNode braces = new BracesNode(document, configuration);
-				braces.setBegin(createEmptyTextNode(document, node
-						.sourceStart()));
+				braces.setBegin(createEmptyTextNode(document,
+						node.sourceStart()));
 				push(braces);
 				visit(node);
 				checkedPop(braces, node.sourceEnd());
@@ -1007,8 +1004,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				final FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getIfKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						node.getIfKeyword()));
 				push(formatterNode);
 
 				processParens(node.getLP(), node.getRP(), node.getCondition(),
@@ -1079,10 +1076,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterLabelledStatementNode formatterNode = new FormatterLabelledStatementNode(
 						document);
 
-				formatterNode
-						.setBegin(createTextNode(document, node.getLabel()));
-				formatterNode.addChild(createCharNode(document, node
-						.getColonPosition()));
+				formatterNode.setBegin(createTextNode(document, node.getLabel()));
+				formatterNode.addChild(createCharNode(document,
+						node.getColonPosition()));
 
 				push(formatterNode);
 
@@ -1098,18 +1094,13 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			@Override
 			public IFormatterNode visitNewExpression(NewExpression node) {
 
-				FormatterNewExpressionNode formatterNode = new FormatterNewExpressionNode(
+				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
-
-				formatterNode.setBegin(createTextNode(document, node
-						.getNewKeyword()));
-
+				formatterNode.addChild(createTextNode(document,
+						node.getNewKeyword()));
 				push(formatterNode);
-
 				visit(node.getObjectClass());
-
 				checkedPop(formatterNode, node.sourceEnd());
-
 				return formatterNode;
 			}
 
@@ -1154,9 +1145,9 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			public IFormatterNode visitParenthesizedExpression(
 					ParenthesizedExpression node) {
 
-				return processParens(node.getLP(), node.getRP(), node
-						.getExpression(), new ExpressionParensConfiguration(
-						document));
+				return processParens(node.getLP(), node.getRP(),
+						node.getExpression(),
+						new ExpressionParensConfiguration(document));
 			}
 
 			@Override
@@ -1166,8 +1157,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
@@ -1193,8 +1184,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
@@ -1226,10 +1217,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				final IFormatterTextNode keyword = createTextNode(document,
 						node.getReturnKeyword());
-				formatterNode
-						.addChild(node.getValue() != null ? new SpaceAfterKeyword(
-								keyword)
-								: keyword);
+				formatterNode.addChild(node.getValue() != null ? new SpaceAfterKeyword(
+						keyword) : keyword);
 
 				push(formatterNode);
 
@@ -1243,8 +1232,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			public IFormatterNode visitEmptyStatement(EmptyStatement node) {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 				push(formatterNode);
 				return processOptionalSemicolon(formatterNode, node);
 			}
@@ -1268,8 +1257,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getSetKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						node.getSetKeyword()));
 
 				push(formatterNode);
 
@@ -1307,8 +1296,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterSwitchNode switchNode = new FormatterSwitchNode(
 						document);
 
-				switchNode.setBegin(createTextNode(document, node
-						.getSwitchKeyword()));
+				switchNode.setBegin(createTextNode(document,
+						node.getSwitchKeyword()));
 
 				push(switchNode);
 
@@ -1340,8 +1329,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 								defaultClause.getKeyword()));
 						push(defaultNode);
 						defaultNode.addChild(new ColonNodeWrapper(
-								createCharNode(document, defaultClause
-										.getColonPosition())));
+								createCharNode(document,
+										defaultClause.getColonPosition())));
 						processSwitchComponent(defaultNode, defaultClause);
 					}
 					nodes.pop();
@@ -1365,8 +1354,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterThrowNode formatterNode = new FormatterThrowNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getThrowKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getThrowKeyword()));
 
 				push(formatterNode);
 
@@ -1382,8 +1371,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getTryKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						node.getTryKeyword()));
 
 				push(formatterNode);
 
@@ -1406,8 +1395,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterCatchClauseNode formatterNode = new FormatterCatchClauseNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, catchClause
-						.getCatchKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						catchClause.getCatchKeyword()));
 
 				push(formatterNode);
 
@@ -1433,8 +1422,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterFinallyClauseNode formatterNode = new FormatterFinallyClauseNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getFinallyKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						node.getFinallyKeyword()));
 
 				push(formatterNode);
 
@@ -1449,8 +1438,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterTypeofNode formatterNode = new FormatterTypeofNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getTypeOfKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getTypeOfKeyword()));
 
 				push(formatterNode);
 
@@ -1466,16 +1455,16 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
 				if (!node.isPostfix()) {
-					addChild(createTextNode(document, node
-							.getOperationPosition(), node
-							.getOperationPosition()
-							+ node.getOperationText().length()));
+					addChild(createTextNode(document,
+							node.getOperationPosition(),
+							node.getOperationPosition()
+									+ node.getOperationText().length()));
 					skipSpaces(formatterNode, node.getExpression()
 							.sourceStart());
 				}
@@ -1484,10 +1473,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				if (node.isPostfix()) {
 					skipSpaces(formatterNode, node.getOperationPosition());
-					addChild(createTextNode(document, node
-							.getOperationPosition(), node
-							.getOperationPosition()
-							+ node.getOperationText().length()));
+					addChild(createTextNode(document,
+							node.getOperationPosition(),
+							node.getOperationPosition()
+									+ node.getOperationText().length()));
 				}
 
 				checkedPop(formatterNode, node.sourceEnd());
@@ -1500,8 +1489,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterVariableDeclarationNode formatterNode = new FormatterVariableDeclarationNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getVarKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getVarKeyword()));
 
 				push(formatterNode);
 
@@ -1553,8 +1542,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterVoidExpressionNode formatterNode = new FormatterVoidExpressionNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
@@ -1569,8 +1558,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getWhileKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						node.getWhileKeyword()));
 
 				push(formatterNode);
 
@@ -1591,8 +1580,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createTextNode(document, node
-						.getWithKeyword()));
+				formatterNode.addChild(createTextNode(document,
+						node.getWithKeyword()));
 
 				push(formatterNode);
 
@@ -1618,8 +1607,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterVoidOperatorNode formatterNode = new FormatterVoidOperatorNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getVoidKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getVoidKeyword()));
 
 				push(formatterNode);
 
@@ -1635,8 +1624,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterYieldOperatorNode formatterNode = new FormatterYieldOperatorNode(
 						document);
 
-				formatterNode.setBegin(createTextNode(document, node
-						.getYieldKeyword()));
+				formatterNode.setBegin(createTextNode(document,
+						node.getYieldKeyword()));
 
 				push(formatterNode);
 
@@ -1658,8 +1647,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				FormatterBlockNode formatter = new FormatterBlockNode(document);
 
-				formatter.addChild(createTextNode(document, node
-						.getDefaultKeyword()));
+				formatter.addChild(createTextNode(document,
+						node.getDefaultKeyword()));
 
 				push(formatter);
 
@@ -1691,8 +1680,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
@@ -1711,8 +1700,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				FormatterBlockNode formatterNode = new FormatterBlockNode(
 						document);
 
-				formatterNode.addChild(createEmptyTextNode(document, node
-						.sourceStart()));
+				formatterNode.addChild(createEmptyTextNode(document,
+						node.sourceStart()));
 
 				push(formatterNode);
 
