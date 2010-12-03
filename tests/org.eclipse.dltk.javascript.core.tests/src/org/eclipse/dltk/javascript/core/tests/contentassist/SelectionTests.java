@@ -21,6 +21,7 @@ import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.ILocalVariable;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.ScriptModelUtil;
@@ -44,6 +45,16 @@ public class SelectionTests extends AbstractModelTests {
 		super.setUpSuite();
 		setUpScriptProject(PRJ_NAME);
 		waitUntilIndexesReady();
+	}
+	
+	@Override
+	protected void setUp() throws Exception {
+		IScriptProject scriptProject = getScriptProject(PRJ_NAME);
+		if (scriptProject == null || !scriptProject.isOpen())
+		{
+			setUpSuite();
+		}
+		super.setUp();
 	}
 
 	@Override
@@ -161,5 +172,92 @@ public class SelectionTests extends AbstractModelTests {
 		final String contents = module.getSourceContents();
 		assertEquals(contents.indexOf("aa"), nameRange.getOffset());
 	}
+	
+	public void testFunctionField() throws ModelException {
+		IModuleSource module = getModule("functions.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("fun1", module, false));
+		assertEquals(1, elements.length);
+		final IMethod local = (IMethod) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("fun1"), nameRange.getOffset());
+	}
+
+	public void testFunctionLocalField() throws ModelException {
+		IModuleSource module = getModule("functions.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("fun2", module, false));
+		assertEquals(1, elements.length);
+		final IMethod local = (IMethod) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("fun2"), nameRange.getOffset());
+	}
+	
+	public void testFunctionLocalFieldWith2Declarations() throws ModelException {
+		IModuleSource module = getModule("functions.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("fun4", module, false));
+		assertEquals(1, elements.length);
+		final IMethod local = (IMethod) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("fun4"), nameRange.getOffset());
+	}
+	
+	public void testFunctionThisField() throws ModelException {
+		IModuleSource module = getModule("functions.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("fun5", module, false));
+		assertEquals(1, elements.length);
+		final IMethod local = (IMethod) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("fun5"), nameRange.getOffset());
+	}
+
+	public void testFunctionThisOuterField() throws ModelException {
+		IModuleSource module = getModule("functions.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("fun6", module, false));
+		assertEquals(1, elements.length);
+		final IMethod local = (IMethod) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("fun6"), nameRange.getOffset());
+	}
+	
+	public void testFunctionThisFieldWithLocalFunction() throws ModelException {
+		IModuleSource module = getModule("functions.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("fun8", module, false));
+		assertEquals(1, elements.length);
+		final IMethod local = (IMethod) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("fun8"), nameRange.getOffset());
+	}
+	
+	public void testFunctionThisFieldWithLocalFunctionOutercall() throws ModelException {
+		IModuleSource module = getModule("functions.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("funA", module, false));
+		assertEquals(0, elements.length);
+	}
+
+
+	public void testFunctionObjectInitalizerFunctionField() throws ModelException {
+		IModuleSource module = getModule("functions.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("funB", module, false));
+		assertEquals(1, elements.length);
+		final IMethod local = (IMethod) elements[0];
+		final ISourceRange nameRange = local.getNameRange();
+		final String contents = module.getSourceContents();
+		assertEquals(contents.indexOf("funB"), nameRange.getOffset());
+	}
+
+
 
 }
