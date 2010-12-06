@@ -553,7 +553,7 @@ public class ExtractMethodRefactoring extends Refactoring {
 			EReference ref = enclosing.eContainmentFeature();
 			assert ref.isMany();
 			EList<Statement> list = (EList<Statement>)enclosing.eContainer().eGet(ref);
-			list.add(list.lastIndexOf(enclosing),stmt);
+			list.add(list.lastIndexOf(enclosing)+1,stmt);
 			// TODO replace branches
 			ChangeDescription cd = cr.endRecording();
 			RewriteAnalyzer ra = new RewriteAnalyzer(cd, fSource);
