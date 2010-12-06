@@ -106,4 +106,13 @@ public class ChildReference extends AbstractReference {
 		return parent.toString() + "." + name;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ChildReference) {
+			final ChildReference other = (ChildReference) obj;
+			return name.equals(other.name) && parent.equals(other.parent);
+		}
+		return false;
+	}
+
 }

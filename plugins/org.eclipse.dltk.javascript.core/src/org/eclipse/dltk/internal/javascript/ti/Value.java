@@ -26,14 +26,14 @@ public class Value implements IValue {
 	private final Set<Type> types = new HashSet<Type>();
 	private final Map<String, Value> children = new HashMap<String, Value>(4);
 	private final Map<String, IValue> inherited = new HashMap<String, IValue>(4);
-	private final Map<String, IValue> elementValues = new HashMap<String, IValue>(4);
+	private final Map<String, IValue> elementValues = new HashMap<String, IValue>(
+			4);
 	private Set<String> deletedChildren = null;
 	private Type declaredType;
 	private ReferenceKind kind = ReferenceKind.UNKNOWN;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 	private Map<String, Object> attributes = null;
 	private Set<Value> references = new HashSet<Value>();
-
 
 	private final boolean hasReferences() {
 		return !references.isEmpty();
@@ -318,7 +318,7 @@ public class Value implements IValue {
 
 	public void addValue(IValue src) {
 		if (src instanceof Value) {
-			addValueRecursive((Value) src, new HashSet<Value>());
+			addValueRecursive((Value) src, new HashSet<Value>(), 0);
 		} else {
 			if (src.getDeclaredType() != null) {
 				types.add(src.getDeclaredType());
@@ -339,8 +339,12 @@ public class Value implements IValue {
 			references.add((Value) src);
 	}
 
-	private void addValueRecursive(Value src, Set<Value> processing) {
+	private void addValueRecursive(Value src, Set<Value> processing, int depth) {
 		if (processing.add(src)) {
+			if (depth > 8) {
+				// TODO logging?
+				return;
+			}
 			if (src.declaredType != null) {
 				types.add(src.declaredType);
 			}
@@ -356,7 +360,7 @@ public class Value implements IValue {
 				IValue child = createChild(entry.getKey());
 				if (child instanceof Value) {
 					((Value) child).addValueRecursive(entry.getValue(),
-							processing);
+							processing, depth + 1);
 				}
 			}
 			if (src.kind != ReferenceKind.UNKNOWN

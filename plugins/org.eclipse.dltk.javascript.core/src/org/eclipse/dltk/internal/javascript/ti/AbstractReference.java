@@ -38,7 +38,8 @@ public abstract class AbstractReference implements IValueReference,
 				}
 				val.clear();
 				if (src instanceof Value
-						&& ((IValueProvider) value).isReference()) {
+						&& ((IValueProvider) value).isReference()
+						|| value.isParentOf(this)) {
 					val.addReference(src);
 				} else {
 					val.addValue(src);
@@ -57,12 +58,23 @@ public abstract class AbstractReference implements IValueReference,
 			if (src == null)
 				return;
 			if (!copy && src instanceof Value
-					&& ((IValueProvider) value).isReference()) {
+					&& ((IValueProvider) value).isReference()
+					|| value.isParentOf(this)) {
 				val.addReference(src);
 			} else {
 				val.addValue(src);
 			}
 		}
+	}
+
+	public boolean isParentOf(IValueReference anotherReference) {
+		while (anotherReference != null) {
+			if (this.equals(anotherReference)) {
+				return true;
+			}
+			anotherReference = anotherReference.getParent();
+		}
+		return false;
 	}
 
 	public void clear() {
