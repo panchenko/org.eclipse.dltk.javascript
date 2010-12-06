@@ -58,7 +58,14 @@ public class FunctionValueCollection extends ValueCollection {
 		return returnValue;
 	}
 
-	private final IValueReference thisValue = new AnonymousValue();
+	private static class ThisValue extends AnonymousValue {
+		@Override
+		protected String getToStringPrefix() {
+			return "this";
+		}
+	}
+
+	private final IValueReference thisValue = new ThisValue();
 
 	@Override
 	public IValueReference getThis() {

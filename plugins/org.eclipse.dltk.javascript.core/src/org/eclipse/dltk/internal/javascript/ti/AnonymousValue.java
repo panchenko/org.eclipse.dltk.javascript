@@ -46,4 +46,13 @@ public class AnonymousValue extends AbstractReference {
 		return null;
 	}
 
+	protected String getToStringPrefix() {
+		return "AnonymousValue";
+	}
+
+	@Override
+	public String toString() {
+		return getToStringPrefix() + "@" + System.identityHashCode(value);
+	}
+
 }
