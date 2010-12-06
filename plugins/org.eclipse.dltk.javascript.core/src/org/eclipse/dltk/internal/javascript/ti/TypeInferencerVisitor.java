@@ -777,6 +777,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitTypeOfExpression(TypeOfExpression node) {
+		visit(node.getExpression());
 		return context.getFactory().createString(peekContext());
 	}
 
