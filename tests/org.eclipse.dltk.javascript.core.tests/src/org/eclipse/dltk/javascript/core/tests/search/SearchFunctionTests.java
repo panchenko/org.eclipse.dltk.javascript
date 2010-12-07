@@ -50,9 +50,8 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		final IMethod method = (IMethod) elements[0];
 		final TestSearchResults results = search(method, ALL_OCCURRENCES);
 		assertEquals(2, results.size());
-		// TODO check should first a declaration be found and then the reference?
-		assertTrue(results.getMatch(1) instanceof MethodDeclarationMatch);
-		assertTrue(results.getMatch(0) instanceof MethodReferenceMatch);
+		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
+		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
 	}
 	
 	public void testFunctionLocalField() throws CoreException {
