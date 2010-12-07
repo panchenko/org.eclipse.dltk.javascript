@@ -45,14 +45,17 @@ public class ChildReference extends AbstractReference {
 
 	private static IValue findChild(IValueCollection collection, String name) {
 		while (collection != null) {
-			IValue childValue = ((IValueProvider) collection).getValue()
-					.getChild(name, true);
-			if (childValue != null) {
-				return childValue;
+			if (collection instanceof IValueProvider) {
+				// XXX WithValueCollection doesn't implement IValueProvider
+				IValue childValue = ((IValueProvider) collection).getValue()
+						.getChild(name, true);
+				if (childValue != null) {
+					return childValue;
+				}
 			}
 			if (collection.getThis() != null) {
-				childValue = ((IValueProvider) collection.getThis()).getValue()
-						.getChild(name, true);
+				IValue childValue = ((IValueProvider) collection.getThis())
+						.getValue().getChild(name, true);
 				if (childValue != null) {
 					return childValue;
 				}

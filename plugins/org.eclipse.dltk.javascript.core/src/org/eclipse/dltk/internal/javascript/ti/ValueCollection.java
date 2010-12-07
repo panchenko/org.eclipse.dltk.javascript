@@ -80,13 +80,16 @@ public abstract class ValueCollection implements IValueCollection,
 	public IValueReference createChild(String name) {
 		IValueCollection coll = this;
 		for (;;) {
-			IValue childValue = ((IValueProvider) coll).getValue().getChild(
-					name, false);
-			if (childValue != null) {
-				if (coll != this) {
-					getValue().putChild(name, childValue);
+			if (coll instanceof IValueProvider) {
+				// XXX WithValueCollection doesn't implement IValueProvider
+				IValue childValue = ((IValueProvider) coll).getValue()
+						.getChild(name, false);
+				if (childValue != null) {
+					if (coll != this) {
+						getValue().putChild(name, childValue);
+					}
+					return newChild(name);
 				}
-				return newChild(name);
 			}
 			coll = coll.getParent();
 			if (coll == null)
