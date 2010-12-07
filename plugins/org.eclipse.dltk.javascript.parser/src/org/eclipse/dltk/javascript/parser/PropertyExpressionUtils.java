@@ -26,6 +26,24 @@ public class PropertyExpressionUtils {
 			return null;
 		}
 	}
+	
+	public static Identifier getIdentifier(Expression expression) {
+		if (expression instanceof Identifier) {
+			return (Identifier) expression;
+		} else if (expression instanceof PropertyExpression) {
+			final PropertyExpression propertyExpression = (PropertyExpression) expression;
+
+			Identifier identifier = getIdentifier(propertyExpression
+					.getObject());
+			if (identifier != null)
+				return identifier;
+			return getIdentifier(propertyExpression.getProperty());
+		} else if (expression instanceof FunctionStatement) {
+			final FunctionStatement functionStatement = (FunctionStatement) expression;
+			return getIdentifier(functionStatement.getName());
+		}
+		return null;
+	}
 
 	private static boolean buildPath(StringBuilder buffer, Expression expression) {
 		if (expression instanceof Identifier) {
