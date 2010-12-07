@@ -38,5 +38,19 @@ public abstract class AbstractContentAssistTest extends TestCase {
 			throw new AssertionFailedError("Not found");
 		}
 	}
+	
+	public static int firstPositionInFile(String string, IModuleSource source,
+			boolean after) {
+		int position = source.getSourceContents().indexOf(string);
+		if (position >= 0) {
+			if (after) {
+				position += string.length();
+			}
+			return position;
+		} else {
+			throw new AssertionFailedError("Not found");
+		}
+	}
+
 
 }
