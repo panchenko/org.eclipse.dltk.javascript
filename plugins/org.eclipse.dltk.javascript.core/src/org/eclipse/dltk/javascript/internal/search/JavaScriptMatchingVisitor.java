@@ -103,7 +103,7 @@ public class JavaScriptMatchingVisitor extends TypeInferencerVisitor {
 
 		// if this is a function declaration, skip this, will be
 		// reported by visit functionStatement
-		if (StructureReporter2.isFunctionDeclaration(node))
+		if (TypeInferencerVisitor.isFunctionDeclaration(node))
 			return true;
 
 		if (result != null

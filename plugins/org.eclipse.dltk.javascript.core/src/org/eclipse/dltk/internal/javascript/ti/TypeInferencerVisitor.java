@@ -23,7 +23,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter2;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
@@ -348,35 +347,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
-		final JSMethod method = new JSMethod();
-		final Identifier methodName = node.getName();
-		if (methodName != null) {
-			method.setName(methodName.getName());
-		}
-		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
-		if (funcType != null) {
-			method.setType(funcType.getName());
-		}
-		for (Argument argument : node.getArguments()) {
-			final IParameter parameter = method.createParameter();
-			parameter.setName(argument.getIdentifier().getName());
-			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
-			if (paramType != null) {
-				parameter.setType(paramType.getName());
-				parameter.setLocation(ReferenceLocation.create(getSource(),
-						argument.sourceStart(), paramType.sourceEnd(),
-						argument.sourceStart(), argument.sourceEnd()));
-			} else {
-				parameter.setLocation(ReferenceLocation.create(getSource(),
-						argument.sourceStart(), argument.sourceEnd()));
-			}
-			method.getParameters().add(parameter);
-		}
-		if (methodName != null) {
-			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
-				extension.processMethod(node, method);
-			}
-		}
+		final JSMethod method = generateJSMethod(node);
 		final IValueCollection function = new FunctionValueCollection(
 				peekContext(), method.getName());
 		IValueReference arguments = function.createChild("arguments");
@@ -407,6 +378,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		} finally {
 			leaveContext();
 		}
+		final Identifier methodName = node.getName();
 		final IValueReference result;
 		if (methodName != null) {
 			result = peekContext().createChild(method.getName());
@@ -435,6 +407,44 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		returnValue.setValue(function.getReturnValue());
 		return result;
+	}
+
+	/**
+	 * @param node
+	 * @param methodName
+	 * @return
+	 */
+	protected JSMethod generateJSMethod(FunctionStatement node) {
+		final Identifier methodName = node.getName();
+		final JSMethod method = new JSMethod();
+		if (methodName != null) {
+			method.setName(methodName.getName());
+		}
+		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
+		if (funcType != null) {
+			method.setType(funcType.getName());
+		}
+		for (Argument argument : node.getArguments()) {
+			final IParameter parameter = method.createParameter();
+			parameter.setName(argument.getIdentifier().getName());
+			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
+			if (paramType != null) {
+				parameter.setType(paramType.getName());
+				parameter.setLocation(ReferenceLocation.create(getSource(),
+						argument.sourceStart(), paramType.sourceEnd(),
+						argument.sourceStart(), argument.sourceEnd()));
+			} else {
+				parameter.setLocation(ReferenceLocation.create(getSource(),
+						argument.sourceStart(), argument.sourceEnd()));
+			}
+			method.getParameters().add(parameter);
+		}
+		if (methodName != null) {
+			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
+				extension.processMethod(node, method);
+			}
+		}
+		return method;
 	}
 
 	protected void visitFunctionBody(FunctionStatement node) {
@@ -657,7 +667,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		Expression property = node.getProperty();
 		IValueReference child = extractNamedChild(object, property);
 		if (child != null && node.getObject() instanceof ThisExpression) {
-			if (StructureReporter2.isFunctionDeclaration(node))
+			if (isFunctionDeclaration(node))
 				child.setKind(ReferenceKind.FUNCTION);
 			else
 				child.setKind(ReferenceKind.FIELD);
@@ -949,6 +959,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 		}
 		return null;
+	}
+
+	public static boolean isFunctionDeclaration(Expression expression) {
+		PropertyExpression pe = null;
+		if (expression instanceof PropertyExpression)
+			pe = (PropertyExpression) expression;
+		else if (expression.getParent() instanceof PropertyExpression)
+			pe = (PropertyExpression) expression.getParent();
+		if (pe != null && pe.getObject() instanceof ThisExpression
+				&& pe.getParent() instanceof BinaryOperation) {
+			return ((BinaryOperation) pe.getParent()).getRightExpression() instanceof FunctionStatement;
+		}
+		return false;
 	}
 
 }
