@@ -440,10 +440,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 			method.getParameters().add(parameter);
 		}
-		if (methodName != null) {
-			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
-				extension.processMethod(node, method);
-			}
+		for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
+			extension.processMethod(node, method);
 		}
 		return method;
 	}
