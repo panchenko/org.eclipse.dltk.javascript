@@ -4,3 +4,11 @@ var object = new function() {
 };
 
 var z = object.aa
+
+function test1() {
+	var y = object2.cc;
+}
+
+var object2 = new function() {
+	this.cc = 10;
+};

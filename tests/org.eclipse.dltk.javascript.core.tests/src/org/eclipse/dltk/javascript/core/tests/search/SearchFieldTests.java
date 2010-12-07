@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.core.tests.search;
 
 import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
 import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.lastPositionInFile;
+import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.firstPositionInFile;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.env.IModuleSource;
@@ -50,5 +51,19 @@ public class SearchFieldTests extends AbstractSingleProjectSearchTests {
 		assertTrue(results.getMatch(0) instanceof FieldDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof FieldReferenceMatch);
 	}
+	
+	
+	public void testLazyFieldCC() throws CoreException {
+		IModuleSource module = getModule("fields.js");
+		IModelElement[] elements = new SelectionTests(null).select(module,
+				firstPositionInFile("cc", module, false));
+		assertEquals(1, elements.length);
+		final IField field = (IField) elements[0];
+		final TestSearchResults results = search(field, ALL_OCCURRENCES);
+		assertEquals(2, results.size());
+		assertTrue(results.getMatch(0) instanceof FieldReferenceMatch);
+		assertTrue(results.getMatch(1) instanceof FieldDeclarationMatch);
+	}
+
 
 }
