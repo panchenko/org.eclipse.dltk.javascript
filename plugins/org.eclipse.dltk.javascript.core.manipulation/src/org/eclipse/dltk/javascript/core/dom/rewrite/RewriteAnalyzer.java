@@ -51,7 +51,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	private final ChangeDescription cd;
 	private final Set<Node> generated = new HashSet<Node>();
 	private final String text;
-	private final String lineDelimiter;
+	protected final String lineDelimiter;
 	private final TextEdit edit;
 	public RewriteAnalyzer(ChangeDescription cd, String text) {
 		this.cd = cd;

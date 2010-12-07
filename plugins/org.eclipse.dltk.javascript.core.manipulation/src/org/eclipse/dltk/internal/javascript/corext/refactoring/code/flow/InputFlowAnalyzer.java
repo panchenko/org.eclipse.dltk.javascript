@@ -151,7 +151,7 @@ public class InputFlowAnalyzer extends FlowAnalyzer {
 	}
 
 	protected boolean isTraverseNeeded(Node node) {
-		return node.getEnd() > fSelection.getInclusiveEnd();
+		return node.getEnd() > fSelection.getExclusiveEnd();
 	}
 
 	protected boolean createReturnFlowInfo(ReturnStatement node) {
@@ -161,12 +161,10 @@ public class InputFlowAnalyzer extends FlowAnalyzer {
 	}
 	
 	protected void traverse(Node node) {
-		if (isTraverseNeeded(node)) {
-			if (node instanceof IterationStatement) {
-				createLoopReentranceVisitor(node);
-			}
-			super.traverse(node);
+		if (isTraverseNeeded(node) && (node instanceof IterationStatement)) {
+			createLoopReentranceVisitor(node);
 		}
+		super.traverse(node);
 	}
 
 	private void createLoopReentranceVisitor(Node node) {

@@ -71,6 +71,8 @@ import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.TextFileChange;
 import org.eclipse.ltk.core.refactoring.participants.ResourceChangeChecker;
+import org.eclipse.text.edits.InsertEdit;
+import org.eclipse.text.edits.TextEdit;
 
 /**
  * Extracts a method in a compilation unit based on a text selection range.
@@ -547,7 +549,7 @@ public class ExtractMethodRefactoring extends Refactoring {
 				}
 			}
 			// add declaration
-			ExpressionStatement stmt = DomFactory.eINSTANCE.createExpressionStatement();
+			final ExpressionStatement stmt = DomFactory.eINSTANCE.createExpressionStatement();
 			stmt.setExpression(mm);
 			Node enclosing = fDestination;
 			EReference ref = enclosing.eContainmentFeature();
@@ -556,7 +558,16 @@ public class ExtractMethodRefactoring extends Refactoring {
 			list.add(list.lastIndexOf(enclosing)+1,stmt);
 			// TODO replace branches
 			ChangeDescription cd = cr.endRecording();
-			RewriteAnalyzer ra = new RewriteAnalyzer(cd, fSource);
+			RewriteAnalyzer ra = new RewriteAnalyzer(cd, fSource) {
+				@Override
+				protected void addEdit(TextEdit edit, Node node) {
+					if (node == stmt) {
+						edit = new InsertEdit(edit.getOffset(),
+								lineDelimiter+((InsertEdit)edit).getText());
+					}
+					super.addEdit(edit, node);
+				}
+			};
 			SourceModuleChange result= new SourceModuleChange(RefactoringCoreMessages.ExtractMethodRefactoring_change_name, fCUnit);
 			ra.rewrite(fRoot);
 			result.setSaveMode(TextFileChange.KEEP_SAVE_STATE);
