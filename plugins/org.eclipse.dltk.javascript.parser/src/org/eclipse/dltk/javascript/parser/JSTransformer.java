@@ -736,11 +736,22 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		FunctionStatement fn = new FunctionStatement(getParent());
 
 		int tokenIndex = node.getTokenStartIndex();
+		boolean lookForNewLine = false;
 		while (tokenIndex > 0) {
 			--tokenIndex;
 			final Token token = tokens.get(tokenIndex);
-			if (token.getType() == JSParser.WhiteSpace
+			if (lookForNewLine) {
+				if (token.getType() == JSParser.EOL) {
+					lookForNewLine = false;
+				}
+				continue;
+			} else if (token.getType() == JSParser.WhiteSpace
 					|| token.getType() == JSParser.EOL) {
+				continue;
+			} else if (token.getType() == JSParser.ASSIGN) {
+				// function is an assignment, look first for a new line it could
+				// be variable = fun()
+				lookForNewLine = true;
 				continue;
 			}
 			if (token.getType() == JSParser.MultiLineComment) {
