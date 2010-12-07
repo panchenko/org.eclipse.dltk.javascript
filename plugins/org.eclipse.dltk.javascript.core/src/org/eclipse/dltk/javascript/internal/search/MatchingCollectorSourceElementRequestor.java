@@ -53,6 +53,9 @@ public class MatchingCollectorSourceElementRequestor implements
 
 	public void enterMethod(MethodInfo methodInfo, Identifier identifier,
 			JSMethod method) {
+		// ignore method(function(){});
+		if (identifier == null)
+			return;
 		nodes.add(new MethodDeclarationNode(identifier, method));
 	}
 
