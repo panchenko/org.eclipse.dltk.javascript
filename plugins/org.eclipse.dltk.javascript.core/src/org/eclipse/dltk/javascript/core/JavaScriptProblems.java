@@ -32,7 +32,11 @@ public interface JavaScriptProblems {
 	/**
 	 * @since 3.0
 	 */
-	public static final int PRIVATE_FUNCTION = IProblem.MethodRelated + 4;
+	public static final int STATIC_METHOD = IProblem.MethodRelated + 6;
+	/**
+	 * @since 3.0
+	 */
+	public static final int PRIVATE_FUNCTION = IProblem.MethodRelated + 7;
 
 	public static final int UNDEFINED_PROPERTY = IProblem.FieldRelated + 1;
 	public static final int DEPRECATED_PROPERTY = IProblem.FieldRelated + 2;

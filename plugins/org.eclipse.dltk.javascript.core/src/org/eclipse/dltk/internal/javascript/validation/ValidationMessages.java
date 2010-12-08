@@ -29,6 +29,7 @@ public class ValidationMessages extends NLS {
 	public static String DeprecatedFunction;
 	public static String PrivateFunction;
 	public static String StaticReferenceToNoneStaticMethod;
+	public static String ReferenceToStaticMethod;
 
 	public static String UndefinedProperty;
 	public static String StaticReferenceToNoneStaticProperty;

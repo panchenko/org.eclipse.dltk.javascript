@@ -147,7 +147,8 @@ public abstract class ElementValue implements IValue {
 				return new TypeValue(types);
 			}
 			for (Type type : types) {
-				IValue child = findMember(type, name, MemberPredicates.STATIC);
+				IValue child = findMember(type, name,
+						MemberPredicates.ALWAYS_TRUE);
 				if (child != null)
 					return child;
 			}

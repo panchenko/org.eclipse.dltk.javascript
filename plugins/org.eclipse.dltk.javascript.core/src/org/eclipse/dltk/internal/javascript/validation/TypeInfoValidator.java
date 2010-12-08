@@ -245,23 +245,22 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				methodNode = expression;
 			}
 
-			final List<Method> methods = JavaScriptValidations
-					.extractElements(reference, Method.class);
+			final List<Method> methods = JavaScriptValidations.extractElements(
+					reference, Method.class);
 			if (methods != null) {
 				final List<ASTNode> callArgs = node.getArguments();
 				Method method = JavaScriptValidations.selectMethod(methods,
 						arguments);
 				if (method == null) {
-					final Type type = JavaScriptValidations
-							.typeOf(reference.getParent());
+					final Type type = JavaScriptValidations.typeOf(reference
+							.getParent());
 					if (type != null) {
 						if (type.getKind() == TypeKind.JAVA) {
 							reporter.reportProblem(
 									JavaScriptProblems.WRONG_PARAMETERS,
 									NLS.bind(
 											ValidationMessages.MethodNotSelected,
-											new String[] {
-													reference.getName(),
+											new String[] { reference.getName(),
 													type.getName(),
 													describeArgTypes(arguments) }),
 									methodNode.sourceStart(), methodNode
@@ -275,8 +274,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					return;
 				}
 				if (!validateParameterCount(method, callArgs)) {
-					reportMethodParameterError(methodNode, arguments,
-							method);
+					reportMethodParameterError(methodNode, arguments, method);
 				}
 				if (method.isDeprecated()) {
 					reportDeprecatedMethod(methodNode, reference, method);
@@ -291,7 +289,17 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									ValidationMessages.StaticReferenceToNoneStaticMethod,
 									reference.getName(), type.getName()),
 							methodNode.sourceStart(), methodNode.sourceEnd());
+				} else if (!JavaScriptValidations.isStatic(reference
+						.getParent()) && method.isStatic()) {
+					Type type = JavaScriptValidations.typeOf(reference
+							.getParent());
+					reporter.reportProblem(JavaScriptProblems.STATIC_METHOD,
+							NLS.bind(
+									ValidationMessages.ReferenceToStaticMethod,
+									reference.getName(), type.getName()),
+							methodNode.sourceStart(), methodNode.sourceEnd());
 				}
+
 			} else {
 				Object attribute = reference.getAttribute(
 						IReferenceAttributes.PARAMETERS, true);
@@ -300,20 +308,16 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					if (method.isDeprecated()) {
 						reporter.reportProblem(
 								JavaScriptProblems.DEPRECATED_FUNCTION,
-								NLS.bind(
-										ValidationMessages.DeprecatedFunction,
+								NLS.bind(ValidationMessages.DeprecatedFunction,
 										reference.getName()), methodNode
-										.sourceStart(), methodNode
-										.sourceEnd());
+										.sourceStart(), methodNode.sourceEnd());
 					}
 					if (method.isPrivate() && reference.getParent() != null) {
 						reporter.reportProblem(
-								JavaScriptProblems.PRIVATE_FUNCTION,
-								NLS.bind(
+								JavaScriptProblems.PRIVATE_FUNCTION, NLS.bind(
 										ValidationMessages.PrivateFunction,
 										reference.getName()), methodNode
-										.sourceStart(), methodNode
-										.sourceEnd());
+										.sourceStart(), methodNode.sourceEnd());
 					}
 					List<IParameter> parameters = method.getParameters();
 					if (!validateParameters(parameters, arguments)) {
@@ -321,39 +325,35 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								JavaScriptProblems.WRONG_PARAMETERS,
 								NLS.bind(
 										ValidationMessages.MethodNotApplicableInScript,
-										new String[] {
-												method.getName(),
+										new String[] { method.getName(),
 												describeParamTypes(parameters),
 												describeArgTypes(arguments) }),
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
 					}
 				} else {
-					final Type type = JavaScriptValidations
-							.typeOf(reference.getParent());
+					final Type type = JavaScriptValidations.typeOf(reference
+							.getParent());
 					if (type != null) {
 						if (type.getKind() == TypeKind.JAVA) {
 							reporter.reportProblem(
 									JavaScriptProblems.UNDEFINED_METHOD,
 									NLS.bind(
 											ValidationMessages.UndefinedMethod,
-											reference.getName(),
-											type.getName()), methodNode
-											.sourceStart(), methodNode
+											reference.getName(), type.getName()),
+									methodNode.sourceStart(), methodNode
 											.sourceEnd());
 						} else if (JavaScriptValidations.isStatic(reference
 								.getParent())
 								&& !ElementValue.findMembers(type,
 										reference.getName(),
-										MemberPredicates.NON_STATIC)
-										.isEmpty()) {
+										MemberPredicates.NON_STATIC).isEmpty()) {
 							reporter.reportProblem(
 									JavaScriptProblems.INSTANCE_METHOD,
 									NLS.bind(
 											ValidationMessages.StaticReferenceToNoneStaticMethod,
-											reference.getName(),
-											type.getName()), methodNode
-											.sourceStart(), methodNode
+											reference.getName(), type.getName()),
+									methodNode.sourceStart(), methodNode
 											.sourceEnd());
 						} else {
 							// TODO also report a JS error (that should be
@@ -362,8 +362,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									JavaScriptProblems.UNDEFINED_METHOD,
 									NLS.bind(
 											ValidationMessages.UndefinedMethodInScript,
-											reference.getName()),
-									methodNode.sourceStart(), methodNode
+											reference.getName()), methodNode
+											.sourceStart(), methodNode
 											.sourceEnd());
 						}
 					} else {
