@@ -11,12 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui;
 
+import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
 import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.ScriptElementImageProvider;
 import org.eclipse.dltk.ui.viewsupport.ImageDescriptorRegistry;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
@@ -32,8 +34,8 @@ public class JSModelLabelProvider extends BaseLabelProvider implements
 	private final ImageDescriptorRegistry registry = new ImageDescriptorRegistry();
 
 	public Image getImage(Object element) {
-		if (element instanceof IMethod) {
-			final IMethod method = (IMethod) element;
+		if (element instanceof IMember) {
+			final IMember method = (IMember) element;
 			int flags;
 			try {
 				flags = method.getFlags();
@@ -41,11 +43,23 @@ public class JSModelLabelProvider extends BaseLabelProvider implements
 				flags = 0;
 			}
 			if ((flags & JSModifiers.DEPRECATED) != 0) {
-				return registry.get(new DecorationOverlayIcon(
-						ScriptElementImageProvider.getMethodImageDescriptor(
-								flags).createImage(),
-						DLTKPluginImages.DESC_OVR_DEPRECATED,
-						IDecoration.UNDERLAY));
+				ImageDescriptor imageDescriptor = null;
+				ImageDescriptor[] overlay = new ImageDescriptor[5];
+				overlay[IDecoration.UNDERLAY] = DLTKPluginImages.DESC_OVR_DEPRECATED;
+				if (element instanceof IMethod) {
+					try {
+						if (((IMethod) element).isConstructor()) {
+							overlay[IDecoration.TOP_RIGHT] = DLTKPluginImages.DESC_OVR_CONSTRUCTOR;
+						}
+					} catch (ModelException e) {
+					}
+					imageDescriptor = ScriptElementImageProvider
+							.getMethodImageDescriptor(flags);
+				} else
+					imageDescriptor = ScriptElementImageProvider
+							.getFieldImageDescriptor(flags);
+				return registry.get(new DecorationOverlayIcon(imageDescriptor
+						.createImage(), overlay));
 			}
 		}
 		return null;

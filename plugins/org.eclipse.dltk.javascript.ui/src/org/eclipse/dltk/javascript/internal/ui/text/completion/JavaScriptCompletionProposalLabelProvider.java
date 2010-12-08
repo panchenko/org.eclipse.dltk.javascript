@@ -17,6 +17,7 @@ import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -194,9 +195,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	@Override
 	protected ImageDescriptor decorateImageDescriptor(
 			ImageDescriptor descriptor, CompletionProposal proposal) {
-		// TODO other proposal kinds?
-		if (proposal.getKind() == CompletionProposal.METHOD_REF
-				&& isDeprecated(proposal)) {
+		if (isDeprecated(proposal)) {
 			return new DecorationOverlayIcon(descriptor.createImage(),
 					DLTKPluginImages.DESC_OVR_DEPRECATED, IDecoration.UNDERLAY);
 		} else if (isStatic(proposal)) {
@@ -226,7 +225,11 @@ public class JavaScriptCompletionProposalLabelProvider extends
 					.getExtraInfo();
 			final IMethod method = (IMethod) reference
 					.getAttribute(IReferenceAttributes.PARAMETERS);
-			return method != null && method.isDeprecated();
+			if (method != null)
+				return method.isDeprecated();
+			final IVariable variable = (IVariable) reference
+					.getAttribute(IReferenceAttributes.VARIABLE);
+			return variable != null && variable.isDeprecated();
 		}
 		return false;
 	}
