@@ -140,13 +140,13 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 		}
 	}
 
-	private List fParameters;
+	private List<String> fParameters;
 	private String fReturn;
-	private List fExceptions;
-	private List fAuthors;
-	private List fSees;
-	private List fSince;
-	private List fRest; // list of Pair objects
+	private List<String> fExceptions;
+	private List<String> fAuthors;
+	private List<String> fSees;
+	private List<String> fSince;
+	private List<Pair> fRest; // list of Pair objects
 
 	public JavaDoc2HTMLTextReader(Reader reader) {
 		super(reader);
@@ -211,11 +211,11 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 		return result;
 	}
 
-	private void printDefinitions(StringBuffer buffer, List list,
+	private void printDefinitions(StringBuffer buffer, List<String> list,
 			boolean firstword) {
-		Iterator e = list.iterator();
+		Iterator<String> e = list.iterator();
 		while (e.hasNext()) {
-			String s = (String) e.next();
+			String s = e.next();
 			buffer.append("<dd>"); //$NON-NLS-1$
 			if (!firstword)
 				buffer.append(s);
@@ -259,7 +259,7 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 		return i;
 	}
 
-	private void print(StringBuffer buffer, String tag, List elements,
+	private void print(StringBuffer buffer, String tag, List<String> elements,
 			boolean firstword) {
 		if (!elements.isEmpty()) {
 			buffer.append("<dt>"); //$NON-NLS-1$
@@ -282,9 +282,9 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 
 	private void printRest(StringBuffer buffer) {
 		if (!fRest.isEmpty()) {
-			Iterator e = fRest.iterator();
+			Iterator<Pair> e = fRest.iterator();
 			while (e.hasNext()) {
-				Pair p = (Pair) e.next();
+				Pair p = e.next();
 				buffer.append("<dt>"); //$NON-NLS-1$
 				if (p.fTag != null)
 					buffer.append(p.fTag);
@@ -338,7 +338,8 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 		else if (TAG_SINCE.equals(tag))
 			fSince.add(substituteQualification(tagContent));
 		else if (tagContent != null)
-			fRest.add(new Pair(tag, tagContent));
+			fRest.add(new Pair(Character.toUpperCase(tag.charAt(1))
+					+ tag.substring(2), tagContent));
 	}
 
 	/*
@@ -346,12 +347,12 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 	 */
 	private String processSimpleTag() throws IOException {
 
-		fParameters = new ArrayList();
-		fExceptions = new ArrayList();
-		fAuthors = new ArrayList();
-		fSees = new ArrayList();
-		fSince = new ArrayList();
-		fRest = new ArrayList();
+		fParameters = new ArrayList<String>();
+		fExceptions = new ArrayList<String>();
+		fAuthors = new ArrayList<String>();
+		fSees = new ArrayList<String>();
+		fSince = new ArrayList<String>();
+		fRest = new ArrayList<Pair>();
 
 		StringBuffer buffer = new StringBuffer();
 		int c = '@';
