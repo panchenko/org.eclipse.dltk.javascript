@@ -352,6 +352,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueCollection function = new FunctionValueCollection(
 				peekContext(), method.getName());
 		IValueReference arguments = function.createChild("arguments");
+		arguments.setKind(ReferenceKind.LOCAL);
 		IValueReference argumentsLength = arguments.getChild("length");
 		argumentsLength.setDeclaredType(context.getKnownType(NUMBER));
 
