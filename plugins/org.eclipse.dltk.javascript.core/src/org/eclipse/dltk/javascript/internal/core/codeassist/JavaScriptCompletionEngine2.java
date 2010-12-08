@@ -356,11 +356,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		 */
 		private void reportReference(IValueReference reference, char[] prefix,
 				int position) {
-			boolean isFunction = reference.getKind() == ReferenceKind.FUNCTION
-					|| reference.getChild(IValueReference.FUNCTION_OP).exists();
+			int proposalKind = CompletionProposal.FIELD_REF;
+			if (reference.getKind() == ReferenceKind.FUNCTION
+					|| reference.getChild(IValueReference.FUNCTION_OP).exists()) {
+				proposalKind = CompletionProposal.METHOD_REF;
+			} else if (reference.getKind() == ReferenceKind.LOCAL) {
+				proposalKind = CompletionProposal.LOCAL_VARIABLE_REF;
+			}
 			CompletionProposal proposal = CompletionProposal.create(
-					isFunction ? CompletionProposal.METHOD_REF
-							: CompletionProposal.LOCAL_VARIABLE_REF, position);
+					proposalKind, position);
 
 			int relevance = computeBaseRelevance();
 			relevance += computeRelevanceForInterestingProposal();
@@ -374,7 +378,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			proposal.setExtraInfo(reference);
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
-			if (isFunction) {
+			if (proposalKind == CompletionProposal.METHOD_REF) {
 				final IMethod method = (IMethod) reference.getAttribute(
 						IReferenceAttributes.PARAMETERS, true);
 				if (method != null) {
