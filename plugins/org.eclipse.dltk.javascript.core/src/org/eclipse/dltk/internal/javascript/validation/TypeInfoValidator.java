@@ -728,38 +728,6 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					}
 					return;
 				}
-
-				final Type type = JavaScriptValidations.typeOf(result
-						.getParent());
-				if (type != null) {
-					if (type.getKind() == TypeKind.JAVA) {
-						reporter.reportProblem(
-								JavaScriptProblems.UNDEFINED_PROPERTY,
-								NLS.bind(ValidationMessages.UndefinedProperty,
-										result.getName(), type.getName()),
-								propName.sourceStart(), propName.sourceEnd());
-					} else if (JavaScriptValidations.isStatic(result
-							.getParent())
-							&& !ElementValue.findMembers(type,
-									result.getName(),
-									MemberPredicates.NON_STATIC).isEmpty()) {
-						reporter.reportProblem(
-								JavaScriptProblems.INSTANCE_PROPERTY,
-								NLS.bind(
-										ValidationMessages.StaticReferenceToNoneStaticProperty,
-										result.getName(), type.getName()),
-								propName.sourceStart(), propName.sourceEnd());
-					} else {
-						// TODO also report a JS error (that should be
-						// configurable)
-						reporter.reportProblem(
-								JavaScriptProblems.UNDEFINED_PROPERTY,
-								NLS.bind(
-										ValidationMessages.UndefinedMethodInScript,
-										result.getName()), propName
-										.sourceStart(), propName.sourceEnd());
-					}
-				}
 			}
 		}
 
