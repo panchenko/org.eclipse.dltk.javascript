@@ -10,6 +10,7 @@ import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.StandardTypeMemberTests;
 import org.eclipse.dltk.javascript.core.tests.contentassist.XMLCompletionTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchDeclarationTests;
+import org.eclipse.dltk.javascript.core.tests.search.SearchExternalLibraryTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchFieldTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchFunctionTests;
 import org.eclipse.dltk.javascript.core.tests.search.SearchReferenceTests;
@@ -48,6 +49,7 @@ public class AllTests {
 		suite.addTest(SelectionTests.suite());
 		suite.addTest(SearchFieldTests.suite());
 		suite.addTest(SearchFunctionTests.suite());
+		suite.addTest(SearchExternalLibraryTests.suite());
 		// $JUnit-END$
 		return suite;
 	}
