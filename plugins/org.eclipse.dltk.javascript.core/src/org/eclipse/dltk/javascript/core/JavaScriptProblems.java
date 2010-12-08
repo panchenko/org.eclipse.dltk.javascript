@@ -28,7 +28,7 @@ public interface JavaScriptProblems {
 	/**
 	 * @since 3.0
 	 */
-	public static final int NON_STATIC_METHOD = IProblem.MethodRelated + 5;
+	public static final int INSTANCE_METHOD = IProblem.MethodRelated + 5;
 	/**
 	 * @since 3.0
 	 */
@@ -51,7 +51,11 @@ public interface JavaScriptProblems {
 	/**
 	 * @since 3.0
 	 */
-	public static final int NON_STATIC_PROPERTY = IProblem.FieldRelated + 6;
+	public static final int INSTANCE_PROPERTY = IProblem.FieldRelated + 6;
+	/**
+	 * @since 3.0
+	 */
+	public static final int STATIC_PROPERTY = IProblem.FieldRelated + 7;
 
 	
 	public static final int EQUAL_AS_ASSIGN = IProblem.Internal + 1;

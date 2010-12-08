@@ -281,6 +281,17 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (method.isDeprecated()) {
 					reportDeprecatedMethod(methodNode, reference, method);
 				}
+				if (JavaScriptValidations.isStatic(reference.getParent())
+						&& !method.isStatic()) {
+					Type type = JavaScriptValidations.typeOf(reference
+							.getParent());
+					reporter.reportProblem(
+							JavaScriptProblems.INSTANCE_METHOD,
+							NLS.bind(
+									ValidationMessages.StaticReferenceToNoneStaticMethod,
+									reference.getName(), type.getName()),
+							methodNode.sourceStart(), methodNode.sourceEnd());
+				}
 			} else {
 				Object attribute = reference.getAttribute(
 						IReferenceAttributes.PARAMETERS, true);
@@ -337,9 +348,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 										MemberPredicates.NON_STATIC)
 										.isEmpty()) {
 							reporter.reportProblem(
-									JavaScriptProblems.NON_STATIC_METHOD,
+									JavaScriptProblems.INSTANCE_METHOD,
 									NLS.bind(
-											"Cannot make a static reference to the non-static method {0}() from {1}",
+											ValidationMessages.StaticReferenceToNoneStaticMethod,
 											reference.getName(),
 											type.getName()), methodNode
 											.sourceStart(), methodNode
@@ -623,8 +634,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							&& parentProperty.getDeclaringType() == null) {
 						if (member instanceof Property)
 							reportDeprecatedProperty((Property) member,
-									parentProperty,
-									propName);
+									parentProperty, propName);
 						else if (member instanceof Method)
 							reportDeprecatedMethod(propName, result,
 									(Method) member);
@@ -651,6 +661,26 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 						reportHiddenProperty((Property) member,
 								member.getDeclaringType(), propName);
 					}
+				} else if (JavaScriptValidations.isStatic(result.getParent())
+						&& !member.isStatic()) {
+					Type type = JavaScriptValidations
+							.typeOf(result.getParent());
+					reporter.reportProblem(
+							JavaScriptProblems.INSTANCE_PROPERTY,
+							NLS.bind(
+									ValidationMessages.StaticReferenceToNoneStaticProperty,
+									result.getName(), type.getName()), propName
+									.sourceStart(), propName.sourceEnd());
+				} else if (!JavaScriptValidations.isStatic(result.getParent())
+						&& member.isStatic()) {
+					Type type = JavaScriptValidations
+							.typeOf(result.getParent());
+					reporter.reportProblem(
+							JavaScriptProblems.STATIC_PROPERTY,
+							NLS.bind(
+									ValidationMessages.ReferenceToStaticProperty,
+									result.getName(), type.getName()), propName
+									.sourceStart(), propName.sourceEnd());
 				}
 			} else if (!result.exists()) {
 				final Type type = JavaScriptValidations.typeOf(result
@@ -696,6 +726,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 										variable.getName()), propName
 										.sourceStart(), propName.sourceEnd());
 					}
+					return;
 				}
 
 				final Type type = JavaScriptValidations.typeOf(result
@@ -713,9 +744,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									result.getName(),
 									MemberPredicates.NON_STATIC).isEmpty()) {
 						reporter.reportProblem(
-								JavaScriptProblems.NON_STATIC_PROPERTY,
+								JavaScriptProblems.INSTANCE_PROPERTY,
 								NLS.bind(
-										"Cannot make a static reference to the non-static field {0} from {1}",
+										ValidationMessages.StaticReferenceToNoneStaticProperty,
 										result.getName(), type.getName()),
 								propName.sourceStart(), propName.sourceEnd());
 					} else {

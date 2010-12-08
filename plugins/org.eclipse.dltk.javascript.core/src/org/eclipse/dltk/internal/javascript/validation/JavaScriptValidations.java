@@ -98,21 +98,12 @@ public class JavaScriptValidations {
 			IValueReference reference, Class<E> elementType) {
 		final Object value = reference
 				.getAttribute(IReferenceAttributes.ELEMENT);
-		boolean staticValue = false;
-		if (reference.getParent() != null)
-			staticValue = Boolean.TRUE.equals(reference.getParent()
-				.getAttribute(IReferenceAttributes.STATIC));
 		if (elementType.isInstance(value)) {
-			if (staticValue != ((E) value).isStatic())
-				return null;
-
 			return Collections.singletonList((E) value);
 		} else if (value instanceof Member[]) {
 			final Member[] elements = (Member[]) value;
 			List<E> result = null;
 			for (Member element : elements) {
-				if (staticValue != element.isStatic())
-					continue;
 
 				if (elementType.isInstance(element)) {
 					if (result == null) {
@@ -155,6 +146,9 @@ public class JavaScriptValidations {
 	}
 
 	public static boolean isStatic(IValueReference valueRef) {
+		if (valueRef == null) {
+			return false;
+		}
 		return Boolean.TRUE == valueRef
 				.getAttribute(IReferenceAttributes.STATIC);
 	}

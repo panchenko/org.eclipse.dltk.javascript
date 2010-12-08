@@ -406,6 +406,12 @@ public abstract class ElementValue implements IValue {
 		if (IReferenceAttributes.ELEMENT.equals(key)) {
 			return getElements();
 		}
+		if (IReferenceAttributes.STATIC.equals(key)) {
+			Object elements = getElements();
+			if (elements instanceof Member) {
+				return ((Member) elements).isStatic();
+			}
+		}
 		return null;
 	}
 
