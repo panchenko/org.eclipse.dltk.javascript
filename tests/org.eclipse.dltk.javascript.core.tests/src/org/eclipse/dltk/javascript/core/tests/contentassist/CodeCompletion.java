@@ -412,7 +412,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 		String[] names = new String[] { "word", "other_word" };
 		IModuleSource module = createModule("test45.js");
 		int position = lastPositionInFile("x.hello.", module);
-		basicTest(module, position, names);
+		basicTest(module, position, concat(getMethodsOfObject(), names));
 		// basicTest(module, 139, names);
 	}
 
@@ -446,7 +446,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 		String[] names = new String[] { "a", "b" };
 		IModuleSource module = createModule("test-return-value.js");
 		int position = lastPositionInFile("execute().", module);
-		basicTest(module, position, names);
+		basicTest(module, position, concat(getMethodsOfObject(), names));
 	}
 
 	public void testFunctionRefs() {

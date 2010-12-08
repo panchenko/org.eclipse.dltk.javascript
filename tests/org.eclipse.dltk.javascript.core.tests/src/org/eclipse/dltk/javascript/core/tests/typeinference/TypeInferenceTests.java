@@ -61,7 +61,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		inferencer.doInferencing(parse(code));
 		return inferencer.getCollection();
 	}
-	
+
 	public void testNewNamedFunction() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("var test = new function Test() {");
@@ -98,7 +98,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(1, a.getDirectChildren().size());
 		assertEquals("p", a.getDirectChildren().iterator().next());
 	}
-	
+
 	public void testNestedFunctionType() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("function Test() {");
@@ -123,30 +123,34 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		test = test.getChild("newNode");
 		assertEquals(true, test.exists());
 		assertEquals(1, test.getDeclaredTypes().size());
-		assertEquals("Function", test.getDeclaredTypes().iterator().next().getName());
-		
+		assertEquals("Function", typename(test.getDeclaredTypes()));
+
 		test = test.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(2, test.getDirectChildren().size());
 		assertNull(test.getDeclaredType());
-		
+
 		IValueReference a = test.getChild("a");
 		assertEquals(true, a.exists());
 		assertEquals(1, a.getTypes().size());
-		assertEquals("Number", a.getTypes().iterator().next().getName());
+		assertEquals("Number", typename(a.getTypes()));
 
 		IValueReference toString = test.getChild("toString");
 		assertEquals(true, toString.exists());
 		assertEquals(1, toString.getDeclaredTypes().size());
-		assertEquals("Function", toString.getDeclaredTypes().iterator().next().getName());
-		
+		assertEquals(FUNCTION, typename(toString.getDeclaredTypes()));
+
 		toString = toString.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(true, toString.exists());
 		assertEquals(1, toString.getTypes().size());
-		assertEquals("String", toString.getTypes().iterator().next().getName());
+		assertEquals("String", typename(toString.getTypes()));
 
-		
 	}
-	
+
+	protected String typename(Set<Type> types) {
+		assertEquals(1, types.size());
+		return types.iterator().next().getName();
+	}
+
 	public void testNestedFunctionTypeWithoutDeclaration() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("function Test() {");
@@ -171,12 +175,12 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		test = test.getChild("newNode");
 		assertEquals(true, test.exists());
 		assertEquals(1, test.getDeclaredTypes().size());
-		assertEquals("Function", test.getDeclaredTypes().iterator().next().getName());
-		
+		assertEquals("Function", typename(test.getDeclaredTypes()));
+
 		test = test.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(2, test.getDirectChildren().size());
 		assertNull(test.getDeclaredType());
-		
+
 		IValueReference a = test.getChild("a");
 		assertEquals(true, a.exists());
 		assertEquals(1, a.getTypes().size());
@@ -185,14 +189,14 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference toString = test.getChild("toString");
 		assertEquals(true, toString.exists());
 		assertEquals(1, toString.getDeclaredTypes().size());
-		assertEquals("Function", toString.getDeclaredTypes().iterator().next().getName());
-		
+		assertEquals("Function", typename(toString.getDeclaredTypes()));
+
 		toString = toString.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(true, toString.exists());
 		assertEquals(1, toString.getTypes().size());
-		assertEquals("String", toString.getTypes().iterator().next().getName());
+		assertEquals("String", typename(toString.getTypes()));
 	}
-	
+
 	public void testNestedFunctionTypeWithScopeReturn() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("function Test() {");
@@ -216,7 +220,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(true, test.exists());
 		assertEquals(1, test.getTypes().size());
 		assertEquals("Function", test.getTypes().iterator().next().getName());
-		
+
 		test = test.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(3, test.getDirectChildren().size());
 		assertNull(test.getDeclaredType());
@@ -237,14 +241,13 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(true, toString.exists());
 		assertEquals(0, toString.getDeclaredTypes().size());
 		assertEquals(1, toString.getTypes().size());
-		assertEquals("Function", toString.getTypes().iterator().next().getName());
-		
+		assertEquals("Function", typename(toString.getTypes()));
+
 		toString = toString.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(true, toString.exists());
 		assertEquals(1, toString.getTypes().size());
 		assertEquals("String", toString.getTypes().iterator().next().getName());
 
-		
 	}
 
 	public void testNumberVar() {
@@ -298,7 +301,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var z = s.execute()");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference z = collection.getChild("z");
-		assertTrue(z.getTypes().isEmpty());
+		assertEquals(getTypes(OBJECT), z.getTypes());
 		final IValueReference a = z.getChild("a");
 		assertTrue(a.exists());
 		assertEquals(getTypes(NUMBER), a.getTypes());
@@ -419,7 +422,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var y = x.b");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference x = collection.getChild("x");
-		assertEquals(getTypes(), x.getTypes());
+		assertEquals(getTypes(OBJECT), x.getTypes());
 		assertEquals(Collections.singleton("a"), x.getDirectChildren());
 		IValueReference y = collection.getChild("y");
 		assertEquals(getTypes(), y.getTypes());
@@ -454,7 +457,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("}");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference a = collection.getChild("a");
-		assertEquals(getTypes(), a.getTypes());
+		assertEquals(getTypes(OBJECT), a.getTypes());
 		IValueReference name = a.getChild("name");
 		assertTrue(name.getTypes().containsAll(getTypes(STRING)));
 	}
@@ -542,23 +545,23 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var name = a.execute();");
 		lines.add("var name2 = a.execute()[0];");
 		IValueCollection collection = inference(lines.toString());
-		
+
 		IValueReference name = collection.getChild("name");
 		assertTrue(name.exists());
 		assertEquals(1, name.getTypes().size());
-		assertEquals("Array<String>", name.getTypes().iterator().next().getName());
+		assertEquals("Array<String>", typename(name.getTypes()));
 
 		IValueReference name2 = collection.getChild("name2");
 		assertTrue(name2.exists());
 		assertEquals(1, name2.getTypes().size());
-		assertEquals("String", name2.getTypes().iterator().next().getName());
+		assertEquals("String", typename(name2.getTypes()));
 	}
 
 	public void testGenericArrayResolverMethod() {
 		List<String> lines = new StringList();
 		lines.add("var name = myGenericArrayTest.execute()[0];");
 		IValueCollection collection = inference(lines.toString());
-		
+
 		IValueReference name = collection.getChild("name");
 		assertTrue(name.exists());
 		assertEquals(1, name.getTypes().size());
@@ -581,7 +584,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("name");
 		assertEquals(getTypes(STRING), name.getTypes());
 	}
-	
+
 	public void testSelfReferenceAssignment() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("var str = '10';");
@@ -590,20 +593,21 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("str");
 		assertEquals(getTypes(STRING), name.getTypes());
 	}
-	
+
 	public void testStaticTypeAssignment() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("var num = Number;");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference name = collection.getChild("num");
 		assertEquals(getTypes(NUMBER), name.getTypes());
-		
+
 		assertEquals(true, name.getAttribute(IReferenceAttributes.STATIC));
-		
-		// TODO should a static reference getchild really return existing none static childs?
-//		assertEquals(true, name.getChild("prototype").exists());
-//		assertEquals(false, name.getChild("toFixed").exists());
-		
+
+		// TODO should a static reference getchild really return existing none
+		// static childs?
+		// assertEquals(true, name.getChild("prototype").exists());
+		// assertEquals(false, name.getChild("toFixed").exists());
+
 	}
 
 	public void testAssignToResolvedProperty() {
@@ -611,9 +615,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("ExampleGlobal.abcdef = 1");
 		inference(lines.toString());
 	}
-	
-	public void testJavaClzIntegrationWithPackagesPrefix()
-	{
+
+	public void testJavaClzIntegrationWithPackagesPrefix() {
 		List<String> lines = new StringList();
 		lines.add("var str = Packages.java.lang.String;");
 		lines.add("var x = new str()");
@@ -621,13 +624,12 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
 		Type type = strClz.getTypes().iterator().next();
-		assertEquals("java.lang.String",type.getName());
+		assertEquals("java.lang.String", type.getName());
 
 		boolean valueOfFound = false;
 		for (Member member : type.getMembers()) {
 			valueOfFound = member.getName().equals("valueOf");
-			if (valueOfFound)
-			{
+			if (valueOfFound) {
 				assertEquals(true, member.isStatic());
 				break;
 			}
@@ -641,8 +643,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		boolean toStringFound = false;
 		for (Member member : type.getMembers()) {
 			toStringFound = member.getName().equals("toString");
-			if (toStringFound)
-			{
+			if (toStringFound) {
 				assertEquals(false, member.isStatic());
 				break;
 			}
@@ -650,9 +651,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(true, toStringFound);
 
 	}
-	
-	public void testJavaClzIntegrationWithJavaPrefix()
-	{
+
+	public void testJavaClzIntegrationWithJavaPrefix() {
 		List<String> lines = new StringList();
 		lines.add("var str = java.lang.String;");
 		lines.add("var x = new str()");
@@ -660,29 +660,27 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
 		Type type = strClz.getTypes().iterator().next();
-		assertEquals("java.lang.String",type.getName());
-		
+		assertEquals("java.lang.String", type.getName());
+
 		boolean valueOfFound = false;
 		for (Member member : type.getMembers()) {
 			valueOfFound = member.getName().equals("valueOf");
-			if (valueOfFound)
-			{
+			if (valueOfFound) {
 				assertEquals(true, member.isStatic());
 				break;
 			}
 
 		}
 		assertEquals(true, valueOfFound);
-		
+
 		IValueReference str = collection.getChild("x");
 		assertEquals(1, str.getTypes().size());
 		assertEquals(type, str.getTypes().iterator().next());
-		
+
 		boolean toStringFound = false;
 		for (Member member : type.getMembers()) {
 			toStringFound = member.getName().equals("toString");
-			if (toStringFound)
-			{
+			if (toStringFound) {
 				assertEquals(false, member.isStatic());
 				break;
 			}
@@ -691,54 +689,50 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(true, toStringFound);
 
 	}
-	
-	public void testJavaIntegrationWithJavaPrefix()
-	{
+
+	public void testJavaIntegrationWithJavaPrefix() {
 		List<String> lines = new StringList();
 		lines.add("var str = new java.lang.String()");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
 		Type type = strClz.getTypes().iterator().next();
-		assertEquals("java.lang.String",type.getName());
-		
+		assertEquals("java.lang.String", type.getName());
+
 		boolean toStringFound = false;
 		for (Member member : type.getMembers()) {
 			toStringFound = member.getName().equals("toString");
-			if (toStringFound)
-			{
+			if (toStringFound) {
 				assertEquals(false, member.isStatic());
 				break;
 			}
 
 		}
-		
+
 		assertEquals(true, toStringFound);
 	}
-	
-	public void testJavaIntegrationWithPackagesPrefix()
-	{
+
+	public void testJavaIntegrationWithPackagesPrefix() {
 		List<String> lines = new StringList();
 		lines.add("var str = new Packages.java.lang.String()");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
 		Type type = strClz.getTypes().iterator().next();
-		assertEquals("java.lang.String",type.getName());
-		
+		assertEquals("java.lang.String", type.getName());
+
 		boolean toStringFound = false;
 		for (Member member : type.getMembers()) {
 			toStringFound = member.getName().equals("toString");
-			if (toStringFound)
-			{
+			if (toStringFound) {
 				assertEquals(false, member.isStatic());
 				break;
 			}
 		}
-		
+
 		assertEquals(true, toStringFound);
 	}
-	
+
 	public void testJSDocParamWithDefaultProperties() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("/**");
@@ -751,23 +745,27 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference addChild = collection.getChild("addChild");
 		assertEquals(1, addChild.getDirectChildren().size());
-		assertEquals(IValueReference.FUNCTION_OP, addChild.getDirectChildren().iterator().next());
-		
-		IValueCollection functionCollection  = (IValueCollection) addChild.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		assertEquals(IValueReference.FUNCTION_OP, addChild.getDirectChildren()
+				.iterator().next());
+
+		IValueCollection functionCollection = (IValueCollection) addChild
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 		assertNotNull(functionCollection);
-		
+
 		IValueReference node = functionCollection.getChild("node");
 		assertEquals(0, node.getDirectChildren().size());
-		
+
 		assertNotNull(node.getDeclaredType());
-		
+
 		assertEquals(2, node.getDeclaredType().getMembers().size());
-		
-		assertEquals("name", node.getDeclaredType().getMembers().get(0).getName());
-		assertEquals("value", node.getDeclaredType().getMembers().get(1).getName());
-		
+
+		assertEquals("name", node.getDeclaredType().getMembers().get(0)
+				.getName());
+		assertEquals("value", node.getDeclaredType().getMembers().get(1)
+				.getName());
+
 	}
-	
+
 	public void testJSDocTypeTagFunction() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("/**");
@@ -780,12 +778,13 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("}");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference test = collection.getChild("test");
-		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueCollection functionScope = (IValueCollection) test
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 		IValueReference x = functionScope.getChild("x");
 		assertEquals(1, x.getTypes().size());
 		assertEquals("String", x.getTypes().iterator().next().getName());
 	}
-	
+
 	public void testJSDocReturnsTagFunction() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("/**");
@@ -798,12 +797,13 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("}");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference test = collection.getChild("test");
-		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueCollection functionScope = (IValueCollection) test
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 		IValueReference x = functionScope.getChild("x");
 		assertEquals(1, x.getTypes().size());
 		assertEquals("String", x.getTypes().iterator().next().getName());
 	}
-	
+
 	public void testJSDocReturnsTagLazyFunction() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("function test() {");
@@ -816,13 +816,13 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("}");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference test = collection.getChild("test");
-		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueCollection functionScope = (IValueCollection) test
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 		IValueReference x = functionScope.getChild("x");
 		assertEquals(1, x.getTypes().size());
 		assertEquals("String", x.getTypes().iterator().next().getName());
 	}
 
-	
 	public void testJSDocTypeTagVariable() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("/**");
@@ -834,12 +834,13 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("}");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference test = collection.getChild("test");
-		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueCollection functionScope = (IValueCollection) test
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 		IValueReference x = functionScope.getChild("x");
 		assertNotNull(x.getDeclaredType());
 		assertEquals("String", x.getDeclaredType().getName());
 	}
-	
+
 	public void testJSDocTypeTagVariableLazy() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("function test() {");
@@ -851,7 +852,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var str;");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference test = collection.getChild("test");
-		IValueCollection functionScope = (IValueCollection) test.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueCollection functionScope = (IValueCollection) test
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 		IValueReference x = functionScope.getChild("x");
 		assertNotNull(x.getDeclaredType());
 		assertEquals("String", x.getDeclaredType().getName());
