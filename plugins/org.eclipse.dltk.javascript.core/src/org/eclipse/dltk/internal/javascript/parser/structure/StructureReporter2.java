@@ -65,8 +65,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 	 * @param reference
 	 * @return
 	 */
-	private void checkIdentifier(Identifier node,
-			IValueReference reference) {
+	private void checkIdentifier(Identifier node, IValueReference reference) {
 		// if this is a function declaration, skip this, will be
 		// reported by visit functionStatement
 		if (isFunctionDeclaration(node))
@@ -212,9 +211,8 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 				paramTypes[i] = parameter.getType();
 
 				fRequestor.acceptArgumentDeclaration(arguments.get(parameter
-						.getName()), getSource()
-							.getSourceModule(), context.getType(parameter
-							.getType()));
+						.getName()), getSource().getSourceModule(), parameter
+						.getType());
 			}
 			methodInfo.parameterNames = paramNames;
 			methodInfo.parameterTypes = paramTypes;
@@ -262,8 +260,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 	 * @param method
 	 */
 	private Identifier setNameProperties(Identifier node,
-			MethodInfo methodInfo,
-			final JSMethod method) {
+			MethodInfo methodInfo, final JSMethod method) {
 		method.setName(node.getName());
 		methodInfo.nameSourceStart = node.sourceStart();
 		methodInfo.nameSourceEnd = node.sourceEnd() - 1;
@@ -286,7 +283,9 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 						.getParent()).getName();
 			}
 			if (fieldIdentifer != null) {
-				fRequestor.enterField(fieldIdentifer, node.sourceStart(), null);
+				fRequestor.enterField(
+						createFieldInfo(fieldIdentifer, node.sourceStart(),
+								null), fieldIdentifer);
 			}
 		}
 		for (ObjectInitializerPart part : node.getInitializers()) {
@@ -298,12 +297,10 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 					continue;
 				if (pi.getName() instanceof Identifier) {
 					Identifier identifier = (Identifier) pi.getName();
-					FieldInfo piInfo = new FieldInfo();
-					piInfo.name = identifier.getName();
-					piInfo.nameSourceStart = identifier.sourceStart();
-					piInfo.nameSourceEnd = identifier.sourceEnd() - 1;
-					piInfo.declarationStart = pi.sourceStart();
-					fRequestor.enterField(identifier, pi.sourceStart(), null);
+					fRequestor
+							.enterField(
+									createFieldInfo(identifier,
+											pi.sourceStart(), null), identifier);
 					fRequestor.exitField(pi.sourceEnd());
 				}
 
@@ -316,20 +313,39 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 		return reference;
 	}
 
+	private FieldInfo createFieldInfo(Identifier identifer, int sourceStart,
+			JSVariable variable) {
+		FieldInfo fieldInfo = new FieldInfo();
+		fieldInfo.declarationStart = sourceStart;
+		fieldInfo.name = identifer.getName();
+		fieldInfo.nameSourceStart = identifer.sourceStart();
+		fieldInfo.nameSourceEnd = identifer.sourceEnd() - 1;
+		if (variable != null) {
+			if (variable.isDeprecated()) {
+				fieldInfo.modifiers |= JSModifiers.DEPRECATED;
+			}
+			if (variable.isPrivate()) {
+				fieldInfo.modifiers |= JSModifiers.PRIVATE;
+			}
+			fieldInfo.type = variable.getType();
+		}
+		return fieldInfo;
+	}
+
 	protected IValueReference createVariable(IValueCollection context,
 			VariableDeclaration declaration) {
 		if (!(declaration.getInitializer() instanceof FunctionStatement)) {
 			final Identifier identifier = declaration.getIdentifier();
 			final String varName = identifier.getName();
-			String typeName = null;
+			final JSVariable variable = new JSVariable();
 			final IValueReference reference = context.createChild(varName);
 			final org.eclipse.dltk.javascript.ast.Type varType = declaration
 					.getType();
 			if (varType != null) {
 				reference.setDeclaredType(resolveType(varType));
-				typeName = varType.getName();
-			} else if (declaration.getParent() instanceof VariableStatement) {
-				final JSVariable variable = new JSVariable();
+				variable.setType(varType.getName());
+			}
+			if (declaration.getParent() instanceof VariableStatement) {
 				variable.setName(declaration.getVariableName());
 				for (IModelBuilder extension : TypeInfoManager
 						.getModelBuilders()) {
@@ -337,7 +353,6 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 							(VariableStatement) declaration.getParent(),
 							variable);
 				}
-				typeName = variable.getType();
 			}
 
 			reference.setKind(inFunction() ? ReferenceKind.LOCAL
@@ -347,11 +362,11 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 					identifier.sourceStart(), identifier.sourceEnd()));
 			if (inFunction())
 				fRequestor.enterLocal(identifier,
-						getSource().getSourceModule(),
-						this.context.getType(typeName));
+						getSource().getSourceModule(), variable.getType());
 			else
-				fRequestor.enterField(identifier, declaration.sourceStart(),
-						this.context.getType(typeName));
+				fRequestor.enterField(
+						createFieldInfo(identifier, declaration.sourceStart(),
+								variable), identifier);
 
 			if (declaration.getInitializer() != null) {
 				IValueReference assignment = visit(declaration.getInitializer());
@@ -395,8 +410,9 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			// }
 			if (identifier != null) {
 				IValueReference reference = super.visitPropertyExpression(node);
-				if (fRequestor.enterFieldCheckDuplicates(identifier,
-						name.sourceStart(), null)) {
+				if (fRequestor.enterFieldCheckDuplicates(
+						createFieldInfo(identifier, name.sourceStart(), null),
+						identifier)) {
 					reference = super.visitPropertyExpression(node);
 					fRequestor.exitField(node.sourceEnd());
 					return reference;

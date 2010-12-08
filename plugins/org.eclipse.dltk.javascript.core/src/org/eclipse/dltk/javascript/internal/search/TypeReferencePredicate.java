@@ -15,7 +15,6 @@ import org.eclipse.dltk.core.search.matching2.AbstractMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.internal.core.search.matching.TypeReferencePattern;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TypeReferencePredicate extends
 		AbstractMatchingPredicate<MatchingNode> {
@@ -43,10 +42,10 @@ public class TypeReferencePredicate extends
 			}
 		} else if (node instanceof FieldDeclarationNode) {
 			FieldDeclarationNode fNode = (FieldDeclarationNode) node;
-			return matchType(fNode.declaredType);
+			return matchTypeName(fNode.declaredType);
 		} else if (node instanceof LocalVariableDeclarationNode) {
 			LocalVariableDeclarationNode vNode = (LocalVariableDeclarationNode) node;
-			return matchType(vNode.declaredType);
+			return matchTypeName(vNode.declaredType);
 		}
 		return null;
 	}
@@ -56,15 +55,4 @@ public class TypeReferencePredicate extends
 			return null;
 		return matchName(typeName);
 	}
-
-	/**
-	 * @param type
-	 * @return
-	 */
-	private MatchLevel matchType(Type type) {
-		if (type == null)
-			return null;
-		return matchName(type.getName());
-	}
-
 }

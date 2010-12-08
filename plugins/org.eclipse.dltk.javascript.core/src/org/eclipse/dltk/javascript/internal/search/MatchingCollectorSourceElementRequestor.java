@@ -3,6 +3,7 @@ package org.eclipse.dltk.javascript.internal.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
@@ -11,7 +12,6 @@ import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class MatchingCollectorSourceElementRequestor implements
 		IStructureRequestor {
@@ -47,7 +47,7 @@ public class MatchingCollectorSourceElementRequestor implements
 	}
 
 	public void acceptArgumentDeclaration(Argument argument,
-			ISourceModule sourceModule, Type type) {
+			ISourceModule sourceModule, String type) {
 		nodes.add(new ArgumentDeclarationNode(argument, sourceModule, type));
 	}
 
@@ -59,18 +59,18 @@ public class MatchingCollectorSourceElementRequestor implements
 		nodes.add(new MethodDeclarationNode(identifier, method));
 	}
 
-	public void enterField(Identifier identifier, int sourceStart, Type type) {
-		nodes.add(new FieldDeclarationNode(identifier, type));
+	public void enterField(FieldInfo fieldInfo, Identifier identifier) {
+		nodes.add(new FieldDeclarationNode(identifier, fieldInfo.type));
 	}
 
-	public boolean enterFieldCheckDuplicates(Identifier identifier,
-			int sourceStart, Type type) {
-		nodes.add(new FieldDeclarationNode(identifier, type));
+	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
+			Identifier identifier) {
+		nodes.add(new FieldDeclarationNode(identifier, fieldInfo.type));
 		return true;
 	}
 
 	public void enterLocal(Identifier identifier, ISourceModule module,
-			Type type) {
+			String type) {
 		nodes.add(new LocalVariableDeclarationNode(identifier, module, type));
 	}
 

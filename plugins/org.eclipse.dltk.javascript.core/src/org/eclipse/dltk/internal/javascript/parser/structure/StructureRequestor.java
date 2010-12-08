@@ -8,7 +8,6 @@ import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class StructureRequestor implements IStructureRequestor {
 
@@ -23,11 +22,11 @@ public class StructureRequestor implements IStructureRequestor {
 	}
 
 	public void acceptArgumentDeclaration(Argument argument,
-			ISourceModule sourceModule, Type type) {
+			ISourceModule sourceModule, String type) {
 	}
 
 	public void enterLocal(Identifier identifier, ISourceModule module,
-			Type type) {
+			String type) {
 	}
 
 	public void exitLocal(int sourceEnd) {
@@ -57,26 +56,13 @@ public class StructureRequestor implements IStructureRequestor {
 		requestor.exitField(sourceEnd);
 	}
 
-	public void enterField(Identifier identifer, int sourceStart, Type type) {
-		requestor.enterField(createFieldInfo(identifer, sourceStart, type));
+	public void enterField(FieldInfo fieldInfo, Identifier identifer) {
+		requestor.enterField(fieldInfo);
 	}
 
-	private FieldInfo createFieldInfo(Identifier identifer, int sourceStart,
-			Type type) {
-		FieldInfo fieldInfo = new FieldInfo();
-		fieldInfo.declarationStart = sourceStart;
-		fieldInfo.name = identifer.getName();
-		fieldInfo.nameSourceStart = identifer.sourceStart();
-		fieldInfo.nameSourceEnd = identifer.sourceEnd() - 1;
-		if (type != null)
-			fieldInfo.type = type.getName();
-		return fieldInfo;
-	}
-
-	public boolean enterFieldCheckDuplicates(Identifier identifier,
-			int sourceStart, Type type) {
-		return requestor.enterFieldCheckDuplicates(createFieldInfo(identifier,
-				sourceStart, type));
+	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
+			Identifier identifier) {
+		return requestor.enterFieldCheckDuplicates(fieldInfo);
 	}
 
 }

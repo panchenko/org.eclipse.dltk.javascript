@@ -12,16 +12,15 @@
 package org.eclipse.dltk.javascript.internal.search;
 
 import org.eclipse.dltk.javascript.ast.Identifier;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class FieldDeclarationNode extends AbstractMatchingNode<Identifier> {
 
-	final Type declaredType;
+	final String declaredType;
 
 	/**
 	 * @param node
 	 */
-	public FieldDeclarationNode(Identifier node, Type declaredType) {
+	public FieldDeclarationNode(Identifier node, String declaredType) {
 		super(node);
 		this.declaredType = declaredType;
 	}

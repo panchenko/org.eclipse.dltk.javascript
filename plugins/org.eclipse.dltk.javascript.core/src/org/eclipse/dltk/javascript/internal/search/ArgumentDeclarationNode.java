@@ -13,18 +13,17 @@ package org.eclipse.dltk.javascript.internal.search;
 
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.ast.Argument;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class ArgumentDeclarationNode extends AbstractMatchingNode<Argument> {
 
 	final ISourceModule module;
-	final Type declaredType;
+	final String declaredType;
 
 	/**
 	 * @param node
 	 */
 	public ArgumentDeclarationNode(Argument node, ISourceModule module,
-			Type declaredType) {
+			String declaredType) {
 		super(node);
 		this.module = module;
 		this.declaredType = declaredType;
