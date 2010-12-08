@@ -34,7 +34,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	public static String[] getTags() {
 		return new String[] { DEPRECATED, PARAM_TAG, TYPE_TAG, RETURN_TAG,
-				RETURNS_TAG, PRIVATE_TAG };
+				RETURNS_TAG, PRIVATE_TAG, CONSTRUCTOR_TAG };
 	}
 
 	private static final String PRIVATE_TAG = "@private";
