@@ -576,4 +576,13 @@
    </occurrencesFinder>
 </extension>
 
+<extension
+      point="org.eclipse.dltk.ui.modelLabelProvider">
+   <modelLabelProvider
+         class="org.eclipse.dltk.javascript.internal.ui.JSModelLabelProvider"
+         id="org.eclipse.dltk.javascript.ui.modelLabelProvider"
+         language="org.eclipse.dltk.javascript.core.nature">
+   </modelLabelProvider>
+</extension>
+
 </plugin>
