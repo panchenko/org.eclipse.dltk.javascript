@@ -456,40 +456,68 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		private boolean validateParameters(List<IParameter> parameters,
 				IValueReference[] arguments) {
-			if (arguments.length > parameters.size())
+			if (arguments.length > parameters.size()
+					&& !(parameters.size() > 0 && parameters.get(
+							parameters.size() - 1).isVarargs()))
 				return false;
 			int testTypesSize = parameters.size();
-			if (parameters.size() != arguments.length) {
+			if (parameters.size() > arguments.length) {
 				for (int i = arguments.length; i < parameters.size(); i++) {
 					if (!parameters.get(i).isOptional())
 						return false;
 				}
 				testTypesSize = arguments.length;
+			} else if (parameters.size() < arguments.length) {
+				// is var args..
+				testTypesSize = parameters.size() - 1;
 			}
 
 			for (int i = 0; i < testTypesSize; i++) {
-				String param = parameters.get(i).getType();
-				if (arguments[i] == null)
-					continue;
-				Type argumentType = arguments[i].getDeclaredType();
-				if (argumentType == null) {
-					if (!arguments[i].getTypes().isEmpty()) {
-						argumentType = arguments[i].getTypes().iterator()
-								.next();
-					}
-				}
-				if (param != null && param != null
-						&& argumentType != null
-						&& !param.equals(argumentType.getName())) {
-					String argumentName = argumentType.getName();
-					int index = argumentName.indexOf('<');
-					if (index != -1) {
-						argumentName = argumentName.substring(0, index);
-					}
-					if (param.equals(argumentName))
-						continue;
+				String paramType = parameters.get(i).getType();
+				IValueReference argument = arguments[i];
+				if (!testArgumentType(paramType, argument))
 					return false;
+			}
+			// test var args
+			if (parameters.size() < arguments.length) {
+				int varargsParameter = parameters.size() - 1;
+				String paramType = parameters.get(varargsParameter).getType();
+
+				for (int i = varargsParameter; i < arguments.length; i++) {
+					IValueReference argument = arguments[i];
+					if (!testArgumentType(paramType, argument))
+						return false;
 				}
+
+			}
+			return true;
+		}
+
+		/**
+		 * @param paramType
+		 * @param argument
+		 * @return
+		 */
+		private boolean testArgumentType(String paramType,
+				IValueReference argument) {
+			if (argument == null)
+				return true;
+			Type argumentType = argument.getDeclaredType();
+			if (argumentType == null) {
+				if (!argument.getTypes().isEmpty()) {
+					argumentType = argument.getTypes().iterator().next();
+				}
+			}
+			if (paramType != null && paramType != null && argumentType != null
+					&& !paramType.equals(argumentType.getName())) {
+				String argumentName = argumentType.getName();
+				int index = argumentName.indexOf('<');
+				if (index != -1) {
+					argumentName = argumentName.substring(0, index);
+				}
+				if (paramType.equals(argumentName))
+					return true;
+				return false;
 			}
 			return true;
 		}
@@ -524,7 +552,13 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					sb.append(',');
 				}
 				if (parameter.getType() != null) {
+					if (parameter.isOptional())
+						sb.append("[");
+					if (parameter.isVarargs())
+						sb.append("...");
 					sb.append(parameter.getType());
+					if (parameter.isOptional())
+						sb.append("]");
 				} else {
 					sb.append('?');
 				}

@@ -111,10 +111,15 @@ public class JSDocSupport implements IModelBuilder {
 					index + PARAM_TAG.length(), endLineIndex);
 			StringTokenizer st = new StringTokenizer(parameterString);
 			String type = null;
+			boolean varargs = false;
 			while (st.hasMoreTokens()) {
 				final String token = st.nextToken();
 				if (token.startsWith("{") && token.endsWith("}")) {
 					type = token.substring(1, token.length() - 1);
+					if (type.startsWith("...")) {
+						varargs = true;
+						type = type.substring(3);
+					}
 				} else {
 					final IParameter parameter;
 					boolean optional = false;
@@ -164,6 +169,7 @@ public class JSDocSupport implements IModelBuilder {
 								&& st.nextToken().equals("optional"))
 							optional = true;
 						parameter.setOptional(optional);
+						parameter.setVarargs(varargs);
 					}
 					break;
 				}

@@ -103,6 +103,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 		private boolean optional;
 		private Type propertiesType;
+		private boolean varargs;
 
 		public String getName() {
 			return name;
@@ -134,6 +135,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 		public boolean isOptional() {
 			return optional;
+		}
+
+		public void setVarargs(boolean varargs) {
+			this.varargs = varargs;
+		}
+
+		public boolean isVarargs() {
+			return varargs;
 		}
 
 		public Type getPropertiesType() {

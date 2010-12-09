@@ -73,6 +73,16 @@ public interface IModelBuilder {
 		/**
 		 * @since 3.0
 		 */
+		void setVarargs(boolean varargs);
+
+		/**
+		 * @since 3.0
+		 */
+		boolean isVarargs();
+
+		/**
+		 * @since 3.0
+		 */
 		void setPropertiesType(Type type);
 
 		/**
