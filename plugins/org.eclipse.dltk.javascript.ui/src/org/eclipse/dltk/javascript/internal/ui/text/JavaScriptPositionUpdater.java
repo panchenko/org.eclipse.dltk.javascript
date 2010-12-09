@@ -28,8 +28,7 @@ final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
 
 	@Override
 	protected boolean doHighlighting(IModuleSource code) throws Exception {
-		final Script declaration = (Script) JavaScriptParserUtil.parse(code,
-				null);
+		final Script declaration = JavaScriptParserUtil.parse(code, null);
 		if (declaration == null) {
 			return false;
 		}
