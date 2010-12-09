@@ -29,7 +29,11 @@ public class JavascriptTextTools extends ScriptTextTools {
 			return bgColor;
 		}
 
-		private String bgColor;
+		final private String bgColor;
+
+		public SH(String editorXmlTagNameColor) {
+			this(editorXmlTagNameColor, null);
+		}
 
 		public SH(String editorXmlTagNameColor, String bgColor) {
 			this.preferenceKey = editorXmlTagNameColor;
@@ -61,14 +65,10 @@ public class JavascriptTextTools extends ScriptTextTools {
 
 	public SemanticHighlighting[] getSemanticHighlightings() {
 		return new SemanticHighlighting[] {
-				new SH(JavascriptPreferenceConstants.EDITOR_XML_TAG_NAME_COLOR,
-						null),
-				new SH(
-						JavascriptPreferenceConstants.EDITOR_XML_ATTR_NAME_COLOR,
-						null),
-				new SH(JavascriptPreferenceConstants.EDITOR_XML_COMMENT_COLOR,
-						null),
-				new SH(JavascriptPreferenceConstants.EDITOR_KEYWORD_COLOR, null), };
+				new SH(JavascriptPreferenceConstants.EDITOR_XML_TAG_NAME_COLOR),
+				new SH(JavascriptPreferenceConstants.EDITOR_XML_ATTR_NAME_COLOR),
+				new SH(JavascriptPreferenceConstants.EDITOR_XML_COMMENT_COLOR),
+				new SH(JavascriptPreferenceConstants.EDITOR_KEYWORD_COLOR), };
 	}
 
 	public ISemanticHighlighter getSemanticPositionUpdater() {
