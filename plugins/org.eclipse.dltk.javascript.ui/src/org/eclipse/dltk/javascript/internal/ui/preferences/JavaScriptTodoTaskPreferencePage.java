@@ -3,7 +3,6 @@ package org.eclipse.dltk.javascript.internal.ui.preferences;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
-import org.eclipse.dltk.ui.PreferencesAdapter;
 import org.eclipse.dltk.ui.preferences.AbstractConfigurationBlockPropertyAndPreferencePage;
 import org.eclipse.dltk.ui.preferences.AbstractOptionsBlock;
 import org.eclipse.dltk.ui.preferences.TodoTaskOptionsBlock;
@@ -37,8 +36,7 @@ public class JavaScriptTodoTaskPreferencePage extends
 	}
 
 	protected void setPreferenceStore() {
-		setPreferenceStore(new PreferencesAdapter(JavaScriptPlugin.getDefault()
-				.getPluginPreferences()));
+		// empty
 	}
 
 	protected String getPreferencePageId() {
