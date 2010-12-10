@@ -9,7 +9,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.javascript.internal.ui.text.completion.JavaScriptCompletionProcessor;
 import org.eclipse.dltk.javascript.internal.ui.text.completion.JavaScriptContentAssistPreference;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
@@ -42,8 +41,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 public class JavascriptSourceViewerConfiguration extends
 		ScriptSourceViewerConfiguration {
-
-	private JavascriptTextTools fTextTools;
 
 	private JavascriptCodeScanner fCodeScanner;
 
@@ -248,7 +245,6 @@ public class JavascriptSourceViewerConfiguration extends
 
 	@Override
 	protected void initializeScanners() {
-		Assert.isTrue(isNewSetup());
 		fCodeScanner = new JavascriptCodeScanner(getColorManager(),
 				fPreferenceStore);
 		fStringScanner = new JavascriptStringScanner(getColorManager(),
@@ -262,13 +258,6 @@ public class JavascriptSourceViewerConfiguration extends
 		fDocScanner = new JavascriptDocScanner(getColorManager(),
 				fPreferenceStore);
 
-	}
-
-	/**
-	 * @return <code>true</code> iff the new setup without text tools is in use.
-	 */
-	private boolean isNewSetup() {
-		return fTextTools == null;
 	}
 
 	/**
@@ -339,7 +328,6 @@ public class JavascriptSourceViewerConfiguration extends
 	 */
 	@Override
 	public void handlePropertyChangeEvent(PropertyChangeEvent event) {
-		Assert.isTrue(isNewSetup());
 		if (fCodeScanner.affectsBehavior(event))
 			fCodeScanner.adaptToPreferenceChange(event);
 		if (fCommentScanner.affectsBehavior(event))
