@@ -41,6 +41,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -368,6 +369,13 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 											.sourceEnd());
 						}
 					} else {
+						Type referenceType = JavaScriptValidations
+								.typeOf(reference);
+						if (referenceType != null
+								&& referenceType.getName().equals(
+										ITypeNames.FUNCTION)) {
+							return;
+						}
 						if (expression instanceof NewExpression) {
 							if (reference.getKind() == ReferenceKind.TYPE) {
 								return;
