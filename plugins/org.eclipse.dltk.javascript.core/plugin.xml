@@ -2,8 +2,6 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="typeinfo" name="JavaScript TypeInfo" schema="schema/typeinfo.exsd"/>
-   <extension-point id="resolver" name="Reference Resolver" schema="schema/resolver.exsd"/>
-   <extension-point id="customtype" name="Custom JavaScript types provider" schema="schema/customtype.exsd"/>
 
   <extension point="org.eclipse.core.runtime.preferences">
     <initializer
