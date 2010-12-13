@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
+import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
 import org.eclipse.dltk.internal.javascript.parser.structure.IStructureRequestor;
@@ -49,6 +50,12 @@ public class MatchingCollectorSourceElementRequestor implements
 	public void acceptArgumentDeclaration(Argument argument,
 			ISourceModule sourceModule, String type) {
 		nodes.add(new ArgumentDeclarationNode(argument, sourceModule, type));
+	}
+
+	public void enterType(TypeInfo typeInfo) {
+	}
+
+	public void exitType(int sourceEnd) {
 	}
 
 	public void enterMethod(MethodInfo methodInfo, Identifier identifier,

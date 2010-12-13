@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore.xmi
 Bundle-Activator: org.eclipse.dltk.javascript.core.JavaScriptPlugin
 Export-Package: org.eclipse.dltk.internal.javascript.parser,
+ org.eclipse.dltk.internal.javascript.parser.structure,
  org.eclipse.dltk.internal.javascript.reference.resolvers,
  org.eclipse.dltk.internal.javascript.ti;x-internal:=true,
  org.eclipse.dltk.internal.javascript.typeinference,

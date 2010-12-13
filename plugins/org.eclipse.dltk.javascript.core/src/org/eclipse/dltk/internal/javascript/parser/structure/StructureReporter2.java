@@ -53,6 +53,10 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 		this.fRequestor = fRequestor;
 	}
 
+	public IStructureRequestor getRequestor() {
+		return fRequestor;
+	}
+
 	@Override
 	public IValueReference visitIdentifier(Identifier node) {
 		IValueReference reference = super.visitIdentifier(node);

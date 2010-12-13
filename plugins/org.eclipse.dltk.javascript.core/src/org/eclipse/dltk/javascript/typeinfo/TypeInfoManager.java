@@ -37,6 +37,7 @@ public class TypeInfoManager {
 	private static final String RESOLVER_ELEMENT = "resolver";
 	private static final String CONVERTER_ELEMENT = "converter";
 	private static final String EVALUATOR_ELEMENT = "evaluator";
+	private static final String NODE_HANDLER_ELEMENT = "nodeHandler";
 
 	private static String trim(String str) {
 		if (str != null) {
@@ -118,6 +119,19 @@ public class TypeInfoManager {
 		}
 	};
 
+	private static final SimpleExtensionManager<ITypeInferenceHandlerFactory> nodeHandlerManager = new SimpleExtensionManager<ITypeInferenceHandlerFactory>(
+			ITypeInferenceHandlerFactory.class, EXT_POINT) {
+		@Override
+		protected ITypeInferenceHandlerFactory createInstance(
+				IConfigurationElement element) {
+			if (NODE_HANDLER_ELEMENT.equals(element.getName())) {
+				return super.createInstance(element);
+			} else {
+				return null;
+			}
+		}
+	};
+
 	public static IModelBuilder[] getModelBuilders() {
 		return modelBuilderManager.getInstances();
 	}
@@ -136,6 +150,10 @@ public class TypeInfoManager {
 
 	public static IMemberEvaluator[] getMemberEvaluators() {
 		return evaluatorManager.getInstances();
+	}
+
+	public static ITypeInferenceHandlerFactory[] getNodeHandlerFactories() {
+		return nodeHandlerManager.getInstances();
 	}
 
 	public static ResourceSet loadModelResources() {

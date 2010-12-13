@@ -2,6 +2,7 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
+import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.javascript.ast.Argument;
@@ -14,6 +15,10 @@ public interface IStructureRequestor {
 
 	void acceptMethodReference(Identifier node, int argCount,
 			IValueReference reference);
+
+	void enterType(TypeInfo typeInfo);
+
+	void exitType(int sourceEnd);
 
 	void enterMethod(MethodInfo methodInfo, Identifier identifier,
 			JSMethod method);
