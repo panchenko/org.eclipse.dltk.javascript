@@ -83,6 +83,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		public StackedExpressionValidator(Reporter reporter) {
 			this.reporter = reporter;
 		}
+
 		public void call() {
 			for (ExpressionValidator validator : stacked) {
 				int count = reporter.getProblemCount();
@@ -508,7 +509,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					argumentType = argument.getTypes().iterator().next();
 				}
 			}
-			if (paramType != null && paramType != null && argumentType != null
+			if (paramType != null && argumentType != null
 					&& !paramType.equals(argumentType.getName())) {
 				String argumentName = argumentType.getName();
 				int index = argumentName.indexOf('<');
