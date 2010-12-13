@@ -55,6 +55,25 @@ public class ObjectInitializer extends Expression {
 		this.initializers.add(initializer);
 	}
 
+	public Expression getProperty(String propertyName) {
+		for (ObjectInitializerPart part : initializers) {
+			if (part instanceof PropertyInitializer) {
+				final PropertyInitializer property = (PropertyInitializer) part;
+				final Expression name = property.getName();
+				if (name instanceof Identifier) {
+					if (propertyName.equals(((Identifier) name).getName())) {
+						return property.getValue();
+					}
+				} else if (name instanceof StringLiteral) {
+					if (propertyName.equals(((StringLiteral) name).getValue())) {
+						return property.getValue();
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	public int getLC() {
 		return this.LC;
 	}
