@@ -9,7 +9,6 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.ast;
 
 import java.util.Collection;
@@ -18,7 +17,7 @@ import java.util.Map;
 
 import org.eclipse.dltk.ast.ASTNode;
 
-public abstract class ASTVisitor<E> {
+public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 
 	public E visit(Collection<? extends ASTNode> nodes) {
 		E result = null;
