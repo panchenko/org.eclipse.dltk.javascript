@@ -600,6 +600,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				result = new AnonymousNewValue();
 				result.setValue(((IValueCollection) fs).getThis());
 				result.setKind(ReferenceKind.TYPE);
+				result.setDeclaredType(context.getKnownType(OBJECT));
 			}
 		}
 		if (result == null) {
