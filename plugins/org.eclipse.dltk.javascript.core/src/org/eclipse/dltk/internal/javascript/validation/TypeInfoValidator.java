@@ -26,6 +26,7 @@ import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
+import org.eclipse.dltk.internal.javascript.ti.LazyReference;
 import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
@@ -119,6 +120,39 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		}
 	}
 
+	private static class NewExpressionValidator implements ExpressionValidator {
+
+		private final NewExpression node;
+		private final IValueReference reference;
+		private final ValidationVisitor validator;
+
+		public NewExpressionValidator(NewExpression node,
+				IValueReference reference, ValidationVisitor validator) {
+			this.node = node;
+			this.reference = reference;
+			this.validator = validator;
+		}
+
+		public void call() {
+			Set<Type> types = reference.getTypes();
+			if (types.size() > 0) {
+				Type type = types.iterator().next();
+				validator
+						.checkType(node.getObjectClass(), type, type.getName());
+			} else if (reference.getDeclaredType() == null) {
+				if (reference instanceof LazyReference) {
+					validator.checkType(node.getObjectClass(), null,
+							((LazyReference) reference).getName());
+				}
+			} else {
+				Type type = reference.getDeclaredType();
+				validator
+						.checkType(node.getObjectClass(), type, type.getName());
+			}
+		}
+
+	}
+
 	private static class PropertyExpressionHolder implements
 			ExpressionValidator {
 		private final PropertyExpression node;
@@ -176,6 +210,20 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		private VisitorMode currentMode() {
 			final VisitorMode mode = modes.get(visitStack.peek());
 			return mode != null ? mode : VisitorMode.NORMAL;
+		}
+
+		@Override
+		public IValueReference visitNewExpression(NewExpression node) {
+			boolean started = startExpressionValidator();
+			try {
+				IValueReference reference = super.visitNewExpression(node);
+				pushExpressionValidator(new NewExpressionValidator(node,
+						reference, this));
+				return reference;
+			} finally {
+				if (started)
+					stopExpressionValidator();
+			}
 		}
 
 		@Override
@@ -371,10 +419,13 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					} else {
 						Type referenceType = JavaScriptValidations
 								.typeOf(reference);
-						if (referenceType != null
-								&& referenceType.getName().equals(
+						while (referenceType != null) {
+							if (referenceType.getName().equals(
 										ITypeNames.FUNCTION)) {
-							return;
+
+								return;
+							}
+							referenceType = referenceType.getSuperType();
 						}
 						if (expression instanceof NewExpression) {
 							if (reference.getKind() == ReferenceKind.TYPE) {
@@ -811,22 +862,30 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		@Override
 		protected Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
 			final Type result = super.resolveType(type);
+			checkType(type, result, type.getName());
+			return result;
+		}
+
+		/**
+		 * @param type
+		 * @param result
+		 */
+		private void checkType(ASTNode type, final Type result, String name) {
 			if (result != null) {
 				if (result.getKind() == TypeKind.UNKNOWN) {
-					reporter.reportProblem(
-							JavaScriptProblems.UNKNOWN_TYPE,
-							NLS.bind(ValidationMessages.UnknownType,
-									type.getName()), type.sourceStart(),
-							type.sourceEnd());
+					reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE,
+							NLS.bind(ValidationMessages.UnknownType, name),
+							type.sourceStart(), type.sourceEnd());
 				} else if (result.isDeprecated()) {
-					reporter.reportProblem(
-							JavaScriptProblems.DEPRECATED_TYPE,
-							NLS.bind(ValidationMessages.DeprecatedType,
-									type.getName()), type.sourceStart(),
-							type.sourceEnd());
+					reporter.reportProblem(JavaScriptProblems.DEPRECATED_TYPE,
+							NLS.bind(ValidationMessages.DeprecatedType, name),
+							type.sourceStart(), type.sourceEnd());
 				}
+			} else {
+				reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE,
+						NLS.bind(ValidationMessages.UnknownType, name),
+						type.sourceStart(), type.sourceEnd());
 			}
-			return result;
 		}
 	}
 
