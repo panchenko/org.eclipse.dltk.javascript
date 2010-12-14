@@ -473,7 +473,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			IValueCollection collection, Reporter reporter) {
 		reportItems(reporter, collection, false);
 		if (useEngine) {
-			// doCompletionOnType(context, reporter);
+			doCompletionOnType(context, reporter);
 			doCompletionOnKeyword(reporter.getPrefix(), reporter.getPosition());
 			reportGlobals(context, reporter);
 		}
