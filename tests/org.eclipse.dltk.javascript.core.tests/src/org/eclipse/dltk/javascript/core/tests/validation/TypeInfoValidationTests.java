@@ -38,6 +38,12 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
 
+	public void testUnknownJavaScriptFunctionType() {
+		final List<IProblem> problems = validate("var x = new LongString()");
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
+	}
+
 	public void testDeprecatedType() {
 		final List<IProblem> problems = validate("var x:ExampleService2");
 		assertEquals(1, problems.size());
