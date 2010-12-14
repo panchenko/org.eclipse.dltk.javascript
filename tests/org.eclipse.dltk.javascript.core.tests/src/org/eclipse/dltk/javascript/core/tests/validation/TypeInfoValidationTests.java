@@ -175,6 +175,85 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
 				.getID());
 	}
+	
+	public void testFunctionCallWithCorrectFunctionObjectArgument()
+	{
+		StringList code = new StringList();
+		code.add("function Node1() {");
+		code.add("this.a=10;");
+		code.add("}");
+		code.add("function Node2() {");
+		code.add("this.a=10;");
+		code.add("}");
+		code.add("function call(arg:Node1){");
+		code.add("}");
+		code.add("function test(){");
+		code.add("call(new Node1());");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
+	}
+
+	public void testFunctionCallWithInCorrectFunctionObjectArgument()
+	{
+		StringList code = new StringList();
+		code.add("function Node1() {");
+		code.add("this.a=10;");
+		code.add("}");
+		code.add("function Node2() {");
+		code.add("this.a=10;");
+		code.add("}");
+		code.add("function call(arg:Node1){");
+		code.add("}");
+		code.add("function test(){");
+		code.add("call(new Node2());");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+	}
+	
+	
+	public void testFunctionCallWithCorrectFunctionObjectArgumentJSDOC()
+	{
+		StringList code = new StringList();
+		code.add("function Node1() {");
+		code.add("this.a=10;");
+		code.add("}");
+		code.add("function Node2() {");
+		code.add("this.a=10;");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @param {Node1} arg");
+		code.add(" */");
+		code.add("function call(arg){");
+		code.add("}");
+		code.add("function test(){");
+		code.add("call(new Node1());");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
+	}
+
+	public void testFunctionCallWithInCorrectFunctionObjectArgumentJSDOC()
+	{
+		StringList code = new StringList();
+		code.add("function Node1() {");
+		code.add("this.a=10;");
+		code.add("}");
+		code.add("function Node2() {");
+		code.add("this.a=10;");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @param {Node1} arg");
+		code.add(" */");
+		code.add("function call(arg){");
+		code.add("}");
+		code.add("function test(){");
+		code.add("call(new Node2());");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+	}
 
 	public void testLazyJSObject() {
 		StringList code = new StringList();
