@@ -58,8 +58,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	private static IValueCollection inference(final String code) {
 		TypeInferencer2 inferencer = new TestTypeInferencer2();
-		inferencer.doInferencing(parse(code));
-		return inferencer.getCollection();
+		return inferencer.doInferencing(parse(code));
 	}
 
 	public void testNewNamedFunction() throws Exception {
@@ -69,7 +68,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("}");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference a = collection.getChild("test");
-		assertEquals(0, a.getTypes().size());
+		assertEquals(1, a.getTypes().size());
+		assertEquals(ITypeNames.OBJECT, a.getTypes().iterator().next().getName());
 		assertEquals(1, a.getDirectChildren().size());
 		assertEquals("p", a.getDirectChildren().iterator().next());
 	}
@@ -81,7 +81,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("}");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference a = collection.getChild("test");
-		assertEquals(0, a.getTypes().size());
+		assertEquals(1, a.getTypes().size());
+		assertEquals(ITypeNames.OBJECT, a.getTypes().iterator().next().getName());
 		assertEquals(1, a.getDirectChildren().size());
 		assertEquals("p", a.getDirectChildren().iterator().next());
 	}
@@ -94,7 +95,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var test = new Test();");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference a = collection.getChild("test");
-		assertEquals(0, a.getTypes().size());
+		assertEquals(1, a.getTypes().size());
+		assertEquals(ITypeNames.OBJECT, a.getTypes().iterator().next().getName());
 		assertEquals(1, a.getDirectChildren().size());
 		assertEquals("p", a.getDirectChildren().iterator().next());
 	}
@@ -117,7 +119,9 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference test = collection.getChild("test");
 		assertEquals(true, test.exists());
 		assertEquals(1, test.getDirectChildren().size());
-		assertEquals(0, test.getTypes().size());
+		assertEquals(1, test.getTypes().size());
+		assertEquals(ITypeNames.OBJECT, test.getTypes().iterator().next().getName());
+
 		assertEquals("newNode", test.getDirectChildren().iterator().next());
 
 		test = test.getChild("newNode");
@@ -169,7 +173,9 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference test = collection.getChild("test");
 		assertEquals(true, test.exists());
 		assertEquals(1, test.getDirectChildren().size());
-		assertEquals(0, test.getTypes().size());
+		assertEquals(1, test.getTypes().size());
+		assertEquals(ITypeNames.OBJECT, test.getTypes().iterator().next().getName());
+
 		assertEquals("newNode", test.getDirectChildren().iterator().next());
 
 		test = test.getChild("newNode");
@@ -213,7 +219,9 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference test = collection.getChild("test");
 		assertEquals(true, test.exists());
 		assertEquals(1, test.getDirectChildren().size());
-		assertEquals(0, test.getTypes().size());
+		assertEquals(1, test.getTypes().size());
+		assertEquals(ITypeNames.OBJECT, test.getTypes().iterator().next().getName());
+
 		assertEquals("newScope", test.getDirectChildren().iterator().next());
 
 		test = test.getChild("newScope");
