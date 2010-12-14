@@ -47,6 +47,7 @@ import org.eclipse.dltk.javascript.ast.DefaultClause;
 import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
+import org.eclipse.dltk.javascript.ast.Documentable;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.EmptyStatement;
 import org.eclipse.dltk.javascript.ast.ErrorExpression;
@@ -315,6 +316,31 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 			return voidExpression;
 		}
+	}
+
+	@Override
+	protected ASTNode visit(Tree tree) {
+		final ASTNode node = super.visit(tree);
+		if (node != null && node instanceof Documentable) {
+			int tokenIndex = tree.getTokenStartIndex();
+			while (tokenIndex > 0) {
+				--tokenIndex;
+				final Token token = tokens.get(tokenIndex);
+				if (token.getType() == JSParser.WhiteSpace
+						|| token.getType() == JSParser.EOL) {
+					continue;
+				}
+				if (token.getType() == JSParser.MultiLineComment) {
+					final Comment comment = documentationMap.get(token
+							.getTokenIndex());
+					if (comment != null) {
+						((Documentable) node).setDocumentation(comment);
+					}
+				}
+				break;
+			}
+		}
+		return node;
 	}
 
 	@Override
@@ -735,36 +761,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitFunction(Tree node) {
 		FunctionStatement fn = new FunctionStatement(getParent());
 
-		int tokenIndex = node.getTokenStartIndex();
-		boolean lookForNewLine = false;
-		while (tokenIndex > 0) {
-			--tokenIndex;
-			final Token token = tokens.get(tokenIndex);
-			if (lookForNewLine) {
-				if (token.getType() == JSParser.EOL) {
-					lookForNewLine = false;
-				}
-				continue;
-			} else if (token.getType() == JSParser.WhiteSpace
-					|| token.getType() == JSParser.EOL) {
-				continue;
-			} else if (token.getType() == JSParser.ASSIGN) {
-				// function is an assignment, look first for a new line it could
-				// be variable = fun()
-				lookForNewLine = true;
-				continue;
-			}
-			if (token.getType() == JSParser.MultiLineComment) {
-				final Comment comment = documentationMap.get(token
-						.getTokenIndex());
-				if (comment != null) {
-					assert token.getText().startsWith(
-							MultiLineComment.JSDOC_PREFIX);
-					fn.setDocumentation(comment);
-				}
-			}
-			break;
-		}
 		fn.setFunctionKeyword(createKeyword(node, Keywords.FUNCTION));
 
 		int index = 0;
@@ -1117,26 +1113,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	@Override
 	protected ASTNode visitVarDeclaration(Tree node) {
 		VariableStatement var = new VariableStatement(getParent());
-
-		int tokenIndex = node.getTokenStartIndex();
-		while (tokenIndex > 0) {
-			--tokenIndex;
-			final Token token = tokens.get(tokenIndex);
-			if (token.getType() == JSParser.WhiteSpace
-					|| token.getType() == JSParser.EOL) {
-				continue;
-			}
-			if (token.getType() == JSParser.MultiLineComment) {
-				final Comment comment = documentationMap.get(token
-						.getTokenIndex());
-				if (comment != null) {
-					assert token.getText().startsWith(
-							MultiLineComment.JSDOC_PREFIX);
-					var.setDocumentation(comment);
-				}
-			}
-			break;
-		}
 
 		var.setVarKeyword(createKeyword(node, Keywords.VAR));
 

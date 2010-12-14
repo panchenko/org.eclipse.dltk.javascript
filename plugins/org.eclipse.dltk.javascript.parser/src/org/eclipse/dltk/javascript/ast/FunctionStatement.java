@@ -21,7 +21,8 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
-public class FunctionStatement extends Expression implements ISourceableBlock {
+public class FunctionStatement extends Expression implements ISourceableBlock,
+		Documentable {
 
 	private Keyword functionKeyword;
 	private Identifier name;
@@ -130,6 +131,7 @@ public class FunctionStatement extends Expression implements ISourceableBlock {
 		this.returnType = returnType;
 	}
 
+	@Override
 	public Comment getDocumentation() {
 		return documentation;
 	}

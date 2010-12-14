@@ -16,11 +16,12 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class PropertyExpression extends Expression {
+public class PropertyExpression extends Expression implements Documentable {
 
 	private Expression object;
 	private Expression property;
 	private int dot = -1;
+	private Comment documentation;
 
 	public PropertyExpression(ASTNode parent) {
 		super(parent);
@@ -62,6 +63,15 @@ public class PropertyExpression extends Expression {
 
 	public void setDotPosition(int dot) {
 		this.dot = dot;
+	}
+
+	public void setDocumentation(Comment documentation) {
+		this.documentation = documentation;
+	}
+
+	@Override
+	public Comment getDocumentation() {
+		return documentation;
 	}
 
 	@Override

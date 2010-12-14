@@ -16,9 +16,10 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class Identifier extends Expression {
+public class Identifier extends Expression implements Documentable {
 
 	private String name;
+	private Comment documentation;
 
 	public Identifier(ASTNode parent) {
 		super(parent);
@@ -40,6 +41,15 @@ public class Identifier extends Expression {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setDocumentation(Comment documentation) {
+		this.documentation = documentation;
+	}
+
+	@Override
+	public Comment getDocumentation() {
+		return documentation;
 	}
 
 	@Override

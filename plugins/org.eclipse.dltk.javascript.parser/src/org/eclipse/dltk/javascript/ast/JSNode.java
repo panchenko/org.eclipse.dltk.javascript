@@ -28,7 +28,7 @@ public abstract class JSNode extends ASTNode {
 		}
 	}
 
-	private ASTNode parent;
+	private final ASTNode parent;
 
 	public JSNode(ASTNode parent) {
 		this.parent = parent;
@@ -38,6 +38,10 @@ public abstract class JSNode extends ASTNode {
 
 	public ASTNode getParent() {
 		return this.parent;
+	}
+
+	public Comment getDocumentation() {
+		return null;
 	}
 
 	@Override

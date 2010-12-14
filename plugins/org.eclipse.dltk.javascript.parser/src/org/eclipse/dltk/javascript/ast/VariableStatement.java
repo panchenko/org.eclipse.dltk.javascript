@@ -21,7 +21,7 @@ import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class VariableStatement extends Expression implements
-		IVariableStatement {
+		IVariableStatement, Documentable {
 
 	private Keyword varKeyword;
 	private final List<VariableDeclaration> variables = new ArrayList<VariableDeclaration>();
@@ -84,10 +84,13 @@ public class VariableStatement extends Expression implements
 		return buffer.toString();
 	}
 
+	@Override
 	public Comment getDocumentation() {
 		return documentation;
 	}
 
 	public void setDocumentation(Comment documentation) {
 		this.documentation = documentation;
-	}}
+	}
+
+}
