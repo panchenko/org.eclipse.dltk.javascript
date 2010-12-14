@@ -100,6 +100,8 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -600,7 +602,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				result = new AnonymousNewValue();
 				result.setValue(((IValueCollection) fs).getThis());
 				result.setKind(ReferenceKind.TYPE);
-				result.setDeclaredType(context.getKnownType(OBJECT));
+				String className = PropertyExpressionUtils.getPath(objectClass);
+				if (className != null) {
+					Type type = TypeInfoModelFactory.eINSTANCE.createType();
+					type.setSuperType(context.getKnownType(OBJECT));
+					type.setKind(TypeKind.JAVASCRIPT);
+					type.setName(className);
+					result.setDeclaredType(type);
+				} else {
+					result.setDeclaredType(context.getKnownType(OBJECT));
+				}
 			}
 		}
 		if (result == null) {
