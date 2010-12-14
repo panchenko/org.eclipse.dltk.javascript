@@ -59,7 +59,7 @@ public class LazyReference extends AbstractReference {
 	}
 
 	public String getName() {
-		return "";
+		return className;
 	}
 
 	public void delete() {
