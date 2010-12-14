@@ -125,6 +125,11 @@ public abstract class ElementValue implements IValue {
 			return types;
 		}
 
+		@Override
+		public final Set<Type> getTypes() {
+			return types;
+		}
+
 	}
 
 	private static class StaticTypeValue extends ElementValue implements IValue {
@@ -454,7 +459,7 @@ public abstract class ElementValue implements IValue {
 		return ReferenceLocation.UNKNOWN;
 	}
 
-	public final Set<Type> getTypes() {
+	public Set<Type> getTypes() {
 		return Collections.emptySet();
 	}
 
