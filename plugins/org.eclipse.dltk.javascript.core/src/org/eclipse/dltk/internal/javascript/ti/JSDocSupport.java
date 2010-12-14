@@ -15,8 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
+import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -42,10 +46,10 @@ public class JSDocSupport implements IModelBuilder {
 	private static final String CONSTRUCTOR_TAG = "@constructor";
 
 	public void processMethod(FunctionStatement statement, IMethod method) {
-		if (statement.getDocumentation() == null) {
+		String comment = getFunctionComment(statement);
+		if (comment == null) {
 			return;
 		}
-		final String comment = statement.getDocumentation().getText();
 		if (method.getType() == null) {
 			parseType(method, comment);
 		}
@@ -56,6 +60,34 @@ public class JSDocSupport implements IModelBuilder {
 		parsePrivate(method, comment);
 
 		parseConstructor(method, comment);
+	}
+
+	public static String getFunctionComment(FunctionStatement statement) {
+		Comment documentation = statement.getDocumentation();
+		if (documentation != null) {
+			return documentation.getText();
+		}
+		if (statement.getParent() instanceof BinaryOperation) {
+			final BinaryOperation binary = (BinaryOperation) statement
+					.getParent();
+			if (binary.getOperation() == JSParser.ASSIGN
+					&& binary.getRightExpression() == statement) {
+				documentation = binary.getLeftExpression().getDocumentation();
+				if (documentation != null) {
+					return documentation.getText();
+				}
+			}
+		} else if (statement.getParent() instanceof PropertyInitializer) {
+			final PropertyInitializer property = (PropertyInitializer) statement
+					.getParent();
+			if (property.getValue() == statement) {
+				documentation = property.getName().getDocumentation();
+				if (documentation != null) {
+					return documentation.getText();
+				}
+			}
+		}
+		return null;
 	}
 
 	private void parseConstructor(IMethod method, String comment) {
@@ -190,7 +222,7 @@ public class JSDocSupport implements IModelBuilder {
 	 * @param member
 	 * @param comment
 	 */
-	private void parseType(IElement member, String comment) {
+	public void parseType(IElement member, String comment) {
 		int index = comment.indexOf(TYPE_TAG);
 		if (index != -1) {
 			int endLineIndex = comment.indexOf("\n", index);
@@ -222,6 +254,11 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	private String translateTypeName(String typeName) {
+		final int length = typeName.length();
+		if (length > 2 && typeName.charAt(0) == '{'
+				&& typeName.charAt(length - 1) == '}') {
+			typeName = typeName.substring(1, length - 1);
+		}
 		return TypeInfoModelLoader.getInstance().translateTypeName(typeName);
 	}
 }
