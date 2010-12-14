@@ -140,7 +140,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				validator
 						.checkType(node.getObjectClass(), type, type.getName());
 			} else if (reference.getDeclaredType() == null) {
-				if (reference instanceof LazyReference) {
+				if (reference instanceof LazyReference
+						&& reference.getKind() == ReferenceKind.UNKNOWN) {
 					validator.checkType(node.getObjectClass(), null,
 							((LazyReference) reference).getName());
 				}
