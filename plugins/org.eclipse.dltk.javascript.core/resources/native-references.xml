@@ -414,7 +414,7 @@
       <parameters name="child1"/>
       <parameters name="child2" kind="OPTIONAL"/>
     </members>
-    <members xsi:type="ref:Property" name="length" type="Number" description="The length method always returns the integer 1 for XML objects. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value"/>
+    <members xsi:type="ref:Method" name="length" type="Number" description="The length method always returns the integer 1 for XML objects. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value"/>
     <members xsi:type="ref:Method" name="localName" type="String"/>
     <members xsi:type="ref:Method" name="name" type="QName" description="The name method returns the qualified name (QName) associated with this XML object"/>
     <members xsi:type="ref:Method" name="namespace" type="Namespace" description="If no prefix is specified, the namespace method returns the Namespace associated with the qualified name of this XML object. If a prefix is specified, the namespace method looks for a namespace in scope for this XML object with the given prefix and, if found, returns it. If no such namespace is found, the namespace method returns undefined">
@@ -481,7 +481,7 @@
       <parameters name="prop" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="hasSimpleContent" type="Boolean" description="The hasSimpleContent method returns a Boolean value indicating whether this XML object contains simple content. An XML object is considered to contain simple content if it represents a text node, represents an attribute node or if it represents an XML element that has no child elements. XML objects representing comments and processing instructions do not have simple content. The existence of attributes, comments, processing instructions and text nodes within an XML object is not significant in determining if it has simple content."/>
-    <members xsi:type="ref:Property" name="length" type="Number" description="The length method always returns the integer 1 for XML objects. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value"/>
+    <members xsi:type="ref:Method" name="length" type="Number" description="The length method always returns the integer 1 for XML objects. This treatment intentionally blurs the distinction between a single XML object and an XMLList containing only one value"/>
     <members xsi:type="ref:Method" name="normalize" type="XMLList" description="The normalize method puts all text nodes in this and all descendant XMLList objects into a normal form by merging adjacent text nodes and eliminating empty text nodes. It returns this XML object."/>
     <members xsi:type="ref:Method" name="parent" type="XML" description="The parent method returns the parent of this XML object."/>
     <members xsi:type="ref:Method" name="processingInstructions" type="XMLList" description="When the processingInstructions method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are processing-instructions with the given name. When the processingInstructions method is called with no parameters, it returns an XMLList containing all the children of this XML object that are processing-instructions regardless of their name">
