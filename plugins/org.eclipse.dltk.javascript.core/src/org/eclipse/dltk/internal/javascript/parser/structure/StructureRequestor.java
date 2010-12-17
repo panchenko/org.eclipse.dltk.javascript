@@ -5,10 +5,10 @@ import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
 public class StructureRequestor implements IStructureRequestor {
 
@@ -53,7 +53,7 @@ public class StructureRequestor implements IStructureRequestor {
 	}
 
 	public void enterMethod(MethodInfo methodInfo, Identifier identifier,
-			JSMethod method) {
+			IMethod method) {
 		requestor.enterMethod(methodInfo);
 	}
 

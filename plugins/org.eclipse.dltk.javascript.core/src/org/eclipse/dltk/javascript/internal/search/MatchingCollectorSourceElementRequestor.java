@@ -9,10 +9,10 @@ import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
 import org.eclipse.dltk.internal.javascript.parser.structure.IStructureRequestor;
-import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 
 public class MatchingCollectorSourceElementRequestor implements
 		IStructureRequestor {
@@ -59,7 +59,7 @@ public class MatchingCollectorSourceElementRequestor implements
 	}
 
 	public void enterMethod(MethodInfo methodInfo, Identifier identifier,
-			JSMethod method) {
+			IMethod method) {
 		// ignore method(function(){});
 		if (identifier == null)
 			return;
