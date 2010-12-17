@@ -16,12 +16,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
-import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
@@ -71,29 +69,35 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	public void doInferencing(Script script) {
 		try {
+			elements.clear();
 			initializeVisitor();
 			visitor.visit(script);
+//			IValueCollection collection = visitor.getCollection();
+//			visitor = null;
+//			return collection;
 		} catch (PositionReachedException e) {
+//			visitor = null;
 			throw e;
 		} catch (RuntimeException e) {
 			log(e);
 		} catch (AssertionError e) {
 			log(e);
 		}
+//		return null;
 	}
 
 	protected void log(Throwable e) {
 		JavaScriptPlugin.error(e);
 	}
 
-	public IValueReference evaluate(ASTNode node) {
-		initializeVisitor();
-		return visitor.visit(node);
-	}
+	 public IValueReference evaluate(ASTNode node) {
+	 initializeVisitor();
+	 return visitor.visit(node);
+	 }
 
-	public IValueCollection getCollection() {
-		return visitor.getCollection();
-	}
+	 public IValueCollection getCollection() {
+	 return visitor.getCollection();
+	 }
 
 	private final Map<String, Type> types = new HashMap<String, Type>();
 
@@ -246,6 +250,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				typedArray.setDescription(type.getDescription());
 				typedArray.setKind(type.getKind());
 				typedArray.setAttribute(GENERIC_ARRAY_TYPE, genericArrayType);
+				typedArray.setSuperType(type.getSuperType());
 
 				EList<Member> arrayMembers = type.getMembers();
 				EList<Member> typedArrayMembers = typedArray.getMembers();

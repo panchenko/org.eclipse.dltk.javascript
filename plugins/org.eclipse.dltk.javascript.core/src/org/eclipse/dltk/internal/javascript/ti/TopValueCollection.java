@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -46,7 +47,13 @@ public class TopValueCollection extends ValueCollection {
 				}
 				final Type type = context.getKnownType(name);
 				if (type != null && type.getKind() != TypeKind.UNKNOWN) {
-					value = ElementValue.createStatic(type);
+					if (name.equals(IValueReference.ARRAY_OP)) {
+						// special case ARRAY_OP is an instance of an Array not
+						// the Array type/class itself.
+						value = ElementValue.createFor(type, context);
+					} else {
+						value = ElementValue.createStatic(type);
+					}
 					memberCache.put(name, value);
 					return value;
 				}

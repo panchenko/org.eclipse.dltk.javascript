@@ -124,6 +124,12 @@ public class CompletionString {
 			return parse(id, dotBeforeBrackets, functionCallParenthesis);
 		}
 		sb.insert(0, id.substring(start, current));
+		if (dotBeforeBrackets && sb.length() > 1 && sb.charAt(0) == '.'
+				&& sb.charAt(1) == '[') {
+			// don't return a . before the brackets when it starts with this (so
+			// the start of the completion is the array itself)
+			return sb.substring(1);
+		}
 		return sb.toString();
 	}
 
