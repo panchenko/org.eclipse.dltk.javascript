@@ -693,7 +693,6 @@ public class ASTConverter extends ASTVisitor<Node> {
 			break;
 		case JSParser.NEG:
 		case JSParser.SUB:
-		case JSParser.POS:
 			r = UnaryOperator.NUM_NEG;
 			break;
 		case JSParser.PDEC:
@@ -711,6 +710,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 		case JSParser.TYPEOF:
 			r = UnaryOperator.TYPEOF;
 			break;
+		case JSParser.POS:
 		case JSParser.ADD:
 			r = UnaryOperator.UNARY_PLUS;
 			break;
