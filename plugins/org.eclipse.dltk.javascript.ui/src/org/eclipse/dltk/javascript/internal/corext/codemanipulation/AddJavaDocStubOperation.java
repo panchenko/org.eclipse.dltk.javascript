@@ -31,16 +31,19 @@ import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.IType;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.ui.DLTKUIStatus;
 import org.eclipse.dltk.javascript.scriptdoc.PublicScanner;
+import org.eclipse.dltk.javascript.scriptdoc.ScriptdocContentAccess;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.text.edits.ReplaceEdit;
 
 /**
  * Add javadoc stubs to members. All members must belong to the same compilation
@@ -171,7 +174,15 @@ public class AddJavaDocStubOperation implements IWorkspaceRunnable {
 				String indentedComment = JSCodeGeneration.changeIndent(comment,
 						0, project, indentString, lineDelim);
 
-				edit.addChild(new InsertEdit(memberStartOffset, indentedComment));
+				ISourceRange range = ScriptdocContentAccess
+						.getJavadocRange(curr);
+				if (range != null) {
+					edit.addChild(new ReplaceEdit(range.getOffset(), range
+							.getLength(), indentedComment));
+				} else {
+					edit.addChild(new InsertEdit(memberStartOffset,
+							indentedComment));
+				}
 
 				monitor.worked(1);
 			}
