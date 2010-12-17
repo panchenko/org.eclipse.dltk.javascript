@@ -120,6 +120,10 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return getMembers(ITypeNames.OBJECT);
 	}
 
+	protected static List<String> getMethodsOfArray() {
+		return getMembers(ITypeNames.ARRAY);
+	}
+
 	protected static List<String> getMethodsOfNumber() {
 		return getMembers(ITypeNames.NUMBER);
 	}

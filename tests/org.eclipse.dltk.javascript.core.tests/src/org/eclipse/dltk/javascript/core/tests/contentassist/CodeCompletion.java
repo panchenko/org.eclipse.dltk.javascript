@@ -455,5 +455,12 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile("a = test", module);
 		basicTest(module, position, names);
 	}
+	
+	public void testArrayInitializer() {
+		IModuleSource module = createModule("test-array-intializer.js");
+		int position = lastPositionInFile("].", module);
+		basicTest(module, position, getMethodsOfArray().toArray(new String[0]));
+	}
+
 
 }
