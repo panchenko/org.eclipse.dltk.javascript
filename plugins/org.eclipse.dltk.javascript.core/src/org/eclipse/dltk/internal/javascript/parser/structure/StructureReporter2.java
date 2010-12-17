@@ -234,6 +234,16 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 
 		fRequestor.enterMethod(methodInfo, identifier, method);
 		IValueReference reference = super.visitFunctionStatement(node);
+		if (method.getType() == null) {
+			if (reference.getDeclaredType() != null) {
+				method.setType(reference.getDeclaredType().getName());
+				methodInfo.returnType = method.getType();
+			} else if (!reference.getDeclaredTypes().isEmpty()) {
+				method.setType(reference.getDeclaredTypes().iterator().next()
+						.getName());
+				methodInfo.returnType = method.getType();
+			}
+		}
 		fRequestor.exitMethod(node.sourceEnd());
 		return reference;
 	}
