@@ -22,6 +22,12 @@
   	<ref:Method name="eval" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object" description="Evaluates a string of JavaScript code without reference to a particular object.">
     	<parameters name="str" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
     </ref:Method>
+  	<ref:Method name="escape" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Encodes a string, so it can be transmitted across any network to any computer that supports ASCII characters.">
+    	<parameters name="str" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+    </ref:Method>
+  	<ref:Method name="unescape" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Decodes an encoded string (encoded with escape).">
+    	<parameters name="str" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+    </ref:Method>
   	<ref:Method name="isFinite" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean" description="Evaluates an argument to determine whether it is a finite number.">
     	<parameters name="number" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" />
     </ref:Method>
