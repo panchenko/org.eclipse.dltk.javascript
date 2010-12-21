@@ -276,7 +276,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 		}
 		char[] source = input.getContentsAsCharArray();
 		return parse(createTokenStream(source), reporter == null ? null
-				: new Reporter(TextUtils.createLineTracker(source), reporter));
+				: new Reporter(TextUtils.createLineTracker(source), reporter,new JavaScriptParserSeverityReporter()));
 	}
 
 	/**
@@ -290,7 +290,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 
 	protected Script parse(JSTokenStream stream,
 			ISourceLineTracker lineTracker, IProblemReporter reporter) {
-		return parse(stream, new Reporter(lineTracker, reporter));
+		return parse(stream, new Reporter(lineTracker, reporter,new JavaScriptParserSeverityReporter()));
 	}
 
 	protected Script parse(JSTokenStream stream, Reporter reporter) {

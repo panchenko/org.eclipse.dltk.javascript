@@ -23,10 +23,13 @@ public class Reporter extends LineTracker implements IProblemReporter {
 
 	private int problemCount;
 
+	private final ISeverityReporter severityReporter;
+
 	public Reporter(ISourceLineTracker lineTracker,
-			IProblemReporter problemReporter) {
+			IProblemReporter problemReporter, ISeverityReporter severityReporter) {
 		super(lineTracker);
 		this.problemReporter = problemReporter;
+		this.severityReporter = severityReporter;
 		reset();
 	}
 
@@ -53,6 +56,13 @@ public class Reporter extends LineTracker implements IProblemReporter {
 		if (line > getNumberOfLines() && start >= 0 && start <= getLength()) {
 			line = getLineNumberOfOffset(start);
 		}
+		
+		if (severityReporter != null)
+		{
+			severity = severityReporter.getSeverity(id);
+			if (severity == null) return null;
+		}
+
 		return new DefaultProblem(message, id, null,
 				severity == Severity.ERROR ? ProblemSeverities.Error
 						: ProblemSeverities.Warning, start, end, line);
@@ -117,7 +127,7 @@ public class Reporter extends LineTracker implements IProblemReporter {
 	}
 
 	public void reportProblem(IProblem problem) {
-		if (problemReporter != null) {
+		if (problemReporter != null && problem != null) {
 			problemCount++;
 			problemReporter.reportProblem(problem);
 		}
@@ -128,8 +138,15 @@ public class Reporter extends LineTracker implements IProblemReporter {
 	}
 
 	public void reportProblem(int id, String message, int start, int end) {
+		if (severityReporter != null)
+		{
+			severity = severityReporter.getSeverity(id);
+			if (severity == null) return;
+		}
+
 		reportProblem(new DefaultProblem(message, id, null,
-				ProblemSeverities.Warning, start, end,
+				severity == Severity.ERROR ? ProblemSeverities.Error
+						: ProblemSeverities.Warning, start, end,
 				getLineNumberOfOffset(start)));
 	}
 
