@@ -85,7 +85,8 @@ public class JavaScriptValidations {
 
 	protected static Reporter createReporter(IBuildContext context) {
 		return new Reporter(context.getLineTracker(),
-				context.getProblemReporter());
+				context.getProblemReporter(),
+				new JavaScriptValidationSeverityReporter());
 	}
 
 	/**
