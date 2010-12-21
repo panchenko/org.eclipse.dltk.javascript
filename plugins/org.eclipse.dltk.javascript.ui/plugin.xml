@@ -196,6 +196,60 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M2+M">
       </key>                   
+      <key
+            sequence="M2+M3+C"
+            commandId="org.eclipse.dltk.javascript.ui.action.modify.parameters"
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+C"
+            commandId=""
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+C"
+            commandId="org.eclipse.dltk.javascript.ui.action.modify.parameters"
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M2+M3+M"
+            commandId="org.eclipse.dltk.javascript.ui.action.extract.method"
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+M"
+            commandId=""
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+M"
+            commandId="org.eclipse.dltk.javascript.ui.action.extract.method"
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M2+M3+L"
+            commandId="org.eclipse.dltk.javascript.ui.action.extract.local"
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+L"
+            commandId=""
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+L"
+            commandId="org.eclipse.dltk.javascript.ui.action.extract.local"
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
  	</extension>
 	<extension
          point="org.eclipse.ui.newWizards">
@@ -382,7 +436,31 @@
             description="%ActionDefinition.OpenMethod.desciption"
             id="org.eclipse.javascript.ui.navigate.open.method"
             name="%ActionDefinition.OpenMethod.name">
-      </command>      
+      </command>
+      <command
+            name="%ActionDefinition.extractLocalVariable.name"
+            description="%ActionDefinition.extractLocalVariable.description"
+            categoryId="org.eclipse.dltk.ui.category.refactoring"
+            id="org.eclipse.dltk.javascript.ui.action.extract.local">
+      </command>
+      <command
+            name="%ActionDefinition.extractMethod.name"
+            description="%ActionDefinition.extractMethod.description"
+            categoryId="org.eclipse.dltk.ui.category.refactoring"
+            id="org.eclipse.dltk.javascript.ui.action.extract.method">
+      </command>
+      <command
+            name="%ActionDefinition.introduceParameter.name"
+            description="%ActionDefinition.introduceParameter.description"
+            categoryId="org.eclipse.dltk.ui.category.refactoring"
+            id="org.eclipse.dltk.javascript.ui.action.introduce.parameter">
+      </command>
+      <command
+            name="%ActionDefinition.modifyMethodParameters.name"
+            description="%ActionDefinition.modifyMethodParameters.description"
+            categoryId="org.eclipse.dltk.ui.category.refactoring"
+            id="org.eclipse.dltk.javascript.ui.action.modify.parameters">
+      </command>
   </extension>
   <extension
          point="org.eclipse.ui.contexts">
@@ -555,6 +633,12 @@
        label="%Refactoring.Actions.IntroduceParameter"
        nature="org.eclipse.dltk.javascript.core.nature">
  </action>
+ <!--action
+       class="org.eclipse.dltk.javascript.ui.actions.InlineMethodAction"
+       id="org.eclipse.dltk.javascript.ui.action.inline"
+       label="%Refactoring.Actions.InlineAction"
+       nature="org.eclipse.dltk.javascript.core.nature">
+ </action-->
 </extension>
 
 <extension point="org.eclipse.compare.contentMergeViewers">

@@ -18,6 +18,7 @@ import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.structure.ChangeSignatureProcessor;
 import org.eclipse.dltk.internal.ui.actions.ActionUtil;
 import org.eclipse.dltk.internal.ui.actions.SelectionConverter;
+import org.eclipse.dltk.internal.ui.editor.ModelTextSelection;
 import org.eclipse.dltk.internal.ui.editor.ScriptEditor;
 import org.eclipse.dltk.internal.ui.refactoring.RefactoringMessages;
 import org.eclipse.dltk.internal.ui.refactoring.actions.RefactoringStarter;
@@ -75,8 +76,13 @@ public class ModifyParametersAction implements IEditorActionDelegate {
 		if (selection instanceof IStructuredSelection)
 			method = getSingleSelectedMethod((IStructuredSelection) selection);
 		else if (selection instanceof ITextSelection) {
+			ITextSelection text = (ITextSelection) selection;
+			if (!(text instanceof ModelTextSelection) && text.getLength() == 0) {
+				action.setEnabled(true);
+				return;
+			}
 			try {
-				method = getSingleSelectedMethod((ITextSelection) selection);
+				method = getSingleSelectedMethod(text);
 			} catch (ModelException e) {
 				DLTKUIPlugin.log(e);
 			} catch (StringIndexOutOfBoundsException e) {
