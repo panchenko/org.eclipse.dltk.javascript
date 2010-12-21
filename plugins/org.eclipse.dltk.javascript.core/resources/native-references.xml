@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
+   <ref:Type name="Infinity" kind="PREDEFINED">
+  </ref:Type>
   <ref:Type name="Error" kind="PREDEFINED">
   	<members xsi:type="ref:Property" name="prototype" type="Error" static="true" description="Allows the addition of properties to a Error object."/>
   	<members xsi:type="ref:Property" name="name" type="String" description="Error name."/>
