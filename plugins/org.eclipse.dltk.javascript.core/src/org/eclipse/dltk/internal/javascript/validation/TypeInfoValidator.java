@@ -388,7 +388,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					if (type != null) {
 						if (type.getKind() == TypeKind.JAVA) {
 							reporter.reportProblem(
-									JavaScriptProblems.UNDEFINED_METHOD,
+									JavaScriptProblems.UNDEFINED_JAVA_METHOD,
 									NLS.bind(
 											ValidationMessages.UndefinedMethod,
 											reference.getName(), type.getName()),
@@ -494,7 +494,11 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		private void reportMethodParameterError(ASTNode methodNode,
 				IValueReference[] arguments, Method method) {
 			if (method.getDeclaringType() != null) {
-				reporter.reportProblem(JavaScriptProblems.WRONG_PARAMETERS, NLS
+				int problemId = JavaScriptProblems.WRONG_PARAMETERS;
+				if (method.getDeclaringType().getKind() == TypeKind.JAVA) {
+					problemId = JavaScriptProblems.WRONG_JAVA_PARAMETERS;
+				}
+				reporter.reportProblem(problemId, NLS
 						.bind(ValidationMessages.MethodNotApplicable,
 								new String[] {
 										method.getName(),
@@ -708,6 +712,20 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		}
 
 		@Override
+		protected IValueReference visitAssign(IValueReference left,
+				IValueReference right, ASTNode node) {
+			if (left != null
+					&& left.getAttribute(IReferenceAttributes.CONSTANT) != null) {
+				reporter.reportProblem(
+						JavaScriptProblems.REASSIGNMENT_OF_CONSTANT,
+						ValidationMessages.ReassignmentOfConstant,
+						node.sourceStart(), node.sourceEnd());
+
+			}
+			return super.visitAssign(left, right, node);
+		}
+
+		@Override
 		public IValueReference visitIdentifier(Identifier node) {
 			final IValueReference result = super.visitIdentifier(node);
 			final Property property = extractElement(result, Property.class);
@@ -782,7 +800,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 						.getParent());
 				if (type != null && type.getKind() == TypeKind.JAVA) {
 					reporter.reportProblem(
-							JavaScriptProblems.UNDEFINED_PROPERTY, NLS.bind(
+							JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, NLS
+									.bind(
 									ValidationMessages.UndefinedProperty,
 									result.getName(), type.getName()), propName
 									.sourceStart(), propName.sourceEnd());

@@ -44,6 +44,7 @@ public class ValidationMessages extends NLS {
 	public static String HiddenProperty;
 	public static String HiddenPropertyOfInstance;
 	public static String HiddenPropertyNoType;
+	public static String ReassignmentOfConstant;
 
 	static {
 		// initialize resource bundle

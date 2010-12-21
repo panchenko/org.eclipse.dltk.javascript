@@ -178,7 +178,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference left = visit(node.getLeftExpression());
 		final IValueReference right = visit(node.getRightExpression());
 		if (JSParser.ASSIGN == node.getOperation()) {
-			return visitAssign(left, right);
+			return visitAssign(left, right, node);
 		} else if (left == null && right instanceof ConstantValue) {
 			return right;
 		} else if (isNumber(left) && isNumber(right)) {
@@ -196,7 +196,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	protected IValueReference visitAssign(IValueReference left,
-			IValueReference right) {
+			IValueReference right, ASTNode node) {
 		if (left != null)
 			assign(left, right);
 		return right;
@@ -240,7 +240,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitConstDeclaration(ConstStatement node) {
 		final IValueCollection context = peekContext();
 		for (VariableDeclaration declaration : node.getVariables()) {
-			createVariable(context, declaration);
+			IValueReference constant = createVariable(context, declaration);
+			if (constant != null)
+				constant.setAttribute(IReferenceAttributes.CONSTANT,
+						Boolean.TRUE);
 		}
 		return null;
 	}
