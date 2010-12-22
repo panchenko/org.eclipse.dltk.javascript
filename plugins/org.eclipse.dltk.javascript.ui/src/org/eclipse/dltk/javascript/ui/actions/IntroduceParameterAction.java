@@ -77,7 +77,7 @@ public class IntroduceParameterAction implements IEditorActionDelegate {
 					new IntroduceParameterWizard(refactoring), editor
 							.getEditorSite().getShell(),
 					RefactoringMessages.IntroduceParameterAction_dialog_title,
-					true);
+					false);
 		} catch (ModelException e) {
 			ExceptionHandler
 					.handle(e,
