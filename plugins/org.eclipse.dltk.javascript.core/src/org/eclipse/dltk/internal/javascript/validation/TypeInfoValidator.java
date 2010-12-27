@@ -32,14 +32,17 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
@@ -225,6 +228,33 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (started)
 					stopExpressionValidator();
 			}
+		}
+
+		@Override
+		public IValueReference visitFunctionStatement(FunctionStatement node) {
+			IValueReference reference = super.visitFunctionStatement(node);
+			IValueCollection collection = (IValueCollection) reference
+					.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+			IMethod method = (IMethod) reference
+					.getAttribute(IReferenceAttributes.PARAMETERS);
+			if (method != null && method.getType() != null
+					&& collection != null
+					&& collection.getReturnValue() != null) {
+				Set<Type> types = collection.getReturnValue().getTypes();
+				if (!types.isEmpty()
+						&& !types.contains(context.getType(method.getType()))) {
+					reporter.reportProblem(
+							JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+							NLS.bind(
+									ValidationMessages.DeclarationMismatchWithActualReturnType,
+									new String[] { method.getName(),
+											method.getType(),
+											types.iterator().next().getName() }),
+							node.getName().sourceStart(), node.getName()
+									.sourceEnd());
+				}
+			}
+			return reference;
 		}
 
 		@Override

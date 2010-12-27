@@ -45,6 +45,10 @@ public interface JavaScriptProblems {
 	 * @since 3.0
 	 */
 	public static final int UNDEFINED_JAVA_METHOD = IProblem.MethodRelated + 9;
+	/**
+	 * @since 3.0
+	 */
+	public static final int DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE = IProblem.MethodRelated + 10;
 
 	public static final int UNDEFINED_PROPERTY = IProblem.FieldRelated + 1;
 	public static final int DEPRECATED_PROPERTY = IProblem.FieldRelated + 2;
