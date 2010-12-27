@@ -192,7 +192,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	private boolean isNumber(IValueReference ref) {
-		return ref != null && ref.getTypes().contains(context.getType(NUMBER));
+		if (ref != null) {
+			if (ref.getTypes().contains(context.getType(NUMBER)))
+				return true;
+			if (context.getType(NUMBER).equals(ref.getDeclaredType()))
+				return true;
+		}
+		return false;
 	}
 
 	protected IValueReference visitAssign(IValueReference left,
