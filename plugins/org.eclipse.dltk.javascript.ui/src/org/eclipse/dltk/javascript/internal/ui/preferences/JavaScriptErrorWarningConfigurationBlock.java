@@ -243,6 +243,16 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				ids);
 
 		SWTFactory.createLabel(composite,
+				"Function returns a different type then it declares", 1);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				new PreferenceKey(
+						JavaScriptPlugin.PLUGIN_ID,
+						"JavaScriptProblems_"
+								+ JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE),
+				ids);
+
+		SWTFactory.createLabel(composite,
 				"Assignment (=) when equality (==) test", 1);
 		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
 				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
