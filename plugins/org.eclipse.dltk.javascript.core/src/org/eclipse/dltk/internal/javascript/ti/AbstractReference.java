@@ -173,7 +173,7 @@ public abstract class AbstractReference implements IValueReference,
 				.<String> emptySet();
 	}
 
-	private class LazyReferenceValue extends Value implements ILazyValue {
+	private static class LazyReferenceValue extends Value implements ILazyValue {
 		private final IValueReference reference;
 		private boolean resolved = false;
 
