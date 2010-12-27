@@ -24,16 +24,18 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public class Value implements IValue {
 
 	private final Set<Type> types = new HashSet<Type>();
-	private final Map<String, Value> children = new HashMap<String, Value>(4);
-	private final Map<String, IValue> inherited = new HashMap<String, IValue>(4);
+	private final Map<String, Value> children = new HashMap<String, Value>(4,
+			9f);
+	private final Map<String, IValue> inherited = new HashMap<String, IValue>(
+			4, 9f);
 	private final Map<String, IValue> elementValues = new HashMap<String, IValue>(
-			4);
+			4, 9f);
 	private Set<String> deletedChildren = null;
 	private Type declaredType;
 	private ReferenceKind kind = ReferenceKind.UNKNOWN;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 	private Map<String, Object> attributes = null;
-	private Set<Value> references = new HashSet<Value>();
+	private Set<Value> references = new HashSet<Value>(4, 9f);
 
 	private final boolean hasReferences() {
 		return !references.isEmpty();
