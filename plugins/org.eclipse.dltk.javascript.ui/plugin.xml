@@ -246,6 +246,24 @@
       <key
             platform="carbon"
             sequence="COMMAND+ALT+L"
+            commandId="org.eclipse.dltk.javascript.ui.action.inline.method"
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+            
+      <key
+            sequence="M2+M3+I"
+            commandId="org.eclipse.dltk.javascript.ui.action.inline.method"
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="M2+M3+I"
+            commandId=""
+            contextId="org.eclipse.dltk.ui.scriptEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            platform="carbon"
+            sequence="COMMAND+ALT+I"
             commandId="org.eclipse.dltk.javascript.ui.action.extract.local"
             contextId="org.eclipse.dltk.ui.scriptEditorScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
@@ -461,6 +479,12 @@
             categoryId="org.eclipse.dltk.ui.category.refactoring"
             id="org.eclipse.dltk.javascript.ui.action.modify.parameters">
       </command>
+      <command
+            name="%ActionDefinition.inlineMethod.name"
+            description="%ActionDefinition.inlineMethod.description"
+            categoryId="org.eclipse.dltk.ui.category.refactoring"
+            id="org.eclipse.dltk.javascript.ui.action.inline.method">
+      </command>
   </extension>
   <extension
          point="org.eclipse.ui.contexts">
@@ -633,12 +657,12 @@
        label="%Refactoring.Actions.IntroduceParameter"
        nature="org.eclipse.dltk.javascript.core.nature">
  </action>
- <!--action
+ <action
        class="org.eclipse.dltk.javascript.ui.actions.InlineMethodAction"
-       id="org.eclipse.dltk.javascript.ui.action.inline"
+       id="org.eclipse.dltk.javascript.ui.action.inline.method"
        label="%Refactoring.Actions.InlineAction"
        nature="org.eclipse.dltk.javascript.core.nature">
- </action-->
+ </action>
 </extension>
 
 <extension point="org.eclipse.compare.contentMergeViewers">
