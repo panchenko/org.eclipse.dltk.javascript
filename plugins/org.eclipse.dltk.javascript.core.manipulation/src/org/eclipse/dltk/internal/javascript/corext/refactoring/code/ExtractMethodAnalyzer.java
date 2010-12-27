@@ -13,7 +13,6 @@
 package org.eclipse.dltk.internal.javascript.corext.refactoring.code;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,11 +43,9 @@ import org.eclipse.dltk.javascript.core.dom.Identifier;
 import org.eclipse.dltk.javascript.core.dom.Label;
 import org.eclipse.dltk.javascript.core.dom.LabeledStatement;
 import org.eclipse.dltk.javascript.core.dom.Node;
-import org.eclipse.dltk.javascript.core.dom.Parameter;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
 import org.eclipse.dltk.javascript.core.dom.Type;
-import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.WhileStatement;
 import org.eclipse.dltk.javascript.core.dom.rewrite.VariableLookup;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -73,7 +70,7 @@ import com.ibm.icu.text.MessageFormat;
 	/** This is either a method declaration or an initializer */
 	private Node fEnclosingNode;
 	//private IMethodBinding fEnclosingMethodBinding;
-	private int fMaxVariableId;
+	//private int fMaxVariableId;
 
 	private int fReturnKind;
 	private String fReturnTypeName;
@@ -203,6 +200,11 @@ import com.ibm.icu.text.MessageFormat;
 		status.addError(message, ScriptStatusContext.create(fCUnit, range));
 	}
 
+	private void addWarning(RefactoringStatus status, String message) {
+		SourceRange range = new SourceRange(getSelection().getOffset(),getSelection().getLength());
+		status.addWarning(message, ScriptStatusContext.create(fCUnit, range));
+	}
+
 	private void initReturnType() {
 		fReturnTypeName = null;
 		//fReturnTypeBinding= null;
@@ -288,11 +290,10 @@ import com.ibm.icu.text.MessageFormat;
 	}*/
 
 	private RefactoringStatus analyzeSelection(RefactoringStatus status) {
-		final Map<Identifier, VariableBinding> bindings = getBindings();
-		fInputFlowContext= new FlowContext(fMaxVariableId, bindings);
+		final Map<Identifier, VariableBinding> bindings = VariableLookup.findBindings(fEnclosingNode);
+		fInputFlowContext= new FlowContext(bindings);
 		fInputFlowContext.setConsiderAccessMode(true);
 		fInputFlowContext.setComputeMode(FlowContext.Mode.ARGUMENTS);
-
 		InOutFlowAnalyzer flowAnalyzer= new InOutFlowAnalyzer(fInputFlowContext);
 		fInputFlowInfo= flowAnalyzer.perform(getSelectedNodes());
 
@@ -325,35 +326,6 @@ import com.ibm.icu.text.MessageFormat;
 		adjustArgumentsAndMethodLocals();
 		//compressArrays();
 		return status;
-	}
-
-	private Map<Identifier, VariableBinding> getBindings() {
-		final Map<Identifier, VariableBinding> bindings = new HashMap<Identifier, VariableBinding>();
-		VariableLookup lookup = new VariableLookup(){
-			@Override
-			protected void reportDeclaration(Identifier decl) {
-				Node parent = (Node)decl.eContainer();
-				Type type = null;
-				switch (parent.eClass().getClassifierID()) {
-				case DomPackage.VARIABLE_DECLARATION:
-					type = ((VariableDeclaration)parent).getType();
-					break;
-				case DomPackage.PARAMETER:
-					type = ((Parameter)parent).getType();
-					break;
-				}
-				String typeName = type == null ? null : type.getName();
-				bindings.put(decl, new VariableBinding(decl.getName(), fMaxVariableId, decl, typeName));
-				fMaxVariableId++;
-			}
-			@Override
-			protected void reportReference(Identifier ref, Identifier decl) {
-				if (decl != null)
-					bindings.put(ref, bindings.get(decl));
-			}
-		};
-		lookup.traverse(fEnclosingNode);
-		return bindings;
 	}
 
 	private String canHandleBranches() {
@@ -516,11 +488,26 @@ import com.ibm.icu.text.MessageFormat;
 
 	private void computeOutput(RefactoringStatus status, Map<Identifier, VariableBinding> bindings) {
 		// First find all writes inside the selection.
-		FlowContext flowContext= new FlowContext(fMaxVariableId, bindings);
+		FlowContext flowContext= new FlowContext(bindings);
 		flowContext.setConsiderAccessMode(true);
 		flowContext.setComputeMode(FlowContext.Mode.RETURN_VALUES);
-		FlowInfo returnInfo= new InOutFlowAnalyzer(flowContext).perform(getSelectedNodes());
-		VariableBinding[] returnValues= returnInfo.get(flowContext, FlowInfo.WRITE | FlowInfo.WRITE_POTENTIAL | FlowInfo.UNKNOWN);
+		FlowInfo returnInfo = new InOutFlowAnalyzer(flowContext).perform(getSelectedNodes());
+		VariableBinding[] returnValues = returnInfo.get(flowContext, FlowInfo.WRITE | FlowInfo.WRITE_POTENTIAL | FlowInfo.UNKNOWN);
+		InOutFlowAnalyzer analyzer = new InOutFlowAnalyzer(flowContext);
+		analyzer.perform(new Node[]{fEnclosingNode});
+		FlowInfo closureInfo = analyzer.closureInfo;
+		VariableBinding[] closureReads = closureInfo.get(flowContext, FlowInfo.READ | FlowInfo.READ_POTENTIAL);
+		for(VariableBinding binding : returnValues) {
+			for (VariableBinding read : closureReads) {
+				if (read == binding) {
+					addWarning(status,Messages.format(RefactoringCoreMessages.ExtractMethodAnalyzer_closure,binding.getName()));
+				}
+			}
+		}
+		VariableBinding[] closureRW = closureInfo.get(flowContext, FlowInfo.UNKNOWN);
+		for(VariableBinding binding : closureRW) {
+			addWarning(status,Messages.format(RefactoringCoreMessages.ExtractMethodAnalyzer_closure,binding.getName()));
+		}
 
 		// Compute a selection that exactly covers the selected nodes
 		IRegion region= getSelectedNodeRange();
@@ -528,8 +515,17 @@ import com.ibm.icu.text.MessageFormat;
 
 		List<VariableBinding> localReads= new ArrayList<VariableBinding>();
 		flowContext.setComputeMode(FlowContext.Mode.ARGUMENTS);
-		FlowInfo argInfo= new InputFlowAnalyzer(flowContext, selection, true).perform(fEnclosingNode);
+		FlowInfo argInfo = new InputFlowAnalyzer(flowContext, selection, true).perform(fEnclosingNode);
 		VariableBinding[] reads= argInfo.get(flowContext, FlowInfo.READ | FlowInfo.READ_POTENTIAL | FlowInfo.UNKNOWN);
+		VariableBinding[] closureWrites = closureInfo.get(flowContext, FlowInfo.WRITE | FlowInfo.WRITE_POTENTIAL);
+		for(VariableBinding binding : reads) {
+			for (VariableBinding write : closureWrites) {
+				if (write == binding) {
+					addWarning(status,Messages.format(RefactoringCoreMessages.ExtractMethodAnalyzer_closure,binding.getName()));
+				}
+			}
+		}
+		
 		outer: for (int i= 0; i < returnValues.length && localReads.size() < returnValues.length; i++) {
 			VariableBinding binding= returnValues[i];
 			for (int x= 0; x < reads.length; x++) {

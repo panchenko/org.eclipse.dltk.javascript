@@ -890,7 +890,7 @@ public class ExtractTempRefactoring extends Refactoring {
 	private Expression getSelectedExpression() throws ModelException {
 		if (fSelectedExpression != null)
 			return fSelectedExpression;
-		Node node = NodeFinder.findExpression(fCompilationUnitNode, fSelectionStart, fSelectionStart+fSelectionLength);
+		Node node = NodeFinder.findNode(fCompilationUnitNode, fSelectionStart, fSelectionStart+fSelectionLength);
 		if (node == null) return null;
 		for(int i=fSelectionStart;i<node.getBegin();i++)
 			if (!Character.isWhitespace(fSource.charAt(i))) return null;

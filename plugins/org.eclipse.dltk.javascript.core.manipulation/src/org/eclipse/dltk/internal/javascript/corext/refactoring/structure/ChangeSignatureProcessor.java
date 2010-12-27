@@ -11,6 +11,7 @@
 package org.eclipse.dltk.internal.javascript.corext.refactoring.structure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -48,22 +49,18 @@ import org.eclipse.dltk.internal.javascript.core.manipulation.Messages;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.Checks;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.ParameterInfo;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.RefactoringCoreMessages;
-import org.eclipse.dltk.javascript.core.dom.BinaryExpression;
-import org.eclipse.dltk.javascript.core.dom.BinaryOperator;
 import org.eclipse.dltk.javascript.core.dom.CallExpression;
 import org.eclipse.dltk.javascript.core.dom.DomFactory;
-import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.Expression;
 import org.eclipse.dltk.javascript.core.dom.FunctionExpression;
 import org.eclipse.dltk.javascript.core.dom.Identifier;
 import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Parameter;
-import org.eclipse.dltk.javascript.core.dom.SimplePropertyAssignment;
 import org.eclipse.dltk.javascript.core.dom.Source;
-import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.dltk.javascript.core.dom.rewrite.ASTConverter;
 import org.eclipse.dltk.javascript.core.dom.rewrite.NodeFinder;
+import org.eclipse.dltk.javascript.core.dom.rewrite.RefactoringUtils;
 import org.eclipse.dltk.javascript.core.dom.rewrite.RewriteAnalyzer;
 import org.eclipse.dltk.javascript.core.dom.rewrite.VariableLookup;
 import org.eclipse.dltk.javascript.core.refactoring.descriptors.ChangeMethodSignatureDescriptor;
@@ -1306,12 +1303,12 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		if (!decl) {
 			if (pm.isCanceled())
 				throw new OperationCanceledException();
-			processCu(fMethod.getSourceModule(),new SearchMatch[0],result);
+			processCu(fMethod.getSourceModule(),Collections.EMPTY_LIST,result);
 		}
 		pm.done();
 		return fChangeManager;
 	}
-	private void processCu(ISourceModule cu, SearchMatch[] searchResults, RefactoringStatus result)
+	private void processCu(ISourceModule cu, List<SearchMatch> searchResults, RefactoringStatus result)
 			throws ModelException {
 		if (cu == null)
 			return;
@@ -1326,7 +1323,7 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		Node[] nodes= NodeFinder.findNodes(root, searchResults);
 		ChangeRecorder cr = new ChangeRecorder(root);
 		for(Node node : nodes) {
-			CallExpression call = getFunctionReference(node);
+			CallExpression call = RefactoringUtils.getFunctionReference(node);
 			if (call != null) {
 				Identifier id = (node instanceof Identifier) ? (Identifier)node : ((VariableReference)node).getVariable();
 				id.setName(fMethodName);
@@ -1355,7 +1352,7 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		}
 		if (cu.equals(fMethod.getSourceModule())) {
 			Node node = NodeFinder.findNode(root, fMethod.getNameRange());
-			FunctionExpression expr = node == null ? null : getFunctionDeclaration(node);
+			FunctionExpression expr = node == null ? null : RefactoringUtils.getFunctionDeclaration(node);
 			if (expr != null) {
 				((Identifier)node).setName(fMethodName);
 				reshuffleElements(expr.getParameters(),new NewElementsProvider<Parameter>(){
@@ -1516,46 +1513,6 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		return info.getNewName() + ("".equals(info.getNewTypeName()) ? "" : ":" + info.getNewTypeName()); //$NON-NL0S-1$
 	}
 
-	private static CallExpression getFunctionReference(Node node){
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getCallExpression_Applicant())
-			return (CallExpression)node.eContainer();
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getPropertyAccessExpression_Property())
-			return getFunctionReference((Node)node.eContainer());
-		return null;
-	}
-	
-	private static FunctionExpression getFunctionDeclaration(Node node) {
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getFunctionExpression_Identifier())
-			return (FunctionExpression)node.eContainer();
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getPropertyAssignment_Name()) {
-			Node parent = (Node)node.eContainer();
-			if (parent instanceof SimplePropertyAssignment) {
-				Node func = ((SimplePropertyAssignment)parent).getInitializer();
-				if (func instanceof FunctionExpression)
-					return (FunctionExpression)func;
-			}
-		}
-		if (node.eContainingFeature() == DomPackage.eINSTANCE.getVariableDeclaration_Identifier()) {
-			Expression initializer = ((VariableDeclaration)node.eContainer()).getInitializer();
-			if (initializer instanceof FunctionExpression)
-				return (FunctionExpression)initializer;
-		}
-		if (node.eContainingFeature() == DomPackage.eINSTANCE
-				.getPropertyAccessExpression_Property()) {
-			Node parent = (Node) node.eContainer();
-			if (parent.eContainingFeature() == DomPackage.eINSTANCE
-					.getBinaryExpression_Left()) {
-				BinaryExpression expr = (BinaryExpression) parent.eContainer();
-				if (expr.getOperation() == BinaryOperator.ASSIGN) {
-					Expression right = expr.getRight();
-					if (right instanceof FunctionExpression)
-						return (FunctionExpression) right;
-				}
-			}
-		}
-		return null;
-	}
-	
 	private void tryRename(Node node) {
 		if (node instanceof Identifier)
 			((Identifier) node).setName(fMethodName);

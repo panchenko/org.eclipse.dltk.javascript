@@ -128,7 +128,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 		ASTConverter converter = new ASTConverter();
 		return converter.visit(node);
 	}
-
+	
 	private org.eclipse.dltk.javascript.core.dom.Label visitLabel(Label label) {
 		if (label == null)
 			return null;
@@ -398,8 +398,8 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitForInStatement(ForInStatement node) {
 		org.eclipse.dltk.javascript.core.dom.ForInStatement res = DOM_FACTORY
 				.createForInStatement();
-		res.setItem((IForInitializer) visit(node.getIterator()));
-		res.setCollection((Expression) visit(node.getItem()));
+		res.setItem((IForInitializer) visit(node.getItem()));
+		res.setCollection((Expression) visit(node.getIterator()));
 		res.setBody((Statement) visit(node.getBody()));
 		return res;
 	}

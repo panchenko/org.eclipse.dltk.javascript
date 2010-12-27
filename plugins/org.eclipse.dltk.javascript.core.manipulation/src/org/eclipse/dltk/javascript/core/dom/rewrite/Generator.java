@@ -101,9 +101,13 @@ public class Generator extends DomSwitch<StringBuilder> {
 		this.lineDelimiter = lineDelimiter;
 		int st,end=pos;
 		for(st=pos-1;st>=0;st--) {
-			char c = text.charAt(st);
-			if (c == '\n' || c == '\r') break;
-			if (c != ' ' && c != '\t') end = st;
+			try {
+				char c = text.charAt(st);
+				if (c == '\n' || c == '\r') break;
+				if (c != ' ' && c != '\t') end = st;
+			} catch (RuntimeException e) {
+				System.err.println("OK");
+			}
 		}
 		nlStr = lineDelimiter + text.substring(st+1,end);
 	}

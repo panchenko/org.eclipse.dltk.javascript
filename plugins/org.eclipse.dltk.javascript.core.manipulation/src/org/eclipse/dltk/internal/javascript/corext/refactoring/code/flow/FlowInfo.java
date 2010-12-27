@@ -342,15 +342,15 @@ public abstract class FlowInfo {
 	 * @param context the flow context used during flow analysis
 	 * @param local the local variable of interest
 	 * @return the access mode of the local variable
-	 *
-	public int getAccessMode(FlowContext context, IVariableBinding local) {
+	 */
+	public int getAccessMode(FlowContext context, VariableBinding local) {
 		if (fAccessModes == null)
 			return UNUSED;
-		int index= context.getIndexFromLocal(local);
+		int index=local.getVariableId();
 		if (index == -1)
 			return UNUSED;
 		return fAccessModes[index];
-	}*/
+	}
 
 	protected int[] getAccessModes() {
 		return fAccessModes;

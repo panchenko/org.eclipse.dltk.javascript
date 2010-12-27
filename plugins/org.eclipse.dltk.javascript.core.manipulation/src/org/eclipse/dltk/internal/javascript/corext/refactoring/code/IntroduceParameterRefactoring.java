@@ -37,7 +37,6 @@ import org.eclipse.dltk.internal.javascript.corext.refactoring.structure.BodyUpd
 import org.eclipse.dltk.internal.javascript.corext.refactoring.structure.ChangeSignatureProcessor;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.dom.BinaryExpression;
-import org.eclipse.dltk.javascript.core.dom.BinaryOperator;
 import org.eclipse.dltk.javascript.core.dom.DomFactory;
 import org.eclipse.dltk.javascript.core.dom.Expression;
 import org.eclipse.dltk.javascript.core.dom.FunctionExpression;
@@ -47,6 +46,7 @@ import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.dltk.javascript.core.dom.rewrite.ASTConverter;
 import org.eclipse.dltk.javascript.core.dom.rewrite.NodeFinder;
+import org.eclipse.dltk.javascript.core.dom.rewrite.RefactoringUtils;
 import org.eclipse.dltk.javascript.core.refactoring.descriptors.ChangeMethodSignatureDescriptor;
 import org.eclipse.dltk.javascript.core.refactoring.descriptors.IntroduceParameterDescriptor;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
@@ -225,7 +225,7 @@ public class IntroduceParameterRefactoring extends Refactoring {
 
 	private void replaceSelectedExpression(Node root) {
 		// cannot use fSelectedExpression here, since it could be from another AST (if method was replaced by overridden):
-		Expression expression=(Expression)NodeFinder.findExpression(root, fSelectedExpression.getBegin(), fSelectedExpression.getEnd());
+		Expression expression=(Expression)NodeFinder.findNode(root, fSelectedExpression.getBegin(), fSelectedExpression.getEnd());
 		VariableReference result = DomFactory.eINSTANCE.createVariableReference();
 		Identifier id = DomFactory.eINSTANCE.createIdentifier();
 		id.setName(fParameter.getNewName());
@@ -240,7 +240,7 @@ public class IntroduceParameterRefactoring extends Refactoring {
 	}
 
 	private void initializeSelectedExpression() {
-		Node selected = NodeFinder.findExpression(root, fSelectionStart, fSelectionStart+fSelectionLength);
+		Node selected = NodeFinder.findNode(root, fSelectionStart, fSelectionStart+fSelectionLength);
 		if (!(selected instanceof Expression))
 			return;
 		for(int i=fSelectionStart;i<selected.getBegin();i++)
@@ -287,48 +287,10 @@ public class IntroduceParameterRefactoring extends Refactoring {
 
 		if (selectedExpression instanceof BinaryExpression
 				&& selectedExpression.eContainer() instanceof Expression
-				&& isAssignment(((BinaryExpression)selectedExpression).getOperation()))
+				&& RefactoringUtils.isAssignment(((BinaryExpression)selectedExpression).getOperation()))
 			return RefactoringStatus.createFatalErrorStatus(RefactoringCoreMessages.ExtractTempRefactoring_assignment);
 		return null;
 	}
-
-	private boolean isAssignment(BinaryOperator op) {
-		switch (op) {
-		case ADD_ASSIGN:
-		case AND_ASSIGN:
-		case ASSIGN:
-		case DIV_ASSIGN:
-		case LSH_ASSIGN:
-		case MOD_ASSIGN:
-		case MUL_ASSIGN:
-		case OR_ASSIGN:
-		case RSH_ASSIGN:
-		case SUB_ASSIGN:
-		case URSH_ASSIGN:
-		case XOR_ASSIGN:
-			return true;
-		}
-		return false;
-	}
-	
-	/*private RefactoringStatus checkExpressionBinding() {
-		return checkExpressionFragmentIsRValue();
-	}
-
-	// !! +/- same as in ExtractConstantRefactoring & ExtractTempRefactoring
-	private RefactoringStatus checkExpressionFragmentIsRValue() {
-		switch(Checks.checkExpressionIsRValue(fSelectedExpression)) {
-			case Checks.IS_RVALUE_GUESSED:
-			case Checks.NOT_RVALUE_MISC:
-				return RefactoringStatus.createStatus(RefactoringStatus.FATAL, RefactoringCoreMessages.IntroduceParameterRefactoring_select, null, Corext.getPluginId(), RefactoringStatusCodes.EXPRESSION_NOT_RVALUE, null);
-			case Checks.NOT_RVALUE_VOID:
-				return RefactoringStatus.createStatus(RefactoringStatus.FATAL, RefactoringCoreMessages.IntroduceParameterRefactoring_no_void, null, Corext.getPluginId(), RefactoringStatusCodes.EXPRESSION_NOT_RVALUE_VOID, null);
-			case Checks.IS_RVALUE:
-				return new RefactoringStatus();
-			default:
-				Assert.isTrue(false); return null;
-		}
-	}*/
 
 	public List<ParameterInfo> getParameterInfos() {
 		return fChangeSignatureProcessor.getParameterInfos();

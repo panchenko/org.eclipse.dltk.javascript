@@ -53,11 +53,11 @@ import org.eclipse.dltk.javascript.core.dom.SwitchStatement;
 import org.eclipse.dltk.javascript.core.dom.ThrowStatement;
 import org.eclipse.dltk.javascript.core.dom.TryStatement;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
-import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
 import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.dltk.javascript.core.dom.VariableStatement;
 import org.eclipse.dltk.javascript.core.dom.WhileStatement;
+import org.eclipse.dltk.javascript.core.dom.rewrite.RefactoringUtils;
 import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.IRegion;
@@ -101,10 +101,12 @@ abstract class FlowAnalyzer extends DomSwitch<Boolean> {
 	}
 
 	private Map<Node,FlowInfo> fData = new HashMap<Node,FlowInfo>(100);
+	private GenericConditionalFlowInfo callInfo = createGenericConditional();
+	public GenericConditionalFlowInfo closureInfo = createGenericConditional();
 	/* package */ FlowContext fFlowContext;
-
 	public FlowAnalyzer(FlowContext context) {
 		fFlowContext= context;
+		callInfo.mergeEmptyCondition(context);
 	}
 
 	protected abstract boolean createReturnFlowInfo(ReturnStatement node);
@@ -136,7 +138,11 @@ abstract class FlowAnalyzer extends DomSwitch<Boolean> {
 	protected GenericSequentialFlowInfo createSequential() {
 		return new GenericSequentialFlowInfo();
 	}
-
+	
+	protected GenericConditionalFlowInfo createGenericConditional() {
+		return new GenericConditionalFlowInfo();
+	}
+	
 	protected ConditionalFlowInfo createConditional() {
 		return new ConditionalFlowInfo();
 	}
@@ -441,7 +447,7 @@ abstract class FlowAnalyzer extends DomSwitch<Boolean> {
 	}
 
 	public Boolean caseBinaryExpression(BinaryExpression node) {
-		if (isAssignment(node.getOperation())) {
+		if (RefactoringUtils.isAssignment(node.getOperation())) {
 			FlowInfo lhs= getFlowInfo(node.getLeft());
 			FlowInfo rhs= getFlowInfo(node.getRight());
 			if (lhs instanceof LocalFlowInfo) {
@@ -463,25 +469,6 @@ abstract class FlowAnalyzer extends DomSwitch<Boolean> {
 		return true;
 	}
 	
-	private boolean isAssignment(BinaryOperator op) {
-		switch (op) {
-		case ADD_ASSIGN:
-		case AND_ASSIGN:
-		case ASSIGN:
-		case DIV_ASSIGN:
-		case LSH_ASSIGN:
-		case MOD_ASSIGN:
-		case MUL_ASSIGN:
-		case OR_ASSIGN:
-		case RSH_ASSIGN:
-		case SUB_ASSIGN:
-		case URSH_ASSIGN:
-		case XOR_ASSIGN:
-			return true;
-		}
-		return false;
-	}
-
 	public Boolean caseLabeledStatement(LabeledStatement node) {
 		FlowInfo info= assignFlowInfo(node, node.getStatement());
 		if (info != null)
@@ -490,9 +477,12 @@ abstract class FlowAnalyzer extends DomSwitch<Boolean> {
 	}
 
 	public Boolean caseFunctionExpression(FunctionExpression node) {
-		GenericSequentialFlowInfo info= processSequential(node, node.getParameters());
-		info.merge(getFlowInfo(node.getBody()), fFlowContext);
-		info.setNoReturn();
+		GenericSequentialFlowInfo info = createSequential();
+		GenericSequentialFlowInfo inner = processSequential(node, node.getParameters());
+		inner.merge(getFlowInfo(node.getBody()), fFlowContext);
+		inner.setNoReturn();
+		callInfo.merge(inner, fFlowContext);
+		setFlowInfo(node,info);
 		return true;
 	}
 	
@@ -517,6 +507,7 @@ abstract class FlowAnalyzer extends DomSwitch<Boolean> {
 			info.mergeArgument(getFlowInfo(arg), fFlowContext);
 		}
 		info.mergeReceiver(getFlowInfo(node.getApplicant()), fFlowContext);
+		closureInfo.assignAccessMode(callInfo);
 		//info.mergeExceptions(binding, fFlowContext);
 		return true;
 	}
@@ -528,7 +519,7 @@ abstract class FlowAnalyzer extends DomSwitch<Boolean> {
 	}
 
 	public Boolean caseUnaryExpression(UnaryExpression node) {
-		if (hasSideEffect(node.getOperation())) {
+		if (RefactoringUtils.hasSideEffect(node.getOperation())) {
 			FlowInfo info= getFlowInfo(node.getArgument());
 			if (info instanceof LocalFlowInfo) {
 				// Normally we should do this in the parent node since the write access take place later.
@@ -548,18 +539,6 @@ abstract class FlowAnalyzer extends DomSwitch<Boolean> {
 		return true;
 	}
 	
-	private boolean hasSideEffect(UnaryOperator op) {
-		switch (op) {
-		case POSTFIX_DEC:
-		case POSTFIX_INC:
-		case PREFIX_DEC:
-		case PREFIX_INC:
-		case DELETE:
-			return true;
-		}
-		return false;
-	}
-
 	public Boolean caseReturnStatement(ReturnStatement node) {
 		if (createReturnFlowInfo(node)) {
 			ReturnFlowInfo info= createReturn(node);

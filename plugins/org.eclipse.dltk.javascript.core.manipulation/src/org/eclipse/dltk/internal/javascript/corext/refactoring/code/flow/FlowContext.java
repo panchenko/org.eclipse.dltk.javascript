@@ -21,7 +21,7 @@ public class FlowContext {
 		MERGE, ARGUMENTS, RETURN_VALUES;
 	}
 
-	private int fLength;
+	//private int fLength;
 	private boolean fConsiderAccessMode;
 	//private boolean fLoopReentranceMode;
 	private Mode fComputeMode;
@@ -31,8 +31,8 @@ public class FlowContext {
 
 	//private static final List EMPTY_CATCH_CLAUSE= new ArrayList(0);
 
-	public FlowContext(int length, Map<Identifier,VariableBinding> bindings) {
-		fLength = length;
+	public FlowContext(Map<Identifier,VariableBinding> bindings) {
+		//fLength = bindings.size();
 		//fExceptionStack= new ArrayList(3);
 		fBindings = bindings;
 	}
@@ -50,7 +50,7 @@ public class FlowContext {
 	}*/
 
 	int getArrayLength() {
-		return fLength;
+		return fBindings.size();
 	}
 
 	/*int getStartingIndex() {
@@ -100,7 +100,7 @@ public class FlowContext {
 
 	void manageLocal(VariableBinding local) {
 		if (fLocals == null)
-			fLocals= new VariableBinding[fLength];
+			fLocals= new VariableBinding[fBindings.size()];
 		fLocals[local.getVariableId()]= local;
 	}
 	

@@ -12,12 +12,15 @@
 package org.eclipse.dltk.javascript.core.dom.rewrite;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.dltk.internal.javascript.corext.refactoring.code.flow.VariableBinding;
+import org.eclipse.dltk.javascript.core.dom.AccessorAssignment;
 import org.eclipse.dltk.javascript.core.dom.CatchClause;
 import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.ExpressionStatement;
@@ -28,6 +31,7 @@ import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Parameter;
 import org.eclipse.dltk.javascript.core.dom.SetterAssignment;
 import org.eclipse.dltk.javascript.core.dom.Source;
+import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
@@ -168,18 +172,22 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 					result.add(ref.getName());
 			}
 		};
-		boolean ok = true;
-		while (ok) {
+		Node body = null;
+		while (body == null) {
 			node = (Node)node.eContainer();
 			switch(node.eClass().getClassifierID()) {
 			case DomPackage.FUNCTION_EXPRESSION:
+				body = ((FunctionExpression)node).getBody();
+				break;
 			case DomPackage.GETTER_ASSIGNMENT:
 			case DomPackage.SETTER_ASSIGNMENT:
+				body = ((AccessorAssignment)node).getBody();
 			case DomPackage.SOURCE:
-				ok = false;
+				body = node;
+				break;
 			}
 		}
-		lookup.findDeclarations(node);
+		lookup.findDeclarations(body);
 		reportDecls[0] = false;
 		lookup.traverse(node);
 		return result;
@@ -189,7 +197,7 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		return findReferences(root,names,false);
 	}
 	
-	public static List<Identifier> findReferences(final Node root, Set<String> names,
+	public static List<Identifier> findReferences(Node root, Set<String> names,
 			final boolean firstOnly) {
 		final Set<String> wanted;
 		if (firstOnly) {
@@ -218,5 +226,32 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 		};
 		lookup.traverse(root);
 		return refs;
+	}
+	public static Map<Identifier, VariableBinding> findBindings(Node node) {
+		final Map<Identifier, VariableBinding> bindings = new HashMap<Identifier, VariableBinding>();
+		VariableLookup lookup = new VariableLookup(){
+			@Override
+			protected void reportDeclaration(Identifier decl) {
+				Node parent = (Node)decl.eContainer();
+				Type type = null;
+				switch (parent.eClass().getClassifierID()) {
+				case DomPackage.VARIABLE_DECLARATION:
+					type = ((VariableDeclaration)parent).getType();
+					break;
+				case DomPackage.PARAMETER:
+					type = ((Parameter)parent).getType();
+					break;
+				}
+				String typeName = type == null ? null : type.getName();
+				bindings.put(decl, new VariableBinding(decl.getName(), bindings.size(), decl, typeName));
+			}
+			@Override
+			protected void reportReference(Identifier ref, Identifier decl) {
+				if (decl != null)
+					bindings.put(ref, bindings.get(decl));
+			}
+		};
+		lookup.traverse(node);
+		return bindings;
 	}
 }

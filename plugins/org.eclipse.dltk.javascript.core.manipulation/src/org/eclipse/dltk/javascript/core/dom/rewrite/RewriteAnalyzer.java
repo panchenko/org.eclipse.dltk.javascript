@@ -136,7 +136,6 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 				else
 					off = last.getEnd();
 				addEdit(new InsertEdit(off, generateElement(item,last == null,first,off)),item);
-				first = false;
 			} else
 				last = item;
 		}
