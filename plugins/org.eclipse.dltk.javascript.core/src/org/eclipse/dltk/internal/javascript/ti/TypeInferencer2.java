@@ -69,6 +69,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		this.source = source;
 	}
 
+	// public IValueCollection doInferencing(Script script) {
 	public void doInferencing(Script script) {
 		try {
 			elements.clear();
@@ -85,21 +86,21 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		} catch (AssertionError e) {
 			log(e);
 		}
-//		return null;
+		// return null;
 	}
 
 	protected void log(Throwable e) {
 		JavaScriptPlugin.error(e);
 	}
 
-	 public IValueReference evaluate(ASTNode node) {
-	 initializeVisitor();
-	 return visitor.visit(node);
-	 }
+	public IValueReference evaluate(ASTNode node) {
+		initializeVisitor();
+		return visitor.visit(node);
+	}
 
-	 public IValueCollection getCollection() {
-	 return visitor.getCollection();
-	 }
+	public IValueCollection getCollection() {
+		return visitor.getCollection();
+	}
 
 	private final Map<String, Type> types = new HashMap<String, Type>();
 
@@ -332,6 +333,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	 */
 	private Type createProxy(String typeName) {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
+		type.setName(typeName);
 		((InternalEObject) type).eSetProxyURI(URI.createGenericURI(
 				PROXY_SCHEME, PROXY_OPAQUE_PART, typeName));
 		return type;
