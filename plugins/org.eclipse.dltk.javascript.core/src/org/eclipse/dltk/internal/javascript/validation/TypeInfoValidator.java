@@ -612,6 +612,14 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				}
 				if (paramType.equals(argumentName))
 					return true;
+
+				Type type = argumentType.getSuperType();
+				while (type != null) {
+					String name = type.getName();
+					if (name.equals(paramType))
+						return true;
+					type = type.getSuperType();
+				}
 				return false;
 			}
 			return true;
