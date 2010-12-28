@@ -24,7 +24,6 @@ public class JavaScriptPreferenceMessages extends NLS {
 	public static String JavascriptSmartTypingConfigurationBlock_typing_tabTitle;
 	public static String TodoTaskDescription;
 	public static String ErrorWarningDescription;
-	public static String ErrorWarning_strictMode;
 	public static String ErrorWarning_enableTypeInfo;
 
 	public static String JavascriptFoldingPreferencePage_initiallyFoldFunctions;

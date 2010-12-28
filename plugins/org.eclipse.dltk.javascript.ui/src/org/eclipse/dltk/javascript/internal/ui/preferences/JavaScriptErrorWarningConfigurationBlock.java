@@ -21,7 +21,6 @@ import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IDLTKContributedExtension;
 import org.eclipse.dltk.core.SourceParserUtil;
-import org.eclipse.dltk.javascript.core.JavaScriptCorePreferences;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
@@ -87,10 +86,6 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 					DLTKCore.PROJECT_SOURCE_PARSER_ID), ids);
 		}
 
-		bindControl(SWTFactory.createCheckButton(composite,
-				JavaScriptPreferenceMessages.ErrorWarning_strictMode, null,
-				false, 2), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				JavaScriptCorePreferences.USE_STRICT_MODE), null);
 		bindControl(SWTFactory.createCheckButton(composite,
 				JavaScriptPreferenceMessages.ErrorWarning_enableTypeInfo, null,
 				false, 2), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
