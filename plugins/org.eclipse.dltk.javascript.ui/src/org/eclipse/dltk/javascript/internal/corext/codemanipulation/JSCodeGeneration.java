@@ -50,14 +50,14 @@ public class JSCodeGeneration {
 			// update existing doc.
 			List<String> lines = new ArrayList<String>();
 			List<String> paramLines = new ArrayList<String>();
-			int paramStart = 0;
+			int paramStart = -1;
 			StringTokenizer st = new StringTokenizer(existingComment,
 					lineDelimiter);
 			while (st.hasMoreTokens()) {
 				String line = st.nextToken();
 				int index = line.indexOf("@param");
 				if (index != -1) {
-					if (paramLines.size() == 0)
+					if (paramStart == -1)
 						paramStart = lines.size() - 1;
 					paramLines.add(line);
 				} else
@@ -84,7 +84,7 @@ public class JSCodeGeneration {
 			} catch (ModelException e) {
 				// ignore
 			}
-			if (paramStart == 0)
+			if (paramStart == -1)
 				paramStart = lines.size() - 2;
 			for (int i = 0; i < lines.size(); i++) {
 				buf.append(lines.get(i)).append(lineDelimiter);
@@ -106,15 +106,15 @@ public class JSCodeGeneration {
 				// ignore
 			}
 			buf.append(" * @return {Object}").append(lineDelimiter); //$NON-NLS-1$
-//			try {
-//				if (meth.getType() != null) {
-//					buf.append(" * @return {");
-//					buf.append(meth.getType());
-//					buf.append("}").append(lineDelimiter); //$NON-NLS-1$
-//				}
-//			} catch (ModelException e) {
-//				// ignore
-//			}
+			// try {
+			// if (meth.getType() != null) {
+			// buf.append(" * @return {");
+			// buf.append(meth.getType());
+			//					buf.append("}").append(lineDelimiter); //$NON-NLS-1$
+			// }
+			// } catch (ModelException e) {
+			// // ignore
+			// }
 			buf.append(" */").append(lineDelimiter); //$NON-NLS-1$
 		}
 		return buf.toString();
