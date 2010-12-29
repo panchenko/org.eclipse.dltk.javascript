@@ -275,10 +275,11 @@ public class InlineMethodRefactoring extends Refactoring {
 				CallExpression[] invocations= removeNestedCalls(nestedInvocations, unit,
 					targetProvider.getInvocations(body, new SubProgressMonitor(pm, 2)));
 				for(CallExpression invocation : invocations) {
-					result.merge(inliner.initialize(invocation, targetProvider.getStatusSeverity()));
+					RefactoringStatus checkInline = inliner.initialize(invocation, targetProvider.getStatusSeverity());
+					result.merge(checkInline);
 					if (result.hasFatalError())
 						break;
-					if (result.getSeverity() >= targetProvider.getStatusSeverity()) {
+					if (checkInline.getSeverity() >= targetProvider.getStatusSeverity()) {
 						deleteSource= false;
 					} else {
 						modified = true;

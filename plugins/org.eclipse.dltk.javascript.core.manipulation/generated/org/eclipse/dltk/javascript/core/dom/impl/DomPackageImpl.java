@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DomPackageImpl.java,v 1.3 2010/12/01 09:31:18 apanchenk Exp $
+ * $Id: DomPackageImpl.java,v 1.4 2010/12/29 15:18:56 jcompagne Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -52,7 +52,6 @@ import org.eclipse.dltk.javascript.core.dom.IfStatement;
 import org.eclipse.dltk.javascript.core.dom.IterationStatement;
 import org.eclipse.dltk.javascript.core.dom.Label;
 import org.eclipse.dltk.javascript.core.dom.LabeledStatement;
-import org.eclipse.dltk.javascript.core.dom.MutliLineComment;
 import org.eclipse.dltk.javascript.core.dom.NewExpression;
 import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.NullLiteral;
@@ -68,7 +67,6 @@ import org.eclipse.dltk.javascript.core.dom.RegularExpressionLiteral;
 import org.eclipse.dltk.javascript.core.dom.ReturnStatement;
 import org.eclipse.dltk.javascript.core.dom.SetterAssignment;
 import org.eclipse.dltk.javascript.core.dom.SimplePropertyAssignment;
-import org.eclipse.dltk.javascript.core.dom.SingleLineComment;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
 import org.eclipse.dltk.javascript.core.dom.StringLiteral;
@@ -90,13 +88,11 @@ import org.eclipse.dltk.javascript.core.dom.XmlExpressionFragment;
 import org.eclipse.dltk.javascript.core.dom.XmlFragment;
 import org.eclipse.dltk.javascript.core.dom.XmlInitializer;
 import org.eclipse.dltk.javascript.core.dom.XmlTextFragment;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -107,2929 +103,2916 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  */
 public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass nodeEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass commentEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
-	private EClass mutliLineCommentEClass = null;
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	private EClass singleLineCommentEClass = null;
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass identifierEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass variableReferenceEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass labelEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass expressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass nullLiteralEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass booleanLiteralEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass numericLiteralEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass stringLiteralEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass regularExpressionLiteralEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass thisExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass arrayLiteralEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass iArrayElementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass elisionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass objectLiteralEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass propertyAssignmentEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass iPropertyNameEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass simplePropertyAssignmentEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass accessorAssignmentEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass getterAssignmentEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass setterAssignmentEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass parenthesizedExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass arrayAccessExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass propertyAccessExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass newExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass callExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass unaryExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass binaryExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass conditionalExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass statementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass blockStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass variableStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass variableDeclarationEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass emptyStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass expressionStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass ifStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass iterationStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass doStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass whileStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass forStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass iForInitializerEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass forInStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass continueStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass breakStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass returnStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass withStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass switchStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass switchElementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass caseClauseEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass defaultClauseEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass labeledStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass throwStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass tryStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass catchClauseEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass finallyClauseEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass functionExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass parameterEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass sourceEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass constStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass propertyIdentifierEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass iPropertyEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass xmlInitializerEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass attributeIdentifierEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass iSelectorEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass qualifiedIdentifierEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass iUnqualifiedSelectorEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass wildcardIdentifierEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass iPropertySelectorEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass expressionSelectorEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass xmlFragmentEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass xmlTextFragmentEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass xmlExpressionFragmentEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass descendantAccessExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass filterExpressionEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass defaultXmlNamespaceStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass forEachInStatementEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EClass typeEClass = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EEnum unaryOperatorEEnum = null;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private EEnum binaryOperatorEEnum = null;
 
 	/**
-     * Creates an instance of the model <b>Package</b>, registered with
-     * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
-     * package URI value.
-     * <p>Note: the correct way to create the package is via the static
-     * factory method {@link #init init()}, which also performs
-     * initialization of the package, or returns the registered package,
-     * if one already exists.
-     * <!-- begin-user-doc -->
+	 * Creates an instance of the model <b>Package</b>, registered with
+	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
+	 * package URI value.
+	 * <p>Note: the correct way to create the package is via the static
+	 * factory method {@link #init init()}, which also performs
+	 * initialization of the package, or returns the registered package,
+	 * if one already exists.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see org.eclipse.emf.ecore.EPackage.Registry
-     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#eNS_URI
-     * @see #init()
-     * @generated
-     */
+	 * @see org.eclipse.emf.ecore.EPackage.Registry
+	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#eNS_URI
+	 * @see #init()
+	 * @generated
+	 */
 	private DomPackageImpl() {
-        super(eNS_URI, DomFactory.eINSTANCE);
-    }
+		super(eNS_URI, DomFactory.eINSTANCE);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private static boolean isInited = false;
 
 	/**
-     * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-     * 
-     * <p>This method is used to initialize {@link DomPackage#eINSTANCE} when that field is accessed.
-     * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
-     * <!-- begin-user-doc -->
+	 * Creates, registers, and initializes the <b>Package</b> for this
+	 * model, and for any others upon which it depends.  Simple
+	 * dependencies are satisfied by calling this method on all
+	 * dependent packages before doing anything else.  This method drives
+	 * initialization for interdependent packages directly, in parallel
+	 * with this package, itself.
+	 * <p>Of this package and its interdependencies, all packages which
+	 * have not yet been registered by their URI values are first created
+	 * and registered.  The packages are then initialized in two steps:
+	 * meta-model objects for all of the packages are created before any
+	 * are initialized, since one package's meta-model objects may refer to
+	 * those of another.
+	 * <p>Invocation of this method will not affect any packages that have
+	 * already been initialized.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #eNS_URI
-     * @see #createPackageContents()
-     * @see #initializePackageContents()
-     * @generated
-     */
+	 * @see #eNS_URI
+	 * @see #createPackageContents()
+	 * @see #initializePackageContents()
+	 * @generated
+	 */
 	public static DomPackage init() {
-        if (isInited) return (DomPackage)EPackage.Registry.INSTANCE.getEPackage(DomPackage.eNS_URI);
+		if (isInited) return (DomPackage)EPackage.Registry.INSTANCE.getEPackage(DomPackage.eNS_URI);
 
-        // Obtain or create and register package
-        DomPackageImpl theDomPackage = (DomPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof DomPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new DomPackageImpl());
+		// Obtain or create and register package
+		DomPackageImpl theDomPackage = (DomPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(eNS_URI) instanceof DomPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(eNS_URI) : new DomPackageImpl());
 
-        isInited = true;
+		isInited = true;
 
-        // Create package meta-data objects
-        theDomPackage.createPackageContents();
+		// Create package meta-data objects
+		theDomPackage.createPackageContents();
 
-        // Initialize created meta-data
-        theDomPackage.initializePackageContents();
+		// Initialize created meta-data
+		theDomPackage.initializePackageContents();
 
-        // Mark meta-data to indicate it can't be changed
-        theDomPackage.freeze();
+		// Mark meta-data to indicate it can't be changed
+		theDomPackage.freeze();
 
-  
-        // Update the registry and return the package
-        EPackage.Registry.INSTANCE.put(DomPackage.eNS_URI, theDomPackage);
-        return theDomPackage;
-    }
+		return theDomPackage;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getNode() {
-        return nodeEClass;
-    }
+		return nodeEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getNode_Begin() {
-        return (EAttribute)nodeEClass.getEStructuralFeatures().get(0);
-    }
+		return (EAttribute)nodeEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getNode_End() {
-        return (EAttribute)nodeEClass.getEStructuralFeatures().get(1);
-    }
+		return (EAttribute)nodeEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getComment() {
-        return commentEClass;
-    }
+		return commentEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public EClass getMutliLineComment() {
-        return mutliLineCommentEClass;
-    }
+	 * @generated
+	 */
+	public EAttribute getComment_Text() {
+		return (EAttribute)commentEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public EClass getSingleLineComment() {
-        return singleLineCommentEClass;
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getIdentifier() {
-        return identifierEClass;
-    }
+		return identifierEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getIdentifier_Name() {
-        return (EAttribute)identifierEClass.getEStructuralFeatures().get(0);
-    }
+		return (EAttribute)identifierEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getVariableReference() {
-        return variableReferenceEClass;
-    }
+		return variableReferenceEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getVariableReference_Variable() {
-        return (EReference)variableReferenceEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)variableReferenceEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getLabel() {
-        return labelEClass;
-    }
+		return labelEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getLabel_Name() {
-        return (EAttribute)labelEClass.getEStructuralFeatures().get(0);
-    }
+		return (EAttribute)labelEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getExpression() {
-        return expressionEClass;
-    }
+		return expressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getNullLiteral() {
-        return nullLiteralEClass;
-    }
+		return nullLiteralEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getBooleanLiteral() {
-        return booleanLiteralEClass;
-    }
+		return booleanLiteralEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getBooleanLiteral_Text() {
-        return (EAttribute)booleanLiteralEClass.getEStructuralFeatures().get(0);
-    }
+		return (EAttribute)booleanLiteralEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getNumericLiteral() {
-        return numericLiteralEClass;
-    }
+		return numericLiteralEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getNumericLiteral_Text() {
-        return (EAttribute)numericLiteralEClass.getEStructuralFeatures().get(0);
-    }
+		return (EAttribute)numericLiteralEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getStringLiteral() {
-        return stringLiteralEClass;
-    }
+		return stringLiteralEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getStringLiteral_Text() {
-        return (EAttribute)stringLiteralEClass.getEStructuralFeatures().get(0);
-    }
+		return (EAttribute)stringLiteralEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getRegularExpressionLiteral() {
-        return regularExpressionLiteralEClass;
-    }
+		return regularExpressionLiteralEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getRegularExpressionLiteral_Text() {
-        return (EAttribute)regularExpressionLiteralEClass.getEStructuralFeatures().get(0);
-    }
+		return (EAttribute)regularExpressionLiteralEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getThisExpression() {
-        return thisExpressionEClass;
-    }
+		return thisExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getArrayLiteral() {
-        return arrayLiteralEClass;
-    }
+		return arrayLiteralEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getArrayLiteral_Elements() {
-        return (EReference)arrayLiteralEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)arrayLiteralEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getIArrayElement() {
-        return iArrayElementEClass;
-    }
+		return iArrayElementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getElision() {
-        return elisionEClass;
-    }
+		return elisionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getObjectLiteral() {
-        return objectLiteralEClass;
-    }
+		return objectLiteralEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getObjectLiteral_Properties() {
-        return (EReference)objectLiteralEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)objectLiteralEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getPropertyAssignment() {
-        return propertyAssignmentEClass;
-    }
+		return propertyAssignmentEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getPropertyAssignment_Name() {
-        return (EReference)propertyAssignmentEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)propertyAssignmentEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getIPropertyName() {
-        return iPropertyNameEClass;
-    }
+		return iPropertyNameEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getSimplePropertyAssignment() {
-        return simplePropertyAssignmentEClass;
-    }
+		return simplePropertyAssignmentEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getSimplePropertyAssignment_Initializer() {
-        return (EReference)simplePropertyAssignmentEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)simplePropertyAssignmentEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getAccessorAssignment() {
-        return accessorAssignmentEClass;
-    }
+		return accessorAssignmentEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getAccessorAssignment_Body() {
-        return (EReference)accessorAssignmentEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)accessorAssignmentEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getGetterAssignment() {
-        return getterAssignmentEClass;
-    }
+		return getterAssignmentEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getSetterAssignment() {
-        return setterAssignmentEClass;
-    }
+		return setterAssignmentEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getSetterAssignment_Parameter() {
-        return (EReference)setterAssignmentEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)setterAssignmentEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getParenthesizedExpression() {
-        return parenthesizedExpressionEClass;
-    }
+		return parenthesizedExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getParenthesizedExpression_Enclosed() {
-        return (EReference)parenthesizedExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)parenthesizedExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getArrayAccessExpression() {
-        return arrayAccessExpressionEClass;
-    }
+		return arrayAccessExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getArrayAccessExpression_Array() {
-        return (EReference)arrayAccessExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)arrayAccessExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getArrayAccessExpression_Index() {
-        return (EReference)arrayAccessExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)arrayAccessExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getPropertyAccessExpression() {
-        return propertyAccessExpressionEClass;
-    }
+		return propertyAccessExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getPropertyAccessExpression_Object() {
-        return (EReference)propertyAccessExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)propertyAccessExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getPropertyAccessExpression_Property() {
-        return (EReference)propertyAccessExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)propertyAccessExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getNewExpression() {
-        return newExpressionEClass;
-    }
+		return newExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getNewExpression_Constructor() {
-        return (EReference)newExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)newExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getNewExpression_Arguments() {
-        return (EReference)newExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)newExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getCallExpression() {
-        return callExpressionEClass;
-    }
+		return callExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getCallExpression_Applicant() {
-        return (EReference)callExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)callExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getCallExpression_Arguments() {
-        return (EReference)callExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)callExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getUnaryExpression() {
-        return unaryExpressionEClass;
-    }
+		return unaryExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getUnaryExpression_Argument() {
-        return (EReference)unaryExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)unaryExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getUnaryExpression_Operation() {
-        return (EAttribute)unaryExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EAttribute)unaryExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getBinaryExpression() {
-        return binaryExpressionEClass;
-    }
+		return binaryExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getBinaryExpression_Left() {
-        return (EReference)binaryExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)binaryExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getBinaryExpression_Right() {
-        return (EReference)binaryExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)binaryExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getBinaryExpression_Operation() {
-        return (EAttribute)binaryExpressionEClass.getEStructuralFeatures().get(2);
-    }
+		return (EAttribute)binaryExpressionEClass.getEStructuralFeatures().get(2);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getBinaryExpression_OperatorPosition() {
-        return (EAttribute)binaryExpressionEClass.getEStructuralFeatures().get(3);
-    }
+		return (EAttribute)binaryExpressionEClass.getEStructuralFeatures().get(3);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getConditionalExpression() {
-        return conditionalExpressionEClass;
-    }
+		return conditionalExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getConditionalExpression_Predicate() {
-        return (EReference)conditionalExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)conditionalExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getConditionalExpression_Consequent() {
-        return (EReference)conditionalExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)conditionalExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getConditionalExpression_Alternative() {
-        return (EReference)conditionalExpressionEClass.getEStructuralFeatures().get(2);
-    }
+		return (EReference)conditionalExpressionEClass.getEStructuralFeatures().get(2);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getStatement() {
-        return statementEClass;
-    }
+		return statementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getBlockStatement() {
-        return blockStatementEClass;
-    }
+		return blockStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getBlockStatement_Statements() {
-        return (EReference)blockStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)blockStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getVariableStatement() {
-        return variableStatementEClass;
-    }
+		return variableStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getVariableStatement_Declarations() {
-        return (EReference)variableStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)variableStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getVariableDeclaration() {
-        return variableDeclarationEClass;
-    }
+		return variableDeclarationEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getVariableDeclaration_Identifier() {
-        return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getVariableDeclaration_Type() {
-        return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getVariableDeclaration_Initializer() {
-        return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(2);
-    }
+		return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(2);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getEmptyStatement() {
-        return emptyStatementEClass;
-    }
+		return emptyStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getExpressionStatement() {
-        return expressionStatementEClass;
-    }
+		return expressionStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getExpressionStatement_Expression() {
-        return (EReference)expressionStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)expressionStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getIfStatement() {
-        return ifStatementEClass;
-    }
+		return ifStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getIfStatement_Predicate() {
-        return (EReference)ifStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)ifStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getIfStatement_Consequent() {
-        return (EReference)ifStatementEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)ifStatementEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getIfStatement_Alternative() {
-        return (EReference)ifStatementEClass.getEStructuralFeatures().get(2);
-    }
+		return (EReference)ifStatementEClass.getEStructuralFeatures().get(2);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getIterationStatement() {
-        return iterationStatementEClass;
-    }
+		return iterationStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getIterationStatement_Body() {
-        return (EReference)iterationStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)iterationStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getDoStatement() {
-        return doStatementEClass;
-    }
+		return doStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getDoStatement_Condition() {
-        return (EReference)doStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)doStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getWhileStatement() {
-        return whileStatementEClass;
-    }
+		return whileStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getWhileStatement_Condition() {
-        return (EReference)whileStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)whileStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getForStatement() {
-        return forStatementEClass;
-    }
+		return forStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getForStatement_Initialization() {
-        return (EReference)forStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)forStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getForStatement_Condition() {
-        return (EReference)forStatementEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)forStatementEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getForStatement_Increment() {
-        return (EReference)forStatementEClass.getEStructuralFeatures().get(2);
-    }
+		return (EReference)forStatementEClass.getEStructuralFeatures().get(2);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getIForInitializer() {
-        return iForInitializerEClass;
-    }
+		return iForInitializerEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getForInStatement() {
-        return forInStatementEClass;
-    }
+		return forInStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getForInStatement_Item() {
-        return (EReference)forInStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)forInStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getForInStatement_Collection() {
-        return (EReference)forInStatementEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)forInStatementEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getContinueStatement() {
-        return continueStatementEClass;
-    }
+		return continueStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getContinueStatement_Label() {
-        return (EReference)continueStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)continueStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getBreakStatement() {
-        return breakStatementEClass;
-    }
+		return breakStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getBreakStatement_Label() {
-        return (EReference)breakStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)breakStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getReturnStatement() {
-        return returnStatementEClass;
-    }
+		return returnStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getReturnStatement_Expression() {
-        return (EReference)returnStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)returnStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getWithStatement() {
-        return withStatementEClass;
-    }
+		return withStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getWithStatement_Expression() {
-        return (EReference)withStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)withStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getWithStatement_Statement() {
-        return (EReference)withStatementEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)withStatementEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getSwitchStatement() {
-        return switchStatementEClass;
-    }
+		return switchStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getSwitchStatement_Selector() {
-        return (EReference)switchStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)switchStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getSwitchStatement_Elements() {
-        return (EReference)switchStatementEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)switchStatementEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getSwitchElement() {
-        return switchElementEClass;
-    }
+		return switchElementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getSwitchElement_Statements() {
-        return (EReference)switchElementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)switchElementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getCaseClause() {
-        return caseClauseEClass;
-    }
+		return caseClauseEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getCaseClause_Expression() {
-        return (EReference)caseClauseEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)caseClauseEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getDefaultClause() {
-        return defaultClauseEClass;
-    }
+		return defaultClauseEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getLabeledStatement() {
-        return labeledStatementEClass;
-    }
+		return labeledStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getLabeledStatement_Label() {
-        return (EReference)labeledStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)labeledStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getLabeledStatement_Statement() {
-        return (EReference)labeledStatementEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)labeledStatementEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getThrowStatement() {
-        return throwStatementEClass;
-    }
+		return throwStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getThrowStatement_Exception() {
-        return (EReference)throwStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)throwStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getTryStatement() {
-        return tryStatementEClass;
-    }
+		return tryStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getTryStatement_Body() {
-        return (EReference)tryStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)tryStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getTryStatement_Catches() {
-        return (EReference)tryStatementEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)tryStatementEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getTryStatement_FinallyClause() {
-        return (EReference)tryStatementEClass.getEStructuralFeatures().get(2);
-    }
+		return (EReference)tryStatementEClass.getEStructuralFeatures().get(2);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getCatchClause() {
-        return catchClauseEClass;
-    }
+		return catchClauseEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getCatchClause_Exception() {
-        return (EReference)catchClauseEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)catchClauseEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getCatchClause_Filter() {
-        return (EReference)catchClauseEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)catchClauseEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getCatchClause_Body() {
-        return (EReference)catchClauseEClass.getEStructuralFeatures().get(2);
-    }
+		return (EReference)catchClauseEClass.getEStructuralFeatures().get(2);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getFinallyClause() {
-        return finallyClauseEClass;
-    }
+		return finallyClauseEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getFinallyClause_Body() {
-        return (EReference)finallyClauseEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)finallyClauseEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getFunctionExpression() {
-        return functionExpressionEClass;
-    }
+		return functionExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
+	public EReference getFunctionExpression_Documentation() {
+		return (EReference)functionExpressionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getFunctionExpression_Identifier() {
-        return (EReference)functionExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)functionExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getFunctionExpression_Parameters() {
-        return (EReference)functionExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)functionExpressionEClass.getEStructuralFeatures().get(2);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getFunctionExpression_ReturnType() {
-        return (EReference)functionExpressionEClass.getEStructuralFeatures().get(2);
-    }
+		return (EReference)functionExpressionEClass.getEStructuralFeatures().get(3);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getFunctionExpression_Body() {
-        return (EReference)functionExpressionEClass.getEStructuralFeatures().get(3);
-    }
+		return (EReference)functionExpressionEClass.getEStructuralFeatures().get(4);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getFunctionExpression_ParametersPosition() {
-        return (EAttribute)functionExpressionEClass.getEStructuralFeatures().get(4);
-    }
+		return (EAttribute)functionExpressionEClass.getEStructuralFeatures().get(5);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getParameter() {
-        return parameterEClass;
-    }
+		return parameterEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getParameter_Name() {
-        return (EReference)parameterEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)parameterEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getParameter_Type() {
-        return (EReference)parameterEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)parameterEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getSource() {
-        return sourceEClass;
-    }
+		return sourceEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getSource_Statements() {
-        return (EReference)sourceEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)sourceEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getConstStatement() {
-        return constStatementEClass;
-    }
+		return constStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getConstStatement_Declarations() {
-        return (EReference)constStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)constStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getPropertyIdentifier() {
-        return propertyIdentifierEClass;
-    }
+		return propertyIdentifierEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getIProperty() {
-        return iPropertyEClass;
-    }
+		return iPropertyEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getXmlInitializer() {
-        return xmlInitializerEClass;
-    }
+		return xmlInitializerEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getXmlInitializer_Fragments() {
-        return (EReference)xmlInitializerEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)xmlInitializerEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getAttributeIdentifier() {
-        return attributeIdentifierEClass;
-    }
+		return attributeIdentifierEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getAttributeIdentifier_Selector() {
-        return (EReference)attributeIdentifierEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)attributeIdentifierEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getISelector() {
-        return iSelectorEClass;
-    }
+		return iSelectorEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getQualifiedIdentifier() {
-        return qualifiedIdentifierEClass;
-    }
+		return qualifiedIdentifierEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getQualifiedIdentifier_Namespace() {
-        return (EReference)qualifiedIdentifierEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)qualifiedIdentifierEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getQualifiedIdentifier_Member() {
-        return (EReference)qualifiedIdentifierEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)qualifiedIdentifierEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getIUnqualifiedSelector() {
-        return iUnqualifiedSelectorEClass;
-    }
+		return iUnqualifiedSelectorEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getWildcardIdentifier() {
-        return wildcardIdentifierEClass;
-    }
+		return wildcardIdentifierEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getIPropertySelector() {
-        return iPropertySelectorEClass;
-    }
+		return iPropertySelectorEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getExpressionSelector() {
-        return expressionSelectorEClass;
-    }
+		return expressionSelectorEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getExpressionSelector_Index() {
-        return (EReference)expressionSelectorEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)expressionSelectorEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getXmlFragment() {
-        return xmlFragmentEClass;
-    }
+		return xmlFragmentEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getXmlTextFragment() {
-        return xmlTextFragmentEClass;
-    }
+		return xmlTextFragmentEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getXmlTextFragment_Text() {
-        return (EAttribute)xmlTextFragmentEClass.getEStructuralFeatures().get(0);
-    }
+		return (EAttribute)xmlTextFragmentEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getXmlExpressionFragment() {
-        return xmlExpressionFragmentEClass;
-    }
+		return xmlExpressionFragmentEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getXmlExpressionFragment_Expression() {
-        return (EReference)xmlExpressionFragmentEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)xmlExpressionFragmentEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getDescendantAccessExpression() {
-        return descendantAccessExpressionEClass;
-    }
+		return descendantAccessExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getDescendantAccessExpression_Object() {
-        return (EReference)descendantAccessExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)descendantAccessExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getDescendantAccessExpression_Property() {
-        return (EReference)descendantAccessExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)descendantAccessExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getFilterExpression() {
-        return filterExpressionEClass;
-    }
+		return filterExpressionEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getFilterExpression_Object() {
-        return (EReference)filterExpressionEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)filterExpressionEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getFilterExpression_Filter() {
-        return (EReference)filterExpressionEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)filterExpressionEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getDefaultXmlNamespaceStatement() {
-        return defaultXmlNamespaceStatementEClass;
-    }
+		return defaultXmlNamespaceStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getDefaultXmlNamespaceStatement_Expression() {
-        return (EReference)defaultXmlNamespaceStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)defaultXmlNamespaceStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getForEachInStatement() {
-        return forEachInStatementEClass;
-    }
+		return forEachInStatementEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getForEachInStatement_Item() {
-        return (EReference)forEachInStatementEClass.getEStructuralFeatures().get(0);
-    }
+		return (EReference)forEachInStatementEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EReference getForEachInStatement_Collection() {
-        return (EReference)forEachInStatementEClass.getEStructuralFeatures().get(1);
-    }
+		return (EReference)forEachInStatementEClass.getEStructuralFeatures().get(1);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EClass getType() {
-        return typeEClass;
-    }
+		return typeEClass;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EAttribute getType_Name() {
-        return (EAttribute)typeEClass.getEStructuralFeatures().get(0);
-    }
+		return (EAttribute)typeEClass.getEStructuralFeatures().get(0);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EEnum getUnaryOperator() {
-        return unaryOperatorEEnum;
-    }
+		return unaryOperatorEEnum;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EEnum getBinaryOperator() {
-        return binaryOperatorEEnum;
-    }
+		return binaryOperatorEEnum;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public DomFactory getDomFactory() {
-        return (DomFactory)getEFactoryInstance();
-    }
+		return (DomFactory)getEFactoryInstance();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private boolean isCreated = false;
 
 	/**
-     * Creates the meta-model objects for the package.  This method is
-     * guarded to have no affect on any invocation but its first.
-     * <!-- begin-user-doc -->
+	 * Creates the meta-model objects for the package.  This method is
+	 * guarded to have no affect on any invocation but its first.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public void createPackageContents() {
-        if (isCreated) return;
-        isCreated = true;
+		if (isCreated) return;
+		isCreated = true;
 
-        // Create classes and their features
-        nodeEClass = createEClass(NODE);
-        createEAttribute(nodeEClass, NODE__BEGIN);
-        createEAttribute(nodeEClass, NODE__END);
+		// Create classes and their features
+		nodeEClass = createEClass(NODE);
+		createEAttribute(nodeEClass, NODE__BEGIN);
+		createEAttribute(nodeEClass, NODE__END);
 
-        commentEClass = createEClass(COMMENT);
+		commentEClass = createEClass(COMMENT);
+		createEAttribute(commentEClass, COMMENT__TEXT);
 
-        mutliLineCommentEClass = createEClass(MUTLI_LINE_COMMENT);
+		identifierEClass = createEClass(IDENTIFIER);
+		createEAttribute(identifierEClass, IDENTIFIER__NAME);
 
-        singleLineCommentEClass = createEClass(SINGLE_LINE_COMMENT);
+		variableReferenceEClass = createEClass(VARIABLE_REFERENCE);
+		createEReference(variableReferenceEClass, VARIABLE_REFERENCE__VARIABLE);
 
-        identifierEClass = createEClass(IDENTIFIER);
-        createEAttribute(identifierEClass, IDENTIFIER__NAME);
+		labelEClass = createEClass(LABEL);
+		createEAttribute(labelEClass, LABEL__NAME);
 
-        variableReferenceEClass = createEClass(VARIABLE_REFERENCE);
-        createEReference(variableReferenceEClass, VARIABLE_REFERENCE__VARIABLE);
+		expressionEClass = createEClass(EXPRESSION);
 
-        labelEClass = createEClass(LABEL);
-        createEAttribute(labelEClass, LABEL__NAME);
+		nullLiteralEClass = createEClass(NULL_LITERAL);
 
-        expressionEClass = createEClass(EXPRESSION);
+		booleanLiteralEClass = createEClass(BOOLEAN_LITERAL);
+		createEAttribute(booleanLiteralEClass, BOOLEAN_LITERAL__TEXT);
 
-        nullLiteralEClass = createEClass(NULL_LITERAL);
+		numericLiteralEClass = createEClass(NUMERIC_LITERAL);
+		createEAttribute(numericLiteralEClass, NUMERIC_LITERAL__TEXT);
 
-        booleanLiteralEClass = createEClass(BOOLEAN_LITERAL);
-        createEAttribute(booleanLiteralEClass, BOOLEAN_LITERAL__TEXT);
+		stringLiteralEClass = createEClass(STRING_LITERAL);
+		createEAttribute(stringLiteralEClass, STRING_LITERAL__TEXT);
 
-        numericLiteralEClass = createEClass(NUMERIC_LITERAL);
-        createEAttribute(numericLiteralEClass, NUMERIC_LITERAL__TEXT);
+		regularExpressionLiteralEClass = createEClass(REGULAR_EXPRESSION_LITERAL);
+		createEAttribute(regularExpressionLiteralEClass, REGULAR_EXPRESSION_LITERAL__TEXT);
 
-        stringLiteralEClass = createEClass(STRING_LITERAL);
-        createEAttribute(stringLiteralEClass, STRING_LITERAL__TEXT);
+		thisExpressionEClass = createEClass(THIS_EXPRESSION);
 
-        regularExpressionLiteralEClass = createEClass(REGULAR_EXPRESSION_LITERAL);
-        createEAttribute(regularExpressionLiteralEClass, REGULAR_EXPRESSION_LITERAL__TEXT);
+		arrayLiteralEClass = createEClass(ARRAY_LITERAL);
+		createEReference(arrayLiteralEClass, ARRAY_LITERAL__ELEMENTS);
 
-        thisExpressionEClass = createEClass(THIS_EXPRESSION);
+		iArrayElementEClass = createEClass(IARRAY_ELEMENT);
 
-        arrayLiteralEClass = createEClass(ARRAY_LITERAL);
-        createEReference(arrayLiteralEClass, ARRAY_LITERAL__ELEMENTS);
+		elisionEClass = createEClass(ELISION);
 
-        iArrayElementEClass = createEClass(IARRAY_ELEMENT);
+		objectLiteralEClass = createEClass(OBJECT_LITERAL);
+		createEReference(objectLiteralEClass, OBJECT_LITERAL__PROPERTIES);
 
-        elisionEClass = createEClass(ELISION);
+		propertyAssignmentEClass = createEClass(PROPERTY_ASSIGNMENT);
+		createEReference(propertyAssignmentEClass, PROPERTY_ASSIGNMENT__NAME);
 
-        objectLiteralEClass = createEClass(OBJECT_LITERAL);
-        createEReference(objectLiteralEClass, OBJECT_LITERAL__PROPERTIES);
+		iPropertyNameEClass = createEClass(IPROPERTY_NAME);
 
-        propertyAssignmentEClass = createEClass(PROPERTY_ASSIGNMENT);
-        createEReference(propertyAssignmentEClass, PROPERTY_ASSIGNMENT__NAME);
+		simplePropertyAssignmentEClass = createEClass(SIMPLE_PROPERTY_ASSIGNMENT);
+		createEReference(simplePropertyAssignmentEClass, SIMPLE_PROPERTY_ASSIGNMENT__INITIALIZER);
 
-        iPropertyNameEClass = createEClass(IPROPERTY_NAME);
+		accessorAssignmentEClass = createEClass(ACCESSOR_ASSIGNMENT);
+		createEReference(accessorAssignmentEClass, ACCESSOR_ASSIGNMENT__BODY);
 
-        simplePropertyAssignmentEClass = createEClass(SIMPLE_PROPERTY_ASSIGNMENT);
-        createEReference(simplePropertyAssignmentEClass, SIMPLE_PROPERTY_ASSIGNMENT__INITIALIZER);
+		getterAssignmentEClass = createEClass(GETTER_ASSIGNMENT);
 
-        accessorAssignmentEClass = createEClass(ACCESSOR_ASSIGNMENT);
-        createEReference(accessorAssignmentEClass, ACCESSOR_ASSIGNMENT__BODY);
+		setterAssignmentEClass = createEClass(SETTER_ASSIGNMENT);
+		createEReference(setterAssignmentEClass, SETTER_ASSIGNMENT__PARAMETER);
 
-        getterAssignmentEClass = createEClass(GETTER_ASSIGNMENT);
+		parenthesizedExpressionEClass = createEClass(PARENTHESIZED_EXPRESSION);
+		createEReference(parenthesizedExpressionEClass, PARENTHESIZED_EXPRESSION__ENCLOSED);
 
-        setterAssignmentEClass = createEClass(SETTER_ASSIGNMENT);
-        createEReference(setterAssignmentEClass, SETTER_ASSIGNMENT__PARAMETER);
+		arrayAccessExpressionEClass = createEClass(ARRAY_ACCESS_EXPRESSION);
+		createEReference(arrayAccessExpressionEClass, ARRAY_ACCESS_EXPRESSION__ARRAY);
+		createEReference(arrayAccessExpressionEClass, ARRAY_ACCESS_EXPRESSION__INDEX);
 
-        parenthesizedExpressionEClass = createEClass(PARENTHESIZED_EXPRESSION);
-        createEReference(parenthesizedExpressionEClass, PARENTHESIZED_EXPRESSION__ENCLOSED);
+		propertyAccessExpressionEClass = createEClass(PROPERTY_ACCESS_EXPRESSION);
+		createEReference(propertyAccessExpressionEClass, PROPERTY_ACCESS_EXPRESSION__OBJECT);
+		createEReference(propertyAccessExpressionEClass, PROPERTY_ACCESS_EXPRESSION__PROPERTY);
 
-        arrayAccessExpressionEClass = createEClass(ARRAY_ACCESS_EXPRESSION);
-        createEReference(arrayAccessExpressionEClass, ARRAY_ACCESS_EXPRESSION__ARRAY);
-        createEReference(arrayAccessExpressionEClass, ARRAY_ACCESS_EXPRESSION__INDEX);
+		newExpressionEClass = createEClass(NEW_EXPRESSION);
+		createEReference(newExpressionEClass, NEW_EXPRESSION__CONSTRUCTOR);
+		createEReference(newExpressionEClass, NEW_EXPRESSION__ARGUMENTS);
 
-        propertyAccessExpressionEClass = createEClass(PROPERTY_ACCESS_EXPRESSION);
-        createEReference(propertyAccessExpressionEClass, PROPERTY_ACCESS_EXPRESSION__OBJECT);
-        createEReference(propertyAccessExpressionEClass, PROPERTY_ACCESS_EXPRESSION__PROPERTY);
+		callExpressionEClass = createEClass(CALL_EXPRESSION);
+		createEReference(callExpressionEClass, CALL_EXPRESSION__APPLICANT);
+		createEReference(callExpressionEClass, CALL_EXPRESSION__ARGUMENTS);
 
-        newExpressionEClass = createEClass(NEW_EXPRESSION);
-        createEReference(newExpressionEClass, NEW_EXPRESSION__CONSTRUCTOR);
-        createEReference(newExpressionEClass, NEW_EXPRESSION__ARGUMENTS);
+		unaryExpressionEClass = createEClass(UNARY_EXPRESSION);
+		createEReference(unaryExpressionEClass, UNARY_EXPRESSION__ARGUMENT);
+		createEAttribute(unaryExpressionEClass, UNARY_EXPRESSION__OPERATION);
 
-        callExpressionEClass = createEClass(CALL_EXPRESSION);
-        createEReference(callExpressionEClass, CALL_EXPRESSION__APPLICANT);
-        createEReference(callExpressionEClass, CALL_EXPRESSION__ARGUMENTS);
+		binaryExpressionEClass = createEClass(BINARY_EXPRESSION);
+		createEReference(binaryExpressionEClass, BINARY_EXPRESSION__LEFT);
+		createEReference(binaryExpressionEClass, BINARY_EXPRESSION__RIGHT);
+		createEAttribute(binaryExpressionEClass, BINARY_EXPRESSION__OPERATION);
+		createEAttribute(binaryExpressionEClass, BINARY_EXPRESSION__OPERATOR_POSITION);
 
-        unaryExpressionEClass = createEClass(UNARY_EXPRESSION);
-        createEReference(unaryExpressionEClass, UNARY_EXPRESSION__ARGUMENT);
-        createEAttribute(unaryExpressionEClass, UNARY_EXPRESSION__OPERATION);
+		conditionalExpressionEClass = createEClass(CONDITIONAL_EXPRESSION);
+		createEReference(conditionalExpressionEClass, CONDITIONAL_EXPRESSION__PREDICATE);
+		createEReference(conditionalExpressionEClass, CONDITIONAL_EXPRESSION__CONSEQUENT);
+		createEReference(conditionalExpressionEClass, CONDITIONAL_EXPRESSION__ALTERNATIVE);
 
-        binaryExpressionEClass = createEClass(BINARY_EXPRESSION);
-        createEReference(binaryExpressionEClass, BINARY_EXPRESSION__LEFT);
-        createEReference(binaryExpressionEClass, BINARY_EXPRESSION__RIGHT);
-        createEAttribute(binaryExpressionEClass, BINARY_EXPRESSION__OPERATION);
-        createEAttribute(binaryExpressionEClass, BINARY_EXPRESSION__OPERATOR_POSITION);
+		statementEClass = createEClass(STATEMENT);
 
-        conditionalExpressionEClass = createEClass(CONDITIONAL_EXPRESSION);
-        createEReference(conditionalExpressionEClass, CONDITIONAL_EXPRESSION__PREDICATE);
-        createEReference(conditionalExpressionEClass, CONDITIONAL_EXPRESSION__CONSEQUENT);
-        createEReference(conditionalExpressionEClass, CONDITIONAL_EXPRESSION__ALTERNATIVE);
+		blockStatementEClass = createEClass(BLOCK_STATEMENT);
+		createEReference(blockStatementEClass, BLOCK_STATEMENT__STATEMENTS);
 
-        statementEClass = createEClass(STATEMENT);
+		variableStatementEClass = createEClass(VARIABLE_STATEMENT);
+		createEReference(variableStatementEClass, VARIABLE_STATEMENT__DECLARATIONS);
 
-        blockStatementEClass = createEClass(BLOCK_STATEMENT);
-        createEReference(blockStatementEClass, BLOCK_STATEMENT__STATEMENTS);
+		variableDeclarationEClass = createEClass(VARIABLE_DECLARATION);
+		createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__IDENTIFIER);
+		createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__TYPE);
+		createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__INITIALIZER);
 
-        variableStatementEClass = createEClass(VARIABLE_STATEMENT);
-        createEReference(variableStatementEClass, VARIABLE_STATEMENT__DECLARATIONS);
+		emptyStatementEClass = createEClass(EMPTY_STATEMENT);
 
-        variableDeclarationEClass = createEClass(VARIABLE_DECLARATION);
-        createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__IDENTIFIER);
-        createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__TYPE);
-        createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__INITIALIZER);
+		expressionStatementEClass = createEClass(EXPRESSION_STATEMENT);
+		createEReference(expressionStatementEClass, EXPRESSION_STATEMENT__EXPRESSION);
 
-        emptyStatementEClass = createEClass(EMPTY_STATEMENT);
+		ifStatementEClass = createEClass(IF_STATEMENT);
+		createEReference(ifStatementEClass, IF_STATEMENT__PREDICATE);
+		createEReference(ifStatementEClass, IF_STATEMENT__CONSEQUENT);
+		createEReference(ifStatementEClass, IF_STATEMENT__ALTERNATIVE);
 
-        expressionStatementEClass = createEClass(EXPRESSION_STATEMENT);
-        createEReference(expressionStatementEClass, EXPRESSION_STATEMENT__EXPRESSION);
+		iterationStatementEClass = createEClass(ITERATION_STATEMENT);
+		createEReference(iterationStatementEClass, ITERATION_STATEMENT__BODY);
 
-        ifStatementEClass = createEClass(IF_STATEMENT);
-        createEReference(ifStatementEClass, IF_STATEMENT__PREDICATE);
-        createEReference(ifStatementEClass, IF_STATEMENT__CONSEQUENT);
-        createEReference(ifStatementEClass, IF_STATEMENT__ALTERNATIVE);
+		doStatementEClass = createEClass(DO_STATEMENT);
+		createEReference(doStatementEClass, DO_STATEMENT__CONDITION);
 
-        iterationStatementEClass = createEClass(ITERATION_STATEMENT);
-        createEReference(iterationStatementEClass, ITERATION_STATEMENT__BODY);
+		whileStatementEClass = createEClass(WHILE_STATEMENT);
+		createEReference(whileStatementEClass, WHILE_STATEMENT__CONDITION);
 
-        doStatementEClass = createEClass(DO_STATEMENT);
-        createEReference(doStatementEClass, DO_STATEMENT__CONDITION);
+		forStatementEClass = createEClass(FOR_STATEMENT);
+		createEReference(forStatementEClass, FOR_STATEMENT__INITIALIZATION);
+		createEReference(forStatementEClass, FOR_STATEMENT__CONDITION);
+		createEReference(forStatementEClass, FOR_STATEMENT__INCREMENT);
 
-        whileStatementEClass = createEClass(WHILE_STATEMENT);
-        createEReference(whileStatementEClass, WHILE_STATEMENT__CONDITION);
+		iForInitializerEClass = createEClass(IFOR_INITIALIZER);
 
-        forStatementEClass = createEClass(FOR_STATEMENT);
-        createEReference(forStatementEClass, FOR_STATEMENT__INITIALIZATION);
-        createEReference(forStatementEClass, FOR_STATEMENT__CONDITION);
-        createEReference(forStatementEClass, FOR_STATEMENT__INCREMENT);
+		forInStatementEClass = createEClass(FOR_IN_STATEMENT);
+		createEReference(forInStatementEClass, FOR_IN_STATEMENT__ITEM);
+		createEReference(forInStatementEClass, FOR_IN_STATEMENT__COLLECTION);
 
-        iForInitializerEClass = createEClass(IFOR_INITIALIZER);
+		continueStatementEClass = createEClass(CONTINUE_STATEMENT);
+		createEReference(continueStatementEClass, CONTINUE_STATEMENT__LABEL);
 
-        forInStatementEClass = createEClass(FOR_IN_STATEMENT);
-        createEReference(forInStatementEClass, FOR_IN_STATEMENT__ITEM);
-        createEReference(forInStatementEClass, FOR_IN_STATEMENT__COLLECTION);
+		breakStatementEClass = createEClass(BREAK_STATEMENT);
+		createEReference(breakStatementEClass, BREAK_STATEMENT__LABEL);
 
-        continueStatementEClass = createEClass(CONTINUE_STATEMENT);
-        createEReference(continueStatementEClass, CONTINUE_STATEMENT__LABEL);
+		returnStatementEClass = createEClass(RETURN_STATEMENT);
+		createEReference(returnStatementEClass, RETURN_STATEMENT__EXPRESSION);
 
-        breakStatementEClass = createEClass(BREAK_STATEMENT);
-        createEReference(breakStatementEClass, BREAK_STATEMENT__LABEL);
+		withStatementEClass = createEClass(WITH_STATEMENT);
+		createEReference(withStatementEClass, WITH_STATEMENT__EXPRESSION);
+		createEReference(withStatementEClass, WITH_STATEMENT__STATEMENT);
 
-        returnStatementEClass = createEClass(RETURN_STATEMENT);
-        createEReference(returnStatementEClass, RETURN_STATEMENT__EXPRESSION);
+		switchStatementEClass = createEClass(SWITCH_STATEMENT);
+		createEReference(switchStatementEClass, SWITCH_STATEMENT__SELECTOR);
+		createEReference(switchStatementEClass, SWITCH_STATEMENT__ELEMENTS);
 
-        withStatementEClass = createEClass(WITH_STATEMENT);
-        createEReference(withStatementEClass, WITH_STATEMENT__EXPRESSION);
-        createEReference(withStatementEClass, WITH_STATEMENT__STATEMENT);
+		switchElementEClass = createEClass(SWITCH_ELEMENT);
+		createEReference(switchElementEClass, SWITCH_ELEMENT__STATEMENTS);
 
-        switchStatementEClass = createEClass(SWITCH_STATEMENT);
-        createEReference(switchStatementEClass, SWITCH_STATEMENT__SELECTOR);
-        createEReference(switchStatementEClass, SWITCH_STATEMENT__ELEMENTS);
+		caseClauseEClass = createEClass(CASE_CLAUSE);
+		createEReference(caseClauseEClass, CASE_CLAUSE__EXPRESSION);
 
-        switchElementEClass = createEClass(SWITCH_ELEMENT);
-        createEReference(switchElementEClass, SWITCH_ELEMENT__STATEMENTS);
+		defaultClauseEClass = createEClass(DEFAULT_CLAUSE);
 
-        caseClauseEClass = createEClass(CASE_CLAUSE);
-        createEReference(caseClauseEClass, CASE_CLAUSE__EXPRESSION);
+		labeledStatementEClass = createEClass(LABELED_STATEMENT);
+		createEReference(labeledStatementEClass, LABELED_STATEMENT__LABEL);
+		createEReference(labeledStatementEClass, LABELED_STATEMENT__STATEMENT);
 
-        defaultClauseEClass = createEClass(DEFAULT_CLAUSE);
+		throwStatementEClass = createEClass(THROW_STATEMENT);
+		createEReference(throwStatementEClass, THROW_STATEMENT__EXCEPTION);
 
-        labeledStatementEClass = createEClass(LABELED_STATEMENT);
-        createEReference(labeledStatementEClass, LABELED_STATEMENT__LABEL);
-        createEReference(labeledStatementEClass, LABELED_STATEMENT__STATEMENT);
+		tryStatementEClass = createEClass(TRY_STATEMENT);
+		createEReference(tryStatementEClass, TRY_STATEMENT__BODY);
+		createEReference(tryStatementEClass, TRY_STATEMENT__CATCHES);
+		createEReference(tryStatementEClass, TRY_STATEMENT__FINALLY_CLAUSE);
 
-        throwStatementEClass = createEClass(THROW_STATEMENT);
-        createEReference(throwStatementEClass, THROW_STATEMENT__EXCEPTION);
+		catchClauseEClass = createEClass(CATCH_CLAUSE);
+		createEReference(catchClauseEClass, CATCH_CLAUSE__EXCEPTION);
+		createEReference(catchClauseEClass, CATCH_CLAUSE__FILTER);
+		createEReference(catchClauseEClass, CATCH_CLAUSE__BODY);
 
-        tryStatementEClass = createEClass(TRY_STATEMENT);
-        createEReference(tryStatementEClass, TRY_STATEMENT__BODY);
-        createEReference(tryStatementEClass, TRY_STATEMENT__CATCHES);
-        createEReference(tryStatementEClass, TRY_STATEMENT__FINALLY_CLAUSE);
+		finallyClauseEClass = createEClass(FINALLY_CLAUSE);
+		createEReference(finallyClauseEClass, FINALLY_CLAUSE__BODY);
 
-        catchClauseEClass = createEClass(CATCH_CLAUSE);
-        createEReference(catchClauseEClass, CATCH_CLAUSE__EXCEPTION);
-        createEReference(catchClauseEClass, CATCH_CLAUSE__FILTER);
-        createEReference(catchClauseEClass, CATCH_CLAUSE__BODY);
+		functionExpressionEClass = createEClass(FUNCTION_EXPRESSION);
+		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__DOCUMENTATION);
+		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__IDENTIFIER);
+		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__PARAMETERS);
+		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__RETURN_TYPE);
+		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__BODY);
+		createEAttribute(functionExpressionEClass, FUNCTION_EXPRESSION__PARAMETERS_POSITION);
 
-        finallyClauseEClass = createEClass(FINALLY_CLAUSE);
-        createEReference(finallyClauseEClass, FINALLY_CLAUSE__BODY);
+		parameterEClass = createEClass(PARAMETER);
+		createEReference(parameterEClass, PARAMETER__NAME);
+		createEReference(parameterEClass, PARAMETER__TYPE);
 
-        functionExpressionEClass = createEClass(FUNCTION_EXPRESSION);
-        createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__IDENTIFIER);
-        createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__PARAMETERS);
-        createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__RETURN_TYPE);
-        createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__BODY);
-        createEAttribute(functionExpressionEClass, FUNCTION_EXPRESSION__PARAMETERS_POSITION);
+		sourceEClass = createEClass(SOURCE);
+		createEReference(sourceEClass, SOURCE__STATEMENTS);
 
-        parameterEClass = createEClass(PARAMETER);
-        createEReference(parameterEClass, PARAMETER__NAME);
-        createEReference(parameterEClass, PARAMETER__TYPE);
+		constStatementEClass = createEClass(CONST_STATEMENT);
+		createEReference(constStatementEClass, CONST_STATEMENT__DECLARATIONS);
 
-        sourceEClass = createEClass(SOURCE);
-        createEReference(sourceEClass, SOURCE__STATEMENTS);
+		propertyIdentifierEClass = createEClass(PROPERTY_IDENTIFIER);
 
-        constStatementEClass = createEClass(CONST_STATEMENT);
-        createEReference(constStatementEClass, CONST_STATEMENT__DECLARATIONS);
+		iPropertyEClass = createEClass(IPROPERTY);
 
-        propertyIdentifierEClass = createEClass(PROPERTY_IDENTIFIER);
+		xmlInitializerEClass = createEClass(XML_INITIALIZER);
+		createEReference(xmlInitializerEClass, XML_INITIALIZER__FRAGMENTS);
 
-        iPropertyEClass = createEClass(IPROPERTY);
+		attributeIdentifierEClass = createEClass(ATTRIBUTE_IDENTIFIER);
+		createEReference(attributeIdentifierEClass, ATTRIBUTE_IDENTIFIER__SELECTOR);
 
-        xmlInitializerEClass = createEClass(XML_INITIALIZER);
-        createEReference(xmlInitializerEClass, XML_INITIALIZER__FRAGMENTS);
+		iSelectorEClass = createEClass(ISELECTOR);
 
-        attributeIdentifierEClass = createEClass(ATTRIBUTE_IDENTIFIER);
-        createEReference(attributeIdentifierEClass, ATTRIBUTE_IDENTIFIER__SELECTOR);
+		qualifiedIdentifierEClass = createEClass(QUALIFIED_IDENTIFIER);
+		createEReference(qualifiedIdentifierEClass, QUALIFIED_IDENTIFIER__NAMESPACE);
+		createEReference(qualifiedIdentifierEClass, QUALIFIED_IDENTIFIER__MEMBER);
 
-        iSelectorEClass = createEClass(ISELECTOR);
+		iUnqualifiedSelectorEClass = createEClass(IUNQUALIFIED_SELECTOR);
 
-        qualifiedIdentifierEClass = createEClass(QUALIFIED_IDENTIFIER);
-        createEReference(qualifiedIdentifierEClass, QUALIFIED_IDENTIFIER__NAMESPACE);
-        createEReference(qualifiedIdentifierEClass, QUALIFIED_IDENTIFIER__MEMBER);
+		wildcardIdentifierEClass = createEClass(WILDCARD_IDENTIFIER);
 
-        iUnqualifiedSelectorEClass = createEClass(IUNQUALIFIED_SELECTOR);
+		iPropertySelectorEClass = createEClass(IPROPERTY_SELECTOR);
 
-        wildcardIdentifierEClass = createEClass(WILDCARD_IDENTIFIER);
+		expressionSelectorEClass = createEClass(EXPRESSION_SELECTOR);
+		createEReference(expressionSelectorEClass, EXPRESSION_SELECTOR__INDEX);
 
-        iPropertySelectorEClass = createEClass(IPROPERTY_SELECTOR);
+		xmlFragmentEClass = createEClass(XML_FRAGMENT);
 
-        expressionSelectorEClass = createEClass(EXPRESSION_SELECTOR);
-        createEReference(expressionSelectorEClass, EXPRESSION_SELECTOR__INDEX);
+		xmlTextFragmentEClass = createEClass(XML_TEXT_FRAGMENT);
+		createEAttribute(xmlTextFragmentEClass, XML_TEXT_FRAGMENT__TEXT);
 
-        xmlFragmentEClass = createEClass(XML_FRAGMENT);
+		xmlExpressionFragmentEClass = createEClass(XML_EXPRESSION_FRAGMENT);
+		createEReference(xmlExpressionFragmentEClass, XML_EXPRESSION_FRAGMENT__EXPRESSION);
 
-        xmlTextFragmentEClass = createEClass(XML_TEXT_FRAGMENT);
-        createEAttribute(xmlTextFragmentEClass, XML_TEXT_FRAGMENT__TEXT);
+		descendantAccessExpressionEClass = createEClass(DESCENDANT_ACCESS_EXPRESSION);
+		createEReference(descendantAccessExpressionEClass, DESCENDANT_ACCESS_EXPRESSION__OBJECT);
+		createEReference(descendantAccessExpressionEClass, DESCENDANT_ACCESS_EXPRESSION__PROPERTY);
 
-        xmlExpressionFragmentEClass = createEClass(XML_EXPRESSION_FRAGMENT);
-        createEReference(xmlExpressionFragmentEClass, XML_EXPRESSION_FRAGMENT__EXPRESSION);
+		filterExpressionEClass = createEClass(FILTER_EXPRESSION);
+		createEReference(filterExpressionEClass, FILTER_EXPRESSION__OBJECT);
+		createEReference(filterExpressionEClass, FILTER_EXPRESSION__FILTER);
 
-        descendantAccessExpressionEClass = createEClass(DESCENDANT_ACCESS_EXPRESSION);
-        createEReference(descendantAccessExpressionEClass, DESCENDANT_ACCESS_EXPRESSION__OBJECT);
-        createEReference(descendantAccessExpressionEClass, DESCENDANT_ACCESS_EXPRESSION__PROPERTY);
+		defaultXmlNamespaceStatementEClass = createEClass(DEFAULT_XML_NAMESPACE_STATEMENT);
+		createEReference(defaultXmlNamespaceStatementEClass, DEFAULT_XML_NAMESPACE_STATEMENT__EXPRESSION);
 
-        filterExpressionEClass = createEClass(FILTER_EXPRESSION);
-        createEReference(filterExpressionEClass, FILTER_EXPRESSION__OBJECT);
-        createEReference(filterExpressionEClass, FILTER_EXPRESSION__FILTER);
+		forEachInStatementEClass = createEClass(FOR_EACH_IN_STATEMENT);
+		createEReference(forEachInStatementEClass, FOR_EACH_IN_STATEMENT__ITEM);
+		createEReference(forEachInStatementEClass, FOR_EACH_IN_STATEMENT__COLLECTION);
 
-        defaultXmlNamespaceStatementEClass = createEClass(DEFAULT_XML_NAMESPACE_STATEMENT);
-        createEReference(defaultXmlNamespaceStatementEClass, DEFAULT_XML_NAMESPACE_STATEMENT__EXPRESSION);
+		typeEClass = createEClass(TYPE);
+		createEAttribute(typeEClass, TYPE__NAME);
 
-        forEachInStatementEClass = createEClass(FOR_EACH_IN_STATEMENT);
-        createEReference(forEachInStatementEClass, FOR_EACH_IN_STATEMENT__ITEM);
-        createEReference(forEachInStatementEClass, FOR_EACH_IN_STATEMENT__COLLECTION);
-
-        typeEClass = createEClass(TYPE);
-        createEAttribute(typeEClass, TYPE__NAME);
-
-        // Create enums
-        unaryOperatorEEnum = createEEnum(UNARY_OPERATOR);
-        binaryOperatorEEnum = createEEnum(BINARY_OPERATOR);
-    }
+		// Create enums
+		unaryOperatorEEnum = createEEnum(UNARY_OPERATOR);
+		binaryOperatorEEnum = createEEnum(BINARY_OPERATOR);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	private boolean isInitialized = false;
 
 	/**
-     * Complete the initialization of the package and its meta-model.  This
-     * method is guarded to have no affect on any invocation but its first.
-     * <!-- begin-user-doc -->
+	 * Complete the initialization of the package and its meta-model.  This
+	 * method is guarded to have no affect on any invocation but its first.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public void initializePackageContents() {
-        if (isInitialized) return;
-        isInitialized = true;
-
-        // Initialize package
-        setName(eNAME);
-        setNsPrefix(eNS_PREFIX);
-        setNsURI(eNS_URI);
-
-        // Create type parameters
-
-        // Set bounds for type parameters
-
-        // Add supertypes to classes
-        commentEClass.getESuperTypes().add(this.getNode());
-        mutliLineCommentEClass.getESuperTypes().add(this.getComment());
-        singleLineCommentEClass.getESuperTypes().add(this.getComment());
-        identifierEClass.getESuperTypes().add(this.getNode());
-        identifierEClass.getESuperTypes().add(this.getIPropertyName());
-        identifierEClass.getESuperTypes().add(this.getIPropertySelector());
-        identifierEClass.getESuperTypes().add(this.getIProperty());
-        variableReferenceEClass.getESuperTypes().add(this.getExpression());
-        labelEClass.getESuperTypes().add(this.getNode());
-        expressionEClass.getESuperTypes().add(this.getNode());
-        expressionEClass.getESuperTypes().add(this.getIArrayElement());
-        expressionEClass.getESuperTypes().add(this.getIForInitializer());
-        nullLiteralEClass.getESuperTypes().add(this.getExpression());
-        booleanLiteralEClass.getESuperTypes().add(this.getExpression());
-        numericLiteralEClass.getESuperTypes().add(this.getExpression());
-        numericLiteralEClass.getESuperTypes().add(this.getIPropertyName());
-        stringLiteralEClass.getESuperTypes().add(this.getExpression());
-        stringLiteralEClass.getESuperTypes().add(this.getIPropertyName());
-        regularExpressionLiteralEClass.getESuperTypes().add(this.getExpression());
-        thisExpressionEClass.getESuperTypes().add(this.getExpression());
-        arrayLiteralEClass.getESuperTypes().add(this.getExpression());
-        iArrayElementEClass.getESuperTypes().add(this.getNode());
-        elisionEClass.getESuperTypes().add(this.getIArrayElement());
-        objectLiteralEClass.getESuperTypes().add(this.getExpression());
-        propertyAssignmentEClass.getESuperTypes().add(this.getNode());
-        iPropertyNameEClass.getESuperTypes().add(this.getNode());
-        simplePropertyAssignmentEClass.getESuperTypes().add(this.getPropertyAssignment());
-        accessorAssignmentEClass.getESuperTypes().add(this.getPropertyAssignment());
-        getterAssignmentEClass.getESuperTypes().add(this.getAccessorAssignment());
-        setterAssignmentEClass.getESuperTypes().add(this.getAccessorAssignment());
-        parenthesizedExpressionEClass.getESuperTypes().add(this.getExpression());
-        arrayAccessExpressionEClass.getESuperTypes().add(this.getExpression());
-        propertyAccessExpressionEClass.getESuperTypes().add(this.getExpression());
-        newExpressionEClass.getESuperTypes().add(this.getExpression());
-        callExpressionEClass.getESuperTypes().add(this.getExpression());
-        unaryExpressionEClass.getESuperTypes().add(this.getExpression());
-        binaryExpressionEClass.getESuperTypes().add(this.getExpression());
-        conditionalExpressionEClass.getESuperTypes().add(this.getExpression());
-        statementEClass.getESuperTypes().add(this.getNode());
-        blockStatementEClass.getESuperTypes().add(this.getStatement());
-        variableStatementEClass.getESuperTypes().add(this.getStatement());
-        variableStatementEClass.getESuperTypes().add(this.getIForInitializer());
-        variableDeclarationEClass.getESuperTypes().add(this.getNode());
-        emptyStatementEClass.getESuperTypes().add(this.getStatement());
-        expressionStatementEClass.getESuperTypes().add(this.getStatement());
-        ifStatementEClass.getESuperTypes().add(this.getStatement());
-        iterationStatementEClass.getESuperTypes().add(this.getStatement());
-        doStatementEClass.getESuperTypes().add(this.getIterationStatement());
-        whileStatementEClass.getESuperTypes().add(this.getIterationStatement());
-        forStatementEClass.getESuperTypes().add(this.getIterationStatement());
-        iForInitializerEClass.getESuperTypes().add(this.getNode());
-        forInStatementEClass.getESuperTypes().add(this.getIterationStatement());
-        continueStatementEClass.getESuperTypes().add(this.getISelector());
-        breakStatementEClass.getESuperTypes().add(this.getStatement());
-        returnStatementEClass.getESuperTypes().add(this.getStatement());
-        withStatementEClass.getESuperTypes().add(this.getStatement());
-        switchStatementEClass.getESuperTypes().add(this.getStatement());
-        switchElementEClass.getESuperTypes().add(this.getNode());
-        caseClauseEClass.getESuperTypes().add(this.getSwitchElement());
-        defaultClauseEClass.getESuperTypes().add(this.getSwitchElement());
-        labeledStatementEClass.getESuperTypes().add(this.getStatement());
-        throwStatementEClass.getESuperTypes().add(this.getStatement());
-        tryStatementEClass.getESuperTypes().add(this.getStatement());
-        catchClauseEClass.getESuperTypes().add(this.getNode());
-        finallyClauseEClass.getESuperTypes().add(this.getNode());
-        functionExpressionEClass.getESuperTypes().add(this.getExpression());
-        parameterEClass.getESuperTypes().add(this.getNode());
-        sourceEClass.getESuperTypes().add(this.getNode());
-        constStatementEClass.getESuperTypes().add(this.getStatement());
-        propertyIdentifierEClass.getESuperTypes().add(this.getExpression());
-        propertyIdentifierEClass.getESuperTypes().add(this.getIProperty());
-        iPropertyEClass.getESuperTypes().add(this.getNode());
-        xmlInitializerEClass.getESuperTypes().add(this.getExpression());
-        attributeIdentifierEClass.getESuperTypes().add(this.getPropertyIdentifier());
-        iSelectorEClass.getESuperTypes().add(this.getNode());
-        qualifiedIdentifierEClass.getESuperTypes().add(this.getPropertyIdentifier());
-        qualifiedIdentifierEClass.getESuperTypes().add(this.getISelector());
-        iUnqualifiedSelectorEClass.getESuperTypes().add(this.getISelector());
-        wildcardIdentifierEClass.getESuperTypes().add(this.getPropertyIdentifier());
-        wildcardIdentifierEClass.getESuperTypes().add(this.getIPropertySelector());
-        iPropertySelectorEClass.getESuperTypes().add(this.getIUnqualifiedSelector());
-        expressionSelectorEClass.getESuperTypes().add(this.getIUnqualifiedSelector());
-        xmlFragmentEClass.getESuperTypes().add(this.getNode());
-        xmlTextFragmentEClass.getESuperTypes().add(this.getXmlFragment());
-        xmlExpressionFragmentEClass.getESuperTypes().add(this.getXmlFragment());
-        descendantAccessExpressionEClass.getESuperTypes().add(this.getExpression());
-        filterExpressionEClass.getESuperTypes().add(this.getExpression());
-        defaultXmlNamespaceStatementEClass.getESuperTypes().add(this.getStatement());
-        forEachInStatementEClass.getESuperTypes().add(this.getIterationStatement());
-        typeEClass.getESuperTypes().add(this.getNode());
+		if (isInitialized) return;
+		isInitialized = true;
+
+		// Initialize package
+		setName(eNAME);
+		setNsPrefix(eNS_PREFIX);
+		setNsURI(eNS_URI);
+
+		// Create type parameters
+
+		// Set bounds for type parameters
+
+		// Add supertypes to classes
+		commentEClass.getESuperTypes().add(this.getNode());
+		identifierEClass.getESuperTypes().add(this.getNode());
+		identifierEClass.getESuperTypes().add(this.getIPropertyName());
+		identifierEClass.getESuperTypes().add(this.getIPropertySelector());
+		identifierEClass.getESuperTypes().add(this.getIProperty());
+		variableReferenceEClass.getESuperTypes().add(this.getExpression());
+		labelEClass.getESuperTypes().add(this.getNode());
+		expressionEClass.getESuperTypes().add(this.getNode());
+		expressionEClass.getESuperTypes().add(this.getIArrayElement());
+		expressionEClass.getESuperTypes().add(this.getIForInitializer());
+		nullLiteralEClass.getESuperTypes().add(this.getExpression());
+		booleanLiteralEClass.getESuperTypes().add(this.getExpression());
+		numericLiteralEClass.getESuperTypes().add(this.getExpression());
+		numericLiteralEClass.getESuperTypes().add(this.getIPropertyName());
+		stringLiteralEClass.getESuperTypes().add(this.getExpression());
+		stringLiteralEClass.getESuperTypes().add(this.getIPropertyName());
+		regularExpressionLiteralEClass.getESuperTypes().add(this.getExpression());
+		thisExpressionEClass.getESuperTypes().add(this.getExpression());
+		arrayLiteralEClass.getESuperTypes().add(this.getExpression());
+		iArrayElementEClass.getESuperTypes().add(this.getNode());
+		elisionEClass.getESuperTypes().add(this.getIArrayElement());
+		objectLiteralEClass.getESuperTypes().add(this.getExpression());
+		propertyAssignmentEClass.getESuperTypes().add(this.getNode());
+		iPropertyNameEClass.getESuperTypes().add(this.getNode());
+		simplePropertyAssignmentEClass.getESuperTypes().add(this.getPropertyAssignment());
+		accessorAssignmentEClass.getESuperTypes().add(this.getPropertyAssignment());
+		getterAssignmentEClass.getESuperTypes().add(this.getAccessorAssignment());
+		setterAssignmentEClass.getESuperTypes().add(this.getAccessorAssignment());
+		parenthesizedExpressionEClass.getESuperTypes().add(this.getExpression());
+		arrayAccessExpressionEClass.getESuperTypes().add(this.getExpression());
+		propertyAccessExpressionEClass.getESuperTypes().add(this.getExpression());
+		newExpressionEClass.getESuperTypes().add(this.getExpression());
+		callExpressionEClass.getESuperTypes().add(this.getExpression());
+		unaryExpressionEClass.getESuperTypes().add(this.getExpression());
+		binaryExpressionEClass.getESuperTypes().add(this.getExpression());
+		conditionalExpressionEClass.getESuperTypes().add(this.getExpression());
+		statementEClass.getESuperTypes().add(this.getNode());
+		blockStatementEClass.getESuperTypes().add(this.getStatement());
+		variableStatementEClass.getESuperTypes().add(this.getStatement());
+		variableStatementEClass.getESuperTypes().add(this.getIForInitializer());
+		variableDeclarationEClass.getESuperTypes().add(this.getNode());
+		emptyStatementEClass.getESuperTypes().add(this.getStatement());
+		expressionStatementEClass.getESuperTypes().add(this.getStatement());
+		ifStatementEClass.getESuperTypes().add(this.getStatement());
+		iterationStatementEClass.getESuperTypes().add(this.getStatement());
+		doStatementEClass.getESuperTypes().add(this.getIterationStatement());
+		whileStatementEClass.getESuperTypes().add(this.getIterationStatement());
+		forStatementEClass.getESuperTypes().add(this.getIterationStatement());
+		iForInitializerEClass.getESuperTypes().add(this.getNode());
+		forInStatementEClass.getESuperTypes().add(this.getIterationStatement());
+		continueStatementEClass.getESuperTypes().add(this.getStatement());
+		breakStatementEClass.getESuperTypes().add(this.getStatement());
+		returnStatementEClass.getESuperTypes().add(this.getStatement());
+		withStatementEClass.getESuperTypes().add(this.getStatement());
+		switchStatementEClass.getESuperTypes().add(this.getStatement());
+		switchElementEClass.getESuperTypes().add(this.getNode());
+		caseClauseEClass.getESuperTypes().add(this.getSwitchElement());
+		defaultClauseEClass.getESuperTypes().add(this.getSwitchElement());
+		labeledStatementEClass.getESuperTypes().add(this.getStatement());
+		throwStatementEClass.getESuperTypes().add(this.getStatement());
+		tryStatementEClass.getESuperTypes().add(this.getStatement());
+		catchClauseEClass.getESuperTypes().add(this.getNode());
+		finallyClauseEClass.getESuperTypes().add(this.getNode());
+		functionExpressionEClass.getESuperTypes().add(this.getExpression());
+		parameterEClass.getESuperTypes().add(this.getNode());
+		sourceEClass.getESuperTypes().add(this.getNode());
+		constStatementEClass.getESuperTypes().add(this.getStatement());
+		propertyIdentifierEClass.getESuperTypes().add(this.getExpression());
+		propertyIdentifierEClass.getESuperTypes().add(this.getIProperty());
+		iPropertyEClass.getESuperTypes().add(this.getNode());
+		xmlInitializerEClass.getESuperTypes().add(this.getExpression());
+		attributeIdentifierEClass.getESuperTypes().add(this.getPropertyIdentifier());
+		iSelectorEClass.getESuperTypes().add(this.getNode());
+		qualifiedIdentifierEClass.getESuperTypes().add(this.getPropertyIdentifier());
+		qualifiedIdentifierEClass.getESuperTypes().add(this.getISelector());
+		iUnqualifiedSelectorEClass.getESuperTypes().add(this.getISelector());
+		wildcardIdentifierEClass.getESuperTypes().add(this.getPropertyIdentifier());
+		wildcardIdentifierEClass.getESuperTypes().add(this.getIPropertySelector());
+		iPropertySelectorEClass.getESuperTypes().add(this.getIUnqualifiedSelector());
+		expressionSelectorEClass.getESuperTypes().add(this.getIUnqualifiedSelector());
+		xmlFragmentEClass.getESuperTypes().add(this.getNode());
+		xmlTextFragmentEClass.getESuperTypes().add(this.getXmlFragment());
+		xmlExpressionFragmentEClass.getESuperTypes().add(this.getXmlFragment());
+		descendantAccessExpressionEClass.getESuperTypes().add(this.getExpression());
+		filterExpressionEClass.getESuperTypes().add(this.getExpression());
+		defaultXmlNamespaceStatementEClass.getESuperTypes().add(this.getStatement());
+		forEachInStatementEClass.getESuperTypes().add(this.getIterationStatement());
+		typeEClass.getESuperTypes().add(this.getNode());
 
-        // Initialize classes and features; add operations and parameters
-        initEClass(nodeEClass, Node.class, "Node", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getNode_Begin(), ecorePackage.getEInt(), "begin", "-1", 1, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getNode_End(), ecorePackage.getEInt(), "end", "-1", 1, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		// Initialize classes and features; add operations and parameters
+		initEClass(nodeEClass, Node.class, "Node", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNode_Begin(), ecorePackage.getEInt(), "begin", "-1", 1, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNode_End(), ecorePackage.getEInt(), "end", "-1", 1, 1, Node.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(commentEClass, Comment.class, "Comment", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(commentEClass, Comment.class, "Comment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getComment_Text(), ecorePackage.getEString(), "text", null, 1, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(mutliLineCommentEClass, MutliLineComment.class, "MutliLineComment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(identifierEClass, Identifier.class, "Identifier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIdentifier_Name(), ecorePackage.getEString(), "name", null, 1, 1, Identifier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(singleLineCommentEClass, SingleLineComment.class, "SingleLineComment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(variableReferenceEClass, VariableReference.class, "VariableReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVariableReference_Variable(), this.getIdentifier(), null, "variable", null, 1, 1, VariableReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(identifierEClass, Identifier.class, "Identifier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getIdentifier_Name(), ecorePackage.getEString(), "name", null, 1, 1, Identifier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(labelEClass, Label.class, "Label", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLabel_Name(), ecorePackage.getEString(), "name", null, 1, 1, Label.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(variableReferenceEClass, VariableReference.class, "VariableReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getVariableReference_Variable(), this.getIdentifier(), null, "variable", null, 1, 1, VariableReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(expressionEClass, Expression.class, "Expression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(labelEClass, Label.class, "Label", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getLabel_Name(), ecorePackage.getEString(), "name", null, 1, 1, Label.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(nullLiteralEClass, NullLiteral.class, "NullLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(expressionEClass, Expression.class, "Expression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(booleanLiteralEClass, BooleanLiteral.class, "BooleanLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getBooleanLiteral_Text(), ecorePackage.getEString(), "text", null, 1, 1, BooleanLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(nullLiteralEClass, NullLiteral.class, "NullLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(numericLiteralEClass, NumericLiteral.class, "NumericLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNumericLiteral_Text(), ecorePackage.getEString(), "text", null, 1, 1, NumericLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(booleanLiteralEClass, BooleanLiteral.class, "BooleanLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getBooleanLiteral_Text(), ecorePackage.getEString(), "text", null, 1, 1, BooleanLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(stringLiteralEClass, StringLiteral.class, "StringLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStringLiteral_Text(), ecorePackage.getEString(), "text", null, 1, 1, StringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(numericLiteralEClass, NumericLiteral.class, "NumericLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getNumericLiteral_Text(), ecorePackage.getEString(), "text", null, 1, 1, NumericLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(regularExpressionLiteralEClass, RegularExpressionLiteral.class, "RegularExpressionLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getRegularExpressionLiteral_Text(), ecorePackage.getEString(), "text", null, 1, 1, RegularExpressionLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(stringLiteralEClass, StringLiteral.class, "StringLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getStringLiteral_Text(), ecorePackage.getEString(), "text", null, 1, 1, StringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(thisExpressionEClass, ThisExpression.class, "ThisExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(regularExpressionLiteralEClass, RegularExpressionLiteral.class, "RegularExpressionLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getRegularExpressionLiteral_Text(), ecorePackage.getEString(), "text", null, 1, 1, RegularExpressionLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(arrayLiteralEClass, ArrayLiteral.class, "ArrayLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getArrayLiteral_Elements(), this.getIArrayElement(), null, "elements", null, 0, -1, ArrayLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(thisExpressionEClass, ThisExpression.class, "ThisExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iArrayElementEClass, IArrayElement.class, "IArrayElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(arrayLiteralEClass, ArrayLiteral.class, "ArrayLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getArrayLiteral_Elements(), this.getIArrayElement(), null, "elements", null, 0, -1, ArrayLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(elisionEClass, Elision.class, "Elision", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(iArrayElementEClass, IArrayElement.class, "IArrayElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(objectLiteralEClass, ObjectLiteral.class, "ObjectLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getObjectLiteral_Properties(), this.getPropertyAssignment(), null, "properties", null, 0, -1, ObjectLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(elisionEClass, Elision.class, "Elision", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(propertyAssignmentEClass, PropertyAssignment.class, "PropertyAssignment", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPropertyAssignment_Name(), this.getIPropertyName(), null, "name", null, 1, 1, PropertyAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(objectLiteralEClass, ObjectLiteral.class, "ObjectLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getObjectLiteral_Properties(), this.getPropertyAssignment(), null, "properties", null, 0, -1, ObjectLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(iPropertyNameEClass, IPropertyName.class, "IPropertyName", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(propertyAssignmentEClass, PropertyAssignment.class, "PropertyAssignment", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getPropertyAssignment_Name(), this.getIPropertyName(), null, "name", null, 1, 1, PropertyAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(simplePropertyAssignmentEClass, SimplePropertyAssignment.class, "SimplePropertyAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSimplePropertyAssignment_Initializer(), this.getExpression(), null, "initializer", null, 1, 1, SimplePropertyAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(iPropertyNameEClass, IPropertyName.class, "IPropertyName", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(accessorAssignmentEClass, AccessorAssignment.class, "AccessorAssignment", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAccessorAssignment_Body(), this.getBlockStatement(), null, "body", null, 1, 1, AccessorAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(simplePropertyAssignmentEClass, SimplePropertyAssignment.class, "SimplePropertyAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getSimplePropertyAssignment_Initializer(), this.getExpression(), null, "initializer", null, 1, 1, SimplePropertyAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(getterAssignmentEClass, GetterAssignment.class, "GetterAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(accessorAssignmentEClass, AccessorAssignment.class, "AccessorAssignment", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getAccessorAssignment_Body(), this.getBlockStatement(), null, "body", null, 1, 1, AccessorAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(setterAssignmentEClass, SetterAssignment.class, "SetterAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSetterAssignment_Parameter(), this.getIdentifier(), null, "parameter", null, 1, 1, SetterAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(getterAssignmentEClass, GetterAssignment.class, "GetterAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(parenthesizedExpressionEClass, ParenthesizedExpression.class, "ParenthesizedExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getParenthesizedExpression_Enclosed(), this.getExpression(), null, "enclosed", null, 1, 1, ParenthesizedExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(setterAssignmentEClass, SetterAssignment.class, "SetterAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getSetterAssignment_Parameter(), this.getIdentifier(), null, "parameter", null, 1, 1, SetterAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(arrayAccessExpressionEClass, ArrayAccessExpression.class, "ArrayAccessExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getArrayAccessExpression_Array(), this.getExpression(), null, "array", null, 1, 1, ArrayAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArrayAccessExpression_Index(), this.getExpression(), null, "index", null, 1, 1, ArrayAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(parenthesizedExpressionEClass, ParenthesizedExpression.class, "ParenthesizedExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getParenthesizedExpression_Enclosed(), this.getExpression(), null, "enclosed", null, 1, 1, ParenthesizedExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(propertyAccessExpressionEClass, PropertyAccessExpression.class, "PropertyAccessExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPropertyAccessExpression_Object(), this.getExpression(), null, "object", null, 1, 1, PropertyAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPropertyAccessExpression_Property(), this.getIProperty(), null, "property", null, 1, 1, PropertyAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(arrayAccessExpressionEClass, ArrayAccessExpression.class, "ArrayAccessExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getArrayAccessExpression_Array(), this.getExpression(), null, "array", null, 1, 1, ArrayAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getArrayAccessExpression_Index(), this.getExpression(), null, "index", null, 1, 1, ArrayAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(newExpressionEClass, NewExpression.class, "NewExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getNewExpression_Constructor(), this.getExpression(), null, "constructor", null, 1, 1, NewExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNewExpression_Arguments(), this.getExpression(), null, "arguments", null, 0, -1, NewExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(propertyAccessExpressionEClass, PropertyAccessExpression.class, "PropertyAccessExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getPropertyAccessExpression_Object(), this.getExpression(), null, "object", null, 1, 1, PropertyAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getPropertyAccessExpression_Property(), this.getIProperty(), null, "property", null, 1, 1, PropertyAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(callExpressionEClass, CallExpression.class, "CallExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCallExpression_Applicant(), this.getExpression(), null, "applicant", null, 1, 1, CallExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCallExpression_Arguments(), this.getExpression(), null, "arguments", null, 0, -1, CallExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(newExpressionEClass, NewExpression.class, "NewExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getNewExpression_Constructor(), this.getExpression(), null, "constructor", null, 1, 1, NewExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getNewExpression_Arguments(), this.getExpression(), null, "arguments", null, 0, -1, NewExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(unaryExpressionEClass, UnaryExpression.class, "UnaryExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getUnaryExpression_Argument(), this.getExpression(), null, "argument", null, 1, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUnaryExpression_Operation(), this.getUnaryOperator(), "operation", null, 1, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(callExpressionEClass, CallExpression.class, "CallExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getCallExpression_Applicant(), this.getExpression(), null, "applicant", null, 1, 1, CallExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getCallExpression_Arguments(), this.getExpression(), null, "arguments", null, 0, -1, CallExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(binaryExpressionEClass, BinaryExpression.class, "BinaryExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBinaryExpression_Left(), this.getExpression(), null, "left", null, 1, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBinaryExpression_Right(), this.getExpression(), null, "right", null, 1, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBinaryExpression_Operation(), this.getBinaryOperator(), "operation", null, 1, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBinaryExpression_OperatorPosition(), ecorePackage.getEInt(), "operatorPosition", null, 1, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(unaryExpressionEClass, UnaryExpression.class, "UnaryExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getUnaryExpression_Argument(), this.getExpression(), null, "argument", null, 1, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getUnaryExpression_Operation(), this.getUnaryOperator(), "operation", null, 1, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(conditionalExpressionEClass, ConditionalExpression.class, "ConditionalExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getConditionalExpression_Predicate(), this.getExpression(), null, "predicate", null, 1, 1, ConditionalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getConditionalExpression_Consequent(), this.getExpression(), null, "consequent", null, 1, 1, ConditionalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getConditionalExpression_Alternative(), this.getExpression(), null, "alternative", null, 1, 1, ConditionalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(binaryExpressionEClass, BinaryExpression.class, "BinaryExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getBinaryExpression_Left(), this.getExpression(), null, "left", null, 1, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getBinaryExpression_Right(), this.getExpression(), null, "right", null, 1, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getBinaryExpression_Operation(), this.getBinaryOperator(), "operation", null, 1, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getBinaryExpression_OperatorPosition(), ecorePackage.getEInt(), "operatorPosition", null, 1, 1, BinaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(statementEClass, Statement.class, "Statement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(conditionalExpressionEClass, ConditionalExpression.class, "ConditionalExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getConditionalExpression_Predicate(), this.getExpression(), null, "predicate", null, 1, 1, ConditionalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getConditionalExpression_Consequent(), this.getExpression(), null, "consequent", null, 1, 1, ConditionalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getConditionalExpression_Alternative(), this.getExpression(), null, "alternative", null, 1, 1, ConditionalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(blockStatementEClass, BlockStatement.class, "BlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBlockStatement_Statements(), this.getStatement(), null, "statements", null, 0, -1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(statementEClass, Statement.class, "Statement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(variableStatementEClass, VariableStatement.class, "VariableStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVariableStatement_Declarations(), this.getVariableDeclaration(), null, "declarations", null, 1, -1, VariableStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(blockStatementEClass, BlockStatement.class, "BlockStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getBlockStatement_Statements(), this.getStatement(), null, "statements", null, 0, -1, BlockStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(variableDeclarationEClass, VariableDeclaration.class, "VariableDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getVariableDeclaration_Identifier(), this.getIdentifier(), null, "identifier", null, 1, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVariableDeclaration_Type(), this.getType(), null, "type", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVariableDeclaration_Initializer(), this.getExpression(), null, "initializer", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(variableStatementEClass, VariableStatement.class, "VariableStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getVariableStatement_Declarations(), this.getVariableDeclaration(), null, "declarations", null, 1, -1, VariableStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(emptyStatementEClass, EmptyStatement.class, "EmptyStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(variableDeclarationEClass, VariableDeclaration.class, "VariableDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getVariableDeclaration_Identifier(), this.getIdentifier(), null, "identifier", null, 1, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getVariableDeclaration_Type(), this.getType(), null, "type", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getVariableDeclaration_Initializer(), this.getExpression(), null, "initializer", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(expressionStatementEClass, ExpressionStatement.class, "ExpressionStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getExpressionStatement_Expression(), this.getExpression(), null, "expression", null, 1, 1, ExpressionStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(emptyStatementEClass, EmptyStatement.class, "EmptyStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(ifStatementEClass, IfStatement.class, "IfStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getIfStatement_Predicate(), this.getExpression(), null, "predicate", null, 1, 1, IfStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getIfStatement_Consequent(), this.getStatement(), null, "consequent", null, 1, 1, IfStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getIfStatement_Alternative(), this.getStatement(), null, "alternative", null, 0, 1, IfStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(expressionStatementEClass, ExpressionStatement.class, "ExpressionStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getExpressionStatement_Expression(), this.getExpression(), null, "expression", null, 1, 1, ExpressionStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(iterationStatementEClass, IterationStatement.class, "IterationStatement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getIterationStatement_Body(), this.getStatement(), null, "body", null, 1, 1, IterationStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(ifStatementEClass, IfStatement.class, "IfStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getIfStatement_Predicate(), this.getExpression(), null, "predicate", null, 1, 1, IfStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getIfStatement_Consequent(), this.getStatement(), null, "consequent", null, 1, 1, IfStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getIfStatement_Alternative(), this.getStatement(), null, "alternative", null, 0, 1, IfStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(doStatementEClass, DoStatement.class, "DoStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDoStatement_Condition(), this.getExpression(), null, "condition", null, 1, 1, DoStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(iterationStatementEClass, IterationStatement.class, "IterationStatement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getIterationStatement_Body(), this.getStatement(), null, "body", null, 1, 1, IterationStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(whileStatementEClass, WhileStatement.class, "WhileStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getWhileStatement_Condition(), this.getExpression(), null, "condition", null, 1, 1, WhileStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(doStatementEClass, DoStatement.class, "DoStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getDoStatement_Condition(), this.getExpression(), null, "condition", null, 1, 1, DoStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(forStatementEClass, ForStatement.class, "ForStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getForStatement_Initialization(), this.getIForInitializer(), null, "initialization", null, 1, 1, ForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getForStatement_Condition(), this.getExpression(), null, "condition", null, 1, 1, ForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getForStatement_Increment(), this.getExpression(), null, "increment", null, 1, 1, ForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(whileStatementEClass, WhileStatement.class, "WhileStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getWhileStatement_Condition(), this.getExpression(), null, "condition", null, 1, 1, WhileStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(iForInitializerEClass, IForInitializer.class, "IForInitializer", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(forStatementEClass, ForStatement.class, "ForStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getForStatement_Initialization(), this.getIForInitializer(), null, "initialization", null, 1, 1, ForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getForStatement_Condition(), this.getExpression(), null, "condition", null, 1, 1, ForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getForStatement_Increment(), this.getExpression(), null, "increment", null, 1, 1, ForStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(forInStatementEClass, ForInStatement.class, "ForInStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getForInStatement_Item(), this.getIForInitializer(), null, "item", null, 1, 1, ForInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getForInStatement_Collection(), this.getExpression(), null, "collection", null, 1, 1, ForInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(iForInitializerEClass, IForInitializer.class, "IForInitializer", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(continueStatementEClass, ContinueStatement.class, "ContinueStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getContinueStatement_Label(), this.getLabel(), null, "label", null, 0, 1, ContinueStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(forInStatementEClass, ForInStatement.class, "ForInStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getForInStatement_Item(), this.getIForInitializer(), null, "item", null, 1, 1, ForInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getForInStatement_Collection(), this.getExpression(), null, "collection", null, 1, 1, ForInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(breakStatementEClass, BreakStatement.class, "BreakStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBreakStatement_Label(), this.getLabel(), null, "label", null, 0, 1, BreakStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(continueStatementEClass, ContinueStatement.class, "ContinueStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getContinueStatement_Label(), this.getLabel(), null, "label", null, 0, 1, ContinueStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(returnStatementEClass, ReturnStatement.class, "ReturnStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getReturnStatement_Expression(), this.getExpression(), null, "expression", null, 0, 1, ReturnStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(breakStatementEClass, BreakStatement.class, "BreakStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getBreakStatement_Label(), this.getLabel(), null, "label", null, 0, 1, BreakStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(withStatementEClass, WithStatement.class, "WithStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getWithStatement_Expression(), this.getExpression(), null, "expression", null, 1, 1, WithStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getWithStatement_Statement(), this.getStatement(), null, "statement", null, 1, 1, WithStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(returnStatementEClass, ReturnStatement.class, "ReturnStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getReturnStatement_Expression(), this.getExpression(), null, "expression", null, 0, 1, ReturnStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(switchStatementEClass, SwitchStatement.class, "SwitchStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSwitchStatement_Selector(), this.getExpression(), null, "selector", null, 1, 1, SwitchStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSwitchStatement_Elements(), this.getSwitchElement(), null, "elements", null, 0, -1, SwitchStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(withStatementEClass, WithStatement.class, "WithStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getWithStatement_Expression(), this.getExpression(), null, "expression", null, 1, 1, WithStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getWithStatement_Statement(), this.getStatement(), null, "statement", null, 1, 1, WithStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(switchElementEClass, SwitchElement.class, "SwitchElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSwitchElement_Statements(), this.getStatement(), null, "statements", null, 0, -1, SwitchElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(switchStatementEClass, SwitchStatement.class, "SwitchStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getSwitchStatement_Selector(), this.getExpression(), null, "selector", null, 1, 1, SwitchStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getSwitchStatement_Elements(), this.getSwitchElement(), null, "elements", null, 0, -1, SwitchStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(caseClauseEClass, CaseClause.class, "CaseClause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCaseClause_Expression(), this.getExpression(), null, "expression", null, 1, 1, CaseClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(switchElementEClass, SwitchElement.class, "SwitchElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getSwitchElement_Statements(), this.getStatement(), null, "statements", null, 0, -1, SwitchElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(defaultClauseEClass, DefaultClause.class, "DefaultClause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(caseClauseEClass, CaseClause.class, "CaseClause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getCaseClause_Expression(), this.getExpression(), null, "expression", null, 1, 1, CaseClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(labeledStatementEClass, LabeledStatement.class, "LabeledStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getLabeledStatement_Label(), this.getLabel(), null, "label", null, 1, 1, LabeledStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLabeledStatement_Statement(), this.getStatement(), null, "statement", null, 1, 1, LabeledStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(defaultClauseEClass, DefaultClause.class, "DefaultClause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(throwStatementEClass, ThrowStatement.class, "ThrowStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getThrowStatement_Exception(), this.getExpression(), null, "exception", null, 1, 1, ThrowStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(labeledStatementEClass, LabeledStatement.class, "LabeledStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getLabeledStatement_Label(), this.getLabel(), null, "label", null, 1, 1, LabeledStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getLabeledStatement_Statement(), this.getStatement(), null, "statement", null, 1, 1, LabeledStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(tryStatementEClass, TryStatement.class, "TryStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTryStatement_Body(), this.getBlockStatement(), null, "body", null, 1, 1, TryStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTryStatement_Catches(), this.getCatchClause(), null, "catches", null, 0, -1, TryStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTryStatement_FinallyClause(), this.getFinallyClause(), null, "finallyClause", null, 0, 1, TryStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(throwStatementEClass, ThrowStatement.class, "ThrowStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getThrowStatement_Exception(), this.getExpression(), null, "exception", null, 1, 1, ThrowStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(catchClauseEClass, CatchClause.class, "CatchClause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCatchClause_Exception(), this.getIdentifier(), null, "exception", null, 1, 1, CatchClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCatchClause_Filter(), this.getExpression(), null, "filter", null, 0, 1, CatchClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCatchClause_Body(), this.getBlockStatement(), null, "body", null, 1, 1, CatchClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(tryStatementEClass, TryStatement.class, "TryStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getTryStatement_Body(), this.getBlockStatement(), null, "body", null, 1, 1, TryStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getTryStatement_Catches(), this.getCatchClause(), null, "catches", null, 0, -1, TryStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getTryStatement_FinallyClause(), this.getFinallyClause(), null, "finallyClause", null, 0, 1, TryStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(finallyClauseEClass, FinallyClause.class, "FinallyClause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFinallyClause_Body(), this.getBlockStatement(), null, "body", null, 1, 1, FinallyClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(catchClauseEClass, CatchClause.class, "CatchClause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getCatchClause_Exception(), this.getIdentifier(), null, "exception", null, 1, 1, CatchClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getCatchClause_Filter(), this.getExpression(), null, "filter", null, 0, 1, CatchClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getCatchClause_Body(), this.getBlockStatement(), null, "body", null, 1, 1, CatchClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(functionExpressionEClass, FunctionExpression.class, "FunctionExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFunctionExpression_Documentation(), this.getComment(), null, "documentation", null, 0, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFunctionExpression_Identifier(), this.getIdentifier(), null, "identifier", null, 0, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFunctionExpression_Parameters(), this.getParameter(), null, "parameters", null, 0, -1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFunctionExpression_ReturnType(), this.getType(), null, "returnType", null, 0, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFunctionExpression_Body(), this.getBlockStatement(), null, "body", null, 1, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFunctionExpression_ParametersPosition(), ecorePackage.getEInt(), "parametersPosition", null, 1, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(finallyClauseEClass, FinallyClause.class, "FinallyClause", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getFinallyClause_Body(), this.getBlockStatement(), null, "body", null, 1, 1, FinallyClause.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getParameter_Name(), this.getIdentifier(), null, "name", null, 1, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getParameter_Type(), this.getType(), null, "type", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(functionExpressionEClass, FunctionExpression.class, "FunctionExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getFunctionExpression_Identifier(), this.getIdentifier(), null, "identifier", null, 0, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getFunctionExpression_Parameters(), this.getParameter(), null, "parameters", null, 0, -1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getFunctionExpression_ReturnType(), this.getType(), null, "returnType", null, 0, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getFunctionExpression_Body(), this.getBlockStatement(), null, "body", null, 1, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getFunctionExpression_ParametersPosition(), ecorePackage.getEInt(), "parametersPosition", null, 1, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(sourceEClass, Source.class, "Source", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSource_Statements(), this.getStatement(), null, "statements", null, 0, -1, Source.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getParameter_Name(), this.getIdentifier(), null, "name", null, 1, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getParameter_Type(), this.getType(), null, "type", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(constStatementEClass, ConstStatement.class, "ConstStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getConstStatement_Declarations(), this.getVariableDeclaration(), null, "declarations", null, 1, -1, ConstStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(sourceEClass, Source.class, "Source", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getSource_Statements(), this.getStatement(), null, "statements", null, 0, -1, Source.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(propertyIdentifierEClass, PropertyIdentifier.class, "PropertyIdentifier", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(constStatementEClass, ConstStatement.class, "ConstStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getConstStatement_Declarations(), this.getVariableDeclaration(), null, "declarations", null, 1, -1, ConstStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(iPropertyEClass, IProperty.class, "IProperty", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(propertyIdentifierEClass, PropertyIdentifier.class, "PropertyIdentifier", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(xmlInitializerEClass, XmlInitializer.class, "XmlInitializer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getXmlInitializer_Fragments(), this.getXmlFragment(), null, "fragments", null, 1, -1, XmlInitializer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(iPropertyEClass, IProperty.class, "IProperty", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(attributeIdentifierEClass, AttributeIdentifier.class, "AttributeIdentifier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAttributeIdentifier_Selector(), this.getISelector(), null, "selector", null, 1, 1, AttributeIdentifier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(xmlInitializerEClass, XmlInitializer.class, "XmlInitializer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getXmlInitializer_Fragments(), this.getXmlFragment(), null, "fragments", null, 1, -1, XmlInitializer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(iSelectorEClass, ISelector.class, "ISelector", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(attributeIdentifierEClass, AttributeIdentifier.class, "AttributeIdentifier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getAttributeIdentifier_Selector(), this.getISelector(), null, "selector", null, 1, 1, AttributeIdentifier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(qualifiedIdentifierEClass, QualifiedIdentifier.class, "QualifiedIdentifier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getQualifiedIdentifier_Namespace(), this.getIPropertySelector(), null, "namespace", null, 1, 1, QualifiedIdentifier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getQualifiedIdentifier_Member(), this.getIUnqualifiedSelector(), null, "member", null, 1, 1, QualifiedIdentifier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(iSelectorEClass, ISelector.class, "ISelector", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iUnqualifiedSelectorEClass, IUnqualifiedSelector.class, "IUnqualifiedSelector", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(qualifiedIdentifierEClass, QualifiedIdentifier.class, "QualifiedIdentifier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getQualifiedIdentifier_Namespace(), this.getIPropertySelector(), null, "namespace", null, 1, 1, QualifiedIdentifier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getQualifiedIdentifier_Member(), this.getIUnqualifiedSelector(), null, "member", null, 1, 1, QualifiedIdentifier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(wildcardIdentifierEClass, WildcardIdentifier.class, "WildcardIdentifier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(iUnqualifiedSelectorEClass, IUnqualifiedSelector.class, "IUnqualifiedSelector", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iPropertySelectorEClass, IPropertySelector.class, "IPropertySelector", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(wildcardIdentifierEClass, WildcardIdentifier.class, "WildcardIdentifier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(expressionSelectorEClass, ExpressionSelector.class, "ExpressionSelector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getExpressionSelector_Index(), this.getExpression(), null, "index", null, 1, 1, ExpressionSelector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(iPropertySelectorEClass, IPropertySelector.class, "IPropertySelector", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(xmlFragmentEClass, XmlFragment.class, "XmlFragment", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(expressionSelectorEClass, ExpressionSelector.class, "ExpressionSelector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getExpressionSelector_Index(), this.getExpression(), null, "index", null, 1, 1, ExpressionSelector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(xmlTextFragmentEClass, XmlTextFragment.class, "XmlTextFragment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getXmlTextFragment_Text(), ecorePackage.getEString(), "text", null, 1, 1, XmlTextFragment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(xmlFragmentEClass, XmlFragment.class, "XmlFragment", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(xmlExpressionFragmentEClass, XmlExpressionFragment.class, "XmlExpressionFragment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getXmlExpressionFragment_Expression(), this.getExpression(), null, "expression", null, 1, 1, XmlExpressionFragment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(xmlTextFragmentEClass, XmlTextFragment.class, "XmlTextFragment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getXmlTextFragment_Text(), ecorePackage.getEString(), "text", null, 1, 1, XmlTextFragment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(descendantAccessExpressionEClass, DescendantAccessExpression.class, "DescendantAccessExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDescendantAccessExpression_Object(), this.getExpression(), null, "object", null, 1, 1, DescendantAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDescendantAccessExpression_Property(), this.getIProperty(), null, "property", null, 1, 1, DescendantAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(xmlExpressionFragmentEClass, XmlExpressionFragment.class, "XmlExpressionFragment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getXmlExpressionFragment_Expression(), this.getExpression(), null, "expression", null, 1, 1, XmlExpressionFragment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(filterExpressionEClass, FilterExpression.class, "FilterExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFilterExpression_Object(), this.getExpression(), null, "object", null, 1, 1, FilterExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFilterExpression_Filter(), this.getExpression(), null, "filter", null, 1, 1, FilterExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(descendantAccessExpressionEClass, DescendantAccessExpression.class, "DescendantAccessExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getDescendantAccessExpression_Object(), this.getExpression(), null, "object", null, 1, 1, DescendantAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getDescendantAccessExpression_Property(), this.getIProperty(), null, "property", null, 1, 1, DescendantAccessExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(defaultXmlNamespaceStatementEClass, DefaultXmlNamespaceStatement.class, "DefaultXmlNamespaceStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDefaultXmlNamespaceStatement_Expression(), this.getExpression(), null, "expression", null, 1, 1, DefaultXmlNamespaceStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(filterExpressionEClass, FilterExpression.class, "FilterExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getFilterExpression_Object(), this.getExpression(), null, "object", null, 1, 1, FilterExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getFilterExpression_Filter(), this.getExpression(), null, "filter", null, 1, 1, FilterExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(forEachInStatementEClass, ForEachInStatement.class, "ForEachInStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getForEachInStatement_Item(), this.getIForInitializer(), null, "item", null, 1, 1, ForEachInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getForEachInStatement_Collection(), this.getExpression(), null, "collection", null, 1, 1, ForEachInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(defaultXmlNamespaceStatementEClass, DefaultXmlNamespaceStatement.class, "DefaultXmlNamespaceStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getDefaultXmlNamespaceStatement_Expression(), this.getExpression(), null, "expression", null, 1, 1, DefaultXmlNamespaceStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(typeEClass, Type.class, "Type", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getType_Name(), ecorePackage.getEString(), "name", null, 1, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(forEachInStatementEClass, ForEachInStatement.class, "ForEachInStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEReference(getForEachInStatement_Item(), this.getIForInitializer(), null, "item", null, 1, 1, ForEachInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEReference(getForEachInStatement_Collection(), this.getExpression(), null, "collection", null, 1, 1, ForEachInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		// Initialize enums and add enum literals
+		initEEnum(unaryOperatorEEnum, UnaryOperator.class, "UnaryOperator");
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.POSTFIX_INC);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.POSTFIX_DEC);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.DELETE);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.VOID);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.TYPEOF);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.PREFIX_INC);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.PREFIX_DEC);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.UNARY_PLUS);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.NUM_NEG);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.BW_NOT);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.NOT);
+		addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.YIELD);
 
-        initEClass(typeEClass, Type.class, "Type", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getType_Name(), ecorePackage.getEString(), "name", null, 1, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEEnum(binaryOperatorEEnum, BinaryOperator.class, "BinaryOperator");
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.MUL);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.DIV);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.MOD);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.ADD);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.SUB);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LSH);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.RSH);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.URSH);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LESS);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.GREATER);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LEQ);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.GEQ);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.INSTANCEOF);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.IN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.EQ);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.NEQ);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.SAME);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.NSAME);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.BW_AND);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.BW_XOR);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.BW_OR);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LOG_AND);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LOG_OR);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.MUL_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.DIV_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.MOD_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.ADD_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.SUB_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LSH_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.RSH_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.URSH_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.AND_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.XOR_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.OR_ASSIGN);
+		addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.COMMA);
 
-        // Initialize enums and add enum literals
-        initEEnum(unaryOperatorEEnum, UnaryOperator.class, "UnaryOperator");
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.POSTFIX_INC);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.POSTFIX_DEC);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.DELETE);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.VOID);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.TYPEOF);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.PREFIX_INC);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.PREFIX_DEC);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.UNARY_PLUS);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.NUM_NEG);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.BW_NOT);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.NOT);
-        addEEnumLiteral(unaryOperatorEEnum, UnaryOperator.YIELD);
-
-        initEEnum(binaryOperatorEEnum, BinaryOperator.class, "BinaryOperator");
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.MUL);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.DIV);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.MOD);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.ADD);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.SUB);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LSH);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.RSH);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.URSH);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LESS);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.GREATER);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LEQ);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.GEQ);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.INSTANCEOF);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.IN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.EQ);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.NEQ);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.SAME);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.NSAME);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.BW_AND);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.BW_XOR);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.BW_OR);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LOG_AND);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LOG_OR);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.MUL_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.DIV_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.MOD_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.ADD_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.SUB_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.LSH_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.RSH_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.URSH_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.AND_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.XOR_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.OR_ASSIGN);
-        addEEnumLiteral(binaryOperatorEEnum, BinaryOperator.COMMA);
-
-        // Create resource
-        createResource(eNS_URI);
-    }
+		// Create resource
+		createResource(eNS_URI);
+	}
 
 } //DomPackageImpl

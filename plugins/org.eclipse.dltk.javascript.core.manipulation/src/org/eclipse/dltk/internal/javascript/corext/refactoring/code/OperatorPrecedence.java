@@ -16,23 +16,23 @@ import org.eclipse.dltk.javascript.core.dom.Expression;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
 
 public class OperatorPrecedence {
-	private static final int SEQUENCE =			0;
-	private static final int ASSIGNMENT = 		1;
-	private static final int CONDITIONAL =		2;
-	private static final int LOGICAL_OR = 		3;
-	private static final int LOGICAL_AND = 		4;
-	private static final int BITWISE_OR =		5;
-	private static final int BITWISE_XOR =		6;
-	private static final int BITWISE_AND =		7;
-	private static final int EQUALITY =			8;
-	private static final int RELATIONAL =		9;
-	private static final int SHIFT =			10;
-	private static final int ADDITIVE =			11;
-	private static final int MULTIPLICATIVE =	12;
-	private static final int PREFIX =			14;
-	private static final int POSTFIX =			15;
-	private static final int INSTANTIATION =    16;
-	private static final int CALL =             17;
+	public static final int SEQUENCE =			0;
+	public static final int ASSIGNMENT = 		1;
+	public static final int CONDITIONAL =		2;
+	public static final int LOGICAL_OR = 		3;
+	public static final int LOGICAL_AND = 		4;
+	public static final int BITWISE_OR =		5;
+	public static final int BITWISE_XOR =		6;
+	public static final int BITWISE_AND =		7;
+	public static final int EQUALITY =			8;
+	public static final int RELATIONAL =		9;
+	public static final int SHIFT =				10;
+	public static final int ADDITIVE =			11;
+	public static final int MULTIPLICATIVE =	12;
+	public static final int PREFIX =			14;
+	public static final int POSTFIX =			15;
+	public static final int INSTANTIATION =		16;
+	public static final int CALL =				17;
 	
 	public static int getExpressionPrecedence(Expression expression) {
 		switch(expression.eClass().getClassifierID()) {

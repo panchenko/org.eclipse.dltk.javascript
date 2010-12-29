@@ -51,6 +51,7 @@ import org.eclipse.dltk.internal.javascript.corext.refactoring.ParameterInfo;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.RefactoringCoreMessages;
 import org.eclipse.dltk.javascript.core.dom.CallExpression;
 import org.eclipse.dltk.javascript.core.dom.DomFactory;
+import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.Expression;
 import org.eclipse.dltk.javascript.core.dom.FunctionExpression;
 import org.eclipse.dltk.javascript.core.dom.Identifier;
@@ -1352,9 +1353,21 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 		}
 		if (cu.equals(fMethod.getSourceModule())) {
 			Node node = NodeFinder.findNode(root, fMethod.getNameRange());
-			FunctionExpression expr = node == null ? null : RefactoringUtils.getFunctionDeclaration(node);
+			FunctionExpression expr = null;
+			if (node == null) {
+				Node anon = NodeFinder.findNode(root, fMethod.getSourceRange());
+				if (anon.eClass().getClassifierID() == DomPackage.FUNCTION_EXPRESSION)
+					expr = (FunctionExpression)anon;
+			} else
+				expr = RefactoringUtils.getFunctionDeclaration(node);
 			if (expr != null) {
-				((Identifier)node).setName(fMethodName);
+				if (node != null)
+					((Identifier)node).setName(fMethodName);
+				else {
+					Identifier id = DomFactory.eINSTANCE.createIdentifier();
+					id.setName(fMethodName);
+					expr.setIdentifier(id);
+				}
 				reshuffleElements(expr.getParameters(),new NewElementsProvider<Parameter>(){
 					@Override
 					Parameter createElement(ParameterInfo info) {
@@ -1372,7 +1385,7 @@ public class ChangeSignatureProcessor extends RefactoringProcessor {
 					fBodyUpdater.updateBody(expr);
 			} else {
 				result.addError(RefactoringCoreMessages.ChangeSignatureRefactoring_unknown_reference,
-						ScriptStatusContext.create(cu, new SourceRange(node.getBegin(), node.getEnd()-node.getBegin())));
+						ScriptStatusContext.create(cu, fMethod.getNameRange()));
 				tryRename(node);
 			}
 		}

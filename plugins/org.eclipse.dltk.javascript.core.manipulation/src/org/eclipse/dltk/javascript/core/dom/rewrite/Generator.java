@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.core.dom.BreakStatement;
 import org.eclipse.dltk.javascript.core.dom.CallExpression;
 import org.eclipse.dltk.javascript.core.dom.CaseClause;
 import org.eclipse.dltk.javascript.core.dom.CatchClause;
+import org.eclipse.dltk.javascript.core.dom.Comment;
 import org.eclipse.dltk.javascript.core.dom.ConditionalExpression;
 import org.eclipse.dltk.javascript.core.dom.ConstStatement;
 import org.eclipse.dltk.javascript.core.dom.ContinueStatement;
@@ -30,6 +31,8 @@ import org.eclipse.dltk.javascript.core.dom.DefaultClause;
 import org.eclipse.dltk.javascript.core.dom.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.core.dom.DescendantAccessExpression;
 import org.eclipse.dltk.javascript.core.dom.DoStatement;
+import org.eclipse.dltk.javascript.core.dom.DomFactory;
+import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.Elision;
 import org.eclipse.dltk.javascript.core.dom.EmptyStatement;
 import org.eclipse.dltk.javascript.core.dom.Expression;
@@ -115,7 +118,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 		if (node.getBegin() != -1 && cd != null) {
 			RewriteAnalyzer ra = new RewriteAnalyzer(cd, text, lineDelimiter);
 			ra.rewrite(node);
-			Document doc = new Document(text.substring(node.getBegin(), node.getEnd()));
+			Document doc = new Document(text.substring(node.getBegin(),node.getEnd()));
 			try {
 				TextEdit edit = ra.getEdit();
 				if (edit.hasChildren())
@@ -526,6 +529,8 @@ public class Generator extends DomSwitch<StringBuilder> {
 	}
 	@Override
 	public StringBuilder caseFunctionExpression(FunctionExpression object) {
+		if (object.getDocumentation() != null)
+			sb.append(object.getDocumentation().getText());
 		sb.append("function ");
 		if (object.getIdentifier() != null)
 			sb.append(object.getIdentifier().getName());
@@ -613,5 +618,9 @@ public class Generator extends DomSwitch<StringBuilder> {
 	@Override
 	public StringBuilder caseType(Type object) {
 		return sb.append(object.getName());
+	}
+	@Override
+	public StringBuilder caseComment(Comment object) {
+		return sb.append(object.getText());
 	}
 }

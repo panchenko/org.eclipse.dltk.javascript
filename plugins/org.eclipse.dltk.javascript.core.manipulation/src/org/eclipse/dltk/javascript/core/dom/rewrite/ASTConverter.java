@@ -14,6 +14,7 @@ import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.CaseClause;
 import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.CommaExpression;
+import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.ConditionalOperator;
 import org.eclipse.dltk.javascript.ast.ConstStatement;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
@@ -119,7 +120,8 @@ public class ASTConverter extends ASTVisitor<Node> {
 		if (node == null)
 			return null;
 		Node res = super.visit(node);
-		res.setBegin(node.sourceStart());
+		if (res.getBegin() == -1)
+			res.setBegin(node.sourceStart());
 		res.setEnd(node.sourceEnd());
 		return res;
 	}
@@ -429,6 +431,15 @@ public class ASTConverter extends ASTVisitor<Node> {
 		FunctionExpression res = DOM_FACTORY.createFunctionExpression();
 		if (node.getName() != null)
 			res.setIdentifier(createIdentifier(node.getName()));
+		Comment docs = node.getDocumentation();
+		if (docs != null) {
+			org.eclipse.dltk.javascript.core.dom.Comment comment = DOM_FACTORY.createComment();
+			comment.setText(docs.getText());
+			comment.setBegin(docs.sourceStart());
+			comment.setEnd(docs.sourceEnd());
+			res.setDocumentation(comment);
+			res.setBegin(comment.getBegin());
+		}
 		for (Argument arg : node.getArguments()) {
 			Parameter prm = DOM_FACTORY.createParameter();
 			prm.setName(createIdentifier(arg.getIdentifier()));
@@ -752,6 +763,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 			return visit(node.getExpression());
 		ExpressionStatement res = DOM_FACTORY.createExpressionStatement();
 		res.setExpression((Expression) visit(node.getExpression()));
+		res.setBegin(res.getExpression().getBegin());
 		return res;
 	}
 

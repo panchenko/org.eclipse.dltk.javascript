@@ -442,9 +442,11 @@ class SourceAnalyzer  {
 			VariableBinding value = entry.getValue();
 			if (value.getDeclaration() != key) {
 				ParameterData data = datas.get(value);
-				if (data != null) data.addReference(key);
-				if (key.eContainer().eContainmentFeature() == DomPackage.eINSTANCE.getCallExpression_Applicant())
-					data.setFunction(true);
+				if (data != null) {
+					data.addReference(key);
+					if (key.eContainer().eContainmentFeature() == DomPackage.eINSTANCE.getCallExpression_Applicant())
+						data.setFunction(true);
+				}
 			}
 		}
 	}

@@ -9,9 +9,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="-1"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Comment" abstract="true" eSuperTypes="#//Node"/>
-  <eClassifiers xsi:type="ecore:EClass" name="MutliLineComment" eSuperTypes="#//Comment"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SingleLineComment" eSuperTypes="#//Comment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Comment" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Identifier" eSuperTypes="#//Node #//IPropertyName #//IPropertySelector #//IProperty">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -231,7 +231,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="collection" lowerBound="1"
         eType="#//Expression" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ContinueStatement" eSuperTypes="#//ISelector">
+  <eClassifiers xsi:type="ecore:EClass" name="ContinueStatement" eSuperTypes="#//Statement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="label" eType="#//Label"
         containment="true"/>
   </eClassifiers>
@@ -295,6 +295,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FunctionExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentation" eType="#//Comment"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//Identifier"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"

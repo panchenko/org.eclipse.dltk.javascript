@@ -1,6 +1,8 @@
 package org.eclipse.dltk.internal.javascript.corext.refactoring.rename;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.corext.refactoring.rename.RenameModelElementProcessor;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.Checks;
@@ -27,7 +29,11 @@ public class RenameFunctionProcessor extends RenameModelElementProcessor {
 
 	@Override
 	public boolean isApplicable() throws CoreException {
-		return Checks.isAvailable(fModelElement);
+		if (!Checks.isAvailable(fModelElement))
+			return false;
+		Assert.isTrue(fModelElement instanceof IMethod);
+		IMethod method = (IMethod)fModelElement;
+		return !"".equals(method.getElementName());
 	}
 
 	@Override

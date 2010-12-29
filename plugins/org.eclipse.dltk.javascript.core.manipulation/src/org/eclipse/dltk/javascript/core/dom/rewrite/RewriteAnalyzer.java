@@ -260,7 +260,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		case DomPackage.FUNCTION_EXPRESSION:
 			FunctionExpression expr = (FunctionExpression)node;
 			if (ref == DomPackage.eINSTANCE.getFunctionExpression_Identifier())
-				return expr.getParametersPosition()-2;
+				return expr.getParametersPosition()-1;
 			else
 				return expr.getParametersPosition();
 		}

@@ -44,6 +44,7 @@ import org.eclipse.dltk.javascript.core.dom.BinaryExpression;
 import org.eclipse.dltk.javascript.core.dom.BinaryOperator;
 import org.eclipse.dltk.javascript.core.dom.BlockStatement;
 import org.eclipse.dltk.javascript.core.dom.CallExpression;
+import org.eclipse.dltk.javascript.core.dom.ConditionalExpression;
 import org.eclipse.dltk.javascript.core.dom.DomFactory;
 import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.Expression;
@@ -288,7 +289,7 @@ public class CallInliner {
 		int nodeType= targetNode.eClass().getClassifierID();
 		if (nodeType == DomPackage.EXPRESSION_STATEMENT) {
 			if (sourceProvider.isExecutionFlowInterrupted()) {
-				addEntry(result, RefactoringCoreMessages.CallInliner_execution_flow, severity);
+				addEntry(result, RefactoringCoreMessages.CallInliner_execution_flow);
 				return;
 			}
 		} else if (nodeType == DomPackage.CALL_EXPRESSION) {
@@ -299,7 +300,7 @@ public class CallInliner {
 				return;
 			}
 			if (sourceProvider.isExecutionFlowInterrupted()) {
-				addEntry(result, RefactoringCoreMessages.CallInliner_execution_flow, severity);
+				addEntry(result, RefactoringCoreMessages.CallInliner_execution_flow);
 				return;
 			}
 			if (parentType == DomPackage.BINARY_EXPRESSION && RefactoringUtils.isAssignment(((BinaryExpression)parent).getOperation())
@@ -314,16 +315,20 @@ public class CallInliner {
 				if (stmt.getDeclarations().get(0) == decl)
 					return;
 			}
+			if (parentType == DomPackage.NEW_EXPRESSION) {
+				addEntry(result, RefactoringCoreMessages.CallInliner_constructors);
+				return;
+			}
 			//boolean isFieldDeclaration= ASTNodes.getParent(invocation, FieldDeclaration.class) != null;
 			if (!sourceProvider.isSimpleFunction()) {
 				if (isMultiDeclarationFragment(parent)) {
-					addEntry(result, RefactoringCoreMessages.CallInliner_multiDeclaration, severity);
+					addEntry(result, RefactoringCoreMessages.CallInliner_multiDeclaration);
 				/*} else if (isFieldDeclaration) {
 					addEntry(result,
 						RefactoringCoreMessages.CallInliner_field_initializer_simple,
 						RefactoringStatusCodes.INLINE_METHOD_FIELD_INITIALIZER, severity);*/
 				} else {
-					addEntry(result, RefactoringCoreMessages.CallInliner_simple_functions, severity);
+					addEntry(result, RefactoringCoreMessages.CallInliner_simple_functions);
 				}
 				return;
 			}
@@ -382,9 +387,9 @@ public class CallInliner {
 		return node instanceof VariableDeclaration && ((VariableStatement)node.eContainer()).getDeclarations().size() > 1;
 	}
 
-	private void addEntry(RefactoringStatus result, String message, int severity) {
+	private void addEntry(RefactoringStatus result, String message) {
 		result.addEntry(new RefactoringStatusEntry(
-			severity, message,
+			RefactoringStatus.ERROR, message,
 			ScriptStatusContext.create(cu, new SourceRange(invocation.getBegin(),invocation.getEnd()-invocation.getBegin())),
 			JavascriptManipulationPlugin.getPluginId(),RefactoringStatusEntry.NO_CODE));
 	}
@@ -623,13 +628,67 @@ public class CallInliner {
 		return false;
 	}*/
 
-	/*private static boolean needsParentheses(Expression expression) {
-		int type= expression.eClass().getClassifierID();
-		return type == DomPackage.BINARY_EXPRESSION || type == DomPackage.CONDITIONAL_EXPRESSION
-			|| type == DomPackage.UNARY_EXPRESSION;
+	private static boolean needsParentheses(Expression expression, Expression destination) {
+		int inner = OperatorPrecedence.getExpressionPrecedence(expression);
+		int outer;
+		EReference feature = destination.eContainmentFeature();
+		if (feature == DomPackage.eINSTANCE.getCallExpression_Arguments()) {
+			outer = OperatorPrecedence.SEQUENCE;
+		} else if (feature == DomPackage.eINSTANCE.getArrayLiteral_Elements()) {
+			outer = OperatorPrecedence.SEQUENCE;
+		} else if (feature == DomPackage.eINSTANCE.getParenthesizedExpression_Enclosed()) {
+			outer = OperatorPrecedence.SEQUENCE-1;
+		} else if (destination.eContainer() instanceof Expression) {
+			outer = OperatorPrecedence.getExpressionPrecedence((Expression)destination.eContainer());
+		} else if (destination.eContainer() instanceof VariableDeclaration) {
+			outer = OperatorPrecedence.SEQUENCE;
+		} else {
+			outer = OperatorPrecedence.SEQUENCE-1;
+		}
+		Node node = destination;
+		while (node != null) {
+			EReference ref = node.eContainmentFeature();
+			node = (Node)node.eContainer();
+			
+			if (ref == DomPackage.eINSTANCE.getBinaryExpression_Left()
+					|| ref == DomPackage.eINSTANCE.getBinaryExpression_Right()
+					|| ref == DomPackage.eINSTANCE.getConditionalExpression_Predicate()
+					|| ref == DomPackage.eINSTANCE.getConditionalExpression_Alternative()
+					|| ref == DomPackage.eINSTANCE.getVariableDeclaration_Initializer()
+					|| ref == DomPackage.eINSTANCE.getVariableStatement_Declarations()
+					|| ref == DomPackage.eINSTANCE.getConstStatement_Declarations())
+				continue;
+			if (ref == DomPackage.eINSTANCE.getForStatement_Initialization()
+					|| ref == DomPackage.eINSTANCE.getForInStatement_Item()
+					|| ref == DomPackage.eINSTANCE.getForEachInStatement_Item()) {
+				if (!isNodeNoIn(expression))
+					return true;
+			}
+			break;
+		}
+		if (inner != outer)
+			return inner < outer;
+		if (feature == DomPackage.eINSTANCE.getBinaryExpression_Right()) {
+			return !RefactoringUtils.isAssignment(((BinaryExpression)destination.eContainer()).getOperation());
+		}
+		return false;
+	}
+	
+	private static boolean isNodeNoIn(Node node) {
+		switch(node.eClass().getClassifierID()) {
+		case DomPackage.BINARY_EXPRESSION:
+			BinaryExpression be = (BinaryExpression)node;
+			return be.getOperation() != BinaryOperator.IN && isNodeNoIn(be.getLeft())
+					&& isNodeNoIn(be.getRight());
+		case DomPackage.CONDITIONAL_EXPRESSION:
+			ConditionalExpression ce = (ConditionalExpression)node;
+			return isNodeNoIn(ce.getPredicate()) && isNodeNoIn(ce.getAlternative());
+		default:
+			return true;
+		} 
 	}
 
-	private boolean needsParentheses(Statement last) {
+	/*private boolean needsParentheses(Statement last) {
 		if (!(last instanceof ReturnStatement))
 			return false;
 		if (!needsParentheses(((ReturnStatement)last).getExpression()))
@@ -714,7 +773,6 @@ public class CallInliner {
 	}
 
 	public RefactoringStatus perform() {
-		RefactoringStatus result= new RefactoringStatus();
 		Node parentStatement=invocation;
 		while (!(parentStatement.eContainmentFeature().getEReferenceType().getClassifierID() == DomPackage.STATEMENT))
 			parentStatement = (Node)parentStatement.eContainer();
@@ -794,11 +852,11 @@ public class CallInliner {
 			if (node.eClass().getClassifierID() == DomPackage.RETURN_STATEMENT) {
 				node = ((ReturnStatement)node).getExpression();
 				if (targetNode instanceof Expression) {
-					/*if (needsParentheses((Expression)node)) {
+					if (needsParentheses((Expression)node,(Expression)targetNode)) {
 						ParenthesizedExpression pExp = DomFactory.eINSTANCE.createParenthesizedExpression();
 						pExp.setEnclosed((Expression)node);
 						node= pExp;
-					}*/
+					}
 					Node cont = (Node)targetNode.eContainer();
 					EReference target = targetNode.eContainmentFeature();
 					if (target.isMany()) {
@@ -864,7 +922,16 @@ public class CallInliner {
 					if (binding == null)
 						return null;
 					Expression res = replacements.get(binding);
-					return res == null ? null : (Expression)EcoreUtil.copy(res);
+					if (res != null) {
+						res = (Expression)EcoreUtil.copy(res);
+						if (needsParentheses(res,(Expression)value)) {
+							ParenthesizedExpression pExp = DomFactory.eINSTANCE.createParenthesizedExpression();
+							pExp.setEnclosed((Expression)res);
+							res = pExp;
+						}
+						return res;
+					}
+					return null;
 				case DomPackage.THIS_EXPRESSION:
 					return (Expression)EcoreUtil.copy(receiverExpr);
 				default:
@@ -873,7 +940,7 @@ public class CallInliner {
 				}
 			}
 		}.traverse(stmts,node);
-		return result;
+		return new RefactoringStatus();
 	}
 	
 	/*private void initializeInsertionPoint(int nos) {
