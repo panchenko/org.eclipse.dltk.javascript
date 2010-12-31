@@ -262,17 +262,9 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 
 		SWTFactory.createLabel(composite, "Duplicate variable declaration", 1);
 		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
-				"JavaScriptParserProblems_"
-						+ JavaScriptParserProblems.DUPLICATE_VAR_DECLARATION),
-				ids);
-
-		SWTFactory.createLabel(composite, "Duplicate constant declaration", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
-				"JavaScriptParserProblems_"
-						+ JavaScriptParserProblems.DUPLICATE_VAR_DECLARATION),
-				ids);
+				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
+				"JavaScriptProblems_"
+						+ JavaScriptProblems.DUPLICATE_VAR_DECLARATION), ids);
 
 		SWTFactory.createLabel(composite, "Duplicate parameter declaration", 1);
 		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
@@ -280,17 +272,24 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				"JavaScriptParserProblems_"
 						+ JavaScriptParserProblems.DUPLICATE_PARAMETER), ids);
 
-		SWTFactory.createLabel(composite, "Variable hides argument", 1);
+		SWTFactory.createLabel(composite, "Parameter hides variable", 1);
 		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
-				"JavaScriptParserProblems_"
-						+ JavaScriptParserProblems.VAR_HIDES_ARGUMENT), ids);
+				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
+				"JavaScriptProblems_"
+						+ JavaScriptProblems.PARAMETER_HIDES_VARIABLE), ids);
 
-		SWTFactory.createLabel(composite, "Constant hides argument", 1);
+		SWTFactory.createLabel(composite, "Variable hides parameter", 1);
 		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
-				"JavaScriptParserProblems_"
-						+ JavaScriptParserProblems.CONST_HIDES_ARGUMENT), ids);
+				names),
+				new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
+						"JavaScriptProblems_"
+								+ JavaScriptProblems.VAR_HIDES_PARAMETER), ids);
+
+		SWTFactory.createLabel(composite, "Variable hides property", 1);
+		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
+				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
+				"JavaScriptProblems_" + JavaScriptProblems.VAR_HIDES_PROPERTY),
+				ids);
 
 		SWTFactory.createLabel(composite, "Function hides argument", 1);
 		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
