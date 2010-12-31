@@ -46,6 +46,13 @@ public class ValidationMessages extends NLS {
 	public static String HiddenPropertyNoType;
 	public static String ReassignmentOfConstant;
 	public static String DeclarationMismatchWithActualReturnType;
+	public static String ParameterHidesVariable;
+	public static String ParameterHidesProperty;
+	public static String ParameterHidesPropertyOfType;
+	public static String DuplicateVarDeclaration;
+	public static String VariableHidesParameter;
+	public static String VariableHidesPropertyOfType;
+	public static String VariableHidesProperty;
 
 	static {
 		// initialize resource bundle

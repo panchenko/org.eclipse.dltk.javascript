@@ -30,6 +30,7 @@ import org.eclipse.dltk.internal.javascript.ti.LazyReference;
 import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
+import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
@@ -37,6 +38,7 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -232,6 +234,46 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		@Override
 		public IValueReference visitFunctionStatement(FunctionStatement node) {
+			List<Argument> args = node.getArguments();
+			IValueCollection peekContext = peekContext();
+			for (Argument argument : args) {
+				IValueReference child = peekContext.getChild(argument
+						.getArgumentName());
+				if (child.exists()) {
+					if (child.getKind() == ReferenceKind.PROPERTY) {
+						Property property = (Property) child
+								.getAttribute(IReferenceAttributes.ELEMENT);
+						if (property.getDeclaringType() != null) {
+							reporter.reportProblem(
+									JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
+									NLS.bind(
+											ValidationMessages.ParameterHidesPropertyOfType,
+											new String[] {
+													argument.getArgumentName(),
+													property.getDeclaringType()
+															.getName() }),
+									argument.sourceStart(), argument
+											.sourceEnd());
+						} else {
+							reporter.reportProblem(
+									JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
+									NLS.bind(
+											ValidationMessages.ParameterHidesProperty,
+											argument.getArgumentName()),
+									argument.sourceStart(), argument
+											.sourceEnd());
+						}
+					} else {
+						reporter.reportProblem(
+								JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
+								NLS.bind(
+										ValidationMessages.ParameterHidesVariable,
+										argument.getArgumentName()), argument
+										.sourceStart(), argument.sourceEnd());
+					}
+				}
+			}
+
 			IValueReference reference = super.visitFunctionStatement(node);
 			IValueCollection collection = (IValueCollection) reference
 					.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
@@ -771,6 +813,51 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				reportDeprecatedProperty(property, null, node);
 			}
 			return result;
+		}
+
+		@Override
+		protected IValueReference createVariable(IValueCollection context,
+				VariableDeclaration declaration) {
+			final Identifier identifier = declaration.getIdentifier();
+			final String varName = identifier.getName();
+			IValueReference child = context.getChild(varName);
+			if (child.exists()) {
+				if (child.getKind() == ReferenceKind.ARGUMENT) {
+					reporter.reportProblem(
+							JavaScriptProblems.VAR_HIDES_PARAMETER, NLS.bind(
+									ValidationMessages.VariableHidesParameter,
+									declaration.getVariableName()), identifier
+									.sourceStart(), identifier.sourceEnd());
+				} else if (child.getKind() == ReferenceKind.PROPERTY) {
+					Property property = (Property) child
+							.getAttribute(IReferenceAttributes.ELEMENT);
+					if (property.getDeclaringType() != null) {
+						reporter.reportProblem(
+								JavaScriptProblems.VAR_HIDES_PROPERTY, NLS.bind(
+										ValidationMessages.VariableHidesPropertyOfType,
+										declaration.getVariableName(),property.getDeclaringType().getName()), identifier
+										.sourceStart(), identifier.sourceEnd());
+					}
+					else
+					{
+						reporter.reportProblem(
+								JavaScriptProblems.VAR_HIDES_PROPERTY, NLS.bind(
+										ValidationMessages.VariableHidesProperty,
+										declaration.getVariableName()), identifier
+										.sourceStart(), identifier.sourceEnd());
+
+					}
+				} else {
+					reporter.reportProblem(
+							JavaScriptProblems.DUPLICATE_VAR_DECLARATION,
+							NLS.bind(
+									ValidationMessages.DuplicateVarDeclaration,
+									declaration.getVariableName()), identifier
+									.sourceStart(), identifier.sourceEnd());
+				}
+
+			}
+			return super.createVariable(context, declaration);
 		}
 
 		private void validateProperty(PropertyExpression propertyExpression,

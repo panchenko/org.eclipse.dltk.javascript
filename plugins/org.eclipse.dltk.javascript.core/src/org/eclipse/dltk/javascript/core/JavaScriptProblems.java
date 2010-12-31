@@ -80,6 +80,22 @@ public interface JavaScriptProblems {
 	 * @since 3.0
 	 */
 	public static final int REASSIGNMENT_OF_CONSTANT = IProblem.FieldRelated + 9;
+	/**
+	 * @since 3.0
+	 */
+	public static final int PARAMETER_HIDES_VARIABLE = 10;
+	/**
+	 * @since 3.0
+	 */
+	public static final int DUPLICATE_VAR_DECLARATION = 11;
+	/**
+	 * @since 3.0
+	 */
+	public static final int VAR_HIDES_PARAMETER = 12;
+	/**
+	 * @since 3.0
+	 */
+	public static final int VAR_HIDES_PROPERTY = 0;
 	
 	public static final int EQUAL_AS_ASSIGN = IProblem.Internal + 1;
 	public static final int INVALID_ASSIGN_LEFT = IProblem.Internal + 2;
@@ -98,5 +114,4 @@ public interface JavaScriptProblems {
 	 * @since 3.0
 	 */
 	public static final int CONTINUE_OUTSIDE_LABEL = IProblem.Internal + 9;
-
 }
