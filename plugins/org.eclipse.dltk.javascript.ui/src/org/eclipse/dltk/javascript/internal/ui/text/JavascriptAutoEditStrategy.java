@@ -1325,7 +1325,7 @@ public class JavascriptAutoEditStrategy extends
 	}
 
 	private static IPreferenceStore getPreferenceStore() {
-		return DLTKUIPlugin.getDefault().getPreferenceStore();
+		return JavaScriptUI.getDefault().getPreferenceStore();
 	}
 
 	private boolean closeBrace() {
