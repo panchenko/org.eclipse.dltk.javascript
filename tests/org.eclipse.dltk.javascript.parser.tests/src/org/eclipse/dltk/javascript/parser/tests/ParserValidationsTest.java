@@ -17,19 +17,19 @@ public class ParserValidationsTest extends AbstractJSParserTest {
 				getProblemId());
 	}
 
-	public void testVarHidesParameter() {
-		StringList code = new StringList();
-		code.add("function hello(a) {");
-		code.add("  // 1");
-		code.add("  var a = 1");
-		code.add("  // 2");
-		code.add("}");
-		code.add("");
-		code.add("");
-		parse(code.toString());
-		assertEquals(JavaScriptParserProblems.VAR_HIDES_ARGUMENT,
-				getProblemId());
-	}
+//	public void testVarHidesParameter() {
+//		StringList code = new StringList();
+//		code.add("function hello(a) {");
+//		code.add("  // 1");
+//		code.add("  var a = 1");
+//		code.add("  // 2");
+//		code.add("}");
+//		code.add("");
+//		code.add("");
+//		parse(code.toString());
+//		assertEquals(JavaScriptParserProblems.VAR_HIDES_ARGUMENT,
+//				getProblemId());
+//	}
 
 	public void testDoubleSwitchDefault() {
 		StringList code = new StringList();
