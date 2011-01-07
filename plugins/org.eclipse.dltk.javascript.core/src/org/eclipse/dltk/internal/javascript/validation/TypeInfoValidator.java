@@ -801,6 +801,12 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 						ValidationMessages.ReassignmentOfConstant,
 						node.sourceStart(), node.sourceEnd());
 
+			} else if (left != null && !left.exists()) {
+				reporter.reportProblem(JavaScriptProblems.UNDECLARED_VARIABLE,
+						NLS.bind(
+						ValidationMessages.UndeclaredVariable,
+								left.getName()),
+						node.sourceStart(), node.sourceEnd());
 			}
 			return super.visitAssign(left, right, node);
 		}
