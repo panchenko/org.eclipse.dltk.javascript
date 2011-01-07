@@ -254,6 +254,14 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				"JavaScriptProblems_" + JavaScriptProblems.EQUAL_AS_ASSIGN),
 				ids);
 
+		SWTFactory.createLabel(composite, "Assignment to undeclared variable",
+				1);
+		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
+				names),
+				new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
+						"JavaScriptProblems_"
+								+ JavaScriptProblems.UNDECLARED_VARIABLE), ids);
+
 		SWTFactory.createLabel(composite, "Reassignment of a constant", 1);
 		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
 				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
