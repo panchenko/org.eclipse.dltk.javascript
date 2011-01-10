@@ -37,8 +37,6 @@ import org.eclipse.dltk.utils.IntList;
 
 public class DynamicTokenStream implements TokenStream, JSTokenStream {
 
-	private static final int UNKNOWN = -1;
-
 	private static final boolean DEBUG = false;
 
 	private final JSTokenSource tokenSource;
@@ -64,9 +62,10 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 
 	/**
 	 * The index into the tokens list of the current token (next token to
-	 * consume). p==UNKNOWN indicates not initialized value
+	 * consume).
 	 */
-	private int p = UNKNOWN;
+	private int p = 0;
+	private boolean pValid = false;
 
 	public DynamicTokenStream(JSTokenSource tokenSource) {
 		tokens = new ArrayList<Token>(500);
@@ -128,8 +127,9 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	 * Makes sure current index is valid
 	 */
 	private void init() {
-		if (p == UNKNOWN) {
-			p = skipOffTokenChannels(0); // init
+		if (!pValid) {
+			p = skipOffTokenChannels(p); // init
+			pValid = true;
 		}
 	}
 
@@ -154,13 +154,14 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	 * Walk past any token not on the channel the parser is listening to.
 	 */
 	public void consume() {
-		assert p != UNKNOWN;
+		assert pValid;
 		if (!endOfStream) {
 			fill(p + 1);
 		}
 		if (p < tokens.size()) {
 			++p;
 			p = skipOffTokenChannels(p); // leave p on valid token
+			pValid = true;
 		}
 	}
 
@@ -268,7 +269,7 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	}
 
 	public int index() {
-		assert p != UNKNOWN;
+		assert pValid;
 		return p;
 	}
 
@@ -330,6 +331,7 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 		currentMode = value;
 		tokenSource.setMode(value);
 		if (p < tokens.size()) {
+			pValid = false;
 			// reset already loaded tokens after current position
 			endOfStream = false;
 			for (int i = tokens.size(); --i >= p;) {
