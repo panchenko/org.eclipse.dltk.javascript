@@ -97,7 +97,7 @@ public class JavaScriptTokenSource extends JavaScriptLexer implements
 					break;
 				case '{':
 					// matchAny();
-					return JSParser.XMLFragment;
+					return XMLFragment;
 				case '\'':
 				case '\"':
 					matchAny();
@@ -175,7 +175,7 @@ public class JavaScriptTokenSource extends JavaScriptLexer implements
 					break;
 				case '{':
 					// matchAny();
-					return JSParser.XMLFragment;
+					return XMLFragment;
 				default:
 					matchAny();
 					break;
