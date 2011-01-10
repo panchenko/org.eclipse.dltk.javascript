@@ -16,12 +16,9 @@ import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractConte
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.env.IModuleSource;
-import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ModelException;
-import org.eclipse.dltk.core.search.FieldDeclarationMatch;
-import org.eclipse.dltk.core.search.FieldReferenceMatch;
 import org.eclipse.dltk.core.search.MethodDeclarationMatch;
 import org.eclipse.dltk.core.search.MethodReferenceMatch;
 import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
@@ -53,7 +50,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
 	}
-	
+
 	public void testFunctionLocalField() throws CoreException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = new SelectionTests(null).select(module,
@@ -89,7 +86,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
 	}
-	
+
 	public void testFunctionThisFieldOuterCall() throws CoreException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = new SelectionTests(null).select(module,
@@ -114,7 +111,8 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
 	}
 
-	public void testFunctionThisFieldWithInnerFunctionCall() throws CoreException {
+	public void testFunctionThisFieldWithInnerFunctionCall()
+			throws CoreException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = new SelectionTests(null).select(module,
 				lastPositionInFile("funA", module, false));
@@ -132,7 +130,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
 	}
-	
+
 	public void testLocalInitializerFunctionField() throws CoreException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = new SelectionTests(null).select(module,
@@ -144,7 +142,5 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
 	}
-
-
 
 }

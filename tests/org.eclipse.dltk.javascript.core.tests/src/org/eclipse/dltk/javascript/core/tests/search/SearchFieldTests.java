@@ -51,8 +51,7 @@ public class SearchFieldTests extends AbstractSingleProjectSearchTests {
 		assertTrue(results.getMatch(0) instanceof FieldDeclarationMatch);
 		assertTrue(results.getMatch(1) instanceof FieldReferenceMatch);
 	}
-	
-	
+
 	public void testLazyFieldCC() throws CoreException {
 		IModuleSource module = getModule("fields.js");
 		IModelElement[] elements = new SelectionTests(null).select(module,
@@ -64,6 +63,5 @@ public class SearchFieldTests extends AbstractSingleProjectSearchTests {
 		assertTrue(results.getMatch(0) instanceof FieldReferenceMatch);
 		assertTrue(results.getMatch(1) instanceof FieldDeclarationMatch);
 	}
-
 
 }
