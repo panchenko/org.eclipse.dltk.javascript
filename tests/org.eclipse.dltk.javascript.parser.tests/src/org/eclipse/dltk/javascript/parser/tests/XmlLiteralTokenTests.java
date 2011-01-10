@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.tests;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.runtime.Token;
@@ -28,12 +29,49 @@ public class XmlLiteralTokenTests extends AbstractJSParserTest {
 
 	private static class TestParser extends JavaScriptParser {
 
+		/*
+		 * increase visibility of inherited method
+		 */
 		@Override
 		public Script parse(JSTokenStream stream,
 				ISourceLineTracker lineTracker, IProblemReporter reporter) {
 			return super.parse(stream, lineTracker, reporter);
 		}
 
+	}
+
+	protected List<Token> tokenize(final String code) {
+		final JSTokenStream stream = JavaScriptParser.createTokenStream(code);
+		new TestParser().parse(stream, TextUtils.createLineTracker(code),
+				reporter);
+		return stream.getTokens();
+	}
+
+	protected List<Token> filter(List<Token> tokens) {
+		List<Token> result = null;
+		for (int i = 0, size = tokens.size(); i < size; ++i) {
+			Token token = tokens.get(i);
+			if (token.getChannel() != Token.HIDDEN_CHANNEL) {
+				if (result != null) {
+					result.add(token);
+				}
+			} else if (result == null) {
+				result = new ArrayList<Token>();
+				result.addAll(tokens.subList(0, i));
+			}
+		}
+		if (result != null) {
+			return result;
+		} else {
+			return tokens;
+		}
+	}
+
+	protected void assertTokenTypes(List<Token> tokens, int... tokenTypes) {
+		assertEquals(tokenTypes.length, tokens.size());
+		for (int i = 0; i < tokenTypes.length; ++i) {
+			assertEquals(tokenTypes[i], tokens.get(i).getType());
+		}
 	}
 
 	public void testXmlLiteralTokens() {
@@ -44,27 +82,25 @@ public class XmlLiteralTokenTests extends AbstractJSParserTest {
 		code.add("");
 		code.add("");
 
-		final JSTokenStream stream = JavaScriptParser.createTokenStream(code
-				.toString());
-		new TestParser().parse(stream,
-				TextUtils.createLineTracker(code.toString()), null);
+		List<Token> tokens = tokenize(code.toString());
+		assertTokenTypes(tokens, JSParser.VAR, JSParser.WhiteSpace,
+				JSParser.Identifier, JSParser.WhiteSpace, JSParser.ASSIGN,
+				JSParser.WhiteSpace, JSParser.XMLFragment, JSParser.LBRACE,
+				JSParser.Identifier, JSParser.RBRACE, JSParser.XMLFragmentEnd,
+				JSParser.EOL, JSParser.EOL, JSParser.EOL);
 
-		final List<Token> tokens = stream.getTokens();
-		assertEquals(14, tokens.size());
-		assertEquals(JSParser.VAR, tokens.get(0).getType());
-		assertEquals(JSParser.WhiteSpace, tokens.get(1).getType());
-		assertEquals(JSParser.Identifier, tokens.get(2).getType());
-		assertEquals(JSParser.WhiteSpace, tokens.get(3).getType());
-		assertEquals(JSParser.ASSIGN, tokens.get(4).getType());
-		assertEquals(JSParser.WhiteSpace, tokens.get(5).getType());
-		assertEquals(JSParser.XMLFragment, tokens.get(6).getType());
-		assertEquals(JSParser.LBRACE, tokens.get(7).getType());
-		assertEquals(JSParser.Identifier, tokens.get(8).getType());
-		assertEquals(JSParser.RBRACE, tokens.get(9).getType());
-		assertEquals(JSParser.XMLFragmentEnd, tokens.get(10).getType());
-		assertEquals(JSParser.EOL, tokens.get(11).getType());
-		assertEquals(JSParser.EOL, tokens.get(12).getType());
-		assertEquals(JSParser.EOL, tokens.get(13).getType());
+		tokens = filter(tokens);
+		assertTokenTypes(tokens, JSParser.VAR, JSParser.Identifier,
+				JSParser.ASSIGN, JSParser.XMLFragment, JSParser.LBRACE,
+				JSParser.Identifier, JSParser.RBRACE, JSParser.XMLFragmentEnd);
+	}
+
+	public void testXmlLiteralTokensWithCommment() {
+		final String code = "var x = <{name}/> // name\n";
+		final List<Token> tokens = filter(tokenize(code));
+		assertTokenTypes(tokens, JSParser.VAR, JSParser.Identifier,
+				JSParser.ASSIGN, JSParser.XMLFragment, JSParser.LBRACE,
+				JSParser.Identifier, JSParser.RBRACE, JSParser.XMLFragmentEnd);
 	}
 
 }
