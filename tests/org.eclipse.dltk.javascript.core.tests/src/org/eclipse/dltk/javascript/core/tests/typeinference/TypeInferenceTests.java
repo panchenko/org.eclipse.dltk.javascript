@@ -23,6 +23,7 @@ import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -613,7 +614,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("num");
 		assertEquals(getTypes(NUMBER), name.getTypes());
 
-		assertEquals(true, name.getAttribute(IReferenceAttributes.STATIC));
+		assertTrue(JavaScriptValidations.isStatic(name));
 
 		// TODO should a static reference getchild really return existing none
 		// static childs?
