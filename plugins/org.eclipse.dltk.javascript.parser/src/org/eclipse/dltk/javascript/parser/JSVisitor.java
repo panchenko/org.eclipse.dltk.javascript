@@ -42,6 +42,13 @@ public abstract class JSVisitor<E> {
 		case JSParser.NAMESPACE:
 			return visitIdentifier(node);
 
+		case JSParser.RESERVED_WORD:
+			if (node.getChildCount() == 1) {
+				return visitReservedWord(node.getChild(0));
+			} else {
+				return null;
+			}
+
 		case JSParser.BLOCK:
 			return visitBlock(node);
 
@@ -266,6 +273,10 @@ public abstract class JSVisitor<E> {
 	protected abstract E visitFunction(Tree node);
 
 	protected abstract E visitIdentifier(Tree node);
+
+	protected E visitReservedWord(Tree node) {
+		return visitIdentifier(node);
+	}
 
 	protected abstract E visitXmlLiteral(Tree node);
 

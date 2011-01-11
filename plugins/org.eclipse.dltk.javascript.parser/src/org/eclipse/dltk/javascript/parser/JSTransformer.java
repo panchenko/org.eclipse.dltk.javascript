@@ -833,6 +833,15 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return id;
 	}
 
+	protected ASTNode visitReservedWord(Tree node) {
+		reporter.setMessage(JavaScriptParserProblems.RESERVED_KEYWORD,
+				NLS.bind("\"{0}\" keyword is reserved", node.getText()));
+		final int start = getTokenOffset(node.getTokenStartIndex());
+		reporter.setRange(start, start + node.getText().length());
+		reporter.report();
+		return visitIdentifier(node);
+	}
+
 	@Override
 	protected ASTNode visitReturn(Tree node) {
 
@@ -1136,31 +1145,32 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 								.getTokenStartIndex()));
 			}
 			scope.add(declaration.getVariableName(), kind);
-//			SymbolKind replaced = scope
-//					.add(declaration.getVariableName(), kind);
-//			if (replaced != null && reporter != null) {
-//				final Identifier identifier = declaration.getIdentifier();
-//				reporter.setRange(identifier.sourceStart(),
-//						identifier.sourceEnd());
-//				String message;
-//				if (replaced == SymbolKind.VAR || replaced == SymbolKind.CONST) {
-//					message = "redeclaration of "
-//							+ replaced.name().toLowerCase() + " "
-//							+ declaration.getVariableName();
-//					reporter.setMessage(
-//							JavaScriptParserProblems.DUPLICATE_VAR_DECLARATION,
-//							message);
-//				} else {
-//					message = kind.name().toLowerCase() + " "
-//							+ declaration.getVariableName()
-//							+ " hides parameter";
-//					reporter.setMessage(
-//							kind == SymbolKind.VAR ? JavaScriptParserProblems.VAR_HIDES_ARGUMENT
-//									: JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
-//							message);
-//				}
-//				reporter.report();
-//			}
+			// SymbolKind replaced = scope
+			// .add(declaration.getVariableName(), kind);
+			// if (replaced != null && reporter != null) {
+			// final Identifier identifier = declaration.getIdentifier();
+			// reporter.setRange(identifier.sourceStart(),
+			// identifier.sourceEnd());
+			// String message;
+			// if (replaced == SymbolKind.VAR || replaced == SymbolKind.CONST) {
+			// message = "redeclaration of "
+			// + replaced.name().toLowerCase() + " "
+			// + declaration.getVariableName();
+			// reporter.setMessage(
+			// JavaScriptParserProblems.DUPLICATE_VAR_DECLARATION,
+			// message);
+			// } else {
+			// message = kind.name().toLowerCase() + " "
+			// + declaration.getVariableName()
+			// + " hides parameter";
+			// reporter.setMessage(
+			// kind == SymbolKind.VAR ?
+			// JavaScriptParserProblems.VAR_HIDES_ARGUMENT
+			// : JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
+			// message);
+			// }
+			// reporter.report();
+			// }
 		}
 	}
 

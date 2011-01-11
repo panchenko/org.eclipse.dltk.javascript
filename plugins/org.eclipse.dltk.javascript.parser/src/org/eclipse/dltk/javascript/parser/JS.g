@@ -212,6 +212,7 @@ tokens
 	XmlAttribute;
 	XML_LITERAL;
 	EMPTY_STATEMENT;
+	RESERVED_WORD;
 }
 
 @lexer::header
@@ -630,6 +631,8 @@ token
 	| XMLFragment
 	| XMLFragmentEnd
 	| punctuator
+	| NULL
+	| booleanLiteral
 	| numericLiteral
 	| StringLiteral
 	| xmlAttribute
@@ -639,9 +642,6 @@ token
 
 reservedWord
 	: keyword
-	| futureReservedWord
-	| NULL
-	| booleanLiteral
 	;
 
 // $>
@@ -692,7 +692,6 @@ futureReservedWord
 	| BYTE
 	| CHAR
 	| CLASS
-	| CONST
 	| DEBUGGER
 	| DOUBLE
 	| ENUM
@@ -766,6 +765,7 @@ identifier
   | SET
   | EACH
   | NAMESPACE
+  | futureReservedWord -> ^(RESERVED_WORD futureReservedWord)
   | Identifier
 ;
 
