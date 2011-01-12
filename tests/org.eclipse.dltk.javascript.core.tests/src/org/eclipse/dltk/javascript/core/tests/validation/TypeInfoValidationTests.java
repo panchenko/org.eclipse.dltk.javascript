@@ -65,7 +65,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("x.runUndefindMethod()");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+		assertEquals(JavaScriptProblems.UNDEFINED_JAVA_METHOD, problems.get(0)
 				.getID());
 	}
 
@@ -85,7 +85,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("x.run('Hello','World','!')");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+		assertEquals(JavaScriptProblems.WRONG_JAVA_PARAMETERS, problems.get(0)
 				.getID());
 	}
 
@@ -95,7 +95,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("x.execute(1)");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+		assertEquals(JavaScriptProblems.WRONG_JAVA_PARAMETERS, problems.get(0)
 				.getID());
 	}
 
@@ -154,8 +154,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var name = x.noname");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
-				.getID());
+		assertEquals(JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, problems
+				.get(0).getID());
 	}
 
 	public void testMethodAsPropertyAccess() {
@@ -175,9 +175,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
 				.getID());
 	}
-	
-	public void testFunctionCallWithCorrectFunctionObjectArgument()
-	{
+
+	public void testFunctionCallWithCorrectFunctionObjectArgument() {
 		StringList code = new StringList();
 		code.add("function Node1() {");
 		code.add("this.a=10;");
@@ -194,8 +193,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(0, problems.size());
 	}
 
-	public void testFunctionCallWithInCorrectFunctionObjectArgument()
-	{
+	public void testFunctionCallWithInCorrectFunctionObjectArgument() {
 		StringList code = new StringList();
 		code.add("function Node1() {");
 		code.add("this.a=10;");
@@ -211,10 +209,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 	}
-	
-	
-	public void testFunctionCallWithCorrectFunctionObjectArgumentJSDOC()
-	{
+
+	public void testFunctionCallWithCorrectFunctionObjectArgumentJSDOC() {
 		StringList code = new StringList();
 		code.add("function Node1() {");
 		code.add("this.a=10;");
@@ -234,8 +230,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(0, problems.size());
 	}
 
-	public void testFunctionCallWithInCorrectFunctionObjectArgumentJSDOC()
-	{
+	public void testFunctionCallWithInCorrectFunctionObjectArgumentJSDOC() {
 		StringList code = new StringList();
 		code.add("function Node1() {");
 		code.add("this.a=10;");
