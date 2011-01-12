@@ -225,11 +225,16 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	private void setEndByTokenIndex(ASTNode node, int stopIndex) {
-		while (stopIndex >= 0
-				&& tokens.get(stopIndex).getType() == JSParser.EOL) {
+		while (stopIndex >= 0 && isHidden(tokens.get(stopIndex))) {
 			--stopIndex;
 		}
 		node.setEnd(getTokenOffset(stopIndex + 1));
+	}
+
+	private static boolean isHidden(Token token) {
+		return token.getType() == JSParser.EOL
+				|| token.getType() == JSParser.SingleLineComment
+				|| token.getType() == JSParser.MultiLineComment;
 	}
 
 	private int getTokenOffset(int tokenType, int startTokenIndex,
