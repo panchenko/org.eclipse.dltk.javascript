@@ -158,6 +158,33 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.get(0).getID());
 	}
 
+	public void testUndefinedPropertyAssignment() {
+		StringList code = new StringList();
+		code.add("var x:ExampleService");
+		code.add("x.noname = true");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, problems
+				.get(0).getID());
+	}
+
+	public void testUndefinedVariableAssignment() {
+		StringList code = new StringList();
+		code.add("x.noname = true");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+				.getID());
+	}
+
+	public void testPropertyAssignment() {
+		StringList code = new StringList();
+		code.add("var x = { }");
+		code.add("x.noname = true");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 	public void testMethodAsPropertyAccess() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
