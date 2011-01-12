@@ -202,7 +202,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	protected IValueReference visitAssign(IValueReference left,
-			IValueReference right, ASTNode node) {
+			IValueReference right, BinaryOperation node) {
 		if (left != null)
 			assign(left, right);
 		return right;

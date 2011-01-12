@@ -31,6 +31,7 @@ import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
@@ -494,7 +495,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								.typeOf(reference);
 						while (referenceType != null) {
 							if (referenceType.getName().equals(
-										ITypeNames.FUNCTION)) {
+									ITypeNames.FUNCTION)) {
 
 								return;
 							}
@@ -570,15 +571,13 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (method.getDeclaringType().getKind() == TypeKind.JAVA) {
 					problemId = JavaScriptProblems.WRONG_JAVA_PARAMETERS;
 				}
-				reporter.reportProblem(problemId, NLS
-						.bind(ValidationMessages.MethodNotApplicable,
-								new String[] {
-										method.getName(),
-										describeParamTypes(method
-												.getParameters()),
-										method.getDeclaringType().getName(),
-										describeArgTypes(arguments) }),
-						methodNode.sourceStart(), methodNode.sourceEnd());
+				reporter.reportProblem(problemId, NLS.bind(
+						ValidationMessages.MethodNotApplicable,
+						new String[] { method.getName(),
+								describeParamTypes(method.getParameters()),
+								method.getDeclaringType().getName(),
+								describeArgTypes(arguments) }), methodNode
+						.sourceStart(), methodNode.sourceEnd());
 			} else {
 				reporter.reportProblem(JavaScriptProblems.WRONG_PARAMETERS, NLS
 						.bind(ValidationMessages.TopLevelMethodNotApplicable,
@@ -793,22 +792,46 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		@Override
 		protected IValueReference visitAssign(IValueReference left,
-				IValueReference right, ASTNode node) {
-			if (left != null
-					&& left.getAttribute(IReferenceAttributes.CONSTANT) != null) {
-				reporter.reportProblem(
-						JavaScriptProblems.REASSIGNMENT_OF_CONSTANT,
-						ValidationMessages.ReassignmentOfConstant,
-						node.sourceStart(), node.sourceEnd());
+				IValueReference right, BinaryOperation node) {
+			if (left != null) {
+				if (left.getAttribute(IReferenceAttributes.CONSTANT) != null) {
+					reporter.reportProblem(
+							JavaScriptProblems.REASSIGNMENT_OF_CONSTANT,
+							ValidationMessages.ReassignmentOfConstant,
+							node.sourceStart(), node.sourceEnd());
 
-			} else if (left != null && !left.exists()) {
-				reporter.reportProblem(JavaScriptProblems.UNDECLARED_VARIABLE,
-						NLS.bind(
-						ValidationMessages.UndeclaredVariable,
-								left.getName()),
-						node.sourceStart(), node.sourceEnd());
+				}
+				validate(node.getLeftExpression(), left);
 			}
 			return super.visitAssign(left, right, node);
+		}
+
+		private boolean validate(Expression expr, IValueReference reference) {
+			final IValueReference parent = reference.getParent();
+			if (parent == null) {
+				// top level
+				if (expr instanceof Identifier && !reference.exists()) {
+					reporter.reportProblem(
+							JavaScriptProblems.UNDECLARED_VARIABLE, NLS.bind(
+									ValidationMessages.UndeclaredVariable,
+									reference.getName()), expr.sourceStart(),
+							expr.sourceEnd());
+					return false;
+				}
+			} else if (expr instanceof PropertyExpression
+					&& validate(((PropertyExpression) expr).getObject(), parent)) {
+				final Type type = JavaScriptValidations.typeOf(parent);
+				if (type != null && type.getKind() == TypeKind.JAVA
+						&& !reference.exists()) {
+					reporter.reportProblem(
+							JavaScriptProblems.UNDEFINED_JAVA_PROPERTY,
+							NLS.bind(ValidationMessages.UndefinedProperty,
+									reference.getName(), type.getName()), expr
+									.sourceStart(), expr.sourceEnd());
+					return false;
+				}
+			}
+			return true;
 		}
 
 		@Override
@@ -839,18 +862,21 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							.getAttribute(IReferenceAttributes.ELEMENT);
 					if (property.getDeclaringType() != null) {
 						reporter.reportProblem(
-								JavaScriptProblems.VAR_HIDES_PROPERTY, NLS.bind(
+								JavaScriptProblems.VAR_HIDES_PROPERTY,
+								NLS.bind(
 										ValidationMessages.VariableHidesPropertyOfType,
-										declaration.getVariableName(),property.getDeclaringType().getName()), identifier
-										.sourceStart(), identifier.sourceEnd());
-					}
-					else
-					{
+										declaration.getVariableName(), property
+												.getDeclaringType().getName()),
+								identifier.sourceStart(), identifier
+										.sourceEnd());
+					} else {
 						reporter.reportProblem(
-								JavaScriptProblems.VAR_HIDES_PROPERTY, NLS.bind(
+								JavaScriptProblems.VAR_HIDES_PROPERTY,
+								NLS.bind(
 										ValidationMessages.VariableHidesProperty,
-										declaration.getVariableName()), identifier
-										.sourceStart(), identifier.sourceEnd());
+										declaration.getVariableName()),
+								identifier.sourceStart(), identifier
+										.sourceEnd());
 
 					}
 				} else {
@@ -932,10 +958,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (type != null && type.getKind() == TypeKind.JAVA) {
 					reporter.reportProblem(
 							JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, NLS
-									.bind(
-									ValidationMessages.UndefinedProperty,
-									result.getName(), type.getName()), propName
-									.sourceStart(), propName.sourceEnd());
+									.bind(ValidationMessages.UndefinedProperty,
+											result.getName(), type.getName()),
+							propName.sourceStart(), propName.sourceEnd());
 				} else if (type != null
 						&& (type.getKind() == TypeKind.JAVASCRIPT || type
 								.getKind() == TypeKind.PREDEFINED)) {
