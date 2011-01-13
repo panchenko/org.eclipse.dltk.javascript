@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.dltk.javascript</groupId>
-  <artifactId>javascript</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <modules>
-    <module>features/org.eclipse.dltk.javascript-feature</module>
-<!--    <module>features/org.eclipse.dltk.javascript.sdk</module>-->
-    
-    <module>plugins/org.eclipse.dltk.javascript.core</module>
-    <module>plugins/org.eclipse.dltk.javascript.core.dom.support</module>
-    <module>plugins/org.eclipse.dltk.javascript.core.manipulation</module>
-    <module>plugins/org.eclipse.dltk.javascript.debug</module>
-    <module>plugins/org.eclipse.dltk.javascript.debug.ui</module>
-    <module>plugins/org.eclipse.dltk.javascript.formatter</module>
-    <module>plugins/org.eclipse.dltk.javascript.jdt.integration</module>
-    <module>plugins/org.eclipse.dltk.javascript.jdt.integration.ui</module>
-    <module>plugins/org.eclipse.dltk.javascript.jsjdtdebugger</module>
-    <module>plugins/org.eclipse.dltk.javascript.launching</module>
-    <module>plugins/org.eclipse.dltk.javascript.parser</module>
-    <module>plugins/org.eclipse.dltk.javascript.rhino</module>
-    <module>plugins/org.eclipse.dltk.javascript.rhino.dbgp</module>
-    <module>plugins/org.eclipse.dltk.javascript.ui</module>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.eclipse.dltk.javascript</groupId>
+	<artifactId>javascript</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>features/org.eclipse.dltk.javascript-feature</module>
+		<!--    <module>features/org.eclipse.dltk.javascript.sdk</module>-->
+		<module>plugins/org.eclipse.dltk.javascript.core</module>
+		<module>plugins/org.eclipse.dltk.javascript.core.dom.support</module>
+		<module>plugins/org.eclipse.dltk.javascript.core.manipulation</module>
+		<module>plugins/org.eclipse.dltk.javascript.debug</module>
+		<module>plugins/org.eclipse.dltk.javascript.debug.ui</module>
+		<module>plugins/org.eclipse.dltk.javascript.formatter</module>
+		<module>plugins/org.eclipse.dltk.javascript.jdt.integration</module>
+		<module>plugins/org.eclipse.dltk.javascript.jdt.integration.ui</module>
+		<module>plugins/org.eclipse.dltk.javascript.jsjdtdebugger</module>
+		<module>plugins/org.eclipse.dltk.javascript.launching</module>
+		<module>plugins/org.eclipse.dltk.javascript.parser</module>
+		<module>plugins/org.eclipse.dltk.javascript.rhino</module>
+		<module>plugins/org.eclipse.dltk.javascript.rhino.dbgp</module>
+		<module>plugins/org.eclipse.dltk.javascript.ui</module>
 
-<!--    <module>tests/org.eclipse.dltk.javascript.core.tests</module>-->
-<!--    <module>tests/org.eclipse.dltk.javascript.formatter.tests</module>-->
-<!--    <module>tests/org.eclipse.dltk.javascript.parser.tests</module>-->
-<!--    <module>tests/org.eclipse.dltk.javascript.ui.tests</module>-->
-    
-    <module>tools/org.eclipse.dltk.javascript.core.edit</module>
-    <module>tools/org.eclipse.dltk.javascript.core.editor</module>
-    <module>tools/org.eclipse.dltk.javascript.dev-tools</module>
-  </modules>
+		<!--    <module>tests/org.eclipse.dltk.javascript.core.tests</module>-->
+		<!--    <module>tests/org.eclipse.dltk.javascript.formatter.tests</module>-->
+		<!--    <module>tests/org.eclipse.dltk.javascript.parser.tests</module>-->
+		<!--    <module>tests/org.eclipse.dltk.javascript.ui.tests</module>-->
+
+		<!--module>tools/org.eclipse.dltk.javascript.core.edit</module>
+		<module>tools/org.eclipse.dltk.javascript.core.editor</module>
+		<module>tools/org.eclipse.dltk.javascript.dev-tools</module-->
+	</modules>
 
 	<properties>
 		<tycho-version>0.8.0</tycho-version>
@@ -67,7 +66,6 @@
 				<artifactId>maven-osgi-compiler-plugin</artifactId>
 				<version>${tycho-version}</version>
 			</plugin>
-			
 			<plugin>
 				<groupId>org.sonatype.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
@@ -76,7 +74,22 @@
 					<resolver>p2</resolver>
 				</configuration>
 			</plugin>
-			
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>tycho-last</id>
+			<activation>
+				<property>
+					<name>tycho</name>
+					<value>last</value>
+				</property>
+			</activation>
+			<properties>
+				<tycho-version>0.10.0</tycho-version>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>
