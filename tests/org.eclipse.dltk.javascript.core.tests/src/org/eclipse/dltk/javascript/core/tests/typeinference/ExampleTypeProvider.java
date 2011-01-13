@@ -156,6 +156,11 @@ public class ExampleTypeProvider implements ITypeProvider {
 			type.setName(typeName);
 			type.setKind(TypeKind.JAVA);
 
+			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
+			property.setName("genericArrayProperty");
+			property.setType(context.getType("Array<String>"));
+			type.getMembers().add(property);
+
 			Method method1 = TypeInfoModelFactory.eINSTANCE.createMethod();
 			method1.setName("execute");
 			method1.setType(context.getType("Array<String>"));

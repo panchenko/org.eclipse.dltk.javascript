@@ -59,6 +59,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	private static IValueCollection inference(final String code) {
 		TypeInferencer2 inferencer = new TestTypeInferencer2();
+//		return inferencer.doInferencing(parse(code));
 		inferencer.doInferencing(parse(code));
 		return inferencer.getCollection();
 	}
@@ -573,6 +574,18 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 	public void testGenericArrayResolverMethod() {
 		List<String> lines = new StringList();
 		lines.add("var name = myGenericArrayTest.execute()[0];");
+		IValueCollection collection = inference(lines.toString());
+
+		IValueReference name = collection.getChild("name");
+		assertTrue(name.exists());
+		assertEquals(1, name.getTypes().size());
+		assertEquals("String", name.getTypes().iterator().next().getName());
+
+	}
+
+	public void testGenericArrayResolverProperty() {
+		List<String> lines = new StringList();
+		lines.add("var name = myGenericArrayTest.genericArrayProperty[0];");
 		IValueCollection collection = inference(lines.toString());
 
 		IValueReference name = collection.getChild("name");
