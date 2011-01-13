@@ -21,6 +21,7 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -37,8 +38,9 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 public class JSDocSupport implements IModelBuilder {
 
 	public static String[] getTags() {
-		return new String[] { DEPRECATED, PARAM_TAG, TYPE_TAG, RETURN_TAG,
-				RETURNS_TAG, PRIVATE_TAG, CONSTRUCTOR_TAG };
+		return new String[] { DEPRECATED, JSDocTag.PARAM, JSDocTag.TYPE,
+				JSDocTag.RETURN, JSDocTag.RETURNS, PRIVATE_TAG,
+				CONSTRUCTOR_TAG };
 	}
 
 	private static final String PRIVATE_TAG = "@private";
@@ -128,10 +130,8 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	private static final String PARAM_TAG = "@param"; //$NON-NLS-1$
-
 	private void parseParams(IMethod method, String comment) {
-		int index = comment.indexOf(PARAM_TAG);
+		int index = comment.indexOf(JSDocTag.PARAM);
 		Map<String, Type> objectPropertiesTypes = new HashMap<String, Type>();
 
 		while (index != -1) {
@@ -140,7 +140,7 @@ public class JSDocSupport implements IModelBuilder {
 				endLineIndex = comment.length();
 			}
 			String parameterString = comment.substring(
-					index + PARAM_TAG.length(), endLineIndex);
+					index + JSDocTag.PARAM.length(), endLineIndex);
 			StringTokenizer st = new StringTokenizer(parameterString);
 			String type = null;
 			boolean varargs = false;
@@ -206,15 +206,12 @@ public class JSDocSupport implements IModelBuilder {
 					break;
 				}
 			}
-			index = comment.indexOf(PARAM_TAG, endLineIndex);
+			index = comment.indexOf(JSDocTag.PARAM, endLineIndex);
 		}
 	}
 
-	private static final String TYPE_TAG = "@type"; //$NON-NLS-1$
-	private static final String RETURN_TAG = "@return";
-	private static final String RETURNS_TAG = "@returns";
-
-	private static final String[] RETURN_TAGS = { RETURNS_TAG, RETURN_TAG };
+	private static final String[] RETURN_TAGS = { JSDocTag.RETURNS,
+			JSDocTag.RETURN };
 
 	/**
 	 * @see St
@@ -223,14 +220,14 @@ public class JSDocSupport implements IModelBuilder {
 	 * @param comment
 	 */
 	public void parseType(IElement member, String comment) {
-		int index = comment.indexOf(TYPE_TAG);
+		int index = comment.indexOf(JSDocTag.TYPE);
 		if (index != -1) {
 			int endLineIndex = comment.indexOf("\n", index);
 			if (endLineIndex == -1) {
 				endLineIndex = comment.length();
 			}
 			StringTokenizer st = new StringTokenizer(comment.substring(index
-					+ TYPE_TAG.length(), endLineIndex), " \t\n\r\f*");
+					+ JSDocTag.TYPE.length(), endLineIndex), " \t\n\r\f*");
 			if (st.hasMoreTokens()) {
 				member.setType(translateTypeName(st.nextToken()));
 			}
