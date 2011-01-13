@@ -31,6 +31,7 @@ public class AllTests {
 		suite.addTestSuite(ErrorReportingTests.class);
 		suite.addTestSuite(FunctionDocumentationTests.class);
 		suite.addTestSuite(ParserValidationsTest.class);
+		suite.addTestSuite(SimpleJSDocParserTests.class);
 		// $JUnit-END$
 		return suite;
 	}
