@@ -497,10 +497,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				child.setDeclaredType(context.getType(arrayType));
 			}
 			if (node.getIndex() instanceof StringLiteral) {
-				child = extractNamedChild(array, node.getIndex());
-				if (arrayType != null && child.getDeclaredType() == null) {
-					child.setDeclaredType(context.getType(arrayType));
-				}
+				IValueReference namedChild = extractNamedChild(array,
+						node.getIndex());
+				if (arrayType != null && namedChild.getDeclaredType() == null) {
+					namedChild.setDeclaredType(context.getType(arrayType));
+				} else if (namedChild.exists())
+					child = namedChild;
 			}
 			return child;
 		}
