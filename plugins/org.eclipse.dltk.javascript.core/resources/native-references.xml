@@ -351,7 +351,7 @@
       <parameters name="endSlice" type="Number" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="small" type="String" description="Returns a string in a small font."/>
-    <members xsi:type="ref:Method" name="split" type="Array" description="Splits a string into an array of strings.">
+    <members xsi:type="ref:Method" name="split" type="Array<String>" description="Splits a string into an array of strings.">
       <parameters name="separator"/>
       <parameters name="howmany" kind="OPTIONAL"/>
     </members>
@@ -409,7 +409,7 @@
     <members xsi:type="ref:Property" name="ignoreComments" type="Boolean"/>
     <members xsi:type="ref:Property" name="ignoreProcessingInstructions" type="Boolean"/>
     <members xsi:type="ref:Property" name="ignoreWhitespace" type="Boolean"/>
-    <members xsi:type="ref:Method" name="inScopeNamespaces" type="Array" description="The inScopeNamespaces method returns an Array of Namespace objects representing the namespaces in scope for this XML object in the context of its parent. If the parent of this XML object is modified, the associated namespace declarations may change. The set of namespaces returned by this method may be a super set of the namespaces used by this value."/>
+    <members xsi:type="ref:Method" name="inScopeNamespaces" type="Array<Namespace>" description="The inScopeNamespaces method returns an Array of Namespace objects representing the namespaces in scope for this XML object in the context of its parent. If the parent of this XML object is modified, the associated namespace declarations may change. The set of namespaces returned by this method may be a super set of the namespaces used by this value."/>
     <members xsi:type="ref:Method" name="insertChildAfter" type="XML" description="The insertChildAfter method inserts the given child2 after the given child1 in this XML object and returns this XML object. If child1 is null, the insertChildAfter method inserts child2 before all children of this XML object (i.e., after none of them). If child1 does not exist in this XML object, it returns without modifying this XML object.">
       <parameters name="child1"/>
       <parameters name="child2" kind="OPTIONAL"/>
