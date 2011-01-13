@@ -100,6 +100,10 @@ public interface JavaScriptProblems {
 	 * @since 3.0
 	 */
 	public static final int UNDECLARED_VARIABLE = IProblem.FieldRelated + 14;
+	/**
+	 * @since 3.0
+	 */
+	public static final int VAR_HIDES_FUNCTION = IProblem.FieldRelated + 15;
 	
 	public static final int EQUAL_AS_ASSIGN = IProblem.Internal + 1;
 	public static final int INVALID_ASSIGN_LEFT = IProblem.Internal + 2;

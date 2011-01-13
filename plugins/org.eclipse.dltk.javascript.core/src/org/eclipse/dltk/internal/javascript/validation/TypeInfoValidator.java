@@ -35,7 +35,9 @@ import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -123,6 +125,24 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 
 		public void call() {
 			visitor.validateCallExpression(node, reference, arguments);
+		}
+	}
+
+	private static class NotExistingIdentiferValidator implements
+			ExpressionValidator {
+		private final Identifier identifer;
+		private final IValueReference reference;
+		private final ValidationVisitor visitor;
+
+		public NotExistingIdentiferValidator(Identifier identifer,
+				IValueReference reference, ValidationVisitor visitor) {
+			this.identifer = identifer;
+			this.reference = reference;
+			this.visitor = visitor;
+		}
+
+		public void call() {
+			visitor.validate(identifer, reference);
 		}
 	}
 
@@ -455,7 +475,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
 					}
-				} else {
+				} else if (!isArrayLookup(expression)) {
+
 					final Type type = JavaScriptValidations.typeOf(reference
 							.getParent());
 					if (type != null) {
@@ -546,6 +567,23 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				}
 			}
 			return;
+		}
+
+		private boolean isArrayLookup(ASTNode expression) {
+			ASTNode walker = expression;
+			while (walker != null) {
+				if (walker instanceof GetArrayItemExpression)
+					return true;
+				if (walker instanceof PropertyExpression) {
+					if (((PropertyExpression) walker).getObject() instanceof GetArrayItemExpression)
+						return true;
+				}
+				if (walker instanceof JSNode) {
+					walker = ((JSNode) walker).getParent();
+				} else
+					return false;
+			}
+			return false;
 		}
 
 		private void reportDeprecatedMethod(ASTNode methodNode,
@@ -801,7 +839,6 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							node.sourceStart(), node.sourceEnd());
 
 				}
-				validate(node.getLeftExpression(), left);
 			}
 			return super.visitAssign(left, right, node);
 		}
@@ -840,6 +877,14 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			final Property property = extractElement(result, Property.class);
 			if (property != null && property.isDeprecated()) {
 				reportDeprecatedProperty(property, null, node);
+			} else {
+				final Type type = JavaScriptValidations.typeOf(result);
+				if (type != null) {
+					checkType(node, type, type.getName());
+				} else if (!result.exists()) {
+					pushExpressionValidator(new NotExistingIdentiferValidator(
+							node, result, this));
+				}
 			}
 			return result;
 		}
@@ -855,6 +900,12 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					reporter.reportProblem(
 							JavaScriptProblems.VAR_HIDES_PARAMETER, NLS.bind(
 									ValidationMessages.VariableHidesParameter,
+									declaration.getVariableName()), identifier
+									.sourceStart(), identifier.sourceEnd());
+				} else if (child.getKind() == ReferenceKind.FUNCTION) {
+					reporter.reportProblem(
+							JavaScriptProblems.VAR_HIDES_FUNCTION, NLS.bind(
+									ValidationMessages.VariableHidesFunction,
 									declaration.getVariableName()), identifier
 									.sourceStart(), identifier.sourceEnd());
 				} else if (child.getKind() == ReferenceKind.PROPERTY) {
@@ -952,7 +1003,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									result.getName(), type.getName()), propName
 									.sourceStart(), propName.sourceEnd());
 				}
-			} else if (!result.exists()) {
+			} else if (!result.exists() && !isArrayLookup(propertyExpression)) {
 				final Type type = JavaScriptValidations.typeOf(result
 						.getParent());
 				if (type != null && type.getKind() == TypeKind.JAVA) {
