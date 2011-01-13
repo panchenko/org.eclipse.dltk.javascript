@@ -255,6 +255,17 @@ public abstract class ElementValue implements IValue {
 		public IValue getChild(String name, boolean resolve) {
 			IValue child = children.get(name);
 			if (child == null) {
+				if (name.equals(IValueReference.ARRAY_OP)
+						&& property.getType() != null) {
+					String arrayType = (String) property.getType()
+							.getAttribute(
+							ITypeInferenceContext.GENERIC_ARRAY_TYPE);
+					if (arrayType != null) {
+						ElementValue arrayOpChild = createFor(context.getType(arrayType), context);
+						children.put(name, arrayOpChild);
+						return arrayOpChild;
+					}
+				}
 				ElementValue eValue = ElementValue.findMember(
 						property.getType(), name);
 				if (eValue != null) {
