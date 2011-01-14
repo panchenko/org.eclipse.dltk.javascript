@@ -8,18 +8,22 @@ import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 
 public class JavaScriptValidationSeverityReporter implements ISeverityReporter {
 
-	public Severity getSeverity(int problemId) {
+	public Severity getSeverity(int problemId, Severity defaultSeverity) {
+		if (defaultSeverity == null)
+			defaultSeverity = Severity.WARNING;
+		int defaultProblemSeverity = defaultSeverity == Severity.WARNING ? ProblemSeverities.Warning
+				: ProblemSeverities.Error;
 
 		int severity = new InstanceScope().getNode(JavaScriptPlugin.PLUGIN_ID)
 				.getInt("JavaScriptProblems_" + problemId,
-						ProblemSeverities.Warning);
+						defaultProblemSeverity);
 		switch (severity) {
 		case ProblemSeverities.Error:
 			return Severity.ERROR;
 		case ProblemSeverities.Ignore:
 			return null;
 		}
-		return Severity.WARNING;
+		return defaultSeverity;
 	}
 
 }
