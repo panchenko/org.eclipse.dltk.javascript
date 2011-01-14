@@ -837,8 +837,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							JavaScriptProblems.REASSIGNMENT_OF_CONSTANT,
 							ValidationMessages.ReassignmentOfConstant,
 							node.sourceStart(), node.sourceEnd());
-
-				}
+				} else
+					validate(node.getLeftExpression(), left);
 			}
 			return super.visitAssign(left, right, node);
 		}
