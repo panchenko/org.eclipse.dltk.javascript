@@ -59,7 +59,7 @@ public class Reporter extends LineTracker implements IProblemReporter {
 		
 		if (severityReporter != null)
 		{
-			severity = severityReporter.getSeverity(id);
+			severity = severityReporter.getSeverity(id,severity);
 			if (severity == null) return null;
 		}
 
@@ -140,7 +140,7 @@ public class Reporter extends LineTracker implements IProblemReporter {
 	public void reportProblem(int id, String message, int start, int end) {
 		if (severityReporter != null)
 		{
-			severity = severityReporter.getSeverity(id);
+			severity = severityReporter.getSeverity(id,severity);
 			if (severity == null) return;
 		}
 
