@@ -16,12 +16,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
-import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
@@ -69,7 +68,6 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		this.source = source;
 	}
 
-	// public IValueCollection doInferencing(Script script) {
 	public void doInferencing(Script script) {
 		try {
 			elements.clear();
@@ -93,14 +91,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		JavaScriptPlugin.error(e);
 	}
 
-	public IValueReference evaluate(ASTNode node) {
-		initializeVisitor();
-		return visitor.visit(node);
-	}
-
-	public IValueCollection getCollection() {
-		return visitor.getCollection();
-	}
+	 public IValueReference evaluate(ASTNode node) {
+	 initializeVisitor();
+	 return visitor.visit(node);
+	 }
+	
+	 public IValueCollection getCollection() {
+	 return visitor.getCollection();
+	 }
 
 	private final Map<String, Type> types = new HashMap<String, Type>();
 
@@ -414,6 +412,13 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					IValue value = ((IValueProvider) collection).getValue();
 					if (member.getType() != null) {
 						value.setDeclaredType(member.getType());
+					}
+					if (value.getKind() == ReferenceKind.UNKNOWN) {
+						if (member instanceof Property) {
+							value.setKind(ReferenceKind.PROPERTY);
+						} else {
+							value.setKind(ReferenceKind.METHOD);
+						}
 					}
 					return value;
 				} else {
