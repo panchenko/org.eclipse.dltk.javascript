@@ -123,4 +123,8 @@ public class TypeInfoModelLoader {
 		return result;
 	}
 
+	public boolean hasResource(Resource resource) {
+		return resourceSet.getResources().contains(resource);
+	}
+
 }

@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -25,6 +26,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
@@ -42,7 +44,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
@@ -75,11 +76,11 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			elements.clear();
 			initializeVisitor();
 			visitor.visit(script);
-//			IValueCollection collection = visitor.getCollection();
-//			visitor = null;
-//			return collection;
+			// IValueCollection collection = visitor.getCollection();
+			// visitor = null;
+			// return collection;
 		} catch (PositionReachedException e) {
-//			visitor = null;
+			// visitor = null;
 			throw e;
 		} catch (RuntimeException e) {
 			log(e);
@@ -93,14 +94,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		JavaScriptPlugin.error(e);
 	}
 
-	 public IValueReference evaluate(ASTNode node) {
-	 initializeVisitor();
-	 return visitor.visit(node);
-	 }
-	
-	 public IValueCollection getCollection() {
-	 return visitor.getCollection();
-	 }
+	public IValueReference evaluate(ASTNode node) {
+		initializeVisitor();
+		return visitor.visit(node);
+	}
+
+	public IValueCollection getCollection() {
+		return visitor.getCollection();
+	}
 
 	private final Map<String, Type> types = new HashMap<String, Type>();
 
@@ -171,10 +172,16 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		if (type != null) {
 			return type;
 		}
-		type = loadType(typeName, queryProviders, queryPredefined);
+		type = invariantRS.getCachedType(typeName);
 		if (type != null) {
 			types.put(typeName, type);
-			addToResource(type);
+			return type;
+		}
+		type = loadType(typeName, queryProviders, queryPredefined);
+		if (type != null) {
+			validateTypeInfo(type);
+			types.put(typeName, type);
+			typeRS.addToResource(type);
 			return type;
 		}
 		if (allowProxy) {
@@ -183,11 +190,26 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 		if (allowUnknown) {
 			type = createUnknown(typeName);
-			addToResource(type);
+			typeRS.addToResource(type);
 			types.put(typeName, type);
 			return type;
 		}
 		return null;
+	}
+
+	private void validateTypeInfo(Type type) {
+		final Resource resource = ((EObject) type).eResource();
+		if (resource != null) {
+			Assert.isTrue(resource == invariantRS.getResource()
+					|| TypeInfoModelLoader.getInstance().hasResource(resource));
+		}
+		// TODO check that member referenced types are contained or proxy
+	}
+
+	public void markInvariant(Type type) {
+		Assert.isLegal(((EObject) type).eContainer() == null);
+		Assert.isLegal(((EObject) type).eResource() == null);
+		invariantRS.add(type);
 	}
 
 	private static Type createUnknown(String typeName) {
@@ -239,89 +261,79 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 
 			if (genericArrayType != null) {
-
-				type = TypeInfoModelLoader.getInstance().getType(
-						ITypeNames.ARRAY);
-
 				Type genericType = getType(genericArrayType,
 						canQueryTypeProviders(), true, true, false);
-				if (genericType == null || type == null)
+				if (genericType == null)
 					return type;
 
-				Type typedArray = TypeInfoModelFactory.eINSTANCE.createType();
-				typedArray.setName(arrayType);
-				typedArray.setDescription(type.getDescription());
-				typedArray.setKind(type.getKind());
-				typedArray.setAttribute(GENERIC_ARRAY_TYPE, genericArrayType);
-				typedArray.setSuperType(type.getSuperType());
-
-				EList<Member> arrayMembers = type.getMembers();
-				EList<Member> typedArrayMembers = typedArray.getMembers();
-
-				for (Member member : arrayMembers) {
-					if (member instanceof Method) {
-						String memberName = member.getName();
-						Method method = TypeInfoModelFactory.eINSTANCE
-								.createMethod();
-						method.setName(memberName);
-						method.setDescription(member.getDescription());
-						method.setStatic(member.isStatic());
-						method.setDeprecated(member.isDeprecated());
-						method.setVisible(member.isVisible());
-						EList<Parameter> parameters = method.getParameters();
-
-						EList<Parameter> original = ((Method) member)
-								.getParameters();
-						for (Parameter parameter : original) {
-							Parameter clone = TypeInfoModelFactory.eINSTANCE
-									.createParameter();
-							clone.setKind(parameter.getKind());
-							clone.setName(parameter.getName());
-							clone.setType(parameter.getType());
-							parameters.add(clone);
-						}
-
-						if ("pop".equals(memberName)
-								|| "shift".equals(memberName)) {
-							method.setType(genericType);
-						} else if ("filter".equals(memberName)
-								|| "reverse".equals(memberName)
-								|| "slice".equals(memberName)
-								|| "sort".equals(memberName)
-								|| "splice".equals(memberName)) {
-							method.setType(typedArray);
-						} else {
-							method.setType(member.getType());
-						}
-						typedArrayMembers.add(method);
-					} else {
-						Property property = TypeInfoModelFactory.eINSTANCE
-								.createProperty();
-						property.setDescription(member.getDescription());
-						property.setDeprecated(member.isDeprecated());
-						property.setName(member.getName());
-						property.setReadOnly(((Property) member).isReadOnly());
-						property.setStatic(member.isStatic());
-						property.setVisible(member.isVisible());
-						typedArrayMembers.add(property);
-					}
-				}
-				return typedArray;
+				return createTypedArray(arrayType, genericArrayType,
+						genericType);
 			}
 		}
 		return null;
 	}
 
-	private void addToResource(final Type type) {
-		final EObject object = (EObject) type;
-		if (object.eResource() == null) {
-			if (typesResource == null) {
-				typesResource = new ResourceImpl(URI.createGenericURI(
-						PROXY_SCHEME, PROXY_OPAQUE_PART, null));
-				typeRS.getResources().add(typesResource);
-			}
-			typesResource.getContents().add(object);
+	private static Type createTypedArray(String arrayType,
+			String genericArrayType, Type genericType) {
+		final Type typedArray = TypeInfoModelFactory.eINSTANCE.createType();
+		typedArray.setName(arrayType);
+		final Type array = TypeInfoModelLoader.getInstance().getType(
+				ITypeNames.ARRAY);
+		if (array == null) {
+			return null;
 		}
+		typedArray.setDescription(array.getDescription());
+		typedArray.setKind(array.getKind());
+		typedArray.setAttribute(GENERIC_ARRAY_TYPE, genericArrayType);
+		typedArray.setSuperType(array.getSuperType());
+
+		EList<Member> typedArrayMembers = typedArray.getMembers();
+
+		for (Member member : array.getMembers()) {
+			if (member instanceof Method) {
+				String memberName = member.getName();
+				Method method = TypeInfoModelFactory.eINSTANCE.createMethod();
+				method.setName(memberName);
+				method.setDescription(member.getDescription());
+				method.setStatic(member.isStatic());
+				method.setDeprecated(member.isDeprecated());
+				method.setVisible(member.isVisible());
+				EList<Parameter> parameters = method.getParameters();
+
+				for (Parameter parameter : ((Method) member).getParameters()) {
+					Parameter clone = TypeInfoModelFactory.eINSTANCE
+							.createParameter();
+					clone.setKind(parameter.getKind());
+					clone.setName(parameter.getName());
+					clone.setType(parameter.getType());
+					parameters.add(clone);
+				}
+
+				if ("pop".equals(memberName) || "shift".equals(memberName)) {
+					method.setType(genericType);
+				} else if ("filter".equals(memberName)
+						|| "reverse".equals(memberName)
+						|| "slice".equals(memberName)
+						|| "sort".equals(memberName)
+						|| "splice".equals(memberName)) {
+					method.setType(typedArray);
+				} else {
+					method.setType(member.getType());
+				}
+				typedArrayMembers.add(method);
+			} else {
+				Property property = TypeInfoModelFactory.eINSTANCE
+						.createProperty();
+				property.setDescription(member.getDescription());
+				property.setDeprecated(member.isDeprecated());
+				property.setName(member.getName());
+				property.setReadOnly(((Property) member).isReadOnly());
+				property.setStatic(member.isStatic());
+				property.setVisible(member.isVisible());
+				typedArrayMembers.add(property);
+			}
+		}
+		return typedArray;
 	}
 
 	private static final String PROXY_SCHEME = "proxy";
@@ -331,7 +343,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	 * @param typeName
 	 * @return
 	 */
-	private Type createProxy(String typeName) {
+	private static Type createProxy(String typeName) {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(typeName);
 		((InternalEObject) type).eSetProxyURI(URI.createGenericURI(
@@ -339,14 +351,13 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return type;
 	}
 
-	private class TypeResourceSet extends ResourceSetImpl {
+	static abstract class TypeResourceSet extends ResourceSetImpl {
 
 		@Override
 		public EObject getEObject(URI uri, boolean loadOnDemand) {
 			if (PROXY_SCHEME.equals(uri.scheme())
 					&& PROXY_OPAQUE_PART.equals(uri.opaquePart())) {
-				final Type type = getType(uri.fragment(), true, false, false,
-						false);
+				final Type type = resolveTypeProxy(uri.fragment());
 				if (type == null) {
 					return (EObject) createUnknown(uri.fragment());
 				} else if (type instanceof EObject) {
@@ -361,13 +372,180 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return super.getEObject(uri, loadOnDemand);
 		}
 
+		protected abstract Type resolveTypeProxy(String typeName);
+
+		public synchronized Resource getResource() {
+			if (typesResource == null) {
+				typesResource = new ResourceImpl(URI.createGenericURI(
+						PROXY_SCHEME, PROXY_OPAQUE_PART, null));
+				getResources().add(typesResource);
+			}
+			return typesResource;
+		}
+
+		private Resource typesResource = null;
+
+		public void addToResource(final Type type) {
+			final EObject object = (EObject) type;
+			if (object.eResource() == null) {
+				add(type);
+			}
+		}
+
+		protected synchronized void add(Type type) {
+			getResource().getContents().add((EObject) type);
+		}
+
 	}
 
-	private final ResourceSet typeRS = new TypeResourceSet();
+	private final TypeResourceSet typeRS = new TypeResourceSet() {
+		@Override
+		protected Type resolveTypeProxy(String typeName) {
+			return getType(typeName, true, false, false, false);
+		}
+	};
 
-	private Resource typesResource = null;
+	static class InvariantTypeResourceSet extends TypeResourceSet implements
+			ITypeInfoContext {
 
-	private boolean isProxy(Type type) {
+		private final Set<String> activeTypeRequests = new HashSet<String>();
+
+		private boolean canQueryTypeProviders() {
+			return activeTypeRequests.isEmpty();
+		}
+
+		private Type getType(String typeName, boolean queryProviders,
+				boolean queryPredefined, boolean allowProxy,
+				boolean allowUnknown) {
+			Type type = types.get(typeName);
+			if (type != null) {
+				return type;
+			}
+			type = loadType(typeName, queryProviders, queryPredefined);
+			if (type != null) {
+				// TODO validateTypeInfo(type);
+				addToResource(type);
+				return type;
+			}
+			if (allowProxy) {
+				type = createProxy(typeName);
+				return type;
+			}
+			if (allowUnknown) {
+				type = createUnknown(typeName);
+				addToResource(type);
+				return type;
+			}
+			return null;
+		}
+
+		private Type loadType(String typeName, boolean queryProviders,
+				boolean queryPredefined) {
+			if (queryProviders) {
+				if (activeTypeRequests.add(typeName)) {
+					try {
+						for (ITypeProvider provider : TypeInfoManager
+								.getTypeProviders()) {
+							final Type type = provider.getType(this, typeName);
+							if (type != null && !isProxy(type)) {
+								return type;
+							}
+						}
+					} finally {
+						activeTypeRequests.remove(typeName);
+					}
+				}
+			}
+			if (queryPredefined) {
+				Type type = TypeInfoModelLoader.getInstance().getType(typeName);
+				if (type != null) {
+					return type;
+				}
+				String arrayType = typeName;
+				String genericArrayType = null;
+				String arrayGenericStart = ITypeNames.ARRAY + '<';
+				if (arrayType.endsWith("[]")) {
+					genericArrayType = arrayType.substring(0,
+							arrayType.length() - 2);
+					arrayType = arrayGenericStart + genericArrayType + '>';
+				} else if (arrayType.startsWith(arrayGenericStart)
+						&& arrayType.endsWith(">")) {
+					genericArrayType = arrayType.substring(6,
+							arrayType.length() - 1);
+				}
+
+				if (genericArrayType != null) {
+					Type genericType = getType(genericArrayType,
+							canQueryTypeProviders(), true, true, false);
+					if (genericType == null)
+						return type;
+
+					return createTypedArray(arrayType, genericArrayType,
+							genericType);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected Type resolveTypeProxy(String typeName) {
+			return getType(typeName, true, false, false, false);
+		}
+
+		public Type getType(String typeName) {
+			if (typeName == null || typeName.length() == 0) {
+				return null;
+			}
+			final boolean queryProviders = canQueryTypeProviders();
+			return getType(typeName, queryProviders, true, !queryProviders,
+					true);
+		}
+
+		public Type getKnownType(String typeName) {
+			if (typeName == null || typeName.length() == 0) {
+				return null;
+			}
+			final boolean queryProviders = canQueryTypeProviders();
+			return getType(typeName, queryProviders, true, !queryProviders,
+					false);
+		}
+
+		public void markInvariant(Type type) {
+			Assert.isLegal(((EObject) type).eContainer() == null);
+			Assert.isLegal(((EObject) type).eResource() == null);
+			add(type);
+		}
+
+		public IModelElement getModelElement() {
+			return null;
+		}
+
+		public ReferenceSource getSource() {
+			return ReferenceSource.UNKNOWN;
+		}
+
+		private final Map<String, Type> types = new HashMap<String, Type>();
+
+		@Override
+		public synchronized void add(Type type) {
+			super.add(type);
+			types.put(type.getName(), type);
+		}
+
+		public synchronized Type getCachedType(String typeName) {
+			return types.get(typeName);
+		}
+
+		public synchronized void reset() {
+			types.clear();
+			getResource().getContents().clear();
+		}
+
+	}
+
+	static final InvariantTypeResourceSet invariantRS = new InvariantTypeResourceSet();
+
+	private static boolean isProxy(Type type) {
 		return type instanceof EObject && ((EObject) type).eIsProxy();
 	}
 
