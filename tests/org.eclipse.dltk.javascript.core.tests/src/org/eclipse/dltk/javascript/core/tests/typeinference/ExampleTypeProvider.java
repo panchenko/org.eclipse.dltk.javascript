@@ -38,7 +38,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 	private static final String TYPE_SERVICE2 = "ExampleService2";
 
 	static final String TYPE_EXAMPLE_FORMS = "ExampleForms";
-	
+
 	static final String TYPE_GENERIC_ARRAY_METHOD = "ExampleArrayMethod";
 
 	public Type getType(ITypeInfoContext context, String typeName) {
@@ -100,6 +100,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 				type.getMembers().add(method4);
 			}
 
+			context.markInvariant(type);
+
 			return type;
 		} else if (TYPE_RESPONSE.equals(typeName)) {
 			Type type = TypeInfoModelFactory.eINSTANCE.createType();
@@ -115,6 +117,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 			prop2.setName("service");
 			prop2.setType(context.getType(TYPE_SERVICE));
 			type.getMembers().add(prop2);
+
+			context.markInvariant(type);
 
 			return type;
 		} else if (TYPE_SERVICE2.equals(typeName)) {
@@ -166,24 +170,20 @@ public class ExampleTypeProvider implements ITypeProvider {
 			method1.setType(context.getType("Array<String>"));
 			type.getMembers().add(method1);
 			return type;
-		}
-		else if (typeName.startsWith("Packages."))
-		{
+		} else if (typeName.startsWith("Packages.")) {
 			String name = typeName.substring("Packages.".length());
-			try
-			{
-				Class< ? > clz = Class.forName(name, false, Thread.currentThread().getContextClassLoader());
+			try {
+				Class<?> clz = Class.forName(name, false, Thread
+						.currentThread().getContextClassLoader());
 				return getClassType(clz, name, context);
-			}
-			catch (ClassNotFoundException e)
-			{
+			} catch (ClassNotFoundException e) {
 			}
 		}
 		return null;
 	}
-	
-	private static Type getClassType(Class< ? > clz, String name, ITypeInfoContext context)
-	{
+
+	private static Type getClassType(Class<?> clz, String name,
+			ITypeInfoContext context) {
 		Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(name);
 		type.setKind(TypeKind.JAVA);
@@ -193,36 +193,39 @@ public class ExampleTypeProvider implements ITypeProvider {
 
 		EList<Member> members = type.getMembers();
 
-		for (Field field : fields)
-		{
+		for (Field field : fields) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setName(field.getName());
-			Class< ? > fieldType = field.getType();
-			if (fieldType != null) property.setType(context.getKnownType("Packages." + fieldType.getName()));
-			if (Modifier.isStatic(field.getModifiers()))
-			{
+			Class<?> fieldType = field.getType();
+			if (fieldType != null)
+				property.setType(context.getKnownType("Packages."
+						+ fieldType.getName()));
+			if (Modifier.isStatic(field.getModifiers())) {
 				property.setStatic(true);
 			}
 			members.add(property);
 		}
-		for (java.lang.reflect.Method method : methods)
-		{
-			org.eclipse.dltk.javascript.typeinfo.model.Method m = TypeInfoModelFactory.eINSTANCE.createMethod();
+		for (java.lang.reflect.Method method : methods) {
+			org.eclipse.dltk.javascript.typeinfo.model.Method m = TypeInfoModelFactory.eINSTANCE
+					.createMethod();
 			m.setName(method.getName());
-			Class< ? > methodType = method.getReturnType();
-			if (methodType != null) m.setType(context.getKnownType("Packages." + methodType.getName()));
+			Class<?> methodType = method.getReturnType();
+			if (methodType != null)
+				m.setType(context.getKnownType("Packages."
+						+ methodType.getName()));
 
 			EList<Parameter> parameters = m.getParameters();
-			Class< ? >[] parameterTypes = method.getParameterTypes();
-			for (int i = 0; i < parameterTypes.length; i++)
-			{
-				Parameter parameter = TypeInfoModelFactory.eINSTANCE.createParameter();
-				parameter.setName(parameterTypes[i].getSimpleName() + " arg" + i);
-				parameter.setType(context.getKnownType("Packages." + parameterTypes[i].getName()));
+			Class<?>[] parameterTypes = method.getParameterTypes();
+			for (int i = 0; i < parameterTypes.length; i++) {
+				Parameter parameter = TypeInfoModelFactory.eINSTANCE
+						.createParameter();
+				parameter.setName(parameterTypes[i].getSimpleName() + " arg"
+						+ i);
+				parameter.setType(context.getKnownType("Packages."
+						+ parameterTypes[i].getName()));
 				parameters.add(parameter);
 			}
-			if (Modifier.isStatic(method.getModifiers()))
-			{
+			if (Modifier.isStatic(method.getModifiers())) {
 				m.setStatic(true);
 			}
 			members.add(m);
@@ -233,7 +236,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 	public Set<String> listTypes(ITypeInfoContext context, String prefix) {
 		final Set<String> result = new HashSet<String>();
 		final String[] names = new String[] { TYPE_SERVICE, TYPE_SERVICE2,
-				TYPE_RESPONSE, TYPE_EXAMPLE_FORMS,TYPE_GENERIC_ARRAY_METHOD };
+				TYPE_RESPONSE, TYPE_EXAMPLE_FORMS, TYPE_GENERIC_ARRAY_METHOD };
 		for (String name : names) {
 			if (CharOperation.prefixEquals(prefix, name)) {
 				result.add(name);
