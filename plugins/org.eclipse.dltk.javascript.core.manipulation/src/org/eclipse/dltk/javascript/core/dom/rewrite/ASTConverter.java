@@ -410,8 +410,8 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitForEachInStatement(ForEachInStatement node) {
 		org.eclipse.dltk.javascript.core.dom.ForEachInStatement res = DOM_FACTORY
 				.createForEachInStatement();
-		res.setItem((IForInitializer) visit(node.getIterator()));
-		res.setCollection((Expression) visit(node.getItem()));
+		res.setItem((IForInitializer) visit(node.getItem()));
+		res.setCollection((Expression) visit(node.getIterator()));
 		res.setBody((Statement) visit(node.getBody()));
 		return res;
 	}
