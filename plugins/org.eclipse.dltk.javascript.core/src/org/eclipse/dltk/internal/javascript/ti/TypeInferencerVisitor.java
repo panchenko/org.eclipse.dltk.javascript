@@ -24,6 +24,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
@@ -327,8 +328,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitForEachInStatement(ForEachInStatement node) {
-		visit(node.getItem());
-		visit(node.getIterator());
+		IValueReference itemReference = visit(node.getItem());
+		IValueReference iteratorReference = visit(node.getIterator());
+		Type type = JavaScriptValidations.typeOf(iteratorReference);
+		if (type != null
+				&& type.getAttribute(ITypeInferenceContext.GENERIC_ARRAY_TYPE) != null
+				&& JavaScriptValidations.typeOf(itemReference) == null) {
+			String genericType = (String) type
+					.getAttribute(ITypeInferenceContext.GENERIC_ARRAY_TYPE);
+			itemReference.setDeclaredType(context.getType(genericType));
+		}
 		visit(node.getBody());
 		return null;
 	}
