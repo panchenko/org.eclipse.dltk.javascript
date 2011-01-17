@@ -201,7 +201,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		final Resource resource = ((EObject) type).eResource();
 		if (resource != null) {
 			Assert.isTrue(resource == invariantRS.getResource()
-					|| TypeInfoModelLoader.getInstance().hasResource(resource));
+					|| TypeInfoModelLoader.getInstance().hasResource(resource),
+					"Type " + type.getName() + " has not a valid resource: "
+							+ resource);
 		}
 		// TODO check that member referenced types are contained or proxy
 	}
