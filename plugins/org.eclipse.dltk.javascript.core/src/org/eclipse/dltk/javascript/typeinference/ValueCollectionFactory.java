@@ -1,8 +1,11 @@
 package org.eclipse.dltk.javascript.typeinference;
 
+import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.internal.javascript.ti.IValue;
 import org.eclipse.dltk.internal.javascript.ti.IValueProvider;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.Value;
@@ -100,8 +103,18 @@ public class ValueCollectionFactory {
 	public static void copyInto(IValueCollection target, IValueCollection source) {
 		if (target instanceof IValueProvider
 				&& source instanceof IValueProvider) {
-			((IValueProvider) target).getValue().addValue(
+			IValue targetValue = ((IValueProvider) target).getValue();
+			IValue sourceValue = ((IValueProvider) source).getValue();
+			if (targetValue instanceof Value && sourceValue instanceof Value) {
+				Set<String> children = sourceValue.getDirectChildren();
+				for (String childName : children) {
+					((Value) targetValue).putDirectChild(childName,
+							(Value) sourceValue.getChild(childName, false));
+				}
+			} else {
+				targetValue.addValue(
 					((IValueProvider) source).getValue());
+			}
 
 		}
 	}

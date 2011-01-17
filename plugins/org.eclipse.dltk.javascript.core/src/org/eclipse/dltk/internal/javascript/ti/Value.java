@@ -365,10 +365,12 @@ public class Value implements IValue {
 							processing, depth + 1);
 				}
 			}
-			if (src.kind != ReferenceKind.UNKNOWN) {
+			if (src.kind != ReferenceKind.UNKNOWN
+					&& kind == ReferenceKind.UNKNOWN) {
 				kind = src.kind;
 			}
-			if (src.location != ReferenceLocation.UNKNOWN) {
+			if (src.location != ReferenceLocation.UNKNOWN
+					&& location == ReferenceLocation.UNKNOWN) {
 				location = src.location;
 			}
 		}
