@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
@@ -103,7 +104,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return visitor.getCollection();
 	}
 
-	private final Map<String, Type> types = new HashMap<String, Type>();
+	private final Map<String, Type> types = new ConcurrentHashMap<String, Type>();
 
 	public Type getType(String typeName) {
 		if (typeName == null || typeName.length() == 0) {
@@ -224,23 +225,42 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	private final Set<String> activeTypeRequests = new HashSet<String>();
 
 	private boolean canQueryTypeProviders() {
-		return activeTypeRequests.isEmpty();
+		synchronized (activeTypeRequests) {
+			return activeTypeRequests.isEmpty();
+		}
 	}
 
 	private Type loadType(String typeName, boolean queryProviders,
 			boolean queryPredefined) {
 		if (queryProviders) {
-			if (activeTypeRequests.add(typeName)) {
-				try {
-					for (ITypeProvider provider : TypeInfoManager
-							.getTypeProviders()) {
-						final Type type = provider.getType(this, typeName);
-						if (type != null && !isProxy(type)) {
-							return type;
-						}
+			synchronized (activeTypeRequests) {
+				while (!activeTypeRequests.add(typeName)) {
+					try {
+						activeTypeRequests.wait();
+					} catch (InterruptedException e) {
 					}
-				} finally {
+				}
+			}
+			try {
+				Type type = types.get(typeName);
+				if (type != null) {
+					return type;
+				}
+				type = invariantRS.getCachedType(typeName);
+				if (type != null) {
+					return type;
+				}
+				for (ITypeProvider provider : TypeInfoManager
+						.getTypeProviders()) {
+					type = provider.getType(this, typeName);
+					if (type != null && !isProxy(type)) {
+						return type;
+					}
+				}
+			} finally {
+				synchronized (activeTypeRequests) {
 					activeTypeRequests.remove(typeName);
+					activeTypeRequests.notifyAll();
 				}
 			}
 		}
@@ -411,9 +431,12 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			ITypeInfoContext {
 
 		private final Set<String> activeTypeRequests = new HashSet<String>();
+		private final Map<String, Type> types = new ConcurrentHashMap<String, Type>();
 
 		private boolean canQueryTypeProviders() {
-			return activeTypeRequests.isEmpty();
+			synchronized (activeTypeRequests) {
+				return activeTypeRequests.isEmpty();
+			}
 		}
 
 		private Type getType(String typeName, boolean queryProviders,
@@ -444,17 +467,30 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		private Type loadType(String typeName, boolean queryProviders,
 				boolean queryPredefined) {
 			if (queryProviders) {
-				if (activeTypeRequests.add(typeName)) {
-					try {
-						for (ITypeProvider provider : TypeInfoManager
-								.getTypeProviders()) {
-							final Type type = provider.getType(this, typeName);
-							if (type != null && !isProxy(type)) {
-								return type;
-							}
+				synchronized (activeTypeRequests) {
+					while (!activeTypeRequests.add(typeName)) {
+						try {
+							activeTypeRequests.wait();
+						} catch (InterruptedException e) {
 						}
-					} finally {
+					}
+				}
+				try {
+					Type type = types.get(typeName);
+					if (type != null) {
+						return type;
+					}
+					for (ITypeProvider provider : TypeInfoManager
+							.getTypeProviders()) {
+						type = provider.getType(this, typeName);
+						if (type != null && !isProxy(type)) {
+							return type;
+						}
+					}
+				} finally {
+					synchronized (activeTypeRequests) {
 						activeTypeRequests.remove(typeName);
+						activeTypeRequests.notifyAll();
 					}
 				}
 			}
@@ -526,21 +562,21 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return ReferenceSource.UNKNOWN;
 		}
 
-		private final Map<String, Type> types = new HashMap<String, Type>();
-
 		@Override
-		public synchronized void add(Type type) {
+		public void add(Type type) {
 			super.add(type);
 			types.put(type.getName(), type);
 		}
 
-		public synchronized Type getCachedType(String typeName) {
+		public Type getCachedType(String typeName) {
 			return types.get(typeName);
 		}
 
-		public synchronized void reset() {
+		public void reset() {
 			types.clear();
-			getResource().getContents().clear();
+			synchronized (this) {
+				getResource().getContents().clear();
+			}
 		}
 
 	}
