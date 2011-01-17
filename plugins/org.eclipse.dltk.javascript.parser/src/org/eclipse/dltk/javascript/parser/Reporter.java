@@ -138,14 +138,15 @@ public class Reporter extends LineTracker implements IProblemReporter {
 	}
 
 	public void reportProblem(int id, String message, int start, int end) {
+		Severity sev = severity;
 		if (severityReporter != null)
 		{
-			severity = severityReporter.getSeverity(id,severity);
-			if (severity == null) return;
+			sev = severityReporter.getSeverity(id,sev);
+			if (sev == null) return;
 		}
 
 		reportProblem(new DefaultProblem(message, id, null,
-				severity == Severity.ERROR ? ProblemSeverities.Error
+				sev == Severity.ERROR ? ProblemSeverities.Error
 						: ProblemSeverities.Warning, start, end,
 				getLineNumberOfOffset(start)));
 	}
