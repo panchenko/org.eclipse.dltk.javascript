@@ -151,11 +151,12 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 									.getElementType() == IModelElement.METHOD)) {
 						return new IModelElement[] { result };
 					}
+					Type type = JavaScriptValidations.typeOf(value);
 					return new IModelElement[] { new LocalVariable(m,
 							value.getName(), location.getDeclarationStart(),
 							location.getDeclarationEnd(),
 							location.getNameStart(), location.getNameEnd() - 1,
-							null) };
+							type == null?null:type.getName()) };
 				} else if (kind == ReferenceKind.FUNCTION
 						|| kind == ReferenceKind.GLOBAL
 						|| kind == ReferenceKind.FIELD) {
