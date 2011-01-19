@@ -10,8 +10,12 @@ public class PackageOrClassValue extends Value {
 	public PackageOrClassValue(String name, ITypeInferenceContext context) {
 		this.name = name;
 		this.context = context;
-
-		Type type = context.getKnownType("Packages." + name);
+		// first try to resolve it with the name.
+		Type type = context.getKnownType(name);
+		if (type == null) {
+			// if not found then try it with the Packages prefix.
+			type = context.getKnownType("Packages." + name);
+		}
 		if (type != null) {
 			setAttribute(IReferenceAttributes.STATIC, Boolean.TRUE);
 			getTypes().add(type);
