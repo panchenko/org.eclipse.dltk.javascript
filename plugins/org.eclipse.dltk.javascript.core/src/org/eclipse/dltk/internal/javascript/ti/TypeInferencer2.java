@@ -288,17 +288,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				if (genericType == null)
 					return type;
 
-				return createTypedArray(arrayType, genericArrayType,
-						genericType);
+				return createTypedArray(genericType);
 			}
 		}
 		return null;
 	}
 
-	private static Type createTypedArray(String arrayType,
-			String genericArrayType, Type genericType) {
+	private static Type createTypedArray(Type genericType) {
 		final Type typedArray = TypeInfoModelFactory.eINSTANCE.createType();
-		typedArray.setName(arrayType);
+		typedArray.setName("Array<" + genericType.getName() + '>');
 		final Type array = TypeInfoModelLoader.getInstance().getType(
 				ITypeNames.ARRAY);
 		if (array == null) {
@@ -306,7 +304,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 		typedArray.setDescription(array.getDescription());
 		typedArray.setKind(array.getKind());
-		typedArray.setAttribute(GENERIC_ARRAY_TYPE, genericArrayType);
+		typedArray.setAttribute(GENERIC_ARRAY_TYPE, genericType.getName());
 		typedArray.setSuperType(array.getSuperType());
 
 		EList<Member> typedArrayMembers = typedArray.getMembers();
@@ -518,8 +516,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					if (genericType == null)
 						return type;
 
-					return createTypedArray(arrayType, genericArrayType,
-							genericType);
+					return createTypedArray(genericType);
 				}
 			}
 			return null;
