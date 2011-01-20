@@ -35,7 +35,6 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 
 public class StructureReporter2 extends TypeInferencerVisitor {
 
@@ -361,11 +360,10 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			}
 			if (declaration.getParent() instanceof VariableStatement) {
 				variable.setName(declaration.getVariableName());
-				for (IModelBuilder extension : TypeInfoManager
-						.getModelBuilders()) {
+				for (IModelBuilder extension : this.context.getModelBuilders()) {
 					extension.processVariable(
 							(VariableStatement) declaration.getParent(),
-							variable);
+							variable, reporter);
 				}
 			}
 

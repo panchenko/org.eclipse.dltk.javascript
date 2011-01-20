@@ -27,6 +27,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
@@ -75,6 +76,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	public void doInferencing(Script script) {
 		try {
 			elements.clear();
+			modelBuilders = null;
 			initializeVisitor();
 			visitor.visit(script);
 			// IValueCollection collection = visitor.getCollection();
@@ -661,6 +663,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	public void setDoResolve(boolean resolve) {
 		this.resolve = resolve;
+	}
+
+	private IModelBuilder[] modelBuilders = null;
+
+	public IModelBuilder[] getModelBuilders() {
+		if (modelBuilders == null) {
+			modelBuilders = TypeInfoManager.getModelBuilders(this);
+		}
+		return modelBuilders;
 	}
 
 }

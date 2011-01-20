@@ -99,7 +99,6 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -461,8 +460,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 			method.getParameters().add(parameter);
 		}
-		for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
-			extension.processMethod(node, method);
+		for (IModelBuilder extension : context.getModelBuilders()) {
+			extension.processMethod(node, method, reporter);
 		}
 		return method;
 	}
@@ -839,8 +838,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			variable.setName(declaration.getVariableName());
 			if (result.getDeclaredType() != null)
 				variable.setType(result.getDeclaredType().getName());
-			for (IModelBuilder extension : TypeInfoManager.getModelBuilders()) {
-				extension.processVariable(node, variable);
+			for (IModelBuilder extension : context.getModelBuilders()) {
+				extension.processVariable(node, variable, reporter);
 			}
 			if (result.getDeclaredType() == null && variable.getType() != null) {
 				result.setDeclaredType(context.getType(variable.getType()));
@@ -1007,4 +1006,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return false;
 	}
 
+	protected IModelBuilder.IProblemReporter reporter;
+
+	public void setProblemReporter(IModelBuilder.IProblemReporter reporter) {
+		this.reporter = reporter;
+	}
 }

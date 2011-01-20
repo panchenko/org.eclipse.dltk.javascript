@@ -13,6 +13,8 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
@@ -132,8 +134,49 @@ public class TypeInfoManager {
 		}
 	};
 
-	public static IModelBuilder[] getModelBuilders() {
-		return modelBuilderManager.getInstances();
+	static class ModelBuilderRec {
+		IModelBuilder builder;
+		int priority;
+	}
+
+	/**
+	 * Return contributed {@link IModelBuilder}s matching to the specified
+	 * context. If context is <code>null</code> all model builders are returned.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static IModelBuilder[] getModelBuilders(ITypeInfoContext context) {
+		final IModelBuilder[] all = modelBuilderManager.getInstances();
+		if (context == null) {
+			return all;
+		}
+		final Map<String, ModelBuilderRec> recs = new HashMap<String, ModelBuilderRec>();
+		for (IModelBuilder builder : all) {
+			final int priority = builder.priorityFor(context);
+			if (priority == IModelBuilder.PRIORITY_UNSUPPORTED) {
+				continue;
+			}
+			String featureId = builder.getFeatureId();
+			ModelBuilderRec rec = recs.get(featureId);
+			if (rec != null) {
+				if (priority > rec.priority) {
+					rec.priority = priority;
+					rec.builder = builder;
+				}
+			} else {
+				rec = new ModelBuilderRec();
+				rec.builder = builder;
+				rec.priority = priority;
+				recs.put(featureId, rec);
+			}
+		}
+		final IModelBuilder[] result = new IModelBuilder[recs.size()];
+		int index = 0;
+		for (ModelBuilderRec rec : recs.values()) {
+			result[index++] = rec.builder;
+		}
+		return result;
 	}
 
 	public static ITypeProvider[] getTypeProviders() {

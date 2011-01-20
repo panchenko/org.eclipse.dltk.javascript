@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.List;
 
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
@@ -132,10 +133,38 @@ public interface IModelBuilder {
 	public interface IVariable extends IMember {
 	}
 
-	void processMethod(FunctionStatement statement,
-			IMethod method);
+	public interface IProblemReporter {
+		void reportProblem(IProblemIdentifier identifier, String message,
+				int start, int end);
+	}
 
-	void processVariable(VariableStatement statement,
-			IVariable variabe);
+	/**
+	 * Returns the unique identifier of the functionality, provided by this
+	 * object. If some feature is provided by several objects, then the one
+	 * having the maximal priority will be used.
+	 * 
+	 * @return
+	 */
+	String getFeatureId();
+
+	/**
+	 * Constant to be returned from {@link #priorityFor(ITypeInfoContext)} if
+	 * this extension shouldn't be used
+	 */
+	int PRIORITY_UNSUPPORTED = -1;
+
+	/**
+	 * Constant to be returned from {@link #priorityFor(ITypeInfoContext)} as
+	 * the default priorirt.
+	 */
+	int PRIORITY_DEFAULT = 0;
+
+	int priorityFor(ITypeInfoContext context);
+
+	void processMethod(FunctionStatement statement, IMethod method,
+			IProblemReporter reporter);
+
+	void processVariable(VariableStatement statement, IVariable variabe,
+			IProblemReporter reporter);
 
 }

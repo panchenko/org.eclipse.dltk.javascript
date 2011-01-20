@@ -12,9 +12,13 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
@@ -22,7 +26,10 @@ import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
+import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -37,37 +44,49 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
  */
 public class JSDocSupport implements IModelBuilder {
 
+	private static final String DOTS = "...";
+
+	private static final String ARRAY_SUFFIX = "[]";
+
 	public static String[] getTags() {
-		return new String[] { DEPRECATED, JSDocTag.PARAM, JSDocTag.TYPE,
-				JSDocTag.RETURN, JSDocTag.RETURNS, PRIVATE_TAG,
-				CONSTRUCTOR_TAG };
+		return new String[] { JSDocTag.DEPRECATED, JSDocTag.PARAM,
+				JSDocTag.TYPE, JSDocTag.RETURN, JSDocTag.RETURNS,
+				JSDocTag.PRIVATE, JSDocTag.CONSTRUCTOR };
 	}
 
-	private static final String PRIVATE_TAG = "@private";
+	public String getFeatureId() {
+		return JSDocSupport.class.getName();
+	}
 
-	private static final String CONSTRUCTOR_TAG = "@constructor";
+	public int priorityFor(ITypeInfoContext context) {
+		return PRIORITY_DEFAULT;
+	}
 
-	public void processMethod(FunctionStatement statement, IMethod method) {
-		String comment = getFunctionComment(statement);
+	protected JSDocTags parse(Comment comment) {
+		return new SimpleJSDocParser().parse(comment.getText(),
+				comment.sourceStart());
+	}
+
+	public void processMethod(FunctionStatement statement, IMethod method,
+			IProblemReporter reporter) {
+		Comment comment = getFunctionComment(statement);
 		if (comment == null) {
 			return;
 		}
+		final JSDocTags tags = parse(comment);
 		if (method.getType() == null) {
-			parseType(method, comment);
+			parseType(method, tags, RETURN_TAGS, reporter);
 		}
-		parseParams(method, comment);
-
-		parseDeprecation(method, comment);
-
-		parsePrivate(method, comment);
-
-		parseConstructor(method, comment);
+		parseParams(method, tags, reporter);
+		parseDeprecation(method, tags, reporter);
+		parsePrivate(method, tags, reporter);
+		parseConstructor(method, tags, reporter);
 	}
 
-	public static String getFunctionComment(FunctionStatement statement) {
+	public static Comment getFunctionComment(FunctionStatement statement) {
 		Comment documentation = statement.getDocumentation();
 		if (documentation != null) {
-			return documentation.getText();
+			return documentation;
 		}
 		if (statement.getParent() instanceof BinaryOperation) {
 			final BinaryOperation binary = (BinaryOperation) statement
@@ -76,7 +95,7 @@ public class JSDocSupport implements IModelBuilder {
 					&& binary.getRightExpression() == statement) {
 				documentation = binary.getLeftExpression().getDocumentation();
 				if (documentation != null) {
-					return documentation.getText();
+					return documentation;
 				}
 			}
 		} else if (statement.getParent() instanceof PropertyInitializer) {
@@ -85,133 +104,200 @@ public class JSDocSupport implements IModelBuilder {
 			if (property.getValue() == statement) {
 				documentation = property.getName().getDocumentation();
 				if (documentation != null) {
-					return documentation.getText();
+					return documentation;
 				}
 			}
 		}
 		return null;
 	}
 
-	private void parseConstructor(IMethod method, String comment) {
-		if (comment.indexOf(CONSTRUCTOR_TAG) != -1) {
+	private void parseConstructor(IMethod method, JSDocTags tags,
+			IProblemReporter reporter) {
+		if (tags.get(JSDocTag.CONSTRUCTOR) != null) {
 			method.setConstructor(true);
+			validateSingleTag(tags, JSDocTag.CONSTRUCTOR, reporter);
 		}
 	}
 
 	/**
 	 * @param method
-	 * @param comment
+	 * @param tags
 	 */
-	private void parsePrivate(IMember member, final String comment) {
-		if (comment.indexOf(PRIVATE_TAG) != -1) {
+	private void parsePrivate(IMember member, final JSDocTags tags,
+			IProblemReporter reporter) {
+		if (tags.get(JSDocTag.PRIVATE) != null) {
 			member.setPrivate(true);
+			validateSingleTag(tags, JSDocTag.PRIVATE, reporter);
 		}
 	}
 
-	public void processVariable(VariableStatement statement, IVariable variable) {
-		if (statement.getDocumentation() == null) {
+	private void validateSingleTag(JSDocTags tags, String tagName,
+			IProblemReporter reporter) {
+		if (reporter != null && tags.count(tagName) > 1) {
+			final List<JSDocTag> t = tags.list(tagName);
+			for (JSDocTag tag : t.subList(1, t.size())) {
+				reportProblem(reporter, JSDocProblem.REPEATED_TAG, tag);
+			}
+		}
+	}
+
+	public void processVariable(VariableStatement statement,
+			IVariable variable, IProblemReporter reporter) {
+		final Comment comment = statement.getDocumentation();
+		if (comment == null) {
 			return;
 		}
-		final String comment = statement.getDocumentation().getText();
+		final JSDocTags tags = parse(comment);
 		if (variable.getType() == null) {
-			parseType(variable, comment);
+			parseType(variable, tags, TYPE_TAGS, reporter);
 		}
-		parseDeprecation(variable, comment);
-
-		parsePrivate(variable, comment);
+		parseDeprecation(variable, tags, reporter);
+		parsePrivate(variable, tags, reporter);
 	}
 
-	private static final String DEPRECATED = "@deprecated"; //$NON-NLS-1$
-
-	private void parseDeprecation(IMember member, String comment) {
-		int index = comment.indexOf(DEPRECATED);
-		if (index != -1) {
+	private void parseDeprecation(IMember member, JSDocTags tags,
+			IProblemReporter reporter) {
+		if (tags.get(JSDocTag.DEPRECATED) != null) {
 			member.setDeprecated(true);
+			validateSingleTag(tags, JSDocTag.DEPRECATED, reporter);
 		}
 	}
 
-	private void parseParams(IMethod method, String comment) {
-		int index = comment.indexOf(JSDocTag.PARAM);
-		Map<String, Type> objectPropertiesTypes = new HashMap<String, Type>();
-
-		while (index != -1) {
-			int endLineIndex = comment.indexOf("\n", index);
-			if (endLineIndex == -1) {
-				endLineIndex = comment.length();
-			}
-			String parameterString = comment.substring(
-					index + JSDocTag.PARAM.length(), endLineIndex);
-			StringTokenizer st = new StringTokenizer(parameterString);
+	protected void parseParams(IMethod method, JSDocTags tags,
+			IProblemReporter reporter) {
+		final Map<String, Type> objectPropertiesTypes = new HashMap<String, Type>();
+		final Set<String> processedParams = new HashSet<String>();
+		for (JSDocTag tag : tags.list(JSDocTag.PARAM)) {
 			String type = null;
 			boolean varargs = false;
-			while (st.hasMoreTokens()) {
-				final String token = st.nextToken();
+			boolean optional = false;
+			final Tokenizer st = new Tokenizer(tag.getValue());
+			if (st.hasMoreTokens()) {
+				final String token = st.peek();
 				if (token.startsWith("{") && token.endsWith("}")) {
 					type = token.substring(1, token.length() - 1);
-					if (type.startsWith("...")) {
+					if (type.startsWith(DOTS)) {
 						varargs = true;
-						type = type.substring(3);
+						type = type.substring(DOTS.length());
+					} else if (type.endsWith("=")) {
+						type = type.substring(type.length() - 1);
+						optional = true;
+					}
+					st.nextToken();
+				}
+			}
+			if (st.hasMoreTokens()) {
+				String paramName = st.nextToken();
+				if (paramName.startsWith("[") && paramName.endsWith("]")) {
+					optional = true;
+					paramName = paramName.substring(1, paramName.length() - 1);
+					int defaultValueSeperatorIndex = paramName.indexOf('=');
+					if (defaultValueSeperatorIndex != -1) {
+						paramName = paramName.substring(0,
+								defaultValueSeperatorIndex);
 					}
 				} else {
-					final IParameter parameter;
-					boolean optional = false;
-					if (token.startsWith("[") && token.endsWith("]")) {
-						optional = true;
-						String parameterName = token.substring(1,
-								token.length() - 1);
-						int defaultValueSeperatorIndex = parameterName
-								.indexOf('=');
-						if (defaultValueSeperatorIndex != -1) {
-							parameterName = parameterName.substring(0,
-									defaultValueSeperatorIndex);
-						}
-						parameter = method.getParameter(parameterName);
-					} else {
-						String parameterName = token;
-						int propertiesObjectIndex = parameterName.indexOf('.');
-						Type propertiesType = null;
-						if (propertiesObjectIndex != -1) {
-							String propertyName = parameterName
-									.substring(propertiesObjectIndex + 1);
-							parameterName = parameterName.substring(0,
-									propertiesObjectIndex);
-
-							propertiesType = objectPropertiesTypes
-									.get(parameterName);
-							if (propertiesType == null) {
-								propertiesType = TypeInfoModelFactory.eINSTANCE
-										.createType();
-								objectPropertiesTypes.put(parameterName,
-										propertiesType);
+					String propertyName = null;
+					int propertiesObjectIndex = paramName.indexOf('.');
+					if (propertiesObjectIndex != -1) {
+						// http://code.google.com/p/jsdoc-toolkit/wiki/TagParam
+						// = Parameters With Properties =
+						propertyName = paramName
+								.substring(propertiesObjectIndex + 1);
+						paramName = paramName.substring(0,
+								propertiesObjectIndex);
+						Type propertiesType = objectPropertiesTypes
+								.get(paramName);
+						if (propertiesType == null) {
+							propertiesType = TypeInfoModelFactory.eINSTANCE
+									.createType();
+							objectPropertiesTypes
+									.put(paramName, propertiesType);
+							final IParameter param = method
+									.getParameter(paramName);
+							if (param != null) {
+								param.setPropertiesType(propertiesType);
 							}
-							Property property = TypeInfoModelFactory.eINSTANCE
-									.createProperty();
-							property.setName(propertyName);
-							propertiesType.getMembers().add(property);
 						}
-						parameter = method.getParameter(parameterName);
-
-						if (parameter != null && propertiesType != null)
-							parameter.setPropertiesType(propertiesType);
+						Property property = TypeInfoModelFactory.eINSTANCE
+								.createProperty();
+						property.setName(propertyName);
+						propertiesType.getMembers().add(property);
 					}
+					if (propertyName == null) {
+						if (!processedParams.add(paramName)) {
+							reportProblem(reporter,
+									JSDocProblem.DUPLICATE_PARAM, tag,
+									paramName);
+							continue;
+						}
+					}
+					final IParameter parameter = method.getParameter(paramName);
 					if (parameter != null) {
-						if (type != null && parameter.getType() == null)
+						if (type != null && parameter.getType() == null) {
 							parameter.setType(translateTypeName(type));
+						}
 						if (!optional && st.hasMoreTokens()
 								&& st.nextToken().equals("optional"))
 							optional = true;
 						parameter.setOptional(optional);
 						parameter.setVarargs(varargs);
+					} else {
+						reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM,
+								tag, paramName);
 					}
-					break;
 				}
+			} else {
+				reportProblem(reporter, JSDocProblem.MISSING_PARAMETER_NAME,
+						tag);
 			}
-			index = comment.indexOf(JSDocTag.PARAM, endLineIndex);
 		}
 	}
 
 	private static final String[] RETURN_TAGS = { JSDocTag.RETURNS,
-			JSDocTag.RETURN };
+			JSDocTag.RETURN, JSDocTag.TYPE };
+
+	private static final String[] TYPE_TAGS = { JSDocTag.TYPE };
+
+	private static class Tokenizer {
+
+		private final StringTokenizer st;
+
+		public Tokenizer(String content) {
+			st = new StringTokenizer(content);
+		}
+
+		private boolean hasCurrent = false;
+		private String current;
+
+		public boolean hasMoreTokens() {
+			if (hasCurrent) {
+				return true;
+			}
+			return st.hasMoreTokens();
+		}
+
+		public String peek() {
+			if (!hasCurrent) {
+				if (st.hasMoreElements()) {
+					hasCurrent = true;
+					current = st.nextToken();
+				} else {
+					return null;
+				}
+			}
+			return current;
+		}
+
+		public String nextToken() {
+			if (hasCurrent) {
+				hasCurrent = false;
+				return current;
+			}
+			return st.nextToken();
+		}
+
+	}
 
 	/**
 	 * @see St
@@ -219,34 +305,31 @@ public class JSDocSupport implements IModelBuilder {
 	 * @param member
 	 * @param comment
 	 */
-	public void parseType(IElement member, String comment) {
-		int index = comment.indexOf(JSDocTag.TYPE);
-		if (index != -1) {
-			int endLineIndex = comment.indexOf("\n", index);
-			if (endLineIndex == -1) {
-				endLineIndex = comment.length();
-			}
-			StringTokenizer st = new StringTokenizer(comment.substring(index
-					+ JSDocTag.TYPE.length(), endLineIndex), " \t\n\r\f*");
-			if (st.hasMoreTokens()) {
-				member.setType(translateTypeName(st.nextToken()));
-			}
-		} else {
-			for (String tag : RETURN_TAGS) {
-				index = comment.indexOf(tag);
-				if (index != -1) {
-					int begingBrace = comment
-							.indexOf('{', index + tag.length());
-					if (begingBrace != -1) {
-						int endBrace = comment.indexOf('}', begingBrace);
-						if (endBrace != -1) {
-							member.setType(translateTypeName(comment.substring(
-									begingBrace + 1, endBrace).trim()));
-							break;
-						}
+	public void parseType(IElement member, JSDocTags tags, String[] tagNames,
+			IProblemReporter reporter) {
+		final JSDocTag tag = tags.get(tagNames);
+		if (tag != null) {
+			if (reporter != null) {
+				final int count = tags.count(tagNames);
+				if (count > 1) {
+					for (JSDocTag t : tags.list(tagNames).subList(1, count)) {
+						reportProblem(reporter, JSDocProblem.DUPLICATE_TYPE, t);
 					}
 				}
 			}
+			final Tokenizer st = new Tokenizer(tag.getValue());
+			if (st.hasMoreTokens()) {
+				member.setType(translateTypeName(st.nextToken()));
+			}
+		}
+	}
+
+	private void reportProblem(IProblemReporter reporter,
+			IProblemIdentifier problemIdentifier, JSDocTag tag, Object... args) {
+		if (reporter != null) {
+			reporter.reportProblem(problemIdentifier,
+					problemIdentifier.formatMessage(args), tag.getStart(),
+					tag.getEnd());
 		}
 	}
 
@@ -255,6 +338,12 @@ public class JSDocSupport implements IModelBuilder {
 		if (length > 2 && typeName.charAt(0) == '{'
 				&& typeName.charAt(length - 1) == '}') {
 			typeName = typeName.substring(1, length - 1);
+		}
+		if (typeName.endsWith(ARRAY_SUFFIX)) {
+			return "Array<"
+					+ TypeInfoModelLoader.getInstance().translateTypeName(
+							typeName.substring(0, typeName.length()
+									- ARRAY_SUFFIX.length())) + ">";
 		}
 		return TypeInfoModelLoader.getInstance().translateTypeName(typeName);
 	}
