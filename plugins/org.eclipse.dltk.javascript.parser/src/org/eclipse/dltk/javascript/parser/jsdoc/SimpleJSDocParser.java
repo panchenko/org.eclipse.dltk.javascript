@@ -12,52 +12,73 @@
 package org.eclipse.dltk.javascript.parser.jsdoc;
 
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
+import org.eclipse.dltk.utils.IntList;
 
 public class SimpleJSDocParser {
 
 	private static final char FORM_FEED = '\u000c';
+	private static final char CR = '\r';
+	private static final char LF = '\n';
+	private static final char TAB = '\t';
+	private static final char SPACE = ' ';
 
 	private char buffer[];
 	private int index;
 	private int end;
 	private final StringBuilder value = new StringBuilder();
+	private final IntList ends = new IntList();
 
-	public void parse(String content) {
+	public JSDocTags parse(String content, int offset) {
+		final JSDocTags tags = new JSDocTags();
 		index = MultiLineComment.JSDOC_PREFIX.length();
 		buffer = content.toCharArray();
 		end = buffer.length;
+		if (index + 2 <= end && buffer[end - 2] == '*'
+				&& buffer[end - 1] == '/') {
+			end -= 2;
+		}
 		while (index < end) {
 			switch (readChar()) {
 			case '*':
-			case ' ':
-			case '\t':
+			case SPACE:
+			case TAB:
 			case FORM_FEED:
 				continue;
-			case '\n':
-				skipChar('\r');
+			case LF:
+				skipChar(CR);
 				continue;
-			case '\r':
-				skipChar('\n');
+			case CR:
+				skipChar(LF);
 				continue;
 			case '@':
-				parseTag();
+				final JSDocTag tag = parseTag(offset);
+				if (tag != null) {
+					tags.add(tag);
+				} else {
+					skipEndOfLine();
+				}
 				break;
 			default:
 				skipEndOfLine();
 				continue;
 			}
-
 		}
+		return tags;
 	}
 
-	private void parseTag() {
+	private JSDocTag parseTag(int offset) {
 		final int tagStart = index - 1;
 		while (index < end
 				&& (buffer[index] == '.' || Character.isLetter(buffer[index]))) {
 			++index;
 		}
+		if (index == tagStart + 1) {
+			return null;
+		}
 		final String tag = new String(buffer, tagStart, index - tagStart);
+		final int valueStart = index;
 		value.setLength(0);
+		ends.clear();
 		skipSpaces();
 		boolean lineStart = false;
 		VALUE_LOOP: while (index < end) {
@@ -69,9 +90,10 @@ public class SimpleJSDocParser {
 					break VALUE_LOOP;
 				}
 				value.append(c);
+				ends.add(index);
 				break;
-			case '\r':
-				skipChar('\n');
+			case CR:
+				skipChar(LF);
 				lineStart = true;
 				skipSpaces();
 				if (skipAll('*') && skipChar('/')) {
@@ -79,8 +101,8 @@ public class SimpleJSDocParser {
 					break VALUE_LOOP;
 				}
 				break;
-			case '\n':
-				skipChar('\r');
+			case LF:
+				skipChar(CR);
 				lineStart = true;
 				skipSpaces();
 				if (skipAll('*') && skipChar('/')) {
@@ -88,14 +110,16 @@ public class SimpleJSDocParser {
 					break VALUE_LOOP;
 				}
 				break;
-			case ' ':
-			case '\t':
+			case SPACE:
+			case TAB:
 			case FORM_FEED:
 				value.append(c);
+				ends.add(index);
 				break;
 			default:
 				lineStart = false;
 				value.append(c);
+				ends.add(index);
 				break;
 			}
 		}
@@ -105,11 +129,10 @@ public class SimpleJSDocParser {
 		}
 		if (len != value.length()) {
 			value.setLength(len);
+			ends.setSize(len);
 		}
-		processTag(tag, value.toString());
-	}
-
-	protected void processTag(String tag, String content) {
+		return new JSDocTag(tag, value.toString(), offset + tagStart, offset
+				+ (ends.isEmpty() ? valueStart : ends.get(ends.size() - 1)));
 	}
 
 	private boolean skipAll(char expected) {
@@ -122,7 +145,7 @@ public class SimpleJSDocParser {
 	}
 
 	private void skipSpaces() {
-		while (index < end && Character.isWhitespace(buffer[index])) {
+		while (index < end && (buffer[index] == ' ' || buffer[index] == '\t')) {
 			++index;
 		}
 	}
@@ -130,11 +153,11 @@ public class SimpleJSDocParser {
 	private void skipEndOfLine() {
 		LOOP: while (index < end) {
 			switch (readChar()) {
-			case '\r':
-				skipChar('\n');
+			case CR:
+				skipChar(LF);
 				break LOOP;
-			case '\n':
-				skipChar('\r');
+			case LF:
+				skipChar(CR);
 				break LOOP;
 			}
 		}
