@@ -37,7 +37,7 @@ public class TypeInfoModelTests extends TestCase implements ITypeNames {
 	}
 
 	public void testLoad() {
-		assertTrue(TypeInfoManager.getModelBuilders().length > 0);
+		assertTrue(TypeInfoManager.getModelBuilders(null).length > 0);
 		// load parser classes
 		final JavaScriptParser parser = new JavaScriptParser();
 		parser.parse(new ModuleSource("x=1"), new ProblemCollector());
