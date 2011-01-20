@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.tests;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -22,26 +21,8 @@ import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
 
 public class SimpleJSDocParserTests extends TestCase {
 
-	private static class Tag {
-		final String tag;
-		final String content;
-
-		public Tag(String tag, String content) {
-			this.tag = tag;
-			this.content = content;
-		}
-
-	}
-
-	private List<Tag> parse(String content) {
-		final List<Tag> tags = new ArrayList<Tag>();
-		new SimpleJSDocParser() {
-			@Override
-			protected void processTag(String tag, String content) {
-				tags.add(new Tag(tag, content));
-			}
-		}.parse(content);
-		return tags;
+	private List<JSDocTag> parse(String content) {
+		return new SimpleJSDocParser().parse(content, 0).list();
 	}
 
 	public void testSimple() {
@@ -51,14 +32,14 @@ public class SimpleJSDocParserTests extends TestCase {
 		code.add(" * @param y");
 		code.add(" * @param z");
 		code.add(" */");
-		List<Tag> tags = parse(code.toString());
+		List<JSDocTag> tags = parse(code.toString());
 		assertEquals(3, tags.size());
-		assertEquals(JSDocTag.PARAM, tags.get(0).tag);
-		assertEquals(JSDocTag.PARAM, tags.get(1).tag);
-		assertEquals(JSDocTag.PARAM, tags.get(2).tag);
-		assertEquals("x", tags.get(0).content);
-		assertEquals("y", tags.get(1).content);
-		assertEquals("z", tags.get(2).content);
+		assertEquals(JSDocTag.PARAM, tags.get(0).getTag());
+		assertEquals(JSDocTag.PARAM, tags.get(1).getTag());
+		assertEquals(JSDocTag.PARAM, tags.get(2).getTag());
+		assertEquals("x", tags.get(0).getValue());
+		assertEquals("y", tags.get(1).getValue());
+		assertEquals("z", tags.get(2).getValue());
 	}
 
 	public void testEmptyLines() {
@@ -70,14 +51,14 @@ public class SimpleJSDocParserTests extends TestCase {
 		code.add(" *");
 		code.add(" * @param z");
 		code.add(" */");
-		List<Tag> tags = parse(code.toString());
+		List<JSDocTag> tags = parse(code.toString());
 		assertEquals(3, tags.size());
-		assertEquals(JSDocTag.PARAM, tags.get(0).tag);
-		assertEquals(JSDocTag.PARAM, tags.get(1).tag);
-		assertEquals(JSDocTag.PARAM, tags.get(2).tag);
-		assertEquals("x", tags.get(0).content);
-		assertEquals("y", tags.get(1).content);
-		assertEquals("z", tags.get(2).content);
+		assertEquals(JSDocTag.PARAM, tags.get(0).getTag());
+		assertEquals(JSDocTag.PARAM, tags.get(1).getTag());
+		assertEquals(JSDocTag.PARAM, tags.get(2).getTag());
+		assertEquals("x", tags.get(0).getValue());
+		assertEquals("y", tags.get(1).getValue());
+		assertEquals("z", tags.get(2).getValue());
 	}
 
 	public void testNotLineStart() {
@@ -87,9 +68,9 @@ public class SimpleJSDocParserTests extends TestCase {
 		code.add(" * @param y");
 		code.add(" * B @param z");
 		code.add(" */");
-		List<Tag> tags = parse(code.toString());
+		List<JSDocTag> tags = parse(code.toString());
 		assertEquals(1, tags.size());
-		assertEquals(JSDocTag.PARAM, tags.get(0).tag);
-		assertEquals("y B @param z", tags.get(0).content);
+		assertEquals(JSDocTag.PARAM, tags.get(0).getTag());
+		assertEquals("y B @param z", tags.get(0).getValue());
 	}
 }
