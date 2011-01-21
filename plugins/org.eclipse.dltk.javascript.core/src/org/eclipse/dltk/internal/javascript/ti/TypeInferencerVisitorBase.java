@@ -19,6 +19,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandler;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandlerFactory;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferencerVisitor;
@@ -30,6 +31,10 @@ public abstract class TypeInferencerVisitorBase extends
 	protected final ITypeInferenceContext context;
 
 	private Stack<IValueCollection> contexts = new Stack<IValueCollection>();
+
+	public ITypeInferenceContext getContext() {
+		return context;
+	}
 
 	public IValueCollection peekContext() {
 		return !contexts.isEmpty() ? contexts.peek() : null;
@@ -110,6 +115,16 @@ public abstract class TypeInferencerVisitorBase extends
 		reference.setValue(value1);
 		reference.addValue(value2, false);
 		return reference;
+	}
+
+	protected IModelBuilder.IProblemReporter reporter;
+
+	public IModelBuilder.IProblemReporter getProblemReporter() {
+		return reporter;
+	}
+
+	public void setProblemReporter(IModelBuilder.IProblemReporter reporter) {
+		this.reporter = reporter;
 	}
 
 }

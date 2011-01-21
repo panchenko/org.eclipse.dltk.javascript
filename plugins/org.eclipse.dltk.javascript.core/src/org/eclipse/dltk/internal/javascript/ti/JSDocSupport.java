@@ -62,7 +62,7 @@ public class JSDocSupport implements IModelBuilder {
 		return PRIORITY_DEFAULT;
 	}
 
-	protected JSDocTags parse(Comment comment) {
+	public JSDocTags parse(Comment comment) {
 		return new SimpleJSDocParser().parse(comment.getText(),
 				comment.sourceStart());
 	}
@@ -257,7 +257,7 @@ public class JSDocSupport implements IModelBuilder {
 	private static final String[] RETURN_TAGS = { JSDocTag.RETURNS,
 			JSDocTag.RETURN, JSDocTag.TYPE };
 
-	private static final String[] TYPE_TAGS = { JSDocTag.TYPE };
+	public static final String[] TYPE_TAGS = { JSDocTag.TYPE };
 
 	private static class Tokenizer {
 

@@ -1006,9 +1006,4 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return false;
 	}
 
-	protected IModelBuilder.IProblemReporter reporter;
-
-	public void setProblemReporter(IModelBuilder.IProblemReporter reporter) {
-		this.reporter = reporter;
-	}
 }
