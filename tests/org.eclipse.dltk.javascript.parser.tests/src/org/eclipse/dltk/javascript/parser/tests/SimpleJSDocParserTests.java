@@ -17,12 +17,14 @@ import junit.framework.TestCase;
 
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
 
 public class SimpleJSDocParserTests extends TestCase {
 
 	private List<JSDocTag> parse(String content) {
-		return new SimpleJSDocParser().parse(content, 0).list();
+		final JSDocTags tags = new SimpleJSDocParser().parse(content, 0);
+		return tags.list();
 	}
 
 	public void testSimple() {
