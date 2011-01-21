@@ -49,4 +49,9 @@ public class JSDocTag {
 	public int getEnd() {
 		return end;
 	}
+
+	@Override
+	public String toString() {
+		return value != null && value.length() != 0 ? tag + " " + value : tag;
+	}
 }

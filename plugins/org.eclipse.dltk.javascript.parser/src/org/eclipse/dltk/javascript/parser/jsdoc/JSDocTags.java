@@ -143,4 +143,21 @@ public class JSDocTags {
 		tags.add(tag);
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append('[');
+		boolean first = true;
+		for (JSDocTag tag : tags) {
+			if (!first) {
+				sb.append(",\n ");
+			} else {
+				first = false;
+			}
+			sb.append(tag);
+		}
+		sb.append(']');
+		return sb.toString();
+	}
+
 }
