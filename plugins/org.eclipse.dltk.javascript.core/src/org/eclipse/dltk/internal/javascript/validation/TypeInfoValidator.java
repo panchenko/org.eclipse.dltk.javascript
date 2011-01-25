@@ -300,21 +300,36 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 			IMethod method = (IMethod) reference
 					.getAttribute(IReferenceAttributes.PARAMETERS);
-			if (method != null && method.getType() != null
-					&& collection != null
-					&& collection.getReturnValue() != null) {
-				Set<Type> types = collection.getReturnValue().getTypes();
-				if (!types.isEmpty()
-						&& !types.contains(context.getType(method.getType()))) {
-					reporter.reportProblem(
-							JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
-							NLS.bind(
-									ValidationMessages.DeclarationMismatchWithActualReturnType,
-									new String[] { method.getName(),
-											method.getType(),
-											types.iterator().next().getName() }),
-							node.getName().sourceStart(), node.getName()
-									.sourceEnd());
+			if (method != null && method.getType() != null) {
+				if (collection != null && collection.getReturnValue() != null) {
+					Set<Type> types = collection.getReturnValue().getTypes();
+					if (!types.isEmpty()
+							&& !types
+									.contains(context.getType(method.getType()))) {
+						String name = method.getName();
+						int sourceStart;
+						int sourceEnd;
+
+						if (node.getName() == null) {
+							name = "<anonymous>";
+							sourceStart = node.getFunctionKeyword()
+									.sourceStart();
+							sourceEnd = node.getFunctionKeyword().sourceEnd();
+						} else {
+							sourceStart = node.getName().sourceStart();
+							sourceEnd = node.getName().sourceEnd();
+						}
+						reporter.reportProblem(
+								JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+								NLS.bind(
+										ValidationMessages.DeclarationMismatchWithActualReturnType,
+										new String[] {
+												name,
+												method.getType(),
+												types.iterator().next()
+														.getName() }),
+								sourceStart, sourceEnd);
+					}
 				}
 			}
 			return reference;
