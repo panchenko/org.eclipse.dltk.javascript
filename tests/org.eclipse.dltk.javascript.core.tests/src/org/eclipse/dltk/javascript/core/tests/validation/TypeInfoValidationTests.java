@@ -433,6 +433,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(1)
 				.getID());
 	}
+	
+	public void tesUndefinedVariables() throws Exception {
+		List<String> code = new StringList();
+		code.add("function test() {");
+		code.add("a=10");
+		code.add("b['test']='1'");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(2, problems.size());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+				.getID());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(1)
+				.getID());
+	}
 
 	public void testObjectInitalizerWithPropertyAndFunction() {
 		List<String> code = new StringList();
