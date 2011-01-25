@@ -503,7 +503,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						node.getIndex());
 				if (arrayType != null && namedChild.getDeclaredType() == null) {
 					namedChild.setDeclaredType(context.getType(arrayType));
-				} else if (namedChild.exists())
+				} else
+					// if (namedChild.exists())
 					child = namedChild;
 			}
 			return child;
