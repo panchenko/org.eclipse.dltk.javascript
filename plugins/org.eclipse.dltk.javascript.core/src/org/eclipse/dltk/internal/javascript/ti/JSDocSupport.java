@@ -232,20 +232,20 @@ public class JSDocSupport implements IModelBuilder {
 							continue;
 						}
 					}
-					final IParameter parameter = method.getParameter(paramName);
-					if (parameter != null) {
-						if (type != null && parameter.getType() == null) {
-							parameter.setType(translateTypeName(type));
-						}
-						if (!optional && st.hasMoreTokens()
-								&& st.nextToken().equals("optional"))
-							optional = true;
-						parameter.setOptional(optional);
-						parameter.setVarargs(varargs);
-					} else {
-						reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM,
-								tag, paramName);
+				}
+				final IParameter parameter = method.getParameter(paramName);
+				if (parameter != null) {
+					if (type != null && parameter.getType() == null) {
+						parameter.setType(translateTypeName(type));
 					}
+					if (!optional && st.hasMoreTokens()
+							&& st.nextToken().equals("optional"))
+						optional = true;
+					parameter.setOptional(optional);
+					parameter.setVarargs(varargs);
+				} else {
+					reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM, tag,
+							paramName);
 				}
 			} else {
 				reportProblem(reporter, JSDocProblem.MISSING_PARAMETER_NAME,

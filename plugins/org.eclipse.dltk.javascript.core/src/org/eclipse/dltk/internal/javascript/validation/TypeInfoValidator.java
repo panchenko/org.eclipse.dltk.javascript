@@ -898,7 +898,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				final JSType type = JavaScriptValidations.typeOf(result);
 				if (type != null) {
 					checkType(node, type, type.getName());
-				} else if (!result.exists()) {
+				} else if (!result.exists()
+						&& !(node.getParent() instanceof CallExpression)) {
 					pushExpressionValidator(new NotExistingIdentiferValidator(
 							node, result, this));
 				}
