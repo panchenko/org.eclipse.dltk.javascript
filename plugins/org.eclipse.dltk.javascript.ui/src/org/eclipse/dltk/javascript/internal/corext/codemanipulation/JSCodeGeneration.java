@@ -26,6 +26,7 @@ import org.eclipse.dltk.core.PreferencesLookupDelegate;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.scriptdoc.IndentManipulation;
 import org.eclipse.dltk.javascript.scriptdoc.ScriptdocContentAccess;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.ui.CodeFormatterConstants;
 
 public class JSCodeGeneration {
@@ -125,7 +126,7 @@ public class JSCodeGeneration {
 		StringBuffer buf = new StringBuffer();
 		buf.append("/**").append(lineDelimiter); //$NON-NLS-1$
 		buf.append(" * " + fieldName).append(lineDelimiter); //$NON-NLS-1$
-		buf.append(" * @type Object").append(lineDelimiter); //$NON-NLS-1$
+		buf.append(" * @type ").append(typeName != null ? typeName : ITypeNames.OBJECT).append(lineDelimiter); //$NON-NLS-1$
 		buf.append(" */").append(lineDelimiter); //$NON-NLS-1$
 		return buf.toString();
 	}
