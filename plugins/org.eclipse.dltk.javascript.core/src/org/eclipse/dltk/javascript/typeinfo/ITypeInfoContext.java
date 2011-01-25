@@ -45,8 +45,28 @@ public interface ITypeInfoContext {
 	 */
 	void markInvariant(Type type);
 
+	/**
+	 * Mark the specified type as invariant for a specific context, so the type
+	 * can be widely cached.
+	 * 
+	 * @param type
+	 * @param context
+	 */
+	void markInvariant(Type type, String context);
+
+	/**
+	 * Get a type from an invariant cache.
+	 * 
+	 * @param typeName
+	 * @param context
+	 * @return
+	 */
+	Type getInvariantType(String typeName, String context);
+
 	public interface ITypeInfoInvariantCache {
 		void reset();
+
+		void reset(String context);
 	}
 
 	ITypeInfoInvariantCache INVARIANTS = new TypeInfoInvariantCacheImpl();
@@ -65,4 +85,11 @@ public interface ITypeInfoContext {
 	 */
 	ReferenceSource getSource();
 
+	/**
+	 * Returns the context name of this TypeInfoContext, by default this return
+	 * null.
+	 * 
+	 * @return
+	 */
+	String getContext();
 }

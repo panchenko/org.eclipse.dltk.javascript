@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2.InvariantTypeResourceSet;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 
 public class TypeInfoInvariantCacheImpl implements
@@ -18,6 +19,13 @@ public class TypeInfoInvariantCacheImpl implements
 
 	public void reset() {
 		TypeInferencer2.invariantRS.reset();
+	}
+
+	public void reset(String context) {
+		InvariantTypeResourceSet invariantTypeResourceSet = TypeInferencer2.invariantContextRS
+				.get(context);
+		if (invariantTypeResourceSet != null)
+			invariantTypeResourceSet.reset();
 	}
 
 }

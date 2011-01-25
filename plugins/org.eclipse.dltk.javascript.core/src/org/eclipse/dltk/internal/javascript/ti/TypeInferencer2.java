@@ -13,9 +13,11 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
@@ -165,6 +167,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return source != null ? source.getModelElement() : null;
 	}
 
+	public String getContext() {
+		return null;
+	}
+
 	private enum TypeResolveMode {
 		SIMPLE, PROXY, UNKNOWN
 	}
@@ -203,18 +209,62 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	private void validateTypeInfo(Type type) {
 		final Resource resource = ((EObject) type).eResource();
 		if (resource != null) {
-			Assert.isTrue(resource == invariantRS.getResource()
-					|| TypeInfoModelLoader.getInstance().hasResource(resource),
+			boolean validResource = resource == invariantRS.getResource()
+					|| TypeInfoModelLoader.getInstance().hasResource(resource);
+			if (!validResource) {
+				Iterator<InvariantTypeResourceSet> iterator = invariantContextRS
+						.values().iterator();
+				while (iterator.hasNext()) {
+					validResource = iterator.next().getResource() == resource;
+					if (validResource)
+						break;
+				}
+				Assert.isTrue(validResource,
 					"Type " + type.getName() + " has not a valid resource: "
 							+ resource);
+			}
 		}
 		// TODO check that member referenced types are contained or proxy
 	}
 
 	public void markInvariant(Type type) {
-		Assert.isLegal(((EObject) type).eContainer() == null);
-		Assert.isLegal(((EObject) type).eResource() == null);
+		if (((EObject) type).eResource() != null) {
+			return;
+		}
 		invariantRS.add(type);
+	}
+
+	public void markInvariant(Type type, String context) {
+		if (((EObject) type).eResource() != null) {
+			return;
+		}
+		if (context == null) {
+			markInvariant(type);
+		} else {
+			Assert.isLegal(((EObject) type).eContainer() == null);
+			Assert.isLegal(((EObject) type).eResource() == null);
+			InvariantTypeResourceSet invariantTypeResourceSet = invariantContextRS
+					.get(context);
+			if (invariantTypeResourceSet == null) {
+				invariantTypeResourceSet = new InvariantTypeResourceSet(
+						context, invariantRS, invariantContextRS);
+				InvariantTypeResourceSet set = invariantContextRS.putIfAbsent(
+						context, invariantTypeResourceSet);
+				if (set != null) {
+					invariantTypeResourceSet = set;
+				}
+			}
+			invariantTypeResourceSet.add(type);
+		}
+	}
+
+	public Type getInvariantType(String typeName, String context) {
+		InvariantTypeResourceSet invariantTypeResourceSet = invariantContextRS
+				.get(context);
+		if (invariantTypeResourceSet != null) {
+			return invariantTypeResourceSet.getCachedType(typeName);
+		}
+		return null;
 	}
 
 	private static Type createUnknown(String typeName) {
@@ -224,31 +274,18 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return type;
 	}
 
-	private final Set<String> activeTypeRequests = new HashSet<String>();
+	private final Map<String, Boolean> activeTypeRequests = new HashMap<String, Boolean>();
 
 	private boolean canQueryTypeProviders() {
-		synchronized (activeTypeRequests) {
-			return activeTypeRequests.isEmpty();
-		}
+		return activeTypeRequests.isEmpty();
 	}
 
 	private Type loadType(String typeName, boolean queryProviders,
 			boolean queryPredefined) {
-		if (queryProviders) {
-			synchronized (activeTypeRequests) {
-				while (!activeTypeRequests.add(typeName)) {
-					try {
-						activeTypeRequests.wait();
-					} catch (InterruptedException e) {
-					}
-				}
-			}
+		if (queryProviders
+				&& activeTypeRequests.put(typeName, Boolean.FALSE) == null) {
 			try {
-				Type type = types.get(typeName);
-				if (type != null) {
-					return type;
-				}
-				type = invariantRS.getCachedType(typeName);
+				Type type = invariantRS.getCachedType(typeName);
 				if (type != null) {
 					return type;
 				}
@@ -260,10 +297,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					}
 				}
 			} finally {
-				synchronized (activeTypeRequests) {
-					activeTypeRequests.remove(typeName);
-					activeTypeRequests.notifyAll();
-				}
+				activeTypeRequests.remove(typeName);
 			}
 		}
 		if (queryPredefined) {
@@ -430,6 +464,22 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	static class InvariantTypeResourceSet extends TypeResourceSet implements
 			ITypeInfoContext {
 
+		private final String context;
+		private final InvariantTypeResourceSet staticInvariants;
+		private final ConcurrentMap<String, InvariantTypeResourceSet> contextInvariants;
+
+		public InvariantTypeResourceSet(
+				ConcurrentMap<String, InvariantTypeResourceSet> contextInvariants) {
+			this(null, null, contextInvariants);
+		}
+
+		public InvariantTypeResourceSet(String context,
+				InvariantTypeResourceSet staticInvariants,
+				ConcurrentMap<String, InvariantTypeResourceSet> contextInvariants) {
+			this.context = context;
+			this.staticInvariants = staticInvariants;
+			this.contextInvariants = contextInvariants;
+		}
 		private final Set<String> activeTypeRequests = new HashSet<String>();
 		private final Map<String, Type> types = new ConcurrentHashMap<String, Type>();
 
@@ -437,6 +487,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			synchronized (activeTypeRequests) {
 				return activeTypeRequests.isEmpty();
 			}
+		}
+
+		public String getContext() {
+			return context;
 		}
 
 		private Type getType(String typeName, boolean queryProviders,
@@ -526,6 +580,11 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 		@Override
 		protected Type resolveTypeProxy(String typeName) {
+			if (staticInvariants != null) {
+				Type cachedType = staticInvariants.getCachedType(typeName);
+				if (cachedType != null)
+					return cachedType;
+			}
 			return getType(typeName, true, false, false, false);
 		}
 
@@ -548,9 +607,49 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 
 		public void markInvariant(Type type) {
-			Assert.isLegal(((EObject) type).eContainer() == null);
-			Assert.isLegal(((EObject) type).eResource() == null);
-			add(type);
+			if (((EObject) type).eResource() != null) {
+				return;
+			}
+			// context == null, this is a static one
+			if (staticInvariants == null)
+				add(type);
+			else
+				staticInvariants.add(type);
+		}
+
+		public void markInvariant(Type type, String context) {
+			if (((EObject) type).eResource() != null) {
+				return;
+			}
+			if (context.equals(this.context)) {
+				add(type);
+			} else {
+				InvariantTypeResourceSet invariantTypeResourceSet = this.contextInvariants
+						.get(context);
+				if (invariantTypeResourceSet == null) {
+					invariantTypeResourceSet = new InvariantTypeResourceSet(
+							context, invariantRS, invariantContextRS);
+					InvariantTypeResourceSet set = invariantContextRS
+							.putIfAbsent(context, invariantTypeResourceSet);
+					if (set != null) {
+						invariantTypeResourceSet = set;
+					}
+				}
+				invariantTypeResourceSet.add(type);
+			}
+		}
+
+		public Type getInvariantType(String typeName, String context) {
+			if (context.equals(this.context)) {
+				return getCachedType(typeName);
+			} else {
+				InvariantTypeResourceSet invariantTypeResourceSet = invariantContextRS
+						.get(context);
+				if (invariantTypeResourceSet != null) {
+					return invariantTypeResourceSet.getCachedType(typeName);
+				}
+			}
+			return null;
 		}
 
 		public IModelElement getModelElement() {
@@ -580,7 +679,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	}
 
-	static final InvariantTypeResourceSet invariantRS = new InvariantTypeResourceSet();
+	static final ConcurrentHashMap<String, InvariantTypeResourceSet> invariantContextRS = new ConcurrentHashMap<String, InvariantTypeResourceSet>();
+	static final InvariantTypeResourceSet invariantRS = new InvariantTypeResourceSet(
+			invariantContextRS);
 
 	private static boolean isProxy(Type type) {
 		return type instanceof EObject && ((EObject) type).eIsProxy();
