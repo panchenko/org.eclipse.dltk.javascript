@@ -13,6 +13,19 @@ package org.eclipse.dltk.javascript.core;
 
 import org.eclipse.dltk.core.keyword.IKeywordCategory;
 
+/**
+ * JavaScript keyword categories.
+ * 
+ * @since 3.0
+ */
 public enum JSKeywordCategory implements IKeywordCategory {
+	/**
+	 * code keyword category
+	 */
+	CODE,
+
+	/**
+	 * JSDoc tag category
+	 */
 	JS_DOC_TAG
 }
