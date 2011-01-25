@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Element.java,v 1.6 2010/11/29 16:28:05 apanchenk Exp $
+ * $Id: Element.java,v 1.7 2011/01/25 12:47:12 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -23,7 +23,6 @@ import org.eclipse.emf.common.util.EMap;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isDeprecated <em>Deprecated</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isVisible <em>Visible</em>}</li>
@@ -35,33 +34,7 @@ import org.eclipse.emf.common.util.EMap;
  * @model abstract="true"
  * @generated
  */
-public interface Element {
-	/**
-     * Returns the value of the '<em><b>Name</b></em>' attribute.
-     * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-     * @return the value of the '<em>Name</em>' attribute.
-     * @see #setName(String)
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getElement_Name()
-     * @model id="true"
-     * @generated
-     */
-	String getName();
-
-	/**
-     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getName <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Name</em>' attribute.
-     * @see #getName()
-     * @generated
-     */
-	void setName(String value);
-
+public interface Element extends NamedElement {
 	/**
      * Returns the value of the '<em><b>Deprecated</b></em>' attribute.
      * <!-- begin-user-doc -->

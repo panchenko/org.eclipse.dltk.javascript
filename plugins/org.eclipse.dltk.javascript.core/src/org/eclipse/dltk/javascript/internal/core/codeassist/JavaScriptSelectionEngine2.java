@@ -45,6 +45,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
@@ -107,7 +108,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		}
 		final Script script = JavaScriptParserUtil.parse(module, null);
 
-		NodeFinder finder = new NodeFinder(content, position, i);
+		NodeFinder finder = new NodeFinder(content, position, i + 1);
 		ASTNode node = finder.locateNode(script);
 		if (node != null) {
 			if (DEBUG) {
@@ -151,12 +152,12 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 									.getElementType() == IModelElement.METHOD)) {
 						return new IModelElement[] { result };
 					}
-					Type type = JavaScriptValidations.typeOf(value);
+					final JSType type = JavaScriptValidations.typeOf(value);
 					return new IModelElement[] { new LocalVariable(m,
 							value.getName(), location.getDeclarationStart(),
 							location.getDeclarationEnd(),
 							location.getNameStart(), location.getNameEnd() - 1,
-							type == null?null:type.getName()) };
+							type == null ? null : type.getName()) };
 				} else if (kind == ReferenceKind.FUNCTION
 						|| kind == ReferenceKind.GLOBAL
 						|| kind == ReferenceKind.FIELD) {
@@ -190,9 +191,15 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 						return convert(m, Collections.singletonList(method));
 					}
 				} else if (kind == ReferenceKind.TYPE) {
-					final Collection<Type> types = value.getTypes();
+					final Collection<JSType> types = value.getTypes();
 					if (types != null) {
-						return convert(m, types);
+						final List<Type> t = new ArrayList<Type>(types.size());
+						for (JSType type : types) {
+							if (type instanceof Type) {
+								t.add((Type) type);
+							}
+						}
+						return convert(m, t);
 					}
 				}
 			}
@@ -308,29 +315,29 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			}
 		}
 		return null;
-//		return new org.eclipse.dltk.internal.core.NamedMember(
-//				(ModelElement) module, "test") {
-//
-//			public int getElementType() {
-//				return 0;
-//			}
-//
-//			@Override
-//			protected char getHandleMementoDelimiter() {
-//				return 0;
-//			}
-//
-//			@Override
-//			public ISourceRange getNameRange() throws ModelException {
-//				return new SourceRange(location.getNameStart(),
-//						(location.getNameEnd() - location.getNameStart()));
-//			}
-//
-//			@Override
-//			public ISourceRange getSourceRange() throws ModelException {
-//				return getNameRange();
-//			}
-//		};
+		// return new org.eclipse.dltk.internal.core.NamedMember(
+		// (ModelElement) module, "test") {
+		//
+		// public int getElementType() {
+		// return 0;
+		// }
+		//
+		// @Override
+		// protected char getHandleMementoDelimiter() {
+		// return 0;
+		// }
+		//
+		// @Override
+		// public ISourceRange getNameRange() throws ModelException {
+		// return new SourceRange(location.getNameStart(),
+		// (location.getNameEnd() - location.getNameStart()));
+		// }
+		//
+		// @Override
+		// public ISourceRange getSourceRange() throws ModelException {
+		// return getNameRange();
+		// }
+		// };
 	}
 
 	/**

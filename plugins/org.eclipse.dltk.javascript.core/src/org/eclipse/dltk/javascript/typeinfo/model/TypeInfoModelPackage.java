@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.12 2010/11/29 16:28:05 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.13 2011/01/25 12:47:12 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -68,6 +68,62 @@ public interface TypeInfoModelPackage extends EPackage {
 	TypeInfoModelPackage eINSTANCE = org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl.init();
 
 	/**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.NamedElementImpl <em>Named Element</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.NamedElementImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getNamedElement()
+     * @generated
+     */
+    int NAMED_ELEMENT = 0;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int NAMED_ELEMENT__NAME = 0;
+
+    /**
+     * The number of structural features of the '<em>Named Element</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int NAMED_ELEMENT_FEATURE_COUNT = 1;
+
+    /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.JSType <em>JS Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.JSType
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getJSType()
+     * @generated
+     */
+    int JS_TYPE = 1;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int JS_TYPE__NAME = NAMED_ELEMENT__NAME;
+
+    /**
+     * The number of structural features of the '<em>JS Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int JS_TYPE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -75,7 +131,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getElement()
      * @generated
      */
-	int ELEMENT = 0;
+	int ELEMENT = 2;
 
 	/**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -84,7 +140,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int ELEMENT__NAME = 0;
+	int ELEMENT__NAME = NAMED_ELEMENT__NAME;
 
 	/**
      * The feature id for the '<em><b>Deprecated</b></em>' attribute.
@@ -93,7 +149,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int ELEMENT__DEPRECATED = 1;
+	int ELEMENT__DEPRECATED = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
      * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -102,7 +158,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int ELEMENT__DESCRIPTION = 2;
+	int ELEMENT__DESCRIPTION = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
      * The feature id for the '<em><b>Visible</b></em>' attribute.
@@ -111,7 +167,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int ELEMENT__VISIBLE = 3;
+	int ELEMENT__VISIBLE = NAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
      * The feature id for the '<em><b>Attributes</b></em>' map.
@@ -120,7 +176,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int ELEMENT__ATTRIBUTES = 4;
+	int ELEMENT__ATTRIBUTES = NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
      * The number of structural features of the '<em>Element</em>' class.
@@ -129,7 +185,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int ELEMENT_FEATURE_COUNT = 5;
+	int ELEMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
@@ -139,7 +195,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getType()
      * @generated
      */
-	int TYPE = 1;
+	int TYPE = 3;
 
 	/**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -230,7 +286,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeAlias()
      * @generated
      */
-    int TYPE_ALIAS = 2;
+    int TYPE_ALIAS = 4;
 
     /**
      * The feature id for the '<em><b>Source</b></em>' attribute.
@@ -267,7 +323,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMember()
      * @generated
      */
-	int MEMBER = 3;
+	int MEMBER = 5;
 
 	/**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -358,7 +414,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMethod()
      * @generated
      */
-	int METHOD = 4;
+	int METHOD = 6;
 
 	/**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -458,7 +514,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameter()
      * @generated
      */
-	int PARAMETER = 5;
+	int PARAMETER = 7;
 
 	/**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -504,7 +560,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getProperty()
      * @generated
      */
-	int PROPERTY = 6;
+	int PROPERTY = 8;
 
 	/**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -605,7 +661,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAttributeEntry()
      * @generated
      */
-	int ATTRIBUTE_ENTRY = 7;
+	int ATTRIBUTE_ENTRY = 9;
 
 	/**
      * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -642,7 +698,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 8;
+	int TYPE_KIND = 10;
 
 
 	/**
@@ -653,10 +709,41 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 9;
+	int PARAMETER_KIND = 11;
 
 
 	/**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.NamedElement <em>Named Element</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Named Element</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.NamedElement
+     * @generated
+     */
+    EClass getNamedElement();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.NamedElement#getName <em>Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Name</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.NamedElement#getName()
+     * @see #getNamedElement()
+     * @generated
+     */
+    EAttribute getNamedElement_Name();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.JSType <em>JS Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>JS Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.JSType
+     * @generated
+     */
+    EClass getJSType();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -665,17 +752,6 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
 	EClass getElement();
-
-	/**
-     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getName <em>Name</em>}'.
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Name</em>'.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.Element#getName()
-     * @see #getElement()
-     * @generated
-     */
-	EAttribute getElement_Name();
 
 	/**
      * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isDeprecated <em>Deprecated</em>}'.
@@ -1001,6 +1077,34 @@ public interface TypeInfoModelPackage extends EPackage {
      */
 	interface Literals {
 		/**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.NamedElementImpl <em>Named Element</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.NamedElementImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getNamedElement()
+         * @generated
+         */
+        EClass NAMED_ELEMENT = eINSTANCE.getNamedElement();
+
+        /**
+         * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute NAMED_ELEMENT__NAME = eINSTANCE.getNamedElement_Name();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.JSType <em>JS Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.JSType
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getJSType()
+         * @generated
+         */
+        EClass JS_TYPE = eINSTANCE.getJSType();
+
+        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
          * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1009,14 +1113,6 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
 		EClass ELEMENT = eINSTANCE.getElement();
-
-		/**
-         * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-         * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-         * @generated
-         */
-		EAttribute ELEMENT__NAME = eINSTANCE.getElement_Name();
 
 		/**
          * The meta object literal for the '<em><b>Deprecated</b></em>' attribute feature.

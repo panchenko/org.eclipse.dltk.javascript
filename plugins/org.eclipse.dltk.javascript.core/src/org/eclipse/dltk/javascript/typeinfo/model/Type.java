@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.5 2010/11/29 16:28:05 apanchenk Exp $
+ * $Id: Type.java,v 1.6 2011/01/25 12:47:12 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -33,7 +33,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Type extends Element {
+public interface Type extends Element, JSType {
 	/**
      * Returns the value of the '<em><b>Members</b></em>' containment reference list.
      * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Member}.

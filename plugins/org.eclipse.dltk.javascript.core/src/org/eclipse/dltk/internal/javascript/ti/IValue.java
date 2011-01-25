@@ -15,7 +15,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public interface IValue {
 
@@ -27,13 +27,13 @@ public interface IValue {
 
 	IValue createChild(String name);
 
-	Type getDeclaredType();
+	JSType getDeclaredType();
 
-	void setDeclaredType(Type declaredType);
+	void setDeclaredType(JSType declaredType);
 
-	Set<Type> getDeclaredTypes();
+	Set<JSType> getDeclaredTypes();
 
-	Set<Type> getTypes();
+	Set<JSType> getTypes();
 
 	Object getAttribute(String key, boolean includeReferences);
 	

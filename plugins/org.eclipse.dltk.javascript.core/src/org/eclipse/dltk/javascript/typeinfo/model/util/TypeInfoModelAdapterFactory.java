@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.4 2010/11/25 16:38:34 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.5 2011/01/25 12:47:13 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -80,6 +80,14 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
 	protected TypeInfoModelSwitch<Adapter> modelSwitch =
 		new TypeInfoModelSwitch<Adapter>() {
             @Override
+            public Adapter caseNamedElement(NamedElement object) {
+                return createNamedElementAdapter();
+            }
+            @Override
+            public Adapter caseJSType(JSType object) {
+                return createJSTypeAdapter();
+            }
+            @Override
             public Adapter caseElement(Element object) {
                 return createElementAdapter();
             }
@@ -132,6 +140,34 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.NamedElement <em>Named Element</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.NamedElement
+     * @generated
+     */
+    public Adapter createNamedElementAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.JSType <em>JS Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.JSType
+     * @generated
+     */
+    public Adapter createJSTypeAdapter() {
+        return null;
+    }
+
+    /**
      * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
      * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;

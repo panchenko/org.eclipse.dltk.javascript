@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.7 2010/11/29 16:28:05 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.8 2011/01/25 12:47:13 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Collection;
 
+import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
@@ -174,6 +175,15 @@ public class TypeImpl extends ElementImpl implements Type {
         if (eNotificationRequired())
             eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__SUPER_TYPE, oldSuperType, superType));
     }
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+	public String getComponentType() {
+		return (String) getAttribute(ITypeInferenceContext.GENERIC_ARRAY_TYPE);
+	}
 
     /**
      * <!-- begin-user-doc -->

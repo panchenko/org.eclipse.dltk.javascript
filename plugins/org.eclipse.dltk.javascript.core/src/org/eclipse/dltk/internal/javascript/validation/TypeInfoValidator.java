@@ -52,6 +52,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -160,9 +161,9 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		}
 
 		public void call() {
-			Set<Type> types = reference.getTypes();
+			Set<JSType> types = reference.getTypes();
 			if (types.size() > 0) {
-				Type type = types.iterator().next();
+				JSType type = types.iterator().next();
 				validator
 						.checkType(node.getObjectClass(), type, type.getName());
 			} else if (reference.getDeclaredType() == null) {
@@ -172,7 +173,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							((LazyReference) reference).getName());
 				}
 			} else {
-				Type type = reference.getDeclaredType();
+				JSType type = reference.getDeclaredType();
 				validator
 						.checkType(node.getObjectClass(), type, type.getName());
 			}
@@ -302,7 +303,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					.getAttribute(IReferenceAttributes.PARAMETERS);
 			if (method != null && method.getType() != null) {
 				if (collection != null && collection.getReturnValue() != null) {
-					Set<Type> types = collection.getReturnValue().getTypes();
+					Set<JSType> types = collection.getReturnValue().getTypes();
 					if (!types.isEmpty()
 							&& !types
 									.contains(context.getType(method.getType()))) {
@@ -411,7 +412,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				Method method = JavaScriptValidations.selectMethod(methods,
 						arguments);
 				if (method == null) {
-					final Type type = JavaScriptValidations.typeOf(reference
+					final JSType type = JavaScriptValidations.typeOf(reference
 							.getParent());
 					if (type != null) {
 						if (type.getKind() == TypeKind.JAVA) {
@@ -440,7 +441,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				}
 				if (JavaScriptValidations.isStatic(reference.getParent())
 						&& !method.isStatic()) {
-					Type type = JavaScriptValidations.typeOf(reference
+					JSType type = JavaScriptValidations.typeOf(reference
 							.getParent());
 					reporter.reportProblem(
 							JavaScriptProblems.INSTANCE_METHOD,
@@ -450,7 +451,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							methodNode.sourceStart(), methodNode.sourceEnd());
 				} else if (!JavaScriptValidations.isStatic(reference
 						.getParent()) && method.isStatic()) {
-					Type type = JavaScriptValidations.typeOf(reference
+					JSType type = JavaScriptValidations.typeOf(reference
 							.getParent());
 					reporter.reportProblem(JavaScriptProblems.STATIC_METHOD,
 							NLS.bind(
@@ -492,7 +493,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					}
 				} else if (!isArrayLookup(expression)) {
 
-					final Type type = JavaScriptValidations.typeOf(reference
+					final JSType type = JavaScriptValidations.typeOf(reference
 							.getParent());
 					if (type != null) {
 						if (type.getKind() == TypeKind.JAVA) {
@@ -505,7 +506,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 											.sourceEnd());
 						} else if (JavaScriptValidations.isStatic(reference
 								.getParent())
-								&& !ElementValue.findMembers(type,
+								&& type instanceof Type
+								&& !ElementValue.findMembers((Type) type,
 										reference.getName(),
 										MemberPredicates.NON_STATIC).isEmpty()) {
 							reporter.reportProblem(
@@ -527,7 +529,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 											.sourceEnd());
 						}
 					} else {
-						Type referenceType = JavaScriptValidations
+						JSType referenceType = JavaScriptValidations
 								.typeOf(reference);
 						while (referenceType != null) {
 							if (referenceType.getName().equals(
@@ -541,7 +543,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 							if (reference.getKind() == ReferenceKind.TYPE) {
 								return;
 							}
-							Type newType = JavaScriptValidations
+							JSType newType = JavaScriptValidations
 									.typeOf(reference);
 							if (newType != null) {
 								return;
@@ -691,7 +693,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				IValueReference argument) {
 			if (argument == null)
 				return true;
-			Type argumentType = argument.getDeclaredType();
+			JSType argumentType = argument.getDeclaredType();
 			if (argumentType == null) {
 				if (!argument.getTypes().isEmpty()) {
 					argumentType = argument.getTypes().iterator().next();
@@ -707,7 +709,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (paramType.equals(argumentName))
 					return true;
 
-				Type type = argumentType.getSuperType();
+				JSType type = argumentType.getSuperType();
 				while (type != null) {
 					String name = type.getName();
 					if (name.equals(paramType))
@@ -778,7 +780,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				} else if (argument.getDeclaredType() != null) {
 					sb.append(argument.getDeclaredType().getName());
 				} else {
-					final Set<Type> types = argument.getTypes();
+					final Set<JSType> types = argument.getTypes();
 					if (types.size() == 1) {
 						sb.append(types.iterator().next().getName());
 					} else {
@@ -872,7 +874,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				}
 			} else if (expr instanceof PropertyExpression
 					&& validate(((PropertyExpression) expr).getObject(), parent)) {
-				final Type type = JavaScriptValidations.typeOf(parent);
+				final JSType type = JavaScriptValidations.typeOf(parent);
 				if (type != null && type.getKind() == TypeKind.JAVA
 						&& !reference.exists()) {
 					reporter.reportProblem(
@@ -893,7 +895,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 			if (property != null && property.isDeprecated()) {
 				reportDeprecatedProperty(property, null, node);
 			} else {
-				final Type type = JavaScriptValidations.typeOf(result);
+				final JSType type = JavaScriptValidations.typeOf(result);
 				if (type != null) {
 					checkType(node, type, type.getName());
 				} else if (!result.exists()) {
@@ -999,8 +1001,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 					}
 				} else if (JavaScriptValidations.isStatic(result.getParent())
 						&& !member.isStatic()) {
-					Type type = JavaScriptValidations
-							.typeOf(result.getParent());
+					JSType type = JavaScriptValidations.typeOf(result
+							.getParent());
 					reporter.reportProblem(
 							JavaScriptProblems.INSTANCE_PROPERTY,
 							NLS.bind(
@@ -1009,8 +1011,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									.sourceStart(), propName.sourceEnd());
 				} else if (!JavaScriptValidations.isStatic(result.getParent())
 						&& member.isStatic()) {
-					Type type = JavaScriptValidations
-							.typeOf(result.getParent());
+					JSType type = JavaScriptValidations.typeOf(result
+							.getParent());
 					reporter.reportProblem(
 							JavaScriptProblems.STATIC_PROPERTY,
 							NLS.bind(
@@ -1019,7 +1021,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									.sourceStart(), propName.sourceEnd());
 				}
 			} else if (!result.exists() && !isArrayLookup(propertyExpression)) {
-				final Type type = JavaScriptValidations.typeOf(result
+				final JSType type = JavaScriptValidations.typeOf(result
 						.getParent());
 				if (type != null && type.getKind() == TypeKind.JAVA) {
 					reporter.reportProblem(
@@ -1112,7 +1114,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		 * @param type
 		 * @param result
 		 */
-		private void checkType(ASTNode type, final Type result, String name) {
+		private void checkType(ASTNode type, final JSType result, String name) {
 			if (result != null) {
 				if (result.getKind() == TypeKind.UNKNOWN) {
 					reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE,

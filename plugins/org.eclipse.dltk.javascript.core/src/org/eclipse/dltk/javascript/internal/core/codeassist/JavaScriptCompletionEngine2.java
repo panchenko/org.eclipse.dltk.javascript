@@ -43,6 +43,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -284,11 +285,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				} else {
 					predicate = MemberPredicates.NON_STATIC;
 				}
-				for (Type type : valueRef.getDeclaredTypes()) {
-					reportTypeMembers(type, predicate);
+				for (JSType type : valueRef.getDeclaredTypes()) {
+					if (type instanceof Type) {
+						reportTypeMembers((Type) type, predicate);
+					}
 				}
-				for (Type type : valueRef.getTypes()) {
-					reportTypeMembers(type, predicate);
+				for (JSType type : valueRef.getTypes()) {
+					if (type instanceof Type) {
+						reportTypeMembers((Type) type, predicate);
+					}
 				}
 			}
 		}

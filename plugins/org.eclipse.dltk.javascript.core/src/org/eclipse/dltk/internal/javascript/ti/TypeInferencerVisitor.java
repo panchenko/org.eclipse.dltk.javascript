@@ -99,6 +99,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -329,12 +330,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitForEachInStatement(ForEachInStatement node) {
 		IValueReference itemReference = visit(node.getItem());
 		IValueReference iteratorReference = visit(node.getIterator());
-		Type type = JavaScriptValidations.typeOf(iteratorReference);
-		if (type != null
-				&& type.getAttribute(ITypeInferenceContext.GENERIC_ARRAY_TYPE) != null
+		JSType type = JavaScriptValidations.typeOf(iteratorReference);
+		if (type != null && type.getComponentType() != null
 				&& JavaScriptValidations.typeOf(itemReference) == null) {
-			String genericType = (String) type
-					.getAttribute(ITypeInferenceContext.GENERIC_ARRAY_TYPE);
+			String genericType = type.getComponentType();
 			itemReference.setDeclaredType(context.getType(genericType));
 		}
 		visit(node.getBody());
@@ -490,16 +489,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			IValueReference child = array.getChild(IValueReference.ARRAY_OP);
 			String arrayType = null;
 			if (array.getDeclaredType() != null) {
-				arrayType = (String) array.getDeclaredType().getAttribute(
-						ITypeInferenceContext.GENERIC_ARRAY_TYPE);
+				arrayType = array.getDeclaredType().getComponentType();
 			} else {
-				Set<Type> types = array.getTypes();
+				Set<JSType> types = array.getTypes();
 				if (types.size() > 0)
-					arrayType = (String) types
-							.iterator()
-							.next()
-							.getAttribute(
-									ITypeInferenceContext.GENERIC_ARRAY_TYPE);
+					arrayType = types.iterator().next().getComponentType();
 			}
 			if (arrayType != null && child.getDeclaredType() == null) {
 				child.setDeclaredType(context.getType(arrayType));

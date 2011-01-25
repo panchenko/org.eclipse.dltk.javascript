@@ -26,6 +26,7 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -66,16 +67,16 @@ public class JavaScriptValidations {
 		return script;
 	}
 
-	public static Type typeOf(IValueReference reference) {
+	public static JSType typeOf(IValueReference reference) {
 		if (reference != null) {
 			if (reference.getDeclaredType() != null) {
 				return reference.getDeclaredType();
 			}
-			Set<Type> declaredTypes = reference.getDeclaredTypes();
+			Set<JSType> declaredTypes = reference.getDeclaredTypes();
 			if (declaredTypes.size() == 1) {
 				return declaredTypes.toArray(new Type[1])[0];
 			}
-			final Set<Type> types = reference.getTypes();
+			final Set<JSType> types = reference.getTypes();
 			if (types.size() == 1) {
 				return types.toArray(new Type[1])[0];
 			}

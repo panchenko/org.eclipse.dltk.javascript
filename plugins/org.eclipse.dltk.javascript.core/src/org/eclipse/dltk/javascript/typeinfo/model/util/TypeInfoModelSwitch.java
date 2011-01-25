@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.4 2010/11/25 16:38:34 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.5 2011/01/25 12:47:13 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -95,9 +95,23 @@ public class TypeInfoModelSwitch<T> {
      */
 	protected T doSwitch(int classifierID, EObject theEObject) {
         switch (classifierID) {
+            case TypeInfoModelPackage.NAMED_ELEMENT: {
+                NamedElement namedElement = (NamedElement)theEObject;
+                T result = caseNamedElement(namedElement);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.JS_TYPE: {
+                JSType jsType = (JSType)theEObject;
+                T result = caseJSType(jsType);
+                if (result == null) result = caseNamedElement(jsType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             case TypeInfoModelPackage.ELEMENT: {
                 Element element = (Element)theEObject;
                 T result = caseElement(element);
+                if (result == null) result = caseNamedElement(element);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -105,6 +119,8 @@ public class TypeInfoModelSwitch<T> {
                 Type type = (Type)theEObject;
                 T result = caseType(type);
                 if (result == null) result = caseElement(type);
+                if (result == null) result = caseJSType(type);
+                if (result == null) result = caseNamedElement(type);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -118,6 +134,7 @@ public class TypeInfoModelSwitch<T> {
                 Member member = (Member)theEObject;
                 T result = caseMember(member);
                 if (result == null) result = caseElement(member);
+                if (result == null) result = caseNamedElement(member);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -126,6 +143,7 @@ public class TypeInfoModelSwitch<T> {
                 T result = caseMethod(method);
                 if (result == null) result = caseMember(method);
                 if (result == null) result = caseElement(method);
+                if (result == null) result = caseNamedElement(method);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -140,6 +158,7 @@ public class TypeInfoModelSwitch<T> {
                 T result = caseProperty(property);
                 if (result == null) result = caseMember(property);
                 if (result == null) result = caseElement(property);
+                if (result == null) result = caseNamedElement(property);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -154,6 +173,36 @@ public class TypeInfoModelSwitch<T> {
     }
 
 	/**
+     * Returns the result of interpreting the object as an instance of '<em>Named Element</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Named Element</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseNamedElement(NamedElement object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>JS Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>JS Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseJSType(JSType object) {
+        return null;
+    }
+
+    /**
      * Returns the result of interpreting the object as an instance of '<em>Element</em>'.
      * <!-- begin-user-doc -->
 	 * This implementation returns null;

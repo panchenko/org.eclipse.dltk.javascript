@@ -13,7 +13,7 @@ package org.eclipse.dltk.javascript.typeinference;
 
 import java.util.Set;
 
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public interface IValueReference extends IValueParent {
 
@@ -24,7 +24,7 @@ public interface IValueReference extends IValueParent {
 
 	String getName();
 
-	Set<Type> getTypes();
+	Set<JSType> getTypes();
 
 	void clear();
 
@@ -42,11 +42,11 @@ public interface IValueReference extends IValueParent {
 
 	void setLocation(ReferenceLocation location);
 
-	Type getDeclaredType();
+	JSType getDeclaredType();
 
-	void setDeclaredType(Type type);
+	void setDeclaredType(JSType type);
 
-	Set<Type> getDeclaredTypes();
+	Set<JSType> getDeclaredTypes();
 
 	Object getAttribute(String key, boolean includeReferences);
 

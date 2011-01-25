@@ -17,7 +17,7 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public abstract class AbstractReference implements IValueReference,
 		IValueProvider {
@@ -98,15 +98,15 @@ public abstract class AbstractReference implements IValueReference,
 				: null;
 	}
 
-	public Type getDeclaredType() {
+	public JSType getDeclaredType() {
 		IValue value = getValue();
 		return value != null ? value.getDeclaredType() : null;
 	}
 
-	public Set<Type> getDeclaredTypes() {
+	public Set<JSType> getDeclaredTypes() {
 		IValue value = getValue();
 		return value != null ? value.getDeclaredTypes() : Collections
-				.<Type> emptySet();
+				.<JSType> emptySet();
 	}
 
 	public ReferenceKind getKind() {
@@ -119,9 +119,10 @@ public abstract class AbstractReference implements IValueReference,
 		return value != null ? value.getLocation() : ReferenceLocation.UNKNOWN;
 	}
 
-	public Set<Type> getTypes() {
+	public Set<JSType> getTypes() {
 		IValue value = getValue();
-		return value != null ? value.getTypes() : Collections.<Type> emptySet();
+		return value != null ? value.getTypes() : Collections
+				.<JSType> emptySet();
 	}
 
 	public void setAttribute(String key, Object value) {
@@ -131,7 +132,7 @@ public abstract class AbstractReference implements IValueReference,
 		}
 	}
 
-	public void setDeclaredType(Type type) {
+	public void setDeclaredType(JSType type) {
 		IValue value = createValue();
 		if (value != null) {
 			value.setDeclaredType(type);
