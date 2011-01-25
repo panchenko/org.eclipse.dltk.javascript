@@ -14,19 +14,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
-import org.eclipse.dltk.ui.text.IColorManager;
+import org.eclipse.dltk.internal.ui.editor.EditorUtility;
+import org.eclipse.dltk.javascript.core.JSKeywordCategory;
+import org.eclipse.dltk.javascript.core.JSKeywordManager;
+import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
 import org.eclipse.dltk.ui.text.TodoTaskPreferencesOnPreferenceStore;
 import org.eclipse.dltk.ui.text.rules.CombinedWordRule.WordMatcher;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.rules.IWordDetector;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 public class JavascriptDocScanner extends JavaScriptScriptCommentScanner {
 
-	public JavascriptDocScanner(IColorManager manager, IPreferenceStore store) {
-		super(manager, store, JavascriptColorConstants.JS_DOC,
+	public JavascriptDocScanner(ScriptSourceViewerConfiguration configuration) {
+		super(configuration, JavascriptColorConstants.JS_DOC,
 				JavascriptColorConstants.JS_TODO_TAG,
-				new TodoTaskPreferencesOnPreferenceStore(store));
+				new TodoTaskPreferencesOnPreferenceStore(
+						configuration.getPreferenceStore()));
 	}
 
 	@Override
@@ -67,6 +72,17 @@ public class JavascriptDocScanner extends JavaScriptScriptCommentScanner {
 		final WordMatcher matcher = new WordMatcher();
 		final Set<String> tags = new HashSet<String>();
 		Collections.addAll(tags, JSDocSupport.getTags());
+		ISourceModule module = null;
+		if (fConfiguration != null) {
+			final ITextEditor editor = fConfiguration.getEditor();
+			if (editor != null) {
+				module = EditorUtility.getEditorInputModelElement(editor, true);
+			}
+		}
+		Collections.addAll(
+				tags,
+				JSKeywordManager.getInstance().getKeywords(
+						JSKeywordCategory.JS_DOC_TAG, module));
 		for (String tag : tags) {
 			matcher.addWord(tag, getToken(JavascriptColorConstants.JS_DOC_TAGS));
 		}

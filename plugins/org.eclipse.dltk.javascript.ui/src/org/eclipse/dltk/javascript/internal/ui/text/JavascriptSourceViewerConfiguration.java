@@ -255,8 +255,7 @@ public class JavascriptSourceViewerConfiguration extends
 				JavascriptColorConstants.JS_SINGLE_LINE_COMMENT,
 				JavascriptColorConstants.JS_TODO_TAG,
 				new TodoTaskPreferencesOnPreferenceStore(fPreferenceStore));
-		fDocScanner = new JavascriptDocScanner(getColorManager(),
-				fPreferenceStore);
+		fDocScanner = new JavascriptDocScanner(this);
 
 	}
 

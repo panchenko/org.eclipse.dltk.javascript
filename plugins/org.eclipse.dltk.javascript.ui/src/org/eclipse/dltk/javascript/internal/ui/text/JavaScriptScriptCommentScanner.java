@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.internal.ui.text;
 import org.eclipse.dltk.compiler.task.ITodoTaskPreferences;
 import org.eclipse.dltk.ui.text.IColorManager;
 import org.eclipse.dltk.ui.text.ScriptCommentScanner;
+import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class JavaScriptScriptCommentScanner extends ScriptCommentScanner {
@@ -22,6 +23,12 @@ public class JavaScriptScriptCommentScanner extends ScriptCommentScanner {
 			IPreferenceStore store, String comment, String todoTag,
 			ITodoTaskPreferences preferences) {
 		super(manager, store, comment, todoTag, preferences);
+	}
+
+	public JavaScriptScriptCommentScanner(
+			ScriptSourceViewerConfiguration configuration, String comment,
+			String todoTag, ITodoTaskPreferences preferences) {
+		super(configuration, comment, todoTag, preferences);
 	}
 
 	@Override
