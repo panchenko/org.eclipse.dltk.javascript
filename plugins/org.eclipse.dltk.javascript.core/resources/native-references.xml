@@ -11,6 +11,18 @@
   	<members xsi:type="ref:Property" name="name" type="String" description="Error name."/>
   	<members xsi:type="ref:Property" name="message" type="String" description="Error message."/>
   </ref:Type>
+  <ref:Type name="EvalError" kind="PREDEFINED" superType="Error">
+  </ref:Type>
+  <ref:Type name="RangeError" kind="PREDEFINED" superType="Error">
+  </ref:Type>
+  <ref:Type name="ReferenceError" kind="PREDEFINED" superType="Error">
+  </ref:Type>
+  <ref:Type name="SyntaxError" kind="PREDEFINED" superType="Error">
+  </ref:Type>
+  <ref:Type name="TypeError" kind="PREDEFINED" superType="Error">
+  </ref:Type>
+  <ref:Type name="URIError" kind="PREDEFINED" superType="Error">
+  </ref:Type>
   <ref:Type name="Function" kind="PREDEFINED" superType="Object">
   	<members xsi:type="ref:Property" name="prototype" type="Function" static="true" description="Allows the addition of properties to a Function object."/>
   	<members xsi:type="ref:Property" name="length" type="Number"  description="Specifies the number of arguments expected by the function."/>
