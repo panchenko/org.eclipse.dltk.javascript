@@ -347,6 +347,10 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				modes.remove(expression);
 				if (reference == null)
 					return null;
+				if (started) {
+					stopExpressionValidator();
+					started = false;
+				}
 				final List<ASTNode> callArgs = node.getArguments();
 				IValueReference[] arguments = new IValueReference[callArgs
 						.size()];
@@ -899,7 +903,8 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 				if (type != null) {
 					checkType(node, type, type.getName());
 				} else if (!result.exists()
-						&& !(node.getParent() instanceof CallExpression)) {
+						&& !(node.getParent() instanceof CallExpression && ((CallExpression) node
+								.getParent()).getExpression() == node)) {
 					pushExpressionValidator(new NotExistingIdentiferValidator(
 							node, result, this));
 				}
