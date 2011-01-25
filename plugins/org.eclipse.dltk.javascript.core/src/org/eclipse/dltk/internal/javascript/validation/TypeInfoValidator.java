@@ -888,6 +888,10 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 									.sourceStart(), expr.sourceEnd());
 					return false;
 				}
+			} else if (expr instanceof GetArrayItemExpression
+					&& !validate(((GetArrayItemExpression) expr).getArray(),
+							parent)) {
+				return false;
 			}
 			return true;
 		}
