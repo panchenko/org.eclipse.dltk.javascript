@@ -319,25 +319,36 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 
 			if (genericArrayType != null) {
-				Type genericType = getType(genericArrayType,
-						canQueryTypeProviders(), true, true, false);
-				if (genericType == null)
-					return type;
+				Type genericType = getType(genericArrayType, true, true, true,
+						false);
+				if (genericType == null) {
+					return TypeInfoModelLoader.getInstance().getType(
+							ITypeNames.ARRAY);
+				}
 
-				return createTypedArray(genericType);
+				type = createTypedArray(genericType);
+				if (type != null && ((EObject) genericType).eResource() != null) {
+					Resource resource = ((EObject) genericType).eResource();
+					if (resource == invariantRS.getResource()
+							|| TypeInfoModelLoader.getInstance().hasResource(
+									resource)) {
+						markInvariant(type);
+					}
+				}
+				return type;
 			}
 		}
 		return null;
 	}
 
 	private static Type createTypedArray(Type genericType) {
-		final Type typedArray = TypeInfoModelFactory.eINSTANCE.createType();
-		typedArray.setName("Array<" + genericType.getName() + '>');
 		final Type array = TypeInfoModelLoader.getInstance().getType(
 				ITypeNames.ARRAY);
 		if (array == null) {
 			return null;
 		}
+		final Type typedArray = TypeInfoModelFactory.eINSTANCE.createType();
+		typedArray.setName("Array<" + genericType.getName() + '>');
 		typedArray.setDescription(array.getDescription());
 		typedArray.setKind(array.getKind());
 		typedArray.setAttribute(GENERIC_ARRAY_TYPE, genericType.getName());
