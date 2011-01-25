@@ -43,6 +43,13 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
+	
+	public void testUnknownJavaScriptFunctionCall() {
+		final List<IProblem> problems = validate("var x = longString()");
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0).getID());
+	}
+
 
 	public void testDeprecatedType() {
 		final List<IProblem> problems = validate("var x:ExampleService2");
@@ -387,6 +394,22 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		code.add("function test() {");
 		code.add("testArray(['test','test2']);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
+	}
+	
+	public void testFunctionWithOptionalParams() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add(" * @param {String} a");
+		code.add(" * @param {String} [b]");
+		code.add(" */");
+		code.add("function tester(a,b) {");
+		code.add("}");
+		code.add("function test() {");
+		code.add("tester('test');");
+		code.add("tester('test','test2');");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(0, problems.size());
