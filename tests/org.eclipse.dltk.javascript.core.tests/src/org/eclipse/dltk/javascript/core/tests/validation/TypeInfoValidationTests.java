@@ -414,6 +414,25 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(0, problems.size());
 	}
+	
+	public void testFunctionCallWithUndefinedArgumments() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add(" * @param {String} a");
+		code.add(" * @param {String} b");
+		code.add(" */");
+		code.add("function tester(a,b) {");
+		code.add("}");
+		code.add("function test() {");
+		code.add("tester(a,b);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(2, problems.size());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+				.getID());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(1)
+				.getID());
+	}
 
 	public void testObjectInitalizerWithPropertyAndFunction() {
 		List<String> code = new StringList();
