@@ -916,11 +916,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					}
 					xml.append(xmlText);
 				} else if (xmlFragment instanceof XmlExpressionFragment) {
+					Expression expression = ((XmlExpressionFragment) xmlFragment)
+							.getExpression();
+					visit(expression);
 					if (xml.charAt(xml.length() - 1) == '<'
 							|| xml.subSequence(xml.length() - 2, xml.length())
 									.equals("</")) {
-						Expression expression = ((XmlExpressionFragment) xmlFragment)
-								.getExpression();
 						if (expression instanceof Identifier) {
 							xml.append(((Identifier) expression).getName());
 						} else {
