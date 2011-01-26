@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.core.tests.validation;
 
 import java.util.Set;
 
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.FlowValidation;
@@ -32,7 +33,7 @@ public class FlowValidationTests extends AbstractValidationTest {
 		code.add("  else return 0");
 		code.add("  var x = 1");
 		code.add("}");
-		final Set<Integer> problemIds = extractIds(validate(code.toString()));
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code.toString()));
 		assertEquals(1, problemIds.size());
 		assertTrue(problemIds.contains(JavaScriptProblems.UNREACHABLE_CODE));
 	}
@@ -42,7 +43,7 @@ public class FlowValidationTests extends AbstractValidationTest {
 		code.add("function q(a) {");
 		code.add("  if (a ==1) return 1");
 		code.add("}");
-		final Set<Integer> problemIds = extractIds(validate(code.toString()));
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code.toString()));
 		assertEquals(1, problemIds.size());
 		assertTrue(problemIds
 				.contains(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE));
@@ -54,7 +55,7 @@ public class FlowValidationTests extends AbstractValidationTest {
 		code.add("  if (a ==1) return 1");
 		code.add("  return");
 		code.add("}");
-		final Set<Integer> problemIds = extractIds(validate(code.toString()));
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code.toString()));
 		assertEquals(2, problemIds.size());
 		assertTrue(problemIds
 				.contains(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE));
@@ -68,7 +69,7 @@ public class FlowValidationTests extends AbstractValidationTest {
 		code.add("  else a = 1");
 		code.add("  return 1");
 		code.add("}");
-		final Set<Integer> problemIds = extractIds(validate(code.toString()));
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code.toString()));
 		assertEquals(0, problemIds.size());
 	}
 	
@@ -80,7 +81,7 @@ public class FlowValidationTests extends AbstractValidationTest {
 		code.add("  else if (a == 3) a = 1");
 		code.add("  else return 2");
 		code.add("}");
-		final Set<Integer> problemIds = extractIds(validate(code.toString()));
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code.toString()));
 		assertEquals(1, problemIds.size());
 		assertTrue(problemIds
 				.contains(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE));
@@ -94,7 +95,7 @@ public class FlowValidationTests extends AbstractValidationTest {
 		code.add("  else if (a == 3) return 3");
 		code.add("  else return -1");
 		code.add("}");
-		final Set<Integer> problemIds = extractIds(validate(code.toString()));
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code.toString()));
 		assertEquals(0, problemIds.size());
 	}
 
