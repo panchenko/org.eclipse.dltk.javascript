@@ -434,7 +434,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 	
-	public void tesUndefinedVariables() throws Exception {
+	public void testUndefinedVariables() throws Exception {
 		List<String> code = new StringList();
 		code.add("function test() {");
 		code.add("a=10");
@@ -446,6 +446,31 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(1)
 				.getID());
+	}
+	
+	public void testArrayLookupWithoutAssign() throws Exception {
+		List<String> code = new StringList();
+		code.add("function test() {");
+		code.add("var object = new Array();");
+		code.add("var x = object['test'].length;");
+		code.add("object.test;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
+				.getID());
+	}
+	
+	public void testArrayLookupWithAssign() throws Exception {
+		List<String> code = new StringList();
+		code.add("function test() {");
+		code.add("var object = new Array();");
+		code.add("object['test'] = '';");
+		code.add("var x = object['test'].length;");
+		code.add("object.test;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(0, problems.size());
 	}
 
 	public void testObjectInitalizerWithPropertyAndFunction() {
