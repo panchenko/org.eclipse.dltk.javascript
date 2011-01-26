@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.Identifier;
@@ -83,18 +84,18 @@ public abstract class AbstractJSParserTest extends TestCase {
 		assertEquals(expected, ((DecimalLiteral) decimal).getText());
 	}
 
-	public int getProblemId() {
-		final Set<Integer> problemIds = getProblemIds();
+	public IProblemIdentifier getProblemId() {
+		final Set<IProblemIdentifier> problemIds = getProblemIds();
 		assertEquals(1, problemIds.size());
-		return problemIds.toArray(new Integer[1])[0].intValue();
+		return problemIds.toArray(new IProblemIdentifier[1])[0];
 	}
 
-	public Set<Integer> getProblemIds() {
+	public Set<IProblemIdentifier> getProblemIds() {
 		return extractIds(reporter.getProblems());
 	}
 
-	protected Set<Integer> extractIds(final List<IProblem> problems) {
-		final Set<Integer> ids = new HashSet<Integer>();
+	protected Set<IProblemIdentifier> extractIds(final List<IProblem> problems) {
+		final Set<IProblemIdentifier> ids = new HashSet<IProblemIdentifier>();
 		for (IProblem problem : problems) {
 			ids.add(problem.getID());
 		}
