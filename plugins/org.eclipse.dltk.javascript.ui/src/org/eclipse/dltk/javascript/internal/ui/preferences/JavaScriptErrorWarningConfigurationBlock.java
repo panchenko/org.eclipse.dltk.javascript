@@ -17,12 +17,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.dltk.ast.parser.SourceParserManager;
+import org.eclipse.dltk.compiler.problem.DefaultProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IDLTKContributedExtension;
 import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
-import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserPlugin;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserPreferences;
@@ -99,214 +100,180 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 
 		SWTFactory.createLabel(composite,
 				"Wrong number of parameters to javascript function call", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.WRONG_PARAMETERS),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.WRONG_PARAMETERS), ids);
 		SWTFactory.createLabel(composite,
 				"Wrong number of parameters to java method call", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_"
-						+ JavaScriptProblems.WRONG_JAVA_PARAMETERS), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.WRONG_JAVA_PARAMETERS), ids);
 
 		SWTFactory.createLabel(composite, "Unknown javascript type", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.UNKNOWN_TYPE), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.UNKNOWN_TYPE), ids);
 
 		SWTFactory.createLabel(composite, "Deprecated type usage", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.DEPRECATED_TYPE),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.DEPRECATED_TYPE), ids);
 
 		SWTFactory.createLabel(composite,
 				"Deprecated javascript function call", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names),
-				new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-						"JavaScriptProblems_"
-								+ JavaScriptProblems.DEPRECATED_FUNCTION), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.DEPRECATED_FUNCTION), ids);
 
 		SWTFactory.createLabel(composite,
 				"Deprecated javascript variable access", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names),
-				new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-						"JavaScriptProblems_"
-								+ JavaScriptProblems.DEPRECATED_VARIABLE), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.DEPRECATED_VARIABLE), ids);
 
 		SWTFactory.createLabel(composite, "Deprecated java method call", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.DEPRECATED_METHOD),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.DEPRECATED_METHOD), ids);
 
 		SWTFactory.createLabel(composite, "Deprecated java property access", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names),
-				new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-						"JavaScriptProblems_"
-								+ JavaScriptProblems.DEPRECATED_PROPERTY), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.DEPRECATED_PROPERTY), ids);
 
 		SWTFactory.createLabel(composite, "Undefined javascript function call",
 				1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.UNDEFINED_METHOD),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.UNDEFINED_METHOD), ids);
 
 		SWTFactory.createLabel(composite,
 				"Undefined javascript variable access", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.UNDEFINED_PROPERTY),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.UNDEFINED_PROPERTY), ids);
 
 		SWTFactory.createLabel(composite, "Undefined java method call", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_"
-						+ JavaScriptProblems.UNDEFINED_JAVA_METHOD), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.UNDEFINED_JAVA_METHOD), ids);
 
 		SWTFactory.createLabel(composite, "Undefined java property access", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_"
-						+ JavaScriptProblems.UNDEFINED_JAVA_PROPERTY), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.UNDEFINED_JAVA_PROPERTY), ids);
 
 		SWTFactory.createLabel(composite, "Private function call", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.PRIVATE_FUNCTION),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.PRIVATE_FUNCTION), ids);
 
 		SWTFactory.createLabel(composite, "Private variable access", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.PRIVATE_VARIABLE),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.PRIVATE_VARIABLE), ids);
 
 		SWTFactory
 				.createLabel(composite, "Indirect access to static method", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.STATIC_METHOD), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.STATIC_METHOD), ids);
 
 		SWTFactory.createLabel(composite, "Indirect access to static property",
 				1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.STATIC_PROPERTY),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.STATIC_PROPERTY), ids);
 
 		SWTFactory.createLabel(composite,
 				"Static reference to none static method", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.INSTANCE_METHOD),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.INSTANCE_METHOD), ids);
 
 		SWTFactory.createLabel(composite,
 				"Static reference to none static property", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.INSTANCE_PROPERTY),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.INSTANCE_PROPERTY), ids);
 
 		SWTFactory.createLabel(composite, "Unreachable code", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.UNREACHABLE_CODE),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.UNREACHABLE_CODE), ids);
 
 		SWTFactory.createLabel(composite,
 				"Inconsistent function return values", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names),
-				new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-						"JavaScriptProblems_"
-								+ JavaScriptProblems.RETURN_INCONSISTENT), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.RETURN_INCONSISTENT), ids);
 
 		SWTFactory.createLabel(composite,
 				"Function not always returning a value", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_"
-						+ JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE), ids);
 
 		SWTFactory.createLabel(composite,
 				"Function returns a different type then it declares", 1);
 		bindControl(
 				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				new PreferenceKey(
-						JavaScriptPlugin.PLUGIN_ID,
-						"JavaScriptProblems_"
-								+ JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE),
+				key(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE),
 				ids);
 
 		SWTFactory.createLabel(composite,
 				"Assignment (=) when equality (==) test", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.EQUAL_AS_ASSIGN),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.EQUAL_AS_ASSIGN), ids);
 
 		SWTFactory.createLabel(composite, "Assignment to undeclared variable",
 				1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names),
-				new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-						"JavaScriptProblems_"
-								+ JavaScriptProblems.UNDECLARED_VARIABLE), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.UNDECLARED_VARIABLE), ids);
 
 		SWTFactory.createLabel(composite, "Reassignment of a constant", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_"
-						+ JavaScriptProblems.REASSIGNMENT_OF_CONSTANT), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.REASSIGNMENT_OF_CONSTANT), ids);
 
 		SWTFactory.createLabel(composite, "Duplicate variable declaration", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_"
-						+ JavaScriptProblems.DUPLICATE_VAR_DECLARATION), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.DUPLICATE_VAR_DECLARATION), ids);
 
 		SWTFactory.createLabel(composite, "Duplicate parameter declaration", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
-				"JavaScriptParserProblems_"
-						+ JavaScriptParserProblems.DUPLICATE_PARAMETER), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptParserProblems.DUPLICATE_PARAMETER), ids);
 
 		SWTFactory.createLabel(composite, "Parameter hides variable", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_"
-						+ JavaScriptProblems.PARAMETER_HIDES_VARIABLE), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.PARAMETER_HIDES_VARIABLE), ids);
 
 		SWTFactory.createLabel(composite, "Variable hides parameter", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names),
-				new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-						"JavaScriptProblems_"
-								+ JavaScriptProblems.VAR_HIDES_PARAMETER), ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.VAR_HIDES_PARAMETER), ids);
 
 		SWTFactory.createLabel(composite, "Variable hides property", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-				"JavaScriptProblems_" + JavaScriptProblems.VAR_HIDES_PROPERTY),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.VAR_HIDES_PROPERTY), ids);
 
 		SWTFactory.createLabel(composite, "Function hides argument", 1);
-		bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-				names), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
-				"JavaScriptParserProblems_"
-						+ JavaScriptParserProblems.FUNCTION_HIDES_ARGUMENT),
-				ids);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptParserProblems.FUNCTION_HIDES_ARGUMENT), ids);
 
 		return composite;
+	}
+
+	private static PreferenceKey key(IProblemIdentifier identifier) {
+		return new PreferenceKey(identifier.contributor(),
+				DefaultProblemIdentifier.encode(identifier));
 	}
 
 	@Override
