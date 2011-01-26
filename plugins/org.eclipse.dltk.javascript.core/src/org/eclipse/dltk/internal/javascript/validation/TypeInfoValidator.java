@@ -44,6 +44,7 @@ import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -870,11 +871,23 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (parent == null) {
 				// top level
 				if (expr instanceof Identifier && !reference.exists()) {
+					if (expr.getParent() instanceof BinaryOperation
+							&& ((BinaryOperation) expr.getParent())
+									.getOperation() == JSParser.INSTANCEOF
+							&& ((BinaryOperation) expr.getParent())
+									.getRightExpression() == expr) {
+						reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE,
+								NLS.bind(ValidationMessages.UnknownType,
+										reference.getName()), expr
+										.sourceStart(), expr.sourceEnd());
+
+					} else {
 					reporter.reportProblem(
 							JavaScriptProblems.UNDECLARED_VARIABLE, NLS.bind(
 									ValidationMessages.UndeclaredVariable,
 									reference.getName()), expr.sourceStart(),
 							expr.sourceEnd());
+					}
 					return false;
 				}
 			} else if (expr instanceof PropertyExpression

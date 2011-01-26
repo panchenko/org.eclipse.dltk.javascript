@@ -186,6 +186,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return context.getFactory().createNumber(peekContext());
 		} else if (node.getOperation() == JSParser.ADD) {
 			return left;
+		} else if (JSParser.INSTANCEOF == node.getOperation()) {
+			return context.getFactory().createBoolean(peekContext());
 		} else {
 			// TODO handle other operations
 			return null;
