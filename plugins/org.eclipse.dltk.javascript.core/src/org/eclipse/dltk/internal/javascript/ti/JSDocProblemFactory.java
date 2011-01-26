@@ -11,25 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
-import org.eclipse.dltk.utils.EnumNLS;
-import org.eclipse.osgi.util.NLS;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifierFactory;
 
-public enum JSDocProblem implements JSProblemIdentifier {
+public class JSDocProblemFactory implements IProblemIdentifierFactory {
 
-	DUPLICATE_TYPE, MISSING_PARAMETER_NAME, UNKNOWN_PARAM, DUPLICATE_PARAM, REPEATED_TAG;
-
-	private String message;
-
-	public String formatMessage(Object... args) {
-		return NLS.bind(message, args);
+	public IProblemIdentifier valueOf(String localName) {
+		return JSDocProblem.valueOf(localName);
 	}
 
-	public String contributor() {
-		return JavaScriptPlugin.PLUGIN_ID;
-	}
-
-	static {
-		EnumNLS.initializeMessages(JSDocProblem.values(), "message");
-	}
 }

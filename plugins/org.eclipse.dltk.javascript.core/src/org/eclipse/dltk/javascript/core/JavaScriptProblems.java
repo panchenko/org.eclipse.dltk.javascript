@@ -11,115 +11,112 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core;
 
-import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 
-public interface JavaScriptProblems {
+public enum JavaScriptProblems implements IProblemIdentifier {
 
-	public static final int UNKNOWN_TYPE = IProblem.TypeRelated + 1;
-	public static final int DEPRECATED_TYPE = IProblem.TypeRelated + 2;
+	UNKNOWN_TYPE, DEPRECATED_TYPE,
 
-	public static final int UNDEFINED_METHOD = IProblem.MethodRelated + 1;
-	public static final int WRONG_PARAMETERS = IProblem.MethodRelated + 2;
-	public static final int DEPRECATED_METHOD = IProblem.MethodRelated + 3;
+	UNDEFINED_METHOD, WRONG_PARAMETERS, DEPRECATED_METHOD,
 	/**
 	 * @since 3.0
 	 */
-	public static final int DEPRECATED_FUNCTION = IProblem.MethodRelated + 4;
+	DEPRECATED_FUNCTION,
 	/**
 	 * @since 3.0
 	 */
-	public static final int INSTANCE_METHOD = IProblem.MethodRelated + 5;
+	INSTANCE_METHOD,
 	/**
 	 * @since 3.0
 	 */
-	public static final int STATIC_METHOD = IProblem.MethodRelated + 6;
+	STATIC_METHOD,
 	/**
 	 * @since 3.0
 	 */
-	public static final int PRIVATE_FUNCTION = IProblem.MethodRelated + 7;
+	PRIVATE_FUNCTION,
 	/**
 	 * @since 3.0
 	 */
-	public static final int WRONG_JAVA_PARAMETERS = IProblem.MethodRelated + 8;
+	WRONG_JAVA_PARAMETERS,
 	/**
 	 * @since 3.0
 	 */
-	public static final int UNDEFINED_JAVA_METHOD = IProblem.MethodRelated + 9;
+	UNDEFINED_JAVA_METHOD,
 	/**
 	 * @since 3.0
 	 */
-	public static final int DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE = IProblem.MethodRelated + 10;
+	DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
 
-	public static final int UNDEFINED_PROPERTY = IProblem.FieldRelated + 1;
-	public static final int DEPRECATED_PROPERTY = IProblem.FieldRelated + 2;
+	UNDEFINED_PROPERTY, DEPRECATED_PROPERTY,
 	/**
 	 * @since 3.0
 	 */
-	public static final int DEPRECATED_VARIABLE = IProblem.FieldRelated + 3;
+	DEPRECATED_VARIABLE,
 	/**
 	 * @since 3.0
 	 */
-	public static final int PRIVATE_VARIABLE = IProblem.FieldRelated + 4;
+	PRIVATE_VARIABLE,
 	/**
 	 * @since 3.0
 	 */
-	public static final int HIDDEN_PROPERTY = IProblem.FieldRelated + 5;
+	HIDDEN_PROPERTY,
 	/**
 	 * @since 3.0
 	 */
-	public static final int INSTANCE_PROPERTY = IProblem.FieldRelated + 6;
+	INSTANCE_PROPERTY,
 	/**
 	 * @since 3.0
 	 */
-	public static final int STATIC_PROPERTY = IProblem.FieldRelated + 7;
+	STATIC_PROPERTY,
 	/**
 	 * @since 3.0
 	 */
-	public static final int UNDEFINED_JAVA_PROPERTY = IProblem.FieldRelated + 8;
+	UNDEFINED_JAVA_PROPERTY,
 	/**
 	 * @since 3.0
 	 */
-	public static final int REASSIGNMENT_OF_CONSTANT = IProblem.FieldRelated + 9;
+	REASSIGNMENT_OF_CONSTANT,
 	/**
 	 * @since 3.0
 	 */
-	public static final int PARAMETER_HIDES_VARIABLE = IProblem.FieldRelated + 10;
+	PARAMETER_HIDES_VARIABLE,
 	/**
 	 * @since 3.0
 	 */
-	public static final int DUPLICATE_VAR_DECLARATION = IProblem.FieldRelated + 11;
+	DUPLICATE_VAR_DECLARATION,
 	/**
 	 * @since 3.0
 	 */
-	public static final int VAR_HIDES_PARAMETER = IProblem.FieldRelated + 12;
+	VAR_HIDES_PARAMETER,
 	/**
 	 * @since 3.0
 	 */
-	public static final int VAR_HIDES_PROPERTY = IProblem.FieldRelated + 13;
+	VAR_HIDES_PROPERTY,
 	/**
 	 * @since 3.0
 	 */
-	public static final int UNDECLARED_VARIABLE = IProblem.FieldRelated + 14;
+	UNDECLARED_VARIABLE,
 	/**
 	 * @since 3.0
 	 */
-	public static final int VAR_HIDES_FUNCTION = IProblem.FieldRelated + 15;
-	
-	public static final int EQUAL_AS_ASSIGN = IProblem.Internal + 1;
-	public static final int INVALID_ASSIGN_LEFT = IProblem.Internal + 2;
+	VAR_HIDES_FUNCTION,
 
-	public static final int UNREACHABLE_CODE = IProblem.Internal + 3;
-	public static final int RETURN_INCONSISTENT = IProblem.Internal + 4;
-	public static final int FUNCTION_NOT_ALWAYS_RETURN_VALUE = IProblem.Internal + 5;
+	EQUAL_AS_ASSIGN, INVALID_ASSIGN_LEFT,
 
-	public static final int CONTINUE_NON_LOOP_LABEL = IProblem.Internal + 6;
-	public static final int BREAK_NON_LOOP_LABEL = IProblem.Internal + 7;
+	UNREACHABLE_CODE, RETURN_INCONSISTENT, FUNCTION_NOT_ALWAYS_RETURN_VALUE,
+
+	CONTINUE_NON_LOOP_LABEL, BREAK_NON_LOOP_LABEL,
 	/**
 	 * @since 3.0
 	 */
-	public static final int BREAK_OUTSIDE_LABEL = IProblem.Internal + 8;
+	BREAK_OUTSIDE_LABEL,
 	/**
 	 * @since 3.0
 	 */
-	public static final int CONTINUE_OUTSIDE_LABEL = IProblem.Internal + 9;
+	CONTINUE_OUTSIDE_LABEL;
+
+	public String contributor() {
+		return JavaScriptPlugin.PLUGIN_ID;
+	}
+
 }

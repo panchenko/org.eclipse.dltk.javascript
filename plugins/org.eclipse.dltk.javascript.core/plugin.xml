@@ -163,6 +163,14 @@
 	      <problemFactory
              class="org.eclipse.dltk.javascript.internal.core.JSProblemFactory"
              nature="org.eclipse.dltk.javascript.core.nature"/>
+          <problemIdentifierFactory
+             class="org.eclipse.dltk.internal.javascript.ti.JSDocProblemFactory"
+             namespace="org.eclipse.dltk.internal.javascript.ti.JSDocProblem">
+          </problemIdentifierFactory>
+          <problemIdentifierFactory
+             class="org.eclipse.dltk.javascript.core.JavaScriptProblemFactory"
+	         namespace="org.eclipse.dltk.javascript.core.JavaScriptProblems">
+          </problemIdentifierFactory>
 	</extension>
 
 </plugin>

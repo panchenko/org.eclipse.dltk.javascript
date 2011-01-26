@@ -20,6 +20,7 @@ import java.util.Stack;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
@@ -63,7 +64,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
-public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems {
+public class TypeInfoValidator implements IBuildParticipant {
 
 	public void build(IBuildContext context) throws CoreException {
 		final Script script = JavaScriptValidations.parse(context);
@@ -626,7 +627,7 @@ public class TypeInfoValidator implements IBuildParticipant, JavaScriptProblems 
 		private void reportMethodParameterError(ASTNode methodNode,
 				IValueReference[] arguments, Method method) {
 			if (method.getDeclaringType() != null) {
-				int problemId = JavaScriptProblems.WRONG_PARAMETERS;
+				IProblemIdentifier problemId = JavaScriptProblems.WRONG_PARAMETERS;
 				if (method.getDeclaringType().getKind() == TypeKind.JAVA) {
 					problemId = JavaScriptProblems.WRONG_JAVA_PARAMETERS;
 				}

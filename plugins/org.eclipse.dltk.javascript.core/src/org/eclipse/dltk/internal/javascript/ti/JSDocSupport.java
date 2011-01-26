@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
@@ -325,7 +324,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	private void reportProblem(IProblemReporter reporter,
-			IProblemIdentifier problemIdentifier, JSDocTag tag, Object... args) {
+			JSProblemIdentifier problemIdentifier, JSDocTag tag, Object... args) {
 		if (reporter != null) {
 			reporter.reportProblem(problemIdentifier,
 					problemIdentifier.formatMessage(args), tag.getStart(),
