@@ -348,18 +348,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 				modes.remove(expression);
 				if (reference == null)
 					return null;
+				final List<ASTNode> callArgs = node.getArguments();
+				IValueReference[] arguments = new IValueReference[callArgs
+						.size()];
+				pushExpressionValidator(new CallExpressionValidator(node,
+						reference, arguments, this));
 				if (started) {
 					stopExpressionValidator();
 					started = false;
 				}
-				final List<ASTNode> callArgs = node.getArguments();
-				IValueReference[] arguments = new IValueReference[callArgs
-						.size()];
 				for (int i = 0, size = callArgs.size(); i < size; ++i) {
 					arguments[i] = visit(callArgs.get(i));
 				}
-				pushExpressionValidator(new CallExpressionValidator(node,
-						reference, arguments, this));
 				return reference.getChild(IValueReference.FUNCTION_OP);
 			} finally {
 				if (started)
