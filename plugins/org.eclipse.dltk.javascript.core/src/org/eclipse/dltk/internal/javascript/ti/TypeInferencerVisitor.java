@@ -204,8 +204,18 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	protected IValueReference visitAssign(IValueReference left,
 			IValueReference right, BinaryOperation node) {
-		if (left != null)
-			assign(left, right);
+		if (left != null) {
+			if (IValueReference.ARRAY_OP.equals(left.getName())
+					&& node.getLeftExpression() instanceof GetArrayItemExpression) {
+				GetArrayItemExpression arrayItemExpression = (GetArrayItemExpression) node
+						.getLeftExpression();
+				IValueReference namedChild = extractNamedChild(
+						left.getParent(), arrayItemExpression.getIndex());
+				assign(namedChild, right);
+			} else {
+				assign(left, right);
+			}
+		}
 		return right;
 	}
 
@@ -501,11 +511,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (node.getIndex() instanceof StringLiteral) {
 				IValueReference namedChild = extractNamedChild(array,
 						node.getIndex());
-				if (arrayType != null && namedChild.getDeclaredType() == null) {
-					namedChild.setDeclaredType(context.getType(arrayType));
-				} else
-					// if (namedChild.exists())
+				if (namedChild.exists()) {
 					child = namedChild;
+					if (arrayType != null
+							&& namedChild.getDeclaredType() == null) {
+						namedChild.setDeclaredType(context.getType(arrayType));
+					}
+				}
 			}
 			return child;
 		}
