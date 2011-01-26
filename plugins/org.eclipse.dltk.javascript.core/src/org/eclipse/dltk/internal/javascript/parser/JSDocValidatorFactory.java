@@ -46,7 +46,7 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 		public void reportProblem(IProblemIdentifier identifier,
 				String message, int start, int end) {
 			context.getProblemReporter().reportProblem(
-					new DefaultProblem(message, 0, null,
+					new DefaultProblem(message, identifier, null,
 							ProblemSeverities.Warning, start, end,
 							lineNumberOf(start)));
 		}
