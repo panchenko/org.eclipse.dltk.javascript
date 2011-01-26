@@ -1,8 +1,8 @@
 package org.eclipse.dltk.javascript.parser;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.javascript.parser.Reporter.Severity;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 
 public interface ISeverityReporter {
-	public Severity getSeverity(IProblemIdentifier problemId, Severity defaultServerity);
+	public ProblemSeverity getSeverity(IProblemIdentifier problemId, ProblemSeverity defaultServerity);
 }

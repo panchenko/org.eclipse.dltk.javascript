@@ -5,12 +5,14 @@ import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemSeverities;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
 
 public class Reporter extends LineTracker implements IProblemReporter {
 
-	public enum Severity {
-		WARNING, ERROR
+	public static class Severity {
+		public static final ProblemSeverity WARNING = ProblemSeverity.WARNING;
+		public static final ProblemSeverity ERROR = ProblemSeverity.ERROR;
 	}
 
 	private final IProblemReporter problemReporter;
@@ -20,7 +22,7 @@ public class Reporter extends LineTracker implements IProblemReporter {
 	private int line;
 	private int start;
 	private int end;
-	private Severity severity;
+	private ProblemSeverity severity;
 
 	private int problemCount;
 
@@ -114,11 +116,11 @@ public class Reporter extends LineTracker implements IProblemReporter {
 		this.end = end;
 	}
 
-	public Severity getSeverity() {
+	public ProblemSeverity getSeverity() {
 		return severity;
 	}
 
-	public void setSeverity(Severity severity) {
+	public void setSeverity(ProblemSeverity severity) {
 		this.severity = severity;
 	}
 
@@ -138,17 +140,16 @@ public class Reporter extends LineTracker implements IProblemReporter {
 		return null;
 	}
 
-	public void reportProblem(IProblemIdentifier id, String message, int start, int end) {
-		Severity sev = severity;
+	public void reportProblem(IProblemIdentifier id, String message, int start,
+			int end) {
+		ProblemSeverity sev = severity;
 		if (severityReporter != null) {
 			sev = severityReporter.getSeverity(id, sev);
-			if (sev == null)
+			if (sev == null || sev == ProblemSeverity.IGNORE)
 				return;
 		}
 
-		reportProblem(new DefaultProblem(message, id, null,
-				sev == Severity.ERROR ? ProblemSeverities.Error
-						: ProblemSeverities.Warning, start, end,
+		reportProblem(new DefaultProblem(message, id, null, sev, start, end,
 				getLineNumberOfOffset(start)));
 	}
 
