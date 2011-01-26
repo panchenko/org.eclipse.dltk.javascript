@@ -12,4 +12,11 @@
                priority="1" />
       </parserContribution>
    </extension>
+   <extension
+         point="org.eclipse.dltk.core.problemFactory">
+         <problemIdentifierFactory
+               class="org.eclipse.dltk.javascript.parser.JavaScriptParserProblemFactory"
+               namespace="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems">
+         </problemIdentifierFactory>
+   </extension>
 </plugin>

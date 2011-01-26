@@ -27,6 +27,7 @@ import org.antlr.runtime.tree.Tree;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.AssertionFailedException;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
@@ -1052,7 +1053,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 	}
 
-	private void validateParent(int messageId, String message,
+	private void validateParent(IProblemIdentifier messageId, String message,
 			Statement statement, Class<?>... classes) {
 		if (reporter == null)
 			return;

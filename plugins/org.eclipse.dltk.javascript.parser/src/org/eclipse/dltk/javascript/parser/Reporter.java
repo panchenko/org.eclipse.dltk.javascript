@@ -2,6 +2,7 @@ package org.eclipse.dltk.javascript.parser;
 
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
@@ -14,7 +15,7 @@ public class Reporter extends LineTracker implements IProblemReporter {
 
 	private final IProblemReporter problemReporter;
 
-	private int id;
+	private IProblemIdentifier id;
 	private String message;
 	private int line;
 	private int start;
@@ -35,7 +36,7 @@ public class Reporter extends LineTracker implements IProblemReporter {
 
 	private void reset() {
 		severity = Severity.WARNING;
-		id = 0;
+		id = null;
 		message = null;
 		line = -1;
 		start = -1;
@@ -56,11 +57,11 @@ public class Reporter extends LineTracker implements IProblemReporter {
 		if (line > getNumberOfLines() && start >= 0 && start <= getLength()) {
 			line = getLineNumberOfOffset(start);
 		}
-		
-		if (severityReporter != null)
-		{
-			severity = severityReporter.getSeverity(id,severity);
-			if (severity == null) return null;
+
+		if (severityReporter != null) {
+			severity = severityReporter.getSeverity(id, severity);
+			if (severity == null)
+				return null;
 		}
 
 		return new DefaultProblem(message, id, null,
@@ -68,16 +69,16 @@ public class Reporter extends LineTracker implements IProblemReporter {
 						: ProblemSeverities.Warning, start, end, line);
 	}
 
-	public void setMessage(int id, String message) {
+	public void setMessage(IProblemIdentifier id, String message) {
 		this.id = id;
 		this.message = message;
 	}
 
-	public int getId() {
+	public IProblemIdentifier getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(IProblemIdentifier id) {
 		this.id = id;
 	}
 
@@ -137,12 +138,12 @@ public class Reporter extends LineTracker implements IProblemReporter {
 		return null;
 	}
 
-	public void reportProblem(int id, String message, int start, int end) {
+	public void reportProblem(IProblemIdentifier id, String message, int start, int end) {
 		Severity sev = severity;
-		if (severityReporter != null)
-		{
-			sev = severityReporter.getSeverity(id,sev);
-			if (sev == null) return;
+		if (severityReporter != null) {
+			sev = severityReporter.getSeverity(id, sev);
+			if (sev == null)
+				return;
 		}
 
 		reportProblem(new DefaultProblem(message, id, null,

@@ -11,28 +11,25 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
-import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 
-public class JavaScriptParserProblems {
+public enum JavaScriptParserProblems implements IProblemIdentifier {
 
-	public static final int INTERNAL_ERROR = IProblem.Internal + 1;
-	public static final int LEXER_ERROR = IProblem.Syntax + 1;
-	public static final int SYNTAX_ERROR = IProblem.Syntax + 2;
-	public static final int RESERVED_KEYWORD = IProblem.Syntax + 3;
+	INTERNAL_ERROR, LEXER_ERROR, SYNTAX_ERROR, RESERVED_KEYWORD, DUPLICATE_PARAMETER,
+	// public static final int VAR_HIDES_ARGUMENT = IProblem.MethodRelated +
+	// 1001;
+	// public static final int CONST_HIDES_ARGUMENT = IProblem.MethodRelated +
+	// 1002;
+	FUNCTION_HIDES_ARGUMENT,
+	// public static final int DUPLICATE_VAR_DECLARATION = IProblem.Internal +
+	// 1004;
+	// public static final int DUPLICATE_CONST_DECLARATION = IProblem.Internal +
+	// 1005;
 
-	public static final int DUPLICATE_PARAMETER = IProblem.MethodRelated + 1000;
-//	public static final int VAR_HIDES_ARGUMENT = IProblem.MethodRelated + 1001;
-//	public static final int CONST_HIDES_ARGUMENT = IProblem.MethodRelated + 1002;
-	public static final int FUNCTION_HIDES_ARGUMENT = IProblem.MethodRelated + 1003;
-//	public static final int DUPLICATE_VAR_DECLARATION = IProblem.Internal + 1004;
-//	public static final int DUPLICATE_CONST_DECLARATION = IProblem.Internal + 1005;
+	DOUBLE_SWITCH_DEFAULT, DUPLICATE_LABEL, UNDEFINED_LABEL, BAD_BREAK, INVALID_RETURN, BAD_CONTINUE, CATCH_UNREACHABLE, TRAILING_COMMA_OBJECT_INITIALIZER;
 
-	public static final int DOUBLE_SWITCH_DEFAULT = IProblem.Internal + 1025;
-	public static final int DUPLICATE_LABEL = IProblem.Internal + 1026;
-	public static final int UNDEFINED_LABEL = IProblem.Internal + 1027;
-	public static final int BAD_BREAK = IProblem.Internal + 1030;
-	public static final int INVALID_RETURN = IProblem.Internal + 1031;
-	public static final int BAD_CONTINUE = IProblem.Internal + 1032;
-	public static final int CATCH_UNREACHABLE = IProblem.Internal + 1033;
-	public static final int TRAILING_COMMA_OBJECT_INITIALIZER = IProblem.Internal + 1034;
+	public String contributor() {
+		return JavaScriptParserPlugin.PLUGIN_ID;
+	}
+
 }
