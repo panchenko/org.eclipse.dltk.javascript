@@ -213,7 +213,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						.getLeftExpression();
 				IValueReference namedChild = extractNamedChild(
 						left.getParent(), arrayItemExpression.getIndex());
-				assign(namedChild, right);
+				if (namedChild != null) {
+					assign(namedChild, right);
+				} else {
+					assign(left, right);
+				}
 			} else {
 				assign(left, right);
 			}
