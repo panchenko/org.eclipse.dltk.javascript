@@ -77,6 +77,24 @@ public class BinaryOperation extends Expression {
 	}
 
 	@Override
+	public Comment getDocumentation() {
+		Comment comment = null;
+		if (left != null) {
+			comment = left.getDocumentation();
+			if (comment != null) {
+				return comment;
+			}
+		}
+		if (right != null) {
+			comment = right.getDocumentation();
+			if (comment != null) {
+				return comment;
+			}
+		}
+		return super.getDocumentation();
+	}
+
+	@Override
 	public String toSourceString(String indentionString) {
 
 		Assert.isTrue(sourceStart() >= 0);
