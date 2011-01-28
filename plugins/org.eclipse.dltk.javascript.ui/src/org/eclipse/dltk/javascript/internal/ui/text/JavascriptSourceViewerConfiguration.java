@@ -64,6 +64,10 @@ public class JavascriptSourceViewerConfiguration extends
 	@Override
 	public ITextDoubleClickStrategy getDoubleClickStrategy(
 			ISourceViewer sourceViewer, String contentType) {
+		if (IJavaScriptPartitions.JS_DOC.equals(contentType)) {
+			return new JSDocDoubleClickStrategy(
+					getConfiguredDocumentPartitioning(sourceViewer));
+		}
 		return new DefaultTextDoubleClickStrategy() {
 			/**
 			 * @see org.eclipse.jface.text.DefaultTextDoubleClickStrategy#findExtendedDoubleClickSelection(org.eclipse.jface.text.IDocument,
