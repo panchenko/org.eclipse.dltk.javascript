@@ -18,10 +18,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
+import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
@@ -80,6 +84,26 @@ public class JSDocSupport implements IModelBuilder {
 		parseDeprecation(method, tags, reporter);
 		parsePrivate(method, tags, reporter);
 		parseConstructor(method, tags, reporter);
+	}
+
+	public static Comment getCallComment(CallExpression call) {
+		ASTNode node = call;
+		while (node != null) {
+			if (node instanceof JSNode) {
+				final Comment doc = ((JSNode) node).getDocumentation();
+				if (doc != null) {
+					return doc;
+				}
+			}
+			if (node instanceof Statement) {
+				break;
+			}
+			if (!(node instanceof JSNode)) {
+				break;
+			}
+			node = ((JSNode) node).getParent();
+		}
+		return null;
 	}
 
 	public static Comment getFunctionComment(FunctionStatement statement) {

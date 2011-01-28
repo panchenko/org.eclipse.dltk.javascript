@@ -52,6 +52,12 @@ public class MatchingCollectorSourceElementRequestor implements
 		nodes.add(new ArgumentDeclarationNode(argument, sourceModule, type));
 	}
 
+	public void enterNamespace(String[] namespace) {
+	}
+
+	public void exitNamespace() {
+	}
+
 	public void enterType(TypeInfo typeInfo) {
 	}
 

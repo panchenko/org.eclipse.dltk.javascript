@@ -44,6 +44,14 @@ public class StructureRequestor implements IStructureRequestor {
 				node.sourceStart(), node.sourceEnd() - 1);
 	}
 
+	public void enterNamespace(String[] namespace) {
+		requestor.enterNamespace(namespace);
+	}
+
+	public void exitNamespace() {
+		requestor.exitNamespace();
+	}
+
 	public void enterType(TypeInfo typeInfo) {
 		requestor.enterType(typeInfo);
 	}

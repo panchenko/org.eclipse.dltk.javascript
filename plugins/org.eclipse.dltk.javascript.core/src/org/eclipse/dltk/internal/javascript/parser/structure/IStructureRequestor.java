@@ -16,6 +16,10 @@ public interface IStructureRequestor {
 	void acceptMethodReference(Identifier node, int argCount,
 			IValueReference reference);
 
+	void enterNamespace(String[] namespace);
+
+	void exitNamespace();
+
 	void enterType(TypeInfo typeInfo);
 
 	void exitType(int sourceEnd);
