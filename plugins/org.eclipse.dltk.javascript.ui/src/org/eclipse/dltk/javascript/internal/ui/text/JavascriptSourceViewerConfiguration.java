@@ -90,17 +90,18 @@ public class JavascriptSourceViewerConfiguration extends
 								.equals(contentType)
 								|| IJavaScriptPartitions.JS_STRING
 										.equals(contentType)
-								|| IJavaScriptPartitions.JS_REGEXP
-										.equals(contentType)) {
+						// || IJavaScriptPartitions.JS_REGEXP
+						// .equals(contentType)
+						) {
 							ITypedRegion region = ((IDocumentExtension3) document)
 									.getPartition(
 											IJavaScriptPartitions.JS_PARTITIONING,
 											offset, true);
 							if (region != null && region.getLength() > 0) {
 								// if reg exp return as is.
-								if (IJavaScriptPartitions.JS_REGEXP
-										.equals(contentType))
-									return region;
+								// if (IJavaScriptPartitions.JS_REGEXP
+								// .equals(contentType))
+								// return region;
 								// if it is a string, strip the quotes.
 								return new Region(region.getOffset() + 1,
 										region.getLength() - 2);
@@ -292,10 +293,6 @@ public class JavascriptSourceViewerConfiguration extends
 				this.fCodeScanner);
 		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
-
-		// also let the default code scanner color regexp
-		reconciler.setDamager(dr, IJavaScriptPartitions.JS_REGEXP);
-		reconciler.setRepairer(dr, IJavaScriptPartitions.JS_REGEXP);
 
 		dr = new DefaultDamagerRepairer(getStringScanner());
 		reconciler.setDamager(dr, IJavaScriptPartitions.JS_STRING);

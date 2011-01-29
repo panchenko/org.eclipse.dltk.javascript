@@ -22,20 +22,13 @@ public interface IJavaScriptPartitions {
 	public final static String JS_STRING_SINGLE = "__javascript_string_single"; //$NON-NLS-1$
 	public final static String JS_STRING = "__javascript_string_double";//$NON-NLS-1$
 	public final static String JS_DOC = "__javascript_doc"; //$NON-NLS-1$
-	public final static String JS_REGEXP = "__javascript_quoteRegExp"; //$NON-NLS-1$
 
 	public final static String[] JS_PARTITION_TYPES = new String[] {
-			IDocument.DEFAULT_CONTENT_TYPE, IJavaScriptPartitions.JS_STRING,
-			IJavaScriptPartitions.JS_STRING_SINGLE,
-			IJavaScriptPartitions.JS_COMMENT, IJavaScriptPartitions.JS_DOC,
-			JS_REGEXP };
+			IDocument.DEFAULT_CONTENT_TYPE, JS_STRING, JS_STRING_SINGLE,
+			JS_COMMENT, JS_DOC };
 
-	public final static String[] LEGAL_CONTENT_TYPES = new String[] {
-			IJavaScriptPartitions.JS_REGEXP, IJavaScriptPartitions.JS_DOC,
-			IJavaScriptPartitions.JS_COMMENT,
-			IJavaScriptPartitions.JS_PARTITIONING,
-			IJavaScriptPartitions.JS_STRING,
-			IJavaScriptPartitions.JS_STRING_SINGLE,
+	public final static String[] LEGAL_CONTENT_TYPES = new String[] { JS_DOC,
+			JS_COMMENT, JS_PARTITIONING, JS_STRING, JS_STRING_SINGLE,
 			IDocument.DEFAULT_CONTENT_TYPE };
 
 }
