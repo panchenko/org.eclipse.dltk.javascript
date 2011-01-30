@@ -17,9 +17,9 @@ import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandler;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandlerFactory;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferencerVisitor;
@@ -117,13 +117,13 @@ public abstract class TypeInferencerVisitorBase extends
 		return reference;
 	}
 
-	protected IModelBuilder.IProblemReporter reporter;
+	protected JSProblemReporter reporter;
 
-	public IModelBuilder.IProblemReporter getProblemReporter() {
+	public JSProblemReporter getProblemReporter() {
 		return reporter;
 	}
 
-	public void setProblemReporter(IModelBuilder.IProblemReporter reporter) {
+	public void setProblemReporter(JSProblemReporter reporter) {
 		this.reporter = reporter;
 	}
 

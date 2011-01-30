@@ -11,16 +11,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.search;
 
-import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.Expression;
 
-public class FieldDeclarationNode extends AbstractMatchingNode<Identifier> {
+public class FieldDeclarationNode extends AbstractMatchingNode<Expression> {
 
 	final String declaredType;
 
 	/**
 	 * @param node
 	 */
-	public FieldDeclarationNode(Identifier node, String declaredType) {
+	public FieldDeclarationNode(Expression node, String declaredType) {
 		super(node);
 		this.declaredType = declaredType;
 	}

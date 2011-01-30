@@ -12,6 +12,9 @@
 package org.eclipse.dltk.javascript.internal.search;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.util.Util;
+import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.StringLiteral;
 
 public abstract class AbstractMatchingNode<E extends ASTNode> implements
 		MatchingNode {
@@ -42,6 +45,16 @@ public abstract class AbstractMatchingNode<E extends ASTNode> implements
 
 	public int sourceEnd() {
 		return node.sourceEnd();
+	}
+
+	public String getName() {
+		if (node instanceof Identifier) {
+			return ((Identifier) node).getName();
+		} else if (node instanceof StringLiteral) {
+			return ((StringLiteral) node).getValue();
+		} else {
+			return Util.EMPTY_STRING;
+		}
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
@@ -71,12 +72,17 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	public void processMethod(FunctionStatement statement, IMethod method,
-			IProblemReporter reporter) {
+			JSProblemReporter reporter) {
 		Comment comment = getFunctionComment(statement);
 		if (comment == null) {
 			return;
 		}
 		final JSDocTags tags = parse(comment);
+		processMethod(method, tags, reporter);
+	}
+
+	public void processMethod(IMethod method, final JSDocTags tags,
+			JSProblemReporter reporter) {
 		if (method.getType() == null) {
 			parseType(method, tags, RETURN_TAGS, reporter);
 		}
@@ -135,7 +141,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	private void parseConstructor(IMethod method, JSDocTags tags,
-			IProblemReporter reporter) {
+			JSProblemReporter reporter) {
 		if (tags.get(JSDocTag.CONSTRUCTOR) != null) {
 			method.setConstructor(true);
 			validateSingleTag(tags, JSDocTag.CONSTRUCTOR, reporter);
@@ -147,7 +153,7 @@ public class JSDocSupport implements IModelBuilder {
 	 * @param tags
 	 */
 	private void parsePrivate(IMember member, final JSDocTags tags,
-			IProblemReporter reporter) {
+			JSProblemReporter reporter) {
 		if (tags.get(JSDocTag.PRIVATE) != null) {
 			member.setPrivate(true);
 			validateSingleTag(tags, JSDocTag.PRIVATE, reporter);
@@ -155,7 +161,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	private void validateSingleTag(JSDocTags tags, String tagName,
-			IProblemReporter reporter) {
+			JSProblemReporter reporter) {
 		if (reporter != null && tags.count(tagName) > 1) {
 			final List<JSDocTag> t = tags.list(tagName);
 			for (JSDocTag tag : t.subList(1, t.size())) {
@@ -165,7 +171,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	public void processVariable(VariableStatement statement,
-			IVariable variable, IProblemReporter reporter) {
+			IVariable variable, JSProblemReporter reporter) {
 		final Comment comment = statement.getDocumentation();
 		if (comment == null) {
 			return;
@@ -179,7 +185,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	private void parseDeprecation(IMember member, JSDocTags tags,
-			IProblemReporter reporter) {
+			JSProblemReporter reporter) {
 		if (tags.get(JSDocTag.DEPRECATED) != null) {
 			member.setDeprecated(true);
 			validateSingleTag(tags, JSDocTag.DEPRECATED, reporter);
@@ -187,7 +193,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	protected void parseParams(IMethod method, JSDocTags tags,
-			IProblemReporter reporter) {
+			JSProblemReporter reporter) {
 		final Map<String, Type> objectPropertiesTypes = new HashMap<String, Type>();
 		final Set<String> processedParams = new HashSet<String>();
 		for (JSDocTag tag : tags.list(JSDocTag.PARAM)) {
@@ -329,7 +335,7 @@ public class JSDocSupport implements IModelBuilder {
 	 * @param comment
 	 */
 	public void parseType(IElement member, JSDocTags tags, String[] tagNames,
-			IProblemReporter reporter) {
+			JSProblemReporter reporter) {
 		final JSDocTag tag = tags.get(tagNames);
 		if (tag != null) {
 			if (reporter != null) {
@@ -347,7 +353,7 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	private void reportProblem(IProblemReporter reporter,
+	private void reportProblem(JSProblemReporter reporter,
 			JSProblemIdentifier problemIdentifier, JSDocTag tag, Object... args) {
 		if (reporter != null) {
 			reporter.reportProblem(problemIdentifier,

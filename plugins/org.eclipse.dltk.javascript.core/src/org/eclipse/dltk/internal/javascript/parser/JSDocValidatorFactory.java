@@ -12,7 +12,7 @@ import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 
 public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 
@@ -35,7 +35,7 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 
 	}
 
-	private static class Reporter implements IModelBuilder.IProblemReporter {
+	private static class Reporter implements JSProblemReporter {
 
 		private final IBuildContext context;
 

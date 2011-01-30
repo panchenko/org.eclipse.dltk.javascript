@@ -10,6 +10,7 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.search.matching2.MatchingCollector;
 import org.eclipse.dltk.internal.javascript.parser.structure.IStructureRequestor;
 import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -64,7 +65,7 @@ public class MatchingCollectorSourceElementRequestor implements
 	public void exitType(int sourceEnd) {
 	}
 
-	public void enterMethod(MethodInfo methodInfo, Identifier identifier,
+	public void enterMethod(MethodInfo methodInfo, Expression identifier,
 			IMethod method) {
 		// ignore method(function(){});
 		if (identifier == null)
@@ -72,12 +73,12 @@ public class MatchingCollectorSourceElementRequestor implements
 		nodes.add(new MethodDeclarationNode(identifier, method));
 	}
 
-	public void enterField(FieldInfo fieldInfo, Identifier identifier) {
+	public void enterField(FieldInfo fieldInfo, Expression identifier) {
 		nodes.add(new FieldDeclarationNode(identifier, fieldInfo.type));
 	}
 
 	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
-			Identifier identifier) {
+			Expression identifier) {
 		nodes.add(new FieldDeclarationNode(identifier, fieldInfo.type));
 		return true;
 	}

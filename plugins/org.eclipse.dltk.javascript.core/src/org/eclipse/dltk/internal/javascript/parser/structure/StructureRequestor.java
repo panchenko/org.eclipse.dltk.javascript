@@ -6,6 +6,7 @@ import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -60,7 +61,7 @@ public class StructureRequestor implements IStructureRequestor {
 		requestor.exitType(sourceEnd);
 	}
 
-	public void enterMethod(MethodInfo methodInfo, Identifier identifier,
+	public void enterMethod(MethodInfo methodInfo, Expression identifier,
 			IMethod method) {
 		requestor.enterMethod(methodInfo);
 	}
@@ -73,12 +74,12 @@ public class StructureRequestor implements IStructureRequestor {
 		requestor.exitField(sourceEnd);
 	}
 
-	public void enterField(FieldInfo fieldInfo, Identifier identifer) {
+	public void enterField(FieldInfo fieldInfo, Expression identifer) {
 		requestor.enterField(fieldInfo);
 	}
 
 	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
-			Identifier identifier) {
+			Expression identifier) {
 		return requestor.enterFieldCheckDuplicates(fieldInfo);
 	}
 

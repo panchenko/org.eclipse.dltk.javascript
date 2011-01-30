@@ -74,7 +74,7 @@ public class MethodPredicate extends AbstractMatchingPredicate<MatchingNode> {
 			if (!declarations)
 				return null;
 			final MethodDeclarationNode mNode = (MethodDeclarationNode) node;
-			return matchName(mNode.node.getName());
+			return matchName(mNode.getName());
 		} else if (node instanceof MethodReferenceNode) {
 			if (!references)
 				return null;

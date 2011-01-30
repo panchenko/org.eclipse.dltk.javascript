@@ -14,9 +14,13 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 @SuppressWarnings("serial")
@@ -94,6 +98,39 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	@Override
 	public String toString() {
 		return name + super.toString() + (type != null ? ":" + type : "");
+	}
+
+	/**
+	 * @param node
+	 * @param source
+	 * @return
+	 */
+	public static JSMethod create(FunctionStatement node, ReferenceSource source) {
+		final JSMethod method = new JSMethod();
+		final Identifier methodName = node.getName();
+		if (methodName != null) {
+			method.setName(methodName.getName());
+		}
+		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
+		if (funcType != null) {
+			method.setType(funcType.getName());
+		}
+		for (Argument argument : node.getArguments()) {
+			final IParameter parameter = method.createParameter();
+			parameter.setName(argument.getIdentifier().getName());
+			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
+			if (paramType != null) {
+				parameter.setType(paramType.getName());
+				parameter.setLocation(ReferenceLocation.create(source,
+						argument.sourceStart(), paramType.sourceEnd(),
+						argument.sourceStart(), argument.sourceEnd()));
+			} else {
+				parameter.setLocation(ReferenceLocation.create(source,
+						argument.sourceStart(), argument.sourceEnd()));
+			}
+			method.getParameters().add(parameter);
+		}
+		return method;
 	}
 
 	private static class Parameter implements IParameter {

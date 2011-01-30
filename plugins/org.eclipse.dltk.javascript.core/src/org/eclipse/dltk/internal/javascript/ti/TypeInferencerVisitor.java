@@ -25,7 +25,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
-import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
@@ -447,34 +446,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	/**
 	 * @param node
-	 * @param methodName
 	 * @return
 	 */
 	protected JSMethod generateJSMethod(FunctionStatement node) {
-		final Identifier methodName = node.getName();
-		final JSMethod method = new JSMethod();
-		if (methodName != null) {
-			method.setName(methodName.getName());
-		}
-		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
-		if (funcType != null) {
-			method.setType(funcType.getName());
-		}
-		for (Argument argument : node.getArguments()) {
-			final IParameter parameter = method.createParameter();
-			parameter.setName(argument.getIdentifier().getName());
-			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
-			if (paramType != null) {
-				parameter.setType(paramType.getName());
-				parameter.setLocation(ReferenceLocation.create(getSource(),
-						argument.sourceStart(), paramType.sourceEnd(),
-						argument.sourceStart(), argument.sourceEnd()));
-			} else {
-				parameter.setLocation(ReferenceLocation.create(getSource(),
-						argument.sourceStart(), argument.sourceEnd()));
-			}
-			method.getParameters().add(parameter);
-		}
+		final JSMethod method = JSMethod.create(node, getSource());
 		for (IModelBuilder extension : context.getModelBuilders()) {
 			extension.processMethod(node, method, reporter);
 		}

@@ -63,7 +63,7 @@ public class FieldPredicate extends AbstractMatchingPredicate<MatchingNode> {
 			if (!declarations)
 				return null;
 			final FieldDeclarationNode fieldNode = (FieldDeclarationNode) node;
-			return matchName(fieldNode.node.getName());
+			return matchName(fieldNode.getName());
 		} else if (node instanceof FieldReferenceNode) {
 			if (!references)
 				return null;

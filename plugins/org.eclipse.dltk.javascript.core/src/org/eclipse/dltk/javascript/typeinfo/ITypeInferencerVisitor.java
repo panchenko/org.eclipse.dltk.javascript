@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.javascript.ast.INodeVisitor;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 
@@ -22,6 +23,6 @@ public interface ITypeInferencerVisitor extends INodeVisitor<IValueReference> {
 
 	ITypeInferenceContext getContext();
 
-	IModelBuilder.IProblemReporter getProblemReporter();
+	JSProblemReporter getProblemReporter();
 
 }

@@ -13,9 +13,9 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.List;
 
-import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
@@ -133,11 +133,6 @@ public interface IModelBuilder {
 	public interface IVariable extends IMember {
 	}
 
-	public interface IProblemReporter {
-		void reportProblem(IProblemIdentifier identifier, String message,
-				int start, int end);
-	}
-
 	/**
 	 * Returns the unique identifier of the functionality, provided by this
 	 * object. If some feature is provided by several objects, then the one
@@ -162,9 +157,9 @@ public interface IModelBuilder {
 	int priorityFor(ITypeInfoContext context);
 
 	void processMethod(FunctionStatement statement, IMethod method,
-			IProblemReporter reporter);
+			JSProblemReporter reporter);
 
 	void processVariable(VariableStatement statement, IVariable variabe,
-			IProblemReporter reporter);
+			JSProblemReporter reporter);
 
 }
