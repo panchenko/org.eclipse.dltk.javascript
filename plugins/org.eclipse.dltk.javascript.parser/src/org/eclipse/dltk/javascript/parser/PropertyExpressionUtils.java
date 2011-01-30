@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
@@ -26,7 +29,7 @@ public class PropertyExpressionUtils {
 			return null;
 		}
 	}
-	
+
 	public static Identifier getIdentifier(Expression expression) {
 		if (expression instanceof Identifier) {
 			return (Identifier) expression;
@@ -57,13 +60,59 @@ public class PropertyExpressionUtils {
 			if (!buildPath(buffer, propertyExpression.getProperty()))
 				return false;
 			return true;
-		}  else if (expression instanceof FunctionStatement) {
+		} else if (expression instanceof FunctionStatement) {
 			final FunctionStatement functionStatement = (FunctionStatement) expression;
 			if (!buildPath(buffer, functionStatement.getName()))
 				return false;
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public static boolean equals(Expression expression,
+			String... expressionPath) {
+		int endIndex = expressionPath.length;
+		if (endIndex <= 0) {
+			return false;
+		}
+		for (;;) {
+			--endIndex;
+			if (endIndex == 0) {
+				return expression instanceof Identifier
+						&& expressionPath[endIndex]
+								.equals(((Identifier) expression).getName());
+			} else if (expression instanceof PropertyExpression) {
+				final PropertyExpression pe = (PropertyExpression) expression;
+				if (pe.getProperty() instanceof Identifier
+						&& expressionPath[endIndex].equals(((Identifier) pe
+								.getProperty()).getName())) {
+					expression = pe.getObject();
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+	}
+
+	public static List<Identifier> getIdentifiers(PropertyExpression expression) {
+		final List<Identifier> identifiers = new ArrayList<Identifier>();
+		collectIdentifiers(expression, identifiers);
+		return identifiers;
+	}
+
+	private static void collectIdentifiers(PropertyExpression expression,
+			List<Identifier> identifiers) {
+		if (expression.getObject() instanceof PropertyExpression) {
+			collectIdentifiers((PropertyExpression) expression.getObject(),
+					identifiers);
+		} else if (expression.getObject() instanceof Identifier) {
+			identifiers.add((Identifier) expression.getObject());
+		}
+		if (expression.getProperty() instanceof Identifier) {
+			identifiers.add((Identifier) expression.getProperty());
 		}
 	}
 

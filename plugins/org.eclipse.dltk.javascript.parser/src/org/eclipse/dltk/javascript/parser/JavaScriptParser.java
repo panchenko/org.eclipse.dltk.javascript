@@ -31,10 +31,12 @@ import org.eclipse.dltk.ast.parser.AbstractSourceParser;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
 import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 import org.eclipse.dltk.utils.TextUtils;
 
@@ -275,8 +277,12 @@ public class JavaScriptParser extends AbstractSourceParser {
 							.getScriptProject().getProject()));
 		}
 		char[] source = input.getContentsAsCharArray();
-		return parse(createTokenStream(source), reporter == null ? null
-				: new Reporter(TextUtils.createLineTracker(source), reporter,new JavaScriptParserSeverityReporter()));
+		return parse(
+				input.getModelElement(),
+				createTokenStream(source),
+				reporter == null ? null : new Reporter(TextUtils
+						.createLineTracker(source), reporter,
+						new JavaScriptParserSeverityReporter()));
 	}
 
 	/**
@@ -284,23 +290,27 @@ public class JavaScriptParser extends AbstractSourceParser {
 	 */
 	public Script parse(String source, IProblemReporter reporter) {
 		Assert.isNotNull(source);
-		return parse(createTokenStream(source),
+		return parse(null, createTokenStream(source),
 				TextUtils.createLineTracker(source), reporter);
 	}
 
-	protected Script parse(JSTokenStream stream,
+	protected Script parse(IModelElement element, JSTokenStream stream,
 			ISourceLineTracker lineTracker, IProblemReporter reporter) {
-		return parse(stream, new Reporter(lineTracker, reporter,new JavaScriptParserSeverityReporter()));
+		return parse(element, stream, new Reporter(lineTracker, reporter,
+				new JavaScriptParserSeverityReporter()));
 	}
 
-	protected Script parse(JSTokenStream stream, Reporter reporter) {
+	protected Script parse(IModelElement element, JSTokenStream stream,
+			Reporter reporter) {
 		try {
 			stream.setReporter(reporter);
 			JSInternalParser parser = new JSInternalParser(stream, reporter);
 			parser.setTypeInformationEnabled(typeInformationEnabled);
 			RuleReturnScope root = parser.program();
-			JSTransformer transformer = new JSTransformer(stream.getTokens(),
-					parser.peekState().hasErrors());
+			final NodeTransformer[] transformers = NodeTransformerManager
+					.createTransformers(element, reporter);
+			JSTransformer transformer = new JSTransformer(transformers,
+					stream.getTokens(), parser.peekState().hasErrors());
 			transformer.setReporter(reporter);
 			return transformer.transform(root);
 		} catch (Exception e) {

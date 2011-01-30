@@ -112,6 +112,7 @@ import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.internal.parser.ArgumentTypedDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.FunctionTypedDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.ITypedDeclaration;
+import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
 import org.eclipse.dltk.javascript.internal.parser.VariableTypedDeclaration;
 import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 import org.eclipse.dltk.utils.IntList;
@@ -119,6 +120,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class JSTransformer extends JSVisitor<ASTNode> {
 
+	private final NodeTransformer[] transformers;
 	private final List<Token> tokens;
 	private final int[] tokenOffsets;
 	private Stack<ASTNode> parents = new Stack<ASTNode>();
@@ -136,11 +138,13 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	public JSTransformer(List<Token> tokens) {
-		this(tokens, false);
+		this(NodeTransformerManager.NO_TRANSFORMERS, tokens, false);
 	}
 
-	public JSTransformer(List<Token> tokens, boolean ignoreUnknown) {
+	public JSTransformer(NodeTransformer[] transformers, List<Token> tokens,
+			boolean ignoreUnknown) {
 		Assert.isNotNull(tokens);
+		this.transformers = transformers;
 		this.tokens = tokens;
 		this.ignoreUnknown = ignoreUnknown;
 		tokenOffsets = prepareOffsetMap(tokens);
@@ -344,6 +348,15 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 					}
 				}
 				break;
+			}
+		}
+		if (node != null && transformers.length != 0) {
+			final ASTNode parent = getParent();
+			for (NodeTransformer transformer : transformers) {
+				final ASTNode transformed = transformer.transform(node, parent);
+				if (transformed != null && transformed != node) {
+					return transformed;
+				}
 			}
 		}
 		return node;

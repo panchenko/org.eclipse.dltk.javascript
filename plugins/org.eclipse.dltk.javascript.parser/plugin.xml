@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="transformer" name="JavaScript Parser Node Transformer" schema="schema/transformer.exsd"/>
+
    <extension point="org.eclipse.dltk.core.sourceParsers">
       <parserContribution natureId="org.eclipse.dltk.javascript.core.nature">
 		 <selector class="org.eclipse.dltk.javascript.internal.parser.JavaScriptParserSelector"/>
