@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="keywordsprovider" name="Script Editor color providers" schema="schema/keywordsprovider.exsd"/>
    <extension-point id="typeInfoLabelProvider" name="JavaScript TypeInfo label provider" schema="schema/typeInfoLabelProvider.exsd"/>
  <extension
          point="org.eclipse.ui.editors">
@@ -691,6 +690,14 @@
          id="org.eclipse.dltk.javascript.ui.modelLabelProvider"
          language="org.eclipse.dltk.javascript.core.nature">
    </modelLabelProvider>
+</extension>
+
+<extension point="org.eclipse.dltk.ui.coloring">
+<coloring
+      class="org.eclipse.dltk.javascript.internal.ui.JavaScriptColoringPreferences"
+      nature="org.eclipse.dltk.javascript.core.nature"
+      priority="0">
+</coloring>
 </extension>
 
 </plugin>

@@ -35,26 +35,6 @@ public class JavascriptDocScanner extends JavaScriptScriptCommentScanner {
 	}
 
 	@Override
-	protected int skipCommentChars() {
-		int count = 0;
-		int c = read();
-		while (Character.isWhitespace(c)) {
-			++count;
-			c = read();
-		}
-		while (c == '/') {
-			++count;
-			c = read();
-		}
-		while (c == '*') {
-			++count;
-			c = read();
-		}
-		unread();
-		return count;
-	}
-
-	@Override
 	protected String[] getTokenProperties() {
 		return new String[] { JavascriptColorConstants.JS_DOC,
 				JavascriptColorConstants.JS_TODO_TAG,

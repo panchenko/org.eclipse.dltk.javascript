@@ -9,7 +9,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text;
 
-import org.eclipse.dltk.javascript.ui.JavascriptPreferenceConstants;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.editor.highlighting.ISemanticHighlighter;
 import org.eclipse.dltk.ui.editor.highlighting.SemanticHighlighting;
@@ -65,10 +64,10 @@ public class JavascriptTextTools extends ScriptTextTools {
 
 	public SemanticHighlighting[] getSemanticHighlightings() {
 		return new SemanticHighlighting[] {
-				new SH(JavascriptPreferenceConstants.EDITOR_XML_TAG_NAME_COLOR),
-				new SH(JavascriptPreferenceConstants.EDITOR_XML_ATTR_NAME_COLOR),
-				new SH(JavascriptPreferenceConstants.EDITOR_XML_COMMENT_COLOR),
-				new SH(JavascriptPreferenceConstants.EDITOR_KEYWORD_COLOR), };
+				new SH(JavascriptColorConstants.JS_XML_TAG_NAME),
+				new SH(JavascriptColorConstants.JS_XML_ATTR_NAME),
+				new SH(JavascriptColorConstants.JS_XML_COMMENT_NAME),
+				new SH(JavascriptColorConstants.JS_KEYWORD), };
 	}
 
 	public ISemanticHighlighter getSemanticPositionUpdater() {

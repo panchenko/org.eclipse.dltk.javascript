@@ -12,12 +12,13 @@ package org.eclipse.dltk.javascript.internal.ui.text;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.dltk.javascript.core.JSKeywordCategory;
+import org.eclipse.dltk.javascript.core.JSKeywordManager;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.ui.rules.FloatNumberRule;
-import org.eclipse.dltk.javascript.ui.scriptcolor.provider.IScriptColorProvider;
+import org.eclipse.dltk.ui.coloring.ColoringPreferences;
+import org.eclipse.dltk.ui.coloring.IKeywordColorProvider;
 import org.eclipse.dltk.ui.text.AbstractScriptScanner;
 import org.eclipse.dltk.ui.text.IColorManager;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -36,35 +37,6 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 			JavascriptColorConstants.JS_NUMBER,
 			JavascriptColorConstants.JS_FUNCTION_DEFINITION };
 
-	private static IScriptColorProvider[] providers;
-	static {
-		initProviders();
-	}
-
-	public static IScriptColorProvider[] getScriptColorProviders() {
-		return providers;
-	}
-
-	private static void initProviders() {
-		final List<IScriptColorProvider> providerList = new ArrayList<IScriptColorProvider>();
-		final IConfigurationElement[] configurationElements = Platform
-				.getExtensionRegistry().getConfigurationElementsFor(
-						"org.eclipse.dltk.javascript.ui.keywordsprovider");
-		for (IConfigurationElement configurationElement : configurationElements) {
-			try {
-				final Object provider = configurationElement
-						.createExecutableExtension("class");
-				if (provider instanceof IScriptColorProvider) {
-					providerList.add((IScriptColorProvider) provider);
-				}
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
-		providers = providerList.toArray(new IScriptColorProvider[providerList
-				.size()]);
-	}
-
 	public JavascriptCodeScanner(IColorManager manager, IPreferenceStore store) {
 		super(manager, store);
 		initialize();
@@ -73,6 +45,23 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 	@Override
 	protected String[] getTokenProperties() {
 		return fgTokenProperties;
+	}
+
+	private IKeywordColorProvider[] keywordColorProviders = null;
+
+	private IToken getKeywordColor(String keyword, IToken defaultToken) {
+		if (keywordColorProviders == null) {
+			keywordColorProviders = ColoringPreferences
+					.getKeywordColorProviders(JavaScriptNature.NATURE_ID);
+		}
+		for (IKeywordColorProvider provider : keywordColorProviders) {
+			final String colorKey = provider.getColorKey(
+					JSKeywordCategory.CODE, keyword);
+			if (colorKey != null) {
+				return getToken(colorKey);
+			}
+		}
+		return defaultToken;
 	}
 
 	@Override
@@ -94,29 +83,26 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 		JavascriptWordRule wordRule = new JavascriptWordRule(
 				new JavascriptWordDetector(), other, null, def);
 		for (String word : JavaScriptKeywords.getJavaScriptKeywords()) {
-			wordRule.addWord(word, keyword);
+			wordRule.addWord(word, getKeywordColor(word, keyword));
 		}
-		wordRule.addWord(fgReturnKeyword, keywordReturn);
+		wordRule.addWord(fgReturnKeyword,
+				getKeywordColor(fgReturnKeyword, keywordReturn));
+		for (String word : JSKeywordManager.getInstance().getKeywords(
+				JSKeywordCategory.CODE, null)) {
+			wordRule.addWord(word, getKeywordColor(word, keyword));
+		}
 
-		for (int i = 0; i < providers.length; i++) {
-			String[] keywords = providers[i].getKeywords();
-			if (keywords != null) {
-				for (String word : keywords) {
-					wordRule.addWord(word, providers[i].getToken(word));
-				}
-			}
-		}
 		rules.add(wordRule);
 		rules.add(new FloatNumberRule(number));
 
-		for (int i = 0; i < providers.length; i++) {
-			IRule[] r = providers[i].getRules();
-			if (r != null) {
-				for (int j = 0; j < r.length; j++) {
-					rules.add(r[j]);
-				}
-			}
-		}
+		// for (int i = 0; i < providers.length; i++) {
+		// FIXME (alex) IRule[] r = providers[i].getRules();
+		// if (r != null) {
+		// for (int j = 0; j < r.length; j++) {
+		// rules.add(r[j]);
+		// }
+		// }
+		// }
 		setDefaultReturnToken(other);
 		return rules;
 	}

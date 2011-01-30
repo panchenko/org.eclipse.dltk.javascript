@@ -34,8 +34,18 @@ public class JavaScriptScriptCommentScanner extends ScriptCommentScanner {
 	@Override
 	protected int skipCommentChars() {
 		int count = 0;
-		while (read() == '/') {
+		int c = read();
+		while (Character.isWhitespace(c)) {
 			++count;
+			c = read();
+		}
+		while (c == '/') {
+			++count;
+			c = read();
+		}
+		while (c == '*') {
+			++count;
+			c = read();
 		}
 		unread();
 		return count;

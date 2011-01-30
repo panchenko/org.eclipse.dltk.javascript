@@ -23,7 +23,7 @@ public final class JavascriptColorConstants {
 	/**
 	 * The color key for Javascript comments.
 	 */
-	public static final String JS_SINGLE_LINE_COMMENT = DLTKColorConstants.DLTK_SINGLE_LINE_COMMENT; //$NON-NLS-1$	
+	public static final String JS_SINGLE_LINE_COMMENT = DLTKColorConstants.DLTK_SINGLE_LINE_COMMENT;
 
 	/**
 	 * The color key for Javascript doc.
