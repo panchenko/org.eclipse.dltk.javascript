@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.antlr.runtime.Token;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -33,16 +34,16 @@ public class XmlLiteralTokenTests extends AbstractJSParserTest {
 		 * increase visibility of inherited method
 		 */
 		@Override
-		public Script parse(JSTokenStream stream,
+		public Script parse(IModelElement element, JSTokenStream stream,
 				ISourceLineTracker lineTracker, IProblemReporter reporter) {
-			return super.parse(stream, lineTracker, reporter);
+			return super.parse(element, stream, lineTracker, reporter);
 		}
 
 	}
 
 	protected List<Token> tokenize(final String code) {
 		final JSTokenStream stream = JavaScriptParser.createTokenStream(code);
-		new TestParser().parse(stream, TextUtils.createLineTracker(code),
+		new TestParser().parse(null, stream, TextUtils.createLineTracker(code),
 				reporter);
 		return stream.getTokens();
 	}

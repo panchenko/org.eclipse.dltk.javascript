@@ -11,8 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.tests;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.javascript.ast.CallExpression;
+import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -29,6 +33,7 @@ public class NewTests extends AbstractJSParserTest {
 		NewExpression newExpr = (NewExpression) var.getInitializer();
 		CallExpression call = (CallExpression) newExpr.getObjectClass();
 		assertEquals("a", PropertyExpressionUtils.getPath(call.getExpression()));
+		assertTrue(PropertyExpressionUtils.equals(call.getExpression(), "a"));
 		assertIdentifier("a", call.getExpression());
 	}
 
@@ -41,6 +46,8 @@ public class NewTests extends AbstractJSParserTest {
 		CallExpression call = (CallExpression) newExpr.getObjectClass();
 		assertEquals("a.b",
 				PropertyExpressionUtils.getPath(call.getExpression()));
+		assertTrue(PropertyExpressionUtils.equals(call.getExpression(), "a",
+				"b"));
 		PropertyExpression property = (PropertyExpression) call.getExpression();
 		assertIdentifier("a", property.getObject());
 		assertIdentifier("b", property.getProperty());
@@ -55,6 +62,14 @@ public class NewTests extends AbstractJSParserTest {
 		CallExpression call = (CallExpression) newExpr.getObjectClass();
 		assertEquals("a.b.c",
 				PropertyExpressionUtils.getPath(call.getExpression()));
+		assertTrue(PropertyExpressionUtils.equals(call.getExpression(), "a",
+				"b", "c"));
+		final List<Identifier> identifiers = PropertyExpressionUtils
+				.getIdentifiers((PropertyExpression) call.getExpression());
+		assertEquals(3, identifiers.size());
+		assertIdentifier("a", identifiers.get(0));
+		assertIdentifier("b", identifiers.get(1));
+		assertIdentifier("c", identifiers.get(2));
 		PropertyExpression property = (PropertyExpression) call.getExpression();
 		PropertyExpression property2 = (PropertyExpression) property
 				.getObject();
