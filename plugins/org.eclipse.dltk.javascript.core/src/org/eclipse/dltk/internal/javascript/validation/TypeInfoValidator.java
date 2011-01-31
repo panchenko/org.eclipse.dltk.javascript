@@ -824,7 +824,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 				return true;
 			}
 			if (params.size() > callArgs.size()
-					&& params.get(callArgs.size()).getKind() == ParameterKind.OPTIONAL) {
+					&& (params.get(callArgs.size()).getKind() == ParameterKind.OPTIONAL || params
+							.get(callArgs.size()).getKind() == ParameterKind.VARARGS)) {
 				return true;
 			}
 			return false;
