@@ -24,7 +24,7 @@ public abstract class UserExpression extends Expression implements JSUserNode {
 		super(parent);
 	}
 
-	private JSNode original;
+	protected JSNode original;
 
 	public JSNode getOriginal() {
 		return original;
