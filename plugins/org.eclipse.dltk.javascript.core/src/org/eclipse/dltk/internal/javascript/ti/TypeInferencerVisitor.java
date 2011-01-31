@@ -956,9 +956,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			IValue nodeValue = xmlValue.createChild(item.getNodeName());
 			nodeValue.setDeclaredType(xmlType);
 			NamedNodeMap attributes = item.getAttributes();
-			for (int a = 0; a < attributes.getLength(); a++) {
-				Node attribute = attributes.item(a);
-				nodeValue.createChild("@" + attribute.getNodeName());
+			if (attributes != null) {
+				for (int a = 0; a < attributes.getLength(); a++) {
+					Node attribute = attributes.item(a);
+					nodeValue.createChild("@" + attribute.getNodeName());
+				}
 			}
 			createXmlChilds(xmlType, nodeValue, item.getChildNodes());
 		}
