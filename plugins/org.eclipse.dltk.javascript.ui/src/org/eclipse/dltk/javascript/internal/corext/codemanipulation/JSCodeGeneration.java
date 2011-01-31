@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.corext.codemanipulation;
 
+import static org.eclipse.dltk.javascript.ast.MultiLineComment.JSDOC_PREFIX;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -96,7 +98,7 @@ public class JSCodeGeneration {
 				}
 			}
 		} else {
-			buf.append("/**").append(lineDelimiter); //$NON-NLS-1$
+			buf.append(JSDOC_PREFIX).append(lineDelimiter);
 			buf.append(" * Function " + meth.getElementName()).append(lineDelimiter); //$NON-NLS-1$
 			try {
 				for (IParameter parameter : meth.getParameters()) {
@@ -124,7 +126,7 @@ public class JSCodeGeneration {
 	public static String getFieldComment(ISourceModule sourceModule,
 			String typeName, String fieldName, String lineDelimiter) {
 		StringBuffer buf = new StringBuffer();
-		buf.append("/**").append(lineDelimiter); //$NON-NLS-1$
+		buf.append(JSDOC_PREFIX).append(lineDelimiter);
 		buf.append(" * " + fieldName).append(lineDelimiter); //$NON-NLS-1$
 		buf.append(" * @type ").append(typeName != null ? typeName : ITypeNames.OBJECT).append(lineDelimiter); //$NON-NLS-1$
 		buf.append(" */").append(lineDelimiter); //$NON-NLS-1$

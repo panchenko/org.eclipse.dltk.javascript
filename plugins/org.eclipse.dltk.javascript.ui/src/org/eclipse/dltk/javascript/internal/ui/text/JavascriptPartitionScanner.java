@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text;
 
+import static org.eclipse.dltk.javascript.ast.MultiLineComment.JSDOC_PREFIX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 		IToken doc = new Token(IJavaScriptPartitions.JS_DOC);
 
 		List<IPredicateRule> rules = new ArrayList<IPredicateRule>();
-		rules.add(new MultiLineRule("/**", "*/", doc)); //$NON-NLS-1$ //$NON-NLS-2$
+		rules.add(new MultiLineRule(JSDOC_PREFIX, "*/", doc)); //$NON-NLS-1$ 
 		rules.add(new MultiLineRule("/*", "*/", comment)); //$NON-NLS-1$ //$NON-NLS-2$
 		rules.add(new EndOfLineRule("//", comment)); //$NON-NLS-1$		
 
