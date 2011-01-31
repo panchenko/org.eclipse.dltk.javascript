@@ -45,6 +45,7 @@ public class JavaScriptTokenSource extends JavaScriptLexer implements
 			try {
 				super.mTokens();
 			} catch (RecognitionException e) {
+				recover(e);
 				type = XMLFragmentError;
 				emit();
 			}
