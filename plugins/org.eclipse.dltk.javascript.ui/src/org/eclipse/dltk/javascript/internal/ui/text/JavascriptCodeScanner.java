@@ -10,6 +10,7 @@
 package org.eclipse.dltk.javascript.internal.ui.text;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.dltk.javascript.core.JSKeywordCategory;
@@ -19,9 +20,11 @@ import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.ui.rules.FloatNumberRule;
 import org.eclipse.dltk.ui.coloring.ColoringPreferences;
 import org.eclipse.dltk.ui.coloring.IKeywordColorProvider;
+import org.eclipse.dltk.ui.coloring.ITextRuleProvider;
 import org.eclipse.dltk.ui.text.AbstractScriptScanner;
 import org.eclipse.dltk.ui.text.IColorManager;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.WhitespaceRule;
@@ -95,14 +98,18 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 		rules.add(wordRule);
 		rules.add(new FloatNumberRule(number));
 
-		// for (int i = 0; i < providers.length; i++) {
-		// FIXME (alex) IRule[] r = providers[i].getRules();
-		// if (r != null) {
-		// for (int j = 0; j < r.length; j++) {
-		// rules.add(r[j]);
-		// }
-		// }
-		// }
+		final ITextRuleProvider[] textRuleProviders = ColoringPreferences
+				.getTextRules(JavaScriptNature.NATURE_ID);
+		if (textRuleProviders != null) {
+			for (ITextRuleProvider provider : textRuleProviders) {
+				final IRule[] r = provider.getRules(
+						IDocument.DEFAULT_CONTENT_TYPE, this);
+				if (r != null) {
+					Collections.addAll(rules, r);
+				}
+			}
+		}
+
 		setDefaultReturnToken(other);
 		return rules;
 	}
