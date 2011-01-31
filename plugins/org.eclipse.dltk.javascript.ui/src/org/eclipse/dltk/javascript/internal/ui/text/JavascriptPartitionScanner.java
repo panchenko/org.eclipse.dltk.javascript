@@ -18,7 +18,6 @@ import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
-import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 
 public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
@@ -40,7 +39,7 @@ public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 		rules.add(new EndOfLineRule("//", comment)); //$NON-NLS-1$		
 
 		// Add rule for character constants.
-		rules.add(new SingleLineRule("'", "'", stringSingle, '\\'));
+		rules.add(new MultiLineRule("'", "'", stringSingle, '\\'));
 		rules.add(new MultiLineRule("\"", "\"", string, '\\'));
 
 		IPredicateRule[] result = new IPredicateRule[rules.size()];
