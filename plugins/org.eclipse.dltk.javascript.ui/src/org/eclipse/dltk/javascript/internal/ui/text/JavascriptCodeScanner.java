@@ -28,6 +28,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.WhitespaceRule;
+import org.eclipse.jface.text.rules.WordRule;
 
 public class JavascriptCodeScanner extends AbstractScriptScanner {
 
@@ -83,8 +84,7 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 		// Add generic whitespace rule.
 		rules.add(new WhitespaceRule(new JavascriptWhitespaceDetector()));
 		// Add word rule for keywords, types, and constants.
-		JavascriptWordRule wordRule = new JavascriptWordRule(
-				new JavascriptWordDetector(), other, null, def);
+		WordRule wordRule = new WordRule(new JavascriptWordDetector(), other);
 		for (String word : JavaScriptKeywords.getJavaScriptKeywords()) {
 			wordRule.addWord(word, getKeywordColor(word, keyword));
 		}
