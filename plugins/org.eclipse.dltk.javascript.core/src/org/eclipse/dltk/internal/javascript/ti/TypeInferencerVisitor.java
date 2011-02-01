@@ -388,6 +388,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		arguments.setKind(ReferenceKind.LOCAL);
 		IValueReference argumentsLength = arguments.getChild("length");
 		argumentsLength.setDeclaredType(context.getKnownType(NUMBER));
+		IValueReference argumentsArray = arguments
+				.getChild(IValueReference.ARRAY_OP);
+		argumentsArray.setDeclaredType(context.getKnownType(OBJECT));
 
 		for (IParameter parameter : method.getParameters()) {
 			final IValueReference refArg = function.createChild(parameter
