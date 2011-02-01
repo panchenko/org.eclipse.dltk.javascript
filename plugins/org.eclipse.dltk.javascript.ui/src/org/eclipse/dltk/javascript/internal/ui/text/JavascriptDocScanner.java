@@ -48,9 +48,12 @@ public class JavascriptDocScanner extends JavaScriptScriptCommentScanner {
 		return matchers;
 	}
 
+	private static final String[] JSDOC_TAGS = { "@author", "@version", "@see" };
+
 	private WordMatcher createJavadocKeywordMatcher() {
 		final WordMatcher matcher = new WordMatcher();
 		final Set<String> tags = new HashSet<String>();
+		Collections.addAll(tags, JSDOC_TAGS);
 		Collections.addAll(tags, JSDocSupport.getTags());
 		ISourceModule module = null;
 		if (fConfiguration != null) {
