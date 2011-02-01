@@ -1244,10 +1244,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		initializer.setName((Expression) transformNode(node.getChild(0),
 				initializer));
 
-		initializer
-				.setColon(getTokenOffset(JSParser.COLON, node.getChild(0)
-						.getTokenStopIndex() + 1, node.getChild(1)
-						.getTokenStartIndex()));
+		initializer.setColon(getTokenOffset(JSParser.COLON, node.getChild(0)
+				.getTokenStopIndex() + 1, node.getChildCount() == 2 ? node
+				.getChild(1).getTokenStartIndex() : node.getTokenStopIndex()));
 
 		initializer.setValue((Expression) transformNode(node.getChild(1),
 				initializer));
