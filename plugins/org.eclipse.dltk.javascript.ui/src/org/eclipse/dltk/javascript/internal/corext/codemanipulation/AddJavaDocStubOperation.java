@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.corext.codemanipulation;
 
+import static org.eclipse.dltk.javascript.ast.MultiLineComment.JSDOC_PREFIX;
+
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
@@ -152,7 +154,7 @@ public class AddJavaDocStubOperation implements IWorkspaceRunnable {
 				}
 				if (comment == null) {
 					StringBuffer buf = new StringBuffer();
-					buf.append("/**").append(lineDelim); //$NON-NLS-1$
+					buf.append(JSDOC_PREFIX).append(lineDelim);
 					buf.append(" *").append(lineDelim); //$NON-NLS-1$
 					buf.append(" */").append(lineDelim); //$NON-NLS-1$
 					comment = buf.toString();
@@ -177,10 +179,23 @@ public class AddJavaDocStubOperation implements IWorkspaceRunnable {
 				ISourceRange range = ScriptdocContentAccess
 						.getJavadocRange(curr);
 				if (range != null) {
-					edit.addChild(new ReplaceEdit(range.getOffset(), range
-							.getLength(), indentedComment));
+					if (curr.getElementType() == IModelElement.TYPE) {
+						// don't override type comment
+						continue;
+					}
+					final int begin = range.getOffset();
+					int end = begin + range.getLength();
+					while (end < document.getLength()
+							&& Character.isWhitespace(document.getChar(end))) {
+						++end;
+					}
+					if (!indentedComment.equals(document
+							.get(begin, end - begin))) {
+						edit.addChild(new ReplaceEdit(begin, end - begin,
+								indentedComment));
+					}
 				} else {
-					edit.addChild(new InsertEdit(memberStartOffset,
+					edit.addChild(new InsertEdit(region.getOffset(),
 							indentedComment));
 				}
 
