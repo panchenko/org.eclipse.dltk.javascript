@@ -18,13 +18,16 @@ import org.eclipse.dltk.core.IBuffer;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.IOpenable;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.ISourceReference;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.corext.documentation.SingleCharReader;
 import org.eclipse.dltk.internal.javascript.typeinference.IProposalHolder;
+import org.eclipse.dltk.javascript.ast.MultiLineComment;
 
 class JavaDocCommentReader extends SingleCharReader {
 
@@ -109,8 +112,9 @@ class JavaDocCommentReader extends SingleCharReader {
 
 public class ScriptdocContentAccess {
 
-	private static final String JAVADOC_BEGIN = "/**";
-	private static final String JAVADOC_END = "*/";
+	private static final String JAVADOC_BEGIN = MultiLineComment.JSDOC_PREFIX;
+
+	// private static final String JAVADOC_END = "*/";
 
 	private ScriptdocContentAccess() {
 		// do not instantiate
@@ -124,6 +128,54 @@ public class ScriptdocContentAccess {
 				null/* taskTags */, null/* taskPriorities */, true/* taskCaseSensitive */);
 		scanner.recordLineSeparator = recordLineSeparator;
 		return scanner;
+	}
+
+	private static class PreviousMemberDetector implements IModelElementVisitor {
+
+		private int currentEnd = 0;
+		private final IMember target;
+		private final int targetStart;
+		private final int targetEnd;
+
+		public PreviousMemberDetector(IMember target, int targetStart,
+				int targetEnd) {
+			this.target = target;
+			this.targetStart = targetStart;
+			this.targetEnd = targetEnd;
+		}
+
+		public boolean visit(IModelElement element) {
+			if (!element.equals(target) && element instanceof ISourceReference) {
+				try {
+					final ISourceRange range = ((ISourceReference) element)
+							.getSourceRange();
+					if (SourceRange.isAvailable(range)) {
+						final int end = range.getOffset() + range.getLength();
+						if (end < targetStart && end > currentEnd) {
+							currentEnd = end;
+						} else if (range.getOffset() <= targetStart
+								&& end >= targetEnd
+								&& range.getOffset() > currentEnd) {
+							currentEnd = range.getOffset();
+						}
+					}
+				} catch (ModelException e) {
+					// ignore
+				}
+			}
+			return true;
+		}
+
+		public static int execute(int start, int end, IMember member) {
+			final PreviousMemberDetector detector = new PreviousMemberDetector(
+					member, start, end);
+			try {
+				member.getSourceModule().accept(detector);
+			} catch (ModelException e) {
+				// ignore
+			}
+			return detector.currentEnd;
+		}
 	}
 
 	public static ISourceRange getJavadocRange(IMember member)
@@ -142,48 +194,48 @@ public class ScriptdocContentAccess {
 			}
 			buf = compilationUnit.getBuffer();
 		}
-		int start = range.getOffset();
-		int length = range.getLength();
-		String sm = buf.getText(0, start);
-		start = sm.lastIndexOf(JAVADOC_BEGIN);
+		final int possibleDocEnd = range.getOffset();
+		final int possibleDocStart = PreviousMemberDetector.execute(
+				possibleDocEnd, possibleDocEnd + range.getLength(), member);
+		final String sm = buf.getText(possibleDocStart,
+				possibleDocEnd + range.getLength() - possibleDocStart);
+		int start = sm.indexOf(JAVADOC_BEGIN);
 		if (start == -1) {
 			return null;
 		}
-		sm = sm.substring(start);
-		int end = sm.lastIndexOf(JAVADOC_END);
-		if (end != -1) {
-			length = end + JAVADOC_END.length();
-		}
-		if (length > 0) {
-			IScanner scanner = createScanner(true, false, false, false);
-			scanner.setSource(buf.getText(start, length).toCharArray());
-			try {
-				int docOffset = -1;
-				int docEnd = -1;
+		// int end = sm.indexOf(JAVADOC_END, start);
+		// if (end == -1) {
+		// return null;
+		// }
+		IScanner scanner = createScanner(true, false, false, false);
+		scanner.setSource(buf.getText(possibleDocStart + start,
+				possibleDocEnd - (possibleDocStart + start)).toCharArray());
+		try {
+			int docOffset = -1;
+			int docEnd = -1;
 
-				int terminal = scanner.getNextToken();
-				loop: while (true) {
-					switch (terminal) {
-					case ITerminalSymbols.TokenNameCOMMENT_JAVADOC:
-						docOffset = scanner.getCurrentTokenStartPosition();
-						docEnd = scanner.getCurrentTokenEndPosition() + 1;
-						terminal = scanner.getNextToken();
-						break;
-					case ITerminalSymbols.TokenNameCOMMENT_LINE:
-					case ITerminalSymbols.TokenNameCOMMENT_BLOCK:
-						terminal = scanner.getNextToken();
-						continue loop;
-					default:
-						break loop;
-					}
+			int terminal = scanner.getNextToken();
+			loop: while (true) {
+				switch (terminal) {
+				case ITerminalSymbols.TokenNameCOMMENT_JAVADOC:
+					docOffset = scanner.getCurrentTokenStartPosition();
+					docEnd = scanner.getCurrentTokenEndPosition() + 1;
+					terminal = scanner.getNextToken();
+					break;
+				case ITerminalSymbols.TokenNameCOMMENT_LINE:
+				case ITerminalSymbols.TokenNameCOMMENT_BLOCK:
+					terminal = scanner.getNextToken();
+					continue loop;
+				default:
+					break loop;
 				}
-				if (docOffset != -1) {
-					return new SourceRange(docOffset + start, docEnd
-							- docOffset + 1);
-				}
-			} catch (InvalidInputException ex) {
-				// try if there is inherited Javadoc
 			}
+			if (docOffset != -1) {
+				return new SourceRange(docOffset + possibleDocStart + start,
+						docEnd - docOffset + 1);
+			}
+		} catch (InvalidInputException ex) {
+			// try if there is inherited Javadoc
 		}
 		return null;
 	}
