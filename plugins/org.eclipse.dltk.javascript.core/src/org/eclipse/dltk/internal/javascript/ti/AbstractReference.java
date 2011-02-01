@@ -174,12 +174,26 @@ public abstract class AbstractReference implements IValueReference,
 				.<String> emptySet();
 	}
 
-	private static class LazyReferenceValue extends Value implements ILazyValue {
+	private final static class LazyReferenceValue extends Value implements
+			ILazyValue {
 		private final IValueReference reference;
 		private boolean resolved = false;
 
 		public LazyReferenceValue(IValueReference value) {
 			this.reference = value;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof LazyReferenceValue) {
+				return reference.equals(((LazyReferenceValue) obj).reference);
+			}
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return reference.hashCode();
 		}
 
 		public void resolve() {
@@ -197,6 +211,12 @@ public abstract class AbstractReference implements IValueReference,
 					resolved = false;
 				}
 			}
+		}
+
+		@Override
+		public String toString() {
+			return "LazyReferenceValue[resolved:" + resolved + ",reference:"
+					+ reference + ']';
 		}
 	}
 }

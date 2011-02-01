@@ -118,4 +118,9 @@ public class ChildReference extends AbstractReference {
 		return false;
 	}
 
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
 }
