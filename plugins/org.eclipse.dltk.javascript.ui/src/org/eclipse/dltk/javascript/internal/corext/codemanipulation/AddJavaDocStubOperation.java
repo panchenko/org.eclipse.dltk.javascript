@@ -195,7 +195,7 @@ public class AddJavaDocStubOperation implements IWorkspaceRunnable {
 								indentedComment));
 					}
 				} else {
-					edit.addChild(new InsertEdit(region.getOffset(),
+					edit.addChild(new InsertEdit(memberStartOffset,
 							indentedComment));
 				}
 

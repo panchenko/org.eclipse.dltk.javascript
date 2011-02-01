@@ -197,8 +197,8 @@ public class ScriptdocContentAccess {
 		final int possibleDocEnd = range.getOffset();
 		final int possibleDocStart = PreviousMemberDetector.execute(
 				possibleDocEnd, possibleDocEnd + range.getLength(), member);
-		final String sm = buf.getText(possibleDocStart,
-				possibleDocEnd + range.getLength() - possibleDocStart);
+		final String sm = buf.getText(possibleDocStart, possibleDocEnd
+				- possibleDocStart);
 		int start = sm.indexOf(JAVADOC_BEGIN);
 		if (start == -1) {
 			return null;
