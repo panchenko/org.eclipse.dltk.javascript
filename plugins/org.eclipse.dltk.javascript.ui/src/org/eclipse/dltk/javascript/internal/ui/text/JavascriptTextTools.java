@@ -10,8 +10,6 @@
 package org.eclipse.dltk.javascript.internal.ui.text;
 
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
-import org.eclipse.dltk.ui.editor.highlighting.ISemanticHighlighter;
-import org.eclipse.dltk.ui.editor.highlighting.SemanticHighlighting;
 import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
 import org.eclipse.dltk.ui.text.ScriptTextTools;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -19,31 +17,6 @@ import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 public class JavascriptTextTools extends ScriptTextTools {
-
-	private final class SH extends SemanticHighlighting {
-
-		private String preferenceKey;
-
-		public String getBackgroundPreferenceKey() {
-			return bgColor;
-		}
-
-		final private String bgColor;
-
-		public SH(String editorXmlTagNameColor) {
-			this(editorXmlTagNameColor, null);
-		}
-
-		public SH(String editorXmlTagNameColor, String bgColor) {
-			this.preferenceKey = editorXmlTagNameColor;
-			this.bgColor = bgColor;
-		}
-
-		public String getPreferenceKey() {
-			return preferenceKey;
-		}
-
-	}
 
 	public JavascriptTextTools(boolean autoDisposeOnDisplayDispose) {
 		super(IJavaScriptPartitions.JS_PARTITIONING,
@@ -60,18 +33,6 @@ public class JavascriptTextTools extends ScriptTextTools {
 
 	public IPartitionTokenScanner getPartitionScanner() {
 		return new JavascriptPartitionScanner();
-	}
-
-	public SemanticHighlighting[] getSemanticHighlightings() {
-		return new SemanticHighlighting[] {
-				new SH(JavascriptColorConstants.JS_XML_TAG_NAME),
-				new SH(JavascriptColorConstants.JS_XML_ATTR_NAME),
-				new SH(JavascriptColorConstants.JS_XML_COMMENT_NAME),
-				new SH(JavascriptColorConstants.JS_KEYWORD), };
-	}
-
-	public ISemanticHighlighter getSemanticPositionUpdater() {
-		return new JavaScriptPositionUpdater();
 	}
 
 }

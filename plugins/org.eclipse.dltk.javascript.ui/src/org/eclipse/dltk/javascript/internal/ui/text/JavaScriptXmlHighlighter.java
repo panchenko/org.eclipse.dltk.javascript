@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.eclipse.dltk.javascript.internal.ui.text;
 
 import java.io.StringReader;
@@ -17,20 +14,27 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
-import org.eclipse.dltk.ui.editor.highlighting.AbstractSemanticHighlighter;
+import org.eclipse.dltk.ui.editor.highlighting.AbortSemanticHighlightingException;
+import org.eclipse.dltk.ui.editor.highlighting.ISemanticHighlighter;
+import org.eclipse.dltk.ui.editor.highlighting.ISemanticHighlightingRequestor;
 
-final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
+public class JavaScriptXmlHighlighter implements ISemanticHighlighter {
 
-	private static final int HL_XML_TAG = 0;
-	private static final int HL_XML_ATTRIBUTE = 1;
-	private static final int HL_XML_COMMENT = 2;
-	private static final int HL_KEYWORD = 3;
+	private static final String HL_XML_TAG = JavascriptColorConstants.JS_XML_TAG_NAME;
+	private static final String HL_XML_ATTRIBUTE = JavascriptColorConstants.JS_XML_ATTR_NAME;
+	private static final String HL_XML_COMMENT = JavascriptColorConstants.JS_XML_COMMENT_NAME;
+	private static final String HL_KEYWORD = JavascriptColorConstants.JS_KEYWORD;
 
-	@Override
-	protected boolean doHighlighting(IModuleSource code) throws Exception {
+	public String[] getHighlightingKeys() {
+		return new String[] { HL_XML_TAG, HL_XML_ATTRIBUTE, HL_XML_COMMENT,
+				HL_KEYWORD };
+	}
+
+	public void process(IModuleSource code,
+			ISemanticHighlightingRequestor requestor) {
 		final Script declaration = JavaScriptParserUtil.parse(code, null);
 		if (declaration == null) {
-			return false;
+			throw new AbortSemanticHighlightingException();
 		}
 		for (XmlLiteral literal : ASTUtil.select(declaration, XmlLiteral.class)) {
 			for (XmlFragment fragment : literal.getFragments()) {
@@ -43,13 +47,13 @@ final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
 					final List<Token> tokens = tokenizer.getRegions();
 					for (Token token : tokens) {
 						if (token.context == XMLTokenizer.XML_TAG_NAME) {
-							addRange(offset, token, HL_XML_TAG);
+							addRange(requestor, offset, token, HL_XML_TAG);
 						} else if (token.context == XMLTokenizer.XML_TAG_ATTRIBUTE_NAME) {
-							addRange(offset, token, HL_XML_ATTRIBUTE);
+							addRange(requestor, offset, token, HL_XML_ATTRIBUTE);
 						} else if (token.context == XMLTokenizer.XML_COMMENT_OPEN
 								|| token.context == XMLTokenizer.XML_COMMENT_TEXT
 								|| token.context == XMLTokenizer.XML_COMMENT_CLOSE) {
-							addRange(offset, token, HL_XML_COMMENT);
+							addRange(requestor, offset, token, HL_XML_COMMENT);
 						} else if (token.context == XMLTokenizer.XML_TAG_ATTRIBUTE_VALUE) {
 							//
 						}
@@ -66,14 +70,15 @@ final class JavaScriptPositionUpdater extends AbstractSemanticHighlighter {
 			} else {
 				continue;
 			}
-			addPosition(keyword.sourceStart(), keyword.sourceEnd(), HL_KEYWORD);
+			requestor.addPosition(keyword.sourceStart(), keyword.sourceEnd(),
+					HL_KEYWORD);
 		}
-		return true;
 	}
 
-	private void addRange(int start, Token token, int highlightingIndex) {
-		addPosition(start + token.start,
-				start + token.start + token.textLength, highlightingIndex);
+	private static void addRange(ISemanticHighlightingRequestor requestor,
+			int start, Token token, String highlightingKey) {
+		requestor.addPosition(start + token.start, start + token.start
+				+ token.textLength, highlightingKey);
 	}
 
 }
