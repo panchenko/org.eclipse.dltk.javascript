@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2011-01-11 18:18:38
+// $ANTLR 3.0.1 JS.g 2011-02-01 21:41:12
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -406,7 +406,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start token
-    // JS.g:628:1: token : ( reservedWord | identifier | XMLFragment | XMLFragmentEnd | punctuator | NULL | booleanLiteral | numericLiteral | StringLiteral | xmlAttribute );
+    // JS.g:631:1: token : ( reservedWord | identifier | XMLFragment | XMLFragmentEnd | punctuator | NULL | booleanLiteral | numericLiteral | StringLiteral | xmlAttribute );
     public final token_return token() throws RecognitionException {
         token_return retval = new token_return();
         retval.start = input.LT(1);
@@ -436,7 +436,7 @@ public class JSParser extends Parser {
         Object StringLiteral9_tree=null;
 
         try {
-            // JS.g:629:2: ( reservedWord | identifier | XMLFragment | XMLFragmentEnd | punctuator | NULL | booleanLiteral | numericLiteral | StringLiteral | xmlAttribute )
+            // JS.g:632:2: ( reservedWord | identifier | XMLFragment | XMLFragmentEnd | punctuator | NULL | booleanLiteral | numericLiteral | StringLiteral | xmlAttribute )
             int alt1=10;
             switch ( input.LA(1) ) {
             case WXML:
@@ -619,14 +619,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("628:1: token : ( reservedWord | identifier | XMLFragment | XMLFragmentEnd | punctuator | NULL | booleanLiteral | numericLiteral | StringLiteral | xmlAttribute );", 1, 0, input);
+                    new NoViableAltException("631:1: token : ( reservedWord | identifier | XMLFragment | XMLFragmentEnd | punctuator | NULL | booleanLiteral | numericLiteral | StringLiteral | xmlAttribute );", 1, 0, input);
 
                 throw nvae;
             }
 
             switch (alt1) {
                 case 1 :
-                    // JS.g:629:4: reservedWord
+                    // JS.g:632:4: reservedWord
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -639,7 +639,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:630:4: identifier
+                    // JS.g:633:4: identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -652,7 +652,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:631:4: XMLFragment
+                    // JS.g:634:4: XMLFragment
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -665,7 +665,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:632:4: XMLFragmentEnd
+                    // JS.g:635:4: XMLFragmentEnd
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -678,7 +678,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // JS.g:633:4: punctuator
+                    // JS.g:636:4: punctuator
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -691,7 +691,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // JS.g:634:4: NULL
+                    // JS.g:637:4: NULL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -704,7 +704,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // JS.g:635:4: booleanLiteral
+                    // JS.g:638:4: booleanLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -717,7 +717,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // JS.g:636:4: numericLiteral
+                    // JS.g:639:4: numericLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -730,7 +730,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 9 :
-                    // JS.g:637:4: StringLiteral
+                    // JS.g:640:4: StringLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -743,7 +743,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 10 :
-                    // JS.g:638:4: xmlAttribute
+                    // JS.g:641:4: xmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -782,7 +782,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start reservedWord
-    // JS.g:643:1: reservedWord : keyword ;
+    // JS.g:646:1: reservedWord : keyword ;
     public final reservedWord_return reservedWord() throws RecognitionException {
         reservedWord_return retval = new reservedWord_return();
         retval.start = input.LT(1);
@@ -794,8 +794,8 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:644:2: ( keyword )
-            // JS.g:644:4: keyword
+            // JS.g:647:2: ( keyword )
+            // JS.g:647:4: keyword
             {
             root_0 = (Object)adaptor.nil();
 
@@ -832,7 +832,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start keyword
-    // JS.g:651:1: keyword : ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | GET | SET | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | NAMESPACE | WXML | YIELD );
+    // JS.g:654:1: keyword : ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | GET | SET | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | NAMESPACE | WXML | YIELD );
     public final keyword_return keyword() throws RecognitionException {
         keyword_return retval = new keyword_return();
         retval.start = input.LT(1);
@@ -844,7 +844,7 @@ public class JSParser extends Parser {
         Object set12_tree=null;
 
         try {
-            // JS.g:652:2: ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | GET | SET | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | NAMESPACE | WXML | YIELD )
+            // JS.g:655:2: ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | EACH | FUNCTION | GET | SET | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH | NAMESPACE | WXML | YIELD )
             // JS.g:
             {
             root_0 = (Object)adaptor.nil();
@@ -889,7 +889,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start futureReservedWord
-    // JS.g:689:1: futureReservedWord : ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE );
+    // JS.g:692:1: futureReservedWord : ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE );
     public final futureReservedWord_return futureReservedWord() throws RecognitionException {
         futureReservedWord_return retval = new futureReservedWord_return();
         retval.start = input.LT(1);
@@ -901,7 +901,7 @@ public class JSParser extends Parser {
         Object set13_tree=null;
 
         try {
-            // JS.g:690:2: ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE )
+            // JS.g:693:2: ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE )
             // JS.g:
             {
             root_0 = (Object)adaptor.nil();
@@ -946,7 +946,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start identifier
-    // JS.g:762:1: identifier : ( WXML | GET | SET | EACH | NAMESPACE | futureReservedWord -> ^( RESERVED_WORD futureReservedWord ) | Identifier );
+    // JS.g:765:1: identifier : ( WXML | GET | SET | EACH | NAMESPACE | futureReservedWord -> ^( RESERVED_WORD futureReservedWord ) | Identifier );
     public final identifier_return identifier() throws RecognitionException {
         identifier_return retval = new identifier_return();
         retval.start = input.LT(1);
@@ -970,7 +970,7 @@ public class JSParser extends Parser {
         Object Identifier20_tree=null;
         RewriteRuleSubtreeStream stream_futureReservedWord=new RewriteRuleSubtreeStream(adaptor,"rule futureReservedWord");
         try {
-            // JS.g:763:3: ( WXML | GET | SET | EACH | NAMESPACE | futureReservedWord -> ^( RESERVED_WORD futureReservedWord ) | Identifier )
+            // JS.g:766:3: ( WXML | GET | SET | EACH | NAMESPACE | futureReservedWord -> ^( RESERVED_WORD futureReservedWord ) | Identifier )
             int alt2=7;
             switch ( input.LA(1) ) {
             case WXML:
@@ -1039,14 +1039,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("762:1: identifier : ( WXML | GET | SET | EACH | NAMESPACE | futureReservedWord -> ^( RESERVED_WORD futureReservedWord ) | Identifier );", 2, 0, input);
+                    new NoViableAltException("765:1: identifier : ( WXML | GET | SET | EACH | NAMESPACE | futureReservedWord -> ^( RESERVED_WORD futureReservedWord ) | Identifier );", 2, 0, input);
 
                 throw nvae;
             }
 
             switch (alt2) {
                 case 1 :
-                    // JS.g:763:5: WXML
+                    // JS.g:766:5: WXML
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1059,7 +1059,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:764:5: GET
+                    // JS.g:767:5: GET
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1072,7 +1072,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:765:5: SET
+                    // JS.g:768:5: SET
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1085,7 +1085,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:766:5: EACH
+                    // JS.g:769:5: EACH
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1098,7 +1098,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // JS.g:767:5: NAMESPACE
+                    // JS.g:770:5: NAMESPACE
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1111,7 +1111,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // JS.g:768:5: futureReservedWord
+                    // JS.g:771:5: futureReservedWord
                     {
                     pushFollow(FOLLOW_futureReservedWord_in_identifier2496);
                     futureReservedWord19=futureReservedWord();
@@ -1129,9 +1129,9 @@ public class JSParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 768:24: -> ^( RESERVED_WORD futureReservedWord )
+                    // 771:24: -> ^( RESERVED_WORD futureReservedWord )
                     {
-                        // JS.g:768:27: ^( RESERVED_WORD futureReservedWord )
+                        // JS.g:771:27: ^( RESERVED_WORD futureReservedWord )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(RESERVED_WORD, "RESERVED_WORD"), root_1);
@@ -1148,7 +1148,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // JS.g:769:5: Identifier
+                    // JS.g:772:5: Identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1187,7 +1187,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start xmlAttribute
-    // JS.g:772:1: xmlAttribute : ( AT identifier -> ^( XmlAttribute AT identifier ) | AT MUL -> ^( XmlAttribute AT MUL ) );
+    // JS.g:775:1: xmlAttribute : ( AT identifier -> ^( XmlAttribute AT identifier ) | AT MUL -> ^( XmlAttribute AT MUL ) );
     public final xmlAttribute_return xmlAttribute() throws RecognitionException {
         xmlAttribute_return retval = new xmlAttribute_return();
         retval.start = input.LT(1);
@@ -1207,7 +1207,7 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_MUL=new RewriteRuleTokenStream(adaptor,"token MUL");
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         try {
-            // JS.g:773:3: ( AT identifier -> ^( XmlAttribute AT identifier ) | AT MUL -> ^( XmlAttribute AT MUL ) )
+            // JS.g:776:3: ( AT identifier -> ^( XmlAttribute AT identifier ) | AT MUL -> ^( XmlAttribute AT MUL ) )
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -1222,20 +1222,20 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("772:1: xmlAttribute : ( AT identifier -> ^( XmlAttribute AT identifier ) | AT MUL -> ^( XmlAttribute AT MUL ) );", 3, 1, input);
+                        new NoViableAltException("775:1: xmlAttribute : ( AT identifier -> ^( XmlAttribute AT identifier ) | AT MUL -> ^( XmlAttribute AT MUL ) );", 3, 1, input);
 
                     throw nvae;
                 }
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("772:1: xmlAttribute : ( AT identifier -> ^( XmlAttribute AT identifier ) | AT MUL -> ^( XmlAttribute AT MUL ) );", 3, 0, input);
+                    new NoViableAltException("775:1: xmlAttribute : ( AT identifier -> ^( XmlAttribute AT identifier ) | AT MUL -> ^( XmlAttribute AT MUL ) );", 3, 0, input);
 
                 throw nvae;
             }
             switch (alt3) {
                 case 1 :
-                    // JS.g:773:5: AT identifier
+                    // JS.g:776:5: AT identifier
                     {
                     AT21=(Token)input.LT(1);
                     match(input,AT,FOLLOW_AT_in_xmlAttribute2521); 
@@ -1248,7 +1248,7 @@ public class JSParser extends Parser {
                     stream_identifier.add(identifier22.getTree());
 
                     // AST REWRITE
-                    // elements: identifier, AT
+                    // elements: AT, identifier
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1257,9 +1257,9 @@ public class JSParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 773:19: -> ^( XmlAttribute AT identifier )
+                    // 776:19: -> ^( XmlAttribute AT identifier )
                     {
-                        // JS.g:773:22: ^( XmlAttribute AT identifier )
+                        // JS.g:776:22: ^( XmlAttribute AT identifier )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(XmlAttribute, "XmlAttribute"), root_1);
@@ -1277,7 +1277,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:774:5: AT MUL
+                    // JS.g:777:5: AT MUL
                     {
                     AT23=(Token)input.LT(1);
                     match(input,AT,FOLLOW_AT_in_xmlAttribute2539); 
@@ -1289,7 +1289,7 @@ public class JSParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: MUL, AT
+                    // elements: AT, MUL
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -1298,9 +1298,9 @@ public class JSParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 774:12: -> ^( XmlAttribute AT MUL )
+                    // 777:12: -> ^( XmlAttribute AT MUL )
                     {
-                        // JS.g:774:15: ^( XmlAttribute AT MUL )
+                        // JS.g:777:15: ^( XmlAttribute AT MUL )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(XmlAttribute, "XmlAttribute"), root_1);
@@ -1344,7 +1344,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start punctuator
-    // JS.g:781:1: punctuator : ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | DOTDOT | COLONCOLON );
+    // JS.g:784:1: punctuator : ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | DOTDOT | COLONCOLON );
     public final punctuator_return punctuator() throws RecognitionException {
         punctuator_return retval = new punctuator_return();
         retval.start = input.LT(1);
@@ -1356,7 +1356,7 @@ public class JSParser extends Parser {
         Object set25_tree=null;
 
         try {
-            // JS.g:782:2: ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | DOTDOT | COLONCOLON )
+            // JS.g:785:2: ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS | DOTDOT | COLONCOLON )
             // JS.g:
             {
             root_0 = (Object)adaptor.nil();
@@ -1401,7 +1401,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start literal
-    // JS.g:838:1: literal : ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral | xmlLiteral );
+    // JS.g:841:1: literal : ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral | xmlLiteral );
     public final literal_return literal() throws RecognitionException {
         literal_return retval = new literal_return();
         retval.start = input.LT(1);
@@ -1423,7 +1423,7 @@ public class JSParser extends Parser {
         Object RegularExpressionLiteral30_tree=null;
 
         try {
-            // JS.g:839:2: ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral | xmlLiteral )
+            // JS.g:842:2: ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral | xmlLiteral )
             int alt4=6;
             switch ( input.LA(1) ) {
             case NULL:
@@ -1462,14 +1462,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("838:1: literal : ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral | xmlLiteral );", 4, 0, input);
+                    new NoViableAltException("841:1: literal : ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral | xmlLiteral );", 4, 0, input);
 
                 throw nvae;
             }
 
             switch (alt4) {
                 case 1 :
-                    // JS.g:839:4: NULL
+                    // JS.g:842:4: NULL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1482,7 +1482,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:840:4: booleanLiteral
+                    // JS.g:843:4: booleanLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1495,7 +1495,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:841:4: numericLiteral
+                    // JS.g:844:4: numericLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1508,7 +1508,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:842:4: StringLiteral
+                    // JS.g:845:4: StringLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1521,7 +1521,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // JS.g:843:4: RegularExpressionLiteral
+                    // JS.g:846:4: RegularExpressionLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1534,7 +1534,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // JS.g:844:4: xmlLiteral
+                    // JS.g:847:4: xmlLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1573,7 +1573,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start xmlLiteral
-    // JS.g:847:1: xmlLiteral : ( XMLFragment LBRACE expression RBRACE )* XMLFragmentEnd -> ^( XML_LITERAL ( XMLFragment )* ( expression )* XMLFragmentEnd ) ;
+    // JS.g:850:1: xmlLiteral : ( XMLFragment LBRACE expression RBRACE )* XMLFragmentEnd -> ^( XML_LITERAL ( XMLFragment )* ( expression )* XMLFragmentEnd ) ;
     public final xmlLiteral_return xmlLiteral() throws RecognitionException {
         xmlLiteral_return retval = new xmlLiteral_return();
         retval.start = input.LT(1);
@@ -1597,10 +1597,10 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LBRACE=new RewriteRuleTokenStream(adaptor,"token LBRACE");
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         try {
-            // JS.g:848:2: ( ( XMLFragment LBRACE expression RBRACE )* XMLFragmentEnd -> ^( XML_LITERAL ( XMLFragment )* ( expression )* XMLFragmentEnd ) )
-            // JS.g:848:4: ( XMLFragment LBRACE expression RBRACE )* XMLFragmentEnd
+            // JS.g:851:2: ( ( XMLFragment LBRACE expression RBRACE )* XMLFragmentEnd -> ^( XML_LITERAL ( XMLFragment )* ( expression )* XMLFragmentEnd ) )
+            // JS.g:851:4: ( XMLFragment LBRACE expression RBRACE )* XMLFragmentEnd
             {
-            // JS.g:848:4: ( XMLFragment LBRACE expression RBRACE )*
+            // JS.g:851:4: ( XMLFragment LBRACE expression RBRACE )*
             loop5:
             do {
                 int alt5=2;
@@ -1613,7 +1613,7 @@ public class JSParser extends Parser {
 
                 switch (alt5) {
             	case 1 :
-            	    // JS.g:849:6: XMLFragment LBRACE expression RBRACE
+            	    // JS.g:852:6: XMLFragment LBRACE expression RBRACE
             	    {
             	    XMLFragment32=(Token)input.LT(1);
             	    match(input,XMLFragment,FOLLOW_XMLFragment_in_xmlLiteral2870); 
@@ -1649,7 +1649,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: XMLFragment, XMLFragmentEnd, expression
+            // elements: expression, XMLFragment, XMLFragmentEnd
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -1658,20 +1658,20 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 854:4: -> ^( XML_LITERAL ( XMLFragment )* ( expression )* XMLFragmentEnd )
+            // 857:4: -> ^( XML_LITERAL ( XMLFragment )* ( expression )* XMLFragmentEnd )
             {
-                // JS.g:854:7: ^( XML_LITERAL ( XMLFragment )* ( expression )* XMLFragmentEnd )
+                // JS.g:857:7: ^( XML_LITERAL ( XMLFragment )* ( expression )* XMLFragmentEnd )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(XML_LITERAL, "XML_LITERAL"), root_1);
 
-                // JS.g:854:21: ( XMLFragment )*
+                // JS.g:857:21: ( XMLFragment )*
                 while ( stream_XMLFragment.hasNext() ) {
                     adaptor.addChild(root_1, stream_XMLFragment.next());
 
                 }
                 stream_XMLFragment.reset();
-                // JS.g:854:34: ( expression )*
+                // JS.g:857:34: ( expression )*
                 while ( stream_expression.hasNext() ) {
                     adaptor.addChild(root_1, stream_expression.next());
 
@@ -1714,7 +1714,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start booleanLiteral
-    // JS.g:878:1: booleanLiteral : ( TRUE | FALSE );
+    // JS.g:881:1: booleanLiteral : ( TRUE | FALSE );
     public final booleanLiteral_return booleanLiteral() throws RecognitionException {
         booleanLiteral_return retval = new booleanLiteral_return();
         retval.start = input.LT(1);
@@ -1726,7 +1726,7 @@ public class JSParser extends Parser {
         Object set37_tree=null;
 
         try {
-            // JS.g:879:2: ( TRUE | FALSE )
+            // JS.g:882:2: ( TRUE | FALSE )
             // JS.g:
             {
             root_0 = (Object)adaptor.nil();
@@ -1771,7 +1771,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start numericLiteral
-    // JS.g:925:1: numericLiteral : ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral );
+    // JS.g:928:1: numericLiteral : ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral );
     public final numericLiteral_return numericLiteral() throws RecognitionException {
         numericLiteral_return retval = new numericLiteral_return();
         retval.start = input.LT(1);
@@ -1783,7 +1783,7 @@ public class JSParser extends Parser {
         Object set38_tree=null;
 
         try {
-            // JS.g:926:2: ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral )
+            // JS.g:929:2: ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral )
             // JS.g:
             {
             root_0 = (Object)adaptor.nil();
@@ -1828,7 +1828,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start primaryExpression
-    // JS.g:1015:1: primaryExpression : ( THIS | identifier | xmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression );
+    // JS.g:1018:1: primaryExpression : ( THIS | identifier | xmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression );
     public final primaryExpression_return primaryExpression() throws RecognitionException {
         primaryExpression_return retval = new primaryExpression_return();
         retval.start = input.LT(1);
@@ -1852,7 +1852,7 @@ public class JSParser extends Parser {
         Object THIS39_tree=null;
 
         try {
-            // JS.g:1016:2: ( THIS | identifier | xmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression )
+            // JS.g:1019:2: ( THIS | identifier | xmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression )
             int alt6=7;
             switch ( input.LA(1) ) {
             case THIS:
@@ -1936,14 +1936,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1015:1: primaryExpression : ( THIS | identifier | xmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression );", 6, 0, input);
+                    new NoViableAltException("1018:1: primaryExpression : ( THIS | identifier | xmlAttribute | literal | arrayLiteral | objectLiteral | parenExpression );", 6, 0, input);
 
                 throw nvae;
             }
 
             switch (alt6) {
                 case 1 :
-                    // JS.g:1016:4: THIS
+                    // JS.g:1019:4: THIS
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1956,7 +1956,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1017:4: identifier
+                    // JS.g:1020:4: identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1969,7 +1969,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1018:4: xmlAttribute
+                    // JS.g:1021:4: xmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1982,7 +1982,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1019:4: literal
+                    // JS.g:1022:4: literal
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -1995,7 +1995,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // JS.g:1020:4: arrayLiteral
+                    // JS.g:1023:4: arrayLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2008,7 +2008,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // JS.g:1021:4: objectLiteral
+                    // JS.g:1024:4: objectLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2021,7 +2021,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // JS.g:1022:4: parenExpression
+                    // JS.g:1025:4: parenExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2060,7 +2060,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start parenExpression
-    // JS.g:1025:1: parenExpression : lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) ;
+    // JS.g:1028:1: parenExpression : lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) ;
     public final parenExpression_return parenExpression() throws RecognitionException {
         parenExpression_return retval = new parenExpression_return();
         retval.start = input.LT(1);
@@ -2078,8 +2078,8 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         try {
-            // JS.g:1026:3: (lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) )
-            // JS.g:1026:5: lpar= LPAREN expression RPAREN
+            // JS.g:1029:3: (lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) )
+            // JS.g:1029:5: lpar= LPAREN expression RPAREN
             {
             lpar=(Token)input.LT(1);
             match(input,LPAREN,FOLLOW_LPAREN_in_parenExpression3743); 
@@ -2105,9 +2105,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1026:37: -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
+            // 1029:37: -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
             {
-                // JS.g:1026:40: ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
+                // JS.g:1029:40: ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(PAREXPR, lpar,  "PAREXPR"), root_1);
@@ -2148,7 +2148,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start arrayLiteral
-    // JS.g:1029:1: arrayLiteral : lb= LBRACK ( arrayItem ( COMMA ( arrayItem )? )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) ;
+    // JS.g:1032:1: arrayLiteral : lb= LBRACK ( arrayItem ( COMMA ( arrayItem )? )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) ;
     public final arrayLiteral_return arrayLiteral() throws RecognitionException {
         arrayLiteral_return retval = new arrayLiteral_return();
         retval.start = input.LT(1);
@@ -2171,14 +2171,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_arrayItem=new RewriteRuleSubtreeStream(adaptor,"rule arrayItem");
         try {
-            // JS.g:1030:2: (lb= LBRACK ( arrayItem ( COMMA ( arrayItem )? )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) )
-            // JS.g:1030:4: lb= LBRACK ( arrayItem ( COMMA ( arrayItem )? )* )? RBRACK
+            // JS.g:1033:2: (lb= LBRACK ( arrayItem ( COMMA ( arrayItem )? )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) )
+            // JS.g:1033:4: lb= LBRACK ( arrayItem ( COMMA ( arrayItem )? )* )? RBRACK
             {
             lb=(Token)input.LT(1);
             match(input,LBRACK,FOLLOW_LBRACK_in_arrayLiteral3772); 
             stream_LBRACK.add(lb);
 
-            // JS.g:1030:14: ( arrayItem ( COMMA ( arrayItem )? )* )?
+            // JS.g:1033:14: ( arrayItem ( COMMA ( arrayItem )? )* )?
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -2194,14 +2194,14 @@ public class JSParser extends Parser {
             }
             switch (alt9) {
                 case 1 :
-                    // JS.g:1030:16: arrayItem ( COMMA ( arrayItem )? )*
+                    // JS.g:1033:16: arrayItem ( COMMA ( arrayItem )? )*
                     {
                     pushFollow(FOLLOW_arrayItem_in_arrayLiteral3776);
                     arrayItem48=arrayItem();
                     _fsp--;
 
                     stream_arrayItem.add(arrayItem48.getTree());
-                    // JS.g:1030:26: ( COMMA ( arrayItem )? )*
+                    // JS.g:1033:26: ( COMMA ( arrayItem )? )*
                     loop8:
                     do {
                         int alt8=2;
@@ -2214,13 +2214,13 @@ public class JSParser extends Parser {
 
                         switch (alt8) {
                     	case 1 :
-                    	    // JS.g:1030:28: COMMA ( arrayItem )?
+                    	    // JS.g:1033:28: COMMA ( arrayItem )?
                     	    {
                     	    COMMA49=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_arrayLiteral3780); 
                     	    stream_COMMA.add(COMMA49);
 
-                    	    // JS.g:1030:34: ( arrayItem )?
+                    	    // JS.g:1033:34: ( arrayItem )?
                     	    int alt7=2;
                     	    switch ( input.LA(1) ) {
                     	        case NULL:
@@ -2312,7 +2312,7 @@ public class JSParser extends Parser {
 
                     	    switch (alt7) {
                     	        case 1 :
-                    	            // JS.g:1030:34: arrayItem
+                    	            // JS.g:1033:34: arrayItem
                     	            {
                     	            pushFollow(FOLLOW_arrayItem_in_arrayLiteral3782);
                     	            arrayItem50=arrayItem();
@@ -2355,14 +2355,14 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1031:2: -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
+            // 1034:2: -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
             {
-                // JS.g:1031:5: ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
+                // JS.g:1034:5: ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(ARRAY, lb,  "ARRAY"), root_1);
 
-                // JS.g:1031:28: ( arrayItem )*
+                // JS.g:1034:28: ( arrayItem )*
                 while ( stream_arrayItem.hasNext() ) {
                     adaptor.addChild(root_1, stream_arrayItem.next());
 
@@ -2403,7 +2403,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start arrayItem
-    // JS.g:1034:1: arrayItem : (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) ;
+    // JS.g:1037:1: arrayItem : (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) ;
     public final arrayItem_return arrayItem() throws RecognitionException {
         arrayItem_return retval = new arrayItem_return();
         retval.start = input.LT(1);
@@ -2415,10 +2415,10 @@ public class JSParser extends Parser {
 
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // JS.g:1035:2: ( (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) )
-            // JS.g:1035:4: (expr= assignmentExpression | {...}?)
+            // JS.g:1038:2: ( (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) )
+            // JS.g:1038:4: (expr= assignmentExpression | {...}?)
             {
-            // JS.g:1035:4: (expr= assignmentExpression | {...}?)
+            // JS.g:1038:4: (expr= assignmentExpression | {...}?)
             int alt10=2;
             int LA10_0 = input.LA(1);
 
@@ -2430,13 +2430,13 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1035:4: (expr= assignmentExpression | {...}?)", 10, 0, input);
+                    new NoViableAltException("1038:4: (expr= assignmentExpression | {...}?)", 10, 0, input);
 
                 throw nvae;
             }
             switch (alt10) {
                 case 1 :
-                    // JS.g:1035:6: expr= assignmentExpression
+                    // JS.g:1038:6: expr= assignmentExpression
                     {
                     pushFollow(FOLLOW_assignmentExpression_in_arrayItem3819);
                     expr=assignmentExpression();
@@ -2447,7 +2447,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1035:34: {...}?
+                    // JS.g:1038:34: {...}?
                     {
                     if ( !( input.LA(1) == COMMA ) ) {
                         throw new FailedPredicateException(input, "arrayItem", " input.LA(1) == COMMA ");
@@ -2470,14 +2470,14 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_expr=new RewriteRuleSubtreeStream(adaptor,"token expr",expr!=null?expr.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1036:2: -> ^( ITEM ( $expr)? )
+            // 1039:2: -> ^( ITEM ( $expr)? )
             {
-                // JS.g:1036:5: ^( ITEM ( $expr)? )
+                // JS.g:1039:5: ^( ITEM ( $expr)? )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(ITEM, "ITEM"), root_1);
 
-                // JS.g:1036:13: ( $expr)?
+                // JS.g:1039:13: ( $expr)?
                 if ( stream_expr.hasNext() ) {
                     adaptor.addChild(root_1, stream_expr.next());
 
@@ -2518,7 +2518,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start objectLiteral
-    // JS.g:1039:1: objectLiteral : lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )? )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ( COMMA )* ) ;
+    // JS.g:1042:1: objectLiteral : lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )? )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ( COMMA )* ) ;
     public final objectLiteral_return objectLiteral() throws RecognitionException {
         objectLiteral_return retval = new objectLiteral_return();
         retval.start = input.LT(1);
@@ -2543,14 +2543,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LBRACE=new RewriteRuleTokenStream(adaptor,"token LBRACE");
         RewriteRuleSubtreeStream stream_objectPropertyInitializer=new RewriteRuleSubtreeStream(adaptor,"rule objectPropertyInitializer");
         try {
-            // JS.g:1040:2: (lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )? )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ( COMMA )* ) )
-            // JS.g:1040:4: lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )? )? RBRACE
+            // JS.g:1043:2: (lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )? )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ( COMMA )* ) )
+            // JS.g:1043:4: lb= LBRACE ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )? )? RBRACE
             {
             lb=(Token)input.LT(1);
             match(input,LBRACE,FOLLOW_LBRACE_in_objectLiteral3851); 
             stream_LBRACE.add(lb);
 
-            // JS.g:1040:14: ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )? )?
+            // JS.g:1043:14: ( objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )? )?
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -2559,14 +2559,14 @@ public class JSParser extends Parser {
             }
             switch (alt13) {
                 case 1 :
-                    // JS.g:1040:16: objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )?
+                    // JS.g:1043:16: objectPropertyInitializer ( COMMA objectPropertyInitializer )* ( COMMA )?
                     {
                     pushFollow(FOLLOW_objectPropertyInitializer_in_objectLiteral3855);
                     objectPropertyInitializer52=objectPropertyInitializer();
                     _fsp--;
 
                     stream_objectPropertyInitializer.add(objectPropertyInitializer52.getTree());
-                    // JS.g:1040:42: ( COMMA objectPropertyInitializer )*
+                    // JS.g:1043:42: ( COMMA objectPropertyInitializer )*
                     loop11:
                     do {
                         int alt11=2;
@@ -2585,7 +2585,7 @@ public class JSParser extends Parser {
 
                         switch (alt11) {
                     	case 1 :
-                    	    // JS.g:1040:44: COMMA objectPropertyInitializer
+                    	    // JS.g:1043:44: COMMA objectPropertyInitializer
                     	    {
                     	    COMMA53=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_objectLiteral3859); 
@@ -2605,7 +2605,7 @@ public class JSParser extends Parser {
                         }
                     } while (true);
 
-                    // JS.g:1040:79: ( COMMA )?
+                    // JS.g:1043:79: ( COMMA )?
                     int alt12=2;
                     int LA12_0 = input.LA(1);
 
@@ -2614,7 +2614,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt12) {
                         case 1 :
-                            // JS.g:1040:79: COMMA
+                            // JS.g:1043:79: COMMA
                             {
                             COMMA55=(Token)input.LT(1);
                             match(input,COMMA,FOLLOW_COMMA_in_objectLiteral3866); 
@@ -2638,7 +2638,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: objectPropertyInitializer, COMMA
+            // elements: COMMA, objectPropertyInitializer
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2647,20 +2647,20 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1041:2: -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ( COMMA )* )
+            // 1044:2: -> ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ( COMMA )* )
             {
-                // JS.g:1041:5: ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ( COMMA )* )
+                // JS.g:1044:5: ^( OBJECT[$lb, \"OBJECT\"] ( objectPropertyInitializer )* ( COMMA )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(OBJECT, lb,  "OBJECT"), root_1);
 
-                // JS.g:1041:30: ( objectPropertyInitializer )*
+                // JS.g:1044:30: ( objectPropertyInitializer )*
                 while ( stream_objectPropertyInitializer.hasNext() ) {
                     adaptor.addChild(root_1, stream_objectPropertyInitializer.next());
 
                 }
                 stream_objectPropertyInitializer.reset();
-                // JS.g:1041:57: ( COMMA )*
+                // JS.g:1044:57: ( COMMA )*
                 while ( stream_COMMA.hasNext() ) {
                     adaptor.addChild(root_1, stream_COMMA.next());
 
@@ -2701,7 +2701,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start objectPropertyInitializer
-    // JS.g:1044:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );
+    // JS.g:1047:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );
     public final objectPropertyInitializer_return objectPropertyInitializer() throws RecognitionException {
         objectPropertyInitializer_return retval = new objectPropertyInitializer_return();
         retval.start = input.LT(1);
@@ -2717,7 +2717,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1045:3: ( nameValuePair | getMethodDeclaration | setMethodDeclaration )
+            // JS.g:1048:3: ( nameValuePair | getMethodDeclaration | setMethodDeclaration )
             int alt14=3;
             switch ( input.LA(1) ) {
             case EACH:
@@ -2775,7 +2775,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1044:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );", 14, 2, input);
+                        new NoViableAltException("1047:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );", 14, 2, input);
 
                     throw nvae;
                 }
@@ -2793,7 +2793,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1044:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );", 14, 3, input);
+                        new NoViableAltException("1047:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );", 14, 3, input);
 
                     throw nvae;
                 }
@@ -2801,14 +2801,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1044:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );", 14, 0, input);
+                    new NoViableAltException("1047:1: objectPropertyInitializer : ( nameValuePair | getMethodDeclaration | setMethodDeclaration );", 14, 0, input);
 
                 throw nvae;
             }
 
             switch (alt14) {
                 case 1 :
-                    // JS.g:1045:5: nameValuePair
+                    // JS.g:1048:5: nameValuePair
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2821,7 +2821,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1046:5: getMethodDeclaration
+                    // JS.g:1049:5: getMethodDeclaration
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2834,7 +2834,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1047:5: setMethodDeclaration
+                    // JS.g:1050:5: setMethodDeclaration
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -2873,7 +2873,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start nameValuePair
-    // JS.g:1050:1: nameValuePair : propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) ;
+    // JS.g:1053:1: nameValuePair : propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) ;
     public final nameValuePair_return nameValuePair() throws RecognitionException {
         nameValuePair_return retval = new nameValuePair_return();
         retval.start = input.LT(1);
@@ -2891,8 +2891,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_propertyName=new RewriteRuleSubtreeStream(adaptor,"rule propertyName");
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // JS.g:1051:2: ( propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) )
-            // JS.g:1051:4: propertyName COLON assignmentExpression
+            // JS.g:1054:2: ( propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) )
+            // JS.g:1054:4: propertyName COLON assignmentExpression
             {
             pushFollow(FOLLOW_propertyName_in_nameValuePair3924);
             propertyName60=propertyName();
@@ -2910,7 +2910,7 @@ public class JSParser extends Parser {
             stream_assignmentExpression.add(assignmentExpression62.getTree());
 
             // AST REWRITE
-            // elements: assignmentExpression, propertyName
+            // elements: propertyName, assignmentExpression
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2919,9 +2919,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1052:2: -> ^( NAMEDVALUE propertyName assignmentExpression )
+            // 1055:2: -> ^( NAMEDVALUE propertyName assignmentExpression )
             {
-                // JS.g:1052:5: ^( NAMEDVALUE propertyName assignmentExpression )
+                // JS.g:1055:5: ^( NAMEDVALUE propertyName assignmentExpression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(NAMEDVALUE, "NAMEDVALUE"), root_1);
@@ -2963,7 +2963,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start propertyName
-    // JS.g:1055:1: propertyName : ( identifier | StringLiteral | numericLiteral | xmlAttribute );
+    // JS.g:1058:1: propertyName : ( identifier | StringLiteral | numericLiteral | xmlAttribute );
     public final propertyName_return propertyName() throws RecognitionException {
         propertyName_return retval = new propertyName_return();
         retval.start = input.LT(1);
@@ -2981,7 +2981,7 @@ public class JSParser extends Parser {
         Object StringLiteral64_tree=null;
 
         try {
-            // JS.g:1056:2: ( identifier | StringLiteral | numericLiteral | xmlAttribute )
+            // JS.g:1059:2: ( identifier | StringLiteral | numericLiteral | xmlAttribute )
             int alt15=4;
             switch ( input.LA(1) ) {
             case EACH:
@@ -3043,14 +3043,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1055:1: propertyName : ( identifier | StringLiteral | numericLiteral | xmlAttribute );", 15, 0, input);
+                    new NoViableAltException("1058:1: propertyName : ( identifier | StringLiteral | numericLiteral | xmlAttribute );", 15, 0, input);
 
                 throw nvae;
             }
 
             switch (alt15) {
                 case 1 :
-                    // JS.g:1056:4: identifier
+                    // JS.g:1059:4: identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3063,7 +3063,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1057:4: StringLiteral
+                    // JS.g:1060:4: StringLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3076,7 +3076,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1058:4: numericLiteral
+                    // JS.g:1061:4: numericLiteral
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3089,7 +3089,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1059:4: xmlAttribute
+                    // JS.g:1062:4: xmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3128,7 +3128,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start memberExpression
-    // JS.g:1071:1: memberExpression : ( primaryExpression | functionExpression | newExpression );
+    // JS.g:1074:1: memberExpression : ( primaryExpression | functionExpression | newExpression );
     public final memberExpression_return memberExpression() throws RecognitionException {
         memberExpression_return retval = new memberExpression_return();
         retval.start = input.LT(1);
@@ -3144,7 +3144,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1072:2: ( primaryExpression | functionExpression | newExpression )
+            // JS.g:1075:2: ( primaryExpression | functionExpression | newExpression )
             int alt16=3;
             switch ( input.LA(1) ) {
             case NULL:
@@ -3214,14 +3214,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1071:1: memberExpression : ( primaryExpression | functionExpression | newExpression );", 16, 0, input);
+                    new NoViableAltException("1074:1: memberExpression : ( primaryExpression | functionExpression | newExpression );", 16, 0, input);
 
                 throw nvae;
             }
 
             switch (alt16) {
                 case 1 :
-                    // JS.g:1072:4: primaryExpression
+                    // JS.g:1075:4: primaryExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3234,7 +3234,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1073:4: functionExpression
+                    // JS.g:1076:4: functionExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3247,7 +3247,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1074:4: newExpression
+                    // JS.g:1077:4: newExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -3286,7 +3286,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start newExpression
-    // JS.g:1077:1: newExpression : NEW newExpressionTail ;
+    // JS.g:1080:1: newExpression : NEW newExpressionTail ;
     public final newExpression_return newExpression() throws RecognitionException {
         newExpression_return retval = new newExpression_return();
         retval.start = input.LT(1);
@@ -3300,8 +3300,8 @@ public class JSParser extends Parser {
         Object NEW70_tree=null;
 
         try {
-            // JS.g:1078:2: ( NEW newExpressionTail )
-            // JS.g:1078:4: NEW newExpressionTail
+            // JS.g:1081:2: ( NEW newExpressionTail )
+            // JS.g:1081:4: NEW newExpressionTail
             {
             root_0 = (Object)adaptor.nil();
 
@@ -3343,7 +3343,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start arguments
-    // JS.g:1082:1: arguments : LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( CALL_ARGUMENTS ( assignmentExpression )* ) ;
+    // JS.g:1085:1: arguments : LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( CALL_ARGUMENTS ( assignmentExpression )* ) ;
     public final arguments_return arguments() throws RecognitionException {
         arguments_return retval = new arguments_return();
         retval.start = input.LT(1);
@@ -3366,14 +3366,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // JS.g:1083:2: ( LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( CALL_ARGUMENTS ( assignmentExpression )* ) )
-            // JS.g:1083:4: LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN
+            // JS.g:1086:2: ( LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( CALL_ARGUMENTS ( assignmentExpression )* ) )
+            // JS.g:1086:4: LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN
             {
             LPAREN72=(Token)input.LT(1);
             match(input,LPAREN,FOLLOW_LPAREN_in_arguments4022); 
             stream_LPAREN.add(LPAREN72);
 
-            // JS.g:1083:11: ( assignmentExpression ( COMMA assignmentExpression )* )?
+            // JS.g:1086:11: ( assignmentExpression ( COMMA assignmentExpression )* )?
             int alt18=2;
             int LA18_0 = input.LA(1);
 
@@ -3382,14 +3382,14 @@ public class JSParser extends Parser {
             }
             switch (alt18) {
                 case 1 :
-                    // JS.g:1083:13: assignmentExpression ( COMMA assignmentExpression )*
+                    // JS.g:1086:13: assignmentExpression ( COMMA assignmentExpression )*
                     {
                     pushFollow(FOLLOW_assignmentExpression_in_arguments4026);
                     assignmentExpression73=assignmentExpression();
                     _fsp--;
 
                     stream_assignmentExpression.add(assignmentExpression73.getTree());
-                    // JS.g:1083:34: ( COMMA assignmentExpression )*
+                    // JS.g:1086:34: ( COMMA assignmentExpression )*
                     loop17:
                     do {
                         int alt17=2;
@@ -3402,7 +3402,7 @@ public class JSParser extends Parser {
 
                         switch (alt17) {
                     	case 1 :
-                    	    // JS.g:1083:36: COMMA assignmentExpression
+                    	    // JS.g:1086:36: COMMA assignmentExpression
                     	    {
                     	    COMMA74=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_arguments4030); 
@@ -3443,14 +3443,14 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1084:2: -> ^( CALL_ARGUMENTS ( assignmentExpression )* )
+            // 1087:2: -> ^( CALL_ARGUMENTS ( assignmentExpression )* )
             {
-                // JS.g:1084:5: ^( CALL_ARGUMENTS ( assignmentExpression )* )
+                // JS.g:1087:5: ^( CALL_ARGUMENTS ( assignmentExpression )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(CALL_ARGUMENTS, "CALL_ARGUMENTS"), root_1);
 
-                // JS.g:1084:23: ( assignmentExpression )*
+                // JS.g:1087:23: ( assignmentExpression )*
                 while ( stream_assignmentExpression.hasNext() ) {
                     adaptor.addChild(root_1, stream_assignmentExpression.next());
 
@@ -3491,7 +3491,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start leftHandSideExpression
-    // JS.g:1087:1: leftHandSideExpression : ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )* ;
+    // JS.g:1090:1: leftHandSideExpression : ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )* ;
     public final leftHandSideExpression_return leftHandSideExpression() throws RecognitionException {
         leftHandSideExpression_return retval = new leftHandSideExpression_return();
         retval.start = input.LT(1);
@@ -3532,11 +3532,11 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_rightHandSideExpression=new RewriteRuleSubtreeStream(adaptor,"rule rightHandSideExpression");
          pushState(JSParserRule.LEFT_HAND_SIDE_EXPRESSION); 
         try {
-            // JS.g:1089:3: ( ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )* )
-            // JS.g:1090:3: ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )*
+            // JS.g:1092:3: ( ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )* )
+            // JS.g:1093:3: ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )*
             {
-            // JS.g:1090:3: ( memberExpression -> memberExpression )
-            // JS.g:1091:5: memberExpression
+            // JS.g:1093:3: ( memberExpression -> memberExpression )
+            // JS.g:1094:5: memberExpression
             {
             pushFollow(FOLLOW_memberExpression_in_leftHandSideExpression4078);
             memberExpression77=memberExpression();
@@ -3554,7 +3554,7 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1091:25: -> memberExpression
+            // 1094:25: -> memberExpression
             {
                 adaptor.addChild(root_0, stream_memberExpression.next());
 
@@ -3564,7 +3564,7 @@ public class JSParser extends Parser {
 
             }
 
-            // JS.g:1093:3: ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )*
+            // JS.g:1096:3: ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression ) | DOT rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $leftHandSideExpression expression ) )*
             loop19:
             do {
                 int alt19=6;
@@ -3599,7 +3599,7 @@ public class JSParser extends Parser {
 
                 switch (alt19) {
             	case 1 :
-            	    // JS.g:1094:5: arguments
+            	    // JS.g:1097:5: arguments
             	    {
             	    pushFollow(FOLLOW_arguments_in_leftHandSideExpression4099);
             	    arguments78=arguments();
@@ -3617,9 +3617,9 @@ public class JSParser extends Parser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1094:19: -> ^( CALL $leftHandSideExpression arguments )
+            	    // 1097:19: -> ^( CALL $leftHandSideExpression arguments )
             	    {
-            	        // JS.g:1094:22: ^( CALL $leftHandSideExpression arguments )
+            	        // JS.g:1097:22: ^( CALL $leftHandSideExpression arguments )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(CALL, "CALL"), root_1);
@@ -3637,7 +3637,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // JS.g:1095:7: LBRACK expression RBRACK
+            	    // JS.g:1098:7: LBRACK expression RBRACK
             	    {
             	    LBRACK79=(Token)input.LT(1);
             	    match(input,LBRACK,FOLLOW_LBRACK_in_leftHandSideExpression4124); 
@@ -3663,9 +3663,9 @@ public class JSParser extends Parser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1095:33: -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression )
+            	    // 1098:33: -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression )
             	    {
-            	        // JS.g:1095:36: ^( BYINDEX[$LBRACK] $leftHandSideExpression expression )
+            	        // JS.g:1098:36: ^( BYINDEX[$LBRACK] $leftHandSideExpression expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYINDEX, LBRACK79), root_1);
@@ -3683,7 +3683,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 3 :
-            	    // JS.g:1096:7: DOT rightHandSideExpression
+            	    // JS.g:1099:7: DOT rightHandSideExpression
             	    {
             	    DOT82=(Token)input.LT(1);
             	    match(input,DOT,FOLLOW_DOT_in_leftHandSideExpression4151); 
@@ -3696,7 +3696,7 @@ public class JSParser extends Parser {
             	    stream_rightHandSideExpression.add(rightHandSideExpression83.getTree());
 
             	    // AST REWRITE
-            	    // elements: rightHandSideExpression, leftHandSideExpression, DOT
+            	    // elements: DOT, leftHandSideExpression, rightHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3705,9 +3705,9 @@ public class JSParser extends Parser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1096:35: -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression )
+            	    // 1099:35: -> ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression )
             	    {
-            	        // JS.g:1096:38: ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression )
+            	        // JS.g:1099:38: ^( BYFIELD $leftHandSideExpression DOT rightHandSideExpression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYFIELD, "BYFIELD"), root_1);
@@ -3726,7 +3726,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 4 :
-            	    // JS.g:1097:7: DOTDOT rightHandSideExpression
+            	    // JS.g:1100:7: DOTDOT rightHandSideExpression
             	    {
             	    DOTDOT84=(Token)input.LT(1);
             	    match(input,DOTDOT,FOLLOW_DOTDOT_in_leftHandSideExpression4176); 
@@ -3739,7 +3739,7 @@ public class JSParser extends Parser {
             	    stream_rightHandSideExpression.add(rightHandSideExpression85.getTree());
 
             	    // AST REWRITE
-            	    // elements: leftHandSideExpression, rightHandSideExpression
+            	    // elements: rightHandSideExpression, leftHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -3748,9 +3748,9 @@ public class JSParser extends Parser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1097:38: -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression )
+            	    // 1100:38: -> ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression )
             	    {
-            	        // JS.g:1097:41: ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression )
+            	        // JS.g:1100:41: ^( ALLCHILDREN $leftHandSideExpression rightHandSideExpression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(ALLCHILDREN, "ALLCHILDREN"), root_1);
@@ -3768,7 +3768,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 5 :
-            	    // JS.g:1098:7: COLONCOLON expression
+            	    // JS.g:1101:7: COLONCOLON expression
             	    {
             	    COLONCOLON86=(Token)input.LT(1);
             	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_leftHandSideExpression4197); 
@@ -3790,9 +3790,9 @@ public class JSParser extends Parser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1098:29: -> ^( LOCALNAME $leftHandSideExpression expression )
+            	    // 1101:29: -> ^( LOCALNAME $leftHandSideExpression expression )
             	    {
-            	        // JS.g:1098:32: ^( LOCALNAME $leftHandSideExpression expression )
+            	        // JS.g:1101:32: ^( LOCALNAME $leftHandSideExpression expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(LOCALNAME, "LOCALNAME"), root_1);
@@ -3843,7 +3843,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start newExpressionTail
-    // JS.g:1105:1: newExpressionTail : ( memberExpression -> memberExpression ) ( LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $newExpressionTail expression ) | DOT rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $newExpressionTail expression ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )? ;
+    // JS.g:1108:1: newExpressionTail : ( memberExpression -> memberExpression ) ( LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $newExpressionTail expression ) | DOT rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $newExpressionTail expression ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )? ;
     public final newExpressionTail_return newExpressionTail() throws RecognitionException {
         newExpressionTail_return retval = new newExpressionTail_return();
         retval.start = input.LT(1);
@@ -3883,11 +3883,11 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_arguments=new RewriteRuleSubtreeStream(adaptor,"rule arguments");
         RewriteRuleSubtreeStream stream_rightHandSideExpression=new RewriteRuleSubtreeStream(adaptor,"rule rightHandSideExpression");
         try {
-            // JS.g:1106:3: ( ( memberExpression -> memberExpression ) ( LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $newExpressionTail expression ) | DOT rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $newExpressionTail expression ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )? )
-            // JS.g:1107:3: ( memberExpression -> memberExpression ) ( LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $newExpressionTail expression ) | DOT rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $newExpressionTail expression ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )?
+            // JS.g:1109:3: ( ( memberExpression -> memberExpression ) ( LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $newExpressionTail expression ) | DOT rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $newExpressionTail expression ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )? )
+            // JS.g:1110:3: ( memberExpression -> memberExpression ) ( LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $newExpressionTail expression ) | DOT rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $newExpressionTail expression ) )* ( arguments -> ^( CALL $newExpressionTail arguments ) )?
             {
-            // JS.g:1107:3: ( memberExpression -> memberExpression )
-            // JS.g:1108:5: memberExpression
+            // JS.g:1110:3: ( memberExpression -> memberExpression )
+            // JS.g:1111:5: memberExpression
             {
             pushFollow(FOLLOW_memberExpression_in_newExpressionTail4258);
             memberExpression88=memberExpression();
@@ -3905,7 +3905,7 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1108:25: -> memberExpression
+            // 1111:25: -> memberExpression
             {
                 adaptor.addChild(root_0, stream_memberExpression.next());
 
@@ -3915,7 +3915,7 @@ public class JSParser extends Parser {
 
             }
 
-            // JS.g:1110:3: ( LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $newExpressionTail expression ) | DOT rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $newExpressionTail expression ) )*
+            // JS.g:1113:3: ( LBRACK expression RBRACK -> ^( BYINDEX[$LBRACK] $newExpressionTail expression ) | DOT rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression ) | DOTDOT rightHandSideExpression -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression ) | COLONCOLON expression -> ^( LOCALNAME $newExpressionTail expression ) )*
             loop20:
             do {
                 int alt20=5;
@@ -3945,7 +3945,7 @@ public class JSParser extends Parser {
 
                 switch (alt20) {
             	case 1 :
-            	    // JS.g:1111:5: LBRACK expression RBRACK
+            	    // JS.g:1114:5: LBRACK expression RBRACK
             	    {
             	    LBRACK89=(Token)input.LT(1);
             	    match(input,LBRACK,FOLLOW_LBRACK_in_newExpressionTail4279); 
@@ -3971,9 +3971,9 @@ public class JSParser extends Parser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1111:31: -> ^( BYINDEX[$LBRACK] $newExpressionTail expression )
+            	    // 1114:31: -> ^( BYINDEX[$LBRACK] $newExpressionTail expression )
             	    {
-            	        // JS.g:1111:34: ^( BYINDEX[$LBRACK] $newExpressionTail expression )
+            	        // JS.g:1114:34: ^( BYINDEX[$LBRACK] $newExpressionTail expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYINDEX, LBRACK89), root_1);
@@ -3991,7 +3991,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // JS.g:1112:7: DOT rightHandSideExpression
+            	    // JS.g:1115:7: DOT rightHandSideExpression
             	    {
             	    DOT92=(Token)input.LT(1);
             	    match(input,DOT,FOLLOW_DOT_in_newExpressionTail4306); 
@@ -4004,7 +4004,7 @@ public class JSParser extends Parser {
             	    stream_rightHandSideExpression.add(rightHandSideExpression93.getTree());
 
             	    // AST REWRITE
-            	    // elements: rightHandSideExpression, newExpressionTail, DOT
+            	    // elements: newExpressionTail, DOT, rightHandSideExpression
             	    // token labels: 
             	    // rule labels: retval
             	    // token list labels: 
@@ -4013,9 +4013,9 @@ public class JSParser extends Parser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1112:35: -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression )
+            	    // 1115:35: -> ^( BYFIELD $newExpressionTail DOT rightHandSideExpression )
             	    {
-            	        // JS.g:1112:38: ^( BYFIELD $newExpressionTail DOT rightHandSideExpression )
+            	        // JS.g:1115:38: ^( BYFIELD $newExpressionTail DOT rightHandSideExpression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(BYFIELD, "BYFIELD"), root_1);
@@ -4034,7 +4034,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 3 :
-            	    // JS.g:1113:7: DOTDOT rightHandSideExpression
+            	    // JS.g:1116:7: DOTDOT rightHandSideExpression
             	    {
             	    DOTDOT94=(Token)input.LT(1);
             	    match(input,DOTDOT,FOLLOW_DOTDOT_in_newExpressionTail4331); 
@@ -4056,9 +4056,9 @@ public class JSParser extends Parser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1113:38: -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression )
+            	    // 1116:38: -> ^( ALLCHILDREN $newExpressionTail rightHandSideExpression )
             	    {
-            	        // JS.g:1113:41: ^( ALLCHILDREN $newExpressionTail rightHandSideExpression )
+            	        // JS.g:1116:41: ^( ALLCHILDREN $newExpressionTail rightHandSideExpression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(ALLCHILDREN, "ALLCHILDREN"), root_1);
@@ -4076,7 +4076,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 4 :
-            	    // JS.g:1114:7: COLONCOLON expression
+            	    // JS.g:1117:7: COLONCOLON expression
             	    {
             	    COLONCOLON96=(Token)input.LT(1);
             	    match(input,COLONCOLON,FOLLOW_COLONCOLON_in_newExpressionTail4352); 
@@ -4098,9 +4098,9 @@ public class JSParser extends Parser {
             	    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             	    root_0 = (Object)adaptor.nil();
-            	    // 1114:29: -> ^( LOCALNAME $newExpressionTail expression )
+            	    // 1117:29: -> ^( LOCALNAME $newExpressionTail expression )
             	    {
-            	        // JS.g:1114:32: ^( LOCALNAME $newExpressionTail expression )
+            	        // JS.g:1117:32: ^( LOCALNAME $newExpressionTail expression )
             	        {
             	        Object root_1 = (Object)adaptor.nil();
             	        root_1 = (Object)adaptor.becomeRoot(adaptor.create(LOCALNAME, "LOCALNAME"), root_1);
@@ -4123,7 +4123,7 @@ public class JSParser extends Parser {
                 }
             } while (true);
 
-            // JS.g:1116:3: ( arguments -> ^( CALL $newExpressionTail arguments ) )?
+            // JS.g:1119:3: ( arguments -> ^( CALL $newExpressionTail arguments ) )?
             int alt21=2;
             int LA21_0 = input.LA(1);
 
@@ -4132,7 +4132,7 @@ public class JSParser extends Parser {
             }
             switch (alt21) {
                 case 1 :
-                    // JS.g:1117:5: arguments
+                    // JS.g:1120:5: arguments
                     {
                     pushFollow(FOLLOW_arguments_in_newExpressionTail4380);
                     arguments98=arguments();
@@ -4141,7 +4141,7 @@ public class JSParser extends Parser {
                     stream_arguments.add(arguments98.getTree());
 
                     // AST REWRITE
-                    // elements: newExpressionTail, arguments
+                    // elements: arguments, newExpressionTail
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -4150,9 +4150,9 @@ public class JSParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1117:19: -> ^( CALL $newExpressionTail arguments )
+                    // 1120:19: -> ^( CALL $newExpressionTail arguments )
                     {
-                        // JS.g:1117:22: ^( CALL $newExpressionTail arguments )
+                        // JS.g:1120:22: ^( CALL $newExpressionTail arguments )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(CALL, "CALL"), root_1);
@@ -4200,7 +4200,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start rightHandSideExpression
-    // JS.g:1121:1: rightHandSideExpression : ( parenExpression | identifier | xmlAttribute | MUL );
+    // JS.g:1124:1: rightHandSideExpression : ( parenExpression | identifier | xmlAttribute | MUL );
     public final rightHandSideExpression_return rightHandSideExpression() throws RecognitionException {
         rightHandSideExpression_return retval = new rightHandSideExpression_return();
         retval.start = input.LT(1);
@@ -4218,7 +4218,7 @@ public class JSParser extends Parser {
         Object MUL102_tree=null;
 
         try {
-            // JS.g:1122:3: ( parenExpression | identifier | xmlAttribute | MUL )
+            // JS.g:1125:3: ( parenExpression | identifier | xmlAttribute | MUL )
             int alt22=4;
             switch ( input.LA(1) ) {
             case LPAREN:
@@ -4278,14 +4278,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1121:1: rightHandSideExpression : ( parenExpression | identifier | xmlAttribute | MUL );", 22, 0, input);
+                    new NoViableAltException("1124:1: rightHandSideExpression : ( parenExpression | identifier | xmlAttribute | MUL );", 22, 0, input);
 
                 throw nvae;
             }
 
             switch (alt22) {
                 case 1 :
-                    // JS.g:1122:5: parenExpression
+                    // JS.g:1125:5: parenExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4298,7 +4298,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1123:5: identifier
+                    // JS.g:1126:5: identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4311,7 +4311,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1124:5: xmlAttribute
+                    // JS.g:1127:5: xmlAttribute
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4324,7 +4324,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1125:5: MUL
+                    // JS.g:1128:5: MUL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4363,7 +4363,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start postfixExpression
-    // JS.g:1138:1: postfixExpression : leftHandSideExpression ( postfixOperator )? ;
+    // JS.g:1141:1: postfixExpression : leftHandSideExpression ( postfixOperator )? ;
     public final postfixExpression_return postfixExpression() throws RecognitionException {
         postfixExpression_return retval = new postfixExpression_return();
         retval.start = input.LT(1);
@@ -4377,8 +4377,8 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1139:2: ( leftHandSideExpression ( postfixOperator )? )
-            // JS.g:1139:4: leftHandSideExpression ( postfixOperator )?
+            // JS.g:1142:2: ( leftHandSideExpression ( postfixOperator )? )
+            // JS.g:1142:4: leftHandSideExpression ( postfixOperator )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -4388,7 +4388,7 @@ public class JSParser extends Parser {
 
             adaptor.addChild(root_0, leftHandSideExpression103.getTree());
              if (input.LA(1) == INC || input.LA(1) == DEC) promoteEOL(null); 
-            // JS.g:1139:95: ( postfixOperator )?
+            // JS.g:1142:95: ( postfixOperator )?
             int alt23=2;
             int LA23_0 = input.LA(1);
 
@@ -4400,7 +4400,7 @@ public class JSParser extends Parser {
             }
             switch (alt23) {
                 case 1 :
-                    // JS.g:1139:97: postfixOperator
+                    // JS.g:1142:97: postfixOperator
                     {
                     pushFollow(FOLLOW_postfixOperator_in_postfixExpression4457);
                     postfixOperator104=postfixOperator();
@@ -4441,7 +4441,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start postfixOperator
-    // JS.g:1142:1: postfixOperator : (op= INC | op= DEC );
+    // JS.g:1145:1: postfixOperator : (op= INC | op= DEC );
     public final postfixOperator_return postfixOperator() throws RecognitionException {
         postfixOperator_return retval = new postfixOperator_return();
         retval.start = input.LT(1);
@@ -4453,7 +4453,7 @@ public class JSParser extends Parser {
         Object op_tree=null;
 
         try {
-            // JS.g:1143:2: (op= INC | op= DEC )
+            // JS.g:1146:2: (op= INC | op= DEC )
             int alt24=2;
             int LA24_0 = input.LA(1);
 
@@ -4465,13 +4465,13 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1142:1: postfixOperator : (op= INC | op= DEC );", 24, 0, input);
+                    new NoViableAltException("1145:1: postfixOperator : (op= INC | op= DEC );", 24, 0, input);
 
                 throw nvae;
             }
             switch (alt24) {
                 case 1 :
-                    // JS.g:1143:4: op= INC
+                    // JS.g:1146:4: op= INC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4485,7 +4485,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1144:4: op= DEC
+                    // JS.g:1147:4: op= DEC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4525,7 +4525,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start unaryExpression
-    // JS.g:1151:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );
+    // JS.g:1154:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );
     public final unaryExpression_return unaryExpression() throws RecognitionException {
         unaryExpression_return retval = new unaryExpression_return();
         retval.start = input.LT(1);
@@ -4541,7 +4541,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1152:2: ( postfixExpression | unaryOperator unaryExpression )
+            // JS.g:1155:2: ( postfixExpression | unaryOperator unaryExpression )
             int alt25=2;
             int LA25_0 = input.LA(1);
 
@@ -4553,13 +4553,13 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1151:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );", 25, 0, input);
+                    new NoViableAltException("1154:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );", 25, 0, input);
 
                 throw nvae;
             }
             switch (alt25) {
                 case 1 :
-                    // JS.g:1152:4: postfixExpression
+                    // JS.g:1155:4: postfixExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4572,7 +4572,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1153:4: unaryOperator unaryExpression
+                    // JS.g:1156:4: unaryOperator unaryExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4616,7 +4616,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start unaryOperator
-    // JS.g:1156:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );
+    // JS.g:1159:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );
     public final unaryOperator_return unaryOperator() throws RecognitionException {
         unaryOperator_return retval = new unaryOperator_return();
         retval.start = input.LT(1);
@@ -4644,7 +4644,7 @@ public class JSParser extends Parser {
         Object YIELD115_tree=null;
 
         try {
-            // JS.g:1157:2: ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD )
+            // JS.g:1160:2: ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD )
             int alt26=10;
             switch ( input.LA(1) ) {
             case DELETE:
@@ -4699,14 +4699,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1156:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );", 26, 0, input);
+                    new NoViableAltException("1159:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT | YIELD );", 26, 0, input);
 
                 throw nvae;
             }
 
             switch (alt26) {
                 case 1 :
-                    // JS.g:1157:4: DELETE
+                    // JS.g:1160:4: DELETE
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4719,7 +4719,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1158:4: VOID
+                    // JS.g:1161:4: VOID
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4732,7 +4732,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1159:4: TYPEOF
+                    // JS.g:1162:4: TYPEOF
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4745,7 +4745,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1160:4: INC
+                    // JS.g:1163:4: INC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4758,7 +4758,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // JS.g:1161:4: DEC
+                    // JS.g:1164:4: DEC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4771,7 +4771,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // JS.g:1162:4: op= ADD
+                    // JS.g:1165:4: op= ADD
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4785,7 +4785,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // JS.g:1163:4: op= SUB
+                    // JS.g:1166:4: op= SUB
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4799,7 +4799,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // JS.g:1164:4: INV
+                    // JS.g:1167:4: INV
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4812,7 +4812,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 9 :
-                    // JS.g:1165:4: NOT
+                    // JS.g:1168:4: NOT
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4825,7 +4825,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 10 :
-                    // JS.g:1166:4: YIELD
+                    // JS.g:1169:4: YIELD
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -4864,7 +4864,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start namespaceStatement
-    // JS.g:1171:1: namespaceStatement : DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) ;
+    // JS.g:1174:1: namespaceStatement : DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) ;
     public final namespaceStatement_return namespaceStatement() throws RecognitionException {
         namespaceStatement_return retval = new namespaceStatement_return();
         retval.start = input.LT(1);
@@ -4891,8 +4891,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // JS.g:1172:3: ( DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) )
-            // JS.g:1172:5: DEFAULT WXML NAMESPACE ASSIGN expression semic
+            // JS.g:1175:3: ( DEFAULT WXML NAMESPACE ASSIGN expression semic -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression ) )
+            // JS.g:1175:5: DEFAULT WXML NAMESPACE ASSIGN expression semic
             {
             DEFAULT116=(Token)input.LT(1);
             match(input,DEFAULT,FOLLOW_DEFAULT_in_namespaceStatement4588); 
@@ -4922,7 +4922,7 @@ public class JSParser extends Parser {
             stream_semic.add(semic121.getTree());
 
             // AST REWRITE
-            // elements: WXML, expression, ASSIGN, DEFAULT
+            // elements: ASSIGN, DEFAULT, expression, WXML
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -4931,9 +4931,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1173:5: -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
+            // 1176:5: -> ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
             {
-                // JS.g:1173:8: ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
+                // JS.g:1176:8: ^( DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(DEFAULT_XML_NAMESPACE, "DEFAULT_XML_NAMESPACE"), root_1);
@@ -4977,7 +4977,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start multiplicativeExpression
-    // JS.g:1178:1: multiplicativeExpression : unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* ;
+    // JS.g:1181:1: multiplicativeExpression : unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* ;
     public final multiplicativeExpression_return multiplicativeExpression() throws RecognitionException {
         multiplicativeExpression_return retval = new multiplicativeExpression_return();
         retval.start = input.LT(1);
@@ -4993,8 +4993,8 @@ public class JSParser extends Parser {
         Object set123_tree=null;
 
         try {
-            // JS.g:1179:2: ( unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* )
-            // JS.g:1179:4: unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )*
+            // JS.g:1182:2: ( unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* )
+            // JS.g:1182:4: unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5003,7 +5003,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, unaryExpression122.getTree());
-            // JS.g:1179:20: ( ( MUL | DIV | MOD ) unaryExpression )*
+            // JS.g:1182:20: ( ( MUL | DIV | MOD ) unaryExpression )*
             loop27:
             do {
                 int alt27=2;
@@ -5016,7 +5016,7 @@ public class JSParser extends Parser {
 
                 switch (alt27) {
             	case 1 :
-            	    // JS.g:1179:22: ( MUL | DIV | MOD ) unaryExpression
+            	    // JS.g:1182:22: ( MUL | DIV | MOD ) unaryExpression
             	    {
             	    set123=(Token)input.LT(1);
             	    if ( (input.LA(1)>=MUL && input.LA(1)<=MOD)||input.LA(1)==DIV ) {
@@ -5072,7 +5072,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start additiveExpression
-    // JS.g:1186:1: additiveExpression : multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* ;
+    // JS.g:1189:1: additiveExpression : multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* ;
     public final additiveExpression_return additiveExpression() throws RecognitionException {
         additiveExpression_return retval = new additiveExpression_return();
         retval.start = input.LT(1);
@@ -5088,8 +5088,8 @@ public class JSParser extends Parser {
         Object set126_tree=null;
 
         try {
-            // JS.g:1187:2: ( multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* )
-            // JS.g:1187:4: multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )*
+            // JS.g:1190:2: ( multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* )
+            // JS.g:1190:4: multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5098,7 +5098,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, multiplicativeExpression125.getTree());
-            // JS.g:1187:29: ( ( ADD | SUB ) multiplicativeExpression )*
+            // JS.g:1190:29: ( ( ADD | SUB ) multiplicativeExpression )*
             loop28:
             do {
                 int alt28=2;
@@ -5111,7 +5111,7 @@ public class JSParser extends Parser {
 
                 switch (alt28) {
             	case 1 :
-            	    // JS.g:1187:31: ( ADD | SUB ) multiplicativeExpression
+            	    // JS.g:1190:31: ( ADD | SUB ) multiplicativeExpression
             	    {
             	    set126=(Token)input.LT(1);
             	    if ( (input.LA(1)>=ADD && input.LA(1)<=SUB) ) {
@@ -5167,7 +5167,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start shiftExpression
-    // JS.g:1194:1: shiftExpression : additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* ;
+    // JS.g:1197:1: shiftExpression : additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* ;
     public final shiftExpression_return shiftExpression() throws RecognitionException {
         shiftExpression_return retval = new shiftExpression_return();
         retval.start = input.LT(1);
@@ -5183,8 +5183,8 @@ public class JSParser extends Parser {
         Object set129_tree=null;
 
         try {
-            // JS.g:1195:2: ( additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* )
-            // JS.g:1195:4: additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )*
+            // JS.g:1198:2: ( additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* )
+            // JS.g:1198:4: additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5193,7 +5193,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, additiveExpression128.getTree());
-            // JS.g:1195:23: ( ( SHL | SHR | SHU ) additiveExpression )*
+            // JS.g:1198:23: ( ( SHL | SHR | SHU ) additiveExpression )*
             loop29:
             do {
                 int alt29=2;
@@ -5206,7 +5206,7 @@ public class JSParser extends Parser {
 
                 switch (alt29) {
             	case 1 :
-            	    // JS.g:1195:25: ( SHL | SHR | SHU ) additiveExpression
+            	    // JS.g:1198:25: ( SHL | SHR | SHU ) additiveExpression
             	    {
             	    set129=(Token)input.LT(1);
             	    if ( (input.LA(1)>=SHL && input.LA(1)<=SHU) ) {
@@ -5262,7 +5262,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start relationalExpression
-    // JS.g:1202:1: relationalExpression : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* ;
+    // JS.g:1205:1: relationalExpression : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* ;
     public final relationalExpression_return relationalExpression() throws RecognitionException {
         relationalExpression_return retval = new relationalExpression_return();
         retval.start = input.LT(1);
@@ -5278,8 +5278,8 @@ public class JSParser extends Parser {
         Object set132_tree=null;
 
         try {
-            // JS.g:1203:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* )
-            // JS.g:1203:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
+            // JS.g:1206:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* )
+            // JS.g:1206:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5288,7 +5288,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, shiftExpression131.getTree());
-            // JS.g:1203:20: ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
+            // JS.g:1206:20: ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
             loop30:
             do {
                 int alt30=2;
@@ -5304,7 +5304,7 @@ public class JSParser extends Parser {
 
                 switch (alt30) {
             	case 1 :
-            	    // JS.g:1203:22: ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression
+            	    // JS.g:1206:22: ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression
             	    {
             	    set132=(Token)input.LT(1);
             	    if ( (input.LA(1)>=IN && input.LA(1)<=INSTANCEOF)||(input.LA(1)>=LT && input.LA(1)<=GTE) ) {
@@ -5360,7 +5360,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start relationalExpressionNoIn
-    // JS.g:1206:1: relationalExpressionNoIn : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* ;
+    // JS.g:1209:1: relationalExpressionNoIn : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* ;
     public final relationalExpressionNoIn_return relationalExpressionNoIn() throws RecognitionException {
         relationalExpressionNoIn_return retval = new relationalExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -5376,8 +5376,8 @@ public class JSParser extends Parser {
         Object set135_tree=null;
 
         try {
-            // JS.g:1207:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* )
-            // JS.g:1207:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
+            // JS.g:1210:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* )
+            // JS.g:1210:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5386,7 +5386,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, shiftExpression134.getTree());
-            // JS.g:1207:20: ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
+            // JS.g:1210:20: ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
             loop31:
             do {
                 int alt31=2;
@@ -5399,7 +5399,7 @@ public class JSParser extends Parser {
 
                 switch (alt31) {
             	case 1 :
-            	    // JS.g:1207:22: ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression
+            	    // JS.g:1210:22: ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression
             	    {
             	    set135=(Token)input.LT(1);
             	    if ( input.LA(1)==INSTANCEOF||(input.LA(1)>=LT && input.LA(1)<=GTE) ) {
@@ -5455,7 +5455,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start equalityExpression
-    // JS.g:1214:1: equalityExpression : relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* ;
+    // JS.g:1217:1: equalityExpression : relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* ;
     public final equalityExpression_return equalityExpression() throws RecognitionException {
         equalityExpression_return retval = new equalityExpression_return();
         retval.start = input.LT(1);
@@ -5471,8 +5471,8 @@ public class JSParser extends Parser {
         Object set138_tree=null;
 
         try {
-            // JS.g:1215:2: ( relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* )
-            // JS.g:1215:4: relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
+            // JS.g:1218:2: ( relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* )
+            // JS.g:1218:4: relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5481,7 +5481,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, relationalExpression137.getTree());
-            // JS.g:1215:25: ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
+            // JS.g:1218:25: ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
             loop32:
             do {
                 int alt32=2;
@@ -5494,7 +5494,7 @@ public class JSParser extends Parser {
 
                 switch (alt32) {
             	case 1 :
-            	    // JS.g:1215:27: ( EQ | NEQ | SAME | NSAME ) relationalExpression
+            	    // JS.g:1218:27: ( EQ | NEQ | SAME | NSAME ) relationalExpression
             	    {
             	    set138=(Token)input.LT(1);
             	    if ( (input.LA(1)>=EQ && input.LA(1)<=NSAME) ) {
@@ -5550,7 +5550,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start equalityExpressionNoIn
-    // JS.g:1218:1: equalityExpressionNoIn : relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* ;
+    // JS.g:1221:1: equalityExpressionNoIn : relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* ;
     public final equalityExpressionNoIn_return equalityExpressionNoIn() throws RecognitionException {
         equalityExpressionNoIn_return retval = new equalityExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -5566,8 +5566,8 @@ public class JSParser extends Parser {
         Object set141_tree=null;
 
         try {
-            // JS.g:1219:2: ( relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* )
-            // JS.g:1219:4: relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
+            // JS.g:1222:2: ( relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* )
+            // JS.g:1222:4: relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5576,7 +5576,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, relationalExpressionNoIn140.getTree());
-            // JS.g:1219:29: ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
+            // JS.g:1222:29: ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
             loop33:
             do {
                 int alt33=2;
@@ -5589,7 +5589,7 @@ public class JSParser extends Parser {
 
                 switch (alt33) {
             	case 1 :
-            	    // JS.g:1219:31: ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn
+            	    // JS.g:1222:31: ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn
             	    {
             	    set141=(Token)input.LT(1);
             	    if ( (input.LA(1)>=EQ && input.LA(1)<=NSAME) ) {
@@ -5645,7 +5645,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseANDExpression
-    // JS.g:1226:1: bitwiseANDExpression : equalityExpression ( AND equalityExpression )* ;
+    // JS.g:1229:1: bitwiseANDExpression : equalityExpression ( AND equalityExpression )* ;
     public final bitwiseANDExpression_return bitwiseANDExpression() throws RecognitionException {
         bitwiseANDExpression_return retval = new bitwiseANDExpression_return();
         retval.start = input.LT(1);
@@ -5661,8 +5661,8 @@ public class JSParser extends Parser {
         Object AND144_tree=null;
 
         try {
-            // JS.g:1227:2: ( equalityExpression ( AND equalityExpression )* )
-            // JS.g:1227:4: equalityExpression ( AND equalityExpression )*
+            // JS.g:1230:2: ( equalityExpression ( AND equalityExpression )* )
+            // JS.g:1230:4: equalityExpression ( AND equalityExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5671,7 +5671,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, equalityExpression143.getTree());
-            // JS.g:1227:23: ( AND equalityExpression )*
+            // JS.g:1230:23: ( AND equalityExpression )*
             loop34:
             do {
                 int alt34=2;
@@ -5684,7 +5684,7 @@ public class JSParser extends Parser {
 
                 switch (alt34) {
             	case 1 :
-            	    // JS.g:1227:25: AND equalityExpression
+            	    // JS.g:1230:25: AND equalityExpression
             	    {
             	    AND144=(Token)input.LT(1);
             	    match(input,AND,FOLLOW_AND_in_bitwiseANDExpression4914); 
@@ -5733,7 +5733,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseANDExpressionNoIn
-    // JS.g:1230:1: bitwiseANDExpressionNoIn : equalityExpressionNoIn ( AND equalityExpressionNoIn )* ;
+    // JS.g:1233:1: bitwiseANDExpressionNoIn : equalityExpressionNoIn ( AND equalityExpressionNoIn )* ;
     public final bitwiseANDExpressionNoIn_return bitwiseANDExpressionNoIn() throws RecognitionException {
         bitwiseANDExpressionNoIn_return retval = new bitwiseANDExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -5749,8 +5749,8 @@ public class JSParser extends Parser {
         Object AND147_tree=null;
 
         try {
-            // JS.g:1231:2: ( equalityExpressionNoIn ( AND equalityExpressionNoIn )* )
-            // JS.g:1231:4: equalityExpressionNoIn ( AND equalityExpressionNoIn )*
+            // JS.g:1234:2: ( equalityExpressionNoIn ( AND equalityExpressionNoIn )* )
+            // JS.g:1234:4: equalityExpressionNoIn ( AND equalityExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5759,7 +5759,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, equalityExpressionNoIn146.getTree());
-            // JS.g:1231:27: ( AND equalityExpressionNoIn )*
+            // JS.g:1234:27: ( AND equalityExpressionNoIn )*
             loop35:
             do {
                 int alt35=2;
@@ -5772,7 +5772,7 @@ public class JSParser extends Parser {
 
                 switch (alt35) {
             	case 1 :
-            	    // JS.g:1231:29: AND equalityExpressionNoIn
+            	    // JS.g:1234:29: AND equalityExpressionNoIn
             	    {
             	    AND147=(Token)input.LT(1);
             	    match(input,AND,FOLLOW_AND_in_bitwiseANDExpressionNoIn4935); 
@@ -5821,7 +5821,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseXORExpression
-    // JS.g:1234:1: bitwiseXORExpression : bitwiseANDExpression ( XOR bitwiseANDExpression )* ;
+    // JS.g:1237:1: bitwiseXORExpression : bitwiseANDExpression ( XOR bitwiseANDExpression )* ;
     public final bitwiseXORExpression_return bitwiseXORExpression() throws RecognitionException {
         bitwiseXORExpression_return retval = new bitwiseXORExpression_return();
         retval.start = input.LT(1);
@@ -5837,8 +5837,8 @@ public class JSParser extends Parser {
         Object XOR150_tree=null;
 
         try {
-            // JS.g:1235:2: ( bitwiseANDExpression ( XOR bitwiseANDExpression )* )
-            // JS.g:1235:4: bitwiseANDExpression ( XOR bitwiseANDExpression )*
+            // JS.g:1238:2: ( bitwiseANDExpression ( XOR bitwiseANDExpression )* )
+            // JS.g:1238:4: bitwiseANDExpression ( XOR bitwiseANDExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5847,7 +5847,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseANDExpression149.getTree());
-            // JS.g:1235:25: ( XOR bitwiseANDExpression )*
+            // JS.g:1238:25: ( XOR bitwiseANDExpression )*
             loop36:
             do {
                 int alt36=2;
@@ -5860,7 +5860,7 @@ public class JSParser extends Parser {
 
                 switch (alt36) {
             	case 1 :
-            	    // JS.g:1235:27: XOR bitwiseANDExpression
+            	    // JS.g:1238:27: XOR bitwiseANDExpression
             	    {
             	    XOR150=(Token)input.LT(1);
             	    match(input,XOR,FOLLOW_XOR_in_bitwiseXORExpression4958); 
@@ -5909,7 +5909,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseXORExpressionNoIn
-    // JS.g:1238:1: bitwiseXORExpressionNoIn : bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* ;
+    // JS.g:1241:1: bitwiseXORExpressionNoIn : bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* ;
     public final bitwiseXORExpressionNoIn_return bitwiseXORExpressionNoIn() throws RecognitionException {
         bitwiseXORExpressionNoIn_return retval = new bitwiseXORExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -5925,8 +5925,8 @@ public class JSParser extends Parser {
         Object XOR153_tree=null;
 
         try {
-            // JS.g:1239:2: ( bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* )
-            // JS.g:1239:4: bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )*
+            // JS.g:1242:2: ( bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* )
+            // JS.g:1242:4: bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -5935,7 +5935,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseANDExpressionNoIn152.getTree());
-            // JS.g:1239:29: ( XOR bitwiseANDExpressionNoIn )*
+            // JS.g:1242:29: ( XOR bitwiseANDExpressionNoIn )*
             loop37:
             do {
                 int alt37=2;
@@ -5948,7 +5948,7 @@ public class JSParser extends Parser {
 
                 switch (alt37) {
             	case 1 :
-            	    // JS.g:1239:31: XOR bitwiseANDExpressionNoIn
+            	    // JS.g:1242:31: XOR bitwiseANDExpressionNoIn
             	    {
             	    XOR153=(Token)input.LT(1);
             	    match(input,XOR,FOLLOW_XOR_in_bitwiseXORExpressionNoIn4981); 
@@ -5997,7 +5997,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseORExpression
-    // JS.g:1242:1: bitwiseORExpression : bitwiseXORExpression ( OR bitwiseXORExpression )* ;
+    // JS.g:1245:1: bitwiseORExpression : bitwiseXORExpression ( OR bitwiseXORExpression )* ;
     public final bitwiseORExpression_return bitwiseORExpression() throws RecognitionException {
         bitwiseORExpression_return retval = new bitwiseORExpression_return();
         retval.start = input.LT(1);
@@ -6013,8 +6013,8 @@ public class JSParser extends Parser {
         Object OR156_tree=null;
 
         try {
-            // JS.g:1243:2: ( bitwiseXORExpression ( OR bitwiseXORExpression )* )
-            // JS.g:1243:4: bitwiseXORExpression ( OR bitwiseXORExpression )*
+            // JS.g:1246:2: ( bitwiseXORExpression ( OR bitwiseXORExpression )* )
+            // JS.g:1246:4: bitwiseXORExpression ( OR bitwiseXORExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6023,7 +6023,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseXORExpression155.getTree());
-            // JS.g:1243:25: ( OR bitwiseXORExpression )*
+            // JS.g:1246:25: ( OR bitwiseXORExpression )*
             loop38:
             do {
                 int alt38=2;
@@ -6036,7 +6036,7 @@ public class JSParser extends Parser {
 
                 switch (alt38) {
             	case 1 :
-            	    // JS.g:1243:27: OR bitwiseXORExpression
+            	    // JS.g:1246:27: OR bitwiseXORExpression
             	    {
             	    OR156=(Token)input.LT(1);
             	    match(input,OR,FOLLOW_OR_in_bitwiseORExpression5003); 
@@ -6085,7 +6085,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start bitwiseORExpressionNoIn
-    // JS.g:1246:1: bitwiseORExpressionNoIn : bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* ;
+    // JS.g:1249:1: bitwiseORExpressionNoIn : bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* ;
     public final bitwiseORExpressionNoIn_return bitwiseORExpressionNoIn() throws RecognitionException {
         bitwiseORExpressionNoIn_return retval = new bitwiseORExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6101,8 +6101,8 @@ public class JSParser extends Parser {
         Object OR159_tree=null;
 
         try {
-            // JS.g:1247:2: ( bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* )
-            // JS.g:1247:4: bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )*
+            // JS.g:1250:2: ( bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* )
+            // JS.g:1250:4: bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6111,7 +6111,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseXORExpressionNoIn158.getTree());
-            // JS.g:1247:29: ( OR bitwiseXORExpressionNoIn )*
+            // JS.g:1250:29: ( OR bitwiseXORExpressionNoIn )*
             loop39:
             do {
                 int alt39=2;
@@ -6124,7 +6124,7 @@ public class JSParser extends Parser {
 
                 switch (alt39) {
             	case 1 :
-            	    // JS.g:1247:31: OR bitwiseXORExpressionNoIn
+            	    // JS.g:1250:31: OR bitwiseXORExpressionNoIn
             	    {
             	    OR159=(Token)input.LT(1);
             	    match(input,OR,FOLLOW_OR_in_bitwiseORExpressionNoIn5025); 
@@ -6173,7 +6173,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start logicalANDExpression
-    // JS.g:1254:1: logicalANDExpression : bitwiseORExpression ( LAND bitwiseORExpression )* ;
+    // JS.g:1257:1: logicalANDExpression : bitwiseORExpression ( LAND bitwiseORExpression )* ;
     public final logicalANDExpression_return logicalANDExpression() throws RecognitionException {
         logicalANDExpression_return retval = new logicalANDExpression_return();
         retval.start = input.LT(1);
@@ -6189,8 +6189,8 @@ public class JSParser extends Parser {
         Object LAND162_tree=null;
 
         try {
-            // JS.g:1255:2: ( bitwiseORExpression ( LAND bitwiseORExpression )* )
-            // JS.g:1255:4: bitwiseORExpression ( LAND bitwiseORExpression )*
+            // JS.g:1258:2: ( bitwiseORExpression ( LAND bitwiseORExpression )* )
+            // JS.g:1258:4: bitwiseORExpression ( LAND bitwiseORExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6199,7 +6199,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseORExpression161.getTree());
-            // JS.g:1255:24: ( LAND bitwiseORExpression )*
+            // JS.g:1258:24: ( LAND bitwiseORExpression )*
             loop40:
             do {
                 int alt40=2;
@@ -6212,7 +6212,7 @@ public class JSParser extends Parser {
 
                 switch (alt40) {
             	case 1 :
-            	    // JS.g:1255:26: LAND bitwiseORExpression
+            	    // JS.g:1258:26: LAND bitwiseORExpression
             	    {
             	    LAND162=(Token)input.LT(1);
             	    match(input,LAND,FOLLOW_LAND_in_logicalANDExpression5051); 
@@ -6261,7 +6261,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start logicalANDExpressionNoIn
-    // JS.g:1258:1: logicalANDExpressionNoIn : bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* ;
+    // JS.g:1261:1: logicalANDExpressionNoIn : bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* ;
     public final logicalANDExpressionNoIn_return logicalANDExpressionNoIn() throws RecognitionException {
         logicalANDExpressionNoIn_return retval = new logicalANDExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6277,8 +6277,8 @@ public class JSParser extends Parser {
         Object LAND165_tree=null;
 
         try {
-            // JS.g:1259:2: ( bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* )
-            // JS.g:1259:4: bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )*
+            // JS.g:1262:2: ( bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* )
+            // JS.g:1262:4: bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6287,7 +6287,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, bitwiseORExpressionNoIn164.getTree());
-            // JS.g:1259:28: ( LAND bitwiseORExpressionNoIn )*
+            // JS.g:1262:28: ( LAND bitwiseORExpressionNoIn )*
             loop41:
             do {
                 int alt41=2;
@@ -6300,7 +6300,7 @@ public class JSParser extends Parser {
 
                 switch (alt41) {
             	case 1 :
-            	    // JS.g:1259:30: LAND bitwiseORExpressionNoIn
+            	    // JS.g:1262:30: LAND bitwiseORExpressionNoIn
             	    {
             	    LAND165=(Token)input.LT(1);
             	    match(input,LAND,FOLLOW_LAND_in_logicalANDExpressionNoIn5072); 
@@ -6349,7 +6349,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start logicalORExpression
-    // JS.g:1262:1: logicalORExpression : logicalANDExpression ( LOR logicalANDExpression )* ;
+    // JS.g:1265:1: logicalORExpression : logicalANDExpression ( LOR logicalANDExpression )* ;
     public final logicalORExpression_return logicalORExpression() throws RecognitionException {
         logicalORExpression_return retval = new logicalORExpression_return();
         retval.start = input.LT(1);
@@ -6365,8 +6365,8 @@ public class JSParser extends Parser {
         Object LOR168_tree=null;
 
         try {
-            // JS.g:1263:2: ( logicalANDExpression ( LOR logicalANDExpression )* )
-            // JS.g:1263:4: logicalANDExpression ( LOR logicalANDExpression )*
+            // JS.g:1266:2: ( logicalANDExpression ( LOR logicalANDExpression )* )
+            // JS.g:1266:4: logicalANDExpression ( LOR logicalANDExpression )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6375,7 +6375,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, logicalANDExpression167.getTree());
-            // JS.g:1263:25: ( LOR logicalANDExpression )*
+            // JS.g:1266:25: ( LOR logicalANDExpression )*
             loop42:
             do {
                 int alt42=2;
@@ -6388,7 +6388,7 @@ public class JSParser extends Parser {
 
                 switch (alt42) {
             	case 1 :
-            	    // JS.g:1263:27: LOR logicalANDExpression
+            	    // JS.g:1266:27: LOR logicalANDExpression
             	    {
             	    LOR168=(Token)input.LT(1);
             	    match(input,LOR,FOLLOW_LOR_in_logicalORExpression5094); 
@@ -6437,7 +6437,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start logicalORExpressionNoIn
-    // JS.g:1266:1: logicalORExpressionNoIn : logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* ;
+    // JS.g:1269:1: logicalORExpressionNoIn : logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* ;
     public final logicalORExpressionNoIn_return logicalORExpressionNoIn() throws RecognitionException {
         logicalORExpressionNoIn_return retval = new logicalORExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6453,8 +6453,8 @@ public class JSParser extends Parser {
         Object LOR171_tree=null;
 
         try {
-            // JS.g:1267:2: ( logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* )
-            // JS.g:1267:4: logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )*
+            // JS.g:1270:2: ( logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* )
+            // JS.g:1270:4: logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6463,7 +6463,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, logicalANDExpressionNoIn170.getTree());
-            // JS.g:1267:29: ( LOR logicalANDExpressionNoIn )*
+            // JS.g:1270:29: ( LOR logicalANDExpressionNoIn )*
             loop43:
             do {
                 int alt43=2;
@@ -6476,7 +6476,7 @@ public class JSParser extends Parser {
 
                 switch (alt43) {
             	case 1 :
-            	    // JS.g:1267:31: LOR logicalANDExpressionNoIn
+            	    // JS.g:1270:31: LOR logicalANDExpressionNoIn
             	    {
             	    LOR171=(Token)input.LT(1);
             	    match(input,LOR,FOLLOW_LOR_in_logicalORExpressionNoIn5116); 
@@ -6525,7 +6525,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start conditionalExpression
-    // JS.g:1274:1: conditionalExpression : logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? ;
+    // JS.g:1277:1: conditionalExpression : logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? ;
     public final conditionalExpression_return conditionalExpression() throws RecognitionException {
         conditionalExpression_return retval = new conditionalExpression_return();
         retval.start = input.LT(1);
@@ -6545,8 +6545,8 @@ public class JSParser extends Parser {
         Object COLON176_tree=null;
 
         try {
-            // JS.g:1275:2: ( logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? )
-            // JS.g:1275:4: logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )?
+            // JS.g:1278:2: ( logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? )
+            // JS.g:1278:4: logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6555,7 +6555,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, logicalORExpression173.getTree());
-            // JS.g:1275:24: ( QUE assignmentExpression COLON assignmentExpression )?
+            // JS.g:1278:24: ( QUE assignmentExpression COLON assignmentExpression )?
             int alt44=2;
             int LA44_0 = input.LA(1);
 
@@ -6564,7 +6564,7 @@ public class JSParser extends Parser {
             }
             switch (alt44) {
                 case 1 :
-                    // JS.g:1275:26: QUE assignmentExpression COLON assignmentExpression
+                    // JS.g:1278:26: QUE assignmentExpression COLON assignmentExpression
                     {
                     QUE174=(Token)input.LT(1);
                     match(input,QUE,FOLLOW_QUE_in_conditionalExpression5142); 
@@ -6617,7 +6617,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start conditionalExpressionNoIn
-    // JS.g:1278:1: conditionalExpressionNoIn : logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? ;
+    // JS.g:1281:1: conditionalExpressionNoIn : logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? ;
     public final conditionalExpressionNoIn_return conditionalExpressionNoIn() throws RecognitionException {
         conditionalExpressionNoIn_return retval = new conditionalExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6637,8 +6637,8 @@ public class JSParser extends Parser {
         Object COLON181_tree=null;
 
         try {
-            // JS.g:1279:2: ( logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? )
-            // JS.g:1279:4: logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
+            // JS.g:1282:2: ( logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? )
+            // JS.g:1282:4: logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6647,7 +6647,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, logicalORExpressionNoIn178.getTree());
-            // JS.g:1279:28: ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
+            // JS.g:1282:28: ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
             int alt45=2;
             int LA45_0 = input.LA(1);
 
@@ -6656,7 +6656,7 @@ public class JSParser extends Parser {
             }
             switch (alt45) {
                 case 1 :
-                    // JS.g:1279:30: QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn
+                    // JS.g:1282:30: QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn
                     {
                     QUE179=(Token)input.LT(1);
                     match(input,QUE,FOLLOW_QUE_in_conditionalExpressionNoIn5168); 
@@ -6709,7 +6709,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start assignmentExpression
-    // JS.g:1308:1: assignmentExpression : lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? ;
+    // JS.g:1311:1: assignmentExpression : lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? ;
     public final assignmentExpression_return assignmentExpression() throws RecognitionException {
         assignmentExpression_return retval = new assignmentExpression_return();
         retval.start = input.LT(1);
@@ -6728,8 +6728,8 @@ public class JSParser extends Parser {
         	Object[] isLhs = new Object[1];
 
         try {
-            // JS.g:1313:2: (lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? )
-            // JS.g:1313:4: lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )?
+            // JS.g:1316:2: (lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? )
+            // JS.g:1316:4: lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6738,7 +6738,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, lhs.getTree());
-            // JS.g:1314:2: ({...}? assignmentOperator assignmentExpression )?
+            // JS.g:1317:2: ({...}? assignmentOperator assignmentExpression )?
             int alt46=2;
             int LA46_0 = input.LA(1);
 
@@ -6751,7 +6751,7 @@ public class JSParser extends Parser {
             }
             switch (alt46) {
                 case 1 :
-                    // JS.g:1314:4: {...}? assignmentOperator assignmentExpression
+                    // JS.g:1317:4: {...}? assignmentOperator assignmentExpression
                     {
                     if ( !( isLeftHandSideAssign(lhs, isLhs) ) ) {
                         throw new FailedPredicateException(input, "assignmentExpression", " isLeftHandSideAssign(lhs, isLhs) ");
@@ -6800,7 +6800,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start assignmentOperator
-    // JS.g:1317:1: assignmentOperator : ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS );
+    // JS.g:1320:1: assignmentOperator : ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS );
     public final assignmentOperator_return assignmentOperator() throws RecognitionException {
         assignmentOperator_return retval = new assignmentOperator_return();
         retval.start = input.LT(1);
@@ -6812,7 +6812,7 @@ public class JSParser extends Parser {
         Object set185_tree=null;
 
         try {
-            // JS.g:1318:3: ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS )
+            // JS.g:1321:3: ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS )
             // JS.g:
             {
             root_0 = (Object)adaptor.nil();
@@ -6857,7 +6857,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start assignmentExpressionNoIn
-    // JS.g:1321:1: assignmentExpressionNoIn : lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? ;
+    // JS.g:1324:1: assignmentExpressionNoIn : lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? ;
     public final assignmentExpressionNoIn_return assignmentExpressionNoIn() throws RecognitionException {
         assignmentExpressionNoIn_return retval = new assignmentExpressionNoIn_return();
         retval.start = input.LT(1);
@@ -6876,8 +6876,8 @@ public class JSParser extends Parser {
         	Object[] isLhs = new Object[1];
 
         try {
-            // JS.g:1326:2: (lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? )
-            // JS.g:1326:4: lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )?
+            // JS.g:1329:2: (lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? )
+            // JS.g:1329:4: lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -6886,7 +6886,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, lhs.getTree());
-            // JS.g:1327:2: ({...}? assignmentOperator assignmentExpressionNoIn )?
+            // JS.g:1330:2: ({...}? assignmentOperator assignmentExpressionNoIn )?
             int alt47=2;
             int LA47_0 = input.LA(1);
 
@@ -6899,7 +6899,7 @@ public class JSParser extends Parser {
             }
             switch (alt47) {
                 case 1 :
-                    // JS.g:1327:4: {...}? assignmentOperator assignmentExpressionNoIn
+                    // JS.g:1330:4: {...}? assignmentOperator assignmentExpressionNoIn
                     {
                     if ( !( isLeftHandSideAssign(lhs, isLhs) ) ) {
                         throw new FailedPredicateException(input, "assignmentExpressionNoIn", " isLeftHandSideAssign(lhs, isLhs) ");
@@ -6948,7 +6948,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start expression
-    // JS.g:1334:1: expression : exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
+    // JS.g:1337:1: expression : exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
     public final expression_return expression() throws RecognitionException {
         expression_return retval = new expression_return();
         retval.start = input.LT(1);
@@ -6962,8 +6962,8 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_assignmentExpression=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpression");
         try {
-            // JS.g:1335:2: (exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
-            // JS.g:1335:4: exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )*
+            // JS.g:1338:2: (exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
+            // JS.g:1338:4: exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )*
             {
             pushFollow(FOLLOW_assignmentExpression_in_expression5324);
             exprs=assignmentExpression();
@@ -6973,7 +6973,7 @@ public class JSParser extends Parser {
             if (list_exprs==null) list_exprs=new ArrayList();
             list_exprs.add(exprs);
 
-            // JS.g:1335:32: ( COMMA exprs+= assignmentExpression )*
+            // JS.g:1338:32: ( COMMA exprs+= assignmentExpression )*
             loop48:
             do {
                 int alt48=2;
@@ -6986,7 +6986,7 @@ public class JSParser extends Parser {
 
                 switch (alt48) {
             	case 1 :
-            	    // JS.g:1335:34: COMMA exprs+= assignmentExpression
+            	    // JS.g:1338:34: COMMA exprs+= assignmentExpression
             	    {
             	    COMMA188=(Token)input.LT(1);
             	    match(input,COMMA,FOLLOW_COMMA_in_expression5328); 
@@ -7020,9 +7020,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
             RewriteRuleSubtreeStream stream_exprs=new RewriteRuleSubtreeStream(adaptor,"token exprs",list_exprs);
             root_0 = (Object)adaptor.nil();
-            // 1336:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
+            // 1339:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
             if ( list_exprs.size() > 1 ) {
-                // JS.g:1336:28: ^( CEXPR ( $exprs)+ )
+                // JS.g:1339:28: ^( CEXPR ( $exprs)+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(CEXPR, "CEXPR"), root_1);
@@ -7040,7 +7040,7 @@ public class JSParser extends Parser {
                 }
 
             }
-            else // 1337:2: -> $exprs
+            else // 1340:2: -> $exprs
             {
                 adaptor.addChild(root_0, ((ParserRuleReturnScope)stream_exprs.next()).getTree());
 
@@ -7075,7 +7075,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start expressionNoIn
-    // JS.g:1340:1: expressionNoIn : exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
+    // JS.g:1343:1: expressionNoIn : exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
     public final expressionNoIn_return expressionNoIn() throws RecognitionException {
         expressionNoIn_return retval = new expressionNoIn_return();
         retval.start = input.LT(1);
@@ -7089,8 +7089,8 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_COMMA=new RewriteRuleTokenStream(adaptor,"token COMMA");
         RewriteRuleSubtreeStream stream_assignmentExpressionNoIn=new RewriteRuleSubtreeStream(adaptor,"rule assignmentExpressionNoIn");
         try {
-            // JS.g:1341:2: (exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
-            // JS.g:1341:4: exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )*
+            // JS.g:1344:2: (exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
+            // JS.g:1344:4: exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )*
             {
             pushFollow(FOLLOW_assignmentExpressionNoIn_in_expressionNoIn5369);
             exprs=assignmentExpressionNoIn();
@@ -7100,7 +7100,7 @@ public class JSParser extends Parser {
             if (list_exprs==null) list_exprs=new ArrayList();
             list_exprs.add(exprs);
 
-            // JS.g:1341:36: ( COMMA exprs+= assignmentExpressionNoIn )*
+            // JS.g:1344:36: ( COMMA exprs+= assignmentExpressionNoIn )*
             loop49:
             do {
                 int alt49=2;
@@ -7113,7 +7113,7 @@ public class JSParser extends Parser {
 
                 switch (alt49) {
             	case 1 :
-            	    // JS.g:1341:38: COMMA exprs+= assignmentExpressionNoIn
+            	    // JS.g:1344:38: COMMA exprs+= assignmentExpressionNoIn
             	    {
             	    COMMA189=(Token)input.LT(1);
             	    match(input,COMMA,FOLLOW_COMMA_in_expressionNoIn5373); 
@@ -7147,9 +7147,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
             RewriteRuleSubtreeStream stream_exprs=new RewriteRuleSubtreeStream(adaptor,"token exprs",list_exprs);
             root_0 = (Object)adaptor.nil();
-            // 1342:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
+            // 1345:2: -> { $exprs.size() > 1 }? ^( CEXPR ( $exprs)+ )
             if ( list_exprs.size() > 1 ) {
-                // JS.g:1342:28: ^( CEXPR ( $exprs)+ )
+                // JS.g:1345:28: ^( CEXPR ( $exprs)+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(CEXPR, "CEXPR"), root_1);
@@ -7167,7 +7167,7 @@ public class JSParser extends Parser {
                 }
 
             }
-            else // 1343:2: -> $exprs
+            else // 1346:2: -> $exprs
             {
                 adaptor.addChild(root_0, ((ParserRuleReturnScope)stream_exprs.next()).getTree());
 
@@ -7202,7 +7202,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start semic
-    // JS.g:1368:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );
+    // JS.g:1371:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );
     public final semic_return semic() throws RecognitionException {
         semic_return retval = new semic_return();
         retval.start = input.LT(1);
@@ -7228,7 +7228,7 @@ public class JSParser extends Parser {
         	promoteEOL(retval);
 
         try {
-            // JS.g:1376:2: ( SEMIC | EOF | RBRACE | EOL | MultiLineComment )
+            // JS.g:1379:2: ( SEMIC | EOF | RBRACE | EOL | MultiLineComment )
             int alt50=5;
             switch ( input.LA(1) ) {
             case SEMIC:
@@ -7258,14 +7258,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1368:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );", 50, 0, input);
+                    new NoViableAltException("1371:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );", 50, 0, input);
 
                 throw nvae;
             }
 
             switch (alt50) {
                 case 1 :
-                    // JS.g:1376:4: SEMIC
+                    // JS.g:1379:4: SEMIC
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7278,7 +7278,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1377:4: EOF
+                    // JS.g:1380:4: EOF
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7291,7 +7291,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1378:4: RBRACE
+                    // JS.g:1381:4: RBRACE
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7305,7 +7305,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1379:4: EOL
+                    // JS.g:1382:4: EOL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7318,7 +7318,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // JS.g:1379:10: MultiLineComment
+                    // JS.g:1382:10: MultiLineComment
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7357,7 +7357,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start statement
-    // JS.g:1387:1: statement options {k=1; } : ({...}? block | statementTail );
+    // JS.g:1390:1: statement options {k=1; } : ({...}? block | statementTail );
     public final statement_return statement() throws RecognitionException {
         statement_return retval = new statement_return();
         retval.start = input.LT(1);
@@ -7371,7 +7371,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1392:2: ({...}? block | statementTail )
+            // JS.g:1395:2: ({...}? block | statementTail )
             int alt51=2;
             int LA51_0 = input.LA(1);
 
@@ -7386,7 +7386,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1387:1: statement options {k=1; } : ({...}? block | statementTail );", 51, 1, input);
+                        new NoViableAltException("1390:1: statement options {k=1; } : ({...}? block | statementTail );", 51, 1, input);
 
                     throw nvae;
                 }
@@ -7396,13 +7396,13 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1387:1: statement options {k=1; } : ({...}? block | statementTail );", 51, 0, input);
+                    new NoViableAltException("1390:1: statement options {k=1; } : ({...}? block | statementTail );", 51, 0, input);
 
                 throw nvae;
             }
             switch (alt51) {
                 case 1 :
-                    // JS.g:1392:4: {...}? block
+                    // JS.g:1395:4: {...}? block
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7418,7 +7418,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1393:4: statementTail
+                    // JS.g:1396:4: statementTail
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7457,7 +7457,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start statementTail
-    // JS.g:1396:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );
+    // JS.g:1399:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );
     public final statementTail_return statementTail() throws RecognitionException {
         statementTail_return retval = new statementTail_return();
         retval.start = input.LT(1);
@@ -7497,7 +7497,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1397:2: ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement )
+            // JS.g:1400:2: ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement )
             int alt52=15;
             switch ( input.LA(1) ) {
             case VAR:
@@ -7553,7 +7553,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1396:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 4, input);
+                        new NoViableAltException("1399:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 4, input);
 
                     throw nvae;
                 }
@@ -7571,7 +7571,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1396:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 5, input);
+                        new NoViableAltException("1399:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 5, input);
 
                     throw nvae;
                 }
@@ -7589,7 +7589,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1396:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 6, input);
+                        new NoViableAltException("1399:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 6, input);
 
                     throw nvae;
                 }
@@ -7607,7 +7607,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1396:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 7, input);
+                        new NoViableAltException("1399:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 7, input);
 
                     throw nvae;
                 }
@@ -7625,7 +7625,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1396:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 8, input);
+                        new NoViableAltException("1399:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 8, input);
 
                     throw nvae;
                 }
@@ -7672,7 +7672,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1396:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 9, input);
+                        new NoViableAltException("1399:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 9, input);
 
                     throw nvae;
                 }
@@ -7690,7 +7690,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1396:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 10, input);
+                        new NoViableAltException("1399:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 10, input);
 
                     throw nvae;
                 }
@@ -7755,14 +7755,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1396:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 0, input);
+                    new NoViableAltException("1399:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement | constStatement | namespaceStatement );", 52, 0, input);
 
                 throw nvae;
             }
 
             switch (alt52) {
                 case 1 :
-                    // JS.g:1397:4: variableStatement
+                    // JS.g:1400:4: variableStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7775,7 +7775,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1398:4: emptyStatement
+                    // JS.g:1401:4: emptyStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7788,7 +7788,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1399:4: expressionStatement
+                    // JS.g:1402:4: expressionStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7801,7 +7801,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1400:4: ifStatement
+                    // JS.g:1403:4: ifStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7814,7 +7814,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 5 :
-                    // JS.g:1401:4: iterationStatement
+                    // JS.g:1404:4: iterationStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7827,7 +7827,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 6 :
-                    // JS.g:1402:4: continueStatement
+                    // JS.g:1405:4: continueStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7840,7 +7840,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 7 :
-                    // JS.g:1403:4: breakStatement
+                    // JS.g:1406:4: breakStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7853,7 +7853,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 8 :
-                    // JS.g:1404:4: returnStatement
+                    // JS.g:1407:4: returnStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7866,7 +7866,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 9 :
-                    // JS.g:1405:4: withStatement
+                    // JS.g:1408:4: withStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7879,7 +7879,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 10 :
-                    // JS.g:1406:4: labelledStatement
+                    // JS.g:1409:4: labelledStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7892,7 +7892,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 11 :
-                    // JS.g:1407:4: switchStatement
+                    // JS.g:1410:4: switchStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7905,7 +7905,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 12 :
-                    // JS.g:1408:4: throwStatement
+                    // JS.g:1411:4: throwStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7918,7 +7918,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 13 :
-                    // JS.g:1409:4: tryStatement
+                    // JS.g:1412:4: tryStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7931,7 +7931,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 14 :
-                    // JS.g:1410:4: constStatement
+                    // JS.g:1413:4: constStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7944,7 +7944,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 15 :
-                    // JS.g:1411:4: namespaceStatement
+                    // JS.g:1414:4: namespaceStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -7983,7 +7983,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start block
-    // JS.g:1416:1: block : lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) ;
+    // JS.g:1419:1: block : lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) ;
     public final block_return block() throws RecognitionException {
         block_return retval = new block_return();
         retval.start = input.LT(1);
@@ -8001,14 +8001,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LBRACE=new RewriteRuleTokenStream(adaptor,"token LBRACE");
         RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
         try {
-            // JS.g:1417:2: (lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) )
-            // JS.g:1417:4: lb= LBRACE ( statement )* RBRACE
+            // JS.g:1420:2: (lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) )
+            // JS.g:1420:4: lb= LBRACE ( statement )* RBRACE
             {
             lb=(Token)input.LT(1);
             match(input,LBRACE,FOLLOW_LBRACE_in_block5580); 
             stream_LBRACE.add(lb);
 
-            // JS.g:1417:14: ( statement )*
+            // JS.g:1420:14: ( statement )*
             loop53:
             do {
                 int alt53=2;
@@ -8021,7 +8021,7 @@ public class JSParser extends Parser {
 
                 switch (alt53) {
             	case 1 :
-            	    // JS.g:1417:14: statement
+            	    // JS.g:1420:14: statement
             	    {
             	    pushFollow(FOLLOW_statement_in_block5582);
             	    statement212=statement();
@@ -8052,14 +8052,14 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1418:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
+            // 1421:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
             {
-                // JS.g:1418:5: ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
+                // JS.g:1421:5: ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(BLOCK, lb,  "BLOCK"), root_1);
 
-                // JS.g:1418:28: ( statement )*
+                // JS.g:1421:28: ( statement )*
                 while ( stream_statement.hasNext() ) {
                     adaptor.addChild(root_1, stream_statement.next());
 
@@ -8100,7 +8100,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start variableStatement
-    // JS.g:1425:1: variableStatement : VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) ;
+    // JS.g:1428:1: variableStatement : VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) ;
     public final variableStatement_return variableStatement() throws RecognitionException {
         variableStatement_return retval = new variableStatement_return();
         retval.start = input.LT(1);
@@ -8123,8 +8123,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_variableDeclaration=new RewriteRuleSubtreeStream(adaptor,"rule variableDeclaration");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // JS.g:1426:2: ( VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) )
-            // JS.g:1426:4: VAR variableDeclaration ( COMMA variableDeclaration )* semic
+            // JS.g:1429:2: ( VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) )
+            // JS.g:1429:4: VAR variableDeclaration ( COMMA variableDeclaration )* semic
             {
             VAR214=(Token)input.LT(1);
             match(input,VAR,FOLLOW_VAR_in_variableStatement5614); 
@@ -8135,7 +8135,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_variableDeclaration.add(variableDeclaration215.getTree());
-            // JS.g:1426:28: ( COMMA variableDeclaration )*
+            // JS.g:1429:28: ( COMMA variableDeclaration )*
             loop54:
             do {
                 int alt54=2;
@@ -8148,7 +8148,7 @@ public class JSParser extends Parser {
 
                 switch (alt54) {
             	case 1 :
-            	    // JS.g:1426:30: COMMA variableDeclaration
+            	    // JS.g:1429:30: COMMA variableDeclaration
             	    {
             	    COMMA216=(Token)input.LT(1);
             	    match(input,COMMA,FOLLOW_COMMA_in_variableStatement5620); 
@@ -8175,7 +8175,7 @@ public class JSParser extends Parser {
             stream_semic.add(semic218.getTree());
 
             // AST REWRITE
-            // elements: VAR, variableDeclaration
+            // elements: variableDeclaration, VAR
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8184,9 +8184,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1427:2: -> ^( VAR ( variableDeclaration )+ )
+            // 1430:2: -> ^( VAR ( variableDeclaration )+ )
             {
-                // JS.g:1427:5: ^( VAR ( variableDeclaration )+ )
+                // JS.g:1430:5: ^( VAR ( variableDeclaration )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_VAR.next(), root_1);
@@ -8234,7 +8234,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start typeRef
-    // JS.g:1430:1: typeRef : ( identifier | );
+    // JS.g:1433:1: typeRef : ( identifier | );
     public final typeRef_return typeRef() throws RecognitionException {
         typeRef_return retval = new typeRef_return();
         retval.start = input.LT(1);
@@ -8246,7 +8246,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1431:2: ( identifier | )
+            // JS.g:1434:2: ( identifier | )
             int alt55=2;
             int LA55_0 = input.LA(1);
 
@@ -8258,13 +8258,13 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1430:1: typeRef : ( identifier | );", 55, 0, input);
+                    new NoViableAltException("1433:1: typeRef : ( identifier | );", 55, 0, input);
 
                 throw nvae;
             }
             switch (alt55) {
                 case 1 :
-                    // JS.g:1431:4: identifier
+                    // JS.g:1434:4: identifier
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -8277,7 +8277,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1432:4: 
+                    // JS.g:1435:4: 
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -8312,7 +8312,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start variableDeclaration
-    // JS.g:1435:1: variableDeclaration : identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpression )? ;
+    // JS.g:1438:1: variableDeclaration : identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpression )? ;
     public final variableDeclaration_return variableDeclaration() throws RecognitionException {
         variableDeclaration_return retval = new variableDeclaration_return();
         retval.start = input.LT(1);
@@ -8332,8 +8332,8 @@ public class JSParser extends Parser {
         Object ASSIGN223_tree=null;
 
         try {
-            // JS.g:1436:2: ( identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpression )? )
-            // JS.g:1436:4: identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpression )?
+            // JS.g:1439:2: ( identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpression )? )
+            // JS.g:1439:4: identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpression )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -8342,7 +8342,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             root_0 = (Object)adaptor.becomeRoot(identifier220.getTree(), root_0);
-            // JS.g:1436:16: ({...}? => COLON typeRef )?
+            // JS.g:1439:16: ({...}? => COLON typeRef )?
             int alt56=2;
             int LA56_0 = input.LA(1);
 
@@ -8351,7 +8351,7 @@ public class JSParser extends Parser {
             }
             switch (alt56) {
                 case 1 :
-                    // JS.g:1436:18: {...}? => COLON typeRef
+                    // JS.g:1439:18: {...}? => COLON typeRef
                     {
                     if ( !( isTypeInformationEnabled() ) ) {
                         throw new FailedPredicateException(input, "variableDeclaration", " isTypeInformationEnabled() ");
@@ -8372,7 +8372,7 @@ public class JSParser extends Parser {
 
             }
 
-            // JS.g:1436:69: ( ASSIGN assignmentExpression )?
+            // JS.g:1439:69: ( ASSIGN assignmentExpression )?
             int alt57=2;
             int LA57_0 = input.LA(1);
 
@@ -8381,7 +8381,7 @@ public class JSParser extends Parser {
             }
             switch (alt57) {
                 case 1 :
-                    // JS.g:1436:71: ASSIGN assignmentExpression
+                    // JS.g:1439:71: ASSIGN assignmentExpression
                     {
                     ASSIGN223=(Token)input.LT(1);
                     match(input,ASSIGN,FOLLOW_ASSIGN_in_variableDeclaration5683); 
@@ -8427,7 +8427,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start variableDeclarationNoIn
-    // JS.g:1439:1: variableDeclarationNoIn : identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpressionNoIn )? ;
+    // JS.g:1442:1: variableDeclarationNoIn : identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpressionNoIn )? ;
     public final variableDeclarationNoIn_return variableDeclarationNoIn() throws RecognitionException {
         variableDeclarationNoIn_return retval = new variableDeclarationNoIn_return();
         retval.start = input.LT(1);
@@ -8447,8 +8447,8 @@ public class JSParser extends Parser {
         Object ASSIGN228_tree=null;
 
         try {
-            // JS.g:1440:2: ( identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpressionNoIn )? )
-            // JS.g:1440:4: identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpressionNoIn )?
+            // JS.g:1443:2: ( identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpressionNoIn )? )
+            // JS.g:1443:4: identifier ({...}? => COLON typeRef )? ( ASSIGN assignmentExpressionNoIn )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -8457,7 +8457,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             root_0 = (Object)adaptor.becomeRoot(identifier225.getTree(), root_0);
-            // JS.g:1440:16: ({...}? => COLON typeRef )?
+            // JS.g:1443:16: ({...}? => COLON typeRef )?
             int alt58=2;
             int LA58_0 = input.LA(1);
 
@@ -8466,7 +8466,7 @@ public class JSParser extends Parser {
             }
             switch (alt58) {
                 case 1 :
-                    // JS.g:1440:18: {...}? => COLON typeRef
+                    // JS.g:1443:18: {...}? => COLON typeRef
                     {
                     if ( !( isTypeInformationEnabled() ) ) {
                         throw new FailedPredicateException(input, "variableDeclarationNoIn", " isTypeInformationEnabled() ");
@@ -8487,7 +8487,7 @@ public class JSParser extends Parser {
 
             }
 
-            // JS.g:1440:69: ( ASSIGN assignmentExpressionNoIn )?
+            // JS.g:1443:69: ( ASSIGN assignmentExpressionNoIn )?
             int alt59=2;
             int LA59_0 = input.LA(1);
 
@@ -8496,7 +8496,7 @@ public class JSParser extends Parser {
             }
             switch (alt59) {
                 case 1 :
-                    // JS.g:1440:71: ASSIGN assignmentExpressionNoIn
+                    // JS.g:1443:71: ASSIGN assignmentExpressionNoIn
                     {
                     ASSIGN228=(Token)input.LT(1);
                     match(input,ASSIGN,FOLLOW_ASSIGN_in_variableDeclarationNoIn5717); 
@@ -8542,7 +8542,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start constStatement
-    // JS.g:1443:1: constStatement : CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) ;
+    // JS.g:1446:1: constStatement : CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) ;
     public final constStatement_return constStatement() throws RecognitionException {
         constStatement_return retval = new constStatement_return();
         retval.start = input.LT(1);
@@ -8565,8 +8565,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_variableDeclaration=new RewriteRuleSubtreeStream(adaptor,"rule variableDeclaration");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // JS.g:1444:3: ( CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) )
-            // JS.g:1444:5: CONST variableDeclaration ( COMMA variableDeclaration )* semic
+            // JS.g:1447:3: ( CONST variableDeclaration ( COMMA variableDeclaration )* semic -> ^( CONST ( variableDeclaration )+ ) )
+            // JS.g:1447:5: CONST variableDeclaration ( COMMA variableDeclaration )* semic
             {
             CONST230=(Token)input.LT(1);
             match(input,CONST,FOLLOW_CONST_in_constStatement5734); 
@@ -8577,7 +8577,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_variableDeclaration.add(variableDeclaration231.getTree());
-            // JS.g:1444:31: ( COMMA variableDeclaration )*
+            // JS.g:1447:31: ( COMMA variableDeclaration )*
             loop60:
             do {
                 int alt60=2;
@@ -8590,7 +8590,7 @@ public class JSParser extends Parser {
 
                 switch (alt60) {
             	case 1 :
-            	    // JS.g:1444:33: COMMA variableDeclaration
+            	    // JS.g:1447:33: COMMA variableDeclaration
             	    {
             	    COMMA232=(Token)input.LT(1);
             	    match(input,COMMA,FOLLOW_COMMA_in_constStatement5740); 
@@ -8617,7 +8617,7 @@ public class JSParser extends Parser {
             stream_semic.add(semic234.getTree());
 
             // AST REWRITE
-            // elements: variableDeclaration, CONST
+            // elements: CONST, variableDeclaration
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8626,9 +8626,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1445:3: -> ^( CONST ( variableDeclaration )+ )
+            // 1448:3: -> ^( CONST ( variableDeclaration )+ )
             {
-                // JS.g:1445:6: ^( CONST ( variableDeclaration )+ )
+                // JS.g:1448:6: ^( CONST ( variableDeclaration )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_CONST.next(), root_1);
@@ -8676,7 +8676,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start emptyStatement
-    // JS.g:1452:1: emptyStatement : SEMIC -> EMPTY_STATEMENT[$SEMIC] ;
+    // JS.g:1455:1: emptyStatement : SEMIC -> EMPTY_STATEMENT[$SEMIC] ;
     public final emptyStatement_return emptyStatement() throws RecognitionException {
         emptyStatement_return retval = new emptyStatement_return();
         retval.start = input.LT(1);
@@ -8689,8 +8689,8 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_SEMIC=new RewriteRuleTokenStream(adaptor,"token SEMIC");
 
         try {
-            // JS.g:1453:2: ( SEMIC -> EMPTY_STATEMENT[$SEMIC] )
-            // JS.g:1453:4: SEMIC
+            // JS.g:1456:2: ( SEMIC -> EMPTY_STATEMENT[$SEMIC] )
+            // JS.g:1456:4: SEMIC
             {
             SEMIC235=(Token)input.LT(1);
             match(input,SEMIC,FOLLOW_SEMIC_in_emptyStatement5777); 
@@ -8707,7 +8707,7 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1453:10: -> EMPTY_STATEMENT[$SEMIC]
+            // 1456:10: -> EMPTY_STATEMENT[$SEMIC]
             {
                 adaptor.addChild(root_0, adaptor.create(EMPTY_STATEMENT, SEMIC235));
 
@@ -8742,7 +8742,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start expressionStatement
-    // JS.g:1466:1: expressionStatement : expression semic ;
+    // JS.g:1469:1: expressionStatement : expression semic ;
     public final expressionStatement_return expressionStatement() throws RecognitionException {
         expressionStatement_return retval = new expressionStatement_return();
         retval.start = input.LT(1);
@@ -8756,8 +8756,8 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1467:2: ( expression semic )
-            // JS.g:1467:4: expression semic
+            // JS.g:1470:2: ( expression semic )
+            // JS.g:1470:4: expression semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -8798,7 +8798,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start ifStatement
-    // JS.g:1474:1: ifStatement : IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) ;
+    // JS.g:1477:1: ifStatement : IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) ;
     public final ifStatement_return ifStatement() throws RecognitionException {
         ifStatement_return retval = new ifStatement_return();
         retval.start = input.LT(1);
@@ -8827,8 +8827,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
         try {
-            // JS.g:1476:2: ( IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) )
-            // JS.g:1476:4: IF LPAREN expression RPAREN statement ({...}? ELSE statement )?
+            // JS.g:1479:2: ( IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) )
+            // JS.g:1479:4: IF LPAREN expression RPAREN statement ({...}? ELSE statement )?
             {
             IF238=(Token)input.LT(1);
             match(input,IF,FOLLOW_IF_in_ifStatement5820); 
@@ -8852,7 +8852,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_statement.add(statement242.getTree());
-            // JS.g:1476:42: ({...}? ELSE statement )?
+            // JS.g:1479:42: ({...}? ELSE statement )?
             int alt61=2;
             int LA61_0 = input.LA(1);
 
@@ -8865,7 +8865,7 @@ public class JSParser extends Parser {
             }
             switch (alt61) {
                 case 1 :
-                    // JS.g:1476:44: {...}? ELSE statement
+                    // JS.g:1479:44: {...}? ELSE statement
                     {
                     if ( !( input.LA(1) == ELSE ) ) {
                         throw new FailedPredicateException(input, "ifStatement", " input.LA(1) == ELSE ");
@@ -8887,7 +8887,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: statement, IF, expression
+            // elements: expression, statement, IF
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8896,9 +8896,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1477:2: -> ^( IF expression ( statement )+ )
+            // 1480:2: -> ^( IF expression ( statement )+ )
             {
-                // JS.g:1477:5: ^( IF expression ( statement )+ )
+                // JS.g:1480:5: ^( IF expression ( statement )+ )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_IF.next(), root_1);
@@ -8947,7 +8947,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start iterationStatement
-    // JS.g:1484:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );
+    // JS.g:1487:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );
     public final iterationStatement_return iterationStatement() throws RecognitionException {
         iterationStatement_return retval = new iterationStatement_return();
         retval.start = input.LT(1);
@@ -8965,7 +8965,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1485:2: ( doStatement | whileStatement | forEachStatement | forStatement )
+            // JS.g:1488:2: ( doStatement | whileStatement | forEachStatement | forStatement )
             int alt62=4;
             switch ( input.LA(1) ) {
             case DO:
@@ -8990,7 +8990,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1484:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );", 62, 3, input);
+                        new NoViableAltException("1487:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );", 62, 3, input);
 
                     throw nvae;
                 }
@@ -8998,14 +8998,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1484:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );", 62, 0, input);
+                    new NoViableAltException("1487:1: iterationStatement : ( doStatement | whileStatement | forEachStatement | forStatement );", 62, 0, input);
 
                 throw nvae;
             }
 
             switch (alt62) {
                 case 1 :
-                    // JS.g:1485:4: doStatement
+                    // JS.g:1488:4: doStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -9018,7 +9018,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1486:4: whileStatement
+                    // JS.g:1489:4: whileStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -9031,7 +9031,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1487:4: forEachStatement
+                    // JS.g:1490:4: forEachStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -9044,7 +9044,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // JS.g:1488:4: forStatement
+                    // JS.g:1491:4: forStatement
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -9083,7 +9083,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start doStatement
-    // JS.g:1491:1: doStatement : DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) ;
+    // JS.g:1494:1: doStatement : DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) ;
     public final doStatement_return doStatement() throws RecognitionException {
         doStatement_return retval = new doStatement_return();
         retval.start = input.LT(1);
@@ -9113,8 +9113,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_semic=new RewriteRuleSubtreeStream(adaptor,"rule semic");
         try {
-            // JS.g:1492:2: ( DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) )
-            // JS.g:1492:4: DO statement WHILE LPAREN expression RPAREN semic
+            // JS.g:1495:2: ( DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) )
+            // JS.g:1495:4: DO statement WHILE LPAREN expression RPAREN semic
             {
             DO249=(Token)input.LT(1);
             match(input,DO,FOLLOW_DO_in_doStatement5896); 
@@ -9149,7 +9149,7 @@ public class JSParser extends Parser {
             stream_semic.add(semic255.getTree());
 
             // AST REWRITE
-            // elements: statement, DO, expression
+            // elements: expression, DO, statement
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -9158,9 +9158,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1493:2: -> ^( DO statement expression )
+            // 1496:2: -> ^( DO statement expression )
             {
-                // JS.g:1493:5: ^( DO statement expression )
+                // JS.g:1496:5: ^( DO statement expression )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_DO.next(), root_1);
@@ -9202,7 +9202,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start whileStatement
-    // JS.g:1496:1: whileStatement : WHILE LPAREN expression RPAREN statement ;
+    // JS.g:1499:1: whileStatement : WHILE LPAREN expression RPAREN statement ;
     public final whileStatement_return whileStatement() throws RecognitionException {
         whileStatement_return retval = new whileStatement_return();
         retval.start = input.LT(1);
@@ -9222,8 +9222,8 @@ public class JSParser extends Parser {
         Object RPAREN259_tree=null;
 
         try {
-            // JS.g:1497:2: ( WHILE LPAREN expression RPAREN statement )
-            // JS.g:1497:4: WHILE LPAREN expression RPAREN statement
+            // JS.g:1500:2: ( WHILE LPAREN expression RPAREN statement )
+            // JS.g:1500:4: WHILE LPAREN expression RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9274,7 +9274,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forEachStatement
-    // JS.g:1542:1: forEachStatement : forKeyword= FOR EACH LPAREN forEachControl RPAREN statement -> ^( FOREACH[$forKeyword] forEachControl statement ) ;
+    // JS.g:1545:1: forEachStatement : forKeyword= FOR EACH LPAREN forEachControl RPAREN statement -> ^( FOREACH[$forKeyword] forEachControl statement ) ;
     public final forEachStatement_return forEachStatement() throws RecognitionException {
         forEachStatement_return retval = new forEachStatement_return();
         retval.start = input.LT(1);
@@ -9301,8 +9301,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
         RewriteRuleSubtreeStream stream_forEachControl=new RewriteRuleSubtreeStream(adaptor,"rule forEachControl");
         try {
-            // JS.g:1543:3: (forKeyword= FOR EACH LPAREN forEachControl RPAREN statement -> ^( FOREACH[$forKeyword] forEachControl statement ) )
-            // JS.g:1543:5: forKeyword= FOR EACH LPAREN forEachControl RPAREN statement
+            // JS.g:1546:3: (forKeyword= FOR EACH LPAREN forEachControl RPAREN statement -> ^( FOREACH[$forKeyword] forEachControl statement ) )
+            // JS.g:1546:5: forKeyword= FOR EACH LPAREN forEachControl RPAREN statement
             {
             forKeyword=(Token)input.LT(1);
             match(input,FOR,FOLLOW_FOR_in_forEachStatement5961); 
@@ -9332,7 +9332,7 @@ public class JSParser extends Parser {
             stream_statement.add(statement265.getTree());
 
             // AST REWRITE
-            // elements: statement, forEachControl
+            // elements: forEachControl, statement
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -9341,9 +9341,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1544:4: -> ^( FOREACH[$forKeyword] forEachControl statement )
+            // 1547:4: -> ^( FOREACH[$forKeyword] forEachControl statement )
             {
-                // JS.g:1544:7: ^( FOREACH[$forKeyword] forEachControl statement )
+                // JS.g:1547:7: ^( FOREACH[$forKeyword] forEachControl statement )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(FOREACH, forKeyword), root_1);
@@ -9385,7 +9385,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forEachControl
-    // JS.g:1547:1: forEachControl : ( forControlVar | forControlExpression );
+    // JS.g:1550:1: forEachControl : ( forControlVar | forControlExpression );
     public final forEachControl_return forEachControl() throws RecognitionException {
         forEachControl_return retval = new forEachControl_return();
         retval.start = input.LT(1);
@@ -9399,7 +9399,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1548:3: ( forControlVar | forControlExpression )
+            // JS.g:1551:3: ( forControlVar | forControlExpression )
             int alt63=2;
             int LA63_0 = input.LA(1);
 
@@ -9411,13 +9411,13 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1547:1: forEachControl : ( forControlVar | forControlExpression );", 63, 0, input);
+                    new NoViableAltException("1550:1: forEachControl : ( forControlVar | forControlExpression );", 63, 0, input);
 
                 throw nvae;
             }
             switch (alt63) {
                 case 1 :
-                    // JS.g:1548:5: forControlVar
+                    // JS.g:1551:5: forControlVar
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -9430,7 +9430,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1549:5: forControlExpression
+                    // JS.g:1552:5: forControlExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -9469,7 +9469,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forStatement
-    // JS.g:1552:1: forStatement : FOR LPAREN forControl RPAREN statement ;
+    // JS.g:1555:1: forStatement : FOR LPAREN forControl RPAREN statement ;
     public final forStatement_return forStatement() throws RecognitionException {
         forStatement_return retval = new forStatement_return();
         retval.start = input.LT(1);
@@ -9489,8 +9489,8 @@ public class JSParser extends Parser {
         Object RPAREN271_tree=null;
 
         try {
-            // JS.g:1553:2: ( FOR LPAREN forControl RPAREN statement )
-            // JS.g:1553:4: FOR LPAREN forControl RPAREN statement
+            // JS.g:1556:2: ( FOR LPAREN forControl RPAREN statement )
+            // JS.g:1556:4: FOR LPAREN forControl RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
@@ -9541,7 +9541,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forControl
-    // JS.g:1556:1: forControl : ( forControlVar | forControlExpression | forControlSemic );
+    // JS.g:1559:1: forControl : ( forControlVar | forControlExpression | forControlSemic );
     public final forControl_return forControl() throws RecognitionException {
         forControl_return retval = new forControl_return();
         retval.start = input.LT(1);
@@ -9557,7 +9557,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1557:2: ( forControlVar | forControlExpression | forControlSemic )
+            // JS.g:1560:2: ( forControlVar | forControlExpression | forControlSemic )
             int alt64=3;
             switch ( input.LA(1) ) {
             case VAR:
@@ -9639,14 +9639,14 @@ public class JSParser extends Parser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("1556:1: forControl : ( forControlVar | forControlExpression | forControlSemic );", 64, 0, input);
+                    new NoViableAltException("1559:1: forControl : ( forControlVar | forControlExpression | forControlSemic );", 64, 0, input);
 
                 throw nvae;
             }
 
             switch (alt64) {
                 case 1 :
-                    // JS.g:1557:4: forControlVar
+                    // JS.g:1560:4: forControlVar
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -9659,7 +9659,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1558:4: forControlExpression
+                    // JS.g:1561:4: forControlExpression
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -9672,7 +9672,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // JS.g:1559:4: forControlSemic
+                    // JS.g:1562:4: forControlSemic
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -9711,7 +9711,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forControlVar
-    // JS.g:1562:1: forControlVar : VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) ;
+    // JS.g:1565:1: forControlVar : VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) ;
     public final forControlVar_return forControlVar() throws RecognitionException {
         forControlVar_return retval = new forControlVar_return();
         retval.start = input.LT(1);
@@ -9746,8 +9746,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         RewriteRuleSubtreeStream stream_variableDeclarationNoIn=new RewriteRuleSubtreeStream(adaptor,"rule variableDeclarationNoIn");
         try {
-            // JS.g:1563:2: ( VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) )
-            // JS.g:1563:4: VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
+            // JS.g:1566:2: ( VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) )
+            // JS.g:1566:4: VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
             {
             VAR276=(Token)input.LT(1);
             match(input,VAR,FOLLOW_VAR_in_forControlVar6060); 
@@ -9758,7 +9758,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_variableDeclarationNoIn.add(variableDeclarationNoIn277.getTree());
-            // JS.g:1564:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
+            // JS.g:1567:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
             int alt68=2;
             int LA68_0 = input.LA(1);
 
@@ -9770,16 +9770,16 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1564:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )", 68, 0, input);
+                    new NoViableAltException("1567:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )", 68, 0, input);
 
                 throw nvae;
             }
             switch (alt68) {
                 case 1 :
-                    // JS.g:1565:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
+                    // JS.g:1568:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
                     {
-                    // JS.g:1565:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
-                    // JS.g:1566:4: IN expression
+                    // JS.g:1568:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
+                    // JS.g:1569:4: IN expression
                     {
                     IN278=(Token)input.LT(1);
                     match(input,IN,FOLLOW_IN_in_forControlVar6074); 
@@ -9792,7 +9792,7 @@ public class JSParser extends Parser {
                     stream_expression.add(expression279.getTree());
 
                     // AST REWRITE
-                    // elements: VAR, variableDeclarationNoIn, expression
+                    // elements: variableDeclarationNoIn, expression, VAR
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -9801,14 +9801,14 @@ public class JSParser extends Parser {
                     RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1567:4: -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
+                    // 1570:4: -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
                     {
-                        // JS.g:1567:7: ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
+                        // JS.g:1570:7: ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORITER, "FORITER"), root_1);
 
-                        // JS.g:1567:18: ^( VAR variableDeclarationNoIn )
+                        // JS.g:1570:18: ^( VAR variableDeclarationNoIn )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_VAR.next(), root_2);
@@ -9817,7 +9817,7 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1567:51: ^( EXPR expression )
+                        // JS.g:1570:51: ^( EXPR expression )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -9840,12 +9840,12 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1570:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
+                    // JS.g:1573:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
                     {
-                    // JS.g:1570:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
-                    // JS.g:1571:4: ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )?
+                    // JS.g:1573:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
+                    // JS.g:1574:4: ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )?
                     {
-                    // JS.g:1571:4: ( COMMA variableDeclarationNoIn )*
+                    // JS.g:1574:4: ( COMMA variableDeclarationNoIn )*
                     loop65:
                     do {
                         int alt65=2;
@@ -9858,7 +9858,7 @@ public class JSParser extends Parser {
 
                         switch (alt65) {
                     	case 1 :
-                    	    // JS.g:1571:6: COMMA variableDeclarationNoIn
+                    	    // JS.g:1574:6: COMMA variableDeclarationNoIn
                     	    {
                     	    COMMA280=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_forControlVar6122); 
@@ -9882,7 +9882,7 @@ public class JSParser extends Parser {
                     match(input,SEMIC,FOLLOW_SEMIC_in_forControlVar6129); 
                     stream_SEMIC.add(SEMIC282);
 
-                    // JS.g:1571:48: (ex1= expression )?
+                    // JS.g:1574:48: (ex1= expression )?
                     int alt66=2;
                     int LA66_0 = input.LA(1);
 
@@ -9891,7 +9891,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt66) {
                         case 1 :
-                            // JS.g:1571:48: ex1= expression
+                            // JS.g:1574:48: ex1= expression
                             {
                             pushFollow(FOLLOW_expression_in_forControlVar6133);
                             ex1=expression();
@@ -9908,7 +9908,7 @@ public class JSParser extends Parser {
                     match(input,SEMIC,FOLLOW_SEMIC_in_forControlVar6136); 
                     stream_SEMIC.add(SEMIC283);
 
-                    // JS.g:1571:70: (ex2= expression )?
+                    // JS.g:1574:70: (ex2= expression )?
                     int alt67=2;
                     int LA67_0 = input.LA(1);
 
@@ -9917,7 +9917,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt67) {
                         case 1 :
-                            // JS.g:1571:70: ex2= expression
+                            // JS.g:1574:70: ex2= expression
                             {
                             pushFollow(FOLLOW_expression_in_forControlVar6140);
                             ex2=expression();
@@ -9932,7 +9932,7 @@ public class JSParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ex2, variableDeclarationNoIn, ex1, VAR
+                    // elements: ex1, ex2, VAR, variableDeclarationNoIn
                     // token labels: 
                     // rule labels: retval, ex2, ex1
                     // token list labels: 
@@ -9943,14 +9943,14 @@ public class JSParser extends Parser {
                     RewriteRuleSubtreeStream stream_ex1=new RewriteRuleSubtreeStream(adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1572:4: -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
+                    // 1575:4: -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
                     {
-                        // JS.g:1572:7: ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
+                        // JS.g:1575:7: ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                        // JS.g:1572:18: ^( VAR ( variableDeclarationNoIn )+ )
+                        // JS.g:1575:18: ^( VAR ( variableDeclarationNoIn )+ )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(stream_VAR.next(), root_2);
@@ -9966,12 +9966,12 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1572:52: ^( EXPR ( $ex1)? )
+                        // JS.g:1575:52: ^( EXPR ( $ex1)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // JS.g:1572:60: ( $ex1)?
+                        // JS.g:1575:60: ( $ex1)?
                         if ( stream_ex1.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex1.next());
 
@@ -9980,12 +9980,12 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1572:68: ^( EXPR ( $ex2)? )
+                        // JS.g:1575:68: ^( EXPR ( $ex2)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // JS.g:1572:76: ( $ex2)?
+                        // JS.g:1575:76: ( $ex2)?
                         if ( stream_ex2.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex2.next());
 
@@ -10038,7 +10038,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forControlExpression
-    // JS.g:1577:1: forControlExpression : ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) ;
+    // JS.g:1580:1: forControlExpression : ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) ;
     public final forControlExpression_return forControlExpression() throws RecognitionException {
         forControlExpression_return retval = new forControlExpression_return();
         retval.start = input.LT(1);
@@ -10066,15 +10066,15 @@ public class JSParser extends Parser {
         	Object[] isLhs = new Object[1];
 
         try {
-            // JS.g:1582:2: (ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) )
-            // JS.g:1582:4: ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
+            // JS.g:1585:2: (ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) )
+            // JS.g:1585:4: ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
             {
             pushFollow(FOLLOW_expressionNoIn_in_forControlExpression6206);
             ex1=expressionNoIn();
             _fsp--;
 
             stream_expressionNoIn.add(ex1.getTree());
-            // JS.g:1583:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
+            // JS.g:1586:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
             int alt71=2;
             int LA71_0 = input.LA(1);
 
@@ -10086,19 +10086,19 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1583:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )", 71, 0, input);
+                    new NoViableAltException("1586:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )", 71, 0, input);
 
                 throw nvae;
             }
             switch (alt71) {
                 case 1 :
-                    // JS.g:1584:3: {...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
+                    // JS.g:1587:3: {...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
                     {
                     if ( !( isLeftHandSideIn(ex1, isLhs) ) ) {
                         throw new FailedPredicateException(input, "forControlExpression", " isLeftHandSideIn(ex1, isLhs) ");
                     }
-                    // JS.g:1584:37: ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
-                    // JS.g:1585:4: IN ex2= expression
+                    // JS.g:1587:37: ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
+                    // JS.g:1588:4: IN ex2= expression
                     {
                     IN284=(Token)input.LT(1);
                     match(input,IN,FOLLOW_IN_in_forControlExpression6221); 
@@ -10122,14 +10122,14 @@ public class JSParser extends Parser {
                     RewriteRuleSubtreeStream stream_ex1=new RewriteRuleSubtreeStream(adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1586:4: -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
+                    // 1589:4: -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
                     {
-                        // JS.g:1586:7: ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
+                        // JS.g:1589:7: ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORITER, "FORITER"), root_1);
 
-                        // JS.g:1586:18: ^( EXPR $ex1)
+                        // JS.g:1589:18: ^( EXPR $ex1)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -10138,7 +10138,7 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1586:33: ^( EXPR $ex2)
+                        // JS.g:1589:33: ^( EXPR $ex2)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -10161,16 +10161,16 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1589:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
+                    // JS.g:1592:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
                     {
-                    // JS.g:1589:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
-                    // JS.g:1590:4: SEMIC (ex2= expression )? SEMIC (ex3= expression )?
+                    // JS.g:1592:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
+                    // JS.g:1593:4: SEMIC (ex2= expression )? SEMIC (ex3= expression )?
                     {
                     SEMIC285=(Token)input.LT(1);
                     match(input,SEMIC,FOLLOW_SEMIC_in_forControlExpression6271); 
                     stream_SEMIC.add(SEMIC285);
 
-                    // JS.g:1590:13: (ex2= expression )?
+                    // JS.g:1593:13: (ex2= expression )?
                     int alt69=2;
                     int LA69_0 = input.LA(1);
 
@@ -10179,7 +10179,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt69) {
                         case 1 :
-                            // JS.g:1590:13: ex2= expression
+                            // JS.g:1593:13: ex2= expression
                             {
                             pushFollow(FOLLOW_expression_in_forControlExpression6275);
                             ex2=expression();
@@ -10196,7 +10196,7 @@ public class JSParser extends Parser {
                     match(input,SEMIC,FOLLOW_SEMIC_in_forControlExpression6278); 
                     stream_SEMIC.add(SEMIC286);
 
-                    // JS.g:1590:35: (ex3= expression )?
+                    // JS.g:1593:35: (ex3= expression )?
                     int alt70=2;
                     int LA70_0 = input.LA(1);
 
@@ -10205,7 +10205,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt70) {
                         case 1 :
-                            // JS.g:1590:35: ex3= expression
+                            // JS.g:1593:35: ex3= expression
                             {
                             pushFollow(FOLLOW_expression_in_forControlExpression6282);
                             ex3=expression();
@@ -10220,7 +10220,7 @@ public class JSParser extends Parser {
 
 
                     // AST REWRITE
-                    // elements: ex2, ex1, ex3
+                    // elements: ex3, ex2, ex1
                     // token labels: 
                     // rule labels: retval, ex3, ex2, ex1
                     // token list labels: 
@@ -10232,14 +10232,14 @@ public class JSParser extends Parser {
                     RewriteRuleSubtreeStream stream_ex1=new RewriteRuleSubtreeStream(adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
                     root_0 = (Object)adaptor.nil();
-                    // 1591:4: -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
+                    // 1594:4: -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
                     {
-                        // JS.g:1591:7: ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
+                        // JS.g:1594:7: ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
                         {
                         Object root_1 = (Object)adaptor.nil();
                         root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                        // JS.g:1591:18: ^( EXPR $ex1)
+                        // JS.g:1594:18: ^( EXPR $ex1)
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
@@ -10248,12 +10248,12 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1591:33: ^( EXPR ( $ex2)? )
+                        // JS.g:1594:33: ^( EXPR ( $ex2)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // JS.g:1591:41: ( $ex2)?
+                        // JS.g:1594:41: ( $ex2)?
                         if ( stream_ex2.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex2.next());
 
@@ -10262,12 +10262,12 @@ public class JSParser extends Parser {
 
                         adaptor.addChild(root_1, root_2);
                         }
-                        // JS.g:1591:49: ^( EXPR ( $ex3)? )
+                        // JS.g:1594:49: ^( EXPR ( $ex3)? )
                         {
                         Object root_2 = (Object)adaptor.nil();
                         root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // JS.g:1591:57: ( $ex3)?
+                        // JS.g:1594:57: ( $ex3)?
                         if ( stream_ex3.hasNext() ) {
                             adaptor.addChild(root_2, stream_ex3.next());
 
@@ -10320,7 +10320,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start forControlSemic
-    // JS.g:1596:1: forControlSemic : SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ;
+    // JS.g:1599:1: forControlSemic : SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ;
     public final forControlSemic_return forControlSemic() throws RecognitionException {
         forControlSemic_return retval = new forControlSemic_return();
         retval.start = input.LT(1);
@@ -10339,14 +10339,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_SEMIC=new RewriteRuleTokenStream(adaptor,"token SEMIC");
         RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
         try {
-            // JS.g:1597:2: ( SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
-            // JS.g:1597:4: SEMIC (ex1= expression )? SEMIC (ex2= expression )?
+            // JS.g:1600:2: ( SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
+            // JS.g:1600:4: SEMIC (ex1= expression )? SEMIC (ex2= expression )?
             {
             SEMIC287=(Token)input.LT(1);
             match(input,SEMIC,FOLLOW_SEMIC_in_forControlSemic6341); 
             stream_SEMIC.add(SEMIC287);
 
-            // JS.g:1597:13: (ex1= expression )?
+            // JS.g:1600:13: (ex1= expression )?
             int alt72=2;
             int LA72_0 = input.LA(1);
 
@@ -10355,7 +10355,7 @@ public class JSParser extends Parser {
             }
             switch (alt72) {
                 case 1 :
-                    // JS.g:1597:13: ex1= expression
+                    // JS.g:1600:13: ex1= expression
                     {
                     pushFollow(FOLLOW_expression_in_forControlSemic6345);
                     ex1=expression();
@@ -10372,7 +10372,7 @@ public class JSParser extends Parser {
             match(input,SEMIC,FOLLOW_SEMIC_in_forControlSemic6348); 
             stream_SEMIC.add(SEMIC288);
 
-            // JS.g:1597:35: (ex2= expression )?
+            // JS.g:1600:35: (ex2= expression )?
             int alt73=2;
             int LA73_0 = input.LA(1);
 
@@ -10381,7 +10381,7 @@ public class JSParser extends Parser {
             }
             switch (alt73) {
                 case 1 :
-                    // JS.g:1597:35: ex2= expression
+                    // JS.g:1600:35: ex2= expression
                     {
                     pushFollow(FOLLOW_expression_in_forControlSemic6352);
                     ex2=expression();
@@ -10396,7 +10396,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: ex2, ex1
+            // elements: ex1, ex2
             // token labels: 
             // rule labels: retval, ex2, ex1
             // token list labels: 
@@ -10407,26 +10407,26 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_ex1=new RewriteRuleSubtreeStream(adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1598:2: -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
+            // 1601:2: -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
             {
-                // JS.g:1598:5: ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
+                // JS.g:1601:5: ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                // JS.g:1598:16: ^( EXPR )
+                // JS.g:1601:16: ^( EXPR )
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
                 adaptor.addChild(root_1, root_2);
                 }
-                // JS.g:1598:26: ^( EXPR ( $ex1)? )
+                // JS.g:1601:26: ^( EXPR ( $ex1)? )
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                // JS.g:1598:34: ( $ex1)?
+                // JS.g:1601:34: ( $ex1)?
                 if ( stream_ex1.hasNext() ) {
                     adaptor.addChild(root_2, stream_ex1.next());
 
@@ -10435,12 +10435,12 @@ public class JSParser extends Parser {
 
                 adaptor.addChild(root_1, root_2);
                 }
-                // JS.g:1598:42: ^( EXPR ( $ex2)? )
+                // JS.g:1601:42: ^( EXPR ( $ex2)? )
                 {
                 Object root_2 = (Object)adaptor.nil();
                 root_2 = (Object)adaptor.becomeRoot(adaptor.create(EXPR, "EXPR"), root_2);
 
-                // JS.g:1598:50: ( $ex2)?
+                // JS.g:1601:50: ( $ex2)?
                 if ( stream_ex2.hasNext() ) {
                     adaptor.addChild(root_2, stream_ex2.next());
 
@@ -10484,7 +10484,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start continueStatement
-    // JS.g:1610:1: continueStatement : CONTINUE ( Identifier )? semic ;
+    // JS.g:1613:1: continueStatement : CONTINUE ( Identifier )? semic ;
     public final continueStatement_return continueStatement() throws RecognitionException {
         continueStatement_return retval = new continueStatement_return();
         retval.start = input.LT(1);
@@ -10500,8 +10500,8 @@ public class JSParser extends Parser {
         Object Identifier290_tree=null;
 
         try {
-            // JS.g:1611:2: ( CONTINUE ( Identifier )? semic )
-            // JS.g:1611:4: CONTINUE ( Identifier )? semic
+            // JS.g:1614:2: ( CONTINUE ( Identifier )? semic )
+            // JS.g:1614:4: CONTINUE ( Identifier )? semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -10511,7 +10511,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.becomeRoot(CONTINUE289_tree, root_0);
 
              if (input.LA(1) == Identifier) promoteEOL(null); 
-            // JS.g:1611:67: ( Identifier )?
+            // JS.g:1614:67: ( Identifier )?
             int alt74=2;
             int LA74_0 = input.LA(1);
 
@@ -10520,7 +10520,7 @@ public class JSParser extends Parser {
             }
             switch (alt74) {
                 case 1 :
-                    // JS.g:1611:67: Identifier
+                    // JS.g:1614:67: Identifier
                     {
                     Identifier290=(Token)input.LT(1);
                     match(input,Identifier,FOLLOW_Identifier_in_continueStatement6411); 
@@ -10565,7 +10565,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start breakStatement
-    // JS.g:1623:1: breakStatement : BREAK ( Identifier )? semic ;
+    // JS.g:1626:1: breakStatement : BREAK ( Identifier )? semic ;
     public final breakStatement_return breakStatement() throws RecognitionException {
         breakStatement_return retval = new breakStatement_return();
         retval.start = input.LT(1);
@@ -10581,8 +10581,8 @@ public class JSParser extends Parser {
         Object Identifier293_tree=null;
 
         try {
-            // JS.g:1624:2: ( BREAK ( Identifier )? semic )
-            // JS.g:1624:4: BREAK ( Identifier )? semic
+            // JS.g:1627:2: ( BREAK ( Identifier )? semic )
+            // JS.g:1627:4: BREAK ( Identifier )? semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -10592,7 +10592,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.becomeRoot(BREAK292_tree, root_0);
 
              if (input.LA(1) == Identifier) promoteEOL(null); 
-            // JS.g:1624:64: ( Identifier )?
+            // JS.g:1627:64: ( Identifier )?
             int alt75=2;
             int LA75_0 = input.LA(1);
 
@@ -10601,7 +10601,7 @@ public class JSParser extends Parser {
             }
             switch (alt75) {
                 case 1 :
-                    // JS.g:1624:64: Identifier
+                    // JS.g:1627:64: Identifier
                     {
                     Identifier293=(Token)input.LT(1);
                     match(input,Identifier,FOLLOW_Identifier_in_breakStatement6438); 
@@ -10646,7 +10646,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start returnStatement
-    // JS.g:1644:1: returnStatement : RETURN ( expression )? semic ;
+    // JS.g:1647:1: returnStatement : RETURN ( expression )? semic ;
     public final returnStatement_return returnStatement() throws RecognitionException {
         returnStatement_return retval = new returnStatement_return();
         retval.start = input.LT(1);
@@ -10662,8 +10662,8 @@ public class JSParser extends Parser {
         Object RETURN295_tree=null;
 
         try {
-            // JS.g:1645:2: ( RETURN ( expression )? semic )
-            // JS.g:1645:4: RETURN ( expression )? semic
+            // JS.g:1648:2: ( RETURN ( expression )? semic )
+            // JS.g:1648:4: RETURN ( expression )? semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -10673,7 +10673,7 @@ public class JSParser extends Parser {
             root_0 = (Object)adaptor.becomeRoot(RETURN295_tree, root_0);
 
              promoteEOL(null); 
-            // JS.g:1645:34: ( expression )?
+            // JS.g:1648:34: ( expression )?
             int alt76=2;
             int LA76_0 = input.LA(1);
 
@@ -10682,7 +10682,7 @@ public class JSParser extends Parser {
             }
             switch (alt76) {
                 case 1 :
-                    // JS.g:1645:34: expression
+                    // JS.g:1648:34: expression
                     {
                     pushFollow(FOLLOW_expression_in_returnStatement6465);
                     expression296=expression();
@@ -10727,7 +10727,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start withStatement
-    // JS.g:1652:1: withStatement : WITH LPAREN expression RPAREN statement ;
+    // JS.g:1655:1: withStatement : WITH LPAREN expression RPAREN statement ;
     public final withStatement_return withStatement() throws RecognitionException {
         withStatement_return retval = new withStatement_return();
         retval.start = input.LT(1);
@@ -10747,8 +10747,8 @@ public class JSParser extends Parser {
         Object RPAREN301_tree=null;
 
         try {
-            // JS.g:1653:2: ( WITH LPAREN expression RPAREN statement )
-            // JS.g:1653:4: WITH LPAREN expression RPAREN statement
+            // JS.g:1656:2: ( WITH LPAREN expression RPAREN statement )
+            // JS.g:1656:4: WITH LPAREN expression RPAREN statement
             {
             root_0 = (Object)adaptor.nil();
 
@@ -10799,7 +10799,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start switchStatement
-    // JS.g:1660:1: switchStatement : SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )* ( caseClause )* ) ;
+    // JS.g:1663:1: switchStatement : SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )* ( caseClause )* ) ;
     public final switchStatement_return switchStatement() throws RecognitionException {
         switchStatement_return retval = new switchStatement_return();
         retval.start = input.LT(1);
@@ -10832,8 +10832,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_caseClause=new RewriteRuleSubtreeStream(adaptor,"rule caseClause");
         RewriteRuleSubtreeStream stream_defaultClause=new RewriteRuleSubtreeStream(adaptor,"rule defaultClause");
         try {
-            // JS.g:1661:2: ( SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )* ( caseClause )* ) )
-            // JS.g:1661:4: SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE
+            // JS.g:1664:2: ( SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )* ( caseClause )* ) )
+            // JS.g:1664:4: SWITCH LPAREN expression RPAREN LBRACE ( defaultClause | caseClause )* RBRACE
             {
             SWITCH303=(Token)input.LT(1);
             match(input,SWITCH,FOLLOW_SWITCH_in_switchStatement6512); 
@@ -10856,7 +10856,7 @@ public class JSParser extends Parser {
             match(input,LBRACE,FOLLOW_LBRACE_in_switchStatement6520); 
             stream_LBRACE.add(LBRACE307);
 
-            // JS.g:1661:43: ( defaultClause | caseClause )*
+            // JS.g:1664:43: ( defaultClause | caseClause )*
             loop77:
             do {
                 int alt77=3;
@@ -10872,7 +10872,7 @@ public class JSParser extends Parser {
 
                 switch (alt77) {
             	case 1 :
-            	    // JS.g:1661:45: defaultClause
+            	    // JS.g:1664:45: defaultClause
             	    {
             	    pushFollow(FOLLOW_defaultClause_in_switchStatement6524);
             	    defaultClause308=defaultClause();
@@ -10883,7 +10883,7 @@ public class JSParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // JS.g:1661:61: caseClause
+            	    // JS.g:1664:61: caseClause
             	    {
             	    pushFollow(FOLLOW_caseClause_in_switchStatement6528);
             	    caseClause309=caseClause();
@@ -10905,7 +10905,7 @@ public class JSParser extends Parser {
 
 
             // AST REWRITE
-            // elements: SWITCH, defaultClause, expression, caseClause
+            // elements: expression, caseClause, defaultClause, SWITCH
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -10914,21 +10914,21 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1662:2: -> ^( SWITCH expression ( defaultClause )* ( caseClause )* )
+            // 1665:2: -> ^( SWITCH expression ( defaultClause )* ( caseClause )* )
             {
-                // JS.g:1662:5: ^( SWITCH expression ( defaultClause )* ( caseClause )* )
+                // JS.g:1665:5: ^( SWITCH expression ( defaultClause )* ( caseClause )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_SWITCH.next(), root_1);
 
                 adaptor.addChild(root_1, stream_expression.next());
-                // JS.g:1662:26: ( defaultClause )*
+                // JS.g:1665:26: ( defaultClause )*
                 while ( stream_defaultClause.hasNext() ) {
                     adaptor.addChild(root_1, stream_defaultClause.next());
 
                 }
                 stream_defaultClause.reset();
-                // JS.g:1662:41: ( caseClause )*
+                // JS.g:1665:41: ( caseClause )*
                 while ( stream_caseClause.hasNext() ) {
                     adaptor.addChild(root_1, stream_caseClause.next());
 
@@ -10969,7 +10969,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start caseClause
-    // JS.g:1665:1: caseClause : CASE expression COLON ( statement )* ;
+    // JS.g:1668:1: caseClause : CASE expression COLON ( statement )* ;
     public final caseClause_return caseClause() throws RecognitionException {
         caseClause_return retval = new caseClause_return();
         retval.start = input.LT(1);
@@ -10987,8 +10987,8 @@ public class JSParser extends Parser {
         Object COLON313_tree=null;
 
         try {
-            // JS.g:1666:2: ( CASE expression COLON ( statement )* )
-            // JS.g:1666:4: CASE expression COLON ( statement )*
+            // JS.g:1669:2: ( CASE expression COLON ( statement )* )
+            // JS.g:1669:4: CASE expression COLON ( statement )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -11004,7 +11004,7 @@ public class JSParser extends Parser {
             adaptor.addChild(root_0, expression312.getTree());
             COLON313=(Token)input.LT(1);
             match(input,COLON,FOLLOW_COLON_in_caseClause6566); 
-            // JS.g:1666:28: ( statement )*
+            // JS.g:1669:28: ( statement )*
             loop78:
             do {
                 int alt78=2;
@@ -11026,7 +11026,7 @@ public class JSParser extends Parser {
 
                 switch (alt78) {
             	case 1 :
-            	    // JS.g:1666:28: statement
+            	    // JS.g:1669:28: statement
             	    {
             	    pushFollow(FOLLOW_statement_in_caseClause6569);
             	    statement314=statement();
@@ -11070,7 +11070,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start defaultClause
-    // JS.g:1669:1: defaultClause : DEFAULT COLON ( statement )* ;
+    // JS.g:1672:1: defaultClause : DEFAULT COLON ( statement )* ;
     public final defaultClause_return defaultClause() throws RecognitionException {
         defaultClause_return retval = new defaultClause_return();
         retval.start = input.LT(1);
@@ -11086,8 +11086,8 @@ public class JSParser extends Parser {
         Object COLON316_tree=null;
 
         try {
-            // JS.g:1670:2: ( DEFAULT COLON ( statement )* )
-            // JS.g:1670:4: DEFAULT COLON ( statement )*
+            // JS.g:1673:2: ( DEFAULT COLON ( statement )* )
+            // JS.g:1673:4: DEFAULT COLON ( statement )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -11098,7 +11098,7 @@ public class JSParser extends Parser {
 
             COLON316=(Token)input.LT(1);
             match(input,COLON,FOLLOW_COLON_in_defaultClause6585); 
-            // JS.g:1670:20: ( statement )*
+            // JS.g:1673:20: ( statement )*
             loop79:
             do {
                 int alt79=2;
@@ -11120,7 +11120,7 @@ public class JSParser extends Parser {
 
                 switch (alt79) {
             	case 1 :
-            	    // JS.g:1670:20: statement
+            	    // JS.g:1673:20: statement
             	    {
             	    pushFollow(FOLLOW_statement_in_defaultClause6588);
             	    statement317=statement();
@@ -11164,7 +11164,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start labelledStatement
-    // JS.g:1677:1: labelledStatement : identifier COLON statement -> ^( LABELLED identifier statement ) ;
+    // JS.g:1680:1: labelledStatement : identifier COLON statement -> ^( LABELLED identifier statement ) ;
     public final labelledStatement_return labelledStatement() throws RecognitionException {
         labelledStatement_return retval = new labelledStatement_return();
         retval.start = input.LT(1);
@@ -11182,8 +11182,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_statement=new RewriteRuleSubtreeStream(adaptor,"rule statement");
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         try {
-            // JS.g:1678:2: ( identifier COLON statement -> ^( LABELLED identifier statement ) )
-            // JS.g:1678:4: identifier COLON statement
+            // JS.g:1681:2: ( identifier COLON statement -> ^( LABELLED identifier statement ) )
+            // JS.g:1681:4: identifier COLON statement
             {
             pushFollow(FOLLOW_identifier_in_labelledStatement6605);
             identifier318=identifier();
@@ -11201,7 +11201,7 @@ public class JSParser extends Parser {
             stream_statement.add(statement320.getTree());
 
             // AST REWRITE
-            // elements: identifier, statement
+            // elements: statement, identifier
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -11210,9 +11210,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1679:2: -> ^( LABELLED identifier statement )
+            // 1682:2: -> ^( LABELLED identifier statement )
             {
-                // JS.g:1679:5: ^( LABELLED identifier statement )
+                // JS.g:1682:5: ^( LABELLED identifier statement )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(LABELLED, "LABELLED"), root_1);
@@ -11254,7 +11254,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start throwStatement
-    // JS.g:1701:1: throwStatement : THROW expression semic ;
+    // JS.g:1704:1: throwStatement : THROW expression semic ;
     public final throwStatement_return throwStatement() throws RecognitionException {
         throwStatement_return retval = new throwStatement_return();
         retval.start = input.LT(1);
@@ -11270,8 +11270,8 @@ public class JSParser extends Parser {
         Object THROW321_tree=null;
 
         try {
-            // JS.g:1702:2: ( THROW expression semic )
-            // JS.g:1702:4: THROW expression semic
+            // JS.g:1705:2: ( THROW expression semic )
+            // JS.g:1705:4: THROW expression semic
             {
             root_0 = (Object)adaptor.nil();
 
@@ -11318,7 +11318,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start tryStatement
-    // JS.g:1709:1: tryStatement : TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) ;
+    // JS.g:1712:1: tryStatement : TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) ;
     public final tryStatement_return tryStatement() throws RecognitionException {
         tryStatement_return retval = new tryStatement_return();
         retval.start = input.LT(1);
@@ -11338,8 +11338,8 @@ public class JSParser extends Parser {
         Object TRY324_tree=null;
 
         try {
-            // JS.g:1710:2: ( TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) )
-            // JS.g:1710:4: TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause )
+            // JS.g:1713:2: ( TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause ) )
+            // JS.g:1713:4: TRY block ( ( catchClause )+ ( finallyClause )? | finallyClause )
             {
             root_0 = (Object)adaptor.nil();
 
@@ -11353,7 +11353,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, block325.getTree());
-            // JS.g:1710:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )
+            // JS.g:1713:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )
             int alt82=2;
             int LA82_0 = input.LA(1);
 
@@ -11365,15 +11365,15 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1710:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )", 82, 0, input);
+                    new NoViableAltException("1713:15: ( ( catchClause )+ ( finallyClause )? | finallyClause )", 82, 0, input);
 
                 throw nvae;
             }
             switch (alt82) {
                 case 1 :
-                    // JS.g:1710:17: ( catchClause )+ ( finallyClause )?
+                    // JS.g:1713:17: ( catchClause )+ ( finallyClause )?
                     {
-                    // JS.g:1710:17: ( catchClause )+
+                    // JS.g:1713:17: ( catchClause )+
                     int cnt80=0;
                     loop80:
                     do {
@@ -11387,7 +11387,7 @@ public class JSParser extends Parser {
 
                         switch (alt80) {
                     	case 1 :
-                    	    // JS.g:1710:17: catchClause
+                    	    // JS.g:1713:17: catchClause
                     	    {
                     	    pushFollow(FOLLOW_catchClause_in_tryStatement6671);
                     	    catchClause326=catchClause();
@@ -11407,7 +11407,7 @@ public class JSParser extends Parser {
                         cnt80++;
                     } while (true);
 
-                    // JS.g:1710:30: ( finallyClause )?
+                    // JS.g:1713:30: ( finallyClause )?
                     int alt81=2;
                     int LA81_0 = input.LA(1);
 
@@ -11416,7 +11416,7 @@ public class JSParser extends Parser {
                     }
                     switch (alt81) {
                         case 1 :
-                            // JS.g:1710:30: finallyClause
+                            // JS.g:1713:30: finallyClause
                             {
                             pushFollow(FOLLOW_finallyClause_in_tryStatement6674);
                             finallyClause327=finallyClause();
@@ -11433,7 +11433,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1710:47: finallyClause
+                    // JS.g:1713:47: finallyClause
                     {
                     pushFollow(FOLLOW_finallyClause_in_tryStatement6679);
                     finallyClause328=finallyClause();
@@ -11474,7 +11474,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start catchClause
-    // JS.g:1713:1: catchClause : CATCH LPAREN identifier ( catchFilter )? RPAREN block ;
+    // JS.g:1716:1: catchClause : CATCH LPAREN identifier ( catchFilter )? RPAREN block ;
     public final catchClause_return catchClause() throws RecognitionException {
         catchClause_return retval = new catchClause_return();
         retval.start = input.LT(1);
@@ -11496,8 +11496,8 @@ public class JSParser extends Parser {
         Object RPAREN333_tree=null;
 
         try {
-            // JS.g:1714:2: ( CATCH LPAREN identifier ( catchFilter )? RPAREN block )
-            // JS.g:1714:4: CATCH LPAREN identifier ( catchFilter )? RPAREN block
+            // JS.g:1717:2: ( CATCH LPAREN identifier ( catchFilter )? RPAREN block )
+            // JS.g:1717:4: CATCH LPAREN identifier ( catchFilter )? RPAREN block
             {
             root_0 = (Object)adaptor.nil();
 
@@ -11513,7 +11513,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, identifier331.getTree());
-            // JS.g:1714:30: ( catchFilter )?
+            // JS.g:1717:30: ( catchFilter )?
             int alt83=2;
             int LA83_0 = input.LA(1);
 
@@ -11522,7 +11522,7 @@ public class JSParser extends Parser {
             }
             switch (alt83) {
                 case 1 :
-                    // JS.g:1714:30: catchFilter
+                    // JS.g:1717:30: catchFilter
                     {
                     pushFollow(FOLLOW_catchFilter_in_catchClause6701);
                     catchFilter332=catchFilter();
@@ -11570,7 +11570,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start catchFilter
-    // JS.g:1717:1: catchFilter : IF expression ;
+    // JS.g:1720:1: catchFilter : IF expression ;
     public final catchFilter_return catchFilter() throws RecognitionException {
         catchFilter_return retval = new catchFilter_return();
         retval.start = input.LT(1);
@@ -11584,8 +11584,8 @@ public class JSParser extends Parser {
         Object IF335_tree=null;
 
         try {
-            // JS.g:1718:2: ( IF expression )
-            // JS.g:1718:4: IF expression
+            // JS.g:1721:2: ( IF expression )
+            // JS.g:1721:4: IF expression
             {
             root_0 = (Object)adaptor.nil();
 
@@ -11627,7 +11627,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start finallyClause
-    // JS.g:1721:1: finallyClause : FINALLY block ;
+    // JS.g:1724:1: finallyClause : FINALLY block ;
     public final finallyClause_return finallyClause() throws RecognitionException {
         finallyClause_return retval = new finallyClause_return();
         retval.start = input.LT(1);
@@ -11641,8 +11641,8 @@ public class JSParser extends Parser {
         Object FINALLY337_tree=null;
 
         try {
-            // JS.g:1722:2: ( FINALLY block )
-            // JS.g:1722:4: FINALLY block
+            // JS.g:1725:2: ( FINALLY block )
+            // JS.g:1725:4: FINALLY block
             {
             root_0 = (Object)adaptor.nil();
 
@@ -11684,7 +11684,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start functionDeclaration
-    // JS.g:1735:1: functionDeclaration : FUNCTION name= identifier formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION $name formalParameterList ( COLON )? ( typeRef )? functionBody ) ;
+    // JS.g:1738:1: functionDeclaration : FUNCTION name= identifier formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION $name formalParameterList ( COLON )? ( typeRef )? functionBody ) ;
     public final functionDeclaration_return functionDeclaration() throws RecognitionException {
         functionDeclaration_return retval = new functionDeclaration_return();
         retval.start = input.LT(1);
@@ -11711,8 +11711,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         RewriteRuleSubtreeStream stream_formalParameterList=new RewriteRuleSubtreeStream(adaptor,"rule formalParameterList");
         try {
-            // JS.g:1736:2: ( FUNCTION name= identifier formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION $name formalParameterList ( COLON )? ( typeRef )? functionBody ) )
-            // JS.g:1736:4: FUNCTION name= identifier formalParameterList ({...}? => COLON typeRef )? functionBody
+            // JS.g:1739:2: ( FUNCTION name= identifier formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION $name formalParameterList ( COLON )? ( typeRef )? functionBody ) )
+            // JS.g:1739:4: FUNCTION name= identifier formalParameterList ({...}? => COLON typeRef )? functionBody
             {
             FUNCTION339=(Token)input.LT(1);
             match(input,FUNCTION,FOLLOW_FUNCTION_in_functionDeclaration6756); 
@@ -11728,7 +11728,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_formalParameterList.add(formalParameterList340.getTree());
-            // JS.g:1736:49: ({...}? => COLON typeRef )?
+            // JS.g:1739:49: ({...}? => COLON typeRef )?
             int alt84=2;
             int LA84_0 = input.LA(1);
 
@@ -11737,7 +11737,7 @@ public class JSParser extends Parser {
             }
             switch (alt84) {
                 case 1 :
-                    // JS.g:1736:51: {...}? => COLON typeRef
+                    // JS.g:1739:51: {...}? => COLON typeRef
                     {
                     if ( !( isTypeInformationEnabled() ) ) {
                         throw new FailedPredicateException(input, "functionDeclaration", " isTypeInformationEnabled() ");
@@ -11764,7 +11764,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody343.getTree());
 
             // AST REWRITE
-            // elements: COLON, functionBody, typeRef, name, FUNCTION, formalParameterList
+            // elements: typeRef, functionBody, formalParameterList, name, COLON, FUNCTION
             // token labels: 
             // rule labels: retval, name
             // token list labels: 
@@ -11774,22 +11774,22 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"token name",name!=null?name.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1737:2: -> ^( FUNCTION $name formalParameterList ( COLON )? ( typeRef )? functionBody )
+            // 1740:2: -> ^( FUNCTION $name formalParameterList ( COLON )? ( typeRef )? functionBody )
             {
-                // JS.g:1737:5: ^( FUNCTION $name formalParameterList ( COLON )? ( typeRef )? functionBody )
+                // JS.g:1740:5: ^( FUNCTION $name formalParameterList ( COLON )? ( typeRef )? functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_FUNCTION.next(), root_1);
 
                 adaptor.addChild(root_1, stream_name.next());
                 adaptor.addChild(root_1, stream_formalParameterList.next());
-                // JS.g:1737:43: ( COLON )?
+                // JS.g:1740:43: ( COLON )?
                 if ( stream_COLON.hasNext() ) {
                     adaptor.addChild(root_1, stream_COLON.next());
 
                 }
                 stream_COLON.reset();
-                // JS.g:1737:50: ( typeRef )?
+                // JS.g:1740:50: ( typeRef )?
                 if ( stream_typeRef.hasNext() ) {
                     adaptor.addChild(root_1, stream_typeRef.next());
 
@@ -11831,7 +11831,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start functionExpression
-    // JS.g:1740:1: functionExpression : FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) ;
+    // JS.g:1743:1: functionExpression : FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) ;
     public final functionExpression_return functionExpression() throws RecognitionException {
         functionExpression_return retval = new functionExpression_return();
         retval.start = input.LT(1);
@@ -11858,14 +11858,14 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         RewriteRuleSubtreeStream stream_formalParameterList=new RewriteRuleSubtreeStream(adaptor,"rule formalParameterList");
         try {
-            // JS.g:1741:2: ( FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) )
-            // JS.g:1741:4: FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody
+            // JS.g:1744:2: ( FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) )
+            // JS.g:1744:4: FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody
             {
             FUNCTION344=(Token)input.LT(1);
             match(input,FUNCTION,FOLLOW_FUNCTION_in_functionExpression6809); 
             stream_FUNCTION.add(FUNCTION344);
 
-            // JS.g:1741:17: (name= identifier )?
+            // JS.g:1744:17: (name= identifier )?
             int alt85=2;
             int LA85_0 = input.LA(1);
 
@@ -11874,7 +11874,7 @@ public class JSParser extends Parser {
             }
             switch (alt85) {
                 case 1 :
-                    // JS.g:1741:17: name= identifier
+                    // JS.g:1744:17: name= identifier
                     {
                     pushFollow(FOLLOW_identifier_in_functionExpression6813);
                     name=identifier();
@@ -11892,7 +11892,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             stream_formalParameterList.add(formalParameterList345.getTree());
-            // JS.g:1741:50: ({...}? => COLON typeRef )?
+            // JS.g:1744:50: ({...}? => COLON typeRef )?
             int alt86=2;
             int LA86_0 = input.LA(1);
 
@@ -11901,7 +11901,7 @@ public class JSParser extends Parser {
             }
             switch (alt86) {
                 case 1 :
-                    // JS.g:1741:52: {...}? => COLON typeRef
+                    // JS.g:1744:52: {...}? => COLON typeRef
                     {
                     if ( !( isTypeInformationEnabled() ) ) {
                         throw new FailedPredicateException(input, "functionExpression", " isTypeInformationEnabled() ");
@@ -11928,7 +11928,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody348.getTree());
 
             // AST REWRITE
-            // elements: functionBody, name, FUNCTION, formalParameterList
+            // elements: formalParameterList, FUNCTION, name, functionBody
             // token labels: 
             // rule labels: retval, name
             // token list labels: 
@@ -11938,14 +11938,14 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"token name",name!=null?name.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1742:2: -> ^( FUNCTION ( $name)? formalParameterList functionBody )
+            // 1745:2: -> ^( FUNCTION ( $name)? formalParameterList functionBody )
             {
-                // JS.g:1742:5: ^( FUNCTION ( $name)? formalParameterList functionBody )
+                // JS.g:1745:5: ^( FUNCTION ( $name)? formalParameterList functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_FUNCTION.next(), root_1);
 
-                // JS.g:1742:17: ( $name)?
+                // JS.g:1745:17: ( $name)?
                 if ( stream_name.hasNext() ) {
                     adaptor.addChild(root_1, stream_name.next());
 
@@ -11988,7 +11988,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start formalParameter
-    // JS.g:1745:1: formalParameter : identifier ({...}? => COLON typeRef )? ;
+    // JS.g:1748:1: formalParameter : identifier ({...}? => COLON typeRef )? ;
     public final formalParameter_return formalParameter() throws RecognitionException {
         formalParameter_return retval = new formalParameter_return();
         retval.start = input.LT(1);
@@ -12004,8 +12004,8 @@ public class JSParser extends Parser {
         Object COLON350_tree=null;
 
         try {
-            // JS.g:1746:2: ( identifier ({...}? => COLON typeRef )? )
-            // JS.g:1746:4: identifier ({...}? => COLON typeRef )?
+            // JS.g:1749:2: ( identifier ({...}? => COLON typeRef )? )
+            // JS.g:1749:4: identifier ({...}? => COLON typeRef )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -12014,7 +12014,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             root_0 = (Object)adaptor.becomeRoot(identifier349.getTree(), root_0);
-            // JS.g:1746:16: ({...}? => COLON typeRef )?
+            // JS.g:1749:16: ({...}? => COLON typeRef )?
             int alt87=2;
             int LA87_0 = input.LA(1);
 
@@ -12023,7 +12023,7 @@ public class JSParser extends Parser {
             }
             switch (alt87) {
                 case 1 :
-                    // JS.g:1746:18: {...}? => COLON typeRef
+                    // JS.g:1749:18: {...}? => COLON typeRef
                     {
                     if ( !( isTypeInformationEnabled() ) ) {
                         throw new FailedPredicateException(input, "formalParameter", " isTypeInformationEnabled() ");
@@ -12072,7 +12072,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start formalParameterList
-    // JS.g:1749:1: formalParameterList : LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN -> ^( ARGUMENTS ( formalParameter )* ) ;
+    // JS.g:1752:1: formalParameterList : LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN -> ^( ARGUMENTS ( formalParameter )* ) ;
     public final formalParameterList_return formalParameterList() throws RecognitionException {
         formalParameterList_return retval = new formalParameterList_return();
         retval.start = input.LT(1);
@@ -12095,14 +12095,14 @@ public class JSParser extends Parser {
         RewriteRuleTokenStream stream_LPAREN=new RewriteRuleTokenStream(adaptor,"token LPAREN");
         RewriteRuleSubtreeStream stream_formalParameter=new RewriteRuleSubtreeStream(adaptor,"rule formalParameter");
         try {
-            // JS.g:1750:2: ( LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN -> ^( ARGUMENTS ( formalParameter )* ) )
-            // JS.g:1750:4: LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN
+            // JS.g:1753:2: ( LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN -> ^( ARGUMENTS ( formalParameter )* ) )
+            // JS.g:1753:4: LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN
             {
             LPAREN352=(Token)input.LT(1);
             match(input,LPAREN,FOLLOW_LPAREN_in_formalParameterList6882); 
             stream_LPAREN.add(LPAREN352);
 
-            // JS.g:1750:11: ( formalParameter ( COMMA formalParameter )* )?
+            // JS.g:1753:11: ( formalParameter ( COMMA formalParameter )* )?
             int alt89=2;
             int LA89_0 = input.LA(1);
 
@@ -12111,14 +12111,14 @@ public class JSParser extends Parser {
             }
             switch (alt89) {
                 case 1 :
-                    // JS.g:1750:13: formalParameter ( COMMA formalParameter )*
+                    // JS.g:1753:13: formalParameter ( COMMA formalParameter )*
                     {
                     pushFollow(FOLLOW_formalParameter_in_formalParameterList6886);
                     formalParameter353=formalParameter();
                     _fsp--;
 
                     stream_formalParameter.add(formalParameter353.getTree());
-                    // JS.g:1750:29: ( COMMA formalParameter )*
+                    // JS.g:1753:29: ( COMMA formalParameter )*
                     loop88:
                     do {
                         int alt88=2;
@@ -12131,7 +12131,7 @@ public class JSParser extends Parser {
 
                         switch (alt88) {
                     	case 1 :
-                    	    // JS.g:1750:31: COMMA formalParameter
+                    	    // JS.g:1753:31: COMMA formalParameter
                     	    {
                     	    COMMA354=(Token)input.LT(1);
                     	    match(input,COMMA,FOLLOW_COMMA_in_formalParameterList6890); 
@@ -12172,14 +12172,14 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1751:2: -> ^( ARGUMENTS ( formalParameter )* )
+            // 1754:2: -> ^( ARGUMENTS ( formalParameter )* )
             {
-                // JS.g:1751:5: ^( ARGUMENTS ( formalParameter )* )
+                // JS.g:1754:5: ^( ARGUMENTS ( formalParameter )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(ARGUMENTS, "ARGUMENTS"), root_1);
 
-                // JS.g:1751:18: ( formalParameter )*
+                // JS.g:1754:18: ( formalParameter )*
                 while ( stream_formalParameter.hasNext() ) {
                     adaptor.addChild(root_1, stream_formalParameter.next());
 
@@ -12220,7 +12220,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start functionBody
-    // JS.g:1754:1: functionBody : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
+    // JS.g:1757:1: functionBody : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
     public final functionBody_return functionBody() throws RecognitionException {
         functionBody_return retval = new functionBody_return();
         retval.start = input.LT(1);
@@ -12239,14 +12239,14 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_sourceElement=new RewriteRuleSubtreeStream(adaptor,"rule sourceElement");
          pushState(JSParserRule.FUNCTION_BODY); 
         try {
-            // JS.g:1756:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
-            // JS.g:1756:4: lb= LBRACE ( sourceElement )* RBRACE
+            // JS.g:1759:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
+            // JS.g:1759:4: lb= LBRACE ( sourceElement )* RBRACE
             {
             lb=(Token)input.LT(1);
             match(input,LBRACE,FOLLOW_LBRACE_in_functionBody6930); 
             stream_LBRACE.add(lb);
 
-            // JS.g:1756:14: ( sourceElement )*
+            // JS.g:1759:14: ( sourceElement )*
             loop90:
             do {
                 int alt90=2;
@@ -12259,7 +12259,7 @@ public class JSParser extends Parser {
 
                 switch (alt90) {
             	case 1 :
-            	    // JS.g:1756:14: sourceElement
+            	    // JS.g:1759:14: sourceElement
             	    {
             	    pushFollow(FOLLOW_sourceElement_in_functionBody6932);
             	    sourceElement357=sourceElement();
@@ -12290,14 +12290,14 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1757:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
+            // 1760:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
             {
-                // JS.g:1757:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
+                // JS.g:1760:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(BLOCK, lb,  "BLOCK"), root_1);
 
-                // JS.g:1757:28: ( sourceElement )*
+                // JS.g:1760:28: ( sourceElement )*
                 while ( stream_sourceElement.hasNext() ) {
                     adaptor.addChild(root_1, stream_sourceElement.next());
 
@@ -12339,7 +12339,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start getMethodDeclaration
-    // JS.g:1766:1: getMethodDeclaration : get= GET name= identifier LPAREN RPAREN functionBody -> ^( GETTER[$get] identifier functionBody ) ;
+    // JS.g:1769:1: getMethodDeclaration : get= GET name= identifier LPAREN RPAREN functionBody -> ^( GETTER[$get] identifier functionBody ) ;
     public final getMethodDeclaration_return getMethodDeclaration() throws RecognitionException {
         getMethodDeclaration_return retval = new getMethodDeclaration_return();
         retval.start = input.LT(1);
@@ -12363,8 +12363,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_functionBody=new RewriteRuleSubtreeStream(adaptor,"rule functionBody");
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         try {
-            // JS.g:1767:3: (get= GET name= identifier LPAREN RPAREN functionBody -> ^( GETTER[$get] identifier functionBody ) )
-            // JS.g:1767:5: get= GET name= identifier LPAREN RPAREN functionBody
+            // JS.g:1770:3: (get= GET name= identifier LPAREN RPAREN functionBody -> ^( GETTER[$get] identifier functionBody ) )
+            // JS.g:1770:5: get= GET name= identifier LPAREN RPAREN functionBody
             {
             get=(Token)input.LT(1);
             match(input,GET,FOLLOW_GET_in_getMethodDeclaration6972); 
@@ -12390,7 +12390,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody361.getTree());
 
             // AST REWRITE
-            // elements: functionBody, identifier
+            // elements: identifier, functionBody
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -12399,9 +12399,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1768:4: -> ^( GETTER[$get] identifier functionBody )
+            // 1771:4: -> ^( GETTER[$get] identifier functionBody )
             {
-                // JS.g:1768:7: ^( GETTER[$get] identifier functionBody )
+                // JS.g:1771:7: ^( GETTER[$get] identifier functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(GETTER, get), root_1);
@@ -12443,7 +12443,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start setMethodDeclaration
-    // JS.g:1771:1: setMethodDeclaration : set= SET name= identifier LPAREN param= identifier RPAREN functionBody -> ^( SETTER[$set] $name $param functionBody ) ;
+    // JS.g:1774:1: setMethodDeclaration : set= SET name= identifier LPAREN param= identifier RPAREN functionBody -> ^( SETTER[$set] $name $param functionBody ) ;
     public final setMethodDeclaration_return setMethodDeclaration() throws RecognitionException {
         setMethodDeclaration_return retval = new setMethodDeclaration_return();
         retval.start = input.LT(1);
@@ -12469,8 +12469,8 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_functionBody=new RewriteRuleSubtreeStream(adaptor,"rule functionBody");
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         try {
-            // JS.g:1772:3: (set= SET name= identifier LPAREN param= identifier RPAREN functionBody -> ^( SETTER[$set] $name $param functionBody ) )
-            // JS.g:1772:5: set= SET name= identifier LPAREN param= identifier RPAREN functionBody
+            // JS.g:1775:3: (set= SET name= identifier LPAREN param= identifier RPAREN functionBody -> ^( SETTER[$set] $name $param functionBody ) )
+            // JS.g:1775:5: set= SET name= identifier LPAREN param= identifier RPAREN functionBody
             {
             set=(Token)input.LT(1);
             match(input,SET,FOLLOW_SET_in_setMethodDeclaration7013); 
@@ -12501,7 +12501,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody364.getTree());
 
             // AST REWRITE
-            // elements: functionBody, param, name
+            // elements: functionBody, name, param
             // token labels: 
             // rule labels: retval, param, name
             // token list labels: 
@@ -12512,9 +12512,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"token name",name!=null?name.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1773:5: -> ^( SETTER[$set] $name $param functionBody )
+            // 1776:5: -> ^( SETTER[$set] $name $param functionBody )
             {
-                // JS.g:1773:8: ^( SETTER[$set] $name $param functionBody )
+                // JS.g:1776:8: ^( SETTER[$set] $name $param functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(adaptor.create(SETTER, set), root_1);
@@ -12557,7 +12557,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start program
-    // JS.g:1780:1: program : sourceElementSync ( sourceElement sourceElementSync )* EOF ;
+    // JS.g:1783:1: program : sourceElementSync ( sourceElement sourceElementSync )* EOF ;
     public final program_return program() throws RecognitionException {
         program_return retval = new program_return();
         retval.start = input.LT(1);
@@ -12576,8 +12576,8 @@ public class JSParser extends Parser {
 
          pushState(JSParserRule.PROGRAM); 
         try {
-            // JS.g:1782:2: ( sourceElementSync ( sourceElement sourceElementSync )* EOF )
-            // JS.g:1782:4: sourceElementSync ( sourceElement sourceElementSync )* EOF
+            // JS.g:1785:2: ( sourceElementSync ( sourceElement sourceElementSync )* EOF )
+            // JS.g:1785:4: sourceElementSync ( sourceElement sourceElementSync )* EOF
             {
             root_0 = (Object)adaptor.nil();
 
@@ -12586,7 +12586,7 @@ public class JSParser extends Parser {
             _fsp--;
 
             adaptor.addChild(root_0, sourceElementSync365.getTree());
-            // JS.g:1782:22: ( sourceElement sourceElementSync )*
+            // JS.g:1785:22: ( sourceElement sourceElementSync )*
             loop91:
             do {
                 int alt91=2;
@@ -12599,7 +12599,7 @@ public class JSParser extends Parser {
 
                 switch (alt91) {
             	case 1 :
-            	    // JS.g:1782:23: sourceElement sourceElementSync
+            	    // JS.g:1785:23: sourceElement sourceElementSync
             	    {
             	    pushFollow(FOLLOW_sourceElement_in_program7071);
             	    sourceElement366=sourceElement();
@@ -12650,7 +12650,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start sourceElementSync
-    // JS.g:1785:1: sourceElementSync : ;
+    // JS.g:1788:1: sourceElementSync : ;
     public final sourceElementSync_return sourceElementSync() throws RecognitionException {
         sourceElementSync_return retval = new sourceElementSync_return();
         retval.start = input.LT(1);
@@ -12661,8 +12661,8 @@ public class JSParser extends Parser {
         	syncToSet();
 
         try {
-            // JS.g:1789:2: ()
-            // JS.g:1790:3: 
+            // JS.g:1792:2: ()
+            // JS.g:1793:3: 
             {
             root_0 = (Object)adaptor.nil();
 
@@ -12686,7 +12686,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start sourceElement
-    // JS.g:1797:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );
+    // JS.g:1800:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );
     public final sourceElement_return sourceElement() throws RecognitionException {
         sourceElement_return retval = new sourceElement_return();
         retval.start = input.LT(1);
@@ -12700,7 +12700,7 @@ public class JSParser extends Parser {
 
 
         try {
-            // JS.g:1802:2: ({...}? functionDeclaration | statement )
+            // JS.g:1805:2: ({...}? functionDeclaration | statement )
             int alt92=2;
             int LA92_0 = input.LA(1);
 
@@ -12715,7 +12715,7 @@ public class JSParser extends Parser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("1797:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );", 92, 1, input);
+                        new NoViableAltException("1800:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );", 92, 1, input);
 
                     throw nvae;
                 }
@@ -12725,13 +12725,13 @@ public class JSParser extends Parser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("1797:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );", 92, 0, input);
+                    new NoViableAltException("1800:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );", 92, 0, input);
 
                 throw nvae;
             }
             switch (alt92) {
                 case 1 :
-                    // JS.g:1802:4: {...}? functionDeclaration
+                    // JS.g:1805:4: {...}? functionDeclaration
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -12747,7 +12747,7 @@ public class JSParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // JS.g:1803:4: statement
+                    // JS.g:1806:4: statement
                     {
                     root_0 = (Object)adaptor.nil();
 

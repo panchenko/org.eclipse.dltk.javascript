@@ -266,6 +266,9 @@ private final boolean areRegularExpressionsEnabled()
 		case RBRACK:
 	// function call or nested expression ending
 		case RPAREN:
+	//++,--
+	    case INC:
+	    case DEC:
 			return false;
 	// otherwise OK
 		default:
