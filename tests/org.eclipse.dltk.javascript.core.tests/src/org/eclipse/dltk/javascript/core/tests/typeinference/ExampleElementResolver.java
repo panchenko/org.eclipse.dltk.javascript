@@ -38,7 +38,7 @@ public class ExampleElementResolver implements IElementResolver {
 	public Member resolveElement(ITypeInfoContext context, String name) {
 		if ("ExampleGlobal".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
-			property.setType(context.getType(ExampleTypeProvider.TYPE_SERVICE));
+			property.setType(context.getTypeRef(ExampleTypeProvider.TYPE_SERVICE));
 			property.setName(name);
 			property.setDeprecated(true);
 			return property;
@@ -78,7 +78,7 @@ public class ExampleElementResolver implements IElementResolver {
 				// set the lazy value
 				property.setAttribute(LAZY_MEMBER_VALUE,globals);
 				// set the type besides the lazy value
-				property.setType(context.getType("String"));
+				property.setType(context.getTypeRef("String"));
 			}
 			return property;
 		} else if ("executeExampleGlobal".equals(name)) {
@@ -91,21 +91,21 @@ public class ExampleElementResolver implements IElementResolver {
 		} else if ("exampleForms".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setType(context
-					.getType(ExampleTypeProvider.TYPE_EXAMPLE_FORMS));
+					.getTypeRef(ExampleTypeProvider.TYPE_EXAMPLE_FORMS));
 			property.setName(name);
 			property.setDescription("Description for <b>exampleForms</b>");
 			return property;
 		} else if ("myExampleForms".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setType(context
-					.getType(ExampleTypeProvider.TYPE_EXAMPLE_FORMS));
+					.getTypeRef(ExampleTypeProvider.TYPE_EXAMPLE_FORMS));
 			property.setName(name);
 			property.setDeprecated(true);
 			return property;
 		} else if ("myGenericArrayTest".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setType(context
-					.getType(ExampleTypeProvider.TYPE_GENERIC_ARRAY_METHOD));
+					.getTypeRef(ExampleTypeProvider.TYPE_GENERIC_ARRAY_METHOD));
 			property.setName(name);
 			return property;
 		}
