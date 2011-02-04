@@ -9,11 +9,12 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.15 2011/01/25 12:47:13 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.16 2011/02/04 06:04:41 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Map;
+
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -27,6 +28,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeAlias;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -54,7 +57,21 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    private EClass typedElementEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     private EClass jsTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass typeRefEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -210,8 +227,53 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getTypedElement() {
+        return typedElementEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getTypedElement_Type() {
+        return (EReference)typedElementEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getTypedElement_DirectType() {
+        return (EReference)typedElementEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getJSType() {
         return jsTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getTypeRef() {
+        return typeRefEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getTypeRef_Target() {
+        return (EReference)typeRefEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -336,17 +398,8 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public EReference getMember_Type() {
-        return (EReference)memberEClass.getEStructuralFeatures().get(0);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
 	public EAttribute getMember_Static() {
-        return (EAttribute)memberEClass.getEStructuralFeatures().get(1);
+        return (EAttribute)memberEClass.getEStructuralFeatures().get(0);
     }
 
 	/**
@@ -355,7 +408,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
 	public EReference getMember_DeclaringType() {
-        return (EReference)memberEClass.getEStructuralFeatures().get(2);
+        return (EReference)memberEClass.getEStructuralFeatures().get(1);
     }
 
 	/**
@@ -390,26 +443,8 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public EAttribute getParameter_Name() {
-        return (EAttribute)parameterEClass.getEStructuralFeatures().get(0);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public EReference getParameter_Type() {
-        return (EReference)parameterEClass.getEStructuralFeatures().get(1);
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
 	public EAttribute getParameter_Kind() {
-        return (EAttribute)parameterEClass.getEStructuralFeatures().get(2);
+        return (EAttribute)parameterEClass.getEStructuralFeatures().get(0);
     }
 
 	/**
@@ -506,7 +541,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         namedElementEClass = createEClass(NAMED_ELEMENT);
         createEAttribute(namedElementEClass, NAMED_ELEMENT__NAME);
 
-        jsTypeEClass = createEClass(JS_TYPE);
+        typedElementEClass = createEClass(TYPED_ELEMENT);
+        createEReference(typedElementEClass, TYPED_ELEMENT__TYPE);
+        createEReference(typedElementEClass, TYPED_ELEMENT__DIRECT_TYPE);
 
         elementEClass = createEClass(ELEMENT);
         createEAttribute(elementEClass, ELEMENT__DEPRECATED);
@@ -524,7 +561,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         createEReference(typeAliasEClass, TYPE_ALIAS__TARGET);
 
         memberEClass = createEClass(MEMBER);
-        createEReference(memberEClass, MEMBER__TYPE);
         createEAttribute(memberEClass, MEMBER__STATIC);
         createEReference(memberEClass, MEMBER__DECLARING_TYPE);
 
@@ -532,8 +568,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         createEReference(methodEClass, METHOD__PARAMETERS);
 
         parameterEClass = createEClass(PARAMETER);
-        createEAttribute(parameterEClass, PARAMETER__NAME);
-        createEReference(parameterEClass, PARAMETER__TYPE);
         createEAttribute(parameterEClass, PARAMETER__KIND);
 
         propertyEClass = createEClass(PROPERTY);
@@ -542,6 +576,11 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         attributeEntryEClass = createEClass(ATTRIBUTE_ENTRY);
         createEAttribute(attributeEntryEClass, ATTRIBUTE_ENTRY__KEY);
         createEAttribute(attributeEntryEClass, ATTRIBUTE_ENTRY__VALUE);
+
+        jsTypeEClass = createEClass(JS_TYPE);
+
+        typeRefEClass = createEClass(TYPE_REF);
+        createEReference(typeRefEClass, TYPE_REF__TARGET);
 
         // Create enums
         typeKindEEnum = createEEnum(TYPE_KIND);
@@ -576,27 +615,23 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         // Set bounds for type parameters
 
         // Add supertypes to classes
-        jsTypeEClass.getESuperTypes().add(this.getNamedElement());
         elementEClass.getESuperTypes().add(this.getNamedElement());
         typeEClass.getESuperTypes().add(this.getElement());
-        typeEClass.getESuperTypes().add(this.getJSType());
         memberEClass.getESuperTypes().add(this.getElement());
+        memberEClass.getESuperTypes().add(this.getTypedElement());
         methodEClass.getESuperTypes().add(this.getMember());
+        parameterEClass.getESuperTypes().add(this.getNamedElement());
+        parameterEClass.getESuperTypes().add(this.getTypedElement());
         propertyEClass.getESuperTypes().add(this.getMember());
+        typeRefEClass.getESuperTypes().add(this.getJSType());
 
         // Initialize classes and features; add operations and parameters
-        initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEAttribute(getNamedElement_Name(), ecorePackage.getEString(), "name", null, 0, 1, NamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-        initEClass(jsTypeEClass, JSType.class, "JSType", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-
-        addEOperation(jsTypeEClass, this.getJSType(), "getSuperType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-        addEOperation(jsTypeEClass, this.getTypeKind(), "getKind", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-        addEOperation(jsTypeEClass, ecorePackage.getEBoolean(), "isDeprecated", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-        addEOperation(jsTypeEClass, ecorePackage.getEString(), "getComponentType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+        initEClass(typedElementEClass, TypedElement.class, "TypedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getTypedElement_Type(), this.getJSType(), null, "type", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEReference(getTypedElement_DirectType(), this.getType(), null, "directType", null, 0, 1, TypedElement.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(elementEClass, Element.class, "Element", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEAttribute(getElement_Deprecated(), ecorePackage.getEBoolean(), "deprecated", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -621,7 +656,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEReference(getTypeAlias_Target(), this.getType(), null, "target", null, 0, 1, TypeAlias.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(memberEClass, Member.class, "Member", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-        initEReference(getMember_Type(), this.getType(), null, "type", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEAttribute(getMember_Static(), ecorePackage.getEBoolean(), "static", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getMember_DeclaringType(), this.getType(), this.getType_Members(), "declaringType", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -629,8 +663,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEReference(getMethod_Parameters(), this.getParameter(), null, "parameters", null, 0, -1, Method.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-        initEAttribute(getParameter_Name(), ecorePackage.getEString(), "name", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-        initEReference(getParameter_Type(), this.getType(), null, "type", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEAttribute(getParameter_Kind(), this.getParameterKind(), "kind", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -639,6 +671,19 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEClass(attributeEntryEClass, Map.Entry.class, "AttributeEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEAttribute(getAttributeEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEAttribute(getAttributeEntry_Value(), ecorePackage.getEJavaObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+        initEClass(jsTypeEClass, JSType.class, "JSType", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+        addEOperation(jsTypeEClass, this.getTypeKind(), "getKind", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+        addEOperation(jsTypeEClass, ecorePackage.getEBoolean(), "isDeprecated", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+        addEOperation(jsTypeEClass, ecorePackage.getEString(), "getComponentType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+        addEOperation(jsTypeEClass, ecorePackage.getEString(), "getName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+        initEClass(typeRefEClass, TypeRef.class, "TypeRef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getTypeRef_Target(), this.getType(), null, "target", null, 0, 1, TypeRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         // Initialize enums and add enum literals
         initEEnum(typeKindEEnum, TypeKind.class, "TypeKind"); //$NON-NLS-1$

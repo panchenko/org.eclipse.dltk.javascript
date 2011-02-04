@@ -9,20 +9,21 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ParameterImpl.java,v 1.4 2010/11/29 16:28:05 apanchenk Exp $
+ * $Id: ParameterImpl.java,v 1.5 2011/02/04 06:04:41 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
 import org.eclipse.emf.common.notify.Notification;
-
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
@@ -36,6 +37,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl#getDirectType <em>Direct Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl#getKind <em>Kind</em>}</li>
  * </ul>
  * </p>
@@ -64,16 +66,16 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-     * The cached value of the '{@link #getType() <em>Type</em>}' reference.
+     * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @see #getType()
      * @generated
      * @ordered
      */
-	protected Type type;
+    protected JSType type;
 
-	/**
+    /**
      * The default value of the '{@link #getKind() <em>Kind</em>}' attribute.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -138,40 +140,63 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public Type getType() {
-        if (type != null && ((EObject)type).eIsProxy()) {
-            InternalEObject oldType = (InternalEObject)type;
-            type = (Type)eResolveProxy(oldType);
-            if (type != oldType) {
-                if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.PARAMETER__TYPE, oldType, type));
-            }
-        }
+	public JSType getType() {
         return type;
     }
 
 	/**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Type basicGetType() {
-        return type;
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public void setType(Type newType) {
-        Type oldType = type;
+    public NotificationChain basicSetType(JSType newType, NotificationChain msgs) {
+        JSType oldType = type;
         type = newType;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__TYPE, oldType, type));
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__TYPE, oldType, newType);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setType(JSType newType) {
+        if (newType != type) {
+            NotificationChain msgs = null;
+            if (type != null)
+                msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.PARAMETER__TYPE, null, msgs);
+            if (newType != null)
+                msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.PARAMETER__TYPE, null, msgs);
+            msgs = basicSetType(newType, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.PARAMETER__TYPE, newType, newType));
     }
 
 	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public Type getDirectType() {
+		return type instanceof TypeRef ? ((TypeRef) type).getTarget() : null;
+    }
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public void setDirectType(Type newDirectType) {
+		setType(TypeInfoUtil.ref(newDirectType));
+    }
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
@@ -194,6 +219,20 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 
 	/**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+        switch (featureID) {
+            case TypeInfoModelPackage.PARAMETER__TYPE:
+                return basicSetType(null, msgs);
+        }
+        return super.eInverseRemove(otherEnd, featureID, msgs);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -203,8 +242,9 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
             case TypeInfoModelPackage.PARAMETER__NAME:
                 return getName();
             case TypeInfoModelPackage.PARAMETER__TYPE:
-                if (resolve) return getType();
-                return basicGetType();
+                return getType();
+            case TypeInfoModelPackage.PARAMETER__DIRECT_TYPE:
+                return getDirectType();
             case TypeInfoModelPackage.PARAMETER__KIND:
                 return getKind();
         }
@@ -223,7 +263,10 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
                 setName((String)newValue);
                 return;
             case TypeInfoModelPackage.PARAMETER__TYPE:
-                setType((Type)newValue);
+                setType((JSType)newValue);
+                return;
+            case TypeInfoModelPackage.PARAMETER__DIRECT_TYPE:
+                setDirectType((Type)newValue);
                 return;
             case TypeInfoModelPackage.PARAMETER__KIND:
                 setKind((ParameterKind)newValue);
@@ -244,7 +287,10 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
                 setName(NAME_EDEFAULT);
                 return;
             case TypeInfoModelPackage.PARAMETER__TYPE:
-                setType((Type)null);
+                setType((JSType)null);
+                return;
+            case TypeInfoModelPackage.PARAMETER__DIRECT_TYPE:
+                setDirectType((Type)null);
                 return;
             case TypeInfoModelPackage.PARAMETER__KIND:
                 setKind(KIND_EDEFAULT);
@@ -265,6 +311,8 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
                 return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
             case TypeInfoModelPackage.PARAMETER__TYPE:
                 return type != null;
+            case TypeInfoModelPackage.PARAMETER__DIRECT_TYPE:
+                return getDirectType() != null;
             case TypeInfoModelPackage.PARAMETER__KIND:
                 return kind != KIND_EDEFAULT;
         }
@@ -272,6 +320,40 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+        if (baseClass == TypedElement.class) {
+            switch (derivedFeatureID) {
+                case TypeInfoModelPackage.PARAMETER__TYPE: return TypeInfoModelPackage.TYPED_ELEMENT__TYPE;
+                case TypeInfoModelPackage.PARAMETER__DIRECT_TYPE: return TypeInfoModelPackage.TYPED_ELEMENT__DIRECT_TYPE;
+                default: return -1;
+            }
+        }
+        return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+        if (baseClass == TypedElement.class) {
+            switch (baseFeatureID) {
+                case TypeInfoModelPackage.TYPED_ELEMENT__TYPE: return TypeInfoModelPackage.PARAMETER__TYPE;
+                case TypeInfoModelPackage.TYPED_ELEMENT__DIRECT_TYPE: return TypeInfoModelPackage.PARAMETER__DIRECT_TYPE;
+                default: return -1;
+            }
+        }
+        return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+    }
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated

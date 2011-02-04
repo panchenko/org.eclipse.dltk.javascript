@@ -43,6 +43,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -51,6 +52,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 
@@ -191,12 +193,12 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 						return convert(m, Collections.singletonList(method));
 					}
 				} else if (kind == ReferenceKind.TYPE) {
-					final Collection<JSType> types = value.getTypes();
+					final JSTypeSet types = value.getTypes();
 					if (types != null) {
 						final List<Type> t = new ArrayList<Type>(types.size());
 						for (JSType type : types) {
-							if (type instanceof Type) {
-								t.add((Type) type);
+							if (type instanceof TypeRef) {
+								t.add(((TypeRef) type).getTarget());
 							}
 						}
 						return convert(m, t);

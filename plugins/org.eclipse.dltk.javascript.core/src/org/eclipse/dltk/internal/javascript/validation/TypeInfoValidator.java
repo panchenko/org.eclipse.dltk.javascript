@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.CoreException;
@@ -53,6 +52,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -62,6 +62,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
@@ -163,7 +164,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		public void call() {
-			Set<JSType> types = reference.getTypes();
+			JSTypeSet types = reference.getTypes();
 			if (types.size() > 0) {
 				JSType type = types.iterator().next();
 				validator
@@ -305,10 +306,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 					.getAttribute(IReferenceAttributes.PARAMETERS);
 			if (method != null && method.getType() != null) {
 				if (collection != null && collection.getReturnValue() != null) {
-					Set<JSType> types = collection.getReturnValue().getTypes();
+					JSTypeSet types = collection.getReturnValue().getTypes();
 					if (!types.isEmpty()
-							&& !types
-									.contains(context.getType(method.getType()))) {
+							&& !types.contains(context.getTypeRef(method
+									.getType()))) {
 						String name = method.getName();
 						int sourceStart;
 						int sourceEnd;
@@ -512,8 +513,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 											.sourceEnd());
 						} else if (JavaScriptValidations.isStatic(reference
 								.getParent())
-								&& type instanceof Type
-								&& !ElementValue.findMembers((Type) type,
+								&& type instanceof TypeRef
+								&& !ElementValue.findMembers(
+										((TypeRef) type).getTarget(),
 										reference.getName(),
 										MemberPredicates.NON_STATIC).isEmpty()) {
 							reporter.reportProblem(
@@ -537,13 +539,14 @@ public class TypeInfoValidator implements IBuildParticipant {
 					} else {
 						JSType referenceType = JavaScriptValidations
 								.typeOf(reference);
-						while (referenceType != null) {
-							if (referenceType.getName().equals(
-									ITypeNames.FUNCTION)) {
-
-								return;
+						if (referenceType instanceof TypeRef) {
+							Type t = ((TypeRef) referenceType).getTarget();
+							while (t != null) {
+								if (t.getName().equals(ITypeNames.FUNCTION)) {
+									return;
+								}
+								t = t.getSuperType();
 							}
-							referenceType = referenceType.getSuperType();
 						}
 						if (expression instanceof NewExpression) {
 							if (reference.getKind() == ReferenceKind.TYPE) {
@@ -714,13 +717,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 				if (paramType.equals(argumentName))
 					return true;
-
-				JSType type = argumentType.getSuperType();
-				while (type != null) {
-					String name = type.getName();
-					if (name.equals(paramType))
-						return true;
-					type = type.getSuperType();
+				if (argumentType instanceof TypeRef) {
+					Type type = ((TypeRef) argumentType).getTarget()
+							.getSuperType();
+					while (type != null) {
+						String name = type.getName();
+						if (name.equals(paramType))
+							return true;
+						type = type.getSuperType();
+					}
 				}
 				return false;
 			}
@@ -746,6 +751,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 				if (parameter.getKind() == ParameterKind.OPTIONAL)
 					sb.append(']');
+				if (parameter.getKind() == ParameterKind.VARARGS) {
+					sb.append("...");
+				}
 			}
 			return sb.toString();
 		}
@@ -786,9 +794,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 				} else if (argument.getDeclaredType() != null) {
 					sb.append(argument.getDeclaredType().getName());
 				} else {
-					final Set<JSType> types = argument.getTypes();
+					final JSTypeSet types = argument.getTypes();
 					if (types.size() == 1) {
-						sb.append(types.iterator().next().getName());
+						sb.append(types.getFirst().getName());
 					} else {
 						sb.append('?');
 					}
@@ -883,11 +891,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 										.sourceStart(), expr.sourceEnd());
 
 					} else {
-					reporter.reportProblem(
-							JavaScriptProblems.UNDECLARED_VARIABLE, NLS.bind(
-									ValidationMessages.UndeclaredVariable,
-									reference.getName()), expr.sourceStart(),
-							expr.sourceEnd());
+						reporter.reportProblem(
+								JavaScriptProblems.UNDECLARED_VARIABLE,
+								NLS.bind(ValidationMessages.UndeclaredVariable,
+										reference.getName()), expr
+										.sourceStart(), expr.sourceEnd());
 					}
 					return false;
 				}
@@ -1129,8 +1137,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		@Override
-		protected Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
-			final Type result = super.resolveType(type);
+		protected JSType resolveType(org.eclipse.dltk.javascript.ast.Type type) {
+			final JSType result = super.resolveType(type);
 			checkType(type, result, type.getName());
 			return result;
 		}

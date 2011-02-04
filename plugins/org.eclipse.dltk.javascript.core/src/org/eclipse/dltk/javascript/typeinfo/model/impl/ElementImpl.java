@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ElementImpl.java,v 1.8 2011/01/25 12:47:13 apanchenk Exp $
+ * $Id: ElementImpl.java,v 1.9 2011/02/04 06:04:41 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -32,6 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#isDeprecated <em>Deprecated</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#isVisible <em>Visible</em>}</li>
@@ -41,8 +43,28 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public abstract class ElementImpl extends NamedElementImpl implements Element {
+public abstract class ElementImpl extends EObjectImpl implements Element {
 	/**
+     * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
+    protected static final String NAME_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
+    protected String name = NAME_EDEFAULT;
+
+    /**
      * The default value of the '{@link #isDeprecated() <em>Deprecated</em>}' attribute.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -132,6 +154,27 @@ public abstract class ElementImpl extends NamedElementImpl implements Element {
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setName(String newName) {
+        String oldName = name;
+        name = newName;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__NAME, oldName, name));
+    }
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
@@ -250,6 +293,8 @@ public abstract class ElementImpl extends NamedElementImpl implements Element {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
+            case TypeInfoModelPackage.ELEMENT__NAME:
+                return getName();
             case TypeInfoModelPackage.ELEMENT__DEPRECATED:
                 return isDeprecated();
             case TypeInfoModelPackage.ELEMENT__DESCRIPTION:
@@ -271,6 +316,9 @@ public abstract class ElementImpl extends NamedElementImpl implements Element {
 	@Override
 	public void eSet(int featureID, Object newValue) {
         switch (featureID) {
+            case TypeInfoModelPackage.ELEMENT__NAME:
+                setName((String)newValue);
+                return;
             case TypeInfoModelPackage.ELEMENT__DEPRECATED:
                 setDeprecated((Boolean)newValue);
                 return;
@@ -295,6 +343,9 @@ public abstract class ElementImpl extends NamedElementImpl implements Element {
 	@Override
 	public void eUnset(int featureID) {
         switch (featureID) {
+            case TypeInfoModelPackage.ELEMENT__NAME:
+                setName(NAME_EDEFAULT);
+                return;
             case TypeInfoModelPackage.ELEMENT__DEPRECATED:
                 setDeprecated(DEPRECATED_EDEFAULT);
                 return;
@@ -319,6 +370,8 @@ public abstract class ElementImpl extends NamedElementImpl implements Element {
 	@Override
 	public boolean eIsSet(int featureID) {
         switch (featureID) {
+            case TypeInfoModelPackage.ELEMENT__NAME:
+                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
             case TypeInfoModelPackage.ELEMENT__DEPRECATED:
                 return deprecated != DEPRECATED_EDEFAULT;
             case TypeInfoModelPackage.ELEMENT__DESCRIPTION:

@@ -14,7 +14,6 @@ package org.eclipse.dltk.internal.javascript.validation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.core.DLTKCore;
@@ -26,10 +25,10 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class JavaScriptValidations {
 
@@ -72,13 +71,13 @@ public class JavaScriptValidations {
 			if (reference.getDeclaredType() != null) {
 				return reference.getDeclaredType();
 			}
-			Set<JSType> declaredTypes = reference.getDeclaredTypes();
+			JSTypeSet declaredTypes = reference.getDeclaredTypes();
 			if (declaredTypes.size() == 1) {
-				return declaredTypes.toArray(new Type[1])[0];
+				return declaredTypes.getFirst();
 			}
-			final Set<JSType> types = reference.getTypes();
+			final JSTypeSet types = reference.getTypes();
 			if (types.size() == 1) {
-				return types.toArray(new Type[1])[0];
+				return types.getFirst();
 			}
 		}
 		return null;

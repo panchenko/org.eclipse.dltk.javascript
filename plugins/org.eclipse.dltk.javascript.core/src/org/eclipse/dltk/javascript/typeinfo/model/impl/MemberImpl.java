@@ -9,17 +9,20 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: MemberImpl.java,v 1.7 2010/11/29 16:28:05 apanchenk Exp $
+ * $Id: MemberImpl.java,v 1.8 2011/02/04 06:04:41 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -31,6 +34,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getDirectType <em>Direct Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#isStatic <em>Static</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MemberImpl#getDeclaringType <em>Declaring Type</em>}</li>
  * </ul>
@@ -40,16 +44,16 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public abstract class MemberImpl extends ElementImpl implements Member {
 	/**
-     * The cached value of the '{@link #getType() <em>Type</em>}' reference.
+     * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @see #getType()
      * @generated
      * @ordered
      */
-	protected Type type;
+    protected JSType type;
 
-	/**
+    /**
      * The default value of the '{@link #isStatic() <em>Static</em>}' attribute.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -93,40 +97,63 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 	 * <!-- end-user-doc -->
      * @generated
      */
-	public Type getType() {
-        if (type != null && ((EObject)type).eIsProxy()) {
-            InternalEObject oldType = (InternalEObject)type;
-            type = (Type)eResolveProxy(oldType);
-            if (type != oldType) {
-                if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.MEMBER__TYPE, oldType, type));
-            }
-        }
+	public JSType getType() {
         return type;
     }
 
 	/**
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Type basicGetType() {
-        return type;
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public void setType(Type newType) {
-        Type oldType = type;
+    public NotificationChain basicSetType(JSType newType, NotificationChain msgs) {
+        JSType oldType = type;
         type = newType;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.MEMBER__TYPE, oldType, type));
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.MEMBER__TYPE, oldType, newType);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setType(JSType newType) {
+        if (newType != type) {
+            NotificationChain msgs = null;
+            if (type != null)
+                msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.MEMBER__TYPE, null, msgs);
+            if (newType != null)
+                msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.MEMBER__TYPE, null, msgs);
+            msgs = basicSetType(newType, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.MEMBER__TYPE, newType, newType));
     }
 
 	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public Type getDirectType() {
+		return type instanceof TypeRef ? ((TypeRef) type).getTarget() : null;
+    }
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public void setDirectType(Type newDirectType) {
+		setType(TypeInfoUtil.ref(newDirectType));
+    }
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
@@ -181,6 +208,8 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
         switch (featureID) {
+            case TypeInfoModelPackage.MEMBER__TYPE:
+                return basicSetType(null, msgs);
             case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
                 return eBasicSetContainer(null, TypeInfoModelPackage.MEMBER__DECLARING_TYPE, msgs);
         }
@@ -210,8 +239,9 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
             case TypeInfoModelPackage.MEMBER__TYPE:
-                if (resolve) return getType();
-                return basicGetType();
+                return getType();
+            case TypeInfoModelPackage.MEMBER__DIRECT_TYPE:
+                return getDirectType();
             case TypeInfoModelPackage.MEMBER__STATIC:
                 return isStatic();
             case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
@@ -229,7 +259,10 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 	public void eSet(int featureID, Object newValue) {
         switch (featureID) {
             case TypeInfoModelPackage.MEMBER__TYPE:
-                setType((Type)newValue);
+                setType((JSType)newValue);
+                return;
+            case TypeInfoModelPackage.MEMBER__DIRECT_TYPE:
+                setDirectType((Type)newValue);
                 return;
             case TypeInfoModelPackage.MEMBER__STATIC:
                 setStatic((Boolean)newValue);
@@ -247,7 +280,10 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 	public void eUnset(int featureID) {
         switch (featureID) {
             case TypeInfoModelPackage.MEMBER__TYPE:
-                setType((Type)null);
+                setType((JSType)null);
+                return;
+            case TypeInfoModelPackage.MEMBER__DIRECT_TYPE:
+                setDirectType((Type)null);
                 return;
             case TypeInfoModelPackage.MEMBER__STATIC:
                 setStatic(STATIC_EDEFAULT);
@@ -266,6 +302,8 @@ public abstract class MemberImpl extends ElementImpl implements Member {
         switch (featureID) {
             case TypeInfoModelPackage.MEMBER__TYPE:
                 return type != null;
+            case TypeInfoModelPackage.MEMBER__DIRECT_TYPE:
+                return getDirectType() != null;
             case TypeInfoModelPackage.MEMBER__STATIC:
                 return static_ != STATIC_EDEFAULT;
             case TypeInfoModelPackage.MEMBER__DECLARING_TYPE:
@@ -275,6 +313,40 @@ public abstract class MemberImpl extends ElementImpl implements Member {
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+        if (baseClass == TypedElement.class) {
+            switch (derivedFeatureID) {
+                case TypeInfoModelPackage.MEMBER__TYPE: return TypeInfoModelPackage.TYPED_ELEMENT__TYPE;
+                case TypeInfoModelPackage.MEMBER__DIRECT_TYPE: return TypeInfoModelPackage.TYPED_ELEMENT__DIRECT_TYPE;
+                default: return -1;
+            }
+        }
+        return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+        if (baseClass == TypedElement.class) {
+            switch (baseFeatureID) {
+                case TypeInfoModelPackage.TYPED_ELEMENT__TYPE: return TypeInfoModelPackage.MEMBER__TYPE;
+                case TypeInfoModelPackage.TYPED_ELEMENT__DIRECT_TYPE: return TypeInfoModelPackage.MEMBER__DIRECT_TYPE;
+                default: return -1;
+            }
+        }
+        return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+    }
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated

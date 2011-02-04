@@ -49,6 +49,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
@@ -291,8 +292,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					}
 				}
 				for (JSType type : valueRef.getTypes()) {
-					if (type instanceof Type) {
-						reportTypeMembers((Type) type, predicate);
+					if (type instanceof TypeRef) {
+						reportTypeMembers(((TypeRef) type).getTarget(),
+								predicate);
 					}
 				}
 			}
@@ -435,7 +437,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			this.name = method.getName();
 			StringBuilder sb = new StringBuilder();
 			for (Parameter parameter : method.getParameters()) {
-				final Type paramType = parameter.getType();
+				final JSType paramType = parameter.getType();
 				if (paramType != null) {
 					sb.append(paramType.getName());
 				}

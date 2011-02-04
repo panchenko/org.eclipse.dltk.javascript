@@ -15,7 +15,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueParent;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class ValueTypeFactoryImpl implements IValueTypeFactory, ITypeNames {
 
@@ -26,10 +26,10 @@ public class ValueTypeFactoryImpl implements IValueTypeFactory, ITypeNames {
 	}
 
 	private IValueReference create(IValueParent parent, String typeName) {
-		return create(parent, context.getType(typeName));
+		return create(parent, context.getTypeRef(typeName));
 	}
 
-	public IValueReference create(IValueParent parent, final Type type) {
+	public IValueReference create(IValueParent parent, final JSType type) {
 		return new ConstantValue(type);
 	}
 

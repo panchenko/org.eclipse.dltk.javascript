@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.5 2011/01/25 12:47:13 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.6 2011/02/04 06:04:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -101,10 +101,9 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
-            case TypeInfoModelPackage.JS_TYPE: {
-                JSType jsType = (JSType)theEObject;
-                T result = caseJSType(jsType);
-                if (result == null) result = caseNamedElement(jsType);
+            case TypeInfoModelPackage.TYPED_ELEMENT: {
+                TypedElement typedElement = (TypedElement)theEObject;
+                T result = caseTypedElement(typedElement);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -119,7 +118,6 @@ public class TypeInfoModelSwitch<T> {
                 Type type = (Type)theEObject;
                 T result = caseType(type);
                 if (result == null) result = caseElement(type);
-                if (result == null) result = caseJSType(type);
                 if (result == null) result = caseNamedElement(type);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
@@ -134,6 +132,7 @@ public class TypeInfoModelSwitch<T> {
                 Member member = (Member)theEObject;
                 T result = caseMember(member);
                 if (result == null) result = caseElement(member);
+                if (result == null) result = caseTypedElement(member);
                 if (result == null) result = caseNamedElement(member);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
@@ -143,6 +142,7 @@ public class TypeInfoModelSwitch<T> {
                 T result = caseMethod(method);
                 if (result == null) result = caseMember(method);
                 if (result == null) result = caseElement(method);
+                if (result == null) result = caseTypedElement(method);
                 if (result == null) result = caseNamedElement(method);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
@@ -150,6 +150,8 @@ public class TypeInfoModelSwitch<T> {
             case TypeInfoModelPackage.PARAMETER: {
                 Parameter parameter = (Parameter)theEObject;
                 T result = caseParameter(parameter);
+                if (result == null) result = caseNamedElement(parameter);
+                if (result == null) result = caseTypedElement(parameter);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -158,6 +160,7 @@ public class TypeInfoModelSwitch<T> {
                 T result = caseProperty(property);
                 if (result == null) result = caseMember(property);
                 if (result == null) result = caseElement(property);
+                if (result == null) result = caseTypedElement(property);
                 if (result == null) result = caseNamedElement(property);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
@@ -165,6 +168,19 @@ public class TypeInfoModelSwitch<T> {
             case TypeInfoModelPackage.ATTRIBUTE_ENTRY: {
                 @SuppressWarnings("unchecked") Map.Entry<String, Object> attributeEntry = (Map.Entry<String, Object>)theEObject;
                 T result = caseAttributeEntry(attributeEntry);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.JS_TYPE: {
+                JSType jsType = (JSType)theEObject;
+                T result = caseJSType(jsType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.TYPE_REF: {
+                TypeRef typeRef = (TypeRef)theEObject;
+                T result = caseTypeRef(typeRef);
+                if (result == null) result = caseJSType(typeRef);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -188,6 +204,21 @@ public class TypeInfoModelSwitch<T> {
     }
 
     /**
+     * Returns the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseTypedElement(TypedElement object) {
+        return null;
+    }
+
+    /**
      * Returns the result of interpreting the object as an instance of '<em>JS Type</em>'.
      * <!-- begin-user-doc -->
      * This implementation returns null;
@@ -199,6 +230,21 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseJSType(JSType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Type Ref</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Type Ref</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseTypeRef(TypeRef object) {
         return null;
     }
 

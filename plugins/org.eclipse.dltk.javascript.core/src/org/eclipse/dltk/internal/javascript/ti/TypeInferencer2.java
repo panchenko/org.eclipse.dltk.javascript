@@ -35,6 +35,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -43,6 +44,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -116,6 +118,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 		final boolean queryProviders = canQueryTypeProviders();
 		return getType(typeName, queryProviders, true, !queryProviders, true);
+	}
+
+	public TypeRef getTypeRef(String typeName) {
+		return TypeInfoUtil.ref(getType(typeName));
 	}
 
 	public Type getKnownType(String typeName) {
@@ -219,9 +225,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					if (validResource)
 						break;
 				}
-				Assert.isTrue(validResource,
-					"Type " + type.getName() + " has not a valid resource: "
-							+ resource);
+				Assert.isTrue(validResource, "Type " + type.getName()
+						+ " has not a valid resource: " + resource);
 			}
 		}
 		// TODO check that member referenced types are contained or proxy
@@ -377,13 +382,13 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				}
 
 				if ("pop".equals(memberName) || "shift".equals(memberName)) {
-					method.setType(genericType);
+					method.setType(TypeInfoUtil.ref(genericType));
 				} else if ("filter".equals(memberName)
 						|| "reverse".equals(memberName)
 						|| "slice".equals(memberName)
 						|| "sort".equals(memberName)
 						|| "splice".equals(memberName)) {
-					method.setType(typedArray);
+					method.setType(TypeInfoUtil.ref(typedArray));
 				} else {
 					method.setType(member.getType());
 				}
@@ -484,13 +489,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			this(null, null, contextInvariants);
 		}
 
-		public InvariantTypeResourceSet(String context,
+		public InvariantTypeResourceSet(
+				String context,
 				InvariantTypeResourceSet staticInvariants,
 				ConcurrentMap<String, InvariantTypeResourceSet> contextInvariants) {
 			this.context = context;
 			this.staticInvariants = staticInvariants;
 			this.contextInvariants = contextInvariants;
 		}
+
 		private final Set<String> activeTypeRequests = new HashSet<String>();
 		private final Map<String, Type> types = new ConcurrentHashMap<String, Type>();
 
@@ -527,6 +534,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				return type;
 			}
 			return null;
+		}
+
+		public TypeRef getTypeRef(String typeName) {
+			return TypeInfoUtil.ref(getType(typeName));
 		}
 
 		private Type loadType(String typeName, boolean queryProviders,

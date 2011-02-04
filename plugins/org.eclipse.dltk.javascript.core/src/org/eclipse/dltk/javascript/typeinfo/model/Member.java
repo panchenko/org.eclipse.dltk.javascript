@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Member.java,v 1.7 2010/11/29 16:28:05 apanchenk Exp $
+ * $Id: Member.java,v 1.8 2011/02/04 06:04:41 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -22,7 +22,6 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic <em>Static</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}</li>
  * </ul>
@@ -32,33 +31,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * @model abstract="true"
  * @generated
  */
-public interface Member extends Element {
-	/**
-     * Returns the value of the '<em><b>Type</b></em>' reference.
-     * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Type</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-     * @return the value of the '<em>Type</em>' reference.
-     * @see #setType(Type)
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMember_Type()
-     * @model
-     * @generated
-     */
-	Type getType();
-
-	/**
-     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getType <em>Type</em>}' reference.
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Type</em>' reference.
-     * @see #getType()
-     * @generated
-     */
-	void setType(Type value);
-
+public interface Member extends Element, TypedElement {
 	/**
      * Returns the value of the '<em><b>Static</b></em>' attribute.
      * <!-- begin-user-doc -->

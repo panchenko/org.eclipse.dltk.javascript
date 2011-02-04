@@ -1,30 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2010 xored software, Inc.&#xA;&#xA;All rights reserved. This program and the accompanying materials&#xA;are made available under the terms of the Eclipse Public License v1.0&#xA;which accompanies this distribution, and is available at&#xA;http://www.eclipse.org/legal/epl-v10.html&#xA;&#xA;Contributors:&#xA;    xored software, Inc. - initial API and Implementation (Alex Panchenko)"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (c) 2011 NumberFour AG&#xD;&#xA;&#xD;&#xA;All rights reserved. This program and the accompanying materials&#xD;&#xA;are made available under the terms of the Eclipse Public License v1.0&#xD;&#xA;which accompanies this distribution, and is available at&#xD;&#xA;http://www.eclipse.org/legal/epl-v10.html&#xD;&#xA;&#xD;&#xA;Contributors:&#xD;&#xA;    NumberFour AG - initial API and Implementation (Alex Panchenko)"
     modelDirectory="/org.eclipse.dltk.javascript.core/src" modelPluginID="org.eclipse.dltk.javascript.core"
     modelName="References" nonNLSMarkers="true" rootExtendsInterface="" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="5.0" copyrightFields="false" language="">
   <foreignModel>references.ecore</foreignModel>
   <genPackages prefix="TypeInfoModel" basePackage="org.eclipse.dltk.javascript.typeinfo"
       disposableProviderFactory="true" multipleEditorPages="false" ecorePackage="references.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="references.ecore#//TypeKind">
+      <genEnumLiterals ecoreEnumLiteral="references.ecore#//TypeKind/UNKNOWN"/>
+      <genEnumLiterals ecoreEnumLiteral="references.ecore#//TypeKind/PREDEFINED"/>
+      <genEnumLiterals ecoreEnumLiteral="references.ecore#//TypeKind/JAVASCRIPT"/>
+      <genEnumLiterals ecoreEnumLiteral="references.ecore#//TypeKind/JAVA"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="references.ecore#//ParameterKind">
+      <genEnumLiterals ecoreEnumLiteral="references.ecore#//ParameterKind/NORMAL"/>
+      <genEnumLiterals ecoreEnumLiteral="references.ecore#//ParameterKind/OPTIONAL"/>
+      <genEnumLiterals ecoreEnumLiteral="references.ecore#//ParameterKind/VARARGS"/>
+    </genEnums>
+    <genClasses image="false" ecoreClass="references.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="references.ecore#//TypedElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//TypedElement/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//TypedElement/oldType"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="references.ecore#//Element">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Element/deprecated"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Element/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Element/visible"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Element/attributes"/>
+      <genOperations ecoreOperation="references.ecore#//Element/getAttribute">
+        <genParameters ecoreParameter="references.ecore#//Element/getAttribute/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="references.ecore#//Element/setAttribute">
+        <genParameters ecoreParameter="references.ecore#//Element/setAttribute/name"/>
+        <genParameters ecoreParameter="references.ecore#//Element/setAttribute/value"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="references.ecore#//Type">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Type/members"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Type/kind"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//Type/superType"/>
+    </genClasses>
+    <genClasses ecoreClass="references.ecore#//TypeAlias">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//TypeAlias/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//TypeAlias/target"/>
     </genClasses>
     <genClasses image="false" ecoreClass="references.ecore#//Member">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Member/name"/>
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//Member/type"/>
-      <genFeatures notify="false" createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute references.ecore#//Member/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Member/static"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference references.ecore#//Member/declaringType"/>
     </genClasses>
     <genClasses ecoreClass="references.ecore#//Method">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference references.ecore#//Method/parameters"/>
     </genClasses>
     <genClasses ecoreClass="references.ecore#//Parameter">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Parameter/name"/>
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//Parameter/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Parameter/optional"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Parameter/kind"/>
     </genClasses>
-    <genClasses ecoreClass="references.ecore#//Property"/>
+    <genClasses ecoreClass="references.ecore#//Property">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//Property/readOnly"/>
+    </genClasses>
+    <genClasses ecoreClass="references.ecore#//AttributeEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//AttributeEntry/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute references.ecore#//AttributeEntry/value"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="references.ecore#//JSType">
+      <genOperations ecoreOperation="references.ecore#//JSType/getKind"/>
+      <genOperations ecoreOperation="references.ecore#//JSType/isDeprecated"/>
+      <genOperations ecoreOperation="references.ecore#//JSType/getComponentType"/>
+      <genOperations ecoreOperation="references.ecore#//JSType/getName"/>
+    </genClasses>
+    <genClasses ecoreClass="references.ecore#//TypeRef">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference references.ecore#//TypeRef/target"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

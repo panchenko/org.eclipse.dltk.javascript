@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
-  	<ref:Method name="parseInt" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="Parses a string argument and returns an integer of the specified radix or base">
-    	<parameters name="string" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
-    	<parameters name="radix" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" kind="OPTIONAL"/>
+  	<ref:Method name="parseInt" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="Parses a string argument and returns an integer of the specified radix or base">
+    	<parameters name="string" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+    	<parameters name="radix" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" kind="OPTIONAL"/>
     </ref:Method>
-  	<ref:Method name="parseFloat" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="Parses a string argument and returns a floating point number">
-    	<parameters name="string" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
+  	<ref:Method name="parseFloat" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="Parses a string argument and returns a floating point number">
+    	<parameters name="string" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String"/>
     </ref:Method>
-  	<ref:Method name="decodeURI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine.">
-    	<parameters name="encodedURI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+  	<ref:Method name="decodeURI" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine.">
+    	<parameters name="encodedURI" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
     </ref:Method>
-  	<ref:Method name="decodeURIComponent" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine.">
-    	<parameters name="encodedURI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+  	<ref:Method name="decodeURIComponent" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine.">
+    	<parameters name="encodedURI" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
     </ref:Method>
-  	<ref:Method name="encodeURI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two 'surrogate' characters).">
-    	<parameters name="URI" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+  	<ref:Method name="encodeURI" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two 'surrogate' characters).">
+    	<parameters name="URI" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
     </ref:Method>
-  	<ref:Method name="encodeURIComponent" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two 'surrogate' characters).">
-    	<parameters name="str" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+  	<ref:Method name="encodeURIComponent" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two 'surrogate' characters).">
+    	<parameters name="str" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
     </ref:Method>
-  	<ref:Method name="eval" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object" description="Evaluates a string of JavaScript code without reference to a particular object.">
-    	<parameters name="str" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+  	<ref:Method name="eval" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object" description="Evaluates a string of JavaScript code without reference to a particular object.">
+    	<parameters name="str" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
     </ref:Method>
-  	<ref:Method name="escape" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Encodes a string, so it can be transmitted across any network to any computer that supports ASCII characters.">
-    	<parameters name="str" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+  	<ref:Method name="escape" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Encodes a string, so it can be transmitted across any network to any computer that supports ASCII characters.">
+    	<parameters name="str" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
     </ref:Method>
-  	<ref:Method name="unescape" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Decodes an encoded string (encoded with escape).">
-    	<parameters name="str" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
+  	<ref:Method name="unescape" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" description="Decodes an encoded string (encoded with escape).">
+    	<parameters name="str" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#String" />
     </ref:Method>
-  	<ref:Method name="isFinite" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean" description="Evaluates an argument to determine whether it is a finite number.">
-    	<parameters name="number" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" />
+  	<ref:Method name="isFinite" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean" description="Evaluates an argument to determine whether it is a finite number.">
+    	<parameters name="number" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" />
     </ref:Method>
-  	<ref:Method name="isNaN" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean" description="Evaluates an argument to determine if it is not a number.">
-    	<parameters name="testValue" type="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object" />
+  	<ref:Method name="isNaN" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Boolean" description="Evaluates an argument to determine if it is not a number.">
+    	<parameters name="testValue" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object" />
     </ref:Method>
 </xmi:XMI>

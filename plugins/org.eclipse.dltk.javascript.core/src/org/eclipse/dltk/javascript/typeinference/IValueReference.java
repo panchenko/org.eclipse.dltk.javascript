@@ -11,8 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinference;
 
-import java.util.Set;
-
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public interface IValueReference extends IValueParent {
@@ -24,7 +23,7 @@ public interface IValueReference extends IValueParent {
 
 	String getName();
 
-	Set<JSType> getTypes();
+	JSTypeSet getTypes();
 
 	void clear();
 
@@ -46,7 +45,7 @@ public interface IValueReference extends IValueParent {
 
 	void setDeclaredType(JSType type);
 
-	Set<JSType> getDeclaredTypes();
+	JSTypeSet getDeclaredTypes();
 
 	Object getAttribute(String key, boolean includeReferences);
 

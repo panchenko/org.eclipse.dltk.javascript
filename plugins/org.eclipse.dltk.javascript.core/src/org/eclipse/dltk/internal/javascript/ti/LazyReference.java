@@ -7,6 +7,7 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -38,7 +39,7 @@ public class LazyReference extends AbstractReference {
 					type.setSuperType(context.getKnownType(OBJECT));
 					type.setKind(TypeKind.JAVASCRIPT);
 					type.setName(className);
-					setDeclaredType(type);
+					setDeclaredType(TypeInfoUtil.ref(type));
 					resolved = true;
 				}
 			}

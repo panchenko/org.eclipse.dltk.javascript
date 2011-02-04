@@ -27,7 +27,7 @@ import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class SelectionVisitor extends TypeInferencerVisitor {
 
@@ -114,8 +114,8 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 	}
 
 	@Override
-	protected Type resolveType(org.eclipse.dltk.javascript.ast.Type type) {
-		final Type result = super.resolveType(type);
+	protected JSType resolveType(org.eclipse.dltk.javascript.ast.Type type) {
+		final JSType result = super.resolveType(type);
 		if (type == target) {
 			if (result != null) {
 				value = new ConstantValue(result);

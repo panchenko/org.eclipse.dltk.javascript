@@ -25,7 +25,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * </p>
  *
  * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getNamedElement()
- * @model abstract="true"
+ * @model interface="true" abstract="true"
  * @generated
  */
 public interface NamedElement {

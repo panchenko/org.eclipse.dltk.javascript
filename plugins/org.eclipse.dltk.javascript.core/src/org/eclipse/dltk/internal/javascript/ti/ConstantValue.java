@@ -12,13 +12,13 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class ConstantValue extends AbstractReference {
 
 	private final Value value = new Value();
 
-	public ConstantValue(Type type) {
+	public ConstantValue(JSType type) {
 		value.getTypes().add(type);
 	}
 

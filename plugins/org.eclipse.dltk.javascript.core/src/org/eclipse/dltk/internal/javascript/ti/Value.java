@@ -19,11 +19,12 @@ import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class Value implements IValue {
 
-	private final Set<JSType> types = new HashSet<JSType>(4, 0.9f);
+	private final JSTypeSet types = JSTypeSet.create();
 	private final Map<String, Value> children = new HashMap<String, Value>(4,
 			0.9f);
 	private final Map<String, IValue> inherited = new HashMap<String, IValue>(
@@ -61,15 +62,15 @@ public class Value implements IValue {
 		}
 	}
 
-	private static final Handler<Set<JSType>> GET_TYPES = new Handler<Set<JSType>>() {
-		public void process(Value value, Set<JSType> result) {
+	private static final Handler<JSTypeSet> GET_TYPES = new Handler<JSTypeSet>() {
+		public void process(Value value, JSTypeSet result) {
 			result.addAll(value.types);
 		}
 	};
 
-	public Set<JSType> getTypes() {
+	public JSTypeSet getTypes() {
 		if (hasReferences()) {
-			final Set<JSType> result = new HashSet<JSType>();
+			final JSTypeSet result = JSTypeSet.create();
 			execute(this, GET_TYPES, result, new HashSet<IValue>());
 			return result;
 		} else {
@@ -77,8 +78,8 @@ public class Value implements IValue {
 		}
 	}
 
-	private static final Handler<Set<JSType>> GET_DECLARED_TYPES = new Handler<Set<JSType>>() {
-		public void process(Value value, Set<JSType> result) {
+	private static final Handler<JSTypeSet> GET_DECLARED_TYPES = new Handler<JSTypeSet>() {
+		public void process(Value value, JSTypeSet result) {
 			if (value.declaredType != null)
 				result.add(value.declaredType);
 		}
@@ -86,7 +87,7 @@ public class Value implements IValue {
 
 	public JSType getDeclaredType() {
 		if (hasReferences()) {
-			final Set<JSType> result = new HashSet<JSType>();
+			final JSTypeSet result = JSTypeSet.create();
 			execute(this, GET_DECLARED_TYPES, result, new HashSet<IValue>());
 			return !result.isEmpty() ? result.iterator().next() : null;
 		} else {
@@ -94,14 +95,14 @@ public class Value implements IValue {
 		}
 	}
 
-	public Set<JSType> getDeclaredTypes() {
+	public JSTypeSet getDeclaredTypes() {
 		if (hasReferences()) {
-			final Set<JSType> result = new HashSet<JSType>();
+			final JSTypeSet result = JSTypeSet.create();
 			execute(this, GET_DECLARED_TYPES, result, new HashSet<IValue>());
 			return result;
 		} else {
-			return declaredType != null ? Collections.singleton(declaredType)
-					: Collections.<JSType> emptySet();
+			return declaredType != null ? JSTypeSet.singleton(declaredType)
+					: JSTypeSet.emptySet();
 		}
 	}
 
@@ -225,7 +226,7 @@ public class Value implements IValue {
 				if (member != null) {
 					result.add(member);
 				}
-				Set<JSType> valueTypes = null;
+				JSTypeSet valueTypes = null;
 				if (value.hasReferences()) {
 					valueTypes = value.types;
 				} else {

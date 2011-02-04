@@ -24,6 +24,8 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -31,6 +33,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public abstract class ElementValue implements IValue {
 
@@ -40,8 +43,9 @@ public abstract class ElementValue implements IValue {
 
 	public static ElementValue findMember(JSType type, String name,
 			Predicate<Member> predicate) {
-		if (type != null && type instanceof Type) {
-			List<Member> selection = findMembers((Type) type, name, predicate);
+		if (type != null && type instanceof TypeRef) {
+			List<Member> selection = findMembers(((TypeRef) type).getTarget(),
+					name, predicate);
 			if (!selection.isEmpty()) {
 				return new MemberValue(selection.toArray(new Member[selection
 						.size()]));
@@ -76,27 +80,28 @@ public abstract class ElementValue implements IValue {
 		} else if (element instanceof Property) {
 			return new PropertyValue((Property) element, context);
 		} else {
-			assert element instanceof JSType;
-			return new TypeValue(Collections.singleton((JSType) element));
+			assert element instanceof Type;
+			return new TypeValue(JSTypeSet.singleton(TypeInfoUtil
+					.ref((Type) element)));
 		}
 	}
 
-	public static ElementValue createStatic(JSType type) {
-		return new StaticTypeValue(Collections.singleton(type));
+	public static ElementValue createStatic(Type type) {
+		return new StaticTypeValue(JSTypeSet.singleton(TypeInfoUtil.ref(type)));
 	}
 
 	private static class TypeValue extends ElementValue implements IValue {
 
 		private Value arrayLookup;
-		private final Set<JSType> types;
+		private final JSTypeSet types;
 
-		public TypeValue(Set<JSType> types) {
+		public TypeValue(JSTypeSet types) {
 			this.types = types;
 		}
 
 		@Override
 		protected Type[] getElements() {
-			return types.toArray(new Type[types.size()]);
+			return types.toArray();
 		}
 
 		@Override
@@ -122,12 +127,12 @@ public abstract class ElementValue implements IValue {
 			return types.iterator().next();
 		}
 
-		public Set<JSType> getDeclaredTypes() {
+		public JSTypeSet getDeclaredTypes() {
 			return types;
 		}
 
 		@Override
-		public final Set<JSType> getTypes() {
+		public final JSTypeSet getTypes() {
 			return types;
 		}
 
@@ -135,15 +140,15 @@ public abstract class ElementValue implements IValue {
 
 	private static class StaticTypeValue extends ElementValue implements IValue {
 
-		private final Set<JSType> types;
+		private final JSTypeSet types;
 
-		public StaticTypeValue(Set<JSType> types) {
+		public StaticTypeValue(JSTypeSet types) {
 			this.types = types;
 		}
 
 		@Override
 		protected Type[] getElements() {
-			return types.toArray(new Type[types.size()]);
+			return types.toArray();
 		}
 
 		public IValue getChild(String name, boolean resolve) {
@@ -165,7 +170,7 @@ public abstract class ElementValue implements IValue {
 			return types.iterator().next();
 		}
 
-		public Set<JSType> getDeclaredTypes() {
+		public JSTypeSet getDeclaredTypes() {
 			return types;
 		}
 
@@ -209,7 +214,7 @@ public abstract class ElementValue implements IValue {
 				if (method.getType() != null) {
 					if (functionOperator == null) {
 						functionOperator = new TypeValue(
-								Collections.<JSType> singleton(method.getType()));
+								JSTypeSet.singleton(method.getType()));
 					}
 					return functionOperator;
 				}
@@ -217,12 +222,12 @@ public abstract class ElementValue implements IValue {
 			return null;
 		}
 
-		public Type getDeclaredType() {
+		public JSType getDeclaredType() {
 			return null;
 		}
 
-		public Set<JSType> getDeclaredTypes() {
-			return Collections.emptySet();
+		public JSTypeSet getDeclaredTypes() {
+			return JSTypeSet.emptySet();
 		}
 
 	}
@@ -257,9 +262,10 @@ public abstract class ElementValue implements IValue {
 			IValue child = children.get(name);
 			if (child == null) {
 				if (name.equals(IValueReference.ARRAY_OP)
-						&& property.getType() != null) {
-					String arrayType = (String) property.getType()
-							.getAttribute(
+						&& property.getType() != null
+						&& property.getType() instanceof TypeRef) {
+					String arrayType = (String) ((TypeRef) property.getType())
+							.getTarget().getAttribute(
 									ITypeInferenceContext.GENERIC_ARRAY_TYPE);
 					if (arrayType != null) {
 						ElementValue arrayOpChild = createFor(
@@ -278,15 +284,15 @@ public abstract class ElementValue implements IValue {
 			return child;
 		}
 
-		public Type getDeclaredType() {
+		public JSType getDeclaredType() {
 			return property.getType();
 		}
 
-		public Set<JSType> getDeclaredTypes() {
+		public JSTypeSet getDeclaredTypes() {
 			if (property.getType() != null) {
-				return Collections.<JSType> singleton(property.getType());
+				return JSTypeSet.singleton(property.getType());
 			} else {
-				return Collections.emptySet();
+				return JSTypeSet.emptySet();
 			}
 		}
 
@@ -330,13 +336,13 @@ public abstract class ElementValue implements IValue {
 
 		public IValue getChild(String name, boolean resolve) {
 			if (IValueReference.FUNCTION_OP.equals(name)) {
-				Set<JSType> types = null;
+				JSTypeSet types = null;
 				for (Member member : members) {
 					if (member instanceof Method) {
 						final Method method = (Method) member;
 						if (method.getType() != null) {
 							if (types == null) {
-								types = new HashSet<JSType>();
+								types = JSTypeSet.create();
 							}
 							types.add(method.getType());
 						}
@@ -362,7 +368,7 @@ public abstract class ElementValue implements IValue {
 			return null;
 		}
 
-		public Type getDeclaredType() {
+		public JSType getDeclaredType() {
 			for (Member member : members) {
 				if (member instanceof Property) {
 					final Property property = (Property) member;
@@ -374,20 +380,20 @@ public abstract class ElementValue implements IValue {
 			return null;
 		}
 
-		public Set<JSType> getDeclaredTypes() {
-			Set<JSType> types = null;
+		public JSTypeSet getDeclaredTypes() {
+			JSTypeSet types = null;
 			for (Member member : members) {
 				if (member instanceof Property) {
 					final Property property = (Property) member;
 					if (property.getType() != null) {
 						if (types == null) {
-							types = new HashSet<JSType>();
+							types = JSTypeSet.create();
 						}
 						types.add(property.getType());
 					}
 				} else if (member instanceof Method) {
 					if (types == null) {
-						types = new HashSet<JSType>();
+						types = JSTypeSet.create();
 					}
 					types.add(TypeInfoModelLoader.getInstance().getType(
 							ITypeNames.FUNCTION));
@@ -396,7 +402,7 @@ public abstract class ElementValue implements IValue {
 			if (types != null) {
 				return types;
 			} else {
-				return Collections.emptySet();
+				return JSTypeSet.emptySet();
 			}
 		}
 
@@ -472,8 +478,8 @@ public abstract class ElementValue implements IValue {
 		return ReferenceLocation.UNKNOWN;
 	}
 
-	public Set<JSType> getTypes() {
-		return Collections.emptySet();
+	public JSTypeSet getTypes() {
+		return JSTypeSet.emptySet();
 	}
 
 	public final void setDeclaredType(JSType declaredType) {

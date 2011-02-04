@@ -17,6 +17,7 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public abstract class AbstractReference implements IValueReference,
@@ -103,10 +104,9 @@ public abstract class AbstractReference implements IValueReference,
 		return value != null ? value.getDeclaredType() : null;
 	}
 
-	public Set<JSType> getDeclaredTypes() {
+	public JSTypeSet getDeclaredTypes() {
 		IValue value = getValue();
-		return value != null ? value.getDeclaredTypes() : Collections
-				.<JSType> emptySet();
+		return value != null ? value.getDeclaredTypes() : JSTypeSet.emptySet();
 	}
 
 	public ReferenceKind getKind() {
@@ -119,10 +119,9 @@ public abstract class AbstractReference implements IValueReference,
 		return value != null ? value.getLocation() : ReferenceLocation.UNKNOWN;
 	}
 
-	public Set<JSType> getTypes() {
+	public JSTypeSet getTypes() {
 		IValue value = getValue();
-		return value != null ? value.getTypes() : Collections
-				.<JSType> emptySet();
+		return value != null ? value.getTypes() : JSTypeSet.emptySet();
 	}
 
 	public void setAttribute(String key, Object value) {

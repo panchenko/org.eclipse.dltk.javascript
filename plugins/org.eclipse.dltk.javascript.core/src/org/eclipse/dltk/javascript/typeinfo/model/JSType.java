@@ -22,15 +22,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface JSType extends NamedElement {
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @model kind="operation"
-     * @generated
-     */
-    JSType getSuperType();
+public interface JSType {
 
     /**
      * <!-- begin-user-doc -->
@@ -55,4 +47,12 @@ public interface JSType extends NamedElement {
      * @generated
      */
     String getComponentType();
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @model kind="operation"
+     * @generated
+     */
+    String getName();
 } // JSType

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010 xored software, Inc.
+ * Copyright (c) 2011 NumberFour AG
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,53 +7,36 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
+ *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeAlias;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Type Alias</b></em>'.
+ * An implementation of the model object '<em><b>Type Ref</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl#getSource <em>Source</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl#getTarget <em>Target</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
-    /**
-     * The default value of the '{@link #getSource() <em>Source</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getSource()
-     * @generated
-     * @ordered
-     */
-    protected static final String SOURCE_EDEFAULT = null;
-
-    /**
-     * The cached value of the '{@link #getSource() <em>Source</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getSource()
-     * @generated
-     * @ordered
-     */
-    protected String source = SOURCE_EDEFAULT;
-
+public class TypeRefImpl extends EObjectImpl implements TypeRef {
     /**
      * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
      * <!-- begin-user-doc -->
@@ -69,7 +52,7 @@ public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
      * <!-- end-user-doc -->
      * @generated
      */
-    protected TypeAliasImpl() {
+    protected TypeRefImpl() {
         super();
     }
 
@@ -80,28 +63,7 @@ public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
      */
     @Override
     protected EClass eStaticClass() {
-        return TypeInfoModelPackage.Literals.TYPE_ALIAS;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public String getSource() {
-        return source;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setSource(String newSource) {
-        String oldSource = source;
-        source = newSource;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE_ALIAS__SOURCE, oldSource, source));
+        return TypeInfoModelPackage.Literals.TYPE_REF;
     }
 
     /**
@@ -110,6 +72,23 @@ public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
      * @generated
      */
     public Type getTarget() {
+        if (target != null && ((EObject)target).eIsProxy()) {
+            InternalEObject oldTarget = (InternalEObject)target;
+            target = (Type)eResolveProxy(oldTarget);
+            if (target != oldTarget) {
+                if (eNotificationRequired())
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.TYPE_REF__TARGET, oldTarget, target));
+            }
+        }
+        return target;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public Type basicGetTarget() {
         return target;
     }
 
@@ -122,7 +101,44 @@ public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
         Type oldTarget = target;
         target = newTarget;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE_ALIAS__TARGET, oldTarget, target));
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE_REF__TARGET, oldTarget, target));
+    }
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public TypeKind getKind() {
+		return target != null ? target.getKind() : TypeKind.UNKNOWN;
+    }
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public boolean isDeprecated() {
+		return target != null && target.isDeprecated();
+    }
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public String getComponentType() {
+		return target != null ? (String) target
+				.getAttribute(ITypeInferenceContext.GENERIC_ARRAY_TYPE) : null;
+    }
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public String getName() {
+		return target != null ? target.getName() : null;
     }
 
     /**
@@ -133,10 +149,9 @@ public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case TypeInfoModelPackage.TYPE_ALIAS__SOURCE:
-                return getSource();
-            case TypeInfoModelPackage.TYPE_ALIAS__TARGET:
-                return getTarget();
+            case TypeInfoModelPackage.TYPE_REF__TARGET:
+                if (resolve) return getTarget();
+                return basicGetTarget();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -149,10 +164,7 @@ public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case TypeInfoModelPackage.TYPE_ALIAS__SOURCE:
-                setSource((String)newValue);
-                return;
-            case TypeInfoModelPackage.TYPE_ALIAS__TARGET:
+            case TypeInfoModelPackage.TYPE_REF__TARGET:
                 setTarget((Type)newValue);
                 return;
         }
@@ -167,10 +179,7 @@ public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case TypeInfoModelPackage.TYPE_ALIAS__SOURCE:
-                setSource(SOURCE_EDEFAULT);
-                return;
-            case TypeInfoModelPackage.TYPE_ALIAS__TARGET:
+            case TypeInfoModelPackage.TYPE_REF__TARGET:
                 setTarget((Type)null);
                 return;
         }
@@ -185,28 +194,10 @@ public class TypeAliasImpl extends EObjectImpl implements TypeAlias {
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case TypeInfoModelPackage.TYPE_ALIAS__SOURCE:
-                return SOURCE_EDEFAULT == null ? source != null : !SOURCE_EDEFAULT.equals(source);
-            case TypeInfoModelPackage.TYPE_ALIAS__TARGET:
+            case TypeInfoModelPackage.TYPE_REF__TARGET:
                 return target != null;
         }
         return super.eIsSet(featureID);
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public String toString() {
-        if (eIsProxy()) return super.toString();
-
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (source: "); //$NON-NLS-1$
-        result.append(source);
-        result.append(')');
-        return result.toString();
-    }
-
-} //TypeAliasImpl
+} //TypeRefImpl

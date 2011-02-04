@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.5 2011/01/25 12:47:13 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.6 2011/02/04 06:04:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -84,8 +84,8 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
                 return createNamedElementAdapter();
             }
             @Override
-            public Adapter caseJSType(JSType object) {
-                return createJSTypeAdapter();
+            public Adapter caseTypedElement(TypedElement object) {
+                return createTypedElementAdapter();
             }
             @Override
             public Adapter caseElement(Element object) {
@@ -118,6 +118,14 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
             @Override
             public Adapter caseAttributeEntry(Map.Entry<String, Object> object) {
                 return createAttributeEntryAdapter();
+            }
+            @Override
+            public Adapter caseJSType(JSType object) {
+                return createJSTypeAdapter();
+            }
+            @Override
+            public Adapter caseTypeRef(TypeRef object) {
+                return createTypeRefAdapter();
             }
             @Override
             public Adapter defaultCase(EObject object) {
@@ -154,6 +162,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypedElement <em>Typed Element</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypedElement
+     * @generated
+     */
+    public Adapter createTypedElementAdapter() {
+        return null;
+    }
+
+    /**
      * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.JSType <em>JS Type</em>}'.
      * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
@@ -164,6 +186,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createJSTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef <em>Type Ref</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeRef
+     * @generated
+     */
+    public Adapter createTypeRefAdapter() {
         return null;
     }
 
