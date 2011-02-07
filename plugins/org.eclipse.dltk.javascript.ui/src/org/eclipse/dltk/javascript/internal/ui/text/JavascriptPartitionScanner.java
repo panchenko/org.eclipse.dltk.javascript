@@ -41,8 +41,8 @@ public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 		rules.add(new EndOfLineRule("//", comment)); //$NON-NLS-1$		
 
 		// Add rule for character constants.
-		rules.add(new MultiLineRule("'", "'", stringSingle, '\\'));
-		rules.add(new MultiLineRule("\"", "\"", string, '\\'));
+		rules.add(new MultiLineRule("'", "'", stringSingle, '\\', true));
+		rules.add(new MultiLineRule("\"", "\"", string, '\\', true));
 
 		IPredicateRule[] result = new IPredicateRule[rules.size()];
 		rules.toArray(result);
