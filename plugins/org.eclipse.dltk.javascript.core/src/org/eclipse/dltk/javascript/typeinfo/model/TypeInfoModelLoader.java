@@ -45,11 +45,6 @@ public class TypeInfoModelLoader {
 					if (typeName.equals(type.getName())) {
 						return type;
 					}
-				} else if (object instanceof TypeAlias) {
-					final TypeAlias alias = (TypeAlias) object;
-					if (typeName.equals(alias.getSource())) {
-						return alias.getTarget();
-					}
 				}
 			}
 		}
