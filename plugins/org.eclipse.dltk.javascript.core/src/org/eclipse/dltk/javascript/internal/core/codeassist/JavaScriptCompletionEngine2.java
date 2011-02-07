@@ -287,8 +287,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					predicate = MemberPredicates.NON_STATIC;
 				}
 				for (JSType type : valueRef.getDeclaredTypes()) {
-					if (type instanceof Type) {
-						reportTypeMembers((Type) type, predicate);
+					if (type instanceof TypeRef) {
+						reportTypeMembers(((TypeRef) type).getTarget(),
+								predicate);
 					}
 				}
 				for (JSType type : valueRef.getTypes()) {
