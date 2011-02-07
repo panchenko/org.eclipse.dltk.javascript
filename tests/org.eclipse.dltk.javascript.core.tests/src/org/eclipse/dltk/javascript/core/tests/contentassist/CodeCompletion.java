@@ -462,5 +462,16 @@ public class CodeCompletion extends AbstractCompletionTest {
 		basicTest(module, position, getMethodsOfArray().toArray(new String[0]));
 	}
 
+	public void testParamType() {
+		IModuleSource module = createModule("test-function-paramtype.js");
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, new String[]{"service","status"});
+	}
+	
+	public void testElementReferenceType() {
+		IModuleSource module = createModule("test-element-reference.js");
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, new String[]{"deprecatedName","service"});
+	}
 
 }
