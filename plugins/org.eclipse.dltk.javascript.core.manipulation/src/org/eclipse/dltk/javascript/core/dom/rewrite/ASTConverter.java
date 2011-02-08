@@ -838,7 +838,10 @@ public class ASTConverter extends ASTVisitor<Node> {
 	@Override
 	public Node visitXmlPropertyIdentifier(XmlAttributeIdentifier node) {
 		AttributeIdentifier res = DOM_FACTORY.createAttributeIdentifier();
-		res.setSelector((ISelector) visit(node.getExpression()));
+		if (node.getExpression() instanceof Identifier)
+			res.setSelector(createIdentifier((Identifier) node.getExpression()));
+		else
+			res.setSelector((ISelector) visit(node.getExpression()));
 		return res;
 	}
 
