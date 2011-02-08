@@ -87,7 +87,9 @@ public class ValueCollectionFactory {
 				inferencer.setModelElement(sourceModule);
 				inferencer.setDoResolve(resolve);
 				inferencer.doInferencing(script);
-				return inferencer.getCollection();
+				IValueCollection collection = inferencer.getCollection();
+				inferencer.setVisitor(null);
+				return collection;
 			}
 		}
 		return null;
