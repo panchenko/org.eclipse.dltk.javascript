@@ -21,6 +21,7 @@ import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
@@ -884,6 +885,21 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return null;
 	}
 
+	private static final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
+			.newInstance();
+	private DocumentBuilder docBuilder;
+
+	/**
+	 * @return
+	 * @throws ParserConfigurationException
+	 */
+	private DocumentBuilder getDocumentBuilder()
+			throws ParserConfigurationException {
+		if (docBuilder == null)
+			docBuilder = docBuilderFactory.newDocumentBuilder();
+		return docBuilder;
+	}
+
 	@Override
 	public IValueReference visitXmlLiteral(XmlLiteral node) {
 		IValueReference xmlValueReference = context.getFactory().createXML(
@@ -925,11 +941,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 
 			if (xml.length() > 0) {
-				DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-						.newInstance();
 				try {
-					DocumentBuilder docBuilder = docBuilderFactory
-							.newDocumentBuilder();
+					DocumentBuilder docBuilder = getDocumentBuilder();
 					Document doc = docBuilder.parse(new InputSource(
 							new StringReader(xml.toString())));
 					NodeList nl = doc.getChildNodes();
