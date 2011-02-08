@@ -91,6 +91,7 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			addEdit(new ReplaceEdit(off,len,value),n);
 			return;
 		}
+		@SuppressWarnings("unchecked")
 		EList<? extends Node> dst = (EList<? extends Node>)node.eGet(fc.getFeature());
 		EList<Object> src = new BasicEList<Object>();
 		src.addAll(dst);
