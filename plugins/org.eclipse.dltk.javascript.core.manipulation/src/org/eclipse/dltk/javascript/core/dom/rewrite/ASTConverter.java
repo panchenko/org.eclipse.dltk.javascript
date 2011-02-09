@@ -855,7 +855,10 @@ public class ASTConverter extends ASTVisitor<Node> {
 		DescendantAccessExpression res = DOM_FACTORY
 				.createDescendantAccessExpression();
 		res.setObject((Expression) visit(node.getObject()));
-		res.setProperty((IProperty) visit(node.getProperty()));
+		if (node.getProperty() instanceof Identifier)
+		   res.setProperty(createIdentifier((Identifier) node.getProperty()));
+		else
+		   res.setProperty((IProperty) visit(node.getProperty()));
 		return res;
 	}
 
