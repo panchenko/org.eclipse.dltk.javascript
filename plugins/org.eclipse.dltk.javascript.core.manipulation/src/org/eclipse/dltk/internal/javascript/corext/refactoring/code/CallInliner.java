@@ -184,6 +184,80 @@ public class CallInliner {
 		}
 	}*/
 
+	private final class ReceiverAnalyzer {
+		private final Map<VariableBinding, Expression> replacements;
+		private final Map<Identifier, VariableBinding> bindings;
+
+		private ReceiverAnalyzer(Map<VariableBinding, Expression> replacements,
+				Map<Identifier, VariableBinding> bindings) {
+			this.replacements = replacements;
+			this.bindings = bindings;
+		}
+
+		void traverse(List<? extends Node> list, Node node) {
+			traverse(list);
+			if (node != null)
+				traverse(node);
+		}
+
+		void traverse(List<? extends Node> list) {
+			for(int i=0;i<list.size();i++) {
+				Expression expr = process(list.get(i));
+				if (expr != null)
+					((List<Expression>)list).set(i, expr);
+			}
+		}
+
+		void traverse(Node node) {
+			for(EReference ref : node.eClass().getEAllReferences())
+				if (ref.isMany())
+					traverse((List<? extends Node>)node.eGet(ref));
+				else {
+					Expression expr = process((Node)node.eGet(ref));
+					if (expr != null)
+						node.eSet(ref,expr);
+				}
+		}
+
+		Expression process(Node value) {
+			if (value == null)
+				return null;
+			switch(value.eClass().getClassifierID()) {
+			case DomPackage.IDENTIFIER: {
+				VariableBinding binding = bindings.get((Identifier)value);
+				Expression res = replacements.get(binding);
+				if (res == null)
+					return null;
+				if (res instanceof VariableReference) {
+					((Identifier)value).setName(((VariableReference) res).getVariable().getName());
+					return null;
+				}
+				throw new IllegalStateException("Replacing variable with expression without removing declaration"); // $NON-NLS-1
+			}
+			case DomPackage.VARIABLE_REFERENCE:
+				VariableBinding binding = bindings.get(((VariableReference)value).getVariable());
+				if (binding == null)
+					return null;
+				Expression res = replacements.get(binding);
+				if (res != null) {
+					res = (Expression)EcoreUtil.copy(res);
+					if (needsParentheses(res,(Expression)value)) {
+						ParenthesizedExpression pExp = DomFactory.eINSTANCE.createParenthesizedExpression();
+						pExp.setEnclosed((Expression)res);
+						res = pExp;
+					}
+					return res;
+				}
+				return null;
+			case DomPackage.THIS_EXPRESSION:
+				return receiverExpr==null ? null : (Expression)EcoreUtil.copy(receiverExpr);
+			default:
+				traverse(value);
+				return null;
+			}
+		}
+	}
+
 	public CallInliner(ISourceModule cu, SourceProvider provider) throws CoreException {
 		this.cu = cu;
 		sourceProvider= provider;
@@ -879,67 +953,7 @@ public class CallInliner {
 			}
 		}
 		
-		new Object() {
-			void traverse(List<? extends Node> list, Node node) {
-				traverse(list);
-				if (node != null)
-					traverse(node);
-			}
-			void traverse(List<? extends Node> list) {
-				for(int i=0;i<list.size();i++) {
-					Expression expr = process(list.get(i));
-					if (expr != null)
-						((List<Expression>)list).set(i, expr);
-				}
-			}
-			void traverse(Node node) {
-				for(EReference ref : node.eClass().getEAllReferences())
-					if (ref.isMany())
-						traverse((List<? extends Node>)node.eGet(ref));
-					else {
-						Expression expr = process((Node)node.eGet(ref));
-						if (expr != null)
-							node.eSet(ref,expr);
-					}
-			}
-			Expression process(Node value) {
-				if (value == null)
-					return null;
-				switch(value.eClass().getClassifierID()) {
-				case DomPackage.IDENTIFIER: {
-					VariableBinding binding = bindings.get((Identifier)value);
-					Expression res = replacements.get(binding);
-					if (res == null)
-						return null;
-					if (res instanceof VariableReference) {
-						((Identifier)value).setName(((VariableReference) res).getVariable().getName());
-						return null;
-					}
-					throw new IllegalStateException("Replacing variable with expression without removing declaration"); // $NON-NLS-1
-				}
-				case DomPackage.VARIABLE_REFERENCE:
-					VariableBinding binding = bindings.get(((VariableReference)value).getVariable());
-					if (binding == null)
-						return null;
-					Expression res = replacements.get(binding);
-					if (res != null) {
-						res = (Expression)EcoreUtil.copy(res);
-						if (needsParentheses(res,(Expression)value)) {
-							ParenthesizedExpression pExp = DomFactory.eINSTANCE.createParenthesizedExpression();
-							pExp.setEnclosed((Expression)res);
-							res = pExp;
-						}
-						return res;
-					}
-					return null;
-				case DomPackage.THIS_EXPRESSION:
-					return (Expression)EcoreUtil.copy(receiverExpr);
-				default:
-					traverse(value);
-					return null;
-				}
-			}
-		}.traverse(stmts,node);
+		new ReceiverAnalyzer(replacements, bindings).traverse(stmts,node);
 		return new RefactoringStatus();
 	}
 	

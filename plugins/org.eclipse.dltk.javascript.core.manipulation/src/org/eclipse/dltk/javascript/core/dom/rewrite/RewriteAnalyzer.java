@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.core.dom.rewrite;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -113,32 +114,54 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		List<Node> original = new ArrayList<Node>(src.size());
 		for(Object obj : src)
 			original.add((Node)obj);
-		int i=0;
-		boolean first=true;
-		for(Node item : original) {
+		Node last = null;
+		for(Node item : original)
+			if (!deleted.contains(item))
+				last = item;
+
+		// DELETING ELEMENTS
+		// 1) general case: a,(b,)c,(d,)(e,)f
+		// 2) at the end: a,(b,)c,d(,e)(,f)
+		// 3) all of it: (a)(,b)(,c)
+		// we delete element with following separator so that this will work
+		// with statements and line feeds/semicolons.
+		boolean isLast = last == null;
+		for(int i=0;i<original.size();i++) {
+			Node item = original.get(i);
 			if (deleted.contains(item)) {
-				int off = first ? item.getBegin() : original.get(i-1).getEnd();
-				int end = first && i < original.size()-1 ? original.get(i+1).getBegin() : item.getEnd();
+				int off = isLast && i!=0 ? original.get(i-1).getEnd() : item.getBegin();
+				int end = isLast ? item.getEnd() : original.get(i+1).getBegin();
 				addEdit(new DeleteEdit(off,end - off),item);
 			} else
-				first=false;
-			i++;
+				isLast = item == last;
 		}
-		Node last=null;
-		for(Object obj : dst) {
-			Node item = (Node)obj;
+		
+		// OFFSETS
+		// each element is added at the beginning of the next element
+		// or at the end
+		List<Integer> offs = new ArrayList<Integer>();
+		int cur = original.isEmpty() ? calcOffset(node, fc.getFeature())
+				: original.get(original.size()-1).getEnd();
+		for(int i=dst.size()-1;i>=0;i--) {
+			Node item = dst.get(i);
+			if (!generated.contains(item)) {
+				cur = item.getBegin();
+			}
+			offs.add(cur);
+		}
+		Collections.reverse(offs);
+		
+		// ADDING ELEMENTS
+		// adding is done by the same rules as deleting
+		// cases 1-3 are processed in generateElement
+		isLast = last == null;
+		for(int i=0;i<dst.size();i++) {
+			Node item = dst.get(i);
 			if (generated.contains(item)) {
-				int off;
-				if (last == null)
-					if (first)
-						off = calcOffset(node, fc.getFeature());
-					else
-						off = ((Node)original.get(0)).getBegin();
-				else
-					off = last.getEnd();
-				addEdit(new InsertEdit(off, generateElement(item,last == null,first,off)),item);
+				int off = offs.get(i);
+				addEdit(new InsertEdit(off, generateElement(item,i==0,isLast,off)),item);
 			} else
-				last = item;
+				isLast = item == last;
 		}
 	}
 
@@ -267,19 +290,21 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		}
 		return -1;
 	}
-	public String generateElement(Node node,boolean first,boolean empty,int pos) {
+	public String generateElement(Node node,boolean first,boolean last,int pos) {
 		Generator gen = new Generator(cd, text, pos, lineDelimiter);
 		if (node instanceof Statement) {
-			if (!first) gen.newLine();
+			if (!first && last)
+				gen.newLine();
 			gen.generate(node);
-			if (first) gen.newLine();
+			if (!last)
+				gen.newLine();
 			generated.add(node);
 			return gen.toString();
 		}
-		if (!first)
+		if (!first && last)
 			gen.append(",");
 		gen.generate(node);
-		if (first && !empty)
+		if (!last)
 			gen.append(",");
 		generated.add(node);
 		return gen.toString();

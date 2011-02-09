@@ -25,13 +25,22 @@ import org.eclipse.emf.ecore.EObject;
 
 public class NodeFinder {
 	public static Node findNode(Node node, int left,int right) {
-		if (left == right)
-			left--;
 		TreeIterator<EObject> it = node.eAllContents();
+		Node before = null;
+		Node after = null;
 		while(it.hasNext()) {
 			Node cur = (Node)it.next();
-			if (right <= cur.getBegin() || cur.getEnd() <= left) {
-				it.prune();
+			if (cur.getEnd() <= left) {
+				if (before == null || cur.getEnd() >= before.getEnd() && cur.getBegin() > before.getBegin())
+					before = cur;
+				else
+					it.prune();
+			}
+			if (cur.getBegin() >= right) {
+				if (after == null || cur.getBegin() <= after.getBegin() && cur.getEnd() < after.getEnd())
+					after = cur;
+				else
+					it.prune();
 			}
 			if (left <= cur.getBegin() && cur.getEnd() <= right) {
 				return cur;
@@ -51,7 +60,7 @@ public class NodeFinder {
 				}
 			}
 		}
-		return null;
+		return after == null ? before == null ? null : before : after;
 	}
 	public static Node[] findNodes(Source cuNode, Iterable<SearchMatch> searchResults) {
 		List<Node> result= new ArrayList<Node>();
