@@ -34,7 +34,8 @@ public class TopValueCollection extends ValueCollection {
 
 		@Override
 		protected IValue findMember(String name, boolean resolve) {
-			if (resolve) {
+			IValue member = super.findMember(name, resolve);
+			if (resolve && member == null) {
 				IValue value = memberCache.get(name);
 				if (value != null)
 					return value;
@@ -74,7 +75,7 @@ public class TopValueCollection extends ValueCollection {
 					return value;
 				}
 			}
-			return super.findMember(name, resolve);
+			return member;
 		}
 	}
 
