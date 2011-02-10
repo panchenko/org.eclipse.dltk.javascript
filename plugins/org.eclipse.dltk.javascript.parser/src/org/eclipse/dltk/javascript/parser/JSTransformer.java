@@ -246,7 +246,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			int endTokenIndex) {
 
 		Assert.isTrue(startTokenIndex >= 0);
-		Assert.isTrue(endTokenIndex > 0);
+		Assert.isTrue(endTokenIndex >= 0);
 		Assert.isTrue(startTokenIndex <= endTokenIndex);
 
 		Token token = null;
