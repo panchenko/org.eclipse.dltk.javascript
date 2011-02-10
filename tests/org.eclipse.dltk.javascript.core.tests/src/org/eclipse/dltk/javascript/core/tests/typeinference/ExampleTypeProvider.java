@@ -20,7 +20,7 @@ import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -135,7 +135,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 
 			Property prop1 = TypeInfoModelFactory.eINSTANCE.createProperty();
 			prop1.setName("name");
-			prop1.setType(context.getTypeRef(ITypeNames.STRING));
+			prop1.setType(TypeUtil.ref(ITypeNames.STRING));
 			type.getMembers().add(prop1);
 
 			return type;
@@ -151,7 +151,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 
 			Property prop2 = TypeInfoModelFactory.eINSTANCE.createProperty();
 			prop2.setName("deprecatedName");
-			prop2.setType(context.getTypeRef(ITypeNames.STRING));
+			prop2.setType(TypeUtil.ref(ITypeNames.STRING));
 			prop2.setDeprecated(true);
 			type.getMembers().add(prop2);
 
@@ -163,12 +163,14 @@ public class ExampleTypeProvider implements ITypeProvider {
 
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setName("genericArrayProperty");
-			property.setType(context.getTypeRef("Array<String>"));
+			property.setType(TypeUtil.arrayOf(TypeUtil
+					.ref(ITypeNames.STRING)));
 			type.getMembers().add(property);
 
 			Method method1 = TypeInfoModelFactory.eINSTANCE.createMethod();
 			method1.setName("execute");
-			method1.setType(context.getTypeRef("Array<String>"));
+			method1.setType(TypeUtil.arrayOf(TypeUtil
+					.ref(ITypeNames.STRING)));
 			type.getMembers().add(method1);
 			return type;
 		} else if (typeName.startsWith("Packages.")) {
@@ -199,7 +201,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 			property.setName(field.getName());
 			Class<?> fieldType = field.getType();
 			if (fieldType != null)
-				property.setType(TypeInfoUtil.ref(context
+				property.setType(TypeUtil.ref(context
 						.getKnownType("Packages." + fieldType.getName())));
 			if (Modifier.isStatic(field.getModifiers())) {
 				property.setStatic(true);
@@ -212,7 +214,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 			m.setName(method.getName());
 			Class<?> methodType = method.getReturnType();
 			if (methodType != null)
-				m.setType(TypeInfoUtil.ref(context.getKnownType("Packages."
+				m.setType(TypeUtil.ref(context.getKnownType("Packages."
 						+ methodType.getName())));
 
 			EList<Parameter> parameters = m.getParameters();
@@ -223,7 +225,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 				parameter.setName(parameterTypes[i].getSimpleName() + " arg"
 						+ i);
 				parameter
-						.setType(TypeInfoUtil.ref(context
+						.setType(TypeUtil.ref(context
 								.getKnownType("Packages."
 										+ parameterTypes[i].getName())));
 				parameters.add(parameter);

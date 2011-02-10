@@ -43,13 +43,13 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
-	
+
 	public void testUnknownJavaScriptFunctionCall() {
 		final List<IProblem> problems = validate("var x = longString()");
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0).getID());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+				.getID());
 	}
-
 
 	public void testDeprecatedType() {
 		final List<IProblem> problems = validate("var x:ExampleService2");
@@ -224,7 +224,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("call(new Node1());");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testFunctionCallWithInCorrectFunctionObjectArgument() {
@@ -261,7 +261,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("call(new Node1());");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testFunctionCallWithInCorrectFunctionObjectArgumentJSDOC() {
@@ -314,7 +314,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("	this.a = 10;");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testLazyReturnTypeWithTypeInfo() {
@@ -333,7 +333,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("	this.a = 10;");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testLazyReturnTypeWithNoTypeParamInfo() {
@@ -366,7 +366,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("testArray(new Array());");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
@@ -382,7 +382,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("testArray(['test','test2']);");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testNoneGenericParamWtihGenericCall() throws Exception {
@@ -396,9 +396,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("testArray(['test','test2']);");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testFunctionWithOptionalParams() throws Exception {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -414,7 +414,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(0, problems.size());
 	}
-	
+
 	public void testFunctionCallWithUndefinedArgumments() throws Exception {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -433,7 +433,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(1)
 				.getID());
 	}
-	
+
 	public void testUndefinedVariables() throws Exception {
 		List<String> code = new StringList();
 		code.add("function test() {");
@@ -447,7 +447,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(1)
 				.getID());
 	}
-	
+
 	public void testArrayLookupWithoutAssign() throws Exception {
 		List<String> code = new StringList();
 		code.add("function test() {");
@@ -460,7 +460,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
 				.getID());
 	}
-	
+
 	public void testArrayLookupWithAssign() throws Exception {
 		List<String> code = new StringList();
 		code.add("function test() {");

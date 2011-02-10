@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
+import static org.eclipse.dltk.javascript.typeinfo.TypeUtil.arrayOf;
+import static org.eclipse.dltk.javascript.typeinfo.TypeUtil.ref;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -28,11 +31,11 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 @SuppressWarnings("nls")
 public class TypeInferenceTests extends TestCase implements ITypeNames {
@@ -564,7 +567,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("name");
 		assertTrue(name.exists());
 		assertEquals(1, name.getTypes().size());
-		assertEquals("Array<String>", typename(name.getTypes()));
+		assertEquals(JSTypeSet.singleton(arrayOf(ref(ITypeNames.STRING))),
+				name.getTypes());
 
 		IValueReference name2 = collection.getChild("name2");
 		assertTrue(name2.exists());
@@ -654,7 +658,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals("java.lang.String", type.getName());
 
 		boolean valueOfFound = false;
-		for (Member member : ((TypeRef) type).getTarget().getMembers()) {
+		for (Member member : extractType(type).getMembers()) {
 			valueOfFound = member.getName().equals("valueOf");
 			if (valueOfFound) {
 				assertEquals(true, member.isStatic());
@@ -668,7 +672,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(type, str.getTypes().iterator().next());
 
 		boolean toStringFound = false;
-		for (Member member : ((TypeRef) type).getTarget().getMembers()) {
+		for (Member member : extractType(type).getMembers()) {
 			toStringFound = member.getName().equals("toString");
 			if (toStringFound) {
 				assertEquals(false, member.isStatic());
@@ -690,7 +694,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals("java.lang.String", type.getName());
 
 		boolean valueOfFound = false;
-		for (Member member : ((TypeRef) type).getTarget().getMembers()) {
+		for (Member member : extractType(type).getMembers()) {
 			valueOfFound = member.getName().equals("valueOf");
 			if (valueOfFound) {
 				assertEquals(true, member.isStatic());
@@ -705,7 +709,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(type, str.getTypes().iterator().next());
 
 		boolean toStringFound = false;
-		for (Member member : ((TypeRef) type).getTarget().getMembers()) {
+		for (Member member : extractType(type).getMembers()) {
 			toStringFound = member.getName().equals("toString");
 			if (toStringFound) {
 				assertEquals(false, member.isStatic());
@@ -715,6 +719,10 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		}
 		assertEquals(true, toStringFound);
 
+	}
+
+	private static Type extractType(JSType type) {
+		return TypeUtil.extractType(type);
 	}
 
 	public void testJavaIntegrationWithJavaPrefix() {
@@ -727,7 +735,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals("java.lang.String", type.getName());
 
 		boolean toStringFound = false;
-		for (Member member : ((TypeRef) type).getTarget().getMembers()) {
+		for (Member member : extractType(type).getMembers()) {
 			toStringFound = member.getName().equals("toString");
 			if (toStringFound) {
 				assertEquals(false, member.isStatic());
@@ -749,7 +757,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals("java.lang.String", type.getName());
 
 		boolean toStringFound = false;
-		for (Member member : (((TypeRef) type)).getTarget().getMembers()) {
+		for (Member member : extractType(type).getMembers()) {
 			toStringFound = member.getName().equals("toString");
 			if (toStringFound) {
 				assertEquals(false, member.isStatic());
@@ -783,8 +791,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(0, node.getDirectChildren().size());
 
 		assertNotNull(node.getDeclaredType());
-		final Type declaredType = ((TypeRef) node.getDeclaredType())
-				.getTarget();
+		final Type declaredType = extractType(node.getDeclaredType());
 
 		assertEquals(2, declaredType.getMembers().size());
 
