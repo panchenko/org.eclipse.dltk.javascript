@@ -82,7 +82,7 @@ public class ArrayInitializer extends Expression {
 
 		Assert.isTrue(sourceStart() >= 0);
 		Assert.isTrue(sourceEnd() > 0);
-		Assert.isTrue(LB > 0);
+		Assert.isTrue(LB >= 0);
 		Assert.isTrue(RB > 0);
 		Assert.isTrue(items.size() == 0 || commas.size() == items.size() - 1);
 
