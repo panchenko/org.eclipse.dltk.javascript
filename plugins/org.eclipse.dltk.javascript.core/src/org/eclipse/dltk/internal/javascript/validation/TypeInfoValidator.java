@@ -963,6 +963,27 @@ public class TypeInfoValidator implements IBuildParticipant {
 										.sourceEnd());
 
 					}
+				} else if (child.getKind() == ReferenceKind.METHOD) {
+					Method method = (Method) child
+							.getAttribute(IReferenceAttributes.ELEMENT);
+					if (method != null && method.getDeclaringType() != null) {
+						reporter.reportProblem(
+								JavaScriptProblems.VAR_HIDES_METHOD,
+								NLS.bind(
+										ValidationMessages.VariableHidesMethodOfType,
+										declaration.getVariableName(), method
+												.getDeclaringType().getName()),
+								identifier.sourceStart(), identifier
+										.sourceEnd());
+					} else {
+						reporter.reportProblem(
+								JavaScriptProblems.VAR_HIDES_METHOD,
+								NLS.bind(
+										ValidationMessages.VariableHidesMethod,
+										declaration.getVariableName()),
+								identifier.sourceStart(), identifier
+										.sourceEnd());
+					}
 				} else {
 					reporter.reportProblem(
 							JavaScriptProblems.DUPLICATE_VAR_DECLARATION,

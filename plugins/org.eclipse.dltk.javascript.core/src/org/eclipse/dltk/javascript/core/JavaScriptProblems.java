@@ -91,7 +91,7 @@ public enum JavaScriptProblems implements IProblemIdentifier {
 	/**
 	 * @since 3.0
 	 */
-	VAR_HIDES_PROPERTY,
+	VAR_HIDES_PROPERTY, VAR_HIDES_METHOD,
 	/**
 	 * @since 3.0
 	 */
