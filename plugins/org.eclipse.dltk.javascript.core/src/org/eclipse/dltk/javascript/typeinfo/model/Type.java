@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.7 2011/02/04 06:04:41 apanchenk Exp $
+ * $Id: Type.java,v 1.8 2011/02/10 13:05:29 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -106,5 +106,13 @@ public interface Type extends Element {
      * @generated
      */
     void setSuperType(Type value);
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @model kind="operation"
+     * @generated
+     */
+    boolean isProxy();
 
 } // Type

@@ -13,18 +13,19 @@ package org.eclipse.dltk.javascript.internal.search;
 
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class LocalVariableDeclarationNode extends
 		AbstractMatchingNode<Identifier> {
 
 	final ISourceModule module;
-	final String declaredType;
+	final JSType declaredType;
 
 	/**
 	 * @param node
 	 */
 	public LocalVariableDeclarationNode(Identifier node, ISourceModule module,
-			String declaredType) {
+			JSType declaredType) {
 		super(node);
 		this.module = module;
 		this.declaredType = declaredType;

@@ -29,6 +29,7 @@
         eType="#//AttributeEntry" containment="true" resolveProxies="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Type" eSuperTypes="#//Element">
+    <eOperations name="isProxy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
         eType="#//Member" containment="true" resolveProxies="false" eOpposite="#//Member/declaringType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//TypeKind"/>
@@ -64,6 +65,7 @@
     <eLiterals name="PREDEFINED"/>
     <eLiterals name="JAVASCRIPT" value="1" literal="JAVASCRIPT"/>
     <eLiterals name="JAVA" value="2"/>
+    <eLiterals name="EXTERNAL_JS" value="3" literal="EXTERNAL_JS"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ParameterKind">
     <eLiterals name="NORMAL" literal="NORMAL"/>
@@ -76,11 +78,13 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JSType" abstract="true" interface="true">
     <eOperations name="getKind" eType="#//TypeKind"/>
-    <eOperations name="isDeprecated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eOperations name="getComponentType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypeRef" eSuperTypes="#//JSType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//JSType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="itemType" eType="#//JSType"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -53,6 +53,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -166,13 +167,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public void call() {
 			JSTypeSet types = reference.getTypes();
 			if (types.size() > 0) {
-				JSType type = types.iterator().next();
+				JSType type = types.getFirst();
 				validator
 						.checkType(node.getObjectClass(), type, type.getName());
 			} else if (reference.getDeclaredType() == null) {
 				if (reference instanceof LazyReference
 						&& reference.getKind() == ReferenceKind.UNKNOWN) {
-					validator.checkType(node.getObjectClass(), null,
+					validator.reportUnknownType(node.getObjectClass(),
 							((LazyReference) reference).getName());
 				}
 			} else {
@@ -307,9 +308,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (method != null && method.getType() != null) {
 				if (collection != null && collection.getReturnValue() != null) {
 					JSTypeSet types = collection.getReturnValue().getTypes();
-					if (!types.isEmpty()
-							&& !types.contains(context.getTypeRef(method
-									.getType()))) {
+					if (!types.isEmpty() && !types.contains(method.getType())) {
 						String name = method.getName();
 						int sourceStart;
 						int sourceEnd;
@@ -329,9 +328,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 										ValidationMessages.DeclarationMismatchWithActualReturnType,
 										new String[] {
 												name,
-												method.getType(),
-												types.iterator().next()
-														.getName() }),
+												TypeUtil.getName(method
+														.getType()),
+												types.getFirst().getName() }),
 								sourceStart, sourceEnd);
 					}
 				}
@@ -401,7 +400,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		 * @param reference
 		 * @return
 		 */
-		private void validateCallExpression(CallExpression node,
+		protected void validateCallExpression(CallExpression node,
 				final IValueReference reference, IValueReference[] arguments) {
 
 			final ASTNode expression = node.getExpression();
@@ -513,11 +512,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 											.sourceEnd());
 						} else if (JavaScriptValidations.isStatic(reference
 								.getParent())
-								&& type instanceof TypeRef
-								&& !ElementValue.findMembers(
-										((TypeRef) type).getTarget(),
-										reference.getName(),
-										MemberPredicates.NON_STATIC).isEmpty()) {
+								&& hasInstanceMethod(type, reference.getName())) {
 							reporter.reportProblem(
 									JavaScriptProblems.INSTANCE_METHOD,
 									NLS.bind(
@@ -593,6 +588,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 			}
 			return;
+		}
+
+		private boolean hasInstanceMethod(JSType type, String name) {
+			final Type t = TypeUtil.extractType(type);
+			return t != null
+					&& !ElementValue.findMembers(t, name,
+							MemberPredicates.NON_STATIC).isEmpty();
 		}
 
 		private boolean isArrayLookup(ASTNode expression) {
@@ -673,7 +675,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 
 			for (int i = 0; i < testTypesSize; i++) {
-				String paramType = parameters.get(i).getType();
+				JSType paramType = parameters.get(i).getType();
 				IValueReference argument = arguments[i];
 				if (!testArgumentType(paramType, argument))
 					return false;
@@ -681,7 +683,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			// test var args
 			if (parameters.size() < arguments.length) {
 				int varargsParameter = parameters.size() - 1;
-				String paramType = parameters.get(varargsParameter).getType();
+				JSType paramType = parameters.get(varargsParameter).getType();
 
 				for (int i = varargsParameter; i < arguments.length; i++) {
 					IValueReference argument = arguments[i];
@@ -698,36 +700,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 		 * @param argument
 		 * @return
 		 */
-		private boolean testArgumentType(String paramType,
+		private boolean testArgumentType(JSType paramType,
 				IValueReference argument) {
 			if (argument == null)
 				return true;
 			JSType argumentType = argument.getDeclaredType();
-			if (argumentType == null) {
-				if (!argument.getTypes().isEmpty()) {
-					argumentType = argument.getTypes().iterator().next();
-				}
+			if (argumentType == null && !argument.getTypes().isEmpty()) {
+				argumentType = argument.getTypes().getFirst();
 			}
-			if (paramType != null && argumentType != null
-					&& !paramType.equals(argumentType.getName())) {
-				String argumentName = argumentType.getName();
-				int index = argumentName.indexOf('<');
-				if (index != -1) {
-					argumentName = argumentName.substring(0, index);
-				}
-				if (paramType.equals(argumentName))
-					return true;
-				if (argumentType instanceof TypeRef) {
-					Type type = ((TypeRef) argumentType).getTarget()
-							.getSuperType();
-					while (type != null) {
-						String name = type.getName();
-						if (name.equals(paramType))
-							return true;
-						type = type.getSuperType();
-					}
-				}
-				return false;
+			if (paramType != null && argumentType != null) {
+				return JSTypeSet.normalize(paramType).isAssignableFrom(
+						JSTypeSet.normalize(argumentType));
 			}
 			return true;
 		}
@@ -769,7 +752,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 						sb.append("[");
 					if (parameter.isVarargs())
 						sb.append("...");
-					sb.append(parameter.getType());
+					sb.append(parameter.getType().getName());
 					if (parameter.isOptional())
 						sb.append("]");
 				} else {
@@ -875,7 +858,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return super.visitAssign(left, right, node);
 		}
 
-		private boolean validate(Expression expr, IValueReference reference) {
+		protected boolean validate(Expression expr, IValueReference reference) {
 			final IValueReference parent = reference.getParent();
 			if (parent == null) {
 				// top level
@@ -993,7 +976,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return super.createVariable(context, declaration);
 		}
 
-		private void validateProperty(PropertyExpression propertyExpression,
+		protected void validateProperty(PropertyExpression propertyExpression,
 				IValueReference result) {
 			final Expression propName = propertyExpression.getProperty();
 			final Member member = extractElement(result, Member.class);
@@ -1144,25 +1127,32 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		/**
+		 * @param node
 		 * @param type
-		 * @param result
 		 */
-		private void checkType(ASTNode type, final JSType result, String name) {
-			if (result != null) {
-				if (result.getKind() == TypeKind.UNKNOWN) {
-					reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE,
-							NLS.bind(ValidationMessages.UnknownType, name),
-							type.sourceStart(), type.sourceEnd());
-				} else if (result.isDeprecated()) {
-					reporter.reportProblem(JavaScriptProblems.DEPRECATED_TYPE,
-							NLS.bind(ValidationMessages.DeprecatedType, name),
-							type.sourceStart(), type.sourceEnd());
+		protected void checkType(ASTNode node, final JSType type, String name) {
+			if (type != null) {
+				if (type.getKind() == TypeKind.UNKNOWN) {
+					reportUnknownType(node, name);
+				} else {
+					final Type t = TypeUtil.extractType(type);
+					if (t != null && t.isDeprecated()) {
+						reporter.reportProblem(
+								JavaScriptProblems.DEPRECATED_TYPE,
+								NLS.bind(ValidationMessages.DeprecatedType,
+										name), node.sourceStart(), node
+										.sourceEnd());
+					}
 				}
 			} else {
-				reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE,
-						NLS.bind(ValidationMessages.UnknownType, name),
-						type.sourceStart(), type.sourceEnd());
+				reportUnknownType(node, name);
 			}
+		}
+
+		protected void reportUnknownType(ASTNode node, String name) {
+			reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE,
+					NLS.bind(ValidationMessages.UnknownType, name),
+					node.sourceStart(), node.sourceEnd());
 		}
 	}
 

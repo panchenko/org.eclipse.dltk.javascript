@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.6 2011/02/04 06:04:42 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.7 2011/02/10 13:05:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -184,6 +184,13 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case TypeInfoModelPackage.ARRAY_TYPE: {
+                ArrayType arrayType = (ArrayType)theEObject;
+                T result = caseArrayType(arrayType);
+                if (result == null) result = caseJSType(arrayType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -245,6 +252,21 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseTypeRef(TypeRef object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Array Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Array Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseArrayType(ArrayType object) {
         return null;
     }
 

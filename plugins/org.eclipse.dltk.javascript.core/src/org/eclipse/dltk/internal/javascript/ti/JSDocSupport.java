@@ -34,6 +34,8 @@ import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -47,6 +49,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
  * @see http://code.google.com/p/jsdoc-toolkit/wiki/TagParam
  */
 public class JSDocSupport implements IModelBuilder {
+
+	private static final String ARRAY_PREFIX2 = "Array.<";
+
+	private static final String ARRAY_PREFIX1 = "Array<";
 
 	private static final String DOTS = "...";
 
@@ -362,18 +368,31 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	private String translateTypeName(String typeName) {
+	private JSType translateTypeName(String typeName) {
 		final int length = typeName.length();
 		if (length > 2 && typeName.charAt(0) == '{'
 				&& typeName.charAt(length - 1) == '}') {
 			typeName = typeName.substring(1, length - 1);
 		}
 		if (typeName.endsWith(ARRAY_SUFFIX)) {
-			return "Array<"
-					+ TypeInfoModelLoader.getInstance().translateTypeName(
-							typeName.substring(0, typeName.length()
-									- ARRAY_SUFFIX.length())) + ">";
+			final String itemTypeName = translate(typeName.substring(0,
+					typeName.length() - ARRAY_SUFFIX.length()));
+			return TypeUtil.arrayOf(TypeUtil.ref(itemTypeName));
 		}
+		if (typeName.startsWith(ARRAY_PREFIX1) && typeName.endsWith(">")) {
+			final String itemTypeName = translate(typeName.substring(
+					ARRAY_PREFIX1.length(), typeName.length() - 1));
+			return TypeUtil.arrayOf(TypeUtil.ref(itemTypeName));
+		} else if (typeName.startsWith(ARRAY_PREFIX2) && typeName.endsWith(">")) {
+			final String itemTypeName = translate(typeName.substring(
+					ARRAY_PREFIX2.length(), typeName.length() - 1));
+			return TypeUtil.arrayOf(TypeUtil.ref(itemTypeName));
+		} else {
+			return TypeUtil.ref(translate(typeName));
+		}
+	}
+
+	private static String translate(String typeName) {
 		return TypeInfoModelLoader.getInstance().translateTypeName(typeName);
 	}
 }

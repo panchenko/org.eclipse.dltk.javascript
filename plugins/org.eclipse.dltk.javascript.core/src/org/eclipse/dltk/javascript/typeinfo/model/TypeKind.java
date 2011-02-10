@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeKind.java,v 1.3 2010/11/29 16:28:05 apanchenk Exp $
+ * $Id: TypeKind.java,v 1.4 2011/02/10 13:05:30 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -67,7 +67,15 @@ public enum TypeKind implements Enumerator {
      * @generated
      * @ordered
      */
-	JAVA(2, "JAVA", "JAVA"); //$NON-NLS-1$ //$NON-NLS-2$
+	JAVA(2, "JAVA", "JAVA"), /**
+     * The '<em><b>EXTERNAL JS</b></em>' literal object.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #EXTERNAL_JS_VALUE
+     * @generated
+     * @ordered
+     */
+    EXTERNAL_JS(3, "EXTERNAL_JS", "EXTERNAL_JS"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
      * The '<em><b>UNKNOWN</b></em>' literal value.
@@ -130,6 +138,21 @@ public enum TypeKind implements Enumerator {
 	public static final int JAVA_VALUE = 2;
 
 	/**
+     * The '<em><b>EXTERNAL JS</b></em>' literal value.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of '<em><b>EXTERNAL JS</b></em>' literal object isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @see #EXTERNAL_JS
+     * @model
+     * @generated
+     * @ordered
+     */
+    public static final int EXTERNAL_JS_VALUE = 3;
+
+    /**
      * An array of all the '<em><b>Type Kind</b></em>' enumerators.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -141,6 +164,7 @@ public enum TypeKind implements Enumerator {
             PREDEFINED,
             JAVASCRIPT,
             JAVA,
+            EXTERNAL_JS,
         };
 
 	/**
@@ -195,6 +219,7 @@ public enum TypeKind implements Enumerator {
             case PREDEFINED_VALUE: return PREDEFINED;
             case JAVASCRIPT_VALUE: return JAVASCRIPT;
             case JAVA_VALUE: return JAVA;
+            case EXTERNAL_JS_VALUE: return EXTERNAL_JS;
         }
         return null;
     }

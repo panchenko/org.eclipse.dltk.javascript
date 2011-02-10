@@ -38,21 +38,5 @@ public interface JSType {
      * @model kind="operation"
      * @generated
      */
-    boolean isDeprecated();
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @model kind="operation"
-     * @generated
-     */
-    String getComponentType();
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @model kind="operation"
-     * @generated
-     */
     String getName();
 } // JSType

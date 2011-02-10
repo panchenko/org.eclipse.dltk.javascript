@@ -17,6 +17,7 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IModelBuilder {
@@ -26,9 +27,9 @@ public interface IModelBuilder {
 
 		void setName(String name);
 
-		String getType();
+		JSType getType();
 
-		void setType(String type);
+		void setType(JSType type);
 
 	}
 

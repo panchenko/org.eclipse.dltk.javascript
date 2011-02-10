@@ -20,8 +20,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
 public interface ITypeInferenceContext extends ITypeInfoContext {
 
-	public static final String GENERIC_ARRAY_TYPE = "GENERIC_ARRAY_TYPE";
-
 	IValueTypeFactory getFactory();
 
 	Member resolve(String name);

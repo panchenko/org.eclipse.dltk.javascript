@@ -16,8 +16,10 @@ import java.util.Map;
 
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class TopValueCollection extends ValueCollection {
@@ -26,7 +28,7 @@ public class TopValueCollection extends ValueCollection {
 
 		private final ITypeInferenceContext context;
 
-		private TopValue(ITypeInferenceContext context) {
+		public TopValue(ITypeInferenceContext context) {
 			this.context = context;
 		}
 
@@ -46,15 +48,17 @@ public class TopValueCollection extends ValueCollection {
 						memberCache.put(name, value);
 					return value;
 				}
+				if (name.equals(IValueReference.ARRAY_OP)) {
+					// special case ARRAY_OP is an instance of an Array not
+					// the Array type/class itself.
+					value = ElementValue.createFor(TypeInfoModelLoader
+							.getInstance().getType(ITypeNames.ARRAY), context);
+					memberCache.put(name, value);
+					return value;
+				}
 				final Type type = context.getKnownType(name);
 				if (type != null && type.getKind() != TypeKind.UNKNOWN) {
-					if (name.equals(IValueReference.ARRAY_OP)) {
-						// special case ARRAY_OP is an instance of an Array not
-						// the Array type/class itself.
-						value = ElementValue.createFor(type, context);
-					} else {
-						value = ElementValue.createStatic(type);
-					}
+					value = ElementValue.createStatic(type);
 					memberCache.put(name, value);
 					return value;
 				}

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.6 2011/02/04 06:04:42 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.7 2011/02/10 13:05:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -128,6 +128,10 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
                 return createTypeRefAdapter();
             }
             @Override
+            public Adapter caseArrayType(ArrayType object) {
+                return createArrayTypeAdapter();
+            }
+            @Override
             public Adapter defaultCase(EObject object) {
                 return createEObjectAdapter();
             }
@@ -200,6 +204,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createTypeRefAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.ArrayType <em>Array Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ArrayType
+     * @generated
+     */
+    public Adapter createArrayTypeAdapter() {
         return null;
     }
 

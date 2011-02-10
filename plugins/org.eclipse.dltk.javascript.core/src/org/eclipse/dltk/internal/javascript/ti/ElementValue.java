@@ -25,7 +25,8 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -33,7 +34,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public abstract class ElementValue implements IValue {
 
@@ -43,9 +43,9 @@ public abstract class ElementValue implements IValue {
 
 	public static ElementValue findMember(JSType type, String name,
 			Predicate<Member> predicate) {
-		if (type != null && type instanceof TypeRef) {
-			List<Member> selection = findMembers(((TypeRef) type).getTarget(),
-					name, predicate);
+		final Type t = TypeUtil.extractType(type);
+		if (t != null) {
+			List<Member> selection = findMembers(t, name, predicate);
 			if (!selection.isEmpty()) {
 				return new MemberValue(selection.toArray(new Member[selection
 						.size()]));
@@ -81,13 +81,13 @@ public abstract class ElementValue implements IValue {
 			return new PropertyValue((Property) element, context);
 		} else {
 			assert element instanceof Type;
-			return new TypeValue(JSTypeSet.singleton(TypeInfoUtil
+			return new TypeValue(JSTypeSet.singleton(TypeUtil
 					.ref((Type) element)));
 		}
 	}
 
 	public static ElementValue createStatic(Type type) {
-		return new StaticTypeValue(JSTypeSet.singleton(TypeInfoUtil.ref(type)));
+		return new StaticTypeValue(JSTypeSet.singleton(TypeUtil.ref(type)));
 	}
 
 	private static class TypeValue extends ElementValue implements IValue {
@@ -234,8 +234,8 @@ public abstract class ElementValue implements IValue {
 
 	private static class PropertyValue extends ElementValue implements IValue {
 
+		protected final ITypeInferenceContext context;
 		private final Property property;
-		private final ITypeInferenceContext context;
 		private final Map<String, IValue> children = new HashMap<String, IValue>();
 
 		public PropertyValue(Property property, ITypeInferenceContext context) {
@@ -263,13 +263,12 @@ public abstract class ElementValue implements IValue {
 			if (child == null) {
 				if (name.equals(IValueReference.ARRAY_OP)
 						&& property.getType() != null
-						&& property.getType() instanceof TypeRef) {
-					String arrayType = (String) ((TypeRef) property.getType())
-							.getTarget().getAttribute(
-									ITypeInferenceContext.GENERIC_ARRAY_TYPE);
+						&& property.getType() instanceof ArrayType) {
+					Type arrayType = TypeUtil.extractType(((ArrayType) property
+							.getType()).getItemType());
 					if (arrayType != null) {
-						ElementValue arrayOpChild = createFor(
-								context.getType(arrayType), context);
+						ElementValue arrayOpChild = createFor(arrayType,
+								context);
 						children.put(name, arrayOpChild);
 						return arrayOpChild;
 					}

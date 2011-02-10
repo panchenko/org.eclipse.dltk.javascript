@@ -21,13 +21,15 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 @SuppressWarnings("serial")
 public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	private String name;
-	private String type;
+	private JSType type;
 	private boolean deprecated;
 	private boolean priv;
 	private boolean constructor;
@@ -59,7 +61,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		return null;
 	}
 
-	public String getType() {
+	public JSType getType() {
 		return type;
 	}
 
@@ -67,7 +69,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		this.name = name;
 	}
 
-	public void setType(String type) {
+	public void setType(JSType type) {
 		this.type = type;
 	}
 
@@ -113,14 +115,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		}
 		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
 		if (funcType != null) {
-			method.setType(funcType.getName());
+			method.setType(resolveType(funcType));
 		}
 		for (Argument argument : node.getArguments()) {
 			final IParameter parameter = method.createParameter();
 			parameter.setName(argument.getIdentifier().getName());
 			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
 			if (paramType != null) {
-				parameter.setType(paramType.getName());
+				parameter.setType(resolveType(paramType));
 				parameter.setLocation(ReferenceLocation.create(source,
 						argument.sourceStart(), paramType.sourceEnd(),
 						argument.sourceStart(), argument.sourceEnd()));
@@ -133,10 +135,15 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		return method;
 	}
 
-	private static class Parameter implements IParameter {
+	protected static JSType resolveType(
+			org.eclipse.dltk.javascript.ast.Type type) {
+		return TypeUtil.ref(type.getName());
+	}
+
+	static class Parameter implements IParameter {
 
 		private String name;
-		private String type;
+		private JSType type;
 		private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 		private boolean optional;
 		private Type propertiesType;
@@ -146,7 +153,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 			return name;
 		}
 
-		public String getType() {
+		public JSType getType() {
 			return type;
 		}
 
@@ -154,7 +161,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 			this.name = name;
 		}
 
-		public void setType(String type) {
+		public void setType(JSType type) {
 			this.type = type;
 		}
 
@@ -192,7 +199,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 		@Override
 		public String toString() {
-			return type != null ? name + ':' + type : name;
+			return type != null ? name + ':' + type.getName() : name;
 		}
 
 	}

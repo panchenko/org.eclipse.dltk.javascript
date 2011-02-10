@@ -52,7 +52,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 
@@ -196,11 +195,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					final JSTypeSet types = value.getTypes();
 					if (types != null) {
 						final List<Type> t = new ArrayList<Type>(types.size());
-						for (JSType type : types) {
-							if (type instanceof TypeRef) {
-								t.add(((TypeRef) type).getTarget());
-							}
-						}
+						Collections.addAll(t, types.toArray());
 						return convert(m, t);
 					}
 				}

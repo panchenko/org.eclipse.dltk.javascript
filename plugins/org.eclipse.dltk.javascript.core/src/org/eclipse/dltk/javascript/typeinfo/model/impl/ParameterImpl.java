@@ -9,11 +9,11 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ParameterImpl.java,v 1.5 2011/02/04 06:04:41 apanchenk Exp $
+ * $Id: ParameterImpl.java,v 1.6 2011/02/10 13:05:30 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -193,7 +193,7 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	 * @generated NOT
 	 */
     public void setDirectType(Type newDirectType) {
-		setType(TypeInfoUtil.ref(newDirectType));
+		setType(TypeUtil.ref(newDirectType));
     }
 
     /**

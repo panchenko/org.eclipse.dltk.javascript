@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.14 2011/02/04 06:04:41 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.15 2011/02/10 13:05:29 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -783,6 +783,34 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE_REF_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getArrayType()
+     * @generated
+     */
+    int ARRAY_TYPE = 12;
+
+    /**
+     * The feature id for the '<em><b>Item Type</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ARRAY_TYPE__ITEM_TYPE = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Array Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ARRAY_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -790,7 +818,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 12;
+	int TYPE_KIND = 13;
 
 
 	/**
@@ -801,7 +829,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 13;
+	int PARAMETER_KIND = 14;
 
 
 	/**
@@ -887,6 +915,27 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getTypeRef_Target();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.ArrayType <em>Array Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Array Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ArrayType
+     * @generated
+     */
+    EClass getArrayType();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.ArrayType#getItemType <em>Item Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Item Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ArrayType#getItemType()
+     * @see #getArrayType()
+     * @generated
+     */
+    EReference getArrayType_ItemType();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
@@ -1259,6 +1308,24 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference TYPE_REF__TARGET = eINSTANCE.getTypeRef_Target();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getArrayType()
+         * @generated
+         */
+        EClass ARRAY_TYPE = eINSTANCE.getArrayType();
+
+        /**
+         * The meta object literal for the '<em><b>Item Type</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference ARRAY_TYPE__ITEM_TYPE = eINSTANCE.getArrayType_ItemType();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.

@@ -21,6 +21,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 
 class MethodDeclaration extends Declaration implements IReferenceAttributes {
 
@@ -45,7 +46,7 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 		final JSMethod method = (JSMethod) child.getAttribute(PARAMETERS);
 		if (method != null) {
 			if (mi.returnType == null) {
-				mi.returnType = method.getType();
+				mi.returnType = TypeUtil.getName(method.getType());
 			}
 			if (method.isDeprecated()) {
 				mi.modifiers |= JSModifiers.DEPRECATED;
@@ -62,7 +63,8 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 				final IParameter parameter = parameters.get(i);
 				mi.parameterNames[i] = parameter.getName();
 				if (mi.parameterTypes != null) {
-					mi.parameterTypes[i] = parameter.getType();
+					mi.parameterTypes[i] = TypeUtil.getName(parameter
+							.getType());
 				}
 			}
 		}

@@ -42,6 +42,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -49,7 +50,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
@@ -287,15 +287,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					predicate = MemberPredicates.NON_STATIC;
 				}
 				for (JSType type : valueRef.getDeclaredTypes()) {
-					if (type instanceof TypeRef) {
-						reportTypeMembers(((TypeRef) type).getTarget(),
-								predicate);
+					final Type t = TypeUtil.extractType(type);
+					if (t != null) {
+						reportTypeMembers(t, predicate);
 					}
 				}
 				for (JSType type : valueRef.getTypes()) {
-					if (type instanceof TypeRef) {
-						reportTypeMembers(((TypeRef) type).getTarget(),
-								predicate);
+					final Type t = TypeUtil.extractType(type);
+					if (t != null) {
+						reportTypeMembers(t, predicate);
 					}
 				}
 			}

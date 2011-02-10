@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.6 2011/02/04 06:04:41 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.7 2011/02/10 13:05:30 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Map;
 
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -83,6 +84,7 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.PROPERTY: return (EObject)createProperty();
             case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
             case TypeInfoModelPackage.TYPE_REF: return (EObject)createTypeRef();
+            case TypeInfoModelPackage.ARRAY_TYPE: return (EObject)createArrayType();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -190,6 +192,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     public TypeRef createTypeRef() {
         TypeRefImpl typeRef = new TypeRefImpl();
         return typeRef;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public ArrayType createArrayType() {
+        ArrayTypeImpl arrayType = new ArrayTypeImpl();
+        return arrayType;
     }
 
     /**

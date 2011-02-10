@@ -12,15 +12,16 @@
 package org.eclipse.dltk.javascript.internal.search;
 
 import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class FieldDeclarationNode extends AbstractMatchingNode<Expression> {
 
-	final String declaredType;
+	final JSType declaredType;
 
 	/**
 	 * @param node
 	 */
-	public FieldDeclarationNode(Expression node, String declaredType) {
+	public FieldDeclarationNode(Expression node, JSType declaredType) {
 		super(node);
 		this.declaredType = declaredType;
 	}

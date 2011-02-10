@@ -99,11 +99,14 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.emf.ecore.EObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -160,15 +163,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 		}
 		if (kind == K_STRING) {
-			return context.getFactory().create(
-					peekContext(),
-					TypeInfoUtil.ref(context.getKnownType(ITypeNames.ARRAY
-							+ "<String>")));
+			return context.getFactory().create(peekContext(),
+					TypeUtil.arrayOf(context.getTypeRef(ITypeNames.STRING)));
 		} else if (kind == K_NUMBER) {
-			return context.getFactory().create(
-					peekContext(),
-					TypeInfoUtil.ref(context.getKnownType(ITypeNames.ARRAY
-							+ "<Number>")));
+			return context.getFactory().create(peekContext(),
+					TypeUtil.arrayOf(context.getTypeRef(ITypeNames.NUMBER)));
 		} else {
 			return context.getFactory().createArray(peekContext());
 		}
@@ -352,10 +351,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		IValueReference itemReference = visit(node.getItem());
 		IValueReference iteratorReference = visit(node.getIterator());
 		JSType type = JavaScriptValidations.typeOf(iteratorReference);
-		if (type != null && type.getComponentType() != null
+		if (type != null && type instanceof ArrayType
 				&& JavaScriptValidations.typeOf(itemReference) == null) {
-			String genericType = type.getComponentType();
-			itemReference.setDeclaredType(context.getTypeRef(genericType));
+			final JSType itemType = ((ArrayType) type).getItemType();
+			itemReference.setDeclaredType(itemType);
 		}
 		visit(node.getBody());
 		return null;
@@ -403,16 +402,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					.getName());
 			refArg.setKind(ReferenceKind.ARGUMENT);
 			if (parameter.getPropertiesType() != null) {
-				refArg.setDeclaredType(TypeInfoUtil.ref(parameter
+				refArg.setDeclaredType(TypeUtil.ref(parameter
 						.getPropertiesType()));
-			} else {
-				Type paramType = context.getKnownType(parameter.getType());
-				if (paramType != null)
-					refArg.setDeclaredType(TypeInfoUtil.ref(paramType));
-				else if (parameter.getType() != null) {
-					refArg.addValue(
-							new LazyReference(context, parameter.getType(),
-									peekContext()), false);
+			} else if (parameter.getType() != null) {
+				if (isResolved(parameter.getType())) {
+					refArg.setDeclaredType(parameter.getType());
+				} else if (parameter.getType() instanceof TypeRef) {
+					refArg.addValue(new LazyReference(context, parameter
+							.getType().getName(), peekContext()), false);
 				}
 			}
 			refArg.setLocation(parameter.getLocation());
@@ -443,12 +440,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
 		final IValueReference returnValue = result
 				.getChild(IValueReference.FUNCTION_OP);
-		Type methodType = context.getKnownType(method.getType());
-		if (methodType != null)
-			returnValue.setDeclaredType(TypeInfoUtil.ref(methodType));
-		else if (method.getType() != null) {
-			returnValue.addValue(new LazyReference(context, method.getType(),
-					peekContext()), true);
+		if (method.getType() != null) {
+			if (isResolved(method.getType())) {
+				returnValue.setDeclaredType(method.getType());
+			} else if (method.getType() instanceof TypeRef) {
+				returnValue.addValue(new LazyReference(context, method
+						.getType().getName(), peekContext()), true);
+			}
 		}
 		returnValue.setValue(function.getReturnValue());
 		return result;
@@ -474,6 +472,24 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return context.getTypeRef(type.getName());
 	}
 
+	protected boolean isResolved(JSType type) {
+		if (type instanceof TypeRef) {
+			final TypeRef ref = (TypeRef) type;
+			final Type target = ref.getTarget();
+			if (target != null && ((EObject) target).eIsProxy()) {
+				final Type resolved = context.getKnownType(ref.getName());
+				if (resolved != null) {
+					ref.setTarget(resolved);
+				} else {
+					return false;
+				}
+			}
+		} else if (type instanceof ArrayType) {
+			return isResolved(((ArrayType) type).getItemType());
+		}
+		return true;
+	}
+
 	@Override
 	public IValueReference visitGetAllChildrenExpression(
 			GetAllChildrenExpression node) {
@@ -488,16 +504,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (array != null) {
 			// always just create the ARRAY_OP child (for code completion)
 			IValueReference child = array.getChild(IValueReference.ARRAY_OP);
-			String arrayType = null;
+			JSType arrayType = null;
 			if (array.getDeclaredType() != null) {
-				arrayType = array.getDeclaredType().getComponentType();
+				arrayType = TypeUtil.extractArrayItemType(array
+						.getDeclaredType());
 			} else {
 				JSTypeSet types = array.getTypes();
 				if (types.size() > 0)
-					arrayType = types.getFirst().getComponentType();
+					arrayType = TypeUtil.extractArrayItemType(types.getFirst());
 			}
 			if (arrayType != null && child.getDeclaredType() == null) {
-				child.setDeclaredType(context.getTypeRef(arrayType));
+				child.setDeclaredType(arrayType);
 			}
 			if (node.getIndex() instanceof StringLiteral) {
 				IValueReference namedChild = extractNamedChild(array,
@@ -506,8 +523,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					child = namedChild;
 					if (arrayType != null
 							&& namedChild.getDeclaredType() == null) {
-						namedChild.setDeclaredType(context
-								.getTypeRef(arrayType));
+						namedChild.setDeclaredType(arrayType);
 					}
 				}
 			}
@@ -591,7 +607,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return null;
 	}
 
-	private class AnonymousNewValue extends AnonymousValue {
+	protected static class AnonymousNewValue extends AnonymousValue {
 		@Override
 		public IValueReference getChild(String name) {
 			if (name.equals(IValueReference.FUNCTION_OP))
@@ -626,7 +642,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					type.setSuperType(context.getKnownType(OBJECT));
 					type.setKind(TypeKind.JAVASCRIPT);
 					type.setName(className);
-					result.setDeclaredType(TypeInfoUtil.ref(type));
+					result.setDeclaredType(TypeUtil.ref(type));
 				} else {
 					result.setDeclaredType(context.getTypeRef(OBJECT));
 				}
@@ -640,9 +656,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				Type knownType = context.getKnownType(className);
 				if (knownType != null) {
 					result = new AnonymousNewValue();
-					result.setValue(context.getFactory()
-							.create(contextValueCollection,
-									TypeInfoUtil.ref(knownType)));
+					result.setValue(context.getFactory().create(
+							contextValueCollection, TypeUtil.ref(knownType)));
 					result.setKind(ReferenceKind.TYPE);
 				} else {
 					result = new LazyReference(context, className,
@@ -665,7 +680,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitObjectInitializer(ObjectInitializer node) {
 		final IValueReference result = new AnonymousValue();
-		result.setDeclaredType(TypeInfoUtil.ref(context.getKnownType(OBJECT)));
+		result.setDeclaredType(TypeUtil.ref(context.getKnownType(OBJECT)));
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
@@ -837,12 +852,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final JSVariable variable = new JSVariable();
 			variable.setName(declaration.getVariableName());
 			if (result.getDeclaredType() != null)
-				variable.setType(result.getDeclaredType().getName());
+				variable.setType(result.getDeclaredType());
 			for (IModelBuilder extension : context.getModelBuilders()) {
 				extension.processVariable(node, variable, reporter);
 			}
 			if (result.getDeclaredType() == null && variable.getType() != null) {
-				result.setDeclaredType(context.getTypeRef(variable.getType()));
+				result.setDeclaredType(variable.getType());
 			}
 			result.setAttribute(IReferenceAttributes.VARIABLE, variable);
 		}
@@ -906,8 +921,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				peekContext());
 
 		if (xmlValueReference instanceof IValueProvider) {
-			JSType xmlType = TypeInfoUtil.ref(context
-					.getKnownType(ITypeNames.XML));
+			JSType xmlType = TypeUtil.ref(context.getKnownType(ITypeNames.XML));
 			IValue xmlValue = ((IValueProvider) xmlValueReference).getValue();
 			List<XmlFragment> fragments = node.getFragments();
 			StringBuilder xml = new StringBuilder();

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactory.java,v 1.3 2011/02/04 06:04:41 apanchenk Exp $
+ * $Id: TypeInfoModelFactory.java,v 1.4 2011/02/10 13:05:29 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -85,6 +85,15 @@ public interface TypeInfoModelFactory extends EFactory {
      * @generated
      */
     TypeRef createTypeRef();
+
+    /**
+     * Returns a new object of class '<em>Array Type</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Array Type</em>'.
+     * @generated
+     */
+    ArrayType createArrayType();
 
     /**
      * Returns the package supported by this factory.

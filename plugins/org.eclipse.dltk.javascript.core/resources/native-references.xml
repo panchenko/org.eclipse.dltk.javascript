@@ -365,7 +365,10 @@
       <parameters name="endSlice" directType="Number" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="small" directType="String" description="Returns a string in a small font."/>
-    <members xsi:type="ref:Method" name="split" directType="Array" description="Splits a string into an array of strings.">
+    <members xsi:type="ref:Method" name="split" description="Splits a string into an array of strings.">
+	  <type xsi:type="ref:ArrayType">
+        <itemType xsi:type="ref:TypeRef" target="String"/>
+      </type>
       <parameters name="separator"/>
       <parameters name="howmany" kind="OPTIONAL"/>
     </members>

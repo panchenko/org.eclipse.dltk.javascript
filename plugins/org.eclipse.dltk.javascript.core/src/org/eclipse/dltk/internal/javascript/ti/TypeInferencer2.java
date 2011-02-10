@@ -31,21 +31,17 @@ import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
-import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
-import org.eclipse.dltk.javascript.typeinfo.model.Method;
-import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -121,7 +117,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	}
 
 	public TypeRef getTypeRef(String typeName) {
-		return TypeInfoUtil.ref(getType(typeName));
+		return TypeUtil.ref(getType(typeName));
 	}
 
 	public Type getKnownType(String typeName) {
@@ -272,7 +268,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return null;
 	}
 
-	private static Type createUnknown(String typeName) {
+	protected static Type createUnknown(String typeName) {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(typeName);
 		type.setKind(TypeKind.UNKNOWN);
@@ -310,102 +306,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			if (type != null) {
 				return type;
 			}
-			String arrayType = typeName;
-			String genericArrayType = null;
-			String arrayGenericStart = ITypeNames.ARRAY + '<';
-			if (arrayType.endsWith("[]")) {
-				genericArrayType = arrayType.substring(0,
-						arrayType.length() - 2);
-				arrayType = arrayGenericStart + genericArrayType + '>';
-			} else if (arrayType.startsWith(arrayGenericStart)
-					&& arrayType.endsWith(">")) {
-				genericArrayType = arrayType.substring(6,
-						arrayType.length() - 1);
-			}
-
-			if (genericArrayType != null) {
-				Type genericType = getType(genericArrayType, true, true, true,
-						false);
-				if (genericType == null) {
-					return TypeInfoModelLoader.getInstance().getType(
-							ITypeNames.ARRAY);
-				}
-
-				type = createTypedArray(genericType);
-				if (type != null && ((EObject) genericType).eResource() != null) {
-					Resource resource = ((EObject) genericType).eResource();
-					if (resource == invariantRS.getResource()
-							|| TypeInfoModelLoader.getInstance().hasResource(
-									resource)) {
-						markInvariant(type);
-					}
-				}
-				return type;
-			}
 		}
 		return null;
-	}
-
-	private static Type createTypedArray(Type genericType) {
-		final Type array = TypeInfoModelLoader.getInstance().getType(
-				ITypeNames.ARRAY);
-		if (array == null) {
-			return null;
-		}
-		final Type typedArray = TypeInfoModelFactory.eINSTANCE.createType();
-		typedArray.setName("Array<" + genericType.getName() + '>');
-		typedArray.setDescription(array.getDescription());
-		typedArray.setKind(array.getKind());
-		typedArray.setAttribute(GENERIC_ARRAY_TYPE, genericType.getName());
-		typedArray.setSuperType(array.getSuperType());
-
-		EList<Member> typedArrayMembers = typedArray.getMembers();
-
-		for (Member member : array.getMembers()) {
-			if (member instanceof Method) {
-				String memberName = member.getName();
-				Method method = TypeInfoModelFactory.eINSTANCE.createMethod();
-				method.setName(memberName);
-				method.setDescription(member.getDescription());
-				method.setStatic(member.isStatic());
-				method.setDeprecated(member.isDeprecated());
-				method.setVisible(member.isVisible());
-				EList<Parameter> parameters = method.getParameters();
-
-				for (Parameter parameter : ((Method) member).getParameters()) {
-					Parameter clone = TypeInfoModelFactory.eINSTANCE
-							.createParameter();
-					clone.setKind(parameter.getKind());
-					clone.setName(parameter.getName());
-					clone.setType(parameter.getType());
-					parameters.add(clone);
-				}
-
-				if ("pop".equals(memberName) || "shift".equals(memberName)) {
-					method.setType(TypeInfoUtil.ref(genericType));
-				} else if ("filter".equals(memberName)
-						|| "reverse".equals(memberName)
-						|| "slice".equals(memberName)
-						|| "sort".equals(memberName)
-						|| "splice".equals(memberName)) {
-					method.setType(TypeInfoUtil.ref(typedArray));
-				} else {
-					method.setType(member.getType());
-				}
-				typedArrayMembers.add(method);
-			} else {
-				Property property = TypeInfoModelFactory.eINSTANCE
-						.createProperty();
-				property.setDescription(member.getDescription());
-				property.setDeprecated(member.isDeprecated());
-				property.setName(member.getName());
-				property.setReadOnly(((Property) member).isReadOnly());
-				property.setStatic(member.isStatic());
-				property.setVisible(member.isVisible());
-				typedArrayMembers.add(property);
-			}
-		}
-		return typedArray;
 	}
 
 	private static final String PROXY_SCHEME = "proxy";
@@ -415,7 +317,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	 * @param typeName
 	 * @return
 	 */
-	private static Type createProxy(String typeName) {
+	public static Type createProxy(String typeName) {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(typeName);
 		((InternalEObject) type).eSetProxyURI(URI.createGenericURI(
@@ -537,7 +439,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 
 		public TypeRef getTypeRef(String typeName) {
-			return TypeInfoUtil.ref(getType(typeName));
+			return TypeUtil.ref(getType(typeName));
 		}
 
 		private Type loadType(String typeName, boolean queryProviders,
@@ -574,27 +476,6 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				Type type = TypeInfoModelLoader.getInstance().getType(typeName);
 				if (type != null) {
 					return type;
-				}
-				String arrayType = typeName;
-				String genericArrayType = null;
-				String arrayGenericStart = ITypeNames.ARRAY + '<';
-				if (arrayType.endsWith("[]")) {
-					genericArrayType = arrayType.substring(0,
-							arrayType.length() - 2);
-					arrayType = arrayGenericStart + genericArrayType + '>';
-				} else if (arrayType.startsWith(arrayGenericStart)
-						&& arrayType.endsWith(">")) {
-					genericArrayType = arrayType.substring(6,
-							arrayType.length() - 1);
-				}
-
-				if (genericArrayType != null) {
-					Type genericType = getType(genericArrayType,
-							canQueryTypeProviders(), true, true, false);
-					if (genericType == null)
-						return type;
-
-					return createTypedArray(genericType);
 				}
 			}
 			return null;
@@ -705,7 +586,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	static final InvariantTypeResourceSet invariantRS = new InvariantTypeResourceSet(
 			invariantContextRS);
 
-	private static boolean isProxy(Type type) {
+	protected static boolean isProxy(Type type) {
 		return type instanceof EObject && ((EObject) type).eIsProxy();
 	}
 

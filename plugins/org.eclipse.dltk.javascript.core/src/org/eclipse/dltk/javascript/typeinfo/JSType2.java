@@ -11,19 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-public class TypeInfoUtil {
+public interface JSType2 extends JSType {
 
-	public static TypeRef ref(Type type) {
-		if (type != null) {
-			final TypeRef ref = TypeInfoModelFactory.eINSTANCE.createTypeRef();
-			ref.setTarget(type);
-			return ref;
-		}
-		return null;
-	}
+	boolean isArray();
+
+	boolean isAssignableFrom(JSType2 type);
 
 }

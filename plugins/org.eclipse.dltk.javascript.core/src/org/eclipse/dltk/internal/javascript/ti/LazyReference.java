@@ -7,14 +7,14 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class LazyReference extends AbstractReference {
 
-	private final class LazyValue extends Value implements ILazyValue {
+	final class LazyValue extends Value implements ILazyValue {
 		boolean resolved = false;
 
 		public void resolve() {
@@ -39,7 +39,7 @@ public class LazyReference extends AbstractReference {
 					type.setSuperType(context.getKnownType(OBJECT));
 					type.setKind(TypeKind.JAVASCRIPT);
 					type.setName(className);
-					setDeclaredType(TypeInfoUtil.ref(type));
+					setDeclaredType(TypeUtil.ref(type));
 					resolved = true;
 				}
 			}
@@ -47,9 +47,9 @@ public class LazyReference extends AbstractReference {
 	}
 
 	private final LazyValue value = new LazyValue();
-	private final ITypeInferenceContext context;
-	private final String className;
-	private final IValueCollection collection;
+	final ITypeInferenceContext context;
+	final String className;
+	final IValueCollection collection;
 
 	public LazyReference(ITypeInferenceContext context, String className,
 			IValueCollection collection) {

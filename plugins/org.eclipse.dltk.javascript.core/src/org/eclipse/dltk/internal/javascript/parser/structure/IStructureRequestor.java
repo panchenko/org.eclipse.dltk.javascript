@@ -9,6 +9,7 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public interface IStructureRequestor {
 
@@ -32,18 +33,19 @@ public interface IStructureRequestor {
 
 	void exitField(int sourceEnd);
 
-	void enterField(FieldInfo fieldInfo, Expression identifier);
+	void enterField(FieldInfo fieldInfo, Expression identifier, JSType type);
 
-	boolean enterFieldCheckDuplicates(FieldInfo fieldInfo, Expression identifier);
+	boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
+			Expression identifier, JSType type);
 
 	void acceptLocalReference(Identifier node, IValueReference reference);
 
 	public void enterLocal(Identifier identifier, ISourceModule module,
-			String type);
+			JSType type);
 
 	void exitLocal(int sourceEnd);
 
 	void acceptArgumentDeclaration(Argument argument,
-			ISourceModule sourceModule, String type);
+			ISourceModule sourceModule, JSType type);
 
 }

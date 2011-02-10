@@ -20,7 +20,6 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
-import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
@@ -35,6 +34,8 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class StructureReporter2 extends TypeInferencerVisitor {
 
@@ -191,7 +192,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 
 		methodInfo.isConstructor = method.isConstructor();
 
-		methodInfo.returnType = method.getType();
+		methodInfo.returnType = TypeUtil.getName(method.getType());
 
 		if (method.isDeprecated()) {
 			methodInfo.modifiers |= JSModifiers.DEPRECATED;
@@ -211,7 +212,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			for (int i = 0; i < parameters.size(); i++) {
 				IParameter parameter = parameters.get(i);
 				paramNames[i] = parameter.getName();
-				paramTypes[i] = parameter.getType();
+				paramTypes[i] = TypeUtil.getName(parameter.getType());
 
 				fRequestor.acceptArgumentDeclaration(arguments.get(parameter
 						.getName()), getSource().getSourceModule(), parameter
@@ -235,12 +236,11 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 		IValueReference reference = super.visitFunctionStatement(node);
 		if (method.getType() == null) {
 			if (reference.getDeclaredType() != null) {
-				method.setType(reference.getDeclaredType().getName());
-				methodInfo.returnType = method.getType();
+				method.setType(reference.getDeclaredType());
+				methodInfo.returnType = TypeUtil.getName(method.getType());
 			} else if (!reference.getDeclaredTypes().isEmpty()) {
-				method.setType(reference.getDeclaredTypes().iterator().next()
-						.getName());
-				methodInfo.returnType = method.getType();
+				method.setType(reference.getDeclaredTypes().getFirst());
+				methodInfo.returnType = TypeUtil.getName(method.getType());
 			}
 		}
 		fRequestor.exitMethod(node.sourceEnd());
@@ -298,25 +298,20 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			if (fieldIdentifer != null) {
 				fRequestor.enterField(
 						createFieldInfo(fieldIdentifer, node.sourceStart(),
-								null), fieldIdentifer);
+								null), fieldIdentifer, null);
 			}
 		}
-		for (ObjectInitializerPart part : node.getInitializers()) {
-			if (part instanceof PropertyInitializer) {
-				final PropertyInitializer pi = (PropertyInitializer) part;
-				// function statements will be reported in the
-				// visitFunctionStatement
-				if (pi.getValue() instanceof FunctionStatement)
-					continue;
-				if (pi.getName() instanceof Identifier) {
-					Identifier identifier = (Identifier) pi.getName();
-					fRequestor
-							.enterField(
-									createFieldInfo(identifier,
-											pi.sourceStart(), null), identifier);
-					fRequestor.exitField(pi.sourceEnd());
-				}
-
+		for (final PropertyInitializer pi : node.getPropertyInitializers()) {
+			// function statements will be reported in the
+			// visitFunctionStatement
+			if (pi.getValue() instanceof FunctionStatement)
+				continue;
+			if (pi.getName() instanceof Identifier) {
+				Identifier identifier = (Identifier) pi.getName();
+				fRequestor.enterField(
+						createFieldInfo(identifier, pi.sourceStart(), null),
+						identifier, null);
+				fRequestor.exitField(pi.sourceEnd());
 			}
 		}
 		IValueReference reference = super.visitObjectInitializer(node);
@@ -340,7 +335,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			if (variable.isPrivate()) {
 				fieldInfo.modifiers |= JSModifiers.PRIVATE;
 			}
-			fieldInfo.type = variable.getType();
+			fieldInfo.type = TypeUtil.getName(variable.getType());
 		}
 		return fieldInfo;
 	}
@@ -355,8 +350,9 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			final org.eclipse.dltk.javascript.ast.Type varType = declaration
 					.getType();
 			if (varType != null) {
-				reference.setDeclaredType(resolveType(varType));
-				variable.setType(varType.getName());
+				final JSType resolved = resolveType(varType);
+				reference.setDeclaredType(resolved);
+				variable.setType(resolved);
 			}
 			if (declaration.getParent() instanceof VariableStatement) {
 				variable.setName(declaration.getVariableName());
@@ -378,7 +374,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			else
 				fRequestor.enterField(
 						createFieldInfo(identifier, declaration.sourceStart(),
-								variable), identifier);
+								variable), identifier, variable.getType());
 
 			if (declaration.getInitializer() != null) {
 				IValueReference assignment = visit(declaration.getInitializer());
@@ -424,7 +420,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 				IValueReference reference = super.visitPropertyExpression(node);
 				if (fRequestor.enterFieldCheckDuplicates(
 						createFieldInfo(identifier, name.sourceStart(), null),
-						identifier)) {
+						identifier, null)) {
 					reference = super.visitPropertyExpression(node);
 					fRequestor.exitField(node.sourceEnd());
 					return reference;

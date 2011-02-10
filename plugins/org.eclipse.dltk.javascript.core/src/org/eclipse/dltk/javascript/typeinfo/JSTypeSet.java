@@ -18,16 +18,22 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl;
+import org.eclipse.emf.ecore.EObject;
 
 public abstract class JSTypeSet implements Iterable<JSType> {
 
 	private static class EmptyIterator implements Iterator<JSType> {
+
+		protected EmptyIterator() {
+		}
 
 		public boolean hasNext() {
 			return false;
@@ -43,6 +49,9 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 	}
 
 	private static class JSEmptyTypeSet extends JSTypeSet {
+
+		protected JSEmptyTypeSet() {
+		}
 
 		public Iterator<JSType> iterator() {
 			return new EmptyIterator();
@@ -147,7 +156,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		private final JSType type;
 
 		public JSSingletonTypeSet(JSType type) {
-			this.type = type;
+			this.type = normalize(type);
 		}
 
 		public Iterator<JSType> iterator() {
@@ -225,7 +234,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		return new JSSingletonTypeSet(type);
 	}
 
-	private static class TypeRefKey implements TypeRef {
+	private static class TypeRefKey implements TypeRef, JSType2 {
 
 		private final Type type;
 
@@ -235,15 +244,6 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		public TypeKind getKind() {
 			return type.getKind();
-		}
-
-		public boolean isDeprecated() {
-			return type.isDeprecated();
-		}
-
-		public String getComponentType() {
-			return (String) type
-					.getAttribute(ITypeInferenceContext.GENERIC_ARRAY_TYPE);
 		}
 
 		public String getName() {
@@ -277,22 +277,115 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			return type.toString();
 		}
 
+		public boolean isArray() {
+			return ITypeNames.ARRAY.equals(type.getName());
+		}
+
+		public boolean isAssignableFrom(JSType2 type) {
+			if (equals(type)) {
+				return true;
+			} else if (isArray()) {
+				return type.isArray();
+			} else if (type instanceof TypeRef) {
+				final Type other = ((TypeRef) type).getTarget();
+				if (this.type.isProxy()) {
+					final String localName = TypeUtil.getName(this.type);
+					Type t = other;
+					while (t != null) {
+						if (localName.equals(t.getName()))
+							return true;
+						t = t.getSuperType();
+					}
+				} else {
+					Type t = other.getSuperType();
+					while (t != null) {
+						if (this.type.equals(t))
+							return true;
+						t = t.getSuperType();
+					}
+				}
+			}
+			return false;
+		}
 	}
 
-	private static JSType normalize(JSType type) {
+	private static class ArrayTypeKey implements ArrayType, JSType2 {
+
+		private final JSType2 itemType;
+
+		public ArrayTypeKey(JSType2 itemType) {
+			this.itemType = itemType;
+		}
+
+		public TypeKind getKind() {
+			return TypeKind.PREDEFINED;
+		}
+
+		public String getName() {
+			return itemType != null ? ITypeNames.ARRAY + '<'
+					+ itemType.getName() + '>' : ITypeNames.ARRAY;
+		}
+
+		public JSType getItemType() {
+			return itemType;
+		}
+
+		public void setItemType(JSType value) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int hashCode() {
+			return itemType.hashCode();
+		}
+
+		public boolean equals(Object obj) {
+			if (obj instanceof ArrayTypeKey) {
+				final ArrayTypeKey other = (ArrayTypeKey) obj;
+				return itemType.equals(other.itemType);
+			}
+			return false;
+		}
+
+		@Override
+		public String toString() {
+			return getName();
+		}
+
+		public boolean isArray() {
+			return true;
+		}
+
+		public boolean isAssignableFrom(JSType2 type) {
+			if (type instanceof ArrayTypeKey) {
+				return itemType
+						.isAssignableFrom(((ArrayTypeKey) type).itemType);
+			}
+			return false;
+		}
+
+	}
+
+	public static JSType2 normalize(JSType type) {
 		if (type instanceof TypeRefImpl) {
 			return new TypeRefKey(((TypeRef) type).getTarget());
+		} else if (type instanceof ArrayTypeImpl) {
+			return new ArrayTypeKey(normalize(((ArrayType) type).getItemType()));
 		}
-		return type;
+		Assert.isLegal(!(type instanceof EObject));
+		return (JSType2) type;
 	}
 
-	private static JSType wrap(Type type) {
+	protected static JSType wrap(Type type) {
 		return new TypeRefKey(type);
 	}
 
 	private static class JSTypeSetImpl extends JSTypeSet {
 
 		private final Set<JSType> types = new HashSet<JSType>();
+
+		protected JSTypeSetImpl() {
+		}
 
 		public Iterator<JSType> iterator() {
 			return types.iterator();

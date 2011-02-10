@@ -15,6 +15,11 @@ import org.eclipse.dltk.core.search.matching2.AbstractMatchingPredicate;
 import org.eclipse.dltk.core.search.matching2.MatchLevel;
 import org.eclipse.dltk.internal.core.search.matching.TypeReferencePattern;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TypeReferencePredicate extends
 		AbstractMatchingPredicate<MatchingNode> {
@@ -50,9 +55,19 @@ public class TypeReferencePredicate extends
 		return null;
 	}
 
-	private MatchLevel matchTypeName(String typeName) {
-		if (typeName == null)
+	private MatchLevel matchTypeName(JSType type) {
+		if (type == null)
 			return null;
-		return matchName(typeName);
+		MatchLevel result = null;
+		if (type instanceof ArrayType) {
+			result = matchName(ITypeNames.ARRAY);
+		}
+		for (Type t : JSTypeSet.singleton(type).toArray()) {
+			final MatchLevel m = matchName(t.getName());
+			if (result == null || m.compareTo(result) > 0) {
+				result = m;
+			}
+		}
+		return result;
 	}
 }

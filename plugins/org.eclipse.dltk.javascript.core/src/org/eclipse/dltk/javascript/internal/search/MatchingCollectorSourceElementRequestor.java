@@ -14,6 +14,7 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class MatchingCollectorSourceElementRequestor implements
 		IStructureRequestor {
@@ -49,7 +50,7 @@ public class MatchingCollectorSourceElementRequestor implements
 	}
 
 	public void acceptArgumentDeclaration(Argument argument,
-			ISourceModule sourceModule, String type) {
+			ISourceModule sourceModule, JSType type) {
 		nodes.add(new ArgumentDeclarationNode(argument, sourceModule, type));
 	}
 
@@ -73,18 +74,19 @@ public class MatchingCollectorSourceElementRequestor implements
 		nodes.add(new MethodDeclarationNode(identifier, method));
 	}
 
-	public void enterField(FieldInfo fieldInfo, Expression identifier) {
-		nodes.add(new FieldDeclarationNode(identifier, fieldInfo.type));
+	public void enterField(FieldInfo fieldInfo, Expression identifier,
+			JSType type) {
+		nodes.add(new FieldDeclarationNode(identifier, type));
 	}
 
 	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
-			Expression identifier) {
-		nodes.add(new FieldDeclarationNode(identifier, fieldInfo.type));
+			Expression identifier, JSType type) {
+		enterField(fieldInfo, identifier, type);
 		return true;
 	}
 
 	public void enterLocal(Identifier identifier, ISourceModule module,
-			String type) {
+			JSType type) {
 		nodes.add(new LocalVariableDeclarationNode(identifier, module, type));
 	}
 

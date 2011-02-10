@@ -9,11 +9,11 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: MemberImpl.java,v 1.8 2011/02/04 06:04:41 apanchenk Exp $
+ * $Id: MemberImpl.java,v 1.9 2011/02/10 13:05:30 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
-import org.eclipse.dltk.javascript.typeinfo.TypeInfoUtil;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -150,7 +150,7 @@ public abstract class MemberImpl extends ElementImpl implements Member {
 	 * @generated NOT
 	 */
     public void setDirectType(Type newDirectType) {
-		setType(TypeInfoUtil.ref(newDirectType));
+		setType(TypeUtil.ref(newDirectType));
     }
 
     /**

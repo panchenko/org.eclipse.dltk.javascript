@@ -10,6 +10,7 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class StructureRequestor implements IStructureRequestor {
 
@@ -24,11 +25,11 @@ public class StructureRequestor implements IStructureRequestor {
 	}
 
 	public void acceptArgumentDeclaration(Argument argument,
-			ISourceModule sourceModule, String type) {
+			ISourceModule sourceModule, JSType type) {
 	}
 
 	public void enterLocal(Identifier identifier, ISourceModule module,
-			String type) {
+			JSType type) {
 	}
 
 	public void exitLocal(int sourceEnd) {
@@ -74,12 +75,13 @@ public class StructureRequestor implements IStructureRequestor {
 		requestor.exitField(sourceEnd);
 	}
 
-	public void enterField(FieldInfo fieldInfo, Expression identifer) {
+	public void enterField(FieldInfo fieldInfo, Expression identifer,
+			JSType type) {
 		requestor.enterField(fieldInfo);
 	}
 
 	public boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
-			Expression identifier) {
+			Expression identifier, JSType type) {
 		return requestor.enterFieldCheckDuplicates(fieldInfo);
 	}
 
