@@ -355,6 +355,8 @@ public class JSDocSupport implements IModelBuilder {
 			final Tokenizer st = new Tokenizer(tag.getValue());
 			if (st.hasMoreTokens()) {
 				member.setType(translateTypeName(st.nextToken()));
+			} else {
+				reportProblem(reporter, JSDocProblem.MISSING_TYPE_NAME, tag);
 			}
 		}
 	}
