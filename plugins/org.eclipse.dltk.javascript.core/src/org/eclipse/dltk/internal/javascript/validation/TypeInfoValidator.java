@@ -44,6 +44,7 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -977,8 +978,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 										.sourceEnd());
 					} else {
 						reporter.reportProblem(
-								JavaScriptProblems.VAR_HIDES_METHOD,
-								NLS.bind(
+								JavaScriptProblems.VAR_HIDES_METHOD, NLS.bind(
 										ValidationMessages.VariableHidesMethod,
 										declaration.getVariableName()),
 								identifier.sourceStart(), identifier
@@ -1076,12 +1076,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 									result.getName(), type.getName()), propName
 									.sourceStart(), propName.sourceEnd());
 				} else {
+					final String parentPath = PropertyExpressionUtils
+							.getPath(propertyExpression.getObject());
 					reporter.reportProblem(
 							JavaScriptProblems.UNDEFINED_PROPERTY,
 							NLS.bind(
 									ValidationMessages.UndefinedPropertyInScript,
-									result.getName()), propName.sourceStart(),
-							propName.sourceEnd());
+									result.getName(),
+									parentPath != null ? parentPath
+											: "javascript"), propName
+									.sourceStart(), propName.sourceEnd());
 				}
 			} else {
 				IVariable variable = (IVariable) result
