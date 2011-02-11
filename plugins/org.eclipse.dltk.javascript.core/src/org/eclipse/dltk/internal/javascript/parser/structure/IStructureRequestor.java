@@ -35,6 +35,8 @@ public interface IStructureRequestor {
 
 	void enterField(FieldInfo fieldInfo, Expression identifier, JSType type);
 
+	void updateField(FieldInfo fieldInfo, int flags);
+
 	boolean enterFieldCheckDuplicates(FieldInfo fieldInfo,
 			Expression identifier, JSType type);
 

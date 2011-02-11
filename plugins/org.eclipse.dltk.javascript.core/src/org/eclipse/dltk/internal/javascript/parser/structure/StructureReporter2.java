@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
+import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -368,17 +369,27 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			reference.setLocation(ReferenceLocation.create(getSource(),
 					declaration.sourceStart(), declaration.sourceEnd(),
 					identifier.sourceStart(), identifier.sourceEnd()));
-			if (inFunction())
+			FieldInfo fieldInfo = null;
+			if (inFunction()) {
 				fRequestor.enterLocal(identifier,
 						getSource().getSourceModule(), variable.getType());
-			else
-				fRequestor.enterField(
-						createFieldInfo(identifier, declaration.sourceStart(),
-								variable), identifier, variable.getType());
+			} else {
+				fieldInfo = createFieldInfo(identifier,
+						declaration.sourceStart(), variable);
+				fRequestor
+						.enterField(fieldInfo, identifier, variable.getType());
+			}
 
 			if (declaration.getInitializer() != null) {
 				IValueReference assignment = visit(declaration.getInitializer());
 				if (assignment != null) {
+					if (fieldInfo != null && variable.getType() == null
+							&& assignment.getDeclaredType() != null) {
+						fieldInfo.type = TypeUtil.getName(assignment
+								.getDeclaredType());
+						fRequestor.updateField(fieldInfo,
+								ISourceElementRequestor.UPDATE_TYPE);
+					}
 					assign(reference, assignment);
 					if (assignment.getKind() == ReferenceKind.FUNCTION
 							&& reference
