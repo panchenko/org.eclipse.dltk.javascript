@@ -89,7 +89,7 @@ public class Value implements IValue {
 		if (hasReferences()) {
 			final JSTypeSet result = JSTypeSet.create();
 			execute(this, GET_DECLARED_TYPES, result, new HashSet<IValue>());
-			return !result.isEmpty() ? result.iterator().next() : null;
+			return !result.isEmpty() ? result.getFirst() : null;
 		} else {
 			return declaredType;
 		}

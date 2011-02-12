@@ -124,7 +124,7 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public JSType getDeclaredType() {
-			return types.iterator().next();
+			return types.getFirst();
 		}
 
 		public JSTypeSet getDeclaredTypes() {
@@ -167,7 +167,7 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public JSType getDeclaredType() {
-			return types.iterator().next();
+			return types.getFirst();
 		}
 
 		public JSTypeSet getDeclaredTypes() {
