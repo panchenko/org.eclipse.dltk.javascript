@@ -15,7 +15,7 @@ public class JavaScriptKeywords {
 			"const", "var", "case", "finally", "return", "void", "catch",
 			"for", "each", "switch", "while", "continue", "function", "this",
 			"with", "default", "if", "throw", "delete", "in", "try", "do",
-			"instanceof", "typeof", "null", "undefined" };
+			"instanceof", "typeof", "null", "true", "false", "undefined" };
 
 	public static String[] getJavaScriptKeywords() {
 		return fgKeywords;
