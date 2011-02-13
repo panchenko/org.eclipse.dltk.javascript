@@ -58,7 +58,7 @@ public class FunctionValueCollection extends ValueCollection {
 		return returnValue;
 	}
 
-	private static class ThisValue extends AnonymousValue {
+	protected static class ThisValue extends AnonymousValue {
 		@Override
 		protected String getToStringPrefix() {
 			return "this";
