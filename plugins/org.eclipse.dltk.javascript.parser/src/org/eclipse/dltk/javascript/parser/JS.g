@@ -1742,7 +1742,7 @@ functionDeclaration
 
 functionExpression
 	: FUNCTION name=identifier? formalParameterList ( { isTypeInformationEnabled() }?=> COLON typeRef )? functionBody
-	-> ^( FUNCTION $name? formalParameterList functionBody )
+	-> ^( FUNCTION $name? formalParameterList COLON? typeRef? functionBody )
 	;
 
 formalParameter

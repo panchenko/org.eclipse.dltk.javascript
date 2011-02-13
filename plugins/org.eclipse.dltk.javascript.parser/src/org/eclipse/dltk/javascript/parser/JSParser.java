@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2011-02-01 21:41:12
+// $ANTLR 3.0.1 JS.g 2011-02-13 11:29:07
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -11831,7 +11831,7 @@ public class JSParser extends Parser {
     };
 
     // $ANTLR start functionExpression
-    // JS.g:1743:1: functionExpression : FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) ;
+    // JS.g:1743:1: functionExpression : FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION ( $name)? formalParameterList ( COLON )? ( typeRef )? functionBody ) ;
     public final functionExpression_return functionExpression() throws RecognitionException {
         functionExpression_return retval = new functionExpression_return();
         retval.start = input.LT(1);
@@ -11858,7 +11858,7 @@ public class JSParser extends Parser {
         RewriteRuleSubtreeStream stream_identifier=new RewriteRuleSubtreeStream(adaptor,"rule identifier");
         RewriteRuleSubtreeStream stream_formalParameterList=new RewriteRuleSubtreeStream(adaptor,"rule formalParameterList");
         try {
-            // JS.g:1744:2: ( FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) )
+            // JS.g:1744:2: ( FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody -> ^( FUNCTION ( $name)? formalParameterList ( COLON )? ( typeRef )? functionBody ) )
             // JS.g:1744:4: FUNCTION (name= identifier )? formalParameterList ({...}? => COLON typeRef )? functionBody
             {
             FUNCTION344=(Token)input.LT(1);
@@ -11928,7 +11928,7 @@ public class JSParser extends Parser {
             stream_functionBody.add(functionBody348.getTree());
 
             // AST REWRITE
-            // elements: formalParameterList, FUNCTION, name, functionBody
+            // elements: typeRef, formalParameterList, FUNCTION, name, functionBody, COLON
             // token labels: 
             // rule labels: retval, name
             // token list labels: 
@@ -11938,9 +11938,9 @@ public class JSParser extends Parser {
             RewriteRuleSubtreeStream stream_name=new RewriteRuleSubtreeStream(adaptor,"token name",name!=null?name.tree:null);
 
             root_0 = (Object)adaptor.nil();
-            // 1745:2: -> ^( FUNCTION ( $name)? formalParameterList functionBody )
+            // 1745:2: -> ^( FUNCTION ( $name)? formalParameterList ( COLON )? ( typeRef )? functionBody )
             {
-                // JS.g:1745:5: ^( FUNCTION ( $name)? formalParameterList functionBody )
+                // JS.g:1745:5: ^( FUNCTION ( $name)? formalParameterList ( COLON )? ( typeRef )? functionBody )
                 {
                 Object root_1 = (Object)adaptor.nil();
                 root_1 = (Object)adaptor.becomeRoot(stream_FUNCTION.next(), root_1);
@@ -11952,6 +11952,18 @@ public class JSParser extends Parser {
                 }
                 stream_name.reset();
                 adaptor.addChild(root_1, stream_formalParameterList.next());
+                // JS.g:1745:44: ( COLON )?
+                if ( stream_COLON.hasNext() ) {
+                    adaptor.addChild(root_1, stream_COLON.next());
+
+                }
+                stream_COLON.reset();
+                // JS.g:1745:51: ( typeRef )?
+                if ( stream_typeRef.hasNext() ) {
+                    adaptor.addChild(root_1, stream_typeRef.next());
+
+                }
+                stream_typeRef.reset();
                 adaptor.addChild(root_1, stream_functionBody.next());
 
                 adaptor.addChild(root_0, root_1);
@@ -12009,7 +12021,7 @@ public class JSParser extends Parser {
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_identifier_in_formalParameter6858);
+            pushFollow(FOLLOW_identifier_in_formalParameter6864);
             identifier349=identifier();
             _fsp--;
 
@@ -12029,11 +12041,11 @@ public class JSParser extends Parser {
                         throw new FailedPredicateException(input, "formalParameter", " isTypeInformationEnabled() ");
                     }
                     COLON350=(Token)input.LT(1);
-                    match(input,COLON,FOLLOW_COLON_in_formalParameter6866); 
+                    match(input,COLON,FOLLOW_COLON_in_formalParameter6872); 
                     COLON350_tree = (Object)adaptor.create(COLON350);
                     adaptor.addChild(root_0, COLON350_tree);
 
-                    pushFollow(FOLLOW_typeRef_in_formalParameter6868);
+                    pushFollow(FOLLOW_typeRef_in_formalParameter6874);
                     typeRef351=typeRef();
                     _fsp--;
 
@@ -12099,7 +12111,7 @@ public class JSParser extends Parser {
             // JS.g:1753:4: LPAREN ( formalParameter ( COMMA formalParameter )* )? RPAREN
             {
             LPAREN352=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_formalParameterList6882); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_formalParameterList6888); 
             stream_LPAREN.add(LPAREN352);
 
             // JS.g:1753:11: ( formalParameter ( COMMA formalParameter )* )?
@@ -12113,7 +12125,7 @@ public class JSParser extends Parser {
                 case 1 :
                     // JS.g:1753:13: formalParameter ( COMMA formalParameter )*
                     {
-                    pushFollow(FOLLOW_formalParameter_in_formalParameterList6886);
+                    pushFollow(FOLLOW_formalParameter_in_formalParameterList6892);
                     formalParameter353=formalParameter();
                     _fsp--;
 
@@ -12134,10 +12146,10 @@ public class JSParser extends Parser {
                     	    // JS.g:1753:31: COMMA formalParameter
                     	    {
                     	    COMMA354=(Token)input.LT(1);
-                    	    match(input,COMMA,FOLLOW_COMMA_in_formalParameterList6890); 
+                    	    match(input,COMMA,FOLLOW_COMMA_in_formalParameterList6896); 
                     	    stream_COMMA.add(COMMA354);
 
-                    	    pushFollow(FOLLOW_formalParameter_in_formalParameterList6892);
+                    	    pushFollow(FOLLOW_formalParameter_in_formalParameterList6898);
                     	    formalParameter355=formalParameter();
                     	    _fsp--;
 
@@ -12158,7 +12170,7 @@ public class JSParser extends Parser {
             }
 
             RPAREN356=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_formalParameterList6900); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_formalParameterList6906); 
             stream_RPAREN.add(RPAREN356);
 
 
@@ -12243,7 +12255,7 @@ public class JSParser extends Parser {
             // JS.g:1759:4: lb= LBRACE ( sourceElement )* RBRACE
             {
             lb=(Token)input.LT(1);
-            match(input,LBRACE,FOLLOW_LBRACE_in_functionBody6930); 
+            match(input,LBRACE,FOLLOW_LBRACE_in_functionBody6936); 
             stream_LBRACE.add(lb);
 
             // JS.g:1759:14: ( sourceElement )*
@@ -12261,7 +12273,7 @@ public class JSParser extends Parser {
             	case 1 :
             	    // JS.g:1759:14: sourceElement
             	    {
-            	    pushFollow(FOLLOW_sourceElement_in_functionBody6932);
+            	    pushFollow(FOLLOW_sourceElement_in_functionBody6938);
             	    sourceElement357=sourceElement();
             	    _fsp--;
 
@@ -12276,7 +12288,7 @@ public class JSParser extends Parser {
             } while (true);
 
             RBRACE358=(Token)input.LT(1);
-            match(input,RBRACE,FOLLOW_RBRACE_in_functionBody6935); 
+            match(input,RBRACE,FOLLOW_RBRACE_in_functionBody6941); 
             stream_RBRACE.add(RBRACE358);
 
 
@@ -12367,30 +12379,30 @@ public class JSParser extends Parser {
             // JS.g:1770:5: get= GET name= identifier LPAREN RPAREN functionBody
             {
             get=(Token)input.LT(1);
-            match(input,GET,FOLLOW_GET_in_getMethodDeclaration6972); 
+            match(input,GET,FOLLOW_GET_in_getMethodDeclaration6978); 
             stream_GET.add(get);
 
-            pushFollow(FOLLOW_identifier_in_getMethodDeclaration6976);
+            pushFollow(FOLLOW_identifier_in_getMethodDeclaration6982);
             name=identifier();
             _fsp--;
 
             stream_identifier.add(name.getTree());
             LPAREN359=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_getMethodDeclaration6978); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_getMethodDeclaration6984); 
             stream_LPAREN.add(LPAREN359);
 
             RPAREN360=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_getMethodDeclaration6980); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_getMethodDeclaration6986); 
             stream_RPAREN.add(RPAREN360);
 
-            pushFollow(FOLLOW_functionBody_in_getMethodDeclaration6982);
+            pushFollow(FOLLOW_functionBody_in_getMethodDeclaration6988);
             functionBody361=functionBody();
             _fsp--;
 
             stream_functionBody.add(functionBody361.getTree());
 
             // AST REWRITE
-            // elements: identifier, functionBody
+            // elements: functionBody, identifier
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -12473,35 +12485,35 @@ public class JSParser extends Parser {
             // JS.g:1775:5: set= SET name= identifier LPAREN param= identifier RPAREN functionBody
             {
             set=(Token)input.LT(1);
-            match(input,SET,FOLLOW_SET_in_setMethodDeclaration7013); 
+            match(input,SET,FOLLOW_SET_in_setMethodDeclaration7019); 
             stream_SET.add(set);
 
-            pushFollow(FOLLOW_identifier_in_setMethodDeclaration7017);
+            pushFollow(FOLLOW_identifier_in_setMethodDeclaration7023);
             name=identifier();
             _fsp--;
 
             stream_identifier.add(name.getTree());
             LPAREN362=(Token)input.LT(1);
-            match(input,LPAREN,FOLLOW_LPAREN_in_setMethodDeclaration7019); 
+            match(input,LPAREN,FOLLOW_LPAREN_in_setMethodDeclaration7025); 
             stream_LPAREN.add(LPAREN362);
 
-            pushFollow(FOLLOW_identifier_in_setMethodDeclaration7023);
+            pushFollow(FOLLOW_identifier_in_setMethodDeclaration7029);
             param=identifier();
             _fsp--;
 
             stream_identifier.add(param.getTree());
             RPAREN363=(Token)input.LT(1);
-            match(input,RPAREN,FOLLOW_RPAREN_in_setMethodDeclaration7025); 
+            match(input,RPAREN,FOLLOW_RPAREN_in_setMethodDeclaration7031); 
             stream_RPAREN.add(RPAREN363);
 
-            pushFollow(FOLLOW_functionBody_in_setMethodDeclaration7027);
+            pushFollow(FOLLOW_functionBody_in_setMethodDeclaration7033);
             functionBody364=functionBody();
             _fsp--;
 
             stream_functionBody.add(functionBody364.getTree());
 
             // AST REWRITE
-            // elements: functionBody, name, param
+            // elements: param, name, functionBody
             // token labels: 
             // rule labels: retval, param, name
             // token list labels: 
@@ -12581,7 +12593,7 @@ public class JSParser extends Parser {
             {
             root_0 = (Object)adaptor.nil();
 
-            pushFollow(FOLLOW_sourceElementSync_in_program7068);
+            pushFollow(FOLLOW_sourceElementSync_in_program7074);
             sourceElementSync365=sourceElementSync();
             _fsp--;
 
@@ -12601,12 +12613,12 @@ public class JSParser extends Parser {
             	case 1 :
             	    // JS.g:1785:23: sourceElement sourceElementSync
             	    {
-            	    pushFollow(FOLLOW_sourceElement_in_program7071);
+            	    pushFollow(FOLLOW_sourceElement_in_program7077);
             	    sourceElement366=sourceElement();
             	    _fsp--;
 
             	    adaptor.addChild(root_0, sourceElement366.getTree());
-            	    pushFollow(FOLLOW_sourceElementSync_in_program7073);
+            	    pushFollow(FOLLOW_sourceElementSync_in_program7079);
             	    sourceElementSync367=sourceElementSync();
             	    _fsp--;
 
@@ -12621,7 +12633,7 @@ public class JSParser extends Parser {
             } while (true);
 
             EOF368=(Token)input.LT(1);
-            match(input,EOF,FOLLOW_EOF_in_program7077); 
+            match(input,EOF,FOLLOW_EOF_in_program7083); 
 
             }
 
@@ -12738,7 +12750,7 @@ public class JSParser extends Parser {
                     if ( !( input.LA(1) == FUNCTION ) ) {
                         throw new FailedPredicateException(input, "sourceElement", " input.LA(1) == FUNCTION ");
                     }
-                    pushFollow(FOLLOW_functionDeclaration_in_sourceElement7122);
+                    pushFollow(FOLLOW_functionDeclaration_in_sourceElement7128);
                     functionDeclaration369=functionDeclaration();
                     _fsp--;
 
@@ -12751,7 +12763,7 @@ public class JSParser extends Parser {
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    pushFollow(FOLLOW_statement_in_sourceElement7127);
+                    pushFollow(FOLLOW_statement_in_sourceElement7133);
                     statement370=statement();
                     _fsp--;
 
@@ -13157,33 +13169,33 @@ public class JSParser extends Parser {
     public static final BitSet FOLLOW_COLON_in_functionExpression6823 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000003FL,0x0004000000000000L});
     public static final BitSet FOLLOW_typeRef_in_functionExpression6825 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
     public static final BitSet FOLLOW_functionBody_in_functionExpression6830 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_identifier_in_formalParameter6858 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
-    public static final BitSet FOLLOW_COLON_in_formalParameter6866 = new BitSet(new long[]{0xFFFFF7F600020002L,0x000000000000001FL,0x0004000000000000L});
-    public static final BitSet FOLLOW_typeRef_in_formalParameter6868 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LPAREN_in_formalParameterList6882 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000011FL,0x0004000000000000L});
-    public static final BitSet FOLLOW_formalParameter_in_formalParameterList6886 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
-    public static final BitSet FOLLOW_COMMA_in_formalParameterList6890 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0004000000000000L});
+    public static final BitSet FOLLOW_identifier_in_formalParameter6864 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
+    public static final BitSet FOLLOW_COLON_in_formalParameter6872 = new BitSet(new long[]{0xFFFFF7F600020002L,0x000000000000001FL,0x0004000000000000L});
+    public static final BitSet FOLLOW_typeRef_in_formalParameter6874 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LPAREN_in_formalParameterList6888 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000011FL,0x0004000000000000L});
     public static final BitSet FOLLOW_formalParameter_in_formalParameterList6892 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
-    public static final BitSet FOLLOW_RPAREN_in_formalParameterList6900 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LBRACE_in_functionBody6930 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x038C100000000000L});
-    public static final BitSet FOLLOW_sourceElement_in_functionBody6932 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x038C100000000000L});
-    public static final BitSet FOLLOW_RBRACE_in_functionBody6935 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_GET_in_getMethodDeclaration6972 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0004000000000000L});
-    public static final BitSet FOLLOW_identifier_in_getMethodDeclaration6976 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_getMethodDeclaration6978 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_getMethodDeclaration6980 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_functionBody_in_getMethodDeclaration6982 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_SET_in_setMethodDeclaration7013 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0004000000000000L});
-    public static final BitSet FOLLOW_identifier_in_setMethodDeclaration7017 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
-    public static final BitSet FOLLOW_LPAREN_in_setMethodDeclaration7019 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0004000000000000L});
-    public static final BitSet FOLLOW_identifier_in_setMethodDeclaration7023 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_RPAREN_in_setMethodDeclaration7025 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_functionBody_in_setMethodDeclaration7027 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_sourceElementSync_in_program7068 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x038C100000000000L});
-    public static final BitSet FOLLOW_sourceElement_in_program7071 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x038C100000000000L});
-    public static final BitSet FOLLOW_sourceElementSync_in_program7073 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x038C100000000000L});
-    public static final BitSet FOLLOW_EOF_in_program7077 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_functionDeclaration_in_sourceElement7122 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_statement_in_sourceElement7127 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_COMMA_in_formalParameterList6896 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0004000000000000L});
+    public static final BitSet FOLLOW_formalParameter_in_formalParameterList6898 = new BitSet(new long[]{0x0000000000000000L,0x0000000000002100L});
+    public static final BitSet FOLLOW_RPAREN_in_formalParameterList6906 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_LBRACE_in_functionBody6936 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x038C100000000000L});
+    public static final BitSet FOLLOW_sourceElement_in_functionBody6938 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012FFL,0x038C100000000000L});
+    public static final BitSet FOLLOW_RBRACE_in_functionBody6941 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_GET_in_getMethodDeclaration6978 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0004000000000000L});
+    public static final BitSet FOLLOW_identifier_in_getMethodDeclaration6982 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_getMethodDeclaration6984 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_getMethodDeclaration6986 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_functionBody_in_getMethodDeclaration6988 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_SET_in_setMethodDeclaration7019 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0004000000000000L});
+    public static final BitSet FOLLOW_identifier_in_setMethodDeclaration7023 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000080L});
+    public static final BitSet FOLLOW_LPAREN_in_setMethodDeclaration7025 = new BitSet(new long[]{0xFFFFF7F600020000L,0x000000000000001FL,0x0004000000000000L});
+    public static final BitSet FOLLOW_identifier_in_setMethodDeclaration7029 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000100L});
+    public static final BitSet FOLLOW_RPAREN_in_setMethodDeclaration7031 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_functionBody_in_setMethodDeclaration7033 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_sourceElementSync_in_program7074 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x038C100000000000L});
+    public static final BitSet FOLLOW_sourceElement_in_program7077 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x038C100000000000L});
+    public static final BitSet FOLLOW_sourceElementSync_in_program7079 = new BitSet(new long[]{0xFFFFFFFFFFCF3CF0L,0x0320000C0CC012BFL,0x038C100000000000L});
+    public static final BitSet FOLLOW_EOF_in_program7083 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_functionDeclaration_in_sourceElement7128 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_statement_in_sourceElement7133 = new BitSet(new long[]{0x0000000000000002L});
 
 }
