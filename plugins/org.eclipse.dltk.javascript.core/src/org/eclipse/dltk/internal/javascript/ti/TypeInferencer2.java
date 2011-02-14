@@ -260,10 +260,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	}
 
 	public Type getInvariantType(String typeName, String context) {
-		InvariantTypeResourceSet invariantTypeResourceSet = invariantContextRS
-				.get(context);
-		if (invariantTypeResourceSet != null) {
-			return invariantTypeResourceSet.getCachedType(typeName);
+		if (context == null) {
+			return invariantRS.getCachedType(typeName);
+		} else {
+			InvariantTypeResourceSet invariantTypeResourceSet = invariantContextRS
+					.get(context);
+			if (invariantTypeResourceSet != null) {
+				return invariantTypeResourceSet.getCachedType(typeName);
+			}
 		}
 		return null;
 	}
@@ -543,7 +547,13 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 
 		public Type getInvariantType(String typeName, String context) {
-			if (context.equals(this.context)) {
+			if (context == null) {
+				if (staticInvariants == null) {
+					return getCachedType(typeName);
+				} else {
+					return staticInvariants.getCachedType(typeName);
+				}
+			} else if (context.equals(this.context)) {
 				return getCachedType(typeName);
 			} else {
 				InvariantTypeResourceSet invariantTypeResourceSet = invariantContextRS
