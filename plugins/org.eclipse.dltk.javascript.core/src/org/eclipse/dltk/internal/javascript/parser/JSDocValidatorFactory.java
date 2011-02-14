@@ -3,7 +3,7 @@ package org.eclipse.dltk.internal.javascript.parser;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.compiler.problem.ProblemSeverities;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.builder.AbstractBuildParticipantType;
 import org.eclipse.dltk.core.builder.IBuildContext;
@@ -45,10 +45,16 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 
 		public void reportProblem(IProblemIdentifier identifier,
 				String message, int start, int end) {
+			reportProblem(ProblemSeverity.WARNING, identifier, message, start,
+					end);
+		}
+
+		public void reportProblem(ProblemSeverity severity,
+				IProblemIdentifier identifier, String message, int start,
+				int end) {
 			context.getProblemReporter().reportProblem(
-					new DefaultProblem(message, identifier, null,
-							ProblemSeverities.Warning, start, end,
-							lineNumberOf(start)));
+					new DefaultProblem(message, identifier, null, severity,
+							start, end, lineNumberOf(start)));
 		}
 
 		private ISourceLineTracker lineTracker = null;
