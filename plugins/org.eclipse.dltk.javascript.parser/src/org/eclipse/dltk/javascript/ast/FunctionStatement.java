@@ -91,6 +91,24 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 		arguments.add(argument);
 	}
 
+	/**
+	 * Returns the {@link Argument} with the specified name or <code>null</code>
+	 * if not found
+	 * 
+	 * @param argumentName
+	 * @return
+	 */
+	public Argument getArgument(String argumentName) {
+		if (arguments != null && argumentName != null) {
+			for (Argument argument : arguments) {
+				if (argumentName.equals(argument.getArgumentName())) {
+					return argument;
+				}
+			}
+		}
+		return null;
+	}
+
 	public StatementBlock getBody() {
 		return this.body;
 	}
