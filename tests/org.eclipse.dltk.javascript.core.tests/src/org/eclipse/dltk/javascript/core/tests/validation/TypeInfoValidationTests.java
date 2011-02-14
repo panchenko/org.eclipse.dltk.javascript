@@ -165,6 +165,21 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.get(0).getID());
 	}
 
+	public void testUndefinedTypePropertyAccess() {
+		StringList code = new StringList();
+		code.add("/** @type PersonClassIsNotDefined */");
+		code.add("var person");
+		code.add("var name = person.name");
+		code.add("var address = person.address");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 3, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(1)
+				.getID());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(2)
+				.getID());
+	}
+
 	public void testUndefinedPropertyAssignment() {
 		StringList code = new StringList();
 		code.add("var x:ExampleService");
