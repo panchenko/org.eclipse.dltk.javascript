@@ -12,8 +12,12 @@
 package org.eclipse.dltk.javascript.parser;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 
 public interface JSProblemReporter {
 	void reportProblem(IProblemIdentifier identifier, String message,
 			int start, int end);
+
+	void reportProblem(ProblemSeverity severity, IProblemIdentifier identifier,
+			String message, int start, int end);
 }

@@ -15,7 +15,6 @@ import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
-import org.eclipse.dltk.compiler.problem.ProblemSeverities;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
 
@@ -78,9 +77,7 @@ public class Reporter extends LineTracker implements IProblemReporter,
 				return null;
 		}
 
-		return new DefaultProblem(message, id, null,
-				severity == Severity.ERROR ? ProblemSeverities.Error
-						: ProblemSeverities.Warning, start, end, line);
+		return new DefaultProblem(message, id, null, severity, start, end, line);
 	}
 
 	public void setMessage(IProblemIdentifier id, String message) {
@@ -152,8 +149,13 @@ public class Reporter extends LineTracker implements IProblemReporter,
 		return null;
 	}
 
-	public void reportProblem(IProblemIdentifier id, String message, int start,
-			int end) {
+	public void reportProblem(IProblemIdentifier identifier, String message,
+			int start, int end) {
+		reportProblem(ProblemSeverity.WARNING, identifier, message, start, end);
+	}
+
+	public void reportProblem(ProblemSeverity severity, IProblemIdentifier id,
+			String message, int start, int end) {
 		ProblemSeverity sev = severity;
 		if (severityReporter != null) {
 			sev = severityReporter.getSeverity(id, sev);
