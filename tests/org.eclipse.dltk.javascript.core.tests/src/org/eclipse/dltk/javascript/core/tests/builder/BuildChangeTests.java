@@ -214,7 +214,7 @@ public class BuildChangeTests extends AbstractModelTests {
 		getProject(PRJ_NAME).getFolder("src/folder1").move(new Path("folder2"),
 				true, null);
 		final IProjectChange change = listener.getChange();
-		System.out.println(change);
+		// System.out.println(change);
 		assertEquals(2, change.getRenames().size());
 		assertEquals(2, change.getDeletes(IProjectChange.DEFAULT).size());
 		assertEquals(0, change.getDeletes(IProjectChange.NO_RENAMES).size());
