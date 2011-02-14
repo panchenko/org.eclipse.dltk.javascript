@@ -34,13 +34,13 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testUnknownType() {
 		final List<IProblem> problems = validate("var x:LongString");
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
 
 	public void testUnknownJavaScriptFunctionType() {
 		final List<IProblem> problems = validate("var x = new LongString()");
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
 
@@ -53,7 +53,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testDeprecatedType() {
 		final List<IProblem> problems = validate("var x:ExampleService2");
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.DEPRECATED_TYPE, problems.get(0)
 				.getID());
 	}
@@ -241,7 +241,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("call(new Node2());");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 	}
 
 	public void testFunctionCallWithCorrectFunctionObjectArgumentJSDOC() {
@@ -281,7 +281,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("call(new Node2());");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 	}
 
 	public void testLazyJSObject() {
