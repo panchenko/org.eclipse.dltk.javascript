@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeKind.java,v 1.4 2011/02/10 13:05:30 apanchenk Exp $
+ * $Id: TypeKind.java,v 1.5 2011/02/14 16:52:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -37,7 +37,15 @@ public enum TypeKind implements Enumerator {
      * @generated
      * @ordered
      */
-	UNKNOWN(-1, "UNKNOWN", "UNKNOWN"), //$NON-NLS-1$ //$NON-NLS-2$
+	UNKNOWN(-1, "UNKNOWN", "UNKNOWN"), /**
+     * The '<em><b>UNRESOLVED</b></em>' literal object.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #UNRESOLVED_VALUE
+     * @generated
+     * @ordered
+     */
+	UNRESOLVED(-2, "UNRESOLVED", "UNRESOLVED"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
      * The '<em><b>PREDEFINED</b></em>' literal object.
@@ -91,6 +99,21 @@ public enum TypeKind implements Enumerator {
      * @ordered
      */
 	public static final int UNKNOWN_VALUE = -1;
+
+    /**
+     * The '<em><b>UNRESOLVED</b></em>' literal value.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of '<em><b>UNRESOLVED</b></em>' literal object isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @see #UNRESOLVED
+     * @model
+     * @generated
+     * @ordered
+     */
+    public static final int UNRESOLVED_VALUE = -2;
 
 	/**
      * The '<em><b>PREDEFINED</b></em>' literal value.
@@ -161,6 +184,7 @@ public enum TypeKind implements Enumerator {
 	private static final TypeKind[] VALUES_ARRAY =
 		new TypeKind[] {
             UNKNOWN,
+            UNRESOLVED,
             PREDEFINED,
             JAVASCRIPT,
             JAVA,
@@ -216,6 +240,7 @@ public enum TypeKind implements Enumerator {
 	public static TypeKind get(int value) {
         switch (value) {
             case UNKNOWN_VALUE: return UNKNOWN;
+            case UNRESOLVED_VALUE: return UNRESOLVED;
             case PREDEFINED_VALUE: return PREDEFINED;
             case JAVASCRIPT_VALUE: return JAVASCRIPT;
             case JAVA_VALUE: return JAVA;

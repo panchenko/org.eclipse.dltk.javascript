@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
@@ -26,7 +27,6 @@ import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
-import org.eclipse.dltk.internal.javascript.ti.LazyReference;
 import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
@@ -49,6 +49,7 @@ import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
@@ -156,32 +157,40 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		private final NewExpression node;
 		private final IValueReference reference;
+		final IValueCollection collection;
 		private final ValidationVisitor validator;
 
 		public NewExpressionValidator(NewExpression node,
-				IValueReference reference, ValidationVisitor validator) {
+				IValueReference reference, IValueCollection collection,
+				ValidationVisitor validator) {
 			this.node = node;
 			this.reference = reference;
+			this.collection = collection;
 			this.validator = validator;
 		}
 
 		public void call() {
-			JSTypeSet types = reference.getTypes();
-			if (types.size() > 0) {
-				JSType type = types.getFirst();
-				validator
-						.checkType(node.getObjectClass(), type, type.getName());
-			} else if (reference.getDeclaredType() == null) {
-				if (reference instanceof LazyReference
-						&& reference.getKind() == ReferenceKind.UNKNOWN) {
-					validator.reportUnknownType(node.getObjectClass(),
-							((LazyReference) reference).getName());
-				}
-			} else {
-				JSType type = reference.getDeclaredType();
-				validator
-						.checkType(node.getObjectClass(), type, type.getName());
-			}
+			validator.checkExpressionType(collection, node.getObjectClass(),
+					reference);
+		}
+
+	}
+
+	private static class TypeValidator implements ExpressionValidator {
+
+		final ValidationVisitor validator;
+		final IValueReference reference;
+		final ASTNode node;
+
+		public TypeValidator(ValidationVisitor validator,
+				IValueReference reference, ASTNode node) {
+			this.validator = validator;
+			this.reference = reference;
+			this.node = node;
+		}
+
+		public void call() {
+			validator.checkExpressionType(null, node, reference);
 		}
 
 	}
@@ -251,7 +260,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			try {
 				IValueReference reference = super.visitNewExpression(node);
 				pushExpressionValidator(new NewExpressionValidator(node,
-						reference, this));
+						reference, peekContext(), this));
 				return reference;
 			} finally {
 				if (started)
@@ -910,10 +919,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (property != null && property.isDeprecated()) {
 				reportDeprecatedProperty(property, null, node);
 			} else {
-				final JSType type = JavaScriptValidations.typeOf(result);
-				if (type != null) {
-					checkType(node, type, type.getName());
-				} else if (!result.exists()
+				if (!result.exists()
 						&& !(node.getParent() instanceof CallExpression && ((CallExpression) node
 								.getParent()).getExpression() == node)) {
 					pushExpressionValidator(new NotExistingIdentiferValidator(
@@ -1144,33 +1150,56 @@ public class TypeInfoValidator implements IBuildParticipant {
 					node.sourceStart(), node.sourceEnd());
 		}
 
+		protected void checkExpressionType(IValueCollection collection,
+				ASTNode node, IValueReference reference) {
+			JSTypeSet types = reference.getTypes();
+			if (types.size() > 0) {
+				checkType(node, types.getFirst(), collection);
+			} else if (reference.getDeclaredType() == null) {
+				final String lazyName = ValueReferenceUtil
+						.getLazyName(reference);
+				if (lazyName != null) {
+					reportUnknownType(node, lazyName);
+				}
+			} else {
+				checkType(node, reference.getDeclaredType(), collection);
+			}
+		}
+
 		@Override
-		protected JSType resolveType(org.eclipse.dltk.javascript.ast.Type type) {
-			final JSType result = super.resolveType(type);
-			checkType(type, result, type.getName());
-			return result;
+		protected void setType(ASTNode node, IValueReference value, JSType type) {
+			super.setType(node, value, type);
+			if (type != null) {
+				pushExpressionValidator(new TypeValidator(this, value, node));
+			}
 		}
 
 		/**
 		 * @param node
 		 * @param type
 		 */
-		protected void checkType(ASTNode node, final JSType type, String name) {
+		protected void checkType(ASTNode node, JSType type,
+				IValueCollection collection) {
 			if (type != null) {
+				type = context.resolveTypeRef(type);
+				Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
 				if (type.getKind() == TypeKind.UNKNOWN) {
-					reportUnknownType(node, name);
+					if (!(type instanceof TypeRef && collection != null && collection
+							.getChild(((TypeRef) type).getName()).exists())) {
+						reportUnknownType(node, TypeUtil.getName(type));
+					}
 				} else {
 					final Type t = TypeUtil.extractType(type);
 					if (t != null && t.isDeprecated()) {
 						reporter.reportProblem(
-								JavaScriptProblems.DEPRECATED_TYPE,
-								NLS.bind(ValidationMessages.DeprecatedType,
-										name), node.sourceStart(), node
-										.sourceEnd());
+								JavaScriptProblems.DEPRECATED_TYPE, NLS.bind(
+										ValidationMessages.DeprecatedType,
+										TypeUtil.getName(type)), node
+										.sourceStart(), node.sourceEnd());
 					}
 				}
 			} else {
-				reportUnknownType(node, name);
+				reportUnknownType(node, TypeUtil.getName(type));
 			}
 		}
 

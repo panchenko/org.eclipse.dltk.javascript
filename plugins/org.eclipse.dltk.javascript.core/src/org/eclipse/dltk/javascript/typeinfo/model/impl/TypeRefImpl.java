@@ -103,7 +103,8 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
 	 * @generated NOT
 	 */
 	public TypeKind getKind() {
-		return target != null ? target.getKind() : TypeKind.UNKNOWN;
+		return target != null && !target.isProxy() ? target.getKind()
+				: TypeKind.UNRESOLVED;
 	}
 
 	/**

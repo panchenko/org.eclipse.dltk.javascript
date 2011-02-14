@@ -2,8 +2,6 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
 
-import java.util.Set;
-
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -19,7 +17,6 @@ public class LazyReference extends AbstractReference {
 
 		public void resolve() {
 			if (!resolved) {
-				Set<Value> references = super.getReferences();
 				IValueReference createChild = collection.getChild(className);
 				if (createChild.exists()) {
 					ValueCollection collection = (ValueCollection) createChild
@@ -30,7 +27,7 @@ public class LazyReference extends AbstractReference {
 
 					IValue src = ((IValueProvider) createChild).getValue();
 					if (src instanceof Value) {
-						references.add((Value) src);
+						this.references.add((Value) src);
 					} else if (src != null) {
 						addValue(src);
 					}
@@ -43,6 +40,14 @@ public class LazyReference extends AbstractReference {
 					resolved = true;
 				}
 			}
+		}
+
+		public String getLazyName() {
+			return className;
+		}
+
+		public boolean isResolved() {
+			return resolved;
 		}
 	}
 

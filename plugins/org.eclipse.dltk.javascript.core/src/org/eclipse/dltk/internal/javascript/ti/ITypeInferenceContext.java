@@ -16,6 +16,7 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
 public interface ITypeInferenceContext extends ITypeInfoContext {
@@ -33,5 +34,13 @@ public interface ITypeInferenceContext extends ITypeInfoContext {
 	IValueCollection getTopValueCollection();
 
 	IModelBuilder[] getModelBuilders();
+
+	/**
+	 * Tries to resolve all members of the specified type expression
+	 * 
+	 * @param type
+	 * @return
+	 */
+	JSType resolveTypeRef(JSType type);
 
 }

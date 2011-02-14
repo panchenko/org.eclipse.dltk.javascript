@@ -184,20 +184,20 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		if (item != null && exists(item)) {
-			reportItems(reporter, item, true);
+			reportItems(context, reporter, item, true);
 		}
 	}
 
-	protected void reportItems(Reporter reporter, IValueParent item,
-			boolean testPrivate) {
-		reporter.report(item, testPrivate);
+	protected void reportItems(ITypeInferenceContext context,
+			Reporter reporter, IValueParent item, boolean testPrivate) {
+		reporter.report(context, item, testPrivate);
 		if (item instanceof IValueCollection) {
 			IValueCollection coll = (IValueCollection) item;
 			for (;;) {
 				coll = coll.getParent();
 				if (coll == null)
 					break;
-				reporter.report(coll, testPrivate);
+				reporter.report(context, coll, testPrivate);
 			}
 		}
 	}
@@ -253,7 +253,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					&& !processed.contains(name);
 		}
 
-		public void report(IValueParent item, boolean testPrivate) {
+		public void report(ITypeInferenceContext context, IValueParent item,
+				boolean testPrivate) {
 			final Set<String> deleted = item.getDeletedChildren();
 			for (String childName : item.getDirectChildren()) {
 				if (childName.equals(IValueReference.FUNCTION_OP))
@@ -274,7 +275,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 								continue;
 							}
 						}
-						reportReference(child, prefix, position);
+						reportReference(child);
 					}
 				}
 			}
@@ -287,13 +288,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					predicate = MemberPredicates.NON_STATIC;
 				}
 				for (JSType type : valueRef.getDeclaredTypes()) {
-					final Type t = TypeUtil.extractType(type);
+					final Type t = TypeUtil.extractType(context
+							.resolveTypeRef(type));
 					if (t != null) {
 						reportTypeMembers(t, predicate);
 					}
 				}
 				for (JSType type : valueRef.getTypes()) {
-					final Type t = TypeUtil.extractType(type);
+					final Type t = TypeUtil.extractType(context
+							.resolveTypeRef(type));
 					if (t != null) {
 						reportTypeMembers(t, predicate);
 					}
@@ -362,8 +365,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		/**
 		 * @param reference
 		 */
-		private void reportReference(IValueReference reference, char[] prefix,
-				int position) {
+		private void reportReference(IValueReference reference) {
 			int proposalKind = CompletionProposal.FIELD_REF;
 			if (reference.getKind() == ReferenceKind.FUNCTION
 					|| reference.getChild(IValueReference.FUNCTION_OP).exists()) {
@@ -479,7 +481,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 */
 	private void doGlobalCompletion(ITypeInferenceContext context,
 			IValueCollection collection, Reporter reporter) {
-		reportItems(reporter, collection, false);
+		reportItems(context, reporter, collection, false);
 		if (useEngine) {
 			doCompletionOnType(context, reporter);
 			doCompletionOnKeyword(reporter.getPrefix(), reporter.getPosition());

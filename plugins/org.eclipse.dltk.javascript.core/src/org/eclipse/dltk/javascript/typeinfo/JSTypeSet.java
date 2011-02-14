@@ -209,7 +209,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		@Override
 		public boolean contains(JSType type) {
-			return this.type.equals(type);
+			return this.type.equals(normalize(type));
 		}
 
 		@Override
@@ -243,7 +243,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		}
 
 		public TypeKind getKind() {
-			return type.getKind();
+			return !type.isProxy() ? type.getKind() : TypeKind.UNRESOLVED;
 		}
 
 		public String getName() {
@@ -368,16 +368,20 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	public static JSType2 normalize(JSType type) {
 		if (type instanceof TypeRefImpl) {
-			return new TypeRefKey(((TypeRef) type).getTarget());
+			return ref(((TypeRef) type).getTarget());
 		} else if (type instanceof ArrayTypeImpl) {
-			return new ArrayTypeKey(normalize(((ArrayType) type).getItemType()));
+			return arrayOf(normalize(((ArrayType) type).getItemType()));
 		}
 		Assert.isLegal(!(type instanceof EObject));
 		return (JSType2) type;
 	}
 
-	protected static JSType wrap(Type type) {
+	public static JSType2 ref(Type type) {
 		return new TypeRefKey(type);
+	}
+
+	public static ArrayTypeKey arrayOf(final JSType2 itemType) {
+		return new ArrayTypeKey(itemType);
 	}
 
 	private static class JSTypeSetImpl extends JSTypeSet {
@@ -398,7 +402,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		@Override
 		public void add(Type type) {
-			types.add(wrap(type));
+			types.add(ref(type));
 		}
 
 		@Override
@@ -446,7 +450,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		@Override
 		public boolean contains(Type type) {
-			return types.contains(wrap(type));
+			return types.contains(ref(type));
 		}
 
 		@Override

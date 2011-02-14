@@ -23,6 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
@@ -106,7 +107,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
-import org.eclipse.emf.ecore.EObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -280,16 +280,34 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final Identifier identifier = declaration.getIdentifier();
 		final String varName = identifier.getName();
 		final IValueReference reference = context.createChild(varName);
+		final JSVariable variable = new JSVariable();
+		variable.setName(declaration.getVariableName());
 		final org.eclipse.dltk.javascript.ast.Type varType = declaration
 				.getType();
 		if (varType != null) {
-			reference.setDeclaredType(resolveType(varType));
+			variable.setType(resolveType(varType));
 		}
+		if (declaration.getParent() instanceof VariableStatement) {
+			final VariableStatement statement = (VariableStatement) declaration
+					.getParent();
+			for (IModelBuilder extension : this.context.getModelBuilders()) {
+				extension.processVariable(statement, variable, reporter);
+			}
+		}
+		setType(identifier, reference, variable.getType());
+		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
+
 		reference.setKind(inFunction() ? ReferenceKind.LOCAL
 				: ReferenceKind.GLOBAL);
 		reference.setLocation(ReferenceLocation.create(getSource(),
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
+		initializeVariable(reference, declaration);
+		return reference;
+	}
+
+	protected void initializeVariable(final IValueReference reference,
+			VariableDeclaration declaration) {
 		if (declaration.getInitializer() != null) {
 			IValueReference assignment = visit(declaration.getInitializer());
 			if (assignment != null) {
@@ -300,7 +318,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					reference.setKind(ReferenceKind.FUNCTION);
 			}
 		}
-		return reference;
 	}
 
 	@Override
@@ -404,13 +421,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (parameter.getPropertiesType() != null) {
 				refArg.setDeclaredType(TypeUtil.ref(parameter
 						.getPropertiesType()));
-			} else if (parameter.getType() != null) {
-				if (isResolved(parameter.getType())) {
-					refArg.setDeclaredType(parameter.getType());
-				} else if (parameter.getType() instanceof TypeRef) {
-					refArg.addValue(new LazyReference(context, parameter
-							.getType().getName(), peekContext()), false);
-				}
+			} else {
+				setType(node.getArgument(parameter.getName()), refArg,
+						parameter.getType());
 			}
 			refArg.setLocation(parameter.getLocation());
 		}
@@ -440,14 +453,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
 		final IValueReference returnValue = result
 				.getChild(IValueReference.FUNCTION_OP);
-		if (method.getType() != null) {
-			if (isResolved(method.getType())) {
-				returnValue.setDeclaredType(method.getType());
-			} else if (method.getType() instanceof TypeRef) {
-				returnValue.addValue(new LazyReference(context, method
-						.getType().getName(), peekContext()), true);
-			}
-		}
+		setType(methodName != null ? methodName : node.getFunctionKeyword(),
+				returnValue, method.getType());
 		returnValue.setValue(function.getReturnValue());
 		return result;
 	}
@@ -472,22 +479,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return context.getTypeRef(type.getName());
 	}
 
-	protected boolean isResolved(JSType type) {
-		if (type instanceof TypeRef) {
-			final TypeRef ref = (TypeRef) type;
-			final Type target = ref.getTarget();
-			if (target != null && ((EObject) target).eIsProxy()) {
-				final Type resolved = context.getKnownType(ref.getName());
-				if (resolved != null) {
-					ref.setTarget(resolved);
-				} else {
-					return false;
-				}
+	protected void setType(ASTNode node, IValueReference value, JSType type) {
+		if (type != null) {
+			type = context.resolveTypeRef(type);
+			Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
+			if (type.getKind() != TypeKind.UNKNOWN) {
+				value.setDeclaredType(type);
+			} else if (type instanceof TypeRef) {
+				value.addValue(new LazyReference(context, type.getName(),
+						peekContext()), false);
 			}
-		} else if (type instanceof ArrayType) {
-			return isResolved(((ArrayType) type).getItemType());
 		}
-		return true;
 	}
 
 	@Override

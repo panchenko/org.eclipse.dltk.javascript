@@ -1,5 +1,9 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 public interface ILazyValue {
-	public void resolve();
+	void resolve();
+
+	String getLazyName();
+
+	boolean isResolved();
 }

@@ -212,10 +212,20 @@ public abstract class AbstractReference implements IValueReference,
 			}
 		}
 
+		public String getLazyName() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public boolean isResolved() {
+			return resolved;
+		}
+
 		@Override
 		public String toString() {
 			return "LazyReferenceValue[resolved:" + resolved + ",reference:"
 					+ reference + ']';
 		}
+
 	}
 }

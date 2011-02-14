@@ -25,18 +25,13 @@ import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
-import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
-import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
-import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class StructureReporter2 extends TypeInferencerVisitor {
 
@@ -341,34 +336,13 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 		return fieldInfo;
 	}
 
-	protected IValueReference createVariable(IValueCollection context,
+	@Override
+	protected void initializeVariable(IValueReference reference,
 			VariableDeclaration declaration) {
 		if (!(declaration.getInitializer() instanceof FunctionStatement)) {
 			final Identifier identifier = declaration.getIdentifier();
-			final String varName = identifier.getName();
-			final JSVariable variable = new JSVariable();
-			final IValueReference reference = context.createChild(varName);
-			final org.eclipse.dltk.javascript.ast.Type varType = declaration
-					.getType();
-			if (varType != null) {
-				final JSType resolved = resolveType(varType);
-				reference.setDeclaredType(resolved);
-				variable.setType(resolved);
-			}
-			if (declaration.getParent() instanceof VariableStatement) {
-				variable.setName(declaration.getVariableName());
-				for (IModelBuilder extension : this.context.getModelBuilders()) {
-					extension.processVariable(
-							(VariableStatement) declaration.getParent(),
-							variable, reporter);
-				}
-			}
-
-			reference.setKind(inFunction() ? ReferenceKind.LOCAL
-					: ReferenceKind.GLOBAL);
-			reference.setLocation(ReferenceLocation.create(getSource(),
-					declaration.sourceStart(), declaration.sourceEnd(),
-					identifier.sourceStart(), identifier.sourceEnd()));
+			final JSVariable variable = (JSVariable) reference
+					.getAttribute(IReferenceAttributes.VARIABLE);
 			FieldInfo fieldInfo = null;
 			if (inFunction()) {
 				fRequestor.enterLocal(identifier,
@@ -379,7 +353,6 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 				fRequestor
 						.enterField(fieldInfo, identifier, variable.getType());
 			}
-
 			if (declaration.getInitializer() != null) {
 				IValueReference assignment = visit(declaration.getInitializer());
 				if (assignment != null) {
@@ -401,10 +374,9 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 				fRequestor.exitLocal(declaration.sourceEnd());
 			else
 				fRequestor.exitField(declaration.sourceEnd());
-
-			return reference;
+		} else {
+			super.initializeVariable(reference, declaration);
 		}
-		return super.createVariable(context, declaration);
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Statement;
+import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -141,6 +142,14 @@ public class JSDocSupport implements IModelBuilder {
 				if (documentation != null) {
 					return documentation;
 				}
+			}
+		} else if (statement.getParent() instanceof VariableDeclaration) {
+			final VariableDeclaration variable = (VariableDeclaration) statement
+					.getParent();
+			if (variable.getInitializer() == statement
+					&& variable.getParent() instanceof VariableStatement) {
+				return ((VariableStatement) variable.getParent())
+						.getDocumentation();
 			}
 		}
 		return null;

@@ -32,9 +32,13 @@ import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
+import org.eclipse.dltk.javascript.typeinfo.JSType2;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -126,6 +130,44 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 		final boolean queryProviders = canQueryTypeProviders();
 		return getType(typeName, queryProviders, true, !queryProviders, false);
+	}
+
+	private boolean isResolved(JSType type) {
+		if (type instanceof TypeRef) {
+			return !((TypeRef) type).getTarget().isProxy();
+		} else if (type instanceof ArrayType) {
+			return isResolved(((ArrayType) type).getItemType());
+		}
+		return false;
+	}
+
+	public JSType resolveTypeRef(JSType type) {
+		if (type == null || isResolved(type)) {
+			return type;
+		}
+		return doResolveTypeRef(type);
+	}
+
+	private JSType2 doResolveTypeRef(JSType type) {
+		if (type instanceof TypeRef) {
+			return JSTypeSet.ref(doResolveType(((TypeRef) type).getTarget()));
+		} else if (type instanceof ArrayType) {
+			return JSTypeSet.arrayOf(doResolveTypeRef(((ArrayType) type)
+					.getItemType()));
+		}
+		return (JSType2) type;
+	}
+
+	private Type doResolveType(Type type) {
+		if (type.isProxy()) {
+			final String typeName = ((InternalEObject) type).eProxyURI()
+					.fragment();
+			final Type resolved = getType(typeName, true, true, false, true);
+			if (resolved != null) {
+				return resolved;
+			}
+		}
+		return type;
 	}
 
 	public Set<String> listTypes(String prefix) {

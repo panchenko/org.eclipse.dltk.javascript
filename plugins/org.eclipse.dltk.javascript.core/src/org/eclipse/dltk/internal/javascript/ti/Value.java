@@ -22,7 +22,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
-public class Value implements IValue {
+public class Value implements IValue, IValue2 {
 
 	private final JSTypeSet types = JSTypeSet.create();
 	private final Map<String, Value> children = new HashMap<String, Value>(4,
@@ -36,7 +36,7 @@ public class Value implements IValue {
 	private ReferenceKind kind = ReferenceKind.UNKNOWN;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 	private Map<String, Object> attributes = null;
-	private Set<Value> references = new HashSet<Value>(4, 0.9f);
+	protected Set<Value> references = new HashSet<Value>(4, 0.9f);
 
 	private final boolean hasReferences() {
 		return !references.isEmpty();
