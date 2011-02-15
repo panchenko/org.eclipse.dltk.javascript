@@ -42,6 +42,10 @@ public class ExampleTypeProvider implements ITypeProvider {
 
 	static final String TYPE_GENERIC_ARRAY_METHOD = "ExampleArrayMethod";
 
+	public boolean initialize(ITypeInfoContext context) {
+		return true;
+	}
+
 	public Type getType(ITypeInfoContext context, String typeName) {
 		if (TYPE_SERVICE.equals(typeName)) {
 			Type type = TypeInfoModelFactory.eINSTANCE.createType();
@@ -163,14 +167,12 @@ public class ExampleTypeProvider implements ITypeProvider {
 
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setName("genericArrayProperty");
-			property.setType(TypeUtil.arrayOf(TypeUtil
-					.ref(ITypeNames.STRING)));
+			property.setType(TypeUtil.arrayOf(TypeUtil.ref(ITypeNames.STRING)));
 			type.getMembers().add(property);
 
 			Method method1 = TypeInfoModelFactory.eINSTANCE.createMethod();
 			method1.setName("execute");
-			method1.setType(TypeUtil.arrayOf(TypeUtil
-					.ref(ITypeNames.STRING)));
+			method1.setType(TypeUtil.arrayOf(TypeUtil.ref(ITypeNames.STRING)));
 			type.getMembers().add(method1);
 			return type;
 		} else if (typeName.startsWith("Packages.")) {
@@ -201,8 +203,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 			property.setName(field.getName());
 			Class<?> fieldType = field.getType();
 			if (fieldType != null)
-				property.setType(TypeUtil.ref(context
-						.getKnownType("Packages." + fieldType.getName())));
+				property.setType(TypeUtil.ref(context.getKnownType("Packages."
+						+ fieldType.getName())));
 			if (Modifier.isStatic(field.getModifiers())) {
 				property.setStatic(true);
 			}
@@ -224,10 +226,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 						.createParameter();
 				parameter.setName(parameterTypes[i].getSimpleName() + " arg"
 						+ i);
-				parameter
-						.setType(TypeUtil.ref(context
-								.getKnownType("Packages."
-										+ parameterTypes[i].getName())));
+				parameter.setType(TypeUtil.ref(context.getKnownType("Packages."
+						+ parameterTypes[i].getName())));
 				parameters.add(parameter);
 			}
 			if (Modifier.isStatic(method.getModifiers())) {
