@@ -38,6 +38,24 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
 
+	public void testUnknownFunctionType() {
+		StringList code = new StringList();
+		code.add("/** @type LongString */");
+		code.add("function x(){}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
+	}
+
+	public void testUnknownParamType() {
+		StringList code = new StringList();
+		code.add("/** @param {LongString} x */");
+		code.add("function y(x){}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
+	}
+
 	public void testUnknownJavaScriptFunctionType() {
 		final List<IProblem> problems = validate("var x = new LongString()");
 		assertEquals(problems.toString(), 1, problems.size());
