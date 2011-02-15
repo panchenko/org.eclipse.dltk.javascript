@@ -19,6 +19,8 @@ import java.util.Map;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.utils.LazyExtensionManager;
+import org.eclipse.dltk.utils.LazyExtensionManager.Descriptor;
 import org.eclipse.dltk.utils.SimpleExtensionManager;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -73,15 +75,30 @@ public class TypeInfoManager {
 		}
 	};
 
-	private static final SimpleExtensionManager<ITypeProvider> providerManager = new SimpleExtensionManager<ITypeProvider>(
-			ITypeProvider.class, EXT_POINT) {
-		@Override
-		protected ITypeProvider createInstance(IConfigurationElement element) {
-			if (PROVIDER_ELEMENT.equals(element.getName())) {
-				return super.createInstance(element);
-			} else {
-				return null;
+	private static final LazyExtensionManager<ITypeProvider> providerManager = new LazyExtensionManager<ITypeProvider>(
+			EXT_POINT) {
+
+		class TypeProviderDescriptor extends Descriptor<ITypeProvider> {
+
+			public TypeProviderDescriptor(
+					LazyExtensionManager<ITypeProvider> manager,
+					IConfigurationElement configurationElement) {
+				super(manager, configurationElement);
 			}
+
+			public ITypeProvider get() {
+				return create();
+			}
+
+		}
+
+		protected boolean isValidElement(IConfigurationElement element) {
+			return PROVIDER_ELEMENT.equals(element.getName());
+		}
+
+		protected LazyExtensionManager.Descriptor<ITypeProvider> createDescriptor(
+				IConfigurationElement element) {
+			return new TypeProviderDescriptor(this, element);
 		}
 	};
 
@@ -179,8 +196,23 @@ public class TypeInfoManager {
 		return result;
 	}
 
-	public static ITypeProvider[] getTypeProviders() {
-		return providerManager.getInstances();
+	public static ITypeProvider[] createTypeProviders(ITypeInfoContext context) {
+		final Descriptor<ITypeProvider>[] descriptors = providerManager
+				.getDescriptors();
+		final ITypeProvider[] providers = new ITypeProvider[descriptors.length];
+		int index = 0;
+		for (Descriptor<ITypeProvider> descriptor : descriptors) {
+			final ITypeProvider provider = descriptor.get();
+			if (provider != null && provider.initialize(context)) {
+				providers[index++] = provider;
+			}
+		}
+		if (index != providers.length) {
+			final ITypeProvider[] result = new ITypeProvider[index];
+			System.arraycopy(providers, 0, result, 0, index);
+			return result;
+		}
+		return providers;
 	}
 
 	public static IElementResolver[] getElementResolvers() {

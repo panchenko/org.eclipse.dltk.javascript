@@ -1043,8 +1043,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 				} else if (JavaScriptValidations.isStatic(result.getParent())
 						&& !member.isStatic()) {
-					JSType type = JavaScriptValidations.typeOf(result
-							.getParent());
+					JSType type = context.resolveTypeRef(JavaScriptValidations
+							.typeOf(result.getParent()));
 					reporter.reportProblem(
 							JavaScriptProblems.INSTANCE_PROPERTY,
 							NLS.bind(
@@ -1063,8 +1063,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 									.sourceStart(), propName.sourceEnd());
 				}
 			} else if (!result.exists() && !isArrayLookup(propertyExpression)) {
-				final JSType type = JavaScriptValidations.typeOf(result
-						.getParent());
+				final JSType type = context
+						.resolveTypeRef(JavaScriptValidations.typeOf(result
+								.getParent()));
 				if (type != null && type.getKind() == TypeKind.JAVA) {
 					reporter.reportProblem(
 							JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, NLS
@@ -1072,8 +1073,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 											result.getName(), type.getName()),
 							propName.sourceStart(), propName.sourceEnd());
 				} else if (type != null
-						&& (type.getKind() == TypeKind.JAVASCRIPT || type
-								.getKind() == TypeKind.PREDEFINED)) {
+						&& (type.getKind() == TypeKind.JAVASCRIPT
+								|| type.getKind() == TypeKind.PREDEFINED || type
+								.getKind() == TypeKind.EXTERNAL_JS)) {
 					reporter.reportProblem(
 							JavaScriptProblems.UNDEFINED_PROPERTY,
 							NLS.bind(

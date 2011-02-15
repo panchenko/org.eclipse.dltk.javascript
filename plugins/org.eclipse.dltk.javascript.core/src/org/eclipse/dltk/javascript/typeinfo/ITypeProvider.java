@@ -17,6 +17,15 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface ITypeProvider {
 
+	/**
+	 * Initialize this provider to operate with the specified
+	 * <code>context</code>. Return <code>false</code> to ignore this provider.
+	 * 
+	 * @param source
+	 * @return
+	 */
+	boolean initialize(ITypeInfoContext context);
+
 	public Type getType(ITypeInfoContext context, String typeName);
 
 	/**

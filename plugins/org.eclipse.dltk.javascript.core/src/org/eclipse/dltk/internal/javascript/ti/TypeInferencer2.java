@@ -177,7 +177,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		if (typeNames != null) {
 			result.addAll(typeNames);
 		}
-		for (ITypeProvider provider : TypeInfoManager.getTypeProviders()) {
+		for (ITypeProvider provider : getTypeProviders()) {
 			typeNames = provider.listTypes(this, prefix);
 			if (typeNames != null) {
 				result.addAll(typeNames);
@@ -253,6 +253,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	private void validateTypeInfo(Type type) {
 		final Resource resource = ((EObject) type).eResource();
 		if (resource != null) {
+			final URI u = resource.getURI();
+			if (u != null && (u.isFile() || u.isPlatform())) {
+				return;
+			}
 			boolean validResource = resource == invariantRS.getResource()
 					|| TypeInfoModelLoader.getInstance().hasResource(resource);
 			if (!validResource) {
@@ -336,8 +340,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				if (type != null) {
 					return type;
 				}
-				for (ITypeProvider provider : TypeInfoManager
-						.getTypeProviders()) {
+				for (ITypeProvider provider : getTypeProviders()) {
 					type = provider.getType(this, typeName);
 					if (type != null && !isProxy(type)) {
 						return type;
@@ -354,6 +357,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 		}
 		return null;
+	}
+
+	private ITypeProvider[] typeProviders = null;
+
+	private ITypeProvider[] getTypeProviders() {
+		if (typeProviders == null) {
+			typeProviders = TypeInfoManager.createTypeProviders(this);
+		}
+		return typeProviders;
 	}
 
 	private static final String PROXY_SCHEME = "proxy";
@@ -490,6 +502,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return TypeUtil.ref(getType(typeName));
 		}
 
+		private ITypeProvider[] typeProviders = null;
+
+		public ITypeProvider[] getTypeProviders() {
+			if (typeProviders == null) {
+				typeProviders = TypeInfoManager.createTypeProviders(this);
+			}
+			return typeProviders;
+		}
+
 		private Type loadType(String typeName, boolean queryProviders,
 				boolean queryPredefined) {
 			if (queryProviders) {
@@ -506,8 +527,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					if (type != null) {
 						return type;
 					}
-					for (ITypeProvider provider : TypeInfoManager
-							.getTypeProviders()) {
+					for (ITypeProvider provider : getTypeProviders()) {
 						type = provider.getType(this, typeName);
 						if (type != null && !isProxy(type)) {
 							return type;
