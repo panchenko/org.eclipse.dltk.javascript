@@ -11,11 +11,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
+import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 
 public class FunctionValueCollection extends ValueCollection {
 
@@ -24,6 +29,13 @@ public class FunctionValueCollection extends ValueCollection {
 	public FunctionValueCollection(IValueCollection parent, String functionName) {
 		super(parent);
 		this.functionName = functionName;
+		IValueReference arguments = createChild("arguments");
+		arguments.setKind(ReferenceKind.LOCAL);
+		IValueReference argumentsLength = arguments.getChild("length");
+		argumentsLength.setDeclaredType(TypeUtil.ref(NUMBER));
+		IValueReference argumentsArray = arguments
+				.getChild(IValueReference.ARRAY_OP);
+		argumentsArray.setDeclaredType(TypeUtil.ref(OBJECT));
 	}
 
 	public boolean isScope() {

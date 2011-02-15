@@ -407,13 +407,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final JSMethod method = generateJSMethod(node);
 		final IValueCollection function = new FunctionValueCollection(
 				peekContext(), method.getName());
-		IValueReference arguments = function.createChild("arguments");
-		arguments.setKind(ReferenceKind.LOCAL);
-		IValueReference argumentsLength = arguments.getChild("length");
-		argumentsLength.setDeclaredType(context.getTypeRef(NUMBER));
-		IValueReference argumentsArray = arguments
-				.getChild(IValueReference.ARRAY_OP);
-		argumentsArray.setDeclaredType(context.getTypeRef(OBJECT));
 
 		for (IParameter parameter : method.getParameters()) {
 			final IValueReference refArg = function.createChild(parameter
@@ -480,7 +473,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return context.getTypeRef(type.getName());
 	}
 
-	protected void setType(ASTNode node, IValueReference value, JSType type) {
+	public void setType(ASTNode node, IValueReference value, JSType type) {
 		if (type != null) {
 			type = context.resolveTypeRef(type);
 			Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
