@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.javascript.corext.refactoring.structure.ChangeSignatureProcessor;
 import org.eclipse.dltk.internal.ui.actions.ActionUtil;
@@ -142,10 +143,14 @@ public class ModifyParametersAction implements IEditorActionDelegate {
 			return null;
 		if (elements.length == 1 && elements[0] instanceof IMethod)
 			return (IMethod) elements[0];
-		IModelElement elementAt = SelectionConverter.getInputAsSourceModule(
-				editor).getElementAt(selection.getOffset());
-		if (elementAt instanceof IMethod)
-			return (IMethod) elementAt;
+		final ISourceModule sourceModule = SelectionConverter
+				.getInputAsSourceModule(editor);
+		if (sourceModule != null) {
+			IModelElement elementAt = sourceModule.getElementAt(selection
+					.getOffset());
+			if (elementAt instanceof IMethod)
+				return (IMethod) elementAt;
+		}
 		return null;
 	}
 
