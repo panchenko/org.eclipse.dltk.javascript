@@ -42,11 +42,13 @@ public class ElementDocumentationProvider implements
 	public IDocumentationResponse getDocumentationFor(Object element) {
 		if (element instanceof Element) {
 			final Element jsElement = (Element) element;
-			if (jsElement.getDescription() != null
-					&& jsElement.getDescription().length() != 0) {
-				return new TextDocumentationResponse(element,
-						getElementTitle(jsElement), jsElement.getDescription());
-			}
+			// if (jsElement.getDescription() != null
+			// && jsElement.getDescription().length() != 0) {
+			return new TextDocumentationResponse(element,
+					getElementTitle(jsElement),
+					jsElement.getDescription() != null ? jsElement
+							.getDescription() : "");
+			// }
 		}
 		return null;
 	}
@@ -80,6 +82,10 @@ public class ElementDocumentationProvider implements
 					sb.append(", "); //$NON-NLS-1$
 				}
 				sb.append(parameter.getName());
+				if (parameter.getType() != null) {
+					sb.append(':');
+					sb.append(parameter.getType().getName());
+				}
 				++paramCount;
 			}
 			sb.append(')');
