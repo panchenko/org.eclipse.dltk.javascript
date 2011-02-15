@@ -160,8 +160,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	private Type doResolveType(Type type) {
 		if (type.isProxy()) {
-			final String typeName = ((InternalEObject) type).eProxyURI()
-					.fragment();
+			final String typeName = URI.decode(((InternalEObject) type)
+					.eProxyURI().fragment());
 			final Type resolved = getType(typeName, true, true, false, true);
 			if (resolved != null) {
 				return resolved;
@@ -367,7 +367,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(typeName);
 		((InternalEObject) type).eSetProxyURI(URI.createGenericURI(
-				PROXY_SCHEME, PROXY_OPAQUE_PART, typeName));
+				PROXY_SCHEME, PROXY_OPAQUE_PART,
+				URI.encodeFragment(typeName, false)));
 		return type;
 	}
 
@@ -377,16 +378,17 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		public EObject getEObject(URI uri, boolean loadOnDemand) {
 			if (PROXY_SCHEME.equals(uri.scheme())
 					&& PROXY_OPAQUE_PART.equals(uri.opaquePart())) {
-				final Type type = resolveTypeProxy(uri.fragment());
+				final String typeName = URI.decode(uri.fragment());
+				final Type type = resolveTypeProxy(typeName);
 				if (type == null) {
-					return (EObject) createUnknown(uri.fragment());
+					return (EObject) createUnknown(typeName);
 				} else if (type instanceof EObject) {
 					return (EObject) type;
 				} else {
 					JavaScriptPlugin.error("proxy resolved to "
 							+ type.getClass().getName()
 							+ " which is not EObject");
-					return (EObject) createUnknown(uri.fragment());
+					return (EObject) createUnknown(typeName);
 				}
 			}
 			return super.getEObject(uri, loadOnDemand);

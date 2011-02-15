@@ -117,7 +117,7 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
 			if (((EObject) target).eIsProxy()) {
 				final URI uri = ((InternalEObject) target).eProxyURI();
 				if (uri != null) {
-					return uri.fragment();
+					return URI.decode(uri.fragment());
 				}
 			} else {
 				return target.getName();

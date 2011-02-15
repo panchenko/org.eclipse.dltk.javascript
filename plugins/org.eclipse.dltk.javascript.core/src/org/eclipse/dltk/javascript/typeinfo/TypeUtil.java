@@ -18,6 +18,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.InternalEObject;
 
 public class TypeUtil {
@@ -76,7 +77,7 @@ public class TypeUtil {
 
 	public static String getName(Type type) {
 		if (type.isProxy()) {
-			return ((InternalEObject) type).eProxyURI().fragment();
+			return URI.decode(((InternalEObject) type).eProxyURI().fragment());
 		} else {
 			return type.getName();
 		}
