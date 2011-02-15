@@ -36,6 +36,7 @@ import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -51,13 +52,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
  */
 public class JSDocSupport implements IModelBuilder {
 
-	private static final String ARRAY_PREFIX2 = "Array.<";
-
-	private static final String ARRAY_PREFIX1 = "Array<";
-
 	private static final String DOTS = "...";
-
-	private static final String ARRAY_SUFFIX = "[]";
 
 	public static String[] getTags() {
 		return new String[] { JSDocTag.DEPRECATED, JSDocTag.PARAM,
@@ -379,18 +374,34 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	private JSType translateTypeName(String typeName) {
+	protected JSType translateTypeName(String typeName) {
+		typeName = cutBraces(typeName);
+		final ArrayType arrayType = parseArray(typeName);
+		if (arrayType != null) {
+			return arrayType;
+		}
+		return TypeUtil.ref(translate(typeName));
+	}
+
+	protected String cutBraces(String typeName) {
 		final int length = typeName.length();
 		if (length > 2 && typeName.charAt(0) == '{'
 				&& typeName.charAt(length - 1) == '}') {
 			typeName = typeName.substring(1, length - 1);
 		}
+		return typeName;
+	}
+
+	private static final String ARRAY_PREFIX1 = "Array<";
+	private static final String ARRAY_PREFIX2 = "Array.<";
+	private static final String ARRAY_SUFFIX = "[]";
+
+	protected ArrayType parseArray(String typeName) {
 		if (typeName.endsWith(ARRAY_SUFFIX)) {
 			final String itemTypeName = translate(typeName.substring(0,
 					typeName.length() - ARRAY_SUFFIX.length()));
 			return TypeUtil.arrayOf(TypeUtil.ref(itemTypeName));
-		}
-		if (typeName.startsWith(ARRAY_PREFIX1) && typeName.endsWith(">")) {
+		} else if (typeName.startsWith(ARRAY_PREFIX1) && typeName.endsWith(">")) {
 			final String itemTypeName = translate(typeName.substring(
 					ARRAY_PREFIX1.length(), typeName.length() - 1));
 			return TypeUtil.arrayOf(TypeUtil.ref(itemTypeName));
@@ -399,11 +410,11 @@ public class JSDocSupport implements IModelBuilder {
 					ARRAY_PREFIX2.length(), typeName.length() - 1));
 			return TypeUtil.arrayOf(TypeUtil.ref(itemTypeName));
 		} else {
-			return TypeUtil.ref(translate(typeName));
+			return null;
 		}
 	}
 
-	private static String translate(String typeName) {
+	protected static String translate(String typeName) {
 		return TypeInfoModelLoader.getInstance().translateTypeName(typeName);
 	}
 }

@@ -465,7 +465,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	 * @return
 	 */
 	protected JSMethod generateJSMethod(FunctionStatement node) {
-		final JSMethod method = JSMethod.create(node, getSource());
+		final JSMethod method = new JSMethod(node, getSource());
 		for (IModelBuilder extension : context.getModelBuilders()) {
 			extension.processMethod(node, method, reporter);
 		}

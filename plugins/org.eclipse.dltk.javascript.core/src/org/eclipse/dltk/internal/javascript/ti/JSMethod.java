@@ -102,23 +102,29 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		return name + super.toString() + (type != null ? ":" + type : "");
 	}
 
+	public JSMethod() {
+	}
+
 	/**
 	 * @param node
 	 * @param source
 	 * @return
 	 */
-	public static JSMethod create(FunctionStatement node, ReferenceSource source) {
-		final JSMethod method = new JSMethod();
+	public JSMethod(FunctionStatement node, ReferenceSource source) {
+		initialize(node, source);
+	}
+
+	protected void initialize(FunctionStatement node, ReferenceSource source) {
 		final Identifier methodName = node.getName();
 		if (methodName != null) {
-			method.setName(methodName.getName());
+			setName(methodName.getName());
 		}
 		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
 		if (funcType != null) {
-			method.setType(resolveType(funcType));
+			setType(resolveType(funcType));
 		}
 		for (Argument argument : node.getArguments()) {
-			final IParameter parameter = method.createParameter();
+			final IParameter parameter = createParameter();
 			parameter.setName(argument.getIdentifier().getName());
 			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
 			if (paramType != null) {
@@ -130,9 +136,8 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 				parameter.setLocation(ReferenceLocation.create(source,
 						argument.sourceStart(), argument.sourceEnd()));
 			}
-			method.getParameters().add(parameter);
+			getParameters().add(parameter);
 		}
-		return method;
 	}
 
 	protected static JSType resolveType(
@@ -140,7 +145,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		return TypeUtil.ref(type.getName());
 	}
 
-	static class Parameter implements IParameter {
+	public static class Parameter implements IParameter {
 
 		private String name;
 		private JSType type;
