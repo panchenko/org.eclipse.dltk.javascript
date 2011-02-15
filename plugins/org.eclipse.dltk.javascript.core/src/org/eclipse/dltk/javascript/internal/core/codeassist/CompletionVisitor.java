@@ -76,7 +76,7 @@ public class CompletionVisitor extends TypeInferencerVisitor {
 	}
 
 	@Override
-	protected void visitFunctionBody(FunctionStatement node) {
+	public void visitFunctionBody(FunctionStatement node) {
 		try {
 			super.visitFunctionBody(node);
 		} catch (PositionReachedException e) {

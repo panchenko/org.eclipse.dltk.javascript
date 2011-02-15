@@ -100,7 +100,7 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 	}
 
 	@Override
-	protected void visitFunctionBody(FunctionStatement node) {
+	public void visitFunctionBody(FunctionStatement node) {
 		for (Argument argument : node.getArguments()) {
 			check(argument.getIdentifier());
 		}

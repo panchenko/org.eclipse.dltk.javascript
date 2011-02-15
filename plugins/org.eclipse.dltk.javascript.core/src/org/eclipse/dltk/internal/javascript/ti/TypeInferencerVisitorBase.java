@@ -40,11 +40,11 @@ public abstract class TypeInferencerVisitorBase extends
 		return !contexts.isEmpty() ? contexts.peek() : null;
 	}
 
-	protected void enterContext(IValueCollection collection) {
+	public void enterContext(IValueCollection collection) {
 		contexts.push(collection);
 	}
 
-	protected IValueCollection leaveContext() {
+	public IValueCollection leaveContext() {
 		return contexts.pop();
 	}
 

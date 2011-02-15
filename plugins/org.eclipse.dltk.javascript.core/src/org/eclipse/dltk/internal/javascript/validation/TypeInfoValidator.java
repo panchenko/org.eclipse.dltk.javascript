@@ -192,7 +192,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public void call() {
 			validator.checkExpressionType(null, node, reference);
 		}
-
 	}
 
 	private static class PropertyExpressionHolder implements
@@ -1167,7 +1166,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		@Override
-		protected void setType(ASTNode node, IValueReference value, JSType type) {
+		public void setType(ASTNode node, IValueReference value, JSType type) {
 			super.setType(node, value, type);
 			if (type != null) {
 				pushExpressionValidator(new TypeValidator(this, value, node));

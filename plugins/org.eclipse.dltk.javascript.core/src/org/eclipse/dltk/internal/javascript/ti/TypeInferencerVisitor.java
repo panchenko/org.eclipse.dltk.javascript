@@ -134,7 +134,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return branching;
 	}
 
-	protected ReferenceSource getSource() {
+	public ReferenceSource getSource() {
 		final ReferenceSource source = context.getSource();
 		return source != null ? source : ReferenceSource.UNKNOWN;
 	}
@@ -456,7 +456,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				.getChild(IValueReference.FUNCTION_OP);
 		setType(methodName != null ? methodName : node.getFunctionKeyword(),
 				returnValue, method.getType());
-		returnValue.setValue(function.getReturnValue());
+		returnValue.addValue(function.getReturnValue(), true);
 		return result;
 	}
 
@@ -472,7 +472,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return method;
 	}
 
-	protected void visitFunctionBody(FunctionStatement node) {
+	public void visitFunctionBody(FunctionStatement node) {
 		visit(node.getBody());
 	}
 
