@@ -12,7 +12,6 @@ import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
-import org.eclipse.dltk.internal.javascript.ti.JSVariable;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
@@ -31,6 +30,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 
 public class StructureReporter2 extends TypeInferencerVisitor {
@@ -318,7 +318,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 	}
 
 	private FieldInfo createFieldInfo(Identifier identifer, int sourceStart,
-			JSVariable variable) {
+			IVariable variable) {
 		FieldInfo fieldInfo = new FieldInfo();
 		fieldInfo.declarationStart = sourceStart;
 		fieldInfo.name = identifer.getName();
@@ -338,11 +338,9 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 
 	@Override
 	protected void initializeVariable(IValueReference reference,
-			VariableDeclaration declaration) {
+			VariableDeclaration declaration, IVariable variable) {
 		if (!(declaration.getInitializer() instanceof FunctionStatement)) {
 			final Identifier identifier = declaration.getIdentifier();
-			final JSVariable variable = (JSVariable) reference
-					.getAttribute(IReferenceAttributes.VARIABLE);
 			FieldInfo fieldInfo = null;
 			if (inFunction()) {
 				fRequestor.enterLocal(identifier,
@@ -375,7 +373,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			else
 				fRequestor.exitField(declaration.sourceEnd());
 		} else {
-			super.initializeVariable(reference, declaration);
+			super.initializeVariable(reference, declaration, variable);
 		}
 	}
 

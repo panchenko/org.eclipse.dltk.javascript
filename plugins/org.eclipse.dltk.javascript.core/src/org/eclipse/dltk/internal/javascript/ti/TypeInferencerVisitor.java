@@ -97,6 +97,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
@@ -302,12 +303,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		reference.setLocation(ReferenceLocation.create(getSource(),
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
-		initializeVariable(reference, declaration);
+		initializeVariable(reference, declaration, variable);
 		return reference;
 	}
 
 	protected void initializeVariable(final IValueReference reference,
-			VariableDeclaration declaration) {
+			VariableDeclaration declaration, IVariable variable) {
 		if (declaration.getInitializer() != null) {
 			IValueReference assignment = visit(declaration.getInitializer());
 			if (assignment != null) {
