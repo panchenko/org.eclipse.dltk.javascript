@@ -11,13 +11,20 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.INodeVisitor;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public interface ITypeInferencerVisitor extends INodeVisitor<IValueReference> {
+
+	void enterContext(IValueCollection collection);
+
+	IValueCollection leaveContext();
 
 	IValueCollection peekContext();
 
@@ -25,4 +32,9 @@ public interface ITypeInferencerVisitor extends INodeVisitor<IValueReference> {
 
 	JSProblemReporter getProblemReporter();
 
+	ReferenceSource getSource();
+
+	void visitFunctionBody(FunctionStatement node);
+
+	void setType(ASTNode node, IValueReference value, JSType type);
 }
