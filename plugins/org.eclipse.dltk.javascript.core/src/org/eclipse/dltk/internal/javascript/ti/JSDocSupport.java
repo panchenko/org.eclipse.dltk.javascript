@@ -203,33 +203,45 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
+	protected static class ParamInfo {
+		public String type;
+		public boolean varargs;
+		public boolean optional;
+
+		void clear() {
+			type = null;
+			varargs = false;
+			optional = false;
+		}
+	}
+
 	protected void parseParams(IMethod method, JSDocTags tags,
 			JSProblemReporter reporter) {
 		final Map<String, Type> objectPropertiesTypes = new HashMap<String, Type>();
 		final Set<String> processedParams = new HashSet<String>();
+		final ParamInfo pp = new ParamInfo();
 		for (JSDocTag tag : tags.list(JSDocTag.PARAM)) {
-			String type = null;
-			boolean varargs = false;
-			boolean optional = false;
+			pp.clear();
 			final Tokenizer st = new Tokenizer(tag.getValue());
 			if (st.hasMoreTokens()) {
 				final String token = st.peek();
 				if (token.startsWith("{") && token.endsWith("}")) {
-					type = token.substring(1, token.length() - 1);
+					String type = token.substring(1, token.length() - 1);
 					if (type.startsWith(DOTS)) {
-						varargs = true;
+						pp.varargs = true;
 						type = type.substring(DOTS.length());
 					} else if (type.endsWith("=")) {
 						type = type.substring(0, type.length() - 1);
-						optional = true;
+						pp.optional = true;
 					}
+					pp.type = type;
 					st.nextToken();
 				}
 			}
 			if (st.hasMoreTokens()) {
 				String paramName = st.nextToken();
 				if (paramName.startsWith("[") && paramName.endsWith("]")) {
-					optional = true;
+					pp.optional = true;
 					paramName = paramName.substring(1, paramName.length() - 1);
 					int defaultValueSeperatorIndex = paramName.indexOf('=');
 					if (defaultValueSeperatorIndex != -1) {
@@ -275,14 +287,11 @@ public class JSDocSupport implements IModelBuilder {
 				}
 				final IParameter parameter = method.getParameter(paramName);
 				if (parameter != null) {
-					if (type != null && parameter.getType() == null) {
-						parameter.setType(translateTypeName(type));
+					if (!pp.optional && st.hasMoreTokens()
+							&& st.nextToken().equals("optional")) {
+						pp.optional = true;
 					}
-					if (!optional && st.hasMoreTokens()
-							&& st.nextToken().equals("optional"))
-						optional = true;
-					parameter.setOptional(optional);
-					parameter.setVarargs(varargs);
+					updateParameter(tag, parameter, pp, reporter);
 				} else {
 					reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM, tag,
 							paramName);
@@ -292,6 +301,15 @@ public class JSDocSupport implements IModelBuilder {
 						tag);
 			}
 		}
+	}
+
+	protected void updateParameter(JSDocTag tag, final IParameter parameter,
+			final ParamInfo pp, JSProblemReporter reporter) {
+		if (pp.type != null && parameter.getType() == null) {
+			parameter.setType(translateTypeName(pp.type));
+		}
+		parameter.setOptional(pp.optional);
+		parameter.setVarargs(pp.varargs);
 	}
 
 	private static final String[] RETURN_TAGS = { JSDocTag.RETURNS,
