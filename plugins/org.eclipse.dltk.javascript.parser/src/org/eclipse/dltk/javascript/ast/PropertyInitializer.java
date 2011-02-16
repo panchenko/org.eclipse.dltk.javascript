@@ -81,4 +81,15 @@ public class PropertyInitializer extends ObjectInitializerPart implements
 		return buffer.toString();
 	}
 
+	public String getNameAsString() {
+		final Expression name = getName();
+		if (name instanceof Identifier) {
+			return ((Identifier) name).getName();
+		} else if (name instanceof StringLiteral) {
+			return ((StringLiteral) name).getValue();
+		} else {
+			return null;
+		}
+	}
+
 }

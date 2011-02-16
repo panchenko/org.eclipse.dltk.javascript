@@ -77,15 +77,8 @@ public class ObjectInitializer extends Expression {
 		for (ObjectInitializerPart part : initializers) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer property = (PropertyInitializer) part;
-				final Expression name = property.getName();
-				if (name instanceof Identifier) {
-					if (propertyName.equals(((Identifier) name).getName())) {
-						return property;
-					}
-				} else if (name instanceof StringLiteral) {
-					if (propertyName.equals(((StringLiteral) name).getValue())) {
-						return property;
-					}
+				if (propertyName.equals(property.getNameAsString())) {
+					return property;
 				}
 			}
 		}
