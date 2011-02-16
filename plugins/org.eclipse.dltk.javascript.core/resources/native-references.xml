@@ -35,6 +35,7 @@
     	<parameters name="[arg1,argN]" kind="VARARGS"/>
     </members>
   </ref:Type>
+  <ref:TypeAlias source="object" target="Object"/>
   <ref:Type name="Object" kind="PREDEFINED">
   	<members xsi:type="ref:Property" name="prototype" directType="Object" static="true" description="Allows the addition of properties to a Object object."/>
   	<members xsi:type="ref:Property" name="constructor" directType="Object" description="Returns a reference to the Object function that created the instance's prototype."/>
