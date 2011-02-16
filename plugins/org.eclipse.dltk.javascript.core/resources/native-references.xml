@@ -42,7 +42,9 @@
     <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a string representing the specified object."/>
     <members xsi:type="ref:Method" name="toLocaleString" description="Returns a string representing the object. This method is meant to be overriden by derived objects for locale-specific purposes."/>
     <members xsi:type="ref:Method" name="valueOf" directType="Object" description="Returns the primitive value of the specified object."/>
-    <members xsi:type="ref:Method" name="hasOwnProperty" description="Returns a boolean indicating whether an object contains the specified property as a direct property of that object and not inherited through the prototype chain."/>
+    <members xsi:type="ref:Method" name="hasOwnProperty" directType="Boolean" description="Returns a boolean indicating whether an object contains the specified property as a direct property of that object and not inherited through the prototype chain.">
+    	<parameters name="prop" directType="String"/>
+    </members>
     <members xsi:type="ref:Method" name="isPrototypeOf" description="Returns a boolean indication whether the specified object is in the prototype chain of the object this method is called upon."/>
     <members xsi:type="ref:Method" name="propertyIsEnumerable" description="Returns a boolean indicating if the internal ECMAScript DontEnum attribute is set."/>
   </ref:Type>
