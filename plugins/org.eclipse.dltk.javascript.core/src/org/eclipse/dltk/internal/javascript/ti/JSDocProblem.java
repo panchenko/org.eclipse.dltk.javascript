@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.compiler.problem.IProblemIdentifierExtension;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.utils.EnumNLS;
 import org.eclipse.osgi.util.NLS;
 
-public enum JSDocProblem implements JSProblemIdentifier {
+public enum JSDocProblem implements JSProblemIdentifier,
+		IProblemIdentifierExtension {
 
 	DUPLICATE_TAG, MISSING_PARAMETER_NAME, MISSING_TYPE_NAME, UNKNOWN_PARAM, DUPLICATE_PARAM;
 
@@ -31,5 +33,12 @@ public enum JSDocProblem implements JSProblemIdentifier {
 
 	static {
 		EnumNLS.initializeMessages(JSDocProblem.values(), "message");
+	}
+
+	public static final String JSDOC_PROBLEM = JavaScriptPlugin.PLUGIN_ID
+			+ ".jsdocproblem";
+
+	public String getMarkerType() {
+		return JSDOC_PROBLEM;
 	}
 }

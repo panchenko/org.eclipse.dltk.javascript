@@ -22,12 +22,12 @@ public class JSProblemFactory extends DefaultProblemFactory {
 	public static final String JS_TASK = PLUGIN_ID + ".jstask"; //$NON-NLS-1$
 
 	@Override
-	public String getProblemMarker() {
+	protected String getProblemMarkerType() {
 		return JS_PROBLEM;
 	}
 
 	@Override
-	public String getTaskMarker() {
+	protected String getTaskMarkerType() {
 		return JS_TASK;
 	}
 

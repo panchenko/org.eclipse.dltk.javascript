@@ -154,6 +154,13 @@
 	</extension>
 	<extension
 		point="org.eclipse.core.resources.markers"
+		id="jsdocproblem"
+		name="JSDoc Problem">
+		<persistent value="true"/>
+		<super type="org.eclipse.dltk.core.problem"/>
+	</extension>
+	<extension
+		point="org.eclipse.core.resources.markers"
 		id="jstask"
 		name="JavaScript Task">
 		<persistent value="true"/>
