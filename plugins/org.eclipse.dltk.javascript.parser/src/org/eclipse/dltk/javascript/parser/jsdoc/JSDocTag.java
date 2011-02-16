@@ -34,7 +34,7 @@ public class JSDocTag {
 		this.end = end;
 	}
 
-	public String getTag() {
+	public String name() {
 		return tag;
 	}
 

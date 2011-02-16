@@ -37,7 +37,7 @@ public class JSDocTags {
 	 */
 	public JSDocTag get(String tagName) {
 		for (JSDocTag tag : tags) {
-			if (tagName.equals(tag.getTag())) {
+			if (tagName.equals(tag.name())) {
 				return tag;
 			}
 		}
@@ -53,7 +53,7 @@ public class JSDocTags {
 	public JSDocTag get(String[] tagNames) {
 		for (JSDocTag tag : tags) {
 			for (String tagName : tagNames) {
-				if (tagName.equals(tag.getTag())) {
+				if (tagName.equals(tag.name())) {
 					return tag;
 				}
 			}
@@ -71,7 +71,7 @@ public class JSDocTags {
 	public List<JSDocTag> list(String tagName) {
 		List<JSDocTag> result = null;
 		for (JSDocTag tag : tags) {
-			if (tagName.equals(tag.getTag())) {
+			if (tagName.equals(tag.name())) {
 				if (result == null) {
 					result = new ArrayList<JSDocTag>();
 				}
@@ -92,7 +92,7 @@ public class JSDocTags {
 		List<JSDocTag> result = null;
 		for (JSDocTag tag : tags) {
 			for (String tagName : tagNames) {
-				if (tagName.equals(tag.getTag())) {
+				if (tagName.equals(tag.name())) {
 					if (result == null) {
 						result = new ArrayList<JSDocTag>();
 					}
@@ -113,7 +113,7 @@ public class JSDocTags {
 	public int count(String tagName) {
 		int result = 0;
 		for (JSDocTag tag : tags) {
-			if (tagName.equals(tag.getTag())) {
+			if (tagName.equals(tag.name())) {
 				++result;
 			}
 		}
@@ -130,7 +130,7 @@ public class JSDocTags {
 		int result = 0;
 		for (JSDocTag tag : tags) {
 			for (String tagName : tagNames) {
-				if (tagName.equals(tag.getTag())) {
+				if (tagName.equals(tag.name())) {
 					++result;
 					break;
 				}
