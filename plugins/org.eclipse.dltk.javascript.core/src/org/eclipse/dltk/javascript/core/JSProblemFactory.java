@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.internal.core;
+package org.eclipse.dltk.javascript.core;
 
 import static org.eclipse.dltk.javascript.core.JavaScriptPlugin.PLUGIN_ID;
 
@@ -20,6 +20,9 @@ public class JSProblemFactory extends DefaultProblemFactory {
 	public static final String JS_PROBLEM = PLUGIN_ID + ".jsproblem"; //$NON-NLS-1$
 
 	public static final String JS_TASK = PLUGIN_ID + ".jstask"; //$NON-NLS-1$
+
+	public static final String JSDOC_PROBLEM = JavaScriptPlugin.PLUGIN_ID
+	+ ".jsdocproblem";
 
 	@Override
 	protected String getProblemMarkerType() {

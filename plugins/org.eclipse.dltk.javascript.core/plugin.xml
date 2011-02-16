@@ -168,7 +168,7 @@
 	</extension>
 	<extension point="org.eclipse.dltk.core.problemFactory">
 	      <problemFactory
-             class="org.eclipse.dltk.javascript.internal.core.JSProblemFactory"
+             class="org.eclipse.dltk.javascript.core.JSProblemFactory"
              nature="org.eclipse.dltk.javascript.core.nature"/>
           <problemIdentifierFactory
              class="org.eclipse.dltk.internal.javascript.ti.JSDocProblemFactory"
