@@ -36,9 +36,9 @@ public class SimpleJSDocParserTests extends TestCase {
 		code.add(" */");
 		List<JSDocTag> tags = parse(code.toString());
 		assertEquals(3, tags.size());
-		assertEquals(JSDocTag.PARAM, tags.get(0).getTag());
-		assertEquals(JSDocTag.PARAM, tags.get(1).getTag());
-		assertEquals(JSDocTag.PARAM, tags.get(2).getTag());
+		assertEquals(JSDocTag.PARAM, tags.get(0).name());
+		assertEquals(JSDocTag.PARAM, tags.get(1).name());
+		assertEquals(JSDocTag.PARAM, tags.get(2).name());
 		assertEquals("x", tags.get(0).getValue());
 		assertEquals("y", tags.get(1).getValue());
 		assertEquals("z", tags.get(2).getValue());
@@ -55,9 +55,9 @@ public class SimpleJSDocParserTests extends TestCase {
 		code.add(" */");
 		List<JSDocTag> tags = parse(code.toString());
 		assertEquals(3, tags.size());
-		assertEquals(JSDocTag.PARAM, tags.get(0).getTag());
-		assertEquals(JSDocTag.PARAM, tags.get(1).getTag());
-		assertEquals(JSDocTag.PARAM, tags.get(2).getTag());
+		assertEquals(JSDocTag.PARAM, tags.get(0).name());
+		assertEquals(JSDocTag.PARAM, tags.get(1).name());
+		assertEquals(JSDocTag.PARAM, tags.get(2).name());
 		assertEquals("x", tags.get(0).getValue());
 		assertEquals("y", tags.get(1).getValue());
 		assertEquals("z", tags.get(2).getValue());
@@ -72,7 +72,7 @@ public class SimpleJSDocParserTests extends TestCase {
 		code.add(" */");
 		List<JSDocTag> tags = parse(code.toString());
 		assertEquals(1, tags.size());
-		assertEquals(JSDocTag.PARAM, tags.get(0).getTag());
+		assertEquals(JSDocTag.PARAM, tags.get(0).name());
 		assertEquals("y B @param z", tags.get(0).getValue());
 	}
 }
