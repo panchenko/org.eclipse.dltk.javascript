@@ -175,7 +175,8 @@ public class JSDocSupport implements IModelBuilder {
 		if (reporter != null && tags.count(tagName) > 1) {
 			final List<JSDocTag> t = tags.list(tagName);
 			for (JSDocTag tag : t.subList(1, t.size())) {
-				reportProblem(reporter, JSDocProblem.REPEATED_TAG, tag);
+				reportProblem(reporter, JSDocProblem.DUPLICATE_TAG, tag,
+						tag.name());
 			}
 		}
 	}
@@ -219,7 +220,7 @@ public class JSDocSupport implements IModelBuilder {
 						varargs = true;
 						type = type.substring(DOTS.length());
 					} else if (type.endsWith("=")) {
-						type = type.substring(type.length() - 1);
+						type = type.substring(0, type.length() - 1);
 						optional = true;
 					}
 					st.nextToken();
@@ -352,7 +353,19 @@ public class JSDocSupport implements IModelBuilder {
 				final int count = tags.count(tagNames);
 				if (count > 1) {
 					for (JSDocTag t : tags.list(tagNames).subList(1, count)) {
-						reportProblem(reporter, JSDocProblem.DUPLICATE_TYPE, t);
+						if (t.name().equals(tag.name())) {
+							reportProblem(reporter, JSDocProblem.DUPLICATE_TAG,
+									t, t.name());
+						} else {
+							reportProblem(
+									reporter,
+									JSDocProblem.DUPLICATE_TAG,
+									JSDocProblem.DUPLICATE_TAG.formatMessage(t
+											.name())
+											+ " (was "
+											+ tag.name()
+											+ ")", t);
+						}
 					}
 				}
 			}
@@ -370,6 +383,14 @@ public class JSDocSupport implements IModelBuilder {
 		if (reporter != null) {
 			reporter.reportProblem(problemIdentifier,
 					problemIdentifier.formatMessage(args), tag.getStart(),
+					tag.getEnd());
+		}
+	}
+
+	private void reportProblem(JSProblemReporter reporter,
+			JSProblemIdentifier problemIdentifier, String message, JSDocTag tag) {
+		if (reporter != null) {
+			reporter.reportProblem(problemIdentifier, message, tag.getStart(),
 					tag.getEnd());
 		}
 	}
