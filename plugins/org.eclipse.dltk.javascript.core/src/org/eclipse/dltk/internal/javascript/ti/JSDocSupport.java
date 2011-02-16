@@ -435,7 +435,7 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	protected static String translate(String typeName) {
+	protected String translate(String typeName) {
 		return TypeInfoModelLoader.getInstance().translateTypeName(typeName);
 	}
 }
