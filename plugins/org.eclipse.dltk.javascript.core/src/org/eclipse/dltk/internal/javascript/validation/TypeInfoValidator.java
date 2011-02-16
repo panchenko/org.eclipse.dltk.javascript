@@ -56,6 +56,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -1189,6 +1190,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 							.getChild(((TypeRef) type).getName()).exists())) {
 						reportUnknownType(node, TypeUtil.getName(type));
 					}
+				} else if (type instanceof ArrayType) {
+					checkType(node, ((ArrayType) type).getItemType(),
+							collection);
 				} else {
 					final Type t = TypeUtil.extractType(type);
 					if (t != null && t.isDeprecated()) {
