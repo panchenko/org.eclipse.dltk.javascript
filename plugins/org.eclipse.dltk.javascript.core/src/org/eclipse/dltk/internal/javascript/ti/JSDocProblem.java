@@ -20,7 +20,7 @@ import org.eclipse.osgi.util.NLS;
 public enum JSDocProblem implements JSProblemIdentifier,
 		IProblemIdentifierExtension {
 
-	DUPLICATE_TAG, MISSING_PARAMETER_NAME, MISSING_TYPE_NAME, UNKNOWN_PARAM, DUPLICATE_PARAM;
+	DUPLICATE_TAG, MISSING_PARAMETER_NAME, MISSING_TYPE_NAME, UNKNOWN_PARAM, DUPLICATE_PARAM, PARAMETER_MISSING_ANNOTATION;
 
 	private String message;
 

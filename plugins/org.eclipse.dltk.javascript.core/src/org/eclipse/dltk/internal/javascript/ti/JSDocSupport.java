@@ -33,6 +33,7 @@ import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
@@ -217,10 +218,15 @@ public class JSDocSupport implements IModelBuilder {
 
 	protected void parseParams(IMethod method, JSDocTags tags,
 			JSProblemReporter reporter) {
+		final List<JSDocTag> paramTags = tags.list(JSDocTag.PARAM);
+		if (paramTags.isEmpty()) {
+			return;
+		}
+		int problemCount = 0;
 		final Map<String, Type> objectPropertiesTypes = new HashMap<String, Type>();
 		final Set<String> processedParams = new HashSet<String>();
 		final ParamInfo pp = new ParamInfo();
-		for (JSDocTag tag : tags.list(JSDocTag.PARAM)) {
+		for (JSDocTag tag : paramTags) {
 			pp.clear();
 			final Tokenizer st = new Tokenizer(tag.getValue());
 			if (st.hasMoreTokens()) {
@@ -278,6 +284,7 @@ public class JSDocSupport implements IModelBuilder {
 					}
 					if (propertyName == null) {
 						if (!processedParams.add(paramName)) {
+							++problemCount;
 							reportProblem(reporter,
 									JSDocProblem.DUPLICATE_PARAM, tag,
 									paramName);
@@ -293,12 +300,26 @@ public class JSDocSupport implements IModelBuilder {
 					}
 					updateParameter(tag, parameter, pp, reporter);
 				} else {
+					++problemCount;
 					reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM, tag,
 							paramName);
 				}
 			} else {
+				++problemCount;
 				reportProblem(reporter, JSDocProblem.MISSING_PARAMETER_NAME,
 						tag);
+			}
+		}
+		if (problemCount == 0 && reporter != null) {
+			for (IParameter parameter : method.getParameters()) {
+				if (!processedParams.contains(parameter.getName())) {
+					final ReferenceLocation location = parameter.getLocation();
+					reporter.reportProblem(
+							JSDocProblem.PARAMETER_MISSING_ANNOTATION,
+							JSDocProblem.PARAMETER_MISSING_ANNOTATION
+									.formatMessage(parameter.getName()),
+							location.getNameStart(), location.getNameEnd());
+				}
 			}
 		}
 	}
