@@ -16,6 +16,7 @@ public class JSDocTag {
 	public static final String PARAM = "@param"; //$NON-NLS-1$
 	public static final String RETURN = "@return";
 	public static final String RETURNS = "@returns";
+	public static final String THROWS  = "@throws";
 	public static final String TYPE = "@type"; //$NON-NLS-1$
 	public static final String DEPRECATED = "@deprecated"; //$NON-NLS-1$
 
