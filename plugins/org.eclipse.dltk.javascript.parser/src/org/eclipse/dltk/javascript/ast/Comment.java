@@ -14,6 +14,8 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.SourceRange;
 
 public abstract class Comment extends ASTNode {
 
@@ -44,5 +46,9 @@ public abstract class Comment extends ASTNode {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + '[' + getText() + ']';
+	}
+
+	public ISourceRange getRange() {
+		return new SourceRange(sourceStart(), sourceEnd() - sourceStart());
 	}
 }

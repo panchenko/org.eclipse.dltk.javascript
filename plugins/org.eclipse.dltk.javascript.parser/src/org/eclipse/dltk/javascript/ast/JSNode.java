@@ -14,6 +14,8 @@ package org.eclipse.dltk.javascript.ast;
 import java.util.Collection;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public abstract class JSNode extends ASTNode {
@@ -50,5 +52,9 @@ public abstract class JSNode extends ASTNode {
 	}
 
 	public abstract String toSourceString(String indentationString);
+
+	public ISourceRange getRange() {
+		return new SourceRange(sourceStart(), sourceEnd() - sourceStart());
+	}
 
 }
