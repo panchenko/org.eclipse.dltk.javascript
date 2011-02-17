@@ -39,6 +39,7 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
 import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 import org.eclipse.dltk.utils.TextUtils;
+import org.eclipse.osgi.util.NLS;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
@@ -261,6 +262,18 @@ public class JavaScriptParser extends AbstractSourceParser {
 			reporter.setRange(colonRange.getOffset(), colonRange.getOffset()
 					+ colonRange.getLength());
 			reporter.setLine(colon.getLine());
+			reporter.report();
+		}
+
+		@Override
+		protected void reportReservedKeyword(Token token) {
+			final ISourceRange colonRange = convert(token);
+			reporter.setMessage(JavaScriptParserProblems.RESERVED_KEYWORD,
+					NLS.bind("\"{0}\" is reserved keyword", token.getText()));
+			reporter.setSeverity(Severity.ERROR);
+			reporter.setRange(colonRange.getOffset(), colonRange.getOffset()
+					+ colonRange.getLength());
+			reporter.setLine(token.getLine());
 			reporter.report();
 		}
 

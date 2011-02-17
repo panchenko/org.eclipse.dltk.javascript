@@ -212,7 +212,6 @@ tokens
 	XmlAttribute;
 	XML_LITERAL;
 	EMPTY_STATEMENT;
-	RESERVED_WORD;
 }
 
 @lexer::header
@@ -372,6 +371,9 @@ protected void syncToSet() {
 
 protected void typeRefExpected() {
 	throw new UnsupportedOperationException("override typeRefExpected()");
+}
+
+protected void reportReservedKeyword(Token token) {
 }
 
 private final boolean isLeftHandSideAssign(RuleReturnScope lhs, Object[] cached)
@@ -768,7 +770,7 @@ identifier
   | SET
   | EACH
   | NAMESPACE
-  | futureReservedWord -> ^(RESERVED_WORD futureReservedWord)
+  | word=futureReservedWord { reportReservedKeyword(word.start); } -> Identifier[word.start]
   | Identifier
 ;
 

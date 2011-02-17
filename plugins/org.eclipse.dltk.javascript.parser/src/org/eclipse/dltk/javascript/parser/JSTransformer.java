@@ -852,15 +852,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return id;
 	}
 
-	protected ASTNode visitReservedWord(Tree node) {
-		reporter.setMessage(JavaScriptParserProblems.RESERVED_KEYWORD,
-				NLS.bind("\"{0}\" keyword is reserved", node.getText()));
-		final int start = getTokenOffset(node.getTokenStartIndex());
-		reporter.setRange(start, start + node.getText().length());
-		reporter.report();
-		return visitIdentifier(node);
-	}
-
 	@Override
 	protected ASTNode visitReturn(Tree node) {
 
