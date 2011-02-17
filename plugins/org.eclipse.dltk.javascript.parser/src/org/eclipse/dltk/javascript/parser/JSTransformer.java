@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.AssertionFailedException;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
@@ -114,7 +115,6 @@ import org.eclipse.dltk.javascript.internal.parser.FunctionTypedDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.ITypedDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
 import org.eclipse.dltk.javascript.internal.parser.VariableTypedDeclaration;
-import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 import org.eclipse.dltk.utils.IntList;
 import org.eclipse.osgi.util.NLS;
 
@@ -937,7 +937,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 					reporter.setMessage(
 							JavaScriptParserProblems.DOUBLE_SWITCH_DEFAULT,
 							"double default label in the switch statement");
-					reporter.setSeverity(Severity.ERROR);
+					reporter.setSeverity(ProblemSeverity.ERROR);
 					reporter.setStart(reporter.getOffset(child.getLine(),
 							child.getCharPositionInLine()));
 					reporter.setEnd(reporter.getStart()
@@ -1051,7 +1051,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		if (!scope.hasLabel(label.getText())) {
 			reporter.setMessage(JavaScriptParserProblems.UNDEFINED_LABEL,
 					"undefined label " + label.getText());
-			reporter.setSeverity(Severity.ERROR);
+			reporter.setSeverity(ProblemSeverity.ERROR);
 			reporter.setRange(label.sourceStart(), label.sourceEnd());
 			reporter.report();
 		}
@@ -1072,7 +1072,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 		reporter.setMessage(messageId, message);
 		reporter.setRange(statement.sourceStart(), statement.sourceEnd());
-		reporter.setSeverity(Severity.ERROR);
+		reporter.setSeverity(ProblemSeverity.ERROR);
 		reporter.report();
 	}
 
@@ -1796,7 +1796,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		if (!scope.addLabel(statement) && reporter != null) {
 			reporter.setMessage(JavaScriptParserProblems.DUPLICATE_LABEL,
 					"duplicate label");
-			reporter.setSeverity(Severity.ERROR);
+			reporter.setSeverity(ProblemSeverity.ERROR);
 			reporter.setRange(label.sourceStart(), label.sourceEnd());
 			reporter.report();
 		}

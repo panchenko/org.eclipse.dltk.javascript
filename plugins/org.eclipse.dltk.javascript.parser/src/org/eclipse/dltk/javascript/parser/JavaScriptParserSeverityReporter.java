@@ -4,14 +4,13 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.dltk.compiler.problem.DefaultProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
-import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 
 public class JavaScriptParserSeverityReporter implements ISeverityReporter {
 
 	public ProblemSeverity getSeverity(IProblemIdentifier problemId,
 			ProblemSeverity defaultSeverity) {
 		if (defaultSeverity == null)
-			defaultSeverity = Severity.WARNING;
+			defaultSeverity = ProblemSeverity.WARNING;
 
 		String severity = new InstanceScope().getNode(
 				JavaScriptParserPlugin.PLUGIN_ID).get(

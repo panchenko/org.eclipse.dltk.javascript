@@ -22,7 +22,9 @@ public class Reporter extends LineTracker implements IProblemReporter,
 		JSProblemReporter {
 
 	public static class Severity {
+		@Deprecated
 		public static final ProblemSeverity WARNING = ProblemSeverity.WARNING;
+		@Deprecated
 		public static final ProblemSeverity ERROR = ProblemSeverity.ERROR;
 	}
 
@@ -48,7 +50,7 @@ public class Reporter extends LineTracker implements IProblemReporter,
 	}
 
 	private void reset() {
-		severity = Severity.WARNING;
+		severity = ProblemSeverity.WARNING;
 		id = null;
 		message = null;
 		line = -1;

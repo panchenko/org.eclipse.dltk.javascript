@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.parser.AbstractSourceParser;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceRange;
@@ -37,7 +38,6 @@ import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
-import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 import org.eclipse.dltk.utils.TextUtils;
 import org.eclipse.osgi.util.NLS;
 
@@ -143,7 +143,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 				// stop = start + 1;}
 			}
 			reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR, message);
-			reporter.setSeverity(Severity.ERROR);
+			reporter.setSeverity(ProblemSeverity.ERROR);
 			if (range != null) {
 				reporter.setRange(range.getOffset(),
 						range.getOffset() + range.getLength());
@@ -239,7 +239,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 					final ISourceRange end = convert(last);
 					reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR,
 							"Unexpected input was discarded");
-					reporter.setSeverity(Severity.ERROR);
+					reporter.setSeverity(ProblemSeverity.ERROR);
 					reporter.setRange(convert(first).getOffset(),
 							end.getOffset() + end.getLength());
 					reporter.setLine(first.getLine() - 1);
@@ -258,7 +258,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 			final ISourceRange colonRange = convert(colon);
 			reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR,
 					"Type name expected after colon");
-			reporter.setSeverity(Severity.ERROR);
+			reporter.setSeverity(ProblemSeverity.ERROR);
 			reporter.setRange(colonRange.getOffset(), colonRange.getOffset()
 					+ colonRange.getLength());
 			reporter.setLine(colon.getLine() - 1);
@@ -270,7 +270,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 			final ISourceRange range = convert(token);
 			reporter.setMessage(JavaScriptParserProblems.RESERVED_KEYWORD,
 					NLS.bind("\"{0}\" is reserved keyword", token.getText()));
-			reporter.setSeverity(Severity.ERROR);
+			reporter.setSeverity(ProblemSeverity.ERROR);
 			reporter.setRange(range.getOffset(),
 					range.getOffset() + range.getLength());
 			reporter.setLine(token.getLine() - 1);
