@@ -92,9 +92,10 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				false, 2), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
 				JavaScriptParserPreferences.ENABLE_TYPE_INFO), null);
 
-		String[] names = new String[] { "Warning", "Error", "Ignore" };
+		String[] names = new String[] { "Warning", "Error", "Info", "Ignore" };
 		String[] ids = new String[] { ProblemSeverities.Warning.name(),
-				ProblemSeverities.Error.name(), ProblemSeverities.Ignore.name() };
+				ProblemSeverities.Error.name(), ProblemSeverities.Info.name(),
+				ProblemSeverities.Ignore.name() };
 
 		SWTFactory.createLabel(composite,
 				"Wrong number of parameters to javascript function call", 1);
