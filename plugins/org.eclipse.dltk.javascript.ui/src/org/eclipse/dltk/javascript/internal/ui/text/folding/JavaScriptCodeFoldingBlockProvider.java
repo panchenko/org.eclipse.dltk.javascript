@@ -100,7 +100,7 @@ public class JavaScriptCodeFoldingBlockProvider extends
 	private MethodCollector methodCollector = new MethodCollector();
 
 	public void computeFoldableBlocks(IFoldingContent content) {
-		final Script script = null;// parse(content);
+		final Script script = parse(content);
 		if (script != null) {
 			methodCollector.clear();
 			try {
