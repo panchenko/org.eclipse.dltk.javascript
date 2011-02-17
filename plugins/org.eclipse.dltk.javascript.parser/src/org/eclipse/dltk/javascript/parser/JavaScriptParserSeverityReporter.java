@@ -20,6 +20,8 @@ public class JavaScriptParserSeverityReporter implements ISeverityReporter {
 				return ProblemSeverity.ERROR;
 			} else if (ProblemSeverity.WARNING.name().equals(severity)) {
 				return ProblemSeverity.WARNING;
+			} else if (ProblemSeverity.INFO.name().equals(severity)) {
+				return ProblemSeverity.INFO;
 			} else if (ProblemSeverity.IGNORE.name().equals(severity)) {
 				return null;
 			}
