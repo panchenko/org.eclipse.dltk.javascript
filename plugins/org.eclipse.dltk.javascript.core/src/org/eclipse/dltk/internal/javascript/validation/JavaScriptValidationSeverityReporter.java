@@ -6,14 +6,13 @@ import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.parser.ISeverityReporter;
-import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 
 public class JavaScriptValidationSeverityReporter implements ISeverityReporter {
 
 	public ProblemSeverity getSeverity(IProblemIdentifier problemId,
 			ProblemSeverity defaultSeverity) {
 		if (defaultSeverity == null)
-			defaultSeverity = Severity.WARNING;
+			defaultSeverity = ProblemSeverity.WARNING;
 
 		String severity = new InstanceScope().getNode(
 				JavaScriptPlugin.PLUGIN_ID).get(

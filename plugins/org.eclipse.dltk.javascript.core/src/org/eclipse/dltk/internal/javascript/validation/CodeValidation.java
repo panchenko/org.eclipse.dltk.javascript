@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
@@ -34,7 +35,6 @@ import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
-import org.eclipse.dltk.javascript.parser.Reporter.Severity;
 
 public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 		IBuildParticipant {
@@ -133,7 +133,7 @@ public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 							: JavaScriptProblems.CONTINUE_OUTSIDE_LABEL,
 					Keywords.fromToken(token)
 							+ " outside of labelled statement");
-			reporter.setSeverity(Severity.ERROR);
+			reporter.setSeverity(ProblemSeverity.ERROR);
 			reporter.setRange(statementStart, label.sourceEnd());
 			reporter.report();
 			return;
@@ -147,7 +147,7 @@ public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 		}
 		reporter.setMessage(JavaScriptProblems.CONTINUE_NON_LOOP_LABEL,
 				"continue can only use labels of iteration statements");
-		reporter.setSeverity(Severity.ERROR);
+		reporter.setSeverity(ProblemSeverity.ERROR);
 		reporter.setRange(statementStart, label.sourceEnd());
 		reporter.report();
 	}
