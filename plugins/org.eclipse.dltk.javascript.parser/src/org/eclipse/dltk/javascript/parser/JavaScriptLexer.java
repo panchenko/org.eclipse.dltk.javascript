@@ -16,7 +16,7 @@ import org.antlr.runtime.CharStream;
 import org.antlr.runtime.IntStream;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.RecognitionException;
-import org.eclipse.dltk.javascript.parser.Reporter.Severity;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 
 public class JavaScriptLexer extends JSLexer {
 
@@ -59,7 +59,7 @@ public class JavaScriptLexer extends JSLexer {
 			end = start + 1;
 		}
 		reporter.setMessage(JavaScriptParserProblems.LEXER_ERROR, msg);
-		reporter.setSeverity(Severity.ERROR);
+		reporter.setSeverity(ProblemSeverity.ERROR);
 		reporter.setRange(start, end);
 		reporter.setLine(e.line - 1);
 		reporter.report();
