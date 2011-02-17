@@ -242,7 +242,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 					reporter.setSeverity(Severity.ERROR);
 					reporter.setRange(convert(first).getOffset(),
 							end.getOffset() + end.getLength());
-					reporter.setLine(first.getLine());
+					reporter.setLine(first.getLine() - 1);
 					reporter.report();
 				}
 			} finally {
@@ -261,19 +261,19 @@ public class JavaScriptParser extends AbstractSourceParser {
 			reporter.setSeverity(Severity.ERROR);
 			reporter.setRange(colonRange.getOffset(), colonRange.getOffset()
 					+ colonRange.getLength());
-			reporter.setLine(colon.getLine());
+			reporter.setLine(colon.getLine() - 1);
 			reporter.report();
 		}
 
 		@Override
 		protected void reportReservedKeyword(Token token) {
-			final ISourceRange colonRange = convert(token);
+			final ISourceRange range = convert(token);
 			reporter.setMessage(JavaScriptParserProblems.RESERVED_KEYWORD,
 					NLS.bind("\"{0}\" is reserved keyword", token.getText()));
 			reporter.setSeverity(Severity.ERROR);
-			reporter.setRange(colonRange.getOffset(), colonRange.getOffset()
-					+ colonRange.getLength());
-			reporter.setLine(token.getLine());
+			reporter.setRange(range.getOffset(),
+					range.getOffset() + range.getLength());
+			reporter.setLine(token.getLine() - 1);
 			reporter.report();
 		}
 
