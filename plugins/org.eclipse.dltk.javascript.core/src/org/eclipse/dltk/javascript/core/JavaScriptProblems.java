@@ -113,7 +113,9 @@ public enum JavaScriptProblems implements IProblemIdentifier {
 	/**
 	 * @since 3.0
 	 */
-	CONTINUE_OUTSIDE_LABEL;
+	CONTINUE_OUTSIDE_LABEL,
+
+	DUPLICATE_PROPERTY_IN_LITERAL;
 
 	public String contributor() {
 		return JavaScriptPlugin.PLUGIN_ID;

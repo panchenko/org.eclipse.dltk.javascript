@@ -12,7 +12,9 @@
 package org.eclipse.dltk.internal.javascript.validation;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
@@ -29,12 +31,16 @@ import org.eclipse.dltk.javascript.ast.Keywords;
 import org.eclipse.dltk.javascript.ast.Label;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.LoopStatement;
+import org.eclipse.dltk.javascript.ast.ObjectInitializer;
+import org.eclipse.dltk.javascript.ast.ObjectInitializerPart;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
+import org.eclipse.osgi.util.NLS;
 
 public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 		IBuildParticipant {
@@ -196,5 +202,26 @@ public class CodeValidation extends AbstractNavigationVisitor<Object> implements
 		return expression instanceof Identifier
 				|| expression instanceof PropertyExpression
 				|| expression instanceof GetArrayItemExpression;
+	}
+
+	@Override
+	public Object visitObjectInitializer(ObjectInitializer node) {
+		final Set<String> processed = new HashSet<String>();
+		for (ObjectInitializerPart part : node.getInitializers()) {
+			if (part instanceof PropertyInitializer) {
+				final PropertyInitializer property = (PropertyInitializer) part;
+				final String propertyName = property.getNameAsString();
+				if (propertyName != null && !processed.add(propertyName)) {
+					reporter.reportProblem(
+							JavaScriptProblems.DUPLICATE_PROPERTY_IN_LITERAL,
+							NLS.bind(
+									"Duplicate property {0} in object literal",
+									propertyName), property.getName()
+									.sourceStart(), property.getName()
+									.sourceEnd());
+				}
+			}
+		}
+		return super.visitObjectInitializer(node);
 	}
 }
