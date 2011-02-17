@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.dltk.ast.parser.SourceParserManager;
 import org.eclipse.dltk.compiler.problem.DefaultProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.compiler.problem.ProblemSeverities;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IDLTKContributedExtension;
 import org.eclipse.dltk.core.SourceParserUtil;
@@ -93,9 +93,9 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				JavaScriptParserPreferences.ENABLE_TYPE_INFO), null);
 
 		String[] names = new String[] { "Warning", "Error", "Info", "Ignore" };
-		String[] ids = new String[] { ProblemSeverities.Warning.name(),
-				ProblemSeverities.Error.name(), ProblemSeverities.Info.name(),
-				ProblemSeverities.Ignore.name() };
+		String[] ids = new String[] { ProblemSeverity.WARNING.name(),
+				ProblemSeverity.ERROR.name(), ProblemSeverity.INFO.name(),
+				ProblemSeverity.IGNORE.name() };
 
 		SWTFactory.createLabel(composite,
 				"Wrong number of parameters to javascript function call", 1);
