@@ -333,7 +333,7 @@ public class JSDocSupport implements IModelBuilder {
 		parameter.setVarargs(pp.varargs);
 	}
 
-	private static final String[] RETURN_TAGS = { JSDocTag.RETURNS,
+	protected static final String[] RETURN_TAGS = { JSDocTag.RETURNS,
 			JSDocTag.RETURN, JSDocTag.TYPE };
 
 	public static final String[] TYPE_TAGS = { JSDocTag.TYPE };
