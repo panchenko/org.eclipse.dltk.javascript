@@ -32,7 +32,8 @@ public class CodeValidationTests extends AbstractValidationTest {
 		code.add("  if (a = 1) return 1");
 		code.add("  else return 0");
 		code.add("}");
-		final Set<IProblemIdentifier> problemIds = extractIds(validate(code.toString()));
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
 		assertEquals(1, problemIds.size());
 		assertTrue(problemIds.contains(JavaScriptProblems.EQUAL_AS_ASSIGN));
 	}
@@ -49,7 +50,8 @@ public class CodeValidationTests extends AbstractValidationTest {
 		code.add("READ: s = f.readLine()");
 		code.add("if (s == 'END') continue READ");
 		code.add("}");
-		Set<IProblemIdentifier> problemIds = extractIds(validate(code.toString()));
+		Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
 		assertEquals(1, problemIds.size());
 		assertTrue(problemIds
 				.contains(JavaScriptProblems.CONTINUE_OUTSIDE_LABEL));
@@ -61,9 +63,23 @@ public class CodeValidationTests extends AbstractValidationTest {
 		code.add("READ: s = f.readLine()");
 		code.add("if (s == 'END') break READ");
 		code.add("}");
-		Set<IProblemIdentifier> problemIds = extractIds(validate(code.toString()));
+		Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
 		assertEquals(1, problemIds.size());
 		assertTrue(problemIds.contains(JavaScriptProblems.BREAK_OUTSIDE_LABEL));
+	}
+
+	public void testDuplicatePropertyInLiteral() {
+		StringList code = new StringList();
+		code.add("var x = {");
+		code.add("a:1,");
+		code.add("b:2,");
+		code.add("a:3");
+		code.add("}");
+		Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(1, problemIds.size());
+		assertTrue(problemIds.contains(JavaScriptProblems.DUPLICATE_PROPERTY_IN_LITERAL));
 	}
 
 }
