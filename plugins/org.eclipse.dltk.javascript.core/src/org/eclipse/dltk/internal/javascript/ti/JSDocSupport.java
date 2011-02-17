@@ -58,7 +58,7 @@ public class JSDocSupport implements IModelBuilder {
 	public static String[] getTags() {
 		return new String[] { JSDocTag.DEPRECATED, JSDocTag.PARAM,
 				JSDocTag.TYPE, JSDocTag.RETURN, JSDocTag.RETURNS,
-				JSDocTag.PRIVATE, JSDocTag.CONSTRUCTOR };
+				JSDocTag.PRIVATE, JSDocTag.CONSTRUCTOR, JSDocTag.THROWS };
 	}
 
 	public String getFeatureId() {
@@ -93,6 +93,7 @@ public class JSDocSupport implements IModelBuilder {
 		parseDeprecation(method, tags, reporter);
 		parsePrivate(method, tags, reporter);
 		parseConstructor(method, tags, reporter);
+		// TODO also parse the throws tag and see if it has a valid type..
 	}
 
 	public static Comment getCallComment(CallExpression call) {
