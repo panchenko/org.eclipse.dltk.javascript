@@ -331,25 +331,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	@Override
 	protected ASTNode visit(Tree tree) {
 		final ASTNode node = super.visit(tree);
-		if (node != null && node instanceof Documentable) {
-			int tokenIndex = tree.getTokenStartIndex();
-			while (tokenIndex > 0) {
-				--tokenIndex;
-				final Token token = tokens.get(tokenIndex);
-				if (token.getType() == JSParser.WhiteSpace
-						|| token.getType() == JSParser.EOL) {
-					continue;
-				}
-				if (token.getType() == JSParser.MultiLineComment) {
-					final Comment comment = documentationMap.get(token
-							.getTokenIndex());
-					if (comment != null) {
-						((Documentable) node).setDocumentation(comment);
-					}
-				}
-				break;
-			}
-		}
 		if (node != null && transformers.length != 0) {
 			final ASTNode parent = getParent();
 			for (NodeTransformer transformer : transformers) {
@@ -360,6 +341,26 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			}
 		}
 		return node;
+	}
+
+	protected void locateDocumentation(final Documentable node, Tree tree) {
+		int tokenIndex = tree.getTokenStartIndex();
+		while (tokenIndex > 0) {
+			--tokenIndex;
+			final Token token = tokens.get(tokenIndex);
+			if (token.getType() == JSParser.WhiteSpace
+					|| token.getType() == JSParser.EOL) {
+				continue;
+			}
+			if (token.getType() == JSParser.MultiLineComment) {
+				final Comment comment = documentationMap.get(token
+						.getTokenIndex());
+				if (comment != null) {
+					node.setDocumentation(comment);
+				}
+			}
+			break;
+		}
 	}
 
 	@Override
@@ -779,6 +780,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	@Override
 	protected ASTNode visitFunction(Tree node) {
 		FunctionStatement fn = new FunctionStatement(getParent());
+		locateDocumentation(fn, node);
 
 		fn.setFunctionKeyword(createKeyword(node, Keywords.FUNCTION));
 
@@ -845,6 +847,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitIdentifier(Tree node) {
 
 		Identifier id = new Identifier(getParent());
+		locateDocumentation(id, node);
+
 		id.setName(node.getText());
 
 		setRangeByToken(id, node.getTokenStartIndex());
@@ -1132,6 +1136,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	@Override
 	protected ASTNode visitVarDeclaration(Tree node) {
 		VariableStatement var = new VariableStatement(getParent());
+		locateDocumentation(var, node);
 
 		var.setVarKeyword(createKeyword(node, Keywords.VAR));
 
@@ -1316,6 +1321,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitByField(Tree node) {
 
 		PropertyExpression property = new PropertyExpression(getParent());
+		locateDocumentation(property, node);
 
 		property.setObject((Expression) transformNode(node.getChild(0),
 				property));
