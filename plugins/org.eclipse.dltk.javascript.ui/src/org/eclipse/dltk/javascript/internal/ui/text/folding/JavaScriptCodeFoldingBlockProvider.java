@@ -27,7 +27,10 @@ import org.eclipse.dltk.internal.javascript.validation.AbstractNavigationVisitor
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Method;
+import org.eclipse.dltk.javascript.ast.ObjectInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.StringLiteral;
+import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.ui.PreferenceConstants;
 import org.eclipse.dltk.ui.text.folding.IFoldingBlockProvider;
@@ -53,15 +56,20 @@ public class JavaScriptCodeFoldingBlockProvider extends
 	}
 
 	private boolean collapseMethods;
+	private boolean collapseObjectInitializers;
+	private boolean collapseXml;
+	private boolean collapseStrings;
+	private int fBlockLinesMin;
 
 	public void initializePreferences(IPreferenceStore preferenceStore) {
 		collapseMethods = preferenceStore
 				.getBoolean(PreferenceConstants.EDITOR_FOLDING_INIT_METHODS);
+		fBlockLinesMin = preferenceStore
+				.getInt(PreferenceConstants.EDITOR_FOLDING_LINES_LIMIT);
 	}
 
 	public int getMinimalLineCount() {
-		// just fold everything
-		return 0;
+		return fBlockLinesMin;
 	}
 
 	private IFoldingBlockRequestor requestor;
@@ -122,6 +130,7 @@ public class JavaScriptCodeFoldingBlockProvider extends
 			element = methodCollector.get(name.sourceStart(), name.sourceEnd()
 					- name.sourceStart());
 		}
+
 		requestor.acceptBlock(node.sourceStart(), node.sourceEnd(),
 				JavaScriptFoldingBlockKind.FUNCTION, element, collapseMethods);
 		return super.visitFunctionStatement(node);
@@ -134,4 +143,26 @@ public class JavaScriptCodeFoldingBlockProvider extends
 		return super.visitMethod(method);
 	}
 
+	@Override
+	public Object visitObjectInitializer(ObjectInitializer node) {
+		requestor.acceptBlock(node.sourceStart(), node.sourceEnd(),
+				JavaScriptFoldingBlockKind.OBJECT_INITIALIZER, null,
+				collapseObjectInitializers);
+		return super.visitObjectInitializer(node);
+	}
+
+	@Override
+	public Object visitXmlLiteral(XmlLiteral node) {
+		requestor.acceptBlock(node.sourceStart(), node.sourceEnd(),
+				JavaScriptFoldingBlockKind.XML, null, collapseXml);
+		return super.visitXmlLiteral(node);
+	}
+
+	@Override
+	public Object visitStringLiteral(StringLiteral node) {
+		requestor.acceptBlock(node.sourceStart(), node.sourceEnd(),
+				JavaScriptFoldingBlockKind.MULTILINESTRING, null,
+				collapseStrings);
+		return super.visitStringLiteral(node);
+	}
 }

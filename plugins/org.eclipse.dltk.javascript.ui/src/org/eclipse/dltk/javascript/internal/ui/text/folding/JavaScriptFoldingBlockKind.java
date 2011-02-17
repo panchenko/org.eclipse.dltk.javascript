@@ -14,7 +14,8 @@ package org.eclipse.dltk.javascript.internal.ui.text.folding;
 import org.eclipse.dltk.ui.text.folding.IFoldingBlockKind;
 
 public enum JavaScriptFoldingBlockKind implements IFoldingBlockKind {
-	FUNCTION(false), COMMENT(true), JSDOC(true);
+	FUNCTION(false), XML(false), MULTILINESTRING(false), OBJECT_INITIALIZER(
+			false), COMMENT(true), JSDOC(true);
 
 	final boolean isComment;
 
