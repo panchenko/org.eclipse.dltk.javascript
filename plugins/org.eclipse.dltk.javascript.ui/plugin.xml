@@ -505,6 +505,23 @@
 			<partition type="__dftl_partition_content_type"/>
 		</scriptCompletionProposalComputer>		
 	</extension>
+ <extension
+       id="JSDocCompletionProposalComputer"
+       point="org.eclipse.dltk.ui.scriptCompletionProposalComputer">
+    <scriptCompletionProposalComputer
+          categoryId="javascriptDocCategory"
+          class="org.eclipse.dltk.javascript.internal.ui.text.completion.JSDocCompletionProposalComputer"
+          toolkitId="org.eclipse.dltk.javascript.core.nature">
+       <partition
+             type="__javascript_doc">
+       </partition>
+    </scriptCompletionProposalComputer>
+ </extension>
+ <extension
+       id="javascriptDocCategory"
+       point="org.eclipse.dltk.ui.scriptCompletionProposalComputer">
+    <proposalCategory></proposalCategory>
+ </extension>
 	<extension point="org.eclipse.dltk.ui.completion">
        <proposalLabelProvider
              class="org.eclipse.dltk.javascript.internal.ui.text.completion.JavaScriptCompletionProposalLabelProvider"
@@ -706,5 +723,4 @@
       nature="org.eclipse.dltk.javascript.core.nature">
 </highlighter>
 </extension>
-
 </plugin>
