@@ -13,10 +13,14 @@ import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.ui.text.completion.AbstractScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
+import org.eclipse.dltk.ui.text.completion.ProposalContextInformation;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.swt.graphics.Image;
 
 public class JavaScriptCompletionProposalCollector extends
@@ -67,6 +71,39 @@ public class JavaScriptCompletionProposalCollector extends
 					.getExtraInfo()));
 		}
 		return outProposal;
+	}
+
+	@Override
+	protected IScriptCompletionProposal createMethodReferenceProposal(
+			CompletionProposal methodProposal) {
+		AbstractScriptCompletionProposal methodReferenceProposal = (AbstractScriptCompletionProposal) super
+				.createMethodReferenceProposal(methodProposal);
+		if (methodProposal.getExtraInfo() instanceof Method) {
+			methodReferenceProposal
+					.setContextInformation(new ProposalContextInformation(
+							methodProposal) {
+						@Override
+						protected String createParametersList(
+								CompletionProposal proposal) {
+							Method method = (Method) proposal.getExtraInfo();
+							EList<Parameter> parameters = method
+									.getParameters();
+							StringBuilder sb = new StringBuilder();
+							for (Parameter parameter : parameters) {
+								if (sb.length() > 0)
+									sb.append(',');
+								sb.append(parameter.getName());
+								if (parameter.getType() != null) {
+									sb.append(':');
+									sb.append(parameter.getType().getName());
+								}
+
+							}
+							return sb.toString();
+						}
+					});
+		}
+		return methodReferenceProposal;
 	}
 
 	@Override
