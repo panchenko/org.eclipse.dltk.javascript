@@ -29,7 +29,6 @@ import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
-import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SimpleType;
@@ -50,6 +49,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
@@ -281,27 +281,29 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			}
 			if (item instanceof IValueReference) {
 				final IValueReference valueRef = (IValueReference) item;
-				final Predicate<Member> predicate;
-				if (JavaScriptValidations.isStatic(valueRef)) {
-					predicate = MemberPredicates.STATIC;
-				} else {
-					predicate = MemberPredicates.NON_STATIC;
-				}
 				for (JSType type : valueRef.getDeclaredTypes()) {
 					final Type t = TypeUtil.extractType(context
 							.resolveTypeRef(type));
 					if (t != null) {
-						reportTypeMembers(t, predicate);
+						reportTypeMembers(t,
+								isStatic(type) ? MemberPredicates.STATIC
+										: MemberPredicates.NON_STATIC);
 					}
 				}
 				for (JSType type : valueRef.getTypes()) {
 					final Type t = TypeUtil.extractType(context
 							.resolveTypeRef(type));
 					if (t != null) {
-						reportTypeMembers(t, predicate);
+						reportTypeMembers(t,
+								isStatic(type) ? MemberPredicates.STATIC
+										: MemberPredicates.NON_STATIC);
 					}
 				}
 			}
+		}
+
+		private boolean isStatic(JSType type) {
+			return type instanceof TypeRef && ((TypeRef) type).isStatic();
 		}
 
 		protected void reportTypeMembers(Type type, Predicate<Member> predicate) {
