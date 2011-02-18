@@ -79,29 +79,36 @@ public class JavaScriptCompletionProposalCollector extends
 		AbstractScriptCompletionProposal methodReferenceProposal = (AbstractScriptCompletionProposal) super
 				.createMethodReferenceProposal(methodProposal);
 		if (methodProposal.getExtraInfo() instanceof Method) {
-			methodReferenceProposal
-					.setContextInformation(new ProposalContextInformation(
-							methodProposal) {
-						@Override
-						protected String createParametersList(
-								CompletionProposal proposal) {
-							Method method = (Method) proposal.getExtraInfo();
-							EList<Parameter> parameters = method
-									.getParameters();
-							StringBuilder sb = new StringBuilder();
-							for (Parameter parameter : parameters) {
-								if (sb.length() > 0)
-									sb.append(',');
-								if (parameter.getType() != null) {
-									sb.append(parameter.getType().getName());
-									sb.append(' ');
-								}
-								sb.append(parameter.getName());
+			Method method = (Method) methodProposal.getExtraInfo();
+			EList<Parameter> parameters = method.getParameters();
+			if (parameters.size() > 0) {
+				StringBuilder sb = new StringBuilder();
+				for (Parameter parameter : parameters) {
+					if (sb.length() > 0)
+						sb.append(',');
+					if (parameter.getType() != null) {
+						sb.append(parameter.getType().getName());
+						sb.append(' ');
+					}
+					sb.append(parameter.getName());
 
-							}
-							return sb.toString();
-						}
-					});
+				}
+				final String informationDisplayString = sb.toString();
+				ProposalContextInformation contextInformation = new ProposalContextInformation(
+						methodProposal) {
+
+					@Override
+					public String getInformationDisplayString() {
+						return informationDisplayString;
+					}
+				};
+
+				contextInformation.setContextInformationPosition(methodProposal
+						.getReplaceStart()
+						+ methodProposal.getCompletion().length() + 1);
+				methodReferenceProposal
+						.setContextInformation(contextInformation);
+			}
 		}
 		return methodReferenceProposal;
 	}
