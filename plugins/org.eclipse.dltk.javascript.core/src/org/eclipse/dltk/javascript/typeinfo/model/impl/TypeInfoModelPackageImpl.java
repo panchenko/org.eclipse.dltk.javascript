@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.18 2011/02/14 16:52:05 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.19 2011/02/18 04:25:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -282,6 +282,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      */
     public EReference getTypeRef_Target() {
         return (EReference)typeRefEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getTypeRef_Static() {
+        return (EAttribute)typeRefEClass.getEStructuralFeatures().get(1);
     }
 
     /**
@@ -607,6 +616,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         typeRefEClass = createEClass(TYPE_REF);
         createEReference(typeRefEClass, TYPE_REF__TARGET);
+        createEAttribute(typeRefEClass, TYPE_REF__STATIC);
 
         arrayTypeEClass = createEClass(ARRAY_TYPE);
         createEReference(arrayTypeEClass, ARRAY_TYPE__ITEM_TYPE);
@@ -712,6 +722,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         initEClass(typeRefEClass, TypeRef.class, "TypeRef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getTypeRef_Target(), this.getType(), null, "target", null, 0, 1, TypeRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEAttribute(getTypeRef_Static(), ecorePackage.getEBoolean(), "static", null, 0, 1, TypeRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(arrayTypeEClass, ArrayType.class, "ArrayType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getArrayType_ItemType(), this.getJSType(), null, "itemType", null, 0, 1, ArrayType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

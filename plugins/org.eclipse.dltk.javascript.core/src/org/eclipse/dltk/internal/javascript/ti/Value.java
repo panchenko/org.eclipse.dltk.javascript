@@ -24,7 +24,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class Value implements IValue, IValue2 {
 
-	private final JSTypeSet types = JSTypeSet.create();
+	protected final JSTypeSet types = JSTypeSet.create();
 	private final Map<String, Value> children = new HashMap<String, Value>(4,
 			0.9f);
 	private final Map<String, IValue> inherited = new HashMap<String, IValue>(
@@ -325,10 +325,6 @@ public class Value implements IValue, IValue2 {
 		} else {
 			if (src.getDeclaredType() != null) {
 				types.add(src.getDeclaredType());
-			}
-			if (Boolean.TRUE.equals(src
-					.getAttribute(IReferenceAttributes.STATIC))) {
-				setAttribute(IReferenceAttributes.STATIC, Boolean.TRUE);
 			}
 			types.addAll(src.getTypes());
 		}

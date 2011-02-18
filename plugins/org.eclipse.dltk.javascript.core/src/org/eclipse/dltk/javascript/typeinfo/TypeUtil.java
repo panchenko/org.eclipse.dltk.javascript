@@ -22,10 +22,18 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.InternalEObject;
 
 public class TypeUtil {
-
 	public static TypeRef ref(Type type) {
+		return ref(type, false);
+	}
+
+	public static TypeRef staticRef(Type type) {
+		return ref(type, true);
+	}
+
+	private static TypeRef ref(Type type, boolean isStatic) {
 		if (type != null) {
 			final TypeRef ref = TypeInfoModelFactory.eINSTANCE.createTypeRef();
+			ref.setStatic(isStatic);
 			ref.setTarget(type);
 			return ref;
 		}

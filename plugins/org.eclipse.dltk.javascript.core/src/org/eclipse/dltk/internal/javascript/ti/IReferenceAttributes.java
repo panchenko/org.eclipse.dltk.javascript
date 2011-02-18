@@ -17,7 +17,6 @@ public interface IReferenceAttributes {
 	String LOCATION = "LOCATION"; //$NON-NLS-1$
 	String FUNCTION_SCOPE = "FUNCTION_SCOPE"; //$NON-NLS-1$
 	String ELEMENT = "ELEMENT"; //$NON-NLS-1$
-	String STATIC = "STATIC"; //$NON-NLS-1$
 	String VARIABLE = "VARIABLE"; //$NON-NLS-1$s
 	String CONSTANT = "CONSTANT"; //$NON-NLS-1$s
 

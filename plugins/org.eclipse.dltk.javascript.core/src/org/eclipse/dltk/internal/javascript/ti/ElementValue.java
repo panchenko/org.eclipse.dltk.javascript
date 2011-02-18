@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.FUNCTION;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,7 +25,6 @@ import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -87,7 +88,8 @@ public abstract class ElementValue implements IValue {
 	}
 
 	public static ElementValue createStatic(Type type) {
-		return new StaticTypeValue(JSTypeSet.singleton(TypeUtil.ref(type)));
+		return new StaticTypeValue(
+				JSTypeSet.singleton(TypeUtil.staticRef(type)));
 	}
 
 	private static class TypeValue extends ElementValue implements IValue {
@@ -172,15 +174,6 @@ public abstract class ElementValue implements IValue {
 
 		public JSTypeSet getDeclaredTypes() {
 			return types;
-		}
-
-		@Override
-		public Object getAttribute(String key, boolean b) {
-			if (IReferenceAttributes.STATIC.equals(key)) {
-				return Boolean.TRUE;
-			} else {
-				return super.getAttribute(key, b);
-			}
 		}
 
 	}
@@ -394,8 +387,8 @@ public abstract class ElementValue implements IValue {
 					if (types == null) {
 						types = JSTypeSet.create();
 					}
-					types.add(TypeInfoModelLoader.getInstance().getType(
-							ITypeNames.FUNCTION));
+					types.add(TypeUtil.staticRef(TypeInfoModelLoader
+							.getInstance().getType(FUNCTION)));
 				}
 			}
 			if (types != null) {
@@ -429,12 +422,6 @@ public abstract class ElementValue implements IValue {
 	public Object getAttribute(String key, boolean includeReferences) {
 		if (IReferenceAttributes.ELEMENT.equals(key)) {
 			return getElements();
-		}
-		if (IReferenceAttributes.STATIC.equals(key)) {
-			Object elements = getElements();
-			if (elements instanceof Member) {
-				return ((Member) elements).isStatic();
-			}
 		}
 		return null;
 	}

@@ -63,11 +63,6 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		}
 
 		@Override
-		public void add(Type type) {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
 		public JSType getFirst() {
 			return null;
 		}
@@ -169,11 +164,6 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		}
 
 		@Override
-		public void add(Type type) {
-			throw new UnsupportedOperationException();
-		}
-
-		@Override
 		public JSType getFirst() {
 			return type;
 		}
@@ -237,9 +227,11 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 	private static class TypeRefKey implements TypeRef, JSType2 {
 
 		private final Type type;
+		private final boolean isStatic;
 
-		public TypeRefKey(Type type) {
+		public TypeRefKey(Type type, boolean isStatic) {
 			this.type = type;
+			this.isStatic = isStatic;
 		}
 
 		public TypeKind getKind() {
@@ -258,6 +250,14 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			throw new UnsupportedOperationException();
 		}
 
+		public boolean isStatic() {
+			return isStatic;
+		}
+
+		public void setStatic(boolean value) {
+			throw new UnsupportedOperationException();
+		}
+
 		@Override
 		public int hashCode() {
 			return type.hashCode();
@@ -267,14 +267,14 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		public boolean equals(Object obj) {
 			if (obj instanceof TypeRefKey) {
 				final TypeRefKey other = (TypeRefKey) obj;
-				return type.equals(other.getTarget());
+				return type.equals(other.type) && isStatic == other.isStatic;
 			}
 			return false;
 		}
 
 		@Override
 		public String toString() {
-			return type.toString();
+			return (isStatic ? "[static]" : "") + type.toString();
 		}
 
 		public boolean isArray() {
@@ -368,7 +368,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	public static JSType2 normalize(JSType type) {
 		if (type instanceof TypeRefImpl) {
-			return ref(((TypeRef) type).getTarget());
+			final TypeRef ref = (TypeRef) type;
+			return ref(ref.getTarget(), ref.isStatic());
 		} else if (type instanceof ArrayTypeImpl) {
 			return arrayOf(normalize(((ArrayType) type).getItemType()));
 		}
@@ -376,8 +377,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		return (JSType2) type;
 	}
 
-	public static JSType2 ref(Type type) {
-		return new TypeRefKey(type);
+	public static JSType2 ref(Type type, boolean isStatic) {
+		return new TypeRefKey(type, isStatic);
 	}
 
 	public static ArrayTypeKey arrayOf(final JSType2 itemType) {
@@ -398,11 +399,6 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		@Override
 		public void add(JSType type) {
 			types.add(normalize(type));
-		}
-
-		@Override
-		public void add(Type type) {
-			types.add(ref(type));
 		}
 
 		@Override
@@ -450,7 +446,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		@Override
 		public boolean contains(Type type) {
-			return types.contains(ref(type));
+			return types.contains(ref(type, false));
 		}
 
 		@Override
@@ -485,7 +481,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	public abstract void add(JSType type);
 
-	public abstract void add(Type type);
+	// public abstract void add(Type type);
 
 	public abstract JSType getFirst();
 

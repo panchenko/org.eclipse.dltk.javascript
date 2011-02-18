@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptValidations {
 
@@ -146,12 +147,24 @@ public class JavaScriptValidations {
 		return methods.get(0);
 	}
 
+	@Deprecated
 	public static boolean isStatic(IValueReference valueRef) {
 		if (valueRef == null) {
 			return false;
 		}
-		return Boolean.TRUE == valueRef
-				.getAttribute(IReferenceAttributes.STATIC);
+		for (JSType type : valueRef.getDeclaredTypes()) {
+			if (type != null && type instanceof TypeRef
+					&& ((TypeRef) type).isStatic()) {
+				return true;
+			}
+		}
+		for (JSType type : valueRef.getTypes()) {
+			if (type != null && type instanceof TypeRef
+					&& ((TypeRef) type).isStatic()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -150,7 +150,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	private JSType2 doResolveTypeRef(JSType type) {
 		if (type instanceof TypeRef) {
-			return JSTypeSet.ref(doResolveType(((TypeRef) type).getTarget()));
+			final TypeRef r = (TypeRef) type;
+			return JSTypeSet.ref(doResolveType(r.getTarget()), r.isStatic());
 		} else if (type instanceof ArrayType) {
 			return JSTypeSet.arrayOf(doResolveTypeRef(((ArrayType) type)
 					.getItemType()));

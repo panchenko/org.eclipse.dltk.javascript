@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl#isStatic <em>Static</em>}</li>
  * </ul>
  * </p>
  *
@@ -46,6 +47,25 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
 	protected Type target;
 
 	/**
+     * The default value of the '{@link #isStatic() <em>Static</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isStatic()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean STATIC_EDEFAULT = false;
+    /**
+     * The cached value of the '{@link #isStatic() <em>Static</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isStatic()
+     * @generated
+     * @ordered
+     */
+    protected boolean static_ = STATIC_EDEFAULT;
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -98,6 +118,27 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean isStatic() {
+        return static_;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setStatic(boolean newStatic) {
+        boolean oldStatic = static_;
+        static_ = newStatic;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE_REF__STATIC, oldStatic, static_));
+    }
+
+    /**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -136,6 +177,8 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
             case TypeInfoModelPackage.TYPE_REF__TARGET:
                 if (resolve) return getTarget();
                 return basicGetTarget();
+            case TypeInfoModelPackage.TYPE_REF__STATIC:
+                return isStatic();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -149,6 +192,9 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
         switch (featureID) {
             case TypeInfoModelPackage.TYPE_REF__TARGET:
                 setTarget((Type)newValue);
+                return;
+            case TypeInfoModelPackage.TYPE_REF__STATIC:
+                setStatic((Boolean)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -164,6 +210,9 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
             case TypeInfoModelPackage.TYPE_REF__TARGET:
                 setTarget((Type)null);
                 return;
+            case TypeInfoModelPackage.TYPE_REF__STATIC:
+                setStatic(STATIC_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -177,6 +226,8 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
         switch (featureID) {
             case TypeInfoModelPackage.TYPE_REF__TARGET:
                 return target != null;
+            case TypeInfoModelPackage.TYPE_REF__STATIC:
+                return static_ != STATIC_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }

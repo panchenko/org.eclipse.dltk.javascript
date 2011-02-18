@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.15 2011/02/10 13:05:29 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.16 2011/02/18 04:25:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -774,13 +774,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE_REF__TARGET = JS_TYPE_FEATURE_COUNT + 0;
 
     /**
+     * The feature id for the '<em><b>Static</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_REF__STATIC = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
      * The number of structural features of the '<em>Type Ref</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int TYPE_REF_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
+    int TYPE_REF_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 2;
 
     /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.
@@ -915,6 +924,17 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getTypeRef_Target();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef#isStatic <em>Static</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Static</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeRef#isStatic()
+     * @see #getTypeRef()
+     * @generated
+     */
+    EAttribute getTypeRef_Static();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.ArrayType <em>Array Type</em>}'.
@@ -1308,6 +1328,14 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference TYPE_REF__TARGET = eINSTANCE.getTypeRef_Target();
+
+        /**
+         * The meta object literal for the '<em><b>Static</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute TYPE_REF__STATIC = eINSTANCE.getTypeRef_Static();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.
