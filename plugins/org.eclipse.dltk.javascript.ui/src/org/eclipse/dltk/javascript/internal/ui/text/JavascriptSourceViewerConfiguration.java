@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text;
 
+import java.util.Map;
+
 import org.eclipse.dltk.javascript.internal.ui.text.completion.JavaScriptCompletionProcessor;
 import org.eclipse.dltk.javascript.internal.ui.text.completion.JavaScriptContentAssistPreference;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
@@ -362,6 +364,13 @@ public class JavascriptSourceViewerConfiguration extends
 		String partitioning = getConfiguredDocumentPartitioning(sourceViewer);
 		return new IAutoEditStrategy[] { new JavascriptAutoEditStrategy(
 				partitioning, null) };
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected Map getHyperlinkDetectorTargets(final ISourceViewer sourceViewer) {
+		final Map targets = super.getHyperlinkDetectorTargets(sourceViewer);
+		targets.put("org.eclipse.dltk.javascript.code", getEditor()); //$NON-NLS-1$
+		return targets;
 	}
 
 }

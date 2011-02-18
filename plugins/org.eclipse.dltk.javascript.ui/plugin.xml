@@ -723,4 +723,11 @@
       nature="org.eclipse.dltk.javascript.core.nature">
 </highlighter>
 </extension>
+
+<extension point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectorTargets">
+	<target id="org.eclipse.dltk.javascript.code" name="%target.name.javascriptEditor">
+		<context type="org.eclipse.ui.texteditor.ITextEditor" />
+	</target>
+</extension>
+
 </plugin>
