@@ -473,5 +473,11 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile(".", module);
 		basicTest(module, position, new String[]{"deprecatedName","service"});
 	}
+	
+	public void testNewViaClassRef() {
+		IModuleSource module = createModule("test-new-via-class-ref.js");
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, getMethodsOfNumber().toArray(new String[0]));
+	}
 
 }
