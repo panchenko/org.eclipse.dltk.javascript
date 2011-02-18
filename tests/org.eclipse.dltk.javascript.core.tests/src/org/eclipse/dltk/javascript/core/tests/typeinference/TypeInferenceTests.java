@@ -51,12 +51,16 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		return script;
 	}
 
+	private static final String STATIC_PREFIX = "static:";
+
 	private static JSTypeSet getTypes(String... names) {
 		final JSTypeSet types = JSTypeSet.create();
 		for (String name : names) {
-			final Type type = TypeInfoModelLoader.getInstance().getType(name);
+			final boolean isStatic = name.startsWith(STATIC_PREFIX);
+			final Type type = TypeInfoModelLoader.getInstance().getType(
+					isStatic ? name.substring(STATIC_PREFIX.length()) : name);
 			assertNotNull(type);
-			types.add(type);
+			types.add(isStatic ? TypeUtil.staticRef(type) : TypeUtil.ref(type));
 		}
 		return types;
 	}
@@ -630,7 +634,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		lines.add("var num = Number;");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference name = collection.getChild("num");
-		assertEquals(getTypes(NUMBER), name.getTypes());
+		assertEquals(getTypes(STATIC_PREFIX + NUMBER), name.getTypes());
 
 		assertTrue(JavaScriptValidations.isStatic(name));
 
