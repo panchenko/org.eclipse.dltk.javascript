@@ -92,11 +92,11 @@ public class JavaScriptCompletionProposalCollector extends
 							for (Parameter parameter : parameters) {
 								if (sb.length() > 0)
 									sb.append(',');
-								sb.append(parameter.getName());
 								if (parameter.getType() != null) {
-									sb.append(':');
 									sb.append(parameter.getType().getName());
+									sb.append(' ');
 								}
+								sb.append(parameter.getName());
 
 							}
 							return sb.toString();
