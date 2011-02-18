@@ -65,6 +65,8 @@ public class JavaScriptCompletionProcessor extends ScriptCompletionProcessor {
 		public boolean updatePresentation(int documentPosition,
 				TextPresentation presentation) {
 			try {
+				if (documentPosition < installOffset)
+					return false;
 				String text = viewer.getDocument().get(installOffset,
 						documentPosition - installOffset);
 				int count = 0;
