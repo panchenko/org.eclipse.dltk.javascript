@@ -45,8 +45,12 @@
     <members xsi:type="ref:Method" name="hasOwnProperty" directType="Boolean" description="Returns a boolean indicating whether an object contains the specified property as a direct property of that object and not inherited through the prototype chain.">
     	<parameters name="prop" directType="String"/>
     </members>
-    <members xsi:type="ref:Method" name="isPrototypeOf" description="Returns a boolean indication whether the specified object is in the prototype chain of the object this method is called upon."/>
-    <members xsi:type="ref:Method" name="propertyIsEnumerable" description="Returns a boolean indicating if the internal ECMAScript DontEnum attribute is set."/>
+    <members xsi:type="ref:Method" name="isPrototypeOf" description="Returns a boolean indication whether the specified object is in the prototype chain of the object this method is called upon.">
+    	<parameters name="object" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="propertyIsEnumerable" description="Returns a boolean indicating if the internal ECMAScript DontEnum attribute is set.">
+    	<parameters name="prop" directType="String"/>
+    </members>
   </ref:Type>
   <ref:Type name="RegExp" kind="PREDEFINED" superType="Object">
   	<members xsi:type="ref:Property" name="prototype" directType="RegExp" static="true" description="Allows the addition of properties to a RegExp object."/>
