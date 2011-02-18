@@ -385,7 +385,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("	this.a = 10;");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 	}
 
 	public void testGenericParamWtihNoneGenericCall() throws Exception {

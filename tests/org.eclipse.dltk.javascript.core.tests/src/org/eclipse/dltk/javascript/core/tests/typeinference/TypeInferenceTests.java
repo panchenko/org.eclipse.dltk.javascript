@@ -658,7 +658,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
-		JSType type = strClz.getTypes().iterator().next();
+		JSType type = strClz.getTypes().getFirst();
 		assertEquals("java.lang.String", type.getName());
 
 		boolean valueOfFound = false;
@@ -673,7 +673,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 		IValueReference str = collection.getChild("x");
 		assertEquals(1, str.getTypes().size());
-		assertEquals(type, str.getTypes().iterator().next());
+		assertEquals(extractType(type), extractType(str.getTypes().getFirst()));
 
 		boolean toStringFound = false;
 		for (Member member : extractType(type).getMembers()) {
@@ -694,7 +694,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
-		JSType type = strClz.getTypes().iterator().next();
+		JSType type = strClz.getTypes().getFirst();
 		assertEquals("java.lang.String", type.getName());
 
 		boolean valueOfFound = false;
@@ -710,7 +710,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 		IValueReference str = collection.getChild("x");
 		assertEquals(1, str.getTypes().size());
-		assertEquals(type, str.getTypes().iterator().next());
+		assertEquals(extractType(type), extractType(str.getTypes().getFirst()));
 
 		boolean toStringFound = false;
 		for (Member member : extractType(type).getMembers()) {
