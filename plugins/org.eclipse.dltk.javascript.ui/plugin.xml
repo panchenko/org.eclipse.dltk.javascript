@@ -507,9 +507,10 @@
 	</extension>
  <extension
        id="JSDocCompletionProposalComputer"
+       name="JSDoc Proposals"
        point="org.eclipse.dltk.ui.scriptCompletionProposalComputer">
     <scriptCompletionProposalComputer
-          categoryId="javascriptDocCategory"
+          categoryId="org.eclipse.dltk.javascript.ui.javascriptDocProposalCategory"
           class="org.eclipse.dltk.javascript.internal.ui.text.completion.JSDocCompletionProposalComputer"
           toolkitId="org.eclipse.dltk.javascript.core.nature">
        <partition
@@ -518,7 +519,8 @@
     </scriptCompletionProposalComputer>
  </extension>
  <extension
-       id="javascriptDocCategory"
+       id="javascriptDocProposalCategory"
+       name="JSDoc Proposals"
        point="org.eclipse.dltk.ui.scriptCompletionProposalComputer">
     <proposalCategory></proposalCategory>
  </extension>
