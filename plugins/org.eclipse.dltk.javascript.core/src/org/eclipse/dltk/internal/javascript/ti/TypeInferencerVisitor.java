@@ -625,22 +625,37 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		IValueReference visit = visit(objectClass);
 
 		IValueReference result = null;
-		if (visit != null && visit.getKind() == ReferenceKind.FUNCTION) {
-			Object fs = visit.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
-			if (fs instanceof IValueCollection
-					&& ((IValueCollection) fs).getThis() != null) {
-				result = new AnonymousNewValue();
-				result.setValue(((IValueCollection) fs).getThis());
-				result.setKind(ReferenceKind.TYPE);
-				String className = PropertyExpressionUtils.getPath(objectClass);
-				if (className != null) {
-					Type type = TypeInfoModelFactory.eINSTANCE.createType();
-					type.setSuperType(context.getKnownType(OBJECT));
-					type.setKind(TypeKind.JAVASCRIPT);
-					type.setName(className);
-					result.setDeclaredType(TypeUtil.ref(type));
-				} else {
-					result.setDeclaredType(context.getTypeRef(OBJECT));
+		if (visit != null) {
+			if (visit.getKind() == ReferenceKind.FUNCTION) {
+				Object fs = visit
+						.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+				if (fs instanceof IValueCollection
+						&& ((IValueCollection) fs).getThis() != null) {
+					result = new AnonymousNewValue();
+					result.setValue(((IValueCollection) fs).getThis());
+					result.setKind(ReferenceKind.TYPE);
+					String className = PropertyExpressionUtils
+							.getPath(objectClass);
+					if (className != null) {
+						Type type = TypeInfoModelFactory.eINSTANCE.createType();
+						type.setSuperType(context.getKnownType(OBJECT));
+						type.setKind(TypeKind.JAVASCRIPT);
+						type.setName(className);
+						result.setDeclaredType(TypeUtil.ref(type));
+					} else {
+						result.setDeclaredType(context.getTypeRef(OBJECT));
+					}
+				}
+			} else if (visit.exists()) {
+				final JSTypeSet types = visit.getTypes();
+				for (JSType type : types) {
+					if (type instanceof TypeRef && ((TypeRef) type).isStatic()) {
+						result = new AnonymousNewValue();
+						result.setKind(ReferenceKind.TYPE);
+						result.setDeclaredType(TypeUtil.ref(((TypeRef) type)
+								.getTarget()));
+						break;
+					}
 				}
 			}
 		}
