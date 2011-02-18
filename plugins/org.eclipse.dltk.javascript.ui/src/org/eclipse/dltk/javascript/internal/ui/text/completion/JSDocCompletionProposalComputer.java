@@ -16,6 +16,7 @@ import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
+import org.eclipse.jface.text.contentassist.ContextInformation;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 
@@ -45,9 +46,12 @@ public class JSDocCompletionProposalComputer implements
 			String prefix = null;
 			String tag = null;
 			boolean bracketFound = false;
+			boolean skipNoneIdentifiers = false;
 			while (--index > 0) {
 				char ch = doc.charAt(index);
 				if (!Character.isJavaIdentifierPart(ch)) {
+					if (skipNoneIdentifiers)
+						continue;
 					if (ch == '@') {
 						// tag found.
 						tag = doc.substring(index,
@@ -62,12 +66,14 @@ public class JSDocCompletionProposalComputer implements
 						prefix = doc
 								.substring(prefixIndex, invocationLineIndex);
 						bracketFound = true;
-						break;
+						skipNoneIdentifiers = true;
 					} else {
 						prefix = doc.substring(index, invocationLineIndex);
 						prefixIndex = index;
 					}
 					continue;
+				} else {
+					skipNoneIdentifiers = false;
 				}
 			}
 			if (prefixIndex == -1) {
@@ -76,17 +82,30 @@ public class JSDocCompletionProposalComputer implements
 					String[] tags = JSDocSupport.getTags();
 					for (String jsdocTag : tags) {
 						if (jsdocTag.startsWith(tag)) {
-							proposals.add(new CompletionProposal(
-									jsdocTag + ' ', context
-											.getInvocationOffset()
-											- tag.length(), tag.length(),
-									jsdocTag.length() + 1));
+							if (jsdocTag.equals("@param")) {
+								CompletionProposal proposal = new CompletionProposal(
+										jsdocTag + " {} name",
+										context.getInvocationOffset()
+												- tag.length(), tag.length(),
+										jsdocTag.length() + 2, null,
+										"@param {Type} name",
+										new ContextInformation(
+												"@param {Type} name",
+												"{Type} name"), null);
+								proposals.add(proposal);
+							} else {
+								proposals.add(new CompletionProposal(
+										jsdocTag + ' ', context
+												.getInvocationOffset()
+												- tag.length(), tag.length(),
+										jsdocTag.length() + 1));
+							}
 						}
 					}
 					return proposals;
 				}
 			} else if (bracketFound || "@type".equals(tag)) {
-				return genereateTypes(context, prefix);
+				return generateTypes(context, prefix);
 			}
 
 		} catch (Exception e) {
@@ -100,7 +119,7 @@ public class JSDocCompletionProposalComputer implements
 	 * @param prefix
 	 * @return
 	 */
-	private List<ICompletionProposal> genereateTypes(
+	private List<ICompletionProposal> generateTypes(
 			ContentAssistInvocationContext context, String prefix) {
 		if (context instanceof ScriptContentAssistInvocationContext) {
 			TypeInferencer2 infencer = new TypeInferencer2();
