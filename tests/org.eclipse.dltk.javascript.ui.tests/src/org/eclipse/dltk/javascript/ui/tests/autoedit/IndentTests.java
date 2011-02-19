@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ui.tests.autoedit;
 
+import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.jface.text.BadLocationException;
 
@@ -21,7 +22,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		code.add("function test() {");
 		code.add(TAB + "var x = null;");
 		code.add("}");
-		final Document document = new Document(code);
+		final Document document = createDocument(code);
 		execute(document, createCommand(ENTER, document.getEndOfLineOffset(1)));
 		StringList expected = new StringList();
 		expected.add("function test() {");
@@ -36,7 +37,7 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		code.add("function test() {");
 		code.add(TAB + "var x:String = null;");
 		code.add("}");
-		final Document document = new Document(code);
+		final Document document = createDocument(code);
 		execute(document, createCommand(ENTER, document.getEndOfLineOffset(1)));
 		StringList expected = new StringList();
 		expected.add("function test() {");
@@ -58,38 +59,93 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
-	public void testJsDocOpen() throws BadLocationException {
+	public void testAfterIf() throws BadLocationException {
 		StringList code = new StringList();
-		code.add("/*");
-		code.add("function test() {");
-		code.add("}");
+		code.add("if (a > b)");
 		final Document document = createDocument(code);
 		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
 		StringList expected = new StringList();
-		expected.add("/*");
-		expected.add(" * ");
-		expected.add(" */");
-		expected.add("function test() {");
+		expected.add("if (a > b)");
+		expected.add(TAB);
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testAfterIfBrace() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("if (a > b) {");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
+		StringList expected = new StringList();
+		expected.add("if (a > b) {");
+		expected.add(TAB);
 		expected.add("}");
 		assertEquals(expected.toString(), document.get());
 	}
 
-	public void testJsDocContinue() throws BadLocationException {
+	public void testElse() throws BadLocationException {
 		StringList code = new StringList();
-		code.add("/*");
-		code.add(" * ");
-		code.add(" */");
-		code.add("function test() {");
+		code.add("if (a > b)");
+		code.add(TAB + "els");
+		final Document document = createDocument(code);
+		execute(document, createCommand("e", document.getEndOfLineOffset(1)));
+		StringList expected = new StringList();
+		expected.add("if (a > b)");
+		expected.add("else");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testCaseIndent() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("switch (x) {");
+		code.add("case 0:");
 		code.add("}");
 		final Document document = createDocument(code);
-		// TODO find correct strategy for offset
 		execute(document, createCommand(ENTER, document.getEndOfLineOffset(1)));
 		StringList expected = new StringList();
-		expected.add("/*");
-		expected.add(" * ");
-		expected.add(" * ");
-		expected.add(" */");
-		expected.add("function test() {");
+		expected.add("switch (x) {");
+		expected.add("case 0:");
+		expected.add(TAB);
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testCaseNext() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("switch (x) {");
+		code.add("case 0:");
+		code.add(TAB + "cas");
+		code.add("}");
+		final Document document = createDocument(code);
+		execute(document, createCommand("e", document.getEndOfLineOffset(2)));
+		StringList expected = new StringList();
+		expected.add("switch (x) {");
+		expected.add("case 0:");
+		expected.add("case");
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testAfterArrayLiteralNext() throws BadLocationException {
+		if (TestSupport.notYetImplemented(this))
+			return; // it fails (indent is increase somehow) now
+		StringList code = new StringList();
+		code.add("var a = [1, 2, 3]");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
+		StringList expected = new StringList();
+		expected.add("var a = [1, 2, 3]");
+		expected.add("");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testRightBrace() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("if (a > b) {");
+		code.add(TAB);
+		final Document document = createDocument(code);
+		execute(document, createCommand("}", document.getEndOfLineOffset(1)));
+		StringList expected = new StringList();
+		expected.add("if (a > b) {");
 		expected.add("}");
 		assertEquals(expected.toString(), document.get());
 	}

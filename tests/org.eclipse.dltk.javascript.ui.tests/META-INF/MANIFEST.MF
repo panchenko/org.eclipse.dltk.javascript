@@ -7,6 +7,7 @@ Bundle-Activator: org.eclipse.dltk.javascript.ui.tests.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface,
  org.eclipse.jface.text,
+ org.eclipse.ui.workbench,
  org.junit,
  org.eclipse.dltk.core,
  org.eclipse.dltk.core.tests,
