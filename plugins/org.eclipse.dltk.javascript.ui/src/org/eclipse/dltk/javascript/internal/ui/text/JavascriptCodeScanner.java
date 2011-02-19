@@ -34,7 +34,6 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 
 	private static String fgReturnKeyword = "return";
 	private static String fgTokenProperties[] = new String[] {
-			JavascriptColorConstants.JS_SINGLE_LINE_COMMENT,
 			JavascriptColorConstants.JS_DEFAULT,
 			JavascriptColorConstants.JS_KEYWORD,
 			JavascriptColorConstants.JS_KEYWORD_RETURN,
@@ -76,11 +75,6 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 		IToken other = getToken(JavascriptColorConstants.JS_DEFAULT);
 		IToken def = getToken(JavascriptColorConstants.JS_FUNCTION_DEFINITION);
 		IToken number = getToken(JavascriptColorConstants.JS_NUMBER);
-		// comments are already done by the TASK scanner...
-		// IToken comment =
-		// getToken(JavascriptColorConstants.JS_SINGLE_LINE_COMMENT);
-		// Add rule for single line comments.
-		// rules.add(new EndOfLineRule("//", comment));
 		// Add generic whitespace rule.
 		rules.add(new WhitespaceRule(new JavascriptWhitespaceDetector()));
 		// Add word rule for keywords, types, and constants.
