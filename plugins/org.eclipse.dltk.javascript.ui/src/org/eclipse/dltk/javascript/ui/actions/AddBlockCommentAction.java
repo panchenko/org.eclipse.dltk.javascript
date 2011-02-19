@@ -153,7 +153,7 @@ public class AddBlockCommentAction extends BlockCommentAction {
 
 			wasJavadoc = true;
 
-		} else if (partType == IJavaScriptPartitions.JS_COMMENT) {
+		} else if (partType == IJavaScriptPartitions.JS_MULTI_LINE_COMMENT) {
 
 			// already in a comment - remove ending mark
 			edits.add(factory.createEdit(partEndOffset - tokenLength,
@@ -183,7 +183,7 @@ public class AddBlockCommentAction extends BlockCommentAction {
 				// if next is javadoc, end block comment before
 				edits.add(factory.createEdit(partition.getOffset(), 0,
 						getCommentEnd()));
-			} else if (partType == IJavaScriptPartitions.JS_COMMENT) {
+			} else if (partType == IJavaScriptPartitions.JS_MULTI_LINE_COMMENT) {
 				// already in a comment - remove startToken
 				edits.add(factory.createEdit(partition.getOffset(),
 						getCommentStart().length(), "")); //$NON-NLS-1$

@@ -201,23 +201,8 @@ public class JavascriptAutoEditStrategy extends
 			c.length = Math.max(contentStart - c.offset, 0);
 
 			int start = reg.getOffset();
-			ITypedRegion region = TextUtilities.getPartition(d, fPartitioning,
-					start, true);
-			if (IJavaScriptPartitions.JS_DOC.equals(region.getType())
-					|| IJavaScriptPartitions.JS_COMMENT
-							.equals(region.getType())) {
-				IRegion prevLine = d.getLineInformation(line);
-				String str = d.get(prevLine.getOffset(), prevLine.getLength());
-				if (!str.trim().endsWith("*/")) {
-					String result = handleJsCodeCompleteStars(buf, str,
-							prevLine, line, region, d, c);
-					buf.setLength(0);
-					buf.append(result);
-
-				}
-			}
 			// insert closing brace on new line after an unclosed opening brace
-			else if (closeBrace() && !isClosed(d, c.offset, c.length)) {
+			if (closeBrace() && !isClosed(d, c.offset, c.length)) {
 				c.caretOffset = c.offset + buf.length();
 				c.shiftsCaret = false;
 
@@ -270,11 +255,19 @@ public class JavascriptAutoEditStrategy extends
 			} else {
 				IRegion prevLine = d.getLineInformation(line);
 				String str = d.get(prevLine.getOffset(), prevLine.getLength());
-				if (!str.trim().endsWith("*/")) {
-					String result = handleJsCodeCompleteStars(buf, str,
-							prevLine, line, region, d, c);
-					buf.setLength(0);
-					buf.append(result);
+				if (str.trim().startsWith("/*")) {
+					/*
+					 * handle only comment/jsdoc start here, as it happens in
+					 * code partition. Continuation is handled in
+					 * JSDocAutoIndentStrategy attached to comment/jsdoc
+					 * partitions.
+					 */
+					String result = handleJsCodeCompleteStars(str, prevLine,
+							line, d, c);
+					if (result != null) {
+						buf.setLength(0);
+						buf.append(result);
+					}
 				}
 			}
 
@@ -285,17 +278,16 @@ public class JavascriptAutoEditStrategy extends
 		}
 	}
 
-	private String handleJsCodeCompleteStars(StringBuffer buf, String str,
-			IRegion prevLine, int line, ITypedRegion region, IDocument d,
-			DocumentCommand c) {
+	private String handleJsCodeCompleteStars(String str, IRegion prevLine,
+			int line, IDocument d, DocumentCommand c) {
 		int index = str.indexOf("/*");
 		// if it is directly closed then there is no doc to append.
 		if (str.indexOf("*/", index + 2) != -1)
-			index = -1;
+			return null;
 
 		// handle the start comment character prefix;
-		if (index != -1 && prevLine.getOffset() + index < c.offset) {
-			buf.setLength(0);
+		if (prevLine.getOffset() + index < c.offset) {
+			StringBuffer buf = new StringBuffer();
 			StringBuffer indentStr = new StringBuffer(index);
 			int counter = 0;
 			while (counter < index) {
@@ -337,28 +329,10 @@ public class JavascriptAutoEditStrategy extends
 			c.shiftsCaret = false;
 			if (!enclosedComment)
 				buf.append("\n" + indentStr + " */");
-		} else {
-			if (IJavaScriptPartitions.JS_COMMENT.equals(region.getType())
-					|| IJavaScriptPartitions.JS_DOC.equals(region.getType())) {
-				if (c.offset < region.getOffset() + region.getLength()) {
-					buf = new StringBuffer();
-					buf.append("\n");
-
-					for (int i = 0; i < str.length(); i++) {
-						char ch = str.charAt(i);
-						if (Character.isWhitespace(ch)) {
-							buf.append(ch);
-						} else {
-							break;
-						}
-					}
-					buf.append("* ");
-				}
-			}
+			return buf.toString();
 		}
 
-		return buf.toString();
-
+		return null;
 	}
 
 	private boolean isClosed(IDocument d, int offset, int length) {
@@ -847,7 +821,7 @@ public class JavascriptAutoEditStrategy extends
 			String type = TextUtilities.getContentType(document,
 					IJavaScriptPartitions.JS_PARTITIONING, to, true);
 			if (type.equals(IJavaScriptPartitions.JS_DOC)
-					|| type.equals(IJavaScriptPartitions.JS_COMMENT))
+					|| type.equals(IJavaScriptPartitions.JS_MULTI_LINE_COMMENT))
 				to--;
 		}
 

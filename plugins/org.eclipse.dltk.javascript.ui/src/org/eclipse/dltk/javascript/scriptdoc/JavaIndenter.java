@@ -648,7 +648,7 @@ public final class JavaIndenter {
 					IJavaScriptPartitions.JS_PARTITIONING, lineOffset, true);
 			String type = partition.getType();
 			while ((type.equals(IJavaScriptPartitions.JS_DOC) || type
-					.equals(IJavaScriptPartitions.JS_COMMENT))
+					.equals(IJavaScriptPartitions.JS_MULTI_LINE_COMMENT))
 					&& lineOffset > 0) {
 				IRegion tmpLine = fDocument
 						.getLineInformationOfOffset(lineOffset - 1);
@@ -657,7 +657,7 @@ public final class JavaIndenter {
 						tmpLine.getOffset(), false);
 				type = partition.getType();
 				if (type.equals(IJavaScriptPartitions.JS_DOC)
-						|| type.equals(IJavaScriptPartitions.JS_COMMENT)) {
+						|| type.equals(IJavaScriptPartitions.JS_MULTI_LINE_COMMENT)) {
 					line = tmpLine;
 					lineOffset = line.getOffset();
 				}

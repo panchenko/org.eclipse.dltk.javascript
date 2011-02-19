@@ -58,7 +58,7 @@ public class RemoveBlockCommentAction extends BlockCommentAction {
 		
 		while (partEndOffset < endOffset) {
 			
-			if (partition.getType() == IJavaScriptPartitions.JS_COMMENT) {
+			if (partition.getType() == IJavaScriptPartitions.JS_MULTI_LINE_COMMENT) {
 				edits.add(factory.createEdit(partOffset, tokenLength, "")); //$NON-NLS-1$
 				edits.add(factory.createEdit(partEndOffset - tokenLength, tokenLength, "")); //$NON-NLS-1$
 			}
@@ -68,7 +68,7 @@ public class RemoveBlockCommentAction extends BlockCommentAction {
 			partEndOffset= partOffset + partition.getLength();
 		}
 
-		if (partition.getType() == IJavaScriptPartitions.JS_COMMENT) {
+		if (partition.getType() == IJavaScriptPartitions.JS_MULTI_LINE_COMMENT) {
 			edits.add(factory.createEdit(partOffset, tokenLength, "")); //$NON-NLS-1$
 			edits.add(factory.createEdit(partEndOffset - tokenLength, tokenLength, "")); //$NON-NLS-1$
 		}

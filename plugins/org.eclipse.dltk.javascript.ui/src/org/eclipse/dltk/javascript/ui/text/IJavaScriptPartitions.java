@@ -15,20 +15,29 @@ public interface IJavaScriptPartitions {
 
 	public final static String JS_PARTITIONING = "__javascript_partitioning"; //$NON-NLS-1$
 
-	public final static String JS_COMMENT = "__javascript_comment"; //$NON-NLS-1$
+	/**
+	 * @since 3.0
+	 */
+	public final static String JS_MULTI_LINE_COMMENT = "__javascript_comment"; //$NON-NLS-1$
+
+	/**
+	 * @since 3.0
+	 */
+	public final static String JS_SINGLE_LINE_COMMENT = "__javascript_single_line_comment"; //$NON-NLS-1$
+
 	/**
 	 * @since 2.0
 	 */
 	public final static String JS_STRING_SINGLE = "__javascript_string_single"; //$NON-NLS-1$
+
 	public final static String JS_STRING = "__javascript_string_double";//$NON-NLS-1$
 	public final static String JS_DOC = "__javascript_doc"; //$NON-NLS-1$
 
 	public final static String[] JS_PARTITION_TYPES = new String[] {
 			IDocument.DEFAULT_CONTENT_TYPE, JS_STRING, JS_STRING_SINGLE,
-			JS_COMMENT, JS_DOC };
+			JS_SINGLE_LINE_COMMENT, JS_MULTI_LINE_COMMENT, JS_DOC };
 
 	public final static String[] LEGAL_CONTENT_TYPES = new String[] { JS_DOC,
-			JS_COMMENT, JS_PARTITIONING, JS_STRING, JS_STRING_SINGLE,
-			IDocument.DEFAULT_CONTENT_TYPE };
-
+			JS_SINGLE_LINE_COMMENT, JS_MULTI_LINE_COMMENT, JS_STRING,
+			JS_STRING_SINGLE };
 }

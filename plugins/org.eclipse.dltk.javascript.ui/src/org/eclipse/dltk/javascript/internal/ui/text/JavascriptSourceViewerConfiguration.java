@@ -36,7 +36,6 @@ import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
-import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -223,9 +222,10 @@ public class JavascriptSourceViewerConfiguration extends
 				IDocument.DEFAULT_CONTENT_TYPE);
 
 		ContentAssistProcessor singleLineProcessor = new JavaScriptCompletionProcessor(
-				getEditor(), assistant, IJavaScriptPartitions.JS_COMMENT);
+				getEditor(), assistant,
+				IJavaScriptPartitions.JS_MULTI_LINE_COMMENT);
 		assistant.setContentAssistProcessor(singleLineProcessor,
-				IJavaScriptPartitions.JS_COMMENT);
+				IJavaScriptPartitions.JS_MULTI_LINE_COMMENT);
 
 		ContentAssistProcessor stringProcessor = new JavaScriptCompletionProcessor(
 				getEditor(), assistant, IJavaScriptPartitions.JS_STRING);
@@ -266,24 +266,6 @@ public class JavascriptSourceViewerConfiguration extends
 
 	}
 
-	/**
-	 * Returns the Javascript string scanner for this configuration.
-	 * 
-	 * @return the Javascript string scanner
-	 */
-	protected RuleBasedScanner getStringScanner() {
-		return fStringScanner;
-	}
-
-	/**
-	 * Returns the Javascript comment scanner for this configuration.
-	 * 
-	 * @return the Javascript comment scanner
-	 */
-	protected RuleBasedScanner getCommentScanner() {
-		return fCommentScanner;
-	}
-
 	@Override
 	public IPresentationReconciler getPresentationReconciler(
 			ISourceViewer sourceViewer) {
@@ -296,17 +278,22 @@ public class JavascriptSourceViewerConfiguration extends
 		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
-		dr = new DefaultDamagerRepairer(getStringScanner());
+		dr = new DefaultDamagerRepairer(fStringScanner);
 		reconciler.setDamager(dr, IJavaScriptPartitions.JS_STRING);
 		reconciler.setRepairer(dr, IJavaScriptPartitions.JS_STRING);
 
-		dr = new DefaultDamagerRepairer(getStringScanner());
+		dr = new DefaultDamagerRepairer(fStringScanner);
 		reconciler.setDamager(dr, IJavaScriptPartitions.JS_STRING_SINGLE);
 		reconciler.setRepairer(dr, IJavaScriptPartitions.JS_STRING_SINGLE);
 
-		dr = new DefaultDamagerRepairer(getCommentScanner());
-		reconciler.setDamager(dr, IJavaScriptPartitions.JS_COMMENT);
-		reconciler.setRepairer(dr, IJavaScriptPartitions.JS_COMMENT);
+		dr = new DefaultDamagerRepairer(fCommentScanner);
+		reconciler.setDamager(dr, IJavaScriptPartitions.JS_MULTI_LINE_COMMENT);
+		reconciler.setRepairer(dr, IJavaScriptPartitions.JS_MULTI_LINE_COMMENT);
+
+		dr = new DefaultDamagerRepairer(fCommentScanner);
+		reconciler.setDamager(dr, IJavaScriptPartitions.JS_SINGLE_LINE_COMMENT);
+		reconciler
+				.setRepairer(dr, IJavaScriptPartitions.JS_SINGLE_LINE_COMMENT);
 
 		dr = new DefaultDamagerRepairer(fDocScanner);
 		reconciler.setDamager(dr, IJavaScriptPartitions.JS_DOC);
@@ -360,10 +347,17 @@ public class JavascriptSourceViewerConfiguration extends
 	@Override
 	public IAutoEditStrategy[] getAutoEditStrategies(
 			ISourceViewer sourceViewer, String contentType) {
-		// TODO: check contentType. think, do we really need it? :)
-		String partitioning = getConfiguredDocumentPartitioning(sourceViewer);
-		return new IAutoEditStrategy[] { new JavascriptAutoEditStrategy(
-				partitioning, null) };
+		if (IJavaScriptPartitions.JS_MULTI_LINE_COMMENT.equals(contentType)
+				|| IJavaScriptPartitions.JS_DOC.equals(contentType)) {
+			return new IAutoEditStrategy[] { new JSDocAutoIndentStrategy(
+					fPreferenceStore) };
+		} else if (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType)) {
+			String partitioning = getConfiguredDocumentPartitioning(sourceViewer);
+			return new IAutoEditStrategy[] { new JavascriptAutoEditStrategy(
+					partitioning, null) };
+		} else {
+			return super.getAutoEditStrategies(sourceViewer, contentType);
+		}
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

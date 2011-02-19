@@ -16,18 +16,74 @@ import java.util.List;
 
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.jface.text.rules.EndOfLineRule;
+import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.IWordDetector;
 import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.rules.WordRule;
 
 public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 
 	private static class JavaScriptStringRule extends SingleLineRule {
 		public JavaScriptStringRule(String quote, IToken token) {
 			super(quote, quote, token, '\\', true, true);
+		}
+	}
+
+	/**
+	 * Detector for empty comments.
+	 */
+	static class EmptyCommentDetector implements IWordDetector {
+
+		/*
+		 * @see IWordDetector#isWordStart
+		 */
+		public boolean isWordStart(char c) {
+			return (c == '/');
+		}
+
+		/*
+		 * @see IWordDetector#isWordPart
+		 */
+		public boolean isWordPart(char c) {
+			return (c == '*' || c == '/');
+		}
+	}
+
+	/**
+	 * Word rule for empty comments.
+	 */
+	static class EmptyCommentRule extends WordRule implements IPredicateRule {
+
+		private IToken fSuccessToken;
+
+		/**
+		 * Constructor for EmptyCommentRule.
+		 * 
+		 * @param successToken
+		 */
+		public EmptyCommentRule(IToken successToken) {
+			super(new EmptyCommentDetector());
+			fSuccessToken = successToken;
+			addWord("/**/", fSuccessToken); //$NON-NLS-1$
+		}
+
+		/*
+		 * @see IPredicateRule#evaluate(ICharacterScanner, boolean)
+		 */
+		public IToken evaluate(ICharacterScanner scanner, boolean resume) {
+			return evaluate(scanner);
+		}
+
+		/*
+		 * @see IPredicateRule#getSuccessToken()
+		 */
+		public IToken getSuccessToken() {
+			return fSuccessToken;
 		}
 	}
 
@@ -39,13 +95,18 @@ public class JavascriptPartitionScanner extends RuleBasedPartitionScanner {
 
 		IToken string = new Token(IJavaScriptPartitions.JS_STRING);
 		IToken stringSingle = new Token(IJavaScriptPartitions.JS_STRING_SINGLE);
-		IToken comment = new Token(IJavaScriptPartitions.JS_COMMENT);
+		IToken multiLineComment = new Token(
+				IJavaScriptPartitions.JS_MULTI_LINE_COMMENT);
+		IToken singleLineComment = new Token(
+				IJavaScriptPartitions.JS_SINGLE_LINE_COMMENT);
 		IToken doc = new Token(IJavaScriptPartitions.JS_DOC);
 
 		List<IPredicateRule> rules = new ArrayList<IPredicateRule>();
+		rules.add(new EndOfLineRule("//", singleLineComment)); //$NON-NLS-1$
+		// Add special case word rule.
+		rules.add(new EmptyCommentRule(multiLineComment));
 		rules.add(new MultiLineRule(JSDOC_PREFIX, "*/", doc)); //$NON-NLS-1$ 
-		rules.add(new MultiLineRule("/*", "*/", comment)); //$NON-NLS-1$ //$NON-NLS-2$
-		rules.add(new EndOfLineRule("//", comment)); //$NON-NLS-1$		
+		rules.add(new MultiLineRule("/*", "*/", multiLineComment)); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// Add rule for character constants.
 		rules.add(new JavaScriptStringRule("'", stringSingle));
