@@ -255,7 +255,7 @@ public class JavascriptAutoEditStrategy extends
 			} else {
 				IRegion prevLine = d.getLineInformation(line);
 				String str = d.get(prevLine.getOffset(), prevLine.getLength());
-				if (str.trim().startsWith("/*")) {
+				if (str.trim().startsWith(C_START)) {
 					/*
 					 * handle only comment/jsdoc start here, as it happens in
 					 * code partition. Continuation is handled in
@@ -278,11 +278,14 @@ public class JavascriptAutoEditStrategy extends
 		}
 	}
 
+	private static final String C_START = "/*";
+	private static final String C_END = "*/";
+
 	private String handleJsCodeCompleteStars(String str, IRegion prevLine,
 			int line, IDocument d, DocumentCommand c) {
-		int index = str.indexOf("/*");
+		int index = str.indexOf(C_START);
 		// if it is directly closed then there is no doc to append.
-		if (str.indexOf("*/", index + 2) != -1)
+		if (str.indexOf(C_END, index + 2) != -1)
 			return null;
 
 		// handle the start comment character prefix;
@@ -306,8 +309,8 @@ public class JavascriptAutoEditStrategy extends
 				while ((nextLine = d.getLineInformation(index++)) != null) {
 					String strNextLine = d.get(nextLine.getOffset(),
 							nextLine.getLength());
-					int stComment = strNextLine.indexOf("/*");
-					int endComment = strNextLine.indexOf("*/");
+					int stComment = strNextLine.indexOf(C_START);
+					int endComment = strNextLine.indexOf(C_END);
 
 					if (stComment != -1 && endComment != -1) {
 						if (stComment < endComment) {
@@ -371,7 +374,7 @@ public class JavascriptAutoEditStrategy extends
 							a = sm.length();
 					} else if (sm.charAt(aPlus1) == '*') {
 						// start of doc search for the end..
-						a = sm.indexOf("*/", aPlus1);
+						a = sm.indexOf(C_END, aPlus1);
 						if (a == -1)
 							a = sm.length();
 						else
