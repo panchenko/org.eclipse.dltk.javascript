@@ -32,6 +32,24 @@ public class JSDocTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	public void testStartJsDocViaDocStrategy() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add("function test() {");
+		code.add("/* body */");
+		code.add("}");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
+		StringList expected = new StringList();
+		expected.add("/**");
+		expected.add(" * ");
+		expected.add(" */");
+		expected.add("function test() {");
+		expected.add("/* body */");
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
 	public void testContinueJsDoc() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("/**");
