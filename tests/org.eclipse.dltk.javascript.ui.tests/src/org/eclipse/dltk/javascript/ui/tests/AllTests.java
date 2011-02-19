@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.ui.tests;
 
 import org.eclipse.dltk.javascript.ui.tests.autoedit.IndentTests;
+import org.eclipse.dltk.javascript.ui.tests.autoedit.JSDocTests;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -22,6 +23,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite("org.eclipse.dltk.javascript.ui.tests");
 		// $JUnit-BEGIN$
 		suite.addTestSuite(IndentTests.class);
+		suite.addTestSuite(JSDocTests.class);
 		// $JUnit-END$
 		return suite;
 	}

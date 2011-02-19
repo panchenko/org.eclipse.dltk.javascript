@@ -11,7 +11,7 @@ import org.eclipse.jface.text.IDocument;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-public class JSAutoEditStrategyTestCase extends TestCase {
+public abstract class JSAutoEditStrategyTestCase extends TestCase {
 
 	protected static final String TAB = "\t";
 
