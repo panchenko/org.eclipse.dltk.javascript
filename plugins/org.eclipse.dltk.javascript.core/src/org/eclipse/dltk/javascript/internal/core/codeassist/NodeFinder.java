@@ -96,10 +96,14 @@ public class NodeFinder extends ASTVisitor {
 		}
 	}
 
-	public org.eclipse.dltk.javascript.ast.Type locateType(Script script) {
+	public void locate(Script script) {
 		if (!traverse(script)) {
-			return null;
+			before = null;
+			after = null;
 		}
+	}
+
+	public org.eclipse.dltk.javascript.ast.Type getType() {
 		if (isValid(before)
 				&& before instanceof org.eclipse.dltk.javascript.ast.Type) {
 			return (org.eclipse.dltk.javascript.ast.Type) before;
@@ -111,10 +115,7 @@ public class NodeFinder extends ASTVisitor {
 		return null;
 	}
 
-	public ASTNode locateNode(Script script) {
-		if (!traverse(script)) {
-			return null;
-		}
+	public ASTNode getNode() {
 		final List<ASTNode> nodes = new ArrayList<ASTNode>();
 		if (isValid(before)) {
 			nodes.add(before);

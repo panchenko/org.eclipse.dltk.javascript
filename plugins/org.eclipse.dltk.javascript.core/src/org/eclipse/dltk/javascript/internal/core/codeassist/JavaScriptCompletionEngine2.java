@@ -32,6 +32,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SimpleType;
+import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -82,8 +83,13 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		final Script script = JavaScriptParserUtil.parse(cu, null);
 		final NodeFinder nodeFinder = new NodeFinder(content, position,
 				position);
+		nodeFinder.locate(script);
+		if (nodeFinder.getNode() instanceof StringLiteral) {
+			// don't complete inside string literals
+			return;
+		}
 		final org.eclipse.dltk.javascript.ast.Type typeNode = nodeFinder
-				.locateType(script);
+				.getType();
 		boolean completeTypes = typeNode != null;
 		if (!completeTypes) {
 			if (nodeFinder.before instanceof Identifier

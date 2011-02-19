@@ -110,7 +110,8 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		final Script script = JavaScriptParserUtil.parse(module, null);
 
 		NodeFinder finder = new NodeFinder(content, position, i + 1);
-		ASTNode node = finder.locateNode(script);
+		finder.locate(script);
+		ASTNode node = finder.getNode();
 		if (node != null) {
 			if (DEBUG) {
 				System.out.println(node.getClass().getName() + "=" + node); //$NON-NLS-1$
