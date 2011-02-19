@@ -503,6 +503,8 @@
 			categoryId="org.eclipse.dltk.ui.scriptTypeProposalCategory"
 			toolkitId="org.eclipse.dltk.javascript.core.nature">
 			<partition type="__dftl_partition_content_type"/>
+			<partition type="__javascript_string_double"/>
+			<partition type="__javascript_string_single"/>
 		</scriptCompletionProposalComputer>		
 	</extension>
  <extension
