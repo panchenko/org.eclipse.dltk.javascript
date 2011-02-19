@@ -54,7 +54,19 @@ public class JavaScriptCompletionProcessor extends ScriptCompletionProcessor {
 			try {
 				String txt = viewer.getDocument().get(installOffset,
 						offset - installOffset);
-				return txt.indexOf(')') == -1;
+				int counter = 0;
+				int inBracket = 0;
+				while (counter < txt.length()) {
+					char ch = txt.charAt(counter++);
+					switch (ch) {
+					case '(':
+						inBracket++;
+						continue;
+					case ')':
+						inBracket--;
+					}
+				}
+				return inBracket >= 0;
 			} catch (BadLocationException e) {
 				e.printStackTrace();
 			}
