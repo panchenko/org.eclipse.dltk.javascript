@@ -51,8 +51,14 @@ public class JavaScriptCompletionProcessor extends ScriptCompletionProcessor {
 		public boolean isContextInformationValid(int offset) {
 			if (offset < installOffset)
 				return false;
-			return (offset - installOffset) <= info.getContextDisplayString()
-					.length();
+			try {
+				String txt = viewer.getDocument().get(installOffset,
+						offset - installOffset);
+				return txt.indexOf(')') == -1;
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			}
+			return false;
 		}
 
 		public void install(IContextInformation info, ITextViewer viewer,
