@@ -10,7 +10,14 @@
 package org.eclipse.dltk.javascript.internal.ui.text;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.core.IMethod;
+import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IScriptProject;
+import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.core.ScriptModelUtil;
+import org.eclipse.dltk.internal.ui.editor.EditorUtility;
+import org.eclipse.dltk.javascript.internal.corext.codemanipulation.JSCodeGeneration;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.scriptdoc.JavaHeuristicScanner;
 import org.eclipse.dltk.javascript.scriptdoc.JavaIndenter;
@@ -278,8 +285,8 @@ public class JavascriptAutoEditStrategy extends
 		}
 	}
 
-	private static final String C_START = "/*";
-	private static final String C_END = "*/";
+	static final String C_START = "/*";
+	static final String C_END = "*/";
 
 	private String handleJsCodeCompleteStars(String str, IRegion prevLine,
 			int line, IDocument d, DocumentCommand c) {
@@ -327,14 +334,76 @@ public class JavascriptAutoEditStrategy extends
 			} catch (Exception ex) {
 
 			}
+			final String endTag = "\n" + indentStr + " */";
+			String generatedString = null;
+			if (!enclosedComment && JSDocAutoIndentStrategy.isGenerateStub()) {
+				try {
+					d.replace(c.offset, 0, endTag);
+				} catch (BadLocationException e) {
+					return null;
+				}
+				c.length = endTag.length();
+				final IMethod method = findMethod(d,
+						c.offset + endTag.length(), true);
+				if (method != null) {
+					final String lineDelimiter = TextUtilities
+							.getDefaultLineDelimiter(d);
+					generatedString = JSCodeGeneration.getMethodComment(method,
+							null, lineDelimiter);
+					if (generatedString != null) {
+						generatedString = JSDocAutoIndentStrategy
+								.normalizeGeneratedDoc(generatedString);
+						generatedString = JSCodeGeneration.changeIndent(
+								generatedString, 0, method.getScriptProject(),
+								indentStr.toString(), lineDelimiter);
+					}
+				}
+			}
 			buf.append("\n" + indentStr + " * ");
+			if (generatedString != null) {
+				buf.append(generatedString);
+			}
 			c.caretOffset = c.offset + buf.length();
 			c.shiftsCaret = false;
 			if (!enclosedComment)
-				buf.append("\n" + indentStr + " */");
+				buf.append(endTag);
 			return buf.toString();
 		}
 
+		return null;
+	}
+
+	static IMethod findMethod(IDocument document, int offset, boolean reconcile) {
+		final int len = document.getLength();
+		try {
+			while (offset < len
+					&& Character.isWhitespace(document.getChar(offset))) {
+				++offset;
+			}
+		} catch (BadLocationException e) {
+			return null;
+		}
+		final IModelElement modelElement = EditorUtility
+				.getActiveEditorModelInput();
+		if (modelElement != null && modelElement instanceof ISourceModule) {
+			final ISourceModule module = (ISourceModule) modelElement;
+			if (reconcile) {
+				try {
+					ScriptModelUtil.reconcile(module);
+				} catch (ModelException e) {
+					return null;
+				}
+			}
+			final IModelElement member;
+			try {
+				member = module.getElementAt(offset);
+			} catch (ModelException e) {
+				return null;
+			}
+			if (member instanceof IMethod) {
+				return (IMethod) member;
+			}
+		}
 		return null;
 	}
 

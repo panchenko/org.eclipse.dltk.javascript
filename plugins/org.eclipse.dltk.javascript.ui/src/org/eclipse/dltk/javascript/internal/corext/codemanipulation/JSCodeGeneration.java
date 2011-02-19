@@ -49,7 +49,7 @@ public class JSCodeGeneration {
 		}
 
 		StringBuffer buf = new StringBuffer();
-		if (existingComment != null) {
+		if (existingComment != null && !isEmptyComment(existingComment)) {
 			// update existing doc.
 			List<String> lines = new ArrayList<String>();
 			List<String> paramLines = new ArrayList<String>();
@@ -235,4 +235,26 @@ public class JSCodeGeneration {
 				lineDelim);
 	}
 
+	private static boolean isEmptyComment(String comment) {
+		int begin = 0;
+		int end = comment.length();
+		while (begin < end && Character.isWhitespace(comment.charAt(begin))) {
+			++begin;
+		}
+		if (begin < end && comment.charAt(begin) == '/') {
+			++begin;
+		}
+		while (begin < end && Character.isWhitespace(comment.charAt(end - 1))) {
+			--end;
+		}
+		if (begin < end && comment.charAt(end - 1) == '/') {
+			--end;
+		}
+		while (begin < end
+				&& (Character.isWhitespace(comment.charAt(begin)) || comment
+						.charAt(begin) == '*')) {
+			++begin;
+		}
+		return begin >= end;
+	}
 }

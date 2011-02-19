@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text;
 
+import static org.eclipse.dltk.javascript.ast.MultiLineComment.JSDOC_PREFIX;
+import static org.eclipse.dltk.javascript.internal.ui.text.JavascriptAutoEditStrategy.C_END;
+
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.core.IMethod;
+import org.eclipse.dltk.javascript.internal.corext.codemanipulation.JSCodeGeneration;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.text.ScriptDefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -87,10 +92,31 @@ public class JSDocAutoIndentStrategy extends
 						int replacementLength = eolOffset - p;
 						String restOfLine = d.get(p, replacementLength);
 						String endTag = lineDelimiter + indentation + " */"; //$NON-NLS-1$
-
-						c.length = replacementLength;
-						buf.append(restOfLine);
-						buf.append(endTag);
+						if (isGenerateStub()) {
+							d.replace(offset, replacementLength, endTag);
+							final IMethod method = JavascriptAutoEditStrategy
+									.findMethod(d, offset - replacementLength
+											+ endTag.length(), true);
+							if (method != null) {
+								buf.append(restOfLine);
+								String string = JSCodeGeneration
+										.getMethodComment(method, null,
+												lineDelimiter);
+								if (string != null) {
+									string = normalizeGeneratedDoc(string);
+									/*
+									 * only add tags if they are non-empty - the
+									 * empty line has already been added above.
+									 */
+									if (string.length() != 0)//$NON-NLS-1$
+										buf.append(string);
+								}
+							}
+						} else {
+							c.length = replacementLength;
+							buf.append(restOfLine);
+							buf.append(endTag);
+						}
 					}
 				}
 			}
@@ -102,6 +128,25 @@ public class JSDocAutoIndentStrategy extends
 		} catch (BadLocationException excp) {
 			// stop work
 		}
+	}
+
+	static String normalizeGeneratedDoc(String string) {
+		string = string.trim();
+		if (string.startsWith(JSDOC_PREFIX)) {
+			string = string.substring(JSDOC_PREFIX.length());
+		}
+		if (string.endsWith(C_END)) {
+			string = string.substring(0, string.length() - C_END.length());
+		}
+		string = string.trim();
+		if (string.startsWith("*")) {
+			string = string.substring(1).trim();
+		}
+		return string;
+	}
+
+	static boolean isGenerateStub() {
+		return true;
 	}
 
 	private IRegion findPrefixRange(IDocument document, IRegion line)
