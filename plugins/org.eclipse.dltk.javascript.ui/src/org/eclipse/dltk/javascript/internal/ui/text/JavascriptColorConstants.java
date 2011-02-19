@@ -61,6 +61,11 @@ public final class JavascriptColorConstants {
 	public static final String JS_TODO_TAG = DLTKColorConstants.TASK_TAG;
 
 	/**
+	 * The color key for regexps
+	 */
+	public static final String JS_REGEXP = "JS_REGEXP";
+
+	/**
 	 * The color key for Javascript function definition.
 	 */
 	public static final String JS_FUNCTION_DEFINITION = DLTKColorConstants.DLTK_FUNCTION_DEFINITION;

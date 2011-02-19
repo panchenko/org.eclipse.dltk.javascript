@@ -46,6 +46,9 @@ public class JavaScriptColoringPreferences implements
 				JavascriptColorConstants.JS_FUNCTION_DEFINITION,
 				PreferencesMessages.DLTKEditorPreferencePage_function_colors,
 				ColoringPreferences.BLACK);
+		requestor.addPreference(JavascriptColorConstants.JS_REGEXP,
+				PreferencesMessages.DLTKEditorPreferencePage_regexps, new RGB(
+						31, 0, 192), FontStyle.BOLD);
 
 		requestor.enterCategory("XML");
 		requestor.addPreference(JavascriptColorConstants.JS_XML_TAG_NAME,

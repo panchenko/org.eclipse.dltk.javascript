@@ -8,6 +8,7 @@ import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.Keyword;
 import org.eclipse.dltk.javascript.ast.Method;
+import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
 import org.eclipse.dltk.javascript.ast.XmlFragment;
@@ -24,10 +25,11 @@ public class JavaScriptXmlHighlighter implements ISemanticHighlighter {
 	private static final String HL_XML_ATTRIBUTE = JavascriptColorConstants.JS_XML_ATTR_NAME;
 	private static final String HL_XML_COMMENT = JavascriptColorConstants.JS_XML_COMMENT_NAME;
 	private static final String HL_KEYWORD = JavascriptColorConstants.JS_KEYWORD;
+	private static final String HL_REGEXP = JavascriptColorConstants.JS_REGEXP;
 
 	public String[] getHighlightingKeys() {
 		return new String[] { HL_XML_TAG, HL_XML_ATTRIBUTE, HL_XML_COMMENT,
-				HL_KEYWORD };
+				HL_KEYWORD, HL_REGEXP };
 	}
 
 	public void process(IModuleSource code,
@@ -72,6 +74,11 @@ public class JavaScriptXmlHighlighter implements ISemanticHighlighter {
 			}
 			requestor.addPosition(keyword.sourceStart(), keyword.sourceEnd(),
 					HL_KEYWORD);
+		}
+		for (RegExpLiteral regExp : ASTUtil.select(declaration,
+				RegExpLiteral.class)) {
+			requestor.addPosition(regExp.sourceStart(), regExp.sourceEnd(),
+					HL_REGEXP);
 		}
 	}
 
