@@ -23,6 +23,7 @@
   </ref:Type>
   <ref:Type name="URIError" kind="PREDEFINED" superType="Error">
   </ref:Type>
+  <ref:TypeAlias source="function" target="Function"/>
   <ref:Type name="Function" kind="PREDEFINED" superType="Object">
   	<members xsi:type="ref:Property" name="prototype" directType="Function" static="true" description="Allows the addition of properties to a Function object."/>
   	<members xsi:type="ref:Property" name="length" directType="Number"  description="Specifies the number of arguments expected by the function."/>
@@ -52,6 +53,7 @@
     	<parameters name="prop" directType="String"/>
     </members>
   </ref:Type>
+  <ref:TypeAlias source="regexp" target="RegExp"/>
   <ref:Type name="RegExp" kind="PREDEFINED" superType="Object">
   	<members xsi:type="ref:Property" name="prototype" directType="RegExp" static="true" description="Allows the addition of properties to a RegExp object."/>
     <members xsi:type="ref:Property" name="global" directType="Boolean" description="Whether to test the regular expression against all possible matches in a string, or only against the first." />
