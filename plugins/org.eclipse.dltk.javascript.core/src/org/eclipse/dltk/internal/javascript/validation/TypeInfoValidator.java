@@ -1209,7 +1209,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		public void reportUnknownType(ASTNode node, String name) {
-			reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE,
+			reportUnknownType(JavaScriptProblems.UNKNOWN_TYPE, node, name);
+		}
+
+		public void reportUnknownType(IProblemIdentifier identifier,
+				ASTNode node, String name) {
+			reporter.reportProblem(identifier,
 					NLS.bind(ValidationMessages.UnknownType, name),
 					node.sourceStart(), node.sourceEnd());
 		}
