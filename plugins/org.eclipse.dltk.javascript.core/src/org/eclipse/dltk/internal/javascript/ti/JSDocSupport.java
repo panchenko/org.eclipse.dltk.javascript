@@ -284,7 +284,8 @@ public class JSDocSupport implements IModelBuilder {
 						propertiesType.getMembers().add(property);
 					}
 					if (propertyName == null) {
-						if (!processedParams.add(paramName)) {
+						if (method.getParameter(paramName) != null
+								&& !processedParams.add(paramName)) {
 							++problemCount;
 							reportProblem(reporter,
 									JSDocProblem.DUPLICATE_PARAM, tag,
