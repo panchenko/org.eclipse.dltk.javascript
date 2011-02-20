@@ -2,7 +2,9 @@ package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -22,6 +24,40 @@ import org.eclipse.jface.text.contentassist.IContextInformation;
 
 public class JSDocCompletionProposalComputer implements
 		IScriptCompletionProposalComputer {
+
+	private static class TagsCompletionProposals {
+		private final String replacement;
+		private final String display;
+		private final int cursorPosition;
+		private final ContextInformation contextInformation;
+
+		private TagsCompletionProposals(String replacement, String display,
+				int cursorPosition, ContextInformation contextInformation) {
+			this.replacement = replacement;
+			this.display = display;
+			this.cursorPosition = cursorPosition;
+			this.contextInformation = contextInformation;
+		}
+	}
+
+	private static final Map<String, TagsCompletionProposals> tagProposals = new HashMap<String, TagsCompletionProposals>();
+
+	static {
+		tagProposals.put("@param", new TagsCompletionProposals(
+				"@param {} name", "@param {Type} name", 8,
+				new ContextInformation("@param {Type} name", "{Type} name")));
+		tagProposals.put("@type", new TagsCompletionProposals("@type ",
+				"@type Type", 6, new ContextInformation("@type Type", "Type")));
+		tagProposals.put("@throws", new TagsCompletionProposals("@throws {}",
+				"@throws {Type}", 9, new ContextInformation("@throws {Type}",
+						"{Type}")));
+		tagProposals.put("@returns", new TagsCompletionProposals("@returns {}",
+				"@returns {Type}", 10, new ContextInformation(
+						"@returns {Type}", "{Type}")));
+		tagProposals.put("@return", new TagsCompletionProposals("@return {}",
+				"@return {Type}", 9, new ContextInformation("@return {Type}",
+						"{Type}")));
+	}
 
 	public JSDocCompletionProposalComputer() {
 	}
@@ -82,17 +118,16 @@ public class JSDocCompletionProposalComputer implements
 					String[] tags = JSDocSupport.getTags();
 					for (String jsdocTag : tags) {
 						if (jsdocTag.startsWith(tag)) {
-							if (jsdocTag.equals("@param")) {
-								CompletionProposal proposal = new CompletionProposal(
-										jsdocTag + " {} name",
-										context.getInvocationOffset()
+							TagsCompletionProposals tcp = tagProposals
+									.get(jsdocTag);
+							if (tcp != null) {
+								proposals.add(new CompletionProposal(
+										tcp.replacement, context
+												.getInvocationOffset()
 												- tag.length(), tag.length(),
-										jsdocTag.length() + 2, null,
-										"@param {Type} name",
-										new ContextInformation(
-												"@param {Type} name",
-												"{Type} name"), null);
-								proposals.add(proposal);
+										tcp.cursorPosition, null, tcp.display,
+										tcp.contextInformation, null));
+
 							} else {
 								proposals.add(new CompletionProposal(
 										jsdocTag + ' ', context
