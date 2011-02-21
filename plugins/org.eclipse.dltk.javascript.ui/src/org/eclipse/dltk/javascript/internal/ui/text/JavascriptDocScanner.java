@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.ui.editor.EditorUtility;
 import org.eclipse.dltk.javascript.core.JSKeywordCategory;
 import org.eclipse.dltk.javascript.core.JSKeywordManager;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
 import org.eclipse.dltk.ui.text.TodoTaskPreferencesOnPreferenceStore;
 import org.eclipse.dltk.ui.text.rules.CombinedWordRule.WordMatcher;
@@ -48,13 +48,10 @@ public class JavascriptDocScanner extends JavaScriptScriptCommentScanner {
 		return matchers;
 	}
 
-	private static final String[] JSDOC_TAGS = { "@author", "@version", "@see" };
-
 	private WordMatcher createJavadocKeywordMatcher() {
 		final WordMatcher matcher = new WordMatcher();
 		final Set<String> tags = new HashSet<String>();
-		Collections.addAll(tags, JSDOC_TAGS);
-		Collections.addAll(tags, JSDocSupport.getTags());
+		Collections.addAll(tags, JSDocTag.getTags());
 		ISourceModule module = null;
 		if (fConfiguration != null) {
 			final ITextEditor editor = fConfiguration.getEditor();

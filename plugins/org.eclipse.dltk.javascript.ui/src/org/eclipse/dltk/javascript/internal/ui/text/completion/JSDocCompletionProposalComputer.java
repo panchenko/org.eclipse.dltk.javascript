@@ -3,15 +3,18 @@ package org.eclipse.dltk.javascript.internal.ui.text.completion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
+import org.eclipse.dltk.javascript.core.JSKeywordCategory;
+import org.eclipse.dltk.javascript.core.JSKeywordManager;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.ui.text.completion.ContentAssistInvocationContext;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposalComputer;
 import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
@@ -57,6 +60,10 @@ public class JSDocCompletionProposalComputer implements
 		tagProposals.put("@return", new TagsCompletionProposals("@return {}",
 				"@return {Type}", 9, new ContextInformation("@return {Type}",
 						"{Type}")));
+		String authorUserNameTag = "@author " + System.getProperty("user.name");
+		tagProposals.put("@author", new TagsCompletionProposals(
+				authorUserNameTag, authorUserNameTag, 8,
+				new ContextInformation(authorUserNameTag, "username")));
 	}
 
 	public JSDocCompletionProposalComputer() {
@@ -115,7 +122,19 @@ public class JSDocCompletionProposalComputer implements
 			if (prefixIndex == -1) {
 				if (tag != null) {
 					List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
-					String[] tags = JSDocSupport.getTags();
+					final Set<String> tags = new HashSet<String>();
+					Collections.addAll(tags, JSDocTag.getTags());
+					ISourceModule module = null;
+					// if (fConfiguration != null) {
+					// final ITextEditor editor = fConfiguration.getEditor();
+					// if (editor != null) {
+					// module = EditorUtility.getEditorInputModelElement(editor,
+					// true);
+					// }
+					// }
+					Collections.addAll(tags, JSKeywordManager.getInstance()
+							.getKeywords(JSKeywordCategory.JS_DOC_TAG, module));
+
 					for (String jsdocTag : tags) {
 						if (jsdocTag.startsWith(tag)) {
 							TagsCompletionProposals tcp = tagProposals
