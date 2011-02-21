@@ -19,12 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
+import org.eclipse.dltk.core.IScriptFolder;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.environment.EnvironmentManager;
 import org.eclipse.dltk.core.environment.EnvironmentPathUtils;
 import org.eclipse.dltk.core.search.SearchEngine;
@@ -47,26 +50,26 @@ public class SearchExternalLibraryTests extends
 
 	private static final String LIB_NAME = "MyLibrary";
 
+	private File library;
+
 	@Override
 	public void setUpSuite() throws Exception {
-		final File temp = File.createTempFile("dltk", "js");
-		temp.deleteOnExit();
-		if (temp.exists()) {
-			temp.delete();
+		library = File.createTempFile("dltk", "js");
+		library.deleteOnExit();
+		if (library.exists()) {
+			library.delete();
 		}
-		assertTrue(temp.mkdir());
-		final File f = new File(temp, MY_EXPORTS_JS);
+		assertTrue(library.mkdir());
+		final File f = new File(library, MY_EXPORTS_JS);
 		final StringList code = new StringList();
 		code.add("function myLibraryExports() {");
 		code.add("}");
 		final FileWriter writer = new FileWriter(f);
 		writer.write(code.toString());
 		writer.close();
-		DLTKCore.setBuildpathVariable(
-				LIB_NAME,
-				EnvironmentPathUtils.getFullPath(
-						EnvironmentManager.getLocalEnvironment(),
-						new Path(temp.getAbsolutePath())), null);
+		DLTKCore.setBuildpathVariable(LIB_NAME, EnvironmentPathUtils
+				.getFullPath(EnvironmentManager.getLocalEnvironment(),
+						new Path(library.getAbsolutePath())), null);
 		super.setUpSuite();
 	}
 
@@ -74,6 +77,27 @@ public class SearchExternalLibraryTests extends
 	public void tearDownSuite() throws Exception {
 		super.tearDownSuite();
 		DLTKCore.removeBuildpathVariable(LIB_NAME, null);
+	}
+
+	public void testFindScriptFolderWithoutEnv() throws ModelException {
+		final IPath libraryPath = new Path(library.getAbsolutePath());
+		final IScriptFolder folder = getScriptProject().findScriptFolder(
+				libraryPath);
+		assertNotNull(folder);
+		assertTrue(EnvironmentPathUtils.isFull(folder.getPath()));
+		assertEquals(libraryPath,
+				EnvironmentPathUtils.getLocalPath(folder.getPath()));
+	}
+
+	public void testFindScriptFolderWithEnv() throws ModelException {
+		final IPath libraryPath = EnvironmentPathUtils.getFullPath(
+				EnvironmentManager.getLocalEnvironment(),
+				new Path(library.getAbsolutePath()));
+		final IScriptFolder folder = getScriptProject().findScriptFolder(
+				libraryPath);
+		assertNotNull(folder);
+		assertTrue(EnvironmentPathUtils.isFull(folder.getPath()));
+		assertEquals(libraryPath, folder.getPath());
 	}
 
 	public void testMyLibraryExports() throws CoreException {
