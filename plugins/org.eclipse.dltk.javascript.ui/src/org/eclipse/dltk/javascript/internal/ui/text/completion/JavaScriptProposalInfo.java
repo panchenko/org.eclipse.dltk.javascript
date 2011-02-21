@@ -24,10 +24,15 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.javascript.typeinference.IReference;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.ui.documentation.DocumentationUtils;
+import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
+import org.eclipse.dltk.ui.documentation.ScriptDocumentationAccess;
 import org.eclipse.dltk.ui.text.completion.ProposalInfo;
 
 class JavaScriptProposalInfo extends ProposalInfo {
@@ -62,7 +67,15 @@ class JavaScriptProposalInfo extends ProposalInfo {
 		} else if (ref instanceof String) {
 			return (String) ref;
 		} else if (ref instanceof Element) {
-			return ((Element) ref).getDescription();
+			final IDocumentationResponse response = ScriptDocumentationAccess
+					.getDocumentation(JavaScriptNature.NATURE_ID, ref, null);
+			if (response != null) {
+				try {
+					return getString(response.getReader());
+				} catch (IOException e) {
+					JavaScriptUI.log(e);
+				}
+			}
 		} else if (ref instanceof IValueReference) {
 			return getInfo((IValueReference) ref);
 		}
@@ -113,21 +126,12 @@ class JavaScriptProposalInfo extends ProposalInfo {
 	 * Gets the reader content as a String
 	 */
 	private String getString(Reader reader) {
-		StringBuffer buf = new StringBuffer();
-		char[] buffer = new char[1024];
-		int count;
-		try {
-			while ((count = reader.read(buffer)) != -1)
-				buf.append(buffer, 0, count);
-		} catch (IOException e) {
-			return null;
-		}
-		return buf.toString();
+		return DocumentationUtils.readAll(reader);
 	}
 
 	@SuppressWarnings("serial")
 	private static class ModelElementFound extends RuntimeException {
-		private final IModelElement element;
+		final IModelElement element;
 
 		public ModelElementFound(IModelElement element) {
 			this.element = element;
