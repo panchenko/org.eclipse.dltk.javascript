@@ -317,7 +317,7 @@ public class ScriptdocContentAccess {
 	 * @return <code>true</code> if the reader only returns the inheritDoc tag
 	 * @since 3.2
 	 */
-	private static boolean containsOnlyInheritDoc(Reader reader, int length) {
+	public static boolean containsOnlyInheritDoc(Reader reader, int length) {
 		char[] content = new char[length];
 		try {
 			reader.read(content, 0, length);
