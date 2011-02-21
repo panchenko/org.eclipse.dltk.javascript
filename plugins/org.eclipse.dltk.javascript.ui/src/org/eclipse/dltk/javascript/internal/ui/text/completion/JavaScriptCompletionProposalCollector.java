@@ -12,7 +12,11 @@ package org.eclipse.dltk.javascript.internal.ui.text.completion;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.ui.text.completion.AbstractScriptCompletionProposal;
@@ -78,11 +82,12 @@ public class JavaScriptCompletionProposalCollector extends
 			CompletionProposal methodProposal) {
 		AbstractScriptCompletionProposal methodReferenceProposal = (AbstractScriptCompletionProposal) super
 				.createMethodReferenceProposal(methodProposal);
+		StringBuilder sb = null;
 		if (methodProposal.getExtraInfo() instanceof Method) {
 			Method method = (Method) methodProposal.getExtraInfo();
 			EList<Parameter> parameters = method.getParameters();
 			if (parameters.size() > 0) {
-				StringBuilder sb = new StringBuilder();
+				sb = new StringBuilder();
 				for (Parameter parameter : parameters) {
 					if (sb.length() > 0)
 						sb.append(',');
@@ -93,23 +98,35 @@ public class JavaScriptCompletionProposalCollector extends
 					sb.append(parameter.getName());
 
 				}
-				final String informationDisplayString = sb.toString();
-				ProposalContextInformation contextInformation = new ProposalContextInformation(
-						methodProposal) {
-
-					@Override
-					public String getInformationDisplayString() {
-						return informationDisplayString;
+			}
+		} else if (methodProposal.getExtraInfo() instanceof IValueReference) {
+			IMethod method = (IMethod) ((IValueReference) methodProposal
+					.getExtraInfo())
+					.getAttribute(IReferenceAttributes.PARAMETERS);
+			if (method != null && method.getParameterCount() > 0) {
+				sb = new StringBuilder();
+				for (IParameter parameter : method.getParameters()) {
+					if (sb.length() > 0)
+						sb.append(',');
+					if (parameter.getType() != null) {
+						sb.append(parameter.getType().getName());
+						sb.append(' ');
 					}
-				};
+					sb.append(parameter.getName());
 
-				contextInformation.setContextInformationPosition(methodProposal
-						.getReplaceStart()
-						+ methodProposal.getCompletion().length() + 1);
-				methodReferenceProposal
-						.setContextInformation(contextInformation);
+				}
 			}
 		}
+		if (sb != null) {
+			ProposalContextInformation contextInformation = new JavaScriptProposalContextInformation(
+					methodProposal, sb.toString());
+
+			contextInformation.setContextInformationPosition(methodProposal
+					.getReplaceStart()
+					+ methodProposal.getCompletion().length() + 1);
+			methodReferenceProposal.setContextInformation(contextInformation);
+		}
+
 		return methodReferenceProposal;
 	}
 
@@ -160,4 +177,21 @@ public class JavaScriptCompletionProposalCollector extends
 	protected String getNatureId() {
 		return JavaScriptNature.NATURE_ID;
 	}
+
+	private static final class JavaScriptProposalContextInformation extends
+			ProposalContextInformation {
+		private final String informationDisplayString;
+
+		private JavaScriptProposalContextInformation(
+				CompletionProposal proposal, String informationDisplayString) {
+			super(proposal);
+			this.informationDisplayString = informationDisplayString;
+		}
+
+		@Override
+		public String getInformationDisplayString() {
+			return informationDisplayString;
+		}
+	}
+
 }
