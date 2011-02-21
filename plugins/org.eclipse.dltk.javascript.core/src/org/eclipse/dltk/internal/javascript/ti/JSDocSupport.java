@@ -55,12 +55,6 @@ public class JSDocSupport implements IModelBuilder {
 
 	private static final String DOTS = "...";
 
-	public static String[] getTags() {
-		return new String[] { JSDocTag.DEPRECATED, JSDocTag.PARAM,
-				JSDocTag.TYPE, JSDocTag.RETURN, JSDocTag.RETURNS,
-				JSDocTag.PRIVATE, JSDocTag.CONSTRUCTOR, JSDocTag.THROWS };
-	}
-
 	public String getFeatureId() {
 		return JSDocSupport.class.getName();
 	}
