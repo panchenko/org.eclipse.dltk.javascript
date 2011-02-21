@@ -12,10 +12,17 @@ package org.eclipse.dltk.javascript.scriptdoc;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.ui.text.SubstitutionTextReader;
+import org.eclipse.dltk.javascript.core.JSKeywordCategory;
+import org.eclipse.dltk.javascript.core.JSKeywordManager;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.utils.TextUtils;
 
 public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
@@ -295,18 +302,42 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 
 	private void printRest(StringBuffer buffer) {
 		if (!fRest.isEmpty()) {
+			final Set<String> tags = new HashSet<String>();
+			Collections.addAll(tags, JSDocTag.getTags());
+			ISourceModule module = null;
+			Collections.addAll(tags, JSKeywordManager.getInstance()
+					.getKeywords(JSKeywordCategory.JS_DOC_TAG, module));
 			Iterator<Pair> e = fRest.iterator();
+			final Set<Pair> unknowTags = new HashSet<Pair>();
 			while (e.hasNext()) {
 				Pair p = e.next();
 				buffer.append("<dt>"); //$NON-NLS-1$
-				if (p.fTag != null)
-					buffer.append(p.fTag);
+				if (p.fTag != null) {
+					if (tags.contains(p.fTag))
+						buffer.append(Character.toUpperCase(p.fTag.charAt(1))
+								+ p.fTag.substring(2));
+					else
+						unknowTags.add(p);
+				}
 				buffer.append("</dt>"); //$NON-NLS-1$
 				buffer.append("<dd>"); //$NON-NLS-1$
 				if (p.fContent != null)
 					buffer.append(p.fContent);
 				buffer.append("</dd>"); //$NON-NLS-1$
 			}
+
+			for (Pair p : unknowTags) {
+				buffer.append("<dt>"); //$NON-NLS-1$
+				if (p.fTag != null) {
+					buffer.append(p.fTag);
+				}
+				buffer.append("</dt>"); //$NON-NLS-1$
+				buffer.append("<dd>"); //$NON-NLS-1$
+				if (p.fContent != null)
+					buffer.append(p.fContent);
+				buffer.append("</dd>");
+			}
+
 		}
 	}
 
@@ -351,8 +382,7 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 		else if (TAG_SINCE.equals(tag))
 			fSince.add(substituteQualification(tagContent));
 		else if (tagContent != null)
-			fRest.add(new Pair(Character.toUpperCase(tag.charAt(1))
-					+ tag.substring(2), tagContent));
+			fRest.add(new Pair(tag, tagContent));
 	}
 
 	/*
