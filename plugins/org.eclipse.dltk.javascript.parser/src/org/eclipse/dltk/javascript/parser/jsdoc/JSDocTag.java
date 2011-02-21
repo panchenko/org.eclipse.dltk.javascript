@@ -12,6 +12,10 @@
 package org.eclipse.dltk.javascript.parser.jsdoc;
 
 public class JSDocTag {
+	
+	public static String[] getTags() {
+		return new String[] { PARAM, RETURN, RETURNS , THROWS, TYPE, DEPRECATED, CONSTRUCTOR,PRIVATE, AUTHOR,VERSION,SEE,SINCE,EXAMPLE };
+	}
 
 	public static final String PARAM = "@param"; //$NON-NLS-1$
 	public static final String RETURN = "@return";
@@ -22,6 +26,12 @@ public class JSDocTag {
 
 	public static final String CONSTRUCTOR = "@constructor";
 	public static final String PRIVATE = "@private";
+	
+	public static final String AUTHOR = "@author";
+	public static final String VERSION = "@version";
+	public static final String SEE = "@see";
+	public static final String SINCE = "@since";
+	public static final String EXAMPLE = "@example";
 
 	private final String tag;
 	private final String value;
