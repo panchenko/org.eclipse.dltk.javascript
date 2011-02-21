@@ -313,8 +313,6 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 	private String printSimpleTag() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("<dl>"); //$NON-NLS-1$
-		print(buffer, JavaDocMessages.JavaDoc2HTMLTextReader_see_section,
-				fSees, false);
 		print(buffer,
 				JavaDocMessages.JavaDoc2HTMLTextReader_parameters_section,
 				fParameters, true);
@@ -326,6 +324,8 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 				fAuthors, false);
 		print(buffer, JavaDocMessages.JavaDoc2HTMLTextReader_since_section,
 				fSince, false);
+		print(buffer, JavaDocMessages.JavaDoc2HTMLTextReader_see_section,
+				fSees, false);
 		printRest(buffer);
 		buffer.append("</dl>"); //$NON-NLS-1$
 
