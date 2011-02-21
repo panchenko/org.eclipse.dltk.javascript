@@ -241,6 +241,19 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 		// \s*
 		while (i < length && Character.isWhitespace(s.charAt(i)))
 			++i;
+		// BEGIN possible type definition
+		if (i < length && s.charAt(i) == '{') {
+			++i;
+			while (i < length && s.charAt(i) != '}') {
+				++i;
+			}
+			if (i < length) {
+				++i;
+			}
+			while (i < length && Character.isWhitespace(s.charAt(i)))
+				++i;
+		}
+		// END possible type definition
 		if (i < length && s.charAt(i) == '<') {
 			// generic type parameter
 			// read <\s*\w*\s*>
