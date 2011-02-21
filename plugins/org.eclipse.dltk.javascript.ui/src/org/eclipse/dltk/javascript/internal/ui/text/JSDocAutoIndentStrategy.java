@@ -104,6 +104,10 @@ public class JSDocAutoIndentStrategy extends
 												lineDelimiter);
 								if (string != null) {
 									string = normalizeGeneratedDoc(string);
+									string = JSCodeGeneration.changeIndent(
+											string, 0,
+											method.getScriptProject(),
+											indentation, lineDelimiter);
 									/*
 									 * only add tags if they are non-empty - the
 									 * empty line has already been added above.
