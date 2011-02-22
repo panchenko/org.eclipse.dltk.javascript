@@ -267,6 +267,12 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
 				key(JavaScriptParserProblems.FUNCTION_HIDES_ARGUMENT), ids);
 
+		SWTFactory.createLabel(composite,
+				"Function hides variable or property", 1);
+		bindControl(
+				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
+				key(JavaScriptProblems.FUNCTION_HIDES_VARIABLE), ids);
+
 		return composite;
 	}
 
