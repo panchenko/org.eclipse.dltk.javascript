@@ -21,6 +21,7 @@ import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
+import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.osgi.util.NLS;
@@ -53,10 +54,19 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		}
 		final FlowStatus status = new FlowStatus();
 		if (node.getValue() == null) {
-			status.returnValue = true;
-		} else {
 			status.returnWithoutValue = true;
+		} else {
+			status.returnValue = true;
 		}
+		return status;
+	}
+
+	public FlowStatus visitThrowStatement(ThrowStatement node) {
+		if (node.getException() != null) {
+			visit(node.getException());
+		}
+		final FlowStatus status = new FlowStatus();
+		status.returnValue = true;
 		return status;
 	}
 
