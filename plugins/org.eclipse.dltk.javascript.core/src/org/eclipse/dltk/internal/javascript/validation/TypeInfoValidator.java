@@ -84,6 +84,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		inferencer.doInferencing(script);
 	}
 
+
 	private static enum VisitorMode {
 		NORMAL, CALL
 	}
@@ -318,32 +319,44 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (method != null && method.getType() != null) {
 				if (collection != null && collection.getReturnValue() != null) {
 					JSTypeSet types = collection.getReturnValue().getTypes();
-					if (!types.isEmpty()
-							&& !types.contains(context.resolveTypeRef(method
-									.getType()))) {
-						String name = method.getName();
-						int sourceStart;
-						int sourceEnd;
-
-						if (node.getName() == null) {
-							name = "<anonymous>";
-							sourceStart = node.getFunctionKeyword()
-									.sourceStart();
-							sourceEnd = node.getFunctionKeyword().sourceEnd();
-						} else {
-							sourceStart = node.getName().sourceStart();
-							sourceEnd = node.getName().sourceEnd();
+					if (!types.isEmpty()) {
+						String inconsistentType = null;
+						JSType methodType = context.resolveTypeRef(method
+								.getType());
+						for (JSType type : types) {
+							if (!JSTypeSet
+									.normalize(methodType)
+									.isAssignableFrom(JSTypeSet.normalize(type))) {
+								inconsistentType = type.getName();
+								break;
+							}
 						}
-						reporter.reportProblem(
-								JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
-								NLS.bind(
-										ValidationMessages.DeclarationMismatchWithActualReturnType,
-										new String[] {
-												name,
-												TypeUtil.getName(method
-														.getType()),
-												types.getFirst().getName() }),
-								sourceStart, sourceEnd);
+						if (inconsistentType != null) {
+							String name = method.getName();
+							int sourceStart;
+							int sourceEnd;
+
+							if (node.getName() == null) {
+								name = "<anonymous>";
+								sourceStart = node.getFunctionKeyword()
+										.sourceStart();
+								sourceEnd = node.getFunctionKeyword()
+										.sourceEnd();
+							} else {
+								sourceStart = node.getName().sourceStart();
+								sourceEnd = node.getName().sourceEnd();
+							}
+							reporter.reportProblem(
+									JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+									NLS.bind(
+											ValidationMessages.DeclarationMismatchWithActualReturnType,
+											new String[] {
+													name,
+													TypeUtil.getName(method
+															.getType()),
+													inconsistentType }),
+									sourceStart, sourceEnd);
+						}
 					}
 				}
 			}
@@ -953,7 +966,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				} else if (child.getKind() == ReferenceKind.PROPERTY) {
 					Property property = (Property) child
 							.getAttribute(IReferenceAttributes.ELEMENT);
-					if (property.getDeclaringType() != null) {
+					if (property != null && property.getDeclaringType() != null) {
 						reporter.reportProblem(
 								JavaScriptProblems.VAR_HIDES_PROPERTY,
 								NLS.bind(

@@ -296,6 +296,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 							return true;
 						t = t.getSuperType();
 					}
+				} else if (other.getName().equals("undefined")) {
+					return true;
 				} else {
 					Type t = other.getSuperType();
 					while (t != null) {

@@ -257,17 +257,17 @@ public class JSDocSupport implements IModelBuilder {
 						// = Parameters With Properties =
 						propertyName = paramName
 								.substring(propertiesObjectIndex + 1);
-						paramName = paramName.substring(0,
+						String objectName = paramName.substring(0,
 								propertiesObjectIndex);
 						Type propertiesType = objectPropertiesTypes
-								.get(paramName);
+								.get(objectName);
 						if (propertiesType == null) {
 							propertiesType = TypeInfoModelFactory.eINSTANCE
 									.createType();
-							objectPropertiesTypes
-									.put(paramName, propertiesType);
+							objectPropertiesTypes.put(objectName,
+									propertiesType);
 							final IParameter param = method
-									.getParameter(paramName);
+									.getParameter(objectName);
 							if (param != null) {
 								param.setPropertiesType(propertiesType);
 							}
@@ -278,17 +278,15 @@ public class JSDocSupport implements IModelBuilder {
 						if (pp.type != null)
 							property.setType(translateTypeName(pp.type));
 						propertiesType.getMembers().add(property);
+						continue;
 					}
-					if (propertyName == null) {
-						if (method.getParameter(paramName) != null
-								&& !processedParams.add(paramName)) {
-							++problemCount;
-							reportProblem(reporter,
-									JSDocProblem.DUPLICATE_PARAM, tag,
-									paramName);
-							continue;
-						}
-					}
+				}
+				if (method.getParameter(paramName) != null
+						&& !processedParams.add(paramName)) {
+					++problemCount;
+					reportProblem(reporter, JSDocProblem.DUPLICATE_PARAM, tag,
+							paramName);
+					continue;
 				}
 				final IParameter parameter = method.getParameter(paramName);
 				if (parameter != null) {
