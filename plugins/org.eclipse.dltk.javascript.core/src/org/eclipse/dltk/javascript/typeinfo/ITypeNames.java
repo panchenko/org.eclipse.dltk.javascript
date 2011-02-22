@@ -22,5 +22,6 @@ public interface ITypeNames {
 	public static final String OBJECT = "Object"; //$NON-NLS-1$
 	public static final String REGEXP = "RegExp"; //$NON-NLS-1$
 	public static final String FUNCTION = "Function"; //$NON-NLS-1$
+	public static final String UNDEFINED = "undefined";
 
 }
