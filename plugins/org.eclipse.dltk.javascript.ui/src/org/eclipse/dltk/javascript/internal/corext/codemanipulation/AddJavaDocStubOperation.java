@@ -88,7 +88,24 @@ public class AddJavaDocStubOperation implements IWorkspaceRunnable {
 
 	private String createFieldComment(IField field, String lineDelimiter)
 			throws ModelException, CoreException {
+		String existingComment = null;
+		try {
+			ISourceRange range = ScriptdocContentAccess.getJavadocRange(field);
+			if (range != null) {
+				ISourceModule compilationUnit = field.getSourceModule();
+				existingComment = compilationUnit.getBuffer().getText(
+						range.getOffset(), range.getLength());
+
+			}
+		} catch (Exception e) {
+			// ignore
+		}
+
 		String typeName = Signature.toString(field.getType());
+		if (existingComment != null
+				&& (typeName == null || existingComment.indexOf("@type "
+						+ typeName) != -1))
+			return existingComment;
 		String fieldName = field.getElementName();
 		return JSCodeGeneration.getFieldComment(field.getSourceModule(),
 				typeName, fieldName, lineDelimiter);
