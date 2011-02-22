@@ -57,6 +57,9 @@ public class ValidationMessages extends NLS {
 	public static String VariableHidesMethod;
 	public static String VariableHidesFunction;
 	public static String UndeclaredVariable;
+	public static String FunctionHidesPropertyOfType;
+	public static String FunctionHidesProperty;
+	public static String FunctionHidesVariable;
 
 	static {
 		// initialize resource bundle

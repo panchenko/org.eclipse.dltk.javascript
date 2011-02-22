@@ -84,7 +84,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 		inferencer.doInferencing(script);
 	}
 
-
 	private static enum VisitorMode {
 		NORMAL, CALL
 	}
@@ -307,6 +306,44 @@ public class TypeInfoValidator implements IBuildParticipant {
 										ValidationMessages.ParameterHidesVariable,
 										argument.getArgumentName()), argument
 										.sourceStart(), argument.sourceEnd());
+					}
+				}
+			}
+			if (node.getName() != null) {
+				IValueReference child = peekContext.getChild(node.getName()
+						.getName());
+				if (child.exists()) {
+					if (child.getKind() == ReferenceKind.PROPERTY) {
+						Property property = (Property) child
+								.getAttribute(IReferenceAttributes.ELEMENT);
+						if (property.getDeclaringType() != null) {
+							reporter.reportProblem(
+									JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
+									NLS.bind(
+											ValidationMessages.FunctionHidesPropertyOfType,
+											new String[] {
+													node.getName().getName(),
+													property.getDeclaringType()
+															.getName() }), node
+											.getName().sourceStart(), node
+											.getName().sourceEnd());
+						} else {
+							reporter.reportProblem(
+									JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
+									NLS.bind(
+											ValidationMessages.FunctionHidesProperty,
+											node.getName().getName()), node
+											.getName().sourceStart(), node
+											.getName().sourceEnd());
+						}
+					} else {
+						reporter.reportProblem(
+								JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
+								NLS.bind(
+										ValidationMessages.FunctionHidesVariable,
+										node.getName().getName()), node
+										.getName().sourceStart(), node
+										.getName().sourceEnd());
 					}
 				}
 			}
