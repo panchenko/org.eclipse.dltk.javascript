@@ -331,6 +331,46 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(0, problems.size());
 	}
 
+	public void testReturnType() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @return {String}");
+		code.add(" */");
+		code.add("function test() {");
+		code.add("	return '';");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testReturnType2() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {ExampleService} srv");
+		code.add(" * @return {ExampleService}");
+		code.add(" */");
+		code.add("function test(srv) {");
+		code.add("	return srv;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testReturnWrongType() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @return {String}");
+		code.add(" */");
+		code.add("function test() {");
+		code.add("	return 1;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
+	}
+
 	public void testLazyReturnTypeWithJSDocParam() {
 		StringList code = new StringList();
 		code.add("/**");
