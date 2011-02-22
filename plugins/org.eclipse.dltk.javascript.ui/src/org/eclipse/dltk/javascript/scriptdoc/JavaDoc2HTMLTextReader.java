@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ISourceRange;
+import org.eclipse.dltk.corext.SourceRange;
 import org.eclipse.dltk.internal.ui.text.SubstitutionTextReader;
 import org.eclipse.dltk.javascript.core.JSKeywordCategory;
 import org.eclipse.dltk.javascript.core.JSKeywordManager;
@@ -224,25 +226,29 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 		while (e.hasNext()) {
 			String s = e.next();
 			buffer.append("<dd>"); //$NON-NLS-1$
-			if (!firstword)
+			if (!firstword) {
 				buffer.append(s);
-			else {
-				buffer.append("<b>"); //$NON-NLS-1$
-
-				int i = getParamEndOffset(s);
-				if (i <= s.length()) {
-					buffer.append(TextUtils.escapeHTML(s.substring(0, i)));
+			} else {
+				final ISourceRange param = getParamRange(s);
+				if (param != null) {
+					buffer.append(TextUtils.escapeHTML(s.substring(0,
+							param.getOffset())));
+					buffer.append("<b>"); //$NON-NLS-1$
+					buffer.append(TextUtils.escapeHTML(s.substring(
+							param.getOffset(),
+							param.getOffset() + param.getLength())));
 					buffer.append("</b>"); //$NON-NLS-1$
-					buffer.append(s.substring(i));
+					buffer.append(s.substring(param.getOffset()
+							+ param.getLength()));
 				} else {
-					buffer.append("</b>"); //$NON-NLS-1$
+					buffer.append(s);
 				}
 			}
 			buffer.append("</dd>"); //$NON-NLS-1$
 		}
 	}
 
-	private int getParamEndOffset(String s) {
+	private ISourceRange getParamRange(String s) {
 		int i = 0;
 		final int length = s.length();
 		// \s*
@@ -261,7 +267,9 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 				++i;
 		}
 		// END possible type definition
+		final int paramStart = i;
 		if (i < length && s.charAt(i) == '<') {
+			++i;
 			// generic type parameter
 			// read <\s*\w*\s*>
 			while (i < length && Character.isWhitespace(s.charAt(i)))
@@ -275,8 +283,11 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 			while (i < length && Character.isJavaIdentifierPart(s.charAt(i)))
 				++i;
 		}
+		if (i > paramStart) {
+			return new SourceRange(paramStart, i - paramStart);
+		}
 
-		return i;
+		return null;
 	}
 
 	private void print(StringBuffer buffer, String tag, List<String> elements,
