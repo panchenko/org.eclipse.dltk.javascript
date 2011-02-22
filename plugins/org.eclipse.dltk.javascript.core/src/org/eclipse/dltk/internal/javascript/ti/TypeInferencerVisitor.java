@@ -462,6 +462,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		for (IModelBuilder extension : context.getModelBuilders()) {
 			extension.processMethod(node, method, reporter);
 		}
+		if (method.getType() != null)
+			method.setType(context.resolveTypeRef(method.getType()));
+		List<IParameter> parameters = method.getParameters();
+		for (IParameter parameter : parameters) {
+			if (parameter.getType() != null)
+				parameter.setType(context.resolveTypeRef(parameter.getType()));
+		}
 		return method;
 	}
 
