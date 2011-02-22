@@ -485,7 +485,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("tester('test','test2');");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(0, problems.size());
+		assertEquals(problems.toString(),0, problems.size());
 	}
 
 	public void testFunctionCallWithUndefinedArgumments() throws Exception {
@@ -556,5 +556,40 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testDifferentReturnTypesThenDeclared() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {String} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("var result_1 = 1;");
+		code.add("var condition_1 = false;");
+		code.add("if(condition_1) {");
+		code.add("return result_1;");
+		code.add("}");
+		code.add("return '';");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
+
+	public void testDifferentReturnTypesThenDeclaredWithUndefined() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {String} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("var result_1 = 1;");
+		code.add("var condition_1 = false;");
+		code.add("if(condition_1) {");
+		code.add("return undefined;");
+		code.add("}");
+		code.add("return '';");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 
 }
