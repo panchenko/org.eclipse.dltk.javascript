@@ -318,7 +318,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (method != null && method.getType() != null) {
 				if (collection != null && collection.getReturnValue() != null) {
 					JSTypeSet types = collection.getReturnValue().getTypes();
-					if (!types.isEmpty() && !types.contains(method.getType())) {
+					if (!types.isEmpty()
+							&& !types.contains(context.resolveTypeRef(method
+									.getType()))) {
 						String name = method.getName();
 						int sourceStart;
 						int sourceEnd;
