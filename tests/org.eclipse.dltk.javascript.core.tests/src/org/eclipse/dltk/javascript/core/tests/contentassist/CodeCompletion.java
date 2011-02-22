@@ -441,6 +441,15 @@ public class CodeCompletion extends AbstractCompletionTest {
 		basicTest(module, position, names);
 		// basicTest(module, 105, names);
 	}
+	
+	public void test49() {
+		String[] names = new String[] { "erer" };
+		IModuleSource module = createModule("test49.js");
+		int position = lastPositionInFile("name.", module);
+		basicTest(module, position, getMethodsOfString().toArray(new String[0]));
+		// basicTest(module, 105, names);
+	}
+
 
 	public void testObjectFunctionReturnValue() {
 		String[] names = new String[] { "a", "b" };
