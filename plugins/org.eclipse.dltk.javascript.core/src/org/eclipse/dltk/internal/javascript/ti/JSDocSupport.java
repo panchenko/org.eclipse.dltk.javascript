@@ -275,6 +275,8 @@ public class JSDocSupport implements IModelBuilder {
 						Property property = TypeInfoModelFactory.eINSTANCE
 								.createProperty();
 						property.setName(propertyName);
+						if (pp.type != null)
+							property.setType(translateTypeName(pp.type));
 						propertiesType.getMembers().add(property);
 					}
 					if (propertyName == null) {
