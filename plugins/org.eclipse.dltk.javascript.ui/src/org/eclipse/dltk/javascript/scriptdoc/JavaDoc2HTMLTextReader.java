@@ -327,8 +327,10 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 					if (tags.contains(p.fTag))
 						buffer.append(Character.toUpperCase(p.fTag.charAt(1))
 								+ p.fTag.substring(2));
-					else
+					else {
 						unknowTags.add(p);
+						continue;
+					}
 				}
 				buffer.append("</dt>"); //$NON-NLS-1$
 				buffer.append("<dd>"); //$NON-NLS-1$
