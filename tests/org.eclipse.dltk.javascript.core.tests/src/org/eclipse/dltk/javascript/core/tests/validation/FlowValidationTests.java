@@ -154,4 +154,18 @@ public class FlowValidationTests extends AbstractValidationTest {
 		assertEquals(0, problemIds.size());
 	}
 
+	public void testFunctionReturnInFinally() {
+		StringList code = new StringList();
+		code.add("function q(a) {");
+		code.add("  try {");
+		code.add("    if (a ==1) return 1");
+		code.add("  } finally {");
+		code.add("    return 0;");
+		code.add("  }");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(0, problemIds.size());
+	}
+
 }
