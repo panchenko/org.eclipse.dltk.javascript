@@ -400,8 +400,13 @@ public class JavascriptAutoEditStrategy extends
 			} catch (ModelException e) {
 				return null;
 			}
-			if (member instanceof IMethod) {
-				return (IMethod) member;
+			try {
+				if (member instanceof IMethod
+						&& ((IMethod) member).getSourceRange().getOffset() == offset) {
+					return (IMethod) member;
+				}
+			} catch (ModelException e) {
+				JavaScriptUI.log(e);
 			}
 		}
 		return null;
