@@ -71,6 +71,16 @@ public abstract class TypeInferencerVisitorBase extends
 
 	protected void initialize0() {
 		contexts.push(new TopValueCollection(context));
+		final List<ITypeInferenceHandler> handlers = createHandlers();
+		if (handlers != null && !handlers.isEmpty()) {
+			this.handlers = handlers.toArray(new ITypeInferenceHandler[handlers
+					.size()]);
+		} else {
+			this.handlers = null;
+		}
+	}
+
+	protected List<ITypeInferenceHandler> createHandlers() {
 		final List<ITypeInferenceHandler> handlers = new ArrayList<ITypeInferenceHandler>();
 		for (ITypeInferenceHandlerFactory factory : TypeInfoManager
 				.getNodeHandlerFactories()) {
@@ -79,12 +89,7 @@ public abstract class TypeInferencerVisitorBase extends
 				handlers.add(handler);
 			}
 		}
-		if (!handlers.isEmpty()) {
-			this.handlers = handlers.toArray(new ITypeInferenceHandler[handlers
-					.size()]);
-		} else {
-			this.handlers = null;
-		}
+		return handlers;
 	}
 
 	@Override

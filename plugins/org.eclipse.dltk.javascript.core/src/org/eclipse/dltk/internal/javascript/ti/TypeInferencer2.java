@@ -367,9 +367,13 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	private ITypeProvider[] getTypeProviders() {
 		if (typeProviders == null) {
-			typeProviders = TypeInfoManager.createTypeProviders(this);
+			typeProviders = createTypeProviders();
 		}
 		return typeProviders;
+	}
+
+	protected ITypeProvider[] createTypeProviders() {
+		return TypeInfoManager.createTypeProviders(this);
 	}
 
 	private static final String PROXY_SCHEME = "proxy";
@@ -388,12 +392,16 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return type;
 	}
 
+	public static boolean isTypeProxy(URI uri) {
+		return PROXY_SCHEME.equals(uri.scheme())
+				&& PROXY_OPAQUE_PART.equals(uri.opaquePart());
+	}
+
 	static abstract class TypeResourceSet extends ResourceSetImpl {
 
 		@Override
 		public EObject getEObject(URI uri, boolean loadOnDemand) {
-			if (PROXY_SCHEME.equals(uri.scheme())
-					&& PROXY_OPAQUE_PART.equals(uri.opaquePart())) {
+			if (isTypeProxy(uri)) {
 				final String typeName = URI.decode(uri.fragment());
 				final Type type = resolveTypeProxy(typeName);
 				if (type == null) {
