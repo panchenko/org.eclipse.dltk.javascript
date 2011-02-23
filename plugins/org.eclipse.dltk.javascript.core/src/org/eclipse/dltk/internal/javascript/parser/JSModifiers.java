@@ -20,4 +20,6 @@ public class JSModifiers {
 	public static final int DEPRECATED = 1 << Modifiers.USER_MODIFIER;
 
 	public static final int PRIVATE = 2 << Modifiers.USER_MODIFIER;
+
+	public static final int USER_MODIFIER = Modifiers.USER_MODIFIER + 2;
 }
