@@ -328,7 +328,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testReturnType() {
@@ -485,7 +485,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("tester('test','test2');");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(),0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testFunctionCallWithUndefinedArgumments() throws Exception {
@@ -556,7 +556,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testDifferentReturnTypesThenDeclared() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -590,6 +590,5 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-
 
 }
