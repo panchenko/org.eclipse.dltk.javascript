@@ -224,6 +224,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			boolean queryPredefined, boolean allowProxy, boolean allowUnknown) {
 		Type type = types.get(typeName);
 		if (type != null) {
+			if (!allowUnknown && type.getKind() == TypeKind.UNKNOWN) {
+				return null;
+			}
 			return type;
 		}
 		type = invariantRS.getCachedType(typeName);
