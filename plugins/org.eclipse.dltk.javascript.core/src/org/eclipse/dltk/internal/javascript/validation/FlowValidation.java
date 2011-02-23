@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
+import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.IfStatement;
@@ -25,6 +26,7 @@ import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
+import org.eclipse.dltk.javascript.ast.TryStatement;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.osgi.util.NLS;
@@ -167,6 +169,29 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 	public FlowStatus visitContinueStatement(ContinueStatement node) {
 		final FlowStatus status = new FlowStatus();
 		status.isBreak = true;
+		return status;
+	}
+
+	@Override
+	public FlowStatus visitTryStatement(TryStatement node) {
+		final FlowStatus status = new FlowStatus();
+		final FlowStatus body = visit(node.getBody());
+		status.add(body);
+		for (CatchClause catchClause : node.getCatches()) {
+			final Statement catchStatement = catchClause.getStatement();
+			if (catchStatement != null) {
+				visit(catchStatement);
+			}
+		}
+		if (node.getFinally() != null) {
+			final Statement finallyStatement = node.getFinally().getStatement();
+			if (finallyStatement != null) {
+				final FlowStatus f = visit(finallyStatement);
+				if (f.isReturned()) {
+					status.add(f);
+				}
+			}
+		}
 		return status;
 	}
 
