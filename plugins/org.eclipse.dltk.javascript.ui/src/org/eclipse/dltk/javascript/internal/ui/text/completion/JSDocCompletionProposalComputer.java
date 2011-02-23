@@ -43,6 +43,8 @@ public class JSDocCompletionProposalComputer implements
 		}
 	}
 
+	private static final Set<String> ignored = new HashSet<String>();
+
 	private static final Map<String, TagsCompletionProposals> tagProposals = new HashMap<String, TagsCompletionProposals>();
 
 	static {
@@ -64,6 +66,8 @@ public class JSDocCompletionProposalComputer implements
 		tagProposals.put("@author", new TagsCompletionProposals(
 				authorUserNameTag, authorUserNameTag, 8,
 				new ContextInformation(authorUserNameTag, "username")));
+
+		ignored.add("@returns");
 	}
 
 	public JSDocCompletionProposalComputer() {
@@ -136,7 +140,8 @@ public class JSDocCompletionProposalComputer implements
 							.getKeywords(JSKeywordCategory.JS_DOC_TAG, module));
 
 					for (String jsdocTag : tags) {
-						if (jsdocTag.startsWith(tag)) {
+						if (jsdocTag.startsWith(tag)
+								&& !ignored.contains(jsdocTag)) {
 							TagsCompletionProposals tcp = tagProposals
 									.get(jsdocTag);
 							if (tcp != null) {
