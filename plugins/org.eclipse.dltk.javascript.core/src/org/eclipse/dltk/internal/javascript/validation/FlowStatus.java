@@ -12,12 +12,14 @@
 package org.eclipse.dltk.internal.javascript.validation;
 
 public class FlowStatus {
+	boolean isBreak;
 	boolean returnValue;
 	boolean returnWithoutValue;
 	boolean noReturn;
 
 	public void add(FlowStatus value) {
 		if (value != null) {
+			isBreak |= value.isBreak;
 			returnValue |= value.returnValue;
 			returnWithoutValue |= value.returnWithoutValue;
 			noReturn = value.noReturn
@@ -25,6 +27,10 @@ public class FlowStatus {
 		} else {
 			noReturn = true;
 		}
+	}
+
+	public boolean isTerminatd() {
+		return isBreak || isReturned();
 	}
 
 	public boolean isReturned() {

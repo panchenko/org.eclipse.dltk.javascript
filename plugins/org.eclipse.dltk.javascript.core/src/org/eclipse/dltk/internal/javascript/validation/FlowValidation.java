@@ -15,12 +15,15 @@ package org.eclipse.dltk.internal.javascript.validation;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.javascript.ast.BreakStatement;
+import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
+import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
@@ -76,7 +79,7 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		int startRange = Integer.MAX_VALUE;
 		int endRange = -1;
 		for (Statement statement : node.getStatements()) {
-			if (status.isReturned()) {
+			if (status.isTerminatd()) {
 				if (startRange > statement.sourceStart())
 					startRange = statement.sourceStart();
 				if (endRange < statement.sourceEnd())
@@ -137,14 +140,12 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 			final FlowStatus result = super.visitFunctionStatement(node);
 			if (scope.contains(FlowEndKind.RETURNS_VALUE)
 					&& (scope.contains(FlowEndKind.RETURNS) || result.noReturn)) {
-				reporter
-						.setMessage(
-								JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE,
-								node.getName() != null ? NLS
-										.bind(
-												"function {0} does not always return a value",
-												node.getName().getName())
-										: "anonymous function does not always return a value");
+				reporter.setMessage(
+						JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE,
+						node.getName() != null ? NLS.bind(
+								"function {0} does not always return a value",
+								node.getName().getName())
+								: "anonymous function does not always return a value");
 				reporter.setRange(node.getBody().getRC(), node.getBody()
 						.getRC() + 1);
 				reporter.report();
@@ -153,5 +154,25 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		} finally {
 			scope = savedScope;
 		}
+	}
+
+	@Override
+	public FlowStatus visitBreakStatement(BreakStatement node) {
+		final FlowStatus status = new FlowStatus();
+		status.isBreak = true;
+		return status;
+	}
+
+	@Override
+	public FlowStatus visitContinueStatement(ContinueStatement node) {
+		final FlowStatus status = new FlowStatus();
+		status.isBreak = true;
+		return status;
+	}
+
+	@Override
+	public FlowStatus visitSwitchStatement(SwitchStatement node) {
+		// TODO Auto-generated method stub
+		return super.visitSwitchStatement(node);
 	}
 }
