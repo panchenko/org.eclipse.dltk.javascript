@@ -131,26 +131,11 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 	@Override
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
 		MethodInfo methodInfo = new MethodInfo();
-		MethodInfo thisMethod = null;
 		methodInfo.declarationStart = node.sourceStart();
 		final JSMethod method = generateJSMethod(node);
 		Identifier thisIdentifier = null;
 		Identifier identifier = null;
-		if (node.getName() != null) {
-			identifier = setNameProperties(node.getName(), methodInfo, method);
-			if ((thisIdentifier = getThisIdentifier(node)) != null) {
-				// this is a function that has a name and an assignment to
-				// the this property.
-				// also a field should be created.
-				thisMethod = new MethodInfo();
-				thisMethod.nameSourceStart = thisIdentifier.sourceStart();
-				thisMethod.nameSourceEnd = thisIdentifier.sourceEnd() - 1;
-				thisMethod.declarationStart = thisIdentifier.getParent()
-						.sourceStart();
-				thisMethod.name = thisIdentifier.getName();
-			}
-
-		} else if (node.getParent() instanceof PropertyInitializer
+		if (node.getParent() instanceof PropertyInitializer
 				&& ((PropertyInitializer) node.getParent()).getName() instanceof Identifier) {
 			identifier = setNameProperties(
 					(Identifier) ((PropertyInitializer) node.getParent())
@@ -177,6 +162,8 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			}
 			methodInfo.nameSourceStart = expression.sourceStart();
 			methodInfo.nameSourceEnd = expression.sourceEnd() - 1;
+		} else if (node.getName() != null) {
+			identifier = setNameProperties(node.getName(), methodInfo, method);
 		} else {
 			method.setName("");
 			methodInfo.nameSourceStart = node.getFunctionKeyword()
@@ -216,16 +203,6 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			}
 			methodInfo.parameterNames = paramNames;
 			methodInfo.parameterTypes = paramTypes;
-		}
-
-		if (thisMethod != null) {
-			thisMethod.isConstructor = methodInfo.isConstructor;
-			thisMethod.returnType = methodInfo.returnType;
-			thisMethod.modifiers = methodInfo.modifiers;
-			thisMethod.parameterNames = methodInfo.parameterNames;
-			thisMethod.parameterTypes = methodInfo.parameterTypes;
-			fRequestor.enterMethod(thisMethod, thisIdentifier, method);
-			fRequestor.exitMethod(node.sourceEnd());
 		}
 
 		fRequestor.enterMethod(methodInfo, identifier, method);

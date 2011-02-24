@@ -309,7 +309,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 				}
 			}
-			if (node.getName() != null) {
+			if (isChildFunction(node)) {
 				IValueReference child = peekContext.getChild(node.getName()
 						.getName());
 				if (child.exists()) {

@@ -429,7 +429,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		final Identifier methodName = node.getName();
 		final IValueReference result;
-		if (methodName != null) {
+		if (isChildFunction(node)) {
 			result = peekContext().createChild(method.getName());
 			result.setLocation(ReferenceLocation.create(getSource(),
 					node.sourceStart(), node.sourceEnd(),
@@ -451,6 +451,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				returnValue, method.getType());
 		returnValue.addValue(function.getReturnValue(), true);
 		return result;
+	}
+
+	/**
+	 * @param node
+	 * @param methodName
+	 * @return
+	 */
+	protected boolean isChildFunction(FunctionStatement node) {
+		return node.getName() != null
+				&& !(node.getParent() instanceof BinaryOperation)
+				&& !(node.getParent() instanceof VariableDeclaration)
+				&& !(node.getParent() instanceof PropertyInitializer)
+				&& !(node.getParent() instanceof NewExpression);
 	}
 
 	/**

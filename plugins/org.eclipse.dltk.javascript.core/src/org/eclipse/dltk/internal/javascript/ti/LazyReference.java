@@ -26,9 +26,12 @@ public class LazyReference extends AbstractReference {
 					}
 
 					IValue src = ((IValueProvider) createChild).getValue();
-					if (src instanceof Value) {
-						this.references.add((Value) src);
-					} else if (src != null) {
+					// if i enable this then the type added below takes precedance some time
+					// for example a toString() on a javasccript object will then return the toString of Object
+					// if (src instanceof Value) {
+					// this.references.add((Value) src);
+					// } else
+					if (src != null) {
 						addValue(src);
 					}
 					setKind(ReferenceKind.TYPE);
