@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
@@ -327,6 +328,21 @@ public class Value implements IValue, IValue2 {
 				types.add(src.getDeclaredType());
 			}
 			types.addAll(src.getTypes());
+			if (src.getKind() == ReferenceKind.METHOD) {
+				final Object element = src
+						.getAttribute(IReferenceAttributes.ELEMENT);
+				if (element != null) {
+					setAttribute(IReferenceAttributes.ELEMENT, element);
+				}
+				final IValue returnType = src.getChild(
+						IValueReference.FUNCTION_OP, false);
+				if (returnType != null) {
+					final JSTypeSet myReturnTypes = createChild(
+							IValueReference.FUNCTION_OP).getTypes();
+					myReturnTypes.addAll(returnType.getTypes());
+					myReturnTypes.addAll(returnType.getDeclaredTypes());
+				}
+			}
 		}
 	}
 
