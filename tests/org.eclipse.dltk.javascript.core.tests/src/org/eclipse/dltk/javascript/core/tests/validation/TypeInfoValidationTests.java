@@ -614,5 +614,41 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
+	
+	public void testVariableAssignedFunctionCallingItself() throws Exception {
+		StringList code = new StringList();
+		code.add("var b = function a() {");
+		code.add("application.output(a);}");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
 
+	public void testVariableAssignedObjectInitializerFunctionCallingItSelf() throws Exception {
+		StringList code = new StringList();
+		code.add("var object = {");
+		code.add(" a: function c() {");
+		code.add(" c(); } }");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+	
+	public void testVariableAssignedObjectInitializerFunctionWithThis() throws Exception {
+		StringList code = new StringList();
+		code.add("var object = {");
+		code.add("a: function c() {this.b();},");
+		code.add("b: function() {}}");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+	
+	public void testVariableAssignedObjectInitializerFunctionWithoutThis() throws Exception {
+		StringList code = new StringList();
+		code.add("var object = {");
+		code.add("a: function c() {b();},");
+		code.add("b: function() {}}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+				.getID());
+	}
 }
