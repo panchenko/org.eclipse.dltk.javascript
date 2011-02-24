@@ -19,6 +19,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.ui.text.completion.AbstractScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ProposalContextInformation;
@@ -91,11 +92,20 @@ public class JavaScriptCompletionProposalCollector extends
 				for (Parameter parameter : parameters) {
 					if (sb.length() > 0)
 						sb.append(',');
+					if (parameter.getKind() == ParameterKind.OPTIONAL)
+						sb.append('[');
 					if (parameter.getType() != null) {
 						sb.append(parameter.getType().getName());
+						if (parameter.getKind() == ParameterKind.VARARGS)
+							sb.append("...");
 						sb.append(' ');
 					}
 					sb.append(parameter.getName());
+					if (parameter.getKind() == ParameterKind.VARARGS
+							&& parameter.getType() == null)
+						sb.append("...");
+					if (parameter.getKind() == ParameterKind.OPTIONAL)
+						sb.append(']');
 
 				}
 			}
@@ -108,12 +118,19 @@ public class JavaScriptCompletionProposalCollector extends
 				for (IParameter parameter : method.getParameters()) {
 					if (sb.length() > 0)
 						sb.append(',');
+					if (parameter.isOptional())
+						sb.append('[');
 					if (parameter.getType() != null) {
 						sb.append(parameter.getType().getName());
+						if (parameter.isVarargs())
+							sb.append("...");
 						sb.append(' ');
 					}
 					sb.append(parameter.getName());
-
+					if (parameter.isVarargs() && parameter.getType() == null)
+						sb.append("...");
+					if (parameter.isOptional())
+						sb.append(']');
 				}
 			}
 		}
