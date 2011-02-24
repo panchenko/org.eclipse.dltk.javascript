@@ -27,8 +27,14 @@ public class FunctionValueCollection extends ValueCollection {
 	private final String functionName;
 
 	public FunctionValueCollection(IValueCollection parent, String functionName) {
+		this(parent, functionName, new ThisValue());
+	}
+
+	public FunctionValueCollection(IValueCollection parent,
+			String functionName, IValueReference thisValue) {
 		super(parent);
 		this.functionName = functionName;
+		this.thisValue = thisValue;
 		IValueReference arguments = createChild("arguments");
 		arguments.setKind(ReferenceKind.LOCAL);
 		IValueReference argumentsLength = arguments.getChild("length");
@@ -77,7 +83,7 @@ public class FunctionValueCollection extends ValueCollection {
 		}
 	}
 
-	private final IValueReference thisValue = new ThisValue();
+	private final IValueReference thisValue;
 
 	@Override
 	public IValueReference getThis() {
