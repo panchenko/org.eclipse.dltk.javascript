@@ -591,4 +591,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testStringTypeAsFunctionCall() {
+		StringList code = new StringList();
+		code.add("var b = true");
+		code.add("var s = String(b)");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+
+	public void testNumberTypeAsFunctionCall() {
+		StringList code = new StringList();
+		code.add("var b = true");
+		code.add("var n = Number(b)");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+
 }
