@@ -193,6 +193,9 @@
     </members>
   </ref:Type>
   <ref:Type name="Boolean" kind="PREDEFINED" superType="Object">
+    <constructor name="Boolean">
+      <parameters name="value" kind="OPTIONAL" directType="Object"/>
+    </constructor>
   	<members xsi:type="ref:Property" name="prototype" directType="Boolean" static="true" description="Allows the addition of properties to a Boolean object."/>
   </ref:Type>
   <ref:TypeAlias source="boolean" target="Boolean"/>
