@@ -176,6 +176,11 @@ public abstract class ElementValue implements IValue {
 			return types;
 		}
 
+		@Override
+		public ReferenceKind getKind() {
+			return ReferenceKind.TYPE;
+		}
+
 	}
 
 	private static class MethodValue extends ElementValue implements IValue {
