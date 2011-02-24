@@ -114,8 +114,7 @@ public class ValueCollectionFactory {
 							(Value) sourceValue.getChild(childName, false));
 				}
 			} else {
-				targetValue.addValue(
-					((IValueProvider) source).getValue());
+				targetValue.addValue(((IValueProvider) source).getValue());
 			}
 
 		}
