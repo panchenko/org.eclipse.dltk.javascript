@@ -41,6 +41,7 @@ import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
@@ -465,7 +466,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		protected void validateCallExpression(CallExpression node,
 				final IValueReference reference, IValueReference[] arguments) {
 
-			final ASTNode expression = node.getExpression();
+			final Expression expression = node.getExpression();
 			final ASTNode methodNode;
 			if (expression instanceof PropertyExpression) {
 				methodNode = ((PropertyExpression) expression).getProperty();
@@ -541,7 +542,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 										reference.getName()), methodNode
 										.sourceStart(), methodNode.sourceEnd());
 					}
-					if (method.isPrivate() && reference.getParent() != null) {
+					if (method.isPrivate() && reference.getParent() != null
+							&& !isThisCall(expression)) {
 						reporter.reportProblem(
 								JavaScriptProblems.PRIVATE_FUNCTION, NLS.bind(
 										ValidationMessages.PrivateFunction,
@@ -651,6 +653,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 			}
 			return;
+		}
+
+		private boolean isThisCall(Expression expression) {
+			return expression instanceof PropertyExpression
+					&& ((PropertyExpression) expression).getObject() instanceof ThisExpression
+					&& ((PropertyExpression) expression).getProperty() instanceof Identifier;
 		}
 
 		private boolean hasInstanceMethod(JSType type, String name) {
