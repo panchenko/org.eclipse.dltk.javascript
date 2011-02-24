@@ -93,7 +93,16 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			if (property.getType() != null
 					&& !property.getType().getName()
 							.equalsIgnoreCase(proposal.getName())) {
-				return proposal.getName() + ": " + property.getType().getName();
+				final StringBuilder sb = new StringBuilder();
+				sb.append(proposal.getName());
+				sb.append(": ");
+				sb.append(property.getType().getName());
+				// TODO use different color
+				if (property.getDeclaringType() != null) {
+					sb.append(" - ");
+					sb.append(property.getDeclaringType().getName());
+				}
+				return sb.toString();
 			}
 		}
 		return proposal.getName();
