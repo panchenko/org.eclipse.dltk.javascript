@@ -67,12 +67,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = new SelectionTests(null).select(module,
 				lastPositionInFile("fun4", module, false));
-		assertEquals(1, elements.length);
-		final IMethod method = (IMethod) elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
-		assertEquals(2, results.size());
-		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
-		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
+		assertEquals(0, elements.length);
 	}
 
 	public void testFunctionThisField() throws CoreException {
@@ -103,12 +98,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = new SelectionTests(null).select(module,
 				lastPositionInFile("fun8", module, false));
-		assertEquals(1, elements.length);
-		final IMethod method = (IMethod) elements[0];
-		final TestSearchResults results = search(method, ALL_OCCURRENCES);
-		assertEquals(2, results.size());
-		assertTrue(results.getMatch(0) instanceof MethodDeclarationMatch);
-		assertTrue(results.getMatch(1) instanceof MethodReferenceMatch);
+		assertEquals(0, elements.length);
 	}
 
 	public void testFunctionThisFieldWithInnerFunctionCall()

@@ -138,8 +138,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 		test = test.getChild("newNode");
 		assertEquals(true, test.exists());
-		assertEquals(1, test.getDeclaredTypes().size());
-		assertEquals("Function", typename(test.getDeclaredTypes()));
+		assertEquals(1, test.getTypes().size());
+		assertEquals("Function", typename(test.getTypes()));
 
 		test = test.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(2, test.getDirectChildren().size());
@@ -153,8 +153,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 		IValueReference toString = test.getChild("toString");
 		assertEquals(true, toString.exists());
-		assertEquals(1, toString.getDeclaredTypes().size());
-		assertEquals(FUNCTION, typename(toString.getDeclaredTypes()));
+		assertEquals(1, toString.getTypes().size());
+		assertEquals(FUNCTION, typename(toString.getTypes()));
 
 		toString = toString.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(true, toString.exists());
@@ -193,8 +193,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 		test = test.getChild("newNode");
 		assertEquals(true, test.exists());
-		assertEquals(1, test.getDeclaredTypes().size());
-		assertEquals("Function", typename(test.getDeclaredTypes()));
+		assertEquals(1, test.getTypes().size());
+		assertEquals("Function", typename(test.getTypes()));
 
 		test = test.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(2, test.getDirectChildren().size());
@@ -208,8 +208,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 		IValueReference toString = test.getChild("toString");
 		assertEquals(true, toString.exists());
-		assertEquals(1, toString.getDeclaredTypes().size());
-		assertEquals("Function", typename(toString.getDeclaredTypes()));
+		assertEquals(1, toString.getTypes().size());
+		assertEquals("Function", typename(toString.getTypes()));
 
 		toString = toString.getChild(IValueReference.FUNCTION_OP);
 		assertEquals(true, toString.exists());

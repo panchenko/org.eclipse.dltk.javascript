@@ -199,11 +199,7 @@ public class SelectionTests extends AbstractModelTests {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("fun4", module, false));
-		assertEquals(1, elements.length);
-		final IMethod local = (IMethod) elements[0];
-		final ISourceRange nameRange = local.getNameRange();
-		final String contents = module.getSourceContents();
-		assertEquals(contents.indexOf("fun4"), nameRange.getOffset());
+		assertEquals(0, elements.length);
 	}
 	
 	public void testFunctionThisField() throws ModelException {
@@ -232,11 +228,7 @@ public class SelectionTests extends AbstractModelTests {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("fun8", module, false));
-		assertEquals(1, elements.length);
-		final IMethod local = (IMethod) elements[0];
-		final ISourceRange nameRange = local.getNameRange();
-		final String contents = module.getSourceContents();
-		assertEquals(contents.indexOf("fun8"), nameRange.getOffset());
+		assertEquals(0, elements.length);
 	}
 	
 	public void testFunctionThisFieldWithLocalFunctionOutercall() throws ModelException {
