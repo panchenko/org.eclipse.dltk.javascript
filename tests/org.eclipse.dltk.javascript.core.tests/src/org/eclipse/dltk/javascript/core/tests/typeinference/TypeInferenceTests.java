@@ -897,4 +897,13 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals("String", x.getDeclaredType().getName());
 	}
 
+	public void testCallExternalFunctionViaReferenceCopy() {
+		StringList code = new StringList();
+		code.add("var p = parseInt");
+		code.add("var n = p('1')");
+		IValueCollection collection = inference(code.toString());
+		IValueReference n = collection.getChild("n");
+		assertEquals(getTypes(ITypeNames.NUMBER), n.getTypes());
+	}
+
 }

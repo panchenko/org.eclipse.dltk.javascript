@@ -607,4 +607,12 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
 
+	public void testCallExternalFunctionViaReferenceCopy() {
+		StringList code = new StringList();
+		code.add("var p = parseInt");
+		code.add("var n = p('1')");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+
 }
