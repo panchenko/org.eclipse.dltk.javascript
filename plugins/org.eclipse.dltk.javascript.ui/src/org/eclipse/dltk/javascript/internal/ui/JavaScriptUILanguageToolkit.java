@@ -98,7 +98,9 @@ public class JavaScriptUILanguageToolkit extends AbstractDLTKUILanguageToolkit {
 			"org.eclipse.dltk.javascript.ui.editor.SyntaxColoring",
 			"org.eclipse.dltk.javascript.ui.editor.SmartTyping",
 			"org.eclipse.dltk.javascript.ui.editor.JavascriptFolding",
-			"javascriptTemplatePreferencePage" };
+			"javascriptTemplatePreferencePage",
+			"org.eclipse.dltk.javascript.ui.editor.Hovers",
+			"org.eclipse.dltk.javascript.ui.editor.MarkOccurrencesPreference" };
 
 	public String[] getEditorPreferencePages() {
 		return EDITOR_PREFERENCE_PAGES_IDS;
