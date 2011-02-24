@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.eclipse.core.runtime.Path;
@@ -193,10 +194,16 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 						return convert(m, Collections.singletonList(method));
 					}
 				} else if (kind == ReferenceKind.TYPE) {
-					final JSTypeSet types = value.getTypes();
+					final LinkedHashSet<Type> t = new LinkedHashSet<Type>();
+					JSTypeSet types = value.getDeclaredTypes();
 					if (types != null) {
-						final List<Type> t = new ArrayList<Type>(types.size());
 						Collections.addAll(t, types.toArray());
+					}
+					types = value.getTypes();
+					if (types != null) {
+						Collections.addAll(t, types.toArray());
+					}
+					if (!t.isEmpty()) {
 						return convert(m, t);
 					}
 				}

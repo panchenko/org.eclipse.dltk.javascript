@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.10 2011/02/10 13:05:30 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.11 2011/02/24 07:24:38 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Collection;
 
+import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
@@ -39,6 +40,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getMembers <em>Members</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getKind <em>Kind</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getSuperType <em>Super Type</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructor <em>Constructor</em>}</li>
  * </ul>
  * </p>
  *
@@ -84,6 +86,16 @@ public class TypeImpl extends ElementImpl implements Type {
      * @ordered
      */
     protected Type superType;
+
+    /**
+     * The cached value of the '{@link #getConstructor() <em>Constructor</em>}' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getConstructor()
+     * @generated
+     * @ordered
+     */
+    protected Constructor constructor;
 
     /**
      * <!-- begin-user-doc -->
@@ -176,6 +188,49 @@ public class TypeImpl extends ElementImpl implements Type {
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public Constructor getConstructor() {
+        return constructor;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public NotificationChain basicSetConstructor(Constructor newConstructor, NotificationChain msgs) {
+        Constructor oldConstructor = constructor;
+        constructor = newConstructor;
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__CONSTRUCTOR, oldConstructor, newConstructor);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setConstructor(Constructor newConstructor) {
+        if (newConstructor != constructor) {
+            NotificationChain msgs = null;
+            if (constructor != null)
+                msgs = ((InternalEObject)constructor).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.TYPE__CONSTRUCTOR, null, msgs);
+            if (newConstructor != null)
+                msgs = ((InternalEObject)newConstructor).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.TYPE__CONSTRUCTOR, null, msgs);
+            msgs = basicSetConstructor(newConstructor, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__CONSTRUCTOR, newConstructor, newConstructor));
+    }
+
+    /**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -209,6 +264,8 @@ public class TypeImpl extends ElementImpl implements Type {
         switch (featureID) {
             case TypeInfoModelPackage.TYPE__MEMBERS:
                 return ((InternalEList<?>)getMembers()).basicRemove(otherEnd, msgs);
+            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
+                return basicSetConstructor(null, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
@@ -228,6 +285,8 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 if (resolve) return getSuperType();
                 return basicGetSuperType();
+            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
+                return getConstructor();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -251,6 +310,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 setSuperType((Type)newValue);
                 return;
+            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
+                setConstructor((Constructor)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -272,6 +334,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 setSuperType((Type)null);
                 return;
+            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
+                setConstructor((Constructor)null);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -290,6 +355,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return kind != KIND_EDEFAULT;
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 return superType != null;
+            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
+                return constructor != null;
         }
         return super.eIsSet(featureID);
     }

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.8 2011/02/10 13:05:29 apanchenk Exp $
+ * $Id: Type.java,v 1.9 2011/02/24 07:24:38 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType <em>Super Type</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructor <em>Constructor</em>}</li>
  * </ul>
  * </p>
  *
@@ -106,6 +107,32 @@ public interface Type extends Element {
      * @generated
      */
     void setSuperType(Type value);
+
+    /**
+     * Returns the value of the '<em><b>Constructor</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Constructor</em>' containment reference isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Constructor</em>' containment reference.
+     * @see #setConstructor(Constructor)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Constructor()
+     * @model containment="true"
+     * @generated
+     */
+    Constructor getConstructor();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructor <em>Constructor</em>}' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Constructor</em>' containment reference.
+     * @see #getConstructor()
+     * @generated
+     */
+    void setConstructor(Constructor value);
 
     /**
      * <!-- begin-user-doc -->

@@ -517,8 +517,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 									ValidationMessages.StaticReferenceToNoneStaticMethod,
 									reference.getName(), type.getName()),
 							methodNode.sourceStart(), methodNode.sourceEnd());
-				} else if (!JavaScriptValidations.isStatic(reference
-						.getParent()) && method.isStatic()) {
+				} else if (reference.getParent() != null
+						&& !JavaScriptValidations.isStatic(reference
+								.getParent()) && method.isStatic()) {
 					JSType type = JavaScriptValidations.typeOf(reference
 							.getParent());
 					reporter.reportProblem(JavaScriptProblems.STATIC_METHOD,

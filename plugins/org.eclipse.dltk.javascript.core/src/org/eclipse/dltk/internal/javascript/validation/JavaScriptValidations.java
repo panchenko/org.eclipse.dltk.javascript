@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptValidations {
@@ -90,28 +91,42 @@ public class JavaScriptValidations {
 				new JavaScriptValidationSeverityReporter());
 	}
 
+	private static <E extends Member> boolean canConvert(Object value,
+			Class<E> elementType) {
+		return elementType.isInstance(value) || elementType == Method.class
+				&& value instanceof Type
+				&& ((Type) value).getConstructor() != null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <E extends Member> E convert(Object value,
+			Class<E> elementType) {
+		if (elementType.isInstance(value))
+			return (E) value;
+		else
+			return (E) ((Type) value).getConstructor();
+	}
+
 	/**
 	 * @param reference
 	 * @param elementType
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static <E extends Member> List<E> extractElements(
 			IValueReference reference, Class<E> elementType) {
 		final Object value = reference
 				.getAttribute(IReferenceAttributes.ELEMENT);
-		if (elementType.isInstance(value)) {
-			return Collections.singletonList((E) value);
-		} else if (value instanceof Member[]) {
-			final Member[] elements = (Member[]) value;
+		if (canConvert(value, elementType)) {
+			return Collections.singletonList(convert(value, elementType));
+		} else if (value instanceof Object[]) {
+			final Object[] elements = (Object[]) value;
 			List<E> result = null;
-			for (Member element : elements) {
-
-				if (elementType.isInstance(element)) {
+			for (Object element : elements) {
+				if (canConvert(element, elementType)) {
 					if (result == null) {
 						result = new ArrayList<E>(elements.length);
 					}
-					result.add((E) element);
+					result.add(convert(element, elementType));
 				}
 			}
 			return result;

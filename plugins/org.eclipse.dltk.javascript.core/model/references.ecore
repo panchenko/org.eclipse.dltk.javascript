@@ -34,6 +34,8 @@
         eType="#//Member" containment="true" resolveProxies="false" eOpposite="#//Member/declaringType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//TypeKind"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constructor" eType="#//Constructor"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypeAlias">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
@@ -57,6 +59,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//NamedElement #//TypedElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//ParameterKind"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constructor" eSuperTypes="#//Method"/>
   <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//Member">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="readOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>

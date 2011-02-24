@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.7 2011/02/10 13:05:31 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.8 2011/02/24 07:24:38 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -152,6 +152,17 @@ public class TypeInfoModelSwitch<T> {
                 T result = caseParameter(parameter);
                 if (result == null) result = caseNamedElement(parameter);
                 if (result == null) result = caseTypedElement(parameter);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.CONSTRUCTOR: {
+                Constructor constructor = (Constructor)theEObject;
+                T result = caseConstructor(constructor);
+                if (result == null) result = caseMethod(constructor);
+                if (result == null) result = caseMember(constructor);
+                if (result == null) result = caseElement(constructor);
+                if (result == null) result = caseTypedElement(constructor);
+                if (result == null) result = caseNamedElement(constructor);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -301,6 +312,21 @@ public class TypeInfoModelSwitch<T> {
     }
 
 	/**
+     * Returns the result of interpreting the object as an instance of '<em>Constructor</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Constructor</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseConstructor(Constructor object) {
+        return null;
+    }
+
+    /**
      * Returns the result of interpreting the object as an instance of '<em>Type Alias</em>'.
      * <!-- begin-user-doc -->
      * This implementation returns null;

@@ -9,13 +9,14 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.7 2011/02/10 13:05:30 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.8 2011/02/24 07:24:38 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Map;
 
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -81,6 +82,7 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.TYPE_ALIAS: return (EObject)createTypeAlias();
             case TypeInfoModelPackage.METHOD: return (EObject)createMethod();
             case TypeInfoModelPackage.PARAMETER: return (EObject)createParameter();
+            case TypeInfoModelPackage.CONSTRUCTOR: return (EObject)createConstructor();
             case TypeInfoModelPackage.PROPERTY: return (EObject)createProperty();
             case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
             case TypeInfoModelPackage.TYPE_REF: return (EObject)createTypeRef();
@@ -135,6 +137,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public Constructor createConstructor() {
+        ConstructorImpl constructor = new ConstructorImpl();
+        return constructor;
+    }
+
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
