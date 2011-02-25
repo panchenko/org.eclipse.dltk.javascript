@@ -137,6 +137,9 @@
     </members>
   </ref:Type>
   <ref:Type name="Array" kind="PREDEFINED" superType="Object">
+    <constructor name="Array">
+      <parameters name="item" kind="VARARGS" directType="Object"/>
+    </constructor>
   	<members xsi:type="ref:Property" name="prototype" directType="Array" static="true" description="Allows the addition of properties to a Array object."/>
     <members xsi:type="ref:Method" name="concat" directType="Array" description="Joins two or more arrays and returns the result.">
       <parameters name="[array1,arrayN]" kind="VARARGS"/>
