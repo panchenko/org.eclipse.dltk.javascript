@@ -780,8 +780,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 				argumentType = argument.getTypes().getFirst();
 			}
 			if (paramType != null && argumentType != null) {
-				return JSTypeSet.normalize(paramType).isAssignableFrom(
-						JSTypeSet.normalize(argumentType));
+				return JSTypeSet.normalize(context.resolveTypeRef(paramType))
+						.isAssignableFrom(
+								JSTypeSet.normalize(context
+										.resolveTypeRef(argumentType)));
 			}
 			return true;
 		}
