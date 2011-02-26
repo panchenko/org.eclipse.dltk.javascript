@@ -1508,7 +1508,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					if (expression instanceof FunctionStatement
 							|| expression instanceof ObjectInitializer
 							|| (expression instanceof NewExpression && ((NewExpression) expression)
-									.getObjectClass() instanceof FunctionStatement)) {
+									.getObjectClass() instanceof FunctionStatement)
+							|| expression instanceof CallExpression) {
 						return false;
 					}
 				}
