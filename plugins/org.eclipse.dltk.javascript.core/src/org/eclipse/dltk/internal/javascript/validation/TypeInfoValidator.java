@@ -516,7 +516,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 							JavaScriptProblems.INSTANCE_METHOD,
 							NLS.bind(
 									ValidationMessages.StaticReferenceToNoneStaticMethod,
-									reference.getName(), type.getName()),
+									reference.getName(), TypeUtil.getName(type)),
 							methodNode.sourceStart(), methodNode.sourceEnd());
 				} else if (reference.getParent() != null
 						&& !JavaScriptValidations.isStatic(reference
@@ -1113,8 +1113,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 							JavaScriptProblems.INSTANCE_PROPERTY,
 							NLS.bind(
 									ValidationMessages.StaticReferenceToNoneStaticProperty,
-									result.getName(), type.getName()), propName
-									.sourceStart(), propName.sourceEnd());
+									result.getName(), TypeUtil.getName(type)),
+							propName.sourceStart(), propName.sourceEnd());
 				} else if (!JavaScriptValidations.isStatic(result.getParent())
 						&& member.isStatic()) {
 					JSType type = JavaScriptValidations.typeOf(result
