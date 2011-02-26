@@ -308,7 +308,9 @@ public class JSDocSupport implements IModelBuilder {
 		}
 		if (problemCount == 0 && reporter != null) {
 			for (IParameter parameter : method.getParameters()) {
-				if (!processedParams.contains(parameter.getName())) {
+				if (!processedParams.contains(parameter.getName())
+						&& !objectPropertiesTypes.containsKey(parameter
+								.getName())) {
 					final ReferenceLocation location = parameter.getLocation();
 					reporter.reportProblem(
 							JSDocProblem.PARAMETER_MISSING_ANNOTATION,
