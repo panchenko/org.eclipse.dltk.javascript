@@ -737,7 +737,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference object = visit(node.getObject());
 		Expression property = node.getProperty();
 		IValueReference child = extractNamedChild(object, property);
-		if (child != null && node.getObject() instanceof ThisExpression) {
+		if (child != null && node.getObject() instanceof ThisExpression
+				&& !child.exists()) {
 			if (isFunctionDeclaration(node))
 				child.setKind(ReferenceKind.FUNCTION);
 			else
