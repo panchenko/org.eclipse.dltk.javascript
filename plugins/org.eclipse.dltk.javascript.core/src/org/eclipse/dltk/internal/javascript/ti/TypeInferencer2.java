@@ -242,7 +242,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return type;
 		}
 		if (allowProxy) {
-			type = createProxy(typeName);
+			type = TypeUtil.createProxy(typeName);
 			return type;
 		}
 		if (allowUnknown) {
@@ -376,32 +376,11 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return TypeInfoManager.createTypeProviders(this);
 	}
 
-	private static final String PROXY_SCHEME = "proxy";
-	private static final String PROXY_OPAQUE_PART = "dltk/javascript/typeinfo/type";
-
-	/**
-	 * @param typeName
-	 * @return
-	 */
-	public static Type createProxy(String typeName) {
-		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
-		type.setName(typeName);
-		((InternalEObject) type).eSetProxyURI(URI.createGenericURI(
-				PROXY_SCHEME, PROXY_OPAQUE_PART,
-				URI.encodeFragment(typeName, false)));
-		return type;
-	}
-
-	public static boolean isTypeProxy(URI uri) {
-		return PROXY_SCHEME.equals(uri.scheme())
-				&& PROXY_OPAQUE_PART.equals(uri.opaquePart());
-	}
-
 	static abstract class TypeResourceSet extends ResourceSetImpl {
 
 		@Override
 		public EObject getEObject(URI uri, boolean loadOnDemand) {
-			if (isTypeProxy(uri)) {
+			if (TypeUtil.isTypeProxy(uri)) {
 				final String typeName = URI.decode(uri.fragment());
 				final Type type = resolveTypeProxy(typeName);
 				if (type == null) {
@@ -422,8 +401,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 		public synchronized Resource getResource() {
 			if (typesResource == null) {
-				typesResource = new ResourceImpl(URI.createGenericURI(
-						PROXY_SCHEME, PROXY_OPAQUE_PART, null));
+				typesResource = new ResourceImpl(
+						TypeUtil.createProxyResourceURI());
 				getResources().add(typesResource);
 			}
 			return typesResource;
@@ -499,7 +478,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				return type;
 			}
 			if (allowProxy) {
-				type = createProxy(typeName);
+				type = TypeUtil.createProxy(typeName);
 				return type;
 			}
 			if (allowUnknown) {

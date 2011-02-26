@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -45,7 +44,7 @@ public class TypeUtil {
 		if (type != null) {
 			return ref(type);
 		}
-		return ref(TypeInferencer2.createProxy(typeName));
+		return ref(createProxy(typeName));
 	}
 
 	public static ArrayType arrayOf(String itemType) {
@@ -89,6 +88,31 @@ public class TypeUtil {
 		} else {
 			return type.getName();
 		}
+	}
+
+	private static final String PROXY_SCHEME = "proxy";
+	private static final String PROXY_OPAQUE_PART = "dltk/javascript/typeinfo/type";
+
+	/**
+	 * @param typeName
+	 * @return
+	 */
+	public static Type createProxy(String typeName) {
+		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
+		type.setName(typeName);
+		((InternalEObject) type).eSetProxyURI(URI.createGenericURI(
+				PROXY_SCHEME, PROXY_OPAQUE_PART,
+				URI.encodeFragment(typeName, false)));
+		return type;
+	}
+
+	public static boolean isTypeProxy(URI uri) {
+		return PROXY_SCHEME.equals(uri.scheme())
+				&& PROXY_OPAQUE_PART.equals(uri.opaquePart());
+	}
+
+	public static URI createProxyResourceURI() {
+		return URI.createGenericURI(PROXY_SCHEME, PROXY_OPAQUE_PART, null);
 	}
 
 }
