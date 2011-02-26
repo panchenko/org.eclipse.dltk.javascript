@@ -122,4 +122,15 @@ public class TypeInfoModelLoader {
 		return resourceSet.getResources().contains(resource);
 	}
 
+	/**
+	 * Initializes the specified {@link ResourceSet} so it can load the same
+	 * resources by their permanent URIs.
+	 * 
+	 * @param resourceSet
+	 */
+	public void initializeURIMap(ResourceSet resourceSet) {
+		resourceSet.getURIConverter().getURIMap()
+				.putAll(this.resourceSet.getURIConverter().getURIMap());
+	}
+
 }
