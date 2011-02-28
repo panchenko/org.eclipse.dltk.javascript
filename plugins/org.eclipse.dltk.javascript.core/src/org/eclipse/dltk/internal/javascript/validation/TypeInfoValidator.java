@@ -12,17 +12,22 @@
 package org.eclipse.dltk.internal.javascript.validation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -45,6 +50,7 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -558,7 +564,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 										ValidationMessages.MethodNotApplicableInScript,
 										new String[] { method.getName(),
 												describeParamTypes(parameters),
-												describeArgTypes(arguments) }),
+												describeArgTypes(arguments,
+														parameters) }),
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
 					}
@@ -746,10 +753,30 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 
 			for (int i = 0; i < testTypesSize; i++) {
-				JSType paramType = parameters.get(i).getType();
 				IValueReference argument = arguments[i];
-				if (!testArgumentType(paramType, argument))
-					return false;
+				IParameter parameter = parameters.get(i);
+				if (parameter.getPropertiesType() != null) {
+					Set<String> argumentsChildren = argument
+							.getDirectChildren();
+					for (Member member : parameter.getPropertiesType()
+							.getMembers()) {
+						if (argumentsChildren.contains(member.getName())) {
+							if (member.getType() != null) {
+								IValueReference child = argument
+										.getChild(member.getName());
+								if (!testArgumentType(member.getType(), child))
+									return false;
+							}
+						} else {
+							return false;
+						}
+					}
+
+				} else {
+					JSType paramType = parameter.getType();
+					if (!testArgumentType(paramType, argument))
+						return false;
+				}
 			}
 			// test var args
 			if (parameters.size() < arguments.length) {
@@ -820,7 +847,20 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (sb.length() != 0) {
 					sb.append(',');
 				}
-				if (parameter.getType() != null) {
+				if (parameter.getPropertiesType() != null) {
+					EList<Member> members = parameter.getPropertiesType().getMembers();
+					sb.append('{');
+					for (Member member : members) {
+						if (sb.length() > 1)
+							sb.append(", ");
+						sb.append(member.getName());
+						if (member.getType() != null) {
+							sb.append(':');
+							sb.append(member.getType().getName());
+						}
+					}
+					sb.append('}');
+				} else if (parameter.getType() != null) {
 					if (parameter.isOptional())
 						sb.append("[");
 					if (parameter.isVarargs())
@@ -828,7 +868,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					sb.append(parameter.getType().getName());
 					if (parameter.isOptional())
 						sb.append("]");
-				} else {
+				} else  {
 					sb.append('?');
 				}
 			}
@@ -840,13 +880,43 @@ public class TypeInfoValidator implements IBuildParticipant {
 		 * @return
 		 */
 		private String describeArgTypes(IValueReference[] arguments) {
+			return describeArgTypes(arguments,
+					Collections.<IParameter> emptyList());
+		}
+
+		/**
+		 * @param arguments
+		 * @param parameters
+		 * @return
+		 */
+		private String describeArgTypes(IValueReference[] arguments,
+				List<IParameter> parameters) {
 			StringBuilder sb = new StringBuilder();
-			for (IValueReference argument : arguments) {
+			for (int i = 0; i < arguments.length; i++) {
+				IValueReference argument = arguments[i];
+				IParameter parameter = parameters.size() > i ? parameters
+						.get(i) : null;
 				if (sb.length() != 0) {
 					sb.append(',');
 				}
 				if (argument == null) {
 					sb.append("null");
+				} else if (parameter != null
+						&& parameter.getPropertiesType() != null) {
+					Set<String> directChildren = argument.getDirectChildren();
+					sb.append('{');
+					for (String childName : directChildren) {
+						if (sb.length() > 1)
+							sb.append(", ");
+						sb.append(childName);
+						JSType type = JavaScriptValidations.typeOf(argument
+								.getChild(childName));
+						if (type != null) {
+							sb.append(':');
+							sb.append(type.getName());
+						}
+					}
+					sb.append('}');
 				} else if (argument.getDeclaredType() != null) {
 					sb.append(argument.getDeclaredType().getName());
 				} else {

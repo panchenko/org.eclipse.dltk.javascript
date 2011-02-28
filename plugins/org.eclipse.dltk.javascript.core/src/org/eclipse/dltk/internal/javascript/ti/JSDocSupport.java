@@ -249,37 +249,35 @@ public class JSDocSupport implements IModelBuilder {
 						paramName = paramName.substring(0,
 								defaultValueSeperatorIndex);
 					}
-				} else {
-					String propertyName = null;
-					int propertiesObjectIndex = paramName.indexOf('.');
-					if (propertiesObjectIndex != -1) {
-						// http://code.google.com/p/jsdoc-toolkit/wiki/TagParam
-						// = Parameters With Properties =
-						propertyName = paramName
-								.substring(propertiesObjectIndex + 1);
-						String objectName = paramName.substring(0,
-								propertiesObjectIndex);
-						Type propertiesType = objectPropertiesTypes
-								.get(objectName);
-						if (propertiesType == null) {
-							propertiesType = TypeInfoModelFactory.eINSTANCE
-									.createType();
-							objectPropertiesTypes.put(objectName,
-									propertiesType);
-							final IParameter param = method
-									.getParameter(objectName);
-							if (param != null) {
-								param.setPropertiesType(propertiesType);
-							}
+				}
+				String propertyName = null;
+				int propertiesObjectIndex = paramName.indexOf('.');
+				if (propertiesObjectIndex != -1) {
+					// http://code.google.com/p/jsdoc-toolkit/wiki/TagParam
+					// = Parameters With Properties =
+					propertyName = paramName
+							.substring(propertiesObjectIndex + 1);
+					String objectName = paramName.substring(0,
+							propertiesObjectIndex);
+					Type propertiesType = objectPropertiesTypes.get(objectName);
+					if (propertiesType == null) {
+						propertiesType = TypeInfoModelFactory.eINSTANCE
+								.createType();
+						objectPropertiesTypes.put(objectName, propertiesType);
+						final IParameter param = method
+								.getParameter(objectName);
+						if (param != null) {
+							param.setPropertiesType(propertiesType);
 						}
-						Property property = TypeInfoModelFactory.eINSTANCE
-								.createProperty();
-						property.setName(propertyName);
-						if (pp.type != null)
-							property.setType(translateTypeName(pp.type));
-						propertiesType.getMembers().add(property);
-						continue;
 					}
+					Property property = TypeInfoModelFactory.eINSTANCE
+							.createProperty();
+					property.setName(propertyName);
+					if (pp.type != null)
+						property.setType(translateTypeName(pp.type));
+					// TODO something with optional?
+					propertiesType.getMembers().add(property);
+					continue;
 				}
 				if (method.getParameter(paramName) != null
 						&& !processedParams.add(paramName)) {
