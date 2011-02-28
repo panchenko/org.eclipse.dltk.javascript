@@ -22,12 +22,9 @@ import java.util.Stack;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -50,7 +47,6 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
-import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -492,7 +488,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					if (type != null) {
 						if (type.getKind() == TypeKind.JAVA) {
 							reporter.reportProblem(
-									JavaScriptProblems.WRONG_PARAMETERS,
+									JavaScriptProblems.WRONG_JAVA_PARAMETERS,
 									NLS.bind(
 											ValidationMessages.MethodNotSelected,
 											new String[] { reference.getName(),
@@ -562,7 +558,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 								JavaScriptProblems.WRONG_PARAMETERS,
 								NLS.bind(
 										ValidationMessages.MethodNotApplicableInScript,
-										new String[] { method.getName(),
+										new String[] {
+												method.getName(),
 												describeParamTypes(parameters),
 												describeArgTypes(arguments,
 														parameters) }),
@@ -848,7 +845,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					sb.append(',');
 				}
 				if (parameter.getPropertiesType() != null) {
-					EList<Member> members = parameter.getPropertiesType().getMembers();
+					EList<Member> members = parameter.getPropertiesType()
+							.getMembers();
 					sb.append('{');
 					for (Member member : members) {
 						if (sb.length() > 1)
@@ -868,7 +866,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					sb.append(parameter.getType().getName());
 					if (parameter.isOptional())
 						sb.append("]");
-				} else  {
+				} else {
 					sb.append('?');
 				}
 			}
