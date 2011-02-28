@@ -11,9 +11,11 @@ package org.eclipse.dltk.javascript.internal.ui.preferences;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -73,11 +75,12 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 	private static final String EXT_POINT_PROBLEM_SECTIONS = JavaScriptUI.PLUGIN_ID
 			+ ".problemSections";
 
-	private static List<ProblemSection> loadProblemSections() {
+	protected List<ProblemSection> loadProblemSections() {
 		final List<ProblemSection> sections = new ArrayList<ProblemSection>();
 		final IConfigurationElement[] elements = Platform
 				.getExtensionRegistry().getConfigurationElementsFor(
 						EXT_POINT_PROBLEM_SECTIONS);
+		final Set<IProblemIdentifier> identifiers = new HashSet<IProblemIdentifier>();
 		for (IConfigurationElement element : elements) {
 			final String sectionId = element.getAttribute("id");
 			final String sectionName = element.getAttribute("name");
@@ -99,10 +102,10 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				final String problemId = problemElement.getAttribute("id");
 				final IProblemIdentifier identifier = DefaultProblemIdentifier
 						.decode(problemId);
-				if (identifier != null) {
+				if (identifier != null && identifiers.add(identifier)) {
 					String problemLabel = problemElement.getAttribute("label");
-					if (problemLabel == null) {
-						problemLabel = identifier.toString();
+					if (problemLabel == null || problemLabel.length() == 0) {
+						problemLabel = identifier.name();
 					}
 					if (!problemSection.items.containsKey(identifier)) {
 						problemSection.items.put(identifier, problemLabel);
@@ -158,6 +161,8 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				ProblemSeverity.IGNORE.name() };
 
 		for (ProblemSection problemSection : loadProblemSections()) {
+			if (problemSection.items.isEmpty())
+				continue;
 			final ExpandableComposite excomposite = createStyleSection(
 					composite, problemSection.name, 2);
 			final Composite inner = new Composite(excomposite, SWT.NONE);
