@@ -9,11 +9,17 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.preferences;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.dltk.ast.parser.SourceParserManager;
@@ -23,21 +29,24 @@ import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IDLTKContributedExtension;
 import org.eclipse.dltk.core.SourceParserUtil;
+import org.eclipse.dltk.internal.ui.preferences.ScrolledPageContent;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
-import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserPlugin;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserPreferences;
-import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 import org.eclipse.dltk.ui.preferences.AbstractOptionsBlock;
 import org.eclipse.dltk.ui.preferences.IPreferenceChangeRebuildPrompt;
 import org.eclipse.dltk.ui.preferences.PreferenceChangeRebuildPrompt;
 import org.eclipse.dltk.ui.preferences.PreferenceKey;
 import org.eclipse.dltk.ui.util.IStatusChangeListener;
 import org.eclipse.dltk.ui.util.SWTFactory;
+import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 
 public class JavaScriptErrorWarningConfigurationBlock extends
@@ -49,229 +58,123 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 		super(context, project, new PreferenceKey[0], container);
 	}
 
-	// private static PreferenceKey[] getKeys(IProject project) {
-	// List<PreferenceKey> keys = new ArrayList<PreferenceKey>();
-	// keys.add(new PreferenceKey(JavaScriptPlugin.PLUGIN_ID,
-	// JavaScriptCorePreferences.USE_STRICT_MODE));
-	// if (project != null) {
-	// keys.add(new PreferenceKey(DLTKCore.PLUGIN_ID,
-	// DLTKCore.PROJECT_SOURCE_PARSER_ID));
-	// }
-	// keys.add(new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
-	// JavaScriptParserPreferences.ENABLE_TYPE_INFO));
-	// return keys.toArray(new PreferenceKey[keys.size()]);
-	// }
+	protected static class ProblemSection {
+		final String id;
+		final String name;
+
+		public ProblemSection(String id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+
+		final Map<IProblemIdentifier, String> items = new LinkedHashMap<IProblemIdentifier, String>();
+	}
+
+	private static final String EXT_POINT_PROBLEM_SECTIONS = JavaScriptUI.PLUGIN_ID
+			+ ".problemSections";
+
+	private static List<ProblemSection> loadProblemSections() {
+		final List<ProblemSection> sections = new ArrayList<ProblemSection>();
+		final IConfigurationElement[] elements = Platform
+				.getExtensionRegistry().getConfigurationElementsFor(
+						EXT_POINT_PROBLEM_SECTIONS);
+		for (IConfigurationElement element : elements) {
+			final String sectionId = element.getAttribute("id");
+			final String sectionName = element.getAttribute("name");
+			ProblemSection problemSection = null;
+			if (sectionId != null) {
+				for (ProblemSection section : sections) {
+					if (sectionId.equals(section.id)) {
+						problemSection = section;
+						break;
+					}
+				}
+			}
+			if (problemSection == null) {
+				problemSection = new ProblemSection(sectionId, sectionName);
+				sections.add(problemSection);
+			}
+			for (IConfigurationElement problemElement : element
+					.getChildren("problem")) {
+				final String problemId = problemElement.getAttribute("id");
+				final IProblemIdentifier identifier = DefaultProblemIdentifier
+						.decode(problemId);
+				if (identifier != null) {
+					String problemLabel = problemElement.getAttribute("label");
+					if (problemLabel == null) {
+						problemLabel = identifier.toString();
+					}
+					if (!problemSection.items.containsKey(identifier)) {
+						problemSection.items.put(identifier, problemLabel);
+					}
+				}
+			}
+		}
+		return sections;
+	}
 
 	@Override
 	public Control createOptionsBlock(Composite parent) {
+		final ScrolledPageContent sc1 = new ScrolledPageContent(parent);
+		final GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = new PixelConverter(parent)
+				.convertHeightInCharsToPixels(20);
+		sc1.setLayoutData(gridData);
+
+		Composite composite = sc1.getBody();
 		final GridLayout layout = new GridLayout(2, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
-
-		final Composite composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(layout);
 		composite.setFont(parent.getFont());
 
 		if (isProjectPreferencePage()) {
-			SWTFactory.createLabel(composite, "Parser", 1);
 			final IDLTKContributedExtension[] extensions = SourceParserManager
 					.getInstance().getContributions(JavaScriptNature.NATURE_ID);
-			final String[] ids = new String[extensions.length];
-			final String[] names = new String[extensions.length];
-			for (int i = 0; i < extensions.length; ++i) {
-				ids[i] = extensions[i].getId();
-				names[i] = extensions[i].getName();
+			if (extensions.length > 1) {
+				SWTFactory.createLabel(composite, "Parser", 1);
+				final String[] ids = new String[extensions.length];
+				final String[] names = new String[extensions.length];
+				for (int i = 0; i < extensions.length; ++i) {
+					ids[i] = extensions[i].getId();
+					names[i] = extensions[i].getName();
+				}
+				bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1,
+						0, names), new PreferenceKey(DLTKCore.PLUGIN_ID,
+						DLTKCore.PROJECT_SOURCE_PARSER_ID), ids);
 			}
-			bindControl(SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0,
-					names), new PreferenceKey(DLTKCore.PLUGIN_ID,
-					DLTKCore.PROJECT_SOURCE_PARSER_ID), ids);
 		}
 
 		bindControl(SWTFactory.createCheckButton(composite,
 				JavaScriptPreferenceMessages.ErrorWarning_enableTypeInfo, null,
 				false, 2), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
 				JavaScriptParserPreferences.ENABLE_TYPE_INFO), null);
+		SWTFactory.createLabel(composite,
+				JavaScriptPreferenceMessages.ErrorWarningDescription, 2);
 
 		String[] names = new String[] { "Warning", "Error", "Info", "Ignore" };
 		String[] ids = new String[] { ProblemSeverity.WARNING.name(),
 				ProblemSeverity.ERROR.name(), ProblemSeverity.INFO.name(),
 				ProblemSeverity.IGNORE.name() };
 
-		SWTFactory.createLabel(composite,
-				"Wrong number of parameters to javascript function call", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.WRONG_PARAMETERS), ids);
-		SWTFactory.createLabel(composite,
-				"Wrong number of parameters to java method call", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.WRONG_JAVA_PARAMETERS), ids);
-
-		SWTFactory.createLabel(composite, "Unknown javascript type", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.UNKNOWN_TYPE), ids);
-
-		SWTFactory.createLabel(composite, "Deprecated type usage", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.DEPRECATED_TYPE), ids);
-
-		SWTFactory.createLabel(composite,
-				"Deprecated javascript function call", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.DEPRECATED_FUNCTION), ids);
-
-		SWTFactory.createLabel(composite,
-				"Deprecated javascript variable access", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.DEPRECATED_VARIABLE), ids);
-
-		SWTFactory.createLabel(composite, "Deprecated java method call", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.DEPRECATED_METHOD), ids);
-
-		SWTFactory.createLabel(composite, "Deprecated java property access", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.DEPRECATED_PROPERTY), ids);
-
-		SWTFactory.createLabel(composite, "Undefined javascript function call",
-				1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.UNDEFINED_METHOD), ids);
-
-		SWTFactory.createLabel(composite,
-				"Undefined javascript variable access", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.UNDEFINED_PROPERTY), ids);
-
-		SWTFactory.createLabel(composite, "Undefined java method call", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.UNDEFINED_JAVA_METHOD), ids);
-
-		SWTFactory.createLabel(composite, "Undefined java property access", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.UNDEFINED_JAVA_PROPERTY), ids);
-
-		SWTFactory.createLabel(composite, "Private function call", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.PRIVATE_FUNCTION), ids);
-
-		SWTFactory.createLabel(composite, "Private variable access", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.PRIVATE_VARIABLE), ids);
-
-		SWTFactory
-				.createLabel(composite, "Indirect access to static method", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.STATIC_METHOD), ids);
-
-		SWTFactory.createLabel(composite, "Indirect access to static property",
-				1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.STATIC_PROPERTY), ids);
-
-		SWTFactory.createLabel(composite,
-				"Static reference to none static method", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.INSTANCE_METHOD), ids);
-
-		SWTFactory.createLabel(composite,
-				"Static reference to none static property", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.INSTANCE_PROPERTY), ids);
-
-		SWTFactory.createLabel(composite, "Unreachable code", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.UNREACHABLE_CODE), ids);
-
-		SWTFactory.createLabel(composite,
-				"Inconsistent function return values", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.RETURN_INCONSISTENT), ids);
-
-		SWTFactory.createLabel(composite,
-				"Function not always returning a value", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE), ids);
-
-		SWTFactory.createLabel(composite,
-				"Function returns a different type then it declares", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE),
-				ids);
-
-		SWTFactory.createLabel(composite,
-				"Assignment (=) when equality (==) test", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.EQUAL_AS_ASSIGN), ids);
-
-		SWTFactory.createLabel(composite, "Assignment to undeclared variable",
-				1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.UNDECLARED_VARIABLE), ids);
-
-		SWTFactory.createLabel(composite, "Reassignment of a constant", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.REASSIGNMENT_OF_CONSTANT), ids);
-
-		SWTFactory.createLabel(composite, "Duplicate variable declaration", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.DUPLICATE_VAR_DECLARATION), ids);
-
-		SWTFactory.createLabel(composite, "Duplicate parameter declaration", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptParserProblems.DUPLICATE_PARAMETER), ids);
-
-		SWTFactory.createLabel(composite, "Parameter hides variable", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.PARAMETER_HIDES_VARIABLE), ids);
-
-		SWTFactory.createLabel(composite, "Variable hides parameter", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.VAR_HIDES_PARAMETER), ids);
-
-		SWTFactory.createLabel(composite, "Variable hides property", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.VAR_HIDES_PROPERTY), ids);
-
-		SWTFactory.createLabel(composite, "Function hides argument", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptParserProblems.FUNCTION_HIDES_ARGUMENT), ids);
-
-		SWTFactory.createLabel(composite,
-				"Function hides variable or property", 1);
-		bindControl(
-				SWTFactory.createCombo(composite, SWT.READ_ONLY, 1, 0, names),
-				key(JavaScriptProblems.FUNCTION_HIDES_VARIABLE), ids);
+		for (ProblemSection problemSection : loadProblemSections()) {
+			final ExpandableComposite excomposite = createStyleSection(
+					composite, problemSection.name, 2);
+			final Composite inner = new Composite(excomposite, SWT.NONE);
+			inner.setFont(composite.getFont());
+			inner.setLayout(new GridLayout(2, false));
+			excomposite.setClient(inner);
+			for (Map.Entry<IProblemIdentifier, String> entry : problemSection.items
+					.entrySet()) {
+				SWTFactory.createLabel(inner, entry.getValue(), 1)
+						.setLayoutData(
+								new GridData(GridData.FILL, GridData.CENTER,
+										true, false));
+				bindControl(SWTFactory.createCombo(inner, SWT.READ_ONLY, 1, 0,
+						names), key(entry.getKey()), ids);
+			}
+			excomposite.setExpanded(true);
+		}
 
 		return composite;
 	}

@@ -11,7 +11,6 @@ public class JavaScriptErrorWarningPreferencePage extends
 
 	@Override
 	protected void setDescription() {
-		setDescription(JavaScriptPreferenceMessages.ErrorWarningDescription);
 	}
 
 	@Override

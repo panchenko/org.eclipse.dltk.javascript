@@ -2,6 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="typeInfoLabelProvider" name="JavaScript TypeInfo label provider" schema="schema/typeInfoLabelProvider.exsd"/>
+   <extension-point id="problemSections" name="JavaScript Problem" schema="schema/problemSections.exsd" />
  <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -732,6 +733,115 @@
 	<target id="org.eclipse.dltk.javascript.code" name="%target.name.javascriptEditor">
 		<context type="org.eclipse.ui.texteditor.ITextEditor" />
 	</target>
+</extension>
+
+<extension point="org.eclipse.dltk.javascript.ui.problemSections">
+   <problemSection id="org.eclipse.dltk.javascript.ui.problems.deprecated" name="Deprecated and restricted API">
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DEPRECATED_TYPE"
+            label="Deprecated type usage"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DEPRECATED_FUNCTION"
+            label="Deprecated javascript function call"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DEPRECATED_VARIABLE"
+            label="Deprecated javascript variable access"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DEPRECATED_METHOD"
+            label="Deprecated java method call"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DEPRECATED_PROPERTY"
+            label="Deprecated java property access"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PRIVATE_FUNCTION"
+            label="Private function call"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PRIVATE_VARIABLE"
+            label="Private variable access"/>
+   </problemSection>
+   <problemSection id="org.eclipse.dltk.javascript.ui.problems.unnecessary" name="Unnecessary code">
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNREACHABLE_CODE"
+            label="Unreachable code"/>
+   </problemSection>
+   <problemSection id="org.eclipse.dltk.javascript.ui.problems.shadowing" name="Name shadowing and conflicts">
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PARAMETER_HIDES_VARIABLE"
+            label="Parameter hides variable"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#VAR_HIDES_PARAMETER"
+            label="Variable hides parameter"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#VAR_HIDES_PROPERTY"
+            label="Variable hides property"/>
+      <problem
+            id="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems#FUNCTION_HIDES_ARGUMENT"
+            label="Function hides argument"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#FUNCTION_HIDES_VARIABLE"
+            label="Function hides variable or property"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DUPLICATE_VAR_DECLARATION"
+            label="Duplicate variable declaration"/>
+      <problem
+            id="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems#DUPLICATE_PARAMETER"
+            label="Duplicate parameter declaration"/>
+   </problemSection>
+   <problemSection id="org.eclipse.dltk.javascript.ui.problems.potential" name="Potential programming problems">
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#RETURN_INCONSISTENT"
+            label="Inconsistent function return values"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#FUNCTION_NOT_ALWAYS_RETURN_VALUE"
+            label="Function not always returning a value"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE"
+            label="Function returns a different type then it declares"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#EQUAL_AS_ASSIGN"
+            label="Assignment (=) when equality (==) test"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNDECLARED_VARIABLE"
+            label="Assignment to undeclared variable"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#REASSIGNMENT_OF_CONSTANT"
+            label="Reassignment of a constant"/>
+   </problemSection>
+   <problemSection id="org.eclipse.dltk.javascript.ui.problems.misc" name="Other problems">
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_PARAMETERS"
+            label="Wrong number of parameters to javascript function call"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_JAVA_PARAMETERS"
+            label="Wrong number of parameters to java method call"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNKNOWN_TYPE"
+            label="Unknown javascript type"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNDEFINED_METHOD"
+            label="Undefined javascript function call"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNDEFINED_PROPERTY"
+            label="Undefined javascript variable access"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNDEFINED_JAVA_METHOD"
+            label="Undefined java method call"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNDEFINED_JAVA_PROPERTY"
+            label="Undefined java property access"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#STATIC_METHOD"
+            label="Indirect access to static method"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#STATIC_PROPERTY"
+            label="Indirect access to static property"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#INSTANCE_METHOD"
+            label="Static reference to none static method"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#INSTANCE_PROPERTY"
+            label="Static reference to none static property"/>
+   </problemSection>
 </extension>
 
 </plugin>
