@@ -21,6 +21,7 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.search.MethodDeclarationMatch;
 import org.eclipse.dltk.core.search.MethodReferenceMatch;
+import org.eclipse.dltk.core.tests.Skip;
 import org.eclipse.dltk.core.tests.model.AbstractSingleProjectSearchTests;
 import org.eclipse.dltk.core.tests.model.TestSearchResults;
 import org.eclipse.dltk.javascript.core.tests.contentassist.SelectionTests;
@@ -70,6 +71,7 @@ public class SearchFunctionTests extends AbstractSingleProjectSearchTests {
 		assertEquals(0, elements.length);
 	}
 
+	@Skip
 	public void testFunctionThisField() throws CoreException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = new SelectionTests(null).select(module,

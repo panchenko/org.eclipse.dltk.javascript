@@ -25,6 +25,7 @@ import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.ScriptModelUtil;
+import org.eclipse.dltk.core.tests.Skip;
 import org.eclipse.dltk.core.tests.model.AbstractModelTests;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 
@@ -202,6 +203,7 @@ public class SelectionTests extends AbstractModelTests {
 		assertEquals(0, elements.length);
 	}
 	
+	@Skip
 	public void testFunctionThisField() throws ModelException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
