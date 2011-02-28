@@ -13,8 +13,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.compiler.InvalidInputException;
 import org.eclipse.dltk.core.IBuffer;
+import org.eclipse.dltk.core.IBufferChangedListener;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
@@ -25,55 +28,21 @@ import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ISourceReference;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.SourceRange;
-import org.eclipse.dltk.corext.documentation.SingleCharReader;
 import org.eclipse.dltk.internal.javascript.typeinference.IProposalHolder;
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
 
-class JavaDocCommentReader extends SingleCharReader {
+class BufferJavaDocCommentReader extends JavaDocCommentReader {
 
 	private IBuffer fBuffer;
 
-	private int fCurrPos;
-	private int fStartPos;
-	private int fEndPos;
-
-	private boolean fWasNewLine;
-
-	public JavaDocCommentReader(IBuffer buf, int start, int end) {
+	public BufferJavaDocCommentReader(IBuffer buf, int start, int end) {
+		super(start, end);
 		fBuffer = buf;
-		fStartPos = start + 3;
-		fEndPos = end - 2;
-
-		reset();
 	}
 
-	/**
-	 * @see java.io.Reader#read()
-	 */
-	public int read() {
-		if (fCurrPos < fEndPos) {
-			char ch;
-			if (fWasNewLine) {
-				do {
-					ch = fBuffer.getChar(fCurrPos++);
-				} while (fCurrPos < fEndPos && Character.isWhitespace(ch));
-				if (ch == '*') {
-					if (fCurrPos < fEndPos) {
-						do {
-							ch = fBuffer.getChar(fCurrPos++);
-						} while (ch == '*');
-					} else {
-						return -1;
-					}
-				}
-			} else {
-				ch = fBuffer.getChar(fCurrPos++);
-			}
-			fWasNewLine = IndentManipulation.isLineDelimiterChar(ch);
-
-			return ch;
-		}
-		return -1;
+	@Override
+	protected char getChar(int index) {
+		return fBuffer.getChar(index);
 	}
 
 	/**
@@ -83,19 +52,27 @@ class JavaDocCommentReader extends SingleCharReader {
 		fBuffer = null;
 	}
 
-	/**
-	 * @see java.io.Reader#reset()
-	 */
-	public void reset() {
-		fCurrPos = fStartPos;
-		fWasNewLine = true;
+}
+
+class StringJavaDocCommentReader extends JavaDocCommentReader {
+
+	private String fBuffer;
+
+	public StringJavaDocCommentReader(String buf) {
+		super(0, buf.length());
+		fBuffer = buf;
+	}
+
+	@Override
+	protected char getChar(int index) {
+		return fBuffer.charAt(index);
 	}
 
 	/**
-	 * Returns the offset of the last read character in the passed buffer.
+	 * @see java.io.Reader#close()
 	 */
-	public int getOffset() {
-		return fCurrPos;
+	public void close() {
+		fBuffer = null;
 	}
 
 }
@@ -178,6 +155,95 @@ public class ScriptdocContentAccess {
 		}
 	}
 
+	private static class SimpleBuffer implements IBuffer {
+
+		private final StringBuilder sb = new StringBuilder();
+
+		public SimpleBuffer(String value) {
+			sb.append(value);
+		}
+
+		public void addBufferChangedListener(IBufferChangedListener listener) {
+		}
+
+		public void append(char[] text) {
+			sb.append(text);
+		}
+
+		public void append(String text) {
+			sb.append(text);
+		}
+
+		public void close() {
+		}
+
+		public char getChar(int position) {
+			return sb.charAt(position);
+		}
+
+		public char[] getCharacters() {
+			return sb.toString().toCharArray();
+		}
+
+		public String getContents() {
+			return sb.toString();
+		}
+
+		public int getLength() {
+			return sb.length();
+		}
+
+		public IOpenable getOwner() {
+			return null;
+		}
+
+		public String getText(int offset, int length) {
+			return sb.substring(offset, offset + length);
+		}
+
+		public IResource getUnderlyingResource() {
+			return null;
+		}
+
+		public boolean hasUnsavedChanges() {
+			return false;
+		}
+
+		public boolean isClosed() {
+			return false;
+		}
+
+		public boolean isReadOnly() {
+			return true;
+		}
+
+		public void removeBufferChangedListener(IBufferChangedListener listener) {
+		}
+
+		public void replace(int position, int length, char[] text) {
+			sb.replace(position, position + length, new String(text));
+		}
+
+		public void replace(int position, int length, String text) {
+			sb.replace(position, position + length, text);
+		}
+
+		public void save(IProgressMonitor progress, boolean force)
+				throws ModelException {
+		}
+
+		public void setContents(char[] contents) {
+			sb.setLength(0);
+			sb.append(contents);
+		}
+
+		public void setContents(String contents) {
+			sb.setLength(0);
+			sb.append(contents);
+		}
+
+	}
+
 	public static ISourceRange getJavadocRange(IMember member)
 			throws ModelException {
 		ISourceRange range = member.getSourceRange();
@@ -193,6 +259,9 @@ public class ScriptdocContentAccess {
 				return null;
 			}
 			buf = compilationUnit.getBuffer();
+			if (buf == null) {
+				buf = new SimpleBuffer(compilationUnit.getSource());
+			}
 		}
 		final int possibleDocEnd = range.getOffset();
 		final int possibleDocStart = PreviousMemberDetector.execute(
@@ -240,6 +309,22 @@ public class ScriptdocContentAccess {
 		return null;
 	}
 
+	public static JavaDocCommentReader getReader(IOpenable openable,
+			ISourceRange docRange) throws ModelException {
+		final IBuffer buf = openable.getBuffer();
+		if (buf != null) {
+			return new BufferJavaDocCommentReader(buf, docRange.getOffset(),
+					docRange.getOffset() + docRange.getLength());
+		}
+		if (openable instanceof ISourceModule) {
+			final ISourceModule module = (ISourceModule) openable;
+			return new StringJavaDocCommentReader(module.getSource().substring(
+					docRange.getOffset(),
+					docRange.getOffset() + docRange.getLength()));
+		}
+		return null;
+	}
+
 	/**
 	 * Gets a reader for an IMember's Javadoc comment content from the source
 	 * attachment. The content does contain only the text from the comment
@@ -263,18 +348,14 @@ public class ScriptdocContentAccess {
 			throws ModelException {
 		IOpenable openable = member.getOpenable();
 		if (openable != null) {
-			IBuffer buf = openable.getBuffer();
-			if (buf == null) {
-				return null; // no source attachment found
-			}
 			try {
 				ISourceRange javadocRange = getJavadocRange(member);
-
 				if (javadocRange != null) {
-
-					JavaDocCommentReader reader = new JavaDocCommentReader(buf,
-							javadocRange.getOffset(), javadocRange.getOffset()
-									+ javadocRange.getLength() - 1);
+					JavaDocCommentReader reader = getReader(openable,
+							javadocRange);
+					if (reader == null) {
+						return null;
+					}
 					if (!containsOnlyInheritDoc(reader,
 							javadocRange.getLength())) {
 						reader.reset();
