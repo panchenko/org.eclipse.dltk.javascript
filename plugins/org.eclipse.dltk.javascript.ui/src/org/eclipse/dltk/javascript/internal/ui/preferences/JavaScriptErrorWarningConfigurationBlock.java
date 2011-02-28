@@ -42,6 +42,7 @@ import org.eclipse.dltk.ui.preferences.PreferenceChangeRebuildPrompt;
 import org.eclipse.dltk.ui.preferences.PreferenceKey;
 import org.eclipse.dltk.ui.util.IStatusChangeListener;
 import org.eclipse.dltk.ui.util.SWTFactory;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -116,6 +117,8 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 		return sections;
 	}
 
+	private static final String SETTINGS_SECTION_NAME = "ProblemSeveritiesConfigurationBlock"; //$NON-NLS-1$
+
 	@Override
 	public Control createOptionsBlock(Composite parent) {
 		final ScrolledPageContent sc1 = new ScrolledPageContent(parent);
@@ -178,10 +181,22 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				bindControl(SWTFactory.createCombo(inner, SWT.READ_ONLY, 1, 0,
 						names), key(entry.getKey()), ids);
 			}
-			excomposite.setExpanded(true);
 		}
-
+		restoreSectionExpansionStates(getSettings(false));
 		return composite;
+	}
+
+	protected IDialogSettings getSettings(boolean create) {
+		final IDialogSettings dialogSettings = JavaScriptUI.getDefault()
+				.getDialogSettings();
+		return create ? dialogSettings.addNewSection(SETTINGS_SECTION_NAME)
+				: dialogSettings.getSection(SETTINGS_SECTION_NAME);
+	}
+
+	@Override
+	public void dispose() {
+		storeSectionExpansionStates(getSettings(true));
+		super.dispose();
 	}
 
 	private static PreferenceKey key(IProblemIdentifier identifier) {
