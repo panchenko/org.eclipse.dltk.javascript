@@ -49,14 +49,6 @@ public class FunctionValueCollection extends ValueCollection {
 	}
 
 	@Override
-	public IValueReference getChild(String name) {
-		if (!super.hasChild(name) && thisValue.hasChild(name)) {
-			return thisValue.getChild(name);
-		}
-		return super.getChild(name);
-	}
-
-	@Override
 	public Set<String> getDirectChildren() {
 		Set<String> directChildren = super.getDirectChildren();
 		Set<String> thisChildren = thisValue.getDirectChildren();

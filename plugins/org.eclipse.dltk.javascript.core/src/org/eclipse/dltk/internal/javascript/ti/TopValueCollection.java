@@ -95,6 +95,7 @@ public class TopValueCollection extends ValueCollection {
 	public TopValueCollection(final ITypeInferenceContext context) {
 		super(null, new TopValue(context));
 		this.context = context;
+		this.thisValue = new TopValueThis(this);
 
 		IValueCollection topValueCollection = context.getTopValueCollection();
 		if (topValueCollection instanceof IValueProvider) {
@@ -106,6 +107,13 @@ public class TopValueCollection extends ValueCollection {
 	@Override
 	public ITypeInferenceContext getContext() {
 		return context;
+	}
+
+	private final TopValueThis thisValue;
+
+	@Override
+	public IValueReference getThis() {
+		return thisValue;
 	}
 
 }

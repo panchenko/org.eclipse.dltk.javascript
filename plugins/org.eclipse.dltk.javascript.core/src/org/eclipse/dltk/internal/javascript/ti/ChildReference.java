@@ -53,13 +53,6 @@ public class ChildReference extends AbstractReference {
 					return childValue;
 				}
 			}
-			if (collection.getThis() != null) {
-				IValue childValue = ((IValueProvider) collection.getThis())
-						.getValue().getChild(name, true);
-				if (childValue != null) {
-					return childValue;
-				}
-			}
 			collection = collection.getParent();
 		}
 		return null;
