@@ -651,4 +651,176 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
 				.getID());
 	}
+	
+	public void testJSDocWithPropertiesNoArgumentProperties() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param anchor");
+		code.add("* @param {String} anchor.display");
+		code.add("* @param {String} anchor.page");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("}");
+		code.add("function tester() {");
+		code.add("var obj = new Object();");
+		code.add("test(obj);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+	
+	public void testJSDocWithPropertiesCorrectArgumentProperties() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param anchor");
+		code.add("* @param {String} anchor.display");
+		code.add("* @param {String} anchor.page");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("}");
+		code.add("function tester() {");
+		code.add("var obj = new Object();");
+		code.add("obj.display ='display'");
+		code.add("obj.page ='page'");
+		code.add("test(obj);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+	
+	public void testJSDocTypedObjectWithPropertiesCorrectArgumentProperties() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} anchor");
+		code.add("* @param {String} anchor.display");
+		code.add("* @param {String} anchor.page");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("}");
+		code.add("function tester() {");
+		code.add("var obj = new Object();");
+		code.add("obj.display ='display'");
+		code.add("obj.page ='page'");
+		code.add("test(obj);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+	
+	public void testJSDocWithPropertiesWrongTypedArgumentProperties() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param anchor");
+		code.add("* @param {String} anchor.display");
+		code.add("* @param {String} anchor.page");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("}");
+		code.add("function tester() {");
+		code.add("var obj = new Object();");
+		code.add("obj.display =10");
+		code.add("obj.page ='page'");
+		code.add("test(obj);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+
+
+	public void testJSDocWithOptionalPropertiesWithOnlyMandatoryArgumentProperties() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param anchor");
+		code.add("* @param {String} anchor.display");
+		code.add("* @param {String} anchor.page");
+		code.add("* @param {String} [anchor.space]");
+		code.add("* @param {String} [anchor.anchor]");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("}");
+		code.add("function tester() {");
+		code.add("var obj = new Object();");
+		code.add("obj.display ='display'");
+		code.add("obj.page ='page'");
+		code.add("test(obj);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+	
+	public void testJSDocWithOptionalPropertiesWithSomeOptionalArgumentProperties() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param anchor");
+		code.add("* @param {String} anchor.display");
+		code.add("* @param {String} anchor.page");
+		code.add("* @param {String} [anchor.space]");
+		code.add("* @param {String} [anchor.anchor]");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("}");
+		code.add("function tester() {");
+		code.add("var obj = new Object();");
+		code.add("obj.display ='display'");
+		code.add("obj.page ='page'");
+		code.add("obj.space ='display'");
+		code.add("test(obj);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+
+	public void testJSDocWithOptionalPropertiesWithAllArgumentProperties() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param anchor");
+		code.add("* @param {String} anchor.display");
+		code.add("* @param {String} anchor.page");
+		code.add("* @param {String} [anchor.space]");
+		code.add("* @param {String} [anchor.anchor]");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("}");
+		code.add("function tester() {");
+		code.add("var obj = new Object();");
+		code.add("obj.display ='display'");
+		code.add("obj.page ='page'");
+		code.add("obj.space ='display'");
+		code.add("obj.anchor ='page'");
+		code.add("test(obj);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertTrue(problems.toString(), problems.isEmpty());
+	}
+	
+	public void testJSDocWithOptionalPropertiesWithAllArgumentPropertiesWrongType() throws Exception {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} anchor");
+		code.add("* @param {String} anchor.display");
+		code.add("* @param {String} anchor.page");
+		code.add("* @param {String} [anchor.space]");
+		code.add("* @param {String} [anchor.anchor]");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("}");
+		code.add("function tester() {");
+		code.add("var obj = new Object();");
+		code.add("obj.display ='display'");
+		code.add("obj.page ='page'");
+		code.add("obj.space ='display'");
+		code.add("obj.anchor =10");
+		code.add("test(obj);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+
+
 }
