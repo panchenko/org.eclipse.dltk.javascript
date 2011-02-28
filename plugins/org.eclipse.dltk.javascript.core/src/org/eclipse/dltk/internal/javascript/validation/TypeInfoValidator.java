@@ -752,7 +752,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			for (int i = 0; i < testTypesSize; i++) {
 				IValueReference argument = arguments[i];
 				IParameter parameter = parameters.get(i);
-				if (parameter.getPropertiesType() != null) {
+				if (parameter.getPropertiesType() != null && argument != null) {
 					Set<String> argumentsChildren = argument
 							.getDirectChildren();
 					for (Member member : parameter.getPropertiesType()
