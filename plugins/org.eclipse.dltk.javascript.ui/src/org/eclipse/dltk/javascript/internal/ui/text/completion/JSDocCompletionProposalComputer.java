@@ -34,7 +34,7 @@ public class JSDocCompletionProposalComputer implements
 		private final int cursorPosition;
 		private final ContextInformation contextInformation;
 
-		private TagsCompletionProposals(String replacement, String display,
+		public TagsCompletionProposals(String replacement, String display,
 				int cursorPosition, ContextInformation contextInformation) {
 			this.replacement = replacement;
 			this.display = display;
