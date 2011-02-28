@@ -736,7 +736,7 @@
 </extension>
 
 <extension point="org.eclipse.dltk.javascript.ui.problemSections">
-   <section id="org.eclipse.dltk.javascript.ui.problems.deprecated" name="Deprecated and restricted API">
+   <section id="org.eclipse.dltk.javascript.ui.problems.deprecated" name="Deprecated and restricted API" priority="100">
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DEPRECATED_TYPE"
             label="Deprecated type usage"/>
@@ -759,12 +759,12 @@
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PRIVATE_VARIABLE"
             label="Private variable access"/>
    </section>
-   <section id="org.eclipse.dltk.javascript.ui.problems.unnecessary" name="Unnecessary code">
+   <section id="org.eclipse.dltk.javascript.ui.problems.unnecessary" name="Unnecessary code" priority="110">
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNREACHABLE_CODE"
             label="Unreachable code"/>
    </section>
-   <section id="org.eclipse.dltk.javascript.ui.problems.shadowing" name="Name shadowing and conflicts">
+   <section id="org.eclipse.dltk.javascript.ui.problems.shadowing" name="Name shadowing and conflicts" priority="120">
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PARAMETER_HIDES_VARIABLE"
             label="Parameter hides variable"/>
@@ -787,7 +787,7 @@
             id="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems#DUPLICATE_PARAMETER"
             label="Duplicate parameter declaration"/>
    </section>
-   <section id="org.eclipse.dltk.javascript.ui.problems.potential" name="Potential programming problems">
+   <section id="org.eclipse.dltk.javascript.ui.problems.potential" name="Potential programming problems" priority="130">
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#RETURN_INCONSISTENT"
             label="Inconsistent function return values"/>
@@ -807,7 +807,7 @@
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#REASSIGNMENT_OF_CONSTANT"
             label="Reassignment of a constant"/>
    </section>
-   <section id="org.eclipse.dltk.javascript.ui.problems.misc" name="Other problems">
+   <section id="org.eclipse.dltk.javascript.ui.problems.misc" name="Other problems" priority="140">
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_PARAMETERS"
             label="Wrong number of parameters to javascript function call"/>

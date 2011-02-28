@@ -11,6 +11,8 @@ package org.eclipse.dltk.javascript.internal.ui.preferences;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -64,6 +66,7 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 	protected static class ProblemSection {
 		final String id;
 		final String name;
+		int priority = 1000;
 
 		public ProblemSection(String id, String name) {
 			this.id = id;
@@ -96,6 +99,12 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 			}
 			if (problemSection == null) {
 				problemSection = new ProblemSection(sectionId, sectionName);
+				try {
+					problemSection.priority = Integer.parseInt(element
+							.getAttribute("priority"));
+				} catch (NumberFormatException e) {
+					// ignore
+				}
 				sections.add(problemSection);
 			}
 			for (IConfigurationElement problemElement : element
@@ -114,6 +123,11 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				}
 			}
 		}
+		Collections.sort(sections, new Comparator<ProblemSection>() {
+			public int compare(ProblemSection s1, ProblemSection s2) {
+				return s1.priority - s2.priority;
+			}
+		});
 		return sections;
 	}
 
