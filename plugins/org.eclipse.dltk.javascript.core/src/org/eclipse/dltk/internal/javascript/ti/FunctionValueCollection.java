@@ -14,9 +14,6 @@ package org.eclipse.dltk.internal.javascript.ti;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -46,19 +43,6 @@ public class FunctionValueCollection extends ValueCollection {
 
 	public boolean isScope() {
 		return true;
-	}
-
-	@Override
-	public Set<String> getDirectChildren() {
-		Set<String> directChildren = super.getDirectChildren();
-		Set<String> thisChildren = thisValue.getDirectChildren();
-		if (thisChildren.isEmpty())
-			return directChildren;
-		if (directChildren.isEmpty())
-			return thisChildren;
-		HashSet<String> hs = new HashSet<String>(directChildren);
-		hs.addAll(thisChildren);
-		return hs;
 	}
 
 	private final IValueReference returnValue = new AnonymousValue();
