@@ -802,7 +802,7 @@
             label="Assignment (=) when equality (==) test"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNDECLARED_VARIABLE"
-            label="Assignment to undeclared variable"/>
+            label="Access to undeclared variable"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#REASSIGNMENT_OF_CONSTANT"
             label="Reassignment of a constant"/>
@@ -822,7 +822,7 @@
             label="Undefined javascript function call"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNDEFINED_PROPERTY"
-            label="Undefined javascript variable access"/>
+            label="Undefined javascript property access"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNDEFINED_JAVA_METHOD"
             label="Undefined java method call"/>
