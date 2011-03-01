@@ -878,6 +878,43 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertNotNull(x.getDeclaredType());
 		assertEquals("String", x.getDeclaredType().getName());
 	}
+	
+
+	public void testOrAssignmentOf2VariablesOfSameType() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("/**");
+		lines.add(" * @param {String} a");
+		lines.add(" * @param {String} b");
+		lines.add(" */");
+		lines.add("function test(a,b) {");
+		lines.add("var x = a || b;");
+		lines.add("}");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference test = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) test
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference x = functionScope.getChild("x");
+		assertEquals(x.getTypes().toString(),1,x.getTypes().size());
+		assertTrue(x.getTypes().toString(), x.getTypes().equals(getTypes("String")));
+	}
+	
+	public void testOrAssignmentOf2VariablesOfDifferentType() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("/**");
+		lines.add(" * @param {Number} a");
+		lines.add(" * @param {String} b");
+		lines.add(" */");
+		lines.add("function test(a,b) {");
+		lines.add("var x = a || b;");
+		lines.add("}");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference test = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) test
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference x = functionScope.getChild("x");
+		assertEquals(x.getTypes().toString(), 2,x.getTypes().size());
+		assertTrue(x.getTypes().toString(), x.getTypes().equals(getTypes("Number","String")));
+	}
 
 	public void testJSDocTypeTagVariableLazy() throws Exception {
 		List<String> lines = new StringList();
