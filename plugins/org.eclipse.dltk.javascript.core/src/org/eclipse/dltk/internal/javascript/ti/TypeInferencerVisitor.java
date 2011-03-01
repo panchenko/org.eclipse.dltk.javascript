@@ -193,6 +193,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return left;
 		} else if (JSParser.INSTANCEOF == node.getOperation()) {
 			return context.getFactory().createBoolean(peekContext());
+		} else if (JSParser.LOR == node.getOperation()) {
+			JSType leftType = JavaScriptValidations.typeOf(left);
+			JSType rightType = JavaScriptValidations.typeOf(right);
+			if (leftType != null && !leftType.equals(rightType)) {
+				IValueReference value = new AnonymousValue();
+				value.addValue(left, true);
+				value.addValue(right, true);
+				return value;
+			}
+			return left;
 		} else {
 			// TODO handle other operations
 			return null;
