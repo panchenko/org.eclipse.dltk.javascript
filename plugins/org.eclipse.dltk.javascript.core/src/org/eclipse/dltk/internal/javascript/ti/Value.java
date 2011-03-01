@@ -14,6 +14,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -322,7 +323,20 @@ public class Value implements IValue, IValue2 {
 
 	public void addValue(IValue src) {
 		if (src instanceof Value) {
-			addValueRecursive((Value) src, new HashSet<Value>(), 0);
+			final IdentityHashMap<Value, Value> processing = new IdentityHashMap<Value, Value>();
+			addValueRecursive((Value) src, processing, 0);
+			// translate references, so they point to the new value
+			for (Map.Entry<Value, Value> entry : processing.entrySet()) {
+				final Value input = entry.getKey();
+				final Value output = entry.getValue();
+				for (Value ref : input.references) {
+					Value refOut = processing.get(ref);
+					if (refOut == null) {
+						refOut = ref;
+					}
+					output.references.add(refOut);
+				}
+			}
 		} else {
 			if (src.getDeclaredType() != null) {
 				types.add(src.getDeclaredType());
@@ -354,8 +368,10 @@ public class Value implements IValue, IValue2 {
 			references.add((Value) src);
 	}
 
-	private void addValueRecursive(Value src, Set<Value> processing, int depth) {
-		if (processing.add(src)) {
+	private void addValueRecursive(Value src, Map<Value, Value> processing,
+			int depth) {
+		if (!processing.containsKey(src)) {
+			processing.put(src, this);
 			if (depth > 8) {
 				// TODO logging?
 				return;
@@ -364,7 +380,7 @@ public class Value implements IValue, IValue2 {
 				types.add(src.declaredType);
 			}
 			types.addAll(src.types);
-			references.addAll(src.references);
+			// (references will be copied later)
 			if (src.attributes != null) {
 				if (attributes == null) {
 					attributes = new HashMap<String, Object>();
