@@ -42,6 +42,12 @@ public class Reporter extends LineTracker implements IProblemReporter,
 	private final ISeverityReporter severityReporter;
 
 	public Reporter(ISourceLineTracker lineTracker,
+			IProblemReporter problemReporter) {
+		this(lineTracker, problemReporter,
+				new JavaScriptParserSeverityReporter());
+	}
+
+	public Reporter(ISourceLineTracker lineTracker,
 			IProblemReporter problemReporter, ISeverityReporter severityReporter) {
 		super(lineTracker);
 		this.problemReporter = problemReporter;

@@ -12,9 +12,8 @@ public class JavaScriptParserSeverityReporter implements ISeverityReporter {
 		if (defaultSeverity == null)
 			defaultSeverity = ProblemSeverity.WARNING;
 
-		String severity = new InstanceScope().getNode(
-				JavaScriptParserPlugin.PLUGIN_ID).get(
-				DefaultProblemIdentifier.encode(problemId), null);
+		String severity = new InstanceScope().getNode(problemId.contributor())
+				.get(DefaultProblemIdentifier.encode(problemId), null);
 		if (severity != null) {
 			if (ProblemSeverity.ERROR.name().equals(severity)) {
 				return ProblemSeverity.ERROR;
