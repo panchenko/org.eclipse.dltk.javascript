@@ -22,12 +22,9 @@ import java.util.Stack;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -50,7 +47,6 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
-import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -286,25 +282,27 @@ public class TypeInfoValidator implements IBuildParticipant {
 					if (child.getKind() == ReferenceKind.PROPERTY) {
 						Property property = (Property) child
 								.getAttribute(IReferenceAttributes.ELEMENT);
-						if (property.getDeclaringType() != null) {
-							reporter.reportProblem(
-									JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
-									NLS.bind(
-											ValidationMessages.ParameterHidesPropertyOfType,
-											new String[] {
-													argument.getArgumentName(),
-													property.getDeclaringType()
-															.getName() }),
-									argument.sourceStart(), argument
-											.sourceEnd());
-						} else {
-							reporter.reportProblem(
-									JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
-									NLS.bind(
-											ValidationMessages.ParameterHidesProperty,
-											argument.getArgumentName()),
-									argument.sourceStart(), argument
-											.sourceEnd());
+						if (!property.isHideAllowed()) {
+							if (property.getDeclaringType() != null) {
+								reporter.reportProblem(
+										JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
+										NLS.bind(
+												ValidationMessages.ParameterHidesPropertyOfType,
+												new String[] {
+														argument.getArgumentName(),
+														property.getDeclaringType()
+																.getName() }),
+										argument.sourceStart(), argument
+												.sourceEnd());
+							} else {
+								reporter.reportProblem(
+										JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
+										NLS.bind(
+												ValidationMessages.ParameterHidesProperty,
+												argument.getArgumentName()),
+										argument.sourceStart(), argument
+												.sourceEnd());
+							}
 						}
 					} else {
 						reporter.reportProblem(
@@ -323,25 +321,28 @@ public class TypeInfoValidator implements IBuildParticipant {
 					if (child.getKind() == ReferenceKind.PROPERTY) {
 						Property property = (Property) child
 								.getAttribute(IReferenceAttributes.ELEMENT);
-						if (property.getDeclaringType() != null) {
-							reporter.reportProblem(
-									JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
-									NLS.bind(
-											ValidationMessages.FunctionHidesPropertyOfType,
-											new String[] {
-													node.getName().getName(),
-													property.getDeclaringType()
-															.getName() }), node
-											.getName().sourceStart(), node
-											.getName().sourceEnd());
-						} else {
-							reporter.reportProblem(
-									JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
-									NLS.bind(
-											ValidationMessages.FunctionHidesProperty,
-											node.getName().getName()), node
-											.getName().sourceStart(), node
-											.getName().sourceEnd());
+						if (!property.isHideAllowed()) {
+							if (property.getDeclaringType() != null) {
+								reporter.reportProblem(
+										JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
+										NLS.bind(
+												ValidationMessages.FunctionHidesPropertyOfType,
+												new String[] {
+														node.getName()
+																.getName(),
+														property.getDeclaringType()
+																.getName() }),
+										node.getName().sourceStart(), node
+												.getName().sourceEnd());
+							} else {
+								reporter.reportProblem(
+										JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
+										NLS.bind(
+												ValidationMessages.FunctionHidesProperty,
+												node.getName().getName()), node
+												.getName().sourceStart(), node
+												.getName().sourceEnd());
+							}
 						}
 					} else {
 						reporter.reportProblem(
