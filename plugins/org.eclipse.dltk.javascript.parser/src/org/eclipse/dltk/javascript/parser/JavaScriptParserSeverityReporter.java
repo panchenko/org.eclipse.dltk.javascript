@@ -1,9 +1,10 @@
 package org.eclipse.dltk.javascript.parser;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.dltk.compiler.problem.DefaultProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
+import org.eclipse.dltk.core.PreferencesLookupDelegate;
 
 public class JavaScriptParserSeverityReporter implements ISeverityReporter {
 
@@ -12,9 +13,12 @@ public class JavaScriptParserSeverityReporter implements ISeverityReporter {
 		if (defaultSeverity == null)
 			defaultSeverity = ProblemSeverity.WARNING;
 
-		String severity = new InstanceScope().getNode(problemId.contributor())
-				.get(DefaultProblemIdentifier.encode(problemId), null);
-		if (severity != null) {
+		// TODO local caching
+		final String severity = new PreferencesLookupDelegate((IProject) null)
+				.getString(problemId.contributor(),
+						DefaultProblemIdentifier.encode(problemId));
+
+		if (severity != null && severity.length() != 0) {
 			if (ProblemSeverity.ERROR.name().equals(severity)) {
 				return ProblemSeverity.ERROR;
 			} else if (ProblemSeverity.WARNING.name().equals(severity)) {
