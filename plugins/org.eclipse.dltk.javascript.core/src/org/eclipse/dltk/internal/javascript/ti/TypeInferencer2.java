@@ -365,7 +365,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	private ITypeProvider[] typeProviders = null;
 
-	private ITypeProvider[] getTypeProviders() {
+	public ITypeProvider[] getTypeProviders() {
 		if (typeProviders == null) {
 			typeProviders = createTypeProviders();
 		}

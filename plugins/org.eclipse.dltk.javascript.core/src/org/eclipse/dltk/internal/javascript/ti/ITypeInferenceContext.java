@@ -16,6 +16,7 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
@@ -34,6 +35,8 @@ public interface ITypeInferenceContext extends ITypeInfoContext {
 	IValueCollection getTopValueCollection();
 
 	IModelBuilder[] getModelBuilders();
+
+	ITypeProvider[] getTypeProviders();
 
 	/**
 	 * Tries to resolve all members of the specified type expression
