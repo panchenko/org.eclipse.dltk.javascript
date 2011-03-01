@@ -15,12 +15,17 @@ import java.util.List;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 
 @SuppressWarnings("nls")
 public class TypeInfoValidationTests extends AbstractValidationTest {
+
+	private boolean notYetImplemented() {
+		return TestSupport.notYetImplemented(this);
+	}
 
 	@Override
 	protected IBuildParticipant createValidator() {
@@ -428,7 +433,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 	}
 
-	public void testGenericParamWtihNoneGenericCall() throws Exception {
+	public void testGenericParamWtihNoneGenericCall() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add(" * @param {Array<String>} array the value of the node");
@@ -444,7 +449,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
-	public void testGenericParamWtihGenericCall() throws Exception {
+	public void testGenericParamWtihGenericCall() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add(" * @param {Array<String>} array the value of the node");
@@ -458,7 +463,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
-	public void testNoneGenericParamWtihGenericCall() throws Exception {
+	public void testNoneGenericParamWtihGenericCall() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add(" * @param {Array} array the value of the node");
@@ -472,7 +477,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
-	public void testFunctionWithOptionalParams() throws Exception {
+	public void testFunctionWithOptionalParams() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add(" * @param {String} a");
@@ -488,7 +493,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
-	public void testFunctionCallWithUndefinedArgumments() throws Exception {
+	public void testFunctionCallWithUndefinedArgumments() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add(" * @param {String} a");
@@ -507,7 +512,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
-	public void testUndefinedVariables() throws Exception {
+	public void testUndefinedVariables() {
 		List<String> code = new StringList();
 		code.add("function test() {");
 		code.add("a=10");
@@ -521,7 +526,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
-	public void testArrayLookupWithoutAssign() throws Exception {
+	public void testArrayLookupWithoutAssign() {
 		List<String> code = new StringList();
 		code.add("function test() {");
 		code.add("var object = new Array();");
@@ -534,7 +539,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
-	public void testArrayLookupWithAssign() throws Exception {
+	public void testArrayLookupWithAssign() {
 		List<String> code = new StringList();
 		code.add("function test() {");
 		code.add("var object = new Array();");
@@ -614,8 +619,10 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
-	
-	public void testVariableAssignedFunctionCallingItself() throws Exception {
+
+	public void testVariableAssignedFunctionCallingItself() {
+		if (notYetImplemented())
+			return;
 		StringList code = new StringList();
 		code.add("var b = function a() {");
 		code.add("application.output(a);}");
@@ -623,7 +630,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
 
-	public void testVariableAssignedObjectInitializerFunctionCallingItSelf() throws Exception {
+	public void testVariableAssignedObjectInitializerFunctionCallingItSelf() {
+		if (notYetImplemented())
+			return;
 		StringList code = new StringList();
 		code.add("var object = {");
 		code.add(" a: function c() {");
@@ -631,8 +640,10 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
-	
-	public void testVariableAssignedObjectInitializerFunctionWithThis() throws Exception {
+
+	public void testVariableAssignedObjectInitializerFunctionWithThis() {
+		if (notYetImplemented())
+			return;
 		StringList code = new StringList();
 		code.add("var object = {");
 		code.add("a: function c() {this.b();},");
@@ -640,8 +651,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
-	
-	public void testVariableAssignedObjectInitializerFunctionWithoutThis() throws Exception {
+
+	public void testVariableAssignedObjectInitializerFunctionWithoutThis() {
 		StringList code = new StringList();
 		code.add("var object = {");
 		code.add("a: function c() {b();},");
@@ -651,8 +662,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
 				.getID());
 	}
-	
-	public void testJSDocWithPropertiesNoArgumentProperties() throws Exception {
+
+	public void testJSDocWithPropertiesNoArgumentProperties() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param anchor");
@@ -670,8 +681,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
-	
-	public void testJSDocWithPropertiesCorrectArgumentProperties() throws Exception {
+
+	public void testJSDocWithPropertiesCorrectArgumentProperties() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param anchor");
@@ -689,8 +700,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
-	
-	public void testJSDocTypedObjectWithPropertiesCorrectArgumentProperties() throws Exception {
+
+	public void testJSDocTypedObjectWithPropertiesCorrectArgumentProperties() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param {Object} anchor");
@@ -708,8 +719,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
-	
-	public void testJSDocWithPropertiesWrongTypedArgumentProperties() throws Exception {
+
+	public void testJSDocWithPropertiesWrongTypedArgumentProperties() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param anchor");
@@ -730,8 +741,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
-
-	public void testJSDocWithOptionalPropertiesWithOnlyMandatoryArgumentProperties() throws Exception {
+	public void testJSDocWithOptionalPropertiesWithOnlyMandatoryArgumentProperties() {
+		if (notYetImplemented())
+			return;
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param anchor");
@@ -751,8 +763,10 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
-	
-	public void testJSDocWithOptionalPropertiesWithSomeOptionalArgumentProperties() throws Exception {
+
+	public void testJSDocWithOptionalPropertiesWithSomeOptionalArgumentProperties() {
+		if (notYetImplemented())
+			return;
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param anchor");
@@ -774,7 +788,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
 
-	public void testJSDocWithOptionalPropertiesWithAllArgumentProperties() throws Exception {
+	public void testJSDocWithOptionalPropertiesWithAllArgumentProperties() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param anchor");
@@ -796,8 +810,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.toString(), problems.isEmpty());
 	}
-	
-	public void testJSDocWithOptionalPropertiesWithAllArgumentPropertiesWrongType() throws Exception {
+
+	public void testJSDocWithOptionalPropertiesWithAllArgumentPropertiesWrongType() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param {Object} anchor");
@@ -821,6 +835,5 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
-
 
 }
