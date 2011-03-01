@@ -424,7 +424,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		code.add("function TestObject() {");
 		code.add("	var x = addChild(new Node());");
-		code.add("	x.a;");
+		code.add("	var y = x.a;");
 		code.add("}");
 		code.add("function Node() {");
 		code.add("	this.a = 10;");
@@ -531,7 +531,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("function test() {");
 		code.add("var object = new Array();");
 		code.add("var x = object['test'].length;");
-		code.add("object.test;");
+		code.add("var y = object.test;");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
@@ -833,6 +833,102 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+
+	public void testVariableDeclartionWithUnknowPropertyAssignment() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} anchor");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("var x = anchor.y");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
+				.getID());
+	}
+	
+	public void testVariableWithUnknowPropertyAssignment() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} anchor");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("var x = null;");
+		code.add("x = anchor.y");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
+				.getID());
+	}
+
+	public void testFunctionCallWithUnknowProperty() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} anchor");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("test(anchor.xxx);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
+				.getID());
+	}
+	
+	public void testUnknowPropertyIfTest() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} anchor");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("if(anchor.xxx){}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(),0, problems.size());
+	}
+	
+	public void testDoubleUnknowPropertyIfTest() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} anchor");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("if(anchor.xxx && anchor.yyyy){}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(),0, problems.size());
+	}
+	
+	
+	public void testUnknowVariableIfTest() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} anchor");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("if(anchorr.xxx){}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+				.getID());
+	}
+	
+	public void testeUnknowPropertyOfPropertyIfTest() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} anchor");
+		code.add("*/");
+		code.add("function test(anchor) {");
+		code.add("if(anchor.xxx.yyy){}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
 				.getID());
 	}
 
