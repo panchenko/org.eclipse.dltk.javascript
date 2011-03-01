@@ -177,6 +177,24 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 		assertTrue(problems.get(0).getMessage().contains("myExampleForms"));
 	}
+	
+	
+	public void testFunctionHidesPoperty() {
+		StringList code = new StringList();
+		code.add("function exampleForms(){}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.FUNCTION_HIDES_VARIABLE, problems.get(0)
+				.getID());
+		assertTrue(problems.get(0).getMessage().contains("exampleForms"));
+	}
+	
+	public void testFunctionDoesntHidesAllowHidePoperty() {
+		StringList code = new StringList();
+		code.add("function exampleFormsHide(){}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(),0, problems.size());
+	}
 
 	public void testUndefinedPropertyAccess() {
 		StringList code = new StringList();

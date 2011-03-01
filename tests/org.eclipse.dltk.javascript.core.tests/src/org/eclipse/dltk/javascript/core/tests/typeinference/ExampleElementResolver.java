@@ -95,6 +95,14 @@ public class ExampleElementResolver implements IElementResolver {
 			property.setName(name);
 			property.setDescription("Description for <b>exampleForms</b>");
 			return property;
+		} else if ("exampleFormsHide".equals(name)) {
+			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
+			property.setType(context
+					.getTypeRef(ExampleTypeProvider.TYPE_EXAMPLE_FORMS));
+			property.setName(name);
+			property.setDescription("Description for <b>exampleForms</b>");
+			property.setHideAllowed(true);
+			return property;
 		} else if ("myExampleForms".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setType(context
