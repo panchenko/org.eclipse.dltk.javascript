@@ -87,8 +87,7 @@ public class JavaScriptValidations {
 
 	protected static Reporter createReporter(IBuildContext context) {
 		return new Reporter(context.getLineTracker(),
-				context.getProblemReporter(),
-				new JavaScriptValidationSeverityReporter());
+				context.getProblemReporter());
 	}
 
 	private static <E extends Member> boolean canConvert(Object value,
