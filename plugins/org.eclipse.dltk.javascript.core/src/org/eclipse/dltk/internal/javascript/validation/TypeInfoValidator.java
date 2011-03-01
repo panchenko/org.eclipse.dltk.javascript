@@ -22,9 +22,12 @@ import java.util.Stack;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -47,6 +50,7 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -474,7 +478,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				final IValueReference reference, IValueReference[] arguments) {
 
 			final Expression expression = node.getExpression();
-			final ASTNode methodNode;
+			final Expression methodNode;
 			if (expression instanceof PropertyExpression) {
 				methodNode = ((PropertyExpression) expression).getProperty();
 			} else {
@@ -559,12 +563,19 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 					List<IParameter> parameters = method.getParameters();
 					if (!validateParameters(parameters, arguments)) {
+						String name = method.getName();
+						if (name == null) {
+							Identifier identifier = PropertyExpressionUtils
+									.getIdentifier(methodNode);
+							if (identifier != null)
+								name = identifier.getName();
+						}
 						reporter.reportProblem(
 								JavaScriptProblems.WRONG_PARAMETERS,
 								NLS.bind(
 										ValidationMessages.MethodNotApplicableInScript,
 										new String[] {
-												method.getName(),
+												name,
 												describeParamTypes(parameters),
 												describeArgTypes(arguments,
 														parameters) }),
