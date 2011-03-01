@@ -22,9 +22,12 @@ import java.util.Stack;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -47,6 +50,7 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -1205,6 +1209,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 											result.getName(), type.getName()),
 							propName.sourceStart(), propName.sourceEnd());
 				} else if (type != null
+						&& shouldBeDefined(propertyExpression)
 						&& (type.getKind() == TypeKind.JAVASCRIPT
 								|| type.getKind() == TypeKind.PREDEFINED || type
 								.getKind() == TypeKind.EXTERNAL_JS)) {
@@ -1214,7 +1219,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 									ValidationMessages.UndefinedPropertyInScriptType,
 									result.getName(), type.getName()), propName
 									.sourceStart(), propName.sourceEnd());
-				} else {
+				} else if (shouldBeDefined(propertyExpression)) {
 					final String parentPath = PropertyExpressionUtils
 							.getPath(propertyExpression.getObject());
 					reporter.reportProblem(
@@ -1247,6 +1252,27 @@ public class TypeInfoValidator implements IBuildParticipant {
 					return;
 				}
 			}
+		}
+
+		private boolean shouldBeDefined(PropertyExpression propertyExpression) {
+			if (propertyExpression.getParent() instanceof BinaryOperation) {
+				BinaryOperation bo = (BinaryOperation) propertyExpression
+						.getParent();
+				if (bo.getRightExpression() == propertyExpression) {
+					return bo.getOperation() != JSParser.LAND
+							&& bo.getOperation() != JSParser.LOR;
+				}
+			}
+			if (propertyExpression.getParent() instanceof VariableDeclaration) {
+				return true;
+			}
+			if (propertyExpression.getParent() instanceof CallExpression) {
+				return true;
+			}
+			if (propertyExpression.getParent() instanceof PropertyExpression) {
+				return true;
+			}
+			return false;
 		}
 
 		private void reportDeprecatedProperty(Property property, Element owner,
