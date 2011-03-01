@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.17 2011/02/24 07:24:38 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.18 2011/03/01 13:04:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -198,13 +198,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int ELEMENT__ATTRIBUTES = NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ELEMENT__HIDE_ALLOWED = NAMED_ELEMENT_FEATURE_COUNT + 4;
+
+    /**
      * The number of structural features of the '<em>Element</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int ELEMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 4;
+	int ELEMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
@@ -262,6 +271,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	int TYPE__ATTRIBUTES = ELEMENT__ATTRIBUTES;
 
 	/**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE__HIDE_ALLOWED = ELEMENT__HIDE_ALLOWED;
+
+    /**
      * The feature id for the '<em><b>Members</b></em>' containment reference list.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -419,6 +437,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	int MEMBER__ATTRIBUTES = ELEMENT__ATTRIBUTES;
 
     /**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MEMBER__HIDE_ALLOWED = ELEMENT__HIDE_ALLOWED;
+
+    /**
      * The feature id for the '<em><b>Type</b></em>' containment reference.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -507,6 +534,15 @@ public interface TypeInfoModelPackage extends EPackage {
      * @ordered
      */
 	int METHOD__ATTRIBUTES = MEMBER__ATTRIBUTES;
+
+    /**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int METHOD__HIDE_ALLOWED = MEMBER__HIDE_ALLOWED;
 
     /**
      * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -663,6 +699,15 @@ public interface TypeInfoModelPackage extends EPackage {
     int CONSTRUCTOR__ATTRIBUTES = METHOD__ATTRIBUTES;
 
     /**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CONSTRUCTOR__HIDE_ALLOWED = METHOD__HIDE_ALLOWED;
+
+    /**
      * The feature id for the '<em><b>Type</b></em>' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -772,6 +817,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	int PROPERTY__ATTRIBUTES = MEMBER__ATTRIBUTES;
 
 	/**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int PROPERTY__HIDE_ALLOWED = MEMBER__HIDE_ALLOWED;
+
+    /**
      * The feature id for the '<em><b>Type</b></em>' containment reference.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1130,6 +1184,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	EReference getElement_Attributes();
 
 	/**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isHideAllowed <em>Hide Allowed</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Hide Allowed</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Element#isHideAllowed()
+     * @see #getElement()
+     * @generated
+     */
+    EAttribute getElement_HideAllowed();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Type <em>Type</em>}'.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1537,6 +1602,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		EReference ELEMENT__ATTRIBUTES = eINSTANCE.getElement_Attributes();
 
 		/**
+         * The meta object literal for the '<em><b>Hide Allowed</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute ELEMENT__HIDE_ALLOWED = eINSTANCE.getElement_HideAllowed();
+
+        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl <em>Type</em>}' class.
          * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Element.java,v 1.7 2011/01/25 12:47:12 apanchenk Exp $
+ * $Id: Element.java,v 1.8 2011/03/01 13:04:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -27,6 +27,7 @@ import org.eclipse.emf.common.util.EMap;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isVisible <em>Visible</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#getAttributes <em>Attributes</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isHideAllowed <em>Hide Allowed</em>}</li>
  * </ul>
  * </p>
  *
@@ -132,6 +133,32 @@ public interface Element extends NamedElement {
 	EMap<String, Object> getAttributes();
 
 	/**
+     * Returns the value of the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Hide Allowed</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Hide Allowed</em>' attribute.
+     * @see #setHideAllowed(boolean)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getElement_HideAllowed()
+     * @model
+     * @generated
+     */
+    boolean isHideAllowed();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Element#isHideAllowed <em>Hide Allowed</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Hide Allowed</em>' attribute.
+     * @see #isHideAllowed()
+     * @generated
+     */
+    void setHideAllowed(boolean value);
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @model

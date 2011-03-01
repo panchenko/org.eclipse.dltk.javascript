@@ -428,6 +428,13 @@ public abstract class ElementValue implements IValue {
 		if (IReferenceAttributes.ELEMENT.equals(key)) {
 			return getElements();
 		}
+		if (IReferenceAttributes.HIDE_ALLOWED.equals(key)) {
+			final Object elements = getElements();
+			if (elements instanceof Element) {
+				return ((Element) elements).isHideAllowed() ? Boolean.TRUE
+						: null;
+			}
+		}
 		return null;
 	}
 

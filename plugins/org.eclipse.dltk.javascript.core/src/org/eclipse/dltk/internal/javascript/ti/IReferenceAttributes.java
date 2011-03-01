@@ -19,5 +19,5 @@ public interface IReferenceAttributes {
 	String ELEMENT = "ELEMENT"; //$NON-NLS-1$
 	String VARIABLE = "VARIABLE"; //$NON-NLS-1$s
 	String CONSTANT = "CONSTANT"; //$NON-NLS-1$s
-
+	String HIDE_ALLOWED = "HIDE_ALLOWED";
 }

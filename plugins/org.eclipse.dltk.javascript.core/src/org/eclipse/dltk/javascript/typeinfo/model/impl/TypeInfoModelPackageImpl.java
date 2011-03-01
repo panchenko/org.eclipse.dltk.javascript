@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.20 2011/02/24 07:24:38 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.21 2011/03/01 13:04:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -366,6 +366,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
 	/**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getElement_HideAllowed() {
+        return (EAttribute)elementEClass.getEStructuralFeatures().get(4);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -611,6 +620,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         createEAttribute(elementEClass, ELEMENT__DESCRIPTION);
         createEAttribute(elementEClass, ELEMENT__VISIBLE);
         createEReference(elementEClass, ELEMENT__ATTRIBUTES);
+        createEAttribute(elementEClass, ELEMENT__HIDE_ALLOWED);
 
         typeEClass = createEClass(TYPE);
         createEReference(typeEClass, TYPE__MEMBERS);
@@ -708,6 +718,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEAttribute(getElement_Description(), ecorePackage.getEString(), "description", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEAttribute(getElement_Visible(), ecorePackage.getEBoolean(), "visible", "true", 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
         initEReference(getElement_Attributes(), this.getAttributeEntry(), null, "attributes", null, 0, -1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEAttribute(getElement_HideAllowed(), ecorePackage.getEBoolean(), "hideAllowed", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         EOperation op = addEOperation(elementEClass, ecorePackage.getEJavaObject(), "getAttribute", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
         addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

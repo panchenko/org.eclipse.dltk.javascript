@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ElementImpl.java,v 1.9 2011/02/04 06:04:41 apanchenk Exp $
+ * $Id: ElementImpl.java,v 1.10 2011/03/01 13:04:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -38,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#isVisible <em>Visible</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#getAttributes <em>Attributes</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl#isHideAllowed <em>Hide Allowed</em>}</li>
  * </ul>
  * </p>
  *
@@ -135,6 +136,26 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	protected EMap<String, Object> attributes;
 
 	/**
+     * The default value of the '{@link #isHideAllowed() <em>Hide Allowed</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isHideAllowed()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean HIDE_ALLOWED_EDEFAULT = false;
+
+    /**
+     * The cached value of the '{@link #isHideAllowed() <em>Hide Allowed</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isHideAllowed()
+     * @generated
+     * @ordered
+     */
+    protected boolean hideAllowed = HIDE_ALLOWED_EDEFAULT;
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
@@ -250,6 +271,27 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean isHideAllowed() {
+        return hideAllowed;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setHideAllowed(boolean newHideAllowed) {
+        boolean oldHideAllowed = hideAllowed;
+        hideAllowed = newHideAllowed;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ELEMENT__HIDE_ALLOWED, oldHideAllowed, hideAllowed));
+    }
+
+    /**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -304,6 +346,8 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
             case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
                 if (coreType) return getAttributes();
                 else return getAttributes().map();
+            case TypeInfoModelPackage.ELEMENT__HIDE_ALLOWED:
+                return isHideAllowed();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -330,6 +374,9 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
                 return;
             case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
                 ((EStructuralFeature.Setting)getAttributes()).set(newValue);
+                return;
+            case TypeInfoModelPackage.ELEMENT__HIDE_ALLOWED:
+                setHideAllowed((Boolean)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -358,6 +405,9 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
             case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
                 getAttributes().clear();
                 return;
+            case TypeInfoModelPackage.ELEMENT__HIDE_ALLOWED:
+                setHideAllowed(HIDE_ALLOWED_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -380,6 +430,8 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
                 return visible != VISIBLE_EDEFAULT;
             case TypeInfoModelPackage.ELEMENT__ATTRIBUTES:
                 return attributes != null && !attributes.isEmpty();
+            case TypeInfoModelPackage.ELEMENT__HIDE_ALLOWED:
+                return hideAllowed != HIDE_ALLOWED_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }
