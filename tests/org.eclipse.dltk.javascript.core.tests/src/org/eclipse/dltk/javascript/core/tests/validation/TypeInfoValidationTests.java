@@ -580,6 +580,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testDifferentReturnTypeThenDeclared() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {Number} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("return '';");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
+				.getID());
+	}
+
 	public void testDifferentReturnTypesThenDeclared() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -594,7 +608,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("return '';");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(problems.toString(), 2, problems.size());
 	}
 
 	public void testDifferentReturnTypesThenDeclaredWithUndefined() {
@@ -612,6 +626,39 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testDifferentReturnTypesThenDeclaredWithNull() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {String} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("var result_1 = 1;");
+		code.add("var condition_1 = false;");
+		code.add("if(condition_1) {");
+		code.add("return null;");
+		code.add("}");
+		code.add("return '';");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testDifferentReturnTypes() {
+		List<String> code = new StringList();
+		code.add("function someFunction() {");
+		code.add("var condition_1 = false;");
+		code.add("if(condition_1) {");
+		code.add("return 1;");
+		code.add("}");
+		code.add("return '';");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.RETURN_INCONSISTENT, problems.get(0)
+				.getID());
+
 	}
 
 	public void testStringTypeAsFunctionCall() {
