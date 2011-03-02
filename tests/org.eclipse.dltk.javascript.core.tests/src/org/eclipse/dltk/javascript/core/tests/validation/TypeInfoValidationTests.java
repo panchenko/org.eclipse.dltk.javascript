@@ -46,7 +46,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testUnknownFunctionType() {
 		StringList code = new StringList();
 		code.add("/** @type LongString */");
-		code.add("function x(){}");
+		code.add("function x(){return null;}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
@@ -628,6 +628,57 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 	
+	public void testDeclaredtArrayTypeWithUndefineReturn() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {Array<String>} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("return undefined;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testDeclaredtArrayTypeWithNullReturn() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {Array<String>} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("return null;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testDeclaredtArrayTypeWithEmptyReturn() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {Array<String>} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("return;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
+				.getID());
+	}
+
+	public void testDeclaredtArrayTypeWithNoReturn() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {Array<String>} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
+				.getID());
+	}
+
 	public void testDifferentReturnTypesThenDeclaredWithNull() {
 		List<String> code = new StringList();
 		code.add("/**");
