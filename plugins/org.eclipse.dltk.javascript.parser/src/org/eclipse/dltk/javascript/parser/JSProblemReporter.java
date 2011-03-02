@@ -18,6 +18,7 @@ public interface JSProblemReporter {
 	void reportProblem(IProblemIdentifier identifier, String message,
 			int start, int end);
 
+	@Deprecated
 	void reportProblem(ProblemSeverity severity, IProblemIdentifier identifier,
 			String message, int start, int end);
 }
