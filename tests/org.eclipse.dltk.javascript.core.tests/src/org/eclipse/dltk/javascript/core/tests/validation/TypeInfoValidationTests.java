@@ -936,7 +936,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 	
-	public void testeUnknowPropertyOfPropertyIfTest() {
+	public void testUnknowPropertyOfPropertyIfTest() {
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param {Object} anchor");
@@ -948,6 +948,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
 				.getID());
+	}
+
+	public void testStringArrayxInitializerWithNullElement() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @param {String[]} args");
+		code.add("*/");
+		code.add("function test2(args) {");
+		code.add(" test2(['hello',null]);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(),0, problems.size());
 	}
 
 }
