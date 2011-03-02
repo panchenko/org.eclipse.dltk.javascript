@@ -159,7 +159,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				kind |= K_STRING;
 			} else if (astNode instanceof DecimalLiteral) {
 				kind |= K_NUMBER;
-			} else {
+			} else if (!(astNode instanceof NullExpression)) {
 				kind |= K_OTHER;
 			}
 		}
