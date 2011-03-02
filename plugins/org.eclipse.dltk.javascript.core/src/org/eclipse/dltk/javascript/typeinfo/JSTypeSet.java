@@ -355,6 +355,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			if (type instanceof ArrayTypeKey) {
 				return itemType
 						.isAssignableFrom(((ArrayTypeKey) type).itemType);
+			} else if (ITypeNames.UNDEFINED.equals(type.getName())) {
+				return true;
 			}
 			return false;
 		}

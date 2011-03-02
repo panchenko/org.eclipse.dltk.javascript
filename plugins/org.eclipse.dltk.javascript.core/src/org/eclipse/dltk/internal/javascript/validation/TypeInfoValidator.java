@@ -41,6 +41,7 @@ import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.NewExpression;
+import org.eclipse.dltk.javascript.ast.NullExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -447,13 +448,24 @@ public class TypeInfoValidator implements IBuildParticipant {
 				@SuppressWarnings("unchecked")
 				List<ReturnNodeAndValueReference> lst = (List<ReturnNodeAndValueReference>) collection
 						.getReturnValue().getAttribute("RETURN_VALUES");
+				JSMethod method = (JSMethod) reference
+						.getAttribute(IReferenceAttributes.PARAMETERS);
 				if (lst != null) {
-					pushExpressionValidator(new TestReturnStatement(
-							(JSMethod) reference
-									.getAttribute(IReferenceAttributes.PARAMETERS),
+					pushExpressionValidator(new TestReturnStatement(method,
 							lst, reporter));
 					collection.getReturnValue().setAttribute("RETURN_VALUES",
 							null);
+				} else if (method.getType() != null) {
+					ASTNode name = node.getName();
+					if (name == null)
+						name = node.getFunctionKeyword();
+					reporter.reportProblem(
+							JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+							NLS.bind(
+									ValidationMessages.DeclarationMismatcNoReturnType,
+									new String[] { method.getName(),
+											TypeUtil.getName(method.getType()) }),
+							name.sourceStart(), name.sourceEnd());
 				}
 			}
 			return reference;
@@ -463,7 +475,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public IValueReference visitReturnStatement(ReturnStatement node) {
 			IValueReference returnValueReference = super
 					.visitReturnStatement(node);
-			if (returnValueReference != null) {
+			if (returnValueReference != null
+					|| node.getValue() instanceof NullExpression) {
 
 				@SuppressWarnings("unchecked")
 				List<ReturnNodeAndValueReference> lst = (List<ReturnNodeAndValueReference>) peekContext()
