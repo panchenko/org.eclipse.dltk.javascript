@@ -22,12 +22,9 @@ import java.util.Stack;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -50,7 +47,6 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
-import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -582,7 +578,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
 					}
-				} else if (!isArrayLookup(expression)) {
+				} else if (!isArrayLookup(expression)
+						&& !isUntypedParameter(reference)) {
 
 					final JSType type = JavaScriptValidations.typeOf(reference
 							.getParent());
@@ -673,6 +670,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 			}
 			return;
+		}
+
+		/**
+		 * Checks if the passed reference is an untyped parameter. This method
+		 * helps to identify the common case of callbacks.
+		 * 
+		 * @param reference
+		 * @return
+		 */
+		private boolean isUntypedParameter(IValueReference reference) {
+			return reference.getKind() == ReferenceKind.ARGUMENT
+					&& reference.getDeclaredType() == null;
 		}
 
 		private boolean isThisCall(Expression expression) {
