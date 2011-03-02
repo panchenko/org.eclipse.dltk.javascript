@@ -42,6 +42,7 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
@@ -53,10 +54,10 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.JSType2;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -86,6 +87,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				JavaScriptValidations.createReporter(context)));
 		inferencer.doInferencing(script);
 	}
+
 
 	private static enum VisitorMode {
 		NORMAL, CALL
@@ -137,6 +139,87 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public void call() {
 			visitor.validateCallExpression(node, reference, arguments);
 		}
+	}
+
+	private static class ReturnNodeAndValueReference {
+
+		private final ReturnStatement node;
+		private final IValueReference returnValueReference;
+
+		public ReturnNodeAndValueReference(ReturnStatement node,
+				IValueReference returnValueReference) {
+			this.node = node;
+			this.returnValueReference = returnValueReference;
+		}
+
+	}
+
+	private static class TestReturnStatement implements ExpressionValidator {
+
+		private final List<ReturnNodeAndValueReference> lst;
+		private final Reporter reporter;
+		private final JSMethod jsMethod;
+
+		public TestReturnStatement(JSMethod jsMethod,
+				List<ReturnNodeAndValueReference> lst, Reporter reporter) {
+			this.jsMethod = jsMethod;
+			this.lst = lst;
+			this.reporter = reporter;
+		}
+
+		public void call() {
+			JSType2 firstType = null;
+			for (int i = 0; i < lst.size(); i++) {
+				ReturnNodeAndValueReference element = (ReturnNodeAndValueReference) lst
+						.get(i);
+				JSType methodType = jsMethod.getType();
+				JSType2 type = JSTypeSet.normalize(JavaScriptValidations
+						.typeOf(element.returnValueReference));
+
+				if (type != null
+						&& methodType != null
+						&& !JSTypeSet.normalize(methodType).isAssignableFrom(
+								type)) {
+					ReturnStatement node = element.node;
+					reporter.reportProblem(
+							JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+							NLS.bind(
+									ValidationMessages.DeclarationMismatchWithActualReturnType,
+									new String[] { jsMethod.getName(),
+											TypeUtil.getName(methodType),
+											TypeUtil.getName(type) }), node
+									.sourceStart(), node.sourceEnd());
+				}
+
+				if (firstType == null && type != null) {
+					firstType = type;
+				}
+			}
+
+			if (firstType != null) {
+				for (int i = 1; i < lst.size(); i++) {
+					ReturnNodeAndValueReference next = lst.get(i);
+					JSType2 nextType = JSTypeSet
+							.normalize(JavaScriptValidations
+									.typeOf(next.returnValueReference));
+					if (nextType != null
+							&& (!nextType.isAssignableFrom(firstType) && !firstType
+									.isAssignableFrom(nextType))) {
+
+						reporter.reportProblem(
+								JavaScriptProblems.RETURN_INCONSISTENT,
+								NLS.bind(
+										ValidationMessages.ReturnTypeInconsistentWithPreviousReturn,
+										new String[] {
+												TypeUtil.getName(nextType),
+												TypeUtil.getName(firstType) }),
+								next.node.sourceStart(), next.node.sourceEnd());
+
+					}
+				}
+			}
+		}
+
 	}
 
 	private static class NotExistingIdentiferValidator implements
@@ -357,55 +440,44 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 
 			IValueReference reference = super.visitFunctionStatement(node);
+
 			IValueCollection collection = (IValueCollection) reference
 					.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
-			IMethod method = (IMethod) reference
-					.getAttribute(IReferenceAttributes.PARAMETERS);
-			if (method != null && method.getType() != null) {
-				if (collection != null && collection.getReturnValue() != null) {
-					JSTypeSet types = collection.getReturnValue().getTypes();
-					if (!types.isEmpty()) {
-						String inconsistentType = null;
-						JSType methodType = context.resolveTypeRef(method
-								.getType());
-						for (JSType type : types) {
-							if (!JSTypeSet
-									.normalize(methodType)
-									.isAssignableFrom(JSTypeSet.normalize(type))) {
-								inconsistentType = type.getName();
-								break;
-							}
-						}
-						if (inconsistentType != null) {
-							String name = method.getName();
-							int sourceStart;
-							int sourceEnd;
-
-							if (node.getName() == null) {
-								name = "<anonymous>";
-								sourceStart = node.getFunctionKeyword()
-										.sourceStart();
-								sourceEnd = node.getFunctionKeyword()
-										.sourceEnd();
-							} else {
-								sourceStart = node.getName().sourceStart();
-								sourceEnd = node.getName().sourceEnd();
-							}
-							reporter.reportProblem(
-									JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
-									NLS.bind(
-											ValidationMessages.DeclarationMismatchWithActualReturnType,
-											new String[] {
-													name,
-													TypeUtil.getName(method
-															.getType()),
-													inconsistentType }),
-									sourceStart, sourceEnd);
-						}
-					}
+			if (collection != null) {
+				@SuppressWarnings("unchecked")
+				List<ReturnNodeAndValueReference> lst = (List<ReturnNodeAndValueReference>) collection
+						.getReturnValue().getAttribute("RETURN_VALUES");
+				if (lst != null) {
+					pushExpressionValidator(new TestReturnStatement(
+							(JSMethod) reference
+									.getAttribute(IReferenceAttributes.PARAMETERS),
+							lst, reporter));
+					collection.getReturnValue().setAttribute("RETURN_VALUES",
+							null);
 				}
 			}
 			return reference;
+		}
+
+		@Override
+		public IValueReference visitReturnStatement(ReturnStatement node) {
+			IValueReference returnValueReference = super
+					.visitReturnStatement(node);
+			if (returnValueReference != null) {
+
+				@SuppressWarnings("unchecked")
+				List<ReturnNodeAndValueReference> lst = (List<ReturnNodeAndValueReference>) peekContext()
+						.getReturnValue().getAttribute("RETURN_VALUES");
+				if (lst == null) {
+					lst = new ArrayList<ReturnNodeAndValueReference>();
+					peekContext().getReturnValue().setAttribute(
+							"RETURN_VALUES", lst);
+				}
+
+				lst.add(new ReturnNodeAndValueReference(node,
+						returnValueReference));
+			}
+			return returnValueReference;
 		}
 
 		@Override

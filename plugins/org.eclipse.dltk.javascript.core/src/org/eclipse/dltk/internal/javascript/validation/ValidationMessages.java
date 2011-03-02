@@ -60,6 +60,7 @@ public class ValidationMessages extends NLS {
 	public static String FunctionHidesPropertyOfType;
 	public static String FunctionHidesProperty;
 	public static String FunctionHidesVariable;
+	public static String ReturnTypeInconsistentWithPreviousReturn;
 
 	static {
 		// initialize resource bundle

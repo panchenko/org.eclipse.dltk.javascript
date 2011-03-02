@@ -795,6 +795,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							!(value instanceof LazyReference));
 				}
 			}
+			return value;
 		}
 		return null;
 	}
