@@ -13,7 +13,7 @@ package org.eclipse.dltk.javascript.parser;
 
 import org.antlr.runtime.RecognitionException;
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
-import org.eclipse.dltk.compiler.problem.ProblemSeverities;
+import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 
 public class JSProblem extends DefaultProblem {
 
@@ -24,7 +24,7 @@ public class JSProblem extends DefaultProblem {
 				cause.getClass().getSimpleName() + ": " + cause.getMessage(),
 				JavaScriptParserProblems.INTERNAL_ERROR,
 				null,
-				ProblemSeverities.Error,
+				ProblemSeverity.ERROR,
 				-1,
 				-1,
 				cause instanceof RecognitionException ? ((RecognitionException) cause).line
