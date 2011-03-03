@@ -10,13 +10,15 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
-public class LazyReference extends AbstractReference {
+public class LazyTypeReference extends AbstractReference {
 
-	final class LazyValue extends Value implements ILazyValue {
+	final class LazyTypeValue extends Value implements ILazyValue {
 		boolean resolved = false;
+		private boolean finalResolve;
+		private boolean doResolve = true;
 
 		public void resolve() {
-			if (!resolved) {
+			if (!resolved && doResolve) {
 				IValueReference createChild = collection.getChild(className);
 				if (createChild.exists()) {
 					ValueCollection collection = (ValueCollection) createChild
@@ -26,8 +28,10 @@ public class LazyReference extends AbstractReference {
 					}
 
 					IValue src = ((IValueProvider) createChild).getValue();
-					// if i enable this then the type added below takes precedance some time
-					// for example a toString() on a javasccript object will then return the toString of Object
+					// if i enable this then the type added below takes
+					// precedance some time
+					// for example a toString() on a javasccript object will
+					// then return the toString of Object
 					// if (src instanceof Value) {
 					// this.references.add((Value) src);
 					// } else
@@ -41,6 +45,8 @@ public class LazyReference extends AbstractReference {
 					type.setName(className);
 					setDeclaredType(TypeUtil.ref(type));
 					resolved = true;
+				} else {
+					doResolve = !finalResolve;
 				}
 			}
 		}
@@ -52,14 +58,30 @@ public class LazyReference extends AbstractReference {
 		public boolean isResolved() {
 			return resolved;
 		}
+
+		public void setFinalResolve() {
+			finalResolve = true;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof LazyTypeValue)
+				return ((LazyTypeValue) obj).getLazyName().equals(className);
+			return super.equals(obj);
+		}
+
+		@Override
+		public int hashCode() {
+			return className.hashCode();
+		}
 	}
 
-	private final LazyValue value = new LazyValue();
+	private final LazyTypeValue value = new LazyTypeValue();
 	final ITypeInferenceContext context;
 	final String className;
 	final IValueCollection collection;
 
-	public LazyReference(ITypeInferenceContext context, String className,
+	public LazyTypeReference(ITypeInferenceContext context, String className,
 			IValueCollection collection) {
 		this.context = context;
 		this.className = className;

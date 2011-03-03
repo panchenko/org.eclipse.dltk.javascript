@@ -12,6 +12,7 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
@@ -92,17 +93,33 @@ public abstract class TypeInferencerVisitorBase extends
 		return handlers;
 	}
 
+	boolean first = false;
 	@Override
 	public IValueReference visit(ASTNode node) {
-		if (handlers != null) {
-			for (ITypeInferenceHandler handler : handlers) {
-				final IValueReference result = handler.handle(node);
-				if (result != ITypeInferenceHandler.CONTINUE) {
-					return result;
+		boolean start = !first;
+		first = true;
+		try {
+			if (handlers != null) {
+				for (ITypeInferenceHandler handler : handlers) {
+					final IValueReference result = handler.handle(node);
+					if (result != ITypeInferenceHandler.CONTINUE) {
+						return result;
+					}
+				}
+			}
+			return super.visit(node);
+		} finally {
+			if (start) {
+				first = false;
+				IValueCollection collection = getCollection();
+				if (collection instanceof ValueCollection) {
+					IValue value = ((ValueCollection) collection).getValue();
+					if (value instanceof Value) {
+						((Value) value).resolveLazyValues(new HashSet<Value>());
+					}
 				}
 			}
 		}
-		return super.visit(node);
 	}
 
 	public IValueCollection getCollection() {

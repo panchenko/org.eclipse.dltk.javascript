@@ -457,9 +457,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
 		final IValueReference returnValue = result
 				.getChild(IValueReference.FUNCTION_OP);
+		returnValue.addValue(function.getReturnValue(), true);
 		setType(methodName != null ? methodName : node.getFunctionKeyword(),
 				returnValue, method.getType());
-		returnValue.addValue(function.getReturnValue(), true);
 		return result;
 	}
 
@@ -503,7 +503,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (type.getKind() != TypeKind.UNKNOWN) {
 				value.setDeclaredType(type);
 			} else if (type instanceof TypeRef) {
-				value.addValue(new LazyReference(context, type.getName(),
+				value.addValue(new LazyTypeReference(context, type.getName(),
 						peekContext()), false);
 			}
 		}
@@ -694,7 +694,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							contextValueCollection, TypeUtil.ref(knownType)));
 					result.setKind(ReferenceKind.TYPE);
 				} else {
-					result = new LazyReference(context, className,
+					result = new LazyTypeReference(context, className,
 							contextValueCollection);
 				}
 			} else {
@@ -792,7 +792,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						.getReturnValue();
 				if (returnValue != null) {
 					returnValue.addValue(value,
-							!(value instanceof LazyReference));
+							!(value instanceof LazyTypeReference));
 				}
 			}
 			return value;

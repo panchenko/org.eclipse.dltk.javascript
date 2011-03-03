@@ -39,6 +39,19 @@ public class NestedValueCollection extends ValueCollection {
 		return getParent().getThis();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof NestedValueCollection) {
+			return getParent()
+					.equals(((NestedValueCollection) obj).getParent());
+		}
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return getParent().hashCode();
+	}
 	protected static void mergeTo(IValueCollection parent,
 			final List<NestedValueCollection> collections) {
 		final Set<String> names = new HashSet<String>();

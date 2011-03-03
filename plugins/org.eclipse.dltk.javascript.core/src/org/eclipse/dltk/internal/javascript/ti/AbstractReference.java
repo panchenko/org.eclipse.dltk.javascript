@@ -12,6 +12,7 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -56,8 +57,11 @@ public abstract class AbstractReference implements IValueReference,
 		IValue val = createValue();
 		if (val != null) {
 			IValue src = ((IValueProvider) value).getValue();
-			if (src == null)
+			if (src == null) {
+				src = new LazyReferenceValue(value);
+				val.addReference(src);
 				return;
+			}
 			if (!copy && src instanceof Value
 					&& ((IValueProvider) value).isReference()
 					|| value.isParentOf(this)) {
@@ -177,6 +181,7 @@ public abstract class AbstractReference implements IValueReference,
 			ILazyValue {
 		private final IValueReference reference;
 		private boolean resolved = false;
+		private boolean finalResolve;
 
 		public LazyReferenceValue(IValueReference value) {
 			this.reference = value;
@@ -200,6 +205,9 @@ public abstract class AbstractReference implements IValueReference,
 				resolved = true;
 				IValue value = ((IValueProvider) reference).getValue();
 				if (value != null) {
+					if (finalResolve && value instanceof Value) {
+						((Value) value).resolveLazyValues(new HashSet<Value>());
+					}
 					if (value instanceof Value
 							&& ((IValueProvider) reference).isReference()) {
 						addReference(value);
@@ -207,13 +215,16 @@ public abstract class AbstractReference implements IValueReference,
 						addValue(value);
 					}
 				} else {
-					resolved = false;
+					resolved = finalResolve;
 				}
 			}
 		}
 
+		public void setFinalResolve() {
+			finalResolve = true;
+		}
+
 		public String getLazyName() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 

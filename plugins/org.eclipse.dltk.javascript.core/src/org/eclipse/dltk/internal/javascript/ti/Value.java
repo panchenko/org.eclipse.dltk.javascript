@@ -408,4 +408,31 @@ public class Value implements IValue, IValue2 {
 	public void putDirectChild(String name, Value value) {
 		children.put(name, value);
 	}
+
+	public void resolveLazyValues(Set<Value> visited) {
+		if (visited.add(this)) {
+			for (Value value : references) {
+				if (value instanceof ILazyValue
+						&& !((ILazyValue) value).isResolved()) {
+					((ILazyValue) value).setFinalResolve();
+				} else {
+					value.resolveLazyValues(visited);
+				}
+			}
+			for (Value value : children.values()) {
+				value.resolveLazyValues(visited);
+			}
+
+			if (attributes != null) {
+				for (Object attibute : attributes.values()) {
+					if (attibute instanceof IValueProvider) {
+						IValue value = ((IValueProvider) attibute).getValue();
+						if (value instanceof Value) {
+							((Value) value).resolveLazyValues(visited);
+						}
+					}
+				}
+			}
+		}
+	}
 }

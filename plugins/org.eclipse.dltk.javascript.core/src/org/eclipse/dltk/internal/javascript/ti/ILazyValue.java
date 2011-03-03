@@ -6,4 +6,6 @@ public interface ILazyValue {
 	String getLazyName();
 
 	boolean isResolved();
+
+	void setFinalResolve();
 }
