@@ -853,4 +853,13 @@
    </section>
 </extension>
 
+<extension point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+   	<hyperlinkDetector
+   		id="org.eclipse.dltk.ruby.RequireHyperlinkDetector"
+   		targetId="org.eclipse.dltk.javascript.code"
+   		class="org.eclipse.dltk.javascript.internal.ui.text.hyperlink.JSDocTypeHyperlinkDetector"
+   		name="%hyperlinkDetector.name.jsdoc_type">
+   	</hyperlinkDetector>
+</extension>
+
 </plugin>
