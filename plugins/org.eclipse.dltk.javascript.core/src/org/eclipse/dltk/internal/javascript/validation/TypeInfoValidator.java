@@ -874,7 +874,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 								if (!testArgumentType(member.getType(), child))
 									return false;
 							}
-						} else {
+						} else if (member
+								.getAttribute(IReferenceAttributes.OPTIONAL) == null) {
 							return false;
 						}
 					}
@@ -961,11 +962,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 					for (Member member : members) {
 						if (sb.length() > 1)
 							sb.append(", ");
+						if (member.getAttribute(IReferenceAttributes.OPTIONAL) != null)
+							sb.append('[');
 						sb.append(member.getName());
 						if (member.getType() != null) {
 							sb.append(':');
 							sb.append(member.getType().getName());
 						}
+						if (member.getAttribute(IReferenceAttributes.OPTIONAL) != null)
+							sb.append(']');
 					}
 					sb.append('}');
 				} else if (parameter.getType() != null) {

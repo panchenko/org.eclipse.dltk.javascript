@@ -275,7 +275,9 @@ public class JSDocSupport implements IModelBuilder {
 					property.setName(propertyName);
 					if (pp.type != null)
 						property.setType(translateTypeName(pp.type));
-					// TODO something with optional?
+					if (pp.optional)
+						property.setAttribute(IReferenceAttributes.OPTIONAL,
+								Boolean.TRUE);
 					propertiesType.getMembers().add(property);
 					continue;
 				}
