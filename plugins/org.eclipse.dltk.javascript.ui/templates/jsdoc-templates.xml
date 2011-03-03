@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+<template 
+	context="JSDocTemplateContextType" 
+	description="%param.description" 
+	id="org.eclipse.dltk.javascript.ui.templates.jsdoc.param" 
+	name="@param">@param {${type}} ${name}</template>
+<template 
+	context="JSDocTemplateContextType" 
+	id="org.eclipse.dltk.javascript.ui.templates.jsdoc.type" 
+	name="@type" 
+	description="%type.description" 
+	enabled="true" 
+	deleted="false" 
+	autoinsert="true">@type {${type}}</template>
+<template 
+	id="org.eclipse.dltk.javascript.ui.templates.jsdoc.throws" 
+	name="@throws" 
+	description="%throws.description" 
+	context="JSDocTemplateContextType" 
+	enabled="true" 
+	deleted="false" 
+	autoinsert="true">@throws {${type}}</template>
+<template
+	id="org.eclipse.dltk.javascript.ui.templates.jsdoc.return" 
+	name="@return" 
+	description="%return.decription" 
+	context="JSDocTemplateContextType" 
+	enabled="true" 
+	deleted="false" 
+	autoinsert="true">@return {${type}}</template>
+<template 
+	id="org.eclipse.dltk.javascript.ui.templates.jsdoc.author" 
+	name="@author" 
+	description="%author.description" 
+	context="JSDocTemplateContextType" 
+	enabled="true" 
+	deleted="false" 
+	autoinsert="true">@author ${user}</template>
+</templates>

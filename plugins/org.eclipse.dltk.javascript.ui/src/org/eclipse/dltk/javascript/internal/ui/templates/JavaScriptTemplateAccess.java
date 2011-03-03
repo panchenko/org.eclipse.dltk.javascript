@@ -12,6 +12,8 @@ package org.eclipse.dltk.javascript.internal.ui.templates;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.ui.templates.ScriptTemplateAccess;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.templates.ContextTypeRegistry;
+import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
 
 /**
  * Provides access to Javascript templates
@@ -31,25 +33,30 @@ public class JavaScriptTemplateAccess extends ScriptTemplateAccess {
 	}
 
 	/*
-	 * @see
-	 * org.eclipse.dltk.ui.templates.ScriptTemplateAccess#getPreferenceStore()
+	 * @see ScriptTemplateAccess#getPreferenceStore()
 	 */
 	protected IPreferenceStore getPreferenceStore() {
 		return JavaScriptUI.getDefault().getPreferenceStore();
 	}
 
 	/*
-	 * @see
-	 * org.eclipse.dltk.ui.templates.ScriptTemplateAccess#getContextTypeId()
+	 * @see ScriptTemplateAccess#getContextTypeId()
 	 */
 	protected String getContextTypeId() {
 		return JavaScriptUniversalTemplateContextType.CONTEXT_TYPE_ID;
 	}
 
+	@Override
+	protected ContextTypeRegistry createContextTypeRegistry() {
+		// TODO review base class to simplify this use case
+		final ContributionContextTypeRegistry registry = (ContributionContextTypeRegistry) super
+				.createContextTypeRegistry();
+		registry.addContextType(JSDocTemplateContextType.CONTEXT_TYPE_ID);
+		return registry;
+	}
+
 	/*
-	 * @see
-	 * org.eclipse.dltk.ui.templates.ScriptTemplateAccess#getCustomTemplatesKey
-	 * ()
+	 * @see ScriptTemplateAccess#getCustomTemplatesKey()
 	 */
 	protected String getCustomTemplatesKey() {
 		return CUSTOM_TEMPLATES_KEY;

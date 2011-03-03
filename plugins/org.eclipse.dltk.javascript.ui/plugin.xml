@@ -569,6 +569,15 @@
           file="templates/templates.xml"
           translations="templates/templates.properties">
     </include>
+    <contextType
+          class="org.eclipse.dltk.javascript.internal.ui.templates.JSDocTemplateContextType"
+          id="JSDocTemplateContextType"
+          name="%JSDocTemplateContextName">
+    </contextType>
+    <include
+          file="templates/jsdoc-templates.xml"
+          translations="templates/jsdoc-templates.properties">
+    </include>
  </extension>
  
  

@@ -2,10 +2,8 @@ package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -13,62 +11,23 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.core.JSKeywordCategory;
 import org.eclipse.dltk.javascript.core.JSKeywordManager;
+import org.eclipse.dltk.javascript.internal.ui.templates.JSDocTemplateCompletionProcessor;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
+import org.eclipse.dltk.ui.DLTKPluginImages;
+import org.eclipse.dltk.ui.templates.ScriptTemplateProposal;
 import org.eclipse.dltk.ui.text.completion.ContentAssistInvocationContext;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposalComputer;
+import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
-import org.eclipse.jface.text.contentassist.ContextInformation;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 
 public class JSDocCompletionProposalComputer implements
 		IScriptCompletionProposalComputer {
-
-	private static class TagsCompletionProposals {
-		private final String replacement;
-		private final String display;
-		private final int cursorPosition;
-		private final ContextInformation contextInformation;
-
-		public TagsCompletionProposals(String replacement, String display,
-				int cursorPosition, ContextInformation contextInformation) {
-			this.replacement = replacement;
-			this.display = display;
-			this.cursorPosition = cursorPosition;
-			this.contextInformation = contextInformation;
-		}
-	}
-
-	private static final Set<String> ignored = new HashSet<String>();
-
-	private static final Map<String, TagsCompletionProposals> tagProposals = new HashMap<String, TagsCompletionProposals>();
-
-	static {
-		tagProposals.put("@param", new TagsCompletionProposals(
-				"@param {} name", "@param {Type} name", 8,
-				new ContextInformation("@param {Type} name", "{Type} name")));
-		tagProposals.put("@type", new TagsCompletionProposals("@type ",
-				"@type Type", 6, new ContextInformation("@type Type", "Type")));
-		tagProposals.put("@throws", new TagsCompletionProposals("@throws {}",
-				"@throws {Type}", 9, new ContextInformation("@throws {Type}",
-						"{Type}")));
-		tagProposals.put("@returns", new TagsCompletionProposals("@returns {}",
-				"@returns {Type}", 10, new ContextInformation(
-						"@returns {Type}", "{Type}")));
-		tagProposals.put("@return", new TagsCompletionProposals("@return {}",
-				"@return {Type}", 9, new ContextInformation("@return {Type}",
-						"{Type}")));
-		String authorUserNameTag = "@author " + System.getProperty("user.name");
-		tagProposals.put("@author", new TagsCompletionProposals(
-				authorUserNameTag, authorUserNameTag, 8,
-				new ContextInformation(authorUserNameTag, "username")));
-
-		ignored.add("@returns");
-	}
 
 	public JSDocCompletionProposalComputer() {
 	}
@@ -123,42 +82,46 @@ public class JSDocCompletionProposalComputer implements
 					skipNoneIdentifiers = false;
 				}
 			}
+
 			if (prefixIndex == -1) {
 				if (tag != null) {
 					List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+					final JSDocTemplateCompletionProcessor processor = new JSDocTemplateCompletionProcessor(
+							(ScriptContentAssistInvocationContext) context);
+					Collections.addAll(
+							proposals,
+							processor.computeCompletionProposals(
+									context.getViewer(),
+									context.getInvocationOffset()));
+					//
 					final Set<String> tags = new HashSet<String>();
 					Collections.addAll(tags, JSDocTag.getTags());
-					ISourceModule module = null;
-					// if (fConfiguration != null) {
-					// final ITextEditor editor = fConfiguration.getEditor();
-					// if (editor != null) {
-					// module = EditorUtility.getEditorInputModelElement(editor,
-					// true);
-					// }
-					// }
+					ISourceModule module = null; // TODO detect source module
 					Collections.addAll(tags, JSKeywordManager.getInstance()
 							.getKeywords(JSKeywordCategory.JS_DOC_TAG, module));
+					// TODO option to ignore @returns ?
+					tags.remove(JSDocTag.RETURNS);
+					// collect used tags, to show keywords only for missing ones
+					final Set<String> usedTags = new HashSet<String>();
+					for (ICompletionProposal proposal : proposals) {
+						if (proposal instanceof ScriptTemplateProposal) {
+							usedTags.add(((ScriptTemplateProposal) proposal)
+									.getTemplateName());
+						}
+					}
 
 					for (String jsdocTag : tags) {
 						if (jsdocTag.startsWith(tag)
-								&& !ignored.contains(jsdocTag)) {
-							TagsCompletionProposals tcp = tagProposals
-									.get(jsdocTag);
-							if (tcp != null) {
-								proposals.add(new CompletionProposal(
-										tcp.replacement, context
-												.getInvocationOffset()
-												- tag.length(), tag.length(),
-										tcp.cursorPosition, null, tcp.display,
-										tcp.contextInformation, null));
-
-							} else {
-								proposals.add(new CompletionProposal(
-										jsdocTag + ' ', context
-												.getInvocationOffset()
-												- tag.length(), tag.length(),
-										jsdocTag.length() + 1));
-							}
+								&& !usedTags.contains(jsdocTag)) {
+							proposals
+									.add(new ScriptCompletionProposal(
+											jsdocTag + ' ',
+											context.getInvocationOffset()
+													- tag.length(),
+											tag.length(),
+											DLTKPluginImages
+													.get(DLTKPluginImages.IMG_OBJS_JAVADOCTAG),
+											jsdocTag, 90, true));
 						}
 					}
 					return proposals;
@@ -202,7 +165,7 @@ public class JSDocCompletionProposalComputer implements
 
 	public List<IContextInformation> computeContextInformation(
 			ContentAssistInvocationContext context, IProgressMonitor monitor) {
-		return null;
+		return Collections.emptyList();
 	}
 
 	public String getErrorMessage() {

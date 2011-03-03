@@ -7,6 +7,7 @@
  ******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.templates;
 
+import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.text.JavascriptTextTools;
 import org.eclipse.dltk.javascript.internal.ui.text.SimpleJavascriptSourceViewerConfiguration;
@@ -14,8 +15,9 @@ import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.templates.ScriptTemplateAccess;
 import org.eclipse.dltk.ui.templates.ScriptTemplatePreferencePage;
 import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
-
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipse.jface.text.templates.Template;
 
 /**
  * Javascript templates preference page
@@ -23,7 +25,7 @@ import org.eclipse.jface.text.IDocument;
 public class JavaScriptTemplatePreferencePage extends
 		ScriptTemplatePreferencePage {
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplatePreferencePage#createSourceViewerConfiguration()
+	 * @see ScriptTemplatePreferencePage#createSourceViewerConfiguration()
 	 */
 	protected ScriptSourceViewerConfiguration createSourceViewerConfiguration() {
 		return new SimpleJavascriptSourceViewerConfiguration(getTextTools()
@@ -32,14 +34,14 @@ public class JavaScriptTemplatePreferencePage extends
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplatePreferencePage#getTemplateAccess()
+	 * @see ScriptTemplatePreferencePage#getTemplateAccess()
 	 */
 	protected ScriptTemplateAccess getTemplateAccess() {
 		return JavaScriptTemplateAccess.getInstance();
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplatePreferencePage#setDocumentParticioner(org.eclipse.jface.text.IDocument)
+	 * @see ScriptTemplatePreferencePage#setDocumentParticioner(IDocument)
 	 */
 	protected void setDocumentPartitioner(IDocument document) {
 		getTextTools().setupDocumentPartitioner(document,
@@ -47,7 +49,7 @@ public class JavaScriptTemplatePreferencePage extends
 	}
 
 	/*
-	 * @see org.eclipse.dltk.ui.templates.ScriptTemplatePreferencePage#setPreferenceStore()
+	 * @see ScriptTemplatePreferencePage#setPreferenceStore()
 	 */
 	protected void setPreferenceStore() {
 		setPreferenceStore(JavaScriptUI.getDefault().getPreferenceStore());
@@ -55,5 +57,18 @@ public class JavaScriptTemplatePreferencePage extends
 
 	private JavascriptTextTools getTextTools() {
 		return JavaScriptUI.getDefault().getTextTools();
+	}
+
+	@Override
+	protected ViewerInputDecorations getViewerInputUpdater(SourceViewer viewer,
+			Template template) {
+		if (JSDocTemplateContextType.CONTEXT_TYPE_ID.equals(template
+				.getContextTypeId())) {
+			final String lineDelimiter = viewer.getDocument()
+					.getLegalLineDelimiters()[0];
+			return new ViewerInputDecorations(MultiLineComment.JSDOC_PREFIX
+					+ lineDelimiter, lineDelimiter + "*/");
+		}
+		return null;
 	}
 }
