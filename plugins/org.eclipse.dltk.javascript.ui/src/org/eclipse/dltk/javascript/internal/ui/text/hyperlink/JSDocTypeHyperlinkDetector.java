@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text.hyperlink;
 
+import org.eclipse.dltk.core.DLTKCore;
+import org.eclipse.dltk.core.IMember;
+import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.ui.actions.SelectionConverter;
 import org.eclipse.dltk.internal.ui.editor.EditorUtility;
@@ -81,22 +86,34 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 			TypeInferencer2 inferencer2 = new TypeInferencer2();
 			inferencer2.setModelElement(input);
 			Type type = inferencer2.getKnownType(typeName);
-			if (type != null) {
-				final Object[] elements = SelectionConverter
-						.filterElements(new Object[] { convert(input, type) });
-				if (elements.length > 0) {
-					final IRegion region = new Region(lineRegion.getOffset()
-							+ start + 1, end - start - 1);
-					final IHyperlink link;
-					if (elements.length == 1) {
-						link = new ModelElementHyperlink(region, elements[0],
-								openAction);
-					} else {
-						link = new ModelElementHyperlink(region,
-								new ModelElementArray(elements), openAction);
+			Object[] elements = null;
+			if (type == null) {
+				try {
+					input.reconcile(false, null, null);
+					input.accept(new Visitor(typeName));
+				} catch (ModelException e) {
+					if (DLTKCore.DEBUG) {
+						e.printStackTrace();
 					}
-					return new IHyperlink[] { link };
+				} catch (ModelElementFound e) {
+					elements = new Object[] { e.element };
 				}
+			} else {
+				elements = SelectionConverter
+						.filterElements(new Object[] { convert(input, type) });
+			}
+			if (elements != null && elements.length > 0) {
+				final IRegion region = new Region(lineRegion.getOffset()
+						+ start + 1, end - start - 1);
+				final IHyperlink link;
+				if (elements.length == 1) {
+					link = new ModelElementHyperlink(region, elements[0],
+							openAction);
+				} else {
+					link = new ModelElementHyperlink(region,
+							new ModelElementArray(elements), openAction);
+				}
+				return new IHyperlink[] { link };
 			}
 		} catch (BadLocationException e) {
 			JavaScriptUI.log(e);
@@ -113,6 +130,34 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 			}
 		}
 		return type;
+	}
+
+	private static class Visitor implements IModelElementVisitor {
+
+		private final String name;
+
+		public Visitor(String name) {
+			this.name = name;
+		}
+
+		public boolean visit(IModelElement element) {
+			if (element instanceof IMember) {
+				IMember member = (IMember) element;
+				if (name.equals(member.getElementName())) {
+					throw new ModelElementFound(element);
+				}
+			}
+			return true;
+		}
+	}
+
+	private static class ModelElementFound extends RuntimeException {
+		private final IModelElement element;
+
+		public ModelElementFound(IModelElement element) {
+			this.element = element;
+		}
+
 	}
 
 }
