@@ -21,6 +21,7 @@ import org.eclipse.dltk.javascript.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandler;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandlerFactory;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferencerVisitor;
@@ -147,6 +148,16 @@ public abstract class TypeInferencerVisitorBase extends
 
 	public void setProblemReporter(JSProblemReporter reporter) {
 		this.reporter = reporter;
+	}
+
+	protected IJSDocTypeChecker typeChecker;
+
+	public IJSDocTypeChecker getJSDocTypeChecker() {
+		return typeChecker;
+	}
+
+	public void setJSDocTypeChecker(IJSDocTypeChecker typeChecker) {
+		this.typeChecker = typeChecker;
 	}
 
 }

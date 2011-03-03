@@ -302,7 +302,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final VariableStatement statement = (VariableStatement) declaration
 					.getParent();
 			for (IModelBuilder extension : this.context.getModelBuilders()) {
-				extension.processVariable(statement, variable, reporter);
+				extension.processVariable(statement, variable, reporter,
+						getJSDocTypeChecker());
 			}
 		}
 		setType(identifier, reference, variable.getType());
@@ -426,7 +427,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				refArg.setDeclaredType(TypeUtil.ref(parameter
 						.getPropertiesType()));
 			} else {
-				setType(node.getArgument(parameter.getName()), refArg,
+				// call directly the impl else unknown type is reported twice if
+				// used in jsdoc,
+				// but when it is declared in code itself it will now fail..
+				setTypeImpl(node.getArgument(parameter.getName()), refArg,
 						parameter.getType());
 			}
 			refArg.setLocation(parameter.getLocation());
@@ -483,7 +487,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	protected JSMethod generateJSMethod(FunctionStatement node) {
 		final JSMethod method = new JSMethod(node, getSource());
 		for (IModelBuilder extension : context.getModelBuilders()) {
-			extension.processMethod(node, method, reporter);
+			extension.processMethod(node, method, reporter,
+					getJSDocTypeChecker());
 		}
 		return method;
 	}
@@ -497,6 +502,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	public void setType(ASTNode node, IValueReference value, JSType type) {
+		setTypeImpl(node, value, type);
+	}
+
+	private void setTypeImpl(ASTNode node, IValueReference value, JSType type) {
 		if (type != null) {
 			type = context.resolveTypeRef(type);
 			Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
@@ -890,7 +899,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (result.getDeclaredType() != null)
 				variable.setType(result.getDeclaredType());
 			for (IModelBuilder extension : context.getModelBuilders()) {
-				extension.processVariable(node, variable, reporter);
+				extension.processVariable(node, variable, reporter,
+						getJSDocTypeChecker());
 			}
 			if (result.getDeclaredType() == null && variable.getType() != null) {
 				result.setDeclaredType(variable.getType());

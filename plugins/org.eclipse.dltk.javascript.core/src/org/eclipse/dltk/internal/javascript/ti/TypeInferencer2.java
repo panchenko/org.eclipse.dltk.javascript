@@ -110,6 +110,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return visitor.getCollection();
 	}
 
+	public IValueCollection currentCollection() {
+		return visitor.peekContext();
+	}
+
 	private final Map<String, Type> types = new ConcurrentHashMap<String, Type>();
 
 	public Type getType(String typeName) {

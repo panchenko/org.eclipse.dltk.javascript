@@ -35,6 +35,7 @@ import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -69,25 +70,43 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	public void processMethod(FunctionStatement statement, IMethod method,
-			JSProblemReporter reporter) {
+			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
 		Comment comment = getFunctionComment(statement);
 		if (comment == null) {
 			return;
 		}
 		final JSDocTags tags = parse(comment);
-		processMethod(method, tags, reporter);
+		processMethod(method, tags, reporter, typeChecker);
 	}
 
 	public void processMethod(IMethod method, final JSDocTags tags,
-			JSProblemReporter reporter) {
+			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
 		if (method.getType() == null) {
-			parseType(method, tags, RETURN_TAGS, reporter);
+			parseType(method, tags, RETURN_TAGS, reporter, typeChecker);
 		}
-		parseParams(method, tags, reporter);
+		parseParams(method, tags, reporter, typeChecker);
 		parseDeprecation(method, tags, reporter);
 		parsePrivate(method, tags, reporter);
 		parseConstructor(method, tags, reporter);
-		// TODO also parse the throws tag and see if it has a valid type..
+		parseThrows(method, tags, reporter, typeChecker);
+	}
+
+	private void parseThrows(IMethod method, JSDocTags tags,
+			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
+		if (typeChecker != null) {
+			JSDocTag throwsTag = tags.get(JSDocTag.THROWS);
+			if (throwsTag != null) {
+				String value = throwsTag.getValue();
+				String[] split = value.split(" ");
+				if (split.length > 0) {
+					if (split[0].startsWith("{")) {
+						JSType type = translateTypeName(split[0]);
+						typeChecker.checkType(type, throwsTag);
+					}
+				}
+			}
+		}
+
 	}
 
 	public static Comment getCallComment(CallExpression call) {
@@ -178,14 +197,15 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	public void processVariable(VariableStatement statement,
-			IVariable variable, JSProblemReporter reporter) {
+			IVariable variable, JSProblemReporter reporter,
+			IJSDocTypeChecker typeChecker) {
 		final Comment comment = statement.getDocumentation();
 		if (comment == null) {
 			return;
 		}
 		final JSDocTags tags = parse(comment);
 		if (variable.getType() == null) {
-			parseType(variable, tags, TYPE_TAGS, reporter);
+			parseType(variable, tags, TYPE_TAGS, reporter, typeChecker);
 		}
 		parseDeprecation(variable, tags, reporter);
 		parsePrivate(variable, tags, reporter);
@@ -212,7 +232,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	protected void parseParams(IMethod method, JSDocTags tags,
-			JSProblemReporter reporter) {
+			JSProblemReporter reporter,IJSDocTypeChecker typeChecker) {
 		final List<JSDocTag> paramTags = tags.list(JSDocTag.PARAM);
 		if (paramTags.isEmpty()) {
 			return;
@@ -274,7 +294,12 @@ public class JSDocSupport implements IModelBuilder {
 							.createProperty();
 					property.setName(propertyName);
 					if (pp.type != null)
-						property.setType(translateTypeName(pp.type));
+					{
+						JSType type = translateTypeName(pp.type);
+						if (typeChecker != null)
+							typeChecker.checkType(type, tag);
+						property.setType(type);
+					}
 					if (pp.optional)
 						property.setAttribute(IReferenceAttributes.OPTIONAL,
 								Boolean.TRUE);
@@ -294,7 +319,7 @@ public class JSDocSupport implements IModelBuilder {
 							&& st.nextToken().equals("optional")) {
 						pp.optional = true;
 					}
-					updateParameter(tag, parameter, pp, reporter);
+					updateParameter(tag, parameter, pp, reporter, typeChecker);
 				} else {
 					++problemCount;
 					reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM, tag,
@@ -323,9 +348,13 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	protected void updateParameter(JSDocTag tag, final IParameter parameter,
-			final ParamInfo pp, JSProblemReporter reporter) {
+			final ParamInfo pp, JSProblemReporter reporter,
+			IJSDocTypeChecker typeChecker) {
 		if (pp.type != null && parameter.getType() == null) {
-			parameter.setType(translateTypeName(pp.type));
+			JSType type = translateTypeName(pp.type);
+			if (typeChecker != null)
+				typeChecker.checkType(type, tag);
+			parameter.setType(type);
 		}
 		parameter.setOptional(pp.optional);
 		parameter.setVarargs(pp.varargs);
@@ -383,7 +412,7 @@ public class JSDocSupport implements IModelBuilder {
 	 * @param comment
 	 */
 	public void parseType(IElement member, JSDocTags tags, String[] tagNames,
-			JSProblemReporter reporter) {
+			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
 		final JSDocTag tag = tags.get(tagNames);
 		if (tag != null) {
 			if (reporter != null) {
@@ -408,7 +437,10 @@ public class JSDocSupport implements IModelBuilder {
 			}
 			final Tokenizer st = new Tokenizer(tag.getValue());
 			if (st.hasMoreTokens()) {
-				member.setType(translateTypeName(st.nextToken()));
+				JSType type = translateTypeName(st.nextToken());
+				if (typeChecker != null)
+					typeChecker.checkType(type, tag);
+				member.setType(type);
 			} else {
 				reportProblem(reporter, JSDocProblem.MISSING_TYPE_NAME, tag);
 			}
