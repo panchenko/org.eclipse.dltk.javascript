@@ -41,6 +41,11 @@ class BufferJavaDocCommentReader extends JavaDocCommentReader {
 	}
 
 	@Override
+	protected int getLength() {
+		return fBuffer.getLength();
+	}
+
+	@Override
 	protected char getChar(int index) {
 		return fBuffer.getChar(index);
 	}
@@ -61,6 +66,11 @@ class StringJavaDocCommentReader extends JavaDocCommentReader {
 	public StringJavaDocCommentReader(String buf) {
 		super(0, buf.length());
 		fBuffer = buf;
+	}
+
+	@Override
+	protected int getLength() {
+		return fBuffer.length();
 	}
 
 	@Override
@@ -356,8 +366,7 @@ public class ScriptdocContentAccess {
 					if (reader == null) {
 						return null;
 					}
-					if (!containsOnlyInheritDoc(reader,
-							javadocRange.getLength())) {
+					if (!reader.containsOnlyInheritDoc()) {
 						reader.reset();
 
 						if (member instanceof IProposalHolder
@@ -386,27 +395,6 @@ public class ScriptdocContentAccess {
 		}
 
 		return null;
-	}
-
-	/**
-	 * Checks whether the given reader only returns the inheritDoc tag.
-	 * 
-	 * @param reader
-	 *            the reader
-	 * @param length
-	 *            the length of the underlying content
-	 * @return <code>true</code> if the reader only returns the inheritDoc tag
-	 * @since 3.2
-	 */
-	public static boolean containsOnlyInheritDoc(Reader reader, int length) {
-		char[] content = new char[length];
-		try {
-			reader.read(content, 0, length);
-		} catch (IOException e) {
-			return false;
-		}
-		return new String(content).trim().equals("{@inheritDoc}"); //$NON-NLS-1$
-
 	}
 
 	/**
