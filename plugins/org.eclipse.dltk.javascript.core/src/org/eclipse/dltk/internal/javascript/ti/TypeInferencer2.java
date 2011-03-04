@@ -81,6 +81,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		try {
 			elements.clear();
 			modelBuilders = null;
+			typeProviders = null;
 			initializeVisitor();
 			visitor.visit(script);
 			// IValueCollection collection = visitor.getCollection();
