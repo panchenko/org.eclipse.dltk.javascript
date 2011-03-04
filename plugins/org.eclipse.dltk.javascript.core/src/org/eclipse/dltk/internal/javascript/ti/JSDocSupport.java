@@ -94,9 +94,8 @@ public class JSDocSupport implements IModelBuilder {
 	private void parseThrows(IMethod method, JSDocTags tags,
 			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
 		if (typeChecker != null) {
-			// TODO handle all @throws tags
-			JSDocTag throwsTag = tags.get(JSDocTag.THROWS);
-			if (throwsTag != null) {
+			List<JSDocTag> throwsTags = tags.list(JSDocTag.THROWS);
+			for (JSDocTag throwsTag : throwsTags) {
 				String value = throwsTag.getValue();
 				String[] split = value.split(" ");
 				if (split.length > 0) {
