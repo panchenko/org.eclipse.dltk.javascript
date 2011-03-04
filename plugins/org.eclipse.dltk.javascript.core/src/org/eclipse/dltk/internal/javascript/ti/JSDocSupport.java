@@ -34,8 +34,8 @@ import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -94,6 +94,7 @@ public class JSDocSupport implements IModelBuilder {
 	private void parseThrows(IMethod method, JSDocTags tags,
 			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
 		if (typeChecker != null) {
+			// TODO handle all @throws tags
 			JSDocTag throwsTag = tags.get(JSDocTag.THROWS);
 			if (throwsTag != null) {
 				String value = throwsTag.getValue();
@@ -232,7 +233,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	protected void parseParams(IMethod method, JSDocTags tags,
-			JSProblemReporter reporter,IJSDocTypeChecker typeChecker) {
+			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
 		final List<JSDocTag> paramTags = tags.list(JSDocTag.PARAM);
 		if (paramTags.isEmpty()) {
 			return;
@@ -293,8 +294,7 @@ public class JSDocSupport implements IModelBuilder {
 					Property property = TypeInfoModelFactory.eINSTANCE
 							.createProperty();
 					property.setName(propertyName);
-					if (pp.type != null)
-					{
+					if (pp.type != null) {
 						JSType type = translateTypeName(pp.type);
 						if (typeChecker != null)
 							typeChecker.checkType(type, tag);
