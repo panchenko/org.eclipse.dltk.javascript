@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.18 2011/03/01 13:04:31 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.19 2011/03/04 06:50:48 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -316,13 +316,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE__CONSTRUCTOR = ELEMENT_FEATURE_COUNT + 3;
 
     /**
+     * The feature id for the '<em><b>Traits</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE__TRAITS = ELEMENT_FEATURE_COUNT + 4;
+
+    /**
      * The number of structural features of the '<em>Type</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 4;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 5;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
@@ -1249,6 +1258,17 @@ public interface TypeInfoModelPackage extends EPackage {
     EReference getType_Constructor();
 
     /**
+     * Returns the meta object for the reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits <em>Traits</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference list '<em>Traits</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits()
+     * @see #getType()
+     * @generated
+     */
+    EReference getType_Traits();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Constructor <em>Constructor</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1650,6 +1670,14 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference TYPE__CONSTRUCTOR = eINSTANCE.getType_Constructor();
+
+        /**
+         * The meta object literal for the '<em><b>Traits</b></em>' reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference TYPE__TRAITS = eINSTANCE.getType_Traits();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ConstructorImpl <em>Constructor</em>}' class.

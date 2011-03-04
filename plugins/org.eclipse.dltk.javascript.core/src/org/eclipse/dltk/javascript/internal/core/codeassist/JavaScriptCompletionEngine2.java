@@ -325,6 +325,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						reportMember(member, member.getName());
 					}
 				}
+				for (Type trait : type.getTraits()) {
+					reportTypeMembers(trait, predicate);
+				}
 				type = type.getSuperType();
 				if (type == null)
 					break;

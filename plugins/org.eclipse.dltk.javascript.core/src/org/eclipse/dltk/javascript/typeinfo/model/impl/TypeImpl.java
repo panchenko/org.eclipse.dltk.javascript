@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.11 2011/02/24 07:24:38 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.12 2011/03/04 06:50:48 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -41,6 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getKind <em>Kind</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getSuperType <em>Super Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructor <em>Constructor</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getTraits <em>Traits</em>}</li>
  * </ul>
  * </p>
  *
@@ -96,6 +98,16 @@ public class TypeImpl extends ElementImpl implements Type {
      * @ordered
      */
     protected Constructor constructor;
+
+    /**
+     * The cached value of the '{@link #getTraits() <em>Traits</em>}' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getTraits()
+     * @generated
+     * @ordered
+     */
+    protected EList<Type> traits;
 
     /**
      * <!-- begin-user-doc -->
@@ -231,6 +243,18 @@ public class TypeImpl extends ElementImpl implements Type {
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EList<Type> getTraits() {
+        if (traits == null) {
+            traits = new EObjectResolvingEList<Type>(Type.class, this, TypeInfoModelPackage.TYPE__TRAITS);
+        }
+        return traits;
+    }
+
+    /**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -287,6 +311,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return basicGetSuperType();
             case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
                 return getConstructor();
+            case TypeInfoModelPackage.TYPE__TRAITS:
+                return getTraits();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -313,6 +339,10 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
                 setConstructor((Constructor)newValue);
                 return;
+            case TypeInfoModelPackage.TYPE__TRAITS:
+                getTraits().clear();
+                getTraits().addAll((Collection<? extends Type>)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -337,6 +367,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
                 setConstructor((Constructor)null);
                 return;
+            case TypeInfoModelPackage.TYPE__TRAITS:
+                getTraits().clear();
+                return;
         }
         super.eUnset(featureID);
     }
@@ -357,6 +390,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return superType != null;
             case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
                 return constructor != null;
+            case TypeInfoModelPackage.TYPE__TRAITS:
+                return traits != null && !traits.isEmpty();
         }
         return super.eIsSet(featureID);
     }

@@ -57,8 +57,14 @@ public abstract class ElementValue implements IValue {
 
 	public static List<Member> findMembers(Type type, String name,
 			Predicate<Member> predicate) {
-		List<Member> selection = new ArrayList<Member>(4);
-		final Set<Type> processedTypes = new HashSet<Type>(4);
+		final List<Member> selection = new ArrayList<Member>(4);
+		findMembers(type, name, predicate, selection, new HashSet<Type>(4));
+		return selection;
+	}
+
+	private static void findMembers(Type type, String name,
+			Predicate<Member> predicate, List<Member> selection,
+			Set<Type> processedTypes) {
 		for (;;) {
 			if (!processedTypes.add(type))
 				break;
@@ -67,11 +73,13 @@ public abstract class ElementValue implements IValue {
 					selection.add(member);
 				}
 			}
+			for (Type trait : type.getTraits()) {
+				findMembers(trait, name, predicate, selection, processedTypes);
+			}
 			type = type.getSuperType();
 			if (type == null)
 				break;
 		}
-		return selection;
 	}
 
 	public static ElementValue createFor(Element element,

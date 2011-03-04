@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.9 2011/02/24 07:24:38 apanchenk Exp $
+ * $Id: Type.java,v 1.10 2011/03/04 06:50:48 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -27,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType <em>Super Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructor <em>Constructor</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits <em>Traits</em>}</li>
  * </ul>
  * </p>
  *
@@ -133,6 +134,22 @@ public interface Type extends Element {
      * @generated
      */
     void setConstructor(Constructor value);
+
+    /**
+     * Returns the value of the '<em><b>Traits</b></em>' reference list.
+     * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Type}.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Traits</em>' reference list isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Traits</em>' reference list.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Traits()
+     * @model
+     * @generated
+     */
+    EList<Type> getTraits();
 
     /**
      * <!-- begin-user-doc -->
