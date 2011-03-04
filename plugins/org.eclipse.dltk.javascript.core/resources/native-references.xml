@@ -322,6 +322,10 @@
       <parameters name="numberOfDigits"/>
     </members>
     <members xsi:type="ref:Method" name="valueOf" directType="String" description="Returns the primitive value of a Number object."/>
+    <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a String value for this object.The toString method parses its first argument, and attempts to return a string representation in the specified radix (base)">
+      <parameters name="radix"  kind="OPTIONAL"/>
+    </members>
+    
   </ref:Type>
   <ref:TypeAlias source="number" target="Number"/>
   <ref:Type name="String" kind="PREDEFINED" description="String is a global object that may be used to construct String  instances." superType="Object">
