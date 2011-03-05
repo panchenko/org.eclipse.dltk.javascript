@@ -89,7 +89,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 		inferencer.doInferencing(script);
 	}
 
-
 	private static enum VisitorMode {
 		NORMAL, CALL
 	}
@@ -388,7 +387,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 												.sourceEnd());
 							}
 						}
-					} else {
+					} else if (!Boolean.TRUE.equals(child
+							.getAttribute(IReferenceAttributes.HIDE_ALLOWED))) {
 						reporter.reportProblem(
 								JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
 								NLS.bind(
