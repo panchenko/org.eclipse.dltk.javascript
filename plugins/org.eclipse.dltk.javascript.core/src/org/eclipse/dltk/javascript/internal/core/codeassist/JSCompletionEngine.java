@@ -12,11 +12,14 @@
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
 import org.eclipse.dltk.codeassist.ICompletionEngine;
+import org.eclipse.dltk.core.ISourceModule;
 
 public interface JSCompletionEngine extends ICompletionEngine {
 
 	boolean isUseEngine();
 
 	void setUseEngine(boolean useEngine);
+
+	void completeTypes(ISourceModule module, String prefix, int offset);
 
 }

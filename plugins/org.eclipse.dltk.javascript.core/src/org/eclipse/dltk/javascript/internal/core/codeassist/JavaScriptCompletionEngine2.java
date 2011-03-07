@@ -50,6 +50,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
@@ -138,6 +139,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			}
 		}
 		this.requestor.endReporting();
+	}
+
+	public void completeTypes(ISourceModule module, String prefix, int offset) {
+		final TypeInferencer2 inferencer2 = new TypeInferencer2();
+		inferencer2.setModelElement(module);
+		doCompletionOnType(inferencer2, new Reporter(prefix, offset));
 	}
 
 	private void doCompletionOnType(ITypeInferenceContext context,
@@ -476,7 +483,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		protected static Object createKey(Member member) {
-			if (member instanceof Method) {
+			if (member instanceof Method && member.getDeclaringType() != null
+					&& member.getDeclaringType().getKind() == TypeKind.JAVA) {
 				return new MethodKey((Method) member);
 			} else {
 				return member.getName();
