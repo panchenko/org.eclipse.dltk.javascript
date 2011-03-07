@@ -1,18 +1,21 @@
 package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.dltk.codeassist.ICompletionEngine;
+import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.core.JSKeywordCategory;
 import org.eclipse.dltk.javascript.core.JSKeywordManager;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 import org.eclipse.dltk.javascript.internal.ui.templates.JSDocTemplateCompletionProcessor;
-import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.templates.ScriptTemplateProposal;
@@ -22,10 +25,10 @@ import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 
+@SuppressWarnings("restriction")
 public class JSDocCompletionProposalComputer implements
 		IScriptCompletionProposalComputer {
 
@@ -144,21 +147,20 @@ public class JSDocCompletionProposalComputer implements
 	private List<ICompletionProposal> generateTypes(
 			ContentAssistInvocationContext context, String prefix) {
 		if (context instanceof ScriptContentAssistInvocationContext) {
-			TypeInferencer2 infencer = new TypeInferencer2();
-			ISourceModule sourceModule = ((ScriptContentAssistInvocationContext) context)
-					.getSourceModule();
-			infencer.setModelElement(sourceModule);
-			infencer.doInferencing(JavaScriptParserUtil.parse(sourceModule,
-					null));
-			prefix = prefix.trim();
-			Set<String> listTypes = infencer.listTypes(prefix);
-			List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
-			for (String type : listTypes) {
-				proposals.add(new CompletionProposal(type, context
-						.getInvocationOffset() - prefix.length(), prefix
-						.length(), type.length()));
+			final ICompletionEngine engine = DLTKLanguageManager
+					.getCompletionEngine(JavaScriptNature.NATURE_ID);
+			if (engine instanceof JSCompletionEngine) {
+				final ISourceModule module = ((ScriptContentAssistInvocationContext) context)
+						.getSourceModule();
+				final JavaScriptCompletionProposalCollector collector = new JavaScriptCompletionProposalCollector(
+						module);
+				final JSCompletionEngine jsEngine = (JSCompletionEngine) engine;
+				jsEngine.setRequestor(collector);
+				jsEngine.completeTypes(module, prefix.trim(),
+						context.getInvocationOffset());
+				return Arrays.<ICompletionProposal> asList(collector
+						.getScriptCompletionProposals());
 			}
-			return proposals;
 		}
 		return Collections.emptyList();
 	}
