@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.ui.typeinfo;
 
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
 import org.eclipse.dltk.utils.LazyExtensionManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -30,4 +31,15 @@ public class ElementLabelProviderRegistry {
 		}
 		return null;
 	}
+
+	public static String getLabel(Element element, Mode mode) {
+		for (IElementLabelProvider provider : manager) {
+			String label = provider.getLabel(element, mode);
+			if (label != null) {
+				return label;
+			}
+		}
+		return null;
+	}
+
 }

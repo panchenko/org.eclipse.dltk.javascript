@@ -15,6 +15,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 public interface IElementLabelProvider {
+	public enum Mode {
+		PROPOSAL
+	}
+
+	String getLabel(Element element, Mode mode);
 
 	ImageDescriptor getImageDescriptor(Element element);
 

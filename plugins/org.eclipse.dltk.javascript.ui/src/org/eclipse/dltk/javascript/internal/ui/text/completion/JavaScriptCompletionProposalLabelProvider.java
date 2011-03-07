@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
+import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
 import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -31,6 +32,18 @@ import org.eclipse.jface.viewers.IDecoration;
 
 public class JavaScriptCompletionProposalLabelProvider extends
 		CompletionProposalLabelProvider {
+
+	@Override
+	protected String createTypeProposalLabel(CompletionProposal typeProposal) {
+		if (typeProposal.getExtraInfo() instanceof Element) {
+			final String label = ElementLabelProviderRegistry.getLabel(
+					(Element) typeProposal.getExtraInfo(), Mode.PROPOSAL);
+			if (label != null) {
+				return label;
+			}
+		}
+		return super.createTypeProposalLabel(typeProposal);
+	}
 
 	@Override
 	protected String createMethodProposalLabel(CompletionProposal methodProposal) {
