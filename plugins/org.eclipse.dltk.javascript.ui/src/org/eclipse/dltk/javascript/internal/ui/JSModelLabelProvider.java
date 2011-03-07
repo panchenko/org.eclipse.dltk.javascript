@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui;
 
+import org.eclipse.dltk.core.IField;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.ModelException;
@@ -55,9 +56,13 @@ public class JSModelLabelProvider extends BaseLabelProvider implements
 					}
 					imageDescriptor = ScriptElementImageProvider
 							.getMethodImageDescriptor(flags);
-				} else
+				} else if (element instanceof IField) {
 					imageDescriptor = ScriptElementImageProvider
 							.getFieldImageDescriptor(flags);
+				} else {
+					imageDescriptor = ScriptElementImageProvider
+							.getTypeImageDescriptor(flags, false);
+				}
 				return registry.get(new DecorationOverlayIcon(imageDescriptor
 						.createImage(), overlay));
 			}
