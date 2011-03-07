@@ -79,7 +79,7 @@ public enum JavaScriptProblems implements IProblemIdentifier {
 	/**
 	 * @since 3.0
 	 */
-	PARAMETER_HIDES_VARIABLE,
+	PARAMETER_HIDES_VARIABLE, PARAMETER_HIDES_FUNCTION,
 	/**
 	 * @since 3.0
 	 */
@@ -119,7 +119,7 @@ public enum JavaScriptProblems implements IProblemIdentifier {
 	/**
 	 * @since 3.0
 	 */
-	FUNCTION_HIDES_VARIABLE;
+	FUNCTION_HIDES_VARIABLE, FUNCTION_HIDES_FUNCTION;
 
 	public String contributor() {
 		return JavaScriptPlugin.PLUGIN_ID;

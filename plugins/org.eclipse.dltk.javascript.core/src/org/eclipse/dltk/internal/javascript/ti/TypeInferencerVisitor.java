@@ -306,7 +306,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						getJSDocTypeChecker());
 			}
 		}
-		setType(identifier, reference, variable.getType());
+		if (varType == null)
+			setTypeImpl(identifier, reference, variable.getType());
+		else
+			setType(identifier, reference, variable.getType());
 		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
 
 		reference.setKind(inFunction() ? ReferenceKind.LOCAL
@@ -435,12 +438,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 			refArg.setLocation(parameter.getLocation());
 		}
-		enterContext(function);
-		try {
-			visitFunctionBody(node);
-		} finally {
-			leaveContext();
-		}
 		final Identifier methodName = node.getName();
 		final IValueReference result;
 		if (isChildFunction(node)) {
@@ -459,11 +456,22 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setDeclaredType(context.getTypeRef(ITypeNames.FUNCTION));
 		result.setAttribute(IReferenceAttributes.PARAMETERS, method);
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
+		enterContext(function);
+		try {
+			visitFunctionBody(node);
+		} finally {
+			leaveContext();
+		}
 		final IValueReference returnValue = result
 				.getChild(IValueReference.FUNCTION_OP);
 		returnValue.addValue(function.getReturnValue(), true);
-		setType(methodName != null ? methodName : node.getFunctionKeyword(),
+		if (node.getReturnType() == null)
+			setTypeImpl(
+				methodName != null ? methodName : node.getFunctionKeyword(),
 				returnValue, method.getType());
+		else
+			setType(methodName != null ? methodName : node.getFunctionKeyword(),
+					returnValue, method.getType());
 		return result;
 	}
 

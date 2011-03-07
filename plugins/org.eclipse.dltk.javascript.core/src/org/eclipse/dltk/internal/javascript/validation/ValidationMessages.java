@@ -48,6 +48,7 @@ public class ValidationMessages extends NLS {
 	public static String DeclarationMismatchWithActualReturnType;
 	public static String DeclarationMismatcNoReturnType;
 	public static String ParameterHidesVariable;
+	public static String ParameterHidesFunction;
 	public static String ParameterHidesProperty;
 	public static String ParameterHidesPropertyOfType;
 	public static String DuplicateVarDeclaration;
@@ -61,6 +62,7 @@ public class ValidationMessages extends NLS {
 	public static String FunctionHidesPropertyOfType;
 	public static String FunctionHidesProperty;
 	public static String FunctionHidesVariable;
+	public static String FunctionHidesFunction;
 	public static String ReturnTypeInconsistentWithPreviousReturn;
 
 	static {

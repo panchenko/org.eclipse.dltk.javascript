@@ -389,12 +389,23 @@ public class TypeInfoValidator implements IBuildParticipant {
 						}
 					} else if (!Boolean.TRUE.equals(child
 							.getAttribute(IReferenceAttributes.HIDE_ALLOWED))) {
-						reporter.reportProblem(
-								JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
-								NLS.bind(
-										ValidationMessages.ParameterHidesVariable,
-										argument.getArgumentName()), argument
-										.sourceStart(), argument.sourceEnd());
+						if (child.getKind() == ReferenceKind.FUNCTION) {
+							reporter.reportProblem(
+									JavaScriptProblems.PARAMETER_HIDES_FUNCTION,
+									NLS.bind(
+											ValidationMessages.ParameterHidesFunction,
+											argument.getArgumentName()),
+									argument.sourceStart(), argument
+											.sourceEnd());
+						} else {
+							reporter.reportProblem(
+									JavaScriptProblems.PARAMETER_HIDES_VARIABLE,
+									NLS.bind(
+											ValidationMessages.ParameterHidesVariable,
+											argument.getArgumentName()),
+									argument.sourceStart(), argument
+											.sourceEnd());
+						}
 					}
 				}
 			}
@@ -428,14 +439,25 @@ public class TypeInfoValidator implements IBuildParticipant {
 												.getName().sourceEnd());
 							}
 						}
-					} else {
-						reporter.reportProblem(
-								JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
-								NLS.bind(
-										ValidationMessages.FunctionHidesVariable,
-										node.getName().getName()), node
-										.getName().sourceStart(), node
-										.getName().sourceEnd());
+					} else if (!Boolean.TRUE.equals(child
+							.getAttribute(IReferenceAttributes.HIDE_ALLOWED))) {
+						if (child.getKind() == ReferenceKind.FUNCTION) {
+							reporter.reportProblem(
+									JavaScriptProblems.FUNCTION_HIDES_FUNCTION,
+									NLS.bind(
+											ValidationMessages.FunctionHidesFunction,
+											node.getName().getName()), node
+											.getName().sourceStart(), node
+											.getName().sourceEnd());
+						} else {
+							reporter.reportProblem(
+									JavaScriptProblems.FUNCTION_HIDES_VARIABLE,
+									NLS.bind(
+											ValidationMessages.FunctionHidesVariable,
+											node.getName().getName()), node
+											.getName().sourceStart(), node
+											.getName().sourceEnd());
+						}
 					}
 				}
 			}
