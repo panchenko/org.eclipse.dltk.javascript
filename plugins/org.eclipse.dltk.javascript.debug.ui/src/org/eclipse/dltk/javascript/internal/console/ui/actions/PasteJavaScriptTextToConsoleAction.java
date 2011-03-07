@@ -12,6 +12,9 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+/**
+ * TODO unused class, remove
+ */
 public class PasteJavaScriptTextToConsoleAction implements
 		IEditorActionDelegate {
 

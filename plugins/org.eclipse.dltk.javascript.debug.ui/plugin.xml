@@ -103,10 +103,10 @@
         name="org.eclipse.dltk.ui.nature"
         value="org.eclipse.dltk.javascript.core.nature">
       </filter>
-      <action
+      <!--action
         class="org.eclipse.dltk.javascript.internal.console.ui.actions.PasteJavaScriptToConsole"
         id="org.eclipse.dltk.javascript.console.ui.internal.actions.PasteTclTextToConsoleAction"
-        label="%JavascriptConsole.Actions.PasteToJavascriptConsole" />
+        label="%JavascriptConsole.Actions.PasteToJavascriptConsole" /-->
     </objectContribution>
 
     <viewerContribution
@@ -117,12 +117,12 @@
         id="org.eclipse.dltk.javascript.debug.ui.WatchExpressionAction"
         label="%WatchVariable"
         menubarPath="additions"/-->
-      <action
+      <!--action
         id="org.eclipse.dltk.javascript.console.ui.internal.actions.PasteToTclConsoleAction"
         label="%JavascriptConsole.Actions.PasteToJavascriptConsole"
         menubarPath="additions"
         class="org.eclipse.dltk.javascript.internal.console.ui.actions.PasteJavaScriptTextToConsoleAction">
-      </action>
+      </action-->
     </viewerContribution>
     <viewerContribution
       id="org.eclipse.dltk.javascript.debug.ui.rulerContribution"

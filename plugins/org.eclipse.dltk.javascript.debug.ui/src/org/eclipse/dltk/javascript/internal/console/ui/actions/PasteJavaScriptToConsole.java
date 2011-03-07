@@ -5,19 +5,22 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+/**
+ * TODO unused class, remove
+ */
 public class PasteJavaScriptToConsole implements IObjectActionDelegate {
 
 	private ISelection selection;
-	
+
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-			
+
 	}
 
 	public void run(IAction action) {
-		//TODO: implement
+		// TODO: implement
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {
-		this.selection = selection;		
+		this.selection = selection;
 	}
 }
