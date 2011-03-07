@@ -29,4 +29,8 @@ public class ExampleElementLabelProvider implements IElementLabelProvider {
 		return null;
 	}
 
+	public String getLabel(Element element, Mode mode) {
+		return null;
+	}
+
 }
