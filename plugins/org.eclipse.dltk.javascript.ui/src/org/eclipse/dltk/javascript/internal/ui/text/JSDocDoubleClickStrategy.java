@@ -7,6 +7,7 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     NumberFour AG - select the whole type name if clicked inside {...} (Alex Panchenko)
  *******************************************************************************/
 
 package org.eclipse.dltk.javascript.internal.ui.text;
@@ -78,6 +79,27 @@ public class JSDocDoubleClickStrategy extends PartitionDoubleClickSelector {
 		} catch (BadLocationException x) {
 			return null;
 		}
+	}
+
+	@Override
+	protected IRegion findWord(IDocument document, int offset) {
+		try {
+			// select the whole type name if double click inside {...}
+			final IRegion line = document.getLineInformationOfOffset(offset);
+			final String s = document.get(line.getOffset(), line.getLength());
+			final int index = offset - line.getOffset();
+			int left = s.lastIndexOf('{', index);
+			if (left >= 0) {
+				++left;
+				final int right = s.indexOf('}', index - 1);
+				if (right >= 0) {
+					return new Region(line.getOffset() + left, right - left);
+				}
+			}
+		} catch (BadLocationException e) {
+			// fall thru
+		}
+		return super.findWord(document, offset);
 	}
 
 }
