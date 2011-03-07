@@ -858,8 +858,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testJSDocWithOptionalPropertiesWithOnlyMandatoryArgumentProperties() {
-		if (notYetImplemented())
-			return;
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param anchor");
@@ -881,8 +879,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testJSDocWithOptionalPropertiesWithSomeOptionalArgumentProperties() {
-		if (notYetImplemented())
-			return;
 		List<String> code = new StringList();
 		code.add("/**");
 		code.add("* @param anchor");
