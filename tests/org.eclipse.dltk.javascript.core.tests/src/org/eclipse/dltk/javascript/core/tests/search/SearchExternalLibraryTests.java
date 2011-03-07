@@ -55,7 +55,6 @@ public class SearchExternalLibraryTests extends
 	@Override
 	public void setUpSuite() throws Exception {
 		library = File.createTempFile("dltk", "js");
-		library.deleteOnExit();
 		if (library.exists()) {
 			library.delete();
 		}
@@ -73,8 +72,23 @@ public class SearchExternalLibraryTests extends
 		super.setUpSuite();
 	}
 
+	private void deleteDir(File file) {
+		if (file.isDirectory()) {
+			File[] children = file.listFiles();
+			if (children != null) {
+				for (File child : children) {
+					deleteDir(child);
+				}
+			}
+		}
+		file.delete();
+	}
+
 	@Override
 	public void tearDownSuite() throws Exception {
+		if (library != null) {
+			deleteDir(library);
+		}
 		super.tearDownSuite();
 		DLTKCore.removeBuildpathVariable(LIB_NAME, null);
 	}
