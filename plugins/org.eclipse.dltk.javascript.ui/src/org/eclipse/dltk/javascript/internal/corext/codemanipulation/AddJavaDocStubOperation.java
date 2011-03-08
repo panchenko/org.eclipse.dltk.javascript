@@ -229,9 +229,17 @@ public class AddJavaDocStubOperation implements IWorkspaceRunnable {
 
 	private int getMemberStartOffset(IMember curr, IDocument document)
 			throws ModelException {
+		String docStr = document.get();
 		int offset = curr.getSourceRange().getOffset();
+		String substring = docStr.substring(0, offset);
+		if (substring.endsWith("var ")) {
+			offset -= 4;
+		} else if (substring.endsWith("this.")) {
+			offset -= 5;
+		}
+
 		final PublicScanner scanner = new PublicScanner();
-		scanner.setSource(document.get().toCharArray());
+		scanner.setSource(docStr.toCharArray());
 
 		try {
 			// read to the first real non comment token
