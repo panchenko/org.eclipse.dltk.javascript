@@ -2,6 +2,7 @@ package org.eclipse.dltk.internal.javascript.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -21,6 +22,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -88,7 +90,31 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 				Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
 				if (type.getKind() == TypeKind.UNKNOWN) {
 					if (!(type instanceof TypeRef && collection != null && collection
-							.getChild(((TypeRef) type).getName()).exists())) {
+							.getChild(type.getName()).exists())) {
+
+						// if it still is not found, test if it is a "package type"
+						// an try to resolve that to a existing child.
+						String className = type.getName();
+						if (className.indexOf('.') != -1) {
+							StringTokenizer st = new StringTokenizer(className,
+									".");
+							IValueReference child = null;
+							while (st.hasMoreTokens()) {
+								String token = st.nextToken();
+								if (child == null)
+									child = collection.getChild(token);
+								else
+									child = child.getChild(token);
+								
+								if (!child.exists()) {
+									child = null;
+									break;
+								}
+							}
+							// if the child is not null, it was found.
+							if (child != null)
+								return;
+						}
 						reportUnknownType(tag, TypeUtil.getName(type));
 					}
 				} else if (type instanceof ArrayType) {

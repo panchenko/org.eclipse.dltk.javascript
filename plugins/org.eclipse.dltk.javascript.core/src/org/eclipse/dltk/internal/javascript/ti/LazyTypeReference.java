@@ -2,6 +2,8 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
 
+import java.util.StringTokenizer;
+
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -45,6 +47,37 @@ public class LazyTypeReference extends AbstractReference {
 					type.setName(className);
 					setDeclaredType(TypeUtil.ref(type));
 					resolved = true;
+				} else if (className.indexOf('.') != -1) {
+					StringTokenizer st = new StringTokenizer(className, ".");
+					IValueReference child = null;
+					while (st.hasMoreTokens()) {
+						String token = st.nextToken();
+						if (child == null) {
+							child = collection.getChild(token);
+						} else {
+							child = child.getChild(token);
+						}
+						if (!child.exists()) {
+							child = null;
+							break;
+						}
+					}
+					if (child != null) {
+						IValue src = ((IValueProvider) child).getValue();
+						if (src != null) {
+							// this is a type so try to get the this of the
+							// function if this resolves to a function object.
+							IValueCollection collection = (IValueCollection) src
+									.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+							if (collection != null)
+								addValue(((IValueProvider) collection.getThis())
+										.getValue());
+							else
+								addValue(src);
+						}
+						setKind(ReferenceKind.TYPE);
+						resolved = true;
+					}
 				} else {
 					doResolve = !finalResolve;
 				}
