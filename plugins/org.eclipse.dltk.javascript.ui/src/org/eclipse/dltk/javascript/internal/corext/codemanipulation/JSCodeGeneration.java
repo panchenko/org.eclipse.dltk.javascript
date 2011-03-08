@@ -99,7 +99,6 @@ public class JSCodeGeneration {
 			}
 		} else {
 			buf.append(JSDOC_PREFIX).append(lineDelimiter);
-			buf.append(" * Function " + meth.getElementName()).append(lineDelimiter); //$NON-NLS-1$
 			try {
 				for (IParameter parameter : meth.getParameters()) {
 					buf.append(" * @param {Object} " + parameter.getName())
