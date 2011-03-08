@@ -26,7 +26,8 @@
   </ref:Type>
   <ref:TypeAlias source="function" target="Function"/>
   <ref:Type name="Function" kind="PREDEFINED" superType="Object">
-  	<members xsi:type="ref:Property" name="prototype" directType="Function" static="true" description="Allows the addition of properties to a Function object."/>
+  	<members xsi:type="ref:Property" name="prototype" directType="Function" static="true" description="Allows the addition of properties to the Function object."/>
+  	<members xsi:type="ref:Property" name="prototype" directType="Object" static="false" description="Allows the addition of properties to the instance of the object created by the constructor function."/>
   	<members xsi:type="ref:Property" name="length" directType="Number"  description="Specifies the number of arguments expected by the function."/>
   	<members xsi:type="ref:Method" name="apply" directType="Object" description="Applies the method of another object in the context of a different object (the calling object); arguments can be passed as an Array object." >
     	<parameters name="thisArg"/>

@@ -324,11 +324,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				if (!processedTypes.add(type))
 					break;
 				for (Member member : type.getMembers()) {
-					if (processed.add(MethodKey.createKey(member))
+					if (predicate.evaluate(member)
+							&& processed.add(MethodKey.createKey(member))
 							&& member.isVisible()
 							&& CharOperation.prefixEquals(prefix,
-									member.getName(), false)
-							&& predicate.evaluate(member)) {
+									member.getName(), false)) {
 						reportMember(member, member.getName());
 					}
 				}

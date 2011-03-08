@@ -1067,9 +1067,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		private <E extends Member> E extractElement(IValueReference reference,
-				Class<E> elementType) {
+				Class<E> elementType, Boolean staticModifierValue) {
 			final List<E> elements = JavaScriptValidations.extractElements(
 					reference, elementType);
+			if (staticModifierValue != null && elements != null
+					&& elements.size() > 1) {
+				for (E e : elements) {
+					if (e.isStatic() == staticModifierValue.booleanValue())
+						return e;
+				}
+			}
+
 			return elements != null ? elements.get(0) : null;
 		}
 
@@ -1183,7 +1191,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		@Override
 		public IValueReference visitIdentifier(Identifier node) {
 			final IValueReference result = super.visitIdentifier(node);
-			final Property property = extractElement(result, Property.class);
+			final Property property = extractElement(result, Property.class,
+					null);
 			if (property != null && property.isDeprecated()) {
 				reportDeprecatedProperty(property, null, node);
 			} else {
@@ -1274,11 +1283,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 		protected void validateProperty(PropertyExpression propertyExpression,
 				IValueReference result) {
 			final Expression propName = propertyExpression.getProperty();
-			final Member member = extractElement(result, Member.class);
+			final Member member = extractElement(result, Member.class,
+					JavaScriptValidations.isStatic(result.getParent()));
 			if (member != null) {
 				if (member.isDeprecated()) {
 					final Property parentProperty = extractElement(
-							result.getParent(), Property.class);
+							result.getParent(), Property.class, null);
 					if (parentProperty != null
 							&& parentProperty.getDeclaringType() == null) {
 						if (member instanceof Property)
@@ -1297,7 +1307,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 				} else if (!member.isVisible()) {
 					final Property parentProperty = extractElement(
-							result.getParent(), Property.class);
+							result.getParent(), Property.class, null);
 					if (parentProperty != null
 							&& parentProperty.getDeclaringType() == null) {
 						if (member instanceof Property)
