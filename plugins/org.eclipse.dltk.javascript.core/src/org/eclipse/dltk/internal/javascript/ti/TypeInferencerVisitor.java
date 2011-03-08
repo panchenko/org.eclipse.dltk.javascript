@@ -309,7 +309,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (varType == null)
 			setTypeImpl(identifier, reference, variable.getType());
 		else
-			setType(identifier, reference, variable.getType());
+			setType(identifier, reference, variable.getType(), true);
 		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
 
 		reference.setKind(inFunction() ? ReferenceKind.LOCAL
@@ -467,11 +467,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		returnValue.addValue(function.getReturnValue(), true);
 		if (node.getReturnType() == null)
 			setTypeImpl(
-				methodName != null ? methodName : node.getFunctionKeyword(),
-				returnValue, method.getType());
+					methodName != null ? methodName : node.getFunctionKeyword(),
+					returnValue, method.getType());
 		else
 			setType(methodName != null ? methodName : node.getFunctionKeyword(),
-					returnValue, method.getType());
+					returnValue, method.getType(), true);
 		return result;
 	}
 
@@ -509,7 +509,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return context.getTypeRef(type.getName());
 	}
 
-	public void setType(ASTNode node, IValueReference value, JSType type) {
+	public void setType(ASTNode node, IValueReference value, JSType type,
+			boolean lazy) {
 		setTypeImpl(node, value, type);
 	}
 

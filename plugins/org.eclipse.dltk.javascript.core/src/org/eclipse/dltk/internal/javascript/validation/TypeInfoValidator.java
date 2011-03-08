@@ -1459,10 +1459,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		@Override
-		public void setType(ASTNode node, IValueReference value, JSType type) {
-			super.setType(node, value, type);
+		public void setType(ASTNode node, IValueReference value, JSType type,
+				boolean lazy) {
+			super.setType(node, value, type, lazy);
 			if (type != null) {
-				pushExpressionValidator(new TypeValidator(this, value, node));
+				if (lazy) {
+					pushExpressionValidator(new TypeValidator(this, value, node));
+				} else {
+					checkType(node, type, null);
+				}
 			}
 		}
 
