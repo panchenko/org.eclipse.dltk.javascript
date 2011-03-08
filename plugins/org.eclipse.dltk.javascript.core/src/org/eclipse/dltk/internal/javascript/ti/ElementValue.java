@@ -380,6 +380,9 @@ public abstract class ElementValue implements IValue {
 					if (property.getType() != null) {
 						return property.getType();
 					}
+				} else if (member instanceof Method) {
+					return TypeUtil.ref(TypeInfoModelLoader.getInstance()
+							.getType(FUNCTION));
 				}
 			}
 			return null;
@@ -400,7 +403,7 @@ public abstract class ElementValue implements IValue {
 					if (types == null) {
 						types = JSTypeSet.create();
 					}
-					types.add(TypeUtil.staticRef(TypeInfoModelLoader
+					types.add(TypeUtil.ref(TypeInfoModelLoader
 							.getInstance().getType(FUNCTION)));
 				}
 			}
