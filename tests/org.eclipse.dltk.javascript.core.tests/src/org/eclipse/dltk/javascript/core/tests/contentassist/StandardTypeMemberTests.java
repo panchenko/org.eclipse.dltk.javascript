@@ -28,5 +28,14 @@ public class StandardTypeMemberTests extends AbstractCompletionTest {
 	public void testXML() {
 		assertEquals(44, getMethodsOfXML().size());
 	}
+	
+	public void testArray() {
+		assertEquals(25, getMethodsOfArray().size());
+	}
+
+	public void testFunction() {
+		assertEquals(11, getMethodsOfFunction().size());
+	}
+
 
 }

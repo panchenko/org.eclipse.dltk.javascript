@@ -443,10 +443,31 @@ public class CodeCompletion extends AbstractCompletionTest {
 	}
 	
 	public void test49() {
-		String[] names = new String[] { "erer" };
 		IModuleSource module = createModule("test49.js");
 		int position = lastPositionInFile("name.", module);
 		basicTest(module, position, getMethodsOfString().toArray(new String[0]));
+		// basicTest(module, 105, names);
+	}
+
+	
+	public void test50() {
+		IModuleSource module = createModule("test50.js");
+		int position = lastPositionInFile("Function.", module);
+		basicTest(module, position, new String[] {"prototype"});
+		// basicTest(module, 105, names);
+	}
+	
+	public void test51() {
+		IModuleSource module = createModule("test51.js");
+		int position = lastPositionInFile("test.", module);
+		basicTest(module, position, getMethodsOfFunction().toArray(new String[0]));
+		// basicTest(module, 105, names);
+	}
+	
+	public void test52() {
+		IModuleSource module = createModule("test52.js");
+		int position = lastPositionInFile("x.", module);
+		basicTest(module, position, getMethodsOfFunction().toArray(new String[0]));
 		// basicTest(module, 105, names);
 	}
 

@@ -124,6 +124,9 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return getMembers(ITypeNames.ARRAY);
 	}
 
+	protected static List<String> getMethodsOfFunction() {
+		return getMembers(ITypeNames.FUNCTION);
+	}
 	protected static List<String> getMethodsOfNumber() {
 		return getMembers(ITypeNames.NUMBER);
 	}
