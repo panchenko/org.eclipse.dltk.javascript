@@ -36,13 +36,17 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	@Override
 	protected String createTypeProposalLabel(CompletionProposal typeProposal) {
 		if (typeProposal.getExtraInfo() instanceof Element) {
-			final String label = ElementLabelProviderRegistry.getLabel(
-					(Element) typeProposal.getExtraInfo(), Mode.PROPOSAL);
+			final String label = getElementLabel((Element) typeProposal
+					.getExtraInfo());
 			if (label != null) {
 				return label;
 			}
 		}
 		return super.createTypeProposalLabel(typeProposal);
+	}
+
+	private static String getElementLabel(Element element) {
+		return ElementLabelProviderRegistry.getLabel(element, Mode.PROPOSAL);
 	}
 
 	@Override
@@ -55,7 +59,11 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			// methodProposal.setParameterNames(cm.getParameterNames());
 			returnType = cm.getReturnType();
 		} else if (info instanceof Method) {
-			Method method = (Method) info;
+			final Method method = (Method) info;
+			final String label = getElementLabel(method);
+			if (label != null) {
+				return label;
+			}
 			if (method.getType() != null) {
 				returnType = method.getType().getName();
 			}
@@ -100,12 +108,12 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	@Override
 	protected String createFieldProposalLabel(CompletionProposal proposal) {
 		if (proposal.getExtraInfo() instanceof Property) {
-			Property property = (Property) proposal.getExtraInfo();
-			// add the type to the label, but only if it is not exactly the same
-			// like Constants (MyObject:MyObject)
-			if (property.getType() != null
-					&& !property.getType().getName()
-							.equalsIgnoreCase(proposal.getName())) {
+			final Property property = (Property) proposal.getExtraInfo();
+			final String label = getElementLabel(property);
+			if (label != null) {
+				return label;
+			}
+			if (property.getType() != null) {
 				final StringBuilder sb = new StringBuilder();
 				sb.append(proposal.getName());
 				sb.append(": ");
