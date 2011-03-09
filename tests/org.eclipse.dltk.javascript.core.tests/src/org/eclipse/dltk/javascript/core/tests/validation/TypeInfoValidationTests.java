@@ -206,7 +206,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var x:ExampleService");
 		code.add("x.noname = true");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(),1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, problems
 				.get(0).getID());
 	}
@@ -1158,6 +1158,19 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" * @return {init.Node} */");
 		code.add("function caller2() {");
 		code.add(" return init.fun();}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testOuterVariableInInnerFunction() {
+		
+		StringList code = new StringList();
+		code.add("function Outer() {");
+		code.add("function inner() {");
+		code.add("variable = 10;");
+		code.add("}");
+		code.add("var variable;");
+		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
