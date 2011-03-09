@@ -14,6 +14,7 @@ import org.eclipse.dltk.core.builder.AbstractBuildParticipantType;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
@@ -23,6 +24,7 @@ import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -103,8 +105,16 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 								String token = st.nextToken();
 								if (child == null)
 									child = collection.getChild(token);
-								else
+								else {
+									if (child.getKind() == ReferenceKind.FUNCTION) {
+										IValueCollection function = (IValueCollection) child
+												.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+										if (function != null)
+											child = function.getThis();
+									}
+
 									child = child.getChild(token);
+								}
 								
 								if (!child.exists()) {
 									child = null;

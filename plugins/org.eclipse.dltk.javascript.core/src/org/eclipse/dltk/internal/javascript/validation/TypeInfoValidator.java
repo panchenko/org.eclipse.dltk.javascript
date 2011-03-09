@@ -13,6 +13,7 @@ package org.eclipse.dltk.internal.javascript.validation;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -354,6 +355,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
+		private final Map<IValueCollection, List<ReturnNodeAndValueReference>> returnNodes = new HashMap<IValueCollection, List<ReturnNodeAndValueReference>>();
+
 		@Override
 		public IValueReference visitFunctionStatement(FunctionStatement node) {
 			List<Argument> args = node.getArguments();
@@ -467,16 +470,14 @@ public class TypeInfoValidator implements IBuildParticipant {
 			IValueCollection collection = (IValueCollection) reference
 					.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 			if (collection != null) {
-				@SuppressWarnings("unchecked")
-				List<ReturnNodeAndValueReference> lst = (List<ReturnNodeAndValueReference>) collection
-						.getReturnValue().getAttribute("RETURN_VALUES");
+				List<ReturnNodeAndValueReference> lst = returnNodes
+						.get(collection);
 				JSMethod method = (JSMethod) reference
 						.getAttribute(IReferenceAttributes.PARAMETERS);
 				if (lst != null) {
 					pushExpressionValidator(new TestReturnStatement(method,
 							lst, reporter));
-					collection.getReturnValue().setAttribute("RETURN_VALUES",
-							null);
+					returnNodes.remove(collection);
 				} else if (method.getType() != null) {
 					ASTNode name = node.getName();
 					if (name == null)
@@ -500,13 +501,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (returnValueReference != null
 					|| node.getValue() instanceof NullExpression) {
 
-				@SuppressWarnings("unchecked")
-				List<ReturnNodeAndValueReference> lst = (List<ReturnNodeAndValueReference>) peekContext()
-						.getReturnValue().getAttribute("RETURN_VALUES");
+				List<ReturnNodeAndValueReference> lst = returnNodes
+						.get(peekContext());
 				if (lst == null) {
 					lst = new ArrayList<ReturnNodeAndValueReference>();
-					peekContext().getReturnValue().setAttribute(
-							"RETURN_VALUES", lst);
+					returnNodes.put(peekContext(), lst);
 				}
 
 				lst.add(new ReturnNodeAndValueReference(node,
