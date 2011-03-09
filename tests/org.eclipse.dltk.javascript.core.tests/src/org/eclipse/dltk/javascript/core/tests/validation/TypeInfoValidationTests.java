@@ -1103,6 +1103,27 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 	
+	public void testNestedFunctionTypeNewConstruct() {
+		List<String> code = new StringList();
+		code.add("function Test() {");
+		code.add(" function Node() {");
+		code.add(" this.fun = function() {");
+		code.add("  return new Node();");
+		code.add("}}");
+		code.add("this.getNode = function() {");
+		code.add(" return new Node();");
+		code.add(" }");
+		code.add("this.Node = Node;");
+		code.add("}");
+		code.add("function caller(){");
+		code.add(" var x = new Test();");
+		code.add(" var node =  new x.Node();");
+		code.add(" node.fun();");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
 	
 	public void testNestedObjectInitializerType() {
 		StringList code = new StringList();
