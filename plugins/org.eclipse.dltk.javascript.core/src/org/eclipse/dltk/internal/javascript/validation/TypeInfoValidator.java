@@ -709,9 +709,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 											reference.getName(), type.getName()),
 									methodNode.sourceStart(), methodNode
 											.sourceEnd());
-						} else {
-							// TODO also report a JS error (that should be
-							// configurable)
+						} else if (!reference.exists()) {
 							reporter.reportProblem(
 									JavaScriptProblems.UNDEFINED_METHOD,
 									NLS.bind(
