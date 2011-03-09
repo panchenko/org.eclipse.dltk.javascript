@@ -159,23 +159,22 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 		assertTrue(problems.get(0).getMessage().contains("myExampleForms"));
 	}
-	
-	
+
 	public void testFunctionHidesPoperty() {
 		StringList code = new StringList();
 		code.add("function exampleForms(){}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.FUNCTION_HIDES_VARIABLE, problems.get(0)
-				.getID());
+		assertEquals(JavaScriptProblems.FUNCTION_HIDES_VARIABLE, problems
+				.get(0).getID());
 		assertTrue(problems.get(0).getMessage().contains("exampleForms"));
 	}
-	
+
 	public void testFunctionDoesntHidesAllowHidePoperty() {
 		StringList code = new StringList();
 		code.add("function exampleFormsHide(){}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(),0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testUndefinedPropertyAccess() {
@@ -571,8 +570,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
-				.getID());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
 	}
 
 	public void testDifferentReturnTypesThenDeclared() {
@@ -608,7 +608,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testDeclaredtArrayTypeWithUndefineReturn() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -632,7 +632,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testDeclaredtArrayTypeWithEmptyReturn() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -643,8 +643,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
-				.getID());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
 	}
 
 	public void testDeclaredtArrayTypeWithNoReturn() {
@@ -656,8 +657,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
-				.getID());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
 	}
 
 	public void testDifferentReturnTypesThenDeclaredWithNull() {
@@ -676,7 +678,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testDifferentReturnTypes() {
 		List<String> code = new StringList();
 		code.add("function someFunction() {");
@@ -942,7 +944,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
 				.getID());
 	}
-	
+
 	public void testVariableWithUnknowPropertyAssignment() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -971,7 +973,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
 				.getID());
 	}
-	
+
 	public void testUnknowPropertyIfTest() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -981,9 +983,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("if(anchor.xxx){}");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(),0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testDoubleUnknowPropertyIfTest() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -993,10 +995,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("if(anchor.xxx && anchor.yyyy){}");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(),0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
-	
+
 	public void testUnknowVariableIfTest() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -1010,7 +1011,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
 				.getID());
 	}
-	
+
 	public void testUnknowPropertyOfPropertyIfTest() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -1034,9 +1035,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" test2(['hello',null]);");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(),0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testNestedAnonymousReturnType() {
 		List<String> code = new StringList();
 		code.add("function Test() {");
@@ -1055,9 +1056,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" var node3 = node2.fun();");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(),0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testMoreDeeplyNestedCallsToAnonymousReturnType() {
 		List<String> code = new StringList();
 		code.add("function Test() {");
@@ -1077,6 +1078,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" var node4 = node3.fun();");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(),0, problems.size());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 }
