@@ -78,5 +78,59 @@ public class JSDocValidationTest extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
-
+	
+	public void testNestedObjectInitializerType() {
+		StringList code = new StringList();
+		code.add("var init = {Node: function(){} }");
+		code.add("/**");
+		code.add(" * @return {init.Node} */");
+		code.add("function caller2() {");
+		code.add(" return new init.Node();}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testNestedCallsToAnonymousReturnType() {
+		List<String> code = new StringList();
+		code.add("function Test() {");
+		code.add(" function Node() {");
+		code.add(" this.fun = function() {");
+		code.add("  return new Node();");
+		code.add("}}");
+		code.add("this.getNode = function() {");
+		code.add(" return new Node();");
+		code.add(" }");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @return {Test.Node} */");
+		code.add("function caller(){");
+		code.add(" var x = new Test();");
+		code.add(" return x.fun();");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
+	}
+	
+	public void testNestedCallsToReturnType() {
+		List<String> code = new StringList();
+		code.add("function Test() {");
+		code.add(" function Node() {");
+		code.add(" this.fun = function() {");
+		code.add("  return new Node();");
+		code.add("}}");
+		code.add("this.getNode = function() {");
+		code.add(" return new Node();");
+		code.add(" }");
+		code.add("this.Node = Node;");
+		code.add("}");
+		code.add("/**");
+		code.add(" * @return {Test.Node} */");
+		code.add("function caller(){");
+		code.add(" var x = new Test();");
+		code.add(" return x.getNode();");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
