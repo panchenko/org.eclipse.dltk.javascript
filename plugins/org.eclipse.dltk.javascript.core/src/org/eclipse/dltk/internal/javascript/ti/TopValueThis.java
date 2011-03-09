@@ -12,6 +12,11 @@ public class TopValueThis extends AnonymousValue {
 		this.owner = collection;
 	}
 
+	@Override
+	public boolean isReference() {
+		return true;
+	}
+
 	public Set<String> getDirectChildren() {
 		return owner.getDirectChildren();
 	}

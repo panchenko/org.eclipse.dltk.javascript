@@ -57,6 +57,11 @@ public class FunctionValueCollection extends ValueCollection {
 		protected String getToStringPrefix() {
 			return "this";
 		}
+
+		@Override
+		public boolean isReference() {
+			return true;
+		}
 	}
 
 	private final IValueReference thisValue;
