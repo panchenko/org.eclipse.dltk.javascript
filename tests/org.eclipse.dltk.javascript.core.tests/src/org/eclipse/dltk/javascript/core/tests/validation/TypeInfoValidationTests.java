@@ -1041,7 +1041,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		List<String> code = new StringList();
 		code.add("function Test() {");
 		code.add(" function Node() {");
-		code.add(" this.a = 10;");
 		code.add(" this.fun = function() {");
 		code.add("  return new Node();");
 		code.add("}}");
@@ -1054,6 +1053,28 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" var node = x.getNode();");
 		code.add(" var node2 = node.fun();");
 		code.add(" var node3 = node2.fun();");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(),0, problems.size());
+	}
+	
+	public void testMoreDeeplyNestedCallsToAnonymousReturnType() {
+		List<String> code = new StringList();
+		code.add("function Test() {");
+		code.add(" function Node() {");
+		code.add(" this.fun = function() {");
+		code.add("  return new Node();");
+		code.add("}}");
+		code.add("this.getNode = function() {");
+		code.add(" return new Node();");
+		code.add(" }");
+		code.add("}");
+		code.add("function caller(){");
+		code.add(" var x = new Test();");
+		code.add(" var node = x.getNode();");
+		code.add(" var node2 = node.fun();");
+		code.add(" var node3 = node2.fun();");
+		code.add(" var node4 = node3.fun();");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(),0, problems.size());
