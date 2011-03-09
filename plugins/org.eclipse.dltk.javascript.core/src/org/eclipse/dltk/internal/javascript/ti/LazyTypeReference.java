@@ -68,7 +68,9 @@ public class LazyTypeReference extends AbstractReference {
 							// this is a type so try to get the this of the
 							// function if this resolves to a function object.
 							IValueCollection collection = (IValueCollection) src
-									.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+									.getAttribute(
+											IReferenceAttributes.FUNCTION_SCOPE,
+											true);
 							if (collection != null)
 								addValue(((IValueProvider) collection.getThis())
 										.getValue());
