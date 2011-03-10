@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class StringLiteral extends Expression {
+public class StringLiteral extends Expression implements Documentable {
 
 	private String text;
 
@@ -73,6 +73,17 @@ public class StringLiteral extends Expression {
 		Assert.isTrue(sourceEnd() > 0);
 
 		return text;
+	}
+
+	private Comment documentation;
+
+	@Override
+	public Comment getDocumentation() {
+		return documentation;
+	}
+
+	public void setDocumentation(Comment documentation) {
+		this.documentation = documentation;
 	}
 
 }

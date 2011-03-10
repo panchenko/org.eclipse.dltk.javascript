@@ -347,7 +347,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		return node;
 	}
 
-	protected void locateDocumentation(final Documentable node, Tree tree) {
+	private void locateDocumentation(final Documentable node, Tree tree) {
 		int tokenIndex = tree.getTokenStartIndex();
 		while (tokenIndex > 0) {
 			--tokenIndex;
@@ -896,6 +896,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitStringLiteral(Tree node) {
 
 		StringLiteral literal = new StringLiteral(getParent());
+		locateDocumentation(literal, node);
 		literal.setText(node.getText());
 
 		literal.setStart(getTokenOffset(node.getTokenStartIndex()));
