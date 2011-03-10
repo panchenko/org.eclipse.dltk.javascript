@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
-  <ref:Type name="Infinity" kind="PREDEFINED">
-  </ref:Type>
   <ref:Type name="undefined" kind="PREDEFINED">
   </ref:Type>
   <ref:Type name="Error" kind="PREDEFINED">

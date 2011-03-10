@@ -35,4 +35,5 @@
     	<parameters name="testValue" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Object" />
     </ref:Method>
   	<ref:Property name="NaN" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="Special 'not a number' value."/>
+  	<ref:Property name="Infinity" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="A numeric value representing infinity."/>
 </xmi:XMI>
