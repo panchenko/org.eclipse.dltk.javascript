@@ -95,6 +95,7 @@ public abstract class TypeInferencerVisitorBase extends
 	}
 
 	boolean first = false;
+
 	@Override
 	public IValueReference visit(ASTNode node) {
 		boolean start = !first;
