@@ -25,6 +25,7 @@ import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
+import org.eclipse.dltk.core.IProjectFragment;
 import org.eclipse.dltk.core.IScriptFolder;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ModelException;
@@ -91,6 +92,24 @@ public class SearchExternalLibraryTests extends
 		}
 		super.tearDownSuite();
 		DLTKCore.removeBuildpathVariable(LIB_NAME, null);
+	}
+
+	public void testFindProjectFragment() throws ModelException {
+		final IPath libraryPath = EnvironmentPathUtils.getFullPath(
+				EnvironmentManager.getLocalEnvironment(),
+				new Path(library.getAbsolutePath()));
+		final IProjectFragment fragment = getScriptProject()
+				.findProjectFragment(libraryPath);
+		assertNotNull(fragment);
+		assertTrue(EnvironmentPathUtils.isFull(fragment.getPath()));
+		assertEquals(libraryPath, fragment.getPath());
+	}
+
+	public void testFindProjectFragmentWithoutEnv() throws ModelException {
+		final IPath libraryPath = new Path(library.getAbsolutePath());
+		final IProjectFragment fragment = getScriptProject()
+				.findProjectFragment(libraryPath);
+		assertNull(fragment);
 	}
 
 	public void testFindScriptFolderWithoutEnv() throws ModelException {
