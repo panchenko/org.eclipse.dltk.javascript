@@ -18,7 +18,11 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class TypeUtil {
 	public static TypeRef ref(Type type) {
@@ -100,10 +104,13 @@ public class TypeUtil {
 	public static Type createProxy(String typeName) {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(typeName);
-		((InternalEObject) type).eSetProxyURI(URI.createGenericURI(
-				PROXY_SCHEME, PROXY_OPAQUE_PART,
-				URI.encodeFragment(typeName, false)));
+		((InternalEObject) type).eSetProxyURI(createProxyURI(typeName));
 		return type;
+	}
+
+	public static URI createProxyURI(String typeName) {
+		return URI.createGenericURI(PROXY_SCHEME, PROXY_OPAQUE_PART,
+				URI.encodeFragment(typeName, false));
 	}
 
 	public static boolean isTypeProxy(URI uri) {
@@ -113,6 +120,18 @@ public class TypeUtil {
 
 	public static URI createProxyResourceURI() {
 		return URI.createGenericURI(PROXY_SCHEME, PROXY_OPAQUE_PART, null);
+	}
+
+	public static EObject resolve(InternalEObject proxy, EObject objectContext) {
+		final Resource resource = objectContext.eResource();
+		if (resource != null) {
+			final ResourceSet resourceSet = resource.getResourceSet();
+			if (resourceSet instanceof TypeInfoResourceSet) {
+				return ((TypeInfoResourceSet) resourceSet).resolve(proxy,
+						objectContext, resource);
+			}
+		}
+		return EcoreUtil.resolve(proxy, objectContext);
 	}
 
 }

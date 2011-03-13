@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.12 2011/03/04 06:50:48 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.13 2011/03/13 11:48:07 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Collection;
 
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -412,6 +413,11 @@ public class TypeImpl extends ElementImpl implements Type {
 		result.append(name);
 		result.append('>');
 		return result.toString();
+	}
+
+	@Override
+	public EObject eResolveProxy(InternalEObject proxy) {
+		return TypeUtil.resolve(proxy, this);
 	}
 
 } //TypeImpl

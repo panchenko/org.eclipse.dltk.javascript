@@ -11,6 +11,7 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -235,6 +236,11 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
 	@Override
 	public String toString() {
 		return target != null ? target.toString() : getClass().getSimpleName();
+	}
+
+	@Override
+	public EObject eResolveProxy(InternalEObject proxy) {
+		return TypeUtil.resolve(proxy, this);
 	}
 
 } // TypeRefImpl
