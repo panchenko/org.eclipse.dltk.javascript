@@ -514,18 +514,22 @@ public class JSDocSupport implements IModelBuilder {
 		if (typeName.endsWith(ARRAY_SUFFIX)) {
 			final String itemTypeName = translate(typeName.substring(0,
 					typeName.length() - ARRAY_SUFFIX.length()));
-			return TypeUtil.arrayOf(TypeUtil.ref(itemTypeName));
+			return arrayOf(itemTypeName);
 		} else if (typeName.startsWith(ARRAY_PREFIX1) && typeName.endsWith(">")) {
 			final String itemTypeName = translate(typeName.substring(
 					ARRAY_PREFIX1.length(), typeName.length() - 1));
-			return TypeUtil.arrayOf(TypeUtil.ref(itemTypeName));
+			return arrayOf(itemTypeName);
 		} else if (typeName.startsWith(ARRAY_PREFIX2) && typeName.endsWith(">")) {
 			final String itemTypeName = translate(typeName.substring(
 					ARRAY_PREFIX2.length(), typeName.length() - 1));
-			return TypeUtil.arrayOf(TypeUtil.ref(itemTypeName));
+			return arrayOf(itemTypeName);
 		} else {
 			return null;
 		}
+	}
+
+	private ArrayType arrayOf(final String itemTypeName) {
+		return TypeUtil.arrayOf(translateTypeName(itemTypeName));
 	}
 
 	protected String translate(String typeName) {
