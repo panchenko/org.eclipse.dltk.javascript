@@ -81,10 +81,13 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		this.source = source;
 	}
 
+	private static final boolean DEBUG = false;
+
 	public void doInferencing(Script script) {
-		System.out.println("Visiting " + source + " with "
-				+ visitor.getClass().getName() + " in "
-				+ Thread.currentThread().getName());
+		if (DEBUG)
+			System.out.println("Visiting " + source + " with "
+					+ visitor.getClass().getName() + " in "
+					+ Thread.currentThread().getName());
 		try {
 			elements.clear();
 			modelBuilders = null;
