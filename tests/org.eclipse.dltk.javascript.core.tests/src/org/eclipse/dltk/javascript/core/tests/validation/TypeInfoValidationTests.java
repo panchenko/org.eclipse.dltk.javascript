@@ -1195,4 +1195,31 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testCompareOperatorsReturningBoolean() {
+		StringList code = new StringList();
+		code.add("/** @return {Boolean} */");
+		code.add("function test() {");
+		code.add(" var x = 1; var y = 2;");
+		code.add(" if(x > 1)");
+		code.add("  return (y == 2);");
+		code.add(" if(x > 1)");
+		code.add("  return (y != 2);");
+		code.add(" if(x > 1)");
+		code.add("  return (y < 2);");
+		code.add(" if(x > 1)");
+		code.add("  return (y > 2);");
+		code.add(" if(x > 1)");
+		code.add("  return (y >= 2);");
+		code.add(" if(x > 1)");
+		code.add("  return (y <= 2);");
+		code.add(" if(x > 1)");
+		code.add("  return (y === 2);");
+		code.add(" if(x > 1)");
+		code.add("  return (y !== 2);");
+		code.add(" return false;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
