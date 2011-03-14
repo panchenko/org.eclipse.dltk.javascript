@@ -1,5 +1,6 @@
 package org.eclipse.dltk.javascript.typeinference;
 
+import java.util.HashMap;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -7,6 +8,8 @@ import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.IValue;
 import org.eclipse.dltk.internal.javascript.ti.IValueProvider;
+import org.eclipse.dltk.internal.javascript.ti.ImmutableValue;
+import org.eclipse.dltk.internal.javascript.ti.ImmutableValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.Value;
 import org.eclipse.dltk.internal.javascript.ti.ValueCollection;
@@ -89,6 +92,10 @@ public class ValueCollectionFactory {
 				inferencer.doInferencing(script);
 				IValueCollection collection = inferencer.getCollection();
 				inferencer.setVisitor(null);
+				if (!resolve)
+					collection = ImmutableValueCollection
+							.getImmutableValueCollection(collection,
+									new HashMap<Object, Object>());
 				return collection;
 			}
 		}
@@ -107,11 +114,13 @@ public class ValueCollectionFactory {
 				&& source instanceof IValueProvider) {
 			IValue targetValue = ((IValueProvider) target).getValue();
 			IValue sourceValue = ((IValueProvider) source).getValue();
-			if (targetValue instanceof Value && sourceValue instanceof Value) {
+			if (targetValue instanceof Value
+					&& sourceValue instanceof ImmutableValue) {
 				Set<String> children = sourceValue.getDirectChildren();
 				for (String childName : children) {
 					((Value) targetValue).putDirectChild(childName,
-							(Value) sourceValue.getChild(childName, false));
+							(ImmutableValue) sourceValue.getChild(childName,
+									false));
 				}
 			} else {
 				targetValue.addValue(((IValueProvider) source).getValue());

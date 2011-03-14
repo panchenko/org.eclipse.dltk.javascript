@@ -14,5 +14,5 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.Set;
 
 public interface IValue2 extends IValue {
-	Set<Value> getReferences();
+	Set<? extends IValue> getReferences();
 }
