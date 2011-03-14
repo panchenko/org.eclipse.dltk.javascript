@@ -183,17 +183,23 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitBinaryOperation(BinaryOperation node) {
 		final IValueReference left = visit(node.getLeftExpression());
 		final IValueReference right = visit(node.getRightExpression());
-		if (JSParser.ASSIGN == node.getOperation()) {
+		final int op = node.getOperation();
+		if (JSParser.ASSIGN == op) {
 			return visitAssign(left, right, node);
 		} else if (left == null && right instanceof ConstantValue) {
 			return right;
+		} else if (op == JSParser.GT || op == JSParser.GTE || op == JSParser.LT
+				|| op == JSParser.LTE || op == JSParser.NSAME
+				|| op == JSParser.SAME || op == JSParser.NEQ
+				|| op == JSParser.EQ) {
+			return context.getFactory().createBoolean(peekContext());
 		} else if (isNumber(left) && isNumber(right)) {
 			return context.getFactory().createNumber(peekContext());
-		} else if (node.getOperation() == JSParser.ADD) {
+		} else if (op == JSParser.ADD) {
 			return left;
-		} else if (JSParser.INSTANCEOF == node.getOperation()) {
+		} else if (JSParser.INSTANCEOF == op) {
 			return context.getFactory().createBoolean(peekContext());
-		} else if (JSParser.LOR == node.getOperation()) {
+		} else if (JSParser.LOR == op) {
 			JSType leftType = JavaScriptValidations.typeOf(left);
 			JSType rightType = JavaScriptValidations.typeOf(right);
 			if (leftType != null && !leftType.equals(rightType)) {
