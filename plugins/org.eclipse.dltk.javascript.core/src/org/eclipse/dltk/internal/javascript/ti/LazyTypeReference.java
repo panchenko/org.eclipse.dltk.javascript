@@ -23,7 +23,7 @@ public class LazyTypeReference extends AbstractReference {
 			if (!resolved && doResolve) {
 				IValueReference createChild = collection.getChild(className);
 				if (createChild.exists()) {
-					ValueCollection collection = (ValueCollection) createChild
+					IValueCollection collection = (IValueCollection) createChild
 							.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 					if (collection != null && collection.getThis() != null) {
 						createChild = collection.getThis();
