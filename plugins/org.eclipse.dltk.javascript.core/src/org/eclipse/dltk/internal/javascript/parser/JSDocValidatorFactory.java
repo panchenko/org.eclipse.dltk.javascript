@@ -15,6 +15,7 @@ import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
+import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
@@ -42,11 +43,19 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 		return new JSDocValidator();
 	}
 
+	private static class JSDocValidationVisitor extends TypeInferencerVisitor {
+
+		public JSDocValidationVisitor(ITypeInferenceContext context) {
+			super(context);
+		}
+
+	}
+
 	private static class JSDocValidator implements IBuildParticipant {
 
 		public void build(IBuildContext context) throws CoreException {
 			final TypeInferencer2 inferencer2 = new TypeInferencer2();
-			TypeInferencerVisitor sr = new TypeInferencerVisitor(inferencer2);
+			TypeInferencerVisitor sr = new JSDocValidationVisitor(inferencer2);
 			sr.setProblemReporter(new Reporter(context));
 			TypeChecker typeChecker = new TypeChecker(inferencer2,
 					sr.getProblemReporter());
@@ -94,7 +103,8 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 					if (!(type instanceof TypeRef && collection != null && collection
 							.getChild(type.getName()).exists())) {
 
-						// if it still is not found, test if it is a "package type"
+						// if it still is not found, test if it is a
+						// "package type"
 						// an try to resolve that to a existing child.
 						String className = type.getName();
 						if (className.indexOf('.') != -1) {
@@ -115,7 +125,7 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 
 									child = child.getChild(token);
 								}
-								
+
 								if (!child.exists()) {
 									child = null;
 									break;
@@ -178,6 +188,7 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 		}
 
 	}
+
 	private static class Reporter implements JSProblemReporter {
 
 		private final IBuildContext context;
