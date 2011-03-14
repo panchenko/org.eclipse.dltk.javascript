@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.8 2011/02/24 07:24:38 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.9 2011/03/14 09:49:09 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -136,6 +136,14 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
                 return createArrayTypeAdapter();
             }
             @Override
+            public Adapter caseAnyType(AnyType object) {
+                return createAnyTypeAdapter();
+            }
+            @Override
+            public Adapter caseUnionType(UnionType object) {
+                return createUnionTypeAdapter();
+            }
+            @Override
             public Adapter defaultCase(EObject object) {
                 return createEObjectAdapter();
             }
@@ -222,6 +230,34 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createArrayTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.AnyType <em>Any Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.AnyType
+     * @generated
+     */
+    public Adapter createAnyTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.UnionType <em>Union Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.UnionType
+     * @generated
+     */
+    public Adapter createUnionTypeAdapter() {
         return null;
     }
 

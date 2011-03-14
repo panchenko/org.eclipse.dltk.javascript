@@ -19,13 +19,19 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl;
+import org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 public abstract class JSTypeSet implements Iterable<JSType> {
@@ -172,6 +178,9 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		public Type[] toArray() {
 			if (type instanceof TypeRef) {
 				return new Type[] { ((TypeRef) type).getTarget() };
+			} else if (type instanceof UnionType) {
+				final List<Type> types = new ArrayList<Type>();
+				return types.toArray(new Type[types.size()]);
 			} else {
 				return new Type[0];
 			}
@@ -221,6 +230,11 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 	}
 
 	public static JSTypeSet singleton(JSType type) {
+		if (type instanceof UnionType) {
+			final JSTypeSet set = create();
+			set.add(type);
+			return set;
+		}
 		return new JSSingletonTypeSet(type);
 	}
 
@@ -363,12 +377,98 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	}
 
+	private static final JSType2 ANY_TYPE = new AnyTypeKey();
+
+	private static class AnyTypeKey implements AnyType, JSType2 {
+
+		public TypeKind getKind() {
+			return TypeKind.PREDEFINED;
+		}
+
+		public String getName() {
+			return "Any";
+		}
+
+		public boolean isArray() {
+			return false;
+		}
+
+		public boolean isAssignableFrom(JSType2 type) {
+			return true;
+		}
+
+	}
+
+	private static class UnionTypeKey implements UnionType, JSType2 {
+
+		final EList<JSType2> targets = new BasicEList<JSType2>();
+
+		public TypeKind getKind() {
+			return !targets.isEmpty() ? targets.get(0).getKind()
+					: TypeKind.UNKNOWN;
+		}
+
+		public String getName() {
+			final StringBuilder sb = new StringBuilder();
+			for (JSType type : targets) {
+				if (sb.length() != 0) {
+					sb.append('|');
+				}
+				sb.append(type.getName());
+			}
+			return sb.toString();
+		}
+
+		public boolean isArray() {
+			return false;
+		}
+
+		public boolean isAssignableFrom(JSType2 type) {
+			for (JSType2 target : targets) {
+				if (target.isAssignableFrom(type)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		public EList<JSType> getTargets() {
+			return (EList) targets;
+		}
+
+		@Override
+		public int hashCode() {
+			// TODO Auto-generated method stub
+			return 1;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof UnionTypeKey) {
+				final UnionTypeKey other = (UnionTypeKey) obj;
+				return targets.size() == other.targets.size()
+						&& targets.containsAll(other.targets);
+			}
+			return false;
+		}
+
+	}
+
 	public static JSType2 normalize(JSType type) {
 		if (type instanceof TypeRefImpl) {
 			final TypeRef ref = (TypeRef) type;
 			return ref(ref.getTarget(), ref.isStatic());
 		} else if (type instanceof ArrayTypeImpl) {
 			return arrayOf(normalize(((ArrayType) type).getItemType()));
+		} else if (type instanceof AnyTypeImpl) {
+			return ANY_TYPE;
+		} else if (type instanceof UnionTypeImpl) {
+			final UnionTypeKey union = new UnionTypeKey();
+			for (JSType t : ((UnionType) type).getTargets()) {
+				union.targets.add(normalize(t));
+			}
+			return union;
 		}
 		Assert.isLegal(!(type instanceof EObject));
 		return (JSType2) type;
@@ -380,6 +480,16 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	public static ArrayTypeKey arrayOf(final JSType2 itemType) {
 		return new ArrayTypeKey(itemType);
+	}
+
+	public static JSType2 any() {
+		return ANY_TYPE;
+	}
+
+	public static JSType2 union(List<JSType2> targets) {
+		final UnionTypeKey union = new UnionTypeKey();
+		union.targets.addAll(targets);
+		return union;
 	}
 
 	private static class JSTypeSetImpl extends JSTypeSet {
@@ -395,7 +505,13 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		@Override
 		public void add(JSType type) {
-			types.add(normalize(type));
+			if (type instanceof UnionType) {
+				for (JSType t : ((UnionType) type).getTargets()) {
+					add(t);
+				}
+			} else {
+				types.add(normalize(type));
+			}
 		}
 
 		@Override

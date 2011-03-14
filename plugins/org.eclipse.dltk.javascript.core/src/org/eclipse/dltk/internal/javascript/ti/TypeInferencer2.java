@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,6 +39,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -46,6 +49,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -78,6 +82,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	}
 
 	public void doInferencing(Script script) {
+		System.out.println("Visiting " + source + " with "
+				+ visitor.getClass().getName() + " in "
+				+ Thread.currentThread().getName());
 		try {
 			elements.clear();
 			modelBuilders = null;
@@ -142,6 +149,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return !((TypeRef) type).getTarget().isProxy();
 		} else if (type instanceof ArrayType) {
 			return isResolved(((ArrayType) type).getItemType());
+		} else if (type instanceof AnyType) {
+			return true;
+		} else if (type instanceof UnionType) {
+			for (JSType t : ((UnionType) type).getTargets()) {
+				if (!isResolved(t)) {
+					return false;
+				}
+			}
+			return true;
 		}
 		return false;
 	}
@@ -160,6 +176,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		} else if (type instanceof ArrayType) {
 			return JSTypeSet.arrayOf(doResolveTypeRef(((ArrayType) type)
 					.getItemType()));
+		} else if (type instanceof UnionType) {
+			final List<JSType2> targets = new ArrayList<JSType2>();
+			for (JSType t : ((UnionType) type).getTargets()) {
+				targets.add(doResolveTypeRef(t));
+			}
+			return JSTypeSet.union(targets);
+		} else if (type instanceof AnyType) {
+			return JSTypeSet.any();
 		}
 		return (JSType2) type;
 	}

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.8 2011/02/24 07:24:38 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.9 2011/03/14 09:49:09 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -202,6 +202,20 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case TypeInfoModelPackage.ANY_TYPE: {
+                AnyType anyType = (AnyType)theEObject;
+                T result = caseAnyType(anyType);
+                if (result == null) result = caseJSType(anyType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.UNION_TYPE: {
+                UnionType unionType = (UnionType)theEObject;
+                T result = caseUnionType(unionType);
+                if (result == null) result = caseJSType(unionType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -278,6 +292,36 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseArrayType(ArrayType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Any Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Any Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseAnyType(AnyType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Union Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Union Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseUnionType(UnionType object) {
         return null;
     }
 

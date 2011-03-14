@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.19 2011/03/04 06:50:48 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.20 2011/03/14 09:49:09 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1001,6 +1001,53 @@ public interface TypeInfoModelPackage extends EPackage {
     int ARRAY_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl <em>Any Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAnyType()
+     * @generated
+     */
+    int ANY_TYPE = 14;
+
+    /**
+     * The number of structural features of the '<em>Any Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ANY_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl <em>Union Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUnionType()
+     * @generated
+     */
+    int UNION_TYPE = 15;
+
+    /**
+     * The feature id for the '<em><b>Targets</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int UNION_TYPE__TARGETS = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Union Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int UNION_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1008,7 +1055,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 14;
+	int TYPE_KIND = 16;
 
 
 	/**
@@ -1019,7 +1066,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 15;
+	int PARAMETER_KIND = 17;
 
 
 	/**
@@ -1137,6 +1184,37 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getArrayType_ItemType();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.AnyType <em>Any Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Any Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.AnyType
+     * @generated
+     */
+    EClass getAnyType();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.UnionType <em>Union Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Union Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.UnionType
+     * @generated
+     */
+    EClass getUnionType();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.UnionType#getTargets <em>Targets</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Targets</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.UnionType#getTargets()
+     * @see #getUnionType()
+     * @generated
+     */
+    EReference getUnionType_Targets();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
@@ -1578,6 +1656,34 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference ARRAY_TYPE__ITEM_TYPE = eINSTANCE.getArrayType_ItemType();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl <em>Any Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAnyType()
+         * @generated
+         */
+        EClass ANY_TYPE = eINSTANCE.getAnyType();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl <em>Union Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUnionType()
+         * @generated
+         */
+        EClass UNION_TYPE = eINSTANCE.getUnionType();
+
+        /**
+         * The meta object literal for the '<em><b>Targets</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference UNION_TYPE__TARGETS = eINSTANCE.getUnionType_Targets();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.

@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.8 2011/02/24 07:24:38 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.9 2011/03/14 09:49:09 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Map;
 
+import org.eclipse.dltk.javascript.typeinfo.model.*;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -87,6 +88,8 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
             case TypeInfoModelPackage.TYPE_REF: return (EObject)createTypeRef();
             case TypeInfoModelPackage.ARRAY_TYPE: return (EObject)createArrayType();
+            case TypeInfoModelPackage.ANY_TYPE: return (EObject)createAnyType();
+            case TypeInfoModelPackage.UNION_TYPE: return (EObject)createUnionType();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -214,6 +217,26 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     public ArrayType createArrayType() {
         ArrayTypeImpl arrayType = new ArrayTypeImpl();
         return arrayType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public AnyType createAnyType() {
+        AnyTypeImpl anyType = new AnyTypeImpl();
+        return anyType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public UnionType createUnionType() {
+        UnionTypeImpl unionType = new UnionTypeImpl();
+        return unionType;
     }
 
     /**

@@ -171,8 +171,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public void call() {
 			JSType2 firstType = null;
 			for (int i = 0; i < lst.size(); i++) {
-				ReturnNodeAndValueReference element = (ReturnNodeAndValueReference) lst
-						.get(i);
+				ReturnNodeAndValueReference element = lst.get(i);
 				JSType methodType = jsMethod.getType();
 				JSType2 type = JSTypeSet.normalize(JavaScriptValidations
 						.typeOf(element.returnValueReference));

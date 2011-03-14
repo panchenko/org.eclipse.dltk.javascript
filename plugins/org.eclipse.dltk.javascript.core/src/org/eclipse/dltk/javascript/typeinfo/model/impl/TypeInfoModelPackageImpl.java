@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.22 2011/03/04 06:50:48 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.23 2011/03/14 09:49:09 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Map;
 
+import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
@@ -32,6 +33,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -81,6 +83,20 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EClass arrayTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass anyTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass unionTypeEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -317,6 +333,33 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      */
     public EReference getArrayType_ItemType() {
         return (EReference)arrayTypeEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getAnyType() {
+        return anyTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getUnionType() {
+        return unionTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getUnionType_Targets() {
+        return (EReference)unionTypeEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -670,6 +713,11 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         arrayTypeEClass = createEClass(ARRAY_TYPE);
         createEReference(arrayTypeEClass, ARRAY_TYPE__ITEM_TYPE);
 
+        anyTypeEClass = createEClass(ANY_TYPE);
+
+        unionTypeEClass = createEClass(UNION_TYPE);
+        createEReference(unionTypeEClass, UNION_TYPE__TARGETS);
+
         // Create enums
         typeKindEEnum = createEEnum(TYPE_KIND);
         parameterKindEEnum = createEEnum(PARAMETER_KIND);
@@ -714,6 +762,8 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         propertyEClass.getESuperTypes().add(this.getMember());
         typeRefEClass.getESuperTypes().add(this.getJSType());
         arrayTypeEClass.getESuperTypes().add(this.getJSType());
+        anyTypeEClass.getESuperTypes().add(this.getJSType());
+        unionTypeEClass.getESuperTypes().add(this.getJSType());
 
         // Initialize classes and features; add operations and parameters
         initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -781,6 +831,11 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         initEClass(arrayTypeEClass, ArrayType.class, "ArrayType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getArrayType_ItemType(), this.getJSType(), null, "itemType", null, 0, 1, ArrayType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+        initEClass(anyTypeEClass, AnyType.class, "AnyType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+        initEClass(unionTypeEClass, UnionType.class, "UnionType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getUnionType_Targets(), this.getJSType(), null, "targets", null, 0, -1, UnionType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         // Initialize enums and add enum literals
         initEEnum(typeKindEEnum, TypeKind.class, "TypeKind"); //$NON-NLS-1$

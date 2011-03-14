@@ -44,6 +44,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.dltk.utils.TextUtils;
 
 /**
  * Implements support for javadocs tags .
@@ -477,6 +479,16 @@ public class JSDocSupport implements IModelBuilder {
 		final ArrayType arrayType = parseArray(typeName);
 		if (arrayType != null) {
 			return arrayType;
+		}
+		if (typeName.contains("|")) {
+			final String[] parts = TextUtils.split(typeName, '|');
+			final UnionType unionType = TypeInfoModelFactory.eINSTANCE
+					.createUnionType();
+			for (String part : parts) {
+				unionType.getTargets()
+						.add(TypeUtil.ref(translate(part.trim())));
+			}
+			return unionType;
 		}
 		return TypeUtil.ref(translate(typeName));
 	}

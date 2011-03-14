@@ -95,4 +95,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="itemType" eType="#//JSType"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnyType" eSuperTypes="#//JSType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UnionType" eSuperTypes="#//JSType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
+        eType="#//JSType" containment="true"/>
+  </eClassifiers>
 </ecore:EPackage>
