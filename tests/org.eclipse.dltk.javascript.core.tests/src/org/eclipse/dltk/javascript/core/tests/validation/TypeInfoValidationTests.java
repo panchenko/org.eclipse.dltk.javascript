@@ -1163,13 +1163,34 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 	
 	public void testOuterVariableInInnerFunction() {
-		
 		StringList code = new StringList();
 		code.add("function Outer() {");
 		code.add("function inner() {");
 		code.add("variable = 10;");
 		code.add("}");
 		code.add("var variable;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testAssignmentOfVariableToUndefined() {
+		StringList code = new StringList();
+		code.add("function test() {");
+		code.add(" var str = '';");
+		code.add(" str.toLocaleString();");
+		code.add(" str = undefined;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testAssignmentOfArgumentToUndefined() {
+		StringList code = new StringList();
+		code.add("/** @param {String} str */");
+		code.add("function test(str) {");
+		code.add(" str.toLocaleString();");
+		code.add(" str = undefined;");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
