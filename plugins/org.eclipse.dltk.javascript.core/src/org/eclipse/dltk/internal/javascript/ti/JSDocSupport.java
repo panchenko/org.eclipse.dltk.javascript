@@ -434,16 +434,25 @@ public class JSDocSupport implements IModelBuilder {
 					}
 				}
 			}
+			final boolean requireBraces = requireBraces(tag.name());
 			final Tokenizer st = new Tokenizer(tag.getValue());
 			if (st.hasMoreTokens()) {
-				JSType type = translateTypeName(st.nextToken());
-				if (typeChecker != null)
-					typeChecker.checkType(type, tag);
-				member.setType(type);
-			} else {
+				final String typeName = st.nextToken();
+				if (!requireBraces || isBraced(typeName)) {
+					JSType type = translateTypeName(typeName);
+					if (typeChecker != null)
+						typeChecker.checkType(type, tag);
+					member.setType(type);
+				}
+			} else if (!requireBraces) {
 				reportProblem(reporter, JSDocProblem.MISSING_TYPE_NAME, tag);
 			}
 		}
+	}
+
+	protected boolean requireBraces(String tagName) {
+		return JSDocTag.RETURN.equals(tagName)
+				|| JSDocTag.RETURNS.equals(tagName);
 	}
 
 	private void reportProblem(JSProblemReporter reporter,
@@ -473,12 +482,16 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	protected String cutBraces(String typeName) {
-		final int length = typeName.length();
-		if (length > 2 && typeName.charAt(0) == '{'
-				&& typeName.charAt(length - 1) == '}') {
-			typeName = typeName.substring(1, length - 1);
+		if (isBraced(typeName)) {
+			typeName = typeName.substring(1, typeName.length() - 1);
 		}
 		return typeName;
+	}
+
+	private boolean isBraced(String typeName) {
+		final int length = typeName.length();
+		return length > 2 && typeName.charAt(0) == '{'
+				&& typeName.charAt(length - 1) == '}';
 	}
 
 	private static final String ARRAY_PREFIX1 = "Array<";
