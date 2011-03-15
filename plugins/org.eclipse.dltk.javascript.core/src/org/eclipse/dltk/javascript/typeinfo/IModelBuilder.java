@@ -31,6 +31,9 @@ public interface IModelBuilder {
 
 		void setType(JSType type);
 
+		ReferenceLocation getLocation();
+
+		void setLocation(ReferenceLocation location);
 	}
 
 	public interface IMember extends IElement {
@@ -57,10 +60,6 @@ public interface IModelBuilder {
 	}
 
 	public interface IParameter extends IElement {
-
-		ReferenceLocation getLocation();
-
-		void setLocation(ReferenceLocation location);
 
 		/**
 		 * @since 3.0

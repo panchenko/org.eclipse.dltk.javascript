@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
-import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.Keyword;
+import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
@@ -33,6 +35,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	private boolean deprecated;
 	private boolean priv;
 	private boolean constructor;
+	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 
 	public IParameter createParameter() {
 		return new Parameter();
@@ -73,6 +76,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		this.type = type;
 	}
 
+	public ReferenceLocation getLocation() {
+		return location;
+	}
+
+	public void setLocation(ReferenceLocation location) {
+		this.location = location;
+	}
+
 	public boolean isDeprecated() {
 		return deprecated;
 	}
@@ -111,13 +122,20 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	 * @return
 	 */
 	public JSMethod(FunctionStatement node, ReferenceSource source) {
-		initialize(node, source);
+		initialize(node, source, node.getName());
 	}
 
-	protected void initialize(FunctionStatement node, ReferenceSource source) {
-		final Identifier methodName = node.getName();
-		if (methodName != null) {
-			setName(methodName.getName());
+	protected void initialize(FunctionStatement node, ReferenceSource source,
+			Expression methodName) {
+		if (methodName != null && TypeInferencerVisitor.isChildFunction(node)) {
+			setName(PropertyExpressionUtils.nameOf(methodName));
+			setLocation(ReferenceLocation.create(source, node.sourceStart(),
+					node.sourceEnd(), methodName.sourceStart(),
+					methodName.sourceEnd()));
+		} else {
+			final Keyword kw = node.getFunctionKeyword();
+			setLocation(ReferenceLocation.create(source, node.sourceStart(),
+					node.sourceEnd(), kw.sourceStart(), kw.sourceEnd()));
 		}
 		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
 		if (funcType != null) {
@@ -145,38 +163,11 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		return TypeUtil.ref(type.getName());
 	}
 
-	public static class Parameter implements IParameter {
+	public static class Parameter extends JSElement implements IParameter {
 
-		private String name;
-		private JSType type;
-		private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 		private boolean optional;
 		private Type propertiesType;
 		private boolean varargs;
-
-		public String getName() {
-			return name;
-		}
-
-		public JSType getType() {
-			return type;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public void setType(JSType type) {
-			this.type = type;
-		}
-
-		public ReferenceLocation getLocation() {
-			return location;
-		}
-
-		public void setLocation(ReferenceLocation location) {
-			this.location = location;
-		}
 
 		public void setOptional(boolean b) {
 			optional = b;
@@ -204,7 +195,8 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 		@Override
 		public String toString() {
-			return type != null ? name + ':' + type.getName() : name;
+			return getType() != null ? getName() + ':' + getType().getName()
+					: getName();
 		}
 
 	}
