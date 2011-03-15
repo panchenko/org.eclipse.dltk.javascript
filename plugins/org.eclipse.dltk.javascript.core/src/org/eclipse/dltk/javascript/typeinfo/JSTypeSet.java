@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
@@ -178,9 +179,9 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		public Type[] toArray() {
 			if (type instanceof TypeRef) {
 				return new Type[] { ((TypeRef) type).getTarget() };
-			} else if (type instanceof UnionType) {
-				final List<Type> types = new ArrayList<Type>();
-				return types.toArray(new Type[types.size()]);
+			} else if (type instanceof AnyType) {
+				return new Type[] { TypeInfoModelLoader.getInstance().getType(
+						ITypeNames.OBJECT) };
 			} else {
 				return new Type[0];
 			}
@@ -521,10 +522,13 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		@Override
 		public Type[] toArray() {
-			final List<Type> result = new ArrayList<Type>();
+			final LinkedHashSet<Type> result = new LinkedHashSet<Type>();
 			for (JSType type : types) {
 				if (type instanceof TypeRef) {
 					result.add(((TypeRef) type).getTarget());
+				} else if (type instanceof AnyType) {
+					result.add(TypeInfoModelLoader.getInstance().getType(
+							ITypeNames.OBJECT));
 				}
 			}
 			return result.toArray(new Type[result.size()]);

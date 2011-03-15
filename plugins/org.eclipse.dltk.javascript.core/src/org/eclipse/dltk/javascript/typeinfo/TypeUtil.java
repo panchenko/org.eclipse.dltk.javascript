@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -69,6 +70,8 @@ public class TypeUtil {
 			return ((TypeRef) type).getTarget();
 		} else if (type instanceof ArrayType) {
 			return TypeInfoModelLoader.getInstance().getType(ITypeNames.ARRAY);
+		} else if (type instanceof AnyType) {
+			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
 		} else {
 			return null;
 		}
