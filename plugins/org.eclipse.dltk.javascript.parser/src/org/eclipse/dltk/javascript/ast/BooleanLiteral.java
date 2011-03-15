@@ -9,7 +9,6 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.core.runtime.Assert;
@@ -18,10 +17,11 @@ import org.eclipse.dltk.ast.ASTVisitor;
 
 public class BooleanLiteral extends Expression {
 
-	private String text;
+	private final String text;
 
-	public BooleanLiteral(ASTNode parent) {
+	public BooleanLiteral(ASTNode parent, String text) {
 		super(parent);
+		this.text = text;
 	}
 
 	/**
@@ -38,8 +38,8 @@ public class BooleanLiteral extends Expression {
 		return this.text;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public boolean booleanValue() {
+		return "true".equals(text);
 	}
 
 	@Override

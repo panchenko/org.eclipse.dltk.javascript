@@ -1953,8 +1953,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	@Override
 	protected ASTNode visitBooleanLiteral(Tree node) {
 
-		BooleanLiteral bool = new BooleanLiteral(getParent());
-		bool.setText(node.getText());
+		BooleanLiteral bool = new BooleanLiteral(getParent(), node.getText());
 
 		bool.setStart(getTokenOffset(node.getTokenStartIndex()));
 		bool.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
