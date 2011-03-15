@@ -9,13 +9,14 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.core.tests.validation;
+package org.eclipse.dltk.javascript.core.tests;
 
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.javascript.core.tests.validation.TestBuildContext;
 import org.eclipse.dltk.javascript.parser.tests.AbstractJSParserTest;
 
 public abstract class AbstractValidationTest extends AbstractJSParserTest {

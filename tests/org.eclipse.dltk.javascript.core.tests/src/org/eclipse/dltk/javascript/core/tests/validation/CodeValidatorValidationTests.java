@@ -7,6 +7,7 @@ import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
 
 public class CodeValidatorValidationTests extends AbstractValidationTest {
 
