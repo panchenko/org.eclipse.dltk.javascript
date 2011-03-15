@@ -22,6 +22,7 @@ import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserSeverityReporter;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -54,21 +55,22 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 	private static class JSDocValidator implements IBuildParticipant {
 
 		public void build(IBuildContext context) throws CoreException {
-			final TypeInferencer2 inferencer2 = new TypeInferencer2();
-			TypeInferencerVisitor sr = new JSDocValidationVisitor(inferencer2);
-			sr.setProblemReporter(new Reporter(context));
-			TypeChecker typeChecker = new TypeChecker(inferencer2,
-					sr.getProblemReporter());
-			sr.setJSDocTypeChecker(typeChecker);
-			inferencer2.setVisitor(sr);
-			inferencer2.setModelElement(context.getModelElement());
-			inferencer2.doInferencing(JavaScriptValidations.parse(context));
-			typeChecker.validate();
+			 final TypeInferencer2 inferencer2 = new TypeInferencer2();
+			 TypeInferencerVisitor sr = new
+			 JSDocValidationVisitor(inferencer2);
+			 sr.setProblemReporter(new Reporter(context));
+			 TypeChecker typeChecker = new TypeChecker(inferencer2,
+			 sr.getProblemReporter());
+			 sr.setJSDocTypeChecker(typeChecker);
+			 inferencer2.setVisitor(sr);
+			 inferencer2.setModelElement(context.getModelElement());
+			 inferencer2.doInferencing(JavaScriptValidations.parse(context));
+			 typeChecker.validate();
 		}
 
 	}
 
-	private static class TypeChecker implements IJSDocTypeChecker {
+	public static class TypeChecker implements IJSDocTypeChecker {
 
 		private List<TagAndType> lst = new ArrayList<JSDocValidatorFactory.TagAndType>();
 		private final TypeInferencer2 context;
@@ -189,16 +191,19 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 
 	}
 
-	private static class Reporter implements JSProblemReporter {
+	public static class Reporter implements JSProblemReporter {
 
 		private final IBuildContext context;
+		private JavaScriptParserSeverityReporter severityReporter;
 
 		public Reporter(IBuildContext context) {
 			this.context = context;
+			severityReporter = new JavaScriptParserSeverityReporter();
 		}
 
 		public void reportProblem(IProblemIdentifier identifier,
 				String message, int start, int end) {
+
 			reportProblem(ProblemSeverity.WARNING, identifier, message, start,
 					end);
 		}
@@ -207,7 +212,8 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 				IProblemIdentifier identifier, String message, int start,
 				int end) {
 			context.getProblemReporter().reportProblem(
-					new DefaultProblem(message, identifier, null, severity,
+					new DefaultProblem(message, identifier, null,
+							severityReporter.getSeverity(identifier, severity),
 							start, end, lineNumberOf(start)));
 		}
 
