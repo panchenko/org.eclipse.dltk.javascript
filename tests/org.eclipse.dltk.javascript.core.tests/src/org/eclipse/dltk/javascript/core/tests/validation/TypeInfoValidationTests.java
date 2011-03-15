@@ -19,6 +19,7 @@ import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
 
 @SuppressWarnings("nls")
 public class TypeInfoValidationTests extends AbstractValidationTest {
@@ -206,7 +207,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var x:ExampleService");
 		code.add("x.noname = true");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(),1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, problems
 				.get(0).getID());
 	}
@@ -1080,7 +1081,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testNestedTypeToReturnType() {
 		List<String> code = new StringList();
 		code.add("function Test() {");
@@ -1102,7 +1103,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testNestedFunctionTypeNewConstruct() {
 		List<String> code = new StringList();
 		code.add("function Test() {");
@@ -1123,8 +1124,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
-	
+
 	public void testNestedObjectInitializerType() {
 		StringList code = new StringList();
 		code.add("var init = {Node: function(){} }");
@@ -1135,7 +1135,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testNestedObjectInitializerTypeWithFunctionCall() {
 		StringList code = new StringList();
 		code.add("var init = {Node: function(){}, ");
@@ -1147,7 +1147,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testNestedObjectInitializerWithThisTypeWithFunctionCall() {
 		if (notYetImplemented())
 			return;
@@ -1161,7 +1161,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testOuterVariableInInnerFunction() {
 		StringList code = new StringList();
 		code.add("function Outer() {");
@@ -1173,7 +1173,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testAssignmentOfVariableToUndefined() {
 		StringList code = new StringList();
 		code.add("function test() {");
@@ -1184,7 +1184,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testAssignmentOfArgumentToUndefined() {
 		StringList code = new StringList();
 		code.add("/** @param {String} str */");
@@ -1195,7 +1195,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testCompareOperatorsReturningBoolean() {
 		StringList code = new StringList();
 		code.add("/** @return {Boolean} */");
@@ -1218,6 +1218,21 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" if(x > 1)");
 		code.add("  return (y !== 2);");
 		code.add(" return false;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testReturnFromNestedCollections() {
+		StringList code = new StringList();
+		code.add("/** @return {Number} */");
+		code.add("function test() {");
+		code.add("  if (1 > 0) {");
+		code.add("    return 1");
+		code.add("  }");
+		code.add("  else {");
+		code.add("    return 2");
+		code.add("  }");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
