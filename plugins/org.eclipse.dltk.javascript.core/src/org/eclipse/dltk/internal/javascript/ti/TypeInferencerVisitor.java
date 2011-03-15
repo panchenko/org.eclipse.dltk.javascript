@@ -187,6 +187,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return visitAssign(left, right, node);
 		} else if (left == null && right instanceof ConstantValue) {
 			return right;
+		} else if (op == JSParser.LAND) {
+			return coalesce(right, left);
+		} else if (op == JSParser.LOR) {
+			return coalesce(left, right);
 		} else if (op == JSParser.GT || op == JSParser.GTE || op == JSParser.LT
 				|| op == JSParser.LTE || op == JSParser.NSAME
 				|| op == JSParser.SAME || op == JSParser.NEQ
@@ -212,6 +216,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			// TODO handle other operations
 			return null;
 		}
+	}
+
+	private static IValueReference coalesce(IValueReference v1,
+			IValueReference v2) {
+		return v1 != null ? v1 : v2;
 	}
 
 	private boolean isNumber(IValueReference ref) {
