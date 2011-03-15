@@ -18,6 +18,7 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.StringLiteral;
 
 public class PropertyExpressionUtils {
 
@@ -113,6 +114,16 @@ public class PropertyExpressionUtils {
 		}
 		if (expression.getProperty() instanceof Identifier) {
 			identifiers.add((Identifier) expression.getProperty());
+		}
+	}
+
+	public static String nameOf(Expression name) {
+		if (name instanceof Identifier) {
+			return ((Identifier) name).getName();
+		} else if (name instanceof StringLiteral) {
+			return ((StringLiteral) name).getValue();
+		} else {
+			return null;
 		}
 	}
 
