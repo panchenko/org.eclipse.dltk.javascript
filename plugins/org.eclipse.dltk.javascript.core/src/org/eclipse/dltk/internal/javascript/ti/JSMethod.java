@@ -127,7 +127,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	protected void initialize(FunctionStatement node, ReferenceSource source,
 			Expression methodName) {
-		if (methodName != null && TypeInferencerVisitor.isChildFunction(node)) {
+		if (methodName != null) {
 			setName(PropertyExpressionUtils.nameOf(methodName));
 			setLocation(ReferenceLocation.create(source, node.sourceStart(),
 					node.sourceEnd(), methodName.sourceStart(),
