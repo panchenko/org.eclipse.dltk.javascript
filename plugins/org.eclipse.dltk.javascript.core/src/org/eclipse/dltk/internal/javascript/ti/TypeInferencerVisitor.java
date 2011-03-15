@@ -54,7 +54,6 @@ import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
-import org.eclipse.dltk.javascript.ast.Keyword;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
@@ -313,7 +312,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 		}
 		if (varType == null)
-			setTypeImpl(identifier, reference, variable.getType());
+			setTypeImpl(reference, variable.getType());
 		else
 			setType(identifier, reference, variable.getType(), true);
 		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
@@ -439,8 +438,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				// call directly the impl else unknown type is reported twice if
 				// used in jsdoc,
 				// but when it is declared in code itself it will now fail..
-				setTypeImpl(node.getArgument(parameter.getName()), refArg,
-						parameter.getType());
+				setTypeImpl(refArg, parameter.getType());
 			}
 			refArg.setLocation(parameter.getLocation());
 		}
@@ -448,16 +446,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference result;
 		if (isChildFunction(node)) {
 			result = peekContext().createChild(method.getName());
-			result.setLocation(ReferenceLocation.create(getSource(),
-					node.sourceStart(), node.sourceEnd(),
-					methodName.sourceStart(), methodName.sourceEnd()));
 		} else {
 			result = new AnonymousValue();
-			final Keyword kw = node.getFunctionKeyword();
-			result.setLocation(ReferenceLocation.create(getSource(),
-					node.sourceStart(), node.sourceEnd(), kw.sourceStart(),
-					kw.sourceEnd()));
 		}
+		result.setLocation(method.getLocation());
 		result.setKind(ReferenceKind.FUNCTION);
 		result.setDeclaredType(context.getTypeRef(ITypeNames.FUNCTION));
 		result.setAttribute(IReferenceAttributes.PARAMETERS, method);
@@ -472,9 +464,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				.getChild(IValueReference.FUNCTION_OP);
 		returnValue.addValue(function.getReturnValue(), true);
 		if (node.getReturnType() == null)
-			setTypeImpl(
-					methodName != null ? methodName : node.getFunctionKeyword(),
-					returnValue, method.getType());
+			setTypeImpl(returnValue, method.getType());
 		else
 			setType(methodName != null ? methodName : node.getFunctionKeyword(),
 					returnValue, method.getType(), true);
@@ -486,7 +476,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	 * @param methodName
 	 * @return
 	 */
-	protected boolean isChildFunction(FunctionStatement node) {
+	protected static boolean isChildFunction(FunctionStatement node) {
 		return node.getName() != null
 				&& !(node.getParent() instanceof BinaryOperation)
 				&& !(node.getParent() instanceof VariableDeclaration)
@@ -517,10 +507,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	public void setType(ASTNode node, IValueReference value, JSType type,
 			boolean lazy) {
-		setTypeImpl(node, value, type);
+		setTypeImpl(value, type);
 	}
 
-	private void setTypeImpl(ASTNode node, IValueReference value, JSType type) {
+	private void setTypeImpl(IValueReference value, JSType type) {
 		if (type != null) {
 			type = context.resolveTypeRef(type);
 			Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
