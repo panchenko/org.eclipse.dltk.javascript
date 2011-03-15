@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Deque;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,9 @@ import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
@@ -142,12 +145,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 	}
 
-	private static class ReturnNodeAndValueReference {
+	private static class ReturnNode {
 
-		private final ReturnStatement node;
-		private final IValueReference returnValueReference;
+		final ReturnStatement node;
+		final IValueReference returnValueReference;
 
-		public ReturnNodeAndValueReference(ReturnStatement node,
+		public ReturnNode(ReturnStatement node,
 				IValueReference returnValueReference) {
 			this.node = node;
 			this.returnValueReference = returnValueReference;
@@ -157,12 +160,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 	private static class TestReturnStatement implements ExpressionValidator {
 
-		private final List<ReturnNodeAndValueReference> lst;
+		private final List<ReturnNode> lst;
 		private final Reporter reporter;
-		private final JSMethod jsMethod;
+		private final IMethod jsMethod;
 
-		public TestReturnStatement(JSMethod jsMethod,
-				List<ReturnNodeAndValueReference> lst, Reporter reporter) {
+		public TestReturnStatement(IMethod jsMethod, List<ReturnNode> lst,
+				Reporter reporter) {
 			this.jsMethod = jsMethod;
 			this.lst = lst;
 			this.reporter = reporter;
@@ -171,7 +174,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public void call() {
 			JSType2 firstType = null;
 			for (int i = 0; i < lst.size(); i++) {
-				ReturnNodeAndValueReference element = lst.get(i);
+				ReturnNode element = lst.get(i);
 				JSType methodType = jsMethod.getType();
 				JSType2 type = JSTypeSet.normalize(JavaScriptValidations
 						.typeOf(element.returnValueReference));
@@ -198,7 +201,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 			if (firstType != null) {
 				for (int i = 1; i < lst.size(); i++) {
-					ReturnNodeAndValueReference next = lst.get(i);
+					ReturnNode next = lst.get(i);
 					JSType2 nextType = JSTypeSet
 							.normalize(JavaScriptValidations
 									.typeOf(next.returnValueReference));
@@ -354,7 +357,32 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		private final Map<IValueCollection, List<ReturnNodeAndValueReference>> returnNodes = new HashMap<IValueCollection, List<ReturnNodeAndValueReference>>();
+		private final Deque<FunctionScope> functionScopes = new ArrayDeque<FunctionScope>();
+
+		public static class FunctionScope {
+			final List<ReturnNode> returnNodes = new ArrayList<ReturnNode>();
+		}
+
+		public void enterFunctionScope() {
+			functionScopes.push(new FunctionScope());
+		}
+
+		public void leaveFunctionScope(IMethod method) {
+			final FunctionScope scope = functionScopes.pop();
+			if (!scope.returnNodes.isEmpty()) {
+				pushExpressionValidator(new TestReturnStatement(method,
+						scope.returnNodes, reporter));
+			} else if (method.getType() != null) {
+				final ReferenceLocation location = method.getLocation();
+				reporter.reportProblem(
+						JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+						NLS.bind(
+								ValidationMessages.DeclarationMismatchNoReturnType,
+								new String[] { method.getName(),
+										TypeUtil.getName(method.getType()) }),
+						location.getNameStart(), location.getNameEnd());
+			}
+		}
 
 		@Override
 		public IValueReference visitFunctionStatement(FunctionStatement node) {
@@ -464,32 +492,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 			}
 
+			enterFunctionScope();
 			IValueReference reference = super.visitFunctionStatement(node);
+			final IMethod method = (IMethod) reference
+					.getAttribute(IReferenceAttributes.PARAMETERS);
+			leaveFunctionScope(method);
 
-			IValueCollection collection = (IValueCollection) reference
-					.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
-			if (collection != null) {
-				List<ReturnNodeAndValueReference> lst = returnNodes
-						.get(collection);
-				JSMethod method = (JSMethod) reference
-						.getAttribute(IReferenceAttributes.PARAMETERS);
-				if (lst != null) {
-					pushExpressionValidator(new TestReturnStatement(method,
-							lst, reporter));
-					returnNodes.remove(collection);
-				} else if (method.getType() != null) {
-					ASTNode name = node.getName();
-					if (name == null)
-						name = node.getFunctionKeyword();
-					reporter.reportProblem(
-							JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
-							NLS.bind(
-									ValidationMessages.DeclarationMismatcNoReturnType,
-									new String[] { method.getName(),
-											TypeUtil.getName(method.getType()) }),
-							name.sourceStart(), name.sourceEnd());
-				}
-			}
 			return reference;
 		}
 
@@ -499,16 +507,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 					.visitReturnStatement(node);
 			if (returnValueReference != null
 					|| node.getValue() instanceof NullExpression) {
-
-				List<ReturnNodeAndValueReference> lst = returnNodes
-						.get(peekContext());
-				if (lst == null) {
-					lst = new ArrayList<ReturnNodeAndValueReference>();
-					returnNodes.put(peekContext(), lst);
+				final FunctionScope scope = functionScopes.peek();
+				if (scope != null) {
+					scope.returnNodes.add(new ReturnNode(node,
+							returnValueReference));
 				}
-
-				lst.add(new ReturnNodeAndValueReference(node,
-						returnValueReference));
 			}
 			return returnValueReference;
 		}
