@@ -128,7 +128,6 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		parser.setTypeInformationEnabled(true);
 		Script script = parse("var method = function a(x,y){}");
 		assertFalse(reporter.hasErrors());
-		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
 		assertFalse(func.isDeclaration());
