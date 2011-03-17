@@ -12,6 +12,7 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class ConstantValue extends AbstractReference {
@@ -20,6 +21,10 @@ public class ConstantValue extends AbstractReference {
 
 	public ConstantValue(JSType type) {
 		value.getTypes().add(type);
+	}
+
+	public ConstantValue(JSTypeSet types) {
+		value.getTypes().addAll(types);
 	}
 
 	public boolean isReference() {

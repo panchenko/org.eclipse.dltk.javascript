@@ -189,8 +189,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return right;
 		} else if (op == JSParser.LAND) {
 			return coalesce(right, left);
-		} else if (op == JSParser.LOR) {
-			return coalesce(left, right);
 		} else if (op == JSParser.GT || op == JSParser.GTE || op == JSParser.LT
 				|| op == JSParser.LTE || op == JSParser.NSAME
 				|| op == JSParser.SAME || op == JSParser.NEQ
@@ -203,15 +201,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		} else if (JSParser.INSTANCEOF == op) {
 			return context.getFactory().createBoolean(peekContext());
 		} else if (JSParser.LOR == op) {
-			JSType leftType = JavaScriptValidations.typeOf(left);
-			JSType rightType = JavaScriptValidations.typeOf(right);
-			if (leftType != null && !leftType.equals(rightType)) {
-				IValueReference value = new AnonymousValue();
-				value.addValue(left, true);
-				value.addValue(right, true);
-				return value;
+			final JSTypeSet typeSet = JSTypeSet.create();
+			if (left != null) {
+				typeSet.addAll(left.getDeclaredTypes());
+				typeSet.addAll(left.getTypes());
 			}
-			return left;
+			if (right != null) {
+				typeSet.addAll(right.getDeclaredTypes());
+				typeSet.addAll(right.getTypes());
+			}
+			return new ConstantValue(typeSet);
 		} else {
 			// TODO handle other operations
 			return null;
