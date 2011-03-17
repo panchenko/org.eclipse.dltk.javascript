@@ -88,6 +88,16 @@ public class Reporter extends LineTracker implements IProblemReporter,
 		return new DefaultProblem(message, id, null, severity, start, end, line);
 	}
 
+	public void setFormattedMessage(JSProblemIdentifier id, Object... args) {
+		this.id = id;
+		this.message = id.formatMessage(args);
+	}
+
+	public void setMessage(JSProblemIdentifier id) {
+		this.id = id;
+		this.message = id.getMessage();
+	}
+
 	public void setMessage(IProblemIdentifier id, String message) {
 		this.id = id;
 		this.message = message;

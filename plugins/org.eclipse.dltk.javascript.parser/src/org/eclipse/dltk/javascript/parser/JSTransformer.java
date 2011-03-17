@@ -116,7 +116,6 @@ import org.eclipse.dltk.javascript.internal.parser.ITypedDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
 import org.eclipse.dltk.javascript.internal.parser.VariableTypedDeclaration;
 import org.eclipse.dltk.utils.IntList;
-import org.eclipse.osgi.util.NLS;
 
 public class JSTransformer extends JSVisitor<ASTNode> {
 
@@ -497,8 +496,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			statement.setEnd(Math.max(statement.getSemicolonPosition() + 1,
 					statement.getBreakKeyword().sourceEnd()));
 		if (statement.getLabel() == null) {
-			validateParent(JavaScriptParserProblems.BAD_BREAK, "bad break",
-					statement, LoopStatement.class, SwitchStatement.class);
+			validateParent(JavaScriptParserProblems.BAD_BREAK, statement,
+					LoopStatement.class, SwitchStatement.class);
 		}
 		return statement;
 	}
@@ -811,10 +810,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			fn.addArgument(argument);
 			if (functionScope.add(argument.getArgumentName(), SymbolKind.PARAM) != null
 					&& reporter != null) {
-				reporter.setMessage(
+				reporter.setFormattedMessage(
 						JavaScriptParserProblems.DUPLICATE_PARAMETER,
-						NLS.bind("Duplicate parameter {0}",
-								argument.getArgumentName()));
+						argument.getArgumentName());
 				reporter.setRange(argument.sourceStart(), argument.sourceEnd());
 				reporter.report();
 			}
@@ -825,9 +823,9 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		final Identifier nameNode = fn.getName();
 		if (nameNode != null
 				&& scope.canAdd(nameNode.getName()) == SymbolKind.PARAM) {
-			reporter.setMessage(
+			reporter.setFormattedMessage(
 					JavaScriptParserProblems.FUNCTION_HIDES_ARGUMENT,
-					NLS.bind("Function {0} hides argument", nameNode.getName()));
+					nameNode.getName());
 			reporter.setRange(nameNode.sourceStart(), nameNode.sourceEnd());
 			reporter.report();
 		}
@@ -887,8 +885,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		returnStatement.setStart(returnStatement.getReturnKeyword()
 				.sourceStart());
 		validateParent(JavaScriptParserProblems.INVALID_RETURN,
-				"invalid return", returnStatement, FunctionStatement.class,
-				Method.class);
+				returnStatement, FunctionStatement.class, Method.class);
 		return returnStatement;
 	}
 
@@ -942,9 +939,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				break;
 			case JSParser.DEFAULT:
 				if (defaultCount != 0 && reporter != null) {
-					reporter.setMessage(
-							JavaScriptParserProblems.DOUBLE_SWITCH_DEFAULT,
-							"double default label in the switch statement");
+					reporter.setMessage(JavaScriptParserProblems.DOUBLE_SWITCH_DEFAULT);
 					reporter.setSeverity(ProblemSeverity.ERROR);
 					reporter.setStart(reporter.getOffset(child.getLine(),
 							child.getCharPositionInLine()));
@@ -1046,8 +1041,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				node.getTokenStopIndex(), node.getTokenStopIndex()));
 		setRange(statement, node);
 		if (statement.getLabel() == null) {
-			validateParent(JavaScriptParserProblems.BAD_CONTINUE,
-					"continue must be inside loop", statement,
+			validateParent(JavaScriptParserProblems.BAD_CONTINUE, statement,
 					LoopStatement.class);
 		}
 		return statement;
@@ -1057,15 +1051,15 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		if (reporter == null)
 			return;
 		if (!scope.hasLabel(label.getText())) {
-			reporter.setMessage(JavaScriptParserProblems.UNDEFINED_LABEL,
-					"undefined label " + label.getText());
+			reporter.setFormattedMessage(
+					JavaScriptParserProblems.UNDEFINED_LABEL, label.getText());
 			reporter.setSeverity(ProblemSeverity.ERROR);
 			reporter.setRange(label.sourceStart(), label.sourceEnd());
 			reporter.report();
 		}
 	}
 
-	private void validateParent(IProblemIdentifier messageId, String message,
+	private void validateParent(JSProblemIdentifier messageId,
 			Statement statement, Class<?>... classes) {
 		if (reporter == null)
 			return;
@@ -1078,7 +1072,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				}
 			}
 		}
-		reporter.setMessage(messageId, message);
+		reporter.setMessage(messageId);
 		reporter.setRange(statement.sourceStart(), statement.sourceEnd());
 		reporter.setSeverity(ProblemSeverity.ERROR);
 		reporter.report();
@@ -1163,33 +1157,21 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 						varNode.getTokenStopIndex() + 1, node.getChild(i + 1)
 								.getTokenStartIndex()));
 			}
-			scope.add(declaration.getVariableName(), kind);
-			// SymbolKind replaced = scope
-			// .add(declaration.getVariableName(), kind);
-			// if (replaced != null && reporter != null) {
-			// final Identifier identifier = declaration.getIdentifier();
-			// reporter.setRange(identifier.sourceStart(),
-			// identifier.sourceEnd());
-			// String message;
-			// if (replaced == SymbolKind.VAR || replaced == SymbolKind.CONST) {
-			// message = "redeclaration of "
-			// + replaced.name().toLowerCase() + " "
-			// + declaration.getVariableName();
-			// reporter.setMessage(
-			// JavaScriptParserProblems.DUPLICATE_VAR_DECLARATION,
-			// message);
-			// } else {
-			// message = kind.name().toLowerCase() + " "
-			// + declaration.getVariableName()
-			// + " hides parameter";
-			// reporter.setMessage(
-			// kind == SymbolKind.VAR ?
-			// JavaScriptParserProblems.VAR_HIDES_ARGUMENT
-			// : JavaScriptParserProblems.CONST_HIDES_ARGUMENT,
-			// message);
-			// }
-			// reporter.report();
-			// }
+			final SymbolKind replaced = scope.add(
+					declaration.getVariableName(), kind);
+			if (replaced != null && reporter != null) {
+				final Identifier identifier = declaration.getIdentifier();
+				reporter.setRange(identifier.sourceStart(),
+						identifier.sourceEnd());
+				if (replaced == SymbolKind.PARAM) {
+					reporter.setFormattedMessage(kind.hideProblem,
+							declaration.getVariableName());
+				} else {
+					reporter.setFormattedMessage(kind.duplicateProblem,
+							declaration.getVariableName());
+				}
+				reporter.report();
+			}
 		}
 	}
 
@@ -1512,9 +1494,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				final CatchClause catchClause = (CatchClause) transformNode(
 						child, statement);
 				if (reporter != null && sawDefaultCatch) {
-					reporter.setMessage(
-							JavaScriptParserProblems.CATCH_UNREACHABLE,
-							"any catch clauses following an unqualified catch are unreachable");
+					reporter.setMessage(JavaScriptParserProblems.CATCH_UNREACHABLE);
 					reporter.setRange(catchClause.sourceStart(),
 							catchClause.getRP() + 1);
 					reporter.report();
@@ -1798,8 +1778,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				node.getTokenStopIndex() + 1));
 
 		if (!scope.addLabel(statement) && reporter != null) {
-			reporter.setMessage(JavaScriptParserProblems.DUPLICATE_LABEL,
-					"duplicate label");
+			reporter.setMessage(JavaScriptParserProblems.DUPLICATE_LABEL);
 			reporter.setSeverity(ProblemSeverity.ERROR);
 			reporter.setRange(label.sourceStart(), label.sourceEnd());
 			reporter.report();

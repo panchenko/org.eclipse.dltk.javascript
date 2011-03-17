@@ -12,21 +12,35 @@
 package org.eclipse.dltk.javascript.parser;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.utils.EnumNLS;
+import org.eclipse.osgi.util.NLS;
 
-public enum JavaScriptParserProblems implements IProblemIdentifier {
+public enum JavaScriptParserProblems implements IProblemIdentifier,
+		JSProblemIdentifier {
 
-	INTERNAL_ERROR, LEXER_ERROR, SYNTAX_ERROR, RESERVED_KEYWORD, DUPLICATE_PARAMETER,
-	// public static final int VAR_HIDES_ARGUMENT = IProblem.MethodRelated +
-	// 1001;
-	// public static final int CONST_HIDES_ARGUMENT = IProblem.MethodRelated +
-	// 1002;
-	FUNCTION_HIDES_ARGUMENT,
-	// public static final int DUPLICATE_VAR_DECLARATION = IProblem.Internal +
-	// 1004;
-	// public static final int DUPLICATE_CONST_DECLARATION = IProblem.Internal +
-	// 1005;
+	INTERNAL_ERROR, LEXER_ERROR, SYNTAX_ERROR, RESERVED_KEYWORD,
 
-	DOUBLE_SWITCH_DEFAULT, DUPLICATE_LABEL, UNDEFINED_LABEL, BAD_BREAK, INVALID_RETURN, BAD_CONTINUE, CATCH_UNREACHABLE, TRAILING_COMMA_OBJECT_INITIALIZER;
+	DUPLICATE_PARAMETER, DUPLICATE_VAR, DUPLICATE_CONST,
+
+	VAR_HIDES_PARAM, CONST_HIDES_PARAM, FUNCTION_HIDES_ARGUMENT,
+
+	DOUBLE_SWITCH_DEFAULT, DUPLICATE_LABEL, UNDEFINED_LABEL, BAD_BREAK, INVALID_RETURN, BAD_CONTINUE, CATCH_UNREACHABLE,
+
+	TRAILING_COMMA_OBJECT_INITIALIZER;
+
+	private String message;
+
+	public String getMessage() {
+		return message;
+	}
+
+	public String formatMessage(Object... args) {
+		return NLS.bind(message, args);
+	}
+
+	static {
+		EnumNLS.initializeMessages(JavaScriptParserProblems.values(), "message");
+	}
 
 	public String contributor() {
 		return JavaScriptParserPlugin.PLUGIN_ID;

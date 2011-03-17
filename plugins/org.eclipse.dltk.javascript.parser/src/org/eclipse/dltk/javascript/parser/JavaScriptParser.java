@@ -39,7 +39,6 @@ import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
 import org.eclipse.dltk.utils.TextUtils;
-import org.eclipse.osgi.util.NLS;
 
 public class JavaScriptParser extends AbstractSourceParser {
 
@@ -268,8 +267,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 		@Override
 		protected void reportReservedKeyword(Token token) {
 			final ISourceRange range = convert(token);
-			reporter.setMessage(JavaScriptParserProblems.RESERVED_KEYWORD,
-					NLS.bind("\"{0}\" is reserved keyword", token.getText()));
+			reporter.setFormattedMessage(
+					JavaScriptParserProblems.RESERVED_KEYWORD, token.getText());
 			reporter.setSeverity(ProblemSeverity.ERROR);
 			reporter.setRange(range.getOffset(),
 					range.getOffset() + range.getLength());
