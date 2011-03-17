@@ -223,6 +223,7 @@ public abstract class JSVisitor<E> {
 			return visitConst(node);
 
 		case JSParser.FUNCTION:
+		case JSParser.FUNCTION_DECLARATION:
 			return visitFunction(node);
 
 		case JSParser.XML_LITERAL:

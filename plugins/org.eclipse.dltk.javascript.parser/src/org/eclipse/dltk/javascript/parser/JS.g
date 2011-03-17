@@ -212,6 +212,7 @@ tokens
 	XmlAttribute;
 	XML_LITERAL;
 	EMPTY_STATEMENT;
+	FUNCTION_DECLARATION;
 }
 
 @lexer::header
@@ -1738,8 +1739,8 @@ finallyClause
 // $<	Function Definition (13)
 
 functionDeclaration
-	: FUNCTION name=identifier formalParameterList ( { isTypeInformationEnabled() }?=> COLON typeRef )? functionBody
-	-> ^( FUNCTION $name formalParameterList COLON? typeRef? functionBody )
+	: function=FUNCTION name=identifier formalParameterList ( { isTypeInformationEnabled() }?=> COLON typeRef )? functionBody
+	-> ^( FUNCTION_DECLARATION[$function] $name formalParameterList COLON? typeRef? functionBody )
 	;
 
 functionExpression

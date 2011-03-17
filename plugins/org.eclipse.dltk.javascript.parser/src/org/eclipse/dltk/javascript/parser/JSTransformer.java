@@ -781,7 +781,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	@Override
 	protected ASTNode visitFunction(Tree node) {
-		FunctionStatement fn = new FunctionStatement(getParent());
+		FunctionStatement fn = new FunctionStatement(getParent(),
+				node.getType() == JSParser.FUNCTION_DECLARATION);
 		locateDocumentation(fn, node);
 
 		fn.setFunctionKeyword(createKeyword(node, Keywords.FUNCTION));

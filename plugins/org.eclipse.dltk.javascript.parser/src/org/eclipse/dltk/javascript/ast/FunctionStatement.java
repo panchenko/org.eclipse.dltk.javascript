@@ -33,9 +33,11 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 	private int colonPosition = -1;
 	private Type returnType;
 	private Comment documentation;
+	private final boolean declaration;
 
-	public FunctionStatement(ASTNode parent) {
+	public FunctionStatement(ASTNode parent, boolean declaration) {
 		super(parent);
+		this.declaration = declaration;
 	}
 
 	/**
@@ -199,5 +201,9 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 
 	public boolean isBlock() {
 		return true;
+	}
+
+	public boolean isDeclaration() {
+		return declaration;
 	}
 }
