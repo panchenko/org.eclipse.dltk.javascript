@@ -47,12 +47,11 @@ public class SelectionTests extends AbstractModelTests {
 		setUpScriptProject(PRJ_NAME);
 		waitUntilIndexesReady();
 	}
-	
+
 	@Override
 	protected void setUp() throws Exception {
 		IScriptProject scriptProject = getScriptProject(PRJ_NAME);
-		if (scriptProject == null || !scriptProject.isOpen())
-		{
+		if (scriptProject == null || !scriptProject.isOpen()) {
 			setUpSuite();
 		}
 		super.setUp();
@@ -173,7 +172,7 @@ public class SelectionTests extends AbstractModelTests {
 		final String contents = module.getSourceContents();
 		assertEquals(contents.indexOf("aa"), nameRange.getOffset());
 	}
-	
+
 	public void testFunctionField() throws ModelException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
@@ -195,14 +194,14 @@ public class SelectionTests extends AbstractModelTests {
 		final String contents = module.getSourceContents();
 		assertEquals(contents.indexOf("fun2"), nameRange.getOffset());
 	}
-	
+
 	public void testFunctionLocalFieldWith2Declarations() throws ModelException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("fun4", module, false));
 		assertEquals(0, elements.length);
 	}
-	
+
 	@Skip
 	public void testFunctionThisField() throws ModelException {
 		IModuleSource module = getModule("functions.js");
@@ -225,23 +224,24 @@ public class SelectionTests extends AbstractModelTests {
 		final String contents = module.getSourceContents();
 		assertEquals(contents.indexOf("fun6"), nameRange.getOffset());
 	}
-	
+
 	public void testFunctionThisFieldWithLocalFunction() throws ModelException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("fun8", module, false));
 		assertEquals(0, elements.length);
 	}
-	
-	public void testFunctionThisFieldWithLocalFunctionOutercall() throws ModelException {
+
+	public void testFunctionThisFieldWithLocalFunctionOutercall()
+			throws ModelException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("funA", module, false));
 		assertEquals(0, elements.length);
 	}
 
-
-	public void testFunctionObjectInitalizerFunctionField() throws ModelException {
+	public void testFunctionObjectInitalizerFunctionField()
+			throws ModelException {
 		IModuleSource module = getModule("functions.js");
 		IModelElement[] elements = select(module,
 				lastPositionInFile("funB", module, false));
@@ -251,7 +251,5 @@ public class SelectionTests extends AbstractModelTests {
 		final String contents = module.getSourceContents();
 		assertEquals(contents.indexOf("funB"), nameRange.getOffset());
 	}
-
-
 
 }
