@@ -23,6 +23,7 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
+		assertTrue(func.isDeclaration());
 		assertEquals("a", func.getName().getName());
 		assertTrue(func.getArguments().isEmpty());
 	}
@@ -32,6 +33,7 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
+		assertTrue(func.isDeclaration());
 		assertEquals("a", func.getName().getName());
 		assertEquals(1, func.getArguments().size());
 		assertEquals("x", func.getArguments().get(0).getArgumentName());
@@ -43,6 +45,7 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
+		assertTrue(func.isDeclaration());
 		assertEquals("a", func.getName().getName());
 		assertEquals(2, func.getArguments().size());
 		assertEquals("x", func.getArguments().get(0).getArgumentName());
@@ -58,6 +61,7 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
+		assertTrue(func.isDeclaration());
 		assertEquals("a", func.getName().getName());
 		assertEquals(1, func.getArguments().size());
 		assertEquals("x", func.getArguments().get(0).getArgumentName());
@@ -71,6 +75,7 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
+		assertTrue(func.isDeclaration());
 		assertEquals("a", func.getName().getName());
 		assertEquals(2, func.getArguments().size());
 		assertEquals("x", func.getArguments().get(0).getArgumentName());
@@ -85,6 +90,7 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
+		assertTrue(func.isDeclaration());
 		assertEquals("a", func.getName().getName());
 		assertEquals(1, func.getArguments().size());
 		assertEquals("x", func.getArguments().get(0).getArgumentName());
@@ -97,6 +103,7 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
+		assertTrue(func.isDeclaration());
 		assertEquals("a", func.getName().getName());
 		assertEquals(2, func.getArguments().size());
 		assertEquals("x", func.getArguments().get(0).getArgumentName());
@@ -111,9 +118,27 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 		FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
+		assertTrue(func.isDeclaration());
 		assertEquals("a", func.getName().getName());
 		assertTrue(func.getArguments().isEmpty());
 		assertEquals("Number", func.getReturnType().getName());
+	}
+
+	public void testFunctionExpression() {
+		parser.setTypeInformationEnabled(true);
+		Script script = parse("var method = function a(x,y){}");
+		assertFalse(reporter.hasErrors());
+		assertFalse(reporter.hasErrors());
+		FunctionStatement func = uniqueResult(ASTUtil.select(script,
+				FunctionStatement.class));
+		assertFalse(func.isDeclaration());
+		assertEquals("a", func.getName().getName());
+		assertEquals(2, func.getArguments().size());
+		assertEquals("x", func.getArguments().get(0).getArgumentName());
+		assertNull(func.getArguments().get(0).getType());
+		assertEquals("y", func.getArguments().get(1).getArgumentName());
+		assertNull(func.getArguments().get(1).getType());
+
 	}
 
 }
