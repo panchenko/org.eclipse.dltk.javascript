@@ -878,7 +878,6 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertNotNull(x.getDeclaredType());
 		assertEquals("String", x.getDeclaredType().getName());
 	}
-	
 
 	public void testOrAssignmentOf2VariablesOfSameType() throws Exception {
 		List<String> lines = new StringList();
@@ -894,10 +893,11 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection functionScope = (IValueCollection) test
 				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 		IValueReference x = functionScope.getChild("x");
-		assertEquals(x.getTypes().toString(),1,x.getTypes().size());
-		assertTrue(x.getTypes().toString(), x.getTypes().equals(getTypes("String")));
+		assertEquals(x.getTypes().toString(), 1, x.getTypes().size());
+		assertTrue(x.getTypes().toString(),
+				x.getTypes().equals(getTypes("String")));
 	}
-	
+
 	public void testOrAssignmentOf2VariablesOfDifferentType() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("/**");
@@ -912,8 +912,9 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection functionScope = (IValueCollection) test
 				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 		IValueReference x = functionScope.getChild("x");
-		assertEquals(x.getTypes().toString(), 2,x.getTypes().size());
-		assertTrue(x.getTypes().toString(), x.getTypes().equals(getTypes("Number","String")));
+		assertEquals(x.getTypes().toString(), 2, x.getTypes().size());
+		assertTrue(x.getTypes().toString(),
+				x.getTypes().equals(getTypes("Number", "String")));
 	}
 
 	public void testJSDocTypeTagVariableLazy() throws Exception {

@@ -16,7 +16,6 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		return new TypeInfoValidator();
 	}
 
-	
 	public void testFunctionHidesNestedFunction() {
 		StringList code = new StringList();
 		code.add("function test() {");
@@ -30,7 +29,7 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 				.contains(JavaScriptProblems.FUNCTION_HIDES_FUNCTION));
 
 	}
-	
+
 	public void testFunctionHidesFunction() {
 		StringList code = new StringList();
 		code.add("function test() {");
@@ -45,7 +44,6 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 
 	}
 
-	
 	public void testFunctionHidesVariable() {
 		StringList code = new StringList();
 		code.add("var test;");
@@ -54,11 +52,11 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(1, problemIds.size());
-		assertTrue(problemIds.toString(),problemIds
-				.contains(JavaScriptProblems.FUNCTION_HIDES_VARIABLE));
+		assertTrue(problemIds.toString(),
+				problemIds.contains(JavaScriptProblems.FUNCTION_HIDES_VARIABLE));
 
 	}
-	
+
 	public void testArgumentHidesVariable() {
 		StringList code = new StringList();
 		code.add("var test;");
@@ -67,11 +65,12 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(1, problemIds.size());
-		assertTrue(problemIds.toString(),problemIds
-				.contains(JavaScriptProblems.PARAMETER_HIDES_VARIABLE));
+		assertTrue(problemIds.toString(),
+				problemIds
+						.contains(JavaScriptProblems.PARAMETER_HIDES_VARIABLE));
 
 	}
-	
+
 	public void testArgumentHidesFunciton() {
 		StringList code = new StringList();
 		code.add("function test(){}");
@@ -80,8 +79,9 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(1, problemIds.size());
-		assertTrue(problemIds.toString(),problemIds
-				.contains(JavaScriptProblems.PARAMETER_HIDES_FUNCTION));
+		assertTrue(problemIds.toString(),
+				problemIds
+						.contains(JavaScriptProblems.PARAMETER_HIDES_FUNCTION));
 
 	}
 
@@ -92,9 +92,9 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
-		assertEquals(1, problemIds.size());
-		assertTrue(problemIds.toString(),problemIds
-				.contains(JavaScriptProblems.VAR_HIDES_PARAMETER));
+		assertEquals(problemIds.toString(), 1, problemIds.size());
+		assertTrue(problemIds.toString(),
+				problemIds.contains(JavaScriptProblems.VAR_HIDES_PARAMETER));
 
 	}
 
@@ -106,10 +106,10 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(1, problemIds.size());
-		assertTrue(problemIds.toString(),problemIds
-				.contains(JavaScriptProblems.VAR_HIDES_FUNCTION));
+		assertTrue(problemIds.toString(),
+				problemIds.contains(JavaScriptProblems.VAR_HIDES_FUNCTION));
 	}
-	
+
 	public void testVariableHidesFunction() {
 		StringList code = new StringList();
 		code.add("function test() {}");
@@ -119,8 +119,8 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(1, problemIds.size());
-		assertTrue(problemIds.toString(),problemIds
-				.contains(JavaScriptProblems.VAR_HIDES_FUNCTION));
+		assertTrue(problemIds.toString(),
+				problemIds.contains(JavaScriptProblems.VAR_HIDES_FUNCTION));
 
 	}
 
