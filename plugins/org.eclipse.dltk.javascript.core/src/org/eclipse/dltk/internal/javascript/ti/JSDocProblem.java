@@ -14,6 +14,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifierExtension;
 import org.eclipse.dltk.javascript.core.JSProblemFactory;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.parser.JSProblemIdentifier;
 import org.eclipse.dltk.utils.EnumNLS;
 import org.eclipse.osgi.util.NLS;
 
@@ -23,6 +24,10 @@ public enum JSDocProblem implements JSProblemIdentifier,
 	DUPLICATE_TAG, MISSING_PARAMETER_NAME, MISSING_TYPE_NAME, UNKNOWN_PARAM, DUPLICATE_PARAM, PARAMETER_MISSING_ANNOTATION;
 
 	private String message;
+
+	public String getMessage() {
+		return message;
+	}
 
 	public String formatMessage(Object... args) {
 		return NLS.bind(message, args);
