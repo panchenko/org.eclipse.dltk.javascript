@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -357,7 +355,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		private final Deque<FunctionScope> functionScopes = new ArrayDeque<FunctionScope>();
+		private final Stack<FunctionScope> functionScopes = new Stack<FunctionScope>();
 
 		public static class FunctionScope {
 			final List<ReturnNode> returnNodes = new ArrayList<ReturnNode>();
@@ -507,8 +505,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					.visitReturnStatement(node);
 			if (returnValueReference != null
 					|| node.getValue() instanceof NullExpression) {
-				final FunctionScope scope = functionScopes.peek();
-				if (scope != null) {
+				if (!functionScopes.isEmpty()) {
+					final FunctionScope scope = functionScopes.peek();
 					scope.returnNodes.add(new ReturnNode(node,
 							returnValueReference));
 				}
