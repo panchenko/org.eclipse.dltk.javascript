@@ -147,22 +147,33 @@ public class JSDocCompletionProposalComputer implements
 	private List<ICompletionProposal> generateTypes(
 			ContentAssistInvocationContext context, String prefix) {
 		if (context instanceof ScriptContentAssistInvocationContext) {
-			final ICompletionEngine engine = DLTKLanguageManager
-					.getCompletionEngine(JavaScriptNature.NATURE_ID);
-			if (engine instanceof JSCompletionEngine) {
+			final JSCompletionEngine engine = getCompletionEngine();
+			if (engine != null) {
 				final ISourceModule module = ((ScriptContentAssistInvocationContext) context)
 						.getSourceModule();
 				final JavaScriptCompletionProposalCollector collector = new JavaScriptCompletionProposalCollector(
 						module);
-				final JSCompletionEngine jsEngine = (JSCompletionEngine) engine;
-				jsEngine.setRequestor(collector);
-				jsEngine.completeTypes(module, prefix.trim(),
+				engine.setRequestor(collector);
+				engine.completeTypes(module, prefix.trim(),
 						context.getInvocationOffset());
 				return Arrays.<ICompletionProposal> asList(collector
 						.getScriptCompletionProposals());
 			}
 		}
 		return Collections.emptyList();
+	}
+
+	private JSCompletionEngine getCompletionEngine() {
+		final ICompletionEngine[] engines = DLTKLanguageManager
+				.getCompletionEngines(JavaScriptNature.NATURE_ID);
+		if (engines != null) {
+			for (ICompletionEngine engine : engines) {
+				if (engine instanceof JSCompletionEngine) {
+					return (JSCompletionEngine) engine;
+				}
+			}
+		}
+		return null;
 	}
 
 	public List<IContextInformation> computeContextInformation(
