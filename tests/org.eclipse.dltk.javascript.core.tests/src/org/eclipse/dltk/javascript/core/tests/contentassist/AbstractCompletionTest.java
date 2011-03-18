@@ -37,13 +37,19 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 
 	protected ICompletionEngine createEngine(List<CompletionProposal> results,
 			boolean useEngine) {
-		final ICompletionEngine engine = DLTKLanguageManager
-				.getCompletionEngine(JavaScriptNature.NATURE_ID);
-		engine.setRequestor(new TestCompletionRequestor(results));
-		if (engine instanceof JSCompletionEngine) {
-			((JSCompletionEngine) engine).setUseEngine(useEngine);
+
+		final ICompletionEngine[] engines = DLTKLanguageManager
+				.getCompletionEngines(JavaScriptNature.NATURE_ID);
+		if (engines != null) {
+			for (ICompletionEngine engine : engines) {
+				if (engine instanceof JSCompletionEngine) {
+					engine.setRequestor(new TestCompletionRequestor(results));
+					((JSCompletionEngine) engine).setUseEngine(useEngine);
+					return (JSCompletionEngine) engine;
+				}
+			}
 		}
-		return engine;
+		return null;
 	}
 
 	private static boolean compareProposalNames(
@@ -127,6 +133,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	protected static List<String> getMethodsOfFunction() {
 		return getMembers(ITypeNames.FUNCTION);
 	}
+
 	protected static List<String> getMethodsOfNumber() {
 		return getMembers(ITypeNames.NUMBER);
 	}
