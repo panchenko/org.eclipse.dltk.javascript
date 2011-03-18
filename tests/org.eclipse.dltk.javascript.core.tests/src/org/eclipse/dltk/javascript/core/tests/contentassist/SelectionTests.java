@@ -252,4 +252,11 @@ public class SelectionTests extends AbstractModelTests {
 		assertEquals(contents.indexOf("funB"), nameRange.getOffset());
 	}
 
+	public void testArrayLiteralItem() throws ModelException {
+		IModuleSource module = getModule("array.js");
+		IModelElement[] elements = select(module,
+				lastPositionInFile("abc", module, false));
+		assertEquals(1, elements.length);
+	}
+
 }
