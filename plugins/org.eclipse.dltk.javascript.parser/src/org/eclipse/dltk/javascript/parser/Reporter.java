@@ -21,13 +21,6 @@ import org.eclipse.dltk.core.builder.ISourceLineTracker;
 public class Reporter extends LineTracker implements IProblemReporter,
 		JSProblemReporter {
 
-	public static class Severity {
-		@Deprecated
-		public static final ProblemSeverity WARNING = ProblemSeverity.WARNING;
-		@Deprecated
-		public static final ProblemSeverity ERROR = ProblemSeverity.ERROR;
-	}
-
 	private final IProblemReporter problemReporter;
 
 	private IProblemIdentifier id;
