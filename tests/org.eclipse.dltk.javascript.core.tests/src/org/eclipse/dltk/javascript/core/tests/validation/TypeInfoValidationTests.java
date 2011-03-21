@@ -1237,7 +1237,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testObjectProperyReturnTypeWithDirectInitializer() {
 		StringList code = new StringList();
 		code.add("/** @return {{astring:String,anumber:Number}} */");
@@ -1247,7 +1247,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testObjectProperyReturnTypeWithInvalidDirectInitializer() {
 		StringList code = new StringList();
 		code.add("/** @return {{astring:String,anumber:Number}} */");
@@ -1256,11 +1256,12 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
-			.getID());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
 
 	}
-	
+
 	public void testObjectProperyReturnTypeWithObjectInitializer() {
 		StringList code = new StringList();
 		code.add("/** @return {{astring:String,anumber:Number}} */");
@@ -1281,8 +1282,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
-			.getID());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
 	}
 
 	public void testObjectProperyReturnTypeWithObject() {
@@ -1309,10 +1311,11 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
-			.getID());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
 	}
-	
+
 	public void testParamWithObjectDeclaration() {
 		StringList code = new StringList();
 		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
@@ -1323,7 +1326,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testParamWithObjectDeclarationInvalidProperty() {
 		StringList code = new StringList();
 		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
@@ -1334,9 +1337,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
-			.getID());
+				.getID());
 	}
-	
+
 	public void testParamWithObjectDeclarationCall() {
 		StringList code = new StringList();
 		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
@@ -1348,7 +1351,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testParamWithObjectDeclarationInvalidCall() {
 		StringList code = new StringList();
 		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
@@ -1360,7 +1363,16 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
-			.getID());
+				.getID());
 	}
 
+	public void testReturnStringAdd() {
+		StringList code = new StringList();
+		code.add("/** @return {String} */");
+		code.add("function test() {");
+		code.add("  return 1 + ''");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
