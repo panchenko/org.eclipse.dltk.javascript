@@ -25,6 +25,8 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory;
+import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChecker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -79,6 +81,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
 public class TypeInfoValidator implements IBuildParticipant {
+
 
 	public void build(IBuildContext context) throws CoreException {
 		final Script script = JavaScriptValidations.parse(context);
@@ -175,6 +178,24 @@ public class TypeInfoValidator implements IBuildParticipant {
 			for (int i = 0; i < lst.size(); i++) {
 				ReturnNode element = lst.get(i);
 				JSType methodType = jsMethod.getType();
+				if (methodType != null && methodType.getName().startsWith("{")
+						&& methodType.getName().endsWith("}")) {
+					String failedPropertyTypeString = ValidationVisitor
+							.testObjectPropertyType(
+									element.returnValueReference, methodType);
+					if (failedPropertyTypeString != null) {
+						reporter.reportProblem(
+								JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+								NLS.bind(
+										ValidationMessages.DeclarationMismatchWithActualReturnType,
+										new String[] { jsMethod.getName(),
+												TypeUtil.getName(methodType),
+												failedPropertyTypeString }),
+								element.node.sourceStart(), element.node
+										.sourceEnd());
+					}
+					return;
+				}
 				JSType2 type = JSTypeSet.normalize(JavaScriptValidations
 						.typeOf(element.returnValueReference));
 
@@ -937,6 +958,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 				IValueReference argument) {
 			if (argument == null)
 				return true;
+			String name = paramType.getName();
+			if (name.startsWith("{") && name.endsWith("}")) {
+				return testObjectPropertyType(argument, paramType) == null;
+			}
+
 			JSType argumentType = argument.getDeclaredType();
 			if (argumentType == null && !argument.getTypes().isEmpty()) {
 				argumentType = argument.getTypes().getFirst();
@@ -948,6 +974,48 @@ public class TypeInfoValidator implements IBuildParticipant {
 										.resolveTypeRef(argumentType)));
 			}
 			return true;
+		}
+
+		/**
+		 * @param element
+		 * @param type
+		 */
+		private static String testObjectPropertyType(IValueReference reference,
+				JSType type) {
+			String name = type.getName();
+			if (name.startsWith("{") && name.endsWith("}")) {
+				Type realType = TypeUtil.extractType(type);
+				if (realType != null) {
+					EList<Member> members = realType.getMembers();
+					for (Member member : members) {
+						if (!reference.getChild(
+								member.getName()).exists()) {
+							Set<String> children = reference
+									.getDirectChildren();
+							if (children.size() == 0)
+								return "{}";
+							StringBuilder typeString = new StringBuilder();
+							typeString.append('{');
+							for (String childName : children) {
+								typeString.append(childName);
+								typeString.append(':');
+								JSType childType = JavaScriptValidations
+										.typeOf(reference
+												.getChild(childName));
+								String typeName = TypeUtil.getName(childType);
+								typeString.append(typeName == null ? "Object"
+										: typeName);
+								typeString.append(',');
+							}
+							typeString.setLength(typeString.length() - 1);
+							typeString.append('}');
+
+							return typeString.toString();
+						}
+					}
+				}
+			}
+			return null;
 		}
 
 		/**
@@ -1057,6 +1125,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 						}
 					}
 					sb.append('}');
+				} else if (parameter != null && parameter.getType() != null && parameter.getType().getName().startsWith("{")) {
+					sb.append(ValidationVisitor.testObjectPropertyType(
+							argument, parameter.getType()));
 				} else if (argument.getDeclaredType() != null) {
 					sb.append(argument.getDeclaredType().getName());
 				} else {

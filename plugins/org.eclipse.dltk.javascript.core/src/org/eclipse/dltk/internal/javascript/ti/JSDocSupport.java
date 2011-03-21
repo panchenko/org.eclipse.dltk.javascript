@@ -45,6 +45,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.utils.TextUtils;
 
@@ -103,7 +104,7 @@ public class JSDocSupport implements IModelBuilder {
 				String[] split = value.split(" ");
 				if (split.length > 0) {
 					if (split[0].startsWith("{")) {
-						JSType type = translateTypeName(split[0]);
+						JSType type = translateTypeName(cutBraces(split[0]));
 						typeChecker.checkType(type, throwsTag);
 					}
 				}
@@ -442,7 +443,7 @@ public class JSDocSupport implements IModelBuilder {
 			if (st.hasMoreTokens()) {
 				final String typeName = st.nextToken();
 				if (!requireBraces || isBraced(typeName)) {
-					JSType type = translateTypeName(typeName);
+					JSType type = translateTypeName(cutBraces(typeName));
 					if (typeChecker != null)
 						typeChecker.checkType(type, tag);
 					member.setType(type);
@@ -476,7 +477,6 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	protected JSType translateTypeName(String typeName) {
-		typeName = cutBraces(typeName);
 		final ArrayType arrayType = parseArray(typeName);
 		if (arrayType != null) {
 			return arrayType;
@@ -490,6 +490,28 @@ public class JSDocSupport implements IModelBuilder {
 						.add(TypeUtil.ref(translate(part.trim())));
 			}
 			return unionType;
+		} else if (typeName.startsWith("{") && typeName.endsWith("}")) {
+			Type type = TypeInfoModelFactory.eINSTANCE.createType();
+			type.setName(typeName);
+			type.setKind(TypeKind.JAVASCRIPT);
+			StringTokenizer st = new StringTokenizer(typeName.substring(1,
+					typeName.length() - 1), ",");
+			while (st.hasMoreTokens()) {
+				String token = st.nextToken();
+				int index = token.indexOf(':');
+				if (index != -1) {
+					// function support?
+					Property property = TypeInfoModelFactory.eINSTANCE
+							.createProperty();
+					property.setName(token.substring(0, index));
+					property.setType(translateTypeName(token
+							.substring(index + 1)));
+					type.getMembers().add(property);
+				} else {
+					// report problem?
+				}
+			}
+			return TypeUtil.ref(type);
 		}
 		return TypeUtil.ref(translate(typeName));
 	}
