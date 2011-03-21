@@ -225,11 +225,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 	private static class NotExistingIdentiferValidator implements
 			ExpressionValidator {
-		private final Identifier identifer;
+		private final Expression identifer;
 		private final IValueReference reference;
 		private final ValidationVisitor visitor;
 
-		public NotExistingIdentiferValidator(Identifier identifer,
+		public NotExistingIdentiferValidator(Expression identifer,
 				IValueReference reference, ValidationVisitor visitor) {
 			this.identifer = identifer;
 			this.reference = reference;
@@ -367,18 +367,20 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		public void leaveFunctionScope(IMethod method) {
 			final FunctionScope scope = functionScopes.pop();
-			if (!scope.returnNodes.isEmpty()) {
-				pushExpressionValidator(new TestReturnStatement(method,
-						scope.returnNodes, reporter));
-			} else if (method.getType() != null) {
-				final ReferenceLocation location = method.getLocation();
-				reporter.reportProblem(
-						JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
-						NLS.bind(
-								ValidationMessages.DeclarationMismatchNoReturnType,
-								new String[] { method.getName(),
-										TypeUtil.getName(method.getType()) }),
-						location.getNameStart(), location.getNameEnd());
+			if (method != null) {
+				if (!scope.returnNodes.isEmpty()) {
+					pushExpressionValidator(new TestReturnStatement(method,
+							scope.returnNodes, reporter));
+				} else if (method.getType() != null) {
+					final ReferenceLocation location = method.getLocation();
+					reporter.reportProblem(
+							JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+							NLS.bind(
+									ValidationMessages.DeclarationMismatchNoReturnType,
+									new String[] { method.getName(),
+											TypeUtil.getName(method.getType()) }),
+							location.getNameStart(), location.getNameEnd());
+				}
 			}
 		}
 
