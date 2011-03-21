@@ -49,6 +49,7 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -310,6 +311,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 				Reporter reporter) {
 			super(context);
 			this.reporter = reporter;
+		}
+
+		@Override
+		public JSProblemReporter getProblemReporter() {
+			return reporter;
 		}
 
 		private final Map<ASTNode, VisitorMode> modes = new IdentityHashMap<ASTNode, VisitorMode>();
