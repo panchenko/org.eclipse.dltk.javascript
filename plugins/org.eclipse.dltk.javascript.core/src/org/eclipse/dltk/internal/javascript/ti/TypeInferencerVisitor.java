@@ -695,14 +695,22 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					}
 				}
 			} else if (visit.exists()) {
-				final JSTypeSet types = visit.getTypes();
-				for (JSType type : types) {
+				for (JSType type : visit.getDeclaredTypes()) {
 					if (type instanceof TypeRef && ((TypeRef) type).isStatic()) {
 						result = new AnonymousNewValue();
 						result.setKind(ReferenceKind.TYPE);
 						result.setDeclaredType(TypeUtil.ref(((TypeRef) type)
 								.getTarget()));
-						break;
+						return result;
+					}
+				}
+				for (JSType type : visit.getTypes()) {
+					if (type instanceof TypeRef && ((TypeRef) type).isStatic()) {
+						result = new AnonymousNewValue();
+						result.setKind(ReferenceKind.TYPE);
+						result.setDeclaredType(TypeUtil.ref(((TypeRef) type)
+								.getTarget()));
+						return result;
 					}
 				}
 			}
