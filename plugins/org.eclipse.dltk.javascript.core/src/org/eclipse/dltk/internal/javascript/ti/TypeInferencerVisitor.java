@@ -13,6 +13,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
+import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.STRING;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -167,10 +168,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		if (kind == K_STRING) {
 			return context.getFactory().create(peekContext(),
-					TypeUtil.arrayOf(context.getTypeRef(ITypeNames.STRING)));
+					TypeUtil.arrayOf(context.getTypeRef(STRING)));
 		} else if (kind == K_NUMBER) {
 			return context.getFactory().create(peekContext(),
-					TypeUtil.arrayOf(context.getTypeRef(ITypeNames.NUMBER)));
+					TypeUtil.arrayOf(context.getTypeRef(NUMBER)));
 		} else {
 			return context.getFactory().createArray(peekContext());
 		}
@@ -200,6 +201,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		} else if (isNumber(left) && isNumber(right)) {
 			return context.getFactory().createNumber(peekContext());
 		} else if (op == JSParser.ADD) {
+			if (isString(left) || isString(right)) {
+				return context.getFactory().createString(peekContext());
+			}
 			return left;
 		} else if (JSParser.INSTANCEOF == op) {
 			return context.getFactory().createBoolean(peekContext());
@@ -227,9 +231,21 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	private boolean isNumber(IValueReference ref) {
 		if (ref != null) {
-			if (ref.getTypes().contains(context.getType(NUMBER)))
+			final Type numType = context.getType(NUMBER);
+			if (ref.getTypes().contains(numType))
 				return true;
-			if (context.getType(NUMBER).equals(ref.getDeclaredType()))
+			if (numType.equals(ref.getDeclaredType()))
+				return true;
+		}
+		return false;
+	}
+
+	private boolean isString(IValueReference ref) {
+		if (ref != null) {
+			final Type strType = context.getType(STRING);
+			if (ref.getTypes().contains(strType))
+				return true;
+			if (strType.equals(ref.getDeclaredType()))
 				return true;
 		}
 		return false;
