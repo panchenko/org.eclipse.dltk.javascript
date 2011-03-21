@@ -1237,4 +1237,130 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testObjectProperyReturnTypeWithDirectInitializer() {
+		StringList code = new StringList();
+		code.add("/** @return {{astring:String,anumber:Number}} */");
+		code.add("function test() {");
+		code.add("return {astring:'test',anumber:1}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testObjectProperyReturnTypeWithInvalidDirectInitializer() {
+		StringList code = new StringList();
+		code.add("/** @return {{astring:String,anumber:Number}} */");
+		code.add("function test() {");
+		code.add("return {aastring:'test',anumber:1}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
+			.getID());
+
+	}
+	
+	public void testObjectProperyReturnTypeWithObjectInitializer() {
+		StringList code = new StringList();
+		code.add("/** @return {{astring:String,anumber:Number}} */");
+		code.add("function test() {");
+		code.add(" var obj =  {astring:'test',anumber:1}");
+		code.add("  return obj;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testObjectProperyReturnTypeWithInvalidObjectInitializer() {
+		StringList code = new StringList();
+		code.add("/** @return {{astring:String,anumber:Number}} */");
+		code.add("function test() {");
+		code.add(" var obj =  {aastring:'test',anumber:1}");
+		code.add("  return obj;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
+			.getID());
+	}
+
+	public void testObjectProperyReturnTypeWithObject() {
+		StringList code = new StringList();
+		code.add("/** @return {{astring:String,anumber:Number}} */");
+		code.add("function test() {");
+		code.add(" var obj =  new Object();");
+		code.add(" obj.astring = ''");
+		code.add(" obj.anumber = 1");
+		code.add(" return obj;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testObjectProperyReturnTypeWithInvalidObject() {
+		StringList code = new StringList();
+		code.add("/** @return {{astring:String,anumber:Number}} */");
+		code.add("function test() {");
+		code.add(" var obj =  new Object();");
+		code.add(" obj.aastring = ''");
+		code.add(" obj.anumber = 1");
+		code.add(" return obj;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
+			.getID());
+	}
+	
+	public void testParamWithObjectDeclaration() {
+		StringList code = new StringList();
+		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
+		code.add("function test(myparam) {");
+		code.add(" var x = myparam.astring");
+		code.add(" var y = myparam.anumber");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testParamWithObjectDeclarationInvalidProperty() {
+		StringList code = new StringList();
+		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
+		code.add("function test(myparam) {");
+		code.add(" var x = myparam.aastring");
+		code.add(" var y = myparam.anumber");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
+			.getID());
+	}
+	
+	public void testParamWithObjectDeclarationCall() {
+		StringList code = new StringList();
+		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
+		code.add("function test(myparam) {");
+		code.add("}");
+		code.add("function test2(myparam) {");
+		code.add(" test({astring:'',anumber:1});");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testParamWithObjectDeclarationInvalidCall() {
+		StringList code = new StringList();
+		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
+		code.add("function test(myparam) {");
+		code.add("}");
+		code.add("function test2(myparam) {");
+		code.add(" test({aastring:'',anumber:1});");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+			.getID());
+	}
+
 }
