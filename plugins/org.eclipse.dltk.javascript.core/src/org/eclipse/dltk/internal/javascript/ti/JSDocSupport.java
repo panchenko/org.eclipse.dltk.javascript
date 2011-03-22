@@ -486,8 +486,7 @@ public class JSDocSupport implements IModelBuilder {
 			final UnionType unionType = TypeInfoModelFactory.eINSTANCE
 					.createUnionType();
 			for (String part : parts) {
-				unionType.getTargets()
-						.add(TypeUtil.ref(translate(part.trim())));
+				unionType.getTargets().add(translateTypeName(part.trim()));
 			}
 			return unionType;
 		} else if (typeName.startsWith("{") && typeName.endsWith("}")) {
