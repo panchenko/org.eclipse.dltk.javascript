@@ -25,6 +25,8 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory;
+import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChecker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -986,7 +988,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (realType != null) {
 					EList<Member> members = realType.getMembers();
 					for (Member member : members) {
-						if (!reference.getChild(member.getName()).exists()) {
+						IValueReference child = reference.getChild(member
+								.getName());
+						JSType referenceType = JavaScriptValidations
+								.typeOf(child);
+						if (!child.exists()
+								|| !(referenceType != null
+										&& member.getType() != null && JSTypeSet
+										.normalize(member.getType())
+										.isAssignableFrom(
+												JSTypeSet
+														.normalize(referenceType)))) {
 							Set<String> children = reference
 									.getDirectChildren();
 							if (children.size() == 0)
