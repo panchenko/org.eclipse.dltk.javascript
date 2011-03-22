@@ -415,10 +415,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		IValueReference itemReference = visit(node.getItem());
 		IValueReference iteratorReference = visit(node.getIterator());
 		JSType type = JavaScriptValidations.typeOf(iteratorReference);
-		if (type != null && type instanceof ArrayType
+		if (type != null) {
+			if (type instanceof ArrayType
 				&& JavaScriptValidations.typeOf(itemReference) == null) {
-			final JSType itemType = ((ArrayType) type).getItemType();
-			itemReference.setDeclaredType(itemType);
+				final JSType itemType = ((ArrayType) type).getItemType();
+				itemReference.setDeclaredType(itemType);
+			} else if (type.getName().endsWith(ITypeNames.XMLLIST)) {
+				itemReference.setDeclaredType(type);
+			}
 		}
 		visit(node.getBody());
 		return null;
