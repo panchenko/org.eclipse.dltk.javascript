@@ -1299,6 +1299,22 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testObjectProperyReturnTypeWithObjectWithDifferentType() {
+		StringList code = new StringList();
+		code.add("/** @return {{astring:String,anumber:Number}} */");
+		code.add("function test() {");
+		code.add(" var obj =  new Object();");
+		code.add(" obj.astring = ''");
+		code.add(" obj.anumber = '1'");
+		code.add(" return obj;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
+	}
 
 	public void testObjectProperyReturnTypeWithInvalidObject() {
 		StringList code = new StringList();
@@ -1350,6 +1366,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testParamWithObjectDeclarationCallWithDifferentType() {
+		StringList code = new StringList();
+		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
+		code.add("function test(myparam) {");
+		code.add("}");
+		code.add("function test2(myparam) {");
+		code.add(" test({astring:'',anumber:'1'});");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+			.getID());
 	}
 
 	public void testParamWithObjectDeclarationInvalidCall() {
