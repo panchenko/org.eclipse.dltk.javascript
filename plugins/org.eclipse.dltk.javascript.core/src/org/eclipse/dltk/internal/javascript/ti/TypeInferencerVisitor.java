@@ -179,7 +179,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitAsteriskExpression(AsteriskExpression node) {
-		return context.getFactory().createXML(peekContext());
+		return context.getFactory().createXMLList(peekContext());
 	}
 
 	@Override
@@ -553,7 +553,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitGetAllChildrenExpression(
 			GetAllChildrenExpression node) {
-		return context.getFactory().createXML(peekContext());
+		return context.getFactory().createXMLList(peekContext());
 	}
 
 	@Override
@@ -818,8 +818,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			} else if (name instanceof StringLiteral) {
 				nameStr = ((StringLiteral) name).getValue();
 			} else if (name instanceof XmlAttributeIdentifier) {
-				nameStr = ((XmlAttributeIdentifier) name).getAttributeName();
-			} else {
+				if (((XmlAttributeIdentifier) name).getExpression() instanceof AsteriskExpression) {
+					return visitAsteriskExpression((AsteriskExpression) ((XmlAttributeIdentifier) name)
+							.getExpression());
+				} else {
+					nameStr = ((XmlAttributeIdentifier) name)
+							.getAttributeName();
+				}
+			} else if (name instanceof AsteriskExpression) {
+				return visitAsteriskExpression((AsteriskExpression) name);
+			}else {
 				return null;
 			}
 			return parent.getChild(nameStr);

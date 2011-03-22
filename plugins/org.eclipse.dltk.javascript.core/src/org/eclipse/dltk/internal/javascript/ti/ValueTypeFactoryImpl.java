@@ -60,4 +60,9 @@ public class ValueTypeFactoryImpl implements IValueTypeFactory, ITypeNames {
 	public IValueReference createXML(IValueParent parent) {
 		return create(parent, XML);
 	}
+
+	public IValueReference createXMLList(IValueParent parent) {
+		return new XMLListValue(parent, context);
+	}
+
 }

@@ -29,6 +29,8 @@ public interface IValueTypeFactory {
 
 	IValueReference createXML(IValueParent parent);
 
+	IValueReference createXMLList(IValueParent parent);
+
 	IValueReference createBoolean(IValueParent parent);
 
 	IValueReference createArray(IValueParent parent);

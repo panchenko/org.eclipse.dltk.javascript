@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 public interface ITypeNames {
 
+	public static final String XMLLIST = "XMLList"; //$NON-NLS-1$
 	public static final String XML = "XML"; //$NON-NLS-1$
 	public static final String ARRAY = "Array"; //$NON-NLS-1$
 	public static final String DATE = "Date"; //$NON-NLS-1$
