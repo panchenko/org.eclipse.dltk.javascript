@@ -314,6 +314,12 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 						t = t.getSuperType();
 					}
 				}
+			} else if (type instanceof UnionTypeKey) {
+				for (JSType2 part : ((UnionTypeKey) type).targets) {
+					if (isAssignableFrom(part)) {
+						return true;
+					}
+				}
 			}
 			return false;
 		}
