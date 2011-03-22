@@ -103,23 +103,26 @@ public class ImmutableValue implements IValue, IValue2 {
 	};
 
 	public JSType getDeclaredType() {
-		if (hasReferences()) {
+		if (declaredType != null) {
+			return declaredType;
+		} else if (hasReferences()) {
 			final JSTypeSet result = JSTypeSet.create();
 			execute(this, GET_DECLARED_TYPES, result, new HashSet<IValue>());
 			return !result.isEmpty() ? result.getFirst() : null;
 		} else {
-			return declaredType;
+			return null;
 		}
 	}
 
 	public JSTypeSet getDeclaredTypes() {
-		if (hasReferences()) {
+		if (declaredType != null) {
+			return JSTypeSet.singleton(declaredType);
+		} else if (hasReferences()) {
 			final JSTypeSet result = JSTypeSet.create();
 			execute(this, GET_DECLARED_TYPES, result, new HashSet<IValue>());
 			return result;
 		} else {
-			return declaredType != null ? JSTypeSet.singleton(declaredType)
-					: JSTypeSet.emptySet();
+			return JSTypeSet.emptySet();
 		}
 	}
 
@@ -203,7 +206,7 @@ public class ImmutableValue implements IValue, IValue2 {
 	}
 
 	protected IValue findMember(String name, boolean resolve) {
-		 
+
 		IValue value = null;
 		if (elementValues != null)
 			value = elementValues.get(name);
