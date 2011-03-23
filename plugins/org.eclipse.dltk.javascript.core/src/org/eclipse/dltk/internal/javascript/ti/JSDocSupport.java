@@ -507,7 +507,13 @@ public class JSDocSupport implements IModelBuilder {
 							.substring(index + 1)));
 					type.getMembers().add(property);
 				} else {
-					// report problem?
+					// any type
+					Property property = TypeInfoModelFactory.eINSTANCE
+							.createProperty();
+					property.setName(token);
+					property.setType(TypeInfoModelFactory.eINSTANCE
+							.createAnyType());
+					type.getMembers().add(property);
 				}
 			}
 			return TypeUtil.ref(type);
