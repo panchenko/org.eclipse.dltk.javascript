@@ -1287,12 +1287,27 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return result;
 		}
 
+		private static IValueCollection getParentScope(
+				final IValueCollection collection) {
+			IValueCollection c = collection;
+			while (c != null && !c.isScope()) {
+				c = c.getParent();
+			}
+			if (c != null) {
+				c = c.getParent();
+				if (c != null) {
+					return c;
+				}
+			}
+			return collection;
+		}
+
 		@Override
 		protected IValueReference createVariable(IValueCollection context,
 				VariableDeclaration declaration) {
 			final Identifier identifier = declaration.getIdentifier();
 			final String varName = identifier.getName();
-			IValueReference child = context.getChild(varName);
+			IValueReference child = getParentScope(context).getChild(varName);
 			if (child.exists()) {
 				if (child.getKind() == ReferenceKind.ARGUMENT) {
 					reporter.reportProblem(
