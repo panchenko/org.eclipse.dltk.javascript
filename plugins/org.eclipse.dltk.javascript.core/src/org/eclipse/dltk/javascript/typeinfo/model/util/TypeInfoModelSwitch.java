@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.9 2011/03/14 09:49:09 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.10 2011/03/23 18:02:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -216,6 +216,13 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case TypeInfoModelPackage.MAP_TYPE: {
+                MapType mapType = (MapType)theEObject;
+                T result = caseMapType(mapType);
+                if (result == null) result = caseJSType(mapType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -322,6 +329,21 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseUnionType(UnionType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Map Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Map Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseMapType(MapType object) {
         return null;
     }
 

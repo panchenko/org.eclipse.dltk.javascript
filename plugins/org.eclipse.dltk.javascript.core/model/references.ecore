@@ -101,4 +101,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
         eType="#//JSType" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MapType" eSuperTypes="#//JSType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keyType" eType="#//JSType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueType" eType="#//JSType"
+        containment="true"/>
+  </eClassifiers>
 </ecore:EPackage>

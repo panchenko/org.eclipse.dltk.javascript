@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.20 2011/03/14 09:49:09 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.21 2011/03/23 18:02:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1048,6 +1048,43 @@ public interface TypeInfoModelPackage extends EPackage {
     int UNION_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMapType()
+     * @generated
+     */
+    int MAP_TYPE = 16;
+
+    /**
+     * The feature id for the '<em><b>Key Type</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MAP_TYPE__KEY_TYPE = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Value Type</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MAP_TYPE__VALUE_TYPE = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
+     * The number of structural features of the '<em>Map Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MAP_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 2;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1055,7 +1092,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 16;
+	int TYPE_KIND = 17;
 
 
 	/**
@@ -1066,7 +1103,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 17;
+	int PARAMETER_KIND = 18;
 
 
 	/**
@@ -1215,6 +1252,38 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getUnionType_Targets();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType <em>Map Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Map Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.MapType
+     * @generated
+     */
+    EClass getMapType();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType#getKeyType <em>Key Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Key Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.MapType#getKeyType()
+     * @see #getMapType()
+     * @generated
+     */
+    EReference getMapType_KeyType();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType#getValueType <em>Value Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Value Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.MapType#getValueType()
+     * @see #getMapType()
+     * @generated
+     */
+    EReference getMapType_ValueType();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
@@ -1684,6 +1753,32 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference UNION_TYPE__TARGETS = eINSTANCE.getUnionType_Targets();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMapType()
+         * @generated
+         */
+        EClass MAP_TYPE = eINSTANCE.getMapType();
+
+        /**
+         * The meta object literal for the '<em><b>Key Type</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference MAP_TYPE__KEY_TYPE = eINSTANCE.getMapType_KeyType();
+
+        /**
+         * The meta object literal for the '<em><b>Value Type</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference MAP_TYPE__VALUE_TYPE = eINSTANCE.getMapType_ValueType();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.

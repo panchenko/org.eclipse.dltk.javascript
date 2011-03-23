@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.9 2011/03/14 09:49:09 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.10 2011/03/23 18:02:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -90,6 +90,7 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.ARRAY_TYPE: return (EObject)createArrayType();
             case TypeInfoModelPackage.ANY_TYPE: return (EObject)createAnyType();
             case TypeInfoModelPackage.UNION_TYPE: return (EObject)createUnionType();
+            case TypeInfoModelPackage.MAP_TYPE: return (EObject)createMapType();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -237,6 +238,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     public UnionType createUnionType() {
         UnionTypeImpl unionType = new UnionTypeImpl();
         return unionType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public MapType createMapType() {
+        MapTypeImpl mapType = new MapTypeImpl();
+        return mapType;
     }
 
     /**

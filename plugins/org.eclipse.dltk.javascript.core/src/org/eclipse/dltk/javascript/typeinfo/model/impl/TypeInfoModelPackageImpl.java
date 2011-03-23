@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.24 2011/03/23 02:30:05 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.25 2011/03/23 18:02:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -20,6 +20,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.NamedElement;
@@ -97,6 +98,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EClass unionTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass mapTypeEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -360,6 +368,33 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      */
     public EReference getUnionType_Targets() {
         return (EReference)unionTypeEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getMapType() {
+        return mapTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getMapType_KeyType() {
+        return (EReference)mapTypeEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getMapType_ValueType() {
+        return (EReference)mapTypeEClass.getEStructuralFeatures().get(1);
     }
 
     /**
@@ -718,6 +753,10 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         unionTypeEClass = createEClass(UNION_TYPE);
         createEReference(unionTypeEClass, UNION_TYPE__TARGETS);
 
+        mapTypeEClass = createEClass(MAP_TYPE);
+        createEReference(mapTypeEClass, MAP_TYPE__KEY_TYPE);
+        createEReference(mapTypeEClass, MAP_TYPE__VALUE_TYPE);
+
         // Create enums
         typeKindEEnum = createEEnum(TYPE_KIND);
         parameterKindEEnum = createEEnum(PARAMETER_KIND);
@@ -764,6 +803,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         arrayTypeEClass.getESuperTypes().add(this.getJSType());
         anyTypeEClass.getESuperTypes().add(this.getJSType());
         unionTypeEClass.getESuperTypes().add(this.getJSType());
+        mapTypeEClass.getESuperTypes().add(this.getJSType());
 
         // Initialize classes and features; add operations and parameters
         initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -836,6 +876,10 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         initEClass(unionTypeEClass, UnionType.class, "UnionType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getUnionType_Targets(), this.getJSType(), null, "targets", null, 0, -1, UnionType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+        initEClass(mapTypeEClass, MapType.class, "MapType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getMapType_KeyType(), this.getJSType(), null, "keyType", null, 0, 1, MapType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEReference(getMapType_ValueType(), this.getJSType(), null, "valueType", null, 0, 1, MapType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         // Initialize enums and add enum literals
         initEEnum(typeKindEEnum, TypeKind.class, "TypeKind"); //$NON-NLS-1$

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.9 2011/03/14 09:49:09 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.10 2011/03/23 18:02:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -144,6 +144,10 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
                 return createUnionTypeAdapter();
             }
             @Override
+            public Adapter caseMapType(MapType object) {
+                return createMapTypeAdapter();
+            }
+            @Override
             public Adapter defaultCase(EObject object) {
                 return createEObjectAdapter();
             }
@@ -258,6 +262,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createUnionTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType <em>Map Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.MapType
+     * @generated
+     */
+    public Adapter createMapTypeAdapter() {
         return null;
     }
 
