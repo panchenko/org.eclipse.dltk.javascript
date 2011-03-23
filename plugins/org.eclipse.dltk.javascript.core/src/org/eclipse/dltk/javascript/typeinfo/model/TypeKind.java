@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeKind.java,v 1.5 2011/02/14 16:52:05 apanchenk Exp $
+ * $Id: TypeKind.java,v 1.6 2011/03/23 02:30:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -83,7 +83,15 @@ public enum TypeKind implements Enumerator {
      * @generated
      * @ordered
      */
-    EXTERNAL_JS(3, "EXTERNAL_JS", "EXTERNAL_JS"); //$NON-NLS-1$ //$NON-NLS-2$
+    EXTERNAL_JS(3, "EXTERNAL_JS", "EXTERNAL_JS"), /**
+     * The '<em><b>RECORD</b></em>' literal object.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #RECORD_VALUE
+     * @generated
+     * @ordered
+     */
+    RECORD(4, "RECORD", "RECORD"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
      * The '<em><b>UNKNOWN</b></em>' literal value.
@@ -176,6 +184,21 @@ public enum TypeKind implements Enumerator {
     public static final int EXTERNAL_JS_VALUE = 3;
 
     /**
+     * The '<em><b>RECORD</b></em>' literal value.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of '<em><b>RECORD</b></em>' literal object isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @see #RECORD
+     * @model
+     * @generated
+     * @ordered
+     */
+    public static final int RECORD_VALUE = 4;
+
+    /**
      * An array of all the '<em><b>Type Kind</b></em>' enumerators.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -189,6 +212,7 @@ public enum TypeKind implements Enumerator {
             JAVASCRIPT,
             JAVA,
             EXTERNAL_JS,
+            RECORD,
         };
 
 	/**
@@ -245,6 +269,7 @@ public enum TypeKind implements Enumerator {
             case JAVASCRIPT_VALUE: return JAVASCRIPT;
             case JAVA_VALUE: return JAVA;
             case EXTERNAL_JS_VALUE: return EXTERNAL_JS;
+            case RECORD_VALUE: return RECORD;
         }
         return null;
     }

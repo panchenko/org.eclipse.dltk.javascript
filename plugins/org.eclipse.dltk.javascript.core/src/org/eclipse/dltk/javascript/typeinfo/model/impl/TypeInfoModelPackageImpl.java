@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.23 2011/03/14 09:49:09 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.24 2011/03/23 02:30:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -845,6 +845,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         addEEnumLiteral(typeKindEEnum, TypeKind.JAVASCRIPT);
         addEEnumLiteral(typeKindEEnum, TypeKind.JAVA);
         addEEnumLiteral(typeKindEEnum, TypeKind.EXTERNAL_JS);
+        addEEnumLiteral(typeKindEEnum, TypeKind.RECORD);
 
         initEEnum(parameterKindEEnum, ParameterKind.class, "ParameterKind"); //$NON-NLS-1$
         addEEnumLiteral(parameterKindEEnum, ParameterKind.NORMAL);

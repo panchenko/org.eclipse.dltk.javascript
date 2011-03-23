@@ -25,8 +25,6 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory;
-import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChecker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -177,8 +175,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 			for (int i = 0; i < lst.size(); i++) {
 				ReturnNode element = lst.get(i);
 				JSType methodType = jsMethod.getType();
-				if (methodType != null && methodType.getName().startsWith("{")
-						&& methodType.getName().endsWith("}")) {
+				if (methodType != null
+						&& methodType.getKind() == TypeKind.RECORD) {
 					String failedPropertyTypeString = ValidationVisitor
 							.testObjectPropertyType(
 									element.returnValueReference, methodType);
@@ -956,8 +954,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private boolean testArgumentType(JSType paramType,
 				IValueReference argument) {
 			if (argument != null && paramType != null) {
-				String name = paramType.getName();
-				if (name.startsWith("{") && name.endsWith("}")) {
+				if (paramType.getKind() == TypeKind.RECORD) {
 					return testObjectPropertyType(argument, paramType) == null;
 				}
 
@@ -982,8 +979,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		 */
 		private static String testObjectPropertyType(IValueReference reference,
 				JSType type) {
-			String name = type.getName();
-			if (name.startsWith("{") && name.endsWith("}")) {
+			if (type.getKind() == TypeKind.RECORD) {
 				Type realType = TypeUtil.extractType(type);
 				if (realType != null) {
 					EList<Member> members = realType.getMembers();
@@ -1134,7 +1130,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 					sb.append('}');
 				} else if (parameter != null && parameter.getType() != null
-						&& parameter.getType().getName().startsWith("{")) {
+						&& parameter.getType().getKind() == TypeKind.RECORD) {
 					sb.append(ValidationVisitor.testObjectPropertyType(
 							argument, parameter.getType()));
 				} else if (argument.getDeclaredType() != null) {

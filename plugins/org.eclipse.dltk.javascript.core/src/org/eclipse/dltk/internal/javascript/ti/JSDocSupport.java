@@ -492,7 +492,7 @@ public class JSDocSupport implements IModelBuilder {
 		} else if (typeName.startsWith("{") && typeName.endsWith("}")) {
 			Type type = TypeInfoModelFactory.eINSTANCE.createType();
 			type.setName(typeName);
-			type.setKind(TypeKind.JAVASCRIPT);
+			type.setKind(TypeKind.RECORD);
 			StringTokenizer st = new StringTokenizer(typeName.substring(1,
 					typeName.length() - 1), ",");
 			while (st.hasMoreTokens()) {

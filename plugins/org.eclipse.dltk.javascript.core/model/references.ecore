@@ -73,6 +73,7 @@
     <eLiterals name="JAVASCRIPT" value="1" literal="JAVASCRIPT"/>
     <eLiterals name="JAVA" value="2"/>
     <eLiterals name="EXTERNAL_JS" value="3" literal="EXTERNAL_JS"/>
+    <eLiterals name="RECORD" value="4" literal="RECORD"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ParameterKind">
     <eLiterals name="NORMAL" literal="NORMAL"/>
