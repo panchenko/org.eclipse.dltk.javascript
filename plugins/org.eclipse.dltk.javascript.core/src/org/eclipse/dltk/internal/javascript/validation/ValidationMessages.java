@@ -51,7 +51,7 @@ public class ValidationMessages extends NLS {
 	public static String ParameterHidesFunction;
 	public static String ParameterHidesProperty;
 	public static String ParameterHidesPropertyOfType;
-	public static String DuplicateVarDeclaration;
+	public static String VariableHidesVariable;
 	public static String VariableHidesParameter;
 	public static String VariableHidesPropertyOfType;
 	public static String VariableHidesProperty;

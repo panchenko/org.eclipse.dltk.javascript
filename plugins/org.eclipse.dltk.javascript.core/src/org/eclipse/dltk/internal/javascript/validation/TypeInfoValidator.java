@@ -1367,7 +1367,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					reporter.reportProblem(
 							JavaScriptProblems.DUPLICATE_VAR_DECLARATION,
 							NLS.bind(
-									ValidationMessages.DuplicateVarDeclaration,
+									ValidationMessages.VariableHidesVariable,
 									declaration.getVariableName()), identifier
 									.sourceStart(), identifier.sourceEnd());
 				}
