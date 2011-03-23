@@ -8,6 +8,7 @@ import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
+import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 
 public class CodeValidatorValidationTests extends AbstractValidationTest {
 
@@ -94,7 +95,7 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 				.toString()));
 		assertEquals(problemIds.toString(), 1, problemIds.size());
 		assertTrue(problemIds.toString(),
-				problemIds.contains(JavaScriptProblems.VAR_HIDES_PARAMETER));
+				problemIds.contains(JavaScriptParserProblems.VAR_HIDES_PARAM));
 
 	}
 
