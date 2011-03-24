@@ -410,6 +410,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		@Override
 		public IValueReference visitFunctionStatement(FunctionStatement node) {
+			validateHidesByFunction(node);
+
+			enterFunctionScope();
+			IValueReference reference = super.visitFunctionStatement(node);
+			final IMethod method = (IMethod) reference
+					.getAttribute(IReferenceAttributes.PARAMETERS);
+			leaveFunctionScope(method);
+
+			return reference;
+		}
+
+		private void validateHidesByFunction(FunctionStatement node) {
 			List<Argument> args = node.getArguments();
 			IValueCollection peekContext = peekContext();
 			for (Argument argument : args) {
@@ -463,9 +475,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 				}
 			}
-			if (isChildFunction(node)) {
-				IValueReference child = peekContext.getChild(node.getName()
-						.getName());
+			if (node.isDeclaration()) {
+				final IValueReference child;
+				final IValueCollection parentScope = getParentScope(peekContext);
+				if (parentScope == null) {
+					child = peekContext.getChild(node.getName().getName());
+					if (getSource().equals(child.getLocation().getSource())) {
+						return;
+					}
+				} else {
+					child = parentScope.getChild(node.getName().getName());
+				}
 				if (child.exists()) {
 					if (child.getKind() == ReferenceKind.PROPERTY) {
 						Property property = (Property) child
@@ -515,14 +535,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 				}
 			}
-
-			enterFunctionScope();
-			IValueReference reference = super.visitFunctionStatement(node);
-			final IMethod method = (IMethod) reference
-					.getAttribute(IReferenceAttributes.PARAMETERS);
-			leaveFunctionScope(method);
-
-			return reference;
 		}
 
 		@Override
@@ -1299,15 +1311,29 @@ public class TypeInfoValidator implements IBuildParticipant {
 					return c;
 				}
 			}
-			return collection;
+			return null;
 		}
 
 		@Override
 		protected IValueReference createVariable(IValueCollection context,
 				VariableDeclaration declaration) {
+			validateHidesByVariable(context, declaration);
+			return super.createVariable(context, declaration);
+		}
+
+		private void validateHidesByVariable(IValueCollection context,
+				VariableDeclaration declaration) {
+			final IValueReference child;
 			final Identifier identifier = declaration.getIdentifier();
-			final String varName = identifier.getName();
-			IValueReference child = getParentScope(context).getChild(varName);
+			final IValueCollection parentScope = getParentScope(context);
+			if (parentScope == null) {
+				child = context.getChild(identifier.getName());
+				if (getSource().equals(child.getLocation().getSource())) {
+					return;
+				}
+			} else {
+				child = parentScope.getChild(identifier.getName());
+			}
 			if (child.exists()) {
 				if (child.getKind() == ReferenceKind.ARGUMENT) {
 					reporter.reportProblem(
@@ -1366,14 +1392,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 				} else {
 					reporter.reportProblem(
 							JavaScriptProblems.DUPLICATE_VAR_DECLARATION,
-							NLS.bind(
-									ValidationMessages.VariableHidesVariable,
+							NLS.bind(ValidationMessages.VariableHidesVariable,
 									declaration.getVariableName()), identifier
 									.sourceStart(), identifier.sourceEnd());
 				}
 
 			}
-			return super.createVariable(context, declaration);
 		}
 
 		protected void validateProperty(PropertyExpression propertyExpression,
