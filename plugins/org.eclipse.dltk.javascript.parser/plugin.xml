@@ -20,5 +20,9 @@
                class="org.eclipse.dltk.javascript.parser.JavaScriptParserProblemFactory"
                namespace="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems">
          </problemIdentifierFactory>
+         <problemIdentifierFactory
+               class="org.eclipse.dltk.javascript.parser.JSParserProblemGroup$Resolver"
+               namespace="org.eclipse.dltk.javascript.parser.JSParserProblemGroup">
+         </problemIdentifierFactory>
    </extension>
 </plugin>

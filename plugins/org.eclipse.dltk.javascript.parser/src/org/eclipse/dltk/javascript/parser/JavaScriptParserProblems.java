@@ -12,21 +12,45 @@
 package org.eclipse.dltk.javascript.parser;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifierExtension2;
 import org.eclipse.dltk.utils.EnumNLS;
 import org.eclipse.osgi.util.NLS;
 
 public enum JavaScriptParserProblems implements IProblemIdentifier,
-		JSProblemIdentifier {
+		JSProblemIdentifier, IProblemIdentifierExtension2 {
 
-	INTERNAL_ERROR, LEXER_ERROR, SYNTAX_ERROR, RESERVED_KEYWORD,
+	INTERNAL_ERROR,
+	LEXER_ERROR,
+	SYNTAX_ERROR,
+	RESERVED_KEYWORD,
 
-	DUPLICATE_FUNCTION, DUPLICATE_PARAMETER, DUPLICATE_VAR, DUPLICATE_CONST,
+	DUPLICATE_FUNCTION(JSParserProblemGroup.DUPLICATE_DECLARATION),
+	DUPLICATE_PARAMETER(JSParserProblemGroup.DUPLICATE_DECLARATION),
+	DUPLICATE_VAR(JSParserProblemGroup.DUPLICATE_DECLARATION),
+	DUPLICATE_CONST(JSParserProblemGroup.DUPLICATE_DECLARATION),
 
-	FUNCTION_DUPLICATES_OTHER, VAR_DUPLICATES_OTHER, CONST_DUPLICATES_OTHER,
+	FUNCTION_DUPLICATES_OTHER(JSParserProblemGroup.DUPLICATE_DECLARATION_OTHER_KIND),
+	VAR_DUPLICATES_OTHER(JSParserProblemGroup.DUPLICATE_DECLARATION_OTHER_KIND),
+	CONST_DUPLICATES_OTHER(JSParserProblemGroup.DUPLICATE_DECLARATION_OTHER_KIND),
 
-	DOUBLE_SWITCH_DEFAULT, DUPLICATE_LABEL, UNDEFINED_LABEL, BAD_BREAK, INVALID_RETURN, BAD_CONTINUE, CATCH_UNREACHABLE,
+	DOUBLE_SWITCH_DEFAULT, DUPLICATE_LABEL, UNDEFINED_LABEL, BAD_BREAK,
+	INVALID_RETURN, BAD_CONTINUE, CATCH_UNREACHABLE,
 
 	TRAILING_COMMA_OBJECT_INITIALIZER;
+
+	JavaScriptParserProblems() {
+		this(null);
+	}
+
+	private final JSParserProblemGroup group;
+
+	JavaScriptParserProblems(JSParserProblemGroup group) {
+		this.group = group;
+	}
+
+	public IProblemIdentifier getPrimeIdentifier() {
+		return group;
+	}
 
 	private String message;
 

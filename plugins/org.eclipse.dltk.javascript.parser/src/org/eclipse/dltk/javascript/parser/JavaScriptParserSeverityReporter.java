@@ -3,6 +3,7 @@ package org.eclipse.dltk.javascript.parser;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.dltk.compiler.problem.DefaultProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifierExtension2;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.PreferencesLookupDelegate;
 
@@ -10,6 +11,13 @@ public class JavaScriptParserSeverityReporter implements ISeverityReporter {
 
 	public ProblemSeverity getSeverity(IProblemIdentifier problemId,
 			ProblemSeverity defaultSeverity) {
+		if (problemId instanceof IProblemIdentifierExtension2) {
+			final IProblemIdentifier prime = ((IProblemIdentifierExtension2) problemId)
+					.getPrimeIdentifier();
+			if (prime != null) {
+				problemId = prime;
+			}
+		}
 		if (defaultSeverity == null)
 			defaultSeverity = ProblemSeverity.WARNING;
 

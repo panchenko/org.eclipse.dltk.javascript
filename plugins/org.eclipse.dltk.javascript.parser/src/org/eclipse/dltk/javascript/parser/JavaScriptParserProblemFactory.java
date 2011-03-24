@@ -22,4 +22,8 @@ public class JavaScriptParserProblemFactory implements
 		return JavaScriptParserProblems.valueOf(localName);
 	}
 
+	public IProblemIdentifier[] values() {
+		return JavaScriptParserProblems.values();
+	}
+
 }
