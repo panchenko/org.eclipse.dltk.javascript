@@ -20,4 +20,8 @@ public class JSDocProblemFactory implements IProblemIdentifierFactory {
 		return JSDocProblem.valueOf(localName);
 	}
 
+	public IProblemIdentifier[] values() {
+		return JSDocProblem.values();
+	}
+
 }

@@ -21,4 +21,8 @@ public class JavaScriptProblemFactory implements IProblemIdentifierFactory {
 		return JavaScriptProblems.valueOf(localName);
 	}
 
+	public IProblemIdentifier[] values() {
+		return JavaScriptProblems.values();
+	}
+
 }

@@ -12,8 +12,11 @@
 package org.eclipse.dltk.javascript.core;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifierExtension2;
+import org.eclipse.dltk.javascript.parser.JSParserProblemGroup;
 
-public enum JavaScriptProblems implements IProblemIdentifier {
+public enum JavaScriptProblems implements IProblemIdentifier,
+		IProblemIdentifierExtension2 {
 
 	UNKNOWN_TYPE, DEPRECATED_TYPE,
 
@@ -79,19 +82,23 @@ public enum JavaScriptProblems implements IProblemIdentifier {
 	/**
 	 * @since 3.0
 	 */
-	PARAMETER_HIDES_VARIABLE, PARAMETER_HIDES_FUNCTION,
+	PARAMETER_HIDES_VARIABLE(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
+
+	PARAMETER_HIDES_FUNCTION(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
 	/**
 	 * @since 3.0
 	 */
-	DUPLICATE_VAR_DECLARATION,
+	DUPLICATE_VAR_DECLARATION(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
 	/**
 	 * @since 3.0
 	 */
-	VAR_HIDES_PARAMETER,
+	VAR_HIDES_PARAMETER(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
 	/**
 	 * @since 3.0
 	 */
-	VAR_HIDES_PROPERTY, VAR_HIDES_METHOD,
+	VAR_HIDES_PROPERTY(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
+
+	VAR_HIDES_METHOD(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
 	/**
 	 * @since 3.0
 	 */
@@ -99,7 +106,7 @@ public enum JavaScriptProblems implements IProblemIdentifier {
 	/**
 	 * @since 3.0
 	 */
-	VAR_HIDES_FUNCTION,
+	VAR_HIDES_FUNCTION(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
 
 	EQUAL_AS_ASSIGN, INVALID_ASSIGN_LEFT,
 
@@ -119,7 +126,23 @@ public enum JavaScriptProblems implements IProblemIdentifier {
 	/**
 	 * @since 3.0
 	 */
-	FUNCTION_HIDES_VARIABLE, FUNCTION_HIDES_FUNCTION;
+	FUNCTION_HIDES_VARIABLE(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
+
+	FUNCTION_HIDES_FUNCTION(JSParserProblemGroup.DECLARATION_HIDES_OTHER);
+
+	JavaScriptProblems() {
+		this(null);
+	}
+
+	JavaScriptProblems(JSParserProblemGroup group) {
+		this.group = group;
+	}
+
+	private final JSParserProblemGroup group;
+
+	public IProblemIdentifier getPrimeIdentifier() {
+		return group;
+	}
 
 	public String contributor() {
 		return JavaScriptPlugin.PLUGIN_ID;
