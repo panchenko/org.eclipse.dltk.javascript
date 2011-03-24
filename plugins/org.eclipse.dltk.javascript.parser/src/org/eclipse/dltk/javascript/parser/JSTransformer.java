@@ -27,7 +27,6 @@ import org.antlr.runtime.tree.Tree;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.AssertionFailedException;
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.javascript.ast.Argument;
@@ -822,15 +821,23 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				node.getChild(index).getTokenStartIndex()));
 		index = processType(new FunctionTypedDeclaration(fn), node, index);
 		final Identifier nameNode = fn.getName();
-		if (nameNode != null
-				&& scope.canAdd(nameNode.getName()) == SymbolKind.PARAM) {
-			reporter.setFormattedMessage(
-					JavaScriptParserProblems.FUNCTION_HIDES_ARGUMENT,
-					nameNode.getName());
-			reporter.setRange(nameNode.sourceStart(), nameNode.sourceEnd());
-			reporter.report();
+		if (fn.isDeclaration() && nameNode != null) {
+			final SymbolKind replaced = scope.add(fn.getName().getName(),
+					SymbolKind.FUNCTION);
+			if (replaced != null && reporter != null) {
+				if (replaced == SymbolKind.FUNCTION) {
+					reporter.setFormattedMessage(
+							JavaScriptParserProblems.DUPLICATE_FUNCTION,
+							nameNode.getName());
+				} else {
+					reporter.setFormattedMessage(
+							JavaScriptParserProblems.FUNCTION_DUPLICATES_OTHER,
+							nameNode.getName(), replaced.verboseName());
+				}
+				reporter.setRange(nameNode.sourceStart(), nameNode.sourceEnd());
+				reporter.report();
+			}
 		}
-
 		final Tree bodyNode = node.getChild(index);
 		final SymbolTable savedScope = scope;
 		try {
@@ -1164,12 +1171,13 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				final Identifier identifier = declaration.getIdentifier();
 				reporter.setRange(identifier.sourceStart(),
 						identifier.sourceEnd());
-				if (replaced == SymbolKind.PARAM) {
-					reporter.setFormattedMessage(kind.hideProblem,
-							declaration.getVariableName());
-				} else {
+				if (replaced == kind) {
 					reporter.setFormattedMessage(kind.duplicateProblem,
 							declaration.getVariableName());
+				} else {
+					reporter.setFormattedMessage(kind.hideProblem,
+							declaration.getVariableName(),
+							replaced.verboseName());
 				}
 				reporter.report();
 			}
@@ -1195,9 +1203,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 		if (!commas.isEmpty()
 				&& commas.size() >= initializer.getInitializers().size()) {
-			reporter.setMessage(
-					JavaScriptParserProblems.TRAILING_COMMA_OBJECT_INITIALIZER,
-					"trailing comma is not legal in ECMA-262 object initializers");
+			reporter.setMessage(JavaScriptParserProblems.TRAILING_COMMA_OBJECT_INITIALIZER);
 			final int comma = commas.get(commas.size() - 1);
 			reporter.setRange(comma, comma + 1);
 			reporter.report();
