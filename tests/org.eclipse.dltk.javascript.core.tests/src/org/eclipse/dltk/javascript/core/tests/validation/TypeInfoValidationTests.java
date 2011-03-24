@@ -17,9 +17,13 @@ import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 
 @SuppressWarnings("nls")
 public class TypeInfoValidationTests extends AbstractValidationTest {
@@ -1406,5 +1410,73 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testMapWithValueDeclaration() {
+		StringList code = new StringList();
+		code.add("/** @param {Object<String>} param */");
+		code.add("function test(param) {");
+		code.add(" var x = param['test'];");
+		code.add(" var p = x.toLocaleLowerCase();");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testMapWithKeyValueDeclaration() {
+		StringList code = new StringList();
+		code.add("/** @param {Object<Number,String>} param */");
+		code.add("function test(param) {");
+		code.add(" var x = param['test'];");
+		code.add(" var p = x.toLocaleLowerCase();");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testMapWithValueWithWrongTypeDeclaration() {
+		StringList code = new StringList();
+		code.add("/** @param {Object<Stringg>} param */");
+		code.add("function test(param) {");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0)
+				.getID());
+	}
+	
+	public void testMapWithKeyValueWithWrongTypeDeclaration() {
+		StringList code = new StringList();
+		code.add("/** @param {Object<Stringg,Numberr>} param */");
+		code.add("function test(param) {");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 2, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0)
+				.getID());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(1)
+				.getID());
+	}
+	
+	public void testArrayWithWrongTypeDeclaration() {
+		StringList code = new StringList();
+		code.add("/** @param {Array<Stringg>} param */");
+		code.add("function test(param) {");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0)
+				.getID());
+	}
+	
+	public void testUnionWithWrongTypeDeclaration() {
+		StringList code = new StringList();
+		code.add("/** @param {Stringg|Number} param */");
+		code.add("function test(param) {");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0)
+				.getID());
 	}
 }

@@ -22,11 +22,12 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.ValueCollectionFactory;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
 public class ExampleMemberEvaluator implements IMemberEvaluator {
 
-    public IValueCollection valueOf(ITypeInfoContext context, Member member) {
+    public IValueCollection valueOf(ITypeInfoContext context, Element member) {
         IValueCollection collection = (IValueCollection) member.getAttribute(ExampleElementResolver.MEMBER_VALUE);
         if (collection == null) {
             ISourceModule globals = (ISourceModule) member.getAttribute(ExampleElementResolver.LAZY_MEMBER_VALUE);

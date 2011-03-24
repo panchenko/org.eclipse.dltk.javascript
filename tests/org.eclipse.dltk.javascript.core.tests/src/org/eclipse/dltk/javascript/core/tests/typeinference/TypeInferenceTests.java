@@ -944,4 +944,46 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(getTypes(ITypeNames.NUMBER), n.getTypes());
 	}
 
+	public void testMapWithOnlyValueDeclaration() {
+		StringList code = new StringList();
+		code.add("/** @param {Object<String>} param */");
+		code.add("function test(param) {");
+		code.add(" var x = param['test'];");
+		code.add("}");
+		IValueCollection collection = inference(code.toString());
+		IValueReference function = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) function
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference variable = functionScope.getChild("x");
+		assertEquals(getTypes(ITypeNames.STRING), variable.getTypes());
+	}
+	
+	public void testMapWithKeyValueDeclaration() {
+		StringList code = new StringList();
+		code.add("/** @param {Object<String,String>} param */");
+		code.add("function test(param) {");
+		code.add(" var x = param['test'];");
+		code.add("}");
+		IValueCollection collection = inference(code.toString());
+		IValueReference function = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) function
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference variable = functionScope.getChild("x");
+		assertEquals(getTypes(ITypeNames.STRING), variable.getTypes());
+	}
+	
+	public void testMapWithKeyValueDeclaration2() {
+		StringList code = new StringList();
+		code.add("/** @param {Object<String,Number>} param */");
+		code.add("function test(param) {");
+		code.add(" var x = param['test'];");
+		code.add("}");
+		IValueCollection collection = inference(code.toString());
+		IValueReference function = collection.getChild("test");
+		IValueCollection functionScope = (IValueCollection) function
+				.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+		IValueReference variable = functionScope.getChild("x");
+		assertEquals(getTypes(ITypeNames.NUMBER), variable.getTypes());
+	}
+
 }
