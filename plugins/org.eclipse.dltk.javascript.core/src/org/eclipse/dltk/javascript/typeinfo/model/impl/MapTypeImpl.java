@@ -11,17 +11,15 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -165,28 +163,31 @@ public class MapTypeImpl extends EObjectImpl implements MapType {
             eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.MAP_TYPE__VALUE_TYPE, newValueType, newValueType));
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
     public TypeKind getKind() {
-        // TODO: implement this method
-        // Ensure that you remove @generated or mark it @generated NOT
-        throw new UnsupportedOperationException();
+		return TypeKind.PREDEFINED;
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
     public String getName() {
-        // TODO: implement this method
-        // Ensure that you remove @generated or mark it @generated NOT
-        throw new UnsupportedOperationException();
-    }
-
+		// if the key type is set but it is a String then just default to
+		// without it.
+		if (valueType != null && keyType != null
+				&& !keyType.getName().equals(ITypeNames.STRING)) {
+			return ITypeNames.OBJECT + '<' + keyType.getName() + ','
+					+ valueType.getName() + '>';
+		}
+		return valueType != null ? ITypeNames.OBJECT + '<'
+				+ valueType.getName() + '>' : ITypeNames.OBJECT;
+	}
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -29,6 +30,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl;
+import org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl;
 import org.eclipse.emf.common.util.BasicEList;
@@ -384,6 +386,82 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	}
 
+	private static class MapTypeKey implements MapType, JSType2 {
+
+		private final JSType2 valueType;
+		private final JSType2 keyType;
+
+		public MapTypeKey(JSType2 keyType, JSType2 valueType) {
+			this.keyType = keyType;
+			this.valueType = valueType;
+		}
+
+		public TypeKind getKind() {
+			return TypeKind.PREDEFINED;
+		}
+
+		public String getName() {
+			// if the key type is set but it is a String then just default to
+			// without it.
+			if (valueType != null && keyType != null
+					&& !keyType.getName().equals(ITypeNames.STRING)) {
+				return ITypeNames.OBJECT + '<' + keyType.getName()+ ','
+						+ valueType.getName() + '>';
+			}
+			return valueType != null ? ITypeNames.OBJECT + '<'
+					+ valueType.getName() + '>' : ITypeNames.OBJECT;
+		}
+
+		@Override
+		public int hashCode() {
+			return valueType.hashCode();
+		}
+
+		public boolean equals(Object obj) {
+			if (obj instanceof MapTypeKey) {
+				final MapTypeKey other = (MapTypeKey) obj;
+				return valueType.equals(other.valueType);
+			}
+			return false;
+		}
+
+		@Override
+		public String toString() {
+			return getName();
+		}
+
+		public boolean isArray() {
+			return false; // TODO what to exactly return here?
+		}
+
+		public boolean isAssignableFrom(JSType2 type) {
+			if (type instanceof MapTypeKey) {
+				return valueType
+						.isAssignableFrom(((MapTypeKey) type).valueType);
+			} else if (ITypeNames.UNDEFINED.equals(type.getName())) {
+				return true;
+			}
+			return false;
+		}
+
+		public JSType getKeyType() {
+			return keyType;
+		}
+
+		public void setKeyType(JSType value) {
+			throw new UnsupportedOperationException();
+		}
+
+		public JSType getValueType() {
+			return valueType;
+		}
+
+		public void setValueType(JSType value) {
+			throw new UnsupportedOperationException();
+		}
+
+	}
+
 	private static final JSType2 ANY_TYPE = new AnyTypeKey();
 
 	private static class AnyTypeKey implements AnyType, JSType2 {
@@ -468,6 +546,9 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			return ref(ref.getTarget(), ref.isStatic());
 		} else if (type instanceof ArrayTypeImpl) {
 			return arrayOf(normalize(((ArrayType) type).getItemType()));
+		} else if (type instanceof MapTypeImpl) {
+			return mapOf(normalize(((MapType) type).getKeyType()),
+					normalize(((MapType) type).getValueType()));
 		} else if (type instanceof AnyTypeImpl) {
 			return ANY_TYPE;
 		} else if (type instanceof UnionTypeImpl) {
@@ -487,6 +568,11 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	public static ArrayTypeKey arrayOf(final JSType2 itemType) {
 		return new ArrayTypeKey(itemType);
+	}
+
+	public static MapTypeKey mapOf(final JSType2 keyType,
+			final JSType2 valueType) {
+		return new MapTypeKey(keyType, valueType);
 	}
 
 	public static JSType2 any() {

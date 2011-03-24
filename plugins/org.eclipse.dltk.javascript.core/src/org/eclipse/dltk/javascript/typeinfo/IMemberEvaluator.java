@@ -12,7 +12,7 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
 
 public interface IMemberEvaluator {
 
@@ -20,7 +20,7 @@ public interface IMemberEvaluator {
 	 * @param member
 	 * @return
 	 */
-	IValueCollection valueOf(ITypeInfoContext context, Member member);
+	IValueCollection valueOf(ITypeInfoContext context, Element member);
 
 	IValueCollection getTopValueCollection(ITypeInfoContext context);
 

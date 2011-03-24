@@ -95,15 +95,18 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -420,6 +423,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				&& JavaScriptValidations.typeOf(itemReference) == null) {
 				final JSType itemType = ((ArrayType) type).getItemType();
 				itemReference.setDeclaredType(itemType);
+			} else if (type instanceof MapType
+					&& JavaScriptValidations.typeOf(itemReference) == null) {
+				final JSType itemType = ((MapType) type).getValueType();
+				itemReference.setDeclaredType(itemType);
 			} else if (type.getName().endsWith(ITypeNames.XMLLIST)) {
 				itemReference.setDeclaredType(type);
 			}
@@ -547,6 +554,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
 			if (type.getKind() != TypeKind.UNKNOWN) {
 				value.setDeclaredType(type);
+				if (type instanceof TypeRef && value instanceof IValueProvider) {
+					for (IMemberEvaluator evaluator : TypeInfoManager
+							.getMemberEvaluators()) {
+						final IValueCollection collection = evaluator.valueOf(
+								context, ((TypeRef) type).getTarget());
+						if (collection != null) {
+							if (collection instanceof IValueProvider) {
+								((IValueProvider)value).getValue().addValue(((IValueProvider) collection)
+										.getValue());
+							}
+						}
+					}
+				}
 			} else if (type instanceof TypeRef) {
 				value.addValue(new LazyTypeReference(context, type.getName(),
 						peekContext()), false);

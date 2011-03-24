@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -65,11 +66,27 @@ public class TypeUtil {
 		return arrayType;
 	}
 
+	public static MapType mapOf(String keyType, String valueType) {
+		return mapOf(keyType != null ? ref(keyType) : null, ref(valueType));
+	}
+
+	public static MapType mapOf(JSType keyType, JSType valueType) {
+		final MapType mapType = TypeInfoModelFactory.eINSTANCE.createMapType();
+		mapType.setKeyType(keyType != null ? keyType : ref(TypeInfoModelLoader
+				.getInstance().getType(ITypeNames.STRING)));
+		mapType.setValueType(valueType != null ? valueType
+				: ref(TypeInfoModelLoader.getInstance().getType(
+						ITypeNames.OBJECT)));
+		return mapType;
+	}
+
 	public static Type extractType(JSType type) {
 		if (type instanceof TypeRef) {
 			return ((TypeRef) type).getTarget();
 		} else if (type instanceof ArrayType) {
 			return TypeInfoModelLoader.getInstance().getType(ITypeNames.ARRAY);
+		} else if (type instanceof MapType) {
+			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
 		} else if (type instanceof AnyType) {
 			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
 		} else {
@@ -80,6 +97,8 @@ public class TypeUtil {
 	public static JSType extractArrayItemType(JSType type) {
 		if (type instanceof ArrayType) {
 			return ((ArrayType) type).getItemType();
+		} else if (type instanceof MapType) {
+			return ((MapType) type).getValueType();
 		} else {
 			return null;
 		}

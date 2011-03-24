@@ -67,6 +67,7 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -1618,6 +1619,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 				} else if (type instanceof ArrayType) {
 					checkType(node, ((ArrayType) type).getItemType(),
 							collection);
+				} else if (type instanceof MapType) {
+					checkType(node, ((MapType) type).getValueType(), collection);
+					checkType(node, ((MapType) type).getKeyType(), collection);
 				} else {
 					final Type t = TypeUtil.extractType(type);
 					if (t != null && t.isDeprecated()) {

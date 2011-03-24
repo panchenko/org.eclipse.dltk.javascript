@@ -30,6 +30,7 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
@@ -268,10 +269,14 @@ public abstract class ElementValue implements IValue {
 			IValue child = children.get(name);
 			if (child == null) {
 				if (name.equals(IValueReference.ARRAY_OP)
-						&& property.getType() != null
-						&& property.getType() instanceof ArrayType) {
-					Type arrayType = TypeUtil.extractType(((ArrayType) property
+						&& property.getType() != null) {
+					Type arrayType = null;
+					if (property.getType() instanceof ArrayType)
+						arrayType = TypeUtil.extractType(((ArrayType) property
 							.getType()).getItemType());
+					if (property.getType() instanceof MapType)
+						arrayType = TypeUtil.extractType(((MapType) property
+								.getType()).getValueType());
 					if (arrayType != null) {
 						ElementValue arrayOpChild = createFor(arrayType,
 								context);

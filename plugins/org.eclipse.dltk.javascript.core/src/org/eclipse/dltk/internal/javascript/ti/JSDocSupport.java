@@ -41,6 +41,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -481,6 +482,10 @@ public class JSDocSupport implements IModelBuilder {
 		if (arrayType != null) {
 			return arrayType;
 		}
+		final MapType mapType = parseMap(typeName);
+		if (mapType != null) {
+			return mapType;
+		}
 		if (typeName.contains("|")) {
 			final String[] parts = TextUtils.split(typeName, '|');
 			final UnionType unionType = TypeInfoModelFactory.eINSTANCE
@@ -532,6 +537,33 @@ public class JSDocSupport implements IModelBuilder {
 		final int length = typeName.length();
 		return length > 2 && typeName.charAt(0) == '{'
 				&& typeName.charAt(length - 1) == '}';
+	}
+
+	private static final String MAP_PREFIX1 = "Object<";
+	private static final String MAP_PREFIX2 = "Object.<";
+
+	protected MapType parseMap(String typeName) {
+		if (typeName.startsWith(MAP_PREFIX1) && typeName.endsWith(">")) {
+			return translateMapType(typeName.substring(
+					MAP_PREFIX1.length(), typeName.length() - 1));
+		} else if (typeName.startsWith(MAP_PREFIX2) && typeName.endsWith(">")) {
+			return translateMapType(typeName.substring(
+					MAP_PREFIX2.length(), typeName.length() - 1));
+		} else {
+			return null;
+		}
+	}
+
+	private MapType translateMapType(String typeName) {
+		int commaIndex = typeName.indexOf(',');
+		if (commaIndex == -1) {
+			return TypeUtil.mapOf(null, translateTypeName(typeName));
+		} else {
+			String keyTypeName = typeName.substring(0, commaIndex).trim();
+			String valueTypeName = typeName.substring(commaIndex + 1).trim();
+			return TypeUtil.mapOf(
+					translateTypeName(keyTypeName), translateTypeName(valueTypeName));
+		}
 	}
 
 	private static final String ARRAY_PREFIX1 = "Array<";

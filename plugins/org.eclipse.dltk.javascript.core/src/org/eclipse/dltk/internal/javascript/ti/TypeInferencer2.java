@@ -42,6 +42,7 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -152,6 +153,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return !((TypeRef) type).getTarget().isProxy();
 		} else if (type instanceof ArrayType) {
 			return isResolved(((ArrayType) type).getItemType());
+		} else if (type instanceof MapType) {
+			return isResolved(((MapType) type).getValueType()) && isResolved(((MapType) type).getKeyType());
 		} else if (type instanceof AnyType) {
 			return true;
 		} else if (type instanceof UnionType) {
@@ -179,6 +182,11 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		} else if (type instanceof ArrayType) {
 			return JSTypeSet.arrayOf(doResolveTypeRef(((ArrayType) type)
 					.getItemType()));
+		} else if (type instanceof MapType) {
+			return JSTypeSet.mapOf(
+					doResolveTypeRef(((MapType) type).getKeyType()),
+					doResolveTypeRef(((MapType) type)
+					.getValueType()));
 		} else if (type instanceof UnionType) {
 			final List<JSType2> targets = new ArrayList<JSType2>();
 			for (JSType t : ((UnionType) type).getTargets()) {

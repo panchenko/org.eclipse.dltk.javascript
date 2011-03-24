@@ -31,9 +31,12 @@ import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
 public class JSDocValidatorFactory extends AbstractBuildParticipantType {
@@ -83,7 +86,17 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 
 		public void checkType(JSType type, JSDocTag tag) {
 			type = context.resolveTypeRef(type);
-			if (type.getKind() == TypeKind.UNKNOWN
+			if (type instanceof UnionType) {
+				EList<JSType> targets = ((UnionType) type).getTargets();
+				for (JSType targetType : targets) {
+					checkType(targetType, tag);
+				}
+			} else if (type instanceof ArrayType) {
+				checkType(((ArrayType) type).getItemType(), tag);
+			} else if (type instanceof MapType) {
+				checkType(((MapType) type).getKeyType(), tag);
+				checkType(((MapType) type).getValueType(), tag);
+			} else if (type.getKind() == TypeKind.UNKNOWN
 					|| type.getKind() == TypeKind.UNRESOLVED) {
 				lst.add(new TagAndType(type, tag, context.currentCollection()));
 			}
@@ -141,6 +154,9 @@ public class JSDocValidatorFactory extends AbstractBuildParticipantType {
 					}
 				} else if (type instanceof ArrayType) {
 					checkType(tag, ((ArrayType) type).getItemType(), collection);
+				} else if (type instanceof MapType) {
+					checkType(tag, ((MapType) type).getValueType(), collection);
+					checkType(tag, ((MapType) type).getKeyType(), collection);
 				} else {
 					final Type t = TypeUtil.extractType(type);
 					if (t != null && t.isDeprecated()) {
