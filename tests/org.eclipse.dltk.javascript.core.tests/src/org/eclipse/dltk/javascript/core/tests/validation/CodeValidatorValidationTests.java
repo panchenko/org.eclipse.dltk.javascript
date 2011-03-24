@@ -39,9 +39,9 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
-		assertEquals(1, problemIds.size());
+		assertEquals(problemIds.toString(), 1, problemIds.size());
 		assertTrue(problemIds
-				.contains(JavaScriptProblems.FUNCTION_HIDES_FUNCTION));
+				.contains(JavaScriptParserProblems.DUPLICATE_FUNCTION));
 
 	}
 
@@ -52,10 +52,11 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
-		assertEquals(1, problemIds.size());
-		assertTrue(problemIds.toString(),
-				problemIds.contains(JavaScriptProblems.FUNCTION_HIDES_VARIABLE));
-
+		assertEquals(problemIds.toString(), 1, problemIds.size());
+		assertTrue(
+				problemIds.toString(),
+				problemIds
+						.contains(JavaScriptParserProblems.FUNCTION_DUPLICATES_OTHER));
 	}
 
 	public void testArgumentHidesVariable() {
@@ -69,7 +70,6 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		assertTrue(problemIds.toString(),
 				problemIds
 						.contains(JavaScriptProblems.PARAMETER_HIDES_VARIABLE));
-
 	}
 
 	public void testArgumentHidesFunciton() {
@@ -83,7 +83,6 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		assertTrue(problemIds.toString(),
 				problemIds
 						.contains(JavaScriptProblems.PARAMETER_HIDES_FUNCTION));
-
 	}
 
 	public void testVariableHidesArgument() {
@@ -94,9 +93,10 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(problemIds.toString(), 1, problemIds.size());
-		assertTrue(problemIds.toString(),
-				problemIds.contains(JavaScriptParserProblems.VAR_HIDES_PARAM));
-
+		assertTrue(
+				problemIds.toString(),
+				problemIds
+						.contains(JavaScriptParserProblems.VAR_DUPLICATES_OTHER));
 	}
 
 	public void testVariableHidesOwnFunction() {

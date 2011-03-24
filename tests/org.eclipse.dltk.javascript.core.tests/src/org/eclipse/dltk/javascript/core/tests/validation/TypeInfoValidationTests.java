@@ -1151,9 +1151,11 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testNestedObjectInitializerWithThisTypeWithFunctionCall() {
 		if (notYetImplemented())
 			return;
-		StringList code = new StringList();
-		code.add("var init = {Node: function(){}, ");
-		code.add("fun: function() {return new this.Node();} }");
+		final StringList code = new StringList();
+		code.add("var init = {");
+		code.add("Node: function(){}, ");
+		code.add("fun: function() {return new this.Node();}");
+		code.add("}");
 		code.add("/**");
 		code.add(" * @return {init.Node} */");
 		code.add("function caller2() {");
@@ -1299,7 +1301,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testObjectProperyReturnTypeWithObjectWithDifferentType() {
 		StringList code = new StringList();
 		code.add("/** @return {{astring:String,anumber:Number}} */");
@@ -1367,7 +1369,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testParamWithObjectDeclarationCallWithDifferentType() {
 		StringList code = new StringList();
 		code.add("/** @param {{astring:String,anumber:Number}} myparam */");
@@ -1379,7 +1381,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
-			.getID());
+				.getID());
 	}
 
 	public void testParamWithObjectDeclarationInvalidCall() {
