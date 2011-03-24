@@ -767,6 +767,9 @@
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PRIVATE_VARIABLE"
             label="Private variable access"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#HIDDEN_PROPERTY"
+            label="Private property access"/>
    </section>
    <section id="org.eclipse.dltk.javascript.ui.problems.unnecessary" name="Unnecessary code" priority="110">
       <problem
@@ -775,38 +778,17 @@
    </section>
    <section id="org.eclipse.dltk.javascript.ui.problems.shadowing" name="Name shadowing and conflicts" priority="120">
       <problem
-            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PARAMETER_HIDES_VARIABLE"
-            label="Parameter hides variable"/>
+      		id="org.eclipse.dltk.javascript.parser.JSParserProblemGroup#DUPLICATE_DECLARATION"
+      		label="Duplicate variable/function declaration"/>
       <problem
-            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PARAMETER_HIDES_FUNCTIONlem"
-            label="Parameter hides function">
-      </problem>
+      		id="org.eclipse.dltk.javascript.parser.JSParserProblemGroup#DUPLICATE_DECLARATION_OTHER_KIND"
+      		label="Declaration duplicates other declaration"/>
       <problem
-            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#VAR_HIDES_PARAMETER"
-            label="Variable hides parameter"/>
+      		id="org.eclipse.dltk.javascript.parser.JSParserProblemGroup#DECLARATION_HIDES_OTHER"
+      		label="Declaration hides other declaration"/>
       <problem
-            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#VAR_HIDES_PROPERTY"
-            label="Variable hides property"/>
-      <problem
-            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#VAR_HIDES_FUNCTION"
-            label="Variable hides function">
-      </problem>
-      <problem
-            id="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems#FUNCTION_HIDES_ARGUMENT"
-            label="Function hides argument"/>
-      <problem
-            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#FUNCTION_HIDES_VARIABLE"
-            label="Function hides variable or property"/>
-      <problem
-            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#FUNCTION_HIDES_FUNCTION"
-            label="Function hides another function">
-      </problem>
-      <problem
-            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DUPLICATE_VAR_DECLARATION"
-            label="Duplicate variable declaration"/>
-      <problem
-            id="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems#DUPLICATE_PARAMETER"
-            label="Duplicate parameter declaration"/>
+      		id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DUPLICATE_PROPERTY_IN_LITERAL"
+      		label="Duplicate property in object literal"/>
    </section>
    <section id="org.eclipse.dltk.javascript.ui.problems.potential" name="Potential programming problems" priority="130">
       <problem
@@ -858,6 +840,9 @@
       </problem>
    </section>
    <section id="org.eclipse.dltk.javascript.ui.problems.misc" name="Other problems" priority="150">
+      <!--defaultEntry namespace="org.eclipse.dltk.javascript.core.JavaScriptProblems"/-->
+      <!--defaultEntry namespace="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems"/-->
+      <defaultEntry namespace="org.eclipse.dltk.internal.javascript.ti.JSDocProblem"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_PARAMETERS"
             label="Wrong number of parameters to javascript function call"/>

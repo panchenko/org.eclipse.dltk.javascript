@@ -50,6 +50,7 @@
    <element name="section">
       <complexType>
          <sequence>
+            <element ref="defaultEntry" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="problem" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="id" type="string" use="required">
@@ -89,6 +90,18 @@
             </annotation>
          </attribute>
          <attribute name="label" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="defaultEntry">
+      <complexType>
+         <attribute name="namespace" type="string" use="required">
             <annotation>
                <documentation>
                   

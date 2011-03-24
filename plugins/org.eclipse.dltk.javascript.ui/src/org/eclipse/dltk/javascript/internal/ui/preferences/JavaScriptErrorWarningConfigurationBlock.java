@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,12 +30,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.dltk.ast.parser.SourceParserManager;
 import org.eclipse.dltk.compiler.problem.DefaultProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifierExtension2;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IDLTKContributedExtension;
 import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.internal.ui.preferences.ScrolledPageContent;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserPlugin;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserPreferences;
@@ -85,6 +88,7 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				.getExtensionRegistry().getConfigurationElementsFor(
 						EXT_POINT_PROBLEM_SECTIONS);
 		final Set<IProblemIdentifier> identifiers = new HashSet<IProblemIdentifier>();
+		final Map<String, ProblemSection> defaultEntries = new HashMap<String, JavaScriptErrorWarningConfigurationBlock.ProblemSection>();
 		for (IConfigurationElement element : elements) {
 			final String sectionId = element.getAttribute("id");
 			final String sectionName = element.getAttribute("name");
@@ -113,12 +117,42 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 				final IProblemIdentifier identifier = DefaultProblemIdentifier
 						.decode(problemId);
 				if (identifier != null && identifiers.add(identifier)) {
+					if (identifier instanceof IProblemIdentifierExtension2
+							&& ((IProblemIdentifierExtension2) identifier)
+									.getPrimeIdentifier() != null) {
+						JavaScriptPlugin.error("Skip dependent " + problemId);
+						continue;
+					}
 					String problemLabel = problemElement.getAttribute("label");
 					if (problemLabel == null || problemLabel.length() == 0) {
 						problemLabel = identifier.name();
 					}
 					if (!problemSection.items.containsKey(identifier)) {
 						problemSection.items.put(identifier, problemLabel);
+					}
+				}
+			}
+			for (IConfigurationElement defaultEntry : element
+					.getChildren("defaultEntry")) {
+				final String namespace = defaultEntry.getAttribute("namespace");
+				if (namespace != null) {
+					defaultEntries.put(namespace, problemSection);
+				}
+			}
+		}
+		for (Map.Entry<String, ProblemSection> entry : defaultEntries
+				.entrySet()) {
+			final IProblemIdentifier[] namespaceItems = DefaultProblemIdentifier
+					.values(entry.getKey());
+			if (namespaceItems != null) {
+				for (IProblemIdentifier item : namespaceItems) {
+					if (item instanceof IProblemIdentifierExtension2
+							&& ((IProblemIdentifierExtension2) item)
+									.getPrimeIdentifier() != null) {
+						continue;
+					}
+					if (!identifiers.contains(item)) {
+						entry.getValue().items.put(item, item.name());
 					}
 				}
 			}
