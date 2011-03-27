@@ -73,8 +73,17 @@ public class JavaScriptPlugin extends Plugin {
 	 * @since 2.0
 	 */
 	public static void error(String message, Throwable t) {
-		plugin.getLog().log(
-				new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, message, t));
+		final JavaScriptPlugin p = plugin;
+		if (p != null) {
+			p.getLog()
+					.log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK,
+							message, t));
+		} else {
+			System.err.println(message);
+			if (t != null) {
+				t.printStackTrace();
+			}
+		}
 	}
 
 }
