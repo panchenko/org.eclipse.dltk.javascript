@@ -76,6 +76,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
@@ -1622,6 +1623,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 				} else if (type instanceof MapType) {
 					checkType(node, ((MapType) type).getValueType(), collection);
 					checkType(node, ((MapType) type).getKeyType(), collection);
+				} else if (type instanceof UnionType) {
+					for (JSType part : ((UnionType) type).getTargets()) {
+						checkType(node, part, collection);
+					}
 				} else {
 					final Type t = TypeUtil.extractType(type);
 					if (t != null && t.isDeprecated()) {
