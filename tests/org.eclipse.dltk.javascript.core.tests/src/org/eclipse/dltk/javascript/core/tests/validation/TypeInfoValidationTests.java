@@ -435,6 +435,21 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 	}
+	
+	public void testLazyTypeWithAssignment() {
+		StringList code = new StringList();
+		code.add("function Node() {");
+		code.add("	this.nummer = 10;");
+		code.add("}");
+		code.add("function testNode() {");
+		code.add("	returnNode().nummer = 11;");
+		code.add("}");
+		code.add("function returnNode() {");
+		code.add("	return new Node();");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
 	public void testGenericParamWtihNoneGenericCall() {
 		List<String> code = new StringList();
