@@ -269,11 +269,22 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					assign(left, right);
 				}
 			} else {
-				if (left.getParent() == null || left.getParent().exists())
+				if (!hasUnknowParentFunctionCall(left))
 					assign(left, right);
 			}
 		}
 		return right;
+	}
+
+	private boolean hasUnknowParentFunctionCall(IValueReference reference) {
+		IValueReference parent = reference.getParent();
+		while (parent != null) {
+			if (parent.getName().equals(IValueReference.FUNCTION_OP)
+					&& !parent.exists())
+				return true;
+			parent = parent.getParent();
+		}
+		return false;
 	}
 
 	@Override
@@ -342,10 +353,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						getJSDocTypeChecker());
 			}
 		}
-		if (varType == null)
-			setTypeImpl(reference, variable.getType());
-		else
-			setType(identifier, reference, variable.getType(), true);
 		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
 
 		reference.setKind(inFunction() ? ReferenceKind.LOCAL
@@ -354,6 +361,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
 		initializeVariable(reference, declaration, variable);
+		if (varType == null)
+			setTypeImpl(reference, variable.getType());
+		else
+			setType(identifier, reference, variable.getType(), true);
 		return reference;
 	}
 
