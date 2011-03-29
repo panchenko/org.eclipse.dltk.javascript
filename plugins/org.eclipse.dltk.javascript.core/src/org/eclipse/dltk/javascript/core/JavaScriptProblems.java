@@ -11,12 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core;
 
+import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifierExtension2;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifierExtension3;
+import org.eclipse.dltk.compiler.problem.ProblemCategory;
 import org.eclipse.dltk.javascript.parser.JSParserProblemGroup;
 
 public enum JavaScriptProblems implements IProblemIdentifier,
-		IProblemIdentifierExtension2 {
+		IProblemIdentifierExtension2, IProblemIdentifierExtension3 {
 
 	UNKNOWN_TYPE, DEPRECATED_TYPE,
 
@@ -142,6 +145,10 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 
 	public IProblemIdentifier getPrimeIdentifier() {
 		return group;
+	}
+
+	public boolean belongsTo(IProblemCategory category) {
+		return category == ProblemCategory.IMPORT && this == UNKNOWN_TYPE;
 	}
 
 	public String contributor() {
