@@ -1494,4 +1494,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0)
 				.getID());
 	}
+	
+	
+	public void testJavaObjectAndUndefineReturn() {
+		StringList code = new StringList();
+		code.add("function test1(param) {");
+		code.add(" if (param) return new ExampleService();");
+		code.add(" else return undefined;");
+		code.add("}");
+		code.add("function test2(param) {");
+		code.add(" test1(true).name = 10;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
