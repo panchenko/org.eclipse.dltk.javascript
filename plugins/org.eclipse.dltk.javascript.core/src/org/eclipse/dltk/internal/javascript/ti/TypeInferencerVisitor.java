@@ -269,7 +269,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					assign(left, right);
 				}
 			} else {
-				assign(left, right);
+				if (left.getParent() == null || left.getParent().exists())
+					assign(left, right);
 			}
 		}
 		return right;
