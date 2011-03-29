@@ -131,18 +131,20 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private final IValueReference reference;
 		private final ValidationVisitor visitor;
 		private final IValueReference[] arguments;
+		private final List<Method> methods;
 
 		public CallExpressionValidator(CallExpression node,
 				IValueReference reference, IValueReference[] arguments,
-				ValidationVisitor visitor) {
+				List<Method> methods, ValidationVisitor visitor) {
 			this.node = node;
 			this.reference = reference;
 			this.arguments = arguments;
+			this.methods = methods;
 			this.visitor = visitor;
 		}
 
 		public void call() {
-			visitor.validateCallExpression(node, reference, arguments);
+			visitor.validateCallExpression(node, reference, arguments, methods);
 		}
 	}
 
@@ -568,8 +570,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 				final List<ASTNode> callArgs = node.getArguments();
 				IValueReference[] arguments = new IValueReference[callArgs
 						.size()];
+				final List<Method> methods = JavaScriptValidations
+						.extractElements(reference, Method.class);
 				pushExpressionValidator(new CallExpressionValidator(node,
-						reference, arguments, this));
+						reference, arguments, methods, this));
 				if (started) {
 					stopExpressionValidator();
 					started = false;
@@ -614,10 +618,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 		/**
 		 * @param node
 		 * @param reference
+		 * @param methods
 		 * @return
 		 */
 		protected void validateCallExpression(CallExpression node,
-				final IValueReference reference, IValueReference[] arguments) {
+				final IValueReference reference, IValueReference[] arguments,
+				List<Method> methods) {
 
 			final Expression expression = node.getExpression();
 			final Expression methodNode;
@@ -627,7 +633,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 				methodNode = expression;
 			}
 
-			final List<Method> methods = JavaScriptValidations.extractElements(
+			if (methods == null || methods.size() == 0)
+				methods = JavaScriptValidations.extractElements(
 					reference, Method.class);
 			if (methods != null) {
 				final List<ASTNode> callArgs = node.getArguments();
