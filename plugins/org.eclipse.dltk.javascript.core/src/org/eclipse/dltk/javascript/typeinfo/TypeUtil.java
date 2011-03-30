@@ -99,6 +99,8 @@ public class TypeUtil {
 			return ((ArrayType) type).getItemType();
 		} else if (type instanceof MapType) {
 			return ((MapType) type).getValueType();
+		} else if (type != null && type.getName().equals(ITypeNames.XML)) {
+			return type;
 		} else {
 			return null;
 		}
