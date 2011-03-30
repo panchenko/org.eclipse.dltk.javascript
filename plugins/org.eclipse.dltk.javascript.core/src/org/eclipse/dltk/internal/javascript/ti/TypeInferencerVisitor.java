@@ -440,7 +440,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				final JSType itemType = ((MapType) type).getValueType();
 				itemReference.setDeclaredType(itemType);
 			} else if (type.getName().endsWith(ITypeNames.XMLLIST)) {
-				itemReference.setDeclaredType(type);
+				itemReference.setDeclaredType(context
+						.getTypeRef(ITypeNames.XML));
 			}
 		}
 		visit(node.getBody());
