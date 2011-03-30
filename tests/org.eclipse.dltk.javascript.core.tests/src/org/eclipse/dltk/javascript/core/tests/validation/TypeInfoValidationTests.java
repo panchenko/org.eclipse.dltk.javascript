@@ -1508,4 +1508,31 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testXMLWithParentheseExpression() {
+		StringList code = new StringList();
+		code.add("function test() {");
+		code.add(" var tmp = 10;");
+		code.add(" var xml = <></>;");
+		code.add(" var node = xml..*.object.(@qualifiedName == tmp);");
+		code.add(" if (node.length() == 0) {}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testXMLWithParentheseExpressionWithUnknownVariableReference() {
+		StringList code = new StringList();
+		code.add("function test() {");
+		code.add(" var xml = <></>;");
+		code.add(" var node = xml..*.object.(@qualifiedName == tmp);");
+		code.add(" if (node.length() == 0) {}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+				.getID());
+
+	}
+
 }
