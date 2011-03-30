@@ -25,6 +25,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChecker;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -49,7 +50,6 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
-import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -87,11 +87,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 		if (script == null) {
 			return;
 		}
-		TypeInferencer2 inferencer = new TypeInferencer2();
+		final TypeInferencer2 inferencer = new TypeInferencer2();
 		inferencer.setModelElement(context.getSourceModule());
-		inferencer.setVisitor(new ValidationVisitor(inferencer,
-				JavaScriptValidations.createReporter(context)));
+		final Reporter reporter = JavaScriptValidations.createReporter(context);
+		final ValidationVisitor visitor = new ValidationVisitor(inferencer,
+				reporter);
+		inferencer.setVisitor(visitor);
+		final TypeChecker typeChecker = new TypeChecker(inferencer, reporter);
+		visitor.setJSDocTypeChecker(typeChecker);
 		inferencer.doInferencing(script);
+		typeChecker.validate();
 	}
 
 	private static enum VisitorMode {
@@ -333,11 +338,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				Reporter reporter) {
 			super(context);
 			this.reporter = reporter;
-		}
-
-		@Override
-		public JSProblemReporter getProblemReporter() {
-			return reporter;
+			setProblemReporter(reporter);
 		}
 
 		private final Map<ASTNode, VisitorMode> modes = new IdentityHashMap<ASTNode, VisitorMode>();
@@ -634,8 +635,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 
 			if (methods == null || methods.size() == 0)
-				methods = JavaScriptValidations.extractElements(
-					reference, Method.class);
+				methods = JavaScriptValidations.extractElements(reference,
+						Method.class);
 			if (methods != null) {
 				final List<ASTNode> callArgs = node.getArguments();
 				Method method = JavaScriptValidations.selectMethod(methods,

@@ -124,12 +124,6 @@
           name="Code Validator"
           nature="org.eclipse.dltk.javascript.core.nature">
     </buildParticipant>
-    <buildParticipant
-          class="org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory"
-          id="org.eclipse.dltk.javascript.core.jsdocvalidation"
-          name="JSDoc Validator"
-          nature="org.eclipse.dltk.javascript.core.nature">
-    </buildParticipant>
   </extension>
 
 	<extension point="org.eclipse.emf.ecore.generated_package">

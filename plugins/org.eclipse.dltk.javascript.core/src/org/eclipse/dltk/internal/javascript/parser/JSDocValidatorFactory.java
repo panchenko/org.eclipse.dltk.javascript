@@ -5,20 +5,13 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
-import org.eclipse.dltk.core.IScriptProject;
-import org.eclipse.dltk.core.builder.AbstractBuildParticipantType;
 import org.eclipse.dltk.core.builder.IBuildContext;
-import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
-import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
-import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
-import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -39,39 +32,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
-public class JSDocValidatorFactory extends AbstractBuildParticipantType {
-
-	@Override
-	public IBuildParticipant createBuildParticipant(IScriptProject project)
-			throws CoreException {
-		return new JSDocValidator();
-	}
-
-	private static class JSDocValidationVisitor extends TypeInferencerVisitor {
-
-		public JSDocValidationVisitor(ITypeInferenceContext context) {
-			super(context);
-		}
-
-	}
-
-	private static class JSDocValidator implements IBuildParticipant {
-
-		public void build(IBuildContext context) throws CoreException {
-			 final TypeInferencer2 inferencer2 = new TypeInferencer2();
-			 TypeInferencerVisitor sr = new
-			 JSDocValidationVisitor(inferencer2);
-			 sr.setProblemReporter(new Reporter(context));
-			 TypeChecker typeChecker = new TypeChecker(inferencer2,
-			 sr.getProblemReporter());
-			 sr.setJSDocTypeChecker(typeChecker);
-			 inferencer2.setVisitor(sr);
-			 inferencer2.setModelElement(context.getModelElement());
-			 inferencer2.doInferencing(JavaScriptValidations.parse(context));
-			 typeChecker.validate();
-		}
-
-	}
+public class JSDocValidatorFactory {
 
 	public static class TypeChecker implements IJSDocTypeChecker {
 
