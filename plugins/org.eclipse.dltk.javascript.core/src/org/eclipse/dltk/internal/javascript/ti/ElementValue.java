@@ -36,6 +36,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public abstract class ElementValue implements IValue {
 
@@ -147,6 +148,10 @@ public abstract class ElementValue implements IValue {
 			return types;
 		}
 
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + types;
+		}
 	}
 
 	private static class StaticTypeValue extends ElementValue implements IValue {
@@ -166,7 +171,23 @@ public abstract class ElementValue implements IValue {
 			// just guess that if the child is the function operator it is a new
 			// expression of this type. return then the none static type.
 			if (name.equals(IValueReference.FUNCTION_OP)) {
-				return new TypeValue(types);
+				if (types.size() == 1) {
+					final JSType type = types.getFirst();
+					if (type instanceof TypeRef && ((TypeRef) type).isStatic()) {
+						return new TypeValue(JSTypeSet.singleton(TypeUtil
+								.ref(((TypeRef) type).getTarget())));
+					}
+				}
+				final JSTypeSet returnTypes = JSTypeSet.create();
+				for (JSType type : types) {
+					if (type instanceof TypeRef && ((TypeRef) type).isStatic()) {
+						returnTypes.add(TypeUtil.ref(((TypeRef) type)
+								.getTarget()));
+					} else {
+						returnTypes.add(type);
+					}
+				}
+				return new TypeValue(returnTypes);
 			}
 			for (JSType type : types) {
 				IValue child = findMember(type, name,
@@ -190,6 +211,10 @@ public abstract class ElementValue implements IValue {
 			return ReferenceKind.TYPE;
 		}
 
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + types;
+		}
 	}
 
 	private static class MethodValue extends ElementValue implements IValue {
@@ -237,6 +262,10 @@ public abstract class ElementValue implements IValue {
 			return JSTypeSet.emptySet();
 		}
 
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + '<' + method + '>';
+		}
 	}
 
 	private static class PropertyValue extends ElementValue implements IValue {
@@ -273,7 +302,7 @@ public abstract class ElementValue implements IValue {
 					Type arrayType = null;
 					if (property.getType() instanceof ArrayType)
 						arrayType = TypeUtil.extractType(((ArrayType) property
-							.getType()).getItemType());
+								.getType()).getItemType());
 					if (property.getType() instanceof MapType)
 						arrayType = TypeUtil.extractType(((MapType) property
 								.getType()).getValueType());
@@ -306,6 +335,10 @@ public abstract class ElementValue implements IValue {
 			}
 		}
 
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + '<' + property + '>';
+		}
 	}
 
 	private static class MemberValue extends ElementValue implements IValue {
@@ -408,8 +441,8 @@ public abstract class ElementValue implements IValue {
 					if (types == null) {
 						types = JSTypeSet.create();
 					}
-					types.add(TypeUtil.ref(TypeInfoModelLoader
-							.getInstance().getType(FUNCTION)));
+					types.add(TypeUtil.ref(TypeInfoModelLoader.getInstance()
+							.getType(FUNCTION)));
 				}
 			}
 			if (types != null) {
