@@ -2,11 +2,10 @@ package org.eclipse.dltk.javascript.core.tests.validation;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.util.StringList;
-import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory;
+import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
 
@@ -14,15 +13,9 @@ public class JSDocValidationTest extends AbstractValidationTest {
 
 	@Override
 	protected IBuildParticipant createValidator() {
-		try {
-			return new JSDocValidatorFactory().createBuildParticipant(null);
-		} catch (CoreException e) {
-			throw new RuntimeException(e);
-		}
-		
+		return new TypeInfoValidator();
 	}
 
-	
 	public void testUnknownFunctionType() {
 		StringList code = new StringList();
 		code.add("/** @type LongString */");
@@ -31,7 +24,7 @@ public class JSDocValidationTest extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
-	
+
 	public void testUnknownFunctionReturnType() {
 		StringList code = new StringList();
 		code.add("/** @return {LongString} doc */");
@@ -69,7 +62,7 @@ public class JSDocValidationTest extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(1).getID());
 	}
-	
+
 	public void testOneUnknownAndOneKnownThrowsType() {
 		StringList code = new StringList();
 		code.add("/** @throws {LongString1} x ");
@@ -79,7 +72,7 @@ public class JSDocValidationTest extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
-	
+
 	public void testNestedObjectInitializerType() {
 		StringList code = new StringList();
 		code.add("var init = {Node: function(){} }");
@@ -90,7 +83,7 @@ public class JSDocValidationTest extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testNestedCallsToAnonymousReturnType() {
 		List<String> code = new StringList();
 		code.add("function Test() {");
@@ -112,7 +105,7 @@ public class JSDocValidationTest extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
-	
+
 	public void testNestedCallsToReturnType() {
 		List<String> code = new StringList();
 		code.add("function Test() {");
