@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.validation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
@@ -198,11 +201,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var person");
 		code.add("var name = person.name");
 		code.add("var address = person.address");
-		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(), 2, problems.size());
-		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
-				.getID());
+		final List<IProblem> problems = new ArrayList<IProblem>(
+				validate(code.toString()));
+		Collections.sort(problems, new Comparator<IProblem>() {
+			public int compare(IProblem o1, IProblem o2) {
+				return o1.getSourceStart() - o2.getSourceStart();
+			}
+		});
+		assertEquals(problems.toString(), 3, problems.size());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(1)
+				.getID());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(2)
 				.getID());
 	}
 
@@ -435,7 +445,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 	}
-	
+
 	public void testLazyTypeWithAssignment() {
 		StringList code = new StringList();
 		code.add("function Node() {");
@@ -1426,7 +1436,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testMapWithValueDeclaration() {
 		StringList code = new StringList();
 		code.add("/** @param {Object<String>} param */");
@@ -1437,7 +1447,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testMapWithKeyValueDeclaration() {
 		StringList code = new StringList();
 		code.add("/** @param {Object<Number,String>} param */");
@@ -1448,7 +1458,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testMapWithValueWithWrongTypeDeclaration() {
 		StringList code = new StringList();
 		code.add("/** @param {Object<Stringg>} param */");
@@ -1456,10 +1466,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0)
-				.getID());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
-	
+
 	public void testMapWithKeyValueWithWrongTypeDeclaration() {
 		StringList code = new StringList();
 		code.add("/** @param {Object<Stringg,Numberr>} param */");
@@ -1467,12 +1476,10 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 2, problems.size());
-		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0)
-				.getID());
-		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(1)
-				.getID());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(1).getID());
 	}
-	
+
 	public void testArrayWithWrongTypeDeclaration() {
 		StringList code = new StringList();
 		code.add("/** @param {Array<Stringg>} param */");
@@ -1480,10 +1487,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0)
-				.getID());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
-	
+
 	public void testUnionWithWrongTypeDeclaration() {
 		StringList code = new StringList();
 		code.add("/** @param {Stringg|Number} param */");
@@ -1491,11 +1497,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0)
-				.getID());
+		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
-	
-	
+
 	public void testJavaObjectAndUndefineReturn() {
 		StringList code = new StringList();
 		code.add("function test1(param) {");
@@ -1508,7 +1512,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testXMLWithParentheseExpression() {
 		StringList code = new StringList();
 		code.add("function test() {");
@@ -1520,7 +1524,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testXMLWithParentheseExpressionWithUnknownVariableReference() {
 		StringList code = new StringList();
 		code.add("function test() {");
