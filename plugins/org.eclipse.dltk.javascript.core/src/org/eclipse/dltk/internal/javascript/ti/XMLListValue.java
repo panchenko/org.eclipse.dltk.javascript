@@ -22,11 +22,9 @@ public class XMLListValue extends AbstractReference {
 	};
 
 	private final IValueParent parent;
-	private final ITypeInfoContext context;
 
 	public XMLListValue(IValueParent parent, ITypeInfoContext context) {
 		this.parent = parent;
-		this.context = context;
 		value.setDeclaredType(context.getTypeRef(ITypeNames.XMLLIST));
 	}
 

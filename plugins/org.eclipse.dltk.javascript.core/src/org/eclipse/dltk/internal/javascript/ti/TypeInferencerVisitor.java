@@ -863,7 +863,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				}
 			} else if (name instanceof AsteriskExpression) {
 				return visitAsteriskExpression((AsteriskExpression) name);
-			}else {
+			} else if (name instanceof ParenthesizedExpression) {
+				visitParenthesizedExpression((ParenthesizedExpression) name);
+				return parent;
+			} else {
 				return null;
 			}
 			return parent.getChild(nameStr);
