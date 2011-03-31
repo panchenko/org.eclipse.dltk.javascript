@@ -237,6 +237,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final Type numType = context.getType(NUMBER);
 			if (ref.getTypes().contains(numType))
 				return true;
+			// FIXME (alex) different types in .equals() call
 			if (numType.equals(ref.getDeclaredType()))
 				return true;
 		}
@@ -248,6 +249,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final Type strType = context.getType(STRING);
 			if (ref.getTypes().contains(strType))
 				return true;
+			// FIXME (alex) different types in .equals() call
 			if (strType.equals(ref.getDeclaredType()))
 				return true;
 		}
@@ -257,6 +259,22 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	protected IValueReference visitAssign(IValueReference left,
 			IValueReference right, BinaryOperation node) {
 		if (left != null) {
+			if (node.getLeftExpression() instanceof PropertyExpression) {
+				final PropertyExpression property = (PropertyExpression) node
+						.getLeftExpression();
+				if (property.getObject() instanceof ThisExpression
+						&& property.getProperty() instanceof Identifier
+						&& !left.exists()) {
+					if (isFunctionDeclaration(property))
+						left.setKind(ReferenceKind.FUNCTION);
+					else
+						left.setKind(ReferenceKind.FIELD);
+					left.setLocation(ReferenceLocation.create(getSource(),
+							property.sourceStart(), property.sourceEnd(),
+							property.getProperty().sourceStart(), property
+									.getProperty().sourceEnd()));
+				}
+			}
 			if (IValueReference.ARRAY_OP.equals(left.getName())
 					&& node.getLeftExpression() instanceof GetArrayItemExpression) {
 				GetArrayItemExpression arrayItemExpression = (GetArrayItemExpression) node
@@ -432,7 +450,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		JSType type = JavaScriptValidations.typeOf(iteratorReference);
 		if (type != null) {
 			if (type instanceof ArrayType
-				&& JavaScriptValidations.typeOf(itemReference) == null) {
+					&& JavaScriptValidations.typeOf(itemReference) == null) {
 				final JSType itemType = ((ArrayType) type).getItemType();
 				itemReference.setDeclaredType(itemType);
 			} else if (type instanceof MapType
@@ -574,8 +592,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 								context, ((TypeRef) type).getTarget());
 						if (collection != null) {
 							if (collection instanceof IValueProvider) {
-								((IValueProvider)value).getValue().addValue(((IValueProvider) collection)
-										.getValue());
+								((IValueProvider) value).getValue().addValue(
+										((IValueProvider) collection)
+												.getValue());
 							}
 						}
 					}
@@ -830,19 +849,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitPropertyExpression(PropertyExpression node) {
 		final IValueReference object = visit(node.getObject());
-		Expression property = node.getProperty();
-		IValueReference child = extractNamedChild(object, property);
-		if (child != null && node.getObject() instanceof ThisExpression
-				&& !child.exists()) {
-			if (isFunctionDeclaration(node))
-				child.setKind(ReferenceKind.FUNCTION);
-			else
-				child.setKind(ReferenceKind.FIELD);
-			child.setLocation(ReferenceLocation.create(getSource(),
-					node.sourceStart(), node.sourceEnd(),
-					property.sourceStart(), property.sourceEnd()));
-		}
-		return child;
+		return extractNamedChild(object, node.getProperty());
 	}
 
 	protected IValueReference extractNamedChild(IValueReference parent,
