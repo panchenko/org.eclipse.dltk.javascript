@@ -1538,5 +1538,15 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 
 	}
-
+	
+	public void testReassignOfAVariableWithDifferentDataAccessingItRightBefore() {
+		StringList code = new StringList();
+		code.add("function getParamXML() {");
+		code.add(" var xml = <xml><data></data></xml>;");
+		code.add(" xml.data.ignoreComments;");
+		code.add(" xml = <xml><data1></data1></xml>;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
