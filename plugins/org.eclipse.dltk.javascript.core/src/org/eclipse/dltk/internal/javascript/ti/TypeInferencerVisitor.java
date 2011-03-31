@@ -523,11 +523,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setDeclaredType(context.getTypeRef(ITypeNames.FUNCTION));
 		result.setAttribute(IReferenceAttributes.PARAMETERS, method);
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
+		result.setAttribute(IReferenceAttributes.RESOLVING, Boolean.TRUE);
 		enterContext(function);
 		try {
 			visitFunctionBody(node);
 		} finally {
 			leaveContext();
+			result.setAttribute(IReferenceAttributes.RESOLVING, null);
 		}
 		final IValueReference returnValue = result
 				.getChild(IValueReference.FUNCTION_OP);
