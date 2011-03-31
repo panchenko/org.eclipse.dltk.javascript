@@ -487,9 +487,6 @@ public abstract class ElementValue implements IValue {
 		return null;
 	}
 
-	public final void removeAttribute(String key) {
-	}
-
 	public final void setAttribute(String key, Object value) {
 	}
 

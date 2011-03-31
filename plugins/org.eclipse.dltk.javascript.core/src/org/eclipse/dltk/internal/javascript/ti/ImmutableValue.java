@@ -264,9 +264,6 @@ public class ImmutableValue implements IValue, IValue2 {
 	public void setDeclaredType(JSType declaredType) {
 	}
 
-	public void removeAttribute(String key) {
-	}
-
 	public void setAttribute(String key, Object value) {
 	}
 

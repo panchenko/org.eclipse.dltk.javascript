@@ -37,10 +37,8 @@ public interface IValue {
 	JSTypeSet getTypes();
 
 	Object getAttribute(String key, boolean includeReferences);
-	
-	Object getAttribute(String key);
 
-	void removeAttribute(String key);
+	Object getAttribute(String key);
 
 	void setAttribute(String key, Object value);
 

@@ -38,12 +38,6 @@ public class Value extends ImmutableValue {
 		this.location = location;
 	}
 
-	public void removeAttribute(String key) {
-		if (attributes != null) {
-			attributes.remove(key);
-		}
-	}
-
 	public void setAttribute(String key, Object value) {
 		if (value != null) {
 			if (attributes == null) {
