@@ -1549,4 +1549,19 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testRecordTypeWithSpacesAndOwnCurlyBrackets() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @type {{height:Number, widgetName:String, widgetTitle: String,originalColumn: forms.widgetColumn, originalPosition:Number,currentColumn:forms.widgetColumn,currentPosition:Number,columns:{} }}");
+		code.add("*/");
+		code.add("var eventDataType;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	
+	 
+	 
+	 
 }
