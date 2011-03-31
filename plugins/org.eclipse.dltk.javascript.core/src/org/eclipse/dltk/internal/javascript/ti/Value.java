@@ -45,10 +45,16 @@ public class Value extends ImmutableValue {
 	}
 
 	public void setAttribute(String key, Object value) {
-		if (attributes == null) {
-			attributes = new HashMap<String, Object>();
+		if (value != null) {
+			if (attributes == null) {
+				attributes = new HashMap<String, Object>();
+			}
+			attributes.put(key, value);
+		} else {
+			if (attributes != null) {
+				attributes.remove(key);
+			}
 		}
-		attributes.put(key, value);
 	}
 
 	public void deleteChild(String name) {
@@ -158,8 +164,7 @@ public class Value extends ImmutableValue {
 	}
 
 	private void addValueRecursive(ImmutableValue src,
-			Map<ImmutableValue, ImmutableValue> processing,
-			int depth) {
+			Map<ImmutableValue, ImmutableValue> processing, int depth) {
 		if (!processing.containsKey(src)) {
 			processing.put(src, this);
 			if (depth > 8) {
@@ -275,7 +280,6 @@ public class Value extends ImmutableValue {
 				childs.put(entry.getKey(), entry.getValue());
 			}
 		}
-
 
 		for (Map.Entry<String, IValue> entry : inherited.entrySet()) {
 			if (entry.getValue() instanceof Value)
