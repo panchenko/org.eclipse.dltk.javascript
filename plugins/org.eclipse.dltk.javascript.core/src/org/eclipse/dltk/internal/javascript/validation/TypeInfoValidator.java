@@ -315,16 +315,19 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private final PropertyExpression node;
 		private final IValueReference reference;
 		private final ValidationVisitor visitor;
+		private final boolean exists;
 
 		public PropertyExpressionHolder(PropertyExpression node,
-				IValueReference reference, ValidationVisitor visitor) {
+				IValueReference reference, ValidationVisitor visitor,
+				boolean exists) {
 			this.node = node;
 			this.reference = reference;
 			this.visitor = visitor;
+			this.exists = exists;
 		}
 
 		public void call() {
-			visitor.validateProperty(node, reference);
+			visitor.validateProperty(node, reference, exists);
 		}
 	}
 
@@ -1220,7 +1223,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (result != null) {
 					if (currentMode() != VisitorMode.CALL) {
 						pushExpressionValidator(new PropertyExpressionHolder(
-								node, result, this));
+								node, result, this, result.exists()));
 					}
 					return result;
 				} else {
@@ -1411,7 +1414,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		protected void validateProperty(PropertyExpression propertyExpression,
-				IValueReference result) {
+				IValueReference result, boolean exists) {
 			final Expression propName = propertyExpression.getProperty();
 			final Member member = extractElement(result, Member.class,
 					JavaScriptValidations.isStatic(result.getParent()));
@@ -1471,7 +1474,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 									result.getName(), type.getName()), propName
 									.sourceStart(), propName.sourceEnd());
 				}
-			} else if (!result.exists() && !isArrayLookup(propertyExpression)) {
+			} else if ((!exists && !result.exists())
+					&& !isArrayLookup(propertyExpression)) {
 				final JSType type = context
 						.resolveTypeRef(JavaScriptValidations.typeOf(result
 								.getParent()));
