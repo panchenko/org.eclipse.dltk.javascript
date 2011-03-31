@@ -391,7 +391,7 @@ public class JSDocSupport implements IModelBuilder {
 			if (!hasCurrent) {
 				if (st.hasMoreElements()) {
 					hasCurrent = true;
-					current = st.nextToken();
+					current = getNextToken();
 				} else {
 					return null;
 				}
@@ -399,12 +399,35 @@ public class JSDocSupport implements IModelBuilder {
 			return current;
 		}
 
+		/**
+		 * @return
+		 */
+		private String getNextToken() {
+			String token = st.nextToken();
+			while (!isClosed(token) && st.hasMoreTokens()) {
+				token += st.nextToken();
+			}
+			return token;
+		}
+
+		private boolean isClosed(String str) {
+			int open = 0;
+			for (int i = 0; i < str.length(); i++) {
+				char ch = str.charAt(i);
+				if (ch == '{')
+					open++;
+				else if (ch == '}')
+					open--;
+			}
+			return open == 0;
+		}
+
 		public String nextToken() {
 			if (hasCurrent) {
 				hasCurrent = false;
 				return current;
 			}
-			return st.nextToken();
+			return getNextToken();
 		}
 
 	}
