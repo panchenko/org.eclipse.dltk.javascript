@@ -1317,10 +1317,19 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		property.setObject(transformExpression(node.getChild(0), property));
 
-		property.setProperty(transformExpression(node.getChild(2), property));
+		final int dotPosition = getTokenOffset(node.getChild(1)
+				.getTokenStartIndex());
+		property.setDotPosition(dotPosition);
 
-		property.setDotPosition(getTokenOffset(node.getChild(1)
-				.getTokenStartIndex()));
+		if (node.getChild(2) != null) {
+			property.setProperty(transformExpression(node.getChild(2), property));
+		} else {
+			final ErrorExpression error = new ErrorExpression(property,
+					Util.EMPTY_STRING);
+			error.setStart(dotPosition + 1);
+			error.setEnd(dotPosition + 1);
+			property.setProperty(error);
+		}
 
 		Assert.isTrue(property.getObject().sourceStart() >= 0);
 		Assert.isTrue(property.getProperty().sourceEnd() > 0);
