@@ -143,6 +143,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	protected void assign(IValueReference dest, IValueReference src) {
+		JSType destType = JavaScriptValidations.typeOf(dest);
+		if (destType != null
+				&& (destType.getName().equals(ITypeNames.XML) || destType
+						.getName().equals(ITypeNames.XMLLIST))) {
+			JSType srcType = JavaScriptValidations.typeOf(src);
+			if (srcType != null
+					&& !(srcType.getName().equals(ITypeNames.XML) || srcType
+							.getName().equals(ITypeNames.XMLLIST)))
+				return;
+		}
 		if (branchings.isEmpty()) {
 			dest.setValue(src);
 		} else {
@@ -452,11 +462,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (type instanceof ArrayType
 					&& JavaScriptValidations.typeOf(itemReference) == null) {
 				final JSType itemType = ((ArrayType) type).getItemType();
-				itemReference.setDeclaredType(itemType);
+				setTypeImpl(itemReference, itemType);
 			} else if (type instanceof MapType
 					&& JavaScriptValidations.typeOf(itemReference) == null) {
 				final JSType itemType = ((MapType) type).getValueType();
-				itemReference.setDeclaredType(itemType);
+				setTypeImpl(itemReference, itemType);
 			} else if (type.getName().endsWith(ITypeNames.XMLLIST)) {
 				itemReference.setDeclaredType(context
 						.getTypeRef(ITypeNames.XML));
@@ -624,12 +634,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			IValueReference child = array.getChild(IValueReference.ARRAY_OP);
 			JSType arrayType = null;
 			if (array.getDeclaredType() != null) {
-				arrayType = TypeUtil.extractArrayItemType(array
-						.getDeclaredType());
+				arrayType = TypeUtil.extractArrayItemType(
+						array.getDeclaredType(), context);
 			} else {
 				JSTypeSet types = array.getTypes();
 				if (types.size() > 0)
-					arrayType = TypeUtil.extractArrayItemType(types.getFirst());
+					arrayType = TypeUtil.extractArrayItemType(types.getFirst(),
+							context);
 			}
 			if (arrayType != null && child.getDeclaredType() == null) {
 				setTypeImpl(child, arrayType);
@@ -860,6 +871,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final String nameStr;
 			if (name instanceof Identifier) {
 				nameStr = ((Identifier) name).getName();
+				JSType parentType = JavaScriptValidations.typeOf(parent);
+				if (parentType != null
+						&& (parentType.getName().equals(ITypeNames.XML) || parentType
+								.getName().equals(ITypeNames.XMLLIST))) {
+					IValueReference child = parent.getChild(nameStr);
+					if (child != null && child.getDeclaredType() == null) {
+						child.setDeclaredType(context
+								.getTypeRef(ITypeNames.XML));
+						return child;
+					}
+				}
 			} else if (name instanceof StringLiteral) {
 				nameStr = ((StringLiteral) name).getValue();
 			} else if (name instanceof XmlAttributeIdentifier) {
@@ -869,6 +891,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				} else {
 					nameStr = ((XmlAttributeIdentifier) name)
 							.getAttributeName();
+					IValueReference child = parent.getChild(nameStr);
+					if (child != null && child.getDeclaredType() == null) {
+						child.setDeclaredType(context
+								.getTypeRef(ITypeNames.XML));
+						return child;
+					}
 				}
 			} else if (name instanceof AsteriskExpression) {
 				return visitAsteriskExpression((AsteriskExpression) name);

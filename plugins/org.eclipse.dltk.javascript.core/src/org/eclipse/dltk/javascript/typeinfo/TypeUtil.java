@@ -94,13 +94,16 @@ public class TypeUtil {
 		}
 	}
 
-	public static JSType extractArrayItemType(JSType type) {
+	public static JSType extractArrayItemType(JSType type,
+			ITypeInfoContext context) {
 		if (type instanceof ArrayType) {
 			return ((ArrayType) type).getItemType();
 		} else if (type instanceof MapType) {
 			return ((MapType) type).getValueType();
 		} else if (type != null && type.getName().equals(ITypeNames.XML)) {
 			return type;
+		} else if (type != null && type.getName().equals(ITypeNames.XMLLIST)) {
+			return context.getTypeRef(ITypeNames.XML);
 		} else {
 			return null;
 		}
