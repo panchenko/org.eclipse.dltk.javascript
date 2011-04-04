@@ -39,8 +39,6 @@ import org.eclipse.dltk.internal.ui.preferences.ScrolledPageContent;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
-import org.eclipse.dltk.javascript.parser.JavaScriptParserPlugin;
-import org.eclipse.dltk.javascript.parser.JavaScriptParserPreferences;
 import org.eclipse.dltk.ui.preferences.AbstractOptionsBlock;
 import org.eclipse.dltk.ui.preferences.IPreferenceChangeRebuildPrompt;
 import org.eclipse.dltk.ui.preferences.PreferenceChangeRebuildPrompt;
@@ -199,10 +197,6 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 			}
 		}
 
-		bindControl(SWTFactory.createCheckButton(composite,
-				JavaScriptPreferenceMessages.ErrorWarning_enableTypeInfo, null,
-				false, 2), new PreferenceKey(JavaScriptParserPlugin.PLUGIN_ID,
-				JavaScriptParserPreferences.ENABLE_TYPE_INFO), null);
 		SWTFactory.createLabel(composite,
 				JavaScriptPreferenceMessages.ErrorWarningDescription, 2);
 
