@@ -24,4 +24,11 @@ public class XMLCompletionTests extends AbstractCompletionTest {
 		int position = lastPositionInFile("x[0].", module);
 		basicTest(module, position, names);
 	}
+	
+	public void test4() {
+		String[] names = getMethodsOfXML().toArray(new String[0]);
+		IModuleSource module = createModule("test-xml4.js");
+		int position = lastPositionInFile("x[0].", module);
+		basicTest(module, position, names);
+	}
 }
