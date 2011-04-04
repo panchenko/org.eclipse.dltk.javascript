@@ -288,6 +288,8 @@ public class JSDocSupport implements IModelBuilder {
 					if (propertiesType == null) {
 						propertiesType = TypeInfoModelFactory.eINSTANCE
 								.createType();
+						propertiesType.setKind(TypeKind.RECORD);
+						propertiesType.setName('{' + objectName + '}');
 						objectPropertiesTypes.put(objectName, propertiesType);
 						final IParameter param = method
 								.getParameter(objectName);
