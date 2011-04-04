@@ -150,7 +150,18 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	private boolean isResolved(JSType type) {
 		if (type instanceof TypeRef) {
-			return !((TypeRef) type).getTarget().isProxy();
+			boolean proxy = ((TypeRef) type).getTarget().isProxy();
+			if (proxy)
+				return false;
+			if (type.getKind() == TypeKind.RECORD) {
+				Type target = ((TypeRef) type).getTarget();
+				for (Member member : target.getMembers()) {
+					if (!isResolved(member.getType())) {
+						member.setType(getTypeRef(member.getType().getName()));
+					}
+				}
+			}
+			return !proxy;
 		} else if (type instanceof ArrayType) {
 			return isResolved(((ArrayType) type).getItemType());
 		} else if (type instanceof MapType) {
