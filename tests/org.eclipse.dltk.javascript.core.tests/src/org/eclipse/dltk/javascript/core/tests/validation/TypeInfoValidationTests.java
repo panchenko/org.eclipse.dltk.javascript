@@ -1112,6 +1112,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testNestedTypeToReturnType() {
+		if (notYetImplemented()) return;
 		List<String> code = new StringList();
 		code.add("function Test() {");
 		code.add(" function Node() {");
@@ -1194,6 +1195,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testOuterVariableInInnerFunction() {
+		if (notYetImplemented()) return;
 		StringList code = new StringList();
 		code.add("function Outer() {");
 		code.add("function inner() {");
