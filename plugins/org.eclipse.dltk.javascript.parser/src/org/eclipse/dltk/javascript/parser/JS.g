@@ -1100,7 +1100,7 @@ leftHandSideExpression
     arguments     -> ^( CALL $leftHandSideExpression arguments )
     | LBRACK expression RBRACK  -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression )
     | DOT r=rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT $r? )
-    | DOTDOT rightHandSideExpression -> ^(ALLCHILDREN $leftHandSideExpression rightHandSideExpression)
+    | DOTDOT r=rightHandSideExpression -> ^(ALLCHILDREN $leftHandSideExpression $r)
     | COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpression expression)
   )*
   ;
@@ -1116,7 +1116,7 @@ newExpressionTail
   (
     LBRACK expression RBRACK  -> ^( BYINDEX[$LBRACK] $newExpressionTail expression )
     | DOT r=rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT $r? )
-    | DOTDOT rightHandSideExpression -> ^(ALLCHILDREN $newExpressionTail rightHandSideExpression)
+    | DOTDOT r=rightHandSideExpression -> ^(ALLCHILDREN $newExpressionTail $r)
     | COLONCOLON expression -> ^(LOCALNAME $newExpressionTail expression)
   )*
   (
