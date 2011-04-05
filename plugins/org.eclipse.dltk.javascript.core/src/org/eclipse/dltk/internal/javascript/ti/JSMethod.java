@@ -15,9 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Keyword;
+import org.eclipse.dltk.javascript.ast.PropertyExpression;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
+import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -136,6 +141,29 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 			final Keyword kw = node.getFunctionKeyword();
 			setLocation(ReferenceLocation.create(source, node.sourceStart(),
 					node.sourceEnd(), kw.sourceStart(), kw.sourceEnd()));
+			Expression expression = null;
+			if (node.getParent() instanceof BinaryOperation) {
+				expression = ((BinaryOperation) node.getParent())
+						.getLeftExpression();
+				while (expression != null
+						&& !(expression instanceof Identifier)) {
+					if (expression instanceof PropertyExpression) {
+						expression = ((PropertyExpression) expression)
+								.getProperty();
+					} else
+						expression = null;
+				}
+			} else if (node.getParent() instanceof PropertyInitializer) {
+				expression = ((PropertyInitializer) node.getParent()).getName();
+			} else if (node.getParent() instanceof VariableDeclaration) {
+				expression = ((VariableDeclaration) node.getParent())
+						.getIdentifier();
+			}
+			if (expression instanceof Identifier) {
+				setName(((Identifier) expression).getName());
+			} else {
+				setName("<anonymous>");
+			}
 		}
 		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
 		if (funcType != null) {
