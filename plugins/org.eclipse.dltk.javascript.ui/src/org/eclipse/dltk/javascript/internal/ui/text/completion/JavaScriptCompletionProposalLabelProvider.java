@@ -34,7 +34,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		CompletionProposalLabelProvider {
 
 	@Override
-	protected String createTypeProposalLabel(CompletionProposal typeProposal) {
+	public String createTypeProposalLabel(CompletionProposal typeProposal) {
 		if (typeProposal.getExtraInfo() instanceof Element) {
 			final String label = getElementLabel((Element) typeProposal
 					.getExtraInfo());
@@ -214,8 +214,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	 * @see org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider#createTypeImageDescriptor(org.eclipse.dltk.core.CompletionProposal)
 	 */
 	@Override
-	protected ImageDescriptor createTypeImageDescriptor(
-			CompletionProposal proposal) {
+	public ImageDescriptor createTypeImageDescriptor(CompletionProposal proposal) {
 		ImageDescriptor imageDescriptor = extraImageFromProposal(proposal);
 		if (imageDescriptor != null)
 			return imageDescriptor;
