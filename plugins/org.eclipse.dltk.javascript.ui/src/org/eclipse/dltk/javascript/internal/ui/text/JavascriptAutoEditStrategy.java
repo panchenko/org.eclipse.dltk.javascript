@@ -24,6 +24,7 @@ import org.eclipse.dltk.javascript.scriptdoc.JavaIndenter;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.DLTKUIPlugin;
 import org.eclipse.dltk.ui.PreferenceConstants;
+import org.eclipse.dltk.ui.text.util.TabStyle;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
@@ -50,6 +51,7 @@ public class JavascriptAutoEditStrategy extends
 	private static final String LINE_COMMENT = "//"; //$NON-NLS-1$
 
 	private boolean fCloseBrace;
+	private boolean fIsSmartTab;
 	private boolean fIsSmartMode;
 
 	private String fPartitioning;
@@ -1365,6 +1367,8 @@ public class JavascriptAutoEditStrategy extends
 			super.customizeDocumentCommand(d, c);
 			return;
 		}
+		if (!fIsSmartTab && isRepresentingTab(c.text))
+			return;
 		if (c.length == 0 && c.text != null && isLineDelimiter(d, c.text))
 			smartIndentAfterNewLine(d, c);
 		else if (c.text.length() == 1)
@@ -1373,6 +1377,32 @@ public class JavascriptAutoEditStrategy extends
 				&& getPreferenceStore().getBoolean(
 						PreferenceConstants.EDITOR_SMART_PASTE))
 			smartPaste(d, c); // no smart backspace for paste
+	}
+
+	/**
+	 * Tells whether the given inserted string represents hitting the Tab key.
+	 * 
+	 * @param text
+	 *            the text to check
+	 * @return <code>true</code> if the text represents hitting the Tab key
+	 * @since 3.0
+	 */
+	private boolean isRepresentingTab(String text) {
+		if (text == null)
+			return false;
+
+		if (TabStyle.SPACES == prefs.getTabStyle()) {
+			if (text.length() == 0
+					|| text.length() > getVisualTabLengthPreference())
+				return false;
+			for (int i = 0; i < text.length(); i++) {
+				if (text.charAt(i) != ' ')
+					return false;
+			}
+			return true;
+		} else {
+			return text.length() == 1 && text.charAt(0) == '\t';
+		}
 	}
 
 	private static IPreferenceStore getPreferenceStore() {
@@ -1389,6 +1419,7 @@ public class JavascriptAutoEditStrategy extends
 
 	private void clearCachedValues() {
 		fCloseBrace = prefs.closeBrackets();
+		fIsSmartTab = prefs.isSmartTab();
 		fIsSmartMode = computeSmartMode();
 	}
 

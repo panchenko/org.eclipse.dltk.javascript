@@ -161,7 +161,7 @@ public class JavaScriptEditor extends ScriptEditor {
 	}
 
 	@Override
-	protected IPreferenceStore getScriptPreferenceStore() {
+	public IPreferenceStore getScriptPreferenceStore() {
 		return JavaScriptUI.getDefault().getPreferenceStore();
 	}
 
