@@ -26,6 +26,7 @@ public class Messages extends NLS {
 	public static String JavaScriptBracesTabPage_SwitchStatement_name;
 	public static String JavaScriptBracesTabPage_ArrayInitializer_name;
 	public static String JavaScriptBracesTabPage_KeepEmptyArrayOnOneLine_name;
+	public static String JavaScriptBracesTabPage_EmptyFunctionBraces_name;
 
 	public static String JavaScriptBracesTabPage_BraceSameLine;
 	public static String JavaScriptBracesTabPage_BraceNextLine;

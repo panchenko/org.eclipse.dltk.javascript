@@ -929,6 +929,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 						braces.setBegin(createCharNode(document, block.getLC()));
 						push(braces);
+						skipSpacesOnly(braces, block.getRC());
 						visitNodeList(block.getStatements());
 						checkedPop(braces, block.getRC());
 						braces.setEnd(createCharNode(document, block.getRC()));

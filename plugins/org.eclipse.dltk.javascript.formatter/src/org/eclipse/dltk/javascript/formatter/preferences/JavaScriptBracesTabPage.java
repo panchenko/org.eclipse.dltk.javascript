@@ -102,14 +102,18 @@ public class JavaScriptBracesTabPage extends FormatterModifyTabPage {
 
 		keepEmptyArray = manager.createCheckbox(positionGroup,
 				JavaScriptFormatterConstants.BRACE_EMPTY_ARRAY,
-				Messages.JavaScriptBracesTabPage_KeepEmptyArrayOnOneLine_name);
+				Messages.JavaScriptBracesTabPage_KeepEmptyArrayOnOneLine_name,
+				2);
+
+		manager.createCheckbox(positionGroup,
+				JavaScriptFormatterConstants.BRACE_EMPTY_FUNCTION,
+				Messages.JavaScriptBracesTabPage_EmptyFunctionBraces_name, 2);
 
 		manager.addInitializeListener(new InitializeListener(manager));
 
 		arrayInitializer.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				keepEmptyArray
-						.setEnabled(arrayInitializer.getSelectionIndex() > 0);
+				keepEmptyArray.setEnabled(arrayInitializer.getSelectionIndex() > 0);
 			}
 		});
 

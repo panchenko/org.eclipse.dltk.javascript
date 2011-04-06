@@ -20,7 +20,7 @@ import org.eclipse.dltk.formatter.IFormatterDocument;
 public abstract class AbstractBracesConfiguration implements
 		IBracesConfiguration {
 
-	private final IFormatterDocument document;
+	protected final IFormatterDocument document;
 
 	protected String indentingSettingName;
 	protected String bracesSettingName;

@@ -56,6 +56,7 @@ public final class JavaScriptFormatterConstants {
 	public static final String INDENT_EMPTY_LINES = "formatter.indent.empty.lines";//$NON-NLS-1$
 
 	public static final String BRACE_METHOD = "formatter.braces.function";//$NON-NLS-1$
+	public static final String BRACE_EMPTY_FUNCTION = "formatter.braces.empty.function";//$NON-NLS-1$
 	public static final String BRACE_BLOCK = "formatter.braces.blocks";//$NON-NLS-1$
 	public static final String BRACE_SWITCH = "formatter.braces.switch";//$NON-NLS-1$
 	public static final String BRACE_CASE = "formatter.braces.case";//$NON-NLS-1$
@@ -187,6 +188,7 @@ public final class JavaScriptFormatterConstants {
 		registerStringOption(BRACE_CASE, BRACE_SAME_LINE);
 		registerStringOption(BRACE_ARRAY, BRACE_SAME_LINE);
 		registerBooleanOption(BRACE_EMPTY_ARRAY, true);
+		registerBooleanOption(BRACE_EMPTY_FUNCTION, false);
 
 		registerBooleanOption(NEW_LINE_IN_EMPTY_METHOD, false);
 		registerBooleanOption(NEW_LINE_IN_EMPTY_BLOCK, false);

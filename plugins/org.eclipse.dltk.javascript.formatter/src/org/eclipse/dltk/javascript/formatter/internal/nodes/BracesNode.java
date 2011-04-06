@@ -94,6 +94,11 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 			}
 			break;
 
+		case IBracesConfiguration.EMPTY_SPACE:
+			visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
+			visitor.skipNextLineBreaks(context);
+			break;
+
 		case IBracesConfiguration.ONE_SPACE:
 			visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
 			visitor.writeText(context, JSLiterals.SPACE);
@@ -123,7 +128,9 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 		default:
 			if (configuration.insertBeforeOpenBrace() != IBracesConfiguration.LINE_BREAK) {
 				visitor.appendToPreviousLine(context, JSLiterals.EMPTY);
-				visitor.writeText(context, JSLiterals.SPACE);
+				if (configuration.insertBeforeCloseBrace() != IBracesConfiguration.EMPTY_SPACE) {
+					visitor.writeText(context, JSLiterals.SPACE);
+				}
 				visitor.skipNextLineBreaks(context);
 			}
 			break;

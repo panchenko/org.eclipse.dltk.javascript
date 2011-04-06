@@ -45,10 +45,13 @@ public class FunctionBodyBracesConfiguration extends
 	}
 
 	public int insertBeforeCloseBrace() {
-		if (emptyBody)
-			return IBracesConfiguration.ONE_SPACE;
-		else
+		if (emptyBody) {
+			return document
+					.getBoolean(JavaScriptFormatterConstants.BRACE_EMPTY_FUNCTION) ? IBracesConfiguration.EMPTY_SPACE
+					: IBracesConfiguration.ONE_SPACE;
+		} else {
 			return super.insertBeforeCloseBrace();
+		}
 	}
 
 	public int insertAfterCloseBrace() {
