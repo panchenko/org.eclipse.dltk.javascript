@@ -431,13 +431,7 @@
             categoryId="org.eclipse.dltk.ui.category.source"
             id="org.eclipse.dltk.ui.edit.text.script.remove.block.comment">
       </command>
-      <command
-            name="%ActionDefinition.indent.name"
-            description="%ActionDefinition.indent.description"
-            categoryId="org.eclipse.dltk.ui.category.source"
-            id="org.eclipse.dltk.ui.edit.text.script.indent">
-      </command>
-	<command
+	  <command
             name="%ActionDefinition.format.name"
             description="%ActionDefinition.format.description"
             categoryId="org.eclipse.dltk.ui.category.source"
