@@ -1563,6 +1563,27 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 	
 	
+	public void testUnionTypeTest() throws Exception {
+		StringList code = new StringList();
+		code.add("/** @param {String|Number} param */");
+		code.add("function test(param) {");
+		code.add(" param.toFixed(1)");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testUnionUnknownTypeTest() throws Exception {
+		StringList code = new StringList();
+		code.add("/** @param {String|Numberr} param */");
+		code.add("function test(param) {");
+		code.add(" param.toFixed(1)");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	
 	 
 	 
 	 
