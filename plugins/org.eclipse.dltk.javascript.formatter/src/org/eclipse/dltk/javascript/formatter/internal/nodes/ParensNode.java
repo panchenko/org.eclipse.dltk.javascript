@@ -42,7 +42,14 @@ public class ParensNode extends FormatterBlockWithBeginEndNode {
 		}
 		writeSpace(context, visitor, configuration.getSpaceAfterLeftParen());
 
+		final boolean indenting = isIndenting();
+		if (indenting) {
+			context.incIndent();
+		}
 		acceptBody(context, visitor);
+		if (indenting) {
+			context.decIndent();
+		}
 
 		writeSpace(context, visitor, configuration.getSpaceBeforeRightParen());
 		if (getEnd() != null) {
