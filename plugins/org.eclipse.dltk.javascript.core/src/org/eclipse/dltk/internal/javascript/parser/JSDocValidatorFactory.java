@@ -118,6 +118,11 @@ public class JSDocValidatorFactory {
 				} else if (type instanceof MapType) {
 					checkType(tag, ((MapType) type).getValueType(), collection);
 					checkType(tag, ((MapType) type).getKeyType(), collection);
+				} else if (type instanceof UnionType) {
+					EList<JSType> targets = ((UnionType) type).getTargets();
+					for (JSType unionTarget : targets) {
+						checkType(tag, unionTarget, collection);
+					}
 				} else {
 					final Type t = TypeUtil.extractType(type);
 					if (t != null && t.isDeprecated()) {

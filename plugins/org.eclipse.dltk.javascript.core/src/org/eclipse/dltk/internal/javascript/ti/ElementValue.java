@@ -37,6 +37,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.emf.common.util.EList;
 
 public abstract class ElementValue implements IValue {
 
@@ -52,6 +54,13 @@ public abstract class ElementValue implements IValue {
 			if (!selection.isEmpty()) {
 				return new MemberValue(selection.toArray(new Member[selection
 						.size()]));
+			}
+		} else if (type instanceof UnionType) {
+			EList<JSType> targets = ((UnionType) type).getTargets();
+			for (JSType unionTarget : targets) {
+				ElementValue member = findMember(unionTarget, name);
+				if (member != null)
+					return member;
 			}
 		}
 		return null;

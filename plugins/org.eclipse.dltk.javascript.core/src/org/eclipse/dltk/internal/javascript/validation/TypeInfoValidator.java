@@ -848,10 +848,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		private boolean hasInstanceMethod(JSType type, String name) {
-			final Type t = TypeUtil.extractType(type);
-			return t != null
-					&& !ElementValue.findMembers(t, name,
-							MemberPredicates.NON_STATIC).isEmpty();
+			return ElementValue.findMember(type, name,
+					MemberPredicates.NON_STATIC) != null;
 		}
 
 		private boolean isArrayLookup(ASTNode expression) {
