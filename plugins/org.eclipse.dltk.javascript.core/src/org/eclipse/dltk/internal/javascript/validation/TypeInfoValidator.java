@@ -375,7 +375,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		@Override
 		public IValueReference visitNewExpression(NewExpression node) {
-			boolean started = startExpressionValidator();
+			boolean started = false;
+			if (!(node.getObjectClass() instanceof FunctionStatement))
+				started = startExpressionValidator();
 			try {
 				IValueReference reference = super.visitNewExpression(node);
 				pushExpressionValidator(new NewExpressionValidator(node,
