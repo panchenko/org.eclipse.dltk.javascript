@@ -106,6 +106,7 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseBlockBracesConfi
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseIfBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ElseIfElseBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.EmptyArrayBracketsConfiguration;
+import org.eclipse.dltk.javascript.formatter.internal.nodes.EmptyObjectInitializerBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ExpressionParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FinallyBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ForEmptySemicolonPunctuationConfiguration;
@@ -759,6 +760,20 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 			}
 
+			private boolean isEmpty(ObjectInitializer initializer) {
+				if (initializer.getInitializers().isEmpty()) {
+					for (int i = initializer.getLC() + 1; i < initializer
+							.getRC(); ++i) {
+						if (!Character.isWhitespace(document.charAt(i))) {
+							return false;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
+			}
+
 			@Override
 			public IFormatterNode visitGetArrayItemExpression(
 					GetArrayItemExpression node) {
@@ -1115,7 +1130,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				final IBracesConfiguration configuration;
 
-				if (node.isMultiline()
+				if (isEmpty(node)) {
+					configuration = new EmptyObjectInitializerBracesConfiguration(
+							document);
+				} else if (node.isMultiline()
 						|| document
 								.getBoolean(JavaScriptFormatterConstants.STATEMENT_NEW_LINE)
 						&& isMultiLineObjectInitializer(node))
@@ -1131,6 +1149,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				formatterNode.setBegin(createCharNode(document, node.getLC()));
 
 				push(formatterNode);
+				skipSpacesOnly(formatterNode, node.getRC());
 
 				visitCombinedNodeList(node.getInitializers(), node.getCommas(),
 						new PropertyInitializerPunctuationConfiguration());

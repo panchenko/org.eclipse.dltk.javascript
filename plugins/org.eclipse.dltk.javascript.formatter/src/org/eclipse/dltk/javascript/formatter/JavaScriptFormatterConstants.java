@@ -62,6 +62,7 @@ public final class JavaScriptFormatterConstants {
 	public static final String BRACE_CASE = "formatter.braces.case";//$NON-NLS-1$
 	public static final String BRACE_ARRAY = "formatter.braces.array";//$NON-NLS-1$
 	public static final String BRACE_EMPTY_ARRAY = "formatter.braces.empty.array";//$NON-NLS-1$
+	public static final String BRACE_EMPTY_OBJECT = "formatter.braces.empty.object";//$NON-NLS-1$
 
 	// //////////////////////////////////////////////////////////////////////////
 	// NOT OPTIONS !
@@ -189,6 +190,7 @@ public final class JavaScriptFormatterConstants {
 		registerStringOption(BRACE_ARRAY, BRACE_SAME_LINE);
 		registerBooleanOption(BRACE_EMPTY_ARRAY, true);
 		registerBooleanOption(BRACE_EMPTY_FUNCTION, false);
+		registerBooleanOption(BRACE_EMPTY_OBJECT, false);
 
 		registerBooleanOption(NEW_LINE_IN_EMPTY_METHOD, false);
 		registerBooleanOption(NEW_LINE_IN_EMPTY_BLOCK, false);

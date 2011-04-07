@@ -109,6 +109,10 @@ public class JavaScriptBracesTabPage extends FormatterModifyTabPage {
 				JavaScriptFormatterConstants.BRACE_EMPTY_FUNCTION,
 				Messages.JavaScriptBracesTabPage_EmptyFunctionBraces_name, 2);
 
+		manager.createCheckbox(positionGroup,
+				JavaScriptFormatterConstants.BRACE_EMPTY_OBJECT,
+				Messages.JavaScriptBracesTabPage_EmptyObjectBraces_name, 2);
+
 		manager.addInitializeListener(new InitializeListener(manager));
 
 		arrayInitializer.addModifyListener(new ModifyListener() {
