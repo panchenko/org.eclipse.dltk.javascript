@@ -19,6 +19,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProvider;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProviderExtension2;
@@ -61,7 +62,8 @@ public class ElementDocumentationProvider implements
 		final StringBuilder sb = new StringBuilder();
 		if (element instanceof Member) {
 			final Member member = (Member) element;
-			if (member.getDeclaringType() != null) {
+			if (member.getDeclaringType() != null
+					&& member.getDeclaringType().getKind() != TypeKind.RECORD) {
 				sb.append(member.getDeclaringType().getName());
 				sb.append('.');
 			}
