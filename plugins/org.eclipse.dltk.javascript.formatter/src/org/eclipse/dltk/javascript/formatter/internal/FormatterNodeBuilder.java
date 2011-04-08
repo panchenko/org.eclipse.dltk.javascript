@@ -369,7 +369,8 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				processParens(node.getLP(), node.getRP(), node.getArguments(),
 						new CallParensConfiguration(document),
 						node.getCommas(),
-						new CallExpressionPunctuationConfiguration());
+						new CallExpressionPunctuationConfiguration(), node
+								.getArguments().size() > 1);
 
 				checkedPop(formatterNode, node.sourceEnd());
 
@@ -854,8 +855,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			private void processParens(int leftParen, int rightParen,
 					List<? extends ASTNode> expressions,
 					IParensConfiguration configuration, IntList punctuations,
-					IPunctuationConfiguration punctuationConfiguration) {
-				ParensNode parens = new ParensNode(document, configuration);
+					IPunctuationConfiguration punctuationConfiguration,
+					boolean indenting) {
+				ParensNode parens = new ParensNode(document, configuration,
+						indenting);
 				parens.setBegin(createCharNode(document, leftParen));
 				push(parens);
 				if (!expressions.isEmpty()) {

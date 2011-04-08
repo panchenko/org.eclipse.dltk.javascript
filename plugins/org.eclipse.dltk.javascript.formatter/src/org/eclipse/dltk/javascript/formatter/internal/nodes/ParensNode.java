@@ -20,13 +20,25 @@ import org.eclipse.dltk.formatter.IFormatterWriter;
 
 public class ParensNode extends FormatterBlockWithBeginEndNode {
 
-	private IParensConfiguration configuration;
+	private final IParensConfiguration configuration;
+	private final boolean indenting;
 
 	public ParensNode(IFormatterDocument document,
 			IParensConfiguration configuration) {
+		this(document, configuration, false);
+	}
+
+	public ParensNode(IFormatterDocument document,
+			IParensConfiguration configuration, boolean indenting) {
 		super(document);
 		Assert.isNotNull(configuration);
 		this.configuration = configuration;
+		this.indenting = indenting;
+	}
+
+	@Override
+	protected boolean isIndenting() {
+		return indenting;
 	}
 
 	@Override
