@@ -1112,7 +1112,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testNestedTypeToReturnType() {
-		if (notYetImplemented()) return;
+		if (notYetImplemented())
+			return;
 		List<String> code = new StringList();
 		code.add("function Test() {");
 		code.add(" function Node() {");
@@ -1195,7 +1196,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testOuterVariableInInnerFunction() {
-		if (notYetImplemented()) return;
+		if (notYetImplemented())
+			return;
 		StringList code = new StringList();
 		code.add("function Outer() {");
 		code.add("function inner() {");
@@ -1540,7 +1542,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 
 	}
-	
+
 	public void testReassignOfAVariableWithDifferentDataAccessingItRightBefore() {
 		StringList code = new StringList();
 		code.add("function getParamXML() {");
@@ -1551,7 +1553,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testRecordTypeWithSpacesAndOwnCurlyBrackets() {
 		StringList code = new StringList();
 		code.add("/**");
@@ -1561,8 +1563,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
-	
+
 	public void testUnionTypeTest() throws Exception {
 		StringList code = new StringList();
 		code.add("/** @param {String|Number} param */");
@@ -1572,7 +1573,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testUnionUnknownTypeTest() throws Exception {
 		StringList code = new StringList();
 		code.add("/** @param {String|Numberr} param */");
@@ -1580,11 +1581,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add(" param.toFixed(1)");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(), 0, problems.size());
+		assertEquals(problems.toString(), 2, problems.size());
 	}
-	
-	
-	 
-	 
-	 
+
 }
