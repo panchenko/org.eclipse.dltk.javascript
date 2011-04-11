@@ -107,4 +107,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="valueType" eType="#//JSType"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RecordType" eSuperTypes="#//JSType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//Member" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
 </ecore:EPackage>

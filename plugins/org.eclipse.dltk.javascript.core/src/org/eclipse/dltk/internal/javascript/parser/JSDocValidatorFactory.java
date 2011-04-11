@@ -25,6 +25,8 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
@@ -115,6 +117,10 @@ public class JSDocValidatorFactory {
 					}
 				} else if (type instanceof ArrayType) {
 					checkType(tag, ((ArrayType) type).getItemType(), collection);
+				} else if (type instanceof RecordType) {
+					for (Member member : ((RecordType) type).getMembers()) {
+						checkType(tag, member.getType(), collection);
+					}
 				} else if (type instanceof MapType) {
 					checkType(tag, ((MapType) type).getValueType(), collection);
 					checkType(tag, ((MapType) type).getKeyType(), collection);

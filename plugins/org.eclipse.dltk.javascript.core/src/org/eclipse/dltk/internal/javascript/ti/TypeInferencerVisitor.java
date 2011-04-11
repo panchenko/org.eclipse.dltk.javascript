@@ -145,11 +145,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	protected void assign(IValueReference dest, IValueReference src) {
 		JSType destType = JavaScriptValidations.typeOf(dest);
 		if (destType != null
-				&& (destType.getName().equals(ITypeNames.XML) || destType
+				&& (ITypeNames.XML.equals(destType.getName()) || destType
 						.getName().equals(ITypeNames.XMLLIST))) {
 			JSType srcType = JavaScriptValidations.typeOf(src);
 			if (srcType != null
-					&& !(srcType.getName().equals(ITypeNames.XML) || srcType
+					&& !(ITypeNames.XML.equals(srcType.getName()) || srcType
 							.getName().equals(ITypeNames.XMLLIST)))
 				return;
 		}
@@ -510,15 +510,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final IValueReference refArg = function.createChild(parameter
 					.getName());
 			refArg.setKind(ReferenceKind.ARGUMENT);
-			if (parameter.getPropertiesType() != null) {
-				refArg.setDeclaredType(TypeUtil.ref(parameter
-						.getPropertiesType()));
-			} else {
-				// call directly the impl else unknown type is reported twice if
-				// used in jsdoc,
-				// but when it is declared in code itself it will now fail..
-				setTypeImpl(refArg, parameter.getType());
-			}
+			// call directly the impl else unknown type is reported twice if
+			// used in jsdoc,
+			// XXX but when it is declared in code itself it will now fail..
+			setTypeImpl(refArg, parameter.getType());
 			refArg.setLocation(parameter.getLocation());
 		}
 		final Identifier methodName = node.getName();

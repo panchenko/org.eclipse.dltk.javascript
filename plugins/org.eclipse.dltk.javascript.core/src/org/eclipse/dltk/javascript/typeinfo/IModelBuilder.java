@@ -18,7 +18,6 @@ import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IModelBuilder {
 
@@ -81,15 +80,6 @@ public interface IModelBuilder {
 		 */
 		boolean isVarargs();
 
-		/**
-		 * @since 3.0
-		 */
-		void setPropertiesType(Type type);
-
-		/**
-		 * @since 3.0
-		 */
-		Type getPropertiesType();
 	}
 
 	public interface IMethod extends IMember {

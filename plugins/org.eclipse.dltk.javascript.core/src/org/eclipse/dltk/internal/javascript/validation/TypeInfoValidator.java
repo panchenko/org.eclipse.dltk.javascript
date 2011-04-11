@@ -73,6 +73,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
@@ -670,6 +671,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 				if (!validateParameterCount(method, callArgs)) {
 					reportMethodParameterError(methodNode, arguments, method);
+					return;
 				}
 				if (method.isDeprecated()) {
 					reportDeprecatedMethod(methodNode, reference, method);
@@ -694,6 +696,26 @@ public class TypeInfoValidator implements IBuildParticipant {
 									ValidationMessages.ReferenceToStaticMethod,
 									reference.getName(), type.getName()),
 							methodNode.sourceStart(), methodNode.sourceEnd());
+				}
+				final EList<Parameter> parameters = method.getParameters();
+				if (!validateParameters(parameters, arguments)) {
+					String name = method.getName();
+					if (name == null) {
+						Identifier identifier = PropertyExpressionUtils
+								.getIdentifier(methodNode);
+						if (identifier != null)
+							name = identifier.getName();
+					}
+					reporter.reportProblem(
+							JavaScriptProblems.WRONG_PARAMETERS,
+							NLS.bind(
+									ValidationMessages.MethodNotApplicableInScript,
+									new String[] {
+											name,
+											describeParamTypes(parameters),
+											describeArgTypes(arguments,
+													parameters) }), methodNode
+									.sourceStart(), methodNode.sourceEnd());
 				}
 
 			} else {
@@ -932,10 +954,72 @@ public class TypeInfoValidator implements IBuildParticipant {
 			for (int i = 0; i < testTypesSize; i++) {
 				IValueReference argument = arguments[i];
 				IParameter parameter = parameters.get(i);
-				if (parameter.getPropertiesType() != null && argument != null) {
+				if (parameter.getType() instanceof RecordType
+						&& argument != null) {
 					Set<String> argumentsChildren = argument
 							.getDirectChildren();
-					for (Member member : parameter.getPropertiesType()
+					for (Member member : ((RecordType) parameter.getType())
+							.getMembers()) {
+						if (argumentsChildren.contains(member.getName())) {
+							if (member.getType() != null) {
+								IValueReference child = argument
+										.getChild(member.getName());
+								if (!testArgumentType(member.getType(), child))
+									return false;
+							}
+						} else if (member
+								.getAttribute(IReferenceAttributes.OPTIONAL) == null) {
+							return false;
+						}
+					}
+
+				} else {
+					JSType paramType = parameter.getType();
+					if (!testArgumentType(paramType, argument))
+						return false;
+				}
+			}
+			// test var args
+			if (parameters.size() < arguments.length) {
+				int varargsParameter = parameters.size() - 1;
+				JSType paramType = parameters.get(varargsParameter).getType();
+
+				for (int i = varargsParameter; i < arguments.length; i++) {
+					IValueReference argument = arguments[i];
+					if (!testArgumentType(paramType, argument))
+						return false;
+				}
+
+			}
+			return true;
+		}
+
+		private boolean validateParameters(EList<Parameter> parameters,
+				IValueReference[] arguments) {
+			if (arguments.length > parameters.size()
+					&& !(parameters.size() > 0 && parameters.get(
+							parameters.size() - 1).getKind() == ParameterKind.VARARGS))
+				return false;
+			int testTypesSize = parameters.size();
+			if (parameters.size() > arguments.length) {
+				for (int i = arguments.length; i < parameters.size(); i++) {
+					if (parameters.get(i).getKind() != ParameterKind.OPTIONAL)
+						return false;
+				}
+				testTypesSize = arguments.length;
+			} else if (parameters.size() < arguments.length) {
+				// is var args..
+				testTypesSize = parameters.size() - 1;
+			}
+
+			for (int i = 0; i < testTypesSize; i++) {
+				IValueReference argument = arguments[i];
+				Parameter parameter = parameters.get(i);
+				if (parameter.getType() instanceof RecordType
+						&& argument != null) {
+					Set<String> argumentsChildren = argument
+							.getDirectChildren();
+					for (Member member : ((RecordType) parameter.getType())
 							.getMembers()) {
 						if (argumentsChildren.contains(member.getName())) {
 							if (member.getType() != null) {
@@ -1079,11 +1163,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (sb.length() != 0) {
 					sb.append(',');
 				}
-				if (parameter.getPropertiesType() != null) {
-					EList<Member> members = parameter.getPropertiesType()
-							.getMembers();
+				if (parameter.getType() instanceof RecordType) {
 					sb.append('{');
-					for (Member member : members) {
+					for (Member member : ((RecordType) parameter.getType())
+							.getMembers()) {
 						if (sb.length() > 1)
 							sb.append(", ");
 						if (member.getAttribute(IReferenceAttributes.OPTIONAL) != null)
@@ -1139,7 +1222,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (argument == null) {
 					sb.append("null");
 				} else if (parameter != null
-						&& parameter.getPropertiesType() != null) {
+						&& parameter.getType() instanceof RecordType) {
 					Set<String> directChildren = argument.getDirectChildren();
 					sb.append('{');
 					for (String childName : directChildren) {
@@ -1156,6 +1239,54 @@ public class TypeInfoValidator implements IBuildParticipant {
 					sb.append('}');
 				} else if (parameter != null && parameter.getType() != null
 						&& parameter.getType().getKind() == TypeKind.RECORD) {
+					// XXX doesn't enter into this block now
+					sb.append(ValidationVisitor.testObjectPropertyType(
+							argument, parameter.getType()));
+				} else if (argument.getDeclaredType() != null) {
+					sb.append(argument.getDeclaredType().getName());
+				} else {
+					final JSTypeSet types = argument.getTypes();
+					if (types.size() == 1) {
+						sb.append(types.getFirst().getName());
+					} else {
+						sb.append('?');
+					}
+				}
+			}
+			return sb.toString();
+		}
+
+		private String describeArgTypes(IValueReference[] arguments,
+				EList<Parameter> parameters) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < arguments.length; i++) {
+				IValueReference argument = arguments[i];
+				Parameter parameter = parameters.size() > i ? parameters.get(i)
+						: null;
+				if (sb.length() != 0) {
+					sb.append(',');
+				}
+				if (argument == null) {
+					sb.append("null");
+				} else if (parameter != null
+						&& parameter.getType() instanceof RecordType) {
+					Set<String> directChildren = argument.getDirectChildren();
+					sb.append('{');
+					for (String childName : directChildren) {
+						if (sb.length() > 1)
+							sb.append(", ");
+						sb.append(childName);
+						JSType type = JavaScriptValidations.typeOf(argument
+								.getChild(childName));
+						if (type != null) {
+							sb.append(':');
+							sb.append(type.getName());
+						}
+					}
+					sb.append('}');
+				} else if (parameter != null && parameter.getType() != null
+						&& parameter.getType().getKind() == TypeKind.RECORD) {
+					// XXX doesn't enter into this block now
 					sb.append(ValidationVisitor.testObjectPropertyType(
 							argument, parameter.getType()));
 				} else if (argument.getDeclaredType() != null) {

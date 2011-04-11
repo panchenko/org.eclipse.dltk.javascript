@@ -23,6 +23,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -31,6 +33,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl;
+import org.eclipse.dltk.javascript.typeinfo.model.impl.RecordTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl;
 import org.eclipse.emf.common.util.BasicEList;
@@ -404,8 +407,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			// if the key type is set but it is a String then just default to
 			// without it.
 			if (valueType != null && keyType != null
-					&& !keyType.getName().equals(ITypeNames.STRING)) {
-				return ITypeNames.OBJECT + '<' + keyType.getName()+ ','
+					&& !ITypeNames.STRING.equals(keyType.getName())) {
+				return ITypeNames.OBJECT + '<' + keyType.getName() + ','
 						+ valueType.getName() + '>';
 			}
 			return valueType != null ? ITypeNames.OBJECT + '<'
@@ -540,6 +543,49 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	}
 
+	public static JSType2 record(Type target) {
+		return new RecordTypeKey(target);
+	}
+
+	private static class RecordTypeKey implements RecordType, JSType2 {
+
+		private final Type target;
+
+		public RecordTypeKey(Type target) {
+			this.target = target;
+		}
+
+		public TypeKind getKind() {
+			return TypeKind.RECORD;
+		}
+
+		public String getName() {
+			return target.getName();
+		}
+
+		public boolean isArray() {
+			return false;
+		}
+
+		public boolean isAssignableFrom(JSType2 type) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public Type getTarget() {
+			return target;
+		}
+
+		public void setTarget(Type value) {
+			throw new UnsupportedOperationException();
+		}
+
+		public EList<Member> getMembers() {
+			return target.getMembers();
+		}
+
+	}
+
 	public static JSType2 normalize(JSType type) {
 		if (type instanceof TypeRefImpl) {
 			final TypeRef ref = (TypeRef) type;
@@ -557,6 +603,9 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 				union.targets.add(normalize(t));
 			}
 			return union;
+		} else if (type instanceof RecordTypeImpl) {
+			final RecordType recordType = (RecordType) type;
+			return new RecordTypeKey(recordType.getTarget());
 		}
 		Assert.isLegal(!(type instanceof EObject));
 		return (JSType2) type;

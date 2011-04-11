@@ -45,6 +45,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -150,27 +151,25 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	private boolean isResolved(JSType type) {
 		if (type instanceof TypeRef) {
-			boolean proxy = ((TypeRef) type).getTarget().isProxy();
-			if (proxy)
-				return false;
-			if (type.getKind() == TypeKind.RECORD) {
-				Type target = ((TypeRef) type).getTarget();
-				for (Member member : target.getMembers()) {
-					if (!isResolved(member.getType())) {
-						member.setType(getTypeRef(member.getType().getName()));
-					}
-				}
-			}
-			return !proxy;
+			return !((TypeRef) type).getTarget().isProxy();
 		} else if (type instanceof ArrayType) {
 			return isResolved(((ArrayType) type).getItemType());
 		} else if (type instanceof MapType) {
-			return isResolved(((MapType) type).getValueType()) && isResolved(((MapType) type).getKeyType());
+			final MapType mapType = (MapType) type;
+			return isResolved(mapType.getValueType())
+					&& isResolved(mapType.getKeyType());
 		} else if (type instanceof AnyType) {
 			return true;
 		} else if (type instanceof UnionType) {
 			for (JSType t : ((UnionType) type).getTargets()) {
 				if (!isResolved(t)) {
+					return false;
+				}
+			}
+			return true;
+		} else if (type instanceof RecordType) {
+			for (Member member : ((RecordType) type).getMembers()) {
+				if (!isResolved(member.getType())) {
 					return false;
 				}
 			}
@@ -194,10 +193,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return JSTypeSet.arrayOf(doResolveTypeRef(((ArrayType) type)
 					.getItemType()));
 		} else if (type instanceof MapType) {
-			return JSTypeSet.mapOf(
-					doResolveTypeRef(((MapType) type).getKeyType()),
-					doResolveTypeRef(((MapType) type)
-					.getValueType()));
+			final MapType mapType = (MapType) type;
+			return JSTypeSet.mapOf(doResolveTypeRef(mapType.getKeyType()),
+					doResolveTypeRef(mapType.getValueType()));
 		} else if (type instanceof UnionType) {
 			final List<JSType2> targets = new ArrayList<JSType2>();
 			for (JSType t : ((UnionType) type).getTargets()) {
@@ -206,6 +204,16 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return JSTypeSet.union(targets);
 		} else if (type instanceof AnyType) {
 			return JSTypeSet.any();
+		} else if (type instanceof RecordType) {
+			// TODO (alex) make a copy of Type?
+			final Type target = ((RecordType) type).getTarget();
+			for (Member member : target.getMembers()) {
+				if (member.getType() instanceof TypeRef) {
+					final TypeRef ref = (TypeRef) member.getType();
+					ref.setTarget(doResolveType(ref.getTarget()));
+				}
+			}
+			return JSTypeSet.record(target);
 		}
 		return (JSType2) type;
 	}

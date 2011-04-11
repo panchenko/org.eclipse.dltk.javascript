@@ -43,10 +43,9 @@ import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.utils.TextUtils;
 
@@ -243,7 +242,7 @@ public class JSDocSupport implements IModelBuilder {
 			return;
 		}
 		int problemCount = 0;
-		final Map<String, Type> objectPropertiesTypes = new HashMap<String, Type>();
+		final Map<String, RecordType> objectPropertiesTypes = new HashMap<String, RecordType>();
 		final Set<String> processedParams = new HashSet<String>();
 		final ParamInfo pp = new ParamInfo();
 		for (JSDocTag tag : paramTags) {
@@ -284,17 +283,24 @@ public class JSDocSupport implements IModelBuilder {
 							.substring(propertiesObjectIndex + 1);
 					String objectName = paramName.substring(0,
 							propertiesObjectIndex);
-					Type propertiesType = objectPropertiesTypes.get(objectName);
+					RecordType propertiesType = objectPropertiesTypes
+							.get(objectName);
 					if (propertiesType == null) {
 						propertiesType = TypeInfoModelFactory.eINSTANCE
-								.createType();
-						propertiesType.setKind(TypeKind.RECORD);
-						propertiesType.setName('{' + objectName + '}');
+								.createRecordType();
+						propertiesType.setTarget(TypeInfoModelFactory.eINSTANCE
+								.createType());
+						propertiesType.getTarget().setName(
+								'{' + objectName + '}');
 						objectPropertiesTypes.put(objectName, propertiesType);
 						final IParameter param = method
 								.getParameter(objectName);
 						if (param != null) {
-							param.setPropertiesType(propertiesType);
+							param.setType(propertiesType);
+						} else {
+							++problemCount;
+							reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM,
+									tag, objectName);
 						}
 					}
 					Property property = TypeInfoModelFactory.eINSTANCE
@@ -520,9 +526,10 @@ public class JSDocSupport implements IModelBuilder {
 			}
 			return unionType;
 		} else if (typeName.startsWith("{") && typeName.endsWith("}")) {
-			Type type = TypeInfoModelFactory.eINSTANCE.createType();
-			type.setName(typeName);
-			type.setKind(TypeKind.RECORD);
+			final RecordType type = TypeInfoModelFactory.eINSTANCE
+					.createRecordType();
+			type.setTarget(TypeInfoModelFactory.eINSTANCE.createType());
+			type.getTarget().setName(typeName);
 			StringTokenizer st = new StringTokenizer(typeName.substring(1,
 					typeName.length() - 1), ",");
 			while (st.hasMoreTokens()) {
@@ -546,7 +553,7 @@ public class JSDocSupport implements IModelBuilder {
 					type.getMembers().add(property);
 				}
 			}
-			return TypeUtil.ref(type);
+			return type;
 		}
 		return TypeUtil.ref(translate(typeName));
 	}
@@ -569,11 +576,11 @@ public class JSDocSupport implements IModelBuilder {
 
 	protected MapType parseMap(String typeName) {
 		if (typeName.startsWith(MAP_PREFIX1) && typeName.endsWith(">")) {
-			return translateMapType(typeName.substring(
-					MAP_PREFIX1.length(), typeName.length() - 1));
+			return translateMapType(typeName.substring(MAP_PREFIX1.length(),
+					typeName.length() - 1));
 		} else if (typeName.startsWith(MAP_PREFIX2) && typeName.endsWith(">")) {
-			return translateMapType(typeName.substring(
-					MAP_PREFIX2.length(), typeName.length() - 1));
+			return translateMapType(typeName.substring(MAP_PREFIX2.length(),
+					typeName.length() - 1));
 		} else {
 			return null;
 		}
@@ -586,8 +593,8 @@ public class JSDocSupport implements IModelBuilder {
 		} else {
 			String keyTypeName = typeName.substring(0, commaIndex).trim();
 			String valueTypeName = typeName.substring(commaIndex + 1).trim();
-			return TypeUtil.mapOf(
-					translateTypeName(keyTypeName), translateTypeName(valueTypeName));
+			return TypeUtil.mapOf(translateTypeName(keyTypeName),
+					translateTypeName(valueTypeName));
 		}
 	}
 

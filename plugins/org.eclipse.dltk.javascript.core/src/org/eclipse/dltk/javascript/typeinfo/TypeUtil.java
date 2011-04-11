@@ -15,6 +15,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -89,6 +90,8 @@ public class TypeUtil {
 			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
 		} else if (type instanceof AnyType) {
 			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
+		} else if (type instanceof RecordType) {
+			return ((RecordType) type).getTarget();
 		} else {
 			return null;
 		}

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.21 2011/03/23 18:02:05 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.22 2011/04/11 11:57:32 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1085,6 +1085,43 @@ public interface TypeInfoModelPackage extends EPackage {
     int MAP_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 2;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.RecordTypeImpl <em>Record Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.RecordTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordType()
+     * @generated
+     */
+    int RECORD_TYPE = 17;
+
+    /**
+     * The feature id for the '<em><b>Target</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_TYPE__TARGET = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Members</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_TYPE__MEMBERS = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
+     * The number of structural features of the '<em>Record Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 2;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1092,7 +1129,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 17;
+	int TYPE_KIND = 18;
 
 
 	/**
@@ -1103,7 +1140,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 18;
+	int PARAMETER_KIND = 19;
 
 
 	/**
@@ -1284,6 +1321,38 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getMapType_ValueType();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType <em>Record Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Record Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordType
+     * @generated
+     */
+    EClass getRecordType();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTarget <em>Target</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Target</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTarget()
+     * @see #getRecordType()
+     * @generated
+     */
+    EReference getRecordType_Target();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getMembers <em>Members</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Members</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordType#getMembers()
+     * @see #getRecordType()
+     * @generated
+     */
+    EReference getRecordType_Members();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
@@ -1779,6 +1848,32 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference MAP_TYPE__VALUE_TYPE = eINSTANCE.getMapType_ValueType();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.RecordTypeImpl <em>Record Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.RecordTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordType()
+         * @generated
+         */
+        EClass RECORD_TYPE = eINSTANCE.getRecordType();
+
+        /**
+         * The meta object literal for the '<em><b>Target</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference RECORD_TYPE__TARGET = eINSTANCE.getRecordType_Target();
+
+        /**
+         * The meta object literal for the '<em><b>Members</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference RECORD_TYPE__MEMBERS = eINSTANCE.getRecordType_Members();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
