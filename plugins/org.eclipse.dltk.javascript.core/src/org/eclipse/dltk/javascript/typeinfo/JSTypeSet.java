@@ -584,6 +584,20 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			return target.getMembers();
 		}
 
+		@Override
+		public int hashCode() {
+			return System.identityHashCode(target);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof RecordTypeKey) {
+				final RecordTypeKey other = (RecordTypeKey) obj;
+				return target == other.target;
+			}
+			return false;
+		}
+
 	}
 
 	public static JSType2 normalize(JSType type) {
