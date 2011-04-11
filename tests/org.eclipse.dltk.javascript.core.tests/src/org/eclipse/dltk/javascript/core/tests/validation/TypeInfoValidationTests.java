@@ -104,7 +104,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var x:ExampleService");
 		code.add("x.run('Hello','World','!')");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.WRONG_JAVA_PARAMETERS, problems.get(0)
 				.getID());
 	}
@@ -114,7 +114,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var x:ExampleService");
 		code.add("x.execute(1)");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.WRONG_JAVA_PARAMETERS, problems.get(0)
 				.getID());
 	}
