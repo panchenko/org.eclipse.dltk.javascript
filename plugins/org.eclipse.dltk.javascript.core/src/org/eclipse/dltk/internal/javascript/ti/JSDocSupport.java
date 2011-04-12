@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -38,16 +39,11 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
-import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
-import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
-import org.eclipse.dltk.utils.TextUtils;
 
 /**
  * Implements support for javadocs tags .
@@ -103,8 +99,9 @@ public class JSDocSupport implements IModelBuilder {
 				String value = throwsTag.getValue();
 				String[] split = value.split(" ");
 				if (split.length > 0) {
-					if (split[0].startsWith("{")) {
-						JSType type = translateTypeName(cutBraces(split[0]));
+					if (isBraced(split[0])) {
+						JSType type = translateTypeName(cutBraces(split[0]),
+								throwsTag, reporter);
 						typeChecker.checkType(type, throwsTag);
 					}
 				}
@@ -250,8 +247,8 @@ public class JSDocSupport implements IModelBuilder {
 			final Tokenizer st = new Tokenizer(tag.getValue());
 			if (st.hasMoreTokens()) {
 				final String token = st.peek();
-				if (token.startsWith("{") && token.endsWith("}")) {
-					String type = token.substring(1, token.length() - 1);
+				if (isBraced(token)) {
+					String type = cutBraces(token);
 					if (type.startsWith(DOTS)) {
 						pp.varargs = true;
 						type = type.substring(DOTS.length());
@@ -307,7 +304,7 @@ public class JSDocSupport implements IModelBuilder {
 							.createProperty();
 					property.setName(propertyName);
 					if (pp.type != null) {
-						JSType type = translateTypeName(pp.type);
+						JSType type = translateTypeName(pp.type, tag, reporter);
 						if (typeChecker != null)
 							typeChecker.checkType(type, tag);
 						property.setType(type);
@@ -363,7 +360,7 @@ public class JSDocSupport implements IModelBuilder {
 			final ParamInfo pp, JSProblemReporter reporter,
 			IJSDocTypeChecker typeChecker) {
 		if (pp.type != null && parameter.getType() == null) {
-			JSType type = translateTypeName(pp.type);
+			JSType type = translateTypeName(pp.type, tag, reporter);
 			if (typeChecker != null)
 				typeChecker.checkType(type, tag);
 			parameter.setType(type);
@@ -475,7 +472,8 @@ public class JSDocSupport implements IModelBuilder {
 			if (st.hasMoreTokens()) {
 				final String typeName = st.nextToken();
 				if (!requireBraces || isBraced(typeName)) {
-					JSType type = translateTypeName(cutBraces(typeName));
+					JSType type = translateTypeName(cutBraces(typeName), tag,
+							reporter);
 					if (typeChecker != null)
 						typeChecker.checkType(type, tag);
 					member.setType(type);
@@ -508,54 +506,25 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	protected JSType translateTypeName(String typeName) {
-		final ArrayType arrayType = parseArray(typeName);
-		if (arrayType != null) {
-			return arrayType;
-		}
-		final MapType mapType = parseMap(typeName);
-		if (mapType != null) {
-			return mapType;
-		}
-		if (typeName.contains("|")) {
-			final String[] parts = TextUtils.split(typeName, '|');
-			final UnionType unionType = TypeInfoModelFactory.eINSTANCE
-					.createUnionType();
-			for (String part : parts) {
-				unionType.getTargets().add(translateTypeName(part.trim()));
+	protected JSType translateTypeName(String typeName, JSDocTag tag,
+			JSProblemReporter reporter) {
+		JSDocTypeParser parser = createTypeParser();
+		try {
+			return parser.parse(typeName);
+		} catch (ParseException e) {
+			if (reporter != null) {
+				reporter.reportProblem(
+						JSDocProblem.WRONG_TYPE_SYNTAX,
+						e.getMessage() + " after "
+								+ typeName.substring(0, e.getErrorOffset()),
+						tag.getStart(), tag.getEnd());
 			}
-			return unionType;
-		} else if (typeName.startsWith("{") && typeName.endsWith("}")) {
-			final RecordType type = TypeInfoModelFactory.eINSTANCE
-					.createRecordType();
-			type.setTarget(TypeInfoModelFactory.eINSTANCE.createType());
-			type.getTarget().setName(typeName);
-			StringTokenizer st = new StringTokenizer(typeName.substring(1,
-					typeName.length() - 1), ",");
-			while (st.hasMoreTokens()) {
-				String token = st.nextToken();
-				int index = token.indexOf(':');
-				if (index != -1) {
-					// function support?
-					Property property = TypeInfoModelFactory.eINSTANCE
-							.createProperty();
-					property.setName(token.substring(0, index));
-					property.setType(translateTypeName(token
-							.substring(index + 1)));
-					type.getMembers().add(property);
-				} else {
-					// any type
-					Property property = TypeInfoModelFactory.eINSTANCE
-							.createProperty();
-					property.setName(token);
-					property.setType(TypeInfoModelFactory.eINSTANCE
-							.createAnyType());
-					type.getMembers().add(property);
-				}
-			}
-			return type;
+			return null;
 		}
-		return TypeUtil.ref(translate(typeName));
+	}
+
+	protected JSDocTypeParser createTypeParser() {
+		return new JSDocTypeParser();
 	}
 
 	protected String cutBraces(String typeName) {
@@ -571,60 +540,4 @@ public class JSDocSupport implements IModelBuilder {
 				&& typeName.charAt(length - 1) == '}';
 	}
 
-	private static final String MAP_PREFIX1 = "Object<";
-	private static final String MAP_PREFIX2 = "Object.<";
-
-	protected MapType parseMap(String typeName) {
-		if (typeName.startsWith(MAP_PREFIX1) && typeName.endsWith(">")) {
-			return translateMapType(typeName.substring(MAP_PREFIX1.length(),
-					typeName.length() - 1));
-		} else if (typeName.startsWith(MAP_PREFIX2) && typeName.endsWith(">")) {
-			return translateMapType(typeName.substring(MAP_PREFIX2.length(),
-					typeName.length() - 1));
-		} else {
-			return null;
-		}
-	}
-
-	private MapType translateMapType(String typeName) {
-		int commaIndex = typeName.indexOf(',');
-		if (commaIndex == -1) {
-			return TypeUtil.mapOf(null, translateTypeName(typeName));
-		} else {
-			String keyTypeName = typeName.substring(0, commaIndex).trim();
-			String valueTypeName = typeName.substring(commaIndex + 1).trim();
-			return TypeUtil.mapOf(translateTypeName(keyTypeName),
-					translateTypeName(valueTypeName));
-		}
-	}
-
-	private static final String ARRAY_PREFIX1 = "Array<";
-	private static final String ARRAY_PREFIX2 = "Array.<";
-	private static final String ARRAY_SUFFIX = "[]";
-
-	protected ArrayType parseArray(String typeName) {
-		if (typeName.endsWith(ARRAY_SUFFIX)) {
-			final String itemTypeName = translate(typeName.substring(0,
-					typeName.length() - ARRAY_SUFFIX.length()));
-			return arrayOf(itemTypeName);
-		} else if (typeName.startsWith(ARRAY_PREFIX1) && typeName.endsWith(">")) {
-			final String itemTypeName = translate(typeName.substring(
-					ARRAY_PREFIX1.length(), typeName.length() - 1));
-			return arrayOf(itemTypeName);
-		} else if (typeName.startsWith(ARRAY_PREFIX2) && typeName.endsWith(">")) {
-			final String itemTypeName = translate(typeName.substring(
-					ARRAY_PREFIX2.length(), typeName.length() - 1));
-			return arrayOf(itemTypeName);
-		} else {
-			return null;
-		}
-	}
-
-	private ArrayType arrayOf(final String itemTypeName) {
-		return TypeUtil.arrayOf(translateTypeName(itemTypeName));
-	}
-
-	protected String translate(String typeName) {
-		return TypeInfoModelLoader.getInstance().translateTypeName(typeName);
-	}
 }
