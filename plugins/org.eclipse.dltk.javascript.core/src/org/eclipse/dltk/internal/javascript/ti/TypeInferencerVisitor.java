@@ -144,13 +144,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	protected void assign(IValueReference dest, IValueReference src) {
 		JSType destType = JavaScriptValidations.typeOf(dest);
-		if (destType != null
-				&& (ITypeNames.XML.equals(destType.getName()) || destType
-						.getName().equals(ITypeNames.XMLLIST))) {
+		if (destType != null && isXML(destType)) {
 			JSType srcType = JavaScriptValidations.typeOf(src);
-			if (srcType != null
-					&& !(ITypeNames.XML.equals(srcType.getName()) || srcType
-							.getName().equals(ITypeNames.XMLLIST)))
+			if (srcType != null && !isXML(srcType))
 				return;
 		}
 		if (branchings.isEmpty()) {
@@ -158,6 +154,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		} else {
 			dest.addValue(src, false);
 		}
+	}
+
+	private static boolean isXML(JSType srcType) {
+		return ITypeNames.XML.equals(srcType.getName())
+				|| ITypeNames.XMLLIST.equals(srcType.getName());
 	}
 
 	private static final int K_NUMBER = 1;
@@ -467,7 +468,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					&& JavaScriptValidations.typeOf(itemReference) == null) {
 				final JSType itemType = ((MapType) type).getValueType();
 				setTypeImpl(itemReference, itemType);
-			} else if (type.getName().endsWith(ITypeNames.XMLLIST)) {
+			} else if (ITypeNames.XMLLIST.equals(type.getName())) {
 				itemReference.setDeclaredType(context
 						.getTypeRef(ITypeNames.XML));
 			}
@@ -867,9 +868,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (name instanceof Identifier) {
 				nameStr = ((Identifier) name).getName();
 				JSType parentType = JavaScriptValidations.typeOf(parent);
-				if (parentType != null
-						&& (parentType.getName().equals(ITypeNames.XML) || parentType
-								.getName().equals(ITypeNames.XMLLIST))) {
+				if (parentType != null && isXML(parentType)) {
 					IValueReference child = parent.getChild(nameStr);
 					if (child != null && child.getDeclaredType() == null) {
 						child.setDeclaredType(context
