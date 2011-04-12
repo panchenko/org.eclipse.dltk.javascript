@@ -306,6 +306,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 				return true;
 			} else if (isArray()) {
 				return type.isArray();
+			} else if (ITypeNames.OBJECT.equals(getName())) {
+				return true;
 			} else if (type instanceof TypeRef) {
 				final Type other = ((TypeRef) type).getTarget();
 				if (ITypeNames.UNDEFINED.equals(other.getName())) {
