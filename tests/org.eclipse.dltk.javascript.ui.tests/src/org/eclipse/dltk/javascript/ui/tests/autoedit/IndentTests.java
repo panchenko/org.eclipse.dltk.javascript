@@ -17,6 +17,46 @@ import org.eclipse.jface.text.BadLocationException;
 
 public class IndentTests extends JSAutoEditStrategyTestCase {
 
+	public void testIndentInFunctionBody() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("function test() {");
+		code.add("}");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
+		StringList expected = new StringList();
+		expected.add("function test() {");
+		expected.add(TAB);
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testIndentInObjectLiteral() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("var x = {");
+		code.add("}");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
+		StringList expected = new StringList();
+		expected.add("var x = {");
+		expected.add(TAB);
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testIndentInObjectLiteralInFunctionCall()
+			throws BadLocationException {
+		StringList code = new StringList();
+		code.add("run({)");
+		final Document document = createDocument(code);
+		execute(document,
+				createCommand(ENTER, document.getEndOfLineOffset(0) - 1));
+		StringList expected = new StringList();
+		expected.add("run({");
+		expected.add(TAB);
+		expected.add("})");
+		assertEquals(expected.toString(), document.get());
+	}
+
 	public void testAfterVarStatement() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
