@@ -57,6 +57,32 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	public void testIndentInObjectLiteralFunctionBody()
+			throws BadLocationException {
+		StringList code = new StringList();
+		code.add("var methods = {");
+		code.add(TAB + "/**");
+		code.add(TAB + " * Hello");
+		code.add(TAB + " */");
+		code.add(TAB + "hello: function() {");
+		code.add(TAB + TAB + "var a = 1");
+		code.add(TAB + "}");
+		code.add("}");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(4)));
+		StringList expected = new StringList();
+		expected.add("var methods = {");
+		expected.add(TAB + "/**");
+		expected.add(TAB + " * Hello");
+		expected.add(TAB + " */");
+		expected.add(TAB + "hello: function() {");
+		expected.add(TAB + TAB);
+		expected.add(TAB + TAB + "var a = 1");
+		expected.add(TAB + "}");
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
 	public void testAfterVarStatement() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
@@ -84,6 +110,17 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		expected.add(TAB + "var x:String = null;");
 		expected.add(TAB);
 		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testVarInitializedWithArray() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("var x = []");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(0)));
+		StringList expected = new StringList();
+		expected.add("var x = []");
+		expected.add("");
 		assertEquals(expected.toString(), document.get());
 	}
 
