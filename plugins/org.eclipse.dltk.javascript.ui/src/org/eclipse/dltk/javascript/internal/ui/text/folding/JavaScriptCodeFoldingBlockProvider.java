@@ -22,7 +22,7 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.SourceParserUtil;
-import org.eclipse.dltk.corext.SourceRange;
+import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.internal.javascript.validation.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
@@ -85,7 +85,8 @@ public class JavaScriptCodeFoldingBlockProvider extends
 
 			if (element instanceof IMethod) {
 				try {
-					put(((IMethod) element).getNameRange(), element);
+					put(new SourceRange(((IMethod) element).getNameRange()),
+							element);
 				} catch (ModelException e) {
 					// empty
 				}
