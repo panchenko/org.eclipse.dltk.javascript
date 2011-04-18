@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.ui.tests.autoedit;
 
-import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.jface.text.BadLocationException;
 
@@ -76,6 +75,64 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		expected.add(TAB + " * Hello");
 		expected.add(TAB + " */");
 		expected.add(TAB + "hello: function() {");
+		expected.add(TAB + TAB);
+		expected.add(TAB + TAB + "var a = 1");
+		expected.add(TAB + "}");
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testIndentInObjectLiteralFunctionBody1()
+			throws BadLocationException {
+		StringList code = new StringList();
+		code.add("var methods = {");
+		code.add(TAB + "/**");
+		code.add(TAB + " * Hello");
+		code.add(TAB + " */");
+		code.add(TAB + "hello: function() {");
+		code.add("");
+		code.add(TAB + TAB + "var a = 1");
+		code.add(TAB + "}");
+		code.add("}");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(5)));
+		StringList expected = new StringList();
+		expected.add("var methods = {");
+		expected.add(TAB + "/**");
+		expected.add(TAB + " * Hello");
+		expected.add(TAB + " */");
+		expected.add(TAB + "hello: function() {");
+		expected.add("");
+		expected.add(TAB + TAB);
+		expected.add(TAB + TAB + "var a = 1");
+		expected.add(TAB + "}");
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
+	public void testIndentInObjectLiteralFunctionBody2()
+			throws BadLocationException {
+		StringList code = new StringList();
+		code.add("var methods = {");
+		code.add(TAB + "/**");
+		code.add(TAB + " * Hello");
+		code.add(TAB + " */");
+		code.add(TAB + "hello: function() {");
+		code.add("");
+		code.add("");
+		code.add(TAB + TAB + "var a = 1");
+		code.add(TAB + "}");
+		code.add("}");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(6)));
+		StringList expected = new StringList();
+		expected.add("var methods = {");
+		expected.add(TAB + "/**");
+		expected.add(TAB + " * Hello");
+		expected.add(TAB + " */");
+		expected.add(TAB + "hello: function() {");
+		expected.add("");
+		expected.add("");
 		expected.add(TAB + TAB);
 		expected.add(TAB + TAB + "var a = 1");
 		expected.add(TAB + "}");
@@ -203,8 +260,6 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 	}
 
 	public void testAfterArrayLiteralNext() throws BadLocationException {
-		if (TestSupport.notYetImplemented(this))
-			return; // it fails (indent is increase somehow) now
 		StringList code = new StringList();
 		code.add("var a = [1, 2, 3]");
 		final Document document = createDocument(code);
