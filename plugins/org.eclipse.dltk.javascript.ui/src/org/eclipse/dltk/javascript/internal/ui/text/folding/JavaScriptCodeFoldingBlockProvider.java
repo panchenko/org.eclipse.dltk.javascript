@@ -50,8 +50,6 @@ public class JavaScriptCodeFoldingBlockProvider extends
 			}
 		}
 		JavaScriptParser parser = new JavaScriptParser();
-		// TODO use project option
-		parser.setTypeInformationEnabled(true);
 		return parser.parse(content, null);
 	}
 
