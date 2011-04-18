@@ -66,7 +66,6 @@ import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
-import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
@@ -162,7 +161,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.SwitchBracesConfigur
 import org.eclipse.dltk.javascript.formatter.internal.nodes.SwitchConditionParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.ThenBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.TryBodyConfiguration;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.TypePunctuationConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WhileBlockBracesConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WhileConditionParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.WithBlockBracesConfiguration;
@@ -707,12 +705,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 				for (Argument argument : node.getArguments()) {
 					visit(argument.getIdentifier());
-					if (argument.getType() != null) {
-						skipSpaces(parens, argument.getColonPosition());
-						processPunctuation(argument.getColonPosition(), 1,
-								new TypePunctuationConfiguration());
-						visit(argument.getType());
-					}
 					if (argument.getCommaPosition() != -1) {
 						int position = argument.getCommaPosition();
 						skipSpacesOnly(parens, position);
@@ -722,13 +714,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				}
 				checkedPop(parens, node.getRP());
 				parens.setEnd(createCharNode(document, node.getRP()));
-
-				if (node.getReturnType() != null) {
-					skipSpaces(formatterNode, node.getColonPosition());
-					processPunctuation(node.getColonPosition(), 1,
-							new TypePunctuationConfiguration());
-					visit(node.getReturnType());
-				}
 
 				boolean emptyBody = node.getBody() == null
 						|| isEmptyBody(node.getBody());
@@ -827,11 +812,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 			@Override
 			public IFormatterNode visitIdentifier(Identifier node) {
-				return addChild(new FormatterStringNode(document, node));
-			}
-
-			@Override
-			public IFormatterNode visitSimpleType(SimpleType node) {
 				return addChild(new FormatterStringNode(document, node));
 			}
 
@@ -1551,13 +1531,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				push(formatterNode);
 				for (VariableDeclaration var : vars) {
 					visit(var.getIdentifier());
-					if (var.getType() != null) {
-						int position = var.getColonPosition();
-						skipSpaces(formatterNode, position);
-						processPunctuation(position, 1,
-								new TypePunctuationConfiguration());
-						visit(var.getType());
-					}
 					if (var.getInitializer() != null) {
 						int position = var.getAssignPosition();
 						skipSpaces(formatterNode, position);

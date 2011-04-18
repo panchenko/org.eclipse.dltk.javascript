@@ -30,7 +30,6 @@ import org.eclipse.dltk.javascript.formatter.internal.JavaScriptFormatterWriter;
 import org.eclipse.dltk.javascript.formatter.internal.JavascriptFormatterNodeRewriter;
 import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
-import org.eclipse.dltk.javascript.parser.JavaScriptParserPreferences;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
@@ -228,8 +227,6 @@ public class JavaScriptFormatter extends AbstractScriptFormatter implements
 
 	private JavaScriptParser createParser() {
 		final JavaScriptParser parser = new JavaScriptParser();
-		parser.setTypeInformationEnabled(JavaScriptParserPreferences
-				.isTypeInfoEnabled(project));
 		return parser;
 	}
 
