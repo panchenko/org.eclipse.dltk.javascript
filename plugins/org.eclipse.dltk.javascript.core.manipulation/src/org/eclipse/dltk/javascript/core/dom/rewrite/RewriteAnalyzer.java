@@ -27,7 +27,6 @@ import org.eclipse.dltk.javascript.core.dom.Label;
 import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Statement;
 import org.eclipse.dltk.javascript.core.dom.TryStatement;
-import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
 import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
 import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
@@ -223,15 +222,6 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 	}
 
 	@Override
-	public Boolean caseType(Type node) {
-		if (cd.getObjectChanges().get(node) != null)
-			for(FeatureChange fc : cd.getObjectChanges().get(node))
-				if (fc.getFeature() == DomPackage.eINSTANCE.getType_Name())
-					addEdit(new ReplaceEdit(node.getBegin(), node.getEnd()-node.getBegin(), node.getName()),node);
-		return true;
-	}
-
-	@Override
 	public Boolean caseBinaryExpression(BinaryExpression node) {
 		if (cd.getObjectChanges().get(node) != null)
 			for(FeatureChange fc : cd.getObjectChanges().get(node))
@@ -315,8 +305,6 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 			gen.append("=");
 		if (wasNull && parent.eClass() == DomPackage.eINSTANCE.getFunctionExpression())
 			gen.append(" ");
-		if (wasNull && node.eClass() == DomPackage.eINSTANCE.getType())
-			gen.append(":");
 		if (wasNull && node.eContainmentFeature() == DomPackage.eINSTANCE.getCatchClause_Filter())
 			gen.append(" if ");
 		gen.generate(node);

@@ -12,7 +12,6 @@
 package org.eclipse.dltk.javascript.core.dom.rewrite;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +30,6 @@ import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Parameter;
 import org.eclipse.dltk.javascript.core.dom.SetterAssignment;
 import org.eclipse.dltk.javascript.core.dom.Source;
-import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
@@ -233,16 +231,16 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 			@Override
 			protected void reportDeclaration(Identifier decl) {
 				Node parent = (Node)decl.eContainer();
-				Type type = null;
+//				Type type = null;
 				switch (parent.eClass().getClassifierID()) {
 				case DomPackage.VARIABLE_DECLARATION:
-					type = ((VariableDeclaration)parent).getType();
+//					type = ((VariableDeclaration)parent).getType();
 					break;
 				case DomPackage.PARAMETER:
-					type = ((Parameter)parent).getType();
+//					type = ((Parameter)parent).getType();
 					break;
 				}
-				String typeName = type == null ? null : type.getName();
+				String typeName = /*type == null ?*/ null /*: type.getName()*/;
 				bindings.put(decl, new VariableBinding(decl.getName(), bindings.size(), decl, typeName));
 			}
 			@Override

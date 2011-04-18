@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DomPackageImpl.java,v 1.4 2010/12/29 15:18:56 jcompagne Exp $
+ * $Id: DomPackageImpl.java,v 1.5 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -75,7 +75,6 @@ import org.eclipse.dltk.javascript.core.dom.SwitchStatement;
 import org.eclipse.dltk.javascript.core.dom.ThisExpression;
 import org.eclipse.dltk.javascript.core.dom.ThrowStatement;
 import org.eclipse.dltk.javascript.core.dom.TryStatement;
-import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
 import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
 import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
@@ -646,13 +645,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass typeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EEnum unaryOperatorEEnum = null;
 
 	/**
@@ -689,20 +681,10 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	private static boolean isInited = false;
 
 	/**
-	 * Creates, registers, and initializes the <b>Package</b> for this
-	 * model, and for any others upon which it depends.  Simple
-	 * dependencies are satisfied by calling this method on all
-	 * dependent packages before doing anything else.  This method drives
-	 * initialization for interdependent packages directly, in parallel
-	 * with this package, itself.
-	 * <p>Of this package and its interdependencies, all packages which
-	 * have not yet been registered by their URI values are first created
-	 * and registered.  The packages are then initialized in two steps:
-	 * meta-model objects for all of the packages are created before any
-	 * are initialized, since one package's meta-model objects may refer to
-	 * those of another.
-	 * <p>Invocation of this method will not affect any packages that have
-	 * already been initialized.
+	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
+	 * 
+	 * <p>This method is used to initialize {@link DomPackage#eINSTANCE} when that field is accessed.
+	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #eNS_URI
@@ -714,7 +696,7 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		if (isInited) return (DomPackage)EPackage.Registry.INSTANCE.getEPackage(DomPackage.eNS_URI);
 
 		// Obtain or create and register package
-		DomPackageImpl theDomPackage = (DomPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(eNS_URI) instanceof DomPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(eNS_URI) : new DomPackageImpl());
+		DomPackageImpl theDomPackage = (DomPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof DomPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new DomPackageImpl());
 
 		isInited = true;
 
@@ -727,6 +709,9 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		// Mark meta-data to indicate it can't be changed
 		theDomPackage.freeze();
 
+  
+		// Update the registry and return the package
+		EPackage.Registry.INSTANCE.put(DomPackage.eNS_URI, theDomPackage);
 		return theDomPackage;
 	}
 
@@ -1374,17 +1359,8 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getVariableDeclaration_Type() {
-		return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getVariableDeclaration_Initializer() {
-		return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(2);
+		return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1905,7 +1881,7 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getFunctionExpression_ReturnType() {
+	public EReference getFunctionExpression_Body() {
 		return (EReference)functionExpressionEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1914,17 +1890,8 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getFunctionExpression_Body() {
-		return (EReference)functionExpressionEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getFunctionExpression_ParametersPosition() {
-		return (EAttribute)functionExpressionEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)functionExpressionEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1943,15 +1910,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 */
 	public EReference getParameter_Name() {
 		return (EReference)parameterEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getParameter_Type() {
-		return (EReference)parameterEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2274,24 +2232,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getType() {
-		return typeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getType_Name() {
-		return (EAttribute)typeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EEnum getUnaryOperator() {
 		return unaryOperatorEEnum;
 	}
@@ -2437,7 +2377,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 
 		variableDeclarationEClass = createEClass(VARIABLE_DECLARATION);
 		createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__IDENTIFIER);
-		createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__TYPE);
 		createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__INITIALIZER);
 
 		emptyStatementEClass = createEClass(EMPTY_STATEMENT);
@@ -2519,13 +2458,11 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__DOCUMENTATION);
 		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__IDENTIFIER);
 		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__PARAMETERS);
-		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__RETURN_TYPE);
 		createEReference(functionExpressionEClass, FUNCTION_EXPRESSION__BODY);
 		createEAttribute(functionExpressionEClass, FUNCTION_EXPRESSION__PARAMETERS_POSITION);
 
 		parameterEClass = createEClass(PARAMETER);
 		createEReference(parameterEClass, PARAMETER__NAME);
-		createEReference(parameterEClass, PARAMETER__TYPE);
 
 		sourceEClass = createEClass(SOURCE);
 		createEReference(sourceEClass, SOURCE__STATEMENTS);
@@ -2580,9 +2517,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		forEachInStatementEClass = createEClass(FOR_EACH_IN_STATEMENT);
 		createEReference(forEachInStatementEClass, FOR_EACH_IN_STATEMENT__ITEM);
 		createEReference(forEachInStatementEClass, FOR_EACH_IN_STATEMENT__COLLECTION);
-
-		typeEClass = createEClass(TYPE);
-		createEAttribute(typeEClass, TYPE__NAME);
 
 		// Create enums
 		unaryOperatorEEnum = createEEnum(UNARY_OPERATOR);
@@ -2704,7 +2638,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		filterExpressionEClass.getESuperTypes().add(this.getExpression());
 		defaultXmlNamespaceStatementEClass.getESuperTypes().add(this.getStatement());
 		forEachInStatementEClass.getESuperTypes().add(this.getIterationStatement());
-		typeEClass.getESuperTypes().add(this.getNode());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(nodeEClass, Node.class, "Node", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2811,7 +2744,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 
 		initEClass(variableDeclarationEClass, VariableDeclaration.class, "VariableDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVariableDeclaration_Identifier(), this.getIdentifier(), null, "identifier", null, 1, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVariableDeclaration_Type(), this.getType(), null, "type", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVariableDeclaration_Initializer(), this.getExpression(), null, "initializer", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(emptyStatementEClass, EmptyStatement.class, "EmptyStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2893,13 +2825,11 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		initEReference(getFunctionExpression_Documentation(), this.getComment(), null, "documentation", null, 0, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFunctionExpression_Identifier(), this.getIdentifier(), null, "identifier", null, 0, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFunctionExpression_Parameters(), this.getParameter(), null, "parameters", null, 0, -1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFunctionExpression_ReturnType(), this.getType(), null, "returnType", null, 0, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFunctionExpression_Body(), this.getBlockStatement(), null, "body", null, 1, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFunctionExpression_ParametersPosition(), ecorePackage.getEInt(), "parametersPosition", null, 1, 1, FunctionExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getParameter_Name(), this.getIdentifier(), null, "name", null, 1, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getParameter_Type(), this.getType(), null, "type", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(sourceEClass, Source.class, "Source", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSource_Statements(), this.getStatement(), null, "statements", null, 0, -1, Source.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2954,9 +2884,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		initEClass(forEachInStatementEClass, ForEachInStatement.class, "ForEachInStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getForEachInStatement_Item(), this.getIForInitializer(), null, "item", null, 1, 1, ForEachInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getForEachInStatement_Collection(), this.getExpression(), null, "collection", null, 1, 1, ForEachInStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(typeEClass, Type.class, "Type", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getType_Name(), ecorePackage.getEString(), "name", null, 1, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(unaryOperatorEEnum, UnaryOperator.class, "UnaryOperator");

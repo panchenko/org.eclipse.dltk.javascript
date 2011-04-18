@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: ObjectLiteralImpl.java,v 1.2 2010/12/01 09:31:17 apanchenk Exp $
+ * $Id: ObjectLiteralImpl.java,v 1.3 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -37,118 +37,118 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class ObjectLiteralImpl extends ExpressionImpl implements ObjectLiteral {
 	/**
-     * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getProperties()
-     * @generated
-     * @ordered
-     */
+	 * @see #getProperties()
+	 * @generated
+	 * @ordered
+	 */
 	protected EList<PropertyAssignment> properties;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	protected ObjectLiteralImpl() {
-        super();
-    }
+		super();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
-        return DomPackage.Literals.OBJECT_LITERAL;
-    }
+		return DomPackage.Literals.OBJECT_LITERAL;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EList<PropertyAssignment> getProperties() {
-        if (properties == null) {
-            properties = new EObjectContainmentEList<PropertyAssignment>(PropertyAssignment.class, this, DomPackage.OBJECT_LITERAL__PROPERTIES);
-        }
-        return properties;
-    }
+		if (properties == null) {
+			properties = new EObjectContainmentEList<PropertyAssignment>(PropertyAssignment.class, this, DomPackage.OBJECT_LITERAL__PROPERTIES);
+		}
+		return properties;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case DomPackage.OBJECT_LITERAL__PROPERTIES:
-                return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case DomPackage.OBJECT_LITERAL__PROPERTIES:
+				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case DomPackage.OBJECT_LITERAL__PROPERTIES:
-                return getProperties();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case DomPackage.OBJECT_LITERAL__PROPERTIES:
+				return getProperties();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case DomPackage.OBJECT_LITERAL__PROPERTIES:
-                getProperties().clear();
-                getProperties().addAll((Collection<? extends PropertyAssignment>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case DomPackage.OBJECT_LITERAL__PROPERTIES:
+				getProperties().clear();
+				getProperties().addAll((Collection<? extends PropertyAssignment>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
-        switch (featureID) {
-            case DomPackage.OBJECT_LITERAL__PROPERTIES:
-                getProperties().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.OBJECT_LITERAL__PROPERTIES:
+				getProperties().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case DomPackage.OBJECT_LITERAL__PROPERTIES:
-                return properties != null && !properties.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.OBJECT_LITERAL__PROPERTIES:
+				return properties != null && !properties.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //ObjectLiteralImpl

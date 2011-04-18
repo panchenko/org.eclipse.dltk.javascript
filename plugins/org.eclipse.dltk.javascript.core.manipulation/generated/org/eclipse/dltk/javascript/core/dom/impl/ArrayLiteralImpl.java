@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: ArrayLiteralImpl.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
+ * $Id: ArrayLiteralImpl.java,v 1.3 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -37,118 +37,118 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class ArrayLiteralImpl extends ExpressionImpl implements ArrayLiteral {
 	/**
-     * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getElements()
-     * @generated
-     * @ordered
-     */
+	 * @see #getElements()
+	 * @generated
+	 * @ordered
+	 */
 	protected EList<IArrayElement> elements;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	protected ArrayLiteralImpl() {
-        super();
-    }
+		super();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
-        return DomPackage.Literals.ARRAY_LITERAL;
-    }
+		return DomPackage.Literals.ARRAY_LITERAL;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EList<IArrayElement> getElements() {
-        if (elements == null) {
-            elements = new EObjectContainmentEList<IArrayElement>(IArrayElement.class, this, DomPackage.ARRAY_LITERAL__ELEMENTS);
-        }
-        return elements;
-    }
+		if (elements == null) {
+			elements = new EObjectContainmentEList<IArrayElement>(IArrayElement.class, this, DomPackage.ARRAY_LITERAL__ELEMENTS);
+		}
+		return elements;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case DomPackage.ARRAY_LITERAL__ELEMENTS:
-                return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case DomPackage.ARRAY_LITERAL__ELEMENTS:
+				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case DomPackage.ARRAY_LITERAL__ELEMENTS:
-                return getElements();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case DomPackage.ARRAY_LITERAL__ELEMENTS:
+				return getElements();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case DomPackage.ARRAY_LITERAL__ELEMENTS:
-                getElements().clear();
-                getElements().addAll((Collection<? extends IArrayElement>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case DomPackage.ARRAY_LITERAL__ELEMENTS:
+				getElements().clear();
+				getElements().addAll((Collection<? extends IArrayElement>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
-        switch (featureID) {
-            case DomPackage.ARRAY_LITERAL__ELEMENTS:
-                getElements().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.ARRAY_LITERAL__ELEMENTS:
+				getElements().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case DomPackage.ARRAY_LITERAL__ELEMENTS:
-                return elements != null && !elements.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.ARRAY_LITERAL__ELEMENTS:
+				return elements != null && !elements.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //ArrayLiteralImpl

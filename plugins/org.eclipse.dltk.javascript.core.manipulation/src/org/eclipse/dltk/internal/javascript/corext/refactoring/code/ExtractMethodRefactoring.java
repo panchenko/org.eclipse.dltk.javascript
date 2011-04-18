@@ -50,7 +50,6 @@ import org.eclipse.dltk.javascript.core.dom.Parameter;
 import org.eclipse.dltk.javascript.core.dom.ReturnStatement;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
-import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
 import org.eclipse.dltk.javascript.core.dom.VariableStatement;
@@ -857,9 +856,9 @@ public class ExtractMethodRefactoring extends Refactoring {
 		result.modifiers().addAll(ASTNodeFactory.newModifiers(fAST, modifiers));
 		result.setReturnType2((Type)ASTNode.copySubtree(fAST, fAnalyzer.getReturnType()));*/
 		if (fAnalyzer.getReturnTypeName() != null) {
-			Type type = DomFactory.eINSTANCE.createType();
-			type.setName(fAnalyzer.getReturnTypeName());
-			result.setReturnType(type);
+//			Type type = DomFactory.eINSTANCE.createType();
+//			type.setName(fAnalyzer.getReturnTypeName());
+//			result.setReturnType(type);
 		}
 		Identifier id = DomFactory.eINSTANCE.createIdentifier();
 		id.setName(fMethodName);
@@ -873,9 +872,9 @@ public class ExtractMethodRefactoring extends Refactoring {
 			prmName.setName(info.getNewName());
 			parameter.setName(prmName);
 			if (!"".equals(info.getNewTypeName())) { //$NON-NLS-1
-				Type type = DomFactory.eINSTANCE.createType();
-				type.setName(info.getNewTypeName());
-				parameter.setType(type);
+//				Type type = DomFactory.eINSTANCE.createType();
+//				type.setName(info.getNewTypeName());
+//				parameter.setType(type);
 			}
 			parameters.add(parameter);
 		}
@@ -942,8 +941,8 @@ public class ExtractMethodRefactoring extends Refactoring {
 		VariableDeclaration decl = DomFactory.eINSTANCE.createVariableDeclaration();
 		decl.setIdentifier(id);
 		if (name.getTypeName() != null) {
-			Type type = DomFactory.eINSTANCE.createType();
-			type.setName(name.getTypeName());
+//			Type type = DomFactory.eINSTANCE.createType();
+//			type.setName(name.getTypeName());
 		}
 		if (initializer != null)
 			decl.setInitializer(initializer);

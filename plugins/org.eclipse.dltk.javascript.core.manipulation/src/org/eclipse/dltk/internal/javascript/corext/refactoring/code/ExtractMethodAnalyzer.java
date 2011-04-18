@@ -45,7 +45,6 @@ import org.eclipse.dltk.javascript.core.dom.LabeledStatement;
 import org.eclipse.dltk.javascript.core.dom.Node;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
-import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.WhileStatement;
 import org.eclipse.dltk.javascript.core.dom.rewrite.VariableLookup;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -239,9 +238,9 @@ import com.ibm.icu.text.MessageFormat;
 				break;*/
 			case RETURN_STATEMENT_VALUE:
 				if (fEnclosingNode.eClass().getClassifierID() == DomPackage.FUNCTION_EXPRESSION) {
-					Type type = ((FunctionExpression) fEnclosingNode).getReturnType();
-					if (type != null)
-						fReturnTypeName = type.getName();
+//					Type type = ((FunctionExpression) fEnclosingNode).getReturnType();
+//					if (type != null)
+//						fReturnTypeName = type.getName();
 					//fReturnTypeBinding= fReturnType != null ? fReturnType.resolveBinding() : null;
 				}
 				break;

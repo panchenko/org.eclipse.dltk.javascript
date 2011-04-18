@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DomSwitch.java,v 1.3 2010/12/29 15:18:57 jcompagne Exp $
+ * $Id: DomSwitch.java,v 1.4 2011/04/18 08:29:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.util;
 
@@ -103,12 +103,12 @@ public class DomSwitch<T> {
 			case DomPackage.IDENTIFIER: {
 				Identifier identifier = (Identifier)theEObject;
 				T result = caseIdentifier(identifier);
-				if (result == null) result = caseNode(identifier);
 				if (result == null) result = caseIPropertyName(identifier);
 				if (result == null) result = caseIPropertySelector(identifier);
 				if (result == null) result = caseIProperty(identifier);
 				if (result == null) result = caseIUnqualifiedSelector(identifier);
 				if (result == null) result = caseISelector(identifier);
+				if (result == null) result = caseNode(identifier);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -116,9 +116,9 @@ public class DomSwitch<T> {
 				VariableReference variableReference = (VariableReference)theEObject;
 				T result = caseVariableReference(variableReference);
 				if (result == null) result = caseExpression(variableReference);
-				if (result == null) result = caseNode(variableReference);
 				if (result == null) result = caseIArrayElement(variableReference);
 				if (result == null) result = caseIForInitializer(variableReference);
+				if (result == null) result = caseNode(variableReference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -132,9 +132,9 @@ public class DomSwitch<T> {
 			case DomPackage.EXPRESSION: {
 				Expression expression = (Expression)theEObject;
 				T result = caseExpression(expression);
-				if (result == null) result = caseNode(expression);
 				if (result == null) result = caseIArrayElement(expression);
 				if (result == null) result = caseIForInitializer(expression);
+				if (result == null) result = caseNode(expression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -142,9 +142,9 @@ public class DomSwitch<T> {
 				NullLiteral nullLiteral = (NullLiteral)theEObject;
 				T result = caseNullLiteral(nullLiteral);
 				if (result == null) result = caseExpression(nullLiteral);
-				if (result == null) result = caseNode(nullLiteral);
 				if (result == null) result = caseIArrayElement(nullLiteral);
 				if (result == null) result = caseIForInitializer(nullLiteral);
+				if (result == null) result = caseNode(nullLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -152,9 +152,9 @@ public class DomSwitch<T> {
 				BooleanLiteral booleanLiteral = (BooleanLiteral)theEObject;
 				T result = caseBooleanLiteral(booleanLiteral);
 				if (result == null) result = caseExpression(booleanLiteral);
-				if (result == null) result = caseNode(booleanLiteral);
 				if (result == null) result = caseIArrayElement(booleanLiteral);
 				if (result == null) result = caseIForInitializer(booleanLiteral);
+				if (result == null) result = caseNode(booleanLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -163,9 +163,9 @@ public class DomSwitch<T> {
 				T result = caseNumericLiteral(numericLiteral);
 				if (result == null) result = caseExpression(numericLiteral);
 				if (result == null) result = caseIPropertyName(numericLiteral);
-				if (result == null) result = caseNode(numericLiteral);
 				if (result == null) result = caseIArrayElement(numericLiteral);
 				if (result == null) result = caseIForInitializer(numericLiteral);
+				if (result == null) result = caseNode(numericLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -174,9 +174,9 @@ public class DomSwitch<T> {
 				T result = caseStringLiteral(stringLiteral);
 				if (result == null) result = caseExpression(stringLiteral);
 				if (result == null) result = caseIPropertyName(stringLiteral);
-				if (result == null) result = caseNode(stringLiteral);
 				if (result == null) result = caseIArrayElement(stringLiteral);
 				if (result == null) result = caseIForInitializer(stringLiteral);
+				if (result == null) result = caseNode(stringLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -184,9 +184,9 @@ public class DomSwitch<T> {
 				RegularExpressionLiteral regularExpressionLiteral = (RegularExpressionLiteral)theEObject;
 				T result = caseRegularExpressionLiteral(regularExpressionLiteral);
 				if (result == null) result = caseExpression(regularExpressionLiteral);
-				if (result == null) result = caseNode(regularExpressionLiteral);
 				if (result == null) result = caseIArrayElement(regularExpressionLiteral);
 				if (result == null) result = caseIForInitializer(regularExpressionLiteral);
+				if (result == null) result = caseNode(regularExpressionLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -194,9 +194,9 @@ public class DomSwitch<T> {
 				ThisExpression thisExpression = (ThisExpression)theEObject;
 				T result = caseThisExpression(thisExpression);
 				if (result == null) result = caseExpression(thisExpression);
-				if (result == null) result = caseNode(thisExpression);
 				if (result == null) result = caseIArrayElement(thisExpression);
 				if (result == null) result = caseIForInitializer(thisExpression);
+				if (result == null) result = caseNode(thisExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -204,9 +204,9 @@ public class DomSwitch<T> {
 				ArrayLiteral arrayLiteral = (ArrayLiteral)theEObject;
 				T result = caseArrayLiteral(arrayLiteral);
 				if (result == null) result = caseExpression(arrayLiteral);
-				if (result == null) result = caseNode(arrayLiteral);
 				if (result == null) result = caseIArrayElement(arrayLiteral);
 				if (result == null) result = caseIForInitializer(arrayLiteral);
+				if (result == null) result = caseNode(arrayLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -229,9 +229,9 @@ public class DomSwitch<T> {
 				ObjectLiteral objectLiteral = (ObjectLiteral)theEObject;
 				T result = caseObjectLiteral(objectLiteral);
 				if (result == null) result = caseExpression(objectLiteral);
-				if (result == null) result = caseNode(objectLiteral);
 				if (result == null) result = caseIArrayElement(objectLiteral);
 				if (result == null) result = caseIForInitializer(objectLiteral);
+				if (result == null) result = caseNode(objectLiteral);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -287,9 +287,9 @@ public class DomSwitch<T> {
 				ParenthesizedExpression parenthesizedExpression = (ParenthesizedExpression)theEObject;
 				T result = caseParenthesizedExpression(parenthesizedExpression);
 				if (result == null) result = caseExpression(parenthesizedExpression);
-				if (result == null) result = caseNode(parenthesizedExpression);
 				if (result == null) result = caseIArrayElement(parenthesizedExpression);
 				if (result == null) result = caseIForInitializer(parenthesizedExpression);
+				if (result == null) result = caseNode(parenthesizedExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -297,9 +297,9 @@ public class DomSwitch<T> {
 				ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression)theEObject;
 				T result = caseArrayAccessExpression(arrayAccessExpression);
 				if (result == null) result = caseExpression(arrayAccessExpression);
-				if (result == null) result = caseNode(arrayAccessExpression);
 				if (result == null) result = caseIArrayElement(arrayAccessExpression);
 				if (result == null) result = caseIForInitializer(arrayAccessExpression);
+				if (result == null) result = caseNode(arrayAccessExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -307,9 +307,9 @@ public class DomSwitch<T> {
 				PropertyAccessExpression propertyAccessExpression = (PropertyAccessExpression)theEObject;
 				T result = casePropertyAccessExpression(propertyAccessExpression);
 				if (result == null) result = caseExpression(propertyAccessExpression);
-				if (result == null) result = caseNode(propertyAccessExpression);
 				if (result == null) result = caseIArrayElement(propertyAccessExpression);
 				if (result == null) result = caseIForInitializer(propertyAccessExpression);
+				if (result == null) result = caseNode(propertyAccessExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -317,9 +317,9 @@ public class DomSwitch<T> {
 				NewExpression newExpression = (NewExpression)theEObject;
 				T result = caseNewExpression(newExpression);
 				if (result == null) result = caseExpression(newExpression);
-				if (result == null) result = caseNode(newExpression);
 				if (result == null) result = caseIArrayElement(newExpression);
 				if (result == null) result = caseIForInitializer(newExpression);
+				if (result == null) result = caseNode(newExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -327,9 +327,9 @@ public class DomSwitch<T> {
 				CallExpression callExpression = (CallExpression)theEObject;
 				T result = caseCallExpression(callExpression);
 				if (result == null) result = caseExpression(callExpression);
-				if (result == null) result = caseNode(callExpression);
 				if (result == null) result = caseIArrayElement(callExpression);
 				if (result == null) result = caseIForInitializer(callExpression);
+				if (result == null) result = caseNode(callExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -337,9 +337,9 @@ public class DomSwitch<T> {
 				UnaryExpression unaryExpression = (UnaryExpression)theEObject;
 				T result = caseUnaryExpression(unaryExpression);
 				if (result == null) result = caseExpression(unaryExpression);
-				if (result == null) result = caseNode(unaryExpression);
 				if (result == null) result = caseIArrayElement(unaryExpression);
 				if (result == null) result = caseIForInitializer(unaryExpression);
+				if (result == null) result = caseNode(unaryExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -347,9 +347,9 @@ public class DomSwitch<T> {
 				BinaryExpression binaryExpression = (BinaryExpression)theEObject;
 				T result = caseBinaryExpression(binaryExpression);
 				if (result == null) result = caseExpression(binaryExpression);
-				if (result == null) result = caseNode(binaryExpression);
 				if (result == null) result = caseIArrayElement(binaryExpression);
 				if (result == null) result = caseIForInitializer(binaryExpression);
+				if (result == null) result = caseNode(binaryExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -357,9 +357,9 @@ public class DomSwitch<T> {
 				ConditionalExpression conditionalExpression = (ConditionalExpression)theEObject;
 				T result = caseConditionalExpression(conditionalExpression);
 				if (result == null) result = caseExpression(conditionalExpression);
-				if (result == null) result = caseNode(conditionalExpression);
 				if (result == null) result = caseIArrayElement(conditionalExpression);
 				if (result == null) result = caseIForInitializer(conditionalExpression);
+				if (result == null) result = caseNode(conditionalExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -574,9 +574,9 @@ public class DomSwitch<T> {
 				FunctionExpression functionExpression = (FunctionExpression)theEObject;
 				T result = caseFunctionExpression(functionExpression);
 				if (result == null) result = caseExpression(functionExpression);
-				if (result == null) result = caseNode(functionExpression);
 				if (result == null) result = caseIArrayElement(functionExpression);
 				if (result == null) result = caseIForInitializer(functionExpression);
+				if (result == null) result = caseNode(functionExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -607,9 +607,9 @@ public class DomSwitch<T> {
 				T result = casePropertyIdentifier(propertyIdentifier);
 				if (result == null) result = caseExpression(propertyIdentifier);
 				if (result == null) result = caseIProperty(propertyIdentifier);
-				if (result == null) result = caseNode(propertyIdentifier);
 				if (result == null) result = caseIArrayElement(propertyIdentifier);
 				if (result == null) result = caseIForInitializer(propertyIdentifier);
+				if (result == null) result = caseNode(propertyIdentifier);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -624,9 +624,9 @@ public class DomSwitch<T> {
 				XmlInitializer xmlInitializer = (XmlInitializer)theEObject;
 				T result = caseXmlInitializer(xmlInitializer);
 				if (result == null) result = caseExpression(xmlInitializer);
-				if (result == null) result = caseNode(xmlInitializer);
 				if (result == null) result = caseIArrayElement(xmlInitializer);
 				if (result == null) result = caseIForInitializer(xmlInitializer);
+				if (result == null) result = caseNode(xmlInitializer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -636,9 +636,9 @@ public class DomSwitch<T> {
 				if (result == null) result = casePropertyIdentifier(attributeIdentifier);
 				if (result == null) result = caseExpression(attributeIdentifier);
 				if (result == null) result = caseIProperty(attributeIdentifier);
-				if (result == null) result = caseNode(attributeIdentifier);
 				if (result == null) result = caseIArrayElement(attributeIdentifier);
 				if (result == null) result = caseIForInitializer(attributeIdentifier);
+				if (result == null) result = caseNode(attributeIdentifier);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -656,9 +656,9 @@ public class DomSwitch<T> {
 				if (result == null) result = caseISelector(qualifiedIdentifier);
 				if (result == null) result = caseExpression(qualifiedIdentifier);
 				if (result == null) result = caseIProperty(qualifiedIdentifier);
-				if (result == null) result = caseNode(qualifiedIdentifier);
 				if (result == null) result = caseIArrayElement(qualifiedIdentifier);
 				if (result == null) result = caseIForInitializer(qualifiedIdentifier);
+				if (result == null) result = caseNode(qualifiedIdentifier);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -678,10 +678,10 @@ public class DomSwitch<T> {
 				if (result == null) result = caseExpression(wildcardIdentifier);
 				if (result == null) result = caseIProperty(wildcardIdentifier);
 				if (result == null) result = caseIUnqualifiedSelector(wildcardIdentifier);
-				if (result == null) result = caseNode(wildcardIdentifier);
 				if (result == null) result = caseIArrayElement(wildcardIdentifier);
 				if (result == null) result = caseIForInitializer(wildcardIdentifier);
 				if (result == null) result = caseISelector(wildcardIdentifier);
+				if (result == null) result = caseNode(wildcardIdentifier);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -730,9 +730,9 @@ public class DomSwitch<T> {
 				DescendantAccessExpression descendantAccessExpression = (DescendantAccessExpression)theEObject;
 				T result = caseDescendantAccessExpression(descendantAccessExpression);
 				if (result == null) result = caseExpression(descendantAccessExpression);
-				if (result == null) result = caseNode(descendantAccessExpression);
 				if (result == null) result = caseIArrayElement(descendantAccessExpression);
 				if (result == null) result = caseIForInitializer(descendantAccessExpression);
+				if (result == null) result = caseNode(descendantAccessExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -740,9 +740,9 @@ public class DomSwitch<T> {
 				FilterExpression filterExpression = (FilterExpression)theEObject;
 				T result = caseFilterExpression(filterExpression);
 				if (result == null) result = caseExpression(filterExpression);
-				if (result == null) result = caseNode(filterExpression);
 				if (result == null) result = caseIArrayElement(filterExpression);
 				if (result == null) result = caseIForInitializer(filterExpression);
+				if (result == null) result = caseNode(filterExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -760,13 +760,6 @@ public class DomSwitch<T> {
 				if (result == null) result = caseIterationStatement(forEachInStatement);
 				if (result == null) result = caseStatement(forEachInStatement);
 				if (result == null) result = caseNode(forEachInStatement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DomPackage.TYPE: {
-				Type type = (Type)theEObject;
-				T result = caseType(type);
-				if (result == null) result = caseNode(type);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1926,21 +1919,6 @@ public class DomSwitch<T> {
 	 * @generated
 	 */
 	public T caseForEachInStatement(ForEachInStatement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseType(Type object) {
 		return null;
 	}
 

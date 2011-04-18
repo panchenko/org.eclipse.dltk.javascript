@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: VariableStatementImpl.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
+ * $Id: VariableStatementImpl.java,v 1.3 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -37,118 +37,118 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class VariableStatementImpl extends StatementImpl implements VariableStatement {
 	/**
-     * The cached value of the '{@link #getDeclarations() <em>Declarations</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getDeclarations() <em>Declarations</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getDeclarations()
-     * @generated
-     * @ordered
-     */
+	 * @see #getDeclarations()
+	 * @generated
+	 * @ordered
+	 */
 	protected EList<VariableDeclaration> declarations;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	protected VariableStatementImpl() {
-        super();
-    }
+		super();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
-        return DomPackage.Literals.VARIABLE_STATEMENT;
-    }
+		return DomPackage.Literals.VARIABLE_STATEMENT;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EList<VariableDeclaration> getDeclarations() {
-        if (declarations == null) {
-            declarations = new EObjectContainmentEList<VariableDeclaration>(VariableDeclaration.class, this, DomPackage.VARIABLE_STATEMENT__DECLARATIONS);
-        }
-        return declarations;
-    }
+		if (declarations == null) {
+			declarations = new EObjectContainmentEList<VariableDeclaration>(VariableDeclaration.class, this, DomPackage.VARIABLE_STATEMENT__DECLARATIONS);
+		}
+		return declarations;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
-                return ((InternalEList<?>)getDeclarations()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
+				return ((InternalEList<?>)getDeclarations()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
-                return getDeclarations();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
+				return getDeclarations();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
-                getDeclarations().clear();
-                getDeclarations().addAll((Collection<? extends VariableDeclaration>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
+				getDeclarations().clear();
+				getDeclarations().addAll((Collection<? extends VariableDeclaration>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
-        switch (featureID) {
-            case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
-                getDeclarations().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
+				getDeclarations().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
-                return declarations != null && !declarations.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.VARIABLE_STATEMENT__DECLARATIONS:
+				return declarations != null && !declarations.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //VariableStatementImpl

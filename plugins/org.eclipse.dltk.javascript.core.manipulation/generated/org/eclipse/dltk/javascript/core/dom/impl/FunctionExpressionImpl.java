@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: FunctionExpressionImpl.java,v 1.4 2010/12/29 15:18:56 jcompagne Exp $
+ * $Id: FunctionExpressionImpl.java,v 1.5 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -14,18 +14,12 @@ import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.FunctionExpression;
 import org.eclipse.dltk.javascript.core.dom.Identifier;
 import org.eclipse.dltk.javascript.core.dom.Parameter;
-import org.eclipse.dltk.javascript.core.dom.Type;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -39,7 +33,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getDocumentation <em>Documentation</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getIdentifier <em>Identifier</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getParameters <em>Parameters</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getBody <em>Body</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.FunctionExpressionImpl#getParametersPosition <em>Parameters Position</em>}</li>
  * </ul>
@@ -77,16 +70,6 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 	 * @ordered
 	 */
 	protected EList<Parameter> parameters;
-
-	/**
-	 * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReturnType()
-	 * @generated
-	 * @ordered
-	 */
-	protected Type returnType;
 
 	/**
 	 * The cached value of the '{@link #getBody() <em>Body</em>}' containment reference.
@@ -235,49 +218,6 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Type getReturnType() {
-		return returnType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetReturnType(Type newReturnType, NotificationChain msgs) {
-		Type oldReturnType = returnType;
-		returnType = newReturnType;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.FUNCTION_EXPRESSION__RETURN_TYPE, oldReturnType, newReturnType);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setReturnType(Type newReturnType) {
-		if (newReturnType != returnType) {
-			NotificationChain msgs = null;
-			if (returnType != null)
-				msgs = ((InternalEObject)returnType).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.FUNCTION_EXPRESSION__RETURN_TYPE, null, msgs);
-			if (newReturnType != null)
-				msgs = ((InternalEObject)newReturnType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.FUNCTION_EXPRESSION__RETURN_TYPE, null, msgs);
-			msgs = basicSetReturnType(newReturnType, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.FUNCTION_EXPRESSION__RETURN_TYPE, newReturnType, newReturnType));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public BlockStatement getBody() {
 		return body;
 	}
@@ -349,8 +289,6 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 				return basicSetIdentifier(null, msgs);
 			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS:
 				return ((InternalEList<?>)getParameters()).basicRemove(otherEnd, msgs);
-			case DomPackage.FUNCTION_EXPRESSION__RETURN_TYPE:
-				return basicSetReturnType(null, msgs);
 			case DomPackage.FUNCTION_EXPRESSION__BODY:
 				return basicSetBody(null, msgs);
 		}
@@ -372,12 +310,10 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 				return getIdentifier();
 			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS:
 				return getParameters();
-			case DomPackage.FUNCTION_EXPRESSION__RETURN_TYPE:
-				return getReturnType();
 			case DomPackage.FUNCTION_EXPRESSION__BODY:
 				return getBody();
 			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS_POSITION:
-				return new Integer(getParametersPosition());
+				return getParametersPosition();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -401,14 +337,11 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 				getParameters().clear();
 				getParameters().addAll((Collection<? extends Parameter>)newValue);
 				return;
-			case DomPackage.FUNCTION_EXPRESSION__RETURN_TYPE:
-				setReturnType((Type)newValue);
-				return;
 			case DomPackage.FUNCTION_EXPRESSION__BODY:
 				setBody((BlockStatement)newValue);
 				return;
 			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS_POSITION:
-				setParametersPosition(((Integer)newValue).intValue());
+				setParametersPosition((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -430,9 +363,6 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 				return;
 			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS:
 				getParameters().clear();
-				return;
-			case DomPackage.FUNCTION_EXPRESSION__RETURN_TYPE:
-				setReturnType((Type)null);
 				return;
 			case DomPackage.FUNCTION_EXPRESSION__BODY:
 				setBody((BlockStatement)null);
@@ -458,8 +388,6 @@ public class FunctionExpressionImpl extends ExpressionImpl implements FunctionEx
 				return identifier != null;
 			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS:
 				return parameters != null && !parameters.isEmpty();
-			case DomPackage.FUNCTION_EXPRESSION__RETURN_TYPE:
-				return returnType != null;
 			case DomPackage.FUNCTION_EXPRESSION__BODY:
 				return body != null;
 			case DomPackage.FUNCTION_EXPRESSION__PARAMETERS_POSITION:

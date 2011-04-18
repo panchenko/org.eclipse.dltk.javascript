@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: PropertyAssignmentImpl.java,v 1.2 2010/12/01 09:31:17 apanchenk Exp $
+ * $Id: PropertyAssignmentImpl.java,v 1.3 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -33,147 +33,147 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public abstract class PropertyAssignmentImpl extends NodeImpl implements PropertyAssignment {
 	/**
-     * The cached value of the '{@link #getName() <em>Name</em>}' containment reference.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getName()
-     * @generated
-     * @ordered
-     */
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
 	protected IPropertyName name;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	protected PropertyAssignmentImpl() {
-        super();
-    }
+		super();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
-        return DomPackage.Literals.PROPERTY_ASSIGNMENT;
-    }
+		return DomPackage.Literals.PROPERTY_ASSIGNMENT;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public IPropertyName getName() {
-        return name;
-    }
+		return name;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public NotificationChain basicSetName(IPropertyName newName, NotificationChain msgs) {
-        IPropertyName oldName = name;
-        name = newName;
-        if (eNotificationRequired()) {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.PROPERTY_ASSIGNMENT__NAME, oldName, newName);
-            if (msgs == null) msgs = notification; else msgs.add(notification);
-        }
-        return msgs;
-    }
+		IPropertyName oldName = name;
+		name = newName;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.PROPERTY_ASSIGNMENT__NAME, oldName, newName);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public void setName(IPropertyName newName) {
-        if (newName != name) {
-            NotificationChain msgs = null;
-            if (name != null)
-                msgs = ((InternalEObject)name).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.PROPERTY_ASSIGNMENT__NAME, null, msgs);
-            if (newName != null)
-                msgs = ((InternalEObject)newName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.PROPERTY_ASSIGNMENT__NAME, null, msgs);
-            msgs = basicSetName(newName, msgs);
-            if (msgs != null) msgs.dispatch();
-        }
-        else if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.PROPERTY_ASSIGNMENT__NAME, newName, newName));
-    }
+		if (newName != name) {
+			NotificationChain msgs = null;
+			if (name != null)
+				msgs = ((InternalEObject)name).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.PROPERTY_ASSIGNMENT__NAME, null, msgs);
+			if (newName != null)
+				msgs = ((InternalEObject)newName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.PROPERTY_ASSIGNMENT__NAME, null, msgs);
+			msgs = basicSetName(newName, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.PROPERTY_ASSIGNMENT__NAME, newName, newName));
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case DomPackage.PROPERTY_ASSIGNMENT__NAME:
-                return basicSetName(null, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case DomPackage.PROPERTY_ASSIGNMENT__NAME:
+				return basicSetName(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case DomPackage.PROPERTY_ASSIGNMENT__NAME:
-                return getName();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case DomPackage.PROPERTY_ASSIGNMENT__NAME:
+				return getName();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case DomPackage.PROPERTY_ASSIGNMENT__NAME:
-                setName((IPropertyName)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case DomPackage.PROPERTY_ASSIGNMENT__NAME:
+				setName((IPropertyName)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
-        switch (featureID) {
-            case DomPackage.PROPERTY_ASSIGNMENT__NAME:
-                setName((IPropertyName)null);
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.PROPERTY_ASSIGNMENT__NAME:
+				setName((IPropertyName)null);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case DomPackage.PROPERTY_ASSIGNMENT__NAME:
-                return name != null;
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.PROPERTY_ASSIGNMENT__NAME:
+				return name != null;
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //PropertyAssignmentImpl

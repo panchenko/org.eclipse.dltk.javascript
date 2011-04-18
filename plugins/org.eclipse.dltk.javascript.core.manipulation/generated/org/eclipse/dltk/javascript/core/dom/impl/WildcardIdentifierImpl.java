@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: WildcardIdentifierImpl.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
+ * $Id: WildcardIdentifierImpl.java,v 1.3 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -22,22 +22,22 @@ import org.eclipse.emf.ecore.EClass;
  */
 public class WildcardIdentifierImpl extends PropertyIdentifierImpl implements WildcardIdentifier {
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	protected WildcardIdentifierImpl() {
-        super();
-    }
+		super();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
-        return DomPackage.Literals.WILDCARD_IDENTIFIER;
-    }
+		return DomPackage.Literals.WILDCARD_IDENTIFIER;
+	}
 
 } //WildcardIdentifierImpl

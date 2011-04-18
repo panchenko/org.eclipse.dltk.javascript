@@ -185,7 +185,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="VariableDeclaration" eSuperTypes="#//Node">
     <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" lowerBound="1"
         eType="#//Identifier" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="initializer" eType="#//Expression"
         containment="true"/>
   </eClassifiers>
@@ -300,8 +299,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="#//Parameter" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//Type"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1" eType="#//BlockStatement"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="parametersPosition" lowerBound="1"
@@ -310,7 +307,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//Node">
     <eStructuralFeatures xsi:type="ecore:EReference" name="name" lowerBound="1" eType="#//Identifier"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Source" eSuperTypes="#//Node">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
@@ -378,8 +374,5 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="collection" lowerBound="1"
         eType="#//Expression" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Type" eSuperTypes="#//Node">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

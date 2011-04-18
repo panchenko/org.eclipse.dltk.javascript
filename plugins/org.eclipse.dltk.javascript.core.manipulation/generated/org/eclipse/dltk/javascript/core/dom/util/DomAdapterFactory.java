@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DomAdapterFactory.java,v 1.3 2010/12/29 15:18:57 jcompagne Exp $
+ * $Id: DomAdapterFactory.java,v 1.4 2011/04/18 08:29:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.util;
 
@@ -378,10 +378,6 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseForEachInStatement(ForEachInStatement object) {
 				return createForEachInStatementAdapter();
-			}
-			@Override
-			public Adapter caseType(Type object) {
-				return createTypeAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -1478,20 +1474,6 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createForEachInStatementAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.core.dom.Type <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.dltk.javascript.core.dom.Type
-	 * @generated
-	 */
-	public Adapter createTypeAdapter() {
 		return null;
 	}
 

@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DomPackage.java,v 1.4 2010/12/29 15:18:57 jcompagne Exp $
+ * $Id: DomPackage.java,v 1.5 2011/04/18 08:29:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -1679,22 +1679,13 @@ public interface DomPackage extends EPackage {
 	int VARIABLE_DECLARATION__IDENTIFIER = NODE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VARIABLE_DECLARATION__TYPE = NODE_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Initializer</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VARIABLE_DECLARATION__INITIALIZER = NODE_FEATURE_COUNT + 2;
+	int VARIABLE_DECLARATION__INITIALIZER = NODE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Variable Declaration</em>' class.
@@ -1703,7 +1694,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VARIABLE_DECLARATION_FEATURE_COUNT = NODE_FEATURE_COUNT + 3;
+	int VARIABLE_DECLARATION_FEATURE_COUNT = NODE_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.core.dom.impl.EmptyStatementImpl <em>Empty Statement</em>}' class.
@@ -2918,22 +2909,13 @@ public interface DomPackage extends EPackage {
 	int FUNCTION_EXPRESSION__PARAMETERS = EXPRESSION_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Return Type</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUNCTION_EXPRESSION__RETURN_TYPE = EXPRESSION_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>Body</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FUNCTION_EXPRESSION__BODY = EXPRESSION_FEATURE_COUNT + 4;
+	int FUNCTION_EXPRESSION__BODY = EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Parameters Position</b></em>' attribute.
@@ -2942,7 +2924,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FUNCTION_EXPRESSION__PARAMETERS_POSITION = EXPRESSION_FEATURE_COUNT + 5;
+	int FUNCTION_EXPRESSION__PARAMETERS_POSITION = EXPRESSION_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Function Expression</em>' class.
@@ -2951,7 +2933,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FUNCTION_EXPRESSION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 6;
+	int FUNCTION_EXPRESSION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.core.dom.impl.ParameterImpl <em>Parameter</em>}' class.
@@ -2991,22 +2973,13 @@ public interface DomPackage extends EPackage {
 	int PARAMETER__NAME = NODE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARAMETER__TYPE = NODE_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Parameter</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARAMETER_FEATURE_COUNT = NODE_FEATURE_COUNT + 2;
+	int PARAMETER_FEATURE_COUNT = NODE_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.core.dom.impl.SourceImpl <em>Source</em>}' class.
@@ -3855,52 +3828,6 @@ public interface DomPackage extends EPackage {
 	int FOR_EACH_IN_STATEMENT_FEATURE_COUNT = ITERATION_STATEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.dltk.javascript.core.dom.impl.TypeImpl <em>Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.dltk.javascript.core.dom.impl.TypeImpl
-	 * @see org.eclipse.dltk.javascript.core.dom.impl.DomPackageImpl#getType()
-	 * @generated
-	 */
-	int TYPE = 77;
-
-	/**
-	 * The feature id for the '<em><b>Begin</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TYPE__BEGIN = NODE__BEGIN;
-
-	/**
-	 * The feature id for the '<em><b>End</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TYPE__END = NODE__END;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TYPE__NAME = NODE_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Type</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TYPE_FEATURE_COUNT = NODE_FEATURE_COUNT + 1;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.core.dom.UnaryOperator <em>Unary Operator</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3908,7 +3835,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.eclipse.dltk.javascript.core.dom.impl.DomPackageImpl#getUnaryOperator()
 	 * @generated
 	 */
-	int UNARY_OPERATOR = 78;
+	int UNARY_OPERATOR = 77;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.dltk.javascript.core.dom.BinaryOperator <em>Binary Operator</em>}' enum.
@@ -3918,7 +3845,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.eclipse.dltk.javascript.core.dom.impl.DomPackageImpl#getBinaryOperator()
 	 * @generated
 	 */
-	int BINARY_OPERATOR = 79;
+	int BINARY_OPERATOR = 78;
 
 
 	/**
@@ -4669,17 +4596,6 @@ public interface DomPackage extends EPackage {
 	EReference getVariableDeclaration_Identifier();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.core.dom.VariableDeclaration#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Type</em>'.
-	 * @see org.eclipse.dltk.javascript.core.dom.VariableDeclaration#getType()
-	 * @see #getVariableDeclaration()
-	 * @generated
-	 */
-	EReference getVariableDeclaration_Type();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.core.dom.VariableDeclaration#getInitializer <em>Initializer</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5295,17 +5211,6 @@ public interface DomPackage extends EPackage {
 	EReference getFunctionExpression_Parameters();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getReturnType <em>Return Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Return Type</em>'.
-	 * @see org.eclipse.dltk.javascript.core.dom.FunctionExpression#getReturnType()
-	 * @see #getFunctionExpression()
-	 * @generated
-	 */
-	EReference getFunctionExpression_ReturnType();
-
-	/**
 	 * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getBody <em>Body</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5347,17 +5252,6 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getParameter_Name();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.core.dom.Parameter#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Type</em>'.
-	 * @see org.eclipse.dltk.javascript.core.dom.Parameter#getType()
-	 * @see #getParameter()
-	 * @generated
-	 */
-	EReference getParameter_Type();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.core.dom.Source <em>Source</em>}'.
@@ -5724,27 +5618,6 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getForEachInStatement_Collection();
-
-	/**
-	 * Returns the meta object for class '{@link org.eclipse.dltk.javascript.core.dom.Type <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Type</em>'.
-	 * @see org.eclipse.dltk.javascript.core.dom.Type
-	 * @generated
-	 */
-	EClass getType();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.core.dom.Type#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see org.eclipse.dltk.javascript.core.dom.Type#getName()
-	 * @see #getType()
-	 * @generated
-	 */
-	EAttribute getType_Name();
 
 	/**
 	 * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.core.dom.UnaryOperator <em>Unary Operator</em>}'.
@@ -6425,14 +6298,6 @@ public interface DomPackage extends EPackage {
 		EReference VARIABLE_DECLARATION__IDENTIFIER = eINSTANCE.getVariableDeclaration_Identifier();
 
 		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VARIABLE_DECLARATION__TYPE = eINSTANCE.getVariableDeclaration_Type();
-
-		/**
 		 * The meta object literal for the '<em><b>Initializer</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6943,14 +6808,6 @@ public interface DomPackage extends EPackage {
 		EReference FUNCTION_EXPRESSION__PARAMETERS = eINSTANCE.getFunctionExpression_Parameters();
 
 		/**
-		 * The meta object literal for the '<em><b>Return Type</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FUNCTION_EXPRESSION__RETURN_TYPE = eINSTANCE.getFunctionExpression_ReturnType();
-
-		/**
 		 * The meta object literal for the '<em><b>Body</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6983,14 +6840,6 @@ public interface DomPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PARAMETER__NAME = eINSTANCE.getParameter_Name();
-
-		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PARAMETER__TYPE = eINSTANCE.getParameter_Type();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.core.dom.impl.SourceImpl <em>Source</em>}' class.
@@ -7309,24 +7158,6 @@ public interface DomPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FOR_EACH_IN_STATEMENT__COLLECTION = eINSTANCE.getForEachInStatement_Collection();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.core.dom.impl.TypeImpl <em>Type</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.dltk.javascript.core.dom.impl.TypeImpl
-		 * @see org.eclipse.dltk.javascript.core.dom.impl.DomPackageImpl#getType()
-		 * @generated
-		 */
-		EClass TYPE = eINSTANCE.getType();
-
-		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TYPE__NAME = eINSTANCE.getType_Name();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.dltk.javascript.core.dom.UnaryOperator <em>Unary Operator</em>}' enum.

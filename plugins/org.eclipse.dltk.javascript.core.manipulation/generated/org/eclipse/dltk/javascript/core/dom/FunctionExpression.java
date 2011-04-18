@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: FunctionExpression.java,v 1.4 2010/12/29 15:18:57 jcompagne Exp $
+ * $Id: FunctionExpression.java,v 1.5 2011/04/18 08:29:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -19,7 +19,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getDocumentation <em>Documentation</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getIdentifier <em>Identifier</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getParameters <em>Parameters</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getBody <em>Body</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getParametersPosition <em>Parameters Position</em>}</li>
  * </ul>
@@ -97,32 +96,6 @@ public interface FunctionExpression extends Expression {
 	 * @generated
 	 */
 	EList<Parameter> getParameters();
-
-	/**
-	 * Returns the value of the '<em><b>Return Type</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Return Type</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Return Type</em>' containment reference.
-	 * @see #setReturnType(Type)
-	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getFunctionExpression_ReturnType()
-	 * @model containment="true"
-	 * @generated
-	 */
-	Type getReturnType();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.FunctionExpression#getReturnType <em>Return Type</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Return Type</em>' containment reference.
-	 * @see #getReturnType()
-	 * @generated
-	 */
-	void setReturnType(Type value);
 
 	/**
 	 * Returns the value of the '<em><b>Body</b></em>' containment reference.

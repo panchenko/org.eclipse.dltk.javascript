@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: Parameter.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
+ * $Id: Parameter.java,v 1.3 2011/04/18 08:29:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -16,7 +16,6 @@ package org.eclipse.dltk.javascript.core.dom;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.Parameter#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.core.dom.Parameter#getType <em>Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -26,55 +25,29 @@ package org.eclipse.dltk.javascript.core.dom;
  */
 public interface Parameter extends Node {
 	/**
-     * Returns the value of the '<em><b>Name</b></em>' containment reference.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Name</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Name</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-     * @return the value of the '<em>Name</em>' containment reference.
-     * @see #setName(Identifier)
-     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getParameter_Name()
-     * @model containment="true" required="true"
-     * @generated
-     */
+	 * @return the value of the '<em>Name</em>' containment reference.
+	 * @see #setName(Identifier)
+	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getParameter_Name()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
 	Identifier getName();
 
 	/**
-     * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.Parameter#getName <em>Name</em>}' containment reference.
-     * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.Parameter#getName <em>Name</em>}' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Name</em>' containment reference.
-     * @see #getName()
-     * @generated
-     */
+	 * @param value the new value of the '<em>Name</em>' containment reference.
+	 * @see #getName()
+	 * @generated
+	 */
 	void setName(Identifier value);
-
-	/**
-     * Returns the value of the '<em><b>Type</b></em>' containment reference.
-     * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Type</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-     * @return the value of the '<em>Type</em>' containment reference.
-     * @see #setType(Type)
-     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getParameter_Type()
-     * @model containment="true"
-     * @generated
-     */
-	Type getType();
-
-	/**
-     * Sets the value of the '{@link org.eclipse.dltk.javascript.core.dom.Parameter#getType <em>Type</em>}' containment reference.
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Type</em>' containment reference.
-     * @see #getType()
-     * @generated
-     */
-	void setType(Type value);
 
 } // Parameter

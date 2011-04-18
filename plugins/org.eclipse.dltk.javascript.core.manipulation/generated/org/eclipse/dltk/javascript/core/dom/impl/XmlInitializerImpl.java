@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: XmlInitializerImpl.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
+ * $Id: XmlInitializerImpl.java,v 1.3 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -37,118 +37,118 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class XmlInitializerImpl extends ExpressionImpl implements XmlInitializer {
 	/**
-     * The cached value of the '{@link #getFragments() <em>Fragments</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getFragments() <em>Fragments</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getFragments()
-     * @generated
-     * @ordered
-     */
+	 * @see #getFragments()
+	 * @generated
+	 * @ordered
+	 */
 	protected EList<XmlFragment> fragments;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	protected XmlInitializerImpl() {
-        super();
-    }
+		super();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
-        return DomPackage.Literals.XML_INITIALIZER;
-    }
+		return DomPackage.Literals.XML_INITIALIZER;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public EList<XmlFragment> getFragments() {
-        if (fragments == null) {
-            fragments = new EObjectContainmentEList<XmlFragment>(XmlFragment.class, this, DomPackage.XML_INITIALIZER__FRAGMENTS);
-        }
-        return fragments;
-    }
+		if (fragments == null) {
+			fragments = new EObjectContainmentEList<XmlFragment>(XmlFragment.class, this, DomPackage.XML_INITIALIZER__FRAGMENTS);
+		}
+		return fragments;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case DomPackage.XML_INITIALIZER__FRAGMENTS:
-                return ((InternalEList<?>)getFragments()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case DomPackage.XML_INITIALIZER__FRAGMENTS:
+				return ((InternalEList<?>)getFragments()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case DomPackage.XML_INITIALIZER__FRAGMENTS:
-                return getFragments();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case DomPackage.XML_INITIALIZER__FRAGMENTS:
+				return getFragments();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case DomPackage.XML_INITIALIZER__FRAGMENTS:
-                getFragments().clear();
-                getFragments().addAll((Collection<? extends XmlFragment>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case DomPackage.XML_INITIALIZER__FRAGMENTS:
+				getFragments().clear();
+				getFragments().addAll((Collection<? extends XmlFragment>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
-        switch (featureID) {
-            case DomPackage.XML_INITIALIZER__FRAGMENTS:
-                getFragments().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.XML_INITIALIZER__FRAGMENTS:
+				getFragments().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case DomPackage.XML_INITIALIZER__FRAGMENTS:
-                return fragments != null && !fragments.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.XML_INITIALIZER__FRAGMENTS:
+				return fragments != null && !fragments.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //XmlInitializerImpl

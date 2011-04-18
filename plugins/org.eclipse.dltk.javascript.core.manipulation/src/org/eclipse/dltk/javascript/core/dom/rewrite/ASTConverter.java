@@ -48,7 +48,6 @@ import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
-import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.SwitchComponent;
@@ -105,7 +104,6 @@ import org.eclipse.dltk.javascript.core.dom.SimplePropertyAssignment;
 import org.eclipse.dltk.javascript.core.dom.Source;
 import org.eclipse.dltk.javascript.core.dom.Statement;
 import org.eclipse.dltk.javascript.core.dom.SwitchElement;
-import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
 import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
 import org.eclipse.dltk.javascript.core.dom.VariableReference;
@@ -130,7 +128,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 		ASTConverter converter = new ASTConverter();
 		return converter.visit(node);
 	}
-	
+
 	private org.eclipse.dltk.javascript.core.dom.Label visitLabel(Label label) {
 		if (label == null)
 			return null;
@@ -433,7 +431,8 @@ public class ASTConverter extends ASTVisitor<Node> {
 			res.setIdentifier(createIdentifier(node.getName()));
 		Comment docs = node.getDocumentation();
 		if (docs != null) {
-			org.eclipse.dltk.javascript.core.dom.Comment comment = DOM_FACTORY.createComment();
+			org.eclipse.dltk.javascript.core.dom.Comment comment = DOM_FACTORY
+					.createComment();
 			comment.setText(docs.getText());
 			comment.setBegin(docs.sourceStart());
 			comment.setEnd(docs.sourceEnd());
@@ -443,12 +442,10 @@ public class ASTConverter extends ASTVisitor<Node> {
 		for (Argument arg : node.getArguments()) {
 			Parameter prm = DOM_FACTORY.createParameter();
 			prm.setName(createIdentifier(arg.getIdentifier()));
-			prm.setType((Type) visit(arg.getType()));
 			prm.setBegin(arg.sourceStart());
 			prm.setEnd(arg.sourceEnd());
 			res.getParameters().add(prm);
 		}
-		res.setReturnType((Type) visit(node.getReturnType()));
 		res.setBody((org.eclipse.dltk.javascript.core.dom.BlockStatement) visit(node
 				.getBody()));
 		res.setParametersPosition(node.getLP() + 1);
@@ -467,13 +464,6 @@ public class ASTConverter extends ASTVisitor<Node> {
 	public Node visitIdentifier(Identifier node) {
 		VariableReference res = DOM_FACTORY.createVariableReference();
 		res.setVariable(createIdentifier(node));
-		return res;
-	}
-
-	@Override
-	public Node visitSimpleType(SimpleType node) {
-		Type res = DOM_FACTORY.createType();
-		res.setName(node.getName());
 		return res;
 	}
 
@@ -750,7 +740,6 @@ public class ASTConverter extends ASTVisitor<Node> {
 		org.eclipse.dltk.javascript.core.dom.VariableDeclaration res = DOM_FACTORY
 				.createVariableDeclaration();
 		res.setIdentifier(createIdentifier(decl.getIdentifier()));
-		res.setType((Type) visit(decl.getType()));
 		res.setInitializer((Expression) visit(decl.getInitializer()));
 		res.setBegin(decl.sourceStart());
 		res.setEnd(decl.sourceEnd());
@@ -856,9 +845,9 @@ public class ASTConverter extends ASTVisitor<Node> {
 				.createDescendantAccessExpression();
 		res.setObject((Expression) visit(node.getObject()));
 		if (node.getProperty() instanceof Identifier)
-		   res.setProperty(createIdentifier((Identifier) node.getProperty()));
+			res.setProperty(createIdentifier((Identifier) node.getProperty()));
 		else
-		   res.setProperty((IProperty) visit(node.getProperty()));
+			res.setProperty((IProperty) visit(node.getProperty()));
 		return res;
 	}
 

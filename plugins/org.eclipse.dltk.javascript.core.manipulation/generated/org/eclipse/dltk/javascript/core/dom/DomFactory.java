@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DomFactory.java,v 1.3 2010/12/29 15:18:57 jcompagne Exp $
+ * $Id: DomFactory.java,v 1.4 2011/04/18 08:29:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -573,15 +573,6 @@ public interface DomFactory extends EFactory {
 	 * @generated
 	 */
 	ForEachInStatement createForEachInStatement();
-
-	/**
-	 * Returns a new object of class '<em>Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Type</em>'.
-	 * @generated
-	 */
-	Type createType();
 
 	/**
 	 * Returns the package supported by this factory.

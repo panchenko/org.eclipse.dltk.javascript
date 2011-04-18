@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: NodeImpl.java,v 1.2 2010/12/01 09:31:17 apanchenk Exp $
+ * $Id: NodeImpl.java,v 1.3 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -32,190 +32,190 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  */
 public abstract class NodeImpl extends EObjectImpl implements Node {
 	/**
-     * The default value of the '{@link #getBegin() <em>Begin</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getBegin() <em>Begin</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getBegin()
-     * @generated
-     * @ordered
-     */
+	 * @see #getBegin()
+	 * @generated
+	 * @ordered
+	 */
 	protected static final int BEGIN_EDEFAULT = -1;
 
 	/**
-     * The cached value of the '{@link #getBegin() <em>Begin</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getBegin() <em>Begin</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getBegin()
-     * @generated
-     * @ordered
-     */
+	 * @see #getBegin()
+	 * @generated
+	 * @ordered
+	 */
 	protected int begin = BEGIN_EDEFAULT;
 
 	/**
-     * The default value of the '{@link #getEnd() <em>End</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getEnd() <em>End</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getEnd()
-     * @generated
-     * @ordered
-     */
+	 * @see #getEnd()
+	 * @generated
+	 * @ordered
+	 */
 	protected static final int END_EDEFAULT = -1;
 
 	/**
-     * The cached value of the '{@link #getEnd() <em>End</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getEnd() <em>End</em>}' attribute.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getEnd()
-     * @generated
-     * @ordered
-     */
+	 * @see #getEnd()
+	 * @generated
+	 * @ordered
+	 */
 	protected int end = END_EDEFAULT;
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	protected NodeImpl() {
-        super();
-    }
+		super();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
-        return DomPackage.Literals.NODE;
-    }
+		return DomPackage.Literals.NODE;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public int getBegin() {
-        return begin;
-    }
+		return begin;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public void setBegin(int newBegin) {
-        int oldBegin = begin;
-        begin = newBegin;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.NODE__BEGIN, oldBegin, begin));
-    }
+		int oldBegin = begin;
+		begin = newBegin;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.NODE__BEGIN, oldBegin, begin));
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public int getEnd() {
-        return end;
-    }
+		return end;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public void setEnd(int newEnd) {
-        int oldEnd = end;
-        end = newEnd;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.NODE__END, oldEnd, end));
-    }
+		int oldEnd = end;
+		end = newEnd;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.NODE__END, oldEnd, end));
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case DomPackage.NODE__BEGIN:
-                return getBegin();
-            case DomPackage.NODE__END:
-                return getEnd();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case DomPackage.NODE__BEGIN:
+				return getBegin();
+			case DomPackage.NODE__END:
+				return getEnd();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case DomPackage.NODE__BEGIN:
-                setBegin((Integer)newValue);
-                return;
-            case DomPackage.NODE__END:
-                setEnd((Integer)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case DomPackage.NODE__BEGIN:
+				setBegin((Integer)newValue);
+				return;
+			case DomPackage.NODE__END:
+				setEnd((Integer)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
-        switch (featureID) {
-            case DomPackage.NODE__BEGIN:
-                setBegin(BEGIN_EDEFAULT);
-                return;
-            case DomPackage.NODE__END:
-                setEnd(END_EDEFAULT);
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.NODE__BEGIN:
+				setBegin(BEGIN_EDEFAULT);
+				return;
+			case DomPackage.NODE__END:
+				setEnd(END_EDEFAULT);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case DomPackage.NODE__BEGIN:
-                return begin != BEGIN_EDEFAULT;
-            case DomPackage.NODE__END:
-                return end != END_EDEFAULT;
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.NODE__BEGIN:
+				return begin != BEGIN_EDEFAULT;
+			case DomPackage.NODE__END:
+				return end != END_EDEFAULT;
+		}
+		return super.eIsSet(featureID);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public String toString() {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (begin: ");
-        result.append(begin);
-        result.append(", end: ");
-        result.append(end);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (begin: ");
+		result.append(begin);
+		result.append(", end: ");
+		result.append(end);
+		result.append(')');
+		return result.toString();
+	}
 
 } //NodeImpl

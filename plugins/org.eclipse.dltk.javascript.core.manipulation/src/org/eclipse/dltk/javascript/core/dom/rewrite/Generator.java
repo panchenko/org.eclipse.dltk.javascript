@@ -31,8 +31,6 @@ import org.eclipse.dltk.javascript.core.dom.DefaultClause;
 import org.eclipse.dltk.javascript.core.dom.DefaultXmlNamespaceStatement;
 import org.eclipse.dltk.javascript.core.dom.DescendantAccessExpression;
 import org.eclipse.dltk.javascript.core.dom.DoStatement;
-import org.eclipse.dltk.javascript.core.dom.DomFactory;
-import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.Elision;
 import org.eclipse.dltk.javascript.core.dom.EmptyStatement;
 import org.eclipse.dltk.javascript.core.dom.Expression;
@@ -72,7 +70,6 @@ import org.eclipse.dltk.javascript.core.dom.SwitchStatement;
 import org.eclipse.dltk.javascript.core.dom.ThisExpression;
 import org.eclipse.dltk.javascript.core.dom.ThrowStatement;
 import org.eclipse.dltk.javascript.core.dom.TryStatement;
-import org.eclipse.dltk.javascript.core.dom.Type;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
 import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
 import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
@@ -542,8 +539,6 @@ public class Generator extends DomSwitch<StringBuilder> {
 			first = false;
 		}
 		sb.append(')');
-		if (object.getReturnType() != null)
-			sb.append(':').append(object.getReturnType().getName());
 		sb.append(' ');
 		generate(object.getBody());
 		return sb;
@@ -611,13 +606,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 	@Override
 	public StringBuilder caseParameter(Parameter object) {
 		sb.append(object.getName().getName());
-		if (object.getType() != null)
-			sb.append(':').append(object.getType().getName());
 		return sb;
-	}
-	@Override
-	public StringBuilder caseType(Type object) {
-		return sb.append(object.getName());
 	}
 	@Override
 	public StringBuilder caseComment(Comment object) {

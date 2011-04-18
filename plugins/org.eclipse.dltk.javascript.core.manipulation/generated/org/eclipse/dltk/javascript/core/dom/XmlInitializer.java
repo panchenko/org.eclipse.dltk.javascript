@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: XmlInitializer.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
+ * $Id: XmlInitializer.java,v 1.3 2011/04/18 08:29:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom;
 
@@ -26,19 +26,19 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface XmlInitializer extends Expression {
 	/**
-     * Returns the value of the '<em><b>Fragments</b></em>' containment reference list.
-     * The list contents are of type {@link org.eclipse.dltk.javascript.core.dom.XmlFragment}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Fragments</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.dltk.javascript.core.dom.XmlFragment}.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Fragments</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-     * @return the value of the '<em>Fragments</em>' containment reference list.
-     * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getXmlInitializer_Fragments()
-     * @model containment="true" required="true"
-     * @generated
-     */
+	 * @return the value of the '<em>Fragments</em>' containment reference list.
+	 * @see org.eclipse.dltk.javascript.core.dom.DomPackage#getXmlInitializer_Fragments()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
 	EList<XmlFragment> getFragments();
 
 } // XmlInitializer

@@ -2,21 +2,17 @@
  * <copyright>
  * </copyright>
  *
- * $Id: ParameterImpl.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
+ * $Id: ParameterImpl.java,v 1.3 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
 import org.eclipse.dltk.javascript.core.dom.DomPackage;
 import org.eclipse.dltk.javascript.core.dom.Identifier;
 import org.eclipse.dltk.javascript.core.dom.Parameter;
-import org.eclipse.dltk.javascript.core.dom.Type;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -27,7 +23,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.ParameterImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.core.dom.impl.ParameterImpl#getType <em>Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -35,212 +30,147 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class ParameterImpl extends NodeImpl implements Parameter {
 	/**
-     * The cached value of the '{@link #getName() <em>Name</em>}' containment reference.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' containment reference.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getName()
-     * @generated
-     * @ordered
-     */
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
 	protected Identifier name;
 
 	/**
-     * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @see #getType()
-     * @generated
-     * @ordered
-     */
-	protected Type type;
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	protected ParameterImpl() {
-        super();
-    }
+		super();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
-        return DomPackage.Literals.PARAMETER;
-    }
+		return DomPackage.Literals.PARAMETER;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public Identifier getName() {
-        return name;
-    }
+		return name;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public NotificationChain basicSetName(Identifier newName, NotificationChain msgs) {
-        Identifier oldName = name;
-        name = newName;
-        if (eNotificationRequired()) {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.PARAMETER__NAME, oldName, newName);
-            if (msgs == null) msgs = notification; else msgs.add(notification);
-        }
-        return msgs;
-    }
+		Identifier oldName = name;
+		name = newName;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.PARAMETER__NAME, oldName, newName);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	public void setName(Identifier newName) {
-        if (newName != name) {
-            NotificationChain msgs = null;
-            if (name != null)
-                msgs = ((InternalEObject)name).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.PARAMETER__NAME, null, msgs);
-            if (newName != null)
-                msgs = ((InternalEObject)newName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.PARAMETER__NAME, null, msgs);
-            msgs = basicSetName(newName, msgs);
-            if (msgs != null) msgs.dispatch();
-        }
-        else if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.PARAMETER__NAME, newName, newName));
-    }
+		if (newName != name) {
+			NotificationChain msgs = null;
+			if (name != null)
+				msgs = ((InternalEObject)name).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.PARAMETER__NAME, null, msgs);
+			if (newName != null)
+				msgs = ((InternalEObject)newName).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.PARAMETER__NAME, null, msgs);
+			msgs = basicSetName(newName, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.PARAMETER__NAME, newName, newName));
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public Type getType() {
-        return type;
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public NotificationChain basicSetType(Type newType, NotificationChain msgs) {
-        Type oldType = type;
-        type = newType;
-        if (eNotificationRequired()) {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomPackage.PARAMETER__TYPE, oldType, newType);
-            if (msgs == null) msgs = notification; else msgs.add(notification);
-        }
-        return msgs;
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
-	public void setType(Type newType) {
-        if (newType != type) {
-            NotificationChain msgs = null;
-            if (type != null)
-                msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomPackage.PARAMETER__TYPE, null, msgs);
-            if (newType != null)
-                msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomPackage.PARAMETER__TYPE, null, msgs);
-            msgs = basicSetType(newType, msgs);
-            if (msgs != null) msgs.dispatch();
-        }
-        else if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.PARAMETER__TYPE, newType, newType));
-    }
-
-	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-        switch (featureID) {
-            case DomPackage.PARAMETER__NAME:
-                return basicSetName(null, msgs);
-            case DomPackage.PARAMETER__TYPE:
-                return basicSetType(null, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case DomPackage.PARAMETER__NAME:
+				return basicSetName(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-        switch (featureID) {
-            case DomPackage.PARAMETER__NAME:
-                return getName();
-            case DomPackage.PARAMETER__TYPE:
-                return getType();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case DomPackage.PARAMETER__NAME:
+				return getName();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
-        switch (featureID) {
-            case DomPackage.PARAMETER__NAME:
-                setName((Identifier)newValue);
-                return;
-            case DomPackage.PARAMETER__TYPE:
-                setType((Type)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case DomPackage.PARAMETER__NAME:
+				setName((Identifier)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
-        switch (featureID) {
-            case DomPackage.PARAMETER__NAME:
-                setName((Identifier)null);
-                return;
-            case DomPackage.PARAMETER__TYPE:
-                setType((Type)null);
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.PARAMETER__NAME:
+				setName((Identifier)null);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
-        switch (featureID) {
-            case DomPackage.PARAMETER__NAME:
-                return name != null;
-            case DomPackage.PARAMETER__TYPE:
-                return type != null;
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case DomPackage.PARAMETER__NAME:
+				return name != null;
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //ParameterImpl

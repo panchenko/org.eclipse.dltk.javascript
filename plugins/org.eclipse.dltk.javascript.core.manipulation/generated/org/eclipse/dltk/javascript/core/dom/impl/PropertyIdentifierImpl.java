@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: PropertyIdentifierImpl.java,v 1.2 2010/12/01 09:31:18 apanchenk Exp $
+ * $Id: PropertyIdentifierImpl.java,v 1.3 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -22,22 +22,22 @@ import org.eclipse.emf.ecore.EClass;
  */
 public abstract class PropertyIdentifierImpl extends ExpressionImpl implements PropertyIdentifier {
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	protected PropertyIdentifierImpl() {
-        super();
-    }
+		super();
+	}
 
 	/**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
-        return DomPackage.Literals.PROPERTY_IDENTIFIER;
-    }
+		return DomPackage.Literals.PROPERTY_IDENTIFIER;
+	}
 
 } //PropertyIdentifierImpl

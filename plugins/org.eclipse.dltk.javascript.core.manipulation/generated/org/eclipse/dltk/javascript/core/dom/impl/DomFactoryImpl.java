@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: DomFactoryImpl.java,v 1.3 2010/12/29 15:18:56 jcompagne Exp $
+ * $Id: DomFactoryImpl.java,v 1.4 2011/04/18 08:29:42 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.core.dom.impl;
 
@@ -122,7 +122,6 @@ public class DomFactoryImpl extends EFactoryImpl implements DomFactory {
 			case DomPackage.FILTER_EXPRESSION: return createFilterExpression();
 			case DomPackage.DEFAULT_XML_NAMESPACE_STATEMENT: return createDefaultXmlNamespaceStatement();
 			case DomPackage.FOR_EACH_IN_STATEMENT: return createForEachInStatement();
-			case DomPackage.TYPE: return createType();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -770,16 +769,6 @@ public class DomFactoryImpl extends EFactoryImpl implements DomFactory {
 	public ForEachInStatement createForEachInStatement() {
 		ForEachInStatementImpl forEachInStatement = new ForEachInStatementImpl();
 		return forEachInStatement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Type createType() {
-		TypeImpl type = new TypeImpl();
-		return type;
 	}
 
 	/**
