@@ -911,7 +911,11 @@ public final class JavaHeuristicScanner implements Symbols {
 				// or loop) or already a ;)
 				if (fChar == '\n' && fPos > 0) {
 					char ch = fDocument.getChar(fPos - 1);
-					if (ch != '\\' && ch != ';' && ch != '{' && ch != ')') {
+					if (ch == '\r' && fPos >= 2) {
+						ch = fDocument.getChar(fPos - 2);
+					}
+					if (ch != '\n' && ch != '\\' && ch != ';' && ch != '{'
+							&& ch != ')') {
 						return fPos;
 					}
 				}

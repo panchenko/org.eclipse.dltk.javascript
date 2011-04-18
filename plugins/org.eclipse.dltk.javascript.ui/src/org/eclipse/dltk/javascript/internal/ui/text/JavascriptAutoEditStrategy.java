@@ -34,7 +34,6 @@ import org.eclipse.jface.text.DocumentRewriteSession;
 import org.eclipse.jface.text.DocumentRewriteSessionType;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.IEditorPart;
@@ -211,24 +210,14 @@ public class JavascriptAutoEditStrategy extends
 
 			int start = reg.getOffset();
 			// insert closing brace on new line after an unclosed opening brace
-			if (closeBrace() && !isClosed(d, c.offset, c.length)) {
+			if (closeBrace()
+					&& countBrackets(d.get(), reg.getOffset(), c.offset, false) > 0
+					&& !isClosed(d, c.offset, c.length)) {
 				c.caretOffset = c.offset + buf.length();
 				c.shiftsCaret = false;
 
-				// copy old content of line behind insertion point to new line
-				// unless we think we are inserting an anonymous type definition
-				if (c.offset == 0
-						|| !(computeAnonymousPosition(d, c.offset - 1,
-								fPartitioning, lineEnd) != -1)) {
-					if (lineEnd - contentStart > 0) {
-						c.length = lineEnd - c.offset;
-						buf.append(d.get(contentStart, lineEnd - contentStart)
-								.toCharArray());
-					}
-				}
-
 				buf.append(TextUtilities.getDefaultLineDelimiter(d));
-				StringBuffer reference = null;
+				final StringBuffer reference;
 				int nonWS = findEndOfWhiteSpace(d, start, lineEnd);
 				if (nonWS < c.offset && d.getChar(nonWS) == '{')
 					reference = new StringBuffer(d.get(start, nonWS - start));
@@ -416,9 +405,9 @@ public class JavascriptAutoEditStrategy extends
 
 	private boolean isClosed(IDocument d, int offset, int length) {
 		String sm = d.get();
-		int levelBefore = countBrackets(sm, 0, offset);
-		int levelAfter = countBrackets(sm, offset, sm.length());
-		return levelBefore <= (levelAfter * -1);
+		int levelBefore = countBrackets(sm, 0, offset, true);
+		int levelAfter = -countBrackets(sm, offset, sm.length(), true);
+		return levelBefore <= levelAfter;
 	}
 
 	/**
@@ -426,7 +415,7 @@ public class JavascriptAutoEditStrategy extends
 	 * @param sm
 	 * @param levelBefore
 	 */
-	private int countBrackets(String sm, int start, int end) {
+	private int countBrackets(String sm, int start, int end, boolean countClose) {
 		int level = 0;
 		for (int a = start; a < end; a++) {
 			char charAt = sm.charAt(a);
@@ -506,209 +495,13 @@ public class JavascriptAutoEditStrategy extends
 				break;
 			}
 			case '}': {
-				level--;
+				if (countClose)
+					level--;
 				break;
 			}
 			}
 		}
 		return level;
-	}
-
-	/**
-	 * Computes an insert position for an opening brace if <code>offset</code>
-	 * maps to a position in <code>document</code> with a expression in
-	 * parenthesis that will take a block after the closing parenthesis.
-	 * 
-	 * @param document
-	 *            the document being modified
-	 * @param offset
-	 *            the offset of the caret position, relative to the line start.
-	 * @param partitioning
-	 *            the document partitioning
-	 * @param max
-	 *            the max position
-	 * @return an insert position relative to the line start if
-	 *         <code>line</code> contains a parenthesized expression that can be
-	 *         followed by a block, -1 otherwise
-	 */
-	private static int computeAnonymousPosition(IDocument document, int offset,
-			String partitioning, int max) {
-		// find the opening parenthesis for every closing parenthesis on the
-		// current line after offset
-		// return the position behind the closing parenthesis if it looks like a
-		// method declaration
-		// or an expression for an if, while, for, catch statement
-
-		JavaHeuristicScanner scanner = new JavaHeuristicScanner(document);
-		int pos = offset;
-		int length = max;
-		int scanTo = scanner.scanForward(pos, length, '}');
-		if (scanTo == -1)
-			scanTo = length;
-
-		int closingParen = findClosingParenToLeft(scanner, pos) - 1;
-
-		while (true) {
-			int startScan = closingParen + 1;
-			closingParen = scanner.scanForward(startScan, scanTo, ')');
-			if (closingParen == -1)
-				break;
-
-			int openingParen = scanner.findOpeningPeer(closingParen - 1, '(',
-					')');
-
-			// no way an expression at the beginning of the document can mean
-			// anything
-			if (openingParen < 1)
-				break;
-
-			// only select insert positions for parenthesis currently embracing
-			// the caret
-			if (openingParen > pos)
-				continue;
-
-			if (looksLikeAnonymousClassDef(document, partitioning, scanner,
-					openingParen - 1))
-				return closingParen + 1;
-
-		}
-
-		return -1;
-	}
-
-	/**
-	 * Finds a closing parenthesis to the left of <code>position</code> in
-	 * document, where that parenthesis is only separated by whitespace from
-	 * <code>position</code>. If no such parenthesis can be found,
-	 * <code>position</code> is returned.
-	 * 
-	 * @param scanner
-	 *            the java heuristic scanner set up on the document
-	 * @param position
-	 *            the first character position in <code>document</code> to be
-	 *            considered
-	 * @return the position of a closing parenthesis left to
-	 *         <code>position</code> separated only by whitespace, or
-	 *         <code>position</code> if no parenthesis can be found
-	 */
-	private static int findClosingParenToLeft(JavaHeuristicScanner scanner,
-			int position) {
-		if (position < 1)
-			return position;
-
-		if (scanner.previousToken(position - 1, JavaHeuristicScanner.UNBOUND) == Symbols.TokenRPAREN)
-			return scanner.getPosition() + 1;
-		return position;
-	}
-
-	/**
-	 * Checks whether the content of <code>document</code> in the range (
-	 * <code>offset</code>, <code>length</code>) contains the <code>new</code>
-	 * keyword.
-	 * 
-	 * @param document
-	 *            the document being modified
-	 * @param offset
-	 *            the first character position in <code>document</code> to be
-	 *            considered
-	 * @param length
-	 *            the length of the character range to be considered
-	 * @param partitioning
-	 *            the document partitioning
-	 * @return <code>true</code> if the specified character range contains a
-	 *         <code>new</code> keyword, <code>false</code> otherwise.
-	 */
-	private static boolean isNewMatch(IDocument document, int offset,
-			int length, String partitioning) {
-		Assert.isTrue(length >= 0);
-		Assert.isTrue(offset >= 0);
-		Assert.isTrue(offset + length < document.getLength() + 1);
-
-		try {
-			String text = document.get(offset, length);
-			int pos = text.indexOf("new"); //$NON-NLS-1$
-
-			while (pos != -1
-					&& !isDefaultPartition(document, pos + offset, partitioning))
-				pos = text.indexOf("new", pos + 2); //$NON-NLS-1$
-
-			if (pos < 0)
-				return false;
-
-			if (pos != 0
-					&& Character.isJavaIdentifierPart(text.charAt(pos - 1)))
-				return false;
-
-			if (pos + 3 < length
-					&& Character.isJavaIdentifierPart(text.charAt(pos + 3)))
-				return false;
-
-			return true;
-
-		} catch (BadLocationException e) {
-		}
-		return false;
-	}
-
-	/**
-	 * Checks whether the content of <code>document</code> at
-	 * <code>position</code> looks like an anonymous class definition.
-	 * <code>position</code> must be to the left of the opening parenthesis of
-	 * the definition's parameter list.
-	 * 
-	 * @param document
-	 *            the document being modified
-	 * @param position
-	 *            the first character position in <code>document</code> to be
-	 *            considered
-	 * @param partitioning
-	 *            the document partitioning
-	 * @return <code>true</code> if the content of <code>document</code> looks
-	 *         like an anonymous class definition, <code>false</code> otherwise
-	 */
-	private static boolean looksLikeAnonymousClassDef(IDocument document,
-			String partitioning, JavaHeuristicScanner scanner, int position) {
-		int previousCommaParenEqual = scanner.scanBackward(position - 1,
-				JavaHeuristicScanner.UNBOUND, new char[] { ',', '(', '=' });
-		if (previousCommaParenEqual == -1
-				|| position < previousCommaParenEqual + 5) // 2 for borders, 3
-			// for "new"
-			return false;
-
-		if (isNewMatch(document, previousCommaParenEqual + 1, position
-				- previousCommaParenEqual - 2, partitioning))
-			return true;
-
-		return false;
-	}
-
-	/**
-	 * Checks whether <code>position</code> resides in a default (Java)
-	 * partition of <code>document</code>.
-	 * 
-	 * @param document
-	 *            the document being modified
-	 * @param position
-	 *            the position to be checked
-	 * @param partitioning
-	 *            the document partitioning
-	 * @return <code>true</code> if <code>position</code> is in the default
-	 *         partition of <code>document</code>, <code>false</code> otherwise
-	 */
-	private static boolean isDefaultPartition(IDocument document, int position,
-			String partitioning) {
-		Assert.isTrue(position >= 0);
-		Assert.isTrue(position <= document.getLength());
-
-		try {
-			ITypedRegion region = TextUtilities.getPartition(document,
-					partitioning, position, false);
-			return region.getType().equals(IDocument.DEFAULT_CONTENT_TYPE);
-
-		} catch (BadLocationException e) {
-		}
-
-		return false;
 	}
 
 	/**

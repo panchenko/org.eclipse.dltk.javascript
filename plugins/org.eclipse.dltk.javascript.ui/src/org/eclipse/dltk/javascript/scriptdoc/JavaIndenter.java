@@ -541,7 +541,6 @@ public final class JavaIndenter {
 	 */
 	public StringBuffer computeIndentation(int offset,
 			boolean assumeOpeningBrace) {
-
 		StringBuffer reference = getReferenceIndentation(offset,
 				assumeOpeningBrace);
 
@@ -551,7 +550,7 @@ public final class JavaIndenter {
 				// a special case has been detected.
 				IRegion line = fDocument.getLineInformationOfOffset(fAlign);
 				int lineOffset = line.getOffset();
-				return createIndent(lineOffset, fAlign, false);
+				return createIndent(lineOffset, fAlign, true);
 			} catch (BadLocationException e) {
 				return null;
 			}
@@ -1534,38 +1533,40 @@ public final class JavaIndenter {
 			pos = fPosition; // store
 
 			// special: array initializer
-			if (looksLikeArrayInitializerIntro())
-				if (fPrefs.prefArrayDeepIndent)
-					return setFirstElementAlignment(pos, bound);
-				else
-					fIndent = fPrefs.prefArrayIndent;
-			else
-				fIndent = fPrefs.prefBlockIndent;
+
+			// if (looksLikeArrayInitializerIntro())
+			// if (fPrefs.prefArrayDeepIndent)
+			// return setFirstElementAlignment(pos, bound);
+			// else
+			// fIndent = fPrefs.prefArrayIndent;
+			// else
+			fIndent = fPrefs.prefBlockIndent;
 
 			// normal: skip to the statement start before the scope introducer
 			// opening braces are often on differently ending indents than e.g.
 			// a method definition
-			if (looksLikeArrayInitializerIntro()
-					&& !fPrefs.prefIndentBracesForArrays
-					|| !fPrefs.prefIndentBracesForBlocks) {
-				fPosition = pos; // restore
-				return skipToStatementStart(true, true); // set to true to
-				// match the first
-				// if
-			} else {
-				return pos;
-			}
+
+			// if (looksLikeArrayInitializerIntro()
+			// && !fPrefs.prefIndentBracesForArrays
+			// || !fPrefs.prefIndentBracesForBlocks) {
+			// fPosition = pos; // restore
+			// return skipToStatementStart(true, true); // set to true to
+			// // match the first
+			// // if
+			// } else {
+			return pos;
+			// }
 
 		case Symbols.TokenLBRACKET:
 			pos = fPosition; // store
 
-			// special: method declaration deep indentation
-			if (fPrefs.prefArrayDimensionsDeepIndent) {
-				return setFirstElementAlignment(pos, bound);
-			}
-
-			// normal: return the bracket as reference
-			fIndent = fPrefs.prefBracketIndent;
+			// // special: method declaration deep indentation
+			// if (fPrefs.prefArrayDimensionsDeepIndent) {
+			// return setFirstElementAlignment(pos, bound);
+			// }
+			//
+			// // normal: return the bracket as reference
+			// fIndent = fPrefs.prefBracketIndent;
 			return pos; // restore
 
 		default:
