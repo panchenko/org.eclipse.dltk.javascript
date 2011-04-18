@@ -14,7 +14,6 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 import java.util.List;
 
 import org.eclipse.dltk.ast.ASTNode;
-import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
@@ -27,7 +26,6 @@ import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class SelectionVisitor extends TypeInferencerVisitor {
 
@@ -111,21 +109,6 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 			VariableDeclaration declaration) {
 		check(declaration.getIdentifier());
 		return super.createVariable(context, declaration);
-	}
-
-	@Override
-	protected JSType resolveType(org.eclipse.dltk.javascript.ast.Type type) {
-		final JSType result = super.resolveType(type);
-		if (type == target) {
-			if (result != null) {
-				value = new ConstantValue(result);
-				value.setKind(ReferenceKind.TYPE);
-			} else {
-				value = null;
-			}
-			earlyExit();
-		}
-		return result;
 	}
 
 	@Override

@@ -60,9 +60,6 @@ public class JavaScriptValidations {
 			}
 		}
 		final JavaScriptParser parser = new JavaScriptParser();
-		if (module == null) {
-			parser.setTypeInformationEnabled(true);
-		}
 		final Script script = parser.parse(context,
 				context.getProblemReporter());
 		context.set(IBuildContext.ATTR_MODULE_DECLARATION, script);

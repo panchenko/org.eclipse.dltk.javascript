@@ -62,6 +62,8 @@ public class JSDocValidatorFactory {
 			} else if (type.getKind() == TypeKind.UNKNOWN
 					|| type.getKind() == TypeKind.UNRESOLVED) {
 				lst.add(new TagAndType(type, tag, context.currentCollection()));
+			} else {
+				checkDeprecatedType(type, tag);
 			}
 		}
 
@@ -130,17 +132,21 @@ public class JSDocValidatorFactory {
 						checkType(tag, unionTarget, collection);
 					}
 				} else {
-					final Type t = TypeUtil.extractType(type);
-					if (t != null && t.isDeprecated()) {
-						reporter.reportProblem(
-								JavaScriptProblems.DEPRECATED_TYPE, NLS.bind(
-										ValidationMessages.DeprecatedType,
-										TypeUtil.getName(type)),
-								tag.getStart(), tag.getEnd());
-					}
+					checkDeprecatedType(type, tag);
 				}
 			} else {
 				reportUnknownType(tag, TypeUtil.getName(type));
+			}
+		}
+
+		private void checkDeprecatedType(JSType type, JSDocTag tag) {
+			final Type t = TypeUtil.extractType(type);
+			if (t != null && t.isDeprecated()) {
+				reporter.reportProblem(
+						JavaScriptProblems.DEPRECATED_TYPE,
+						NLS.bind(ValidationMessages.DeprecatedType,
+								TypeUtil.getName(type)), tag.getStart(),
+						tag.getEnd());
 			}
 		}
 

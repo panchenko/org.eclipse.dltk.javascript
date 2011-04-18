@@ -28,7 +28,6 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
-import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
@@ -165,30 +164,13 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 				setName("<anonymous>");
 			}
 		}
-		org.eclipse.dltk.javascript.ast.Type funcType = node.getReturnType();
-		if (funcType != null) {
-			setType(resolveType(funcType));
-		}
 		for (Argument argument : node.getArguments()) {
 			final IParameter parameter = createParameter();
 			parameter.setName(argument.getIdentifier().getName());
-			org.eclipse.dltk.javascript.ast.Type paramType = argument.getType();
-			if (paramType != null) {
-				parameter.setType(resolveType(paramType));
-				parameter.setLocation(ReferenceLocation.create(source,
-						argument.sourceStart(), paramType.sourceEnd(),
-						argument.sourceStart(), argument.sourceEnd()));
-			} else {
-				parameter.setLocation(ReferenceLocation.create(source,
-						argument.sourceStart(), argument.sourceEnd()));
-			}
+			parameter.setLocation(ReferenceLocation.create(source,
+					argument.sourceStart(), argument.sourceEnd()));
 			getParameters().add(parameter);
 		}
-	}
-
-	protected static JSType resolveType(
-			org.eclipse.dltk.javascript.ast.Type type) {
-		return TypeUtil.ref(type.getName());
 	}
 
 	public static class Parameter extends JSElement implements IParameter {

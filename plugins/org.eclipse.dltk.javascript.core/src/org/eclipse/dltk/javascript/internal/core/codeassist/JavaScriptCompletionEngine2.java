@@ -17,7 +17,6 @@ import java.util.Set;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
-import org.eclipse.dltk.compiler.util.Util;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IAccessRule;
 import org.eclipse.dltk.core.ISourceModule;
@@ -29,9 +28,7 @@ import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
-import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
@@ -89,54 +86,30 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			// don't complete inside string literals
 			return;
 		}
-		final org.eclipse.dltk.javascript.ast.Type typeNode = nodeFinder
-				.getType();
-		boolean completeTypes = typeNode != null;
-		if (!completeTypes) {
-			if (nodeFinder.before instanceof Identifier
-					&& nodeFinder.before == nodeFinder.after
-					&& content.charAt(position - 1) == ':') {
-				completeTypes = true;
-			}
+		final PositionCalculator calculator = new PositionCalculator(content,
+				position, false);
+		final CompletionVisitor visitor = new CompletionVisitor(inferencer2,
+				position);
+		inferencer2.setVisitor(visitor);
+		if (cu instanceof org.eclipse.dltk.core.ISourceModule) {
+			inferencer2
+					.setModelElement((org.eclipse.dltk.core.ISourceModule) cu);
 		}
-		if (completeTypes) {
-			String typePrefix = Util.EMPTY_STRING;
-			if (typeNode instanceof SimpleType) {
-				typePrefix = typeNode.getName();
-				if (nodeFinder.end >= typeNode.sourceStart()
-						&& nodeFinder.end < typeNode.sourceEnd()) {
-					typePrefix = typePrefix.substring(0, nodeFinder.end
-							- typeNode.sourceStart());
-				}
-			}
-			doCompletionOnType(inferencer2, new Reporter(typePrefix, position));
-		} else {
-			final PositionCalculator calculator = new PositionCalculator(
-					content, position, false);
-			final CompletionVisitor visitor = new CompletionVisitor(
-					inferencer2, position);
-			inferencer2.setVisitor(visitor);
-			if (cu instanceof org.eclipse.dltk.core.ISourceModule) {
-				inferencer2
-						.setModelElement((org.eclipse.dltk.core.ISourceModule) cu);
-			}
-			try {
-				inferencer2.doInferencing(script);
-			} catch (PositionReachedException e) {
-				// e.printStackTrace();
-			}
+		try {
+			inferencer2.doInferencing(script);
+		} catch (PositionReachedException e) {
+			// e.printStackTrace();
+		}
 
-			final CompletionPath path = new CompletionPath(
-					calculator.getCompletion());
-			final Reporter reporter = new Reporter(path.lastSegment(), position);
-			if (calculator.isMember() && !path.isEmpty()
-					&& path.lastSegment() != null) {
-				doCompletionOnMember(inferencer2, visitor.getCollection(),
-						path, reporter);
-			} else {
-				doGlobalCompletion(inferencer2, visitor.getCollection(),
-						reporter);
-			}
+		final CompletionPath path = new CompletionPath(
+				calculator.getCompletion());
+		final Reporter reporter = new Reporter(path.lastSegment(), position);
+		if (calculator.isMember() && !path.isEmpty()
+				&& path.lastSegment() != null) {
+			doCompletionOnMember(inferencer2, visitor.getCollection(), path,
+					reporter);
+		} else {
+			doGlobalCompletion(inferencer2, visitor.getCollection(), reporter);
 		}
 		this.requestor.endReporting();
 	}

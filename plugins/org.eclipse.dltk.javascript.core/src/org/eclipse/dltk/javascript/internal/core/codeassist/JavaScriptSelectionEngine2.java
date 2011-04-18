@@ -38,7 +38,6 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -117,7 +116,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			if (DEBUG) {
 				System.out.println(node.getClass().getName() + "=" + node); //$NON-NLS-1$
 			}
-			if (node instanceof Identifier || node instanceof SimpleType) {
+			if (node instanceof Identifier) {
 				final TypeInferencer2 inferencer2 = new TypeInferencer2();
 				final SelectionVisitor visitor = new SelectionVisitor(
 						inferencer2, node);

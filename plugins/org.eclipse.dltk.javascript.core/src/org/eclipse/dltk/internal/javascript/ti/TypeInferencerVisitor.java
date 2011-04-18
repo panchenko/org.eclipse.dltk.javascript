@@ -66,7 +66,6 @@ import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
@@ -369,11 +368,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference reference = context.createChild(varName);
 		final JSVariable variable = new JSVariable();
 		variable.setName(declaration.getVariableName());
-		final org.eclipse.dltk.javascript.ast.Type varType = declaration
-				.getType();
-		if (varType != null) {
-			variable.setType(resolveType(varType));
-		}
 		if (declaration.getParent() instanceof VariableStatement) {
 			final VariableStatement statement = (VariableStatement) declaration
 					.getParent();
@@ -390,10 +384,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
 		initializeVariable(reference, declaration, variable);
-		if (varType == null)
-			setTypeImpl(reference, variable.getType());
-		else
-			setType(identifier, reference, variable.getType(), true);
+		setTypeImpl(reference, variable.getType());
 		return reference;
 	}
 
@@ -540,11 +531,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference returnValue = result
 				.getChild(IValueReference.FUNCTION_OP);
 		returnValue.addValue(function.getReturnValue(), true);
-		if (node.getReturnType() == null)
-			setTypeImpl(returnValue, method.getType());
-		else
-			setType(methodName != null ? methodName : node.getFunctionKeyword(),
-					returnValue, method.getType(), true);
+		setTypeImpl(returnValue, method.getType());
 		return result;
 	}
 
@@ -576,10 +563,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	public void visitFunctionBody(FunctionStatement node) {
 		visit(node.getBody());
-	}
-
-	protected JSType resolveType(org.eclipse.dltk.javascript.ast.Type type) {
-		return context.getTypeRef(type.getName());
 	}
 
 	public void setType(ASTNode node, IValueReference value, JSType type,
@@ -930,12 +913,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitScript(Script node) {
 		return visit(node.getStatements());
-	}
-
-	@Override
-	public IValueReference visitSimpleType(SimpleType node) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
