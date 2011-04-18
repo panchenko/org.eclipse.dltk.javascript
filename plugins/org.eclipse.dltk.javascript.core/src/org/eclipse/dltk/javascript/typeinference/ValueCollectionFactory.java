@@ -92,14 +92,22 @@ public class ValueCollectionFactory {
 				inferencer.doInferencing(script);
 				IValueCollection collection = inferencer.getCollection();
 				inferencer.setVisitor(null);
-				if (!resolve)
-					collection = ImmutableValueCollection
-							.getImmutableValueCollection(collection,
-									new HashMap<Object, Object>());
 				return collection;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Make a immutable collection of the give collection.
+	 * 
+	 * @param collection
+	 * 
+	 * @return the immutable value collection
+	 */
+	public static IValueCollection makeImmutable(IValueCollection collection) {
+		return ImmutableValueCollection.getImmutableValueCollection(collection,
+				new HashMap<Object, Object>());
 	}
 
 	/**
