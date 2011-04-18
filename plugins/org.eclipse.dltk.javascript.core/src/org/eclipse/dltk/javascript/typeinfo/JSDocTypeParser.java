@@ -95,10 +95,10 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 						input.index() - 1);
 				input.consume();
 				match(input, ']');
-				return TypeUtil.arrayOf(translate(baseType));
+				return createArray(translate(baseType));
 			} else if (ch == CharStream.EOF || Character.isWhitespace(ch)
 					|| ch == '|' || ch == ',' || ch == '}' || ch == '>') {
-				return TypeUtil.ref(translate(input.substring(start,
+				return createType(translate(input.substring(start,
 						input.index() - 1)));
 			} else {
 				input.consume();
@@ -106,12 +106,24 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 		}
 	}
 
+	protected JSType createType(String typeName) {
+		return TypeUtil.ref(typeName);
+	}
+
+	protected JSType createArray(String typeName) {
+		return TypeUtil.arrayOf(typeName);
+	}
+
+	protected JSType createArray(JSType itemType) {
+		return TypeUtil.arrayOf(itemType);
+	}
+
 	protected JSType createGenericType(String baseType, List<JSType> typeParams) {
 		if (ITypeNames.ARRAY.equals(baseType)) {
 			if (typeParams.size() >= 1) {
-				return TypeUtil.arrayOf(typeParams.get(0));
+				return createArray(typeParams.get(0));
 			} else {
-				return TypeUtil.arrayOf(ITypeNames.OBJECT);
+				return createArray(ITypeNames.OBJECT);
 			}
 		} else if (ITypeNames.OBJECT.equals(baseType)) {
 			if (typeParams.size() == 1) {
