@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 
 public interface JSCompletionEngine extends ICompletionEngine {
 
@@ -20,6 +21,7 @@ public interface JSCompletionEngine extends ICompletionEngine {
 
 	void setUseEngine(boolean useEngine);
 
-	void completeTypes(ISourceModule module, String prefix, int offset);
+	void completeTypes(ISourceModule module, TypeMode mode, String prefix,
+			int offset);
 
 }

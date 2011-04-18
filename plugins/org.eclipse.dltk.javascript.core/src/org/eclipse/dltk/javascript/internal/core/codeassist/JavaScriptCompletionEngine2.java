@@ -39,6 +39,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -114,15 +115,16 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		this.requestor.endReporting();
 	}
 
-	public void completeTypes(ISourceModule module, String prefix, int offset) {
+	public void completeTypes(ISourceModule module, TypeMode mode,
+			String prefix, int offset) {
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		inferencer2.setModelElement(module);
-		doCompletionOnType(inferencer2, new Reporter(prefix, offset));
+		doCompletionOnType(inferencer2, mode, new Reporter(prefix, offset));
 	}
 
 	private void doCompletionOnType(ITypeInferenceContext context,
-			Reporter reporter) {
-		Set<String> typeNames = context.listTypes(reporter.getPrefix());
+			TypeMode mode, Reporter reporter) {
+		Set<String> typeNames = context.listTypes(mode, reporter.getPrefix());
 		for (String typeName : typeNames) {
 			final Type type = context.getType(typeName);
 			if (type != null && type.isVisible()) {
@@ -475,7 +477,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			IValueCollection collection, Reporter reporter) {
 		reportItems(context, reporter, collection, false);
 		if (useEngine) {
-			doCompletionOnType(context, reporter);
+			doCompletionOnType(context, TypeMode.CODE, reporter);
 			doCompletionOnKeyword(reporter.getPrefix(), reporter.getPosition());
 			reportGlobals(context, reporter);
 		}

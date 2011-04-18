@@ -102,6 +102,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
+import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -749,7 +750,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							.getPath(objectClass);
 					if (className != null) {
 						Type type = TypeInfoModelFactory.eINSTANCE.createType();
-						type.setSuperType(context.getKnownType(OBJECT));
+						type.setSuperType(context.getKnownType(OBJECT, null));
 						type.setKind(TypeKind.JAVASCRIPT);
 						type.setName(className);
 						result.setDeclaredType(TypeUtil.ref(type));
@@ -783,7 +784,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					.getPath(objectClass);
 			IValueCollection contextValueCollection = peekContext();
 			if (className != null) {
-				Type knownType = context.getKnownType(className);
+				Type knownType = context.getKnownType(className, TypeMode.CODE);
 				if (knownType != null) {
 					result = new AnonymousNewValue();
 					result.setValue(context.getFactory().create(
@@ -810,7 +811,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitObjectInitializer(ObjectInitializer node) {
 		final IValueReference result = new AnonymousValue();
-		result.setDeclaredType(TypeUtil.ref(context.getKnownType(OBJECT)));
+		result.setDeclaredType(TypeUtil.ref(context.getKnownType(OBJECT, null)));
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;
@@ -1065,7 +1066,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				peekContext());
 
 		if (xmlValueReference instanceof IValueProvider) {
-			JSType xmlType = TypeUtil.ref(context.getKnownType(ITypeNames.XML));
+			JSType xmlType = TypeUtil.ref(context.getKnownType(ITypeNames.XML,
+					null));
 			IValue xmlValue = ((IValueProvider) xmlValueReference).getValue();
 			List<XmlFragment> fragments = node.getFragments();
 			StringBuilder xml = new StringBuilder();

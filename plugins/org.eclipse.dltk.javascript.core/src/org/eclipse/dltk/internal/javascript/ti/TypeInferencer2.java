@@ -38,6 +38,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSType2;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
+import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -134,19 +135,21 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return null;
 		}
 		final boolean queryProviders = canQueryTypeProviders();
-		return getType(typeName, queryProviders, true, !queryProviders, true);
+		return getType(typeName, null, queryProviders, true, !queryProviders,
+				true);
 	}
 
 	public TypeRef getTypeRef(String typeName) {
 		return TypeUtil.ref(getType(typeName));
 	}
 
-	public Type getKnownType(String typeName) {
+	public Type getKnownType(String typeName, TypeMode mode) {
 		if (typeName == null || typeName.length() == 0) {
 			return null;
 		}
 		final boolean queryProviders = canQueryTypeProviders();
-		return getType(typeName, queryProviders, true, !queryProviders, false);
+		return getType(typeName, mode, queryProviders, true, !queryProviders,
+				false);
 	}
 
 	private boolean isResolved(JSType type) {
@@ -222,7 +225,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		if (type.isProxy()) {
 			final String typeName = URI.decode(((InternalEObject) type)
 					.eProxyURI().fragment());
-			final Type resolved = getType(typeName, true, true, false, true);
+			final Type resolved = getType(typeName, null, true, true, false,
+					true);
 			if (resolved != null) {
 				return resolved;
 			}
@@ -230,7 +234,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return type;
 	}
 
-	public Set<String> listTypes(String prefix) {
+	public Set<String> listTypes(TypeMode mode, String prefix) {
 		Set<String> result = new HashSet<String>();
 		Set<String> typeNames = TypeInfoModelLoader.getInstance().listTypes(
 				prefix);
@@ -238,7 +242,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			result.addAll(typeNames);
 		}
 		for (ITypeProvider provider : getTypeProviders()) {
-			typeNames = provider.listTypes(this, prefix);
+			typeNames = provider.listTypes(this, mode, prefix);
 			if (typeNames != null) {
 				result.addAll(typeNames);
 			}
@@ -279,8 +283,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		SIMPLE, PROXY, UNKNOWN
 	}
 
-	private Type getType(String typeName, boolean queryProviders,
-			boolean queryPredefined, boolean allowProxy, boolean allowUnknown) {
+	private Type getType(String typeName, TypeMode mode,
+			boolean queryProviders, boolean queryPredefined,
+			boolean allowProxy, boolean allowUnknown) {
 		Type type = types.get(typeName);
 		if (type != null) {
 			if (!allowUnknown && type.getKind() == TypeKind.UNKNOWN) {
@@ -293,7 +298,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			types.put(typeName, type);
 			return type;
 		}
-		type = loadType(typeName, queryProviders, queryPredefined);
+		type = loadType(typeName, mode, queryProviders, queryPredefined);
 		if (type != null) {
 			validateTypeInfo(type);
 			types.put(typeName, type);
@@ -394,8 +399,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return activeTypeRequests.isEmpty();
 	}
 
-	private Type loadType(String typeName, boolean queryProviders,
-			boolean queryPredefined) {
+	private Type loadType(String typeName, TypeMode mode,
+			boolean queryProviders, boolean queryPredefined) {
 		if (queryProviders
 				&& activeTypeRequests.put(typeName, Boolean.FALSE) == null) {
 			try {
@@ -404,7 +409,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					return type;
 				}
 				for (ITypeProvider provider : getTypeProviders()) {
-					type = provider.getType(this, typeName);
+					type = provider.getType(this, mode, typeName);
 					if (type != null && !isProxy(type)) {
 						return type;
 					}
@@ -485,7 +490,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	private final TypeResourceSet typeRS = new TypeResourceSet() {
 		@Override
 		protected Type resolveTypeProxy(String typeName) {
-			return getType(typeName, true, false, false, false);
+			return getType(typeName, null, true, false, false, false);
 		}
 	};
 
@@ -523,14 +528,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return context;
 		}
 
-		private Type getType(String typeName, boolean queryProviders,
-				boolean queryPredefined, boolean allowProxy,
-				boolean allowUnknown) {
+		private Type getType(String typeName, TypeMode mode,
+				boolean queryProviders, boolean queryPredefined,
+				boolean allowProxy, boolean allowUnknown) {
 			Type type = types.get(typeName);
 			if (type != null) {
 				return type;
 			}
-			type = loadType(typeName, queryProviders, queryPredefined);
+			type = loadType(typeName, mode, queryProviders, queryPredefined);
 			if (type != null) {
 				// TODO validateTypeInfo(type);
 				addToResource(type);
@@ -561,8 +566,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return typeProviders;
 		}
 
-		private Type loadType(String typeName, boolean queryProviders,
-				boolean queryPredefined) {
+		private Type loadType(String typeName, TypeMode mode,
+				boolean queryProviders, boolean queryPredefined) {
 			if (queryProviders) {
 				synchronized (activeTypeRequests) {
 					while (!activeTypeRequests.add(typeName)) {
@@ -578,7 +583,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 						return type;
 					}
 					for (ITypeProvider provider : getTypeProviders()) {
-						type = provider.getType(this, typeName);
+						type = provider.getType(this, mode, typeName);
 						if (type != null && !isProxy(type)) {
 							return type;
 						}
@@ -606,7 +611,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				if (cachedType != null)
 					return cachedType;
 			}
-			return getType(typeName, true, false, false, false);
+			return getType(typeName, null, true, false, false, false);
 		}
 
 		public Type getType(String typeName) {
@@ -614,17 +619,17 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				return null;
 			}
 			final boolean queryProviders = canQueryTypeProviders();
-			return getType(typeName, queryProviders, true, !queryProviders,
-					true);
+			return getType(typeName, null, queryProviders, true,
+					!queryProviders, true);
 		}
 
-		public Type getKnownType(String typeName) {
+		public Type getKnownType(String typeName, TypeMode mode) {
 			if (typeName == null || typeName.length() == 0) {
 				return null;
 			}
 			final boolean queryProviders = canQueryTypeProviders();
-			return getType(typeName, queryProviders, true, !queryProviders,
-					false);
+			return getType(typeName, null, queryProviders, true,
+					!queryProviders, false);
 		}
 
 		public void markInvariant(Type type) {

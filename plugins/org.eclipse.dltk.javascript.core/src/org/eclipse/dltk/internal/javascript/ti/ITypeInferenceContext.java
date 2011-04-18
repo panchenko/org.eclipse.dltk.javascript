@@ -17,6 +17,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
+import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
@@ -28,7 +29,7 @@ public interface ITypeInferenceContext extends ITypeInfoContext {
 
 	Set<String> listGlobals(String prefix);
 
-	Set<String> listTypes(String prefix);
+	Set<String> listTypes(TypeMode mode, String prefix);
 
 	IValue valueOf(Member member);
 

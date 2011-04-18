@@ -23,7 +23,8 @@ public class LazyTypeReference extends AbstractReference {
 			if (!resolved && doResolve) {
 				IValueReference createChild = collection.getChild(className);
 				if (createChild.exists()
-						&& createChild.getAttribute(IReferenceAttributes.RESOLVING) == null) {
+						&& createChild
+								.getAttribute(IReferenceAttributes.RESOLVING) == null) {
 					IValueCollection collection = (IValueCollection) createChild
 							.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 					if (collection != null && collection.getThis() != null) {
@@ -43,7 +44,7 @@ public class LazyTypeReference extends AbstractReference {
 					}
 					setKind(ReferenceKind.TYPE);
 					Type type = TypeInfoModelFactory.eINSTANCE.createType();
-					type.setSuperType(context.getKnownType(OBJECT));
+					type.setSuperType(context.getKnownType(OBJECT, null));
 					type.setKind(TypeKind.JAVASCRIPT);
 					type.setName(className);
 					setDeclaredType(TypeUtil.ref(type));

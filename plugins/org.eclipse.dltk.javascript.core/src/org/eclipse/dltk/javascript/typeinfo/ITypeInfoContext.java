@@ -42,9 +42,13 @@ public interface ITypeInfoContext {
 	 * compared to {@link #getType(String)} is that this function returns
 	 * <code>null</code> instead of {@link TypeKind#UNKNOWN} type.
 	 * 
+	 * @param typeName
+	 *            the name of the type
+	 * @param mode
+	 *            the mode or <code>null</code> if unknown
 	 * @since 3.0
 	 */
-	Type getKnownType(String typeName);
+	Type getKnownType(String typeName, TypeMode mode);
 
 	/**
 	 * Mark the specified type as invariant - not depending on the current

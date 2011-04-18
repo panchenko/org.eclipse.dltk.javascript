@@ -26,17 +26,31 @@ public interface ITypeProvider {
 	 */
 	boolean initialize(ITypeInfoContext context);
 
-	public Type getType(ITypeInfoContext context, String typeName);
+	/**
+	 * Returns type with the specified name or <code>null</code>
+	 * 
+	 * @param context
+	 *            operation context
+	 * @param mode
+	 *            type mode, can be <code>null</code>
+	 * @param typeName
+	 *            the type name
+	 * @return
+	 */
+	public Type getType(ITypeInfoContext context, TypeMode mode, String typeName);
 
 	/**
 	 * Return the type names starting with the specified prefix
 	 * 
 	 * @param context
 	 *            operation context
+	 * @param mode
+	 *            type mode, not <code>null</code>
 	 * @param prefix
 	 *            the prefix, not <code>null</code>
 	 * @return
 	 */
-	public Set<String> listTypes(ITypeInfoContext context, String prefix);
+	public Set<String> listTypes(ITypeInfoContext context, TypeMode mode,
+			String prefix);
 
 }

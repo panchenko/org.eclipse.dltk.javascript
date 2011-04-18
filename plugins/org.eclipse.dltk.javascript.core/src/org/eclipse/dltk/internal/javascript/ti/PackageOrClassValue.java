@@ -12,7 +12,7 @@ public class PackageOrClassValue extends Value {
 		this.name = name;
 		this.context = context;
 		// Try to resolve it with the name with the Packages prefix.
-		Type type = context.getKnownType("Packages." + name);
+		Type type = context.getKnownType("Packages." + name, null);
 		if (type != null) {
 			types.add(TypeUtil.staticRef(type));
 		}
