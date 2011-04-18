@@ -48,6 +48,7 @@ import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.environment.EnvironmentManager;
 import org.eclipse.dltk.core.environment.IExecutionEnvironment;
 import org.eclipse.dltk.core.environment.IFileHandle;
+import org.eclipse.dltk.debug.ui.messages.DLTKLaunchConfigurationsMessages;
 import org.eclipse.dltk.internal.ui.util.SWTUtil;
 import org.eclipse.dltk.javascript.launching.JavaScriptLaunchingPlugin;
 import org.eclipse.dltk.launching.ScriptLaunchConfigurationConstants;
@@ -185,8 +186,12 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 	public void createControl(Composite parent) {
 		Composite comp = new Composite(parent, SWT.NONE);
 		setControl(comp);
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),
-				IDebugHelpContextIds.LAUNCH_CONFIGURATION_DIALOG_COMMON_TAB);
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(
+						getControl(),
+						IDebugHelpContextIds.LAUNCH_CONFIGURATION_DIALOG_COMMON_TAB);
 		comp.setLayout(new GridLayout(2, true));
 		comp.setFont(parent.getFont());
 
@@ -833,7 +838,7 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 	private boolean validateEncoding() {
 		if (fAltEncodingButton.getSelection()) {
 			if (fEncodingCombo.getSelectionIndex() == -1) {
-				setErrorMessage(LaunchConfigurationsMessages.CommonTab_No_Encoding_Selected);
+				setErrorMessage(DLTKLaunchConfigurationsMessages.commonTab_EncodingNotSupported);
 				return false;
 			}
 		}
@@ -955,8 +960,8 @@ public class JavaScriptCommonTab extends AbstractLaunchConfigurationTab {
 				if (proxyFile != null) {
 					configuration.setAttribute("environmentId", proxyFile
 							.getEnvironment().getId());
-					configuration.setAttribute("proxy_path", proxyFile
-							.toOSString());
+					configuration.setAttribute("proxy_path",
+							proxyFile.toOSString());
 				}
 			} catch (IOException e) {
 				if (DLTKCore.DEBUG) {
