@@ -131,11 +131,6 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 				return visitor.visitIdentifier((Identifier) node);
 			}
 		});
-		HANDLERS.put(SimpleType.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitSimpleType((SimpleType) node);
-			}
-		});
 		HANDLERS.put(IfStatement.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 				return visitor.visitIfStatement((IfStatement) node);
@@ -391,8 +386,6 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 	}
 
 	public abstract E visitIdentifier(Identifier node);
-
-	public abstract E visitSimpleType(SimpleType node);
 
 	public abstract E visitIfStatement(IfStatement node);
 

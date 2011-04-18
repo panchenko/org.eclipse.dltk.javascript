@@ -19,7 +19,6 @@ public class VariableDeclaration extends JSNode implements ISourceable {
 
 	private Identifier identifier;
 	private int colonPosition = -1;
-	private Type type;
 	private int assignPosition = -1;
 	private Expression initializer;
 	private int commaPosition = -1;
@@ -36,10 +35,6 @@ public class VariableDeclaration extends JSNode implements ISourceable {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(identifier != null ? identifier.getName()
 				: JSLiterals.ERROR_TOKEN);
-		if (type != null) {
-			sb.append(JSLiterals.COLON);
-			sb.append(type.toSourceString(indentationString));
-		}
 		if (initializer != null) {
 			sb.append(JSLiterals.ASSIGN);
 			sb.append(initializer.toSourceString(indentationString));
@@ -52,9 +47,6 @@ public class VariableDeclaration extends JSNode implements ISourceable {
 		if (visitor.visit(this)) {
 			if (identifier != null) {
 				identifier.traverse(visitor);
-			}
-			if (type != null) {
-				type.traverse(visitor);
 			}
 			if (initializer != null) {
 				initializer.traverse(visitor);
@@ -108,14 +100,6 @@ public class VariableDeclaration extends JSNode implements ISourceable {
 
 	public void setIdentifier(Identifier name) {
 		this.identifier = name;
-	}
-
-	public Type getType() {
-		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
 	}
 
 	public Expression getInitializer() {

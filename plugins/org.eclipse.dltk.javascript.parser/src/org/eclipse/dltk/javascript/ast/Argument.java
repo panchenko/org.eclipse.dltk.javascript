@@ -13,13 +13,11 @@ package org.eclipse.dltk.javascript.ast;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
-import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class Argument extends JSNode implements ISourceable {
 
 	private Identifier identifier;
 	private int colonPosition = -1;
-	private Type type;
 	private int commaPosition = -1;
 
 	public Argument(ASTNode parent) {
@@ -46,14 +44,6 @@ public class Argument extends JSNode implements ISourceable {
 		this.colonPosition = colonPosition;
 	}
 
-	public Type getType() {
-		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
-	}
-
 	/**
 	 * Returns the comma position after this variable or -1 if this is the last
 	 * variable in statement.
@@ -77,10 +67,6 @@ public class Argument extends JSNode implements ISourceable {
 	public String toSourceString(String indentationString) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(identifier.toSourceString(indentationString));
-		if (type != null) {
-			sb.append(JSLiterals.COLON);
-			sb.append(type.toSourceString(indentationString));
-		}
 		return sb.toString();
 	}
 
@@ -88,9 +74,6 @@ public class Argument extends JSNode implements ISourceable {
 	public void traverse(ASTVisitor visitor) throws Exception {
 		if (identifier != null) {
 			identifier.traverse(visitor);
-		}
-		if (type != null) {
-			type.traverse(visitor);
 		}
 	}
 

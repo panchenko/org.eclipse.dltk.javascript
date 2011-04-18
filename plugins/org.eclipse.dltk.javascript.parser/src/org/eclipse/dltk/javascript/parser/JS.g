@@ -335,16 +335,6 @@ public Token nextToken()
 
 @parser::members
 {
-private boolean typeInformationEnabled;
-
-public final boolean isTypeInformationEnabled() {
-	return typeInformationEnabled;
-}
-
-public void setTypeInformationEnabled(boolean value) {
-	this.typeInformationEnabled = value;
-}
-
 protected void reportFailure(Throwable t) {
 }
 
@@ -368,10 +358,6 @@ public JSParserState peekState() {
 }
 
 protected void syncToSet() {
-}
-
-protected void typeRefExpected() {
-	throw new UnsupportedOperationException("override typeRefExpected()");
 }
 
 protected void reportReservedKeyword(Token token) {
@@ -1433,17 +1419,12 @@ variableStatement
 	-> ^( VAR variableDeclaration+ )
 	;
 
-typeRef
-	: identifier
-	| { typeRefExpected(); }
-	;
-
 variableDeclaration
-	: identifier^ ( { isTypeInformationEnabled() }?=> COLON typeRef )? ( ASSIGN assignmentExpression )?
+	: identifier^ ( ASSIGN assignmentExpression )?
 	;
 	
 variableDeclarationNoIn
-	: identifier^ ( { isTypeInformationEnabled() }?=> COLON typeRef )? ( ASSIGN assignmentExpressionNoIn )?
+	: identifier^ ( ASSIGN assignmentExpressionNoIn )?
 	;
 
 constStatement
@@ -1739,17 +1720,17 @@ finallyClause
 // $<	Function Definition (13)
 
 functionDeclaration
-	: function=FUNCTION name=identifier formalParameterList ( { isTypeInformationEnabled() }?=> COLON typeRef )? functionBody
-	-> ^( FUNCTION_DECLARATION[$function] $name formalParameterList COLON? typeRef? functionBody )
+	: function=FUNCTION name=identifier formalParameterList functionBody
+	-> ^( FUNCTION_DECLARATION[$function] $name formalParameterList functionBody )
 	;
 
 functionExpression
-	: FUNCTION name=identifier? formalParameterList ( { isTypeInformationEnabled() }?=> COLON typeRef )? functionBody
-	-> ^( FUNCTION $name? formalParameterList COLON? typeRef? functionBody )
+	: FUNCTION name=identifier? formalParameterList functionBody
+	-> ^( FUNCTION $name? formalParameterList functionBody )
 	;
 
 formalParameter
-	: identifier^ ( { isTypeInformationEnabled() }?=> COLON typeRef )?
+	: identifier^
 	;
 
 formalParameterList

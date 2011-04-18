@@ -31,7 +31,6 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 	private int LP = -1;
 	private int RP = -1;
 	private int colonPosition = -1;
-	private Type returnType;
 	private Comment documentation;
 	private final boolean declaration;
 
@@ -55,9 +54,6 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 				for (ASTNode node : arguments) {
 					node.traverse(visitor);
 				}
-			}
-			if (returnType != null) {
-				returnType.traverse(visitor);
 			}
 			if (body != null)
 				body.traverse(visitor);
@@ -143,14 +139,6 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 		this.colonPosition = colonPosition;
 	}
 
-	public Type getReturnType() {
-		return returnType;
-	}
-
-	public void setReturnType(Type returnType) {
-		this.returnType = returnType;
-	}
-
 	@Override
 	public Comment getDocumentation() {
 		return documentation;
@@ -189,10 +177,6 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 		}
 
 		buffer.append(")");
-		if (returnType != null) {
-			buffer.append(JSLiterals.COLON);
-			buffer.append(returnType.toSourceString(indentationString));
-		}
 		buffer.append(JSLiterals.EOL);
 		buffer.append(getBody().toSourceString(indentationString));
 

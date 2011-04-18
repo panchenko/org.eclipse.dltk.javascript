@@ -44,16 +44,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 
 	public static final String PARSER_ID = "org.eclipse.dltk.javascript.NewParser";
 
-	private boolean typeInformationEnabled = false;
-
-	public boolean isTypeInformationEnabled() {
-		return typeInformationEnabled;
-	}
-
-	public void setTypeInformationEnabled(boolean typeInformationEnabled) {
-		this.typeInformationEnabled = typeInformationEnabled;
-	}
-
 	private static class JSInternalParser extends JSParser {
 
 		private final Reporter reporter;
@@ -252,19 +242,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 		}
 
 		@Override
-		protected void typeRefExpected() {
-			final Token colon = input.LT(-1);
-			final ISourceRange colonRange = convert(colon);
-			reporter.setMessage(JavaScriptParserProblems.SYNTAX_ERROR,
-					"Type name expected after colon");
-			reporter.setSeverity(ProblemSeverity.ERROR);
-			reporter.setRange(colonRange.getOffset(), colonRange.getOffset()
-					+ colonRange.getLength());
-			reporter.setLine(colon.getLine() - 1);
-			reporter.report();
-		}
-
-		@Override
 		protected void reportReservedKeyword(Token token) {
 			final ISourceRange range = convert(token);
 			reporter.setFormattedMessage(
@@ -283,11 +260,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 	 */
 	public Script parse(IModuleSource input, IProblemReporter reporter) {
 		Assert.isNotNull(input);
-		if (input.getModelElement() != null) {
-			setTypeInformationEnabled(JavaScriptParserPreferences
-					.isTypeInfoEnabled(input.getModelElement()
-							.getScriptProject().getProject()));
-		}
 		char[] source = input.getContentsAsCharArray();
 		return parse(
 				input.getModelElement(),
@@ -317,7 +289,6 @@ public class JavaScriptParser extends AbstractSourceParser {
 		try {
 			stream.setReporter(reporter);
 			JSInternalParser parser = new JSInternalParser(stream, reporter);
-			parser.setTypeInformationEnabled(typeInformationEnabled);
 			RuleReturnScope root = parser.program();
 			final NodeTransformer[] transformers = NodeTransformerManager
 					.createTransformers(element, reporter);

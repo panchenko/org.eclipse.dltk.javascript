@@ -71,7 +71,6 @@ import org.eclipse.dltk.javascript.ast.Label;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.LoopStatement;
 import org.eclipse.dltk.javascript.ast.Method;
-import org.eclipse.dltk.javascript.ast.MissingType;
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
@@ -84,7 +83,6 @@ import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
-import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.SingleLineComment;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
@@ -94,7 +92,6 @@ import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
-import org.eclipse.dltk.javascript.ast.Type;
 import org.eclipse.dltk.javascript.ast.TypeOfExpression;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
@@ -109,11 +106,7 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
-import org.eclipse.dltk.javascript.internal.parser.ArgumentTypedDeclaration;
-import org.eclipse.dltk.javascript.internal.parser.FunctionTypedDeclaration;
-import org.eclipse.dltk.javascript.internal.parser.ITypedDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
-import org.eclipse.dltk.javascript.internal.parser.VariableTypedDeclaration;
 import org.eclipse.dltk.utils.IntList;
 
 public class JSTransformer extends JSVisitor<ASTNode> {
@@ -774,7 +767,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		argument.setIdentifier((Identifier) visitIdentifier(node));
 		argument.setStart(getTokenOffset(node.getTokenStartIndex()));
 		argument.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-		processType(new ArgumentTypedDeclaration(argument), node, 0);
 		return argument;
 	}
 
@@ -819,7 +811,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 		fn.setRP(getTokenOffset(JSParser.RPAREN, argsNode.getTokenStopIndex(),
 				node.getChild(index).getTokenStartIndex()));
-		index = processType(new FunctionTypedDeclaration(fn), node, index);
 		final Identifier nameNode = fn.getName();
 		if (fn.isDeclaration() && nameNode != null) {
 			final SymbolKind replaced = scope.add(fn.getName().getName(),
@@ -1086,34 +1077,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		reporter.report();
 	}
 
-	private Type transformType(Tree node, ASTNode parent) {
-		Assert.isTrue(node.getType() == JSParser.Identifier);
-		SimpleType type = new SimpleType(parent);
-		type.setName(node.getText());
-		setRangeByToken(type, node.getTokenStartIndex());
-		return type;
-	}
-
 	private boolean isType(Tree node) {
 		return node.getType() == JSParser.Identifier;
-	}
-
-	private int processType(ITypedDeclaration target, Tree node, int index) {
-		if (index < node.getChildCount()
-				&& node.getChild(index).getType() == JSParser.COLON) {
-			final int colonPos = getTokenOffset(node.getChild(index)
-					.getTokenStartIndex());
-			target.setColonPosition(colonPos);
-			++index;
-			if (index < node.getChildCount() && isType(node.getChild(index))) {
-				target.setType(transformType(node.getChild(index),
-						target.getNode()));
-				++index;
-			} else {
-				target.setType(new MissingType(target.getNode(), colonPos + 1));
-			}
-		}
-		return index;
 	}
 
 	private VariableDeclaration transformVariableDeclaration(Tree node,
@@ -1127,7 +1092,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				.setIdentifier((Identifier) transformNode(node, declaration));
 		declaration.setStart(getTokenOffset(node.getTokenStartIndex()));
 		declaration.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-		int i = processType(new VariableTypedDeclaration(declaration), node, 0);
+		int i = 0;
 		if (i + 2 <= node.getChildCount()
 				&& node.getChild(i).getType() == JSParser.ASSIGN) {
 			declaration.setAssignPosition(getTokenOffset(node.getChild(i)
