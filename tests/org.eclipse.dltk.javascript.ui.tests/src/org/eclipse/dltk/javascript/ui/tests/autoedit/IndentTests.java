@@ -140,6 +140,36 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	public void testIndentInObjectLiteralFunctionBody2ws()
+			throws BadLocationException {
+		StringList code = new StringList();
+		code.add("var methods = {");
+		code.add(TAB + "/**");
+		code.add(TAB + " * Hello");
+		code.add(TAB + " */");
+		code.add(TAB + "hello: function() {");
+		code.add(TAB);
+		code.add(TAB);
+		code.add(TAB + TAB + "var a = 1");
+		code.add(TAB + "}");
+		code.add("}");
+		final Document document = createDocument(code);
+		execute(document, createCommand(ENTER, document.getEndOfLineOffset(6)));
+		StringList expected = new StringList();
+		expected.add("var methods = {");
+		expected.add(TAB + "/**");
+		expected.add(TAB + " * Hello");
+		expected.add(TAB + " */");
+		expected.add(TAB + "hello: function() {");
+		expected.add(TAB);
+		expected.add(TAB);
+		expected.add(TAB + TAB);
+		expected.add(TAB + TAB + "var a = 1");
+		expected.add(TAB + "}");
+		expected.add("}");
+		assertEquals(expected.toString(), document.get());
+	}
+
 	public void testAfterVarStatement() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
