@@ -1,2 +1,3 @@
-function executeRequest(r:Request) {
+/** @param {Request} r */
+function executeRequest(r) {
 }

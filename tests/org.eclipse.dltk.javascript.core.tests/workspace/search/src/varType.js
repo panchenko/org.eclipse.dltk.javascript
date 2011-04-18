@@ -1,1 +1,2 @@
-var app:MyApplication
+/** @type MyApplication */
+var app

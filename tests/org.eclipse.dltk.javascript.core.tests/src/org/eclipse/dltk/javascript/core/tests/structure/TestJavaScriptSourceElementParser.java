@@ -21,7 +21,6 @@ final class TestJavaScriptSourceElementParser extends
 	@Override
 	protected Script parse(IModuleSource module) {
 		final JavaScriptParser parser = new JavaScriptParser();
-		parser.setTypeInformationEnabled(true);
 		return parser.parse(module, fReporter);
 	}
 

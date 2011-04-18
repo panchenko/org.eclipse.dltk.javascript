@@ -42,7 +42,6 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	private static Script parse(String code) {
 		final JavaScriptParser parser = new JavaScriptParser();
-		parser.setTypeInformationEnabled(true);
 		final ProblemCollector reporter = new ProblemCollector();
 		final Script script = parser.parse(new ModuleSource(code), reporter);
 		if (reporter.hasErrors()) {
@@ -116,12 +115,14 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 	public void testNestedFunctionType() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("function Test() {");
-		lines.add("this.newNode = function newNode():Node {");
+		lines.add("/** @type Node */");
+		lines.add("this.newNode = function newNode() {");
 		lines.add("return new Node();");
 		lines.add("}");
 		lines.add("function Node(){");
 		lines.add("this.a = 10;");
-		lines.add("this.toString = function toString():String {");
+		lines.add("/** @type String */");
+		lines.add("this.toString = function toString() {");
 		lines.add("return 'Node';");
 		lines.add("}");
 		lines.add("}");
@@ -535,7 +536,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	public void testExampleTypeProvider1() {
 		List<String> lines = new StringList();
-		lines.add("var a:ExampleService");
+		lines.add("/** @type ExampleService */");
+		lines.add("var a");
 		lines.add("var status = a.execute().status");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference status = collection.getChild("status");
@@ -544,7 +546,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	public void testExampleTypeProvider2() {
 		List<String> lines = new StringList();
-		lines.add("var a:ExampleService");
+		lines.add("/** @type ExampleService */");
+		lines.add("var a");
 		lines.add("var name = a.execute().service.name");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference name = collection.getChild("name");
@@ -553,7 +556,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	public void testExampleTypeProvider3() {
 		List<String> lines = new StringList();
-		lines.add("var a:ExampleService2");
+		lines.add("/** @type ExampleService2 */");
+		lines.add("var a");
 		lines.add("var name = a.execute().service.name");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference name = collection.getChild("name");
@@ -563,7 +567,9 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 	public void testGenericArrayTypeMethod() {
 		List<String> lines = new StringList();
-		lines.add("var a:" + ExampleTypeProvider.TYPE_GENERIC_ARRAY_METHOD);
+		lines.add("/** @type " + ExampleTypeProvider.TYPE_GENERIC_ARRAY_METHOD
+				+ " */");
+		lines.add("var a");
 		lines.add("var name = a.execute();");
 		lines.add("var name2 = a.execute()[0];");
 		IValueCollection collection = inference(lines.toString());
@@ -957,7 +963,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference variable = functionScope.getChild("x");
 		assertEquals(getTypes(ITypeNames.STRING), variable.getTypes());
 	}
-	
+
 	public void testMapWithKeyValueDeclaration() {
 		StringList code = new StringList();
 		code.add("/** @param {Object<String,String>} param */");
@@ -971,7 +977,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference variable = functionScope.getChild("x");
 		assertEquals(getTypes(ITypeNames.STRING), variable.getTypes());
 	}
-	
+
 	public void testMapWithKeyValueDeclaration2() {
 		StringList code = new StringList();
 		code.add("/** @param {Object<String,Number>} param */");

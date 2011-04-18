@@ -41,12 +41,12 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testKnownType() {
-		final List<IProblem> problems = validate("var x:String");
+		final List<IProblem> problems = validate("/** @type String */ var x");
 		assertTrue(problems.isEmpty());
 	}
 
 	public void testUnknownType() {
-		final List<IProblem> problems = validate("var x:LongString");
+		final List<IProblem> problems = validate("/** @type LongString */ var x");
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
 	}
@@ -65,7 +65,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testDeprecatedType() {
-		final List<IProblem> problems = validate("var x:ExampleService2");
+		final List<IProblem> problems = validate("/** @type ExampleService2 */ var x");
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.DEPRECATED_TYPE, problems.get(0)
 				.getID());
@@ -73,7 +73,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testValidMethodCall() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("x.execute()");
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.isEmpty());
@@ -81,7 +82,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testUndefinedMethodCall() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("x.runUndefindMethod()");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
@@ -91,7 +93,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testMethodOverload1() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("x.run()");
 		code.add("x.run('Hello')");
 		code.add("x.run('Hello','World')");
@@ -101,7 +104,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testMethodOverload2() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("x.run('Hello','World','!')");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
@@ -111,7 +115,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testMethodCallWrongParamCount() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("x.execute(1)");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
@@ -121,7 +126,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testDeprecatedMethodCall() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("x.executeCompatible()");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
@@ -131,7 +137,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testDeprecatedMethodCall_TypeInference() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("var q = x.execute().service");
 		code.add("q.executeCompatible()");
 		final List<IProblem> problems = validate(code.toString());
@@ -142,7 +149,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testPropertyAccess() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("var name = x.name");
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.isEmpty());
@@ -150,7 +158,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testDeprecatedPropertyAccess() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("var name = x.nameCompatible");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
@@ -187,7 +196,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testUndefinedPropertyAccess() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("var name = x.noname");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
@@ -218,7 +228,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testUndefinedPropertyAssignment() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("x.noname = true");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
@@ -245,7 +256,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testMethodAsPropertyAccess() {
 		StringList code = new StringList();
-		code.add("var x:ExampleService");
+		code.add("/** @type ExampleService */");
+		code.add("var x");
 		code.add("var name = x.execute");
 		final List<IProblem> problems = validate(code.toString());
 		assertTrue(problems.toString(), problems.isEmpty());
@@ -269,7 +281,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("function Node2() {");
 		code.add("this.a=10;");
 		code.add("}");
-		code.add("function call(arg:Node1){");
+		code.add("/** @param {Node1} arg */");
+		code.add("function call(arg){");
 		code.add("}");
 		code.add("function test(){");
 		code.add("call(new Node1());");
@@ -286,7 +299,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("function Node2() {");
 		code.add("this.a=10;");
 		code.add("}");
-		code.add("function call(arg:Node1){");
+		code.add("/** @param {Node1} arg */");
+		code.add("function call(arg){");
 		code.add("}");
 		code.add("function test(){");
 		code.add("call(new Node2());");
@@ -411,9 +425,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testLazyReturnTypeWithTypeInfo() {
 		StringList code = new StringList();
 		code.add("/**");
-		code.add(" * @param node");
+		code.add(" * @param {Node} node");
 		code.add(" */");
-		code.add("function addChild(node:Node) {");
+		code.add("function addChild(node) {");
 		code.add("	return node;");
 		code.add("}");
 		code.add("function TestObject() {");

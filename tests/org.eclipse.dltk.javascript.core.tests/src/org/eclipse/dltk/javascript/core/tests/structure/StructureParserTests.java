@@ -53,7 +53,9 @@ public class StructureParserTests extends TestCase {
 
 	public void testMethodFieldMethod() {
 		Root root = parse("function hello() { var a = { z: function() { } } }");
-		assertEquals(new Root(new Method("hello").add(new Field("a").add(new Method("z")))), root);
+		assertEquals(
+				new Root(new Method("hello").add(new Field("a").add(new Method(
+						"z")))), root);
 	}
 
 	public void testMethodMethod() {
@@ -64,12 +66,15 @@ public class StructureParserTests extends TestCase {
 
 	public void testMethodReference() {
 		Root root = parse("var x = calculate()");
-		assertEquals(new Root(new Field("x").add(new MethodRef("calculate"))), root);
+		assertEquals(new Root(new Field("x").add(new MethodRef("calculate"))),
+				root);
 	}
 
 	public void testFieldReference() {
 		Root root = parse("var x = database.get()");
-		assertEquals(new Root(new Field("x").add(new FieldRef("database"),new MethodRef("get"))), root);
+		assertEquals(
+				new Root(new Field("x").add(new FieldRef("database"),
+						new MethodRef("get"))), root);
 	}
 
 	public void testFieldReference1() {
@@ -82,20 +87,20 @@ public class StructureParserTests extends TestCase {
 	public void testFunctionFieldReference() {
 		Root root = parse("var database;function run() {var x = database.get()}");
 		assertEquals(
-				new Root(new Field("database"), new Method("run").add(new FieldRef("database"),
-						new MethodRef("get"))), root);
+				new Root(new Field("database"), new Method("run").add(
+						new FieldRef("database"), new MethodRef("get"))), root);
 	}
 
 	public void testFunctionFieldReference1() {
 		Root root = parse("function hello() { var a = 1; var x = a }");
 		assertEquals(new Root(new Method("hello")), root);
 	}
-	
+
 	public void testThisVariableUnnamedFunctionReference() {
 		Root root = parse("function hello() { this.a = function(){} }");
 		assertEquals(new Root(new Method("hello").add(new Method("a"))), root);
 	}
-	
+
 	public void testThisVariableSameNamedFunctionReference() {
 		Root root = parse("function hello() { this.a = function a(){} }");
 		assertEquals(new Root(new Method("hello").add(new Method("a"))), root);
@@ -108,12 +113,16 @@ public class StructureParserTests extends TestCase {
 
 	public void testObjectInitializerFunctionReference() {
 		Root root = parse("function hello() { var a = {b: function(){}} }");
-		assertEquals(new Root(new Method("hello").add(new Field("a").add(new Method("b")))), root);
+		assertEquals(
+				new Root(new Method("hello").add(new Field("a").add(new Method(
+						"b")))), root);
 	}
 
 	public void testThisVariableUnnamedFunctionReferenceWithArgumentAssignment() {
 		Root root = parse("function hello() { var x = function(a){this.b =a;}}");
-		assertEquals(new Root(new Method("hello").add(new Method("x", new Parameter("a")).add(new Field("b")))), root);
+		assertEquals(
+				new Root(new Method("hello").add(new Method("x", new Parameter(
+						"a")).add(new Field("b")))), root);
 	}
 
 	public void testManyFunctionCalls() {
@@ -152,9 +161,9 @@ public class StructureParserTests extends TestCase {
 	public void testJsDocsParam() {
 		StringList code = new StringList();
 		code.add("/** @param {Number} n */");
-		code.add("function a(n,s:String){}");
+		code.add("function a(n,s){}");
 		Method a = new Method("a", new Parameter("n", "Number"), new Parameter(
-				"s", "String"));
+				"s"));
 		assertEquals(new Root(a), parse(code.toString()));
 		code.remove(0);
 		assertFalse(new Root(a).equals(parse(code.toString())));
