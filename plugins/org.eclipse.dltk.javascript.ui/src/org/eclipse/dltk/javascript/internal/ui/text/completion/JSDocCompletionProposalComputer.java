@@ -17,6 +17,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 import org.eclipse.dltk.javascript.internal.ui.templates.JSDocTemplateCompletionProcessor;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
+import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.templates.ScriptTemplateProposal;
 import org.eclipse.dltk.ui.text.completion.ContentAssistInvocationContext;
@@ -154,7 +155,7 @@ public class JSDocCompletionProposalComputer implements
 				final JavaScriptCompletionProposalCollector collector = new JavaScriptCompletionProposalCollector(
 						module);
 				engine.setRequestor(collector);
-				engine.completeTypes(module, prefix.trim(),
+				engine.completeTypes(module, TypeMode.JSDOC, prefix.trim(),
 						context.getInvocationOffset());
 				return Arrays.<ICompletionProposal> asList(collector
 						.getScriptCompletionProposals());

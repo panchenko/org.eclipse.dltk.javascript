@@ -24,6 +24,7 @@ import org.eclipse.dltk.internal.ui.editor.ModelElementHyperlink;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
+import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.actions.OpenAction;
@@ -85,7 +86,7 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 			final String typeName = line.substring(start + 1, end);
 			TypeInferencer2 inferencer2 = new TypeInferencer2();
 			inferencer2.setModelElement(input);
-			Type type = inferencer2.getKnownType(typeName);
+			Type type = inferencer2.getKnownType(typeName, TypeMode.JSDOC);
 			Object[] elements = null;
 			if (type == null) {
 				try {
