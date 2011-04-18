@@ -37,7 +37,6 @@ public abstract class AbstractJSParserTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		reporter.reset();
-		parser.setTypeInformationEnabled(false);
 	}
 
 	protected Script parseRaw(final String source) {

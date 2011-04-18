@@ -62,7 +62,6 @@ import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
-import org.eclipse.dltk.javascript.ast.SimpleType;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.SwitchComponent;
@@ -134,8 +133,8 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visit(ASTNode node) {
 		Assert.assertTrue(node.getClass().getSimpleName()
-				+ " sourceEnd >= sourceStart", node.sourceEnd() >= node
-				.sourceStart());
+				+ " sourceEnd >= sourceStart",
+				node.sourceEnd() >= node.sourceStart());
 		return super.visit(node);
 	}
 
@@ -153,9 +152,8 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitBinaryOperation(BinaryOperation node) {
 
-		testString(node.getOperationText(), node.getOperationPosition(), node
-				.getOperationPosition()
-				+ node.getOperationText().length());
+		testString(node.getOperationText(), node.getOperationPosition(),
+				node.getOperationPosition() + node.getOperationText().length());
 
 		visit(node.getLeftExpression());
 		visit(node.getRightExpression());
@@ -321,12 +319,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 		testString(node.getName(), node.sourceStart(), node.sourceEnd());
 
-		return true;
-	}
-
-	@Override
-	public Boolean visitSimpleType(SimpleType node) {
-		testString(node.getName(), node.sourceStart(), node.sourceEnd());
 		return true;
 	}
 
@@ -578,9 +570,8 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 
 		visit(node.getExpression());
 
-		testString(node.getOperationText(), node.getOperationPosition(), node
-				.getOperationPosition()
-				+ node.getOperationText().length());
+		testString(node.getOperationText(), node.getOperationPosition(),
+				node.getOperationPosition() + node.getOperationText().length());
 
 		return true;
 	}
@@ -598,9 +589,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 			List<VariableDeclaration> declarations) {
 		for (VariableDeclaration declaration : declarations) {
 			visit(declaration.getIdentifier());
-			if (declaration.getType() != null) {
-				visit(declaration.getType());
-			}
 			if (declaration.getInitializer() != null) {
 				visit(declaration.getInitializer());
 			}
@@ -680,9 +668,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 			visit(argument.getIdentifier());
 			if (argument.getColonPosition() != -1) {
 				testChar(':', argument.getColonPosition());
-			}
-			if (argument.getType() != null) {
-				visit(argument.getType());
 			}
 			if (argument.getCommaPosition() != -1) {
 				testChar(',', argument.getCommaPosition());
