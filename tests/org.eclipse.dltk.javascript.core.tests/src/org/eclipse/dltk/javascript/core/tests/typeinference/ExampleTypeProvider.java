@@ -20,6 +20,7 @@ import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
+import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -46,7 +47,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 		return true;
 	}
 
-	public Type getType(ITypeInfoContext context, String typeName) {
+	public Type getType(ITypeInfoContext context, TypeMode mode, String typeName) {
 		if (TYPE_SERVICE.equals(typeName)) {
 			Type type = TypeInfoModelFactory.eINSTANCE.createType();
 			type.setName(typeName);
@@ -204,7 +205,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 			Class<?> fieldType = field.getType();
 			if (fieldType != null)
 				property.setType(TypeUtil.ref(context.getKnownType("Packages."
-						+ fieldType.getName())));
+						+ fieldType.getName(), null)));
 			if (Modifier.isStatic(field.getModifiers())) {
 				property.setStatic(true);
 			}
@@ -217,7 +218,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 			Class<?> methodType = method.getReturnType();
 			if (methodType != null)
 				m.setType(TypeUtil.ref(context.getKnownType("Packages."
-						+ methodType.getName())));
+						+ methodType.getName(), null)));
 
 			EList<Parameter> parameters = m.getParameters();
 			Class<?>[] parameterTypes = method.getParameterTypes();
@@ -227,7 +228,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 				parameter.setName(parameterTypes[i].getSimpleName() + " arg"
 						+ i);
 				parameter.setType(TypeUtil.ref(context.getKnownType("Packages."
-						+ parameterTypes[i].getName())));
+						+ parameterTypes[i].getName(), null)));
 				parameters.add(parameter);
 			}
 			if (Modifier.isStatic(method.getModifiers())) {
@@ -238,7 +239,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 		return type;
 	}
 
-	public Set<String> listTypes(ITypeInfoContext context, String prefix) {
+	public Set<String> listTypes(ITypeInfoContext context, TypeMode mode,
+			String prefix) {
 		final Set<String> result = new HashSet<String>();
 		final String[] names = new String[] { TYPE_SERVICE, TYPE_SERVICE2,
 				TYPE_RESPONSE, TYPE_EXAMPLE_FORMS, TYPE_GENERIC_ARRAY_METHOD };
