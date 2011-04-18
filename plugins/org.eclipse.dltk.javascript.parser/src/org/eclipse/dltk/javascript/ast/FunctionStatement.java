@@ -115,6 +115,10 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 		this.body = body;
 	}
 
+	public boolean isEmptyBody() {
+		return body == null || body.getStatements().isEmpty();
+	}
+
 	public int getLP() {
 		return this.LP;
 	}
