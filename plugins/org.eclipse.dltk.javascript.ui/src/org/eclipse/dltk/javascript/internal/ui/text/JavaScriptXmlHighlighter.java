@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.GetMethod;
 import org.eclipse.dltk.javascript.ast.Keyword;
 import org.eclipse.dltk.javascript.ast.Method;
@@ -72,6 +73,12 @@ public class JavaScriptXmlHighlighter implements ISemanticHighlighter {
 			} else {
 				continue;
 			}
+			requestor.addPosition(keyword.sourceStart(), keyword.sourceEnd(),
+					HL_KEYWORD);
+		}
+		for (ForEachInStatement forEach : ASTUtil.select(declaration,
+				ForEachInStatement.class)) {
+			final Keyword keyword = forEach.getEachKeyword();
 			requestor.addPosition(keyword.sourceStart(), keyword.sourceEnd(),
 					HL_KEYWORD);
 		}
