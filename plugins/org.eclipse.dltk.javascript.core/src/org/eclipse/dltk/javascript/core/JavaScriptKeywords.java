@@ -13,8 +13,8 @@ public class JavaScriptKeywords {
 
 	private static final String[] fgKeywords = { "break", "else", "new",
 			"const", "var", "case", "finally", "return", "void", "catch",
-			"for", "each", "switch", "while", "continue", "function", "this",
-			"with", "default", "if", "throw", "delete", "in", "try", "do",
+			"for", "switch", "while", "continue", "function", "this", "with",
+			"default", "if", "throw", "delete", "in", "try", "do",
 			"instanceof", "typeof", "null", "true", "false", "undefined" };
 
 	public static String[] getJavaScriptKeywords() {
