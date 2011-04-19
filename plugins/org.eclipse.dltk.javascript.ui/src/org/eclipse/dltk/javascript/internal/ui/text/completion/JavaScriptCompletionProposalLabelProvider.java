@@ -19,9 +19,11 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
 import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
 import org.eclipse.dltk.ui.DLTKPluginImages;
@@ -113,7 +115,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			if (label != null) {
 				return label;
 			}
-			if (property.getType() != null) {
+			if (property.getType() != null && isVisible(property.getType())) {
 				final StringBuilder sb = new StringBuilder();
 				sb.append(proposal.getName());
 				sb.append(": ");
@@ -127,6 +129,14 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			}
 		}
 		return proposal.getName();
+	}
+
+	private boolean isVisible(JSType type) {
+		if (type instanceof UndefinedType) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**

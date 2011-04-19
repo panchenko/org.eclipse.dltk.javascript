@@ -82,6 +82,9 @@ public class JavascriptCodeScanner extends AbstractScriptScanner {
 		for (String word : JavaScriptKeywords.getJavaScriptKeywords()) {
 			wordRule.addWord(word, getKeywordColor(word, keyword));
 		}
+		for (String word : JavaScriptKeywords.getHighLightOnlyKeywords()) {
+			wordRule.addWord(word, getKeywordColor(word, keyword));
+		}
 		wordRule.addWord(fgReturnKeyword,
 				getKeywordColor(fgReturnKeyword, keywordReturn));
 		for (String word : JSKeywordManager.getInstance().getKeywords(
