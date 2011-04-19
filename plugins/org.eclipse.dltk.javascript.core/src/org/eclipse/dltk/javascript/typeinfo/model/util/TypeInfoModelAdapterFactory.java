@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.11 2011/04/11 11:57:32 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.12 2011/04/19 14:02:17 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -144,6 +144,10 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
                 return createUnionTypeAdapter();
             }
             @Override
+            public Adapter caseGenericType(GenericType object) {
+                return createGenericTypeAdapter();
+            }
+            @Override
             public Adapter caseMapType(MapType object) {
                 return createMapTypeAdapter();
             }
@@ -266,6 +270,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createUnionTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.GenericType <em>Generic Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.GenericType
+     * @generated
+     */
+    public Adapter createGenericTypeAdapter() {
         return null;
     }
 

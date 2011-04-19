@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
@@ -47,11 +48,15 @@ public class TypeUtil {
 	}
 
 	public static JSType ref(String typeName) {
+		return ref(type(typeName));
+	}
+
+	public static Type type(String typeName) {
 		final Type type = TypeInfoModelLoader.getInstance().getType(typeName);
 		if (type != null) {
-			return ref(type);
+			return type;
 		}
-		return ref(createProxy(typeName));
+		return createProxy(typeName);
 	}
 
 	public static ArrayType arrayOf(String itemType) {
@@ -79,6 +84,17 @@ public class TypeUtil {
 				: ref(TypeInfoModelLoader.getInstance().getType(
 						ITypeNames.OBJECT)));
 		return mapType;
+	}
+
+	public static GenericType genericType(String baseType,
+			JSType... typeParameters) {
+		final GenericType genericType = TypeInfoModelFactory.eINSTANCE
+				.createGenericType();
+		genericType.setTarget(type(baseType));
+		for (JSType typeParameter : typeParameters) {
+			genericType.getTypeParameters().add(typeParameter);
+		}
+		return genericType;
 	}
 
 	public static Type extractType(JSType type) {

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.22 2011/04/11 11:57:32 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.23 2011/04/19 14:02:17 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1048,6 +1048,52 @@ public interface TypeInfoModelPackage extends EPackage {
     int UNION_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.GenericTypeImpl <em>Generic Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.GenericTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getGenericType()
+     * @generated
+     */
+    int GENERIC_TYPE = 16;
+
+    /**
+     * The feature id for the '<em><b>Target</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__TARGET = TYPE_REF__TARGET;
+
+    /**
+     * The feature id for the '<em><b>Static</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__STATIC = TYPE_REF__STATIC;
+
+    /**
+     * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__TYPE_PARAMETERS = TYPE_REF_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Generic Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE_FEATURE_COUNT = TYPE_REF_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1055,7 +1101,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMapType()
      * @generated
      */
-    int MAP_TYPE = 16;
+    int MAP_TYPE = 17;
 
     /**
      * The feature id for the '<em><b>Key Type</b></em>' containment reference.
@@ -1092,7 +1138,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordType()
      * @generated
      */
-    int RECORD_TYPE = 17;
+    int RECORD_TYPE = 18;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' containment reference.
@@ -1129,7 +1175,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 18;
+	int TYPE_KIND = 19;
 
 
 	/**
@@ -1140,7 +1186,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 19;
+	int PARAMETER_KIND = 20;
 
 
 	/**
@@ -1289,6 +1335,27 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getUnionType_Targets();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.GenericType <em>Generic Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Generic Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.GenericType
+     * @generated
+     */
+    EClass getGenericType();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.GenericType#getTypeParameters <em>Type Parameters</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Type Parameters</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.GenericType#getTypeParameters()
+     * @see #getGenericType()
+     * @generated
+     */
+    EReference getGenericType_TypeParameters();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType <em>Map Type</em>}'.
@@ -1822,6 +1889,24 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference UNION_TYPE__TARGETS = eINSTANCE.getUnionType_Targets();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.GenericTypeImpl <em>Generic Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.GenericTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getGenericType()
+         * @generated
+         */
+        EClass GENERIC_TYPE = eINSTANCE.getGenericType();
+
+        /**
+         * The meta object literal for the '<em><b>Type Parameters</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference GENERIC_TYPE__TYPE_PARAMETERS = eINSTANCE.getGenericType_TypeParameters();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.

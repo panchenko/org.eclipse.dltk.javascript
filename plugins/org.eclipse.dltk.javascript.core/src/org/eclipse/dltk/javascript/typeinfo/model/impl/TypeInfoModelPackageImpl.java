@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.26 2011/04/11 11:57:32 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.27 2011/04/19 14:02:17 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -19,6 +19,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -99,6 +100,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EClass unionTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass genericTypeEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -376,6 +384,24 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      */
     public EReference getUnionType_Targets() {
         return (EReference)unionTypeEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getGenericType() {
+        return genericTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getGenericType_TypeParameters() {
+        return (EReference)genericTypeEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -788,6 +814,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         unionTypeEClass = createEClass(UNION_TYPE);
         createEReference(unionTypeEClass, UNION_TYPE__TARGETS);
 
+        genericTypeEClass = createEClass(GENERIC_TYPE);
+        createEReference(genericTypeEClass, GENERIC_TYPE__TYPE_PARAMETERS);
+
         mapTypeEClass = createEClass(MAP_TYPE);
         createEReference(mapTypeEClass, MAP_TYPE__KEY_TYPE);
         createEReference(mapTypeEClass, MAP_TYPE__VALUE_TYPE);
@@ -842,6 +871,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         arrayTypeEClass.getESuperTypes().add(this.getJSType());
         anyTypeEClass.getESuperTypes().add(this.getJSType());
         unionTypeEClass.getESuperTypes().add(this.getJSType());
+        genericTypeEClass.getESuperTypes().add(this.getTypeRef());
         mapTypeEClass.getESuperTypes().add(this.getJSType());
         recordTypeEClass.getESuperTypes().add(this.getJSType());
 
@@ -916,6 +946,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         initEClass(unionTypeEClass, UnionType.class, "UnionType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getUnionType_Targets(), this.getJSType(), null, "targets", null, 0, -1, UnionType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+        initEClass(genericTypeEClass, GenericType.class, "GenericType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getGenericType_TypeParameters(), this.getJSType(), null, "typeParameters", null, 0, -1, GenericType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(mapTypeEClass, MapType.class, "MapType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getMapType_KeyType(), this.getJSType(), null, "keyType", null, 0, 1, MapType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

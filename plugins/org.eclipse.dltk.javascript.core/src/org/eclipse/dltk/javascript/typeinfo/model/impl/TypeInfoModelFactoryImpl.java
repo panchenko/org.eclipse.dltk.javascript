@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.11 2011/04/11 11:57:32 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.12 2011/04/19 14:02:16 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -90,6 +90,7 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.ARRAY_TYPE: return (EObject)createArrayType();
             case TypeInfoModelPackage.ANY_TYPE: return (EObject)createAnyType();
             case TypeInfoModelPackage.UNION_TYPE: return (EObject)createUnionType();
+            case TypeInfoModelPackage.GENERIC_TYPE: return (EObject)createGenericType();
             case TypeInfoModelPackage.MAP_TYPE: return (EObject)createMapType();
             case TypeInfoModelPackage.RECORD_TYPE: return (EObject)createRecordType();
             default:
@@ -239,6 +240,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     public UnionType createUnionType() {
         UnionTypeImpl unionType = new UnionTypeImpl();
         return unionType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public GenericType createGenericType() {
+        GenericTypeImpl genericType = new GenericTypeImpl();
+        return genericType;
     }
 
     /**
