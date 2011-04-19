@@ -21,6 +21,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -29,16 +30,21 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl;
+import org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.RecordTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl;
+import org.eclipse.dltk.javascript.typeinfo.model.impl.UndefinedTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
 
 public abstract class JSTypeSet implements Iterable<JSType> {
 
@@ -184,6 +190,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		public Type[] toArray() {
 			if (type instanceof TypeRef) {
 				return new Type[] { ((TypeRef) type).getTarget() };
+			} else if (type instanceof ClassType) {
+				return new Type[] { ((ClassType) type).getTarget() };
 			} else if (type instanceof AnyType) {
 				return new Type[] { TypeInfoModelLoader.getInstance().getType(
 						ITypeNames.OBJECT) };
@@ -247,11 +255,9 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 	private static class TypeRefKey implements TypeRef, JSType2 {
 
 		private final Type type;
-		private final boolean isStatic;
 
-		public TypeRefKey(Type type, boolean isStatic) {
+		public TypeRefKey(Type type) {
 			this.type = type;
-			this.isStatic = isStatic;
 		}
 
 		public TypeKind getKind() {
@@ -270,14 +276,6 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			throw new UnsupportedOperationException();
 		}
 
-		public boolean isStatic() {
-			return isStatic;
-		}
-
-		public void setStatic(boolean value) {
-			throw new UnsupportedOperationException();
-		}
-
 		@Override
 		public int hashCode() {
 			return type.hashCode();
@@ -287,14 +285,14 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		public boolean equals(Object obj) {
 			if (obj instanceof TypeRefKey) {
 				final TypeRefKey other = (TypeRefKey) obj;
-				return type.equals(other.type) && isStatic == other.isStatic;
+				return type.equals(other.type);
 			}
 			return false;
 		}
 
 		@Override
 		public String toString() {
-			return (isStatic ? "[static]" : "") + type.toString();
+			return type.toString();
 		}
 
 		public boolean isArray() {
@@ -306,20 +304,109 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 				return true;
 			} else if (isArray()) {
 				return type.isArray();
+			} else if (type instanceof UndefinedType) {
+				return true;
 			} else if (ITypeNames.OBJECT.equals(getName())) {
 				return true;
 			} else if (type instanceof TypeRef) {
 				final Type other = ((TypeRef) type).getTarget();
-				if (ITypeNames.UNDEFINED.equals(other.getName())) {
-					return true;
-				} else {
-					final String localName = TypeUtil.getName(this.type);
-					Type t = other;
-					while (t != null) {
-						if (localName.equals(TypeUtil.getName(t)))
-							return true;
-						t = t.getSuperType();
+				final String localName = TypeUtil.getName(this.type);
+				Type t = other;
+				while (t != null) {
+					if (localName.equals(TypeUtil.getName(t)))
+						return true;
+					t = t.getSuperType();
+				}
+			} else if (type instanceof UnionTypeKey) {
+				for (JSType2 part : ((UnionTypeKey) type).targets) {
+					if (isAssignableFrom(part)) {
+						return true;
 					}
+				}
+			}
+			return false;
+		}
+	}
+
+	private static class ClassTypeKey implements ClassType, JSType2 {
+
+		private final Type type;
+
+		public ClassTypeKey(Type type) {
+			this.type = type;
+		}
+
+		public TypeKind getKind() {
+			return TypeKind.CLASS;
+		}
+
+		public String getRawName() {
+			if (type != null) {
+				if (((EObject) type).eIsProxy()) {
+					final URI uri = ((InternalEObject) type).eProxyURI();
+					if (uri != null) {
+						return URI.decode(uri.fragment());
+					}
+				} else {
+					return type.getName();
+				}
+			}
+			return null;
+		}
+
+		public String getName() {
+			final String rawName = getRawName();
+			return rawName != null ? "Class<" + rawName + ">" : "Class";
+		}
+
+		public Type getTarget() {
+			return type;
+		}
+
+		public void setTarget(Type value) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int hashCode() {
+			return type != null ? type.hashCode() : 31;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof ClassTypeKey) {
+				final ClassTypeKey other = (ClassTypeKey) obj;
+				return type != null ? type.equals(other.type)
+						: other.type == null;
+			}
+			return false;
+		}
+
+		@Override
+		public String toString() {
+			return getName();
+		}
+
+		public boolean isArray() {
+			return false;
+		}
+
+		public boolean isAssignableFrom(JSType2 type) {
+			if (equals(type)) {
+				return true;
+			} else if (type instanceof UndefinedType) {
+				return true;
+			} else if (type instanceof ClassType) {
+				if (this.type == null) {
+					return true;
+				}
+				final Type other = ((ClassType) type).getTarget();
+				final String localName = TypeUtil.getName(this.type);
+				Type t = other;
+				while (t != null) {
+					if (localName.equals(TypeUtil.getName(t)))
+						return true;
+					t = t.getSuperType();
 				}
 			} else if (type instanceof UnionTypeKey) {
 				for (JSType2 part : ((UnionTypeKey) type).targets) {
@@ -383,7 +470,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			if (type instanceof ArrayTypeKey) {
 				return itemType
 						.isAssignableFrom(((ArrayTypeKey) type).itemType);
-			} else if (ITypeNames.UNDEFINED.equals(type.getName())) {
+			} else if (type instanceof UndefinedType) {
 				return true;
 			}
 			return false;
@@ -443,7 +530,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			if (type instanceof MapTypeKey) {
 				return valueType
 						.isAssignableFrom(((MapTypeKey) type).valueType);
-			} else if (ITypeNames.UNDEFINED.equals(type.getName())) {
+			} else if (type instanceof UndefinedType) {
 				return true;
 			}
 			return false;
@@ -477,6 +564,28 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		public String getName() {
 			return "Any";
+		}
+
+		public boolean isArray() {
+			return false;
+		}
+
+		public boolean isAssignableFrom(JSType2 type) {
+			return true;
+		}
+
+	}
+
+	private static final JSType2 UNDEFINED_TYPE = new UndefinedTypeKey();
+
+	private static class UndefinedTypeKey implements UndefinedType, JSType2 {
+
+		public TypeKind getKind() {
+			return TypeKind.PREDEFINED;
+		}
+
+		public String getName() {
+			return ITypeNames.UNDEFINED;
 		}
 
 		public boolean isArray() {
@@ -605,7 +714,9 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 	public static JSType2 normalize(JSType type) {
 		if (type instanceof TypeRefImpl) {
 			final TypeRef ref = (TypeRef) type;
-			return ref(ref.getTarget(), ref.isStatic());
+			return ref(ref.getTarget());
+		} else if (type instanceof ClassTypeImpl) {
+			return classType(((ClassType) type).getTarget());
 		} else if (type instanceof ArrayTypeImpl) {
 			return arrayOf(normalize(((ArrayType) type).getItemType()));
 		} else if (type instanceof MapTypeImpl) {
@@ -613,6 +724,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 					normalize(((MapType) type).getValueType()));
 		} else if (type instanceof AnyTypeImpl) {
 			return ANY_TYPE;
+		} else if (type instanceof UndefinedTypeImpl) {
+			return UNDEFINED_TYPE;
 		} else if (type instanceof UnionTypeImpl) {
 			final UnionTypeKey union = new UnionTypeKey();
 			for (JSType t : ((UnionType) type).getTargets()) {
@@ -627,8 +740,12 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		return (JSType2) type;
 	}
 
-	public static JSType2 ref(Type type, boolean isStatic) {
-		return new TypeRefKey(type, isStatic);
+	public static JSType2 ref(Type type) {
+		return new TypeRefKey(type);
+	}
+
+	public static JSType2 classType(Type type) {
+		return new ClassTypeKey(type);
 	}
 
 	public static ArrayTypeKey arrayOf(final JSType2 itemType) {
@@ -642,6 +759,10 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	public static JSType2 any() {
 		return ANY_TYPE;
+	}
+
+	public static JSType2 undefined() {
+		return UNDEFINED_TYPE;
 	}
 
 	public static JSType2 union(List<JSType2> targets) {
@@ -720,7 +841,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		@Override
 		public boolean contains(Type type) {
-			return types.contains(ref(type, false));
+			return types.contains(ref(type));
 		}
 
 		@Override

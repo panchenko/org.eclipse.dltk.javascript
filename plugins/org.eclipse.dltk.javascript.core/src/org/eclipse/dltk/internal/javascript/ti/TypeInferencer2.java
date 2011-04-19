@@ -42,6 +42,7 @@ import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -52,6 +53,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -161,7 +163,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			final MapType mapType = (MapType) type;
 			return isResolved(mapType.getValueType())
 					&& isResolved(mapType.getKeyType());
-		} else if (type instanceof AnyType) {
+		} else if (type instanceof AnyType || type instanceof UndefinedType) {
 			return true;
 		} else if (type instanceof UnionType) {
 			for (JSType t : ((UnionType) type).getTargets()) {
@@ -191,7 +193,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	private JSType2 doResolveTypeRef(JSType type) {
 		if (type instanceof TypeRef) {
 			final TypeRef r = (TypeRef) type;
-			return JSTypeSet.ref(doResolveType(r.getTarget()), r.isStatic());
+			return JSTypeSet.ref(doResolveType(r.getTarget()));
+		} else if (type instanceof ClassType) {
+			final ClassType c = (ClassType) type;
+			return JSTypeSet.classType(doResolveType(c.getTarget()));
 		} else if (type instanceof ArrayType) {
 			return JSTypeSet.arrayOf(doResolveTypeRef(((ArrayType) type)
 					.getItemType()));

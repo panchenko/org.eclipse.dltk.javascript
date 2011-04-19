@@ -41,6 +41,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -49,7 +50,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
@@ -270,28 +270,30 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			if (item instanceof IValueReference) {
 				final IValueReference valueRef = (IValueReference) item;
 				for (JSType type : valueRef.getDeclaredTypes()) {
-					final Type t = TypeUtil.extractType(context
-							.resolveTypeRef(type));
-					if (t != null) {
-						reportTypeMembers(t,
-								isStatic(type) ? MemberPredicates.STATIC
-										: MemberPredicates.NON_STATIC);
+					if (type instanceof ClassType) {
+						reportTypeMembers(((ClassType) type).getTarget(),
+								MemberPredicates.STATIC);
+					} else {
+						final Type t = TypeUtil.extractType(context
+								.resolveTypeRef(type));
+						if (t != null) {
+							reportTypeMembers(t, MemberPredicates.NON_STATIC);
+						}
 					}
 				}
 				for (JSType type : valueRef.getTypes()) {
-					final Type t = TypeUtil.extractType(context
-							.resolveTypeRef(type));
-					if (t != null) {
-						reportTypeMembers(t,
-								isStatic(type) ? MemberPredicates.STATIC
-										: MemberPredicates.NON_STATIC);
+					if (type instanceof ClassType) {
+						reportTypeMembers(((ClassType) type).getTarget(),
+								MemberPredicates.STATIC);
+					} else {
+						final Type t = TypeUtil.extractType(context
+								.resolveTypeRef(type));
+						if (t != null) {
+							reportTypeMembers(t, MemberPredicates.NON_STATIC);
+						}
 					}
 				}
 			}
-		}
-
-		private boolean isStatic(JSType type) {
-			return type instanceof TypeRef && ((TypeRef) type).isStatic();
 		}
 
 		protected void reportTypeMembers(Type type, Predicate<Member> predicate) {

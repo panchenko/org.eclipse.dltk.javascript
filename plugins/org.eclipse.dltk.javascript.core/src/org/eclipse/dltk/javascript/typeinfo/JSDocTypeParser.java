@@ -107,7 +107,11 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 	}
 
 	protected JSType createType(String typeName) {
-		return TypeUtil.ref(typeName);
+		if (ITypeNames.UNDEFINED.equals(typeName)) {
+			return TypeInfoModelFactory.eINSTANCE.createUndefinedType();
+		} else {
+			return TypeUtil.ref(typeName);
+		}
 	}
 
 	protected JSType createArray(String typeName) {

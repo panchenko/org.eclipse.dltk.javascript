@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.12 2011/04/19 14:02:17 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.13 2011/04/19 17:25:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -238,6 +238,20 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case TypeInfoModelPackage.CLASS_TYPE: {
+                ClassType classType = (ClassType)theEObject;
+                T result = caseClassType(classType);
+                if (result == null) result = caseJSType(classType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.UNDEFINED_TYPE: {
+                UndefinedType undefinedType = (UndefinedType)theEObject;
+                T result = caseUndefinedType(undefinedType);
+                if (result == null) result = caseJSType(undefinedType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -389,6 +403,36 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseRecordType(RecordType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Class Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Class Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseClassType(ClassType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Undefined Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Undefined Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseUndefinedType(UndefinedType object) {
         return null;
     }
 

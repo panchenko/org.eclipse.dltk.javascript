@@ -105,6 +105,7 @@ import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -760,19 +761,19 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				}
 			} else if (visit.exists()) {
 				for (JSType type : visit.getDeclaredTypes()) {
-					if (type instanceof TypeRef && ((TypeRef) type).isStatic()) {
+					if (type instanceof ClassType) {
 						result = new AnonymousNewValue();
 						result.setKind(ReferenceKind.TYPE);
-						result.setDeclaredType(TypeUtil.ref(((TypeRef) type)
+						result.setDeclaredType(TypeUtil.ref(((ClassType) type)
 								.getTarget()));
 						return result;
 					}
 				}
 				for (JSType type : visit.getTypes()) {
-					if (type instanceof TypeRef && ((TypeRef) type).isStatic()) {
+					if (type instanceof ClassType) {
 						result = new AnonymousNewValue();
 						result.setKind(ReferenceKind.TYPE);
-						result.setDeclaredType(TypeUtil.ref(((TypeRef) type)
+						result.setDeclaredType(TypeUtil.ref(((ClassType) type)
 								.getTarget()));
 						return result;
 					}

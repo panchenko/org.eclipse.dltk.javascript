@@ -14,7 +14,7 @@ public class PackageOrClassValue extends Value {
 		// Try to resolve it with the name with the Packages prefix.
 		Type type = context.getKnownType("Packages." + name, null);
 		if (type != null) {
-			types.add(TypeUtil.staticRef(type));
+			types.add(TypeUtil.classType(type));
 		}
 	}
 

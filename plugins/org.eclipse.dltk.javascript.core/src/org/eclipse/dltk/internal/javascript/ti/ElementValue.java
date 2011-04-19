@@ -28,6 +28,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
@@ -36,7 +37,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
 
@@ -108,7 +108,7 @@ public abstract class ElementValue implements IValue {
 
 	public static ElementValue createStatic(Type type) {
 		return new StaticTypeValue(
-				JSTypeSet.singleton(TypeUtil.staticRef(type)));
+				JSTypeSet.singleton(TypeUtil.classType(type)));
 	}
 
 	private static class TypeValue extends ElementValue implements IValue {
@@ -182,15 +182,15 @@ public abstract class ElementValue implements IValue {
 			if (name.equals(IValueReference.FUNCTION_OP)) {
 				if (types.size() == 1) {
 					final JSType type = types.getFirst();
-					if (type instanceof TypeRef && ((TypeRef) type).isStatic()) {
+					if (type instanceof ClassType) {
 						return new TypeValue(JSTypeSet.singleton(TypeUtil
-								.ref(((TypeRef) type).getTarget())));
+								.ref(((ClassType) type).getTarget())));
 					}
 				}
 				final JSTypeSet returnTypes = JSTypeSet.create();
 				for (JSType type : types) {
-					if (type instanceof TypeRef && ((TypeRef) type).isStatic()) {
-						returnTypes.add(TypeUtil.ref(((TypeRef) type)
+					if (type instanceof ClassType) {
+						returnTypes.add(TypeUtil.ref(((ClassType) type)
 								.getTarget()));
 					} else {
 						returnTypes.add(type);

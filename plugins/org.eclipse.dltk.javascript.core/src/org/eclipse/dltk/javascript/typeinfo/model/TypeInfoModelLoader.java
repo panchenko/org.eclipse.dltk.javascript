@@ -42,7 +42,7 @@ public class TypeInfoModelLoader {
 			for (EObject object : resource.getContents()) {
 				if (object instanceof Type) {
 					final Type type = (Type) object;
-					if (typeName.equals(type.getName())) {
+					if (type.isVisible() && typeName.equals(type.getName())) {
 						return type;
 					}
 				}

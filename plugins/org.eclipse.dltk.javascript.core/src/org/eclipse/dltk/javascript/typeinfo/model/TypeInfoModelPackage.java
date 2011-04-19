@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.23 2011/04/19 14:02:17 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.24 2011/04/19 17:25:03 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -955,22 +955,13 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE_REF__TARGET = JS_TYPE_FEATURE_COUNT + 0;
 
     /**
-     * The feature id for the '<em><b>Static</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int TYPE_REF__STATIC = JS_TYPE_FEATURE_COUNT + 1;
-
-    /**
      * The number of structural features of the '<em>Type Ref</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int TYPE_REF_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 2;
+    int TYPE_REF_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
 
     /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.
@@ -1067,15 +1058,6 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_TYPE__TARGET = TYPE_REF__TARGET;
 
     /**
-     * The feature id for the '<em><b>Static</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int GENERIC_TYPE__STATIC = TYPE_REF__STATIC;
-
-    /**
      * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1168,6 +1150,53 @@ public interface TypeInfoModelPackage extends EPackage {
     int RECORD_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 2;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl <em>Class Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getClassType()
+     * @generated
+     */
+    int CLASS_TYPE = 19;
+
+    /**
+     * The feature id for the '<em><b>Target</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CLASS_TYPE__TARGET = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Class Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CLASS_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.UndefinedTypeImpl <em>Undefined Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.UndefinedTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUndefinedType()
+     * @generated
+     */
+    int UNDEFINED_TYPE = 20;
+
+    /**
+     * The number of structural features of the '<em>Undefined Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int UNDEFINED_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1175,7 +1204,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 19;
+	int TYPE_KIND = 21;
 
 
 	/**
@@ -1186,7 +1215,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 20;
+	int PARAMETER_KIND = 22;
 
 
 	/**
@@ -1272,17 +1301,6 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getTypeRef_Target();
-
-    /**
-     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef#isStatic <em>Static</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Static</em>'.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeRef#isStatic()
-     * @see #getTypeRef()
-     * @generated
-     */
-    EAttribute getTypeRef_Static();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.ArrayType <em>Array Type</em>}'.
@@ -1420,6 +1438,37 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getRecordType_Members();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.ClassType <em>Class Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Class Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ClassType
+     * @generated
+     */
+    EClass getClassType();
+
+    /**
+     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.ClassType#getTarget <em>Target</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Target</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ClassType#getTarget()
+     * @see #getClassType()
+     * @generated
+     */
+    EReference getClassType_Target();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.UndefinedType <em>Undefined Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Undefined Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.UndefinedType
+     * @generated
+     */
+    EClass getUndefinedType();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
@@ -1837,14 +1886,6 @@ public interface TypeInfoModelPackage extends EPackage {
         EReference TYPE_REF__TARGET = eINSTANCE.getTypeRef_Target();
 
         /**
-         * The meta object literal for the '<em><b>Static</b></em>' attribute feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EAttribute TYPE_REF__STATIC = eINSTANCE.getTypeRef_Static();
-
-        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -1959,6 +2000,34 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference RECORD_TYPE__MEMBERS = eINSTANCE.getRecordType_Members();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl <em>Class Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getClassType()
+         * @generated
+         */
+        EClass CLASS_TYPE = eINSTANCE.getClassType();
+
+        /**
+         * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference CLASS_TYPE__TARGET = eINSTANCE.getClassType_Target();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.UndefinedTypeImpl <em>Undefined Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.UndefinedTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUndefinedType()
+         * @generated
+         */
+        EClass UNDEFINED_TYPE = eINSTANCE.getUndefinedType();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.

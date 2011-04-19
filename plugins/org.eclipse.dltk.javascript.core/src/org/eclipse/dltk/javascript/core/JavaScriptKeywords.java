@@ -14,10 +14,16 @@ public class JavaScriptKeywords {
 	private static final String[] fgKeywords = { "break", "else", "new",
 			"const", "var", "case", "finally", "return", "void", "catch",
 			"for", "switch", "while", "continue", "function", "this", "with",
-			"default", "if", "throw", "delete", "in", "try", "do",
-			"instanceof", "typeof", "null", "true", "false", "undefined" };
+			"default", "if", "throw", "delete", "try", "do", "instanceof",
+			"typeof", "null", "true", "false" };
+
+	private static final String[] keywords = { "in", "undefined" };
 
 	public static String[] getJavaScriptKeywords() {
 		return fgKeywords;
+	}
+
+	public static String[] getHighLightOnlyKeywords() {
+		return keywords;
 	}
 }

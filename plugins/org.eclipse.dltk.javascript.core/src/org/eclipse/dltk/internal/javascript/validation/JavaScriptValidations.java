@@ -25,13 +25,12 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 public class JavaScriptValidations {
 
@@ -165,19 +164,15 @@ public class JavaScriptValidations {
 			return false;
 		}
 		for (JSType type : valueRef.getDeclaredTypes()) {
-			if (type != null && type instanceof TypeRef
-					&& ((TypeRef) type).isStatic()) {
+			if (type != null && type instanceof ClassType) {
 				return true;
 			}
 		}
 		for (JSType type : valueRef.getTypes()) {
-			if (type != null && type instanceof TypeRef
-					&& ((TypeRef) type).isStatic()
-					&& !type.getName().equals(ITypeNames.UNDEFINED)) {
+			if (type != null && type instanceof ClassType) {
 				return true;
 			}
 		}
 		return false;
 	}
-
 }

@@ -11,11 +11,10 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
-import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -25,77 +24,84 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>Type Ref</b></em>'. <!-- end-user-doc -->
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Class Type</b></em>'.
+ * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl#getTarget <em>Target</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class TypeRefImpl extends EObjectImpl implements TypeRef {
-	/**
+public class ClassTypeImpl extends EObjectImpl implements ClassType {
+    /**
      * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @see #getTarget()
      * @generated
      * @ordered
      */
-	protected Type target;
+    protected Type target;
 
-	/**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	protected TypeRefImpl() {
+    protected ClassTypeImpl() {
         super();
     }
 
-	/**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	protected EClass eStaticClass() {
-        return TypeInfoModelPackage.Literals.TYPE_REF;
+    @Override
+    protected EClass eStaticClass() {
+        return TypeInfoModelPackage.Literals.CLASS_TYPE;
     }
 
-	/**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Type getTarget() {
+    public Type getTarget() {
         if (target != null && ((EObject)target).eIsProxy()) {
             InternalEObject oldTarget = (InternalEObject)target;
             target = (Type)eResolveProxy(oldTarget);
             if (target != oldTarget) {
                 if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.TYPE_REF__TARGET, oldTarget, target));
+                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.CLASS_TYPE__TARGET, oldTarget, target));
             }
         }
         return target;
     }
 
-	/**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public Type basicGetTarget() {
+    public Type basicGetTarget() {
         return target;
     }
 
-	/**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	public void setTarget(Type newTarget) {
+    public void setTarget(Type newTarget) {
         Type oldTarget = target;
         target = newTarget;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE_REF__TARGET, oldTarget, target));
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.CLASS_TYPE__TARGET, oldTarget, target));
     }
 
 	/**
@@ -103,17 +109,7 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
 	 * 
 	 * @generated NOT
 	 */
-	public TypeKind getKind() {
-		return target != null && !target.isProxy() ? target.getKind()
-				: TypeKind.UNRESOLVED;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
-	 */
-	public String getName() {
+	public String getRawName() {
 		if (target != null) {
 			if (((EObject) target).eIsProxy()) {
 				final URI uri = ((InternalEObject) target).eProxyURI();
@@ -125,71 +121,84 @@ public class TypeRefImpl extends EObjectImpl implements TypeRef {
 			}
 		}
 		return null;
-	}
+    }
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public TypeKind getKind() {
+		return TypeKind.CLASS;
+    }
 
 	/**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+	public String getName() {
+		final String rawName = getRawName();
+		return rawName != null ? "Class<" + rawName + ">" : "Class";
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    @Override
+    public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case TypeInfoModelPackage.TYPE_REF__TARGET:
+            case TypeInfoModelPackage.CLASS_TYPE__TARGET:
                 if (resolve) return getTarget();
                 return basicGetTarget();
         }
         return super.eGet(featureID, resolve, coreType);
     }
 
-	/**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	public void eSet(int featureID, Object newValue) {
+    @Override
+    public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case TypeInfoModelPackage.TYPE_REF__TARGET:
+            case TypeInfoModelPackage.CLASS_TYPE__TARGET:
                 setTarget((Type)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
     }
 
-	/**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	public void eUnset(int featureID) {
+    @Override
+    public void eUnset(int featureID) {
         switch (featureID) {
-            case TypeInfoModelPackage.TYPE_REF__TARGET:
+            case TypeInfoModelPackage.CLASS_TYPE__TARGET:
                 setTarget((Type)null);
                 return;
         }
         super.eUnset(featureID);
     }
 
-	/**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-	@Override
-	public boolean eIsSet(int featureID) {
+    @Override
+    public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case TypeInfoModelPackage.TYPE_REF__TARGET:
+            case TypeInfoModelPackage.CLASS_TYPE__TARGET:
                 return target != null;
         }
         return super.eIsSet(featureID);
     }
 
-	@Override
-	public String toString() {
-		return target != null ? target.toString() : getClass().getSimpleName();
-	}
-
-	@Override
-	public EObject eResolveProxy(InternalEObject proxy) {
-		return TypeUtil.resolve(proxy, this);
-	}
-
-} // TypeRefImpl
+} //ClassTypeImpl

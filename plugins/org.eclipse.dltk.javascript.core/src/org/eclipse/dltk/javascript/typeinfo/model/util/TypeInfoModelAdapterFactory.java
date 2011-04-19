@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.12 2011/04/19 14:02:17 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.13 2011/04/19 17:25:05 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -154,6 +154,14 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
             @Override
             public Adapter caseRecordType(RecordType object) {
                 return createRecordTypeAdapter();
+            }
+            @Override
+            public Adapter caseClassType(ClassType object) {
+                return createClassTypeAdapter();
+            }
+            @Override
+            public Adapter caseUndefinedType(UndefinedType object) {
+                return createUndefinedTypeAdapter();
             }
             @Override
             public Adapter defaultCase(EObject object) {
@@ -312,6 +320,34 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createRecordTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.ClassType <em>Class Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ClassType
+     * @generated
+     */
+    public Adapter createClassTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.UndefinedType <em>Undefined Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.UndefinedType
+     * @generated
+     */
+    public Adapter createUndefinedTypeAdapter() {
         return null;
     }
 

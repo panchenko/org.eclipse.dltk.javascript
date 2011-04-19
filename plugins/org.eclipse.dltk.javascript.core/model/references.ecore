@@ -74,6 +74,7 @@
     <eLiterals name="JAVA" value="2"/>
     <eLiterals name="EXTERNAL_JS" value="3" literal="EXTERNAL_JS"/>
     <eLiterals name="RECORD" value="4" literal="RECORD"/>
+    <eLiterals name="CLASS" value="5" literal="CLASS"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ParameterKind">
     <eLiterals name="NORMAL" literal="NORMAL"/>
@@ -90,7 +91,6 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypeRef" eSuperTypes="#//JSType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//JSType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="itemType" eType="#//JSType"
@@ -119,4 +119,9 @@
         eType="#//Member" volatile="true" transient="true" derived="true" containment="true"
         resolveProxies="false"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassType" eSuperTypes="#//JSType">
+    <eOperations name="getRawName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UndefinedType" eSuperTypes="#//JSType"/>
 </ecore:EPackage>

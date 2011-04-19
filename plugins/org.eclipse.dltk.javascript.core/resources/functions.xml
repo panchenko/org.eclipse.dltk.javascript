@@ -36,4 +36,7 @@
     </ref:Method>
   	<ref:Property name="NaN" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="Special 'not a number' value."/>
   	<ref:Property name="Infinity" directType="http://www.eclipse.org/dltk/javascript/typeinfo/builtin.xml#Number" description="A numeric value representing infinity."/>
+  	<ref:Property name="undefined" description="not assigned value.">
+  	    <type xsi:type="ref:UndefinedType"/>
+  	</ref:Property>
 </xmi:XMI>

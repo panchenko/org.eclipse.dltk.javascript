@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.12 2011/04/19 14:02:16 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.13 2011/04/19 17:25:04 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -93,6 +93,8 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.GENERIC_TYPE: return (EObject)createGenericType();
             case TypeInfoModelPackage.MAP_TYPE: return (EObject)createMapType();
             case TypeInfoModelPackage.RECORD_TYPE: return (EObject)createRecordType();
+            case TypeInfoModelPackage.CLASS_TYPE: return (EObject)createClassType();
+            case TypeInfoModelPackage.UNDEFINED_TYPE: return (EObject)createUndefinedType();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -270,6 +272,26 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     public RecordType createRecordType() {
         RecordTypeImpl recordType = new RecordTypeImpl();
         return recordType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public ClassType createClassType() {
+        ClassTypeImpl classType = new ClassTypeImpl();
+        return classType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public UndefinedType createUndefinedType() {
+        UndefinedTypeImpl undefinedType = new UndefinedTypeImpl();
+        return undefinedType;
     }
 
     /**

@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
@@ -30,17 +31,18 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class TypeUtil {
 	public static TypeRef ref(Type type) {
-		return ref(type, false);
-	}
-
-	public static TypeRef staticRef(Type type) {
-		return ref(type, true);
-	}
-
-	private static TypeRef ref(Type type, boolean isStatic) {
 		if (type != null) {
 			final TypeRef ref = TypeInfoModelFactory.eINSTANCE.createTypeRef();
-			ref.setStatic(isStatic);
+			ref.setTarget(type);
+			return ref;
+		}
+		return null;
+	}
+
+	public static ClassType classType(Type type) {
+		if (type != null) {
+			final ClassType ref = TypeInfoModelFactory.eINSTANCE
+					.createClassType();
 			ref.setTarget(type);
 			return ref;
 		}
@@ -100,6 +102,8 @@ public class TypeUtil {
 	public static Type extractType(JSType type) {
 		if (type instanceof TypeRef) {
 			return ((TypeRef) type).getTarget();
+		} else if (type instanceof ClassType) {
+			return ((ClassType) type).getTarget();
 		} else if (type instanceof ArrayType) {
 			return TypeInfoModelLoader.getInstance().getType(ITypeNames.ARRAY);
 		} else if (type instanceof MapType) {

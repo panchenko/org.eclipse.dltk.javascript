@@ -14,21 +14,21 @@ package org.eclipse.dltk.javascript.typeinfo.model;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Type Ref</b></em>'.
+ * A representation of the model object '<em><b>Class Type</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.ClassType#getTarget <em>Target</em>}</li>
  * </ul>
  * </p>
  *
- * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getTypeRef()
+ * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getClassType()
  * @model
  * @generated
  */
-public interface TypeRef extends JSType {
+public interface ClassType extends JSType {
     /**
      * Returns the value of the '<em><b>Target</b></em>' reference.
      * <!-- begin-user-doc -->
@@ -39,14 +39,14 @@ public interface TypeRef extends JSType {
      * <!-- end-user-doc -->
      * @return the value of the '<em>Target</em>' reference.
      * @see #setTarget(Type)
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getTypeRef_Target()
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getClassType_Target()
      * @model
      * @generated
      */
     Type getTarget();
 
     /**
-     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef#getTarget <em>Target</em>}' reference.
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.ClassType#getTarget <em>Target</em>}' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @param value the new value of the '<em>Target</em>' reference.
@@ -55,4 +55,12 @@ public interface TypeRef extends JSType {
      */
     void setTarget(Type value);
 
-} // TypeRef
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @model kind="operation"
+     * @generated
+     */
+    String getRawName();
+
+} // ClassType
