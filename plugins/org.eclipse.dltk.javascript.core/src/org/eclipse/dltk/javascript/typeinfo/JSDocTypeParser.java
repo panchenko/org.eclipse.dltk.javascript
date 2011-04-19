@@ -152,6 +152,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				sb.append(typeParam.getName());
 			}
 			sb.append('>');
+			return TypeUtil.ref(sb.toString());
 		}
 		return TypeUtil.ref(baseType);
 	}
