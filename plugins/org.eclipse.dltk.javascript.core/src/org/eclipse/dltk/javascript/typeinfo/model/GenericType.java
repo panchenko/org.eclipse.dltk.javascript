@@ -46,4 +46,12 @@ public interface GenericType extends TypeRef {
      */
     EList<JSType> getTypeParameters();
 
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @model kind="operation"
+     * @generated
+     */
+    String getRawName();
+
 } // GenericType

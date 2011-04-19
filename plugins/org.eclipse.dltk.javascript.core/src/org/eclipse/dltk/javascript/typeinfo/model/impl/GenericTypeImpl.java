@@ -78,6 +78,15 @@ public class GenericTypeImpl extends TypeRefImpl implements GenericType {
         return typeParameters;
     }
 
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public String getRawName() {
+		return super.getName();
+    }
+
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

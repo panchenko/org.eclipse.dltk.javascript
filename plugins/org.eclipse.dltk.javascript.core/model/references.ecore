@@ -102,6 +102,7 @@
         eType="#//JSType" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GenericType" eSuperTypes="#//TypeRef">
+    <eOperations name="getRawName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="typeParameters" upperBound="-1"
         eType="#//JSType" containment="true"/>
   </eClassifiers>
