@@ -31,11 +31,11 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 
 @SuppressWarnings("nls")
 public class TypeInferenceTests extends TestCase implements ITypeNames {
@@ -59,7 +59,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 			final Type type = TypeInfoModelLoader.getInstance().getType(
 					isStatic ? name.substring(STATIC_PREFIX.length()) : name);
 			assertNotNull(type);
-			types.add(isStatic ? TypeUtil.staticRef(type) : TypeUtil.ref(type));
+			types.add(isStatic ? TypeUtil.classType(type) : TypeUtil.ref(type));
 		}
 		return types;
 	}
@@ -642,7 +642,8 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("num");
 		assertEquals(getTypes(STATIC_PREFIX + NUMBER), name.getTypes());
 
-		assertTrue(((TypeRef) name.getTypes().getFirst()).isStatic());
+		assertEquals(NUMBER,
+				((ClassType) name.getTypes().getFirst()).getRawName());
 
 		// TODO should a static reference getchild really return existing none
 		// static childs?
@@ -665,7 +666,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
 		JSType type = strClz.getTypes().getFirst();
-		assertEquals("java.lang.String", type.getName());
+		assertEquals("Class<java.lang.String>", type.getName());
 
 		boolean valueOfFound = false;
 		for (Member member : extractType(type).getMembers()) {
@@ -701,7 +702,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
 		JSType type = strClz.getTypes().getFirst();
-		assertEquals("java.lang.String", type.getName());
+		assertEquals("Class<java.lang.String>", type.getName());
 
 		boolean valueOfFound = false;
 		for (Member member : extractType(type).getMembers()) {
