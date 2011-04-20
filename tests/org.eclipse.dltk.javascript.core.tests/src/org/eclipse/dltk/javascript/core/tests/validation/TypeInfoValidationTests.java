@@ -491,6 +491,20 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
+	public void testGenericAnyWtihNoneGenericCall() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Array<*>} array the value of the node");
+		code.add(" */");
+		code.add("function testArray(array) {");
+		code.add("}");
+		code.add("function test() {");
+		code.add("testArray(new Array());");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 	public void testGenericParamWtihGenericCall() {
 		List<String> code = new StringList();
 		code.add("/**");
