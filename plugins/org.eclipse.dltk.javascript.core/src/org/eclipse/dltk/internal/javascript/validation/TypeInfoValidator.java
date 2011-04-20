@@ -1003,7 +1003,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 			int testTypesSize = parameters.size();
 			if (parameters.size() > arguments.length) {
 				for (int i = arguments.length; i < parameters.size(); i++) {
-					if (parameters.get(i).getKind() != ParameterKind.OPTIONAL)
+					final ParameterKind pkind = parameters.get(i).getKind();
+					if (pkind != ParameterKind.OPTIONAL
+							&& pkind != ParameterKind.VARARGS)
 						return false;
 				}
 				testTypesSize = arguments.length;
