@@ -1598,4 +1598,29 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 2, problems.size());
 	}
 
+	public void testVarArgs() throws Exception {
+		StringList code = new StringList();
+		code.add("var x = []");
+		code.add("x.splice(0,1)");
+		code.add("x.splice(0,1,2)");
+		code.add("x.splice(0,1,2,3)");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testVarArgsJS() throws Exception {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Number} x");
+		code.add(" * @param {Number} y");
+		code.add(" * @param {...Number} z");
+		code.add(" */");
+		code.add("function test(x, y, z) {}");
+		code.add("test(0,1)");
+		code.add("test(0,1,2)");
+		code.add("test(0,1,2,3)");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 }
