@@ -1601,43 +1601,29 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	@Override
 	protected ASTNode visitArray(Tree node) {
-
-		ArrayInitializer array = new ArrayInitializer(getParent());
-
-		array.setLB(getTokenOffset(JSParser.LBRACK, node.getTokenStartIndex(),
-				node.getTokenStartIndex()));
-
-		List<ASTNode> items = new ArrayList<ASTNode>(node.getChildCount());
-		IntList commas = new IntList();
-
-		for (int i = 0; i < node.getChildCount(); i++) {
-			Tree child = node.getChild(i);
-
-			if (child.getType() != JSParser.ITEM)
-				throw new UnsupportedOperationException("ITEM expected"); //$NON-NLS-1$
-
+		final int itemCount = node.getChildCount() - 1;
+		ArrayInitializer array = new ArrayInitializer(getParent(), itemCount);
+		array.setLB(getTokenOffset(node.getTokenStartIndex()));
+		for (int i = 0; i < itemCount; i++) {
+			final Tree child = node.getChild(i);
+			assert child.getType() == JSParser.ITEM : "ITEM expected"; //$NON-NLS-1$
 			final Tree item = child.getChild(0);
 			if (item != null) {
-				items.add(transformNode(item, array));
+				array.getItems().add(transformNode(item, array));
 			} else {
-				items.add(new EmptyExpression(getParent()));
+				array.getItems().add(new EmptyExpression(getParent()));
 			}
-
 			if (i > 0) {
-				commas.add(getTokenOffset(JSParser.COMMA, node.getChild(i - 1)
-						.getTokenStopIndex() + 1, child.getTokenStartIndex()));
+				array.getCommas().add(
+						getTokenOffset(JSParser.COMMA, node.getChild(i - 1)
+								.getTokenStopIndex() + 1, child
+								.getTokenStartIndex()));
 			}
 		}
-
-		array.setItems(items);
-		array.setCommas(commas);
-
-		array.setRB(getTokenOffset(JSParser.RBRACK, node.getTokenStopIndex(),
-				node.getTokenStopIndex()));
-
+		array.setRB(getTokenOffset(node.getChild(itemCount)
+				.getTokenStartIndex()));
 		array.setStart(array.getLB());
 		array.setEnd(array.getRB() + 1);
-
 		return array;
 	}
 

@@ -12,6 +12,7 @@
 
 package org.eclipse.dltk.javascript.ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -21,13 +22,15 @@ import org.eclipse.dltk.utils.IntList;
 
 public class ArrayInitializer extends Expression {
 
-	private List<ASTNode> items;
-	private IntList commas;
+	private final List<ASTNode> items;
+	private final IntList commas;
 	private int LB = -1;
 	private int RB = -1;
 
-	public ArrayInitializer(ASTNode parent) {
+	public ArrayInitializer(ASTNode parent, int itemCount) {
 		super(parent);
+		items = new ArrayList<ASTNode>(itemCount);
+		commas = new IntList(itemCount > 0 ? itemCount - 1 : 0);
 	}
 
 	/**
@@ -49,16 +52,8 @@ public class ArrayInitializer extends Expression {
 		return this.items;
 	}
 
-	public void setItems(List<ASTNode> items) {
-		this.items = items;
-	}
-
 	public IntList getCommas() {
 		return this.commas;
-	}
-
-	public void setCommas(IntList commas) {
-		this.commas = commas;
 	}
 
 	public int getLB() {

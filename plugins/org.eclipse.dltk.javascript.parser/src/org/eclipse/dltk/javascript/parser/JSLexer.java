@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2011-04-14 21:36:00
+// $ANTLR 3.0.1 JS.g 2011-04-20 21:22:36
 
 package org.eclipse.dltk.javascript.parser;
 

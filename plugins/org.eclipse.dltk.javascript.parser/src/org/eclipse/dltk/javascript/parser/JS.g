@@ -1019,8 +1019,8 @@ parenExpression
   ;
 
 arrayLiteral
-	: lb=LBRACK ( arrayItem ( COMMA arrayItem? )* )? RBRACK
-	-> ^( ARRAY[$lb, "ARRAY"] arrayItem* )
+	: lb=LBRACK ( arrayItem ( COMMA arrayItem? )* )? rb=RBRACK
+	-> ^( ARRAY[$lb, "ARRAY"] arrayItem* $rb)
 	;
 
 arrayItem
