@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.parser.tests;
 
 import org.eclipse.dltk.ast.utils.ASTUtil;
+import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -41,6 +42,17 @@ public class ArrayInitializerTests extends AbstractJSParserTest {
 		assertDecimal("1", array.getItems().get(0));
 		assertTrue(array.getItems().get(1) instanceof EmptyExpression);
 		assertDecimal("3", array.getItems().get(2));
+	}
+
+	public void testArrayInDifferentLines() {
+		StringList code = new StringList();
+		code.add("[");
+		code.add("];");
+		Script script = parse(code.toString());
+		assertFalse(reporter.hasErrors());
+		ArrayInitializer array = uniqueResult(ASTUtil.select(script,
+				ArrayInitializer.class));
+		assertEquals(0, array.getItems().size());
 	}
 
 }
