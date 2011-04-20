@@ -48,6 +48,9 @@ public class JSDocValidatorFactory {
 		}
 
 		public void checkType(JSType type, JSDocTag tag) {
+			if (type == null) {
+				return;
+			}
 			type = context.resolveTypeRef(type);
 			if (type instanceof UnionType) {
 				EList<JSType> targets = ((UnionType) type).getTargets();
