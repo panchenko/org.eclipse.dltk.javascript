@@ -1637,4 +1637,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testPossibleRecursionInNew() {
+		validate("var a = new a.toString()");
+		// just check there was stack overflow
+	}
+
 }
