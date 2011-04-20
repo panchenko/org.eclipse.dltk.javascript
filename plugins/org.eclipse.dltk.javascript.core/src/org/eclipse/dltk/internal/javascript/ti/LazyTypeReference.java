@@ -18,73 +18,79 @@ public class LazyTypeReference extends AbstractReference {
 		boolean resolved = false;
 		private boolean finalResolve;
 		private boolean doResolve = true;
+		private boolean resolving;
 
 		public void resolve() {
-			if (!resolved && doResolve) {
-				IValueReference createChild = collection.getChild(className);
-				if (createChild.exists()
-						&& createChild
-								.getAttribute(IReferenceAttributes.RESOLVING) == null) {
-					IValueCollection collection = (IValueCollection) createChild
-							.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
-					if (collection != null && collection.getThis() != null) {
-						createChild = collection.getThis();
-					}
+			if (!resolved && doResolve && !resolving) {
+				resolving = true;
+				doResolve();
+				resolving = false;
+			}
+		}
 
-					IValue src = ((IValueProvider) createChild).getValue();
-					// if i enable this then the type added below takes
-					// precedance some time
-					// for example a toString() on a javasccript object will
-					// then return the toString of Object
-					// if (src instanceof Value) {
-					// this.references.add((Value) src);
-					// } else
+		private void doResolve() {
+			IValueReference createChild = collection.getChild(className);
+			if (createChild.exists()
+					&& createChild.getAttribute(IReferenceAttributes.RESOLVING) == null) {
+				IValueCollection collection = (IValueCollection) createChild
+						.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
+				if (collection != null && collection.getThis() != null) {
+					createChild = collection.getThis();
+				}
+
+				IValue src = ((IValueProvider) createChild).getValue();
+				// if i enable this then the type added below takes
+				// precedance some time
+				// for example a toString() on a javasccript object will
+				// then return the toString of Object
+				// if (src instanceof Value) {
+				// this.references.add((Value) src);
+				// } else
+				if (src != null) {
+					addValue(src);
+				}
+				setKind(ReferenceKind.TYPE);
+				Type type = TypeInfoModelFactory.eINSTANCE.createType();
+				type.setSuperType(context.getKnownType(OBJECT, null));
+				type.setKind(TypeKind.JAVASCRIPT);
+				type.setName(className);
+				setDeclaredType(TypeUtil.ref(type));
+				resolved = true;
+			} else if (className.indexOf('.') != -1) {
+				StringTokenizer st = new StringTokenizer(className, ".");
+				IValueReference child = null;
+				while (st.hasMoreTokens()) {
+					String token = st.nextToken();
+					if (child == null) {
+						child = collection.getChild(token);
+					} else {
+						child = child.getChild(token);
+					}
+					if (!child.exists()) {
+						child = null;
+						break;
+					}
+				}
+				if (child != null) {
+					IValue src = ((IValueProvider) child).getValue();
 					if (src != null) {
-						addValue(src);
+						// this is a type so try to get the this of the
+						// function if this resolves to a function object.
+						IValueCollection collection = (IValueCollection) src
+								.getAttribute(
+										IReferenceAttributes.FUNCTION_SCOPE,
+										true);
+						if (collection != null)
+							addValue(((IValueProvider) collection.getThis())
+									.getValue());
+						else
+							addValue(src);
 					}
 					setKind(ReferenceKind.TYPE);
-					Type type = TypeInfoModelFactory.eINSTANCE.createType();
-					type.setSuperType(context.getKnownType(OBJECT, null));
-					type.setKind(TypeKind.JAVASCRIPT);
-					type.setName(className);
-					setDeclaredType(TypeUtil.ref(type));
 					resolved = true;
-				} else if (className.indexOf('.') != -1) {
-					StringTokenizer st = new StringTokenizer(className, ".");
-					IValueReference child = null;
-					while (st.hasMoreTokens()) {
-						String token = st.nextToken();
-						if (child == null) {
-							child = collection.getChild(token);
-						} else {
-							child = child.getChild(token);
-						}
-						if (!child.exists()) {
-							child = null;
-							break;
-						}
-					}
-					if (child != null) {
-						IValue src = ((IValueProvider) child).getValue();
-						if (src != null) {
-							// this is a type so try to get the this of the
-							// function if this resolves to a function object.
-							IValueCollection collection = (IValueCollection) src
-									.getAttribute(
-											IReferenceAttributes.FUNCTION_SCOPE,
-											true);
-							if (collection != null)
-								addValue(((IValueProvider) collection.getThis())
-										.getValue());
-							else
-								addValue(src);
-						}
-						setKind(ReferenceKind.TYPE);
-						resolved = true;
-					}
-				} else {
-					doResolve = !finalResolve;
 				}
+			} else {
+				doResolve = !finalResolve;
 			}
 		}
 
