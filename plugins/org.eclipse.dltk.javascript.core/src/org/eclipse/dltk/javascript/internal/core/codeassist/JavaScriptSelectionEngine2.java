@@ -31,6 +31,7 @@ import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.core.ScriptModelUtil;
 import org.eclipse.dltk.core.model.LocalVariable;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
@@ -307,7 +308,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		ISourceModule module = location.getSourceModule();
 		if (module != null) {
 			try {
-				module.reconcile(false, null, null);
+				ScriptModelUtil.reconcile(module);
 				module.accept(new Visitor(location.getNameStart(), location
 						.getNameEnd()));
 			} catch (ModelException e) {
