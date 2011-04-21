@@ -17,6 +17,7 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.core.ScriptModelUtil;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.ui.actions.SelectionConverter;
 import org.eclipse.dltk.internal.ui.editor.EditorUtility;
@@ -90,7 +91,7 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 			Object[] elements = null;
 			if (type == null) {
 				try {
-					input.reconcile(false, null, null);
+					ScriptModelUtil.reconcile(input);
 					input.accept(new Visitor(typeName));
 				} catch (ModelException e) {
 					if (DLTKCore.DEBUG) {
