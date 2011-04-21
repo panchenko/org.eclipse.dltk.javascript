@@ -81,7 +81,8 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				input.consume();
 				final List<JSType> typeParams = parseParams(input);
 				match(input, '>');
-				return createGenericType(baseType, typeParams);
+				JSType type = createGenericType(baseType, typeParams);
+				return checkIfArray(input, type);
 			} else if (ch == '.' && input.LT(2) == '<') {
 				final String baseType = input.substring(start,
 						input.index() - 1);
@@ -89,13 +90,15 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				input.consume();
 				final List<JSType> typeParams = parseParams(input);
 				match(input, '>');
-				return createGenericType(baseType, typeParams);
+				JSType type = createGenericType(baseType, typeParams);
+				return checkIfArray(input, type);
 			} else if (ch == '[') {
 				final String baseType = input.substring(start,
 						input.index() - 1);
 				input.consume();
 				match(input, ']');
-				return createArray(translate(baseType));
+				JSType array = createArray(translate(baseType));
+				return checkIfArray(input, array);
 			} else if (ch == CharStream.EOF || Character.isWhitespace(ch)
 					|| ch == '|' || ch == ',' || ch == '}' || ch == '>') {
 				return createType(translate(input.substring(start,
@@ -104,6 +107,24 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				input.consume();
 			}
 		}
+	}
+
+	/**
+	 * @param input
+	 * @param type
+	 * @return
+	 * @throws ParseException
+	 */
+	private JSType checkIfArray(CharStream input, JSType type)
+			throws ParseException {
+		int ch = input.LT(1);
+		while (ch == '[') {
+			input.consume();
+			match(input, ']');
+			type = createArray(type);
+			ch = input.LT(1);
+		}
+		return type;
 	}
 
 	protected JSType createType(String typeName) {
