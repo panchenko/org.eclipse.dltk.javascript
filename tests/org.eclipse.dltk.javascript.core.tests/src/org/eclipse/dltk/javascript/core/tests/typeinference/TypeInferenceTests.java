@@ -993,4 +993,25 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(getTypes(ITypeNames.NUMBER), variable.getTypes());
 	}
 
+	public void testJSDocWithArrayInArrayType() throws Exception {
+		StringList code = new StringList();
+		code.add("/** @type {String[][]} */");
+		code.add("var x = null;");
+		code.add("var y = x[0][0];");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("y");
+		assertEquals(getTypes(ITypeNames.STRING), child.getTypes());
+		
+	}
+	
+	public void testJSDocWithGenericArrayInArrayType() throws Exception {
+		StringList code = new StringList();
+		code.add("/** @type {Array<String>[]} */");
+		code.add("var x = null;");
+		code.add("var y = x[0][0];");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("y");
+		assertEquals(getTypes(ITypeNames.STRING), child.getTypes());
+		
+	}
 }
