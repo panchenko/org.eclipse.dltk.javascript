@@ -211,7 +211,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 			int ch = input.LT(1);
 			if (Character.isJavaIdentifierStart(ch)) {
 				input.consume();
-				while (Character.isJavaIdentifierStart(input.LT(1))) {
+				while (Character.isJavaIdentifierPart(input.LT(1))) {
 					input.consume();
 				}
 				final Property property = TypeInfoModelFactory.eINSTANCE
