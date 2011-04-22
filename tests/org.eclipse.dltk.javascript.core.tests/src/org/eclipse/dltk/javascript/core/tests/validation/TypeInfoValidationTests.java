@@ -1650,4 +1650,38 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testMixedRecordTypes() throws Exception {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add("* @param {Object} _someArg");
+		code.add("* @param {String} _someArg.strProp");
+		code.add("*/");
+		code.add("function firstFunc(_someArg){");
+		code.add("secondFunc(_someArg);");
+		code.add("}");
+		code.add("/**");
+		code.add("* @param {Object} _someArg - ");
+		code.add("* @param {String} _someArg.strProp");
+		code.add("*/");
+		code.add("function secondFunc(_someArg){");
+		code.add("secondFunc1(_someArg);");
+		code.add("}");
+		code.add("/**");
+		code.add("* @param {{strProp:String}} _someArg");
+		code.add("*/");
+		code.add("function firstFunc1(_someArg){");
+		code.add("secondFunc1(_someArg);");
+		code.add("}");
+		code.add("/**");
+		code.add("* @param {{strProp:String}} _someArg -");
+		code.add("*/");
+		code.add("function secondFunc1(_someArg){");
+		code.add("secondFunc(_someArg);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+
+
 }
