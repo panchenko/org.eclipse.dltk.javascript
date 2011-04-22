@@ -1641,5 +1641,13 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		validate("var a = new a.toString()");
 		// just check there was stack overflow
 	}
+	
+	public void testRecordTypeWithNumbersInPropertyName() throws Exception {
+		StringList code = new StringList();
+		code.add("/** @type  {{prop1: String, prop2:Number}} */");
+		code.add("var x = null;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
 }
