@@ -956,6 +956,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 				IValueReference argument = arguments[i];
 				IParameter parameter = parameters.get(i);
 				if (parameter.getType() instanceof RecordType
+						&& argument.getDeclaredType() instanceof RecordType) {
+					if (!testArgumentType(parameter.getType(), argument))
+						return false;
+				} else
+				if (parameter.getType() instanceof RecordType
 						&& argument != null) {
 					Set<String> argumentsChildren = argument
 							.getDirectChildren();
