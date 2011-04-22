@@ -35,11 +35,11 @@ import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
 import org.eclipse.dltk.ui.documentation.ScriptDocumentationAccess;
 import org.eclipse.dltk.ui.text.completion.ProposalInfo;
 
-class JavaScriptProposalInfo extends ProposalInfo {
+public class JavaScriptProposalInfo extends ProposalInfo {
 
 	private final Object ref;
 
-	JavaScriptProposalInfo(Object ref) {
+	public JavaScriptProposalInfo(Object ref) {
 		super(null);
 		this.ref = ref;
 	}
