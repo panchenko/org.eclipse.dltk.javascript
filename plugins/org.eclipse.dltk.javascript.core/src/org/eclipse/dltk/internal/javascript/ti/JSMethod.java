@@ -114,7 +114,22 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	@Override
 	public String toString() {
-		return name + super.toString() + (type != null ? ":" + type : "");
+		StringBuilder sb = new StringBuilder();
+		sb.append(name);
+		sb.append('(');
+		boolean first = true;
+		for (IParameter parameter : this) {
+			if (!first) {
+				sb.append(',');
+			}
+			first = false;
+			sb.append(parameter);
+		}
+		sb.append(')');
+		if (type != null) {
+			sb.append(':').append(type);
+		}
+		return sb.toString();
 	}
 
 	public JSMethod() {
