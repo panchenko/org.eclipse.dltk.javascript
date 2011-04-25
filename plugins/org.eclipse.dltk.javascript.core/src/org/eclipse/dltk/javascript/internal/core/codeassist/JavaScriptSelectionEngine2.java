@@ -33,6 +33,7 @@ import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.ScriptModelUtil;
 import org.eclipse.dltk.core.model.LocalVariable;
+import org.eclipse.dltk.core.model.UnresolvedElement;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -60,7 +61,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 
 	@SuppressWarnings("serial")
 	private static class ModelElementFound extends RuntimeException {
-		private final IModelElement element;
+		final IModelElement element;
 
 		public ModelElementFound(IModelElement element) {
 			this.element = element;
@@ -207,6 +208,13 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 						return convert(m, t);
 					}
 				}
+				final ReferenceLocation location = value.getLocation();
+				if (location != ReferenceLocation.UNKNOWN
+						&& location.getSourceModule() != null) {
+					return new IModelElement[] { new UnresolvedElement(
+							location.getSourceModule(), value.getName(),
+							location.getNameStart(), location.getNameEnd() - 1) };
+				}
 			}
 		}
 
@@ -320,29 +328,6 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			}
 		}
 		return null;
-		// return new org.eclipse.dltk.internal.core.NamedMember(
-		// (ModelElement) module, "test") {
-		//
-		// public int getElementType() {
-		// return 0;
-		// }
-		//
-		// @Override
-		// protected char getHandleMementoDelimiter() {
-		// return 0;
-		// }
-		//
-		// @Override
-		// public ISourceRange getNameRange() throws ModelException {
-		// return new SourceRange(location.getNameStart(),
-		// (location.getNameEnd() - location.getNameStart()));
-		// }
-		//
-		// @Override
-		// public ISourceRange getSourceRange() throws ModelException {
-		// return getNameRange();
-		// }
-		// };
 	}
 
 	/**
