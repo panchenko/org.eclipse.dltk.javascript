@@ -344,7 +344,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 						break;
 				}
 				Assert.isTrue(validResource, "Type " + type.getName()
-						+ " has not a valid resource: " + resource);
+						+ " has invalid resource: " + resource);
 			}
 		}
 		// TODO check that member referenced types are contained or proxy
