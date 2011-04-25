@@ -15,10 +15,20 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 
 public class AnonymousValue extends AbstractReference {
 
+	public AnonymousValue() {
+		this(false);
+	}
+
+	private final boolean isReference;
+
+	public AnonymousValue(boolean isReference) {
+		this.isReference = isReference;
+	}
+
 	private final Value value = new Value();
 
 	public boolean isReference() {
-		return false;
+		return isReference;
 	}
 
 	@Override
