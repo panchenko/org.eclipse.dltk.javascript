@@ -78,6 +78,7 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 	@Override
 	public FlowStatus visitStatementBlock(StatementBlock node) {
 		FlowStatus status = new FlowStatus();
+		status.noReturn = true;
 		int startRange = Integer.MAX_VALUE;
 		int endRange = -1;
 		for (Statement statement : node.getStatements()) {
