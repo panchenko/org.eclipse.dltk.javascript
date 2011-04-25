@@ -247,12 +247,11 @@ public class TypeInfoManager {
 									.put(URI.createURI(uri),
 											createURI(element, resource));
 							resourceSet.getResources().add(
-									new XMIResourceImpl(URI.createURI(uri)));
+									createResource(URI.createURI(uri)));
 						}
 					} else if (resource != null) {
 						resourceSet.getResources().add(
-								new XMIResourceImpl(
-										createURI(element, resource)));
+								createResource(createURI(element, resource)));
 					}
 				} catch (IllegalArgumentException e) {
 					JavaScriptPlugin.error(e);
@@ -276,6 +275,10 @@ public class TypeInfoManager {
 			}
 		}
 		return resourceSet;
+	}
+
+	private static Resource createResource(URI uri) {
+		return new XMIResourceImpl(uri);
 	}
 
 }
