@@ -26,6 +26,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -43,7 +44,7 @@ import org.eclipse.emf.common.util.EList;
 public abstract class ElementValue implements IValue {
 
 	public static ElementValue findMember(JSType type, String name) {
-		return findMember(type, name, MemberPredicates.ALWAYS_TRUE);
+		return findMember(type, name, MemberPredicate.ALWAYS_TRUE);
 	}
 
 	public static ElementValue findMember(JSType type, String name,
@@ -200,7 +201,7 @@ public abstract class ElementValue implements IValue {
 			}
 			for (JSType type : types) {
 				IValue child = findMember(type, name,
-						MemberPredicates.ALWAYS_TRUE);
+						MemberPredicate.ALWAYS_TRUE);
 				if (child != null)
 					return child;
 			}

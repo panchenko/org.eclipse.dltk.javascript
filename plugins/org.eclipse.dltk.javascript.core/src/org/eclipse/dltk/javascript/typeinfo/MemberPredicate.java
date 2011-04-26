@@ -9,29 +9,25 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.ti;
+package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
-public class MemberPredicates {
-
-	public static final Predicate<Member> STATIC = new Predicate<Member>() {
+public enum MemberPredicate implements Predicate<Member> {
+	STATIC {
 		public boolean evaluate(Member member) {
 			return member.isStatic();
 		}
-	};
-
-	public static final Predicate<Member> NON_STATIC = new Predicate<Member>() {
+	},
+	NON_STATIC {
 		public boolean evaluate(Member member) {
 			return !member.isStatic();
 		}
-	};
-
-	public static final Predicate<Member> ALWAYS_TRUE = new Predicate<Member>() {
+	},
+	ALWAYS_TRUE {
 		public boolean evaluate(Member member) {
 			return true;
 		}
 	};
-
 }

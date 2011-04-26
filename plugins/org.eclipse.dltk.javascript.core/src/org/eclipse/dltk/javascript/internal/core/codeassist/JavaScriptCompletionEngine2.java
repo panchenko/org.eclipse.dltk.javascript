@@ -24,7 +24,6 @@ import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.internal.core.ModelManager;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
-import org.eclipse.dltk.internal.javascript.ti.MemberPredicates;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
@@ -39,6 +38,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -272,24 +272,24 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				for (JSType type : valueRef.getDeclaredTypes()) {
 					if (type instanceof ClassType) {
 						reportTypeMembers(((ClassType) type).getTarget(),
-								MemberPredicates.STATIC);
+								MemberPredicate.STATIC);
 					} else {
 						final Type t = TypeUtil.extractType(context
 								.resolveTypeRef(type));
 						if (t != null) {
-							reportTypeMembers(t, MemberPredicates.NON_STATIC);
+							reportTypeMembers(t, MemberPredicate.NON_STATIC);
 						}
 					}
 				}
 				for (JSType type : valueRef.getTypes()) {
 					if (type instanceof ClassType) {
 						reportTypeMembers(((ClassType) type).getTarget(),
-								MemberPredicates.STATIC);
+								MemberPredicate.STATIC);
 					} else {
 						final Type t = TypeUtil.extractType(context
 								.resolveTypeRef(type));
 						if (t != null) {
-							reportTypeMembers(t, MemberPredicates.NON_STATIC);
+							reportTypeMembers(t, MemberPredicate.NON_STATIC);
 						}
 					}
 				}
