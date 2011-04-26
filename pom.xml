@@ -10,7 +10,6 @@
 		<module>features/org.eclipse.dltk.javascript-feature</module>
 		<!--    <module>features/org.eclipse.dltk.javascript.sdk</module>-->
 		<module>plugins/org.eclipse.dltk.javascript.core</module>
-		<module>plugins/org.eclipse.dltk.javascript.core.dom.support</module>
 		<module>plugins/org.eclipse.dltk.javascript.core.manipulation</module>
 		<module>plugins/org.eclipse.dltk.javascript.debug</module>
 		<module>plugins/org.eclipse.dltk.javascript.debug.ui</module>
