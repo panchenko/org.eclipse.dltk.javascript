@@ -261,6 +261,12 @@ public class ImmutableValue implements IValue, IValue2 {
 		return null;
 	}
 
+	protected void childCreated(String name) {
+		if (elementValues != null) {
+			elementValues.remove(name);
+		}
+	}
+
 	public void setDeclaredType(JSType declaredType) {
 	}
 

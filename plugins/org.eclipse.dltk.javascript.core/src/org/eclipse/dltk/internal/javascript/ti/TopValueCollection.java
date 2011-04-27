@@ -82,6 +82,12 @@ public class TopValueCollection extends ValueCollection {
 			}
 			return member;
 		}
+
+		@Override
+		protected void childCreated(String name) {
+			super.childCreated(name);
+			memberCache.remove(name);
+		}
 	}
 
 	private final ITypeInferenceContext context;

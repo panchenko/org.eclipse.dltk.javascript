@@ -83,7 +83,8 @@ public class Value extends ImmutableValue {
 		if (child == null) {
 			child = inherited.get(name);
 			if (child == null) {
-				child = findMember(name, true);
+				// creating new child, so ignore external elements
+				child = findMember(name, false);
 				if (child != null) {
 					return child;
 				}
@@ -97,6 +98,7 @@ public class Value extends ImmutableValue {
 				}
 				child = new Value();
 				children.put(name, (Value) child);
+				childCreated(name);
 			}
 		}
 		return child;
