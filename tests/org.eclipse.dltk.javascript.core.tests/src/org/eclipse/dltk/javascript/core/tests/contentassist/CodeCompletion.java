@@ -10,6 +10,8 @@ import org.eclipse.dltk.core.CompletionProposal;
 
 public class CodeCompletion extends AbstractCompletionTest {
 
+	private static final String[] STRINGS = new String[0];
+
 	private static final String ARGUMENTS = "arguments";
 
 	/**
@@ -441,36 +443,34 @@ public class CodeCompletion extends AbstractCompletionTest {
 		basicTest(module, position, names);
 		// basicTest(module, 105, names);
 	}
-	
+
 	public void test49() {
 		IModuleSource module = createModule("test49.js");
 		int position = lastPositionInFile("name.", module);
-		basicTest(module, position, getMethodsOfString().toArray(new String[0]));
+		basicTest(module, position, getMethodsOfString().toArray(STRINGS));
 		// basicTest(module, 105, names);
 	}
 
-	
 	public void test50() {
 		IModuleSource module = createModule("test50.js");
 		int position = lastPositionInFile("Function.", module);
-		basicTest(module, position, new String[] {"prototype"});
-		// basicTest(module, 105, names);
-	}
-	
-	public void test51() {
-		IModuleSource module = createModule("test51.js");
-		int position = lastPositionInFile("test.", module);
-		basicTest(module, position, getMethodsOfFunction().toArray(new String[0]));
-		// basicTest(module, 105, names);
-	}
-	
-	public void test52() {
-		IModuleSource module = createModule("test52.js");
-		int position = lastPositionInFile("x.", module);
-		basicTest(module, position, getMethodsOfFunction().toArray(new String[0]));
+		basicTest(module, position, new String[] { "prototype" });
 		// basicTest(module, 105, names);
 	}
 
+	public void test51() {
+		IModuleSource module = createModule("test51.js");
+		int position = lastPositionInFile("test.", module);
+		basicTest(module, position, getMethodsOfFunction().toArray(STRINGS));
+		// basicTest(module, 105, names);
+	}
+
+	public void test52() {
+		IModuleSource module = createModule("test52.js");
+		int position = lastPositionInFile("x.", module);
+		basicTest(module, position, getMethodsOfFunction().toArray(STRINGS));
+		// basicTest(module, 105, names);
+	}
 
 	public void testObjectFunctionReturnValue() {
 		String[] names = new String[] { "a", "b" };
@@ -485,29 +485,36 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile("a = test", module);
 		basicTest(module, position, names);
 	}
-	
+
 	public void testArrayInitializer() {
 		IModuleSource module = createModule("test-array-intializer.js");
 		int position = lastPositionInFile("].", module);
-		basicTest(module, position, getMethodsOfArray().toArray(new String[0]));
+		basicTest(module, position, getMethodsOfArray().toArray(STRINGS));
 	}
 
 	public void testParamType() {
 		IModuleSource module = createModule("test-function-paramtype.js");
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, new String[]{"service","status"});
+		basicTest(module, position, new String[] { "service", "status" });
 	}
-	
+
 	public void testElementReferenceType() {
 		IModuleSource module = createModule("test-element-reference.js");
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, new String[]{"deprecatedName","service"});
+		basicTest(module, position,
+				new String[] { "deprecatedName", "service" });
 	}
-	
+
 	public void testNewViaClassRef() {
 		IModuleSource module = createModule("test-new-via-class-ref.js");
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, getMethodsOfNumber().toArray(new String[0]));
+		basicTest(module, position, getMethodsOfNumber().toArray(STRINGS));
+	}
+
+	public void testXmlVar() {
+		IModuleSource module = createModule("test-xml-name.js");
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, getMethodsOfNumber().toArray(STRINGS));
 	}
 
 }

@@ -20,13 +20,9 @@ import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
-import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
-import org.eclipse.dltk.javascript.typeinference.IValueCollection;
-import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 
 @SuppressWarnings("nls")
 public class TypeInfoValidationTests extends AbstractValidationTest {
@@ -192,6 +188,16 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("function exampleFormsHide(){}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testVarHidesXMLType() {
+		StringList code = new StringList();
+		code.add("var XML = 1");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		// TODO (alex) introduce special problem id
+		assertEquals(JavaScriptProblems.DUPLICATE_VAR_DECLARATION, problems
+				.get(0).getID());
 	}
 
 	public void testUndefinedPropertyAccess() {
@@ -1641,7 +1647,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		validate("var a = new a.toString()");
 		// just check there was stack overflow
 	}
-	
+
 	public void testRecordTypeWithNumbersInPropertyName() throws Exception {
 		StringList code = new StringList();
 		code.add("/** @type  {{prop1: String, prop2:Number}} */");
@@ -1681,7 +1687,5 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-
-
 
 }

@@ -297,6 +297,12 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(getTypes(XML), a.getTypes());
 	}
 
+	public void testXmlVarHidesType() {
+		IValueCollection collection = inference("var XML = 1");
+		IValueReference xml = collection.getChild("XML");
+		assertEquals(getTypes(NUMBER), xml.getTypes());
+	}
+
 	public void testConditionalOperator() {
 		IValueCollection collection = inference("var a = isActive ? 1 : 0");
 		IValueReference a = collection.getChild("a");
@@ -1001,9 +1007,9 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("y");
 		assertEquals(getTypes(ITypeNames.STRING), child.getTypes());
-		
+
 	}
-	
+
 	public void testJSDocWithGenericArrayInArrayType() throws Exception {
 		StringList code = new StringList();
 		code.add("/** @type {Array<String>[]} */");
@@ -1012,6 +1018,6 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(code.toString());
 		IValueReference child = collection.getChild("y");
 		assertEquals(getTypes(ITypeNames.STRING), child.getTypes());
-		
+
 	}
 }
