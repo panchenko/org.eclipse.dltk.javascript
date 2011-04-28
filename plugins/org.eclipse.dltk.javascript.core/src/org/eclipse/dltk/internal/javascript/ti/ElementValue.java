@@ -107,9 +107,8 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
-	public static ElementValue createStatic(Type type) {
-		return new StaticTypeValue(
-				JSTypeSet.singleton(TypeUtil.classType(type)));
+	public static ElementValue createClass(Type type) {
+		return new ClassValue(JSTypeSet.singleton(TypeUtil.classType(type)));
 	}
 
 	private static class TypeValue extends ElementValue implements IValue {
@@ -164,11 +163,11 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
-	private static class StaticTypeValue extends ElementValue implements IValue {
+	private static class ClassValue extends ElementValue implements IValue {
 
 		private final JSTypeSet types;
 
-		public StaticTypeValue(JSTypeSet types) {
+		public ClassValue(JSTypeSet types) {
 			this.types = types;
 		}
 

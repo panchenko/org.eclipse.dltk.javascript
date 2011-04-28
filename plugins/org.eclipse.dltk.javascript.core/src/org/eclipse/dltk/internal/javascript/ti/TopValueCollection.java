@@ -59,7 +59,7 @@ public class TopValueCollection extends ValueCollection {
 				}
 				final Type type = context.getKnownType(name, TypeMode.CODE);
 				if (type != null && type.getKind() != TypeKind.UNKNOWN) {
-					value = ElementValue.createStatic(type);
+					value = ElementValue.createClass(type);
 					memberCache.put(name, value);
 					return value;
 				}
