@@ -30,7 +30,9 @@ import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.emf.common.util.EList;
 
 public class JavaScriptValidations {
 
@@ -146,15 +148,27 @@ public class JavaScriptValidations {
 				if (argCountMatches == null) {
 					argCountMatches = method;
 				} else {
-					argCountMatches = null;
-					break;
+					boolean match = false;
+					EList<Parameter> parameters = method.getParameters();
+					for (int i = 0; i < parameters.size(); i++) {
+						JSType argumentType = typeOf(arguments[i]);
+						JSType parameterType = parameters.get(i).getType();
+						// todo should we have the context here to call
+						// context.resolveTypeRef()?
+						match = JSTypeSet.normalize(parameterType)
+								.isAssignableFrom(
+										JSTypeSet.normalize(argumentType));
+						if (!match)
+							break;
+					}
+					if (match)
+						argCountMatches = method;
 				}
 			}
 		}
 		if (argCountMatches != null) {
 			return argCountMatches;
 		}
-		// TODO implement additional checks
 		return methods.get(0);
 	}
 
