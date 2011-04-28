@@ -25,7 +25,7 @@ public class XMLListValue extends AbstractReference {
 
 	public XMLListValue(IValueParent parent, ITypeInfoContext context) {
 		this.parent = parent;
-		value.setDeclaredType(context.getTypeRef(ITypeNames.XMLLIST));
+		value.setDeclaredType(context.getTypeRef(ITypeNames.XML));
 	}
 
 	public IValueReference getParent() {
