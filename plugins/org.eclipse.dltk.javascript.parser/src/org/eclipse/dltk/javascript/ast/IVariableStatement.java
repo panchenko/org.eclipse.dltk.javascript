@@ -13,10 +13,12 @@ package org.eclipse.dltk.javascript.ast;
 
 import java.util.List;
 
-public interface IVariableStatement {
+import org.eclipse.dltk.ast.ASTNode;
 
+public interface IVariableStatement {
 	void addVariable(VariableDeclaration declaration);
 
 	List<VariableDeclaration> getVariables();
 
+	ASTNode getParent();
 }
