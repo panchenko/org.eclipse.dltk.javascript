@@ -19,7 +19,7 @@ import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 public class JavaScriptTemplateCompletionProcessor extends
 		ScriptTemplateCompletionProcessor {
 
-	private static char[] IGNORE = new char[] { '.', ':', '@', '$' };
+	private static char[] IGNORE = new char[] { '.' };
 
 	public JavaScriptTemplateCompletionProcessor(
 			ScriptContentAssistInvocationContext context) {
