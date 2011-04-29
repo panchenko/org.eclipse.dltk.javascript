@@ -151,8 +151,10 @@ public class JavaScriptValidations {
 					boolean match = false;
 					EList<Parameter> parameters = method.getParameters();
 					for (int i = 0; i < parameters.size(); i++) {
-						JSType argumentType = typeOf(arguments[i]);
 						JSType parameterType = parameters.get(i).getType();
+						if (parameterType == null)
+							continue;
+						JSType argumentType = typeOf(arguments[i]);
 						// todo should we have the context here to call
 						// context.resolveTypeRef()?
 						match = JSTypeSet.normalize(parameterType)
