@@ -12,7 +12,10 @@
 package org.eclipse.dltk.javascript.internal.ui.text.folding;
 
 import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IMethod;
@@ -24,14 +27,21 @@ import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
+import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.IVariableStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Method;
 import org.eclipse.dltk.javascript.ast.ObjectInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
+import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
+import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.ui.PreferenceConstants;
 import org.eclipse.dltk.ui.text.folding.IFoldingBlockProvider;
 import org.eclipse.dltk.ui.text.folding.IFoldingBlockRequestor;
@@ -107,6 +117,7 @@ public class JavaScriptCodeFoldingBlockProvider extends
 	private MethodCollector methodCollector = new MethodCollector();
 
 	public void computeFoldableBlocks(IFoldingContent content) {
+		names.clear();
 		final Script script = parse(content);
 		if (script != null) {
 			methodCollector.clear();
@@ -118,6 +129,7 @@ public class JavaScriptCodeFoldingBlockProvider extends
 				}
 			}
 			visitScript(script);
+			names.clear();
 		}
 	}
 
@@ -144,10 +156,113 @@ public class JavaScriptCodeFoldingBlockProvider extends
 
 	@Override
 	public Object visitObjectInitializer(ObjectInitializer node) {
-		requestor.acceptBlock(node.sourceStart(), node.sourceEnd(),
-				JavaScriptFoldingBlockKind.OBJECT_INITIALIZER, null,
-				collapseObjectInitializers);
+		if (node.isMultiline()) {
+			final Key assignemtKey = getAssignementKey(node.getParent());
+			if (assignemtKey != null) {
+				requestor.acceptBlock(node.sourceStart(), node.sourceEnd(),
+						JavaScriptFoldingBlockKind.OBJECT_INITIALIZER,
+						assignemtKey, collapseObjectInitializers);
+			}
+		}
 		return super.visitObjectInitializer(node);
+	}
+
+	private Key getAssignementKey(ASTNode node) {
+		if (node instanceof VariableDeclaration) {
+			final VariableDeclaration declaration = (VariableDeclaration) node;
+			final IVariableStatement statement = (IVariableStatement) declaration
+					.getParent();
+			if (statement.getVariables().size() == 1) {
+				return registerName(declaration.getVariableName(),
+						declaration.getIdentifier());
+			}
+		} else if (node instanceof BinaryOperation) {
+			final BinaryOperation operation = (BinaryOperation) node;
+			if (operation.getOperation() == JSParser.ASSIGN) {
+				final String path = PropertyExpressionUtils.getPath(operation
+						.getLeftExpression());
+				if (path != null) {
+					return registerName(path, operation.getLeftExpression());
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Object visitBinaryOperation(BinaryOperation node) {
+		if (node.getOperation() == JSParser.ASSIGN) {
+			final Expression expression = node.getLeftExpression();
+			final String name = PropertyExpressionUtils.getPath(expression);
+			if (name != null) {
+				registerName(name, expression);
+			}
+		}
+		return super.visitBinaryOperation(node);
+	}
+
+	@Override
+	public Object visitVariableStatement(VariableStatement node) {
+		for (VariableDeclaration declaration : node.getVariables()) {
+			registerName(declaration.getVariableName(), declaration);
+		}
+		return super.visitVariableStatement(node);
+	}
+
+	static class Key {
+		final String name;
+		final int occurence;
+
+		public Key(String name, int occurence) {
+			this.name = name;
+			this.occurence = occurence;
+		}
+
+		@Override
+		public int hashCode() {
+			return name.hashCode() * 31 + occurence;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Key) {
+				final Key other = (Key) obj;
+				return occurence == other.occurence && name.equals(other.name);
+			}
+			return false;
+		}
+
+	}
+
+	@SuppressWarnings("serial")
+	static class Scope extends IdentityHashMap<ASTNode, Key> {
+		final String name;
+
+		public Scope(String name) {
+			this.name = name;
+		}
+
+		private int lastValue;
+
+		Key getKey(ASTNode node) {
+			Key key = get(node);
+			if (key == null) {
+				key = new Key(name, lastValue++);
+				put(node, key);
+			}
+			return key;
+		}
+	}
+
+	private final Map<String, Scope> names = new HashMap<String, Scope>();
+
+	private Key registerName(String name, ASTNode node) {
+		Scope scope = names.get(name);
+		if (scope == null) {
+			scope = new Scope(name);
+			names.put(name, scope);
+		}
+		return scope.getKey(node);
 	}
 
 	@Override
