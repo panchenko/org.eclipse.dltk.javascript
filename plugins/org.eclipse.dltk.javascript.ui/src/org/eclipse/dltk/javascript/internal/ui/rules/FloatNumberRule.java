@@ -35,13 +35,6 @@ public class FloatNumberRule implements IRule {
 	}
 
 	public IToken evaluate(ICharacterScanner scanner) {
-		if( scanner.getColumn() > 0 ) {
-			scanner.unread();
-			int cc = scanner.read();
-			if( !Character.isWhitespace((char)cc)) {
-				return Token.UNDEFINED;
-			}
-		}
 		int c = scanner.read();
 		int p = c;
 		if (Character.isDigit((char) c) || c == '.') {
