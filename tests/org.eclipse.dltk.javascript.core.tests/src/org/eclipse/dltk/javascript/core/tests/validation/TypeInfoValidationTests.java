@@ -409,6 +409,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				problems.get(0).getID());
 	}
 
+	public void testReturnTypeDeclaredAndThrow() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @return {String}");
+		code.add(" */");
+		code.add("function test() {");
+		code.add("	throw 1;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 	public void testLazyReturnTypeWithJSDocParam() {
 		StringList code = new StringList();
 		code.add("/**");
