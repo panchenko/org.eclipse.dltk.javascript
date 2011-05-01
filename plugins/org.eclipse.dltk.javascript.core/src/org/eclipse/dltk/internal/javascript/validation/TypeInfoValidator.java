@@ -46,6 +46,7 @@ import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
+import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
@@ -394,6 +395,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		public static class FunctionScope {
 			final List<ReturnNode> returnNodes = new ArrayList<ReturnNode>();
+			boolean throwsException;
 		}
 
 		public void enterFunctionScope() {
@@ -406,7 +408,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (!scope.returnNodes.isEmpty()) {
 					pushExpressionValidator(new TestReturnStatement(method,
 							scope.returnNodes, reporter));
-				} else if (method.getType() != null) {
+				} else if (!scope.throwsException && method.getType() != null) {
 					final ReferenceLocation location = method.getLocation();
 					reporter.reportProblem(
 							JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
@@ -561,6 +563,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 			}
 			return returnValueReference;
+		}
+
+		@Override
+		public IValueReference visitThrowStatement(ThrowStatement node) {
+			if (!functionScopes.isEmpty()) {
+				final FunctionScope scope = functionScopes.peek();
+				scope.throwsException = true;
+			}
+			return super.visitThrowStatement(node);
 		}
 
 		@Override
@@ -959,8 +970,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 						&& argument.getDeclaredType() instanceof RecordType) {
 					if (!testArgumentType(parameter.getType(), argument))
 						return false;
-				} else
-				if (parameter.getType() instanceof RecordType
+				} else if (parameter.getType() instanceof RecordType
 						&& argument != null) {
 					Set<String> argumentsChildren = argument
 							.getDirectChildren();
