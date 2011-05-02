@@ -517,4 +517,10 @@ public class CodeCompletion extends AbstractCompletionTest {
 		basicTest(module, position, getMethodsOfNumber().toArray(STRINGS));
 	}
 
+	public void testObjectLiteral() {
+		IModuleSource module = createModule("test-object-literal.js");
+		int position = lastPositionInFile(":p", module);
+		basicTest(module, position, new String[] { "person" });
+	}
+
 }
