@@ -105,9 +105,19 @@ public class CompletionString {
 				}
 				continue;
 			}
+			if (c == ':') {
+				if (i >= 1 && id.charAt(i - 1) == ':') {
+					// "::" is part of XML expressions
+					--i;
+					continue;
+				} else {
+					// label, object literal, etc.
+					start = i + 1;
+					break;
+				}
+			}
 			if (c != '.'
 					&& c != '@'
-					&& c != ':'
 					&& inBrackStack.isEmpty()
 					&& (Character.isWhitespace(c) || !Character
 							.isJavaIdentifierPart(c))) {
