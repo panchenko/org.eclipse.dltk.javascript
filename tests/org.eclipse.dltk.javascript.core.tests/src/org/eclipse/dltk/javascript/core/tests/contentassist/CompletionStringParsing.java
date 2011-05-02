@@ -70,38 +70,39 @@ public class CompletionStringParsing extends TestCase {
 	}
 
 	public void testWithLineEnding() throws Exception {
-		assertEquals("forms.xxx.[].yyy.[]", parse(
-				"someCode\nforms.xxx[xxx].yyy[yyy]", true));
+		assertEquals("forms.xxx.[].yyy.[]",
+				parse("someCode\nforms.xxx[xxx].yyy[yyy]", true));
 		assertEquals("", parse("someCode\nforms.xxx[xxx].yyy[yyy]\n", true));
 
 	}
 
 	public void testWithWhiteSpace() throws Exception {
-		assertEquals("forms.xxx.[].yyy.[]", parse(
-				"someCode forms.xxx[xxx].yyy[yyy]", true));
+		assertEquals("forms.xxx.[].yyy.[]",
+				parse("someCode forms.xxx[xxx].yyy[yyy]", true));
 		assertEquals("", parse("someCode forms.xxx[xxx].yyy[yyy] ", true));
 
 	}
 
 	public void testWithMultiplyParams() throws Exception {
-		assertEquals("forms.xxx.[].yyy.[]", parse(
-				"someCode forms.xxx[xxx,yyy].yyy[xxx,yyy]", true));
-		assertEquals("forms.xxx.[].yyy.[]", parse(
-				"someCode forms.xxx[xxx , yyy].yyy[xxx , yyy, yyy]", true));
+		assertEquals("forms.xxx.[].yyy.[]",
+				parse("someCode forms.xxx[xxx,yyy].yyy[xxx,yyy]", true));
+		assertEquals(
+				"forms.xxx.[].yyy.[]",
+				parse("someCode forms.xxx[xxx , yyy].yyy[xxx , yyy, yyy]", true));
 		assertEquals("a", parse("someCode forms.xxx[xxx,yyy].yyy[a", true));
 		assertEquals("a",
 				parse("someCode forms.xxx[xxx , yyy].yyy[xxx,a", true));
-		assertEquals("a", parse("someCode forms.xxx[xxx , yyy].yyy[xxx , a",
-				true));
+		assertEquals("a",
+				parse("someCode forms.xxx[xxx , yyy].yyy[xxx , a", true));
 	}
 
 	public void testWithString() throws Exception {
-		assertEquals("forms.xxx.[].yyy.[]", parse(
-				"forms.xxx['xxx'].yyy[\"yyy\"]", true));
-		assertEquals("forms.xxx.[].yyy.[]", parse(
-				"forms.xxx['xxx yyy'].yyy[\"xxx yyy\"]", true));
-		assertEquals("forms.xxx.[].yyy.[]", parse(
-				"forms.xxx['xxx yyy'].yyy[\"xxx 'yyy'\"]", true));
+		assertEquals("forms.xxx.[].yyy.[]",
+				parse("forms.xxx['xxx'].yyy[\"yyy\"]", true));
+		assertEquals("forms.xxx.[].yyy.[]",
+				parse("forms.xxx['xxx yyy'].yyy[\"xxx yyy\"]", true));
+		assertEquals("forms.xxx.[].yyy.[]",
+				parse("forms.xxx['xxx yyy'].yyy[\"xxx 'yyy'\"]", true));
 		assertEquals("\"xxx 'yyy'\"", parse("\"xxx 'yyy'\"", true));
 		assertEquals("'xxx \"yyy\"'", parse("'xxx \"yyy\"'", true));
 	}
@@ -109,9 +110,12 @@ public class CompletionStringParsing extends TestCase {
 	public void testXMLSyntax() throws Exception {
 		assertEquals(
 				"_xml.articulo.art::articulo_catalago.art::articulo_borrador",
-				parse(
-						"_xml.articulo.art::articulo_catalago.art::articulo_borrador",
+				parse("_xml.articulo.art::articulo_catalago.art::articulo_borrador",
 						true));
+	}
+
+	public void testObjectLiteralSyntax() {
+		assertEquals("person.name", parse("var x = { name:person.name", true));
 	}
 
 	public void testArrayFunction() throws Exception {
