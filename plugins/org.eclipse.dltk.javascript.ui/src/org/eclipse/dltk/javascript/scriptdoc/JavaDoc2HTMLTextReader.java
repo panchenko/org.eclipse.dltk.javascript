@@ -140,8 +140,8 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 	public static final String TAG_VERSION = "@version"; //$NON-NLS-1$
 
 	static private class Pair {
-		String fTag;
-		String fContent;
+		final String fTag;
+		final String fContent;
 
 		Pair(String tag, String content) {
 			fTag = tag;
@@ -220,19 +220,34 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 		return result;
 	}
 
+	static enum TypedDefinition {
+		NONE, AUTO, PARAM
+	}
+
 	private void printDefinitions(StringBuffer buffer, List<String> list,
-			boolean firstword) {
+			TypedDefinition typed) {
 		Iterator<String> e = list.iterator();
 		while (e.hasNext()) {
 			String s = e.next();
-			buffer.append("<dd>"); //$NON-NLS-1$
-			if (!firstword) {
+			printDefinition(buffer, s, typed);
+		}
+	}
+
+	private void printDefinition(StringBuffer buffer, String s,
+			TypedDefinition typed) {
+		buffer.append("<dd>"); //$NON-NLS-1$
+		if (s != null && s.length() != 0) {
+			if (typed == TypedDefinition.NONE) {
 				buffer.append(s);
-			} else {
+			} else if (typed == TypedDefinition.PARAM) {
 				final ISourceRange param = getParamRange(s);
 				if (param != null) {
-					buffer.append(TextUtils.escapeHTML(s.substring(0,
-							param.getOffset())));
+					if (param.getOffset() > 0) {
+						buffer.append("<i>");
+						buffer.append(TextUtils.escapeHTML(s.substring(0,
+								param.getOffset())));
+						buffer.append("</i>");
+					}
 					buffer.append("<b>"); //$NON-NLS-1$
 					buffer.append(TextUtils.escapeHTML(s.substring(
 							param.getOffset(),
@@ -243,30 +258,44 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 				} else {
 					buffer.append(s);
 				}
+			} else {
+				assert (typed == TypedDefinition.AUTO);
+				int endOfType = skipTypeDefinition(s);
+				if (endOfType > 0) {
+					buffer.append("<i>");
+					buffer.append(TextUtils.escapeHTML(s
+							.substring(0, endOfType)));
+					buffer.append("</i>");
+				}
+				buffer.append(s.substring(endOfType));
 			}
-			buffer.append("</dd>"); //$NON-NLS-1$
 		}
+		buffer.append("</dd>"); //$NON-NLS-1$
 	}
 
-	private ISourceRange getParamRange(String s) {
-		int i = 0;
+	private int skipTypeDefinition(String s) {
 		final int length = s.length();
+		int i = 0;
 		// \s*
 		while (i < length && Character.isWhitespace(s.charAt(i)))
 			++i;
-		// BEGIN possible type definition
 		if (i < length && s.charAt(i) == '{') {
 			++i;
 			while (i < length && s.charAt(i) != '}') {
 				++i;
 			}
 			if (i < length) {
-				++i;
+				++i; // skip closing '}'
 			}
-			while (i < length && Character.isWhitespace(s.charAt(i)))
-				++i;
 		}
-		// END possible type definition
+		return i;
+	}
+
+	private ISourceRange getParamRange(String s) {
+		int i = skipTypeDefinition(s);
+		final int length = s.length();
+		while (i < length && Character.isWhitespace(s.charAt(i)))
+			++i;
 		final int paramStart = i;
 		if (i < length && s.charAt(i) == '<') {
 			++i;
@@ -291,66 +320,50 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 	}
 
 	private void print(StringBuffer buffer, String tag, List<String> elements,
-			boolean firstword) {
+			TypedDefinition typed) {
 		if (!elements.isEmpty()) {
 			buffer.append("<dt>"); //$NON-NLS-1$
 			buffer.append(tag);
 			buffer.append("</dt>"); //$NON-NLS-1$
-			printDefinitions(buffer, elements, firstword);
+			printDefinitions(buffer, elements, typed);
 		}
 	}
 
-	private void print(StringBuffer buffer, String tag, String content) {
+	private void print(StringBuffer buffer, String tag, String content,
+			TypedDefinition typed) {
 		if (content != null) {
 			buffer.append("<dt>"); //$NON-NLS-1$
 			buffer.append(tag);
 			buffer.append("</dt>"); //$NON-NLS-1$
-			buffer.append("<dd>"); //$NON-NLS-1$
-			buffer.append(content);
-			buffer.append("</dd>"); //$NON-NLS-1$
+			printDefinition(buffer, content, typed);
 		}
 	}
 
 	private void printRest(StringBuffer buffer) {
 		if (!fRest.isEmpty()) {
-			final Set<String> tags = new HashSet<String>();
-			Collections.addAll(tags, JSDocTag.getTags());
-			ISourceModule module = null;
-			Collections.addAll(tags, JSKeywordManager.getInstance()
+			final Set<String> definedTags = new HashSet<String>();
+			Collections.addAll(definedTags, JSDocTag.getTags());
+			ISourceModule module = null; /* TODO identify module? */
+			Collections.addAll(definedTags, JSKeywordManager.getInstance()
 					.getKeywords(JSKeywordCategory.JS_DOC_TAG, module));
-			Iterator<Pair> e = fRest.iterator();
-			final Set<Pair> unknowTags = new HashSet<Pair>();
-			while (e.hasNext()) {
-				Pair p = e.next();
+			final List<Pair> unknowTags = new ArrayList<Pair>();
+			for (Pair p : fRest) {
 				buffer.append("<dt>"); //$NON-NLS-1$
-				if (p.fTag != null) {
-					if (tags.contains(p.fTag))
-						buffer.append(Character.toUpperCase(p.fTag.charAt(1))
-								+ p.fTag.substring(2));
-					else {
-						unknowTags.add(p);
-						continue;
-					}
+				if (definedTags.contains(p.fTag)) {
+					buffer.append(Character.toUpperCase(p.fTag.charAt(1))
+							+ p.fTag.substring(2));
+					buffer.append("</dt>"); //$NON-NLS-1$
+					printDefinition(buffer, p.fContent, TypedDefinition.AUTO);
+				} else {
+					unknowTags.add(p);
 				}
-				buffer.append("</dt>"); //$NON-NLS-1$
-				buffer.append("<dd>"); //$NON-NLS-1$
-				if (p.fContent != null)
-					buffer.append(p.fContent);
-				buffer.append("</dd>"); //$NON-NLS-1$
 			}
-
 			for (Pair p : unknowTags) {
 				buffer.append("<dt>"); //$NON-NLS-1$
-				if (p.fTag != null) {
-					buffer.append(p.fTag);
-				}
+				buffer.append(p.fTag);
 				buffer.append("</dt>"); //$NON-NLS-1$
-				buffer.append("<dd>"); //$NON-NLS-1$
-				if (p.fContent != null)
-					buffer.append(p.fContent);
-				buffer.append("</dd>");
+				printDefinition(buffer, p.fContent, TypedDefinition.AUTO);
 			}
-
 		}
 	}
 
@@ -359,17 +372,17 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 		buffer.append("<dl>"); //$NON-NLS-1$
 		print(buffer,
 				JavaDocMessages.JavaDoc2HTMLTextReader_parameters_section,
-				fParameters, true);
+				fParameters, TypedDefinition.PARAM);
 		print(buffer, JavaDocMessages.JavaDoc2HTMLTextReader_returns_section,
-				fReturn);
+				fReturn, TypedDefinition.AUTO);
 		print(buffer, JavaDocMessages.JavaDoc2HTMLTextReader_throws_section,
-				fExceptions, false);
+				fExceptions, TypedDefinition.AUTO);
 		print(buffer, JavaDocMessages.JavaDoc2HTMLTextReader_author_section,
-				fAuthors, false);
+				fAuthors, TypedDefinition.NONE);
 		print(buffer, JavaDocMessages.JavaDoc2HTMLTextReader_since_section,
-				fSince, false);
+				fSince, TypedDefinition.NONE);
 		print(buffer, JavaDocMessages.JavaDoc2HTMLTextReader_see_section,
-				fSees, false);
+				fSees, TypedDefinition.NONE);
 		printRest(buffer);
 		buffer.append("</dl>"); //$NON-NLS-1$
 
