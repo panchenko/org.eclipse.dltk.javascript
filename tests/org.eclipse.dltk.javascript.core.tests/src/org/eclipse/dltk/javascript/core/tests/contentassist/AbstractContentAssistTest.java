@@ -11,10 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.contentassist;
 
-import org.eclipse.dltk.compiler.env.IModuleSource;
-
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+
+import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.osgi.util.NLS;
 
 public abstract class AbstractContentAssistTest extends TestCase {
 
@@ -35,10 +36,12 @@ public abstract class AbstractContentAssistTest extends TestCase {
 			}
 			return position;
 		} else {
-			throw new AssertionFailedError("Not found");
+			throw new AssertionFailedError(NLS.bind(
+					"Pattern \"{0}\" not found in {1}", string,
+					source.getFileName()));
 		}
 	}
-	
+
 	public static int firstPositionInFile(String string, IModuleSource source,
 			boolean after) {
 		int position = source.getSourceContents().indexOf(string);
@@ -51,6 +54,5 @@ public abstract class AbstractContentAssistTest extends TestCase {
 			throw new AssertionFailedError("Not found");
 		}
 	}
-
 
 }
