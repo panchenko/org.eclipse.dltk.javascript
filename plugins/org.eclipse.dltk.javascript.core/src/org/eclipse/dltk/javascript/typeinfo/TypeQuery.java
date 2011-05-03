@@ -35,6 +35,23 @@ public class TypeQuery {
 		types.add(type);
 	}
 
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(getClass().getSimpleName());
+		sb.append("(");
+		boolean first = true;
+		for (Type type : types) {
+			if (!first) {
+				sb.append(", ");
+			}
+			first = false;
+			sb.append(type.getName());
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+
 	protected boolean isValid(Type type) {
 		return true;
 	}
@@ -71,36 +88,41 @@ public class TypeQuery {
 		}
 
 		protected boolean fetchNext() {
-			if (!skipQueue.isEmpty()) {
-				queue.addAll(skipQueue);
-				skipQueue.clear();
-			}
-			if (!queue.isEmpty()) {
-				final Type[] copy = queue.toArray(new Type[queue.size()]);
-				queue.clear();
-				for (Type type : copy) {
-					final Type superType = type.getSuperType();
-					if (superType != null) {
-						if (canVisit(superType) && isValid(superType)) {
-							if ((flags & SUPERTYPES) != 0) {
-								queue.add(superType);
-							} else {
-								skipQueue.add(superType);
-							}
-						}
-					}
-					if ((flags & TRAITS) != 0) {
-						for (Type trait : type.getTraits()) {
-							if (canVisit(trait) && isValid(trait)) {
-								queue.add(trait);
-							}
-						}
-					}
+			for (;;) {
+				if (!skipQueue.isEmpty()) {
+					queue.addAll(skipQueue);
+					skipQueue.clear();
 				}
-				current = queue.iterator();
-				return current.hasNext();
+				if (!queue.isEmpty()) {
+					final Type[] copy = queue.toArray(new Type[queue.size()]);
+					queue.clear();
+					for (Type type : copy) {
+						final Type superType = type.getSuperType();
+						if (superType != null) {
+							if (canVisit(superType) && isValid(superType)) {
+								if ((flags & SUPERTYPES) != 0) {
+									queue.add(superType);
+								} else {
+									skipQueue.add(superType);
+								}
+							}
+						}
+						if ((flags & TRAITS) != 0) {
+							for (Type trait : type.getTraits()) {
+								if (canVisit(trait) && isValid(trait)) {
+									queue.add(trait);
+								}
+							}
+						}
+					}
+					if (!queue.isEmpty()) {
+						current = queue.iterator();
+						return true;
+					}
+				} else {
+					return false;
+				}
 			}
-			return false;
 		}
 	}
 
