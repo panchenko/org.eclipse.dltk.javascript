@@ -32,6 +32,7 @@ public class AllTests {
 		suite.addTestSuite(FunctionDocumentationTests.class);
 		suite.addTestSuite(ParserValidationsTest.class);
 		suite.addTestSuite(SimpleJSDocParserTests.class);
+		suite.addTestSuite(Bug20110503.class);
 		// $JUnit-END$
 		return suite;
 	}

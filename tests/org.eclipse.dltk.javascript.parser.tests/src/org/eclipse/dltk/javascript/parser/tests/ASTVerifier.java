@@ -186,7 +186,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		visit(node.getArguments());
 
 		testChar(Keywords.LP, node.getLP());
-		testChar(Keywords.RP, node.getRP());
+		testCharIfExists(Keywords.RP, node.getRP());
 		testCharList(Keywords.COMMA, node.getCommas());
 
 		return true;
