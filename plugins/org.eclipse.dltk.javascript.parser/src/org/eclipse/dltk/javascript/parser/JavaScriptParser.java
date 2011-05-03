@@ -253,6 +253,29 @@ public class JavaScriptParser extends AbstractSourceParser {
 			reporter.report();
 		}
 
+		/**
+		 * Overrides the function to prevent NPE.
+		 * 
+		 * The only change is <code>localFollowSet != null</code> check
+		 * 
+		 * @see org.eclipse.dltk.javascript.parser.tests.Bug20110503#testCombinedFollowsNPE()
+		 */
+		@Override
+		protected BitSet combineFollows(boolean exact) {
+			int top = _fsp;
+			BitSet followSet = new BitSet();
+			for (int i = top; i >= 0; i--) {
+				BitSet localFollowSet = (BitSet) following[i];
+				followSet.orInPlace(localFollowSet);
+				if (exact && localFollowSet != null
+						&& !localFollowSet.member(Token.EOR_TOKEN_TYPE)) {
+					break;
+				}
+			}
+			followSet.remove(Token.EOR_TOKEN_TYPE);
+			return followSet;
+		}
+
 	}
 
 	/**
