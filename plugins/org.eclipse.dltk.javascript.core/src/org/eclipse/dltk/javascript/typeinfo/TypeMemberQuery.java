@@ -166,4 +166,13 @@ public class TypeMemberQuery implements Iterable<Member> {
 		return new MemberIterator();
 	}
 
+	public Member findMember(String memberName) {
+		for (Member member : this) {
+			if (memberName.equals(member.getName())) {
+				return member;
+			}
+		}
+		return null;
+	}
+
 }
