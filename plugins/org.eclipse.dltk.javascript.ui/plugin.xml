@@ -832,11 +832,15 @@
             id="org.eclipse.dltk.internal.javascript.ti.JSDocProblem#MISSING_TYPE_NAME"
             label="Missing type name">
       </problem>
+      <problem
+            id="org.eclipse.dltk.internal.javascript.ti.JSDocProblem#WRONG_TYPE_SYNTAX"
+            label="Syntax error in type specification">
+      </problem>
+      <defaultEntry namespace="org.eclipse.dltk.internal.javascript.ti.JSDocProblem"/>
    </section>
    <section id="org.eclipse.dltk.javascript.ui.problems.misc" name="Other problems" priority="150">
       <!--defaultEntry namespace="org.eclipse.dltk.javascript.core.JavaScriptProblems"/-->
       <!--defaultEntry namespace="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems"/-->
-      <defaultEntry namespace="org.eclipse.dltk.internal.javascript.ti.JSDocProblem"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_PARAMETERS"
             label="Wrong number of parameters to javascript function call"/>
