@@ -20,7 +20,6 @@ import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.IAccessRule;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
@@ -38,6 +37,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -203,7 +203,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		private final String prefixStr;
 		final int position;
 		final Set<Object> processed = new HashSet<Object>();
-		final Set<Type> processedTypes = new HashSet<Type>();
 
 		public Reporter(String prefix, int position) {
 			this.prefixStr = prefix != null ? prefix : "";
@@ -263,52 +262,43 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			}
 			if (item instanceof IValueReference) {
 				final IValueReference valueRef = (IValueReference) item;
+				final TypeMemberQuery typeQuery = new TypeMemberQuery();
 				for (JSType type : valueRef.getDeclaredTypes()) {
 					if (type instanceof ClassType) {
-						reportTypeMembers(((ClassType) type).getTarget(),
-								MemberPredicate.STATIC);
+						final Type t = ((ClassType) type).getTarget();
+						if (t != null) {
+							typeQuery.add(t, MemberPredicate.STATIC);
+						}
 					} else {
 						final Type t = TypeUtil.extractType(context
 								.resolveTypeRef(type));
 						if (t != null) {
-							reportTypeMembers(t, MemberPredicate.NON_STATIC);
+							typeQuery.add(t, MemberPredicate.NON_STATIC);
 						}
 					}
 				}
 				for (JSType type : valueRef.getTypes()) {
 					if (type instanceof ClassType) {
-						reportTypeMembers(((ClassType) type).getTarget(),
-								MemberPredicate.STATIC);
+						final Type t = ((ClassType) type).getTarget();
+						if (t != null) {
+							typeQuery.add(t, MemberPredicate.STATIC);
+						}
 					} else {
 						final Type t = TypeUtil.extractType(context
 								.resolveTypeRef(type));
 						if (t != null) {
-							reportTypeMembers(t, MemberPredicate.NON_STATIC);
+							typeQuery.add(t, MemberPredicate.NON_STATIC);
 						}
 					}
 				}
-			}
-		}
-
-		protected void reportTypeMembers(Type type, Predicate<Member> predicate) {
-			for (;;) {
-				if (!processedTypes.add(type))
-					break;
-				for (Member member : type.getMembers()) {
-					if (predicate.evaluate(member)
-							&& processed.add(MethodKey.createKey(member))
+				for (Member member : typeQuery) {
+					if (processed.add(MethodKey.createKey(member))
 							&& member.isVisible()
 							&& CharOperation.prefixEquals(prefix,
 									member.getName(), false)) {
 						reportMember(member, member.getName());
 					}
 				}
-				for (Type trait : type.getTraits()) {
-					reportTypeMembers(trait, predicate);
-				}
-				type = type.getSuperType();
-				if (type == null)
-					break;
 			}
 		}
 

@@ -16,17 +16,16 @@ import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.FUNCTION;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -48,7 +47,7 @@ public abstract class ElementValue implements IValue {
 	}
 
 	public static ElementValue findMember(JSType type, String name,
-			Predicate<Member> predicate) {
+			MemberPredicate predicate) {
 		final Type t = TypeUtil.extractType(type);
 		if (t != null) {
 			List<Member> selection = findMembers(t, name, predicate);
@@ -68,30 +67,14 @@ public abstract class ElementValue implements IValue {
 	}
 
 	public static List<Member> findMembers(Type type, String name,
-			Predicate<Member> predicate) {
+			MemberPredicate predicate) {
 		final List<Member> selection = new ArrayList<Member>(4);
-		findMembers(type, name, predicate, selection, new HashSet<Type>(4));
-		return selection;
-	}
-
-	private static void findMembers(Type type, String name,
-			Predicate<Member> predicate, List<Member> selection,
-			Set<Type> processedTypes) {
-		for (;;) {
-			if (!processedTypes.add(type))
-				break;
-			for (Member member : type.getMembers()) {
-				if (name.equals(member.getName()) && predicate.evaluate(member)) {
-					selection.add(member);
-				}
+		for (Member member : new TypeMemberQuery(type, predicate)) {
+			if (name.equals(member.getName())) {
+				selection.add(member);
 			}
-			for (Type trait : type.getTraits()) {
-				findMembers(trait, name, predicate, selection, processedTypes);
-			}
-			type = type.getSuperType();
-			if (type == null)
-				break;
 		}
+		return selection;
 	}
 
 	public static ElementValue createFor(Element element,
