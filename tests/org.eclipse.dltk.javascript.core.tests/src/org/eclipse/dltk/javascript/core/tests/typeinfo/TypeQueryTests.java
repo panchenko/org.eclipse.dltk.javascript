@@ -62,4 +62,16 @@ public class TypeQueryTests extends TestCase implements ITypeNames {
 		assertSame(getType(STRING), traits.get(1));
 	}
 
+	public void testTraits2() {
+		final Type base = TypeInfoModelFactory.eINSTANCE.createType();
+		base.getTraits().add(getType(STRING));
+		base.getTraits().add(getType(NUMBER));
+		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
+		type.setSuperType(base);
+		final List<Type> traits = toList(new TypeQuery(type).getAllTraits());
+		assertEquals(2, traits.size());
+		assertSame(getType(STRING), traits.get(0));
+		assertSame(getType(NUMBER), traits.get(1));
+	}
+
 }
