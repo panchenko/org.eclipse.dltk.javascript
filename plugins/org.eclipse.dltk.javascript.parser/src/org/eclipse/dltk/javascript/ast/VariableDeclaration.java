@@ -26,8 +26,8 @@ public class VariableDeclaration extends JSNode implements ISourceable {
 	/**
 	 * @param parent
 	 */
-	public VariableDeclaration(ASTNode parent) {
-		super(parent);
+	public VariableDeclaration(IVariableStatement parent) {
+		super((ASTNode) parent);
 	}
 
 	@Override
@@ -108,6 +108,15 @@ public class VariableDeclaration extends JSNode implements ISourceable {
 
 	public void setInitializer(Expression initializer) {
 		this.initializer = initializer;
+	}
+
+	@Override
+	public Comment getDocumentation() {
+		return identifier != null ? identifier.getDocumentation() : null;
+	}
+
+	public IVariableStatement getStatement() {
+		return (IVariableStatement) getParent();
 	}
 
 }

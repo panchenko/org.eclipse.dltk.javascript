@@ -21,4 +21,6 @@ public interface IVariableStatement {
 	List<VariableDeclaration> getVariables();
 
 	ASTNode getParent();
+
+	Comment getDocumentation();
 }

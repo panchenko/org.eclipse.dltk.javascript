@@ -1077,17 +1077,12 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		reporter.report();
 	}
 
-	private boolean isType(Tree node) {
-		return node.getType() == JSParser.Identifier;
-	}
-
 	private VariableDeclaration transformVariableDeclaration(Tree node,
 			IVariableStatement statement) {
 		Assert.isTrue(node.getType() == JSParser.Identifier
 				|| JSLexer.isIdentifierKeyword(node.getType()));
 
-		VariableDeclaration declaration = new VariableDeclaration(
-				(ASTNode) statement);
+		VariableDeclaration declaration = new VariableDeclaration(statement);
 		declaration
 				.setIdentifier((Identifier) transformNode(node, declaration));
 		declaration.setStart(getTokenOffset(node.getTokenStartIndex()));
