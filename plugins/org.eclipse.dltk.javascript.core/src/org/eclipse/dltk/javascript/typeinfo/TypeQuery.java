@@ -12,10 +12,12 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.utils.CompoundIterator;
@@ -150,6 +152,46 @@ public class TypeQuery {
 
 	public Iterable<Type> getAllTraits() {
 		return new TypeIterable(TRAITS);
+	}
+
+	public TypeCircularDependency checkCircularDependencies(Type currentType) {
+		final Stack<Type> visited = new Stack<Type>();
+		for (Type type : types) {
+			visited.push(type);
+		}
+		return checkCircularDependencies(currentType, visited);
+	}
+
+	private TypeCircularDependency checkCircularDependencies(Type currentType,
+			Stack<Type> visitedTypes) {
+		assert currentType != null;
+		assert visitedTypes != null;
+		int duplicateIndex = visitedTypes.indexOf(currentType);
+		if (duplicateIndex != -1) {
+			final List<Type> loop = new ArrayList<Type>(visitedTypes.subList(
+					duplicateIndex, visitedTypes.size()));
+			final List<Type> pathToLoop = duplicateIndex == 0 ? Collections
+					.<Type> emptyList() : new ArrayList<Type>(
+					visitedTypes.subList(0, duplicateIndex));
+			return new TypeCircularDependency(loop, pathToLoop);
+		}
+		visitedTypes.push(currentType);
+		if (currentType.getSuperType() != null) {
+			final TypeCircularDependency dependency = checkCircularDependencies(
+					currentType.getSuperType(), visitedTypes);
+			if (dependency != null) {
+				return dependency;
+			}
+		}
+		for (Type trait : currentType.getTraits()) {
+			final TypeCircularDependency dependency = checkCircularDependencies(
+					trait, visitedTypes);
+			if (dependency != null) {
+				return dependency;
+			}
+		}
+		visitedTypes.pop();
+		return null;
 	}
 
 }
