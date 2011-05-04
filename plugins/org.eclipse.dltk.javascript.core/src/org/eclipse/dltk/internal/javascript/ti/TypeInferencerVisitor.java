@@ -374,7 +374,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			final VariableStatement statement = (VariableStatement) declaration
 					.getParent();
 			for (IModelBuilder extension : this.context.getModelBuilders()) {
-				extension.processVariable(statement, variable, reporter,
+				extension.processVariable(declaration, variable, reporter,
 						getJSDocTypeChecker());
 			}
 		}
@@ -999,7 +999,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (result.getDeclaredType() != null)
 				variable.setType(result.getDeclaredType());
 			for (IModelBuilder extension : context.getModelBuilders()) {
-				extension.processVariable(node, variable, reporter,
+				extension.processVariable(declaration, variable, reporter,
 						getJSDocTypeChecker());
 			}
 			if (result.getDeclaredType() == null && variable.getType() != null) {

@@ -24,6 +24,7 @@ import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
+import org.eclipse.dltk.javascript.ast.IVariableStatement;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Statement;
@@ -197,12 +198,21 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	public void processVariable(VariableStatement statement,
+	public void processVariable(VariableDeclaration declaration,
 			IVariable variable, JSProblemReporter reporter,
 			IJSDocTypeChecker typeChecker) {
-		final Comment comment = statement.getDocumentation();
+		Comment comment = declaration.getDocumentation();
 		if (comment == null) {
-			return;
+			final IVariableStatement statement = declaration.getStatement();
+			final List<VariableDeclaration> vars = statement.getVariables();
+			if (!vars.isEmpty() && vars.get(0) == declaration) {
+				comment = statement.getDocumentation();
+				if (comment == null) {
+					return;
+				}
+			} else {
+				return;
+			}
 		}
 		final JSDocTags tags = parse(comment);
 		if (variable.getType() == null) {
