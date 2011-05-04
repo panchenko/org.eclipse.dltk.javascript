@@ -892,6 +892,33 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals("String", x.getDeclaredType().getName());
 	}
 
+	public void testJSDocTypeTagMultiVar1() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("/** @type String */");
+		lines.add("var var1,");
+		lines.add("\t" + "/** @type Number */");
+		lines.add("\t" + "var2");
+		IValueCollection collection = inference(lines.toString());
+		assertEquals("String", typename(collection.getChild("var1")
+				.getDeclaredTypes()));
+		assertEquals("Number", typename(collection.getChild("var2")
+				.getDeclaredTypes()));
+	}
+
+	public void testJSDocTypeTagMultiVar2() throws Exception {
+		List<String> lines = new StringList();
+		lines.add("var");
+		lines.add("\t" + "/** @type String */");
+		lines.add("\t" + "var1,");
+		lines.add("\t" + "/** @type Number */");
+		lines.add("\t" + "var2");
+		IValueCollection collection = inference(lines.toString());
+		assertEquals("String", typename(collection.getChild("var1")
+				.getDeclaredTypes()));
+		assertEquals("Number", typename(collection.getChild("var2")
+				.getDeclaredTypes()));
+	}
+
 	public void testOrAssignmentOf2VariablesOfSameType() throws Exception {
 		List<String> lines = new StringList();
 		lines.add("/**");
