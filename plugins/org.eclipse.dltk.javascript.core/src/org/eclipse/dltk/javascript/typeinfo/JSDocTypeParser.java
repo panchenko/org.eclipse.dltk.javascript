@@ -93,20 +93,23 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				JSType type = createGenericType(baseType, typeParams);
 				return checkIfArray(input, type);
 			} else if (ch == '[') {
-				final String baseType = input.substring(start,
-						input.index() - 1);
+				final JSType itemType = createType(input, start);
 				input.consume();
 				match(input, ']');
-				JSType array = createArray(createType(translate(baseType)));
+				final JSType array = createArray(itemType);
 				return checkIfArray(input, array);
 			} else if (ch == CharStream.EOF || Character.isWhitespace(ch)
 					|| ch == '|' || ch == ',' || ch == '}' || ch == '>') {
-				return createType(translate(input.substring(start,
-						input.index() - 1)));
+				return createType(input, start);
 			} else {
 				input.consume();
 			}
 		}
+	}
+
+	private JSType createType(CharStream input, final int start) {
+		final int end = input.index();
+		return createType(translate(input.substring(start, end - 1)));
 	}
 
 	/**
