@@ -14,7 +14,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 import java.util.List;
 
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
-import org.eclipse.dltk.javascript.ast.VariableStatement;
+import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -149,7 +149,7 @@ public interface IModelBuilder {
 	void processMethod(FunctionStatement statement, IMethod method,
 			JSProblemReporter reporter, IJSDocTypeChecker typeChecker);
 
-	void processVariable(VariableStatement statement, IVariable variabe,
+	void processVariable(VariableDeclaration declaration, IVariable variabe,
 			JSProblemReporter reporter, IJSDocTypeChecker typeChecker);
 
 }
