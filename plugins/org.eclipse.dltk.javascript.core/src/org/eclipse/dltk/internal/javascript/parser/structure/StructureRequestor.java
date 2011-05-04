@@ -47,11 +47,13 @@ public class StructureRequestor implements IStructureRequestor {
 	}
 
 	public void enterNamespace(String[] namespace) {
+		requestor.enterModuleRoot();
 		requestor.enterNamespace(namespace);
 	}
 
 	public void exitNamespace() {
 		requestor.exitNamespace();
+		requestor.exitModuleRoot();
 	}
 
 	public void enterType(TypeInfo typeInfo) {
