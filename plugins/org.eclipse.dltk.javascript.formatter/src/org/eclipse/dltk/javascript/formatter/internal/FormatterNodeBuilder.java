@@ -774,8 +774,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
 				visit(node.getArray());
 
-				processBrackets(node.getLB(), node.getRB(),
-						Collections.<ASTNode> singletonList(node.getIndex()),
+				processBrackets(
+						node.getLB(),
+						node.getRB(),
+						Collections.<Expression> singletonList(node.getIndex()),
 						IntList.EMPTY_LIST,
 						new GetItemArrayBracketsConfiguration(document));
 
@@ -959,7 +961,7 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			 * process array initialization
 			 */
 			private IFormatterNode processBrackets(int leftBracket,
-					int rightBracket, List<ASTNode> nodes, IntList commas,
+					int rightBracket, List<Expression> nodes, IntList commas,
 					IBracketsConfiguration configuration) {
 				BracketsNode brackets = new BracketsNode(document,
 						configuration);
