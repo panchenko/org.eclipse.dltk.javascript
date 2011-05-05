@@ -24,7 +24,7 @@ import org.eclipse.dltk.utils.CompoundIterator;
 
 public class TypeQuery {
 
-	private final List<Type> types = new ArrayList<Type>();
+	protected final List<Type> types = new ArrayList<Type>();
 
 	public TypeQuery() {
 	}
