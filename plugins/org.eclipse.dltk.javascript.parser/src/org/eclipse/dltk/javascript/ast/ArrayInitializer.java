@@ -9,7 +9,6 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.ast;
 
 import java.util.ArrayList;
@@ -22,14 +21,14 @@ import org.eclipse.dltk.utils.IntList;
 
 public class ArrayInitializer extends Expression {
 
-	private final List<ASTNode> items;
+	private final List<Expression> items;
 	private final IntList commas;
 	private int LB = -1;
 	private int RB = -1;
 
 	public ArrayInitializer(ASTNode parent, int itemCount) {
 		super(parent);
-		items = new ArrayList<ASTNode>(itemCount);
+		items = new ArrayList<Expression>(itemCount);
 		commas = new IntList(itemCount > 0 ? itemCount - 1 : 0);
 	}
 
@@ -48,7 +47,7 @@ public class ArrayInitializer extends Expression {
 		}
 	}
 
-	public List<ASTNode> getItems() {
+	public List<Expression> getItems() {
 		return this.items;
 	}
 

@@ -286,7 +286,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	}
 
-	private Expression transformExpression(Tree node, ASTNode parent) {
+	private final Expression transformExpression(Tree node, ASTNode parent) {
 		return (Expression) transformNode(node, parent);
 	}
 
@@ -1604,7 +1604,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			assert child.getType() == JSParser.ITEM : "ITEM expected"; //$NON-NLS-1$
 			final Tree item = child.getChild(0);
 			if (item != null) {
-				array.getItems().add(transformNode(item, array));
+				array.getItems().add(transformExpression(item, array));
 			} else {
 				array.getItems().add(new EmptyExpression(getParent()));
 			}
