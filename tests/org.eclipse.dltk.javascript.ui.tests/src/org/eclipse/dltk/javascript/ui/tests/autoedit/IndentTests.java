@@ -170,6 +170,24 @@ public class IndentTests extends JSAutoEditStrategyTestCase {
 		assertEquals(expected.toString(), document.get());
 	}
 
+	public void testAfterClassCreate() throws BadLocationException {
+		StringList code = new StringList();
+		code.add("var x = test1(),");
+		code.add(TAB + "y = test2()");
+		code.add("");
+		code.add("var a = Class.create({");
+		code.add(TAB + "a: function() {}");
+		code.add("});");
+		final Document document = createDocument(code);
+		execute(document,
+				createCommand(ENTER,
+						document.getEndOfLineOffset(code.size() - 1)));
+		StringList expected = new StringList();
+		expected.addAll(code);
+		expected.add("");
+		assertEquals(expected.toString(), document.get());
+	}
+
 	public void testAfterVarStatement() throws BadLocationException {
 		StringList code = new StringList();
 		code.add("function test() {");
