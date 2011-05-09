@@ -5,17 +5,12 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.compiler.problem.ProblemSeverity;
-import org.eclipse.dltk.core.builder.IBuildContext;
-import org.eclipse.dltk.core.builder.ISourceLineTracker;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
-import org.eclipse.dltk.javascript.parser.JavaScriptParserSeverityReporter;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -184,46 +179,6 @@ public class JSDocValidatorFactory {
 			this.type = type;
 			this.tag = tag;
 			this.collection = collection;
-		}
-
-	}
-
-	public static class Reporter implements JSProblemReporter {
-
-		private final IBuildContext context;
-		private JavaScriptParserSeverityReporter severityReporter;
-
-		public Reporter(IBuildContext context) {
-			this.context = context;
-			severityReporter = new JavaScriptParserSeverityReporter();
-		}
-
-		public void reportProblem(IProblemIdentifier identifier,
-				String message, int start, int end) {
-
-			reportProblem(ProblemSeverity.WARNING, identifier, message, start,
-					end);
-		}
-
-		public void reportProblem(ProblemSeverity severity,
-				IProblemIdentifier identifier, String message, int start,
-				int end) {
-			context.getProblemReporter().reportProblem(
-					new DefaultProblem(message, identifier, null,
-							severityReporter.getSeverity(identifier, severity),
-							start, end, lineNumberOf(start)));
-		}
-
-		private ISourceLineTracker lineTracker = null;
-
-		private int lineNumberOf(int start) {
-			if (start < 0) {
-				return -1;
-			}
-			if (lineTracker == null) {
-				lineTracker = context.getLineTracker();
-			}
-			return lineTracker.getLineNumberOfOffset(start) + 1;
 		}
 
 	}
