@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
@@ -162,11 +166,17 @@ public class Reporter extends LineTracker implements IProblemReporter,
 
 	public void reportProblem(IProblemIdentifier identifier, String message,
 			int start, int end) {
+		if (isSuppressed(identifier)) {
+			return;
+		}
 		reportProblem(ProblemSeverity.WARNING, identifier, message, start, end);
 	}
 
 	public void reportProblem(ProblemSeverity severity, IProblemIdentifier id,
 			String message, int start, int end) {
+		if (isSuppressed(id)) {
+			return;
+		}
 		ProblemSeverity sev = severity;
 		if (severityReporter != null) {
 			sev = severityReporter.getSeverity(id, sev);
@@ -180,6 +190,19 @@ public class Reporter extends LineTracker implements IProblemReporter,
 
 	public int getProblemCount() {
 		return problemCount;
+	}
+
+	private boolean isSuppressed(IProblemIdentifier identifier) {
+		return suppressed != null && suppressed.contains(identifier);
+	}
+
+	private Set<IProblemIdentifier> suppressed;
+
+	public void suppressProblems(IProblemIdentifier... identifiers) {
+		if (suppressed == null) {
+			suppressed = new HashSet<IProblemIdentifier>();
+		}
+		Collections.addAll(suppressed, identifiers);
 	}
 
 }
