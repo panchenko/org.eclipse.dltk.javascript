@@ -82,7 +82,6 @@
       <content-type
             base-type="org.eclipse.core.runtime.text"
             file-extensions="js"
-            file-names="js"
             id="org.eclipse.dltk.javascriptContentType"
             name="JavaScript source file"
             priority="high">
