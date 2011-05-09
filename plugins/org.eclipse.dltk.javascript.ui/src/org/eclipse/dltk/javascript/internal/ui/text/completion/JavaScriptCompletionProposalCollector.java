@@ -71,11 +71,9 @@ public class JavaScriptCompletionProposalCollector extends
 			CompletionProposal proposal) {
 		AbstractScriptCompletionProposal outProposal = (AbstractScriptCompletionProposal) super
 				.createScriptCompletionProposal(proposal);
-		if (outProposal.getProposalInfo() == null) {
-			if (proposal.getExtraInfo() != null) {
-				outProposal.setProposalInfo(new JavaScriptProposalInfo(proposal
-						.getExtraInfo()));
-			}
+		if (proposal.getExtraInfo() != null) {
+			outProposal.setProposalInfo(new JavaScriptProposalInfo(proposal
+					.getExtraInfo()));
 		}
 		return outProposal;
 	}
