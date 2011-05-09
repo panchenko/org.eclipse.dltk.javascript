@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.INodeVisitor;
@@ -37,4 +38,6 @@ public interface ITypeInferencerVisitor extends INodeVisitor<IValueReference> {
 	void visitFunctionBody(FunctionStatement node);
 
 	void setType(ASTNode node, IValueReference value, JSType type, boolean lazy);
+
+	void suppressProblems(IProblemIdentifier... identifiers);
 }
