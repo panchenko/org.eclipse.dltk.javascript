@@ -14,8 +14,10 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
@@ -40,6 +42,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	private boolean priv;
 	private boolean constructor;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
+	private ISourceRange docRange;
 
 	public IParameter createParameter() {
 		return new Parameter();
@@ -110,6 +113,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	public void setConstructor(boolean constructor) {
 		this.constructor = constructor;
+	}
+
+	public ISourceRange getDocRange() {
+		return docRange;
+	}
+
+	public void setDocRange(ISourceRange docRange) {
+		this.docRange = docRange;
 	}
 
 	@Override
@@ -185,6 +196,10 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 			parameter.setLocation(ReferenceLocation.create(source,
 					argument.sourceStart(), argument.sourceEnd()));
 			getParameters().add(parameter);
+		}
+		final Comment documentation = JSDocSupport.getFunctionComment(node);
+		if (documentation != null) {
+			setDocRange(documentation.getRange());
 		}
 	}
 

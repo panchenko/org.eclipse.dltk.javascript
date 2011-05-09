@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.List;
 
+import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -118,6 +119,10 @@ public interface IModelBuilder {
 		 * Set to true if this method is meant to be a constructor (type)
 		 */
 		void setConstructor(boolean constructor);
+
+		ISourceRange getDocRange();
+
+		void setDocRange(ISourceRange docRange);
 	}
 
 	public interface IVariable extends IMember {
