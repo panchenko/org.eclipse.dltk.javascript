@@ -145,7 +145,7 @@ public class JavaScriptValidations {
 		Method argCountMatches = null;
 		for (Method method : methods) {
 			if (method.getParameters().size() == arguments.length) {
-				boolean match = false;
+				boolean match = true;
 				EList<Parameter> parameters = method.getParameters();
 				for (int i = 0; i < parameters.size(); i++) {
 					JSType parameterType = parameters.get(i).getType();
