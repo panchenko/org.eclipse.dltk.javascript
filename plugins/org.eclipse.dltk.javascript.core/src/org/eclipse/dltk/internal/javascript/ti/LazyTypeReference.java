@@ -4,10 +4,13 @@ import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
 
 import java.util.StringTokenizer;
 
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -32,6 +35,16 @@ public class LazyTypeReference extends AbstractReference {
 			IValueReference createChild = collection.getChild(className);
 			if (createChild.exists()
 					&& createChild.getAttribute(IReferenceAttributes.RESOLVING) == null) {
+				final JSType childType = JavaScriptValidations
+						.typeOf(createChild);
+				if (childType != null && childType instanceof ClassType) {
+					final Type target = ((ClassType) childType).getTarget();
+					if (target != null) {
+						setDeclaredType(TypeUtil.ref(target));
+						resolved = true;
+						return;
+					}
+				}
 				IValueCollection collection = (IValueCollection) createChild
 						.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 				if (collection != null && collection.getThis() != null) {
