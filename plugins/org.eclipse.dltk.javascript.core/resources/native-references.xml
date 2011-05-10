@@ -344,8 +344,7 @@
       <parameters name="index" directType="Number"/>
     </members>
     <members xsi:type="ref:Method" name="concat" directType="String" description="Joins two or more strings.">
-      <parameters name="stringN"/>
-      <parameters name="StringX" kind="OPTIONAL"/>
+      <parameters name="strings" directType="String" kind="VARARGS"/>
     </members>
     <members xsi:type="ref:Method" name="equals" directType="Boolean">
       <parameters name="object"/>
