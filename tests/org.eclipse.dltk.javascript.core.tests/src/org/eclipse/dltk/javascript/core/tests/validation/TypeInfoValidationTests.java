@@ -95,7 +95,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("x.run('Hello')");
 		code.add("x.run('Hello','World')");
 		final List<IProblem> problems = validate(code.toString());
-		assertTrue(problems.isEmpty());
+		assertTrue(problems.toString(), problems.isEmpty());
 	}
 
 	public void testMethodOverload2() {
