@@ -493,6 +493,19 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testLazyInnerReference() {
+		StringList code = new StringList();
+		code.add("var NUM = function() {");
+		code.add("  /** @return {Number} */");
+		code.add("  var q = function() {");
+		code.add("    return new NUM();");
+		code.add("  }");
+		code.add("  return Number;");
+		code.add("}()");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 	public void testGenericParamWtihNoneGenericCall() {
 		List<String> code = new StringList();
 		code.add("/**");
