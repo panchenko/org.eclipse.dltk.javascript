@@ -200,11 +200,23 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitBinaryOperation(BinaryOperation node) {
 		final IValueReference left = visit(node.getLeftExpression());
-		final IValueReference right = visit(node.getRightExpression());
 		final int op = node.getOperation();
 		if (JSParser.ASSIGN == op) {
-			return visitAssign(left, right, node);
-		} else if (left == null && right instanceof ConstantValue) {
+			if (left != null && left.exists()) {
+				left.setAttribute(IReferenceAttributes.RESOLVING, Boolean.TRUE);
+				final IValueReference r;
+				try {
+					r = visit(node.getRightExpression());
+				} finally {
+					left.setAttribute(IReferenceAttributes.RESOLVING, null);
+				}
+				return visitAssign(left, r, node);
+			} else {
+				return visitAssign(left, visit(node.getRightExpression()), node);
+			}
+		}
+		final IValueReference right = visit(node.getRightExpression());
+		if (left == null && right instanceof ConstantValue) {
 			return right;
 		} else if (op == JSParser.LAND) {
 			return coalesce(right, left);
