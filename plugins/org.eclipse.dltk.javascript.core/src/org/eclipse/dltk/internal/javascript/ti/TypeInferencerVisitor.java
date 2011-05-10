@@ -393,7 +393,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	protected void initializeVariable(final IValueReference reference,
 			VariableDeclaration declaration, IVariable variable) {
 		if (declaration.getInitializer() != null) {
-			IValueReference assignment = visit(declaration.getInitializer());
+			final IValueReference assignment;
+			reference
+					.setAttribute(IReferenceAttributes.RESOLVING, Boolean.TRUE);
+			try {
+				assignment = visit(declaration.getInitializer());
+			} finally {
+				reference.setAttribute(IReferenceAttributes.RESOLVING, null);
+			}
 			if (assignment != null) {
 				assign(reference, assignment);
 				if (assignment.getKind() == ReferenceKind.FUNCTION
