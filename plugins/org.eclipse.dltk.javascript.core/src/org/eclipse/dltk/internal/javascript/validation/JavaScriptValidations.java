@@ -145,26 +145,24 @@ public class JavaScriptValidations {
 		Method argCountMatches = null;
 		for (Method method : methods) {
 			if (method.getParameters().size() == arguments.length) {
-				if (argCountMatches == null) {
+				boolean match = false;
+				EList<Parameter> parameters = method.getParameters();
+				for (int i = 0; i < parameters.size(); i++) {
+					JSType parameterType = parameters.get(i).getType();
+					if (parameterType == null)
+						continue;
+					JSType argumentType = typeOf(arguments[i]);
+					// todo should we have the context here to call
+					// context.resolveTypeRef()?
+					match = JSTypeSet
+							.normalize(parameterType)
+							.isAssignableFrom(JSTypeSet.normalize(argumentType));
+					if (!match)
+						break;
+				}
+				if (match) {
 					argCountMatches = method;
-				} else {
-					boolean match = false;
-					EList<Parameter> parameters = method.getParameters();
-					for (int i = 0; i < parameters.size(); i++) {
-						JSType parameterType = parameters.get(i).getType();
-						if (parameterType == null)
-							continue;
-						JSType argumentType = typeOf(arguments[i]);
-						// todo should we have the context here to call
-						// context.resolveTypeRef()?
-						match = JSTypeSet.normalize(parameterType)
-								.isAssignableFrom(
-										JSTypeSet.normalize(argumentType));
-						if (!match)
-							break;
-					}
-					if (match)
-						argCountMatches = method;
+					break;
 				}
 			}
 		}

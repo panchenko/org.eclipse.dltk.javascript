@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
@@ -775,7 +774,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	private static class JSTypeSetImpl extends JSTypeSet {
 
-		private final Set<JSType> types = new HashSet<JSType>();
+		private final List<JSType> types = new ArrayList<JSType>();
 
 		protected JSTypeSetImpl() {
 		}
@@ -791,7 +790,10 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 					add(t);
 				}
 			} else {
-				types.add(normalize(type));
+				JSType2 normalize = normalize(type);
+				if (!types.contains(normalize)) {
+					types.add(normalize);
+				}
 			}
 		}
 
