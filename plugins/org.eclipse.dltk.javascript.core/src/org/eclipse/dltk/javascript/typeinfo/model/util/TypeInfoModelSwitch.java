@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.13 2011/04/19 17:25:05 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.14 2011/05/12 14:16:23 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -188,6 +188,13 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case TypeInfoModelPackage.FUNCTION_TYPE: {
+                FunctionType functionType = (FunctionType)theEObject;
+                T result = caseFunctionType(functionType);
+                if (result == null) result = caseJSType(functionType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             case TypeInfoModelPackage.TYPE_REF: {
                 TypeRef typeRef = (TypeRef)theEObject;
                 T result = caseTypeRef(typeRef);
@@ -298,6 +305,21 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseJSType(JSType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Function Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Function Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseFunctionType(FunctionType object) {
         return null;
     }
 

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeKind.java,v 1.7 2011/04/19 17:25:04 apanchenk Exp $
+ * $Id: TypeKind.java,v 1.8 2011/05/12 14:16:23 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -99,7 +99,15 @@ public enum TypeKind implements Enumerator {
      * @generated
      * @ordered
      */
-    CLASS(5, "CLASS", "CLASS"); //$NON-NLS-1$ //$NON-NLS-2$
+    CLASS(5, "CLASS", "CLASS"), /**
+     * The '<em><b>FUNCTION</b></em>' literal object.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #FUNCTION_VALUE
+     * @generated
+     * @ordered
+     */
+    FUNCTION(6, "FUNCTION", "FUNCTION"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
      * The '<em><b>UNKNOWN</b></em>' literal value.
@@ -222,6 +230,21 @@ public enum TypeKind implements Enumerator {
     public static final int CLASS_VALUE = 5;
 
     /**
+     * The '<em><b>FUNCTION</b></em>' literal value.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of '<em><b>FUNCTION</b></em>' literal object isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @see #FUNCTION
+     * @model
+     * @generated
+     * @ordered
+     */
+    public static final int FUNCTION_VALUE = 6;
+
+    /**
      * An array of all the '<em><b>Type Kind</b></em>' enumerators.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -237,6 +260,7 @@ public enum TypeKind implements Enumerator {
             EXTERNAL_JS,
             RECORD,
             CLASS,
+            FUNCTION,
         };
 
 	/**
@@ -295,6 +319,7 @@ public enum TypeKind implements Enumerator {
             case EXTERNAL_JS_VALUE: return EXTERNAL_JS;
             case RECORD_VALUE: return RECORD;
             case CLASS_VALUE: return CLASS;
+            case FUNCTION_VALUE: return FUNCTION;
         }
         return null;
     }

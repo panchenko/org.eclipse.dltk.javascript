@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.29 2011/04/19 17:25:04 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.30 2011/05/12 14:16:23 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -20,6 +20,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
@@ -74,6 +75,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EClass jsTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass functionTypeEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -328,6 +336,33 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      */
     public EClass getJSType() {
         return jsTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getFunctionType() {
+        return functionTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getFunctionType_ReturnType() {
+        return (EReference)functionTypeEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getFunctionType_Parameters() {
+        return (EReference)functionTypeEClass.getEStructuralFeatures().get(1);
     }
 
     /**
@@ -836,6 +871,10 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         jsTypeEClass = createEClass(JS_TYPE);
 
+        functionTypeEClass = createEClass(FUNCTION_TYPE);
+        createEReference(functionTypeEClass, FUNCTION_TYPE__RETURN_TYPE);
+        createEReference(functionTypeEClass, FUNCTION_TYPE__PARAMETERS);
+
         typeRefEClass = createEClass(TYPE_REF);
         createEReference(typeRefEClass, TYPE_REF__TARGET);
 
@@ -905,6 +944,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         parameterEClass.getESuperTypes().add(this.getTypedElement());
         constructorEClass.getESuperTypes().add(this.getMethod());
         propertyEClass.getESuperTypes().add(this.getMember());
+        functionTypeEClass.getESuperTypes().add(this.getJSType());
         typeRefEClass.getESuperTypes().add(this.getJSType());
         arrayTypeEClass.getESuperTypes().add(this.getJSType());
         anyTypeEClass.getESuperTypes().add(this.getJSType());
@@ -975,6 +1015,10 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         addEOperation(jsTypeEClass, ecorePackage.getEString(), "getName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+        initEClass(functionTypeEClass, FunctionType.class, "FunctionType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getFunctionType_ReturnType(), this.getJSType(), null, "returnType", null, 0, 1, FunctionType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEReference(getFunctionType_Parameters(), this.getParameter(), null, "parameters", null, 0, -1, FunctionType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
         initEClass(typeRefEClass, TypeRef.class, "TypeRef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getTypeRef_Target(), this.getType(), null, "target", null, 0, 1, TypeRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -1016,6 +1060,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         addEEnumLiteral(typeKindEEnum, TypeKind.EXTERNAL_JS);
         addEEnumLiteral(typeKindEEnum, TypeKind.RECORD);
         addEEnumLiteral(typeKindEEnum, TypeKind.CLASS);
+        addEEnumLiteral(typeKindEEnum, TypeKind.FUNCTION);
 
         initEEnum(parameterKindEEnum, ParameterKind.class, "ParameterKind"); //$NON-NLS-1$
         addEEnumLiteral(parameterKindEEnum, ParameterKind.NORMAL);

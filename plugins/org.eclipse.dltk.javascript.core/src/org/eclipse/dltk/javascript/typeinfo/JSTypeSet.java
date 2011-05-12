@@ -21,9 +21,12 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -34,12 +37,14 @@ import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl;
+import org.eclipse.dltk.javascript.typeinfo.model.impl.FunctionTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.RecordTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.UndefinedTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl;
 import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -712,6 +717,146 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	}
 
+	private static class ParameterKey implements Parameter {
+
+		private final String name;
+		private final JSType2 type;
+
+		public ParameterKey(String name, JSType2 type) {
+			Assert.isNotNull(type);
+			this.name = name;
+			this.type = type;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String value) {
+			throw new UnsupportedOperationException();
+		}
+
+		public JSType getType() {
+			return type;
+		}
+
+		public void setType(JSType value) {
+			throw new UnsupportedOperationException();
+		}
+
+		public Type getDirectType() {
+			return type instanceof TypeRef ? ((TypeRef) type).getTarget()
+					: null;
+		}
+
+		public void setDirectType(Type value) {
+			throw new UnsupportedOperationException();
+		}
+
+		public ParameterKind getKind() {
+			// TODO (alex) support parameter kinds
+			return ParameterKind.NORMAL;
+		}
+
+		public void setKind(ParameterKind value) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public int hashCode() {
+			return type.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ParameterKey other = (ParameterKey) obj;
+			if (name == null) {
+				if (other.name != null)
+					return false;
+			} else if (!name.equals(other.name))
+				return false;
+			if (!type.equals(other.type))
+				return false;
+			return true;
+		}
+
+	}
+
+	private static class FunctionTypeKey implements FunctionType, JSType2 {
+
+		private final EList<Parameter> parameters;
+		private final JSType2 returnType;
+
+		public FunctionTypeKey(EList<Parameter> parameters, JSType2 returnType) {
+			this.parameters = parameters;
+			this.returnType = returnType;
+		}
+
+		public TypeKind getKind() {
+			return TypeKind.FUNCTION;
+		}
+
+		public String getName() {
+			// TODO (alex) generate function signature
+			return ITypeNames.FUNCTION;
+		}
+
+		public boolean isArray() {
+			return false;
+		}
+
+		public boolean isAssignableFrom(JSType2 type) {
+			// TODO (alex) Auto-generated method stub
+			return false;
+		}
+
+		public JSType getReturnType() {
+			return returnType;
+		}
+
+		public void setReturnType(JSType value) {
+			throw new UnsupportedOperationException();
+		}
+
+		public EList<Parameter> getParameters() {
+			return parameters;
+		}
+
+		@Override
+		public int hashCode() {
+			return parameters.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			FunctionTypeKey other = (FunctionTypeKey) obj;
+			if (parameters == null) {
+				if (other.parameters != null)
+					return false;
+			} else if (!parameters.equals(other.parameters))
+				return false;
+			if (returnType == null) {
+				if (other.returnType != null)
+					return false;
+			} else if (!returnType.equals(other.returnType))
+				return false;
+			return true;
+		}
+
+	}
+
 	public static JSType2 normalize(JSType type) {
 		if (type instanceof TypeRefImpl) {
 			final TypeRef ref = (TypeRef) type;
@@ -736,6 +881,20 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		} else if (type instanceof RecordTypeImpl) {
 			final RecordType recordType = (RecordType) type;
 			return new RecordTypeKey(recordType.getTarget());
+		} else if (type instanceof FunctionTypeImpl) {
+			final FunctionType funcType = (FunctionType) type;
+			final EList<Parameter> params;
+			if (funcType.getParameters().isEmpty()) {
+				params = ECollections.emptyEList();
+			} else {
+				params = new BasicEList<Parameter>();
+				for (Parameter parameter : funcType.getParameters()) {
+					params.add(new ParameterKey(parameter.getName(),
+							normalize(parameter.getType())));
+				}
+			}
+			return new FunctionTypeKey(params,
+					normalize(funcType.getReturnType()));
 		}
 		Assert.isLegal(!(type instanceof EObject));
 		return (JSType2) type;
@@ -770,6 +929,15 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		final UnionTypeKey union = new UnionTypeKey();
 		union.targets.addAll(targets);
 		return union;
+	}
+
+	public static JSType2 functionType(EList<Parameter> parameters,
+			JSType2 returnType) {
+		return new FunctionTypeKey(parameters, returnType);
+	}
+
+	public static Parameter parameter(String name, JSType2 type) {
+		return new ParameterKey(name, type);
 	}
 
 	private static class JSTypeSetImpl extends JSTypeSet {

@@ -17,7 +17,7 @@ import org.antlr.runtime.CharStream;
 
 public class JSDocTypeParserBase {
 
-	protected void match(CharStream input, char expected) throws ParseException {
+	public void match(CharStream input, char expected) throws ParseException {
 		if (input.LT(1) == expected) {
 			input.consume();
 		} else {

@@ -75,6 +75,7 @@
     <eLiterals name="EXTERNAL_JS" value="3" literal="EXTERNAL_JS"/>
     <eLiterals name="RECORD" value="4" literal="RECORD"/>
     <eLiterals name="CLASS" value="5" literal="CLASS"/>
+    <eLiterals name="FUNCTION" value="6"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ParameterKind">
     <eLiterals name="NORMAL" literal="NORMAL"/>
@@ -88,6 +89,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="JSType" abstract="true" interface="true">
     <eOperations name="getKind" eType="#//TypeKind"/>
     <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionType" eSuperTypes="#//JSType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//JSType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true" resolveProxies="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypeRef" eSuperTypes="#//JSType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"/>

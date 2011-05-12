@@ -67,6 +67,7 @@ import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -1768,7 +1769,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		 * @param node
 		 * @param type
 		 */
-		protected void checkType(ASTNode node, JSType type,
+		public void checkType(ASTNode node, JSType type,
 				IValueCollection collection) {
 			if (type != null) {
 				type = context.resolveTypeRef(type);
@@ -1787,6 +1788,14 @@ public class TypeInfoValidator implements IBuildParticipant {
 				} else if (type instanceof UnionType) {
 					for (JSType part : ((UnionType) type).getTargets()) {
 						checkType(node, part, collection);
+					}
+				} else if (type instanceof FunctionType) {
+					final FunctionType funcType = (FunctionType) type;
+					if (funcType.getReturnType() != null) {
+						checkType(node, funcType.getReturnType(), collection);
+					}
+					for (Parameter parameter : funcType.getParameters()) {
+						checkType(node, parameter.getType(), collection);
 					}
 				} else {
 					final Type t = TypeUtil.extractType(type);

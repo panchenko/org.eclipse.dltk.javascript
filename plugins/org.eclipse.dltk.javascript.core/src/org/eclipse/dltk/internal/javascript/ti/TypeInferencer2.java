@@ -43,9 +43,11 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -55,6 +57,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -182,6 +186,17 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				}
 			}
 			return true;
+		} else if (type instanceof FunctionType) {
+			final FunctionType funcType = (FunctionType) type;
+			if (!isResolved(funcType.getReturnType())) {
+				return false;
+			}
+			for (Parameter parameter : funcType.getParameters()) {
+				if (!isResolved(parameter.getType())) {
+					return false;
+				}
+			}
+			return true;
 		}
 		return false;
 	}
@@ -215,6 +230,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return JSTypeSet.union(targets);
 		} else if (type instanceof AnyType) {
 			return JSTypeSet.any();
+		} else if (type instanceof FunctionType) {
+			final FunctionType funcType = (FunctionType) type;
+			final EList<Parameter> params = new BasicEList<Parameter>();
+			for (Parameter parameter : funcType.getParameters()) {
+				params.add(JSTypeSet.parameter(parameter.getName(),
+						doResolveTypeRef(parameter.getType())));
+			}
+			return JSTypeSet.functionType(funcType.getParameters(),
+					doResolveTypeRef(funcType.getReturnType()));
 		} else if (type instanceof RecordType) {
 			// TODO (alex) make a copy of Type?
 			final Type target = ((RecordType) type).getTarget();

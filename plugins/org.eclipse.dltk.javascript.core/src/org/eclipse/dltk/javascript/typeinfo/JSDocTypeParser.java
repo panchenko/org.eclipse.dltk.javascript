@@ -17,12 +17,15 @@ import java.util.List;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.emf.common.util.EList;
 
 public class JSDocTypeParser extends JSDocTypeParserBase {
 
@@ -92,6 +95,20 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				match(input, '>');
 				JSType type = createGenericType(baseType, typeParams);
 				return checkIfArray(input, type);
+			} else if (ch == '('
+					&& ITypeNames.FUNCTION.equalsIgnoreCase(input.substring(
+							start, input.index() - 1))) {
+				// TODO (alex) lower case "function" only?
+				input.consume();
+				final FunctionType functionType = TypeInfoModelFactory.eINSTANCE
+						.createFunctionType();
+				parseFunctionParams(input, functionType.getParameters());
+				match(input, ')');
+				if (input.LT(1) == ':') {
+					input.consume();
+					functionType.setReturnType(parseType(input));
+				}
+				return checkIfArray(input, functionType);
 			} else if (ch == '[') {
 				final JSType itemType = createType(input, start);
 				input.consume();
@@ -99,8 +116,9 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				final JSType array = createArray(itemType);
 				return checkIfArray(input, array);
 			} else if (ch == CharStream.EOF || Character.isWhitespace(ch)
-					|| ch == '|' || ch == ',' || ch == '}' || ch == '>') {
-				return createType(input, start);
+					|| ch == '|' || ch == ',' || ch == '}' || ch == '>'
+					|| ch == ')') {
+				return input.index() > start ? createType(input, start) : null;
 			} else {
 				input.consume();
 			}
@@ -196,6 +214,27 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 			break;
 		}
 		return types;
+	}
+
+	public void parseFunctionParams(CharStream input,
+			EList<Parameter> parameters) throws ParseException {
+		for (;;) {
+			// TODO support parameter names (at least "this")
+			// TODO support parameter modifiers (optional, varargs)
+			final JSType type = parse(input);
+			if (type != null) {
+				final Parameter parameter = TypeInfoModelFactory.eINSTANCE
+						.createParameter();
+				parameter.setType(type);
+				parameters.add(parameter);
+				skipSpaces(input);
+				if (input.LT(1) == ',') {
+					input.consume();
+					continue;
+				}
+			}
+			break;
+		}
 	}
 
 	protected RecordType parseRecordType(CharStream input)

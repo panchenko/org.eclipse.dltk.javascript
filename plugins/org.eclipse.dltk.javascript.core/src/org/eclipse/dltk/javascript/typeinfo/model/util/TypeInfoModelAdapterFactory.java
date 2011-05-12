@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.13 2011/04/19 17:25:05 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.14 2011/05/12 14:16:23 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -128,6 +128,10 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
                 return createJSTypeAdapter();
             }
             @Override
+            public Adapter caseFunctionType(FunctionType object) {
+                return createFunctionTypeAdapter();
+            }
+            @Override
             public Adapter caseTypeRef(TypeRef object) {
                 return createTypeRefAdapter();
             }
@@ -222,6 +226,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createJSTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.FunctionType <em>Function Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.FunctionType
+     * @generated
+     */
+    public Adapter createFunctionTypeAdapter() {
         return null;
     }
 

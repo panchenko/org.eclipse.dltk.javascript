@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.13 2011/04/19 17:25:04 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.14 2011/05/12 14:16:22 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -86,6 +86,7 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.CONSTRUCTOR: return (EObject)createConstructor();
             case TypeInfoModelPackage.PROPERTY: return (EObject)createProperty();
             case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
+            case TypeInfoModelPackage.FUNCTION_TYPE: return (EObject)createFunctionType();
             case TypeInfoModelPackage.TYPE_REF: return (EObject)createTypeRef();
             case TypeInfoModelPackage.ARRAY_TYPE: return (EObject)createArrayType();
             case TypeInfoModelPackage.ANY_TYPE: return (EObject)createAnyType();
@@ -205,6 +206,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public FunctionType createFunctionType() {
+        FunctionTypeImpl functionType = new FunctionTypeImpl();
+        return functionType;
+    }
+
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

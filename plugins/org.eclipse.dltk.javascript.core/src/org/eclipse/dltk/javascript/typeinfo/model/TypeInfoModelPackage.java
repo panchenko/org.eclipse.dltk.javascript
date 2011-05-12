@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.24 2011/04/19 17:25:03 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.25 2011/05/12 14:16:23 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -936,6 +936,43 @@ public interface TypeInfoModelPackage extends EPackage {
     int JS_TYPE_FEATURE_COUNT = 0;
 
 	/**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.FunctionTypeImpl <em>Function Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.FunctionTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getFunctionType()
+     * @generated
+     */
+    int FUNCTION_TYPE = 12;
+
+    /**
+     * The feature id for the '<em><b>Return Type</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int FUNCTION_TYPE__RETURN_TYPE = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int FUNCTION_TYPE__PARAMETERS = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
+     * The number of structural features of the '<em>Function Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int FUNCTION_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 2;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl <em>Type Ref</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -943,7 +980,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeRef()
      * @generated
      */
-    int TYPE_REF = 12;
+    int TYPE_REF = 13;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' reference.
@@ -971,7 +1008,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getArrayType()
      * @generated
      */
-    int ARRAY_TYPE = 13;
+    int ARRAY_TYPE = 14;
 
     /**
      * The feature id for the '<em><b>Item Type</b></em>' containment reference.
@@ -999,7 +1036,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAnyType()
      * @generated
      */
-    int ANY_TYPE = 14;
+    int ANY_TYPE = 15;
 
     /**
      * The number of structural features of the '<em>Any Type</em>' class.
@@ -1018,7 +1055,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUnionType()
      * @generated
      */
-    int UNION_TYPE = 15;
+    int UNION_TYPE = 16;
 
     /**
      * The feature id for the '<em><b>Targets</b></em>' containment reference list.
@@ -1046,7 +1083,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getGenericType()
      * @generated
      */
-    int GENERIC_TYPE = 16;
+    int GENERIC_TYPE = 17;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' reference.
@@ -1083,7 +1120,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMapType()
      * @generated
      */
-    int MAP_TYPE = 17;
+    int MAP_TYPE = 18;
 
     /**
      * The feature id for the '<em><b>Key Type</b></em>' containment reference.
@@ -1120,7 +1157,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordType()
      * @generated
      */
-    int RECORD_TYPE = 18;
+    int RECORD_TYPE = 19;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' containment reference.
@@ -1157,7 +1194,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getClassType()
      * @generated
      */
-    int CLASS_TYPE = 19;
+    int CLASS_TYPE = 20;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' reference.
@@ -1185,7 +1222,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUndefinedType()
      * @generated
      */
-    int UNDEFINED_TYPE = 20;
+    int UNDEFINED_TYPE = 21;
 
     /**
      * The number of structural features of the '<em>Undefined Type</em>' class.
@@ -1204,7 +1241,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 21;
+	int TYPE_KIND = 22;
 
 
 	/**
@@ -1215,7 +1252,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 22;
+	int PARAMETER_KIND = 23;
 
 
 	/**
@@ -1280,6 +1317,38 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EClass getJSType();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.FunctionType <em>Function Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Function Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.FunctionType
+     * @generated
+     */
+    EClass getFunctionType();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.FunctionType#getReturnType <em>Return Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Return Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.FunctionType#getReturnType()
+     * @see #getFunctionType()
+     * @generated
+     */
+    EReference getFunctionType_ReturnType();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.FunctionType#getParameters <em>Parameters</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Parameters</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.FunctionType#getParameters()
+     * @see #getFunctionType()
+     * @generated
+     */
+    EReference getFunctionType_Parameters();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef <em>Type Ref</em>}'.
@@ -1866,6 +1935,32 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EClass JS_TYPE = eINSTANCE.getJSType();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.FunctionTypeImpl <em>Function Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.FunctionTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getFunctionType()
+         * @generated
+         */
+        EClass FUNCTION_TYPE = eINSTANCE.getFunctionType();
+
+        /**
+         * The meta object literal for the '<em><b>Return Type</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference FUNCTION_TYPE__RETURN_TYPE = eINSTANCE.getFunctionType_ReturnType();
+
+        /**
+         * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference FUNCTION_TYPE__PARAMETERS = eINSTANCE.getFunctionType_Parameters();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl <em>Type Ref</em>}' class.
