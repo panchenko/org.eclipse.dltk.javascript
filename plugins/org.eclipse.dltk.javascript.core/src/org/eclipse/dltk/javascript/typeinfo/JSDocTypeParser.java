@@ -104,8 +104,10 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 						.createFunctionType();
 				parseFunctionParams(input, functionType.getParameters());
 				match(input, ')');
+				skipSpaces(input);
 				if (input.LT(1) == ':') {
 					input.consume();
+					skipSpaces(input);
 					functionType.setReturnType(parseType(input));
 				}
 				return checkIfArray(input, functionType);
