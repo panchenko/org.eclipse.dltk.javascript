@@ -199,6 +199,19 @@
   <ref:TypeAlias source="boolean" target="Boolean"/>
   <ref:Type name="Date" kind="PREDEFINED" description="Creates Date instances which let you work with dates and times." superType="Object">
     <members xsi:type="ref:Property" name="prototype" directType="Date" static="true" description="Allows the addition of properties to a Date object."/>
+    <members xsi:type="ref:Method" name="parse" directType="Number" description="Parses a string representation of a date, and returns the number of milliseconds since midnight Jan 1, 1970" static="true">
+      <parameters name="dateString" directType="String"/>
+    </members>
+    <members xsi:type="ref:Method" name="now" directType="Number" description="Returns the numeric value corresponding to the current time." static="true"/>
+    <members xsi:type="ref:Method" name="UTC" directType="UTC takes comma-delimited date parameters and returns the number of milliseconds between January 1, 1970, 00:00:00, universal time and the time you specified." static="true">
+      <parameters name="year" directType="Number"/>
+      <parameters name="month" directType="Number"/>
+      <parameters name="date" directType="Number" kind="OPTIONAL"/>
+      <parameters name="hrs" directType="Number" kind="OPTIONAL"/>
+      <parameters name="min" directType="Number" kind="OPTIONAL"/>
+      <parameters name="sec" directType="Number" kind="OPTIONAL"/>
+      <parameters name="ms" directType="Number" kind="OPTIONAL"/>
+    </members>
     <members xsi:type="ref:Method" name="getDate" directType="Number" description="Returns the day of the month from a Date object (from 1-31)."/>
     <members xsi:type="ref:Method" name="getDay" directType="Number" description="Returns the day of the week from a Date object (from 0-6)."/>
     <members xsi:type="ref:Method" name="getFullYear" directType="Number" description="Returns the year, as a four-digit number."/>
@@ -293,9 +306,6 @@
     <members xsi:type="ref:Method" name="toTimeString" directType="String" description="Returns the time portion of a Date object in readable form."/>
     <members xsi:type="ref:Method" name="toUTCString" directType="String" description="Converts a Date object, according to universal time, to a string."/>
     <members xsi:type="ref:Method" name="valueOf" directType="String" description="Returns the primitive value of a String object."/>
-    <members xsi:type="ref:Method" name="parse" directType="Number" description="Parses a string representation of a date, and returns the number of milliseconds since midnight Jan 1, 1970" static="true">
-      <parameters name="dateString" directType="String"/>
-    </members>
   </ref:Type>
   <ref:Type name="Number" kind="PREDEFINED" superType="Object">
     <constructor name="Number">
