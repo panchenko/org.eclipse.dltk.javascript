@@ -15,6 +15,7 @@ import java.text.ParseException;
 
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
@@ -57,6 +58,26 @@ public class JSDocTypeParserTests extends TestCase {
 		assertRef("String", type.getMembers().get(0).getType());
 		assertEquals("anumber", type.getMembers().get(1).getName());
 		assertRef("Number", type.getMembers().get(1).getType());
+	}
+
+	public void testFunctionType1() {
+		final FunctionType type = (FunctionType) parse("function():String");
+		assertEquals(0, type.getParameters().size());
+		assertRef("String", type.getReturnType());
+	}
+
+	public void testFunctionType2() {
+		final FunctionType type = (FunctionType) parse("function(String)");
+		assertEquals(1, type.getParameters().size());
+		assertRef("String", type.getParameters().get(0).getType());
+		assertNull(type.getReturnType());
+	}
+
+	public void testFunctionType3() {
+		final FunctionType type = (FunctionType) parse("function( String ) : Number");
+		assertEquals(1, type.getParameters().size());
+		assertRef("String", type.getParameters().get(0).getType());
+		assertRef("Number", type.getReturnType());
 	}
 
 }
