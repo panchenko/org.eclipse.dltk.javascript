@@ -203,7 +203,7 @@
       <parameters name="dateString" directType="String"/>
     </members>
     <members xsi:type="ref:Method" name="now" directType="Number" description="Returns the numeric value corresponding to the current time." static="true"/>
-    <members xsi:type="ref:Method" name="UTC" directType="UTC takes comma-delimited date parameters and returns the number of milliseconds between January 1, 1970, 00:00:00, universal time and the time you specified." static="true">
+    <members xsi:type="ref:Method" name="UTC" directType="Number" description="UTC takes comma-delimited date parameters and returns the number of milliseconds between January 1, 1970, 00:00:00, universal time and the time you specified." static="true">
       <parameters name="year" directType="Number"/>
       <parameters name="month" directType="Number"/>
       <parameters name="date" directType="Number" kind="OPTIONAL"/>
