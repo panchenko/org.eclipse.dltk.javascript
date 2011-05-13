@@ -157,7 +157,7 @@ public class FunctionTypeImpl extends EObjectImpl implements FunctionType {
 		printParameters(sb);
 		if (returnType != null) {
 			sb.append(":");
-			sb.append(returnType);
+			sb.append(returnType.getName());
 		}
 		return sb.toString();
     }
@@ -165,7 +165,7 @@ public class FunctionTypeImpl extends EObjectImpl implements FunctionType {
 	protected void printParameters(StringBuilder sb) {
 		sb.append("(");
 		if (parameters != null) {
-			boolean first = false;
+			boolean first = true;
 			for (Parameter parameter : parameters) {
 				if (!first) {
 					sb.append(",");
