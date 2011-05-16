@@ -163,6 +163,23 @@ public class TypeUtil {
 				URI.encodeFragment(typeName, false));
 	}
 
+	/**
+	 * @param type
+	 * @return
+	 */
+	public static Type createProxy(Type type) {
+		final Type result = TypeInfoModelFactory.eINSTANCE.createType();
+		if (type.isProxy()) {
+			((InternalEObject) result).eSetProxyURI(((InternalEObject) type)
+					.eProxyURI());
+		} else {
+			final String typeName = type.getName();
+			result.setName(typeName);
+			((InternalEObject) result).eSetProxyURI(createProxyURI(typeName));
+		}
+		return result;
+	}
+
 	public static boolean isTypeProxy(URI uri) {
 		return PROXY_SCHEME.equals(uri.scheme())
 				&& PROXY_OPAQUE_PART.equals(uri.opaquePart());
