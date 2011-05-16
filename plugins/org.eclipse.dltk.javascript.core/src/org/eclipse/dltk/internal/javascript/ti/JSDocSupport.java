@@ -477,21 +477,28 @@ public class JSDocSupport implements IModelBuilder {
 					}
 				}
 			}
-			final boolean requireBraces = requireBraces(tag.name());
-			final Tokenizer st = new Tokenizer(tag.getValue());
-			if (st.hasMoreTokens()) {
-				final String typeName = st.nextToken();
-				if (!requireBraces || isBraced(typeName)) {
-					JSType type = translateTypeName(cutBraces(typeName), tag,
-							reporter);
-					if (typeChecker != null)
-						typeChecker.checkType(type, tag);
-					member.setType(type);
-				}
-			} else if (!requireBraces) {
-				reportProblem(reporter, JSDocProblem.MISSING_TYPE_NAME, tag);
+			final JSType type = parseType(tag, requireBraces(tag.name()),
+					reporter);
+			if (type != null) {
+				if (typeChecker != null)
+					typeChecker.checkType(type, tag);
+				member.setType(type);
 			}
 		}
+	}
+
+	public JSType parseType(JSDocTag tag, boolean requireBraces,
+			JSProblemReporter reporter) {
+		final Tokenizer st = new Tokenizer(tag.getValue());
+		if (st.hasMoreTokens()) {
+			final String typeName = st.nextToken();
+			if (!requireBraces || isBraced(typeName)) {
+				return translateTypeName(cutBraces(typeName), tag, reporter);
+			}
+		} else if (!requireBraces) {
+			reportProblem(reporter, JSDocProblem.MISSING_TYPE_NAME, tag);
+		}
+		return null;
 	}
 
 	protected boolean requireBraces(String tagName) {
