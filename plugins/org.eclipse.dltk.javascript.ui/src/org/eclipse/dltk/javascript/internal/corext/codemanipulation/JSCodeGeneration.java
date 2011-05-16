@@ -127,7 +127,8 @@ public class JSCodeGeneration {
 		StringBuffer buf = new StringBuffer();
 		buf.append(JSDOC_PREFIX).append(lineDelimiter);
 		buf.append(" * " + fieldName).append(lineDelimiter); //$NON-NLS-1$
-		buf.append(" * @type ").append(typeName != null ? typeName : ITypeNames.OBJECT).append(lineDelimiter); //$NON-NLS-1$
+		// TODO (alex) do we need an option for braces here ?
+		buf.append(" * @type ").append("{").append(typeName != null ? typeName : ITypeNames.OBJECT).append("}").append(lineDelimiter); //$NON-NLS-1$
 		buf.append(" */").append(lineDelimiter); //$NON-NLS-1$
 		return buf.toString();
 	}
