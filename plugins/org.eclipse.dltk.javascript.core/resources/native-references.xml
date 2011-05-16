@@ -305,7 +305,6 @@
     <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a String value for this object."/>
     <members xsi:type="ref:Method" name="toTimeString" directType="String" description="Returns the time portion of a Date object in readable form."/>
     <members xsi:type="ref:Method" name="toUTCString" directType="String" description="Converts a Date object, according to universal time, to a string."/>
-    <members xsi:type="ref:Method" name="valueOf" directType="String" description="Returns the primitive value of a String object."/>
   </ref:Type>
   <ref:Type name="Number" kind="PREDEFINED" superType="Object">
     <constructor name="Number">
@@ -326,7 +325,7 @@
     <members xsi:type="ref:Method" name="toPrecision" directType="String" description="Converts a number into an exponential notation if it has more digits than specified.">
       <parameters name="numberOfDigits"/>
     </members>
-    <members xsi:type="ref:Method" name="valueOf" directType="String" description="Returns the primitive value of a Number object."/>
+    <members xsi:type="ref:Method" name="valueOf" directType="Number" description="Returns the primitive value of a Number object."/>
     <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a String value for this object.The toString method parses its first argument, and attempts to return a string representation in the specified radix (base)">
       <parameters name="radix"  kind="OPTIONAL"/>
     </members>
