@@ -23,11 +23,14 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
 import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
 import org.eclipse.dltk.ui.DLTKPluginImages;
+import org.eclipse.dltk.ui.ScriptElementImageProvider;
 import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
@@ -121,7 +124,9 @@ public class JavaScriptCompletionProposalLabelProvider extends
 				sb.append(": ");
 				sb.append(property.getType().getName());
 				// TODO use different color
-				if (property.getDeclaringType() != null) {
+				if (property.getDeclaringType() != null
+						&& !(((EObject) property.getDeclaringType())
+								.eContainer() instanceof RecordType)) {
 					sb.append(" - ");
 					sb.append(property.getDeclaringType().getName());
 				}
@@ -133,6 +138,8 @@ public class JavaScriptCompletionProposalLabelProvider extends
 
 	private boolean isVisible(JSType type) {
 		if (type instanceof UndefinedType) {
+			return false;
+		} else if (type instanceof RecordType) {
 			return false;
 		} else {
 			return true;
@@ -163,10 +170,25 @@ public class JavaScriptCompletionProposalLabelProvider extends
 				return decorateImageDescriptor(
 						ImageDescriptor.createFromURL(imageUrl), proposal);
 		} else if (proposal.getExtraInfo() instanceof Element) {
+			final Element element = (Element) proposal.getExtraInfo();
 			final ImageDescriptor descriptor = ElementLabelProviderRegistry
-					.getImageDescriptor((Element) proposal.getExtraInfo());
+					.getImageDescriptor(element);
 			if (descriptor != null) {
 				return decorateImageDescriptor(descriptor, proposal);
+			}
+			if (element instanceof Member) {
+				final int flags = ((Member) element).getVisibility().getFlags();
+				if (element instanceof Property) {
+					return decorateImageDescriptor(
+							ScriptElementImageProvider
+									.getFieldImageDescriptor(flags),
+							proposal);
+				} else if (element instanceof Method) {
+					return decorateImageDescriptor(
+							ScriptElementImageProvider
+									.getMethodImageDescriptor(flags),
+							proposal);
+				}
 			}
 		}
 		return null;
