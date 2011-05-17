@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.30 2011/05/12 14:16:23 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.31 2011/05/17 14:58:27 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -40,6 +40,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -224,6 +225,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 	private EEnum parameterKindEEnum = null;
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EEnum visibilityEEnum = null;
+
+    /**
      * Creates an instance of the model <b>Package</b>, registered with
      * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
      * package URI value.
@@ -700,6 +708,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
 	/**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getMember_Visibility() {
+        return (EAttribute)memberEClass.getEStructuralFeatures().get(2);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -799,6 +816,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
 	/**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EEnum getVisibility() {
+        return visibilityEEnum;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -853,6 +879,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         memberEClass = createEClass(MEMBER);
         createEAttribute(memberEClass, MEMBER__STATIC);
         createEReference(memberEClass, MEMBER__DECLARING_TYPE);
+        createEAttribute(memberEClass, MEMBER__VISIBILITY);
 
         methodEClass = createEClass(METHOD);
         createEReference(methodEClass, METHOD__PARAMETERS);
@@ -905,6 +932,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         // Create enums
         typeKindEEnum = createEEnum(TYPE_KIND);
         parameterKindEEnum = createEEnum(PARAMETER_KIND);
+        visibilityEEnum = createEEnum(VISIBILITY);
     }
 
 	/**
@@ -993,6 +1021,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEClass(memberEClass, Member.class, "Member", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEAttribute(getMember_Static(), ecorePackage.getEBoolean(), "static", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getMember_DeclaringType(), this.getType(), this.getType_Members(), "declaringType", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEAttribute(getMember_Visibility(), this.getVisibility(), "visibility", null, 0, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(methodEClass, Method.class, "Method", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getMethod_Parameters(), this.getParameter(), null, "parameters", null, 0, -1, Method.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -1066,6 +1095,10 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         addEEnumLiteral(parameterKindEEnum, ParameterKind.NORMAL);
         addEEnumLiteral(parameterKindEEnum, ParameterKind.OPTIONAL);
         addEEnumLiteral(parameterKindEEnum, ParameterKind.VARARGS);
+
+        initEEnum(visibilityEEnum, Visibility.class, "Visibility"); //$NON-NLS-1$
+        addEEnumLiteral(visibilityEEnum, Visibility.PUBLIC);
+        addEEnumLiteral(visibilityEEnum, Visibility.PRIVATE);
 
         // Create resource
         createResource(eNS_URI);

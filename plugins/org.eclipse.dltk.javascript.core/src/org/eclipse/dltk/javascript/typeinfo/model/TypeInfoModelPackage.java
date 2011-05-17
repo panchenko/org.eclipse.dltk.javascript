@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.25 2011/05/12 14:16:23 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.26 2011/05/17 14:58:27 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -491,13 +491,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int MEMBER__DECLARING_TYPE = ELEMENT_FEATURE_COUNT + 3;
 
     /**
+     * The feature id for the '<em><b>Visibility</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int MEMBER__VISIBILITY = ELEMENT_FEATURE_COUNT + 4;
+
+    /**
      * The number of structural features of the '<em>Member</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int MEMBER_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 4;
+	int MEMBER_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 5;
 
     /**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -588,6 +597,15 @@ public interface TypeInfoModelPackage extends EPackage {
      * @ordered
      */
 	int METHOD__DECLARING_TYPE = MEMBER__DECLARING_TYPE;
+
+    /**
+     * The feature id for the '<em><b>Visibility</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int METHOD__VISIBILITY = MEMBER__VISIBILITY;
 
     /**
      * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
@@ -753,6 +771,15 @@ public interface TypeInfoModelPackage extends EPackage {
     int CONSTRUCTOR__DECLARING_TYPE = METHOD__DECLARING_TYPE;
 
     /**
+     * The feature id for the '<em><b>Visibility</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CONSTRUCTOR__VISIBILITY = METHOD__VISIBILITY;
+
+    /**
      * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -871,6 +898,15 @@ public interface TypeInfoModelPackage extends EPackage {
 	int PROPERTY__DECLARING_TYPE = MEMBER__DECLARING_TYPE;
 
 	/**
+     * The feature id for the '<em><b>Visibility</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int PROPERTY__VISIBILITY = MEMBER__VISIBILITY;
+
+    /**
      * The feature id for the '<em><b>Read Only</b></em>' attribute.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1256,6 +1292,17 @@ public interface TypeInfoModelPackage extends EPackage {
 
 
 	/**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.Visibility <em>Visibility</em>}' enum.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Visibility
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
+     * @generated
+     */
+    int VISIBILITY = 24;
+
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.NamedElement <em>Named Element</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1744,6 +1791,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	EReference getMember_DeclaringType();
 
 	/**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getVisibility <em>Visibility</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Visibility</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Member#getVisibility()
+     * @see #getMember()
+     * @generated
+     */
+    EAttribute getMember_Visibility();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Method <em>Method</em>}'.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1861,6 +1919,16 @@ public interface TypeInfoModelPackage extends EPackage {
 	EEnum getParameterKind();
 
 	/**
+     * Returns the meta object for enum '{@link org.eclipse.dltk.javascript.typeinfo.model.Visibility <em>Visibility</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for enum '<em>Visibility</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Visibility
+     * @generated
+     */
+    EEnum getVisibility();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2287,6 +2355,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		EReference MEMBER__DECLARING_TYPE = eINSTANCE.getMember_DeclaringType();
 
 		/**
+         * The meta object literal for the '<em><b>Visibility</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute MEMBER__VISIBILITY = eINSTANCE.getMember_Visibility();
+
+        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MethodImpl <em>Method</em>}' class.
          * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2385,6 +2461,16 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
 		EEnum PARAMETER_KIND = eINSTANCE.getParameterKind();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.Visibility <em>Visibility</em>}' enum.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.Visibility
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
+         * @generated
+         */
+        EEnum VISIBILITY = eINSTANCE.getVisibility();
 
 	}
 

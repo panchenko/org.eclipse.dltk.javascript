@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Member.java,v 1.8 2011/02/04 06:04:41 apanchenk Exp $
+ * $Id: Member.java,v 1.9 2011/05/17 14:58:27 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -24,6 +24,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#isStatic <em>Static</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getDeclaringType <em>Declaring Type</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getVisibility <em>Visibility</em>}</li>
  * </ul>
  * </p>
  *
@@ -71,5 +72,34 @@ public interface Member extends Element, TypedElement {
 	 * @generated
 	 */
 	Type getDeclaringType();
+
+    /**
+     * Returns the value of the '<em><b>Visibility</b></em>' attribute.
+     * The literals are from the enumeration {@link org.eclipse.dltk.javascript.typeinfo.model.Visibility}.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Visibility</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Visibility</em>' attribute.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Visibility
+     * @see #setVisibility(Visibility)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMember_Visibility()
+     * @model
+     * @generated
+     */
+    Visibility getVisibility();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Member#getVisibility <em>Visibility</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Visibility</em>' attribute.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Visibility
+     * @see #getVisibility()
+     * @generated
+     */
+    void setVisibility(Visibility value);
 
 } // Member
