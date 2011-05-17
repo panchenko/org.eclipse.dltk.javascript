@@ -18,19 +18,16 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
-import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
-import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
 import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
 import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.ScriptElementImageProvider;
 import org.eclipse.dltk.ui.text.completion.CompletionProposalLabelProvider;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
@@ -118,15 +115,13 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			if (label != null) {
 				return label;
 			}
-			if (property.getType() != null && isVisible(property.getType())) {
+			if (TypeUtil.isValueTypeVisible(property.getType())) {
 				final StringBuilder sb = new StringBuilder();
 				sb.append(proposal.getName());
 				sb.append(": ");
 				sb.append(property.getType().getName());
 				// TODO use different color
-				if (property.getDeclaringType() != null
-						&& !(((EObject) property.getDeclaringType())
-								.eContainer() instanceof RecordType)) {
+				if (TypeUtil.isDeclaringTypeVisible(property)) {
 					sb.append(" - ");
 					sb.append(property.getDeclaringType().getName());
 				}
@@ -134,16 +129,6 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			}
 		}
 		return proposal.getName();
-	}
-
-	private boolean isVisible(JSType type) {
-		if (type instanceof UndefinedType) {
-			return false;
-		} else if (type instanceof RecordType) {
-			return false;
-		} else {
-			return true;
-		}
 	}
 
 	/**
