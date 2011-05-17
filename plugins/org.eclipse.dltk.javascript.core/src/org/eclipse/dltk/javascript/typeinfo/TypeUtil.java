@@ -17,11 +17,13 @@ import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -199,6 +201,37 @@ public class TypeUtil {
 			}
 		}
 		return EcoreUtil.resolve(proxy, objectContext);
+	}
+
+	/**
+	 * Tests if the declaring type of the specified member should be displayed
+	 * in completion, etc.
+	 * 
+	 * @param member
+	 * @return
+	 */
+	public static boolean isDeclaringTypeVisible(Member member) {
+		return member.getDeclaringType() != null
+				&& !(((EObject) member.getDeclaringType()).eContainer() instanceof RecordType);
+	}
+
+	/**
+	 * Tests if the specified type expression should be displayed in completion,
+	 * etc.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static boolean isValueTypeVisible(JSType type) {
+		if (type == null) {
+			return false;
+		} else if (type instanceof UndefinedType) {
+			return false;
+		} else if (type instanceof RecordType) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 }
