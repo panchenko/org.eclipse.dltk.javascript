@@ -152,6 +152,8 @@ public class JavaScriptValidations {
 					if (parameterType == null)
 						continue;
 					JSType argumentType = typeOf(arguments[i]);
+					if (argumentType == null)
+						continue;
 					// todo should we have the context here to call
 					// context.resolveTypeRef()?
 					match = JSTypeSet
