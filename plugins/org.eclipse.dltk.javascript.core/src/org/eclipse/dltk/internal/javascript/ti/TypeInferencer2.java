@@ -26,6 +26,8 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.parser.JSProblem;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -118,7 +120,12 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	}
 
 	protected void log(Throwable e) {
-		JavaScriptPlugin.error(e);
+		final JSProblemReporter reporter = visitor.getProblemReporter();
+		if (reporter != null) {
+			reporter.reportProblem(new JSProblem(e));
+		} else {
+			JavaScriptPlugin.error(e);
+		}
 	}
 
 	public IValueReference evaluate(ASTNode node) {
