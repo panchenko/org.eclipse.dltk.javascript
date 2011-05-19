@@ -90,7 +90,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		if (script == null) {
 			return;
 		}
-		final TypeInferencer2 inferencer = new TypeInferencer2();
+		final TypeInferencer2 inferencer = createTypeInferencer();
 		inferencer.setModelElement(context.getSourceModule());
 		final Reporter reporter = JavaScriptValidations.createReporter(context);
 		final ValidationVisitor visitor = new ValidationVisitor(inferencer,
@@ -100,6 +100,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 		visitor.setJSDocTypeChecker(typeChecker);
 		inferencer.doInferencing(script);
 		typeChecker.validate();
+	}
+
+	protected TypeInferencer2 createTypeInferencer() {
+		return new TypeInferencer2();
 	}
 
 	private static enum VisitorMode {
@@ -184,8 +188,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		public void call() {
 			JSType2 firstType = null;
-			for (int i = 0; i < lst.size(); i++) {
-				ReturnNode element = lst.get(i);
+			for (ReturnNode element : lst) {
+				if (element.returnValueReference == null)
+					continue;
 				JSType methodType = jsMethod.getType();
 				if (methodType != null
 						&& methodType.getKind() == TypeKind.RECORD) {
