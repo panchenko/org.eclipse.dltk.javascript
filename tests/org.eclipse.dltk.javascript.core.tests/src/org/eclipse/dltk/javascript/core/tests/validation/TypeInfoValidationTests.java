@@ -20,9 +20,11 @@ import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
+import org.eclipse.dltk.javascript.core.tests.typeinference.TestTypeInferencer2;
 
 @SuppressWarnings("nls")
 public class TypeInfoValidationTests extends AbstractValidationTest {
@@ -33,7 +35,12 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	@Override
 	protected IBuildParticipant createValidator() {
-		return new TypeInfoValidator();
+		return new TypeInfoValidator() {
+			@Override
+			protected TypeInferencer2 createTypeInferencer() {
+				return new TestTypeInferencer2();
+			}
+		};
 	}
 
 	public void testKnownType() {
@@ -407,6 +414,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(
 				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
 				problems.get(0).getID());
+	}
+
+	public void testReturnNull() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @return {String}");
+		code.add(" */");
+		code.add("function test() {");
+		code.add("	return null;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testReturnTypeDeclaredAndThrow() {
@@ -1351,6 +1370,16 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("/** @return {{astring:String,anumber:Number}} */");
 		code.add("function test() {");
 		code.add("return {astring:'test',anumber:1}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testObjectProperyReturnNull() {
+		StringList code = new StringList();
+		code.add("/** @return {{astring:String,anumber:Number}} */");
+		code.add("function test() {");
+		code.add("return null");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
