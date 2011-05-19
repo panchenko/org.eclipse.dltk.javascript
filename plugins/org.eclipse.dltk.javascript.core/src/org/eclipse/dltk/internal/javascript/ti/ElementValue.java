@@ -390,14 +390,12 @@ public abstract class ElementValue implements IValue {
 					return functionOperator;
 				}
 			}
-			for (Member member : members) {
-				if (member instanceof Property) {
-					final Property property = (Property) member;
-					final ElementValue child = ElementValue.findMember(
-							property.getType(), name);
-					if (child != null) {
-						return child;
-					}
+
+			JSType type = getDeclaredType();
+			if (type != null) {
+				final ElementValue child = ElementValue.findMember(type, name);
+				if (child != null) {
+					return child;
 				}
 			}
 			return null;
