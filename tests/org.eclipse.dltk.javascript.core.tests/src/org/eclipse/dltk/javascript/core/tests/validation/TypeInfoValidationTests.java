@@ -1756,4 +1756,15 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testPrototypeFunctionCallApplyCalling() throws Exception {
+		StringList code = new StringList();
+		code.add("Number.prototype.toString.call(null,null);");
+		code.add("String.prototype.toString.apply(null,null);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	 
+	 
+
 }
