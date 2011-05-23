@@ -14,7 +14,6 @@ import org.eclipse.dltk.javascript.ui.JavascriptPreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.editors.text.EditorsUI;
 
-
 public class JavaScriptUIPreferenceInitializer extends
 		AbstractPreferenceInitializer {
 
@@ -24,6 +23,9 @@ public class JavaScriptUIPreferenceInitializer extends
 		EditorsUI.useAnnotationsPreferencePage(store);
 		EditorsUI.useQuickDiffPreferencePage(store);
 		JavascriptPreferenceConstants.initializeDefaultValues(store);
+		store.setDefault(
+				CodeFormatSaveParticipant.EDITOR_SAVE_PARTICIPANT_PREFIX
+						+ CodeFormatSaveParticipant.ID, false);
 	}
 
 }
