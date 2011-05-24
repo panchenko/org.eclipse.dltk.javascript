@@ -523,4 +523,9 @@ public class CodeCompletion extends AbstractCompletionTest {
 		basicTest(module, position, new String[] { "person" });
 	}
 
+	public void testCamelCase() {
+		IModuleSource module = createModule("test-camel-case.js");
+		int position = lastPositionInFile("DS", module);
+		basicTest(module, position, new String[] { "DataSource" });
+	}
 }
