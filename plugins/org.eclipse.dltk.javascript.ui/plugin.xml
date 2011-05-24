@@ -415,9 +415,21 @@
       </enabledWhen>
     </page>    
     <page
-      name="JavaScript Editor"
+      category="org.eclipse.dltk.javascript.propertyPage"
+      name="%EditorPreferencePage.name"
+      class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptEditorPropertyPage"
+      id="org.eclipse.dltk.javascript.editor.propertyPage">
+      <enabledWhen>
+        <adapt type="org.eclipse.core.resources.IProject">
+          <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.dltk.javascript.core.nature"/>
+        </adapt>
+      </enabledWhen>
+    </page>
+    <page
+      category="org.eclipse.dltk.javascript.editor.propertyPage"
+      name="%EditorSaveActionsPreferencePage.name"
       class="org.eclipse.dltk.javascript.internal.ui.CodeFormatSaveParticipantConfigurationPage"
-      id="org.eclipse.dltk.javascript.propertyPage.codeFormatSaveParticipant">
+      id="org.eclipse.dltk.javascript.editor.saveActions.propertyPage">
       <enabledWhen>
         <adapt type="org.eclipse.core.resources.IProject">
           <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.dltk.javascript.core.nature"/>

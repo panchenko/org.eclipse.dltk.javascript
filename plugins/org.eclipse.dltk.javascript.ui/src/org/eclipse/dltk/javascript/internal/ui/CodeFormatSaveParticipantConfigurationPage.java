@@ -21,6 +21,8 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 public class CodeFormatSaveParticipantConfigurationPage extends
 		AbstractConfigurationBlockPropertyAndPreferencePage {
 
+	public static final String PROPERTY_PAGE_ID = "org.eclipse.dltk.javascript.editor.saveActions.propertyPage";
+
 	static final PreferenceKey[] KEYS = new PreferenceKey[] { new PreferenceKey(
 			JavaScriptUI.PLUGIN_ID,
 			CodeFormatSaveParticipant.EDITOR_SAVE_PARTICIPANT_PREFIX
