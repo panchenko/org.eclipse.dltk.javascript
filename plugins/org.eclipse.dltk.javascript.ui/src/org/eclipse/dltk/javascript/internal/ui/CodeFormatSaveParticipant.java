@@ -25,10 +25,10 @@ import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
 import org.eclipse.dltk.ui.formatter.IScriptFormatterFactory;
 import org.eclipse.dltk.ui.formatter.ScriptFormatterManager;
+import org.eclipse.dltk.ui.util.CodeGeneration;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.ltk.core.refactoring.TextFileChange;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
@@ -75,10 +75,9 @@ public class CodeFormatSaveParticipant implements IPostSaveListener {
 						.getScriptProject().getProject());
 		if (factory != null) {
 			final IScriptFormatter formatter = factory.createFormatter(
-					TextUtilities.getDefaultLineDelimiter(document), factory
-							.retrievePreferences(new PreferencesLookupDelegate(
-									compilationUnit.getScriptProject()
-											.getProject())));
+					CodeGeneration.getLineDelimiterUsed(compilationUnit),
+					factory.retrievePreferences(new PreferencesLookupDelegate(
+							compilationUnit.getScriptProject().getProject())));
 			try {
 				final TextEdit edit = formatter.format(document.get(), 0,
 						document.getLength(), 0);
