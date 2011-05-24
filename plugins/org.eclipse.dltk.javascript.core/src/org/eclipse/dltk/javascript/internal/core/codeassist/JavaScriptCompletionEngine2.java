@@ -18,6 +18,7 @@ import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
+import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IAccessRule;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
@@ -203,6 +204,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		private final String prefixStr;
 		final int position;
 		final Set<Object> processed = new HashSet<Object>();
+		final boolean camelCase = DLTKCore.ENABLED.equals(DLTKCore
+				.getOption(DLTKCore.CODEASSIST_CAMEL_CASE_MATCH));
 
 		public Reporter(String prefix, int position) {
 			this.prefixStr = prefix != null ? prefix : "";
@@ -230,8 +233,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		public boolean canReport(String name) {
-			return CharOperation.prefixEquals(prefix, name, false)
-					&& !processed.contains(name);
+			return matches(name) && !processed.contains(name);
+		}
+
+		private boolean matches(String name) {
+			return CharOperation.prefixEquals(prefix, name, false) || camelCase
+					&& CharOperation.camelCaseMatch(prefix, name.toCharArray());
 		}
 
 		public void report(ITypeInferenceContext context, IValueParent item,
@@ -240,8 +247,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			for (String childName : item.getDirectChildren()) {
 				if (childName.equals(IValueReference.FUNCTION_OP))
 					continue;
-				if (!deleted.contains(childName)
-						&& CharOperation.prefixEquals(prefix, childName, false)
+				if (!deleted.contains(childName) && matches(childName)
 						&& processed.add(childName)) {
 					IValueReference child = item.getChild(childName);
 					if (child.exists()) {
