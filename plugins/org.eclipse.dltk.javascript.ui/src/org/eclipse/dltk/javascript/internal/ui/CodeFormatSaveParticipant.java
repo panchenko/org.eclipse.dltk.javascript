@@ -21,6 +21,7 @@ import org.eclipse.dltk.core.manipulation.SourceModuleChange;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.ui.editor.saveparticipant.IPostSaveListener;
 import org.eclipse.dltk.ui.formatter.FormatterException;
+import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
 import org.eclipse.dltk.ui.formatter.IScriptFormatterFactory;
 import org.eclipse.dltk.ui.formatter.ScriptFormatterManager;
@@ -89,6 +90,8 @@ public class CodeFormatSaveParticipant implements IPostSaveListener {
 					change.setEdit(edit);
 					change.perform(monitor);
 				}
+			} catch (FormatterSyntaxProblemException e) {
+				return;
 			} catch (FormatterException e) {
 				throw new CoreException(new Status(IStatus.ERROR,
 						JavaScriptUI.PLUGIN_ID, e.toString(), e));
