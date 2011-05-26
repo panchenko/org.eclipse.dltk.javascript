@@ -747,7 +747,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 										reference.getName()), methodNode
 										.sourceStart(), methodNode.sourceEnd());
 					}
-					if (method.isPrivate() && reference.getParent() != null
+					if (method.isPrivate()
+							&& (reference.getParent() != null || reference
+									.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
 							&& !isThisCall(expression)) {
 						reporter.reportProblem(
 								JavaScriptProblems.PRIVATE_FUNCTION, NLS.bind(
@@ -1428,7 +1430,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 										.sourceStart(), expr.sourceEnd());
 					}
 					return false;
-				}
+				} else
+					testPrivate(expr, reference);
+
 			} else if (expr instanceof PropertyExpression
 					&& validate(((PropertyExpression) expr).getObject(), parent)) {
 				final JSType type = JavaScriptValidations.typeOf(parent);
@@ -1449,6 +1453,37 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return true;
 		}
 
+		/**
+		 * @param expr
+		 * @param reference
+		 */
+		public void testPrivate(Expression expr, IValueReference reference) {
+			if (reference.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE) {
+				Object attribute = reference
+						.getAttribute(IReferenceAttributes.VARIABLE);
+				if (attribute instanceof IVariable) {
+					IVariable variable = (IVariable) attribute;
+					reporter.reportProblem(
+							JavaScriptProblems.PRIVATE_VARIABLE, NLS.bind(
+									ValidationMessages.PrivateVariable,
+									variable.getName()),
+							expr.sourceStart(), expr.sourceEnd());
+				} else {
+					attribute = reference
+							.getAttribute(IReferenceAttributes.PARAMETERS);
+					if (attribute instanceof IMethod) {
+						IMethod method = (IMethod) attribute;
+						reporter.reportProblem(
+								JavaScriptProblems.PRIVATE_FUNCTION,
+								NLS.bind(
+										ValidationMessages.PrivateFunction,
+										method.getName()), expr
+										.sourceStart(), expr.sourceEnd());
+					}
+				}
+			}
+		}
+
 		@Override
 		public IValueReference visitIdentifier(Identifier node) {
 			final IValueReference result = super.visitIdentifier(node);
@@ -1462,6 +1497,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 								.getParent()).getExpression() == node)) {
 					pushExpressionValidator(new NotExistingIdentiferValidator(
 							node, result, this));
+				} else {
+					testPrivate(node, result);
 				}
 			}
 			return result;
@@ -1674,7 +1711,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 										variable.getName()), propName
 										.sourceStart(), propName.sourceEnd());
 					}
-					if (variable.isPrivate() && result.getParent() != null) {
+					if (variable.isPrivate()
+							&& (result.getParent() != null || result
+						.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
+							&& !isThisCall(propertyExpression)) {
 						reporter.reportProblem(
 								JavaScriptProblems.PRIVATE_VARIABLE, NLS.bind(
 										ValidationMessages.PrivateVariable,
@@ -1682,6 +1722,34 @@ public class TypeInfoValidator implements IBuildParticipant {
 										.sourceStart(), propName.sourceEnd());
 					}
 					return;
+				} else {
+					IMethod method = (IMethod) result
+							.getAttribute(IReferenceAttributes.PARAMETERS);
+					if (method != null) {
+						if (method.isDeprecated()) {
+							reporter.reportProblem(
+									JavaScriptProblems.DEPRECATED_FUNCTION,
+									NLS.bind(
+											ValidationMessages.DeprecatedFunction,
+											method.getName()), propName
+											.sourceStart(), propName
+											.sourceEnd());
+						}
+						if (method.isPrivate()
+								&& (result.getParent() != null || result
+										.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
+								&& !isThisCall(propertyExpression)) {
+							reporter.reportProblem(
+									JavaScriptProblems.PRIVATE_FUNCTION,
+									NLS.bind(
+											ValidationMessages.PrivateFunction,
+											method.getName()), propName
+											.sourceStart(), propName
+											.sourceEnd());
+						}
+						return;
+
+					}
 				}
 			}
 		}

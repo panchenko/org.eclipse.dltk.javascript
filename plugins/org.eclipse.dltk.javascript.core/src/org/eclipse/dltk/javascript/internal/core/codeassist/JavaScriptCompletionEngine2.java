@@ -261,7 +261,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 											.isPrivate())) {
 								continue;
 							}
-						}
+						} else if (child
+								.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
+							continue;
 						reportReference(child);
 					}
 				}

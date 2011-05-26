@@ -21,6 +21,7 @@ public interface IReferenceAttributes {
 	String CONSTANT = "CONSTANT"; //$NON-NLS-1$s
 	String HIDE_ALLOWED = "HIDE_ALLOWED";
 	String OPTIONAL = "OPTIONAL";
+	String PRIVATE = "PRIVATE";
 
 	String RESOLVING = "RESOLVING";
 }
