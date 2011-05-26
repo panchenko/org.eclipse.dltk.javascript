@@ -221,7 +221,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return JSTypeSet.ref(doResolveType(r.getTarget()));
 		} else if (type instanceof ClassType) {
 			final ClassType c = (ClassType) type;
-			return JSTypeSet.classType(doResolveType(c.getTarget()));
+			final Type target = c.getTarget();
+			return JSTypeSet.classType(target != null ? doResolveType(target)
+					: null);
 		} else if (type instanceof ArrayType) {
 			return JSTypeSet.arrayOf(doResolveTypeRef(((ArrayType) type)
 					.getItemType()));
