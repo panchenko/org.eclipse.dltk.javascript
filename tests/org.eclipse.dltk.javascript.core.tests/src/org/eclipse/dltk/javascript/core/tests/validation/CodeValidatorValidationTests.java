@@ -124,5 +124,23 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 				problemIds.contains(JavaScriptProblems.VAR_HIDES_FUNCTION));
 
 	}
+	
+	public void testPrivateFunctionAccessedAsVariable() {
+		StringList code = new StringList();
+		code.add("function test1() {");
+		code.add(" /** @private */");
+		code.add(" this.a = function() {");
+		code.add(" }");
+		code.add("}");
+		code.add("function test2() {");
+		code.add(" var b = new test1();");
+		code.add(" b.a");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(1, problemIds.size());
+		assertTrue(problemIds.toString(),
+				problemIds.contains(JavaScriptProblems.PRIVATE_FUNCTION));
 
+	}
 }
