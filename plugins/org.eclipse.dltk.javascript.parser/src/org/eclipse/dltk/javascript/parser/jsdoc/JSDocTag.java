@@ -15,7 +15,7 @@ public class JSDocTag {
 
 	public static String[] getTags() {
 		return new String[] { PARAM, RETURN, RETURNS, THROWS, TYPE, DEPRECATED,
-				CONSTRUCTOR, PRIVATE, AUTHOR, VERSION, SEE, SINCE, EXAMPLE };
+				CONSTRUCTOR, PRIVATE,PROTECTED, AUTHOR, VERSION, SEE, SINCE, EXAMPLE };
 	}
 
 	public static final String PARAM = "@param"; //$NON-NLS-1$
