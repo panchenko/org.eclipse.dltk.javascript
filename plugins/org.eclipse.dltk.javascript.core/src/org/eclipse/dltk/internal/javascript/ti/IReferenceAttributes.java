@@ -22,6 +22,7 @@ public interface IReferenceAttributes {
 	String HIDE_ALLOWED = "HIDE_ALLOWED";
 	String OPTIONAL = "OPTIONAL";
 	String PRIVATE = "PRIVATE";
+	String SUPER_SCOPE = "SUPER_SCOPE";
 
 	String RESOLVING = "RESOLVING";
 }

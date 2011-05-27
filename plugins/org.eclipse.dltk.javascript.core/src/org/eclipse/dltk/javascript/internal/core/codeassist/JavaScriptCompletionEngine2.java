@@ -23,6 +23,7 @@ import org.eclipse.dltk.core.IAccessRule;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.IValueProvider;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
@@ -243,6 +244,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 		public void report(ITypeInferenceContext context, IValueParent item,
 				boolean testPrivate) {
+			boolean superScope = false;
+			if (item instanceof IValueProvider) {
+				superScope = ((IValueProvider) item).getValue().getAttribute(
+						IReferenceAttributes.SUPER_SCOPE) == Boolean.TRUE;
+			}
 			final Set<String> deleted = item.getDeletedChildren();
 			for (String childName : item.getDirectChildren()) {
 				if (childName.equals(IValueReference.FUNCTION_OP))
@@ -256,9 +262,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 									.getAttribute(IReferenceAttributes.PARAMETERS);
 							IVariable variable = (IVariable) child
 									.getAttribute(IReferenceAttributes.VARIABLE);
-							if ((method != null && method.isPrivate())
-									|| (variable != null && variable
-											.isPrivate())) {
+							if ((method != null && (method.isPrivate() || (method
+									.isProtected() && !superScope)))
+									|| (variable != null && (variable
+											.isPrivate() || (variable
+											.isProtected() && !superScope)))) {
 								continue;
 							}
 						} else if (child

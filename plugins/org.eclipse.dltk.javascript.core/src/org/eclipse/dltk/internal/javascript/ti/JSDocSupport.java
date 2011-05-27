@@ -88,6 +88,7 @@ public class JSDocSupport implements IModelBuilder {
 		parseParams(method, tags, reporter, typeChecker);
 		parseDeprecation(method, tags, reporter);
 		parsePrivate(method, tags, reporter);
+		parseProtected(method, tags, reporter);
 		parseConstructor(method, tags, reporter);
 		parseThrows(method, tags, reporter, typeChecker);
 	}
@@ -187,6 +188,18 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
+	/**
+	 * @param method
+	 * @param tags
+	 */
+	private void parseProtected(IMember member, final JSDocTags tags,
+			JSProblemReporter reporter) {
+		if (tags.get(JSDocTag.PROTECTED) != null) {
+			member.setProtected(true);
+			validateSingleTag(tags, JSDocTag.PROTECTED, reporter);
+		}
+	}
+
 	private void validateSingleTag(JSDocTags tags, String tagName,
 			JSProblemReporter reporter) {
 		if (reporter != null && tags.count(tagName) > 1) {
@@ -220,6 +233,7 @@ public class JSDocSupport implements IModelBuilder {
 		}
 		parseDeprecation(variable, tags, reporter);
 		parsePrivate(variable, tags, reporter);
+		parseProtected(variable, tags, reporter);
 	}
 
 	private void parseDeprecation(IMember member, JSDocTags tags,

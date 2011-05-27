@@ -57,6 +57,16 @@ public interface IModelBuilder {
 		 * @since 3.0
 		 */
 		boolean isPrivate();
+
+		/**
+		 * @since 3.0
+		 */
+		void setProtected(boolean b);
+
+		/**
+		 * @since 3.0
+		 */
+		boolean isProtected();
 	}
 
 	public interface IParameter extends IElement {

@@ -6,6 +6,7 @@ public class JSVariable extends JSElement implements IVariable {
 
 	private boolean deprecated;
 	private boolean priv;
+	private boolean prot;
 
 	public void setDeprecated(boolean deprecated) {
 		this.deprecated = deprecated;
@@ -23,6 +24,15 @@ public class JSVariable extends JSElement implements IVariable {
 
 	public boolean isPrivate() {
 		return priv;
+	}
+
+	public void setProtected(boolean prot) {
+		this.prot = prot;
+
+	}
+
+	public boolean isProtected() {
+		return prot;
 	}
 
 }

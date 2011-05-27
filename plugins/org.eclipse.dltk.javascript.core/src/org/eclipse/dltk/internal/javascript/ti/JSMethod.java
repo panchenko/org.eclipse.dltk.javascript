@@ -40,6 +40,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	private JSType type;
 	private boolean deprecated;
 	private boolean priv;
+	private boolean prot;
 	private boolean constructor;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 	private ISourceRange docRange;
@@ -105,6 +106,14 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	public boolean isPrivate() {
 		return priv;
+	}
+
+	public void setProtected(boolean prot) {
+		this.prot = prot;
+	}
+
+	public boolean isProtected() {
+		return prot;
 	}
 
 	public boolean isConstructor() {

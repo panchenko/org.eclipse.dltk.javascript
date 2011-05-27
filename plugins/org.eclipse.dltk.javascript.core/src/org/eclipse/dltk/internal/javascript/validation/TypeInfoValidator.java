@@ -57,6 +57,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMember;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
@@ -747,10 +748,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 										reference.getName()), methodNode
 										.sourceStart(), methodNode.sourceEnd());
 					}
-					if (method.isPrivate()
-							&& (reference.getParent() != null || reference
-									.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
-							&& !isThisCall(expression)) {
+					if (testVisibility(expression, reference, method)) {
 						reporter.reportProblem(
 								JavaScriptProblems.PRIVATE_FUNCTION, NLS.bind(
 										ValidationMessages.PrivateFunction,
@@ -1711,10 +1709,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 										variable.getName()), propName
 										.sourceStart(), propName.sourceEnd());
 					}
-					if (variable.isPrivate()
-							&& (result.getParent() != null || result
-						.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
-							&& !isThisCall(propertyExpression)) {
+					if (testVisibility(propertyExpression, result, variable)) {
 						reporter.reportProblem(
 								JavaScriptProblems.PRIVATE_VARIABLE, NLS.bind(
 										ValidationMessages.PrivateVariable,
@@ -1735,10 +1730,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 											.sourceStart(), propName
 											.sourceEnd());
 						}
-						if (method.isPrivate()
-								&& (result.getParent() != null || result
-										.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
-								&& !isThisCall(propertyExpression)) {
+						if (testVisibility(propertyExpression, result, method)) {
 							reporter.reportProblem(
 									JavaScriptProblems.PRIVATE_FUNCTION,
 									NLS.bind(
@@ -1752,6 +1744,23 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 				}
 			}
+		}
+
+		/**
+		 * @param expression
+		 * @param result
+		 * @param method
+		 * @return
+		 */
+		public boolean testVisibility(Expression expression,
+				IValueReference result, IMember method) {
+			return (method.isPrivate() || (method.isProtected()
+					&& result.getParent() != null && result
+					.getParent().getAttribute(
+							IReferenceAttributes.SUPER_SCOPE) == null))
+					&& (result.getParent() != null || result
+							.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
+					&& !isThisCall(expression);
 		}
 
 		private boolean shouldBeDefined(PropertyExpression propertyExpression) {
