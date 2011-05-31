@@ -168,5 +168,36 @@ public class FlowValidationTests extends AbstractValidationTest {
 				.toString()));
 		assertEquals(0, problemIds.size());
 	}
-	
+
+	public void testThrowCatch() {
+		StringList code = new StringList();
+		code.add("function q() {");
+		code.add("  var x = 0");
+		code.add("  try {");
+		code.add("    throw new Error('aaa')");
+		code.add("  } catch (e) {");
+		code.add("    x++");
+		code.add("  }");
+		code.add("  return x");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 0, problemIds.size());
+	}
+
+	public void testReturnCatch() {
+		StringList code = new StringList();
+		code.add("function q() {");
+		code.add("  var x = 0");
+		code.add("  try {");
+		code.add("    return 0");
+		code.add("  } catch (e) {");
+		code.add("    x++");
+		code.add("  }");
+		code.add("  return x");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 1, problemIds.size());
+	}
 }
