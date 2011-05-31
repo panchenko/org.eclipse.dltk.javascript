@@ -72,7 +72,7 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 			visit(node.getException());
 		}
 		final FlowStatus status = new FlowStatus();
-		status.returnValue = true;
+		status.returnThrow = true;
 		return status;
 	}
 
@@ -179,6 +179,9 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		final FlowStatus status = new FlowStatus();
 		final FlowStatus body = visit(node.getBody());
 		status.add(body);
+		if (!node.getCatches().isEmpty()) {
+			status.returnThrow = false;
+		}
 		for (CatchClause catchClause : node.getCatches()) {
 			final Statement catchStatement = catchClause.getStatement();
 			if (catchStatement != null) {
