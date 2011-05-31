@@ -13,6 +13,7 @@ package org.eclipse.dltk.internal.javascript.validation;
 
 public class FlowStatus {
 	boolean isBreak;
+	boolean returnThrow;
 	boolean returnValue;
 	boolean returnWithoutValue;
 	boolean noReturn;
@@ -20,10 +21,10 @@ public class FlowStatus {
 	public void add(FlowStatus value) {
 		if (value != null) {
 			isBreak |= value.isBreak;
+			returnThrow |= value.returnThrow;
 			returnValue |= value.returnValue;
 			returnWithoutValue |= value.returnWithoutValue;
-			noReturn = value.noReturn
-					|| (!value.returnValue && !value.returnWithoutValue);
+			noReturn = value.noReturn || !value.isAnyReturn();
 		} else {
 			noReturn = true;
 		}
@@ -33,7 +34,11 @@ public class FlowStatus {
 		return isBreak || isReturned();
 	}
 
+	private boolean isAnyReturn() {
+		return returnThrow || returnValue || returnWithoutValue;
+	}
+
 	public boolean isReturned() {
-		return (returnValue || returnWithoutValue) && !noReturn;
+		return isAnyReturn() && !noReturn;
 	}
 }
