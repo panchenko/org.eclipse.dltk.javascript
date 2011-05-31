@@ -276,6 +276,9 @@ public class JSDocSupport implements IModelBuilder {
 					if (type.startsWith(DOTS)) {
 						pp.varargs = true;
 						type = type.substring(DOTS.length());
+					} else if (type.endsWith(DOTS)) {
+						pp.varargs = true;
+						type = type.substring(0, type.length() - DOTS.length());
 					} else if (type.endsWith("=")) {
 						type = type.substring(0, type.length() - 1);
 						pp.optional = true;
