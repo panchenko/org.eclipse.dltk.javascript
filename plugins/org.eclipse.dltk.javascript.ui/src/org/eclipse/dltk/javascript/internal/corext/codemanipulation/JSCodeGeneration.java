@@ -57,7 +57,9 @@ public class JSCodeGeneration {
 			StringTokenizer st = new StringTokenizer(existingComment,
 					lineDelimiter);
 			while (st.hasMoreTokens()) {
-				String line = st.nextToken();
+				String line = st.nextToken().trim();
+				if (line.startsWith("*"))
+					line = ' ' + line;
 				int index = line.indexOf("@param");
 				if (index != -1) {
 					if (paramStart == -1)
