@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
-import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.core.builder.IBuildContext;
@@ -37,20 +36,12 @@ import org.eclipse.emf.common.util.EList;
 public class JavaScriptValidations {
 
 	public static Script parse(IBuildContext context) {
-		final ISourceModule module = context.getSourceModule();
-		if (module != null) {
-			final String parserId = module.getScriptProject().getOption(
-					DLTKCore.PROJECT_SOURCE_PARSER_ID, false);
-			if (parserId != null
-					&& !JavaScriptParser.PARSER_ID.equals(parserId)) {
-				return null;
-			}
-		}
 		final IModuleDeclaration savedAST = (IModuleDeclaration) context
 				.get(IBuildContext.ATTR_MODULE_DECLARATION);
 		if (savedAST instanceof Script) {
 			return (Script) savedAST;
 		}
+		final ISourceModule module = context.getSourceModule();
 		if (module != null) {
 			// TODO pass additional predicate here...
 			final IModuleDeclaration declaration = SourceParserUtil.parse(
