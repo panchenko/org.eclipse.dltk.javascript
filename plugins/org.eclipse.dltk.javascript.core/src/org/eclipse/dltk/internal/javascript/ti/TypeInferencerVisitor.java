@@ -17,7 +17,9 @@ import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.STRING;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -26,6 +28,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.problem.IProblemCategory;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
@@ -543,9 +547,20 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		result.setAttribute(IReferenceAttributes.FUNCTION_SCOPE, function);
 		result.setAttribute(IReferenceAttributes.RESOLVING, Boolean.TRUE);
 		enterContext(function);
+		Set<IProblemIdentifier> suppressed = null;
 		try {
+			if (reporter != null && !method.getSuppressedWarnings().isEmpty()) {
+				suppressed = new HashSet<IProblemIdentifier>();
+				for (IProblemCategory category : method.getSuppressedWarnings()) {
+					suppressed.addAll(category.contents());
+				}
+				reporter.pushSuppressWarnings(suppressed);
+			}
 			visitFunctionBody(node);
 		} finally {
+			if (reporter != null && suppressed != null) {
+				reporter.popSuppressWarnings();
+			}
 			leaveContext();
 			result.setAttribute(IReferenceAttributes.RESOLVING, null);
 		}

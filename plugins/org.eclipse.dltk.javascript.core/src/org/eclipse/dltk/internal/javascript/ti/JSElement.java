@@ -11,6 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IElement;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -43,6 +48,20 @@ public class JSElement implements IElement {
 
 	public void setLocation(ReferenceLocation location) {
 		this.location = location;
+	}
+
+	private Set<IProblemCategory> suppressedWarnings = null;
+
+	public Set<IProblemCategory> getSuppressedWarnings() {
+		return suppressedWarnings != null ? suppressedWarnings : Collections
+				.<IProblemCategory> emptySet();
+	}
+
+	public void addSuppressedWarning(IProblemCategory warningCategoryId) {
+		if (suppressedWarnings == null) {
+			suppressedWarnings = new HashSet<IProblemCategory>();
+		}
+		suppressedWarnings.add(warningCategoryId);
 	}
 
 }

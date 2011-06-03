@@ -19,7 +19,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CharStream;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.compiler.problem.IProblemCategory;
+import org.eclipse.dltk.compiler.problem.ProblemCategoryManager;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Comment;
@@ -30,6 +34,7 @@ import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
+import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSProblemIdentifier;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -45,6 +50,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * Implements support for javadocs tags .
@@ -65,7 +71,7 @@ public class JSDocSupport implements IModelBuilder {
 		return PRIORITY_DEFAULT;
 	}
 
-	public JSDocTags parse(Comment comment) {
+	public static JSDocTags parse(Comment comment) {
 		return new SimpleJSDocParser().parse(comment.getText(),
 				comment.sourceStart());
 	}
@@ -91,6 +97,13 @@ public class JSDocSupport implements IModelBuilder {
 		parseProtected(method, tags, reporter);
 		parseConstructor(method, tags, reporter);
 		parseThrows(method, tags, reporter, typeChecker);
+		final List<JSDocTag> suppressWarnings = tags
+				.list(JSDocTag.SUPPRESS_WARNINGS);
+		if (!suppressWarnings.isEmpty()) {
+			for (JSDocTag tag : suppressWarnings) {
+				processSuppressWarnings(tag, reporter, method);
+			}
+		}
 	}
 
 	private void parseThrows(IMethod method, JSDocTags tags,
@@ -98,7 +111,7 @@ public class JSDocSupport implements IModelBuilder {
 		if (typeChecker != null) {
 			List<JSDocTag> throwsTags = tags.list(JSDocTag.THROWS);
 			for (JSDocTag throwsTag : throwsTags) {
-				String value = throwsTag.getValue();
+				String value = throwsTag.value();
 				String[] split = value.split(" ");
 				if (split.length > 0) {
 					if (isBraced(split[0])) {
@@ -268,7 +281,7 @@ public class JSDocSupport implements IModelBuilder {
 		final ParamInfo pp = new ParamInfo();
 		for (JSDocTag tag : paramTags) {
 			pp.clear();
-			final Tokenizer st = new Tokenizer(tag.getValue());
+			final Tokenizer st = new Tokenizer(tag.value());
 			if (st.hasMoreTokens()) {
 				final String token = st.peek();
 				if (isBraced(token)) {
@@ -506,7 +519,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	public JSType parseType(JSDocTag tag, boolean requireBraces,
 			JSProblemReporter reporter) {
-		final Tokenizer st = new Tokenizer(tag.getValue());
+		final Tokenizer st = new Tokenizer(tag.value());
 		if (st.hasMoreTokens()) {
 			final String typeName = st.nextToken();
 			if (!requireBraces || isBraced(typeName)) {
@@ -527,16 +540,16 @@ public class JSDocSupport implements IModelBuilder {
 			JSProblemIdentifier problemIdentifier, JSDocTag tag, Object... args) {
 		if (reporter != null) {
 			reporter.reportProblem(problemIdentifier,
-					problemIdentifier.formatMessage(args), tag.getStart(),
-					tag.getEnd());
+					problemIdentifier.formatMessage(args), tag.start(),
+					tag.end());
 		}
 	}
 
 	private void reportProblem(JSProblemReporter reporter,
 			JSProblemIdentifier problemIdentifier, String message, JSDocTag tag) {
 		if (reporter != null) {
-			reporter.reportProblem(problemIdentifier, message, tag.getStart(),
-					tag.getEnd());
+			reporter.reportProblem(problemIdentifier, message, tag.start(),
+					tag.end());
 		}
 	}
 
@@ -551,7 +564,7 @@ public class JSDocSupport implements IModelBuilder {
 						JSDocProblem.WRONG_TYPE_SYNTAX,
 						e.getMessage() + " after "
 								+ typeName.substring(0, e.getErrorOffset()),
-						tag.getStart(), tag.getEnd());
+						tag.start(), tag.end());
 			}
 			return null;
 		}
@@ -574,4 +587,102 @@ public class JSDocSupport implements IModelBuilder {
 				&& typeName.charAt(length - 1) == '}';
 	}
 
+	private void processSuppressWarnings(JSDocTag tag,
+			JSProblemReporter reporter, IElement element) {
+		final CharStream input = new ANTLRStringStream(tag.value());
+		final boolean hasParenthesis = input.LT(1) == '(';
+		if (hasParenthesis) {
+			input.consume();
+		}
+		final int problemCount = reporter != null ? reporter.getProblemCount()
+				: 0;
+		for (;;) {
+			int ch = input.LT(1);
+			while (Character.isWhitespace(ch)) {
+				input.consume();
+				ch = input.LT(1);
+			}
+			if (ch == '"' || ch == '\'') {
+				final char quote = (char) ch;
+				input.consume();
+				final int start = input.index();
+				for (;;) {
+					ch = input.LT(1);
+					if (ch == quote) {
+						suppressWarning(tag, reporter, element, input, start);
+						input.consume();
+						break;
+					} else if (ch == CharStream.EOF) {
+						if (reporter != null) {
+							reporter.reportProblem(
+									JSDocProblem.WRONG_SUPPRESS_WARNING,
+									"Closing " + quote + " expected",
+									tag.start(), tag.end());
+						}
+						break;
+					}
+					input.consume();
+				}
+			} else {
+				final int start = input.index();
+				for (;;) {
+					ch = input.LT(1);
+					if (ch == ',' || ch == ')' || ch == CharStream.EOF
+							|| Character.isWhitespace(ch)) {
+						suppressWarning(tag, reporter, element, input, start);
+						break;
+					}
+					input.consume();
+				}
+			}
+			ch = input.LT(1);
+			while (ch != CharStream.EOF && Character.isWhitespace(ch)) {
+				input.consume();
+				ch = input.LT(1);
+			}
+			if (ch != ',') {
+				break;
+			}
+			input.consume();
+		}
+		if (hasParenthesis) {
+			if (input.LT(1) == ')') {
+				input.consume();
+			} else if (reporter != null) {
+				reporter.reportProblem(JSDocProblem.WRONG_SUPPRESS_WARNING,
+						"Closing ) expected", tag.start(), tag.end());
+			}
+		}
+		if (reporter != null && reporter.getProblemCount() == problemCount
+				&& input.LT(1) != CharStream.EOF) {
+			reporter.reportProblem(JSDocProblem.WRONG_SUPPRESS_WARNING,
+					"Unexpected content", tag.start(), tag.end());
+		}
+	}
+
+	private void suppressWarning(JSDocTag tag, JSProblemReporter reporter,
+			IElement element, final CharStream input, final int start) {
+		final String categoryId = input.substring(start, input.index() - 1);
+		if (categoryId.length() != 0) {
+			final IProblemCategory category = getCategory(categoryId);
+			if (category != null) {
+				element.addSuppressedWarning(category);
+			} else if (reporter != null) {
+				reporter.reportProblem(JSDocProblem.WRONG_SUPPRESS_WARNING, NLS
+						.bind("Unsupported {0}({1})",
+								JSDocTag.SUPPRESS_WARNINGS, categoryId), tag
+						.start(), tag.end());
+			}
+		} else if (reporter != null) {
+			reporter.reportProblem(JSDocProblem.WRONG_SUPPRESS_WARNING,
+					"warning identifier expected", tag.start(), tag.end());
+		}
+	}
+
+	protected IProblemCategory getCategory(final String categoryId) {
+		final IProblemCategory category = ProblemCategoryManager
+				.getInstance().getCategory(JavaScriptNature.NATURE_ID,
+						JSDocTag.SUPPRESS_WARNINGS, categoryId);
+		return category;
+	}
 }

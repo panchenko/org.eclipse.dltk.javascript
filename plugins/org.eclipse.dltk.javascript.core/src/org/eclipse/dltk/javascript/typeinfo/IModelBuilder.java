@@ -12,7 +12,9 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
@@ -34,6 +36,10 @@ public interface IModelBuilder {
 		ReferenceLocation getLocation();
 
 		void setLocation(ReferenceLocation location);
+
+		Set<IProblemCategory> getSuppressedWarnings();
+
+		void addSuppressedWarning(IProblemCategory warningCategoryId);
 	}
 
 	public interface IMember extends IElement {

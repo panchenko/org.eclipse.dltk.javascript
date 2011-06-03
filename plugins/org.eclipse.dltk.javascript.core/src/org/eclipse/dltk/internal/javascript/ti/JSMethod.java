@@ -12,8 +12,12 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
@@ -210,6 +214,20 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		if (documentation != null) {
 			setDocRange(documentation.getRange());
 		}
+	}
+
+	private Set<IProblemCategory> suppressedWarnings = null;
+
+	public Set<IProblemCategory> getSuppressedWarnings() {
+		return suppressedWarnings != null ? suppressedWarnings : Collections
+				.<IProblemCategory> emptySet();
+	}
+
+	public void addSuppressedWarning(IProblemCategory warningCategoryId) {
+		if (suppressedWarnings == null) {
+			suppressedWarnings = new HashSet<IProblemCategory>();
+		}
+		suppressedWarnings.add(warningCategoryId);
 	}
 
 	public static class Parameter extends JSElement implements IParameter {
