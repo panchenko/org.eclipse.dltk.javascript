@@ -350,8 +350,11 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 			for (Pair p : fRest) {
 				buffer.append("<dt>"); //$NON-NLS-1$
 				if (definedTags.contains(p.fTag)) {
-					buffer.append(Character.toUpperCase(p.fTag.charAt(1))
-							+ p.fTag.substring(2));
+					buffer.append(Character.toUpperCase(p.fTag.charAt(1)))
+							.append(p.fTag.substring(2));
+					if (p.fContent.length() != 0) {
+						buffer.append(":");
+					}
 					buffer.append("</dt>"); //$NON-NLS-1$
 					printDefinition(buffer, p.fContent, TypedDefinition.AUTO);
 				} else {
@@ -361,6 +364,9 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 			for (Pair p : unknowTags) {
 				buffer.append("<dt>"); //$NON-NLS-1$
 				buffer.append(p.fTag);
+				if (p.fContent.length() != 0) {
+					buffer.append(":");
+				}
 				buffer.append("</dt>"); //$NON-NLS-1$
 				printDefinition(buffer, p.fContent, TypedDefinition.AUTO);
 			}
@@ -407,8 +413,9 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 			fSees.add(substituteQualification(tagContent));
 		else if (TAG_SINCE.equals(tag))
 			fSince.add(substituteQualification(tagContent));
-		else if (tagContent != null)
+		else {
 			fRest.add(new Pair(tag, tagContent));
+		}
 	}
 
 	/*
@@ -434,6 +441,10 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 
 			buffer.setLength(0);
 			if (c != -1) {
+				// e.g. @SuppressWarnings(...) case
+				if (!Character.isWhitespace(c)) {
+					buffer.append((char) c);
+				}
 				c = getContentUntilNextTag(buffer);
 			}
 
