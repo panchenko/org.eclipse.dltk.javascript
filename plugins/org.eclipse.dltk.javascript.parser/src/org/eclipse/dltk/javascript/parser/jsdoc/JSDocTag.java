@@ -15,7 +15,8 @@ public class JSDocTag {
 
 	public static String[] getTags() {
 		return new String[] { PARAM, RETURN, RETURNS, THROWS, TYPE, DEPRECATED,
-				CONSTRUCTOR, PRIVATE,PROTECTED, AUTHOR, VERSION, SEE, SINCE, EXAMPLE };
+				CONSTRUCTOR, PRIVATE, PROTECTED, AUTHOR, VERSION, SEE, SINCE,
+				EXAMPLE, SUPPRESS_WARNINGS };
 	}
 
 	public static final String PARAM = "@param"; //$NON-NLS-1$
@@ -35,6 +36,8 @@ public class JSDocTag {
 	public static final String SINCE = "@since";
 	public static final String EXAMPLE = "@example";
 
+	public static final String SUPPRESS_WARNINGS = "@SuppressWarnings";
+
 	private final String tag;
 	private final String value;
 	private final int start;
@@ -51,14 +54,29 @@ public class JSDocTag {
 		return tag;
 	}
 
+	public String value() {
+		return value;
+	}
+
+	public int start() {
+		return start;
+	}
+
+	public int end() {
+		return end;
+	}
+
+	@Deprecated
 	public String getValue() {
 		return value;
 	}
 
+	@Deprecated
 	public int getStart() {
 		return start;
 	}
 
+	@Deprecated
 	public int getEnd() {
 		return end;
 	}
