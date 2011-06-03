@@ -38,4 +38,12 @@
 	enabled="true" 
 	deleted="false" 
 	autoinsert="true">@author ${user}</template>
+<template 
+	id="org.eclipse.dltk.javascript.ui.templates.jsdoc.suppressWarnings" 
+	name="@SuppressWarnings" 
+	description="%suppressWarnings.description" 
+	context="JSDocTemplateContextType" 
+	enabled="true" 
+	deleted="false" 
+	autoinsert="true">@SuppressWarnings(${warnings})</template>
 </templates>
