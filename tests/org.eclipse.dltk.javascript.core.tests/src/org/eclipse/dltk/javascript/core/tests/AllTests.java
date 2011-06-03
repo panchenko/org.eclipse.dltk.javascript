@@ -18,6 +18,7 @@ import org.eclipse.dltk.javascript.core.tests.search.SearchTypeReferenceTests;
 import org.eclipse.dltk.javascript.core.tests.structure.JSLintModelTests;
 import org.eclipse.dltk.javascript.core.tests.structure.StructureParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinference.TypeInferenceTests;
+import org.eclipse.dltk.javascript.core.tests.typeinfo.JSDocSupportTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.JSDocTypeParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeInfoModelTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeQueryTests;
@@ -42,6 +43,7 @@ public class AllTests {
 		suite.addTestSuite(StructureParserTests.class);
 		suite.addTestSuite(TypeInfoValidationTests.class);
 		suite.addTestSuite(JSDocTypeParserTests.class);
+		suite.addTestSuite(JSDocSupportTests.class);
 		suite.addTestSuite(JSLintModelTests.class);
 		suite.addTestSuite(CodeValidationTests.class);
 		suite.addTestSuite(FlowValidationTests.class);
