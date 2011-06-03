@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
@@ -85,6 +86,8 @@ public class JSDocValidationTest extends AbstractValidationTest {
 	}
 
 	public void testNestedCallsToAnonymousReturnType() {
+		if (TestSupport.notYetImplemented(this))
+			return;
 		List<String> code = new StringList();
 		code.add("function Test() {");
 		code.add(" function Node() {");
@@ -107,6 +110,8 @@ public class JSDocValidationTest extends AbstractValidationTest {
 	}
 
 	public void testNestedCallsToReturnType() {
+		if (TestSupport.notYetImplemented(this))
+			return;
 		List<String> code = new StringList();
 		code.add("function Test() {");
 		code.add(" function Node() {");
