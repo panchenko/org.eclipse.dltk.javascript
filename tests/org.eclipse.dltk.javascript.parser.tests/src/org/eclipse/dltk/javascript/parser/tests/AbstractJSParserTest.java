@@ -61,7 +61,8 @@ public abstract class AbstractJSParserTest extends TestCase {
 		if (elements.size() == 1) {
 			return elements.get(0);
 		} else {
-			throw new AssertionFailedError("Single element expected");
+			throw new AssertionFailedError(elements.isEmpty() ? "No elements"
+					: "Single element expected");
 		}
 	}
 
