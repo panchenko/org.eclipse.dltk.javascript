@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
+import java.util.Collection;
+
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
@@ -22,4 +24,10 @@ public interface JSProblemReporter extends IProblemReporter {
 	@Deprecated
 	void reportProblem(ProblemSeverity severity, IProblemIdentifier identifier,
 			String message, int start, int end);
+
+	int getProblemCount();
+
+	void pushSuppressWarnings(Collection<IProblemIdentifier> suppressed);
+
+	void popSuppressWarnings();
 }

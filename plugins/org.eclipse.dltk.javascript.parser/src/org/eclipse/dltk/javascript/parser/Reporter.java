@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblem;
@@ -203,6 +205,27 @@ public class Reporter extends LineTracker implements IProblemReporter,
 			suppressed = new HashSet<IProblemIdentifier>();
 		}
 		Collections.addAll(suppressed, identifiers);
+	}
+
+	private Stack<Set<IProblemIdentifier>> suppressedStack = null;
+
+	public void pushSuppressWarnings(Collection<IProblemIdentifier> suppressed) {
+		if (suppressedStack == null) {
+			suppressedStack = new Stack<Set<IProblemIdentifier>>();
+		}
+		suppressedStack.push(this.suppressed);
+		if (this.suppressed == null) {
+			this.suppressed = new HashSet<IProblemIdentifier>();
+		} else {
+			this.suppressed = new HashSet<IProblemIdentifier>(this.suppressed);
+		}
+		this.suppressed.addAll(suppressed);
+	}
+
+	public void popSuppressWarnings() {
+		if (suppressedStack != null && !suppressedStack.isEmpty()) {
+			suppressed = suppressedStack.pop();
+		}
 	}
 
 }
