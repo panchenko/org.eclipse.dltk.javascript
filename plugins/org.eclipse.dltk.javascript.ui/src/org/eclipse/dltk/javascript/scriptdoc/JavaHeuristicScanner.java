@@ -116,8 +116,8 @@ public final class JavaHeuristicScanner implements Symbols {
 						--position;
 						prev = document.getChar(position);
 					}
-					if (prev != '\\' && prev != ';' && prev != '{'
-							&& prev != ')') {
+					if (prev != '\\' && prev != ';' && prev != ','
+							&& prev != '{' && prev != ')') {
 						return true;
 					}
 				} catch (BadLocationException e) {
