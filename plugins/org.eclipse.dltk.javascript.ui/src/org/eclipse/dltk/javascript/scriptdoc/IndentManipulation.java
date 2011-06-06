@@ -1,6 +1,3 @@
-package org.eclipse.dltk.javascript.scriptdoc;
-
-
 /*******************************************************************************
  * Copyright (c) 2006 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
@@ -10,6 +7,7 @@ package org.eclipse.dltk.javascript.scriptdoc;
  *
  
  *******************************************************************************/
+package org.eclipse.dltk.javascript.scriptdoc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,18 +20,6 @@ import org.eclipse.jface.text.DefaultLineTracker;
 import org.eclipse.jface.text.ILineTracker;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.text.edits.ReplaceEdit;
-
-
-/*******************************************************************************
- * Copyright (c) 2000, 2005 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- 
- *******************************************************************************/
-
 
 /**
  * Alignment management
