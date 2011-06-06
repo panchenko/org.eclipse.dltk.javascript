@@ -97,11 +97,16 @@ public class JSDocSupport implements IModelBuilder {
 		parseProtected(method, tags, reporter);
 		parseConstructor(method, tags, reporter);
 		parseThrows(method, tags, reporter, typeChecker);
+		parseSuppressWarnings(method, tags, reporter);
+	}
+
+	protected void parseSuppressWarnings(IElement element, JSDocTags tags,
+			JSProblemReporter reporter) {
 		final List<JSDocTag> suppressWarnings = tags
 				.list(JSDocTag.SUPPRESS_WARNINGS);
 		if (!suppressWarnings.isEmpty()) {
 			for (JSDocTag tag : suppressWarnings) {
-				processSuppressWarnings(tag, reporter, method);
+				processSuppressWarnings(tag, reporter, element);
 			}
 		}
 	}
@@ -680,9 +685,8 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	protected IProblemCategory getCategory(final String categoryId) {
-		final IProblemCategory category = ProblemCategoryManager
-				.getInstance().getCategory(JavaScriptNature.NATURE_ID,
-						JSDocTag.SUPPRESS_WARNINGS, categoryId);
-		return category;
+		return ProblemCategoryManager.getInstance().getCategory(
+				JavaScriptNature.NATURE_ID, JSDocTag.SUPPRESS_WARNINGS,
+				categoryId);
 	}
 }
