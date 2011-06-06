@@ -646,20 +646,12 @@ public final class JavaIndenter {
 			ITypedRegion partition = TextUtilities.getPartition(fDocument,
 					IJavaScriptPartitions.JS_PARTITIONING, lineOffset, true);
 			String type = partition.getType();
-			while ((type.equals(IJavaScriptPartitions.JS_DOC) || type
+			if ((type.equals(IJavaScriptPartitions.JS_DOC) || type
 					.equals(IJavaScriptPartitions.JS_MULTI_LINE_COMMENT))
 					&& lineOffset > 0) {
-				IRegion tmpLine = fDocument
-						.getLineInformationOfOffset(lineOffset - 1);
-				partition = TextUtilities.getPartition(fDocument,
-						IJavaScriptPartitions.JS_PARTITIONING,
-						tmpLine.getOffset(), false);
-				type = partition.getType();
-				if (type.equals(IJavaScriptPartitions.JS_DOC)
-						|| type.equals(IJavaScriptPartitions.JS_MULTI_LINE_COMMENT)) {
-					line = tmpLine;
-					lineOffset = line.getOffset();
-				}
+				line = fDocument.getLineInformationOfOffset(partition
+						.getOffset());
+				lineOffset = line.getOffset();
 			}
 			int nonWS = fScanner.findNonWhitespaceForwardInAnyPartition(
 					lineOffset, lineOffset + line.getLength());
