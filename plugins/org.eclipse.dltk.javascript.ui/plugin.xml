@@ -779,10 +779,10 @@
             label="Deprecated java property access"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PRIVATE_FUNCTION"
-            label="Private function call"/>
+            label="Private/protected function call"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#PRIVATE_VARIABLE"
-            label="Private variable access"/>
+            label="Private/protected variable access"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#HIDDEN_PROPERTY"
             label="Private property access"/>
