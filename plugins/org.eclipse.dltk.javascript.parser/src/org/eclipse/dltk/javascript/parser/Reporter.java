@@ -228,4 +228,12 @@ public class Reporter extends LineTracker implements IProblemReporter,
 		}
 	}
 
+	public Set<IProblemIdentifier> getSuppressWarnings() {
+		return suppressed;
+	}
+
+	public void setSuppressWarnings(Set<IProblemIdentifier> sup) {
+		suppressed = sup;
+	}
+
 }
