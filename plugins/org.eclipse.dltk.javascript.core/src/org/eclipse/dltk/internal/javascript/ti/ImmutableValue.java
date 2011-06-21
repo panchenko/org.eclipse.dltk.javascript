@@ -144,13 +144,32 @@ public class ImmutableValue implements IValue, IValue2 {
 			attribute = attributes.get(key);
 		}
 		if (includeReferences && attribute == null && !references.isEmpty()) {
-			for (ImmutableValue reference : references) {
-				attribute = reference.getAttribute(key, includeReferences);
-				if (attribute != null)
-					break;
-			}
+			attribute = visitReferenceForAttribute(key,
+					new HashSet<ImmutableValue>());
 		}
 		return attribute;
+	}
+
+	/**
+	 * @param key
+	 * @param attribute
+	 * @param visited
+	 * @return
+	 */
+	private Object visitReferenceForAttribute(String key,
+			Set<ImmutableValue> visited) {
+		if (visited.add(this)) {
+			for (ImmutableValue reference : references) {
+				Object attribute = reference.attributes != null ? reference.attributes
+						.get(key) : null;
+				if (attribute != null)
+					return attribute;
+				attribute = reference.visitReferenceForAttribute(key, visited);
+				if (attribute != null)
+					return attribute;
+			}
+		}
+		return null;
 	}
 
 	protected static class GetChildHandler implements Handler<Set<IValue>> {
