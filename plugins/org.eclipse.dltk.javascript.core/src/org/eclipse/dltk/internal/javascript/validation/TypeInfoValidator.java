@@ -111,11 +111,21 @@ public class TypeInfoValidator implements IBuildParticipant {
 		NORMAL, CALL
 	}
 
-	private interface ExpressionValidator {
-		void call();
+	private static abstract class ExpressionValidator {
+		abstract void call();
+
+		Set<IProblemIdentifier> suppressed;
+
+		public Set<IProblemIdentifier> getSuppressed() {
+			return suppressed;
+		}
+
+		public void setSuppressed(Set<IProblemIdentifier> suppressed) {
+			this.suppressed = suppressed;
+		}
 	}
 
-	private static class StackedExpressionValidator implements
+	private static class StackedExpressionValidator extends
 			ExpressionValidator {
 
 		private final List<ExpressionValidator> stacked = new ArrayList<TypeInfoValidator.ExpressionValidator>();
@@ -139,7 +149,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 	}
 
-	private static class CallExpressionValidator implements ExpressionValidator {
+	private static class CallExpressionValidator extends ExpressionValidator {
 		private final CallExpression node;
 		private final IValueReference reference;
 		private final ValidationVisitor visitor;
@@ -174,7 +184,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 	}
 
-	private static class TestReturnStatement implements ExpressionValidator {
+	private static class TestReturnStatement extends ExpressionValidator {
 
 		private final List<ReturnNode> lst;
 		private final Reporter reporter;
@@ -260,7 +270,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 	}
 
-	private static class NotExistingIdentiferValidator implements
+	private static class NotExistingIdentiferValidator extends
 			ExpressionValidator {
 		private final Expression identifer;
 		private final IValueReference reference;
@@ -278,7 +288,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 	}
 
-	private static class NewExpressionValidator implements ExpressionValidator {
+	private static class NewExpressionValidator extends ExpressionValidator {
 
 		private final NewExpression node;
 		private final IValueReference reference;
@@ -301,7 +311,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 	}
 
-	private static class TypeValidator implements ExpressionValidator {
+	private static class TypeValidator extends ExpressionValidator {
 
 		final ValidationVisitor validator;
 		final IValueReference reference;
@@ -319,7 +329,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 	}
 
-	private static class PropertyExpressionHolder implements
+	private static class PropertyExpressionHolder extends
 			ExpressionValidator {
 		private final PropertyExpression node;
 		private final IValueReference reference;
@@ -370,7 +380,14 @@ public class TypeInfoValidator implements IBuildParticipant {
 					for (ExpressionValidator call : expressionValidators
 							.toArray(new ExpressionValidator[expressionValidators
 									.size()])) {
-						call.call();
+						Set<IProblemIdentifier> suppressWarnings = reporter
+								.getSuppressWarnings();
+						try {
+							reporter.setSuppressWarnings(call.getSuppressed());
+							call.call();
+						} finally {
+							reporter.setSuppressWarnings(suppressWarnings);
+						}
 					}
 				}
 				visitStack.pop();
@@ -618,6 +635,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (stackedExpressionValidator != null) {
 				stackedExpressionValidator.push(expressionValidator);
 			} else {
+				expressionValidator.setSuppressed(reporter
+						.getSuppressWarnings());
 				expressionValidators.add(expressionValidator);
 			}
 
@@ -625,6 +644,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		private void stopExpressionValidator() {
 			if (stackedExpressionValidator != null) {
+				stackedExpressionValidator.setSuppressed(reporter
+						.getSuppressWarnings());
 				expressionValidators.add(stackedExpressionValidator);
 				stackedExpressionValidator = null;
 			}
