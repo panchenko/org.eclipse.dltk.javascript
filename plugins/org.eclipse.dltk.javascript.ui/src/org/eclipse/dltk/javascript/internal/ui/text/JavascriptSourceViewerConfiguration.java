@@ -21,6 +21,7 @@ import org.eclipse.dltk.ui.text.ScriptSourceViewerConfiguration;
 import org.eclipse.dltk.ui.text.TodoTaskPreferencesOnPreferenceStore;
 import org.eclipse.dltk.ui.text.completion.ContentAssistPreference;
 import org.eclipse.dltk.ui.text.completion.ContentAssistProcessor;
+import org.eclipse.dltk.ui.text.spelling.SpellCheckDelegate;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
@@ -367,4 +368,10 @@ public class JavascriptSourceViewerConfiguration extends
 		return targets;
 	}
 
+	@Override
+	protected SpellCheckDelegate createSpellCheckDelegate() {
+		return new SpellCheckDelegate(IDocument.DEFAULT_CONTENT_TYPE,
+				IJavaScriptPartitions.JS_STRING,
+				IJavaScriptPartitions.JS_STRING_SINGLE);
+	}
 }
