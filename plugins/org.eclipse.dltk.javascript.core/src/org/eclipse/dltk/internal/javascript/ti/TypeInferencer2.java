@@ -208,6 +208,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return false;
 	}
 
+	public Type resolveType(Type type) {
+		if (type != null) {
+			return doResolveType(type);
+		} else {
+			return null;
+		}
+	}
+
 	public JSType resolveTypeRef(JSType type) {
 		if (type == null || isResolved(type)) {
 			return type;
