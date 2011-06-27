@@ -255,6 +255,20 @@ public class Value extends ImmutableValue {
 		Map<String, Object> atts = null;
 		if (attributes != null) {
 			atts = new HashMap<String, Object>(attributes.size(), 0.9f);
+			for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+				if (entry.getValue() instanceof Value) {
+					atts.put(entry.getKey(), ((Value) entry.getValue())
+							.getImmutableValue(visited));
+				} else if (entry.getValue() instanceof IValueCollection) {
+					atts.put(entry.getKey(), ImmutableValueCollection
+							.getImmutableValueCollection(
+									(IValueCollection) entry.getValue(),
+									visited));
+
+				} else {
+					atts.put(entry.getKey(), entry.getValue());
+				}
+			}
 		}
 		immutableValue = new ImmutableValue(declaredType, typeSet,
 				deletedChilds, kind, location, childs, inherits, refers, atts);
@@ -283,22 +297,6 @@ public class Value extends ImmutableValue {
 						((Value) entry.getValue()).getImmutableValue(visited));
 			else
 				inherits.put(entry.getKey(), entry.getValue());
-		}
-		if (attributes != null) {
-			for (Map.Entry<String, Object> entry : attributes.entrySet()) {
-				if (entry.getValue() instanceof Value) {
-					atts.put(entry.getKey(), ((Value) entry.getValue())
-							.getImmutableValue(visited));
-				} else if (entry.getValue() instanceof IValueCollection) {
-					atts.put(entry.getKey(), ImmutableValueCollection
-							.getImmutableValueCollection(
-									(IValueCollection) entry.getValue(),
-									visited));
-
-				} else {
-					atts.put(entry.getKey(), entry.getValue());
-				}
-			}
 		}
 		return immutableValue;
 	}
