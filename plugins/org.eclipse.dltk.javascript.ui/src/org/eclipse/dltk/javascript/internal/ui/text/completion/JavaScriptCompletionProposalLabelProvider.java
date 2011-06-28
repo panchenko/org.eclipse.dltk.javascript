@@ -20,6 +20,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
@@ -74,10 +75,10 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			}
 		} else if (info instanceof IValueReference) {
 			final IValueReference reference = (IValueReference) info;
-			final IValueReference result = reference
-					.getChild(IValueReference.FUNCTION_OP);
-			if (result != null && result.getDeclaredType() != null) {
-				returnType = result.getDeclaredType().getName();
+			final JSType declaredType = reference.getChild(
+					IValueReference.FUNCTION_OP).getDeclaredType();
+			if (declaredType != null) {
+				returnType = declaredType.getName();
 			}
 			final ReferenceLocation loc = reference.getLocation();
 			if (loc != ReferenceLocation.UNKNOWN
