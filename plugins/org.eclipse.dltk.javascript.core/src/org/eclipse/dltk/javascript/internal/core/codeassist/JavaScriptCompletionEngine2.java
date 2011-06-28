@@ -362,10 +362,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		 */
 		private void reportReference(IValueReference reference) {
 			int proposalKind = CompletionProposal.FIELD_REF;
-			if (reference.getKind() == ReferenceKind.FUNCTION
-					|| reference.getChild(IValueReference.FUNCTION_OP).exists()) {
+			final ReferenceKind kind = reference.getKind();
+			if (kind != ReferenceKind.PHANTOM
+					&& (kind == ReferenceKind.FUNCTION || reference
+							.hasChild(IValueReference.FUNCTION_OP))) {
 				proposalKind = CompletionProposal.METHOD_REF;
-			} else if (reference.getKind() == ReferenceKind.LOCAL) {
+			} else if (kind == ReferenceKind.LOCAL) {
 				proposalKind = CompletionProposal.LOCAL_VARIABLE_REF;
 			}
 			CompletionProposal proposal = CompletionProposal.create(
