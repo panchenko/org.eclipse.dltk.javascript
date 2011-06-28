@@ -311,7 +311,7 @@ public class ScriptdocContentAccess {
 			}
 			if (docOffset != -1) {
 				return new SourceRange(docOffset + possibleDocStart + start,
-						docEnd - docOffset + 1);
+						docEnd - docOffset);
 			}
 		} catch (InvalidInputException ex) {
 			// try if there is inherited Javadoc
