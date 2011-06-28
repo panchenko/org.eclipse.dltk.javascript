@@ -125,8 +125,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 	}
 
-	private static class StackedExpressionValidator extends
-			ExpressionValidator {
+	private static class StackedExpressionValidator extends ExpressionValidator {
 
 		private final List<ExpressionValidator> stacked = new ArrayList<TypeInfoValidator.ExpressionValidator>();
 		private final Reporter reporter;
@@ -329,8 +328,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 	}
 
-	private static class PropertyExpressionHolder extends
-			ExpressionValidator {
+	private static class PropertyExpressionHolder extends ExpressionValidator {
 		private final PropertyExpression node;
 		private final IValueReference reference;
 		private final ValidationVisitor visitor;
@@ -1131,8 +1129,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		 * @param element
 		 * @param type
 		 */
-		private static String testObjectPropertyType(IValueReference reference,
-				JSType type) {
+		protected static String testObjectPropertyType(
+				IValueReference reference, JSType type) {
 			if (type.getKind() == TypeKind.RECORD) {
 				Type realType = TypeUtil.extractType(type);
 				if (realType != null) {
@@ -1482,22 +1480,20 @@ public class TypeInfoValidator implements IBuildParticipant {
 						.getAttribute(IReferenceAttributes.VARIABLE);
 				if (attribute instanceof IVariable) {
 					IVariable variable = (IVariable) attribute;
-					reporter.reportProblem(
-							JavaScriptProblems.PRIVATE_VARIABLE, NLS.bind(
-									ValidationMessages.PrivateVariable,
-									variable.getName()),
-							expr.sourceStart(), expr.sourceEnd());
+					reporter.reportProblem(JavaScriptProblems.PRIVATE_VARIABLE,
+							NLS.bind(ValidationMessages.PrivateVariable,
+									variable.getName()), expr.sourceStart(),
+							expr.sourceEnd());
 				} else {
 					attribute = reference
 							.getAttribute(IReferenceAttributes.PARAMETERS);
 					if (attribute instanceof IMethod) {
 						IMethod method = (IMethod) attribute;
 						reporter.reportProblem(
-								JavaScriptProblems.PRIVATE_FUNCTION,
-								NLS.bind(
+								JavaScriptProblems.PRIVATE_FUNCTION, NLS.bind(
 										ValidationMessages.PrivateFunction,
-										method.getName()), expr
-										.sourceStart(), expr.sourceEnd());
+										method.getName()), expr.sourceStart(),
+								expr.sourceEnd());
 					}
 				}
 			}
@@ -1776,9 +1772,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public boolean testVisibility(Expression expression,
 				IValueReference result, IMember method) {
 			return (method.isPrivate() || (method.isProtected()
-					&& result.getParent() != null && result
-					.getParent().getAttribute(
-							IReferenceAttributes.SUPER_SCOPE) == null))
+					&& result.getParent() != null && result.getParent()
+					.getAttribute(IReferenceAttributes.SUPER_SCOPE) == null))
 					&& (result.getParent() != null || result
 							.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
 					&& !isThisCall(expression);
