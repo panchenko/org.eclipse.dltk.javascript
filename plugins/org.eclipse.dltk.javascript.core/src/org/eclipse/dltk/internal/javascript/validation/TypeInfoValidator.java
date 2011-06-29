@@ -67,8 +67,10 @@ import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -114,7 +116,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 	private static abstract class ExpressionValidator {
 		abstract void call();
 
-		Set<IProblemIdentifier> suppressed;
+		public ExpressionValidator() {
+		}
+
+		private Set<IProblemIdentifier> suppressed;
 
 		public Set<IProblemIdentifier> getSuppressed() {
 			return suppressed;
@@ -605,7 +610,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 			try {
 				final IValueReference reference = visit(expression);
 				modes.remove(expression);
-				if (reference == null)
+				if (reference == null
+						|| reference.getKind() == ReferenceKind.PHANTOM)
 					return null;
 				final List<ASTNode> callArgs = node.getArguments();
 				IValueReference[] arguments = new IValueReference[callArgs
@@ -1895,7 +1901,27 @@ public class TypeInfoValidator implements IBuildParticipant {
 					for (Parameter parameter : funcType.getParameters()) {
 						checkType(node, parameter.getType(), collection);
 					}
+				} else if (type instanceof RecordType) {
+					final RecordType recordType = (RecordType) type;
+					for (Member member : recordType.getMembers()) {
+						if (member.getType() != null) {
+							checkType(node, member.getType(), collection);
+						}
+					}
+				} else if (type instanceof ClassType) {
+					final Type classType = ((ClassType) type).getTarget();
+					if (classType != null
+							&& classType.getKind() == TypeKind.UNKNOWN) {
+						reportUnknownType(node, TypeUtil.getName(type));
+					}
 				} else {
+					if (type instanceof GenericType) {
+						final GenericType genericType = (GenericType) type;
+						for (JSType typeParameter : genericType
+								.getTypeParameters()) {
+							checkType(node, typeParameter, collection);
+						}
+					}
 					final Type t = TypeUtil.extractType(type);
 					if (t != null && t.isDeprecated()) {
 						reporter.reportProblem(
