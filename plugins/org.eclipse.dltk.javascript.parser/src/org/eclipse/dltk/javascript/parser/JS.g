@@ -1505,9 +1505,9 @@ options
 {
 	memoize = true ;
 }
-	: ( ex1=expressionNoIn | var=VAR variableDeclarationNoIn ( COMMA variableDeclarationNoIn )* )? SEMIC ex2=expression? SEMIC ex3=expression?
-	-> { $var != null }? ^( FORSTEP ^( VAR[$var] variableDeclarationNoIn+ ) ^( EXPR $ex2? ) ^( EXPR $ex3? ) )
-	-> ^( FORSTEP ^( EXPR $ex1? ) ^( EXPR $ex2? ) ^( EXPR $ex3? ) )
+	: ( ex1=expressionNoIn | var=VAR variableDeclarationNoIn ( COMMA variableDeclarationNoIn )* )? semi1=SEMIC ex2=expression? semi2=SEMIC ex3=expression?
+	-> { $var != null }? ^( FORSTEP ^( VAR[$var] variableDeclarationNoIn+ ) ^( $semi1 ) ^( EXPR $ex2? ) ^( $semi2 ) ^( EXPR $ex3? ) )
+	-> ^( FORSTEP ^( EXPR $ex1? ) ^( $semi1 ) ^( EXPR $ex2? ) ^( $semi2 ) ^( EXPR $ex3? ) )
 	;
 iterationClause
 options
@@ -1555,8 +1555,8 @@ forControlVar
 		)
 		|
 		(
-			( COMMA variableDeclarationNoIn )* SEMIC ex1=expression? SEMIC ex2=expression?
-			-> ^( FORSTEP ^( VAR variableDeclarationNoIn+ ) ^( EXPR $ex1? ) ^( EXPR $ex2? ) )
+			( COMMA variableDeclarationNoIn )* semi1=SEMIC ex1=expression? semi2=SEMIC ex2=expression?
+			-> ^( FORSTEP ^( VAR variableDeclarationNoIn+ ) ^( $semi1 ) ^( EXPR $ex1? ) ^( $semi2 ) ^( EXPR $ex2? ) )
 		)
 	)
 	;
@@ -1574,15 +1574,15 @@ forControlExpression
 		)
 		|
 		(
-			SEMIC ex2=expression? SEMIC ex3=expression?
-			-> ^( FORSTEP ^( EXPR $ex1 ) ^( EXPR $ex2? ) ^( EXPR $ex3? ) )
+			semi1=SEMIC ex2=expression? semi2=SEMIC ex3=expression?
+			-> ^( FORSTEP ^( EXPR $ex1 ) ^( $semi1 ) ^( EXPR $ex2? ) ^( $semi2 ) ^( EXPR $ex3? ) )
 		)
 	)
 	;
 
 forControlSemic
-	: SEMIC ex1=expression? SEMIC ex2=expression?
-	-> ^( FORSTEP ^( EXPR ) ^( EXPR $ex1? ) ^( EXPR $ex2? ) )
+	: semi1=SEMIC ex1=expression? semi2=SEMIC ex2=expression?
+	-> ^( FORSTEP ^( EXPR ) ^( $semi1 ) ^( EXPR $ex1? ) ^( $semi2 ) ^( EXPR $ex2? ) )
 	;
 
 // $>

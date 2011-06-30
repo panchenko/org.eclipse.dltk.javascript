@@ -256,36 +256,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			return getTokenOffset(token.getTokenIndex());
 	}
 
-	private int getTokenOffset(int tokenType, int startTokenIndex,
-			int endTokenIndex, int skipCount) {
-
-		Assert.isTrue(startTokenIndex >= 0);
-		Assert.isTrue(endTokenIndex > 0);
-		Assert.isTrue(startTokenIndex <= endTokenIndex);
-
-		Token token = null;
-
-		int skipped = 0;
-
-		for (int i = startTokenIndex; i <= endTokenIndex; i++) {
-			Token item = tokens.get(i);
-			if (item.getType() == tokenType) {
-				if (skipped == skipCount) {
-					token = item;
-					break;
-				} else {
-					skipped++;
-				}
-			}
-		}
-
-		if (token == null)
-			return -1;
-		else
-			return getTokenOffset(token.getTokenIndex());
-
-	}
-
 	private final Expression transformExpression(Tree node, ASTNode parent) {
 		return (Expression) transformNode(node, parent);
 	}
@@ -636,78 +606,40 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		statement.setLP(getTokenOffset(JSParser.LPAREN,
 				node.getTokenStartIndex() + 1, node.getTokenStopIndex()));
-
-		statement.setInitial(transformExpression(node.getChild(0).getChild(0),
+		final Tree forControl = node.getChild(0);
+		statement.setInitial(transformExpression(forControl.getChild(0),
 				statement));
-
-		statement.setCondition(transformExpression(
-				node.getChild(0).getChild(1), statement));
-
-		statement.setStep(transformExpression(node.getChild(0).getChild(2),
+		statement.setInitialSemicolonPosition(getTokenOffset(forControl
+				.getChild(1).getTokenStartIndex()));
+		statement.setCondition(transformExpression(forControl.getChild(2),
 				statement));
+		statement.setConditionalSemicolonPosition(getTokenOffset(forControl
+				.getChild(3).getTokenStartIndex()));
+		statement
+				.setStep(transformExpression(forControl.getChild(4), statement));
+		statement.setRP(getTokenOffset(JSParser.RPAREN,
+				forControl.getTokenStopIndex() + 1, node.getTokenStopIndex()));
 
 		if (statement.getInitial() instanceof EmptyExpression) {
-			statement.setInitialSemicolonPosition(getTokenOffset(
-					JSParser.SEMIC, node.getTokenStartIndex() + 2,
-					node.getTokenStopIndex()));
-
-			statement.getInitial().setStart(
-					statement.getInitialSemicolonPosition());
-			statement.getInitial().setEnd(
-					statement.getInitialSemicolonPosition());
-
-			if (statement.getCondition() instanceof EmptyExpression) {
-				statement.setConditionalSemicolonPosition((getTokenOffset(
-						JSParser.SEMIC, node.getTokenStartIndex(),
-						node.getTokenStopIndex(), 1)));
-
-				statement.getCondition().setStart(
-						statement.getConditionalSemicolonPosition());
-				statement.getCondition().setEnd(
-						statement.getConditionalSemicolonPosition());
-
-			} else {
-				statement.setConditionalSemicolonPosition((getTokenOffset(
-						JSParser.SEMIC, node.getChild(0).getChild(1)
-								.getTokenStopIndex() + 1,
-						node.getTokenStopIndex())));
-
-			}
-
-		} else {
-			statement.setInitialSemicolonPosition(getTokenOffset(
-					JSParser.SEMIC, getRealTokenStopIndex(node.getChild(0)
-							.getChild(0)) + 1, node.getTokenStopIndex()));
-
-			if (statement.getCondition() instanceof EmptyExpression) {
-				statement.setConditionalSemicolonPosition((getTokenOffset(
-						JSParser.SEMIC, node.getChild(0).getChild(0)
-								.getTokenStopIndex() + 1,
-						node.getTokenStopIndex(), 1)));
-
-				statement.getCondition().setStart(
-						statement.getConditionalSemicolonPosition());
-				statement.getCondition().setEnd(
-						statement.getConditionalSemicolonPosition());
-
-			} else {
-				statement.setConditionalSemicolonPosition((getTokenOffset(
-						JSParser.SEMIC, getRealTokenStopIndex(node.getChild(0)
-								.getChild(1)) + 1, node.getTokenStopIndex())));
-			}
+			final int pos = statement.getInitialSemicolonPosition();
+			statement.getInitial().setStart(pos);
+			statement.getInitial().setEnd(pos);
 		}
-
+		if (statement.getCondition() instanceof EmptyExpression) {
+			final int pos = statement.getConditionalSemicolonPosition();
+			statement.getCondition().setStart(pos);
+			statement.getCondition().setEnd(pos);
+		}
 		if (statement.getStep() instanceof EmptyExpression) {
-			statement.setStart(statement.getConditionalSemicolonPosition() + 1);
-			statement.setEnd(statement.getConditionalSemicolonPosition() + 1);
+			final int pos = statement.getConditionalSemicolonPosition() + 1;
+			statement.setStart(pos);
+			statement.setEnd(pos);
 		}
 
-		statement.setRP(getTokenOffset(JSParser.RPAREN, node.getChild(0)
-				.getTokenStopIndex() + 1, node.getTokenStopIndex()));
-
-		if (node.getChildCount() > 1)
+		if (node.getChildCount() > 1) {
 			statement.setBody(transformStatementNode(node.getChild(1),
 					statement));
+		}
 
 		statement.setStart(statement.getForKeyword().sourceStart());
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
