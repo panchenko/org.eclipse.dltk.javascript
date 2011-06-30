@@ -696,10 +696,18 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		if (node.getBody() != null)
 			visit(node.getBody());
 
-		testChar(Keywords.SEMI, node.getConditionalSemicolonPosition());
-		testChar(Keywords.SEMI, node.getInitialSemicolonPosition());
-		testChar(Keywords.LP, node.getLP());
-		testChar(Keywords.RP, node.getRP());
+		final int initSC = node.getInitialSemicolonPosition();
+		final int condSC = node.getConditionalSemicolonPosition();
+		final int lp = node.getLP();
+		final int rp = node.getRP();
+		Assert.assertTrue(lp < initSC);
+		Assert.assertTrue("initialSemicolonPosition:" + initSC
+				+ " conditionalSemicolonPosition:" + condSC, initSC < condSC);
+		Assert.assertTrue(condSC < rp);
+		testChar(Keywords.SEMI, condSC);
+		testChar(Keywords.SEMI, initSC);
+		testChar(Keywords.LP, lp);
+		testChar(Keywords.RP, rp);
 
 		return true;
 	}

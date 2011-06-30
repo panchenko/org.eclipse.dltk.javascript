@@ -33,6 +33,7 @@ public class AllTests {
 		suite.addTestSuite(ParserValidationsTest.class);
 		suite.addTestSuite(SimpleJSDocParserTests.class);
 		suite.addTestSuite(Bug20110503.class);
+		suite.addTestSuite(ForTests.class);
 		// $JUnit-END$
 		return suite;
 	}
