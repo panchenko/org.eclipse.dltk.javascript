@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.13 2011/03/13 11:48:07 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.14 2011/07/01 12:30:11 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -44,6 +44,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getSuperType <em>Super Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructor <em>Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getTraits <em>Traits</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isExtensible <em>Extensible</em>}</li>
  * </ul>
  * </p>
  *
@@ -109,6 +110,26 @@ public class TypeImpl extends ElementImpl implements Type {
      * @ordered
      */
     protected EList<Type> traits;
+
+    /**
+     * The default value of the '{@link #isExtensible() <em>Extensible</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isExtensible()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean EXTENSIBLE_EDEFAULT = false;
+
+    /**
+     * The cached value of the '{@link #isExtensible() <em>Extensible</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isExtensible()
+     * @generated
+     * @ordered
+     */
+    protected boolean extensible = EXTENSIBLE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -256,6 +277,27 @@ public class TypeImpl extends ElementImpl implements Type {
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean isExtensible() {
+        return extensible;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setExtensible(boolean newExtensible) {
+        boolean oldExtensible = extensible;
+        extensible = newExtensible;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__EXTENSIBLE, oldExtensible, extensible));
+    }
+
+    /**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -314,6 +356,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return getConstructor();
             case TypeInfoModelPackage.TYPE__TRAITS:
                 return getTraits();
+            case TypeInfoModelPackage.TYPE__EXTENSIBLE:
+                return isExtensible();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -344,6 +388,9 @@ public class TypeImpl extends ElementImpl implements Type {
                 getTraits().clear();
                 getTraits().addAll((Collection<? extends Type>)newValue);
                 return;
+            case TypeInfoModelPackage.TYPE__EXTENSIBLE:
+                setExtensible((Boolean)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -371,6 +418,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__TRAITS:
                 getTraits().clear();
                 return;
+            case TypeInfoModelPackage.TYPE__EXTENSIBLE:
+                setExtensible(EXTENSIBLE_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -393,6 +443,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return constructor != null;
             case TypeInfoModelPackage.TYPE__TRAITS:
                 return traits != null && !traits.isEmpty();
+            case TypeInfoModelPackage.TYPE__EXTENSIBLE:
+                return extensible != EXTENSIBLE_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }

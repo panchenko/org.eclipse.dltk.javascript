@@ -39,6 +39,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="traits" upperBound="-1"
         eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extensible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypeAlias">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"

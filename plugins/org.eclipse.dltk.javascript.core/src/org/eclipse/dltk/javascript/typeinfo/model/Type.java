@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.10 2011/03/04 06:50:48 apanchenk Exp $
+ * $Id: Type.java,v 1.11 2011/07/01 12:30:11 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -28,6 +28,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType <em>Super Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructor <em>Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits <em>Traits</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible <em>Extensible</em>}</li>
  * </ul>
  * </p>
  *
@@ -150,6 +151,32 @@ public interface Type extends Element {
      * @generated
      */
     EList<Type> getTraits();
+
+    /**
+     * Returns the value of the '<em><b>Extensible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Extensible</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Extensible</em>' attribute.
+     * @see #setExtensible(boolean)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Extensible()
+     * @model
+     * @generated
+     */
+    boolean isExtensible();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible <em>Extensible</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Extensible</em>' attribute.
+     * @see #isExtensible()
+     * @generated
+     */
+    void setExtensible(boolean value);
 
     /**
      * <!-- begin-user-doc -->
