@@ -998,11 +998,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 				IValueReference argument = arguments[i];
 				IParameter parameter = parameters.get(i);
 				if (parameter.getType() instanceof RecordType
-						&& argument.getDeclaredType() instanceof RecordType) {
-					if (!testArgumentType(parameter.getType(), argument))
-						return false;
-				} else if (parameter.getType() instanceof RecordType
-						&& argument != null) {
+						&& argument != null
+						&& !(argument.getDeclaredType() instanceof RecordType)) {
 					Set<String> argumentsChildren = argument
 							.getDirectChildren();
 					for (Member member : ((RecordType) parameter.getType())
@@ -1021,8 +1018,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 
 				} else {
-					JSType paramType = parameter.getType();
-					if (!testArgumentType(paramType, argument))
+					if (!testArgumentType(parameter.getType(), argument))
 						return false;
 				}
 			}
