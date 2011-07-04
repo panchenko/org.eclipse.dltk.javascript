@@ -123,9 +123,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		final JSProblemReporter reporter = visitor.getProblemReporter();
 		if (reporter != null) {
 			reporter.reportProblem(new JSProblem(e));
-		} else {
-			JavaScriptPlugin.error(e);
 		}
+		JavaScriptPlugin.error(e);
 	}
 
 	public IValueReference evaluate(ASTNode node) {
