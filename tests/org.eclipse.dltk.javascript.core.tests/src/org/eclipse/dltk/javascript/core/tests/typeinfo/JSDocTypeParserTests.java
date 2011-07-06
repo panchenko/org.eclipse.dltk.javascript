@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
 import java.text.ParseException;
 
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
@@ -67,6 +68,17 @@ public class JSDocTypeParserTests extends TestCase {
 		assertRef("String", type.getMembers().get(0).getType());
 		assertEquals("anumber", type.getMembers().get(1).getName());
 		assertRef("Number", type.getMembers().get(1).getType());
+		assertEquals(Boolean.TRUE, type.getMembers().get(1).getAttribute(IReferenceAttributes.OPTIONAL));
+	}
+	
+	public void testRecordTypeWithOptionalClosureStyle() {
+		final RecordType type = (RecordType) parse("{astring:String,anumber:Number=}");
+		assertEquals(2, type.getMembers().size());
+		assertEquals("astring", type.getMembers().get(0).getName());
+		assertRef("String", type.getMembers().get(0).getType());
+		assertEquals("anumber", type.getMembers().get(1).getName());
+		assertRef("Number", type.getMembers().get(1).getType());
+		assertEquals(Boolean.TRUE, type.getMembers().get(1).getAttribute(IReferenceAttributes.OPTIONAL));
 	}
 
 
