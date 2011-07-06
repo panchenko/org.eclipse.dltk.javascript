@@ -119,7 +119,8 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				final JSType array = createArray(itemType);
 				return checkIfArray(input, array);
 			} else if (ch == CharStream.EOF || Character.isWhitespace(ch)
-					|| ch == '|' || ch == ',' || ch == '}' || ch == '>'
+					|| ch == '|' || ch == ',' || ch == '=' || ch == '}'
+					|| ch == '>'
 					|| ch == ')') {
 				return input.index() > start ? createType(input, start) : null;
 			} else {
@@ -274,6 +275,12 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				if (input.LT(1) == ':') {
 					input.consume();
 					final JSType memberType = parse(input);
+					ch = input.LT(1);
+					if (ch == '=') {
+						input.consume();
+						property.setAttribute(IReferenceAttributes.OPTIONAL,
+								Boolean.TRUE);
+					}
 					if (memberType != null) {
 						property.setType(memberType);
 					} else {
