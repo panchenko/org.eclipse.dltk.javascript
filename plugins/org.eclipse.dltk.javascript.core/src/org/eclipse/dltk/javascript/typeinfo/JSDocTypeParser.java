@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -247,8 +248,13 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 		type.setTarget(TypeInfoModelFactory.eINSTANCE.createType());
 		skipSpaces(input);
 		for (;;) {
-			final int nameStart = input.index();
 			int ch = input.LT(1);
+			final boolean optional = ch == '[';
+			if (optional) {
+				input.consume();
+				ch = input.LT(1);
+			}
+			final int nameStart = input.index();
 			if (Character.isJavaIdentifierStart(ch)) {
 				input.consume();
 				while (Character.isJavaIdentifierPart(input.LT(1))) {
@@ -258,6 +264,13 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 						.createProperty();
 				property.setName(input.substring(nameStart, input.index() - 1));
 				skipSpaces(input);
+				if (optional) {
+					// todo test if it ends on ] ?
+					input.consume();
+					property.setAttribute(IReferenceAttributes.OPTIONAL,
+							Boolean.TRUE);
+				}
+
 				if (input.LT(1) == ':') {
 					input.consume();
 					final JSType memberType = parse(input);
