@@ -1504,6 +1504,19 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testParamWithOptinalObjectDeclarationCall() {
+		StringList code = new StringList();
+		code.add("/** @param {{astring:String, [anumber]:Number}} myparam */");
+		code.add("function test(myparam) {");
+		code.add("}");
+		code.add("function test2(myparam) {");
+		code.add(" test({astring:'',anumber:1});");
+		code.add(" test({astring:''});");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
 	public void testParamWithObjectDeclarationCallWithDifferentType() {
 		StringList code = new StringList();

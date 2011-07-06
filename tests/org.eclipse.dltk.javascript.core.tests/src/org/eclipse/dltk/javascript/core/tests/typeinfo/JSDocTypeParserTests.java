@@ -59,6 +59,16 @@ public class JSDocTypeParserTests extends TestCase {
 		assertEquals("anumber", type.getMembers().get(1).getName());
 		assertRef("Number", type.getMembers().get(1).getType());
 	}
+	
+	public void testRecordTypeWithOptionalBrackets() {
+		final RecordType type = (RecordType) parse("{astring:String,[anumber]:Number}");
+		assertEquals(2, type.getMembers().size());
+		assertEquals("astring", type.getMembers().get(0).getName());
+		assertRef("String", type.getMembers().get(0).getType());
+		assertEquals("anumber", type.getMembers().get(1).getName());
+		assertRef("Number", type.getMembers().get(1).getType());
+	}
+
 
 	public void testFunctionType1() {
 		final FunctionType type = (FunctionType) parse("function():String");
