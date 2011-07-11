@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 JS.g 2011-04-20 21:22:36
+// $ANTLR 3.0.1 JS.g 2011-07-11 19:27:56
 
 package org.eclipse.dltk.javascript.parser;
 
@@ -203,10 +203,10 @@ public class JSLexer extends Lexer {
     public static final int EXTENDS=48;
     public static final int BSLASH=153;
     public static final int LF=163;
-    
+
     private Token lastCodeToken;
     protected Token lastToken;
-    
+
     final static boolean isIdentifierKeyword(int token)
     {
     	return token == WXML
@@ -215,7 +215,7 @@ public class JSLexer extends Lexer {
       		|| token == EACH
       		|| token == NAMESPACE; 
     }
-    
+
     private final boolean areRegularExpressionsEnabled()
     {
     	if (lastCodeToken == null)
@@ -252,16 +252,16 @@ public class JSLexer extends Lexer {
     			return true;
     	}
     }
-    
+
     private final boolean isXmlStartEnabled() {
       // TODO
       return ((JSTokenSource)this).getMode() == JSTokenSource.MODE_JS && areRegularExpressionsEnabled();
     }
-    
+
     protected void readFirstXml() throws RecognitionException {
     	throw new EarlyExitException(0, input);
     }
-    
+
     private final void consumeIdentifierUnicodeStart() throws RecognitionException, NoViableAltException
     {
     	int ch = input.LA(1);
@@ -284,7 +284,7 @@ public class JSLexer extends Lexer {
     	}
     	else
     	{
-    		throw new NoViableAltException();
+    		throw new NoIdentifierException();
     	}
     }
     	
@@ -297,7 +297,7 @@ public class JSLexer extends Lexer {
     {
     	return Character.isJavaIdentifierStart((char)ch);
     }
-    
+
     public Token nextToken()
     {
     	Token result = super.nextToken();
@@ -307,7 +307,7 @@ public class JSLexer extends Lexer {
     	}
     	return result;		
     }
-    
+
 
     public JSLexer() {;} 
     public JSLexer(CharStream input) {
@@ -3441,7 +3441,7 @@ public class JSLexer extends Lexer {
     public final void mXMLFragment() throws RecognitionException {
         try {
             int _type = XMLFragment;
-            
+
             	int marker = input.mark();
 
             // JS.g:854:5: ({...}? => LT ( NOT | QUE | GT | 'a' .. 'z' | 'A' .. 'Z' | '_' | ':' | '{' ) )
@@ -3461,7 +3461,7 @@ public class JSLexer extends Lexer {
                 recover(mse);    throw mse;
             }
 
-            
+
             			input.rewind(marker);
             			readFirstXml();
                      

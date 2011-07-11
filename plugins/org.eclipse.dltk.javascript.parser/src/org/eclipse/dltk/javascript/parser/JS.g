@@ -307,7 +307,7 @@ private final void consumeIdentifierUnicodeStart() throws RecognitionException, 
 	}
 	else
 	{
-		throw new NoViableAltException();
+		throw new NoIdentifierException();
 	}
 }
 	

@@ -51,18 +51,36 @@ public class JavaScriptLexer extends JSLexer {
 			RecognitionException e) {
 		if (reporter == null)
 			return;
-		final String msg = getErrorMessage(e, tokenNames);
-		final int start = lastToken != null ? reporter.getOffset(lastToken)
-				+ reporter.length(lastToken) : 0;
-		int end = reporter.getOffset(e.line, e.charPositionInLine);
-		if (end < start) {
+		int start;
+		int end;
+		if (e instanceof NoIdentifierException) {
+			e.c = input.LA(1);
+			start = input.index();
 			end = start + 1;
+		} else {
+			start = lastToken != null ? reporter.getOffset(lastToken)
+					+ reporter.length(lastToken) : 0;
+			end = reporter.getOffset(e.line, e.charPositionInLine);
+			if (end < start) {
+				end = start + 1;
+			}
 		}
+		final String msg = getErrorMessage(e, tokenNames);
 		reporter.setMessage(JavaScriptParserProblems.LEXER_ERROR, msg);
 		reporter.setSeverity(ProblemSeverity.ERROR);
 		reporter.setRange(start, end);
 		reporter.setLine(e.line - 1);
 		reporter.report();
+	}
+
+	@Override
+	public String getCharErrorDisplay(int c) {
+		final String s = super.getCharErrorDisplay(c);
+		if (c >= 32 && c < 127) {
+			return s; // ASCII
+		} else {
+			return s + " (0x" + Integer.toHexString(c).toUpperCase() + ")";
+		}
 	}
 
 	@Override
