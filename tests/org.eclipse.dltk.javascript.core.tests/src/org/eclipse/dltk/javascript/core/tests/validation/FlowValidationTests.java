@@ -19,6 +19,7 @@ import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.FlowValidation;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
+import org.eclipse.dltk.javascript.parser.JSProblem;
 
 public class FlowValidationTests extends AbstractValidationTest {
 
@@ -198,6 +199,24 @@ public class FlowValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
+		assertEquals(problemIds.toString(), 0, problemIds.size());
+	}
+
+	public void testReturnCatchReturn() {
+		StringList code = new StringList();
+		code.add("function q() {");
+		code.add("  var x = 0");
+		code.add("  try {");
+		code.add("    return 0");
+		code.add("  } catch (e) {");
+		code.add("    return 1");
+		code.add("  }");
+		code.add("  return x");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
 		assertEquals(problemIds.toString(), 1, problemIds.size());
+		assertEquals(JavaScriptProblems.UNREACHABLE_CODE, problemIds.iterator()
+				.next());
 	}
 }
