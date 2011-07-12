@@ -65,7 +65,7 @@ public enum PhantomValueReference implements IValueReference, IValueProvider {
 	}
 
 	public ReferenceKind getKind() {
-		return ReferenceKind.PHANTOM;
+		return ReferenceKind.PREDEFINED;
 	}
 
 	public void setKind(ReferenceKind kind) {

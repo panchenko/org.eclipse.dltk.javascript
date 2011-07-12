@@ -23,7 +23,7 @@ public class ImmutableValue implements IValue, IValue2 {
 
 	protected final Map<String, ImmutableValue> children;
 	protected final Map<String, IValue> inherited;
-	protected final Set<ImmutableValue> references;
+	protected final Set<IValue> references;
 	protected Map<String, Object> attributes;
 
 	protected static interface Handler<R> {
@@ -35,13 +35,13 @@ public class ImmutableValue implements IValue, IValue2 {
 		types = JSTypeSet.create();
 		children = new HashMap<String, ImmutableValue>(4, 0.9f);
 		inherited = new HashMap<String, IValue>(4, 0.9f);
-		references = new HashSet<ImmutableValue>(4, 0.9f);
+		references = new HashSet<IValue>(4, 0.9f);
 	}
 
 	public ImmutableValue(JSType declaredType, JSTypeSet types,
 			Set<String> deletedChildren, ReferenceKind kind,
 			ReferenceLocation location, Map<String, ImmutableValue> children,
-			Map<String, IValue> inherited, Set<ImmutableValue> references,
+			Map<String, IValue> inherited, Set<IValue> references,
 			Map<String, Object> attributes) {
 		this.declaredType = declaredType;
 		this.types = types;
@@ -68,8 +68,9 @@ public class ImmutableValue implements IValue, IValue2 {
 			if (value instanceof ILazyValue)
 				((ILazyValue) value).resolve();
 			handler.process(value, result);
-			for (ImmutableValue child : value.references) {
-				execute(child, handler, result, visited);
+			for (IValue child : value.references) {
+				if (child instanceof ImmutableValue)
+					execute((ImmutableValue) child, handler, result, visited);
 			}
 		}
 	}
@@ -159,14 +160,16 @@ public class ImmutableValue implements IValue, IValue2 {
 	private Object visitReferenceForAttribute(String key,
 			Set<ImmutableValue> visited) {
 		if (visited.add(this)) {
-			for (ImmutableValue reference : references) {
-				Object attribute = reference.attributes != null ? reference.attributes
-						.get(key) : null;
+			for (IValue reference : references) {
+				Object attribute = reference.getAttribute(key, false);
 				if (attribute != null)
 					return attribute;
-				attribute = reference.visitReferenceForAttribute(key, visited);
-				if (attribute != null)
-					return attribute;
+				if (reference instanceof ImmutableValue) {
+					attribute = ((ImmutableValue) reference)
+							.visitReferenceForAttribute(key, visited);
+					if (attribute != null)
+						return attribute;
+				}
 			}
 		}
 		return null;

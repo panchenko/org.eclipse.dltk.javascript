@@ -33,6 +33,10 @@ public abstract class AbstractReference implements IValueReference,
 		if (val != null) {
 			if (value != null) {
 				IValue src = ((IValueProvider) value).getValue();
+				if (src == PhantomValue.VALUE) {
+					val.addReference(src);
+					return;
+				}
 				if (src == null) {
 					src = new LazyReferenceValue(value);
 					val.addReference(src);
@@ -57,6 +61,10 @@ public abstract class AbstractReference implements IValueReference,
 		IValue val = createValue();
 		if (val != null) {
 			IValue src = ((IValueProvider) value).getValue();
+			if (src == PhantomValue.VALUE) {
+				val.addReference(src);
+				return;
+			}
 			if (src == null) {
 				src = new LazyReferenceValue(value);
 				val.addReference(src);

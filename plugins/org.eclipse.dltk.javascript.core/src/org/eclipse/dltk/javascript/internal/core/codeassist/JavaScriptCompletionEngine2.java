@@ -247,7 +247,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			boolean superScope = false;
 			if (item instanceof IValueProvider) {
 				superScope = ((IValueProvider) item).getValue().getAttribute(
-						IReferenceAttributes.SUPER_SCOPE) == Boolean.TRUE;
+						IReferenceAttributes.SUPER_SCOPE, false) == Boolean.TRUE;
 			}
 			final Set<String> deleted = item.getDeletedChildren();
 			for (String childName : item.getDirectChildren()) {
@@ -363,7 +363,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		private void reportReference(IValueReference reference) {
 			int proposalKind = CompletionProposal.FIELD_REF;
 			final ReferenceKind kind = reference.getKind();
-			if (kind != ReferenceKind.PHANTOM
+			if (reference.getAttribute(IReferenceAttributes.PHANTOM, true) != null
 					&& (kind == ReferenceKind.FUNCTION || reference
 							.hasChild(IValueReference.FUNCTION_OP))) {
 				proposalKind = CompletionProposal.METHOD_REF;

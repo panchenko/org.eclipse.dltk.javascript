@@ -611,7 +611,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 				final IValueReference reference = visit(expression);
 				modes.remove(expression);
 				if (reference == null
-						|| reference.getKind() == ReferenceKind.PHANTOM)
+						|| reference.getAttribute(IReferenceAttributes.PHANTOM,
+								true) != null)
 					return null;
 				final List<ASTNode> callArgs = node.getArguments();
 				IValueReference[] arguments = new IValueReference[callArgs

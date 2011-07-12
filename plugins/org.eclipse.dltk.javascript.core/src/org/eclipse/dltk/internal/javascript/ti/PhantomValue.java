@@ -54,6 +54,9 @@ public enum PhantomValue implements IValue {
 	}
 
 	public Object getAttribute(String key, boolean includeReferences) {
+		if (key == IReferenceAttributes.PHANTOM) {
+			return Boolean.TRUE;
+		}
 		return null;
 	}
 
@@ -65,7 +68,7 @@ public enum PhantomValue implements IValue {
 	}
 
 	public ReferenceKind getKind() {
-		return ReferenceKind.PHANTOM;
+		return ReferenceKind.PREDEFINED;
 	}
 
 	public void setKind(ReferenceKind kind) {

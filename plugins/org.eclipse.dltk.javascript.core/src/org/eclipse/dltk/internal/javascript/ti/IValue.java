@@ -38,6 +38,7 @@ public interface IValue {
 
 	Object getAttribute(String key, boolean includeReferences);
 
+	@Deprecated
 	Object getAttribute(String key);
 
 	void setAttribute(String key, Object value);

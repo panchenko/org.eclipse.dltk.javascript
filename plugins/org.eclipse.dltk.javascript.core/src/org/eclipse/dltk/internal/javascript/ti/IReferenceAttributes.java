@@ -25,4 +25,5 @@ public interface IReferenceAttributes {
 	String SUPER_SCOPE = "SUPER_SCOPE";
 
 	String RESOLVING = "RESOLVING";
+	String PHANTOM = "PHANTOM";
 }

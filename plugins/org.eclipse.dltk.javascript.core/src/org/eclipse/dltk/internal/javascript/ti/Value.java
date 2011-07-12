@@ -120,8 +120,8 @@ public class Value extends ImmutableValue {
 					.entrySet()) {
 				final ImmutableValue input = entry.getKey();
 				final ImmutableValue output = entry.getValue();
-				for (ImmutableValue ref : input.references) {
-					ImmutableValue refOut = processing.get(ref);
+				for (IValue ref : input.references) {
+					IValue refOut = processing.get(ref);
 					if (refOut == null) {
 						refOut = ref;
 					}
@@ -134,8 +134,8 @@ public class Value extends ImmutableValue {
 			}
 			types.addAll(src.getTypes());
 			if (src.getKind() == ReferenceKind.METHOD) {
-				final Object element = src
-						.getAttribute(IReferenceAttributes.ELEMENT);
+				final Object element = src.getAttribute(
+						IReferenceAttributes.ELEMENT, false);
 				if (element != null) {
 					setAttribute(IReferenceAttributes.ELEMENT, element);
 				}
@@ -155,8 +155,7 @@ public class Value extends ImmutableValue {
 		assert src != null;
 		if (src == this)
 			return;
-		if (src instanceof Value)
-			references.add((Value) src);
+		references.add(src);
 	}
 
 	private void addValueRecursive(ImmutableValue src,
@@ -203,7 +202,7 @@ public class Value extends ImmutableValue {
 
 	public void resolveLazyValues(Set<Value> visited) {
 		if (visited.add(this)) {
-			for (ImmutableValue value : references) {
+			for (IValue value : references) {
 				if (value instanceof ILazyValue
 						&& !((ILazyValue) value).isResolved()) {
 					((ILazyValue) value).setFinalResolve();
@@ -250,8 +249,7 @@ public class Value extends ImmutableValue {
 				children.size(), 0.9f);
 		Map<String, IValue> inherits = new HashMap<String, IValue>(
 				inherited.size(), 0.9f);
-		Set<ImmutableValue> refers = new HashSet<ImmutableValue>(
-				references.size(), 0.9f);
+		Set<IValue> refers = new HashSet<IValue>(references.size(), 0.9f);
 		Map<String, Object> atts = null;
 		if (attributes != null) {
 			atts = new HashMap<String, Object>(attributes.size(), 0.9f);
@@ -274,7 +272,7 @@ public class Value extends ImmutableValue {
 				deletedChilds, kind, location, childs, inherits, refers, atts);
 		visited.put(this, immutableValue);
 
-		for (ImmutableValue value : references) {
+		for (IValue value : references) {
 			if (value instanceof Value) {
 				refers.add(((Value) value).getImmutableValue(visited));
 			} else {
