@@ -90,8 +90,6 @@ public class TopValueCollection extends ValueCollection {
 		}
 	}
 
-	private final ITypeInferenceContext context;
-
 	public boolean isScope() {
 		return true;
 	}
@@ -101,7 +99,6 @@ public class TopValueCollection extends ValueCollection {
 	 */
 	public TopValueCollection(final ITypeInferenceContext context) {
 		super(null, new TopValue(context));
-		this.context = context;
 		this.thisValue = new TopValueThis(this);
 
 		IValueCollection topValueCollection = context.getTopValueCollection();
@@ -109,11 +106,6 @@ public class TopValueCollection extends ValueCollection {
 			getValue().addValue(
 					((IValueProvider) topValueCollection).getValue());
 		}
-	}
-
-	@Override
-	public ITypeInferenceContext getContext() {
-		return context;
 	}
 
 	private final TopValueThis thisValue;
