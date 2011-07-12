@@ -30,7 +30,7 @@ public class FlowStatus {
 		}
 	}
 
-	public boolean isTerminatd() {
+	public boolean isTerminated() {
 		return isBreak || isReturned();
 	}
 

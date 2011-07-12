@@ -83,7 +83,7 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		int startRange = Integer.MAX_VALUE;
 		int endRange = -1;
 		for (Statement statement : node.getStatements()) {
-			if (status.isTerminatd()) {
+			if (status.isTerminated()) {
 				if (startRange > statement.sourceStart())
 					startRange = statement.sourceStart();
 				if (endRange < statement.sourceEnd())
@@ -185,7 +185,10 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		for (CatchClause catchClause : node.getCatches()) {
 			final Statement catchStatement = catchClause.getStatement();
 			if (catchStatement != null) {
-				visit(catchStatement);
+				final FlowStatus c = visit(catchStatement);
+				if (!c.isReturned()) {
+					status.add(c);
+				}
 			}
 		}
 		if (node.getFinally() != null) {
