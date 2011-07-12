@@ -409,6 +409,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		public void reportTypeRef(Type type) {
+			if (!processed.add(type.getName())) {
+				return;
+			}
 			CompletionProposal proposal = CompletionProposal.create(
 					CompletionProposal.TYPE_REF, position);
 			int relevance = computeBaseRelevance();
