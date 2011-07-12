@@ -13,8 +13,6 @@ package org.eclipse.dltk.javascript.typeinference;
 
 import java.util.Set;
 
-import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
-
 public interface IValueParent {
 
 	Set<String> getDirectChildren();
@@ -31,13 +29,5 @@ public interface IValueParent {
 	 *         such name
 	 */
 	IValueReference getChild(String name);
-
-	/**
-	 * TODO delete sometime
-	 * 
-	 * @return
-	 */
-	@Deprecated
-	ITypeInferenceContext getContext();
 
 }

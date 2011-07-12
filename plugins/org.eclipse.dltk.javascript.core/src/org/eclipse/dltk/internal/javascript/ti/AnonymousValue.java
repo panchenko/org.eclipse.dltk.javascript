@@ -48,10 +48,6 @@ public class AnonymousValue extends AbstractReference {
 		return "";
 	}
 
-	public ITypeInferenceContext getContext() {
-		return null;
-	}
-
 	public IValueReference getParent() {
 		return null;
 	}

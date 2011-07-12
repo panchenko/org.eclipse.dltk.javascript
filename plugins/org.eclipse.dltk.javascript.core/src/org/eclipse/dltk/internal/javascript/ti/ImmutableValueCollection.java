@@ -44,8 +44,7 @@ public class ImmutableValueCollection implements IValueCollection,
 		}
 		readOnlyCol.init(collection.isScope(), reference,
 				getImmutableValueCollection(collection.getParent(), visited),
-				value,
-				thisValue, returnValue);
+				value, thisValue, returnValue);
 		return readOnlyCol;
 	}
 
@@ -59,9 +58,8 @@ public class ImmutableValueCollection implements IValueCollection,
 	public ImmutableValueCollection() {
 	}
 
-	public void init(boolean scope, boolean reference,
-			IValueCollection parent, IValue value, IValue thisValue,
-			IValue returnValue) {
+	public void init(boolean scope, boolean reference, IValueCollection parent,
+			IValue value, IValue thisValue, IValue returnValue) {
 		this.scope = scope;
 		this.reference = reference;
 		this.parent = parent;
@@ -98,10 +96,6 @@ public class ImmutableValueCollection implements IValueCollection,
 
 	public IValueReference getChild(String name) {
 		return new ChildReference(this, name);
-	}
-
-	public ITypeInferenceContext getContext() {
-		return null;
 	}
 
 	public boolean isScope() {
@@ -151,10 +145,6 @@ public class ImmutableValueCollection implements IValueCollection,
 
 		public String getName() {
 			return "";
-		}
-
-		public ITypeInferenceContext getContext() {
-			return null;
 		}
 
 		public IValueReference getParent() {

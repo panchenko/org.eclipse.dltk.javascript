@@ -74,10 +74,6 @@ public class ChildReference extends AbstractReference {
 		}
 	}
 
-	public ITypeInferenceContext getContext() {
-		return parent.getContext();
-	}
-
 	public IValueReference getParent() {
 		if (parent instanceof IValueReference) {
 			return (IValueReference) parent;

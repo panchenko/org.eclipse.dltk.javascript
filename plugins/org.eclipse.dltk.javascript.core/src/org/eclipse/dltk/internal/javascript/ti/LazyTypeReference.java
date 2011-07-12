@@ -162,10 +162,6 @@ public class LazyTypeReference extends AbstractReference {
 	public void delete() {
 	}
 
-	public ITypeInferenceContext getContext() {
-		return context;
-	}
-
 	public boolean isReference() {
 		return true;
 	}

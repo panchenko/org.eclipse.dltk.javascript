@@ -8,8 +8,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 public class XMLListValue extends AbstractReference {
 
 	private final Value value = new Value() {
-		public IValue getChild(String name, boolean resolve) 
-		{
+		public IValue getChild(String name, boolean resolve) {
 			IValue value = super.getChild(name, resolve);
 			if (value == null) {
 				// if the value is not found (not a know existing child) then
@@ -39,10 +38,6 @@ public class XMLListValue extends AbstractReference {
 	}
 
 	public void delete() {
-	}
-
-	public ITypeInferenceContext getContext() {
-		return parent.getContext();
 	}
 
 	public boolean isReference() {

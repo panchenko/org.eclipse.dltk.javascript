@@ -14,7 +14,6 @@ package org.eclipse.dltk.javascript.typeinference;
 import java.util.Collections;
 import java.util.Set;
 
-import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.IValue;
 import org.eclipse.dltk.internal.javascript.ti.IValueProvider;
 import org.eclipse.dltk.internal.javascript.ti.PhantomValue;
@@ -39,10 +38,6 @@ public enum PhantomValueReference implements IValueReference, IValueProvider {
 
 	public IValueReference getChild(String name) {
 		return this;
-	}
-
-	public ITypeInferenceContext getContext() {
-		return null;
 	}
 
 	public IValueReference getParent() {

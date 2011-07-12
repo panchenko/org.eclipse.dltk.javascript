@@ -113,8 +113,4 @@ public abstract class ValueCollection implements IValueCollection,
 		return getClass().getSimpleName();
 	}
 
-	public ITypeInferenceContext getContext() {
-		return parent != null ? parent.getContext() : null;
-	}
-
 }

@@ -33,8 +33,4 @@ public class TopValueThis extends AnonymousValue {
 		return owner.getChild(name);
 	}
 
-	public ITypeInferenceContext getContext() {
-		return owner.getContext();
-	}
-
 }

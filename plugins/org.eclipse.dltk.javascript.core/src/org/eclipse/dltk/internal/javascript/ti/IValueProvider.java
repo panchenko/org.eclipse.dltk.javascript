@@ -23,6 +23,4 @@ public interface IValueProvider {
 
 	IValueParent getParent();
 
-	ITypeInferenceContext getContext();
-
 }
