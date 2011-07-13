@@ -863,8 +863,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testVariableAssignedObjectInitializerFunctionWithThis() {
-		if (notYetImplemented())
-			return;
+		// if (notYetImplemented())
+		// return;
+		// doesn't report problem now, as this is untyped, so no checks
 		StringList code = new StringList();
 		code.add("var object = {");
 		code.add("a: function c() {this.b();},");
@@ -1504,7 +1505,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testParamWithOptinalObjectDeclarationCall() {
 		StringList code = new StringList();
 		code.add("/** @param {{astring:String, [anumber]:Number}} myparam */");
@@ -1776,8 +1777,5 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
-	 
-	 
 
 }
