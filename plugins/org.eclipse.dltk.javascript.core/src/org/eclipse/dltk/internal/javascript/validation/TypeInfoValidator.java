@@ -80,6 +80,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
@@ -601,6 +602,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return super.visitThrowStatement(node);
 		}
 
+		private final JSType functionTypeRef = JSTypeSet
+				.ref(TypeInfoModelLoader.getInstance().getType(
+						ITypeNames.FUNCTION));
+
 		@Override
 		public IValueReference visitCallExpression(CallExpression node) {
 			final ASTNode expression = node.getExpression();
@@ -614,6 +619,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 						|| reference.getAttribute(IReferenceAttributes.PHANTOM,
 								true) != null || isUntyped(reference))
 					return null;
+				if (reference.getKind() == ReferenceKind.ARGUMENT) {
+					if (reference.getDeclaredTypes().contains(functionTypeRef)) {
+						// don't validate function pointer
+						return null;
+					}
+				}
 				final List<ASTNode> callArgs = node.getArguments();
 				IValueReference[] arguments = new IValueReference[callArgs
 						.size()];
