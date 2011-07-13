@@ -100,4 +100,9 @@ public enum PhantomValue implements IValue {
 	public void deleteChild(String name) {
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
+
 }

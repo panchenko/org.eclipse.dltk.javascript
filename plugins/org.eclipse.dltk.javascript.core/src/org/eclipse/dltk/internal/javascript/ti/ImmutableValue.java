@@ -30,6 +30,10 @@ public class ImmutableValue implements IValue, IValue2 {
 		void process(ImmutableValue value, R result);
 	}
 
+	protected static interface Handler2<R> extends Handler<R> {
+		void processOther(IValue value, R result);
+	}
+
 	public ImmutableValue() {
 		super();
 		types = JSTypeSet.create();
@@ -71,6 +75,9 @@ public class ImmutableValue implements IValue, IValue2 {
 			for (IValue child : value.references) {
 				if (child instanceof ImmutableValue)
 					execute((ImmutableValue) child, handler, result, visited);
+				else if (handler instanceof Handler2) {
+					((Handler2<R>) handler).processOther(child, result);
+				}
 			}
 		}
 	}
@@ -175,7 +182,7 @@ public class ImmutableValue implements IValue, IValue2 {
 		return null;
 	}
 
-	protected static class GetChildHandler implements Handler<Set<IValue>> {
+	protected static class GetChildHandler implements Handler2<Set<IValue>> {
 
 		private final String childName;
 
@@ -205,6 +212,12 @@ public class ImmutableValue implements IValue, IValue2 {
 						result.add(member);
 					}
 				}
+			}
+		}
+
+		public void processOther(IValue value, Set<IValue> result) {
+			if (value == PhantomValue.VALUE) {
+				result.add(value);
 			}
 		}
 	}

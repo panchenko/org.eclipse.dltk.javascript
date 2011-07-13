@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.typeinference;
 import java.util.Collections;
 import java.util.Set;
 
+import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.IValue;
 import org.eclipse.dltk.internal.javascript.ti.IValueProvider;
 import org.eclipse.dltk.internal.javascript.ti.PhantomValue;
@@ -90,10 +91,13 @@ public enum PhantomValueReference implements IValueReference, IValueProvider {
 	}
 
 	public Object getAttribute(String key, boolean includeReferences) {
-		return null;
+		return getAttribute(key);
 	}
 
 	public Object getAttribute(String key) {
+		if (key == IReferenceAttributes.PHANTOM) {
+			return Boolean.TRUE;
+		}
 		return null;
 	}
 
@@ -118,6 +122,11 @@ public enum PhantomValueReference implements IValueReference, IValueProvider {
 
 	public IValue createValue() {
 		return getValue();
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
 	}
 
 }
