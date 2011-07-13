@@ -612,7 +612,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				modes.remove(expression);
 				if (reference == null
 						|| reference.getAttribute(IReferenceAttributes.PHANTOM,
-								true) != null)
+								true) != null || isUntyped(reference))
 					return null;
 				final List<ASTNode> callArgs = node.getArguments();
 				IValueReference[] arguments = new IValueReference[callArgs
@@ -904,6 +904,22 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private boolean isUntypedParameter(IValueReference reference) {
 			return reference.getKind() == ReferenceKind.ARGUMENT
 					&& reference.getDeclaredType() == null;
+		}
+
+		public boolean isUntyped(IValueReference reference) {
+			while (reference != null) {
+				final ReferenceKind kind = reference.getKind();
+				if (kind == ReferenceKind.ARGUMENT
+						&& reference.getDeclaredType() == null) {
+					return true;
+				} else if (kind == ReferenceKind.THIS
+						&& reference.getDeclaredType() == null
+						&& reference.getDirectChildren().isEmpty()) {
+					return true;
+				}
+				reference = reference.getParent();
+			}
+			return false;
 		}
 
 		private boolean isThisCall(Expression expression) {

@@ -62,6 +62,11 @@ public class FunctionValueCollection extends ValueCollection {
 		public boolean isReference() {
 			return true;
 		}
+
+		@Override
+		public ReferenceKind getKind() {
+			return ReferenceKind.THIS;
+		}
 	}
 
 	private final IValueReference thisValue;
