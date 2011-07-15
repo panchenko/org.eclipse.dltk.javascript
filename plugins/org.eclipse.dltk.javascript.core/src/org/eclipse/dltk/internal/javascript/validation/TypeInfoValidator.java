@@ -39,6 +39,7 @@ import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
@@ -54,6 +55,7 @@ import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
@@ -1971,6 +1973,24 @@ public class TypeInfoValidator implements IBuildParticipant {
 					NLS.bind(ValidationMessages.UnknownType, name),
 					node.sourceStart(), node.sourceEnd());
 		}
+
+		@Override
+		public IValueReference visitIfStatement(IfStatement node) {
+			final IValueReference condition = visit(node.getCondition());
+			if (condition != null && !condition.exists()
+					&& node.getCondition() instanceof PropertyExpression) {
+				if (DEBUG) {
+					System.out.println("visitIfStatement("
+							+ node.getCondition() + ") doesn't exist "
+							+ condition + " - create it");
+				}
+				condition.setValue(PhantomValueReference.REFERENCE);
+			}
+			visitIfStatements(node);
+			return null;
+		}
 	}
+
+	static final boolean DEBUG = false;
 
 }

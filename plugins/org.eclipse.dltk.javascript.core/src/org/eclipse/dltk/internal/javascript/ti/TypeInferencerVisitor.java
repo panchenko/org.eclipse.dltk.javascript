@@ -698,6 +698,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitIfStatement(IfStatement node) {
 		visit(node.getCondition());
+		visitIfStatements(node);
+		return null;
+	}
+
+	protected void visitIfStatements(IfStatement node) {
 		final List<Statement> statements = new ArrayList<Statement>(2);
 		Statement onlyBranch = null;
 		final Boolean condition = evaluateCondition(node.getCondition());
@@ -740,7 +745,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				branching.end();
 			}
 		}
-		return null;
 	}
 
 	@Override
