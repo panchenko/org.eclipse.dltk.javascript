@@ -68,6 +68,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSType2;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
@@ -922,9 +923,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public boolean isUntyped(IValueReference reference) {
 			while (reference != null) {
 				final ReferenceKind kind = reference.getKind();
-				if (kind == ReferenceKind.ARGUMENT
-						&& reference.getDeclaredType() == null) {
-					return true;
+				if (kind == ReferenceKind.ARGUMENT) {
+					final JSType type = reference.getDeclaredType();
+					if (type == null || type instanceof AnyType) {
+						return true;
+					}
 				} else if (kind == ReferenceKind.THIS
 						&& reference.getDeclaredType() == null
 						&& reference.getDirectChildren().isEmpty()) {
