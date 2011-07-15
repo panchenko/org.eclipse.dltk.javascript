@@ -1127,7 +1127,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("* @param {Object} anchor");
 		code.add("*/");
 		code.add("function test(anchor) {");
-		code.add("if(anchorr.xxx){}");
+		code.add("  var x = anchorr.xxx");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
@@ -1141,7 +1141,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("* @param {Object} anchor");
 		code.add("*/");
 		code.add("function test(anchor) {");
-		code.add("if(anchor.xxx.yyy){}");
+		code.add("  var x = anchor.xxx.yyy");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
