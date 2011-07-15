@@ -1424,15 +1424,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 			try {
 				final IValueReference result = super
 						.visitPropertyExpression(node);
-				if (result != null) {
-					if (currentMode() != VisitorMode.CALL) {
-						pushExpressionValidator(new PropertyExpressionHolder(
-								node, result, this, result.exists()));
-					}
+				if (result == null
+						|| result.getAttribute(IReferenceAttributes.PHANTOM,
+								true) != null || isUntyped(result)) {
 					return result;
-				} else {
-					return null;
 				}
+				if (currentMode() != VisitorMode.CALL) {
+					pushExpressionValidator(new PropertyExpressionHolder(node,
+							result, this, result.exists()));
+				}
+				return result;
 			} finally {
 				if (started)
 					stopExpressionValidator();
