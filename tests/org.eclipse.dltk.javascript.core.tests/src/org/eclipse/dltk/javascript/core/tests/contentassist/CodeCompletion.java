@@ -486,6 +486,13 @@ public class CodeCompletion extends AbstractCompletionTest {
 		basicTest(module, position, names);
 	}
 
+	public void testFunctionRefsAndKinds() {
+		String[] names = new String[] { "test1()", "test2()", "test3()" };
+		IModuleSource module = createModule("test-function-refs.js");
+		int position = lastPositionInFile("a = test", module);
+		testWithKinds(module, position, names);
+	}
+
 	public void testArrayInitializer() {
 		IModuleSource module = createModule("test-array-intializer.js");
 		int position = lastPositionInFile("].", module);

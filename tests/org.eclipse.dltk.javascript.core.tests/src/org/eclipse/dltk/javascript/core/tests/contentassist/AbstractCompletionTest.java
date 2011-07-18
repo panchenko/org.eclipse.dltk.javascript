@@ -74,10 +74,16 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	}
 
 	private static StringList exractProposalNames(
-			List<CompletionProposal> proposals) {
+			List<CompletionProposal> proposals, boolean withKinds) {
 		final StringList list = new StringList(proposals.size());
 		for (int i = 0, size = proposals.size(); i < size; ++i) {
-			list.add(proposals.get(i).getName());
+			final CompletionProposal proposal = proposals.get(i);
+			String name = proposal.getName();
+			if (withKinds
+					&& proposal.getKind() == CompletionProposal.METHOD_REF) {
+				name += "()";
+			}
+			list.add(name);
 		}
 		return list;
 	}
@@ -89,7 +95,18 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		c.complete(module, position, 0);
 		if (!compareProposalNames(results, compNames)) {
 			assertEquals(new StringList(compNames).sort().toString(),
-					exractProposalNames(results).sort().toString());
+					exractProposalNames(results, false).sort().toString());
+		}
+	}
+
+	protected void testWithKinds(IModuleSource module, int position,
+			String[] compNames) {
+		List<CompletionProposal> results = new ArrayList<CompletionProposal>();
+		ICompletionEngine c = createEngine(results, false);
+		c.complete(module, position, 0);
+		if (!compareProposalNames(results, compNames)) {
+			assertEquals(new StringList(compNames).sort().toString(),
+					exractProposalNames(results, true).sort().toString());
 		}
 	}
 
