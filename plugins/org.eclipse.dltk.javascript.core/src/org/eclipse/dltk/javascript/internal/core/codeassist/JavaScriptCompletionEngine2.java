@@ -363,7 +363,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		private void reportReference(IValueReference reference) {
 			int proposalKind = CompletionProposal.FIELD_REF;
 			final ReferenceKind kind = reference.getKind();
-			if (reference.getAttribute(IReferenceAttributes.PHANTOM, true) != null
+			if (reference.getAttribute(IReferenceAttributes.PHANTOM, true) == null
 					&& (kind == ReferenceKind.FUNCTION || reference
 							.hasChild(IValueReference.FUNCTION_OP))) {
 				proposalKind = CompletionProposal.METHOD_REF;
