@@ -1778,4 +1778,69 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testRecordTypeReturn() throws Exception {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add("* @return {{propertyName: String, dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}}");
+		code.add("*/");
+		code.add("function getRegisteredPropertyInfos()");
+		code.add("{");
+		code.add("/** @type {{propertyName: String, dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}} */");
+		code.add("var _propInfos = [];");
+		code.add("return _propInfos;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testRightReturnArrayWithRecordTypeObjects() throws Exception {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add("* @return {Array<{propertyName: String, dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}>}");
+		code.add("*/");
+		code.add("function getRegisteredPropertyInfos()");
+		code.add("{");
+		code.add("/** @type {Array<{propertyName: String, dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}>} */");
+		code.add("var _propInfos = [];");
+		code.add("return _propInfos;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testWrong1ReturnArrayWithRecordTypeObjects() throws Exception {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add("* @return {Array<{propertyName: String, dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}>}");
+		code.add("*/");
+		code.add("function getRegisteredPropertyInfos()");
+		code.add("{");
+		code.add("/** @type {Array<{propertyName: Integer, dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}>} */");
+		code.add("var _propInfos = [];");
+		code.add("return _propInfos;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
+			.getID());
+
+	}
+
+	public void testWrong2ReturnArrayWithRecordTypeObjects() throws Exception {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add("* @return {Array<{propertyName: String, dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}>}");
+		code.add("*/");
+		code.add("function getRegisteredPropertyInfos()");
+		code.add("{");
+		code.add("/** @type {Array<{dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}>} */");
+		code.add("var _propInfos = [];");
+		code.add("return _propInfos;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
+			.getID());
+	}
+
 }
