@@ -685,7 +685,34 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		}
 
 		public boolean isAssignableFrom(JSType2 type) {
-			// TODO Auto-generated method stub
+			if (type instanceof RecordTypeKey) {
+				EList<Member> members = target.getMembers();
+				EList<Member> members2 = ((RecordTypeKey) type).getTarget()
+						.getMembers();
+				if (members.size() == members2.size()) {
+					outer:for (Member member : members) {
+						for (Member member2 : members2) {
+							if (member.getName().equals(member2.getName())) {
+								if (member.getType() == null
+										&& member2.getType() == null)
+									continue outer;
+								if (member.getType() != null
+										&& member2.getType() != null
+										&& member
+												.getType()
+												.getName()
+												.equals(member2.getType()
+														.getName())) {
+									continue outer;
+								}
+								return false;
+							}
+						}
+						return false;
+					}
+					return true;
+				}
+			}
 			return false;
 		}
 
