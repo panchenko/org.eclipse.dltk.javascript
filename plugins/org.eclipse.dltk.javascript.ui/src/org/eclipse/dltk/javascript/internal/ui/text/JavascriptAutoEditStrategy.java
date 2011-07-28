@@ -495,6 +495,7 @@ public class JavascriptAutoEditStrategy extends
 											a = aPlus1 + 1;
 											break;
 										}
+										aPlus1--;
 									}
 								} else if (c == '>') {
 									// search for close tag.
