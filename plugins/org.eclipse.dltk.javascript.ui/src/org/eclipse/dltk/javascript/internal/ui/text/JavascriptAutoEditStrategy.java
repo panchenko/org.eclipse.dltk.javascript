@@ -478,10 +478,40 @@ public class JavascriptAutoEditStrategy extends
 						sb.append(c);
 						aPlus1++;
 					} else if ((c == '>' || c == ' ') && sb.length() > 2) {
-						// search for close tag.
-						int index = sm.indexOf(sb.toString(), aPlus1);
-						if (index != -1) {
-							a = index + sb.length();
+						if (c == '>') {
+							// search for close tag.
+							int index = sm.substring(aPlus1, end).indexOf(
+									sb.toString());
+							if (index != -1) {
+								a = aPlus1 + index + sb.length();
+							}
+						} else {
+							while (++aPlus1 < end) {
+								c = sm.charAt(aPlus1);
+								if (c == '/') {
+									if (++aPlus1 < end) {
+										c = sm.charAt(aPlus1);
+										if (c == '>') {
+											a = aPlus1 + 1;
+											break;
+										}
+									}
+								} else if (c == '>') {
+									// search for close tag.
+									int index = sm.substring(aPlus1, end)
+											.indexOf(sb.toString());
+									if (index != -1) {
+										a = aPlus1 + index + sb.length();
+									}
+									break;
+								} else if (c == '"' || c == '\'') {
+									int index = sm.substring(aPlus1 + 1, end)
+											.indexOf(c);
+									if (index != -1) {
+										aPlus1 = aPlus1 + index;
+									}
+								}
+							}
 						}
 						break;
 					} else {
