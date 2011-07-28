@@ -1135,7 +1135,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							break;
 						}
 					} else
-						xml.append("\"\"");
+						xml.append("\"\" ");
 				}
 			}
 
