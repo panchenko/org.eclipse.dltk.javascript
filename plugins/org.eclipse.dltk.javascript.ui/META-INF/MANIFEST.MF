@@ -27,7 +27,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ltk.ui.refactoring,
  org.eclipse.dltk.core.manipulation,
  org.eclipse.dltk.javascript.core.manipulation
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.dltk.javascript.internal.ui,
  org.eclipse.dltk.javascript.internal.ui.editor,
  org.eclipse.dltk.javascript.internal.ui.text,
