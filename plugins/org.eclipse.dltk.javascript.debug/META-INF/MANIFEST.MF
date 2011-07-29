@@ -13,5 +13,5 @@ Require-Bundle: org.eclipse.dltk.debug,
  org.eclipse.jdt.debug.ui
 Bundle-Activator: org.eclipse.dltk.javascript.internal.debug.JavaScriptDebugPlugin
 Export-Package: org.eclipse.dltk.javascript.internal.debug
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
