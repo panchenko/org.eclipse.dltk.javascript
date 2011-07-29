@@ -6,7 +6,7 @@ Bundle-Version: 3.0.0.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.variables
-Eclipse-LazyStart: false
+Bundle-ActivationPolicy: lazy
 Export-Package: org.mozilla.classfile,
  org.mozilla.javascript,
  org.mozilla.javascript.continuations,
