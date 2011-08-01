@@ -14,7 +14,9 @@ package org.eclipse.dltk.javascript.typeinfo;
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.utils.ConfigurationElement;
 
+@ConfigurationElement("resolver")
 public interface IElementResolver {
 	Member resolveElement(ITypeInfoContext context, String name);
 

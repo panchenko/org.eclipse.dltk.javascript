@@ -19,6 +19,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.utils.ConfigurationElement;
 import org.eclipse.dltk.utils.LazyExtensionManager;
 import org.eclipse.dltk.utils.LazyExtensionManager.Descriptor;
 import org.eclipse.dltk.utils.SimpleExtensionManager;
@@ -36,12 +37,7 @@ public class TypeInfoManager {
 	private static final String MODEL_ELEMENT = "model";
 	private static final String RESOURCE_ATTR = "resource";
 	private static final String URI_ATTR = "uri";
-	private static final String BUILDER_ELEMENT = "builder";
 	private static final String PROVIDER_ELEMENT = "provider";
-	private static final String RESOLVER_ELEMENT = "resolver";
-	private static final String CONVERTER_ELEMENT = "converter";
-	private static final String EVALUATOR_ELEMENT = "evaluator";
-	private static final String NODE_HANDLER_ELEMENT = "nodeHandler";
 
 	private static String trim(String str) {
 		if (str != null) {
@@ -63,17 +59,33 @@ public class TypeInfoManager {
 				EXT_POINT);
 	}
 
-	private static final SimpleExtensionManager<IModelBuilder> modelBuilderManager = new SimpleExtensionManager<IModelBuilder>(
-			IModelBuilder.class, EXT_POINT) {
+	private static class ExtManager<E> extends SimpleExtensionManager<E> {
+
+		private final String elementName;
+
+		ExtManager(Class<E> elementType) {
+			super(elementType, EXT_POINT);
+			this.elementName = elementType.getAnnotation(
+					ConfigurationElement.class).value();
+		}
+
 		@Override
-		protected IModelBuilder createInstance(IConfigurationElement element) {
-			if (BUILDER_ELEMENT.equals(element.getName())) {
+		protected E createInstance(IConfigurationElement element) {
+			if (elementName.equals(element.getName())) {
 				return super.createInstance(element);
 			} else {
 				return null;
 			}
 		}
-	};
+
+	}
+
+	public static <E> SimpleExtensionManager<E> createManager(
+			Class<E> elementType) {
+		return new ExtManager<E>(elementType);
+	}
+
+	private static final SimpleExtensionManager<IModelBuilder> modelBuilderManager = createManager(IModelBuilder.class);
 
 	private static final LazyExtensionManager<ITypeProvider> providerManager = new LazyExtensionManager<ITypeProvider>(
 			EXT_POINT) {
@@ -102,54 +114,13 @@ public class TypeInfoManager {
 		}
 	};
 
-	private static final SimpleExtensionManager<IElementResolver> resolverManager = new SimpleExtensionManager<IElementResolver>(
-			IElementResolver.class, EXT_POINT) {
-		@Override
-		protected IElementResolver createInstance(IConfigurationElement element) {
-			if (RESOLVER_ELEMENT.equals(element.getName())) {
-				return super.createInstance(element);
-			} else {
-				return null;
-			}
-		}
-	};
+	private static final SimpleExtensionManager<IElementResolver> resolverManager = createManager(IElementResolver.class);
 
-	private static final SimpleExtensionManager<IElementConverter> converterManager = new SimpleExtensionManager<IElementConverter>(
-			IElementConverter.class, EXT_POINT) {
-		@Override
-		protected IElementConverter createInstance(IConfigurationElement element) {
-			if (CONVERTER_ELEMENT.equals(element.getName())) {
-				return super.createInstance(element);
-			} else {
-				return null;
-			}
-		}
-	};
+	private static final SimpleExtensionManager<IElementConverter> converterManager = createManager(IElementConverter.class);
 
-	private static final SimpleExtensionManager<IMemberEvaluator> evaluatorManager = new SimpleExtensionManager<IMemberEvaluator>(
-			IMemberEvaluator.class, EXT_POINT) {
-		@Override
-		protected IMemberEvaluator createInstance(IConfigurationElement element) {
-			if (EVALUATOR_ELEMENT.equals(element.getName())) {
-				return super.createInstance(element);
-			} else {
-				return null;
-			}
-		}
-	};
+	private static final SimpleExtensionManager<IMemberEvaluator> evaluatorManager = createManager(IMemberEvaluator.class);
 
-	private static final SimpleExtensionManager<ITypeInferenceHandlerFactory> nodeHandlerManager = new SimpleExtensionManager<ITypeInferenceHandlerFactory>(
-			ITypeInferenceHandlerFactory.class, EXT_POINT) {
-		@Override
-		protected ITypeInferenceHandlerFactory createInstance(
-				IConfigurationElement element) {
-			if (NODE_HANDLER_ELEMENT.equals(element.getName())) {
-				return super.createInstance(element);
-			} else {
-				return null;
-			}
-		}
-	};
+	private static final SimpleExtensionManager<ITypeInferenceHandlerFactory> nodeHandlerManager = createManager(ITypeInferenceHandlerFactory.class);
 
 	static class ModelBuilderRec {
 		IModelBuilder builder;

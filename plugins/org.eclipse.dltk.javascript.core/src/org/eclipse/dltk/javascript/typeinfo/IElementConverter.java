@@ -14,7 +14,9 @@ package org.eclipse.dltk.javascript.typeinfo;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.utils.ConfigurationElement;
 
+@ConfigurationElement("converter")
 public interface IElementConverter {
 
 	IModelElement convert(ISourceModule module, Element element);

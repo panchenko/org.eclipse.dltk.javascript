@@ -21,7 +21,9 @@ import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.utils.ConfigurationElement;
 
+@ConfigurationElement("builder")
 public interface IModelBuilder {
 
 	public interface IElement {

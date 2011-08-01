@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.utils.ConfigurationElement;
+
+@ConfigurationElement("nodeHandler")
 public interface ITypeInferenceHandlerFactory {
 
 	ITypeInferenceHandler create(ITypeInfoContext context,
