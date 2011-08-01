@@ -690,7 +690,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 				EList<Member> members2 = ((RecordTypeKey) type).getTarget()
 						.getMembers();
 				if (members.size() == members2.size()) {
-					outer:for (Member member : members) {
+					outer: for (Member member : members) {
 						for (Member member2 : members2) {
 							if (member.getName().equals(member2.getName())) {
 								if (member.getType() == null
@@ -928,6 +928,12 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 	}
 
 	public static JSType2 ref(Type type) {
+		for (IRTypeFactory factory : TypeInfoManager.getRTypeFactories()) {
+			final JSType2 runtimeType = factory.create(type);
+			if (runtimeType != null) {
+				return runtimeType;
+			}
+		}
 		return new TypeRefKey(type);
 	}
 

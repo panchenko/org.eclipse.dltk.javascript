@@ -122,6 +122,8 @@ public class TypeInfoManager {
 
 	private static final SimpleExtensionManager<ITypeInferenceHandlerFactory> nodeHandlerManager = createManager(ITypeInferenceHandlerFactory.class);
 
+	private static final SimpleExtensionManager<IRTypeFactory> typeFactoryManager = createManager(IRTypeFactory.class);
+
 	static class ModelBuilderRec {
 		IModelBuilder builder;
 		int priority;
@@ -200,6 +202,10 @@ public class TypeInfoManager {
 
 	public static ITypeInferenceHandlerFactory[] getNodeHandlerFactories() {
 		return nodeHandlerManager.getInstances();
+	}
+
+	public static IRTypeFactory[] getRTypeFactories() {
+		return typeFactoryManager.getInstances();
 	}
 
 	public static ResourceSet loadModelResources() {
