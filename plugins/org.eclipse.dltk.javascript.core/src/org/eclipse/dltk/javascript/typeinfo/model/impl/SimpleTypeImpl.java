@@ -11,17 +11,16 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-
 import org.eclipse.emf.common.notify.Notification;
-
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -106,27 +105,44 @@ public class SimpleTypeImpl extends EObjectImpl implements SimpleType {
             eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.SIMPLE_TYPE__TARGET, oldTarget, target));
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public TypeKind getKind() {
-        // TODO: implement this method
-        // Ensure that you remove @generated or mark it @generated NOT
-        throw new UnsupportedOperationException();
-    }
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+	public TypeKind getKind() {
+		return target != null && !target.isProxy() ? target.getKind()
+				: TypeKind.UNRESOLVED;
+	}
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public String getName() {
-        // TODO: implement this method
-        // Ensure that you remove @generated or mark it @generated NOT
-        throw new UnsupportedOperationException();
-    }
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+	public String getName() {
+		if (target != null) {
+			if (((EObject) target).eIsProxy()) {
+				final URI uri = ((InternalEObject) target).eProxyURI();
+				if (uri != null) {
+					return URI.decode(uri.fragment());
+				}
+			} else {
+				return target.getName();
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String toString() {
+		return target != null ? target.toString() : getClass().getSimpleName();
+	}
+
+	@Override
+	public EObject eResolveProxy(InternalEObject proxy) {
+		return TypeUtil.resolve(proxy, this);
+	}
 
     /**
      * <!-- begin-user-doc -->
