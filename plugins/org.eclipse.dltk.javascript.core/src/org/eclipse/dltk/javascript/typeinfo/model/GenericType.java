@@ -29,7 +29,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface GenericType extends TypeRef {
+public interface GenericType extends SimpleType {
     /**
      * Returns the value of the '<em><b>Type Parameters</b></em>' containment reference list.
      * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.JSType}.

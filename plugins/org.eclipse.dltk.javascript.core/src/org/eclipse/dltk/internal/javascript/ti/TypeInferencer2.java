@@ -56,7 +56,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.BasicEList;
@@ -151,7 +151,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				true);
 	}
 
-	public TypeRef getTypeRef(String typeName) {
+	public SimpleType getTypeRef(String typeName) {
 		return TypeUtil.ref(getType(typeName));
 	}
 
@@ -165,8 +165,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	}
 
 	private boolean isResolved(JSType type) {
-		if (type instanceof TypeRef) {
-			return !((TypeRef) type).getTarget().isProxy();
+		if (type instanceof SimpleType) {
+			return !((SimpleType) type).getTarget().isProxy();
 		} else if (type instanceof ClassType) {
 			final Type t = ((ClassType) type).getTarget();
 			return t == null || !t.isProxy();
@@ -223,8 +223,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	}
 
 	private JSType2 doResolveTypeRef(JSType type) {
-		if (type instanceof TypeRef) {
-			final TypeRef r = (TypeRef) type;
+		if (type instanceof SimpleType) {
+			final SimpleType r = (SimpleType) type;
 			return JSTypeSet.ref(doResolveType(r.getTarget()));
 		} else if (type instanceof ClassType) {
 			final ClassType c = (ClassType) type;
@@ -259,8 +259,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			// TODO (alex) make a copy of Type?
 			final Type target = ((RecordType) type).getTarget();
 			for (Member member : target.getMembers()) {
-				if (member.getType() instanceof TypeRef) {
-					final TypeRef ref = (TypeRef) member.getType();
+				if (member.getType() instanceof SimpleType) {
+					final SimpleType ref = (SimpleType) member.getType();
 					ref.setTarget(doResolveType(ref.getTarget()));
 				}
 			}
@@ -601,7 +601,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return null;
 		}
 
-		public TypeRef getTypeRef(String typeName) {
+		public SimpleType getTypeRef(String typeName) {
 			return TypeUtil.ref(getType(typeName));
 		}
 

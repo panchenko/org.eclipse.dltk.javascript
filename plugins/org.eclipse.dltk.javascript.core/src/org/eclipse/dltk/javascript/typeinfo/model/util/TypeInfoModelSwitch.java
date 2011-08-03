@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.14 2011/05/12 14:16:23 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.15 2011/08/03 08:48:03 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -195,9 +195,17 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case TypeInfoModelPackage.SIMPLE_TYPE: {
+                SimpleType simpleType = (SimpleType)theEObject;
+                T result = caseSimpleType(simpleType);
+                if (result == null) result = caseJSType(simpleType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             case TypeInfoModelPackage.TYPE_REF: {
                 TypeRef typeRef = (TypeRef)theEObject;
                 T result = caseTypeRef(typeRef);
+                if (result == null) result = caseSimpleType(typeRef);
                 if (result == null) result = caseJSType(typeRef);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
@@ -226,7 +234,7 @@ public class TypeInfoModelSwitch<T> {
             case TypeInfoModelPackage.GENERIC_TYPE: {
                 GenericType genericType = (GenericType)theEObject;
                 T result = caseGenericType(genericType);
-                if (result == null) result = caseTypeRef(genericType);
+                if (result == null) result = caseSimpleType(genericType);
                 if (result == null) result = caseJSType(genericType);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
@@ -320,6 +328,21 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseFunctionType(FunctionType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Simple Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Simple Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseSimpleType(SimpleType object) {
         return null;
     }
 

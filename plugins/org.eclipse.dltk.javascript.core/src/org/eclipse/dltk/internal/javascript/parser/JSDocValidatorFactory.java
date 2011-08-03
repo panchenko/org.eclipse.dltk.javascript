@@ -24,7 +24,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
@@ -78,7 +78,7 @@ public class JSDocValidatorFactory {
 				type = context.resolveTypeRef(type);
 				Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
 				if (type.getKind() == TypeKind.UNKNOWN) {
-					if (!(type instanceof TypeRef && collection != null && collection
+					if (!(type instanceof SimpleType && collection != null && collection
 							.getChild(type.getName()).exists())) {
 
 						// if it still is not found, test if it is a

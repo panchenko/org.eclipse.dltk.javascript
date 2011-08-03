@@ -85,7 +85,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
@@ -852,8 +852,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					} else {
 						JSType referenceType = JavaScriptValidations
 								.typeOf(reference);
-						if (referenceType instanceof TypeRef) {
-							Type t = ((TypeRef) referenceType).getTarget();
+						if (referenceType instanceof SimpleType) {
+							Type t = ((SimpleType) referenceType).getTarget();
 							while (t != null) {
 								if (t.getName().equals(ITypeNames.FUNCTION)) {
 									return;
@@ -1909,8 +1909,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 				type = context.resolveTypeRef(type);
 				Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
 				if (type.getKind() == TypeKind.UNKNOWN) {
-					if (!(type instanceof TypeRef && collection != null && collection
-							.getChild(((TypeRef) type).getName()).exists())) {
+					if (!(type instanceof SimpleType && collection != null && collection
+							.getChild(((SimpleType) type).getName()).exists())) {
 						reportUnknownType(node, TypeUtil.getName(type));
 					}
 				} else if (type instanceof ArrayType) {

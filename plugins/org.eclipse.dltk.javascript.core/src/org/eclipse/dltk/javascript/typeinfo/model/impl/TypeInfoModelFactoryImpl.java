@@ -9,25 +9,34 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.15 2011/05/17 14:58:27 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.16 2011/08/03 08:48:03 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Map;
 
-import org.eclipse.dltk.javascript.typeinfo.model.*;
+import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeAlias;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -87,6 +96,7 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.PROPERTY: return (EObject)createProperty();
             case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
             case TypeInfoModelPackage.FUNCTION_TYPE: return (EObject)createFunctionType();
+            case TypeInfoModelPackage.SIMPLE_TYPE: return (EObject)createSimpleType();
             case TypeInfoModelPackage.TYPE_REF: return (EObject)createTypeRef();
             case TypeInfoModelPackage.ARRAY_TYPE: return (EObject)createArrayType();
             case TypeInfoModelPackage.ANY_TYPE: return (EObject)createAnyType();
@@ -224,6 +234,17 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    public SimpleType createSimpleType() {
+        SimpleTypeImpl simpleType = new SimpleTypeImpl();
+        return simpleType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+	@Deprecated
     public TypeRef createTypeRef() {
         TypeRefImpl typeRef = new TypeRefImpl();
         return typeRef;

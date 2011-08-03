@@ -28,10 +28,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl;
@@ -40,7 +40,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.FunctionTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.RecordTypeImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl;
+import org.eclipse.dltk.javascript.typeinfo.model.impl.SimpleTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.UndefinedTypeImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl;
 import org.eclipse.emf.common.util.BasicEList;
@@ -192,8 +192,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		@Override
 		public Type[] toArray() {
-			if (type instanceof TypeRef) {
-				return new Type[] { ((TypeRef) type).getTarget() };
+			if (type instanceof SimpleType) {
+				return new Type[] { ((SimpleType) type).getTarget() };
 			} else if (type instanceof ClassType) {
 				return new Type[] { ((ClassType) type).getTarget() };
 			} else if (type instanceof AnyType) {
@@ -231,8 +231,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 		@Override
 		public boolean contains(Type type) {
-			return this.type instanceof TypeRef
-					&& ((TypeRef) this.type).getTarget().equals(type);
+			return this.type instanceof SimpleType
+					&& ((SimpleType) this.type).getTarget().equals(type);
 		}
 
 		@Override
@@ -256,7 +256,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		return new JSSingletonTypeSet(type);
 	}
 
-	private static class TypeRefKey implements TypeRef, JSType2 {
+	private static class TypeRefKey implements SimpleType, JSType2 {
 
 		private final Type type;
 
@@ -312,8 +312,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 				return true;
 			} else if (ITypeNames.OBJECT.equals(getName())) {
 				return true;
-			} else if (type instanceof TypeRef) {
-				final Type other = ((TypeRef) type).getTarget();
+			} else if (type instanceof SimpleType) {
+				final Type other = ((SimpleType) type).getTarget();
 				final String localName = TypeUtil.getName(this.type);
 				Type t = other;
 				while (t != null) {
@@ -772,7 +772,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		}
 
 		public Type getDirectType() {
-			return type instanceof TypeRef ? ((TypeRef) type).getTarget()
+			return type instanceof SimpleType ? ((SimpleType) type).getTarget()
 					: null;
 		}
 
@@ -885,8 +885,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 	}
 
 	public static JSType2 normalize(JSType type) {
-		if (type instanceof TypeRefImpl) {
-			final TypeRef ref = (TypeRef) type;
+		if (type instanceof SimpleTypeImpl) {
+			final SimpleType ref = (SimpleType) type;
 			return ref(ref.getTarget());
 		} else if (type instanceof ClassTypeImpl) {
 			return classType(((ClassType) type).getTarget());
@@ -1007,8 +1007,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		public Type[] toArray() {
 			final LinkedHashSet<Type> result = new LinkedHashSet<Type>();
 			for (JSType type : types) {
-				if (type instanceof TypeRef) {
-					result.add(((TypeRef) type).getTarget());
+				if (type instanceof SimpleType) {
+					result.add(((SimpleType) type).getTarget());
 				} else if (type instanceof AnyType) {
 					result.add(TypeInfoModelLoader.getInstance().getType(
 							ITypeNames.OBJECT));

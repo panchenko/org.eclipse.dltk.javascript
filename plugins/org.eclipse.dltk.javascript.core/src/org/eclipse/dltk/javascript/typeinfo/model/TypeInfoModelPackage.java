@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.27 2011/07/01 12:30:11 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.28 2011/08/03 08:48:03 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1018,14 +1018,14 @@ public interface TypeInfoModelPackage extends EPackage {
     int FUNCTION_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 2;
 
     /**
-     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl <em>Type Ref</em>}' class.
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.SimpleTypeImpl <em>Simple Type</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl
-     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeRef()
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.SimpleTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getSimpleType()
      * @generated
      */
-    int TYPE_REF = 13;
+    int SIMPLE_TYPE = 13;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' reference.
@@ -1034,7 +1034,35 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE_REF__TARGET = JS_TYPE_FEATURE_COUNT + 0;
+    int SIMPLE_TYPE__TARGET = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Simple Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int SIMPLE_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl <em>Type Ref</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeRef()
+     * @generated
+     */
+    int TYPE_REF = 14;
+
+    /**
+     * The feature id for the '<em><b>Target</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_REF__TARGET = SIMPLE_TYPE__TARGET;
 
     /**
      * The number of structural features of the '<em>Type Ref</em>' class.
@@ -1043,7 +1071,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE_REF_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
+    int TYPE_REF_FEATURE_COUNT = SIMPLE_TYPE_FEATURE_COUNT + 0;
 
     /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.
@@ -1053,7 +1081,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getArrayType()
      * @generated
      */
-    int ARRAY_TYPE = 14;
+    int ARRAY_TYPE = 15;
 
     /**
      * The feature id for the '<em><b>Item Type</b></em>' containment reference.
@@ -1081,7 +1109,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAnyType()
      * @generated
      */
-    int ANY_TYPE = 15;
+    int ANY_TYPE = 16;
 
     /**
      * The number of structural features of the '<em>Any Type</em>' class.
@@ -1100,7 +1128,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUnionType()
      * @generated
      */
-    int UNION_TYPE = 16;
+    int UNION_TYPE = 17;
 
     /**
      * The feature id for the '<em><b>Targets</b></em>' containment reference list.
@@ -1128,7 +1156,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getGenericType()
      * @generated
      */
-    int GENERIC_TYPE = 17;
+    int GENERIC_TYPE = 18;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' reference.
@@ -1137,7 +1165,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int GENERIC_TYPE__TARGET = TYPE_REF__TARGET;
+    int GENERIC_TYPE__TARGET = SIMPLE_TYPE__TARGET;
 
     /**
      * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
@@ -1146,7 +1174,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int GENERIC_TYPE__TYPE_PARAMETERS = TYPE_REF_FEATURE_COUNT + 0;
+    int GENERIC_TYPE__TYPE_PARAMETERS = SIMPLE_TYPE_FEATURE_COUNT + 0;
 
     /**
      * The number of structural features of the '<em>Generic Type</em>' class.
@@ -1155,7 +1183,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int GENERIC_TYPE_FEATURE_COUNT = TYPE_REF_FEATURE_COUNT + 1;
+    int GENERIC_TYPE_FEATURE_COUNT = SIMPLE_TYPE_FEATURE_COUNT + 1;
 
     /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.
@@ -1165,7 +1193,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMapType()
      * @generated
      */
-    int MAP_TYPE = 18;
+    int MAP_TYPE = 19;
 
     /**
      * The feature id for the '<em><b>Key Type</b></em>' containment reference.
@@ -1202,7 +1230,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordType()
      * @generated
      */
-    int RECORD_TYPE = 19;
+    int RECORD_TYPE = 20;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' containment reference.
@@ -1239,7 +1267,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getClassType()
      * @generated
      */
-    int CLASS_TYPE = 20;
+    int CLASS_TYPE = 21;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' reference.
@@ -1267,7 +1295,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUndefinedType()
      * @generated
      */
-    int UNDEFINED_TYPE = 21;
+    int UNDEFINED_TYPE = 22;
 
     /**
      * The number of structural features of the '<em>Undefined Type</em>' class.
@@ -1286,7 +1314,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 22;
+	int TYPE_KIND = 23;
 
 
 	/**
@@ -1297,7 +1325,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 23;
+	int PARAMETER_KIND = 24;
 
 
 	/**
@@ -1308,7 +1336,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
      * @generated
      */
-    int VISIBILITY = 24;
+    int VISIBILITY = 25;
 
 
     /**
@@ -1407,6 +1435,27 @@ public interface TypeInfoModelPackage extends EPackage {
     EReference getFunctionType_Parameters();
 
     /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.SimpleType <em>Simple Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Simple Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.SimpleType
+     * @generated
+     */
+    EClass getSimpleType();
+
+    /**
+     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.SimpleType#getTarget <em>Target</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Target</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.SimpleType#getTarget()
+     * @see #getSimpleType()
+     * @generated
+     */
+    EReference getSimpleType_Target();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef <em>Type Ref</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1415,17 +1464,6 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EClass getTypeRef();
-
-    /**
-     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef#getTarget <em>Target</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the reference '<em>Target</em>'.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeRef#getTarget()
-     * @see #getTypeRef()
-     * @generated
-     */
-    EReference getTypeRef_Target();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.ArrayType <em>Array Type</em>}'.
@@ -2051,6 +2089,24 @@ public interface TypeInfoModelPackage extends EPackage {
         EReference FUNCTION_TYPE__PARAMETERS = eINSTANCE.getFunctionType_Parameters();
 
         /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.SimpleTypeImpl <em>Simple Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.SimpleTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getSimpleType()
+         * @generated
+         */
+        EClass SIMPLE_TYPE = eINSTANCE.getSimpleType();
+
+        /**
+         * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference SIMPLE_TYPE__TARGET = eINSTANCE.getSimpleType_Target();
+
+        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl <em>Type Ref</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -2059,14 +2115,6 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EClass TYPE_REF = eINSTANCE.getTypeRef();
-
-        /**
-         * The meta object literal for the '<em><b>Target</b></em>' reference feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EReference TYPE_REF__TARGET = eINSTANCE.getTypeRef_Target();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.

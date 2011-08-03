@@ -22,7 +22,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -32,9 +32,9 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class TypeUtil {
-	public static TypeRef ref(Type type) {
+	public static SimpleType ref(Type type) {
 		if (type != null) {
-			final TypeRef ref = TypeInfoModelFactory.eINSTANCE.createTypeRef();
+			final SimpleType ref = TypeInfoModelFactory.eINSTANCE.createTypeRef();
 			ref.setTarget(type);
 			return ref;
 		}
@@ -102,8 +102,8 @@ public class TypeUtil {
 	}
 
 	public static Type extractType(JSType type) {
-		if (type instanceof TypeRef) {
-			return ((TypeRef) type).getTarget();
+		if (type instanceof SimpleType) {
+			return ((SimpleType) type).getTarget();
 		} else if (type instanceof ClassType) {
 			return ((ClassType) type).getTarget();
 		} else if (type instanceof ArrayType) {

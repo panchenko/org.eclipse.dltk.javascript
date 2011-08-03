@@ -115,7 +115,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -612,11 +612,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
 			if (type.getKind() != TypeKind.UNKNOWN) {
 				value.setDeclaredType(type);
-				if (type instanceof TypeRef && value instanceof IValueProvider) {
+				if (type instanceof SimpleType && value instanceof IValueProvider) {
 					for (IMemberEvaluator evaluator : TypeInfoManager
 							.getMemberEvaluators()) {
 						final IValueCollection collection = evaluator.valueOf(
-								context, ((TypeRef) type).getTarget());
+								context, ((SimpleType) type).getTarget());
 						if (collection != null) {
 							if (collection instanceof IValueProvider) {
 								((IValueProvider) value).getValue().addValue(
@@ -626,7 +626,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						}
 					}
 				}
-			} else if (type instanceof TypeRef) {
+			} else if (type instanceof SimpleType) {
 				value.addValue(new LazyTypeReference(context, type.getName(),
 						peekContext()), false);
 			}

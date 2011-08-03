@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: ParameterImpl.java,v 1.6 2011/02/10 13:05:30 apanchenk Exp $
+ * $Id: ParameterImpl.java,v 1.7 2011/08/03 08:48:03 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -19,7 +19,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -184,7 +184,7 @@ public class ParameterImpl extends EObjectImpl implements Parameter {
 	 * @generated NOT
 	 */
     public Type getDirectType() {
-		return type instanceof TypeRef ? ((TypeRef) type).getTarget() : null;
+		return type instanceof SimpleType ? ((SimpleType) type).getTarget() : null;
     }
 
 	/**

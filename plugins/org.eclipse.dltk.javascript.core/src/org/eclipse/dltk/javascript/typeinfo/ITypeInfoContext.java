@@ -15,7 +15,7 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.javascript.ti.TypeInfoInvariantCacheImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 
 public interface ITypeInfoContext {
 
@@ -30,12 +30,12 @@ public interface ITypeInfoContext {
 	Type getType(String typeName);
 
 	/**
-	 * Calls {@link #getType(String)} and wraps the result as {@link TypeRef}.
+	 * Calls {@link #getType(String)} and wraps the result as {@link SimpleType}.
 	 * 
 	 * @param typeName
 	 * @return
 	 */
-	TypeRef getTypeRef(String typeName);
+	SimpleType getTypeRef(String typeName);
 
 	/**
 	 * Returns the {@link Type} with the specified name. The only difference if

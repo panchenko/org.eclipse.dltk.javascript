@@ -36,7 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class GenericTypeImpl extends TypeRefImpl implements GenericType {
+public class GenericTypeImpl extends SimpleTypeImpl implements GenericType {
     /**
      * The cached value of the '{@link #getTypeParameters() <em>Type Parameters</em>}' containment reference list.
      * <!-- begin-user-doc -->
