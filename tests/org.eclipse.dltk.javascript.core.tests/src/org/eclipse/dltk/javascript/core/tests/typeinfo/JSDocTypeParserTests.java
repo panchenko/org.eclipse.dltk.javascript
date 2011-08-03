@@ -19,7 +19,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 
 import junit.framework.TestCase;
 
@@ -34,7 +34,7 @@ public class JSDocTypeParserTests extends TestCase {
 	}
 
 	private static void assertRef(final String expected, JSType type) {
-		assertEquals(expected, ((TypeRef) type).getTarget().getName());
+		assertEquals(expected, ((SimpleType) type).getTarget().getName());
 	}
 
 	public void testSimple() {
