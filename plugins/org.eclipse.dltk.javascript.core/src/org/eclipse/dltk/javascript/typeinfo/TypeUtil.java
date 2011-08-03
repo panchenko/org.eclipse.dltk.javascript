@@ -19,10 +19,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -34,7 +34,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 public class TypeUtil {
 	public static SimpleType ref(Type type) {
 		if (type != null) {
-			final SimpleType ref = TypeInfoModelFactory.eINSTANCE.createTypeRef();
+			final SimpleType ref = TypeInfoModelFactory.eINSTANCE
+					.createSimpleType();
 			ref.setTarget(type);
 			return ref;
 		}

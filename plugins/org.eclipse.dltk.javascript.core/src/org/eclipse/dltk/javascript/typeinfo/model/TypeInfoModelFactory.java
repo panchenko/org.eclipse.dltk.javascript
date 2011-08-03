@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactory.java,v 1.12 2011/08/03 08:48:03 apanchenk Exp $
+ * $Id: TypeInfoModelFactory.java,v 1.13 2011/08/03 08:51:27 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -111,6 +111,7 @@ public interface TypeInfoModelFactory extends EFactory {
      * @return a new object of class '<em>Type Ref</em>'.
      * @generated
      */
+	@Deprecated
     TypeRef createTypeRef();
 
     /**
