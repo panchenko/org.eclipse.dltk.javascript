@@ -53,6 +53,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
+import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
@@ -82,10 +83,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
@@ -387,7 +388,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					for (ExpressionValidator call : expressionValidators
 							.toArray(new ExpressionValidator[expressionValidators
 									.size()])) {
-						Set<IProblemIdentifier> suppressWarnings = reporter
+						final Set<IProblemIdentifier> suppressWarnings = reporter
 								.getSuppressWarnings();
 						try {
 							reporter.setSuppressWarnings(call.getSuppressed());
@@ -1449,13 +1450,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		protected IValueReference visitAssign(IValueReference left,
 				IValueReference right, BinaryOperation node) {
 			if (left != null) {
-				if (left.getAttribute(IReferenceAttributes.CONSTANT) != null) {
-					reporter.reportProblem(
-							JavaScriptProblems.REASSIGNMENT_OF_CONSTANT,
-							ValidationMessages.ReassignmentOfConstant,
-							node.sourceStart(), node.sourceEnd());
-				} else
-					validate(node.getLeftExpression(), left);
+				checkAssign(left, node);
+				validate(node.getLeftExpression(), left);
 			}
 			return super.visitAssign(left, right, node);
 		}
@@ -1575,6 +1571,27 @@ public class TypeInfoValidator implements IBuildParticipant {
 				VariableDeclaration declaration) {
 			validateHidesByVariable(context, declaration);
 			return super.createVariable(context, declaration);
+		}
+
+		private void checkAssign(IValueReference reference, ASTNode node) {
+			final Object value = reference
+					.getAttribute(IAssignProtection.ATTRIBUTE);
+			if (value != null) {
+				final IAssignProtection assign = value instanceof IAssignProtection ? (IAssignProtection) value
+						: PROTECT_CONST;
+				reporter.reportProblem(assign.problemId(),
+						assign.problemMessage(), node.sourceStart(),
+						node.sourceEnd());
+			}
+		}
+
+		@Override
+		protected void initializeVariable(IValueReference reference,
+				VariableDeclaration declaration, IVariable variable) {
+			if (declaration.getInitializer() != null) {
+				checkAssign(reference, declaration);
+			}
+			super.initializeVariable(reference, declaration, variable);
 		}
 
 		private void validateHidesByVariable(IValueCollection context,

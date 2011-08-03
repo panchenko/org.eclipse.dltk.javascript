@@ -31,6 +31,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
+import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.ast.ArrayInitializer;
 import org.eclipse.dltk.javascript.ast.AsteriskExpression;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
@@ -92,8 +93,10 @@ import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
+import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
+import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -112,10 +115,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -367,14 +370,24 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return merge(visit(node.getTrueValue()), visit(node.getFalseValue()));
 	}
 
+	protected static final IAssignProtection PROTECT_CONST = new IAssignProtection() {
+		public IProblemIdentifier problemId() {
+			return JavaScriptProblems.REASSIGNMENT_OF_CONSTANT;
+		}
+
+		public String problemMessage() {
+			return ValidationMessages.ReassignmentOfConstant;
+		}
+	};
+
 	@Override
 	public IValueReference visitConstDeclaration(ConstStatement node) {
 		final IValueCollection context = peekContext();
 		for (VariableDeclaration declaration : node.getVariables()) {
 			IValueReference constant = createVariable(context, declaration);
 			if (constant != null)
-				constant.setAttribute(IReferenceAttributes.CONSTANT,
-						Boolean.TRUE);
+				constant.setAttribute(IAssignProtection.ATTRIBUTE,
+						PROTECT_CONST);
 		}
 		return null;
 	}
@@ -612,7 +625,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
 			if (type.getKind() != TypeKind.UNKNOWN) {
 				value.setDeclaredType(type);
-				if (type instanceof SimpleType && value instanceof IValueProvider) {
+				if (type instanceof SimpleType
+						&& value instanceof IValueProvider) {
 					for (IMemberEvaluator evaluator : TypeInfoManager
 							.getMemberEvaluators()) {
 						final IValueCollection collection = evaluator.valueOf(

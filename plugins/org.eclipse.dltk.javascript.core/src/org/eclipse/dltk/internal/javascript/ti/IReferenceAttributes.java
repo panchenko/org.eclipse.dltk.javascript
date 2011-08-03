@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
+
 public interface IReferenceAttributes {
 
 	String PARAMETERS = "PARAMETERS"; //$NON-NLS-1$
@@ -18,7 +20,8 @@ public interface IReferenceAttributes {
 	String FUNCTION_SCOPE = "FUNCTION_SCOPE"; //$NON-NLS-1$
 	String ELEMENT = "ELEMENT"; //$NON-NLS-1$
 	String VARIABLE = "VARIABLE"; //$NON-NLS-1$s
-	String CONSTANT = "CONSTANT"; //$NON-NLS-1$s
+	@Deprecated
+	String CONSTANT = IAssignProtection.ATTRIBUTE;
 	String HIDE_ALLOWED = "HIDE_ALLOWED";
 	String OPTIONAL = "OPTIONAL";
 	String PRIVATE = "PRIVATE";
