@@ -645,8 +645,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 				modes.remove(expression);
 				if (reference == null
 						|| reference.getAttribute(IReferenceAttributes.PHANTOM,
-								true) != null || isUntyped(reference))
+								true) != null || isUntyped(reference)) {
+					for (ASTNode argument : node.getArguments()) {
+						visit(argument);
+					}
 					return null;
+				}
 				if (reference.getKind() == ReferenceKind.ARGUMENT) {
 					if (reference.getDeclaredTypes().contains(functionTypeRef)) {
 						// don't validate function pointer
