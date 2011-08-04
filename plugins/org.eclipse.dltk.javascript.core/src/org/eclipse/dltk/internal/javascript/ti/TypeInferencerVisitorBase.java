@@ -96,8 +96,6 @@ public abstract class TypeInferencerVisitorBase extends
 		return handlers;
 	}
 
-	boolean first = false;
-
 	@Override
 	public IValueReference visit(ASTNode node) {
 		if (handlers != null) {
