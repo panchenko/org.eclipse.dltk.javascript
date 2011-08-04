@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.parser.JSParser;
 
 public class BinaryOperation extends Expression {
 
@@ -112,4 +113,16 @@ public class BinaryOperation extends Expression {
 		return buffer.toString();
 	}
 
+	public boolean isAssignment() {
+		return operation == JSParser.ASSIGN || operation == JSParser.ADDASS
+				|| operation == JSParser.SUBASS || operation == JSParser.MULASS
+				|| operation == JSParser.DIVASS || operation == JSParser.MODASS
+				|| operation == JSParser.ANDASS || operation == JSParser.ORASS
+				|| operation == JSParser.XORASS || operation == JSParser.SHLASS
+				|| operation == JSParser.SHRASS || operation == JSParser.SHUASS;
+	}
+
+	public boolean isAssignmentTo(Expression expression) {
+		return expression == left && isAssignment();
+	}
 }
