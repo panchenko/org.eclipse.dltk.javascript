@@ -124,7 +124,7 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 				problemIds.contains(JavaScriptProblems.VAR_HIDES_FUNCTION));
 
 	}
-	
+
 	public void testPrivateFunctionAccessedAsVariable() {
 		StringList code = new StringList();
 		code.add("function test1() {");
@@ -143,4 +143,28 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 				problemIds.contains(JavaScriptProblems.PRIVATE_FUNCTION));
 
 	}
+
+	public void testUnusedVariable() {
+		enable(JavaScriptProblems.UNUSED_VARIABLE);
+		StringList code = new StringList();
+		code.add("var x = 1");
+		code.add("x = 2");
+		code.add("x = 3");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(1, problemIds.size());
+		assertTrue(problemIds.toString(),
+				problemIds.contains(JavaScriptProblems.UNUSED_VARIABLE));
+	}
+
+	public void testVariableUsedInFunction() {
+		enable(JavaScriptProblems.UNUSED_VARIABLE);
+		StringList code = new StringList();
+		code.add("var x = 1");
+		code.add("function q() { return x; }");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 0, problemIds.size());
+	}
+
 }
