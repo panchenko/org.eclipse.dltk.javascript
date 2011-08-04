@@ -653,6 +653,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 				if (reference.getKind() == ReferenceKind.ARGUMENT) {
 					if (reference.getDeclaredTypes().contains(functionTypeRef)) {
+						for (ASTNode argument : node.getArguments()) {
+							visit(argument);
+						}
 						// don't validate function pointer
 						return null;
 					}
@@ -1559,12 +1562,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
+		private static boolean isVarOrFunction(IValueReference reference) {
+			final ReferenceKind kind = reference.getKind();
+			return kind.isVariable() || kind == ReferenceKind.FUNCTION;
+		}
+
 		@Override
 		public IValueReference visitIdentifier(Identifier node) {
 			final IValueReference result = super.visitIdentifier(node);
 			if (!(node.getParent() instanceof BinaryOperation && ((BinaryOperation) node
 					.getParent()).isAssignmentTo(node))
-					&& result.getKind().isVariable()
+					&& isVarOrFunction(result)
 					&& getSource().equals(result.getLocation().getSource())) {
 				final IValueCollection current = peekContext();
 				if (current != null) {
