@@ -379,26 +379,28 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		@Override
 		public IValueReference visit(ASTNode node) {
-			boolean rootNode = visitStack.isEmpty();
 			visitStack.push(node);
 			try {
 				return super.visit(node);
 			} finally {
-				if (rootNode) {
-					for (ExpressionValidator call : expressionValidators
-							.toArray(new ExpressionValidator[expressionValidators
-									.size()])) {
-						final Set<IProblemIdentifier> suppressWarnings = reporter
-								.getSuppressWarnings();
-						try {
-							reporter.setSuppressWarnings(call.getSuppressed());
-							call.call();
-						} finally {
-							reporter.setSuppressWarnings(suppressWarnings);
-						}
-					}
-				}
 				visitStack.pop();
+			}
+		}
+
+		@Override
+		public void done() {
+			super.done();
+			for (ExpressionValidator call : expressionValidators
+					.toArray(new ExpressionValidator[expressionValidators
+							.size()])) {
+				final Set<IProblemIdentifier> suppressWarnings = reporter
+						.getSuppressWarnings();
+				try {
+					reporter.setSuppressWarnings(call.getSuppressed());
+					call.call();
+				} finally {
+					reporter.setSuppressWarnings(suppressWarnings);
+				}
 			}
 		}
 
