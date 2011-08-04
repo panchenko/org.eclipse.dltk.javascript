@@ -13,6 +13,7 @@ package org.eclipse.dltk.internal.javascript.validation;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -388,6 +389,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		@Override
+		public void initialize() {
+			super.initialize();
+			variables.clear();
+		}
+
+		@Override
 		public void done() {
 			super.done();
 			for (ExpressionValidator call : expressionValidators
@@ -400,6 +407,21 @@ public class TypeInfoValidator implements IBuildParticipant {
 					call.call();
 				} finally {
 					reporter.setSuppressWarnings(suppressWarnings);
+				}
+			}
+			for (IValueReference variable : variables) {
+				@SuppressWarnings("unchecked")
+				final Set<IValueCollection> access = (Set<IValueCollection>) variable
+						.getAttribute(IReferenceAttributes.ACCESS);
+				if (access == null) {
+					reporter.setMessage(
+							JavaScriptProblems.UNUSED_VARIABLE,
+							NLS.bind("Variable {0} is never used",
+									variable.getName()));
+					final ReferenceLocation location = variable.getLocation();
+					reporter.setRange(location.getNameStart(),
+							location.getNameEnd());
+					reporter.report();
 				}
 			}
 		}
@@ -1536,6 +1558,22 @@ public class TypeInfoValidator implements IBuildParticipant {
 		@Override
 		public IValueReference visitIdentifier(Identifier node) {
 			final IValueReference result = super.visitIdentifier(node);
+			if (!(node.getParent() instanceof BinaryOperation && ((BinaryOperation) node
+					.getParent()).isAssignmentTo(node))
+					&& result.getKind().isVariable()
+					&& getSource().equals(result.getLocation().getSource())) {
+				final IValueCollection current = peekContext();
+				if (current != null) {
+					@SuppressWarnings("unchecked")
+					Set<IValueCollection> access = (Set<IValueCollection>) result
+							.getAttribute(IReferenceAttributes.ACCESS);
+					if (access == null) {
+						access = new HashSet<IValueCollection>();
+						result.setAttribute(IReferenceAttributes.ACCESS, access);
+					}
+					access.add(current);
+				}
+			}
 			final Property property = extractElement(result, Property.class,
 					null);
 			if (property != null && property.isDeprecated()) {
@@ -1568,11 +1606,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return null;
 		}
 
+		private final Set<IValueReference> variables = new HashSet<IValueReference>();
+
 		@Override
 		protected IValueReference createVariable(IValueCollection context,
 				VariableDeclaration declaration) {
 			validateHidesByVariable(context, declaration);
-			return super.createVariable(context, declaration);
+			final IValueReference variable = super.createVariable(context,
+					declaration);
+			variables.add(variable);
+			return variable;
 		}
 
 		private void checkAssign(IValueReference reference, ASTNode node) {

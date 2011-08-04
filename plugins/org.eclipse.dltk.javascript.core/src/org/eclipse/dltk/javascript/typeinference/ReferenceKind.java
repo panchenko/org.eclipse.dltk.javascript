@@ -17,4 +17,8 @@ public enum ReferenceKind {
 	public boolean isLocal() {
 		return this == LOCAL || this == ARGUMENT;
 	}
+
+	public boolean isVariable() {
+		return this == LOCAL || this == GLOBAL;
+	}
 }

@@ -126,6 +126,9 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	CONTINUE_OUTSIDE_LABEL,
 
 	DUPLICATE_PROPERTY_IN_LITERAL,
+
+	UNUSED_VARIABLE,
+
 	/**
 	 * @since 3.0
 	 */
