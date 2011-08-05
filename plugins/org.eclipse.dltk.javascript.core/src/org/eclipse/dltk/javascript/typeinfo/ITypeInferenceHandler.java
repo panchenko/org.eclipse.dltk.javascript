@@ -47,6 +47,10 @@ public interface ITypeInferenceHandler {
 		public IValue createValue() {
 			return null;
 		}
+
+		public String toString() {
+			return ITypeInferenceHandler.class.getSimpleName() + ".CONTINUE";
+		}
 	};
 
 	IValueReference handle(ASTNode node);
