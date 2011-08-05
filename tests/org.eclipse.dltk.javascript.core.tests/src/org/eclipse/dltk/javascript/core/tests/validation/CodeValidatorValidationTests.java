@@ -167,4 +167,14 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 		assertEquals(problemIds.toString(), 0, problemIds.size());
 	}
 
+	public void testVariableUsedInNot() {
+		enable(JavaScriptProblems.UNUSED_VARIABLE);
+		StringList code = new StringList();
+		code.add("var x = 1");
+		code.add("function q() { return !x; }");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 0, problemIds.size());
+	}
+
 }
