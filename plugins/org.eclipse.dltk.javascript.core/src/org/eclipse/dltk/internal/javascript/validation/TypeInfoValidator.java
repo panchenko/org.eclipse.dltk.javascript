@@ -410,10 +410,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 			}
 			for (IValueReference variable : variables) {
-				@SuppressWarnings("unchecked")
-				final Set<IValueCollection> access = (Set<IValueCollection>) variable
-						.getAttribute(IReferenceAttributes.ACCESS);
-				if (access == null) {
+				if (variable.getAttribute(IReferenceAttributes.ACCESS) == null) {
 					reporter.setMessage(
 							JavaScriptProblems.UNUSED_VARIABLE,
 							NLS.bind("Variable {0} is never used",
@@ -1574,16 +1571,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 					.getParent()).isAssignmentTo(node))
 					&& isVarOrFunction(result)
 					&& getSource().equals(result.getLocation().getSource())) {
-				final IValueCollection current = peekContext();
-				if (current != null) {
-					@SuppressWarnings("unchecked")
-					Set<IValueCollection> access = (Set<IValueCollection>) result
-							.getAttribute(IReferenceAttributes.ACCESS);
-					if (access == null) {
-						access = new HashSet<IValueCollection>();
-						result.setAttribute(IReferenceAttributes.ACCESS, access);
-					}
-					access.add(current);
+				if (result.getAttribute(IReferenceAttributes.ACCESS) == null) {
+					result.setAttribute(IReferenceAttributes.ACCESS,
+							Boolean.TRUE);
 				}
 			}
 			final Property property = extractElement(result, Property.class,
