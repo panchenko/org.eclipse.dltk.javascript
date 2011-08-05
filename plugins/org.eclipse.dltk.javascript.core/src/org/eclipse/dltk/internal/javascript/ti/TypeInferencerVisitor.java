@@ -1035,6 +1035,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitUnaryOperation(UnaryOperation node) {
 		if (node.getOperation() == JSParser.NOT) {
+			visit(node.getExpression());
 			return context.getFactory().createBoolean(peekContext());
 		}
 		return visit(node.getExpression());
