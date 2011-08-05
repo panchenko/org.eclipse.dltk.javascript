@@ -68,12 +68,7 @@ public abstract class TypeInferencerVisitorBase extends
 	private ITypeInferenceHandler[] handlers = null;
 
 	public void initialize() {
-		handlers = null;
 		contexts.clear();
-		initialize0();
-	}
-
-	protected void initialize0() {
 		contexts.push(new TopValueCollection(context));
 		final List<ITypeInferenceHandler> handlers = createHandlers();
 		if (handlers != null && !handlers.isEmpty()) {
@@ -82,6 +77,10 @@ public abstract class TypeInferencerVisitorBase extends
 		} else {
 			this.handlers = null;
 		}
+	}
+
+	@Deprecated
+	protected final void initialize0() {
 	}
 
 	protected List<ITypeInferenceHandler> createHandlers() {
