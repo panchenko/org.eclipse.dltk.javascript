@@ -171,6 +171,12 @@
              class="org.eclipse.dltk.javascript.core.JavaScriptProblemFactory"
 	         namespace="org.eclipse.dltk.javascript.core.JavaScriptProblems">
           </problemIdentifierFactory>
+		  <problemCategory
+            scope="@SuppressWarnings"
+            id="unused"
+            nature="org.eclipse.dltk.javascript.core.nature">
+			<problem>org.eclipse.dltk.javascript.core.JavaScriptProblems#UNUSED_VARIABLE</problem>
+		  </problemCategory>
 	</extension>
 
 </plugin>
