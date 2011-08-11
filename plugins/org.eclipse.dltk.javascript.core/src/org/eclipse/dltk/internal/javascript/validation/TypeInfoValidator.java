@@ -31,6 +31,7 @@ import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
+import org.eclipse.dltk.internal.javascript.ti.JSVariable;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
@@ -411,6 +412,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 			for (IValueReference variable : variables) {
 				if (variable.getAttribute(IReferenceAttributes.ACCESS) == null) {
+					final JSVariable jsVariable = (JSVariable) variable
+							.getAttribute(IReferenceAttributes.VARIABLE);
+					if (jsVariable != null
+							&& jsVariable
+									.isSuppressed(JavaScriptProblems.UNUSED_VARIABLE))
+						continue;
 					reporter.setMessage(
 							JavaScriptProblems.UNUSED_VARIABLE,
 							NLS.bind("Variable {0} is never used",

@@ -252,6 +252,7 @@ public class JSDocSupport implements IModelBuilder {
 		parseDeprecation(variable, tags, reporter);
 		parsePrivate(variable, tags, reporter);
 		parseProtected(variable, tags, reporter);
+		parseSuppressWarnings(variable, tags, reporter);
 	}
 
 	private void parseDeprecation(IMember member, JSDocTags tags,
