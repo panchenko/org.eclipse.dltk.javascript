@@ -400,8 +400,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final JSVariable variable = new JSVariable();
 		variable.setName(declaration.getVariableName());
 		if (declaration.getParent() instanceof VariableStatement) {
-			final VariableStatement statement = (VariableStatement) declaration
-					.getParent();
 			for (IModelBuilder extension : this.context.getModelBuilders()) {
 				extension.processVariable(declaration, variable, reporter,
 						getJSDocTypeChecker());
