@@ -315,11 +315,9 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 			} else if (type instanceof SimpleType) {
 				final Type other = ((SimpleType) type).getTarget();
 				final String localName = TypeUtil.getName(this.type);
-				Type t = other;
-				while (t != null) {
+				for (Type t : new TypeQuery(other).getHierarchy()) {
 					if (localName.equals(TypeUtil.getName(t)))
 						return true;
-					t = t.getSuperType();
 				}
 			} else if (type instanceof UnionTypeKey) {
 				for (JSType2 part : ((UnionTypeKey) type).targets) {
