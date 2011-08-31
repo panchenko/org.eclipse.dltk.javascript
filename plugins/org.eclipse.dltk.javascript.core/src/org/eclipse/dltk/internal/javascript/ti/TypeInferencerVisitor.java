@@ -1011,7 +1011,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		for (CatchClause catchClause : node.getCatches()) {
 			final NestedValueCollection collection = new NestedValueCollection(
 					peekContext());
-			collection.createChild(catchClause.getException().getName());
+			IValueReference exception = collection.createChild(catchClause
+					.getException().getName());
+			exception.setDeclaredType(context.getTypeRef(ITypeNames.ERROR));
+
 			enterContext(collection);
 			if (catchClause.getStatement() != null) {
 				visit(catchClause.getStatement());
