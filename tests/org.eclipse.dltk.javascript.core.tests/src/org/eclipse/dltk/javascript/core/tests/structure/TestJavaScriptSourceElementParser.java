@@ -16,7 +16,7 @@ import org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceElementParser
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
-final class TestJavaScriptSourceElementParser extends
+public final class TestJavaScriptSourceElementParser extends
 		JavaScriptSourceElementParser2 {
 	@Override
 	protected Script parse(IModuleSource module) {
