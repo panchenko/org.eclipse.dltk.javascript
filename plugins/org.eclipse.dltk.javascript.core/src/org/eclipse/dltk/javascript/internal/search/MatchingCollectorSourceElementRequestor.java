@@ -1,7 +1,9 @@
 package org.eclipse.dltk.javascript.internal.search;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
@@ -11,9 +13,11 @@ import org.eclipse.dltk.core.search.matching2.MatchingCollector;
 import org.eclipse.dltk.internal.javascript.parser.structure.IStructureRequestor;
 import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class MatchingCollectorSourceElementRequestor implements
@@ -49,11 +53,6 @@ public class MatchingCollectorSourceElementRequestor implements
 		nodes.add(new MethodReferenceNode(node, reference));
 	}
 
-	public void acceptArgumentDeclaration(Argument argument,
-			ISourceModule sourceModule, JSType type) {
-		nodes.add(new ArgumentDeclarationNode(argument, sourceModule, type));
-	}
-
 	public void enterNamespace(String[] namespace) {
 	}
 
@@ -67,11 +66,23 @@ public class MatchingCollectorSourceElementRequestor implements
 	}
 
 	public void enterMethod(MethodInfo methodInfo, Expression identifier,
-			IMethod method) {
+			FunctionStatement function, IMethod method) {
 		// ignore method(function(){});
 		if (identifier == null)
 			return;
 		nodes.add(new MethodDeclarationNode(identifier, method));
+
+		Map<String, Argument> arguments = new HashMap<String, Argument>();
+		for (Argument argument : function.getArguments()) {
+			arguments.put(argument.getIdentifier().getName(), argument);
+		}
+		for (IParameter parameter : method.getParameters()) {
+			final Argument argument = arguments.get(parameter.getName());
+			if (argument != null) {
+				nodes.add(new ArgumentDeclarationNode(argument, method
+						.getLocation().getSourceModule(), parameter.getType()));
+			}
+		}
 	}
 
 	public void enterField(FieldInfo fieldInfo, Expression identifier,

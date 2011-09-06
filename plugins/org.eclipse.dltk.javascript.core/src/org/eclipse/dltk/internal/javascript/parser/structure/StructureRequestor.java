@@ -5,8 +5,8 @@ import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.compiler.IElementRequestor.TypeInfo;
 import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.core.ISourceModule;
-import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.Expression;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
@@ -22,10 +22,6 @@ public class StructureRequestor implements IStructureRequestor {
 	}
 
 	public void acceptLocalReference(Identifier node, IValueReference reference) {
-	}
-
-	public void acceptArgumentDeclaration(Argument argument,
-			ISourceModule sourceModule, JSType type) {
 	}
 
 	public void enterLocal(Identifier identifier, ISourceModule module,
@@ -65,7 +61,7 @@ public class StructureRequestor implements IStructureRequestor {
 	}
 
 	public void enterMethod(MethodInfo methodInfo, Expression identifier,
-			IMethod method) {
+			FunctionStatement function, IMethod method) {
 		requestor.enterMethod(methodInfo);
 	}
 

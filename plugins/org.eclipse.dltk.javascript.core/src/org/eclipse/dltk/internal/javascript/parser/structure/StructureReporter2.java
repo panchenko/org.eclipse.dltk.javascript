@@ -1,8 +1,6 @@
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.IElementRequestor.FieldInfo;
@@ -13,7 +11,6 @@ import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
-import org.eclipse.dltk.javascript.ast.Argument;
 import org.eclipse.dltk.javascript.ast.BinaryOperation;
 import org.eclipse.dltk.javascript.ast.CallExpression;
 import org.eclipse.dltk.javascript.ast.Expression;
@@ -184,28 +181,20 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			methodInfo.modifiers |= JSModifiers.PRIVATE;
 		}
 
-		List<IParameter> parameters = method.getParameters();
-		if (parameters != null && parameters.size() > 0) {
-			Map<String, Argument> arguments = new HashMap<String, Argument>();
-			for (Argument argument : node.getArguments()) {
-				arguments.put(argument.getIdentifier().getName(), argument);
-			}
+		final List<IParameter> parameters = method.getParameters();
+		if (parameters.size() > 0) {
 			String[] paramNames = new String[parameters.size()];
 			String[] paramTypes = new String[parameters.size()];
 			for (int i = 0; i < parameters.size(); i++) {
 				IParameter parameter = parameters.get(i);
 				paramNames[i] = parameter.getName();
 				paramTypes[i] = TypeUtil.getName(parameter.getType());
-
-				fRequestor.acceptArgumentDeclaration(arguments.get(parameter
-						.getName()), getSource().getSourceModule(), parameter
-						.getType());
 			}
 			methodInfo.parameterNames = paramNames;
 			methodInfo.parameterTypes = paramTypes;
 		}
 
-		fRequestor.enterMethod(methodInfo, identifier, method);
+		fRequestor.enterMethod(methodInfo, identifier, node, method);
 		IValueReference reference = super.visitFunctionStatement(node);
 		if (method.getType() == null) {
 			if (reference.getDeclaredType() != null) {
