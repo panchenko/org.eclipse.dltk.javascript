@@ -14,6 +14,10 @@ package org.eclipse.dltk.javascript.core.tests.contentassist;
 import static org.eclipse.dltk.javascript.core.tests.AllTests.PLUGIN_ID;
 import static org.eclipse.dltk.javascript.core.tests.contentassist.AbstractContentAssistTest.lastPositionInFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.codeassist.ISelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKLanguageManager;
@@ -25,6 +29,12 @@ import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.ScriptModelUtil;
+import org.eclipse.dltk.core.search.IDLTKSearchConstants;
+import org.eclipse.dltk.core.search.SearchEngine;
+import org.eclipse.dltk.core.search.SearchMatch;
+import org.eclipse.dltk.core.search.SearchParticipant;
+import org.eclipse.dltk.core.search.SearchPattern;
+import org.eclipse.dltk.core.search.SearchRequestor;
 import org.eclipse.dltk.core.tests.Skip;
 import org.eclipse.dltk.core.tests.model.AbstractModelTests;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
@@ -257,6 +267,31 @@ public class SelectionTests extends AbstractModelTests {
 		IModelElement[] elements = select(module,
 				lastPositionInFile("abc", module, false));
 		assertEquals(1, elements.length);
+	}
+
+	public void testNestedFunctionLocalVar() throws CoreException {
+		IModuleSource module = getModule("nested.js");
+		final int nestedVarOffset = lastPositionInFile("i = 1", module, false);
+		IModelElement[] elements = select(module, nestedVarOffset);
+		assertEquals(1, elements.length);
+		assertEquals(nestedVarOffset, ((ILocalVariable) elements[0])
+				.getNameRange().getOffset());
+		final SearchPattern pattern = SearchPattern.createPattern(elements[0],
+				IDLTKSearchConstants.ALL_OCCURRENCES);
+		assertNotNull(pattern);
+		final List<SearchMatch> result = new ArrayList<SearchMatch>();
+		new SearchEngine().search(pattern,
+				new SearchParticipant[] { SearchEngine
+						.getDefaultSearchParticipant() }, SearchEngine
+						.createSearchScope(module.getModelElement()),
+				new SearchRequestor() {
+					@Override
+					public void acceptSearchMatch(SearchMatch match)
+							throws CoreException {
+						result.add(match);
+					}
+				}, null);
+		assertEquals(3, result.size());
 	}
 
 }
