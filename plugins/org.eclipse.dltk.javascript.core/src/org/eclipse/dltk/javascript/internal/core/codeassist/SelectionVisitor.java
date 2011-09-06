@@ -90,25 +90,27 @@ public class SelectionVisitor extends TypeInferencerVisitor {
 		return result;
 	}
 
-	private void check(Identifier node) {
+	private IValueReference check(Identifier node, IValueReference reference) {
 		if (node == target) {
-			value = visit(node);
+			value = reference;
 			earlyExit();
 		}
+		return reference;
 	}
 
 	@Override
 	public void visitFunctionBody(FunctionStatement node) {
 		for (Argument argument : node.getArguments()) {
-			check(argument.getIdentifier());
+			check(argument.getIdentifier(),
+					peekContext().getChild(argument.getArgumentName()));
 		}
 		super.visitFunctionBody(node);
 	}
 
 	protected IValueReference createVariable(IValueCollection context,
 			VariableDeclaration declaration) {
-		check(declaration.getIdentifier());
-		return super.createVariable(context, declaration);
+		return check(declaration.getIdentifier(),
+				super.createVariable(context, declaration));
 	}
 
 	@Override
