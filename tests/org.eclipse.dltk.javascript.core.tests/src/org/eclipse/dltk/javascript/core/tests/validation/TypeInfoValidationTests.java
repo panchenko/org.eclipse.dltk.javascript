@@ -57,13 +57,14 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testUnknownJavaScriptFunctionType() {
 		final List<IProblem> problems = validate("var x = new LongString()");
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.UNKNOWN_TYPE, problems.get(0).getID());
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+				.getID());
 	}
 
 	public void testUnknownJavaScriptFunctionCall() {
 		final List<IProblem> problems = validate("var x = longString()");
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
 				.getID());
 	}
 
@@ -881,7 +882,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("b: function() {}}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
 				.getID());
 	}
 
@@ -1821,8 +1822,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
-			.getID());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
 
 	}
 
@@ -1839,8 +1841,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE, problems.get(0)
-			.getID());
+		assertEquals(
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				problems.get(0).getID());
 	}
 
 }
