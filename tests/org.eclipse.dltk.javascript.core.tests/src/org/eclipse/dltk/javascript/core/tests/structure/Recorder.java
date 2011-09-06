@@ -35,12 +35,12 @@ public class Recorder extends SourceElementRequestorAdaptor implements
 		return structure.peek();
 	}
 
-	private void push(Member child) {
+	protected void push(Member child) {
 		structure.peek().add(child);
 		structure.push(child);
 	}
 
-	private Member pop() {
+	protected Member pop() {
 		return structure.pop();
 	}
 
