@@ -173,6 +173,12 @@ public class LazyTypeReference extends AbstractReference {
 	}
 
 	@Override
+	public boolean exists() {
+		value.resolve();
+		return value.isResolved();
+	}
+
+	@Override
 	public IValue createValue() {
 		return getValue();
 	}

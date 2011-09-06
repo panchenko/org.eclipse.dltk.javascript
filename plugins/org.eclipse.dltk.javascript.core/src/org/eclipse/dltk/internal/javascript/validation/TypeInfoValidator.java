@@ -322,24 +322,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 	}
 
-	private static class TypeValidator extends ExpressionValidator {
-
-		final ValidationVisitor validator;
-		final IValueReference reference;
-		final ASTNode node;
-
-		public TypeValidator(ValidationVisitor validator,
-				IValueReference reference, ASTNode node) {
-			this.validator = validator;
-			this.reference = reference;
-			this.node = node;
-		}
-
-		public void call() {
-			validator.checkExpressionType(null, node, reference);
-		}
-	}
-
 	private static class PropertyExpressionHolder extends ExpressionValidator {
 		private final PropertyExpression node;
 		private final IValueReference reference;
@@ -931,7 +913,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 						} else {
 							reporter.reportProblem(
-									JavaScriptProblems.UNDEFINED_METHOD,
+									reference.getParent() == null
+											&& isIdentifier(expression)
+											&& !reference.exists() ? JavaScriptProblems.UNDECLARED_VARIABLE
+											: JavaScriptProblems.UNDEFINED_METHOD,
 									NLS.bind(
 											ValidationMessages.UndefinedMethodInScript,
 											reference.getName()), methodNode
@@ -1501,9 +1486,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 									.getOperation() == JSParser.INSTANCEOF
 							&& ((BinaryOperation) expr.getParent())
 									.getRightExpression() == expr) {
-						reporter.reportProblem(JavaScriptProblems.UNKNOWN_TYPE,
-								NLS.bind(ValidationMessages.UnknownType,
-										reference.getName()), expr
+						reporter.reportProblem(
+								JavaScriptProblems.UNDECLARED_VARIABLE, NLS
+										.bind(ValidationMessages.UnknownType,
+												reference.getName()), expr
 										.sourceStart(), expr.sourceEnd());
 
 					} else {
@@ -1941,8 +1927,29 @@ public class TypeInfoValidator implements IBuildParticipant {
 					node.sourceStart(), node.sourceEnd());
 		}
 
+		private static boolean isIdentifier(Expression node) {
+			return node instanceof Identifier || node instanceof CallExpression
+					&& isIdentifier(((CallExpression) node).getExpression());
+		}
+
+		private static String getIdentifier(Expression node) {
+			if (node instanceof Identifier) {
+				return ((Identifier) node).getName();
+			} else if (node instanceof CallExpression) {
+				return getIdentifier(((CallExpression) node).getExpression());
+			} else {
+				return "?";
+			}
+		}
+
 		protected void checkExpressionType(IValueCollection collection,
-				ASTNode node, IValueReference reference) {
+				Expression node, IValueReference reference) {
+			if (reference.getParent() == null && isIdentifier(node)
+					&& !reference.exists()) {
+				reportUnknownType(JavaScriptProblems.UNDECLARED_VARIABLE, node,
+						getIdentifier(node));
+				return;
+			}
 			JSTypeSet types = reference.getTypes();
 			if (types.size() > 0) {
 				checkType(node, types.getFirst(), collection);
@@ -1962,11 +1969,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				boolean lazy) {
 			super.setType(node, value, type, lazy);
 			if (type != null) {
-				if (lazy) {
-					pushExpressionValidator(new TypeValidator(this, value, node));
-				} else {
-					checkType(node, type, null);
-				}
+				checkType(node, type, null);
 			}
 		}
 
