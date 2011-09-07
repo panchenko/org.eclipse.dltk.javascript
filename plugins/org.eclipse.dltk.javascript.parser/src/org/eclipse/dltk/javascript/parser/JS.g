@@ -1015,7 +1015,7 @@ primaryExpression
 	;
 
 parenExpression
-  : lpar = LPAREN expression RPAREN -> ^( PAREXPR[$lpar, "PAREXPR"] expression )
+  : lpar = LPAREN expression RPAREN -> ^( PAREXPR[$lpar, "PAREXPR"] expression RPAREN )
   ;
 
 arrayLiteral

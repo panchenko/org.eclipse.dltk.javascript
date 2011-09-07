@@ -1374,7 +1374,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				expression));
 
 		expression.setLP(getTokenOffset(node.getTokenStartIndex()));
-		expression.setRP(getTokenOffset(node.getTokenStopIndex()));
+		expression.setRP(getTokenOffset(node.getChild(1).getTokenStartIndex()));
 
 		expression.setStart(expression.getLP());
 		expression.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
