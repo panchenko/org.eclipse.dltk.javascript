@@ -194,4 +194,24 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 	public boolean isDeclaration() {
 		return declaration;
 	}
+
+	/**
+	 * Tests if this function is just a block:
+	 * 
+	 * <pre>
+	 * (function(){})();
+	 * </pre>
+	 */
+	public boolean isInlineBlock() {
+		if (!declaration) {
+			if (getParent() instanceof CallExpression) {
+				return true;
+			} else if (getParent() instanceof ParenthesizedExpression) {
+				if (((ParenthesizedExpression) getParent()).getParent() instanceof CallExpression) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
