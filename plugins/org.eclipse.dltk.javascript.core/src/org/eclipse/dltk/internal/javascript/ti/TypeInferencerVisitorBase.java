@@ -21,6 +21,7 @@ import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.Reporter;
+import org.eclipse.dltk.javascript.typeinference.IFunctionValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
@@ -53,8 +54,18 @@ public abstract class TypeInferencerVisitorBase extends
 	}
 
 	protected boolean inFunction() {
+		return inFunction(false);
+	}
+
+	protected boolean inFunction(boolean ignoreBlocks) {
 		for (int i = contexts.size(); --i >= 0;) {
-			if (contexts.get(i) instanceof FunctionValueCollection) {
+			final IValueCollection collection = contexts.get(i);
+			if (collection instanceof IFunctionValueCollection) {
+				if (ignoreBlocks) {
+					if (((IFunctionValueCollection) collection).isInlineBlock()) {
+						continue;
+					}
+				}
 				return true;
 			}
 		}

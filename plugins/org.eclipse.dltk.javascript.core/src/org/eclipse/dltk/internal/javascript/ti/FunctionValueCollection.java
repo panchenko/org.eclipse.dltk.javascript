@@ -14,24 +14,32 @@ package org.eclipse.dltk.internal.javascript.ti;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
 
+import org.eclipse.dltk.javascript.typeinference.IFunctionValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 
-public class FunctionValueCollection extends ValueCollection {
+public class FunctionValueCollection extends ValueCollection implements
+		IFunctionValueCollection {
 
 	private final String functionName;
 
 	public FunctionValueCollection(IValueCollection parent, String functionName) {
-		this(parent, functionName, new ThisValue());
+		this(parent, functionName, false);
 	}
 
 	public FunctionValueCollection(IValueCollection parent,
-			String functionName, IValueReference thisValue) {
+			String functionName, boolean block) {
+		this(parent, functionName, new ThisValue(), block);
+	}
+
+	public FunctionValueCollection(IValueCollection parent,
+			String functionName, IValueReference thisValue, boolean block) {
 		super(parent);
 		this.functionName = functionName;
 		this.thisValue = thisValue;
+		this.block = block;
 		IValueReference arguments = createChild("arguments");
 		arguments.setKind(ReferenceKind.LOCAL);
 		IValueReference argumentsLength = arguments.getChild("length");
@@ -39,6 +47,12 @@ public class FunctionValueCollection extends ValueCollection {
 		IValueReference argumentsArray = arguments
 				.getChild(IValueReference.ARRAY_OP);
 		argumentsArray.setDeclaredType(TypeUtil.ref(OBJECT));
+	}
+
+	private final boolean block;
+
+	public boolean isInlineBlock() {
+		return block;
 	}
 
 	public boolean isScope() {
