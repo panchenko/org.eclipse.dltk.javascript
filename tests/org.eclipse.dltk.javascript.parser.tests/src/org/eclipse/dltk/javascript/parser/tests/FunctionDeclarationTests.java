@@ -62,4 +62,20 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		assertEquals("y", func.getArguments().get(1).getArgumentName());
 	}
 
+	public void testFunctionScopeBlock1() {
+		Script script = parse("(function(){})();");
+		assertFalse(reporter.hasErrors());
+		final FunctionStatement func = uniqueResult(ASTUtil.select(script,
+				FunctionStatement.class));
+		assertTrue(func.isInlineBlock());
+	}
+
+	public void testFunctionScopeBlock2() {
+		Script script = parse("(function(){}());");
+		assertFalse(reporter.hasErrors());
+		final FunctionStatement func = uniqueResult(ASTUtil.select(script,
+				FunctionStatement.class));
+		assertTrue(func.isInlineBlock());
+	}
+
 }
