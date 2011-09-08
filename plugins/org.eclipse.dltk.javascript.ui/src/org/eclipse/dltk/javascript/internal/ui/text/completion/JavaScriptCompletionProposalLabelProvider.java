@@ -116,18 +116,18 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			if (label != null) {
 				return label;
 			}
+			final StringBuilder sb = new StringBuilder();
+			sb.append(proposal.getName());
 			if (TypeUtil.isValueTypeVisible(property.getType())) {
-				final StringBuilder sb = new StringBuilder();
-				sb.append(proposal.getName());
 				sb.append(": ");
 				sb.append(property.getType().getName());
-				// TODO use different color
-				if (TypeUtil.isDeclaringTypeVisible(property)) {
-					sb.append(" - ");
-					sb.append(property.getDeclaringType().getName());
-				}
-				return sb.toString();
 			}
+			// TODO use different color
+			if (TypeUtil.isDeclaringTypeVisible(property)) {
+				sb.append(" - ");
+				sb.append(property.getDeclaringType().getName());
+			}
+			return sb.toString();
 		}
 		return proposal.getName();
 	}
