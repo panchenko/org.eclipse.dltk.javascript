@@ -1932,13 +1932,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 					&& isIdentifier(((CallExpression) node).getExpression());
 		}
 
-		private static String getIdentifier(Expression node) {
+		private static Identifier getIdentifier(Expression node) {
 			if (node instanceof Identifier) {
-				return ((Identifier) node).getName();
+				return (Identifier) node;
 			} else if (node instanceof CallExpression) {
 				return getIdentifier(((CallExpression) node).getExpression());
 			} else {
-				return "?";
+				return null;
 			}
 		}
 
@@ -1946,8 +1946,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 				Expression node, IValueReference reference) {
 			if (reference.getParent() == null && isIdentifier(node)
 					&& !reference.exists()) {
-				reportUnknownType(JavaScriptProblems.UNDECLARED_VARIABLE, node,
-						getIdentifier(node));
+				final Identifier identifier = getIdentifier(node);
+				reportUnknownType(JavaScriptProblems.UNDECLARED_VARIABLE,
+						identifier != null ? identifier : node,
+						identifier != null ? identifier.getName() : "?");
 				return;
 			}
 			JSTypeSet types = reference.getTypes();
