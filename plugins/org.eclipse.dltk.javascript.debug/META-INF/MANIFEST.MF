@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.dltk.javascript.debug;singleton:=true
-Bundle-Version: 3.0.0.qualifier
+Bundle-Version: 4.0.0.qualifier
 Bundle-Vendor: %pluginProvider
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.dltk.debug,
@@ -14,4 +14,4 @@ Require-Bundle: org.eclipse.dltk.debug,
 Bundle-Activator: org.eclipse.dltk.javascript.internal.debug.JavaScriptDebugPlugin
 Export-Package: org.eclipse.dltk.javascript.internal.debug
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
