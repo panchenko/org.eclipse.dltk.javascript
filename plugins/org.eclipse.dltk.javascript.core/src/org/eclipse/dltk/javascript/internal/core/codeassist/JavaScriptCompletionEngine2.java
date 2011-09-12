@@ -50,7 +50,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
@@ -183,6 +182,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					break;
 				reporter.report(context, coll, testPrivate);
 			}
+		} else if (item instanceof IValueReference) {
+			reporter.reportValueTypeMembers(context, (IValueReference) item);
 		}
 	}
 
@@ -204,7 +205,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		final char[] prefix;
 		private final String prefixStr;
 		final int position;
-		final Set<Object> processed = new HashSet<Object>();
+		final Set<String> processed = new HashSet<String>();
 		final boolean camelCase = DLTKCore.ENABLED.equals(DLTKCore
 				.getOption(DLTKCore.CODEASSIST_CAMEL_CASE_MATCH));
 
@@ -276,44 +277,44 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					}
 				}
 			}
-			if (item instanceof IValueReference) {
-				final IValueReference valueRef = (IValueReference) item;
-				final TypeMemberQuery typeQuery = new TypeMemberQuery();
-				for (JSType type : valueRef.getDeclaredTypes()) {
-					if (type instanceof ClassType) {
-						final Type t = ((ClassType) type).getTarget();
-						if (t != null) {
-							typeQuery.add(t, MemberPredicate.STATIC);
-						}
-					} else {
-						final Type t = TypeUtil.extractType(context
-								.resolveTypeRef(type));
-						if (t != null) {
-							typeQuery.add(t, MemberPredicate.NON_STATIC);
-						}
+		}
+
+		public void reportValueTypeMembers(ITypeInferenceContext context,
+				IValueReference valueRef) {
+			final TypeMemberQuery typeQuery = new TypeMemberQuery();
+			for (JSType type : valueRef.getDeclaredTypes()) {
+				if (type instanceof ClassType) {
+					final Type t = ((ClassType) type).getTarget();
+					if (t != null) {
+						typeQuery.add(t, MemberPredicate.STATIC);
+					}
+				} else {
+					final Type t = TypeUtil.extractType(context
+							.resolveTypeRef(type));
+					if (t != null) {
+						typeQuery.add(t, MemberPredicate.NON_STATIC);
 					}
 				}
-				for (JSType type : valueRef.getTypes()) {
-					if (type instanceof ClassType) {
-						final Type t = ((ClassType) type).getTarget();
-						if (t != null) {
-							typeQuery.add(t, MemberPredicate.STATIC);
-						}
-					} else {
-						final Type t = TypeUtil.extractType(context
-								.resolveTypeRef(type));
-						if (t != null) {
-							typeQuery.add(t, MemberPredicate.NON_STATIC);
-						}
+			}
+			for (JSType type : valueRef.getTypes()) {
+				if (type instanceof ClassType) {
+					final Type t = ((ClassType) type).getTarget();
+					if (t != null) {
+						typeQuery.add(t, MemberPredicate.STATIC);
+					}
+				} else {
+					final Type t = TypeUtil.extractType(context
+							.resolveTypeRef(type));
+					if (t != null) {
+						typeQuery.add(t, MemberPredicate.NON_STATIC);
 					}
 				}
-				for (Member member : typeQuery) {
-					if (processed.add(MethodKey.createKey(member))
-							&& member.isVisible()
-							&& CharOperation.prefixEquals(prefix,
-									member.getName(), false)) {
-						reportMember(member, member.getName());
-					}
+			}
+			for (Member member : typeQuery.ignoreDuplicates(processed)) {
+				if (member.isVisible()
+						&& CharOperation.prefixEquals(prefix, member.getName(),
+								false)) {
+					reportMember(member, member.getName());
 				}
 			}
 		}
@@ -425,52 +426,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
 			requestor.accept(proposal);
-		}
-
-	}
-
-	static class MethodKey {
-		final String name;
-		final String signature;
-
-		/**
-		 * @param name
-		 */
-		public MethodKey(Method method) {
-			this.name = method.getName();
-			StringBuilder sb = new StringBuilder();
-			for (Parameter parameter : method.getParameters()) {
-				final JSType paramType = parameter.getType();
-				if (paramType != null) {
-					sb.append(paramType.getName());
-				}
-				sb.append(',');
-			}
-			this.signature = sb.toString();
-		}
-
-		@Override
-		public int hashCode() {
-			return name.hashCode();
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof MethodKey) {
-				final MethodKey other = (MethodKey) obj;
-				return name.equals(other.name)
-						&& signature.equals(other.signature);
-			}
-			return false;
-		}
-
-		protected static Object createKey(Member member) {
-			if (member instanceof Method && member.getDeclaringType() != null
-					&& member.getDeclaringType().getKind() == TypeKind.JAVA) {
-				return new MethodKey((Method) member);
-			} else {
-				return member.getName();
-			}
 		}
 
 	}
