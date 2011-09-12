@@ -10,7 +10,6 @@
 package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
 import org.eclipse.dltk.core.CompletionProposal;
-import org.eclipse.dltk.core.IScriptProject;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
@@ -165,16 +164,6 @@ public class JavaScriptCompletionProposalCollector extends
 				completion, replaceStart, length, image, displayString, i,
 				isInDoc);
 		return javaScriptCompletionProposal;
-	}
-
-	@Override
-	protected ScriptCompletionProposal createOverrideCompletionProposal(
-			IScriptProject scriptProject, ISourceModule compilationUnit,
-			String name, String[] paramTypes, int start, int length,
-			String displayName, String completionProposal) {
-		return new JavaScriptOverrideCompletionProposal(scriptProject,
-				compilationUnit, name, paramTypes, start, length, displayName,
-				completionProposal);
 	}
 
 	@Override
