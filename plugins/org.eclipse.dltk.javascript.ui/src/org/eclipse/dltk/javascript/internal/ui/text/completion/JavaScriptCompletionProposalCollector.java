@@ -33,8 +33,6 @@ public class JavaScriptCompletionProposalCollector extends
 	protected final static char[] VAR_TRIGGER = new char[] { '\t', ' ', '=',
 			';', '.' };
 
-	// private final HashSet doubleFilter = new HashSet();
-
 	@Override
 	protected char[] getVarTrigger() {
 		return VAR_TRIGGER;
@@ -44,27 +42,6 @@ public class JavaScriptCompletionProposalCollector extends
 		super(module);
 	}
 
-	/**
-	 * @see org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector#beginReporting()
-	 */
-	@Override
-	public void beginReporting() {
-		super.beginReporting();
-		// doubleFilter.clear();
-	}
-
-	/**
-	 * @see org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector#isFiltered(org.eclipse.dltk.core.CompletionProposal)
-	 */
-	@Override
-	protected boolean isFiltered(CompletionProposal proposal) {
-		// if (!doubleFilter.add(proposal.getName())) {
-		// return true;
-		// }
-		return super.isFiltered(proposal);
-	}
-
-	// Specific proposals creation. May be use factory?
 	@Override
 	protected IScriptCompletionProposal createScriptCompletionProposal(
 			CompletionProposal proposal) {
@@ -149,16 +126,6 @@ public class JavaScriptCompletionProposalCollector extends
 	@Override
 	protected ScriptCompletionProposal createScriptCompletionProposal(
 			String completion, int replaceStart, int length, Image image,
-			String displayString, int i) {
-		JavaScriptCompletionProposal javaScriptCompletionProposal = new JavaScriptCompletionProposal(
-				completion, replaceStart, length, image, displayString, i);
-
-		return javaScriptCompletionProposal;
-	}
-
-	@Override
-	protected ScriptCompletionProposal createScriptCompletionProposal(
-			String completion, int replaceStart, int length, Image image,
 			String displayString, int i, boolean isInDoc) {
 		JavaScriptCompletionProposal javaScriptCompletionProposal = new JavaScriptCompletionProposal(
 				completion, replaceStart, length, image, displayString, i,
@@ -176,7 +143,7 @@ public class JavaScriptCompletionProposalCollector extends
 		Image img = getImage(getLabelProvider().createImageDescriptor(proposal));
 		int relevance = computeRelevance(proposal);
 		return createScriptCompletionProposal(completion, start, length, img,
-				label, relevance);
+				label, relevance, false);
 	}
 
 	@Override
@@ -188,7 +155,7 @@ public class JavaScriptCompletionProposalCollector extends
 			ProposalContextInformation {
 		private final String informationDisplayString;
 
-		private JavaScriptProposalContextInformation(
+		public JavaScriptProposalContextInformation(
 				CompletionProposal proposal, String informationDisplayString) {
 			super(proposal);
 			this.informationDisplayString = informationDisplayString;
