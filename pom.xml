@@ -29,7 +29,7 @@
 		<module>plugins/org.eclipse.dltk.javascript.rhino</module>
 		<module>plugins/org.eclipse.dltk.javascript.rhino.dbgp</module>
 		<module>plugins/org.eclipse.dltk.javascript.ui</module>
-		<module>update.site</module>
+		<!-- <module>update.site</module> -->
 
 
 		<!--  module>tests/org.eclipse.dltk.javascript.core.tests</module>
