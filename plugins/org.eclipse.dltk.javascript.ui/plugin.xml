@@ -791,6 +791,9 @@
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNREACHABLE_CODE"
             label="Unreachable code"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNUSED_VARIABLE"
+            label="Unused variable"/>
    </section>
    <section id="org.eclipse.dltk.javascript.ui.problems.shadowing" name="Name shadowing and conflicts" priority="120">
       <problem
