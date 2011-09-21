@@ -448,6 +448,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			final FunctionScope scope = functionScopes.pop();
 			if (method != null) {
 				if (!scope.returnNodes.isEmpty()) {
+					method.setType(context.resolveTypeRef(method.getType()));
 					pushExpressionValidator(new TestReturnStatement(method,
 							scope.returnNodes, reporter));
 				} else if (!scope.throwsException && method.getType() != null) {
