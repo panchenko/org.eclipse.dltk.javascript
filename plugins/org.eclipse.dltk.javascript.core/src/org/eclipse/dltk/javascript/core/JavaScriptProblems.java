@@ -83,6 +83,10 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	 */
 	REASSIGNMENT_OF_CONSTANT,
 	/**
+	 * @since 4.0
+	 */
+	PROPERTY_READONLY,
+	/**
 	 * @since 3.0
 	 */
 	PARAMETER_HIDES_VARIABLE(JSParserProblemGroup.DECLARATION_HIDES_OTHER),

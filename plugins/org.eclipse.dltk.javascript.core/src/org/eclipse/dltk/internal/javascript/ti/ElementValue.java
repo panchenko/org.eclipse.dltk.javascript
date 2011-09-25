@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
+import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
@@ -260,6 +264,16 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
+	protected static final IAssignProtection READONLY_PROPERTY = new IAssignProtection() {
+		public IProblemIdentifier problemId() {
+			return JavaScriptProblems.PROPERTY_READONLY;
+		}
+
+		public String problemMessage() {
+			return ValidationMessages.AssignmentToReadonlyProperty;
+		}
+	};
+
 	private static class PropertyValue extends ElementValue implements IValue {
 
 		protected final ITypeInferenceContext context;
@@ -325,6 +339,14 @@ public abstract class ElementValue implements IValue {
 			} else {
 				return JSTypeSet.emptySet();
 			}
+		}
+
+		@Override
+		public Object getAttribute(String key, boolean includeReferences) {
+			if (IAssignProtection.ATTRIBUTE.equals(key)) {
+				return property.isReadOnly() ? READONLY_PROPERTY : null;
+			}
+			return super.getAttribute(key, includeReferences);
 		}
 
 		@Override
