@@ -464,6 +464,21 @@ public abstract class ElementValue implements IValue {
 			}
 		}
 
+		@Override
+		public Object getAttribute(String key, boolean includeReferences) {
+			if (IAssignProtection.ATTRIBUTE.equals(key)) {
+				for (Member member : members) {
+					if (member instanceof Property) {
+						if (((Property) member).isReadOnly()) {
+							return READONLY_PROPERTY;
+						}
+					}
+				}
+				return null;
+			}
+			return super.getAttribute(key, includeReferences);
+		}
+
 	}
 
 	protected abstract Object getElements();
