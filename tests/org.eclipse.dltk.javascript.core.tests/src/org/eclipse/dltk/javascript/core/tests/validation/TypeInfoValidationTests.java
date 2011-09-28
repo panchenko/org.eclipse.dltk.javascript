@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.validation;
 
+import static java.util.Collections.singleton;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1846,4 +1848,50 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				problems.get(0).getID());
 	}
 
+	public void testPhantomPropertyUntyped() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add(" var x");
+		code.add(" if (x.y) {"); // line #2
+		code.add("   return x.y;");
+		code.add(" }");
+		code.add(" return undefined;");
+		code.add("}");
+		final List<IProblem> noproblems = validate(code.toString());
+		assertEquals(noproblems.toString(), 0, noproblems.size());
+		// change the condition and make sure problems are reported
+		code.set(2, "if (x.y > 10) {");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 2, problems.size());
+	}
+
+	public void testPhantomPropertyJava() {
+		final StringList code = new StringList();
+		code.add("/** @param {ExampleService} x */");
+		code.add("function test(x) {");
+		code.add(" if (x.y) {");
+		code.add("   return x.y;");
+		code.add(" }");
+		code.add(" else return undefined;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(),
+				singleton(JavaScriptProblems.UNDEFINED_JAVA_PROPERTY),
+				extractIds(problems));
+	}
+
+	public void testPhantomPropertyRecord() {
+		final StringList code = new StringList();
+		code.add("/** @param {{name:String,address:String}} x */");
+		code.add("function test(x) {");
+		code.add(" if (x.y) {");
+		code.add("   return x.y;");
+		code.add(" }");
+		code.add(" else return undefined;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(),
+				singleton(JavaScriptProblems.UNDEFINED_PROPERTY),
+				extractIds(problems));
+	}
 }
