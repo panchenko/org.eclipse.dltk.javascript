@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
+import static org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations.typeOf;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -1777,9 +1779,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 			} else if ((!exists && !result.exists())
 					&& !isArrayLookup(propertyExpression)) {
-				final JSType type = context
-						.resolveTypeRef(JavaScriptValidations.typeOf(result
-								.getParent()));
+				final JSType type = context.resolveTypeRef(typeOf(result
+						.getParent()));
 				if (type != null && type.getKind() == TypeKind.JAVA) {
 					reporter.reportProblem(
 							JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, NLS
@@ -1875,23 +1876,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		private boolean shouldBeDefined(PropertyExpression propertyExpression) {
 			if (propertyExpression.getParent() instanceof BinaryOperation) {
-				BinaryOperation bo = (BinaryOperation) propertyExpression
+				final BinaryOperation bo = (BinaryOperation) propertyExpression
 						.getParent();
-				if (bo.getRightExpression() == propertyExpression) {
-					return bo.getOperation() != JSParser.LAND
-							&& bo.getOperation() != JSParser.LOR;
-				}
+				return bo.getOperation() != JSParser.LAND
+						&& bo.getOperation() != JSParser.LOR;
 			}
-			if (propertyExpression.getParent() instanceof VariableDeclaration) {
-				return true;
-			}
-			if (propertyExpression.getParent() instanceof CallExpression) {
-				return true;
-			}
-			if (propertyExpression.getParent() instanceof PropertyExpression) {
-				return true;
-			}
-			return false;
+			return true;
 		}
 
 		private void reportDeprecatedProperty(Property property, Element owner,
@@ -2054,11 +2044,21 @@ public class TypeInfoValidator implements IBuildParticipant {
 					node.sourceStart(), node.sourceEnd());
 		}
 
+		private boolean stronglyTyped(IValueReference reference) {
+			final JSType parentType = typeOf(reference.getParent());
+			if (parentType != null) {
+				final TypeKind typeKind = parentType.getKind();
+				return typeKind == TypeKind.JAVA || typeKind == TypeKind.RECORD;
+			}
+			return false;
+		}
+
 		@Override
 		public IValueReference visitIfStatement(IfStatement node) {
 			final IValueReference condition = visit(node.getCondition());
 			if (condition != null && !condition.exists()
-					&& node.getCondition() instanceof PropertyExpression) {
+					&& node.getCondition() instanceof PropertyExpression
+					&& !stronglyTyped(condition)) {
 				if (DEBUG) {
 					System.out.println("visitIfStatement("
 							+ node.getCondition() + ") doesn't exist "
