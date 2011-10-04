@@ -748,12 +748,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 					return;
 				}
+				if (method.isDeprecated()) {
+					reportDeprecatedMethod(methodNode, reference, method);
+				}
 				if (!validateParameterCount(method, callArgs)) {
 					reportMethodParameterError(methodNode, arguments, method);
 					return;
-				}
-				if (method.isDeprecated()) {
-					reportDeprecatedMethod(methodNode, reference, method);
 				}
 				if (JavaScriptValidations.isStatic(reference.getParent())
 						&& !method.isStatic()) {
