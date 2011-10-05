@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.codeassist.ICompletionEngine;
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.core.JSKeywordCategory;
@@ -115,7 +116,7 @@ public class JSDocCompletionProposalComputer implements
 					}
 
 					for (String jsdocTag : tags) {
-						if (jsdocTag.startsWith(tag)
+						if (CharOperation.prefixEquals(tag, jsdocTag)
 								&& !usedTags.contains(jsdocTag)) {
 							proposals
 									.add(new ScriptCompletionProposal(
