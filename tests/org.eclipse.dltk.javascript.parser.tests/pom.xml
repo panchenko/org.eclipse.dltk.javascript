@@ -12,4 +12,24 @@
   <artifactId>org.eclipse.dltk.javascript.parser.tests</artifactId>
   <version>4.0.0-SNAPSHOT</version>
   <packaging>eclipse-test-plugin</packaging>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<includes>
+						<include>**/AllTests.java</include>
+					</includes>
+					<dependencies>
+						<dependency>
+							<type>p2-installable-unit</type>
+							<artifactId>org.eclipse.platform.feature.group</artifactId>
+						</dependency>
+					</dependencies>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
