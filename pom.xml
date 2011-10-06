@@ -30,14 +30,7 @@
 		<module>plugins/org.eclipse.dltk.javascript.rhino.dbgp</module>
 		<module>plugins/org.eclipse.dltk.javascript.ui</module>
 		<!-- <module>update.site</module> -->
+		<module>tests</module>
 
-
-		<!--  module>tests/org.eclipse.dltk.javascript.core.tests</module>
-		<module>tests/org.eclipse.dltk.javascript.formatter.tests</module>
-		<module>tests/org.eclipse.dltk.javascript.parser.tests</module>
-		<module>tests/org.eclipse.dltk.javascript.ui.tests</module> -->
-
-		<!--module>tools/org.eclipse.dltk.javascript.core.edit</module> <module>tools/org.eclipse.dltk.javascript.core.editor</module> 
-			<module>tools/org.eclipse.dltk.javascript.dev-tools</module -->
 	</modules>
 </project>
