@@ -20,8 +20,9 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<testSuite>org.eclipse.dltk.javascript.core.tests</testSuite>
-					<testClass>org.eclipse.dltk.javascript.core.tests.AllTests</testClass>
+					<includes>
+						<include>**/AllTests.java</include>
+					</includes>
 					<dependencies>
 						<dependency>
 							<type>p2-installable-unit</type>
