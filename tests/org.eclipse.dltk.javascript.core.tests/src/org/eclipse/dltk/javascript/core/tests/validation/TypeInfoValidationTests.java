@@ -500,6 +500,30 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 	}
 
+	public void testReturnFunction() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @return {function(String)}");
+		code.add(" */");
+		code.add("function test() {");
+		code.add("	return function(s) { return s;}");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testReturnFunctionWrong() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @return {function(String)}");
+		code.add(" */");
+		code.add("function test() {");
+		code.add("	return 1;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
+
 	public void testLazyTypeWithAssignment() {
 		StringList code = new StringList();
 		code.add("function Node() {");
@@ -1862,7 +1886,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		// change the condition and make sure problems are reported
 		code.set(2, "if (x.y > 10) {");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(problems.toString(), 2, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 	}
 
 	public void testPhantomPropertyJava() {
