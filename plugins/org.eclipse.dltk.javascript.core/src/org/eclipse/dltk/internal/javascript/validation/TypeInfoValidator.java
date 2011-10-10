@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.validation;
 
+import static org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes.PARAMETERS;
+import static org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes.PHANTOM;
 import static org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations.typeOf;
 
 import java.util.ArrayList;
@@ -46,7 +48,6 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.NewExpression;
-import org.eclipse.dltk.javascript.ast.NullExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -548,8 +549,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 			enterFunctionScope();
 			IValueReference reference = super.visitFunctionStatement(node);
-			final IMethod method = (IMethod) reference
-					.getAttribute(IReferenceAttributes.PARAMETERS);
+			final IMethod method = (IMethod) reference.getAttribute(PARAMETERS);
 			leaveFunctionScope(method);
 
 			return reference;
@@ -675,8 +675,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public IValueReference visitReturnStatement(ReturnStatement node) {
 			IValueReference returnValueReference = super
 					.visitReturnStatement(node);
-			if (returnValueReference != null
-					|| node.getValue() instanceof NullExpression) {
+			if (node.getValue() != null) {
 				peekFunctionScope().returnNodes.add(new ReturnNode(node,
 						returnValueReference));
 			}
@@ -703,8 +702,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 				final IValueReference reference = visit(expression);
 				modes.remove(expression);
 				if (reference == null
-						|| reference.getAttribute(IReferenceAttributes.PHANTOM,
-								true) != null || isUntyped(reference)) {
+						|| reference.getAttribute(PHANTOM, true) != null
+						|| isUntyped(reference)) {
 					for (ASTNode argument : node.getArguments()) {
 						visit(argument);
 					}
@@ -873,8 +872,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 
 			} else {
-				Object attribute = reference.getAttribute(
-						IReferenceAttributes.PARAMETERS, true);
+				Object attribute = reference.getAttribute(PARAMETERS, true);
 				if (attribute instanceof JSMethod) {
 					JSMethod method = (JSMethod) attribute;
 					if (method.isDeprecated()) {
@@ -901,7 +899,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 								name = identifier.getName();
 						}
 						reporter.reportProblem(
-								JavaScriptProblems.WRONG_PARAMETERS,
+								method.isTyped() ? JavaScriptProblems.WRONG_PARAMETERS
+										: JavaScriptProblems.WRONG_PARAMETERS_UNTYPED,
 								NLS.bind(
 										ValidationMessages.MethodNotApplicableInScript,
 										new String[] {
@@ -1020,7 +1019,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					&& reference.getDeclaredType() == null;
 		}
 
-		public boolean isUntyped(IValueReference reference) {
+		public static boolean isUntyped(IValueReference reference) {
 			while (reference != null) {
 				final ReferenceKind kind = reference.getKind();
 				if (kind == ReferenceKind.ARGUMENT) {
@@ -1530,8 +1529,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 				final IValueReference result = super
 						.visitPropertyExpression(node);
 				if (result == null
-						|| result.getAttribute(IReferenceAttributes.PHANTOM,
-								true) != null || isUntyped(result)) {
+						|| result.getAttribute(PHANTOM, true) != null
+						|| isUntyped(result)) {
 					return result;
 				}
 				if (currentMode() != VisitorMode.CALL) {
@@ -1621,8 +1620,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 									variable.getName()), expr.sourceStart(),
 							expr.sourceEnd());
 				} else {
-					attribute = reference
-							.getAttribute(IReferenceAttributes.PARAMETERS);
+					attribute = reference.getAttribute(PARAMETERS);
 					if (attribute instanceof IMethod) {
 						IMethod method = (IMethod) attribute;
 						reporter.reportProblem(
@@ -1916,8 +1914,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 					return;
 				} else {
-					IMethod method = (IMethod) result
-							.getAttribute(IReferenceAttributes.PARAMETERS);
+					IMethod method = (IMethod) result.getAttribute(PARAMETERS);
 					if (method != null) {
 						if (method.isDeprecated()) {
 							reporter.reportProblem(
