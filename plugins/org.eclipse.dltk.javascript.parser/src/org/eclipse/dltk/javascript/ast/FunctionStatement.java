@@ -77,6 +77,10 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 		this.name = name;
 	}
 
+	public String getFunctionName() {
+		return name != null ? name.getName() : "<anonymous>";
+	}
+
 	public List<Argument> getArguments() {
 		return arguments != null ? arguments : Collections
 				.<Argument> emptyList();
