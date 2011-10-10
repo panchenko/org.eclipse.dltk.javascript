@@ -28,7 +28,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
 import org.eclipse.dltk.javascript.core.tests.typeinference.TestTypeInferencer2;
 
-@SuppressWarnings("nls")
+@SuppressWarnings({ "nls", "restriction" })
 public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	private boolean notYetImplemented() {
@@ -1133,7 +1133,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("  var x = anchorr.xxx");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
 				.getID());
 	}
@@ -1147,7 +1147,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("  var x = anchor.xxx.yyy");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
 				.getID());
 	}
