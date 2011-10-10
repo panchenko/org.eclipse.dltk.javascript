@@ -129,6 +129,11 @@ public interface IModelBuilder {
 		IParameter getParameter(String name);
 
 		/**
+		 * Checks if this method has type declarations
+		 */
+		boolean isTyped();
+
+		/**
 		 * Is this a constructor method/function
 		 */
 		boolean isConstructor();

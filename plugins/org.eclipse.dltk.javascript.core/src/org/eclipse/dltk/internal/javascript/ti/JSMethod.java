@@ -35,7 +35,6 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 @SuppressWarnings("serial")
 public class JSMethod extends ArrayList<IParameter> implements IMethod {
@@ -118,6 +117,20 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 	public boolean isProtected() {
 		return prot;
+	}
+
+	public boolean isTyped() {
+		if (type != null) {
+			return true;
+		}
+		for (int i = 0; i < size(); ++i) {
+			final IParameter parameter = get(i);
+			if (parameter.getType() != null || parameter.isOptional()
+					|| parameter.isVarargs()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean isConstructor() {
@@ -233,7 +246,6 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	public static class Parameter extends JSElement implements IParameter {
 
 		private boolean optional;
-		private Type propertiesType;
 		private boolean varargs;
 
 		public void setOptional(boolean b) {
@@ -250,14 +262,6 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 
 		public boolean isVarargs() {
 			return varargs;
-		}
-
-		public Type getPropertiesType() {
-			return propertiesType;
-		}
-
-		public void setPropertiesType(Type propertiesType) {
-			this.propertiesType = propertiesType;
 		}
 
 		@Override
