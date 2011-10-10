@@ -837,8 +837,14 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 		}
 
 		public boolean isAssignableFrom(JSType2 type) {
-			// TODO (alex) Auto-generated method stub
-			return false;
+			if (type instanceof FunctionTypeKey || type instanceof AnyType
+					|| type instanceof UndefinedType) {
+				return true;
+			} else if (type instanceof SimpleType) {
+				return ITypeNames.FUNCTION.equals(type.getName());
+			} else {
+				return false;
+			}
 		}
 
 		public JSType getReturnType() {
