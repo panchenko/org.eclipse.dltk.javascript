@@ -141,7 +141,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 	private static class StackedExpressionValidator extends ExpressionValidator {
 
-		private final List<ExpressionValidator> stacked = new ArrayList<TypeInfoValidator.ExpressionValidator>();
+		private final List<ExpressionValidator> stacked = new ArrayList<ExpressionValidator>();
 		private final Reporter reporter;
 
 		public StackedExpressionValidator(Reporter reporter) {
@@ -152,8 +152,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 			for (ExpressionValidator validator : stacked) {
 				int count = reporter.getProblemCount();
 				validator.call();
-				if (reporter.getProblemCount() != count)
-					break;
+				// XXX (alex) REVIEW: if (reporter.getProblemCount() != count)
+				// break;
 			}
 		}
 
@@ -163,15 +163,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 	}
 
 	private static class CallExpressionValidator extends ExpressionValidator {
+		private final FunctionScope scope;
 		private final CallExpression node;
 		private final IValueReference reference;
 		private final ValidationVisitor visitor;
 		private final IValueReference[] arguments;
 		private final List<Method> methods;
 
-		public CallExpressionValidator(CallExpression node,
-				IValueReference reference, IValueReference[] arguments,
-				List<Method> methods, ValidationVisitor visitor) {
+		public CallExpressionValidator(FunctionScope scope,
+				CallExpression node, IValueReference reference,
+				IValueReference[] arguments, List<Method> methods,
+				ValidationVisitor visitor) {
+			this.scope = scope;
 			this.node = node;
 			this.reference = reference;
 			this.arguments = arguments;
@@ -180,7 +183,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		public void call() {
-			visitor.validateCallExpression(node, reference, arguments, methods);
+			visitor.validateCallExpression(scope, node, reference, arguments,
+					methods);
 		}
 	}
 
@@ -195,6 +199,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 			this.returnValueReference = returnValueReference;
 		}
 
+		@Override
+		public String toString() {
+			return String.valueOf(node).trim() + " -> " + returnValueReference;
+		}
 	}
 
 	private static class TestReturnStatement extends ExpressionValidator {
@@ -285,32 +293,36 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 	private static class NotExistingIdentiferValidator extends
 			ExpressionValidator {
+		private final FunctionScope scope;
 		private final Expression identifer;
 		private final IValueReference reference;
 		private final ValidationVisitor visitor;
 
-		public NotExistingIdentiferValidator(Expression identifer,
-				IValueReference reference, ValidationVisitor visitor) {
+		public NotExistingIdentiferValidator(FunctionScope scope,
+				Expression identifer, IValueReference reference,
+				ValidationVisitor visitor) {
+			this.scope = scope;
 			this.identifer = identifer;
 			this.reference = reference;
 			this.visitor = visitor;
 		}
 
 		public void call() {
-			visitor.validate(identifer, reference);
+			visitor.validate(scope, identifer, reference);
 		}
 	}
 
 	private static class NewExpressionValidator extends ExpressionValidator {
-
+		private final FunctionScope scope;
 		private final NewExpression node;
 		private final IValueReference reference;
 		final IValueCollection collection;
 		private final ValidationVisitor validator;
 
-		public NewExpressionValidator(NewExpression node,
+		public NewExpressionValidator(FunctionScope scope, NewExpression node,
 				IValueReference reference, IValueCollection collection,
 				ValidationVisitor validator) {
+			this.scope = scope;
 			this.node = node;
 			this.reference = reference;
 			this.collection = collection;
@@ -318,21 +330,23 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		public void call() {
-			validator.checkExpressionType(collection, node.getObjectClass(),
-					reference);
+			validator.checkExpressionType(scope, collection,
+					node.getObjectClass(), reference);
 		}
 
 	}
 
 	private static class PropertyExpressionHolder extends ExpressionValidator {
+		private final FunctionScope scope;
 		private final PropertyExpression node;
 		private final IValueReference reference;
 		private final ValidationVisitor visitor;
 		private final boolean exists;
 
-		public PropertyExpressionHolder(PropertyExpression node,
-				IValueReference reference, ValidationVisitor visitor,
-				boolean exists) {
+		public PropertyExpressionHolder(FunctionScope scope,
+				PropertyExpression node, IValueReference reference,
+				ValidationVisitor visitor, boolean exists) {
+			this.scope = scope;
 			this.node = node;
 			this.reference = reference;
 			this.visitor = visitor;
@@ -340,7 +354,45 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		public void call() {
-			visitor.validateProperty(node, reference, exists);
+			visitor.validateProperty(scope, node, reference, exists);
+		}
+	}
+
+	static class FunctionScope {
+		// Set<Expression or IValueReference>
+		final Set<Object> reported = new HashSet<Object>();
+		final List<ReturnNode> returnNodes = new ArrayList<ReturnNode>();
+		boolean throwsException;
+
+		void add(Path path) {
+			if (path != null) {
+				reported.add(path.start);
+				reported.add(path.references[0]);
+			}
+		}
+
+		boolean contains(Path path) {
+			if (path != null) {
+				if (reported.contains(path.start)) {
+					return true;
+				}
+				for (IValueReference reference : path.references) {
+					if (reported.contains(reference)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	}
+
+	static class Path {
+		final Expression start;
+		final IValueReference[] references;
+
+		public Path(Expression start, IValueReference[] references) {
+			this.start = start;
+			this.references = references;
 		}
 	}
 
@@ -377,6 +429,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public void initialize() {
 			super.initialize();
 			variables.clear();
+			functionScopes.clear();
+			functionScopes.add(new FunctionScope());
 		}
 
 		@Override
@@ -426,8 +480,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 				started = startExpressionValidator();
 			try {
 				IValueReference reference = super.visitNewExpression(node);
-				pushExpressionValidator(new NewExpressionValidator(node,
-						reference, peekContext(), this));
+				pushExpressionValidator(new NewExpressionValidator(
+						peekFunctionScope(), node, reference, peekContext(),
+						this));
 				return reference;
 			} finally {
 				if (started)
@@ -437,9 +492,30 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		private final Stack<FunctionScope> functionScopes = new Stack<FunctionScope>();
 
-		public static class FunctionScope {
-			final List<ReturnNode> returnNodes = new ArrayList<ReturnNode>();
-			boolean throwsException;
+		private static Path path(Expression expression,
+				IValueReference reference) {
+			final List<IValueReference> refs = new ArrayList<IValueReference>(8);
+			for (;;) {
+				if (expression instanceof PropertyExpression) {
+					expression = ((PropertyExpression) expression).getObject();
+				} else if (expression instanceof CallExpression) {
+					expression = ((CallExpression) expression).getExpression();
+				} else {
+					break;
+				}
+				refs.add(reference);
+				reference = reference.getParent();
+				if (reference == null) {
+					return null;
+				}
+			}
+			refs.add(reference);
+			return new Path(expression, refs.toArray(new IValueReference[refs
+					.size()]));
+		}
+
+		protected final FunctionScope peekFunctionScope() {
+			return functionScopes.peek();
 		}
 
 		public void enterFunctionScope() {
@@ -601,21 +677,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 					.visitReturnStatement(node);
 			if (returnValueReference != null
 					|| node.getValue() instanceof NullExpression) {
-				if (!functionScopes.isEmpty()) {
-					final FunctionScope scope = functionScopes.peek();
-					scope.returnNodes.add(new ReturnNode(node,
-							returnValueReference));
-				}
+				peekFunctionScope().returnNodes.add(new ReturnNode(node,
+						returnValueReference));
 			}
 			return returnValueReference;
 		}
 
 		@Override
 		public IValueReference visitThrowStatement(ThrowStatement node) {
-			if (!functionScopes.isEmpty()) {
-				final FunctionScope scope = functionScopes.peek();
-				scope.throwsException = true;
-			}
+			peekFunctionScope().throwsException = true;
 			return super.visitThrowStatement(node);
 		}
 
@@ -654,8 +724,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 						.size()];
 				final List<Method> methods = JavaScriptValidations
 						.extractElements(reference, Method.class);
-				pushExpressionValidator(new CallExpressionValidator(node,
-						reference, arguments, methods, this));
+				pushExpressionValidator(new CallExpressionValidator(
+						peekFunctionScope(), node, reference, arguments,
+						methods, this));
 				if (started) {
 					stopExpressionValidator();
 					started = false;
@@ -707,11 +778,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 		 * @param methods
 		 * @return
 		 */
-		protected void validateCallExpression(CallExpression node,
-				final IValueReference reference, IValueReference[] arguments,
-				List<Method> methods) {
+		protected void validateCallExpression(FunctionScope scope,
+				CallExpression node, final IValueReference reference,
+				IValueReference[] arguments, List<Method> methods) {
 
 			final Expression expression = node.getExpression();
+			final Path path = path(expression, reference);
+			if (scope.contains(path)) {
+				return;
+			}
 			final Expression methodNode;
 			if (expression instanceof PropertyExpression) {
 				methodNode = ((PropertyExpression) expression).getProperty();
@@ -839,6 +914,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 				} else if (!isArrayLookup(expression)
 						&& !isUntypedParameter(reference)) {
+					scope.add(path);
 
 					final JSType type = JavaScriptValidations.typeOf(reference
 							.getParent());
@@ -1459,8 +1535,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 					return result;
 				}
 				if (currentMode() != VisitorMode.CALL) {
-					pushExpressionValidator(new PropertyExpressionHolder(node,
-							result, this, result.exists()));
+					pushExpressionValidator(new PropertyExpressionHolder(
+							peekFunctionScope(), node, result, this,
+							result.exists()));
 				}
 				return result;
 			} finally {
@@ -1474,16 +1551,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 				IValueReference right, BinaryOperation node) {
 			if (left != null) {
 				checkAssign(left, node);
-				validate(node.getLeftExpression(), left);
+				validate(peekFunctionScope(), node.getLeftExpression(), left);
 			}
 			return super.visitAssign(left, right, node);
 		}
 
-		protected boolean validate(Expression expr, IValueReference reference) {
+		protected boolean validate(FunctionScope scope, Expression expr,
+				IValueReference reference) {
 			final IValueReference parent = reference.getParent();
 			if (parent == null) {
 				// top level
 				if (expr instanceof Identifier && !reference.exists()) {
+					scope.add(path(expr, reference));
 					if (expr.getParent() instanceof BinaryOperation
 							&& ((BinaryOperation) expr.getParent())
 									.getOperation() == JSParser.INSTANCEOF
@@ -1507,7 +1586,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					testPrivate(expr, reference);
 
 			} else if (expr instanceof PropertyExpression
-					&& validate(((PropertyExpression) expr).getObject(), parent)) {
+					&& validate(scope, ((PropertyExpression) expr).getObject(),
+							parent)) {
 				final JSType type = JavaScriptValidations.typeOf(parent);
 				if (type != null && type.getKind() == TypeKind.JAVA
 						&& !reference.exists()) {
@@ -1519,8 +1599,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					return false;
 				}
 			} else if (expr instanceof GetArrayItemExpression
-					&& !validate(((GetArrayItemExpression) expr).getArray(),
-							parent)) {
+					&& !validate(scope,
+							((GetArrayItemExpression) expr).getArray(), parent)) {
 				return false;
 			}
 			return true;
@@ -1581,7 +1661,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 						&& !(node.getParent() instanceof CallExpression && ((CallExpression) node
 								.getParent()).getExpression() == node)) {
 					pushExpressionValidator(new NotExistingIdentiferValidator(
-							node, result, this));
+							peekFunctionScope(), node, result, this));
 				} else {
 					testPrivate(node, result);
 				}
@@ -1716,8 +1796,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		protected void validateProperty(PropertyExpression propertyExpression,
-				IValueReference result, boolean exists) {
+		protected void validateProperty(final FunctionScope scope,
+				PropertyExpression propertyExpression, IValueReference result,
+				boolean exists) {
+			final Path path = path(propertyExpression, result);
+			if (scope.contains(path)) {
+				return;
+			}
 			final Expression propName = propertyExpression.getProperty();
 			final Member member = extractElement(result, Member.class,
 					JavaScriptValidations.isStatic(result.getParent()));
@@ -1779,6 +1864,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 			} else if ((!exists && !result.exists())
 					&& !isArrayLookup(propertyExpression)) {
+				scope.add(path);
 				final JSType type = context.resolveTypeRef(typeOf(result
 						.getParent()));
 				if (type != null && type.getKind() == TypeKind.JAVA) {
@@ -1933,10 +2019,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		protected void checkExpressionType(IValueCollection collection,
-				Expression node, IValueReference reference) {
+		protected void checkExpressionType(FunctionScope scope,
+				IValueCollection collection, Expression node,
+				IValueReference reference) {
 			if (reference.getParent() == null && isIdentifier(node)
 					&& !reference.exists()) {
+				scope.add(path(node, reference));
 				final Identifier identifier = getIdentifier(node);
 				reportUnknownType(JavaScriptProblems.UNDECLARED_VARIABLE,
 						identifier != null ? identifier : node,
