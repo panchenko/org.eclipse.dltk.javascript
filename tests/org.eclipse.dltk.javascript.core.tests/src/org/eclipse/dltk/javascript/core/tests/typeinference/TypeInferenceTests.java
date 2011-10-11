@@ -24,6 +24,7 @@ import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -1047,4 +1048,74 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(getTypes(ITypeNames.STRING), child.getTypes());
 
 	}
+	
+	
+	public void testArrayInitializerWithLiteralNumbers() {
+		StringList code = new StringList();
+		code.add("var x = [1,2,3];");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("x");
+		JSType type = JavaScriptValidations.typeOf(child);
+		assertEquals(JSTypeSet.normalize(TypeUtil.arrayOf(ITypeNames.NUMBER)),type);
+	}
+	
+
+	public void testArrayInitializerWithLiteralStrings() {
+		StringList code = new StringList();
+		code.add("var x = ['1','2','3'];");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("x");
+		JSType type = JavaScriptValidations.typeOf(child);
+		assertEquals(JSTypeSet.normalize(TypeUtil.arrayOf(ITypeNames.STRING)),type);
+	}
+	
+	public void testArrayInitializerWithLiteralMixed() {
+		StringList code = new StringList();
+		code.add("var x = ['1','2',3];");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("x");
+		JSType type = JavaScriptValidations.typeOf(child);
+		assertEquals(JSTypeSet.normalize(TypeUtil.ref(ITypeNames.ARRAY)),type);
+	}
+
+	public void testArrayInitializerWithVariableNumbers() {
+		StringList code = new StringList();
+		code.add("var y = 1;");
+		code.add("var x = [y,y,y];");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("x");
+		JSType type = JavaScriptValidations.typeOf(child);
+		assertEquals(JSTypeSet.normalize(TypeUtil.arrayOf(ITypeNames.NUMBER)),type);
+	}
+	
+	public void testArrayInitializerWithVariableAndLiteralNumbers() {
+		StringList code = new StringList();
+		code.add("var y = 1;");
+		code.add("var x = [y,1,y];");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("x");
+		JSType type = JavaScriptValidations.typeOf(child);
+		assertEquals(JSTypeSet.normalize(TypeUtil.arrayOf(ITypeNames.NUMBER)),type);
+	}
+
+	public void testArrayInitializerWithVariableStrings() {
+		StringList code = new StringList();
+		code.add("var y = '1';");
+		code.add("var x = [y,y,y];");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("x");
+		JSType type = JavaScriptValidations.typeOf(child);
+		assertEquals(JSTypeSet.normalize(TypeUtil.arrayOf(ITypeNames.STRING)),type);
+	}
+	
+	public void testArrayInitializerWithVariableAndLiteralStrings() {
+		StringList code = new StringList();
+		code.add("var y = '1';");
+		code.add("var x = [y,'2',y];");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("x");
+		JSType type = JavaScriptValidations.typeOf(child);
+		assertEquals(JSTypeSet.normalize(TypeUtil.arrayOf(ITypeNames.STRING)),type);
+	}
+
 }
