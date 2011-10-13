@@ -184,8 +184,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			} else if (astNode instanceof NullExpression) {
 				// ignore
 			} else if (astNode instanceof Identifier) {
-				IValueReference child = peekContext().getChild(
-						((Identifier) astNode).getName());
+				IValueReference child = visit(astNode);
 				if (child.exists()) {
 					if (isNumber(child))
 						kind |= K_NUMBER;
