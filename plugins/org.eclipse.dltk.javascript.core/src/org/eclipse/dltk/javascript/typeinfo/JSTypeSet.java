@@ -813,7 +813,8 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	}
 
-	private static class FunctionTypeKey implements FunctionType, JSType2 {
+	private static class FunctionTypeKey implements FunctionType, JSType2,
+			IRFunctionType {
 
 		private final EList<Parameter> parameters;
 		private final JSType2 returnType;
