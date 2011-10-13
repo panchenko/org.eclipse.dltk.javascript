@@ -1918,4 +1918,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				singleton(JavaScriptProblems.UNDEFINED_PROPERTY),
 				extractIds(problems));
 	}
+
+	public void testVarReferencedFromArrayLiteral() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("  var a = 10;");
+		code.add("  var point = {");
+		code.add("    x: 1,");
+		code.add("    y: [a]");
+		code.add("  };");
+		code.add("  return point;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
