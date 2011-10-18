@@ -247,6 +247,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return JSTypeSet.union(targets);
 		} else if (type instanceof AnyType) {
 			return JSTypeSet.any();
+		} else if (type instanceof UndefinedType) {
+			return JSTypeSet.undefined();
 		} else if (type instanceof FunctionType) {
 			final FunctionType funcType = (FunctionType) type;
 			final EList<Parameter> params = new BasicEList<Parameter>();
