@@ -50,6 +50,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
@@ -196,6 +197,13 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				if (element != null && element.isVisible()) {
 					reporter.report(global, element);
 				}
+			} else if (global.lastIndexOf('.') != -1) {
+				Type type = context.getType(global);
+				if (type != null && type.isVisible()
+						&& type.getKind() != TypeKind.UNKNOWN) {
+					reporter.reportTypeRef(type);
+				}
+
 			}
 		}
 	}
