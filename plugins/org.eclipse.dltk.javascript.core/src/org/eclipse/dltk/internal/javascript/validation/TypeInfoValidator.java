@@ -1662,6 +1662,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 							peekFunctionScope(), node, result, this));
 				} else {
 					testPrivate(node, result);
+					if (result.exists()
+							&& node.getParent() instanceof BinaryOperation
+							&& ((BinaryOperation) node.getParent())
+									.getOperation() == JSParser.INSTANCEOF
+							&& ((BinaryOperation) node.getParent())
+									.getRightExpression() == node) {
+						checkType(node, JavaScriptValidations.typeOf(result),
+								peekContext());
+					}
 				}
 			}
 			return result;
@@ -2092,9 +2101,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 				} else if (type instanceof ClassType) {
 					final Type classType = ((ClassType) type).getTarget();
-					if (classType != null
-							&& classType.getKind() == TypeKind.UNKNOWN) {
-						reportUnknownType(node, TypeUtil.getName(type));
+					if (classType != null) {
+						if (classType.getKind() == TypeKind.UNKNOWN) {
+							reportUnknownType(node, TypeUtil.getName(type));
+						} else if (classType.isDeprecated()) {
+							reporter.reportProblem(
+									JavaScriptProblems.DEPRECATED_TYPE,
+									NLS.bind(ValidationMessages.DeprecatedType,
+											TypeUtil.getName(type)), node
+											.sourceStart(), node.sourceEnd());
+						}
 					}
 				} else {
 					if (type instanceof GenericType) {
