@@ -16,6 +16,7 @@ import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.FUNCTION;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,7 +74,7 @@ public abstract class ElementValue implements IValue {
 	public static List<Member> findMembers(Type type, String name,
 			MemberPredicate predicate) {
 		final List<Member> selection = new ArrayList<Member>(4);
-		for (Member member : new TypeMemberQuery(type, predicate)) {
+		for (Member member : new TypeMemberQuery(type, predicate).ignoreDuplicates(new HashSet<String>())) {
 			if (name.equals(member.getName())) {
 				selection.add(member);
 			}
