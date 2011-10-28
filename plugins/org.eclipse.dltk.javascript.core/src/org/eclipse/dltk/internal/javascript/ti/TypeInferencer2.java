@@ -821,6 +821,12 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 							value.setKind(ReferenceKind.METHOD);
 						}
 					}
+					if (value instanceof ImmutableValue) {
+						ElementValue elementValue = ElementValue.createFor(
+								member, this);
+						return new ValueWithElementValue(
+								(ImmutableValue) value, elementValue);
+					}
 					return value;
 				} else {
 					break;
