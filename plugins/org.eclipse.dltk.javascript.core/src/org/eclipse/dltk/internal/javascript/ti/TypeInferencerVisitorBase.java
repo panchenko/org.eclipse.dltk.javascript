@@ -152,10 +152,6 @@ public abstract class TypeInferencerVisitorBase extends
 		return reporter;
 	}
 
-	public void setProblemReporter(JSProblemReporter reporter) {
-		this.reporter = reporter;
-	}
-
 	public void suppressProblems(IProblemIdentifier... identifiers) {
 		if (reporter != null) {
 			((Reporter) reporter).suppressProblems(identifiers);

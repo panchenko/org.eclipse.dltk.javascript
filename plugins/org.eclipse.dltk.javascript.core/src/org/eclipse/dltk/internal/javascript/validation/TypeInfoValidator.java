@@ -55,9 +55,10 @@ import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
-import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -105,7 +106,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 		final TypeInferencer2 inferencer = createTypeInferencer();
 		inferencer.setModelElement(context.getSourceModule());
-		final Reporter reporter = JavaScriptValidations.createReporter(context);
+		final JSProblemReporter reporter = JavaScriptValidations
+				.createReporter(context);
 		final ValidationVisitor visitor = new ValidationVisitor(inferencer,
 				reporter);
 		inferencer.setVisitor(visitor);
@@ -129,13 +131,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public ExpressionValidator() {
 		}
 
-		private Set<IProblemIdentifier> suppressed;
+		private ISuppressWarningsState suppressed;
 
-		public Set<IProblemIdentifier> getSuppressed() {
+		public ISuppressWarningsState getSuppressed() {
 			return suppressed;
 		}
 
-		public void setSuppressed(Set<IProblemIdentifier> suppressed) {
+		public void setSuppressed(ISuppressWarningsState suppressed) {
 			this.suppressed = suppressed;
 		}
 	}
@@ -143,9 +145,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 	private static class StackedExpressionValidator extends ExpressionValidator {
 
 		private final List<ExpressionValidator> stacked = new ArrayList<ExpressionValidator>();
-		private final Reporter reporter;
+		private final JSProblemReporter reporter;
 
-		public StackedExpressionValidator(Reporter reporter) {
+		public StackedExpressionValidator(JSProblemReporter reporter) {
 			this.reporter = reporter;
 		}
 
@@ -209,11 +211,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 	private static class TestReturnStatement extends ExpressionValidator {
 
 		private final List<ReturnNode> lst;
-		private final Reporter reporter;
+		private final JSProblemReporter reporter;
 		private final IMethod jsMethod;
 
 		public TestReturnStatement(IMethod jsMethod, List<ReturnNode> lst,
-				Reporter reporter) {
+				JSProblemReporter reporter) {
 			this.jsMethod = jsMethod;
 			this.lst = lst;
 			this.reporter = reporter;
@@ -399,15 +401,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 	public static class ValidationVisitor extends TypeInferencerVisitor {
 
-		private final Reporter reporter;
-
 		private final List<ExpressionValidator> expressionValidators = new ArrayList<ExpressionValidator>();
 
 		public ValidationVisitor(ITypeInferenceContext context,
-				Reporter reporter) {
+				JSProblemReporter reporter) {
 			super(context);
 			this.reporter = reporter;
-			setProblemReporter(reporter);
 		}
 
 		private final Map<ASTNode, VisitorMode> modes = new IdentityHashMap<ASTNode, VisitorMode>();
@@ -440,13 +439,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 			for (ExpressionValidator call : expressionValidators
 					.toArray(new ExpressionValidator[expressionValidators
 							.size()])) {
-				final Set<IProblemIdentifier> suppressWarnings = reporter
-						.getSuppressWarnings();
+				final ISuppressWarningsState suppressWarnings = reporter
+						.saveSuppressWarnings();
 				try {
-					reporter.setSuppressWarnings(call.getSuppressed());
+					reporter.restoreSuppressWarnings(call.getSuppressed());
 					call.call();
 				} finally {
-					reporter.setSuppressWarnings(suppressWarnings);
+					reporter.restoreSuppressWarnings(suppressWarnings);
 				}
 			}
 			for (IValueReference variable : variables) {
@@ -457,14 +456,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 							&& jsVariable
 									.isSuppressed(JavaScriptProblems.UNUSED_VARIABLE))
 						continue;
-					reporter.setMessage(
+					final ReferenceLocation location = variable.getLocation();
+					reporter.reportProblem(
 							JavaScriptProblems.UNUSED_VARIABLE,
 							NLS.bind("Variable {0} is never used",
-									variable.getName()));
-					final ReferenceLocation location = variable.getLocation();
-					reporter.setRange(location.getNameStart(),
-							location.getNameEnd());
-					reporter.report();
+									variable.getName()),
+							location.getNameStart(), location.getNameEnd());
 				}
 			}
 		}
@@ -746,7 +743,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				stackedExpressionValidator.push(expressionValidator);
 			} else {
 				expressionValidator.setSuppressed(reporter
-						.getSuppressWarnings());
+						.saveSuppressWarnings());
 				expressionValidators.add(expressionValidator);
 			}
 
@@ -755,7 +752,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private void stopExpressionValidator() {
 			if (stackedExpressionValidator != null) {
 				stackedExpressionValidator.setSuppressed(reporter
-						.getSuppressWarnings());
+						.saveSuppressWarnings());
 				expressionValidators.add(stackedExpressionValidator);
 				stackedExpressionValidator = null;
 			}
