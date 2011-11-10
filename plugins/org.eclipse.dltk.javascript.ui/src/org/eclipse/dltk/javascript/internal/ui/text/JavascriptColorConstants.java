@@ -78,4 +78,6 @@ public final class JavascriptColorConstants {
 
 	public static final String JS_XML_ALL = "XML_ALL";
 
+	public static final String JS_DEPRECATED = "JS_DEPRECATED";
+
 }

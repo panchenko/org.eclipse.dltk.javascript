@@ -1,7 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2011 NumberFour AG
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     NumberFour AG - initial API and Implementation (Alex Panchenko)
+ *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui;
 
 import org.eclipse.dltk.javascript.internal.ui.text.JavascriptColorConstants;
 import org.eclipse.dltk.ui.coloring.ColoringPreferences;
+import org.eclipse.dltk.ui.coloring.EnablementStyle;
 import org.eclipse.dltk.ui.coloring.FontStyle;
 import org.eclipse.dltk.ui.coloring.IColoringPreferenceProvider;
 import org.eclipse.dltk.ui.coloring.IColoringPreferenceRequestor;
@@ -49,6 +61,9 @@ public class JavaScriptColoringPreferences implements
 		requestor.addPreference(JavascriptColorConstants.JS_REGEXP,
 				PreferencesMessages.DLTKEditorPreferencePage_regexps, new RGB(
 						31, 0, 192), FontStyle.BOLD);
+		requestor.addPreference(JavascriptColorConstants.JS_DEPRECATED,
+				"Deprecated members", ColoringPreferences.BLACK,
+				EnablementStyle.OFF, FontStyle.STRIKETHROUGH);
 
 		requestor.enterCategory("XML");
 		requestor.addPreference(JavascriptColorConstants.JS_XML_TAG_NAME,

@@ -752,6 +752,10 @@
       class="org.eclipse.dltk.javascript.internal.ui.text.JavaScriptXmlHighlighter"
       nature="org.eclipse.dltk.javascript.core.nature">
 </highlighter>
+<highlighter
+      class="org.eclipse.dltk.javascript.internal.ui.text.JavaScriptDeprecationHighlighter"
+      nature="org.eclipse.dltk.javascript.core.nature">
+</highlighter>
 </extension>
 
 <extension point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectorTargets">
