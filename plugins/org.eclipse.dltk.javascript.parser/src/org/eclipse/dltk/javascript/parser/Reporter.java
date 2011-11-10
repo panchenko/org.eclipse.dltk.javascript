@@ -14,7 +14,6 @@ package org.eclipse.dltk.javascript.parser;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
@@ -198,26 +197,38 @@ public class Reporter extends LineTracker implements IProblemReporter,
 		return suppressed != null && suppressed.contains(identifier);
 	}
 
-	private Set<IProblemIdentifier> suppressed;
+	@SuppressWarnings("serial")
+	private static class SuppressWarningsSet extends
+			HashSet<IProblemIdentifier> implements ISuppressWarningsState {
+
+		public SuppressWarningsSet() {
+		}
+
+		public SuppressWarningsSet(Collection<IProblemIdentifier> set) {
+			super(set);
+		}
+	}
+
+	private SuppressWarningsSet suppressed;
 
 	public void suppressProblems(IProblemIdentifier... identifiers) {
 		if (suppressed == null) {
-			suppressed = new HashSet<IProblemIdentifier>();
+			suppressed = new SuppressWarningsSet();
 		}
 		Collections.addAll(suppressed, identifiers);
 	}
 
-	private Stack<Set<IProblemIdentifier>> suppressedStack = null;
+	private Stack<SuppressWarningsSet> suppressedStack = null;
 
 	public void pushSuppressWarnings(Collection<IProblemIdentifier> suppressed) {
 		if (suppressedStack == null) {
-			suppressedStack = new Stack<Set<IProblemIdentifier>>();
+			suppressedStack = new Stack<SuppressWarningsSet>();
 		}
 		suppressedStack.push(this.suppressed);
 		if (this.suppressed == null) {
-			this.suppressed = new HashSet<IProblemIdentifier>();
+			this.suppressed = new SuppressWarningsSet();
 		} else {
-			this.suppressed = new HashSet<IProblemIdentifier>(this.suppressed);
+			this.suppressed = new SuppressWarningsSet(this.suppressed);
 		}
 		this.suppressed.addAll(suppressed);
 	}
@@ -228,12 +239,12 @@ public class Reporter extends LineTracker implements IProblemReporter,
 		}
 	}
 
-	public Set<IProblemIdentifier> getSuppressWarnings() {
+	public ISuppressWarningsState saveSuppressWarnings() {
 		return suppressed;
 	}
 
-	public void setSuppressWarnings(Set<IProblemIdentifier> sup) {
-		suppressed = sup;
+	public void restoreSuppressWarnings(ISuppressWarningsState sup) {
+		suppressed = (SuppressWarningsSet) sup;
 	}
 
 }

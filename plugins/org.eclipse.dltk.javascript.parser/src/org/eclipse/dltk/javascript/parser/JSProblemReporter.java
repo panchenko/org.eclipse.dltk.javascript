@@ -30,4 +30,16 @@ public interface JSProblemReporter extends IProblemReporter {
 	void pushSuppressWarnings(Collection<IProblemIdentifier> suppressed);
 
 	void popSuppressWarnings();
+
+	/**
+	 * Returns the current state of suppress warnings or <code>null</code>.
+	 */
+	ISuppressWarningsState saveSuppressWarnings();
+
+	/**
+	 * Replaces the current state of suppress warnings with the value returned
+	 * from {@link #saveSuppressWarnings()}
+	 */
+	void restoreSuppressWarnings(ISuppressWarningsState state);
+
 }
