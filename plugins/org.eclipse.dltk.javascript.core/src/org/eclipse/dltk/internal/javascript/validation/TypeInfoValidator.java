@@ -440,7 +440,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					.toArray(new ExpressionValidator[expressionValidators
 							.size()])) {
 				final ISuppressWarningsState suppressWarnings = reporter
-						.saveSuppressWarnings();
+						.getSuppressWarnings();
 				try {
 					reporter.restoreSuppressWarnings(call.getSuppressed());
 					call.call();
@@ -743,7 +743,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				stackedExpressionValidator.push(expressionValidator);
 			} else {
 				expressionValidator.setSuppressed(reporter
-						.saveSuppressWarnings());
+						.getSuppressWarnings());
 				expressionValidators.add(expressionValidator);
 			}
 
@@ -752,7 +752,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private void stopExpressionValidator() {
 			if (stackedExpressionValidator != null) {
 				stackedExpressionValidator.setSuppressed(reporter
-						.saveSuppressWarnings());
+						.getSuppressWarnings());
 				expressionValidators.add(stackedExpressionValidator);
 				stackedExpressionValidator = null;
 			}
