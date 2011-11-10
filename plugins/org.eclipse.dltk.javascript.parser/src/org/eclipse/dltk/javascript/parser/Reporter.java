@@ -239,7 +239,7 @@ public class Reporter extends LineTracker implements IProblemReporter,
 		}
 	}
 
-	public ISuppressWarningsState saveSuppressWarnings() {
+	public ISuppressWarningsState getSuppressWarnings() {
 		return suppressed;
 	}
 

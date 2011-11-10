@@ -34,11 +34,11 @@ public interface JSProblemReporter extends IProblemReporter {
 	/**
 	 * Returns the current state of suppress warnings or <code>null</code>.
 	 */
-	ISuppressWarningsState saveSuppressWarnings();
+	ISuppressWarningsState getSuppressWarnings();
 
 	/**
 	 * Replaces the current state of suppress warnings with the value returned
-	 * from {@link #saveSuppressWarnings()}
+	 * from {@link #getSuppressWarnings()}
 	 */
 	void restoreSuppressWarnings(ISuppressWarningsState state);
 
