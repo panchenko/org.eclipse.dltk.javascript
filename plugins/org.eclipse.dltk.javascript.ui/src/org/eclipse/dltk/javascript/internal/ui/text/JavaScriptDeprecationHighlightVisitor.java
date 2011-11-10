@@ -72,7 +72,7 @@ public class JavaScriptDeprecationHighlightVisitor extends ValidationVisitor
 	public void popSuppressWarnings() {
 	}
 
-	public ISuppressWarningsState saveSuppressWarnings() {
+	public ISuppressWarningsState getSuppressWarnings() {
 		return null;
 	}
 
