@@ -15,23 +15,23 @@ import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
-import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
+import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
 public class JSDocValidatorFactory {
 
-	public static class TypeChecker implements IJSDocTypeChecker {
+	public static class TypeChecker implements ITypeChecker {
 
 		private List<TagAndType> lst = new ArrayList<JSDocValidatorFactory.TagAndType>();
 		private final TypeInferencer2 context;
@@ -143,8 +143,7 @@ public class JSDocValidatorFactory {
 				reporter.reportProblem(
 						JavaScriptProblems.DEPRECATED_TYPE,
 						NLS.bind(ValidationMessages.DeprecatedType,
-								TypeUtil.getName(type)), tag.getStart(),
-						tag.getEnd());
+								TypeUtil.getName(type)), tag.start(), tag.end());
 			}
 		}
 
@@ -154,11 +153,11 @@ public class JSDocValidatorFactory {
 
 		public void reportUnknownType(IProblemIdentifier identifier,
 				JSDocTag tag, String name) {
-			int end = tag.getEnd();
-			int start = end - tag.getValue().length();
-			int index = tag.getValue().indexOf('{');
+			int end = tag.end();
+			int start = end - tag.value().length();
+			int index = tag.value().indexOf('{');
 			if (index != -1) {
-				int index2 = tag.getValue().indexOf('}', index);
+				int index2 = tag.value().indexOf('}', index);
 				if (index2 != -1) {
 					start = start + index + 1;
 					end = start + index2 - 1;

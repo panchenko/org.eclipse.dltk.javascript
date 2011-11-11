@@ -8,6 +8,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
  * 
  * @author jcompagner
  */
-public interface IJSDocTypeChecker {
+public interface ITypeChecker {
 	public void checkType(JSType type, JSDocTag tag);
 }

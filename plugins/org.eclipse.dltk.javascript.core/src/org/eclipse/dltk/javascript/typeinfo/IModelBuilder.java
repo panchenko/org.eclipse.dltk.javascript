@@ -175,9 +175,9 @@ public interface IModelBuilder {
 	int priorityFor(ITypeInfoContext context);
 
 	void processMethod(FunctionStatement statement, IMethod method,
-			JSProblemReporter reporter, IJSDocTypeChecker typeChecker);
+			JSProblemReporter reporter, ITypeChecker typeChecker);
 
 	void processVariable(VariableDeclaration declaration, IVariable variabe,
-			JSProblemReporter reporter, IJSDocTypeChecker typeChecker);
+			JSProblemReporter reporter, ITypeChecker typeChecker);
 
 }

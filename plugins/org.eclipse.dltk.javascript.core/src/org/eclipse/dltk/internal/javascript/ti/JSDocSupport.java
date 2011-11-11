@@ -42,8 +42,8 @@ import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTags;
 import org.eclipse.dltk.javascript.parser.jsdoc.SimpleJSDocParser;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -77,7 +77,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	public void processMethod(FunctionStatement statement, IMethod method,
-			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
+			JSProblemReporter reporter, ITypeChecker typeChecker) {
 		Comment comment = getFunctionComment(statement);
 		if (comment == null) {
 			return;
@@ -87,7 +87,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	public void processMethod(IMethod method, final JSDocTags tags,
-			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
+			JSProblemReporter reporter, ITypeChecker typeChecker) {
 		if (method.getType() == null) {
 			parseType(method, tags, RETURN_TAGS, reporter, typeChecker);
 		}
@@ -112,7 +112,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	private void parseThrows(IMethod method, JSDocTags tags,
-			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
+			JSProblemReporter reporter, ITypeChecker typeChecker) {
 		if (typeChecker != null) {
 			List<JSDocTag> throwsTags = tags.list(JSDocTag.THROWS);
 			for (JSDocTag throwsTag : throwsTags) {
@@ -231,7 +231,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	public void processVariable(VariableDeclaration declaration,
 			IVariable variable, JSProblemReporter reporter,
-			IJSDocTypeChecker typeChecker) {
+			ITypeChecker typeChecker) {
 		Comment comment = declaration.getDocumentation();
 		if (comment == null) {
 			final IVariableStatement statement = declaration.getStatement();
@@ -276,7 +276,7 @@ public class JSDocSupport implements IModelBuilder {
 	}
 
 	protected void parseParams(IMethod method, JSDocTags tags,
-			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
+			JSProblemReporter reporter, ITypeChecker typeChecker) {
 		final List<JSDocTag> paramTags = tags.list(JSDocTag.PARAM);
 		if (paramTags.isEmpty()) {
 			return;
@@ -404,7 +404,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	protected void updateParameter(JSDocTag tag, final IParameter parameter,
 			final ParamInfo pp, JSProblemReporter reporter,
-			IJSDocTypeChecker typeChecker) {
+			ITypeChecker typeChecker) {
 		if (pp.type != null && parameter.getType() == null) {
 			JSType type = translateTypeName(pp.type, tag, reporter);
 			if (typeChecker != null)
@@ -490,7 +490,7 @@ public class JSDocSupport implements IModelBuilder {
 	 * @param comment
 	 */
 	public void parseType(IElement member, JSDocTags tags, String[] tagNames,
-			JSProblemReporter reporter, IJSDocTypeChecker typeChecker) {
+			JSProblemReporter reporter, ITypeChecker typeChecker) {
 		final JSDocTag tag = tags.get(tagNames);
 		if (tag != null) {
 			if (reporter != null) {

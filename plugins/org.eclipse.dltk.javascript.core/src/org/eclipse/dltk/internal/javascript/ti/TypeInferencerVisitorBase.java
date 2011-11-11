@@ -24,7 +24,7 @@ import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IFunctionValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.IJSDocTypeChecker;
+import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandler;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferenceHandlerFactory;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInferencerVisitor;
@@ -158,13 +158,13 @@ public abstract class TypeInferencerVisitorBase extends
 		}
 	}
 
-	protected IJSDocTypeChecker typeChecker;
+	protected ITypeChecker typeChecker;
 
-	public IJSDocTypeChecker getJSDocTypeChecker() {
+	public ITypeChecker getJSDocTypeChecker() {
 		return typeChecker;
 	}
 
-	public void setJSDocTypeChecker(IJSDocTypeChecker typeChecker) {
+	public void setJSDocTypeChecker(ITypeChecker typeChecker) {
 		this.typeChecker = typeChecker;
 	}
 
