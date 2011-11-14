@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.annotations.ConfigurationElement;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.utils.ConfigurationElement;
 
 /**
  * Factory to create runtime type instance for the specified model object
@@ -20,6 +20,6 @@ import org.eclipse.dltk.utils.ConfigurationElement;
 @ConfigurationElement("runtimeTypeFactory")
 public interface IRTypeFactory {
 
-	JSType2 create(Type type);
+	IRType create(Type type);
 
 }

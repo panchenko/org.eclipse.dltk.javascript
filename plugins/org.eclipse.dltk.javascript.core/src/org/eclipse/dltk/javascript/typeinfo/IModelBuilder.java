@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.annotations.ConfigurationElement;
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
@@ -21,7 +22,6 @@ import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.utils.ConfigurationElement;
 
 @ConfigurationElement("builder")
 public interface IModelBuilder {

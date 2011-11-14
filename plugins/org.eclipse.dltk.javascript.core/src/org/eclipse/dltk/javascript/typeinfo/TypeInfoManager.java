@@ -18,8 +18,8 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.dltk.annotations.ConfigurationElement;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
-import org.eclipse.dltk.utils.ConfigurationElement;
 import org.eclipse.dltk.utils.LazyExtensionManager;
 import org.eclipse.dltk.utils.LazyExtensionManager.Descriptor;
 import org.eclipse.dltk.utils.SimpleExtensionManager;

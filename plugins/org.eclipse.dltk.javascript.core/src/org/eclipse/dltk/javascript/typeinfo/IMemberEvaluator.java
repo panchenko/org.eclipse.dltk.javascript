@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.annotations.ConfigurationElement;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
-import org.eclipse.dltk.utils.ConfigurationElement;
 
 @ConfigurationElement("evaluator")
 public interface IMemberEvaluator {
