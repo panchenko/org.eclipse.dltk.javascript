@@ -17,11 +17,13 @@ import java.util.Set;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+import junit.framework.TestResult;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
+import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -37,6 +39,13 @@ public abstract class AbstractJSParserTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		reporter.reset();
+	}
+
+	@Override
+	public void run(TestResult result) {
+		if (TestSupport.ignored(this))
+			return;
+		super.run(result);
 	}
 
 	protected Script parseRaw(final String source) {
