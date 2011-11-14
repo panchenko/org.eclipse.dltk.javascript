@@ -980,7 +980,7 @@ public abstract class JSTypeSet implements Iterable<JSType> {
 
 	private static class JSTypeSetImpl extends JSTypeSet {
 
-		private final List<JSType> types = new ArrayList<JSType>();
+		private final List<JSType> types = new ArrayList<JSType>(3);
 
 		protected JSTypeSetImpl() {
 		}
