@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeKind.java,v 1.9 2011/11/16 11:57:43 apanchenk Exp $
+ * $Id: TypeKind.java,v 1.10 2011/11/16 14:27:03 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -30,14 +30,14 @@ import org.eclipse.emf.common.util.Enumerator;
  */
 public enum TypeKind implements Enumerator {
 	/**
-     * The '<em><b>UNKNOWN</b></em>' literal object.
+     * The '<em><b>DEFAULT</b></em>' literal object.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @see #UNKNOWN_VALUE
+     * <!-- end-user-doc -->
+     * @see #DEFAULT_VALUE
      * @generated
      * @ordered
      */
-	UNKNOWN(-1, "UNKNOWN", "UNKNOWN"), /**
+    DEFAULT(0, "DEFAULT", "DEFAULT"), /**
      * The '<em><b>UNRESOLVED</b></em>' literal object.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -45,7 +45,15 @@ public enum TypeKind implements Enumerator {
      * @generated
      * @ordered
      */
-	UNRESOLVED(-2, "UNRESOLVED", "UNRESOLVED"), //$NON-NLS-1$ //$NON-NLS-2$
+	UNRESOLVED(-2, "UNRESOLVED", "UNRESOLVED"), /**
+     * The '<em><b>UNKNOWN</b></em>' literal object.
+     * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+     * @see #UNKNOWN_VALUE
+     * @generated
+     * @ordered
+     */
+	UNKNOWN(-1, "UNKNOWN", "UNKNOWN"), //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
      * The '<em><b>PREDEFINED</b></em>' literal object.
@@ -78,19 +86,19 @@ public enum TypeKind implements Enumerator {
 	JAVA(2, "JAVA", "JAVA"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
-     * The '<em><b>UNKNOWN</b></em>' literal value.
+     * The '<em><b>DEFAULT</b></em>' literal value.
      * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of '<em><b>UNKNOWN</b></em>' literal object isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-     * @see #UNKNOWN
+     * <p>
+     * If the meaning of '<em><b>DEFAULT</b></em>' literal object isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @see #DEFAULT
      * @model
      * @generated
      * @ordered
      */
-	public static final int UNKNOWN_VALUE = -1;
+    public static final int DEFAULT_VALUE = 0;
 
     /**
      * The '<em><b>UNRESOLVED</b></em>' literal value.
@@ -106,6 +114,21 @@ public enum TypeKind implements Enumerator {
      * @ordered
      */
     public static final int UNRESOLVED_VALUE = -2;
+
+    /**
+     * The '<em><b>UNKNOWN</b></em>' literal value.
+     * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>UNKNOWN</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+     * @see #UNKNOWN
+     * @model
+     * @generated
+     * @ordered
+     */
+	public static final int UNKNOWN_VALUE = -1;
 
 	/**
      * The '<em><b>PREDEFINED</b></em>' literal value.
@@ -160,8 +183,9 @@ public enum TypeKind implements Enumerator {
      */
 	private static final TypeKind[] VALUES_ARRAY =
 		new TypeKind[] {
-            UNKNOWN,
+            DEFAULT,
             UNRESOLVED,
+            UNKNOWN,
             PREDEFINED,
             JAVASCRIPT,
             JAVA,
@@ -215,9 +239,9 @@ public enum TypeKind implements Enumerator {
      */
 	public static TypeKind get(int value) {
         switch (value) {
-            case UNKNOWN_VALUE: return UNKNOWN;
+            case DEFAULT_VALUE: return DEFAULT;
             case UNRESOLVED_VALUE: return UNRESOLVED;
-            case PREDEFINED_VALUE: return PREDEFINED;
+            case UNKNOWN_VALUE: return UNKNOWN;
             case JAVASCRIPT_VALUE: return JAVASCRIPT;
             case JAVA_VALUE: return JAVA;
         }

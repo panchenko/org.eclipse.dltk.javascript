@@ -72,8 +72,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="readOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="TypeKind">
-    <eLiterals name="UNKNOWN" value="-1"/>
+    <eLiterals name="DEFAULT"/>
     <eLiterals name="UNRESOLVED" value="-2"/>
+    <eLiterals name="UNKNOWN" value="-1"/>
     <eLiterals name="PREDEFINED"/>
     <eLiterals name="JAVASCRIPT" value="1" literal="JAVASCRIPT"/>
     <eLiterals name="JAVA" value="2"/>

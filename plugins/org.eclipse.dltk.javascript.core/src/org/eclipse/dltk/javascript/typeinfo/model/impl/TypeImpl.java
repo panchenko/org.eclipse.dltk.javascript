@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.15 2011/11/16 11:57:43 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.16 2011/11/16 14:27:02 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -70,7 +70,7 @@ public class TypeImpl extends ElementImpl implements Type {
      * @generated
      * @ordered
      */
-	protected static final TypeKind KIND_EDEFAULT = TypeKind.UNKNOWN;
+	protected static final TypeKind KIND_EDEFAULT = TypeKind.DEFAULT;
 
 	/**
      * The cached value of the '{@link #getKind() <em>Kind</em>}' attribute.
