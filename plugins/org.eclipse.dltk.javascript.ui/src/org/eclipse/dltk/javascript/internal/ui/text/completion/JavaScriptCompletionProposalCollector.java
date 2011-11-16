@@ -14,8 +14,8 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
+import org.eclipse.dltk.javascript.typeinfo.IRParameter;
+import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -27,6 +27,7 @@ import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.swt.graphics.Image;
 
+@SuppressWarnings("restriction")
 public class JavaScriptCompletionProposalCollector extends
 		ScriptCompletionProposalCollector {
 
@@ -86,12 +87,12 @@ public class JavaScriptCompletionProposalCollector extends
 				}
 			}
 		} else if (methodProposal.getExtraInfo() instanceof IValueReference) {
-			IMethod method = (IMethod) ((IValueReference) methodProposal
+			IRMethod method = (IRMethod) ((IValueReference) methodProposal
 					.getExtraInfo())
-					.getAttribute(IReferenceAttributes.PARAMETERS);
+					.getAttribute(IReferenceAttributes.R_METHOD);
 			if (method != null && method.getParameterCount() > 0) {
 				sb = new StringBuilder();
-				for (IParameter parameter : method.getParameters()) {
+				for (IRParameter parameter : method.getParameters()) {
 					if (sb.length() > 0)
 						sb.append(',');
 					if (parameter.isOptional())

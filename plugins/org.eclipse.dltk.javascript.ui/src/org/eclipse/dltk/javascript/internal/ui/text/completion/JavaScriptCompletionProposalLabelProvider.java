@@ -16,11 +16,11 @@ import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingRe
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.IRMethod;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
@@ -33,6 +33,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
 
+@SuppressWarnings("restriction")
 public class JavaScriptCompletionProposalLabelProvider extends
 		CompletionProposalLabelProvider {
 
@@ -75,7 +76,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			}
 		} else if (info instanceof IValueReference) {
 			final IValueReference reference = (IValueReference) info;
-			final JSType declaredType = reference.getChild(
+			final IRType declaredType = reference.getChild(
 					IValueReference.FUNCTION_OP).getDeclaredType();
 			if (declaredType != null) {
 				returnType = declaredType.getName();
@@ -270,12 +271,12 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		} else if (proposal.getExtraInfo() instanceof IValueReference) {
 			final IValueReference reference = (IValueReference) proposal
 					.getExtraInfo();
-			final IMethod method = (IMethod) reference
-					.getAttribute(IReferenceAttributes.PARAMETERS);
+			final IRMethod method = (IRMethod) reference
+					.getAttribute(IReferenceAttributes.R_METHOD);
 			if (method != null)
 				return method.isDeprecated();
-			final IVariable variable = (IVariable) reference
-					.getAttribute(IReferenceAttributes.VARIABLE);
+			final IRVariable variable = (IRVariable) reference
+					.getAttribute(IReferenceAttributes.R_VARIABLE);
 			return variable != null && variable.isDeprecated();
 		}
 		return false;
