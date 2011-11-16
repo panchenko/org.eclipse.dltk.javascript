@@ -116,7 +116,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			return IDKIND_GLOBAL;
 		} else if (kind == ReferenceKind.FUNCTION) {
 			IMethod method = (IMethod) reference
-					.getAttribute(IReferenceAttributes.PARAMETERS);
+					.getAttribute(IReferenceAttributes.METHOD);
 			if (method == null)
 				return IDKIND_UNKNOWN;
 			else
@@ -196,12 +196,13 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 
 		fRequestor.enterMethod(methodInfo, identifier, node, method);
 		IValueReference reference = super.visitFunctionStatement(node);
+		// TODO (alex) review !!!!!!!!!!!
 		if (method.getType() == null) {
 			if (reference.getDeclaredType() != null) {
-				method.setType(reference.getDeclaredType());
+				// method.setType(reference.getDeclaredType());
 				methodInfo.returnType = TypeUtil.getName(method.getType());
 			} else if (!reference.getDeclaredTypes().isEmpty()) {
-				method.setType(reference.getDeclaredTypes().getFirst());
+				// method.setType(reference.getDeclaredTypes().getFirst());
 				methodInfo.returnType = TypeUtil.getName(method.getType());
 			}
 		}
@@ -330,7 +331,7 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 					assign(reference, assignment);
 					if (assignment.getKind() == ReferenceKind.FUNCTION
 							&& reference
-									.getAttribute(IReferenceAttributes.PARAMETERS) != null)
+									.getAttribute(IReferenceAttributes.METHOD) != null)
 						reference.setKind(ReferenceKind.FUNCTION);
 				}
 			}

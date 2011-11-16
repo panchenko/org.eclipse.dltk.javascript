@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeKind.java,v 1.8 2011/05/12 14:16:23 apanchenk Exp $
+ * $Id: TypeKind.java,v 1.9 2011/11/16 11:57:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -75,39 +75,7 @@ public enum TypeKind implements Enumerator {
      * @generated
      * @ordered
      */
-	JAVA(2, "JAVA", "JAVA"), /**
-     * The '<em><b>EXTERNAL JS</b></em>' literal object.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #EXTERNAL_JS_VALUE
-     * @generated
-     * @ordered
-     */
-    EXTERNAL_JS(3, "EXTERNAL_JS", "EXTERNAL_JS"), /**
-     * The '<em><b>RECORD</b></em>' literal object.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #RECORD_VALUE
-     * @generated
-     * @ordered
-     */
-    RECORD(4, "RECORD", "RECORD"), /**
-     * The '<em><b>CLASS</b></em>' literal object.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #CLASS_VALUE
-     * @generated
-     * @ordered
-     */
-    CLASS(5, "CLASS", "CLASS"), /**
-     * The '<em><b>FUNCTION</b></em>' literal object.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #FUNCTION_VALUE
-     * @generated
-     * @ordered
-     */
-    FUNCTION(6, "FUNCTION", "FUNCTION"); //$NON-NLS-1$ //$NON-NLS-2$
+	JAVA(2, "JAVA", "JAVA"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
      * The '<em><b>UNKNOWN</b></em>' literal value.
@@ -185,66 +153,6 @@ public enum TypeKind implements Enumerator {
 	public static final int JAVA_VALUE = 2;
 
 	/**
-     * The '<em><b>EXTERNAL JS</b></em>' literal value.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>EXTERNAL JS</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @see #EXTERNAL_JS
-     * @model
-     * @generated
-     * @ordered
-     */
-    public static final int EXTERNAL_JS_VALUE = 3;
-
-    /**
-     * The '<em><b>RECORD</b></em>' literal value.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>RECORD</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @see #RECORD
-     * @model
-     * @generated
-     * @ordered
-     */
-    public static final int RECORD_VALUE = 4;
-
-    /**
-     * The '<em><b>CLASS</b></em>' literal value.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>CLASS</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @see #CLASS
-     * @model
-     * @generated
-     * @ordered
-     */
-    public static final int CLASS_VALUE = 5;
-
-    /**
-     * The '<em><b>FUNCTION</b></em>' literal value.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>FUNCTION</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @see #FUNCTION
-     * @model
-     * @generated
-     * @ordered
-     */
-    public static final int FUNCTION_VALUE = 6;
-
-    /**
      * An array of all the '<em><b>Type Kind</b></em>' enumerators.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -257,10 +165,6 @@ public enum TypeKind implements Enumerator {
             PREDEFINED,
             JAVASCRIPT,
             JAVA,
-            EXTERNAL_JS,
-            RECORD,
-            CLASS,
-            FUNCTION,
         };
 
 	/**
@@ -316,10 +220,6 @@ public enum TypeKind implements Enumerator {
             case PREDEFINED_VALUE: return PREDEFINED;
             case JAVASCRIPT_VALUE: return JAVASCRIPT;
             case JAVA_VALUE: return JAVA;
-            case EXTERNAL_JS_VALUE: return EXTERNAL_JS;
-            case RECORD_VALUE: return RECORD;
-            case CLASS_VALUE: return CLASS;
-            case FUNCTION_VALUE: return FUNCTION;
         }
         return null;
     }

@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
-import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IElement;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -65,15 +64,5 @@ public class JSElement implements IElement {
 		suppressedWarnings.add(warningCategoryId);
 	}
 
-	public boolean isSuppressed(IProblemIdentifier problemIdentifier) {
-		if (suppressedWarnings != null) {
-			for (IProblemCategory category : suppressedWarnings) {
-				if (category.contents().contains(problemIdentifier)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 
 }

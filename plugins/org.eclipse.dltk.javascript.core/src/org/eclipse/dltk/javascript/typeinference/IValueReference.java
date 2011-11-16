@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinference;
 
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public interface IValueReference extends IValueParent {
 
@@ -41,9 +41,9 @@ public interface IValueReference extends IValueParent {
 
 	void setLocation(ReferenceLocation location);
 
-	JSType getDeclaredType();
+	IRType getDeclaredType();
 
-	void setDeclaredType(JSType type);
+	void setDeclaredType(IRType type);
 
 	JSTypeSet getDeclaredTypes();
 

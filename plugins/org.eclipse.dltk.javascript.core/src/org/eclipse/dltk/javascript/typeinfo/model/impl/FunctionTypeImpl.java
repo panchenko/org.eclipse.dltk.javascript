@@ -17,7 +17,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -135,15 +134,6 @@ public class FunctionTypeImpl extends EObjectImpl implements FunctionType {
             parameters = new EObjectContainmentEList<Parameter>(Parameter.class, this, TypeInfoModelPackage.FUNCTION_TYPE__PARAMETERS);
         }
         return parameters;
-    }
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
-	 */
-    public TypeKind getKind() {
-		return TypeKind.FUNCTION;
     }
 
 	/**

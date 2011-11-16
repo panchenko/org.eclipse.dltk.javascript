@@ -30,13 +30,5 @@ public interface JSType {
      * @model kind="operation"
      * @generated
      */
-    TypeKind getKind();
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @model kind="operation"
-     * @generated
-     */
     String getName();
 } // JSType

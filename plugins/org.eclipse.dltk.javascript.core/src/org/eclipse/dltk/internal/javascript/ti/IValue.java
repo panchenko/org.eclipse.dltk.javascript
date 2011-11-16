@@ -15,8 +15,8 @@ import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public interface IValue {
 
@@ -28,9 +28,9 @@ public interface IValue {
 
 	IValue createChild(String name);
 
-	JSType getDeclaredType();
+	IRType getDeclaredType();
 
-	void setDeclaredType(JSType declaredType);
+	void setDeclaredType(IRType declaredType);
 
 	JSTypeSet getDeclaredTypes();
 

@@ -1,6 +1,6 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
-import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
+import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 /**
@@ -9,5 +9,5 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
  * @author jcompagner
  */
 public interface ITypeChecker {
-	public void checkType(JSType type, JSDocTag tag);
+	public void checkType(JSType type, ISourceNode tag);
 }

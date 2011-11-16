@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Method.java,v 1.2 2010/11/29 16:28:05 apanchenk Exp $
+ * $Id: Method.java,v 1.3 2011/11/16 11:57:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -47,5 +47,13 @@ public interface Method extends Member {
      * @generated
      */
 	EList<Parameter> getParameters();
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @model
+     * @generated
+     */
+    Parameter getParameter(String name);
 
 } // Method

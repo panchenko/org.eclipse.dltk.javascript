@@ -9,15 +9,37 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.15 2011/08/03 08:48:03 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.16 2011/11/16 11:57:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
 import java.util.List;
-
 import java.util.Map;
-import org.eclipse.dltk.javascript.typeinfo.model.*;
 
+import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
+import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
+import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.NamedElement;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeAlias;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
+import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
+import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
@@ -58,22 +80,22 @@ public class TypeInfoModelSwitch<T> {
 	/**
      * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @return the first non-null result returned by a <code>caseXXX</code> call.
      * @generated
      */
-	public T doSwitch(EObject theEObject) {
+    public T doSwitch(EObject theEObject) {
         return doSwitch(theEObject.eClass(), theEObject);
     }
 
-	/**
+    /**
      * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
      * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @return the first non-null result returned by a <code>caseXXX</code> call.
      * @generated
      */
-	protected T doSwitch(EClass theEClass, EObject theEObject) {
+    protected T doSwitch(EClass theEClass, EObject theEObject) {
         if (theEClass.eContainer() == modelPackage) {
             return doSwitch(theEClass.getClassifierID(), theEObject);
         }
@@ -86,14 +108,14 @@ public class TypeInfoModelSwitch<T> {
         }
     }
 
-	/**
+    /**
      * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @return the first non-null result returned by a <code>caseXXX</code> call.
      * @generated
      */
-	protected T doSwitch(int classifierID, EObject theEObject) {
+    protected T doSwitch(int classifierID, EObject theEObject) {
         switch (classifierID) {
             case TypeInfoModelPackage.NAMED_ELEMENT: {
                 NamedElement namedElement = (NamedElement)theEObject;
@@ -202,14 +224,6 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
-            case TypeInfoModelPackage.TYPE_REF: {
-                TypeRef typeRef = (TypeRef)theEObject;
-                T result = caseTypeRef(typeRef);
-                if (result == null) result = caseSimpleType(typeRef);
-                if (result == null) result = caseJSType(typeRef);
-                if (result == null) result = defaultCase(theEObject);
-                return result;
-            }
             case TypeInfoModelPackage.ARRAY_TYPE: {
                 ArrayType arrayType = (ArrayType)theEObject;
                 T result = caseArrayType(arrayType);
@@ -250,6 +264,28 @@ public class TypeInfoModelSwitch<T> {
                 RecordType recordType = (RecordType)theEObject;
                 T result = caseRecordType(recordType);
                 if (result == null) result = caseJSType(recordType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.RECORD_MEMBER: {
+                RecordMember recordMember = (RecordMember)theEObject;
+                T result = caseRecordMember(recordMember);
+                if (result == null) result = caseMember(recordMember);
+                if (result == null) result = caseElement(recordMember);
+                if (result == null) result = caseTypedElement(recordMember);
+                if (result == null) result = caseNamedElement(recordMember);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.RECORD_PROPERTY: {
+                RecordProperty recordProperty = (RecordProperty)theEObject;
+                T result = caseRecordProperty(recordProperty);
+                if (result == null) result = caseProperty(recordProperty);
+                if (result == null) result = caseRecordMember(recordProperty);
+                if (result == null) result = caseMember(recordProperty);
+                if (result == null) result = caseElement(recordProperty);
+                if (result == null) result = caseTypedElement(recordProperty);
+                if (result == null) result = caseNamedElement(recordProperty);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -347,21 +383,6 @@ public class TypeInfoModelSwitch<T> {
     }
 
     /**
-     * Returns the result of interpreting the object as an instance of '<em>Type Ref</em>'.
-     * <!-- begin-user-doc -->
-     * This implementation returns null;
-     * returning a non-null result will terminate the switch.
-     * <!-- end-user-doc -->
-     * @param object the target of the switch.
-     * @return the result of interpreting the object as an instance of '<em>Type Ref</em>'.
-     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-     * @generated
-     */
-    public T caseTypeRef(TypeRef object) {
-        return null;
-    }
-
-    /**
      * Returns the result of interpreting the object as an instance of '<em>Array Type</em>'.
      * <!-- begin-user-doc -->
      * This implementation returns null;
@@ -448,6 +469,36 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseRecordType(RecordType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Record Member</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Record Member</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseRecordMember(RecordMember object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Record Property</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Record Property</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseRecordProperty(RecordProperty object) {
         return null;
     }
 
@@ -627,7 +678,7 @@ public class TypeInfoModelSwitch<T> {
      * @see #doSwitch(org.eclipse.emf.ecore.EObject)
      * @generated
      */
-	public T defaultCase(EObject object) {
+    public T defaultCase(EObject object) {
         return null;
     }
 

@@ -15,7 +15,6 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
@@ -107,15 +106,6 @@ public class ArrayTypeImpl extends EObjectImpl implements ArrayType {
         }
         else if (eNotificationRequired())
             eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.ARRAY_TYPE__ITEM_TYPE, newItemType, newItemType));
-    }
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
-	 */
-    public TypeKind getKind() {
-		return TypeKind.PREDEFINED;
     }
 
 	/**

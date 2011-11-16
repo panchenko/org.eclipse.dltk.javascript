@@ -17,11 +17,10 @@ import java.util.List;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
-import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
-import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -120,8 +119,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				return checkIfArray(input, array);
 			} else if (ch == CharStream.EOF || Character.isWhitespace(ch)
 					|| ch == '|' || ch == ',' || ch == '=' || ch == '}'
-					|| ch == '>'
-					|| ch == ')') {
+					|| ch == '>' || ch == ')') {
 				return input.index() > start ? createType(input, start) : null;
 			} else {
 				input.consume();
@@ -246,7 +244,6 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 		final int start = input.index();
 		final RecordType type = TypeInfoModelFactory.eINSTANCE
 				.createRecordType();
-		type.setTarget(TypeInfoModelFactory.eINSTANCE.createType());
 		skipSpaces(input);
 		for (;;) {
 			int ch = input.LT(1);
@@ -261,15 +258,14 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				while (Character.isJavaIdentifierPart(input.LT(1))) {
 					input.consume();
 				}
-				final Property property = TypeInfoModelFactory.eINSTANCE
-						.createProperty();
+				final RecordProperty property = TypeInfoModelFactory.eINSTANCE
+						.createRecordProperty();
 				property.setName(input.substring(nameStart, input.index() - 1));
 				skipSpaces(input);
 				if (optional) {
 					// todo test if it ends on ] ?
 					input.consume();
-					property.setAttribute(IReferenceAttributes.OPTIONAL,
-							Boolean.TRUE);
+					property.setOptional(true);
 				}
 
 				if (input.LT(1) == ':') {
@@ -278,8 +274,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 					ch = input.LT(1);
 					if (ch == '=') {
 						input.consume();
-						property.setAttribute(IReferenceAttributes.OPTIONAL,
-								Boolean.TRUE);
+						property.setOptional(true);
 					}
 					if (memberType != null) {
 						property.setType(memberType);
@@ -300,8 +295,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 			}
 			break;
 		}
-		type.getTarget().setName(
-				'{' + input.substring(start, input.index() - 1) + '}');
+		type.setTypeName('{' + input.substring(start, input.index() - 1) + '}');
 		return type;
 	}
 

@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,31 +34,18 @@ import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
-import org.eclipse.dltk.javascript.typeinfo.JSType2;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
-import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
-import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
-import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
-import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
-import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
-import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
-import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -165,111 +150,12 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				false);
 	}
 
-	private boolean isResolved(JSType type) {
-		if (type instanceof SimpleType) {
-			return !((SimpleType) type).getTarget().isProxy();
-		} else if (type instanceof ClassType) {
-			final Type t = ((ClassType) type).getTarget();
-			return t == null || !t.isProxy();
-		} else if (type instanceof ArrayType) {
-			return isResolved(((ArrayType) type).getItemType());
-		} else if (type instanceof MapType) {
-			final MapType mapType = (MapType) type;
-			return isResolved(mapType.getValueType())
-					&& isResolved(mapType.getKeyType());
-		} else if (type instanceof AnyType || type instanceof UndefinedType) {
-			return true;
-		} else if (type instanceof UnionType) {
-			for (JSType t : ((UnionType) type).getTargets()) {
-				if (!isResolved(t)) {
-					return false;
-				}
-			}
-			return true;
-		} else if (type instanceof RecordType) {
-			for (Member member : ((RecordType) type).getMembers()) {
-				if (!isResolved(member.getType())) {
-					return false;
-				}
-			}
-			return true;
-		} else if (type instanceof FunctionType) {
-			final FunctionType funcType = (FunctionType) type;
-			if (!isResolved(funcType.getReturnType())) {
-				return false;
-			}
-			for (Parameter parameter : funcType.getParameters()) {
-				if (!isResolved(parameter.getType())) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
 	public Type resolveType(Type type) {
 		if (type != null) {
 			return doResolveType(type);
 		} else {
 			return null;
 		}
-	}
-
-	public JSType resolveTypeRef(JSType type) {
-		if (type == null || isResolved(type)) {
-			return type;
-		}
-		return doResolveTypeRef(type);
-	}
-
-	private JSType2 doResolveTypeRef(JSType type) {
-		if (type instanceof SimpleType) {
-			final SimpleType r = (SimpleType) type;
-			return JSTypeSet.ref(doResolveType(r.getTarget()));
-		} else if (type instanceof ClassType) {
-			final ClassType c = (ClassType) type;
-			final Type target = c.getTarget();
-			return JSTypeSet.classType(target != null ? doResolveType(target)
-					: null);
-		} else if (type instanceof ArrayType) {
-			return JSTypeSet.arrayOf(doResolveTypeRef(((ArrayType) type)
-					.getItemType()));
-		} else if (type instanceof MapType) {
-			final MapType mapType = (MapType) type;
-			return JSTypeSet.mapOf(doResolveTypeRef(mapType.getKeyType()),
-					doResolveTypeRef(mapType.getValueType()));
-		} else if (type instanceof UnionType) {
-			final List<JSType2> targets = new ArrayList<JSType2>();
-			for (JSType t : ((UnionType) type).getTargets()) {
-				targets.add(doResolveTypeRef(t));
-			}
-			return JSTypeSet.union(targets);
-		} else if (type instanceof AnyType) {
-			return JSTypeSet.any();
-		} else if (type instanceof UndefinedType) {
-			return JSTypeSet.undefined();
-		} else if (type instanceof FunctionType) {
-			final FunctionType funcType = (FunctionType) type;
-			final EList<Parameter> params = new BasicEList<Parameter>();
-			for (Parameter parameter : funcType.getParameters()) {
-				params.add(JSTypeSet.parameter(parameter.getName(),
-						doResolveTypeRef(parameter.getType())));
-			}
-			return JSTypeSet.functionType(funcType.getParameters(),
-					doResolveTypeRef(funcType.getReturnType()));
-		} else if (type instanceof RecordType) {
-			// TODO (alex) make a copy of Type?
-			final Type target = ((RecordType) type).getTarget();
-			for (Member member : target.getMembers()) {
-				if (member.getType() instanceof SimpleType) {
-					final SimpleType ref = (SimpleType) member.getType();
-					ref.setTarget(doResolveType(ref.getTarget()));
-				}
-			}
-			return JSTypeSet.record(target);
-		}
-		return (JSType2) type;
 	}
 
 	private Type doResolveType(Type type) {
@@ -683,6 +569,19 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					!queryProviders, false);
 		}
 
+		public Type resolveType(Type type) {
+			if (type != null && type.isProxy()) {
+				final String typeName = URI.decode(((InternalEObject) type)
+						.eProxyURI().fragment());
+				final Type resolved = getType(typeName, null, true, true,
+						false, true);
+				if (resolved != null) {
+					return resolved;
+				}
+			}
+			return type;
+		}
+
 		public void markInvariant(Type type) {
 			if (((EObject) type).eResource() != null) {
 				return;
@@ -812,7 +711,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				if (collection instanceof IValueProvider) {
 					IValue value = ((IValueProvider) collection).getValue();
 					if (member.getType() != null) {
-						value.setDeclaredType(member.getType());
+						value.setDeclaredType(JSTypeSet.normalize(this,
+								member.getType()));
 					}
 					if (value.getKind() == ReferenceKind.UNKNOWN) {
 						if (member instanceof Property) {

@@ -58,6 +58,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="#//Visibility"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//Member">
+    <eOperations name="getParameter" eType="#//Parameter">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
         eType="#//Parameter" containment="true" resolveProxies="false"/>
   </eClassifiers>
@@ -74,10 +77,6 @@
     <eLiterals name="PREDEFINED"/>
     <eLiterals name="JAVASCRIPT" value="1" literal="JAVASCRIPT"/>
     <eLiterals name="JAVA" value="2"/>
-    <eLiterals name="EXTERNAL_JS" value="3" literal="EXTERNAL_JS"/>
-    <eLiterals name="RECORD" value="4" literal="RECORD"/>
-    <eLiterals name="CLASS" value="5" literal="CLASS"/>
-    <eLiterals name="FUNCTION" value="6"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ParameterKind">
     <eLiterals name="NORMAL" literal="NORMAL"/>
@@ -89,7 +88,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JSType" abstract="true" interface="true">
-    <eOperations name="getKind" eType="#//TypeKind"/>
     <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FunctionType" eSuperTypes="#//JSType">
@@ -101,7 +99,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="SimpleType" eSuperTypes="#//JSType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TypeRef" eSuperTypes="#//SimpleType"/>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//JSType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="itemType" eType="#//JSType"
         containment="true"/>
@@ -123,12 +120,15 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RecordType" eSuperTypes="#//JSType">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
-        eType="#//Member" volatile="true" transient="true" derived="true" containment="true"
-        resolveProxies="false"/>
+        eType="#//Member" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RecordMember" abstract="true" interface="true"
+      eSuperTypes="#//Member">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RecordProperty" eSuperTypes="#//Property #//RecordMember"/>
   <eClassifiers xsi:type="ecore:EClass" name="ClassType" eSuperTypes="#//JSType">
     <eOperations name="getRawName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"/>
@@ -136,6 +136,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="UndefinedType" eSuperTypes="#//JSType"/>
   <eClassifiers xsi:type="ecore:EEnum" name="Visibility">
     <eLiterals name="PUBLIC"/>
+    <eLiterals name="PROTECTED" value="50"/>
     <eLiterals name="PRIVATE" value="100"/>
   </eClassifiers>
 </ecore:EPackage>

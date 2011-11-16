@@ -160,11 +160,11 @@ public abstract class TypeInferencerVisitorBase extends
 
 	protected ITypeChecker typeChecker;
 
-	public ITypeChecker getJSDocTypeChecker() {
+	public ITypeChecker getTypeChecker() {
 		return typeChecker;
 	}
 
-	public void setJSDocTypeChecker(ITypeChecker typeChecker) {
+	public void setTypeChecker(ITypeChecker typeChecker) {
 		this.typeChecker = typeChecker;
 	}
 

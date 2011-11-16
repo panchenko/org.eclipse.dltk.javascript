@@ -16,10 +16,10 @@ import java.util.List;
 import org.eclipse.dltk.compiler.IElementRequestor.MethodInfo;
 import org.eclipse.dltk.internal.javascript.parser.JSModifiers;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
-import org.eclipse.dltk.internal.javascript.ti.JSMethod;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 
@@ -43,7 +43,7 @@ class MethodDeclaration extends Declaration implements IReferenceAttributes {
 		mi.name = childName;
 		mi.returnType = extractType(child.getChild(IValueReference.FUNCTION_OP));
 		copyLocation(location, mi);
-		final JSMethod method = (JSMethod) child.getAttribute(PARAMETERS);
+		final IMethod method = (IMethod) child.getAttribute(METHOD);
 		if (method != null) {
 			if (mi.returnType == null) {
 				mi.returnType = TypeUtil.getName(method.getType());

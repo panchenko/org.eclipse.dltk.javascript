@@ -70,15 +70,14 @@ public class JavaScriptMatchLocator implements IMatchLocator,
 		final ModuleFactory moduleFactory = new ModuleFactory(scope);
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		final IMatchingPredicate<MatchingNode> predicate = MatchingPredicateFactory
-				.create(pattern);
+				.create(inferencer2, pattern);
 		if (predicate == null) {
 			return;
 		}
 
 		MatchingCollectorSourceElementRequestor matchingCollectorRequestor = new MatchingCollectorSourceElementRequestor(
 				new MatchingCollector<MatchingNode>(predicate, nodeSet));
-		StructureReporter2 visitor = new StructureReporter2(
-				inferencer2,
+		StructureReporter2 visitor = new StructureReporter2(inferencer2,
 				matchingCollectorRequestor);
 		for (SearchDocument document : searchDocuments) {
 			// TODO report progress

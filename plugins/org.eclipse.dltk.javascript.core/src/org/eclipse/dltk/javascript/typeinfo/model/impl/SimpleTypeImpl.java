@@ -15,9 +15,7 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -110,26 +108,9 @@ public class SimpleTypeImpl extends EObjectImpl implements SimpleType {
 	 * 
 	 * @generated NOT
 	 */
-	public TypeKind getKind() {
-		return target != null && !target.isProxy() ? target.getKind()
-				: TypeKind.UNRESOLVED;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
-	 */
 	public String getName() {
 		if (target != null) {
-			if (((EObject) target).eIsProxy()) {
-				final URI uri = ((InternalEObject) target).eProxyURI();
-				if (uri != null) {
-					return URI.decode(uri.fragment());
-				}
-			} else {
-				return target.getName();
-			}
+			return target.getName();
 		}
 		return null;
 	}

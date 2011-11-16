@@ -13,42 +13,18 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.internal.javascript.ti.TypeInfoInvariantCacheImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-public interface ITypeInfoContext {
-
-	/**
-	 * Returns the {@link Type} with the specified name. If there is already an
-	 * active call to the {@link ITypeProvider} then a proxy is returned. If
-	 * type couldn't be found then {@link TypeKind#UNKNOWN} type is returned.
-	 * 
-	 * @param typeName
-	 * @return
-	 */
-	Type getType(String typeName);
+public interface ITypeInfoContext extends ITypeSystem {
 
 	/**
-	 * Calls {@link #getType(String)} and wraps the result as {@link SimpleType}.
+	 * Calls {@link #getType(String)} and wraps the result as {@link SimpleType}
 	 * 
 	 * @param typeName
 	 * @return
 	 */
 	SimpleType getTypeRef(String typeName);
-
-	/**
-	 * Returns the {@link Type} with the specified name. The only difference if
-	 * compared to {@link #getType(String)} is that this function returns
-	 * <code>null</code> instead of {@link TypeKind#UNKNOWN} type.
-	 * 
-	 * @param typeName
-	 *            the name of the type
-	 * @param mode
-	 *            the mode or <code>null</code> if unknown
-	 * @since 3.0
-	 */
-	Type getKnownType(String typeName, TypeMode mode);
 
 	/**
 	 * Mark the specified type as invariant - not depending on the current

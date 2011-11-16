@@ -13,7 +13,6 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -44,15 +43,6 @@ public class AnyTypeImpl extends EObjectImpl implements AnyType {
     @Override
     protected EClass eStaticClass() {
         return TypeInfoModelPackage.Literals.ANY_TYPE;
-    }
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
-	 */
-    public TypeKind getKind() {
-		return TypeKind.PREDEFINED;
     }
 
 	/**

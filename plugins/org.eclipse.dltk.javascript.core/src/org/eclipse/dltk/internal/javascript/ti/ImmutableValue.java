@@ -8,14 +8,14 @@ import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class ImmutableValue implements IValue, IValue2 {
 
 	private Map<String, IValue> elementValues;
 
-	protected JSType declaredType;
+	protected IRType declaredType;
 	protected final JSTypeSet types;
 	protected Set<String> deletedChildren;
 	protected ReferenceKind kind = ReferenceKind.UNKNOWN;
@@ -42,7 +42,7 @@ public class ImmutableValue implements IValue, IValue2 {
 		references = new HashSet<IValue>(4, 0.9f);
 	}
 
-	public ImmutableValue(JSType declaredType, JSTypeSet types,
+	public ImmutableValue(IRType declaredType, JSTypeSet types,
 			Set<String> deletedChildren, ReferenceKind kind,
 			ReferenceLocation location, Map<String, ImmutableValue> children,
 			Map<String, IValue> inherited, Set<IValue> references,
@@ -110,7 +110,7 @@ public class ImmutableValue implements IValue, IValue2 {
 		}
 	};
 
-	public JSType getDeclaredType() {
+	public IRType getDeclaredType() {
 		if (declaredType != null) {
 			return declaredType;
 		} else if (hasReferences()) {
@@ -206,7 +206,7 @@ public class ImmutableValue implements IValue, IValue2 {
 				} else {
 					valueTypes = value.getTypes();
 				}
-				for (JSType type : valueTypes) {
+				for (IRType type : valueTypes) {
 					member = ElementValue.findMember(type, childName);
 					if (member != null) {
 						result.add(member);
@@ -253,7 +253,7 @@ public class ImmutableValue implements IValue, IValue2 {
 				elementValues.put(name, value);
 				return value;
 			}
-			for (JSType type : types) {
+			for (IRType type : types) {
 				value = ElementValue.findMember(type, name);
 				if (value != null) {
 					if (elementValues == null)
@@ -302,7 +302,7 @@ public class ImmutableValue implements IValue, IValue2 {
 		}
 	}
 
-	public void setDeclaredType(JSType declaredType) {
+	public void setDeclaredType(IRType declaredType) {
 	}
 
 	public void setAttribute(String key, Object value) {

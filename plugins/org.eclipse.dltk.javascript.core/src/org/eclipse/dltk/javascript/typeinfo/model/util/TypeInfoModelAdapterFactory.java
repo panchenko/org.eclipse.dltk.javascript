@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.15 2011/08/03 08:48:03 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.16 2011/11/16 11:57:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -136,10 +136,6 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
                 return createSimpleTypeAdapter();
             }
             @Override
-            public Adapter caseTypeRef(TypeRef object) {
-                return createTypeRefAdapter();
-            }
-            @Override
             public Adapter caseArrayType(ArrayType object) {
                 return createArrayTypeAdapter();
             }
@@ -162,6 +158,14 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
             @Override
             public Adapter caseRecordType(RecordType object) {
                 return createRecordTypeAdapter();
+            }
+            @Override
+            public Adapter caseRecordMember(RecordMember object) {
+                return createRecordMemberAdapter();
+            }
+            @Override
+            public Adapter caseRecordProperty(RecordProperty object) {
+                return createRecordPropertyAdapter();
             }
             @Override
             public Adapter caseClassType(ClassType object) {
@@ -262,20 +266,6 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
-     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef <em>Type Ref</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeRef
-     * @generated
-     */
-    public Adapter createTypeRefAdapter() {
-        return null;
-    }
-
-    /**
      * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.ArrayType <em>Array Type</em>}'.
      * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
@@ -356,6 +346,34 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createRecordTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordMember <em>Record Member</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordMember
+     * @generated
+     */
+    public Adapter createRecordMemberAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordProperty <em>Record Property</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordProperty
+     * @generated
+     */
+    public Adapter createRecordPropertyAdapter() {
         return null;
     }
 

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.16 2011/08/03 08:48:03 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.17 2011/11/16 11:57:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -26,6 +26,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -33,7 +34,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeAlias;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeRef;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
@@ -97,13 +97,13 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
             case TypeInfoModelPackage.FUNCTION_TYPE: return (EObject)createFunctionType();
             case TypeInfoModelPackage.SIMPLE_TYPE: return (EObject)createSimpleType();
-            case TypeInfoModelPackage.TYPE_REF: return (EObject)createTypeRef();
             case TypeInfoModelPackage.ARRAY_TYPE: return (EObject)createArrayType();
             case TypeInfoModelPackage.ANY_TYPE: return (EObject)createAnyType();
             case TypeInfoModelPackage.UNION_TYPE: return (EObject)createUnionType();
             case TypeInfoModelPackage.GENERIC_TYPE: return (EObject)createGenericType();
             case TypeInfoModelPackage.MAP_TYPE: return (EObject)createMapType();
             case TypeInfoModelPackage.RECORD_TYPE: return (EObject)createRecordType();
+            case TypeInfoModelPackage.RECORD_PROPERTY: return (EObject)createRecordProperty();
             case TypeInfoModelPackage.CLASS_TYPE: return (EObject)createClassType();
             case TypeInfoModelPackage.UNDEFINED_TYPE: return (EObject)createUndefinedType();
             default:
@@ -244,17 +244,6 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-	@Deprecated
-    public TypeRef createTypeRef() {
-        TypeRefImpl typeRef = new TypeRefImpl();
-        return typeRef;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
     public ArrayType createArrayType() {
         ArrayTypeImpl arrayType = new ArrayTypeImpl();
         return arrayType;
@@ -308,6 +297,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     public RecordType createRecordType() {
         RecordTypeImpl recordType = new RecordTypeImpl();
         return recordType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public RecordProperty createRecordProperty() {
+        RecordPropertyImpl recordProperty = new RecordPropertyImpl();
+        return recordProperty;
     }
 
     /**

@@ -11,12 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import java.util.Set;
 
-public interface JSType2 extends JSType {
+public interface IRUnionType extends IRType {
 
-	boolean isArray();
-
-	boolean isAssignableFrom(JSType2 type);
+	Set<IRType> getTargets();
 
 }

@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
@@ -35,16 +37,18 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueParent;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRMethod;
+import org.eclipse.dltk.javascript.typeinfo.IRParameter;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
+import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
-import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -267,10 +271,10 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					IValueReference child = item.getChild(childName);
 					if (child.exists()) {
 						if (testPrivate) {
-							IMethod method = (IMethod) child
-									.getAttribute(IReferenceAttributes.PARAMETERS);
-							IVariable variable = (IVariable) child
-									.getAttribute(IReferenceAttributes.VARIABLE);
+							IRMethod method = (IRMethod) child
+									.getAttribute(IReferenceAttributes.R_METHOD);
+							IRVariable variable = (IRVariable) child
+									.getAttribute(IReferenceAttributes.R_VARIABLE);
 							if ((method != null && (method.isPrivate() || (method
 									.isProtected() && !superScope)))
 									|| (variable != null && (variable
@@ -290,32 +294,52 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		public void reportValueTypeMembers(ITypeInferenceContext context,
 				IValueReference valueRef) {
 			final TypeMemberQuery typeQuery = new TypeMemberQuery();
-			for (JSType type : valueRef.getDeclaredTypes()) {
-				if (type instanceof ClassType) {
-					final Type t = ((ClassType) type).getTarget();
+			List<Member> members = null;
+			for (IRType type : valueRef.getDeclaredTypes()) {
+				if (type instanceof IRClassType) {
+					final Type t = ((IRClassType) type).getTarget();
 					if (t != null) {
 						typeQuery.add(t, MemberPredicate.STATIC);
 					}
+				} else if (type instanceof IRRecordType) {
+					if (members == null) {
+						members = new ArrayList<Member>();
+					}
+					for (IRRecordMember member : ((IRRecordType) type)
+							.getMembers()) {
+						members.add(member.getMember());
+					}
 				} else {
-					final Type t = TypeUtil.extractType(context
-							.resolveTypeRef(type));
+					final Type t = TypeUtil.extractType(type);
 					if (t != null) {
 						typeQuery.add(t, MemberPredicate.NON_STATIC);
 					}
 				}
 			}
-			for (JSType type : valueRef.getTypes()) {
-				if (type instanceof ClassType) {
-					final Type t = ((ClassType) type).getTarget();
+			for (IRType type : valueRef.getTypes()) {
+				if (type instanceof IRClassType) {
+					final Type t = ((IRClassType) type).getTarget();
 					if (t != null) {
 						typeQuery.add(t, MemberPredicate.STATIC);
 					}
+				} else if (type instanceof IRRecordType) {
+					if (members == null) {
+						members = new ArrayList<Member>();
+					}
+					for (IRRecordMember member : ((IRRecordType) type)
+							.getMembers()) {
+						members.add(member.getMember());
+					}
 				} else {
-					final Type t = TypeUtil.extractType(context
-							.resolveTypeRef(type));
+					final Type t = TypeUtil.extractType(type);
 					if (t != null) {
 						typeQuery.add(t, MemberPredicate.NON_STATIC);
 					}
+				}
+			}
+			if (members != null) {
+				for (Member member : members) {
+					reportMember(member, member.getName());
 				}
 			}
 			for (Member member : typeQuery.ignoreDuplicates(processed)) {
@@ -395,15 +419,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
 			if (proposalKind == CompletionProposal.METHOD_REF) {
-				final IMethod method = (IMethod) reference.getAttribute(
-						IReferenceAttributes.PARAMETERS, true);
+				final IRMethod method = (IRMethod) reference.getAttribute(
+						IReferenceAttributes.R_METHOD, true);
 				if (method != null) {
 					int paramCount = method.getParameterCount();
 					if (paramCount > 0) {
 						final String[] params = new String[paramCount];
 						for (int i = 0; i < paramCount; ++i) {
-							IParameter parameter = method.getParameters()
-									.get(i);
+							IRParameter parameter = method.getParameters().get(
+									i);
 							if (parameter.isOptional()) {
 								params[i] = '[' + parameter.getName() + ']';
 							} else {

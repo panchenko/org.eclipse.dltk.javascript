@@ -13,11 +13,11 @@ package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.javascript.typeinference.IValueParent;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 
 public interface IValueTypeFactory {
 
-	IValueReference create(IValueParent parent, JSType type);
+	IValueReference create(IValueParent parent, IRType type);
 
 	IValueReference createObject(IValueParent parent);
 

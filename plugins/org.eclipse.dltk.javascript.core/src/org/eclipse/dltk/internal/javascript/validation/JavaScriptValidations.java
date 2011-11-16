@@ -24,8 +24,10 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -58,7 +60,7 @@ public class JavaScriptValidations {
 		return script;
 	}
 
-	public static JSType typeOf(IValueReference reference) {
+	public static IRType typeOf(IValueReference reference) {
 		if (reference != null) {
 			if (reference.getDeclaredType() != null) {
 				return reference.getDeclaredType();
@@ -128,8 +130,8 @@ public class JavaScriptValidations {
 	 * @param arguments
 	 * @return
 	 */
-	public static Method selectMethod(List<Method> methods,
-			IValueReference[] arguments) {
+	public static Method selectMethod(ITypeSystem context,
+			List<Method> methods, IValueReference[] arguments) {
 		if (methods.size() == 1) {
 			return methods.get(0);
 		}
@@ -142,14 +144,13 @@ public class JavaScriptValidations {
 					JSType parameterType = parameters.get(i).getType();
 					if (parameterType == null)
 						continue;
-					JSType argumentType = typeOf(arguments[i]);
+					IRType argumentType = typeOf(arguments[i]);
 					if (argumentType == null)
 						continue;
 					// todo should we have the context here to call
 					// context.resolveTypeRef()?
-					match = JSTypeSet
-							.normalize(parameterType)
-							.isAssignableFrom(JSTypeSet.normalize(argumentType));
+					match = JSTypeSet.normalize(context, parameterType)
+							.isAssignableFrom(argumentType);
 					if (!match)
 						break;
 				}
@@ -170,13 +171,13 @@ public class JavaScriptValidations {
 		if (valueRef == null) {
 			return false;
 		}
-		for (JSType type : valueRef.getDeclaredTypes()) {
-			if (type != null && type instanceof ClassType) {
+		for (IRType type : valueRef.getDeclaredTypes()) {
+			if (type != null && type instanceof IRClassType) {
 				return true;
 			}
 		}
-		for (JSType type : valueRef.getTypes()) {
-			if (type != null && type instanceof ClassType) {
+		for (IRType type : valueRef.getTypes()) {
+			if (type != null && type instanceof IRClassType) {
 				return true;
 			}
 		}

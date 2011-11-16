@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -113,8 +114,22 @@ public class TypeUtil {
 			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
 		} else if (type instanceof AnyType) {
 			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
-		} else if (type instanceof RecordType) {
-			return ((RecordType) type).getTarget();
+		} else {
+			return null;
+		}
+	}
+
+	public static Type extractType(IRType type) {
+		if (type instanceof IRSimpleType) {
+			return ((IRSimpleType) type).getTarget();
+		} else if (type instanceof IRClassType) {
+			return ((IRClassType) type).getTarget();
+		} else if (type instanceof IRArrayType) {
+			return TypeInfoModelLoader.getInstance().getType(ITypeNames.ARRAY);
+		} else if (type instanceof IRMapType) {
+			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
+		} else if (type instanceof IRAnyType) {
+			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
 		} else {
 			return null;
 		}
@@ -129,13 +144,33 @@ public class TypeUtil {
 		} else if (type != null && type.getName().equals(ITypeNames.XML)) {
 			return type;
 		} else if (type != null && type.getName().equals(ITypeNames.XMLLIST)) {
-			return context.getTypeRef(ITypeNames.XML);
+			return ref(TypeInfoModelLoader.getInstance()
+					.getType(ITypeNames.XML));
+		} else {
+			return null;
+		}
+	}
+
+	public static IRType extractArrayItemType(IRType type,
+			ITypeInfoContext context) {
+		if (type instanceof IRArrayType) {
+			return ((IRArrayType) type).getItemType();
+		} else if (type instanceof IRMapType) {
+			return ((IRMapType) type).getValueType();
+		} else if (type != null && type.getName().equals(ITypeNames.XML)) {
+			return type;
+		} else if (type != null && type.getName().equals(ITypeNames.XMLLIST)) {
+			return JSTypeSet.ref(context.getType(ITypeNames.XML));
 		} else {
 			return null;
 		}
 	}
 
 	public static String getName(JSType type) {
+		return type != null ? type.getName() : null;
+	}
+
+	public static String getName(IRType type) {
 		return type != null ? type.getName() : null;
 	}
 
@@ -233,6 +268,30 @@ public class TypeUtil {
 		} else {
 			return true;
 		}
+	}
+
+	/**
+	 * Return {@link TypeKind} of the simple type in the specified runtime type
+	 * or <code>null</code>.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static TypeKind kind(IRType type) {
+		if (type != null) {
+			if (type instanceof IRSimpleType) {
+				final Type t = ((IRSimpleType) type).getTarget();
+				if (t != null) {
+					return t.getKind();
+				}
+			} else if (type instanceof IRClassType) {
+				final Type t = ((IRClassType) type).getTarget();
+				if (t != null) {
+					return t.getKind();
+				}
+			}
+		}
+		return null;
 	}
 
 }

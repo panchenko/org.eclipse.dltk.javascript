@@ -79,6 +79,8 @@ public interface IModelBuilder {
 
 	public interface IParameter extends IElement {
 
+		ReferenceLocation getLocation();
+
 		/**
 		 * @since 3.0
 		 */
@@ -127,11 +129,6 @@ public interface IModelBuilder {
 		 * @return the parameter found or <code>null</code>
 		 */
 		IParameter getParameter(String name);
-
-		/**
-		 * Checks if this method has type declarations
-		 */
-		boolean isTyped();
 
 		/**
 		 * Is this a constructor method/function

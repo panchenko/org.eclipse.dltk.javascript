@@ -21,12 +21,12 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public class Value extends ImmutableValue {
 
-	public void setDeclaredType(JSType declaredType) {
+	public void setDeclaredType(IRType declaredType) {
 		this.declaredType = declaredType;
 	}
 

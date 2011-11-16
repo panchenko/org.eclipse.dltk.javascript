@@ -18,8 +18,8 @@ import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.IValue;
 import org.eclipse.dltk.internal.javascript.ti.IValueProvider;
 import org.eclipse.dltk.internal.javascript.ti.PhantomValue;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public enum PhantomValueReference implements IValueReference, IValueProvider {
 
@@ -79,11 +79,11 @@ public enum PhantomValueReference implements IValueReference, IValueProvider {
 	public void setLocation(ReferenceLocation location) {
 	}
 
-	public JSType getDeclaredType() {
+	public IRType getDeclaredType() {
 		return null;
 	}
 
-	public void setDeclaredType(JSType type) {
+	public void setDeclaredType(IRType type) {
 	}
 
 	public JSTypeSet getDeclaredTypes() {

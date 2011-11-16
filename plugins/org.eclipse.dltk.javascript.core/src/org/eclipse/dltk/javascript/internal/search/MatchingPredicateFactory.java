@@ -20,10 +20,12 @@ import org.eclipse.dltk.internal.core.search.matching.MethodDeclarationPattern;
 import org.eclipse.dltk.internal.core.search.matching.MethodPattern;
 import org.eclipse.dltk.internal.core.search.matching.OrPattern;
 import org.eclipse.dltk.internal.core.search.matching.TypeReferencePattern;
+import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 
 public class MatchingPredicateFactory {
 
-	static IMatchingPredicate<MatchingNode> create(SearchPattern pattern) {
+	static IMatchingPredicate<MatchingNode> create(ITypeInfoContext context,
+			SearchPattern pattern) {
 		if (pattern instanceof FieldPattern) {
 			return new FieldPredicate((FieldPattern) pattern);
 		} else if (pattern instanceof MethodPattern) {
@@ -31,13 +33,14 @@ public class MatchingPredicateFactory {
 		} else if (pattern instanceof MethodDeclarationPattern) {
 			return new MethodPredicate((MethodDeclarationPattern) pattern);
 		} else if (pattern instanceof TypeReferencePattern) {
-			return new TypeReferencePredicate((TypeReferencePattern) pattern);
+			return new TypeReferencePredicate(context,
+					(TypeReferencePattern) pattern);
 		} else if (pattern instanceof LocalVariablePattern) {
 			return new LocalVariablePredicate((LocalVariablePattern) pattern);
 		} else if (pattern instanceof OrPattern) {
 			OrMatchingPredicate<MatchingNode> predicate = new OrMatchingPredicate<MatchingNode>();
 			for (SearchPattern p : ((OrPattern) pattern).getPatterns()) {
-				final IMatchingPredicate<MatchingNode> pp = create(p);
+				final IMatchingPredicate<MatchingNode> pp = create(context, p);
 				if (pp != null) {
 					predicate.addPredicate(pp);
 				}

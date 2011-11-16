@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.28 2011/08/03 08:48:03 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.29 2011/11/16 11:57:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1046,34 +1046,6 @@ public interface TypeInfoModelPackage extends EPackage {
     int SIMPLE_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
 
     /**
-     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl <em>Type Ref</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl
-     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeRef()
-     * @generated
-     */
-    int TYPE_REF = 14;
-
-    /**
-     * The feature id for the '<em><b>Target</b></em>' reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int TYPE_REF__TARGET = SIMPLE_TYPE__TARGET;
-
-    /**
-     * The number of structural features of the '<em>Type Ref</em>' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int TYPE_REF_FEATURE_COUNT = SIMPLE_TYPE_FEATURE_COUNT + 0;
-
-    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1081,7 +1053,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getArrayType()
      * @generated
      */
-    int ARRAY_TYPE = 15;
+    int ARRAY_TYPE = 14;
 
     /**
      * The feature id for the '<em><b>Item Type</b></em>' containment reference.
@@ -1109,7 +1081,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getAnyType()
      * @generated
      */
-    int ANY_TYPE = 16;
+    int ANY_TYPE = 15;
 
     /**
      * The number of structural features of the '<em>Any Type</em>' class.
@@ -1128,7 +1100,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUnionType()
      * @generated
      */
-    int UNION_TYPE = 17;
+    int UNION_TYPE = 16;
 
     /**
      * The feature id for the '<em><b>Targets</b></em>' containment reference list.
@@ -1156,7 +1128,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getGenericType()
      * @generated
      */
-    int GENERIC_TYPE = 18;
+    int GENERIC_TYPE = 17;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' reference.
@@ -1193,7 +1165,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMapType()
      * @generated
      */
-    int MAP_TYPE = 19;
+    int MAP_TYPE = 18;
 
     /**
      * The feature id for the '<em><b>Key Type</b></em>' containment reference.
@@ -1230,16 +1202,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordType()
      * @generated
      */
-    int RECORD_TYPE = 20;
-
-    /**
-     * The feature id for the '<em><b>Target</b></em>' containment reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int RECORD_TYPE__TARGET = JS_TYPE_FEATURE_COUNT + 0;
+    int RECORD_TYPE = 19;
 
     /**
      * The feature id for the '<em><b>Members</b></em>' containment reference list.
@@ -1248,7 +1211,16 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int RECORD_TYPE__MEMBERS = JS_TYPE_FEATURE_COUNT + 1;
+    int RECORD_TYPE__MEMBERS = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Type Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_TYPE__TYPE_NAME = JS_TYPE_FEATURE_COUNT + 1;
 
     /**
      * The number of structural features of the '<em>Record Type</em>' class.
@@ -1260,6 +1232,269 @@ public interface TypeInfoModelPackage extends EPackage {
     int RECORD_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 2;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordMember <em>Record Member</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordMember
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordMember()
+     * @generated
+     */
+    int RECORD_MEMBER = 20;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__NAME = MEMBER__NAME;
+
+    /**
+     * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__DEPRECATED = MEMBER__DEPRECATED;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__DESCRIPTION = MEMBER__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__VISIBLE = MEMBER__VISIBLE;
+
+    /**
+     * The feature id for the '<em><b>Attributes</b></em>' map.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__ATTRIBUTES = MEMBER__ATTRIBUTES;
+
+    /**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__HIDE_ALLOWED = MEMBER__HIDE_ALLOWED;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__TYPE = MEMBER__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Direct Type</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__DIRECT_TYPE = MEMBER__DIRECT_TYPE;
+
+    /**
+     * The feature id for the '<em><b>Static</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__STATIC = MEMBER__STATIC;
+
+    /**
+     * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__DECLARING_TYPE = MEMBER__DECLARING_TYPE;
+
+    /**
+     * The feature id for the '<em><b>Visibility</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__VISIBILITY = MEMBER__VISIBILITY;
+
+    /**
+     * The feature id for the '<em><b>Optional</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER__OPTIONAL = MEMBER_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Record Member</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_MEMBER_FEATURE_COUNT = MEMBER_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.RecordPropertyImpl <em>Record Property</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.RecordPropertyImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordProperty()
+     * @generated
+     */
+    int RECORD_PROPERTY = 21;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__NAME = PROPERTY__NAME;
+
+    /**
+     * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__DEPRECATED = PROPERTY__DEPRECATED;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__DESCRIPTION = PROPERTY__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__VISIBLE = PROPERTY__VISIBLE;
+
+    /**
+     * The feature id for the '<em><b>Attributes</b></em>' map.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__ATTRIBUTES = PROPERTY__ATTRIBUTES;
+
+    /**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__HIDE_ALLOWED = PROPERTY__HIDE_ALLOWED;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__TYPE = PROPERTY__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Direct Type</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__DIRECT_TYPE = PROPERTY__DIRECT_TYPE;
+
+    /**
+     * The feature id for the '<em><b>Static</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__STATIC = PROPERTY__STATIC;
+
+    /**
+     * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__DECLARING_TYPE = PROPERTY__DECLARING_TYPE;
+
+    /**
+     * The feature id for the '<em><b>Visibility</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__VISIBILITY = PROPERTY__VISIBILITY;
+
+    /**
+     * The feature id for the '<em><b>Read Only</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__READ_ONLY = PROPERTY__READ_ONLY;
+
+    /**
+     * The feature id for the '<em><b>Optional</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY__OPTIONAL = PROPERTY_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Record Property</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RECORD_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl <em>Class Type</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1267,7 +1502,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getClassType()
      * @generated
      */
-    int CLASS_TYPE = 21;
+    int CLASS_TYPE = 22;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' reference.
@@ -1295,7 +1530,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getUndefinedType()
      * @generated
      */
-    int UNDEFINED_TYPE = 22;
+    int UNDEFINED_TYPE = 23;
 
     /**
      * The number of structural features of the '<em>Undefined Type</em>' class.
@@ -1314,7 +1549,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 23;
+	int TYPE_KIND = 24;
 
 
 	/**
@@ -1325,7 +1560,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 24;
+	int PARAMETER_KIND = 25;
 
 
 	/**
@@ -1336,7 +1571,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
      * @generated
      */
-    int VISIBILITY = 25;
+    int VISIBILITY = 26;
 
 
     /**
@@ -1456,16 +1691,6 @@ public interface TypeInfoModelPackage extends EPackage {
     EReference getSimpleType_Target();
 
     /**
-     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeRef <em>Type Ref</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for class '<em>Type Ref</em>'.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeRef
-     * @generated
-     */
-    EClass getTypeRef();
-
-    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.ArrayType <em>Array Type</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1581,17 +1806,6 @@ public interface TypeInfoModelPackage extends EPackage {
     EClass getRecordType();
 
     /**
-     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTarget <em>Target</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the containment reference '<em>Target</em>'.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTarget()
-     * @see #getRecordType()
-     * @generated
-     */
-    EReference getRecordType_Target();
-
-    /**
      * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getMembers <em>Members</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1601,6 +1815,48 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getRecordType_Members();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTypeName <em>Type Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Type Name</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTypeName()
+     * @see #getRecordType()
+     * @generated
+     */
+    EAttribute getRecordType_TypeName();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordMember <em>Record Member</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Record Member</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordMember
+     * @generated
+     */
+    EClass getRecordMember();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordMember#isOptional <em>Optional</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Optional</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordMember#isOptional()
+     * @see #getRecordMember()
+     * @generated
+     */
+    EAttribute getRecordMember_Optional();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordProperty <em>Record Property</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Record Property</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RecordProperty
+     * @generated
+     */
+    EClass getRecordProperty();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.ClassType <em>Class Type</em>}'.
@@ -2107,16 +2363,6 @@ public interface TypeInfoModelPackage extends EPackage {
         EReference SIMPLE_TYPE__TARGET = eINSTANCE.getSimpleType_Target();
 
         /**
-         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl <em>Type Ref</em>}' class.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeRefImpl
-         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeRef()
-         * @generated
-         */
-        EClass TYPE_REF = eINSTANCE.getTypeRef();
-
-        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl <em>Array Type</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -2217,20 +2463,48 @@ public interface TypeInfoModelPackage extends EPackage {
         EClass RECORD_TYPE = eINSTANCE.getRecordType();
 
         /**
-         * The meta object literal for the '<em><b>Target</b></em>' containment reference feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EReference RECORD_TYPE__TARGET = eINSTANCE.getRecordType_Target();
-
-        /**
          * The meta object literal for the '<em><b>Members</b></em>' containment reference list feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
         EReference RECORD_TYPE__MEMBERS = eINSTANCE.getRecordType_Members();
+
+        /**
+         * The meta object literal for the '<em><b>Type Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute RECORD_TYPE__TYPE_NAME = eINSTANCE.getRecordType_TypeName();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordMember <em>Record Member</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.RecordMember
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordMember()
+         * @generated
+         */
+        EClass RECORD_MEMBER = eINSTANCE.getRecordMember();
+
+        /**
+         * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute RECORD_MEMBER__OPTIONAL = eINSTANCE.getRecordMember_Optional();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.RecordPropertyImpl <em>Record Property</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.RecordPropertyImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRecordProperty()
+         * @generated
+         */
+        EClass RECORD_PROPERTY = eINSTANCE.getRecordProperty();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl <em>Class Type</em>}' class.

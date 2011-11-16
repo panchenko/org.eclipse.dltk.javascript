@@ -11,6 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-public interface IRFunctionType extends JSType2 {
+import java.util.List;
+
+public interface IRFunctionType extends IRType {
+
+	IRType getReturnType();
+
+	List<IRParameter> getParameters();
 
 }

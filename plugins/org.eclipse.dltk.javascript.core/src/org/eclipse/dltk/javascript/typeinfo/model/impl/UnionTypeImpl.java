@@ -15,7 +15,6 @@ import java.util.Collection;
 
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -78,16 +77,6 @@ public class UnionTypeImpl extends EObjectImpl implements UnionType {
             targets = new EObjectContainmentEList<JSType>(JSType.class, this, TypeInfoModelPackage.UNION_TYPE__TARGETS);
         }
         return targets;
-    }
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
-	 */
-    public TypeKind getKind() {
-		return targets != null && !targets.isEmpty() ? targets.get(0).getKind()
-				: TypeKind.UNKNOWN;
     }
 
 	/**

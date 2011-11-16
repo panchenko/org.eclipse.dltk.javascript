@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core;
 
+import java.util.Arrays;
+
 public class JavaScriptKeywords {
 
 	private static final String[] fgKeywords = { "break", "else", "new",
@@ -25,5 +27,13 @@ public class JavaScriptKeywords {
 
 	public static String[] getHighLightOnlyKeywords() {
 		return keywords;
+	}
+
+	public static void main(String[] args) {
+		String[] w = Arrays.copyOf(fgKeywords, fgKeywords.length);
+		Arrays.sort(w);
+		for (String wq : w) {
+			System.out.println(wq);
+		}
 	}
 }

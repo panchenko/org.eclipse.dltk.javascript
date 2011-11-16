@@ -22,8 +22,8 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTarget <em>Target</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getMembers <em>Members</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTypeName <em>Type Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -32,32 +32,6 @@ import org.eclipse.emf.common.util.EList;
  * @generated
  */
 public interface RecordType extends JSType {
-
-    /**
-     * Returns the value of the '<em><b>Target</b></em>' containment reference.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Target</em>' containment reference isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @return the value of the '<em>Target</em>' containment reference.
-     * @see #setTarget(Type)
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getRecordType_Target()
-     * @model containment="true"
-     * @generated
-     */
-    Type getTarget();
-
-    /**
-     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTarget <em>Target</em>}' containment reference.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Target</em>' containment reference.
-     * @see #getTarget()
-     * @generated
-     */
-    void setTarget(Type value);
 
     /**
      * Returns the value of the '<em><b>Members</b></em>' containment reference list.
@@ -70,8 +44,34 @@ public interface RecordType extends JSType {
      * <!-- end-user-doc -->
      * @return the value of the '<em>Members</em>' containment reference list.
      * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getRecordType_Members()
-     * @model containment="true" transient="true" volatile="true" derived="true"
+     * @model containment="true"
      * @generated
      */
     EList<Member> getMembers();
+
+    /**
+     * Returns the value of the '<em><b>Type Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Type Name</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Type Name</em>' attribute.
+     * @see #setTypeName(String)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getRecordType_TypeName()
+     * @model
+     * @generated
+     */
+    String getTypeName();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.RecordType#getTypeName <em>Type Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Type Name</em>' attribute.
+     * @see #getTypeName()
+     * @generated
+     */
+    void setTypeName(String value);
 } // RecordType

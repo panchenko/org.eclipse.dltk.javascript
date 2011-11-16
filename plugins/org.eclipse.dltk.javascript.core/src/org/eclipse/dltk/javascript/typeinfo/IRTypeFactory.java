@@ -20,6 +20,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 @ConfigurationElement("runtimeTypeFactory")
 public interface IRTypeFactory {
 
-	JSType2 create(Type type);
+	IRType create(Type type);
 
 }

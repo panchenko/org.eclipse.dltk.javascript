@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.14 2011/07/01 12:30:11 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.15 2011/11/16 11:57:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -24,6 +24,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -162,12 +163,23 @@ public class TypeImpl extends ElementImpl implements Type {
         return members;
     }
 
+	@Override
+	public String getName() {
+		if (isProxy()) {
+			return URI.decode(eProxyURI().fragment());
+		}
+		return super.getName();
+	}
+
 	/**
-     * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-     * @generated
-     */
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
 	public TypeKind getKind() {
+		if (isProxy()) {
+			return TypeKind.UNRESOLVED;
+		}
         return kind;
     }
 

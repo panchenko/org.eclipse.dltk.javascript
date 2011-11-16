@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: MethodImpl.java,v 1.3 2011/02/04 06:04:41 apanchenk Exp $
+ * $Id: MethodImpl.java,v 1.4 2011/11/16 11:57:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -81,6 +81,20 @@ public class MethodImpl extends MemberImpl implements Method {
     }
 
 	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+	public Parameter getParameter(String name) {
+		for (Parameter parameter : getParameters()) {
+			if (name.equals(parameter.getName())) {
+				return parameter;
+			}
+		}
+		return null;
+	}
+
+    /**
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated

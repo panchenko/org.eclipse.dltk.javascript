@@ -14,14 +14,13 @@ package org.eclipse.dltk.javascript.typeinfo.model;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Type Ref</b></em>'.
+ * A representation of the model object '<em><b>Record Property</b></em>'.
  * <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getTypeRef()
+ * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getRecordProperty()
  * @model
  * @generated
  */
-@Deprecated
-public interface TypeRef extends SimpleType {
-} // TypeRef
+public interface RecordProperty extends Property, RecordMember {
+} // RecordProperty

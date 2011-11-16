@@ -16,8 +16,8 @@ import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public enum PhantomValue implements IValue {
 	VALUE;
@@ -38,11 +38,11 @@ public enum PhantomValue implements IValue {
 		return this;
 	}
 
-	public JSType getDeclaredType() {
+	public IRType getDeclaredType() {
 		return null;
 	}
 
-	public void setDeclaredType(JSType declaredType) {
+	public void setDeclaredType(IRType declaredType) {
 	}
 
 	public JSTypeSet getDeclaredTypes() {

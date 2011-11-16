@@ -18,8 +18,8 @@ import java.util.Set;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 
 public abstract class AbstractReference implements IValueReference,
 		IValueProvider {
@@ -111,7 +111,7 @@ public abstract class AbstractReference implements IValueReference,
 				: null;
 	}
 
-	public JSType getDeclaredType() {
+	public IRType getDeclaredType() {
 		IValue value = getValue();
 		return value != null ? value.getDeclaredType() : null;
 	}
@@ -143,7 +143,7 @@ public abstract class AbstractReference implements IValueReference,
 		}
 	}
 
-	public void setDeclaredType(JSType type) {
+	public void setDeclaredType(IRType type) {
 		IValue value = createValue();
 		if (value != null) {
 			value.setDeclaredType(type);

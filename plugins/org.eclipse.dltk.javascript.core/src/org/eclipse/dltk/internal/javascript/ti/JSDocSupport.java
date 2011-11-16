@@ -47,7 +47,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.osgi.util.NLS;
@@ -331,10 +331,7 @@ public class JSDocSupport implements IModelBuilder {
 					if (propertiesType == null) {
 						propertiesType = TypeInfoModelFactory.eINSTANCE
 								.createRecordType();
-						propertiesType.setTarget(TypeInfoModelFactory.eINSTANCE
-								.createType());
-						propertiesType.getTarget().setName(
-								'{' + objectName + '}');
+						propertiesType.setTypeName('{' + objectName + '}');
 						objectPropertiesTypes.put(objectName, propertiesType);
 						final IParameter param = method
 								.getParameter(objectName);
@@ -346,8 +343,8 @@ public class JSDocSupport implements IModelBuilder {
 									tag, objectName);
 						}
 					}
-					Property property = TypeInfoModelFactory.eINSTANCE
-							.createProperty();
+					final RecordProperty property = TypeInfoModelFactory.eINSTANCE
+							.createRecordProperty();
 					property.setName(propertyName);
 					if (pp.type != null) {
 						JSType type = translateTypeName(pp.type, tag, reporter);
@@ -355,9 +352,7 @@ public class JSDocSupport implements IModelBuilder {
 							typeChecker.checkType(type, tag);
 						property.setType(type);
 					}
-					if (pp.optional)
-						property.setAttribute(IReferenceAttributes.OPTIONAL,
-								Boolean.TRUE);
+					property.setOptional(pp.optional);
 					propertiesType.getMembers().add(property);
 					continue;
 				}

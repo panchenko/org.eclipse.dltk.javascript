@@ -14,7 +14,6 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -121,15 +120,6 @@ public class ClassTypeImpl extends EObjectImpl implements ClassType {
 			}
 		}
 		return null;
-    }
-
-    /**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated NOT
-	 */
-    public TypeKind getKind() {
-		return TypeKind.CLASS;
     }
 
 	/**

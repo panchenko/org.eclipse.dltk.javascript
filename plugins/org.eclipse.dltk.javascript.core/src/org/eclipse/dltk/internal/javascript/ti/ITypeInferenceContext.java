@@ -18,9 +18,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface ITypeInferenceContext extends ITypeInfoContext {
 
@@ -39,21 +37,5 @@ public interface ITypeInferenceContext extends ITypeInfoContext {
 	IModelBuilder[] getModelBuilders();
 
 	ITypeProvider[] getTypeProviders();
-
-	/**
-	 * Tries to resolve all members of the specified type expression
-	 * 
-	 * @param type
-	 * @return
-	 */
-	JSType resolveTypeRef(JSType type);
-
-	/**
-	 * Resolves the specified type if it's a proxy
-	 * 
-	 * @param type
-	 * @return
-	 */
-	Type resolveType(Type type);
 
 }

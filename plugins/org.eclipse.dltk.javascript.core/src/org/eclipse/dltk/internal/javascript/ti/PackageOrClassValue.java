@@ -1,6 +1,6 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class PackageOrClassValue extends Value {
@@ -14,7 +14,7 @@ public class PackageOrClassValue extends Value {
 		// Try to resolve it with the name with the Packages prefix.
 		Type type = context.getKnownType("Packages." + name, null);
 		if (type != null) {
-			types.add(TypeUtil.classType(type));
+			types.add(JSTypeSet.classType(type));
 		}
 	}
 

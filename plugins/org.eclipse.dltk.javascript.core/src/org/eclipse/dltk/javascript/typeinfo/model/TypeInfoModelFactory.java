@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactory.java,v 1.13 2011/08/03 08:51:27 apanchenk Exp $
+ * $Id: TypeInfoModelFactory.java,v 1.14 2011/11/16 11:57:43 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -105,16 +105,6 @@ public interface TypeInfoModelFactory extends EFactory {
     SimpleType createSimpleType();
 
     /**
-     * Returns a new object of class '<em>Type Ref</em>'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return a new object of class '<em>Type Ref</em>'.
-     * @generated
-     */
-	@Deprecated
-    TypeRef createTypeRef();
-
-    /**
      * Returns a new object of class '<em>Array Type</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -167,6 +157,15 @@ public interface TypeInfoModelFactory extends EFactory {
      * @generated
      */
     RecordType createRecordType();
+
+    /**
+     * Returns a new object of class '<em>Record Property</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Record Property</em>'.
+     * @generated
+     */
+    RecordProperty createRecordProperty();
 
     /**
      * Returns a new object of class '<em>Class Type</em>'.

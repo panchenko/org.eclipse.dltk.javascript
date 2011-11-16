@@ -119,19 +119,6 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		return prot;
 	}
 
-	public boolean isTyped() {
-		if (type != null) {
-			return true;
-		}
-		for (int i = 0; i < size(); ++i) {
-			final IParameter parameter = get(i);
-			if (parameter.getType() != null || parameter.isOptional()
-					|| parameter.isVarargs()) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	public boolean isConstructor() {
 		return constructor;
@@ -179,6 +166,11 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	 */
 	public JSMethod(FunctionStatement node, ReferenceSource source) {
 		initialize(node, source, node.getName());
+	}
+
+	public JSMethod(FunctionStatement node, ReferenceSource source,
+			Expression name) {
+		initialize(node, source, name);
 	}
 
 	protected void initialize(FunctionStatement node, ReferenceSource source,

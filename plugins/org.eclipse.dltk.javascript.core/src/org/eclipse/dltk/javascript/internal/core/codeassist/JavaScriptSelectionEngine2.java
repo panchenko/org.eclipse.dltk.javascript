@@ -45,10 +45,10 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
@@ -156,7 +156,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 									.getElementType() == IModelElement.METHOD)) {
 						return new IModelElement[] { result };
 					}
-					final JSType type = JavaScriptValidations.typeOf(value);
+					final IRType type = JavaScriptValidations.typeOf(value);
 					return new IModelElement[] { new LocalVariable(m,
 							value.getName(), location.getDeclarationStart(),
 							location.getDeclarationEnd(),
@@ -191,7 +191,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 							arguments = new IValueReference[0];
 						}
 						final Method method = JavaScriptValidations
-								.selectMethod(methods, arguments);
+								.selectMethod(inferencer2, methods, arguments);
 						return convert(m, Collections.singletonList(method));
 					}
 				} else if (kind == ReferenceKind.TYPE) {

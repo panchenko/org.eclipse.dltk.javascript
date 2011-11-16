@@ -14,7 +14,7 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import org.eclipse.dltk.compiler.IElementRequestor.ElementInfo;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 
 abstract class Declaration implements Comparable<Declaration> {
 
@@ -38,7 +38,7 @@ abstract class Declaration implements Comparable<Declaration> {
 				: null;
 	}
 
-	protected static String extractType(final JSType type) {
+	protected static String extractType(final IRType type) {
 		return type != null ? type.getName() : null;
 	}
 
