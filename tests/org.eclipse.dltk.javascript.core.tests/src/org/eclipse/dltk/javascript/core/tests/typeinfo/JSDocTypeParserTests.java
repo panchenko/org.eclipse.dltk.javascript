@@ -13,15 +13,15 @@ package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
 import java.text.ParseException;
 
-import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
+import junit.framework.TestCase;
+
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
-
-import junit.framework.TestCase;
 
 public class JSDocTypeParserTests extends TestCase {
 
@@ -60,7 +60,7 @@ public class JSDocTypeParserTests extends TestCase {
 		assertEquals("anumber", type.getMembers().get(1).getName());
 		assertRef("Number", type.getMembers().get(1).getType());
 	}
-	
+
 	public void testRecordTypeWithOptionalBrackets() {
 		final RecordType type = (RecordType) parse("{astring:String,[anumber]:Number}");
 		assertEquals(2, type.getMembers().size());
@@ -68,9 +68,9 @@ public class JSDocTypeParserTests extends TestCase {
 		assertRef("String", type.getMembers().get(0).getType());
 		assertEquals("anumber", type.getMembers().get(1).getName());
 		assertRef("Number", type.getMembers().get(1).getType());
-		assertEquals(Boolean.TRUE, type.getMembers().get(1).getAttribute(IReferenceAttributes.OPTIONAL));
+		assertTrue(((RecordMember) type.getMembers().get(1)).isOptional());
 	}
-	
+
 	public void testRecordTypeWithOptionalClosureStyle() {
 		final RecordType type = (RecordType) parse("{astring:String,anumber:Number=}");
 		assertEquals(2, type.getMembers().size());
@@ -78,9 +78,8 @@ public class JSDocTypeParserTests extends TestCase {
 		assertRef("String", type.getMembers().get(0).getType());
 		assertEquals("anumber", type.getMembers().get(1).getName());
 		assertRef("Number", type.getMembers().get(1).getType());
-		assertEquals(Boolean.TRUE, type.getMembers().get(1).getAttribute(IReferenceAttributes.OPTIONAL));
+		assertTrue(((RecordMember) type.getMembers().get(1)).isOptional());
 	}
-
 
 	public void testFunctionType1() {
 		final FunctionType type = (FunctionType) parse("function():String");

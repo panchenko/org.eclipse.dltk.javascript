@@ -1700,7 +1700,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testRecordTypeWithSpacesAndOwnCurlyBrackets() {
 		StringList code = new StringList();
 		code.add("/**");
-		code.add(" * @type {{height:Number, widgetName:String, widgetTitle: String,originalColumn: forms.widgetColumn, originalPosition:Number,currentColumn:forms.widgetColumn,currentPosition:Number,columns:{} }}");
+		code.add(" * @type {{height:Number, widgetName:String, widgetTitle: String,originalColumn: Number, originalPosition:Number,currentColumn:Number,currentPosition:Number,columns:{} }}");
 		code.add("*/");
 		code.add("var eventDataType;");
 		final List<IProblem> problems = validate(code.toString());
@@ -1842,7 +1842,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("*/");
 		code.add("function getRegisteredPropertyInfos()");
 		code.add("{");
-		code.add("/** @type {Array<{propertyName: Integer, dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}>} */");
+		code.add("/** @type {Array<{propertyName: Number, dataType: Number,defaultValue: Object, minValue: Object,maxValue: Object, allowBlank: Boolean,allowCustomValues: Boolean, valueListName: String}>} */");
 		code.add("var _propInfos = [];");
 		code.add("return _propInfos;");
 		code.add("}");

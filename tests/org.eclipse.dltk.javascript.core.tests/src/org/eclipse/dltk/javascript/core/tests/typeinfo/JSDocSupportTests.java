@@ -53,6 +53,7 @@ public class JSDocSupportTests extends AbstractJSParserTest {
 				FunctionStatement.class));
 		final JSMethod method = new JSMethod();
 		new JSDocSupport() {
+			@Override
 			protected IProblemCategory getCategory(String categoryId) {
 				return new Category(categoryId);
 			}

@@ -29,7 +29,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 
-@SuppressWarnings("nls")
+@SuppressWarnings({ "nls", "restriction" })
 public class ExampleElementResolver implements IElementResolver {
 
 	public static final String MEMBER_VALUE = "AAAAAAAAAAAAAAAAAAAA";
@@ -38,7 +38,8 @@ public class ExampleElementResolver implements IElementResolver {
 	public Member resolveElement(ITypeInfoContext context, String name) {
 		if ("ExampleGlobal".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
-			property.setType(context.getTypeRef(ExampleTypeProvider.TYPE_SERVICE));
+			property.setType(context
+					.getTypeRef(ExampleTypeProvider.TYPE_SERVICE));
 			property.setName(name);
 			property.setDeprecated(true);
 			return property;
@@ -66,7 +67,8 @@ public class ExampleElementResolver implements IElementResolver {
 			}
 			return property;
 		} else if ("GLOBALSLAZY".equals(name)) {
-			// this is a lazy created value collection that also has a String type (combined js file and a type)
+			// this is a lazy created value collection that also has a String
+			// type (combined js file and a type)
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setName(name);
 			final ISourceModule module = context.getSource().getSourceModule();
@@ -76,7 +78,7 @@ public class ExampleElementResolver implements IElementResolver {
 				final ISourceModule globals = folder
 						.getSourceModule("globals.js");
 				// set the lazy value
-				property.setAttribute(LAZY_MEMBER_VALUE,globals);
+				property.setAttribute(LAZY_MEMBER_VALUE, globals);
 				// set the type besides the lazy value
 				property.setType(context.getTypeRef("String"));
 			}
@@ -126,7 +128,8 @@ public class ExampleElementResolver implements IElementResolver {
 		if (ENABLE_LIST_GLOBALS) {
 			Set<String> result = new HashSet<String>();
 			String[] names = new String[] { "ExampleGlobal", "GLOBALS",
-					"executeExampleGlobal", "exampleForms", "myExampleForms","myGenericArrayTest" };
+					"executeExampleGlobal", "exampleForms", "myExampleForms",
+					"myGenericArrayTest" };
 			for (String name : names) {
 				if (CharOperation.prefixEquals(prefix, name)) {
 					result.add(name);
