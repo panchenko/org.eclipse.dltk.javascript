@@ -22,6 +22,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -73,6 +74,12 @@ public class JSDocValidatorFactory {
 				checkType(((MapType) type).getKeyType(), tag);
 				checkType(((MapType) type).getValueType(), tag);
 			} else if (type instanceof SimpleType) {
+				if (type instanceof GenericType) {
+					for (JSType param : ((GenericType) type)
+							.getTypeParameters()) {
+						checkType(param, tag);
+					}
+				}
 				final Type t = ((SimpleType) type).getTarget();
 				if (t.getKind() == TypeKind.UNKNOWN
 						|| t.getKind() == TypeKind.UNRESOLVED) {
