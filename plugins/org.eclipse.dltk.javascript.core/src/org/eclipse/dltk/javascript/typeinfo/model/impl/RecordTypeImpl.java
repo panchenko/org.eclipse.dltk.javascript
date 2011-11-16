@@ -129,13 +129,15 @@ public class RecordTypeImpl extends EObjectImpl implements RecordType {
 		}
 		final StringBuilder sb = new StringBuilder();
 		sb.append('{');
-		for (Member member : members) {
-			if (sb.length() > 1) {
-				sb.append(',');
-			}
-			sb.append(member.getName());
-			if (member.getType() != null) {
-				sb.append(':').append(member.getType().getName());
+		if (members != null) {
+			for (Member member : members) {
+				if (sb.length() > 1) {
+					sb.append(',');
+				}
+				sb.append(member.getName());
+				if (member.getType() != null) {
+					sb.append(':').append(member.getType().getName());
+				}
 			}
 		}
 		sb.append('}');
