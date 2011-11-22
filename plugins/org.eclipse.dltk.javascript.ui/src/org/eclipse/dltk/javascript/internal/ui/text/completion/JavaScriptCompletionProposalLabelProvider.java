@@ -21,9 +21,12 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
 import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
 import org.eclipse.dltk.ui.DLTKPluginImages;
@@ -39,11 +42,26 @@ public class JavaScriptCompletionProposalLabelProvider extends
 
 	@Override
 	public String createTypeProposalLabel(CompletionProposal typeProposal) {
-		if (typeProposal.getExtraInfo() instanceof Element) {
-			final String label = getElementLabel((Element) typeProposal
-					.getExtraInfo());
+		if (typeProposal.getExtraInfo() instanceof Type) {
+			final Type type = (Type) typeProposal.getExtraInfo();
+			final String label = getElementLabel(type);
 			if (label != null) {
 				return label;
+			}
+			if (type instanceof GenericType) {
+				final StringBuilder sb = new StringBuilder();
+				sb.append(type.getName()).append('<');
+				boolean first = true;
+				for (TypeVariable variable : ((GenericType) type)
+						.getTypeParameters()) {
+					if (!first) {
+						sb.append(',');
+					}
+					sb.append(variable.getName());
+					first = false;
+				}
+				sb.append('>');
+				return sb.toString();
 			}
 		}
 		return super.createTypeProposalLabel(typeProposal);
