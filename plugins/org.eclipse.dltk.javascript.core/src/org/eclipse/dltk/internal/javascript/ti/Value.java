@@ -22,9 +22,15 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 
 public class Value extends ImmutableValue {
+
+	@Override
+	protected ITypeSystem getTypeSystem() {
+		return TypeInferencer2.DELEGATING_TYPE_SYSTEM;
+	}
 
 	public void setDeclaredType(IRType declaredType) {
 		this.declaredType = declaredType;

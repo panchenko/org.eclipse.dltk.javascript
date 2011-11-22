@@ -14,6 +14,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,26 +33,37 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class TypeInferencer2 implements ITypeInferenceContext {
 
@@ -81,10 +93,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	public void doInferencing(Script script) {
 		if (DEBUG)
-			System.out.println("Visiting " + source + " with "
-					+ visitor.getClass().getName() + " in "
+			System.out.println("Visiting "
+					+ source
+					+ " with "
+					+ (visitor != null ? visitor.getClass().getName()
+							: "Default") + " in "
 					+ Thread.currentThread().getName());
+		final TypeInferencer2 saved = CURRENT.get();
 		try {
+			CURRENT.set(this);
 			elements.clear();
 			modelBuilders = null;
 			typeProviders = null;
@@ -101,6 +118,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			log(e);
 		} catch (AssertionError e) {
 			log(e);
+		} finally {
+			CURRENT.set(saved);
 		}
 		// return null;
 	}
@@ -151,24 +170,145 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	}
 
 	public Type resolveType(Type type) {
-		if (type != null) {
+		if (type != null && type.isProxy()) {
 			return doResolveType(type);
 		} else {
-			return null;
+			return type;
 		}
 	}
 
-	private Type doResolveType(Type type) {
-		if (type.isProxy()) {
-			final String typeName = URI.decode(((InternalEObject) type)
-					.eProxyURI().fragment());
-			final Type resolved = getType(typeName, null, true, true, false,
-					true);
-			if (resolved != null) {
-				return resolved;
-			}
+	protected Type doResolveType(Type type) {
+		final String typeName = URI.decode(((InternalEObject) type).eProxyURI()
+				.fragment());
+		final Type resolved = getType(typeName, null, true, true, false, true);
+		if (resolved != null) {
+			return resolved;
 		}
 		return type;
+	}
+
+	private String buildParameterizedTypeName(final GenericType genericType,
+			List<IRType> parameters) {
+		final StringBuilder parameterizedName = new StringBuilder();
+		parameterizedName.append(genericType.getName());
+		parameterizedName.append("<");
+		for (int i = 0; i < genericType.getTypeParameters().size(); ++i) {
+			if (i > 0) {
+				parameterizedName.append(",");
+			}
+			if (i < parameters.size()) {
+				parameterizedName.append(parameters.get(i).getName());
+			} else {
+				parameterizedName.append("*");
+			}
+		}
+		parameterizedName.append(">");
+		final String name = parameterizedName.toString();
+		return name;
+	}
+
+	public Type parameterize(Type target, List<IRType> parameters) {
+		target = resolveType(target);
+		if (target instanceof GenericType) {
+			final GenericType genericType = (GenericType) target;
+			final String name = buildParameterizedTypeName(genericType,
+					parameters);
+			Type type = types.get(name);
+			if (type != null) {
+				if (DEBUG) {
+					System.out.println("Returning " + name);
+				}
+				return type;
+			}
+			if (DEBUG) {
+				System.out.println("Creating " + name);
+			}
+			final Parameterizer parameterizer = new Parameterizer(genericType,
+					parameters);
+			type = parameterizer.copy();
+			parameterizer.copyReferences();
+			type.setName(name);
+			types.put(name, type);
+			typeRS.addToResource(type);
+			return type;
+		}
+		return target;
+	}
+
+	@SuppressWarnings("serial")
+	private static class Parameterizer extends EcoreUtil.Copier {
+
+		final GenericType genericType;
+		final Map<TypeVariable, IRType> parameters = new HashMap<TypeVariable, IRType>();
+
+		public Parameterizer(GenericType genericType, List<IRType> parameters) {
+			super(false);
+			this.genericType = genericType;
+			for (int i = 0; i < genericType.getTypeParameters().size(); ++i) {
+				this.parameters.put(genericType.getTypeParameters().get(i),
+						i < parameters.size() ? parameters.get(i) : null);
+			}
+		}
+
+		public Type copy() {
+			return (Type) copy((EObject) genericType);
+		}
+
+		@Override
+		public EObject copy(EObject eObject) {
+			if (eObject == null) {
+				return null;
+			} else {
+				final EObject copyEObject;
+				final EClass eClass;
+				if (eObject == genericType) {
+					// TODO (alex) extension point
+					copyEObject = (EObject) TypeInfoModelFactory.eINSTANCE
+							.createType();
+					eClass = copyEObject.eClass();
+				} else if (eObject instanceof TypeVariableReference) {
+					final IRType source = parameters
+							.get(((TypeVariableReference) eObject)
+									.getVariable());
+					final RType result = TypeInfoModelFactory.eINSTANCE
+							.createRType();
+					result.setRuntimeType(source != null ? source : JSTypeSet
+							.any());
+					return (EObject) result;
+				} else {
+					copyEObject = createCopy(eObject);
+					eClass = eObject.eClass();
+				}
+				put(eObject, copyEObject);
+				for (int i = 0, size = eClass.getFeatureCount(); i < size; ++i) {
+					EStructuralFeature eStructuralFeature = eClass
+							.getEStructuralFeature(i);
+					if (eStructuralFeature.isChangeable()
+							&& !eStructuralFeature.isDerived()) {
+						if (eStructuralFeature instanceof EAttribute) {
+							copyAttribute((EAttribute) eStructuralFeature,
+									eObject, copyEObject);
+						} else {
+							EReference eReference = (EReference) eStructuralFeature;
+							if (eReference.isContainment()) {
+								copyContainment(eReference, eObject,
+										copyEObject);
+							}
+						}
+					}
+				}
+				copyProxyURI(eObject, copyEObject);
+				return copyEObject;
+			}
+		}
+
+		@Override
+		protected void copyReference(EReference eReference, EObject eObject,
+				EObject copyEObject) {
+			if (eObject instanceof TypeVariableReference)
+				return;
+			super.copyReference(eReference, eObject, copyEObject);
+		}
 	}
 
 	public Set<String> listTypes(TypeMode mode, String prefix) {
@@ -659,6 +799,16 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 		}
 
+		public IValue valueOf(Member member) {
+			// TODO (alex) review
+			return null;
+		}
+
+		public Type parameterize(Type target, List<IRType> parameters) {
+			// TODO (alex) review
+			return target;
+		}
+
 	}
 
 	static final ConcurrentHashMap<String, InvariantTypeResourceSet> invariantContextRS = new ConcurrentHashMap<String, InvariantTypeResourceSet>();
@@ -733,7 +883,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				}
 			}
 		}
-		return ElementValue.createFor(member, this);
+		return null;
 	}
 
 	public Set<String> listGlobals(String prefix) {
@@ -762,6 +912,51 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			modelBuilders = TypeInfoManager.getModelBuilders(this);
 		}
 		return modelBuilders;
+	}
+
+	private static final ThreadLocal<TypeInferencer2> CURRENT = new ThreadLocal<TypeInferencer2>();
+
+	protected static final ITypeSystem DELEGATING_TYPE_SYSTEM = new DelagatingTypeSystem();
+
+	private static class DelagatingTypeSystem implements ITypeSystem {
+
+		private TypeInferencer2 current() {
+			return CURRENT.get();
+		}
+
+		public IValue valueOf(Member member) {
+			final TypeInferencer2 current = current();
+			if (current != null) {
+				return current.valueOf(member);
+			} else {
+				return null;
+			}
+		}
+
+		public Type resolveType(Type type) {
+			if (type != null && type.isProxy()) {
+				final TypeInferencer2 current = current();
+				if (current != null) {
+					return current.doResolveType(type);
+				} else {
+					final Type resolved = TypeInfoModelLoader.getInstance()
+							.getType(type.getName());
+					if (resolved != null) {
+						return resolved;
+					}
+				}
+			}
+			return type;
+		}
+
+		public Type parameterize(Type target, List<IRType> parameters) {
+			final TypeInferencer2 current = current();
+			if (current != null) {
+				return current.parameterize(target, parameters);
+			} else {
+				return target;
+			}
+		}
 	}
 
 }

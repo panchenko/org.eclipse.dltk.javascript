@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactory.java,v 1.14 2011/11/16 11:57:43 apanchenk Exp $
+ * $Id: TypeInfoModelFactory.java,v 1.15 2011/11/22 15:52:21 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -132,6 +132,15 @@ public interface TypeInfoModelFactory extends EFactory {
     UnionType createUnionType();
 
     /**
+     * Returns a new object of class '<em>Parameterized Type</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Parameterized Type</em>'.
+     * @generated
+     */
+    ParameterizedType createParameterizedType();
+
+    /**
      * Returns a new object of class '<em>Generic Type</em>'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -139,6 +148,24 @@ public interface TypeInfoModelFactory extends EFactory {
      * @generated
      */
     GenericType createGenericType();
+
+    /**
+     * Returns a new object of class '<em>Type Variable Reference</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Type Variable Reference</em>'.
+     * @generated
+     */
+    TypeVariableReference createTypeVariableReference();
+
+    /**
+     * Returns a new object of class '<em>RType</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>RType</em>'.
+     * @generated
+     */
+    RType createRType();
 
     /**
      * Returns a new object of class '<em>Map Type</em>'.
@@ -184,6 +211,15 @@ public interface TypeInfoModelFactory extends EFactory {
      * @generated
      */
     UndefinedType createUndefinedType();
+
+    /**
+     * Returns a new object of class '<em>Type Variable</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Type Variable</em>'.
+     * @generated
+     */
+    TypeVariable createTypeVariable();
 
     /**
      * Returns the package supported by this factory.

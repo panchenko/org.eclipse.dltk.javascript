@@ -1041,7 +1041,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		private boolean hasInstanceMethod(IRType type, String name) {
-			return ElementValue.findMember(type, name,
+			return ElementValue.findMember(getContext(), type, name,
 					MemberPredicate.NON_STATIC) != null;
 		}
 
@@ -1312,48 +1312,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 				IValueReference argument = arguments[i];
 				IRParameter parameter = parameters.size() > i ? parameters
 						.get(i) : null;
-				if (sb.length() != 0) {
-					sb.append(',');
-				}
-				if (argument == null) {
-					sb.append("null");
-				} else if (parameter != null
-						&& parameter.getType() instanceof RecordType) {
-					Set<String> directChildren = argument.getDirectChildren();
-					sb.append('{');
-					for (String childName : directChildren) {
-						if (sb.length() > 1)
-							sb.append(", ");
-						sb.append(childName);
-						IRType type = JavaScriptValidations.typeOf(argument
-								.getChild(childName));
-						if (type != null) {
-							sb.append(':');
-							sb.append(type.getName());
-						}
-					}
-					sb.append('}');
-				} else if (argument.getDeclaredType() != null) {
-					sb.append(argument.getDeclaredType().getName());
-				} else {
-					final JSTypeSet types = argument.getTypes();
-					if (types.size() == 1) {
-						sb.append(types.getFirst().getName());
-					} else {
-						sb.append('?');
-					}
-				}
-			}
-			return sb.toString();
-		}
-
-		private String describeArgTypes(IValueReference[] arguments,
-				EList<Parameter> parameters) {
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < arguments.length; i++) {
-				IValueReference argument = arguments[i];
-				Parameter parameter = parameters.size() > i ? parameters.get(i)
-						: null;
 				if (sb.length() != 0) {
 					sb.append(',');
 				}

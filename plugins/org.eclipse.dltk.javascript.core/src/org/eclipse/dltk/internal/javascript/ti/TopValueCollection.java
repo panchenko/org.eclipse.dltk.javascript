@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -33,6 +34,11 @@ public class TopValueCollection extends ValueCollection {
 			this.context = context;
 		}
 
+		@Override
+		protected ITypeSystem getTypeSystem() {
+			return context;
+		}
+
 		private final Map<String, IValue> memberCache = new HashMap<String, IValue>();
 
 		@Override
@@ -45,8 +51,10 @@ public class TopValueCollection extends ValueCollection {
 				final Member element = context.resolve(name);
 				if (element != null) {
 					value = context.valueOf(element);
-					if (value != null)
-						memberCache.put(name, value);
+					if (value == null) {
+						value = ElementValue.createFor(element, context);
+					}
+					memberCache.put(name, value);
 					return value;
 				}
 				if (name.equals(IValueReference.ARRAY_OP)) {
@@ -59,7 +67,7 @@ public class TopValueCollection extends ValueCollection {
 				}
 				final Type type = context.getKnownType(name, TypeMode.CODE);
 				if (type != null && type.getKind() != TypeKind.UNKNOWN) {
-					value = ElementValue.createClass(type);
+					value = ElementValue.createClass(context, type);
 					memberCache.put(name, value);
 					return value;
 				}

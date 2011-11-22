@@ -104,9 +104,12 @@ import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
@@ -114,9 +117,7 @@ import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
-import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -420,11 +421,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 		}
 		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
-		reference.setAttribute(IReferenceAttributes.R_VARIABLE,
-				RModelBuilder.create(getContext(), variable));
-		if (variable.getType() != null) {
-			reference.setDeclaredType(JSTypeSet.normalize(getContext(),
-					variable.getType()));
+		final IRVariable rvar = RModelBuilder.create(getContext(), variable);
+		reference.setAttribute(IReferenceAttributes.R_VARIABLE, rvar);
+		if (rvar.getType() != null) {
+			reference.setDeclaredType(rvar.getType());
 		}
 
 		reference.setKind(inFunction() ? ReferenceKind.LOCAL
@@ -433,7 +433,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
 		initializeVariable(reference, declaration, variable);
-		setTypeImpl(reference, variable.getType());
+		// setTypeImpl(reference, variable.getType());
 		return reference;
 	}
 
@@ -506,14 +506,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		IValueReference iteratorReference = visit(node.getIterator());
 		IRType type = JavaScriptValidations.typeOf(iteratorReference);
 		if (type != null) {
-			if (type instanceof ArrayType
+			if (type instanceof IRArrayType
 					&& JavaScriptValidations.typeOf(itemReference) == null) {
-				final JSType itemType = ((ArrayType) type).getItemType();
-				setTypeImpl(itemReference, itemType);
-			} else if (type instanceof MapType
+				final IRType itemType = ((IRArrayType) type).getItemType();
+				itemReference.setDeclaredType(itemType);
+			} else if (type instanceof IRMapType
 					&& JavaScriptValidations.typeOf(itemReference) == null) {
-				final JSType itemType = ((MapType) type).getValueType();
-				setTypeImpl(itemReference, itemType);
+				final IRType itemType = ((IRMapType) type).getValueType();
+				itemReference.setDeclaredType(itemType);
 			} else if (ITypeNames.XMLLIST.equals(type.getName())) {
 				itemReference.setDeclaredType(JSTypeSet.ref(context
 						.getType(ITypeNames.XML)));
@@ -630,11 +630,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		visit(node.getBody());
 	}
 
-	public void setType(IValueReference value, JSType type) {
-		setTypeImpl(value, type);
+	public void setType(IValueReference value, JSType type, boolean lazyEnabled) {
+		setTypeImpl(value, type, lazyEnabled);
 	}
 
 	private void setTypeImpl(IValueReference value, JSType type) {
+		setTypeImpl(value, type, true);
+	}
+
+	private void setTypeImpl(IValueReference value, JSType type,
+			boolean lazyEnabled) {
 		if (type == null) {
 			return;
 		}
@@ -657,7 +662,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						}
 					}
 				}
-			} else {
+			} else if (lazyEnabled) {
 				value.addValue(new LazyTypeReference(context, type.getName(),
 						peekContext()), false);
 			}
@@ -682,13 +687,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			IValueReference child = array.getChild(IValueReference.ARRAY_OP);
 			IRType arrayType = null;
 			if (array.getDeclaredType() != null) {
-				arrayType = TypeUtil.extractArrayItemType(
-						array.getDeclaredType(), context);
+				arrayType = TypeUtil.extractArrayItemType(array
+						.getDeclaredType());
 			} else {
 				JSTypeSet types = array.getTypes();
 				if (types.size() > 0)
-					arrayType = TypeUtil.extractArrayItemType(types.getFirst(),
-							context);
+					arrayType = TypeUtil.extractArrayItemType(types.getFirst());
 			}
 			if (arrayType != null && child.getDeclaredType() == null) {
 				child.setDeclaredType(arrayType);

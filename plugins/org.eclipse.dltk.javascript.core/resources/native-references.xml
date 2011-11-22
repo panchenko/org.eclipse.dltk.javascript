@@ -131,7 +131,8 @@
     	<parameters name="x" directType="Number"/>
     </members>
   </ref:Type>
-  <ref:Type name="Array" kind="PREDEFINED" superType="Object">
+  <ref:GenericType name="Array" kind="PREDEFINED" superType="Object" description="Arrays are list-like objects that come with a several built-in methods to perform traversal and mutation operations.">
+  	<typeParameters name="E"/>
     <constructor name="Array">
       <parameters name="item" kind="VARARGS" directType="Object"/>
     </constructor>
@@ -163,9 +164,13 @@
     <members xsi:type="ref:Method" name="map" directType="Array" description="Creates a new array with the results of calling a provided function on every element in this array.">
       <parameters name="callback" directType="Function"/>
     </members>
-    <members xsi:type="ref:Method" name="pop" directType="Object" description="Removes and returns the last element of an array."/>
+    <members xsi:type="ref:Method" name="pop" description="Removes and returns the last element of an array.">
+    	<type xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
+    </members>
     <members xsi:type="ref:Method" name="push" directType="Number" description="Adds one or more elements to the end of an array and returns the new length">
-      <parameters name="[element1,elementN]" kind="VARARGS"/>
+      <parameters name="element" kind="VARARGS">
+    	<type xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
+      </parameters>
     </members>
     <members xsi:type="ref:Method" name="reverse" directType="Array" description="Reverses the order of the elements in an array."/>
     <members xsi:type="ref:Method" name="shift" description="Removes and returns the first element of an array."/>
@@ -187,9 +192,11 @@
     <members xsi:type="ref:Method" name="toLocaleString" directType="String"/>
     <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a String value for Array."/>
     <members xsi:type="ref:Method" name="unshift" directType="Number" description="Adds one or more elements to the beginning of an array and returns the new length.">
-      <parameters name="[element1,elementN]" kind="VARARGS"/>
+      <parameters name="element" kind="VARARGS">
+    	<type xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
+      </parameters>
     </members>
-  </ref:Type>
+  </ref:GenericType>
   <ref:Type name="Boolean" kind="PREDEFINED" superType="Object">
     <constructor name="Boolean">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>

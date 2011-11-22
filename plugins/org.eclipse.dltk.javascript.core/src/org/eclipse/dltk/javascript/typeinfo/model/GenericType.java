@@ -29,10 +29,10 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface GenericType extends SimpleType {
+public interface GenericType extends Type {
     /**
      * Returns the value of the '<em><b>Type Parameters</b></em>' containment reference list.
-     * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.JSType}.
+     * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.TypeVariable}.
      * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Type Parameters</em>' containment reference list isn't clear,
@@ -44,14 +44,6 @@ public interface GenericType extends SimpleType {
      * @model containment="true"
      * @generated
      */
-    EList<JSType> getTypeParameters();
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @model kind="operation"
-     * @generated
-     */
-    String getRawName();
+    EList<TypeVariable> getTypeParameters();
 
 } // GenericType

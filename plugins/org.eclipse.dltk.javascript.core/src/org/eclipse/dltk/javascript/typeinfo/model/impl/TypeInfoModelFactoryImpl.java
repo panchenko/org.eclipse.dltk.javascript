@@ -9,18 +9,19 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.17 2011/11/16 11:57:43 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.18 2011/11/22 15:52:22 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Map;
 
+import org.eclipse.dltk.javascript.typeinfo.model.*;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
-import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -100,12 +101,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.ARRAY_TYPE: return (EObject)createArrayType();
             case TypeInfoModelPackage.ANY_TYPE: return (EObject)createAnyType();
             case TypeInfoModelPackage.UNION_TYPE: return (EObject)createUnionType();
-            case TypeInfoModelPackage.GENERIC_TYPE: return (EObject)createGenericType();
+            case TypeInfoModelPackage.PARAMETERIZED_TYPE: return (EObject)createParameterizedType();
             case TypeInfoModelPackage.MAP_TYPE: return (EObject)createMapType();
             case TypeInfoModelPackage.RECORD_TYPE: return (EObject)createRecordType();
             case TypeInfoModelPackage.RECORD_PROPERTY: return (EObject)createRecordProperty();
             case TypeInfoModelPackage.CLASS_TYPE: return (EObject)createClassType();
             case TypeInfoModelPackage.UNDEFINED_TYPE: return (EObject)createUndefinedType();
+            case TypeInfoModelPackage.TYPE_VARIABLE: return (EObject)createTypeVariable();
+            case TypeInfoModelPackage.GENERIC_TYPE: return (EObject)createGenericType();
+            case TypeInfoModelPackage.TYPE_VARIABLE_REFERENCE: return (EObject)createTypeVariableReference();
+            case TypeInfoModelPackage.RTYPE: return (EObject)createRType();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -274,9 +279,39 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    public ParameterizedType createParameterizedType() {
+        ParameterizedTypeImpl parameterizedType = new ParameterizedTypeImpl();
+        return parameterizedType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public GenericType createGenericType() {
         GenericTypeImpl genericType = new GenericTypeImpl();
         return genericType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public TypeVariableReference createTypeVariableReference() {
+        TypeVariableReferenceImpl typeVariableReference = new TypeVariableReferenceImpl();
+        return typeVariableReference;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public RType createRType() {
+        RTypeImpl rType = new RTypeImpl();
+        return rType;
     }
 
     /**
@@ -327,6 +362,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     public UndefinedType createUndefinedType() {
         UndefinedTypeImpl undefinedType = new UndefinedTypeImpl();
         return undefinedType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public TypeVariable createTypeVariable() {
+        TypeVariableImpl typeVariable = new TypeVariableImpl();
+        return typeVariable;
     }
 
     /**

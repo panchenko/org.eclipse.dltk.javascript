@@ -1,11 +1,18 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+
 public class PackagesValue extends Value {
 
 	private final ITypeInferenceContext context;
 
 	public PackagesValue(ITypeInferenceContext context) {
 		this.context = context;
+	}
+
+	@Override
+	protected ITypeSystem getTypeSystem() {
+		return context;
 	}
 
 	@Override

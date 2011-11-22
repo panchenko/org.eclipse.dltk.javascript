@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.16 2011/11/16 11:57:43 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.17 2011/11/22 15:52:22 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -148,8 +148,8 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
                 return createUnionTypeAdapter();
             }
             @Override
-            public Adapter caseGenericType(GenericType object) {
-                return createGenericTypeAdapter();
+            public Adapter caseParameterizedType(ParameterizedType object) {
+                return createParameterizedTypeAdapter();
             }
             @Override
             public Adapter caseMapType(MapType object) {
@@ -174,6 +174,22 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
             @Override
             public Adapter caseUndefinedType(UndefinedType object) {
                 return createUndefinedTypeAdapter();
+            }
+            @Override
+            public Adapter caseTypeVariable(TypeVariable object) {
+                return createTypeVariableAdapter();
+            }
+            @Override
+            public Adapter caseGenericType(GenericType object) {
+                return createGenericTypeAdapter();
+            }
+            @Override
+            public Adapter caseTypeVariableReference(TypeVariableReference object) {
+                return createTypeVariableReferenceAdapter();
+            }
+            @Override
+            public Adapter caseRType(RType object) {
+                return createRTypeAdapter();
             }
             @Override
             public Adapter defaultCase(EObject object) {
@@ -308,6 +324,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
     }
 
     /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType <em>Parameterized Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType
+     * @generated
+     */
+    public Adapter createParameterizedTypeAdapter() {
+        return null;
+    }
+
+    /**
      * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.GenericType <em>Generic Type</em>}'.
      * <!-- begin-user-doc -->
      * This default implementation returns null so that we can easily ignore cases;
@@ -318,6 +348,34 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createGenericTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference <em>Type Variable Reference</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference
+     * @generated
+     */
+    public Adapter createTypeVariableReferenceAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.RType <em>RType</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RType
+     * @generated
+     */
+    public Adapter createRTypeAdapter() {
         return null;
     }
 
@@ -402,6 +460,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createUndefinedTypeAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeVariable <em>Type Variable</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeVariable
+     * @generated
+     */
+    public Adapter createTypeVariableAdapter() {
         return null;
     }
 

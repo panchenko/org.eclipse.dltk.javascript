@@ -109,9 +109,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
         eType="#//JSType" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GenericType" eSuperTypes="#//SimpleType">
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterizedType" eSuperTypes="#//SimpleType">
     <eOperations name="getRawName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="typeParameters" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actualTypeArguments" upperBound="-1"
         eType="#//JSType" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MapType" eSuperTypes="#//JSType">
@@ -139,5 +139,19 @@
     <eLiterals name="PUBLIC"/>
     <eLiterals name="PROTECTED" value="50"/>
     <eLiterals name="PRIVATE" value="100"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeVariable" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GenericType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeParameters" upperBound="-1"
+        eType="#//TypeVariable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeVariableReference" eSuperTypes="#//JSType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//TypeVariable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IRType" instanceClassName="org.eclipse.dltk.javascript.typeinfo.IRType"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RType" eSuperTypes="#//JSType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runtimeType" eType="#//IRType"
+        transient="true"/>
   </eClassifiers>
 </ecore:EPackage>

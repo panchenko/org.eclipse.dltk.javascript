@@ -11,13 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.Collections;
+
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
-import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -92,13 +94,13 @@ public class TypeUtil {
 		return mapType;
 	}
 
-	public static GenericType genericType(String baseType,
+	public static ParameterizedType genericType(String baseType,
 			JSType... typeParameters) {
-		final GenericType genericType = TypeInfoModelFactory.eINSTANCE
-				.createGenericType();
+		final ParameterizedType genericType = TypeInfoModelFactory.eINSTANCE
+				.createParameterizedType();
 		genericType.setTarget(type(baseType));
 		for (JSType typeParameter : typeParameters) {
-			genericType.getTypeParameters().add(typeParameter);
+			genericType.getActualTypeArguments().add(typeParameter);
 		}
 		return genericType;
 	}
@@ -119,13 +121,17 @@ public class TypeUtil {
 		}
 	}
 
-	public static Type extractType(IRType type) {
+	public static Type extractType(ITypeSystem context, IRType type) {
 		if (type instanceof IRSimpleType) {
 			return ((IRSimpleType) type).getTarget();
 		} else if (type instanceof IRClassType) {
 			return ((IRClassType) type).getTarget();
 		} else if (type instanceof IRArrayType) {
-			return TypeInfoModelLoader.getInstance().getType(ITypeNames.ARRAY);
+			final IRArrayType arrayType = (IRArrayType) type;
+			final ITypeSystem typeSystem = arrayType.activeTypeSystem(context);
+			return typeSystem.parameterize(TypeInfoModelLoader.getInstance()
+					.getType(ITypeNames.ARRAY), Collections
+					.singletonList(arrayType.getItemType()));
 		} else if (type instanceof IRMapType) {
 			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
 		} else if (type instanceof IRAnyType) {
@@ -151,8 +157,7 @@ public class TypeUtil {
 		}
 	}
 
-	public static IRType extractArrayItemType(IRType type,
-			ITypeInfoContext context) {
+	public static IRType extractArrayItemType(IRType type) {
 		if (type instanceof IRArrayType) {
 			return ((IRArrayType) type).getItemType();
 		} else if (type instanceof IRMapType) {
@@ -160,7 +165,8 @@ public class TypeUtil {
 		} else if (type != null && type.getName().equals(ITypeNames.XML)) {
 			return type;
 		} else if (type != null && type.getName().equals(ITypeNames.XMLLIST)) {
-			return JSTypeSet.ref(context.getType(ITypeNames.XML));
+			return JSTypeSet.ref(TypeInfoModelLoader.getInstance().getType(
+					ITypeNames.XML));
 		} else {
 			return null;
 		}

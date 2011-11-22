@@ -310,7 +310,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						members.add(member.getMember());
 					}
 				} else {
-					final Type t = TypeUtil.extractType(type);
+					final Type t = TypeUtil.extractType(context, type);
 					if (t != null) {
 						typeQuery.add(t, MemberPredicate.NON_STATIC);
 					}
@@ -331,7 +331,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						members.add(member.getMember());
 					}
 				} else {
-					final Type t = TypeUtil.extractType(type);
+					final Type t = TypeUtil.extractType(context, type);
 					if (t != null) {
 						typeQuery.add(t, MemberPredicate.NON_STATIC);
 					}

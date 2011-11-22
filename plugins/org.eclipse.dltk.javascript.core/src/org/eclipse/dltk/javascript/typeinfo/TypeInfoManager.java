@@ -14,19 +14,25 @@ package org.eclipse.dltk.javascript.typeinfo;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.annotations.ConfigurationElement;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.typeinfo.model.NamedElement;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.utils.LazyExtensionManager;
 import org.eclipse.dltk.utils.LazyExtensionManager.Descriptor;
 import org.eclipse.dltk.utils.SimpleExtensionManager;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 public class TypeInfoManager {
@@ -224,11 +230,11 @@ public class TypeInfoManager {
 									.put(URI.createURI(uri),
 											createURI(element, resource));
 							resourceSet.getResources().add(
-									createResource(URI.createURI(uri)));
+									newResource(URI.createURI(uri)));
 						}
 					} else if (resource != null) {
 						resourceSet.getResources().add(
-								createResource(createURI(element, resource)));
+								newResource(createURI(element, resource)));
 					}
 				} catch (IllegalArgumentException e) {
 					JavaScriptPlugin.error(e);
@@ -254,8 +260,82 @@ public class TypeInfoManager {
 		return resourceSet;
 	}
 
-	private static Resource createResource(URI uri) {
-		return new XMIResourceImpl(uri);
+	public static XMIResource newResource() {
+		return new TypeInfoXMIResource();
+	}
+
+	public static XMIResource newResource(URI uri) {
+		return new TypeInfoXMIResource(uri);
+	}
+
+	/**
+	 * Resource implementation which provides human readable fragments for
+	 * {@link TypeVariable} references.
+	 */
+	private static class TypeInfoXMIResource extends XMIResourceImpl {
+
+		public TypeInfoXMIResource() {
+			super();
+		}
+
+		public TypeInfoXMIResource(URI uri) {
+			super(uri);
+		}
+
+		@Override
+		public EObject getEObject(String uriFragment) {
+			if (uriFragment.startsWith(ROOT)
+					&& uriFragment.length() > ROOT.length()
+					&& uriFragment.charAt(ROOT.length()) == '/') {
+				final StringTokenizer tokenizer = new StringTokenizer(
+						uriFragment.substring(ROOT.length() + 1), "/");
+				Object obj = this;
+				TOKENS: while (tokenizer.hasMoreTokens()) {
+					final String name = URI.decode(tokenizer.nextToken());
+					List<EObject> children = obj instanceof Resource ? ((Resource) obj)
+							.getContents() : ((EObject) obj).eContents();
+					for (EObject child : children) {
+						if (child instanceof NamedElement) {
+							if (name.equals(((NamedElement) child).getName())) {
+								obj = child;
+								continue TOKENS;
+							}
+						}
+					}
+					return super.getEObject(uriFragment);
+				}
+				return (EObject) obj;
+			}
+			return super.getEObject(uriFragment);
+		}
+
+		private static final String ROOT = "@ROOT";
+
+		@Override
+		public String getURIFragment(final EObject eObject) {
+			if (eObject instanceof TypeVariable) {
+				final List<String> path = new ArrayList<String>();
+				EObject obj = eObject;
+				for (;;) {
+					path.add(((NamedElement) obj).getName());
+					obj = obj.eContainer();
+					if (obj == null) {
+						break;
+					}
+					if (!(obj instanceof NamedElement)) {
+						return super.getURIFragment(eObject);
+					}
+				}
+				final StringBuilder sb = new StringBuilder();
+				sb.append(ROOT);
+				for (int i = path.size() - 1; i >= 0; --i) {
+					sb.append('/');
+					sb.append(URI.encodeSegment(path.get(i), false));
+				}
+				return sb.toString();
+			}
+			return super.getURIFragment(eObject);
+		}
 	}
 
 }

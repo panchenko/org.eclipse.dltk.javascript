@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.35 2011/11/16 14:27:02 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.36 2011/11/22 15:52:22 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Map;
 
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -29,7 +30,9 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.NamedElement;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
@@ -39,12 +42,15 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeAlias;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
@@ -119,7 +125,28 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    private EClass parameterizedTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     private EClass genericTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass typeVariableReferenceEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass rTypeEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -162,6 +189,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EClass undefinedTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass typeVariableEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -246,6 +280,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EEnum visibilityEEnum = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EDataType irTypeEDataType = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with
@@ -457,6 +498,24 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getParameterizedType() {
+        return parameterizedTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getParameterizedType_ActualTypeArguments() {
+        return (EReference)parameterizedTypeEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getGenericType() {
         return genericTypeEClass;
     }
@@ -468,6 +527,42 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      */
     public EReference getGenericType_TypeParameters() {
         return (EReference)genericTypeEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getTypeVariableReference() {
+        return typeVariableReferenceEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getTypeVariableReference_Variable() {
+        return (EReference)typeVariableReferenceEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getRType() {
+        return rTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getRType_RuntimeType() {
+        return (EAttribute)rTypeEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -576,6 +671,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      */
     public EClass getUndefinedType() {
         return undefinedTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getTypeVariable() {
+        return typeVariableEClass;
     }
 
     /**
@@ -877,6 +981,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
     /**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EDataType getIRType() {
+        return irTypeEDataType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -966,8 +1079,8 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         unionTypeEClass = createEClass(UNION_TYPE);
         createEReference(unionTypeEClass, UNION_TYPE__TARGETS);
 
-        genericTypeEClass = createEClass(GENERIC_TYPE);
-        createEReference(genericTypeEClass, GENERIC_TYPE__TYPE_PARAMETERS);
+        parameterizedTypeEClass = createEClass(PARAMETERIZED_TYPE);
+        createEReference(parameterizedTypeEClass, PARAMETERIZED_TYPE__ACTUAL_TYPE_ARGUMENTS);
 
         mapTypeEClass = createEClass(MAP_TYPE);
         createEReference(mapTypeEClass, MAP_TYPE__KEY_TYPE);
@@ -987,10 +1100,24 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         undefinedTypeEClass = createEClass(UNDEFINED_TYPE);
 
+        typeVariableEClass = createEClass(TYPE_VARIABLE);
+
+        genericTypeEClass = createEClass(GENERIC_TYPE);
+        createEReference(genericTypeEClass, GENERIC_TYPE__TYPE_PARAMETERS);
+
+        typeVariableReferenceEClass = createEClass(TYPE_VARIABLE_REFERENCE);
+        createEReference(typeVariableReferenceEClass, TYPE_VARIABLE_REFERENCE__VARIABLE);
+
+        rTypeEClass = createEClass(RTYPE);
+        createEAttribute(rTypeEClass, RTYPE__RUNTIME_TYPE);
+
         // Create enums
         typeKindEEnum = createEEnum(TYPE_KIND);
         parameterKindEEnum = createEEnum(PARAMETER_KIND);
         visibilityEEnum = createEEnum(VISIBILITY);
+
+        // Create data types
+        irTypeEDataType = createEDataType(IR_TYPE);
     }
 
 	/**
@@ -1035,7 +1162,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         arrayTypeEClass.getESuperTypes().add(this.getJSType());
         anyTypeEClass.getESuperTypes().add(this.getJSType());
         unionTypeEClass.getESuperTypes().add(this.getJSType());
-        genericTypeEClass.getESuperTypes().add(this.getSimpleType());
+        parameterizedTypeEClass.getESuperTypes().add(this.getSimpleType());
         mapTypeEClass.getESuperTypes().add(this.getJSType());
         recordTypeEClass.getESuperTypes().add(this.getJSType());
         recordMemberEClass.getESuperTypes().add(this.getMember());
@@ -1043,6 +1170,10 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         recordPropertyEClass.getESuperTypes().add(this.getRecordMember());
         classTypeEClass.getESuperTypes().add(this.getJSType());
         undefinedTypeEClass.getESuperTypes().add(this.getJSType());
+        typeVariableEClass.getESuperTypes().add(this.getNamedElement());
+        genericTypeEClass.getESuperTypes().add(this.getType());
+        typeVariableReferenceEClass.getESuperTypes().add(this.getJSType());
+        rTypeEClass.getESuperTypes().add(this.getJSType());
 
         // Initialize classes and features; add operations and parameters
         initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -1122,10 +1253,10 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEClass(unionTypeEClass, UnionType.class, "UnionType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getUnionType_Targets(), this.getJSType(), null, "targets", null, 0, -1, UnionType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-        initEClass(genericTypeEClass, GenericType.class, "GenericType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-        initEReference(getGenericType_TypeParameters(), this.getJSType(), null, "typeParameters", null, 0, -1, GenericType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEClass(parameterizedTypeEClass, ParameterizedType.class, "ParameterizedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getParameterizedType_ActualTypeArguments(), this.getJSType(), null, "actualTypeArguments", null, 0, -1, ParameterizedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-        addEOperation(genericTypeEClass, ecorePackage.getEString(), "getRawName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+        addEOperation(parameterizedTypeEClass, ecorePackage.getEString(), "getRawName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
         initEClass(mapTypeEClass, MapType.class, "MapType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getMapType_KeyType(), this.getJSType(), null, "keyType", null, 0, 1, MapType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -1147,6 +1278,17 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         initEClass(undefinedTypeEClass, UndefinedType.class, "UndefinedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
+        initEClass(typeVariableEClass, TypeVariable.class, "TypeVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+        initEClass(genericTypeEClass, GenericType.class, "GenericType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getGenericType_TypeParameters(), this.getTypeVariable(), null, "typeParameters", null, 0, -1, GenericType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+        initEClass(typeVariableReferenceEClass, TypeVariableReference.class, "TypeVariableReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getTypeVariableReference_Variable(), this.getTypeVariable(), null, "variable", null, 0, 1, TypeVariableReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+        initEClass(rTypeEClass, RType.class, "RType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEAttribute(getRType_RuntimeType(), this.getIRType(), "runtimeType", null, 0, 1, RType.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
         // Initialize enums and add enum literals
         initEEnum(typeKindEEnum, TypeKind.class, "TypeKind"); //$NON-NLS-1$
         addEEnumLiteral(typeKindEEnum, TypeKind.DEFAULT);
@@ -1165,6 +1307,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         addEEnumLiteral(visibilityEEnum, Visibility.PUBLIC);
         addEEnumLiteral(visibilityEEnum, Visibility.PROTECTED);
         addEEnumLiteral(visibilityEEnum, Visibility.PRIVATE);
+
+        // Initialize data types
+        initEDataType(irTypeEDataType, IRType.class, "IRType", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
         // Create resource
         createResource(eNS_URI);

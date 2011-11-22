@@ -30,8 +30,6 @@ public interface ITypeInferenceContext extends ITypeInfoContext {
 
 	Set<String> listTypes(TypeMode mode, String prefix);
 
-	IValue valueOf(Member member);
-
 	IValueCollection getTopValueCollection();
 
 	IModelBuilder[] getModelBuilders();

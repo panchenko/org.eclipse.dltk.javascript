@@ -22,27 +22,24 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
+import org.eclipse.dltk.javascript.typeinfo.model.RType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
+import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.AnyTypeImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.ArrayTypeImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.ClassTypeImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.FunctionTypeImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.RecordTypeImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.SimpleTypeImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.UndefinedTypeImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.impl.UnionTypeImpl;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -257,6 +254,20 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 	private static abstract class TypeKey implements IRType {
 
+		protected final ITypeSystem typeSystem;
+
+		protected TypeKey() {
+			this(null);
+		}
+
+		protected TypeKey(ITypeSystem typeSystem) {
+			this.typeSystem = typeSystem;
+		}
+
+		public ITypeSystem activeTypeSystem(ITypeSystem fallback) {
+			return typeSystem != null ? typeSystem : fallback;
+		}
+
 		protected final void checkType(Type type) {
 			if (type.isProxy()) {
 				System.out.println("PROXY " + type.getName());
@@ -419,6 +430,11 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		private final IRType itemType;
 
+		public ArrayTypeKey(ITypeSystem typeSystem, IRType itemType) {
+			super(typeSystem);
+			this.itemType = itemType;
+		}
+
 		public ArrayTypeKey(IRType itemType) {
 			this.itemType = itemType;
 		}
@@ -500,8 +516,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			if (type instanceof MapTypeKey) {
 				return valueType
 						.isAssignableFrom(((MapTypeKey) type).valueType);
-			} else if (type instanceof UndefinedTypeKey) {
-				return true;
 			}
 			return false;
 		}
@@ -809,7 +823,28 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 	}
 
 	public static IRType normalize(ITypeSystem context, JSType type) {
-		if (type instanceof SimpleTypeImpl) {
+		if (type instanceof ParameterizedType) {
+			final ParameterizedType parameterized = (ParameterizedType) type;
+			Type target = parameterized.getTarget();
+			if (target == null) {
+				return any();
+			}
+			if (context != null) {
+				final EList<JSType> typeArguments = parameterized
+						.getActualTypeArguments();
+				final List<IRType> parameters = new ArrayList<IRType>(
+						typeArguments.size());
+				for (int i = 0; i < typeArguments.size(); ++i) {
+					parameters.add(normalize(context, typeArguments.get(i)));
+				}
+				return ref(context.parameterize(target, parameters));
+			} else {
+				return ref(target);
+			}
+		} else if (type instanceof TypeVariableReference) {
+			// TODO (alex) shouldn't happen
+			return none();
+		} else if (type instanceof SimpleType) {
 			final SimpleType ref = (SimpleType) type;
 			Type target = ref.getTarget();
 			if (target == null) {
@@ -819,31 +854,34 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 				target = context.resolveType(target);
 			}
 			return ref(target);
-		} else if (type instanceof ClassTypeImpl) {
+		} else if (type instanceof ClassType) {
 			return classType(((ClassType) type).getTarget());
-		} else if (type instanceof ArrayTypeImpl) {
-			return arrayOf(normalize(context, ((ArrayType) type).getItemType()));
-		} else if (type instanceof MapTypeImpl) {
+		} else if (type instanceof ArrayType) {
+			final JSType itemType = ((ArrayType) type).getItemType();
+			return new ArrayTypeKey(context, normalize(context, itemType));
+		} else if (type instanceof MapType) {
 			final MapType mapType = (MapType) type;
 			return mapOf(normalize(context, mapType.getKeyType()),
 					normalize(context, mapType.getValueType()));
-		} else if (type instanceof AnyTypeImpl) {
+		} else if (type instanceof AnyType) {
 			return ANY_TYPE;
-		} else if (type instanceof UndefinedTypeImpl) {
+		} else if (type instanceof UndefinedType) {
 			return UNDEFINED_TYPE;
-		} else if (type instanceof UnionTypeImpl) {
+		} else if (type instanceof UnionType) {
 			final UnionTypeKey union = new UnionTypeKey();
 			for (JSType t : ((UnionType) type).getTargets()) {
 				union.targets.add(normalize(context, t));
 			}
 			return union;
-		} else if (type instanceof RecordTypeImpl) {
+		} else if (type instanceof RecordType) {
 			return new RecordTypeKey(context, ((RecordType) type).getMembers());
-		} else if (type instanceof FunctionTypeImpl) {
+		} else if (type instanceof FunctionType) {
 			final FunctionType funcType = (FunctionType) type;
 			return new FunctionTypeKey(RModelBuilder.convert(context,
 					funcType.getParameters()), normalize(context,
 					funcType.getReturnType()));
+		} else if (type instanceof RType) {
+			return ((RType) type).getRuntimeType();
 		} else if (type == null) {
 			return null;
 		} else {

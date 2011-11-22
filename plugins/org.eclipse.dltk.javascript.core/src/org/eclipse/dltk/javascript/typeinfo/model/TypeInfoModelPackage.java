@@ -9,12 +9,13 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.29 2011/11/16 11:57:43 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.30 2011/11/22 15:52:21 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -1121,14 +1122,14 @@ public interface TypeInfoModelPackage extends EPackage {
     int UNION_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
 
     /**
-     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.GenericTypeImpl <em>Generic Type</em>}' class.
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterizedTypeImpl <em>Parameterized Type</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.GenericTypeImpl
-     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getGenericType()
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterizedTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterizedType()
      * @generated
      */
-    int GENERIC_TYPE = 17;
+    int PARAMETERIZED_TYPE = 17;
 
     /**
      * The feature id for the '<em><b>Target</b></em>' reference.
@@ -1137,25 +1138,35 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int GENERIC_TYPE__TARGET = SIMPLE_TYPE__TARGET;
+    int PARAMETERIZED_TYPE__TARGET = SIMPLE_TYPE__TARGET;
 
     /**
-     * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
+     * The feature id for the '<em><b>Actual Type Arguments</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int GENERIC_TYPE__TYPE_PARAMETERS = SIMPLE_TYPE_FEATURE_COUNT + 0;
+    int PARAMETERIZED_TYPE__ACTUAL_TYPE_ARGUMENTS = SIMPLE_TYPE_FEATURE_COUNT + 0;
 
     /**
-     * The number of structural features of the '<em>Generic Type</em>' class.
+     * The number of structural features of the '<em>Parameterized Type</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int GENERIC_TYPE_FEATURE_COUNT = SIMPLE_TYPE_FEATURE_COUNT + 1;
+    int PARAMETERIZED_TYPE_FEATURE_COUNT = SIMPLE_TYPE_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.GenericTypeImpl <em>Generic Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.GenericTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getGenericType()
+     * @generated
+     */
+    int GENERIC_TYPE = 25;
 
     /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.
@@ -1542,6 +1553,216 @@ public interface TypeInfoModelPackage extends EPackage {
     int UNDEFINED_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 0;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableImpl <em>Type Variable</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeVariable()
+     * @generated
+     */
+    int TYPE_VARIABLE = 24;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_VARIABLE__NAME = NAMED_ELEMENT__NAME;
+
+    /**
+     * The number of structural features of the '<em>Type Variable</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_VARIABLE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__NAME = TYPE__NAME;
+
+    /**
+     * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__DEPRECATED = TYPE__DEPRECATED;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__DESCRIPTION = TYPE__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__VISIBLE = TYPE__VISIBLE;
+
+    /**
+     * The feature id for the '<em><b>Attributes</b></em>' map.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__ATTRIBUTES = TYPE__ATTRIBUTES;
+
+    /**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__HIDE_ALLOWED = TYPE__HIDE_ALLOWED;
+
+    /**
+     * The feature id for the '<em><b>Members</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__MEMBERS = TYPE__MEMBERS;
+
+    /**
+     * The feature id for the '<em><b>Kind</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__KIND = TYPE__KIND;
+
+    /**
+     * The feature id for the '<em><b>Super Type</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__SUPER_TYPE = TYPE__SUPER_TYPE;
+
+    /**
+     * The feature id for the '<em><b>Constructor</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__CONSTRUCTOR = TYPE__CONSTRUCTOR;
+
+    /**
+     * The feature id for the '<em><b>Traits</b></em>' reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__TRAITS = TYPE__TRAITS;
+
+    /**
+     * The feature id for the '<em><b>Extensible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__EXTENSIBLE = TYPE__EXTENSIBLE;
+
+    /**
+     * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__TYPE_PARAMETERS = TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Generic Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE_FEATURE_COUNT = TYPE_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableReferenceImpl <em>Type Variable Reference</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableReferenceImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeVariableReference()
+     * @generated
+     */
+    int TYPE_VARIABLE_REFERENCE = 26;
+
+    /**
+     * The feature id for the '<em><b>Variable</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_VARIABLE_REFERENCE__VARIABLE = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Type Variable Reference</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_VARIABLE_REFERENCE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.RTypeImpl <em>RType</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.RTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRType()
+     * @generated
+     */
+    int RTYPE = 27;
+
+    /**
+     * The feature id for the '<em><b>Runtime Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RTYPE__RUNTIME_TYPE = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>RType</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int RTYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1549,7 +1770,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 24;
+	int TYPE_KIND = 28;
 
 
 	/**
@@ -1560,7 +1781,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 25;
+	int PARAMETER_KIND = 29;
 
 
 	/**
@@ -1571,7 +1792,18 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
      * @generated
      */
-    int VISIBILITY = 26;
+    int VISIBILITY = 30;
+
+
+    /**
+     * The meta object id for the '<em>IR Type</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.IRType
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getIRType()
+     * @generated
+     */
+    int IR_TYPE = 31;
 
 
     /**
@@ -1743,6 +1975,27 @@ public interface TypeInfoModelPackage extends EPackage {
     EReference getUnionType_Targets();
 
     /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType <em>Parameterized Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Parameterized Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType
+     * @generated
+     */
+    EClass getParameterizedType();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType#getActualTypeArguments <em>Actual Type Arguments</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Actual Type Arguments</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType#getActualTypeArguments()
+     * @see #getParameterizedType()
+     * @generated
+     */
+    EReference getParameterizedType_ActualTypeArguments();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.GenericType <em>Generic Type</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1762,6 +2015,48 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getGenericType_TypeParameters();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference <em>Type Variable Reference</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Type Variable Reference</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference
+     * @generated
+     */
+    EClass getTypeVariableReference();
+
+    /**
+     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference#getVariable <em>Variable</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Variable</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference#getVariable()
+     * @see #getTypeVariableReference()
+     * @generated
+     */
+    EReference getTypeVariableReference_Variable();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.RType <em>RType</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>RType</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RType
+     * @generated
+     */
+    EClass getRType();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.RType#getRuntimeType <em>Runtime Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Runtime Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.RType#getRuntimeType()
+     * @see #getRType()
+     * @generated
+     */
+    EAttribute getRType_RuntimeType();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType <em>Map Type</em>}'.
@@ -1888,6 +2183,16 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EClass getUndefinedType();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeVariable <em>Type Variable</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Type Variable</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeVariable
+     * @generated
+     */
+    EClass getTypeVariable();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Element <em>Element</em>}'.
@@ -2243,6 +2548,17 @@ public interface TypeInfoModelPackage extends EPackage {
     EEnum getVisibility();
 
     /**
+     * Returns the meta object for data type '{@link org.eclipse.dltk.javascript.typeinfo.IRType <em>IR Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for data type '<em>IR Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.IRType
+     * @model instanceClass="org.eclipse.dltk.javascript.typeinfo.IRType" serializeable="false"
+     * @generated
+     */
+    EDataType getIRType();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2409,6 +2725,24 @@ public interface TypeInfoModelPackage extends EPackage {
         EReference UNION_TYPE__TARGETS = eINSTANCE.getUnionType_Targets();
 
         /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterizedTypeImpl <em>Parameterized Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterizedTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterizedType()
+         * @generated
+         */
+        EClass PARAMETERIZED_TYPE = eINSTANCE.getParameterizedType();
+
+        /**
+         * The meta object literal for the '<em><b>Actual Type Arguments</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference PARAMETERIZED_TYPE__ACTUAL_TYPE_ARGUMENTS = eINSTANCE.getParameterizedType_ActualTypeArguments();
+
+        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.GenericTypeImpl <em>Generic Type</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -2425,6 +2759,42 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference GENERIC_TYPE__TYPE_PARAMETERS = eINSTANCE.getGenericType_TypeParameters();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableReferenceImpl <em>Type Variable Reference</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableReferenceImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeVariableReference()
+         * @generated
+         */
+        EClass TYPE_VARIABLE_REFERENCE = eINSTANCE.getTypeVariableReference();
+
+        /**
+         * The meta object literal for the '<em><b>Variable</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference TYPE_VARIABLE_REFERENCE__VARIABLE = eINSTANCE.getTypeVariableReference_Variable();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.RTypeImpl <em>RType</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.RTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getRType()
+         * @generated
+         */
+        EClass RTYPE = eINSTANCE.getRType();
+
+        /**
+         * The meta object literal for the '<em><b>Runtime Type</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute RTYPE__RUNTIME_TYPE = eINSTANCE.getRType_RuntimeType();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.
@@ -2533,6 +2903,16 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EClass UNDEFINED_TYPE = eINSTANCE.getUndefinedType();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableImpl <em>Type Variable</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeVariable()
+         * @generated
+         */
+        EClass TYPE_VARIABLE = eINSTANCE.getTypeVariable();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ElementImpl <em>Element</em>}' class.
@@ -2821,6 +3201,16 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EEnum VISIBILITY = eINSTANCE.getVisibility();
+
+        /**
+         * The meta object literal for the '<em>IR Type</em>' data type.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.IRType
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getIRType()
+         * @generated
+         */
+        EDataType IR_TYPE = eINSTANCE.getIRType();
 
 	}
 

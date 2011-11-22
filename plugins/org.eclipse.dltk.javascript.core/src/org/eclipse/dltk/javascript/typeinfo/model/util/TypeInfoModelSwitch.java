@@ -9,13 +9,14 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.16 2011/11/16 11:57:43 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.17 2011/11/22 15:52:22 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.dltk.javascript.typeinfo.model.*;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -29,6 +30,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.NamedElement;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
@@ -37,6 +39,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeAlias;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
@@ -245,11 +249,11 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
-            case TypeInfoModelPackage.GENERIC_TYPE: {
-                GenericType genericType = (GenericType)theEObject;
-                T result = caseGenericType(genericType);
-                if (result == null) result = caseSimpleType(genericType);
-                if (result == null) result = caseJSType(genericType);
+            case TypeInfoModelPackage.PARAMETERIZED_TYPE: {
+                ParameterizedType parameterizedType = (ParameterizedType)theEObject;
+                T result = caseParameterizedType(parameterizedType);
+                if (result == null) result = caseSimpleType(parameterizedType);
+                if (result == null) result = caseJSType(parameterizedType);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -300,6 +304,36 @@ public class TypeInfoModelSwitch<T> {
                 UndefinedType undefinedType = (UndefinedType)theEObject;
                 T result = caseUndefinedType(undefinedType);
                 if (result == null) result = caseJSType(undefinedType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.TYPE_VARIABLE: {
+                TypeVariable typeVariable = (TypeVariable)theEObject;
+                T result = caseTypeVariable(typeVariable);
+                if (result == null) result = caseNamedElement(typeVariable);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.GENERIC_TYPE: {
+                GenericType genericType = (GenericType)theEObject;
+                T result = caseGenericType(genericType);
+                if (result == null) result = caseType(genericType);
+                if (result == null) result = caseElement(genericType);
+                if (result == null) result = caseNamedElement(genericType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.TYPE_VARIABLE_REFERENCE: {
+                TypeVariableReference typeVariableReference = (TypeVariableReference)theEObject;
+                T result = caseTypeVariableReference(typeVariableReference);
+                if (result == null) result = caseJSType(typeVariableReference);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
+            case TypeInfoModelPackage.RTYPE: {
+                RType rType = (RType)theEObject;
+                T result = caseRType(rType);
+                if (result == null) result = caseJSType(rType);
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
@@ -428,17 +462,17 @@ public class TypeInfoModelSwitch<T> {
     }
 
     /**
-     * Returns the result of interpreting the object as an instance of '<em>Generic Type</em>'.
+     * Returns the result of interpreting the object as an instance of '<em>Parameterized Type</em>'.
      * <!-- begin-user-doc -->
      * This implementation returns null;
      * returning a non-null result will terminate the switch.
      * <!-- end-user-doc -->
      * @param object the target of the switch.
-     * @return the result of interpreting the object as an instance of '<em>Generic Type</em>'.
+     * @return the result of interpreting the object as an instance of '<em>Parameterized Type</em>'.
      * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
      * @generated
      */
-    public T caseGenericType(GenericType object) {
+    public T caseParameterizedType(ParameterizedType object) {
         return null;
     }
 
@@ -529,6 +563,66 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseUndefinedType(UndefinedType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Type Variable</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Type Variable</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseTypeVariable(TypeVariable object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Generic Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Generic Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseGenericType(GenericType object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Type Variable Reference</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Type Variable Reference</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseTypeVariableReference(TypeVariableReference object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>RType</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>RType</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseRType(RType object) {
         return null;
     }
 

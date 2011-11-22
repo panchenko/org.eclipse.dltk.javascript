@@ -147,8 +147,6 @@ public class JavaScriptValidations {
 					IRType argumentType = typeOf(arguments[i]);
 					if (argumentType == null)
 						continue;
-					// todo should we have the context here to call
-					// context.resolveTypeRef()?
 					match = JSTypeSet.normalize(context, parameterType)
 							.isAssignableFrom(argumentType);
 					if (!match)

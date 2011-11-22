@@ -11,33 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.List;
+
+import org.eclipse.dltk.internal.javascript.ti.IValue;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public interface ITypeSystem {
-
-	/**
-	 * Returns the {@link Type} with the specified name. If there is already an
-	 * active call to the {@link ITypeProvider} then a proxy is returned. If
-	 * type couldn't be found then {@link TypeKind#UNKNOWN} type is returned.
-	 * 
-	 * @param typeName
-	 * @return
-	 */
-	Type getType(String typeName);
-
-	/**
-	 * Returns the {@link Type} with the specified name. The only difference if
-	 * compared to {@link #getType(String)} is that this function returns
-	 * <code>null</code> instead of {@link TypeKind#UNKNOWN} type.
-	 * 
-	 * @param typeName
-	 *            the name of the type
-	 * @param mode
-	 *            the mode or <code>null</code> if unknown
-	 * @since 3.0
-	 */
-	Type getKnownType(String typeName, TypeMode mode);
 
 	/**
 	 * Resolves the specified type if it's a proxy
@@ -46,5 +26,17 @@ public interface ITypeSystem {
 	 * @return
 	 */
 	Type resolveType(Type type);
+
+	/**
+	 * Support for members pointing to other .js files. Returns the result of
+	 * the referenced file evaluation or <code>null</code> to proceed with the
+	 * result from type model.
+	 * 
+	 * @param member
+	 * @return
+	 */
+	IValue valueOf(Member member);
+
+	Type parameterize(Type target, List<IRType> parameters);
 
 }
