@@ -12,7 +12,6 @@
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
 import static org.eclipse.dltk.javascript.typeinfo.TypeUtil.arrayOf;
-import static org.eclipse.dltk.javascript.typeinfo.TypeUtil.extractType;
 import static org.eclipse.dltk.javascript.typeinfo.TypeUtil.ref;
 
 import java.util.Collections;
@@ -68,11 +67,17 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		return types;
 	}
 
-	private static IValueCollection inference(final String code) {
-		TypeInferencer2 inferencer = new TestTypeInferencer2();
+	private TypeInferencer2 inferencer;
+
+	private IValueCollection inference(final String code) {
+		inferencer = new TestTypeInferencer2();
 		// return inferencer.doInferencing(parse(code));
 		inferencer.doInferencing(parse(code));
 		return inferencer.getCollection();
+	}
+
+	private Type extractType(IRType type) {
+		return TypeUtil.extractType(inferencer, type);
 	}
 
 	public void testNewNamedFunction() throws Exception {
@@ -615,8 +620,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 
 		IValueReference name = collection.getChild("name");
 		assertTrue(name.exists());
-		assertEquals(1, name.getTypes().size());
-		assertEquals("String", name.getTypes().iterator().next().getName());
+		assertEquals(getTypes(ITypeNames.STRING), name.getTypes());
 
 	}
 
