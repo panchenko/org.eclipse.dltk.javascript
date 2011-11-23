@@ -137,14 +137,20 @@
       <parameters name="item" kind="VARARGS" directType="Object"/>
     </constructor>
   	<members xsi:type="ref:Property" name="prototype" directType="Array" static="true" description="Allows the addition of properties to a Array object."/>
-    <members xsi:type="ref:Method" name="concat" directType="Array" description="Joins two or more arrays and returns the result.">
+    <members xsi:type="ref:Method" name="concat" description="Joins two or more arrays and returns the result.">
       <parameters name="[array1,arrayN]" kind="VARARGS"/>
+      <type xsi:type="ref:ArrayType">
+        <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
+      </type>
     </members>
     <members xsi:type="ref:Method" name="every" directType="Boolean" description="Tests whether all elements in the array pass the test implemented by the provided function.">
       <parameters name="callback" directType="Function"/>
     </members>
-    <members xsi:type="ref:Method" name="filter" directType="Array" description="Creates a new array with all elements that pass the test implemented by the provided function.">
+    <members xsi:type="ref:Method" name="filter" description="Creates a new array with all elements that pass the test implemented by the provided function.">
       <parameters name="callback" directType="Function"/>
+      <type xsi:type="ref:ArrayType">
+        <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
+      </type>
     </members>
     <members xsi:type="ref:Method" name="forEach" description="Calls a function for each element in the array.">
       <parameters name="callback" directType="Function"/>
@@ -174,9 +180,12 @@
     </members>
     <members xsi:type="ref:Method" name="reverse" directType="Array" description="Reverses the order of the elements in an array."/>
     <members xsi:type="ref:Method" name="shift" description="Removes and returns the first element of an array."/>
-    <members xsi:type="ref:Method" name="slice" directType="Array" description="Returns selected elements from an existing array.">
+    <members xsi:type="ref:Method" name="slice" description="Returns selected elements from an existing array.">
       <parameters name="start" directType="Number"/>
       <parameters name="end" directType="Number" kind="OPTIONAL"/>
+      <type xsi:type="ref:ArrayType">
+        <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
+      </type>
     </members>
     <members xsi:type="ref:Method" name="some" directType="Boolean" description="Tests whether some element in the array passes the test implemented by the provided function.">
       <parameters name="callback" directType="Function"/>
@@ -184,10 +193,13 @@
     <members xsi:type="ref:Method" name="sort" directType="Array" description="Sorts the elements of an array.">
       <parameters name="sortByFunction" directType="Function" kind="OPTIONAL"/>
     </members>
-    <members xsi:type="ref:Method" name="splice" directType="Array" description="Removes and adds new elements to an array. Returns the removed elements as an Array">
+    <members xsi:type="ref:Method" name="splice" description="Removes and adds new elements to an array. Returns the removed elements as an Array">
       <parameters name="index" directType="Number"/>
       <parameters name="howmany" directType="Number"/>
       <parameters name="[element1,elementN]" kind="VARARGS"/>
+      <type xsi:type="ref:ArrayType">
+        <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
+      </type>
     </members>
     <members xsi:type="ref:Method" name="toLocaleString" directType="String"/>
     <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a String value for Array."/>
