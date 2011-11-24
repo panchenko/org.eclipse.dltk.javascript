@@ -427,6 +427,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 		@Override
 		public void initialize() {
 			super.initialize();
+			modes.clear();
+			visitStack.clear();
+			expressionValidators.clear();
 			variables.clear();
 			functionScopes.clear();
 			functionScopes.add(new FunctionScope());
