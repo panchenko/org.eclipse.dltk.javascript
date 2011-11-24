@@ -139,29 +139,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 	}
 
-	private static class StackedExpressionValidator extends ExpressionValidator {
-
-		private final List<ExpressionValidator> stacked = new ArrayList<ExpressionValidator>();
-		private final JSProblemReporter reporter;
-
-		public StackedExpressionValidator(JSProblemReporter reporter) {
-			this.reporter = reporter;
-		}
-
-		public void call() {
-			for (ExpressionValidator validator : stacked) {
-				int count = reporter.getProblemCount();
-				validator.call();
-				// XXX (alex) REVIEW: if (reporter.getProblemCount() != count)
-				// break;
-			}
-		}
-
-		public void push(ExpressionValidator expressionValidator) {
-			stacked.add(expressionValidator);
-		}
-	}
-
 	private static class CallExpressionValidator extends ExpressionValidator {
 		private final FunctionScope scope;
 		private final CallExpression node;
@@ -412,8 +389,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		private final Stack<ASTNode> visitStack = new Stack<ASTNode>();
 
-		private StackedExpressionValidator stackedExpressionValidator;
-
 		@Override
 		public IValueReference visit(ASTNode node) {
 			visitStack.push(node);
@@ -475,19 +450,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		@Override
 		public IValueReference visitNewExpression(NewExpression node) {
-			boolean started = false;
-			if (!(node.getObjectClass() instanceof FunctionStatement))
-				started = startExpressionValidator();
-			try {
-				IValueReference reference = super.visitNewExpression(node);
-				pushExpressionValidator(new NewExpressionValidator(
-						peekFunctionScope(), node, reference, peekContext(),
-						this));
-				return reference;
-			} finally {
-				if (started)
-					stopExpressionValidator();
-			}
+			IValueReference reference = super.visitNewExpression(node);
+			pushExpressionValidator(new NewExpressionValidator(
+					peekFunctionScope(), node, reference, peekContext(), this));
+			return reference;
 		}
 
 		private final Stack<FunctionScope> functionScopes = new Stack<FunctionScope>();
@@ -696,78 +662,42 @@ public class TypeInfoValidator implements IBuildParticipant {
 			final ASTNode expression = node.getExpression();
 			modes.put(expression, VisitorMode.CALL);
 
-			boolean started = startExpressionValidator();
-			try {
-				final IValueReference reference = visit(expression);
-				modes.remove(expression);
-				if (reference == null
-						|| reference.getAttribute(PHANTOM, true) != null
-						|| isUntyped(reference)) {
+			final IValueReference reference = visit(expression);
+			modes.remove(expression);
+			if (reference == null
+					|| reference.getAttribute(PHANTOM, true) != null
+					|| isUntyped(reference)) {
+				for (ASTNode argument : node.getArguments()) {
+					visit(argument);
+				}
+				return null;
+			}
+			if (reference.getKind() == ReferenceKind.ARGUMENT) {
+				if (reference.getDeclaredTypes().contains(functionTypeRef)) {
 					for (ASTNode argument : node.getArguments()) {
 						visit(argument);
 					}
+					// don't validate function pointer
 					return null;
 				}
-				if (reference.getKind() == ReferenceKind.ARGUMENT) {
-					if (reference.getDeclaredTypes().contains(functionTypeRef)) {
-						for (ASTNode argument : node.getArguments()) {
-							visit(argument);
-						}
-						// don't validate function pointer
-						return null;
-					}
-				}
-				final List<ASTNode> callArgs = node.getArguments();
-				IValueReference[] arguments = new IValueReference[callArgs
-						.size()];
-				final List<Method> methods = JavaScriptValidations
-						.extractElements(reference, Method.class);
-				pushExpressionValidator(new CallExpressionValidator(
-						peekFunctionScope(), node, reference, arguments,
-						methods, this));
-				if (started) {
-					stopExpressionValidator();
-					started = false;
-				}
-				for (int i = 0, size = callArgs.size(); i < size; ++i) {
-					arguments[i] = visit(callArgs.get(i));
-				}
-				return reference.getChild(IValueReference.FUNCTION_OP);
-			} finally {
-				if (started)
-					stopExpressionValidator();
 			}
+			final List<ASTNode> callArgs = node.getArguments();
+			IValueReference[] arguments = new IValueReference[callArgs.size()];
+			final List<Method> methods = JavaScriptValidations.extractElements(
+					reference, Method.class);
+			pushExpressionValidator(new CallExpressionValidator(
+					peekFunctionScope(), node, reference, arguments, methods,
+					this));
+			for (int i = 0, size = callArgs.size(); i < size; ++i) {
+				arguments[i] = visit(callArgs.get(i));
+			}
+			return reference.getChild(IValueReference.FUNCTION_OP);
 		}
 
 		private void pushExpressionValidator(
 				ExpressionValidator expressionValidator) {
-			if (stackedExpressionValidator != null) {
-				stackedExpressionValidator.push(expressionValidator);
-			} else {
-				expressionValidator.setSuppressed(reporter
-						.getSuppressWarnings());
-				expressionValidators.add(expressionValidator);
-			}
-
-		}
-
-		private void stopExpressionValidator() {
-			if (stackedExpressionValidator != null) {
-				stackedExpressionValidator.setSuppressed(reporter
-						.getSuppressWarnings());
-				expressionValidators.add(stackedExpressionValidator);
-				stackedExpressionValidator = null;
-			}
-
-		}
-
-		private boolean startExpressionValidator() {
-			if (stackedExpressionValidator == null) {
-				stackedExpressionValidator = new StackedExpressionValidator(
-						reporter);
-				return true;
-			}
-			return false;
+			expressionValidator.setSuppressed(reporter.getSuppressWarnings());
+			expressionValidators.add(expressionValidator);
 		}
 
 		/**
@@ -1394,25 +1324,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		@Override
 		public IValueReference visitPropertyExpression(PropertyExpression node) {
-			boolean started = startExpressionValidator();
-			try {
-				final IValueReference result = super
-						.visitPropertyExpression(node);
-				if (result == null
-						|| result.getAttribute(PHANTOM, true) != null
-						|| isUntyped(result)) {
-					return result;
-				}
-				if (currentMode() != VisitorMode.CALL) {
-					pushExpressionValidator(new PropertyExpressionHolder(
-							peekFunctionScope(), node, result, this,
-							result.exists()));
-				}
+			final IValueReference result = super.visitPropertyExpression(node);
+			if (result == null || result.getAttribute(PHANTOM, true) != null
+					|| isUntyped(result)) {
 				return result;
-			} finally {
-				if (started)
-					stopExpressionValidator();
 			}
+			if (currentMode() != VisitorMode.CALL) {
+				pushExpressionValidator(new PropertyExpressionHolder(
+						peekFunctionScope(), node, result, this,
+						result.exists()));
+			}
+			return result;
 		}
 
 		@Override
