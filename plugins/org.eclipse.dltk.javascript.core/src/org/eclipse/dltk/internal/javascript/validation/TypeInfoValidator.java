@@ -664,12 +664,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 			final IValueReference reference = visit(expression);
 			modes.remove(expression);
-			if (reference == null
-					|| reference.getAttribute(PHANTOM, true) != null
-					|| isUntyped(reference)) {
-				for (ASTNode argument : node.getArguments()) {
-					visit(argument);
-				}
+			if (reference == null) {
+				visitList(node.getArguments());
+				return null;
+			}
+			if (reference.getAttribute(PHANTOM, true) != null) {
+				visitList(node.getArguments());
+				return PhantomValueReference.REFERENCE;
+			}
+			if (isUntyped(reference)) {
+				visitList(node.getArguments());
 				return null;
 			}
 			if (reference.getKind() == ReferenceKind.ARGUMENT) {
