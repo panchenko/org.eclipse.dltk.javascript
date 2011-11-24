@@ -27,6 +27,12 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 		return result;
 	}
 
+	protected void visitList(Collection<? extends ASTNode> nodes) {
+		for (ASTNode node : nodes) {
+			visit(node);
+		}
+	}
+
 	private static interface Handler {
 		<E> E handle(ASTVisitor<E> visitor, ASTNode node);
 	}
