@@ -1932,4 +1932,24 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+
+	public void testArrayPushValid() {
+		final StringList code = new StringList();
+		code.add("/** @type {Array<String>} */");
+		code.add("var a = []");
+		code.add("a.push('AAA')");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testArrayPushInvalid() {
+		final StringList code = new StringList();
+		code.add("/** @type {Array<String>} */");
+		code.add("var a = []");
+		code.add("a.push(1)");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
 }
