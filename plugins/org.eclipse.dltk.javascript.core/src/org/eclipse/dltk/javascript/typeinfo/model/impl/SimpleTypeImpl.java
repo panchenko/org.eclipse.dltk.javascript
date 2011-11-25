@@ -71,7 +71,7 @@ public class SimpleTypeImpl extends EObjectImpl implements SimpleType {
      * @generated
      */
     public Type getTarget() {
-        if (target != null && ((EObject)target).eIsProxy()) {
+        if (target != null && target.eIsProxy()) {
             InternalEObject oldTarget = (InternalEObject)target;
             target = (Type)eResolveProxy(oldTarget);
             if (target != oldTarget) {

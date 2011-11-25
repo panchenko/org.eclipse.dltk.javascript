@@ -11,6 +11,8 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import org.eclipse.emf.ecore.EObject;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +31,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * @model
  * @generated
  */
-public interface TypeAlias {
+public interface TypeAlias extends EObject {
     /**
      * Returns the value of the '<em><b>Source</b></em>' attribute.
      * <!-- begin-user-doc -->

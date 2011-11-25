@@ -16,7 +16,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
@@ -70,7 +69,7 @@ public class TypeVariableReferenceImpl extends EObjectImpl implements TypeVariab
      * @generated
      */
     public TypeVariable getVariable() {
-        if (variable != null && ((EObject)variable).eIsProxy()) {
+        if (variable != null && variable.eIsProxy()) {
             InternalEObject oldVariable = (InternalEObject)variable;
             variable = (TypeVariable)eResolveProxy(oldVariable);
             if (variable != oldVariable) {

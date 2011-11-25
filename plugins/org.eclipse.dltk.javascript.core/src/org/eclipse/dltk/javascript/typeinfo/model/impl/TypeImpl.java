@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.16 2011/11/16 14:27:02 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.17 2011/11/25 11:52:52 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -201,7 +201,7 @@ public class TypeImpl extends ElementImpl implements Type {
      * @generated
      */
     public Type getSuperType() {
-        if (superType != null && ((EObject)superType).eIsProxy()) {
+        if (superType != null && superType.eIsProxy()) {
             InternalEObject oldSuperType = (InternalEObject)superType;
             superType = (Type)eResolveProxy(oldSuperType);
             if (superType != oldSuperType) {

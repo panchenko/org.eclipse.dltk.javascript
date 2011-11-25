@@ -11,6 +11,8 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import org.eclipse.emf.ecore.EObject;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -22,7 +24,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface JSType {
+public interface JSType extends EObject {
 
     /**
      * <!-- begin-user-doc -->

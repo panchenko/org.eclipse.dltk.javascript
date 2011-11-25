@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import org.eclipse.emf.ecore.EObject;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +31,7 @@ package org.eclipse.dltk.javascript.typeinfo.model;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface TypedElement {
+public interface TypedElement extends EObject {
     /**
      * Returns the value of the '<em><b>Type</b></em>' containment reference.
      * <!-- begin-user-doc -->

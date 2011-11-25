@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.18 2011/11/22 15:52:22 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.19 2011/11/25 11:52:52 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -89,28 +89,28 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
 	@Override
 	public EObject create(EClass eClass) {
         switch (eClass.getClassifierID()) {
-            case TypeInfoModelPackage.TYPE: return (EObject)createType();
-            case TypeInfoModelPackage.TYPE_ALIAS: return (EObject)createTypeAlias();
-            case TypeInfoModelPackage.METHOD: return (EObject)createMethod();
-            case TypeInfoModelPackage.PARAMETER: return (EObject)createParameter();
-            case TypeInfoModelPackage.CONSTRUCTOR: return (EObject)createConstructor();
-            case TypeInfoModelPackage.PROPERTY: return (EObject)createProperty();
+            case TypeInfoModelPackage.TYPE: return createType();
+            case TypeInfoModelPackage.TYPE_ALIAS: return createTypeAlias();
+            case TypeInfoModelPackage.METHOD: return createMethod();
+            case TypeInfoModelPackage.PARAMETER: return createParameter();
+            case TypeInfoModelPackage.CONSTRUCTOR: return createConstructor();
+            case TypeInfoModelPackage.PROPERTY: return createProperty();
             case TypeInfoModelPackage.ATTRIBUTE_ENTRY: return (EObject)createAttributeEntry();
-            case TypeInfoModelPackage.FUNCTION_TYPE: return (EObject)createFunctionType();
-            case TypeInfoModelPackage.SIMPLE_TYPE: return (EObject)createSimpleType();
-            case TypeInfoModelPackage.ARRAY_TYPE: return (EObject)createArrayType();
-            case TypeInfoModelPackage.ANY_TYPE: return (EObject)createAnyType();
-            case TypeInfoModelPackage.UNION_TYPE: return (EObject)createUnionType();
-            case TypeInfoModelPackage.PARAMETERIZED_TYPE: return (EObject)createParameterizedType();
-            case TypeInfoModelPackage.MAP_TYPE: return (EObject)createMapType();
-            case TypeInfoModelPackage.RECORD_TYPE: return (EObject)createRecordType();
-            case TypeInfoModelPackage.RECORD_PROPERTY: return (EObject)createRecordProperty();
-            case TypeInfoModelPackage.CLASS_TYPE: return (EObject)createClassType();
-            case TypeInfoModelPackage.UNDEFINED_TYPE: return (EObject)createUndefinedType();
-            case TypeInfoModelPackage.TYPE_VARIABLE: return (EObject)createTypeVariable();
-            case TypeInfoModelPackage.GENERIC_TYPE: return (EObject)createGenericType();
-            case TypeInfoModelPackage.TYPE_VARIABLE_REFERENCE: return (EObject)createTypeVariableReference();
-            case TypeInfoModelPackage.RTYPE: return (EObject)createRType();
+            case TypeInfoModelPackage.FUNCTION_TYPE: return createFunctionType();
+            case TypeInfoModelPackage.SIMPLE_TYPE: return createSimpleType();
+            case TypeInfoModelPackage.ARRAY_TYPE: return createArrayType();
+            case TypeInfoModelPackage.ANY_TYPE: return createAnyType();
+            case TypeInfoModelPackage.UNION_TYPE: return createUnionType();
+            case TypeInfoModelPackage.PARAMETERIZED_TYPE: return createParameterizedType();
+            case TypeInfoModelPackage.MAP_TYPE: return createMapType();
+            case TypeInfoModelPackage.RECORD_TYPE: return createRecordType();
+            case TypeInfoModelPackage.RECORD_PROPERTY: return createRecordProperty();
+            case TypeInfoModelPackage.CLASS_TYPE: return createClassType();
+            case TypeInfoModelPackage.UNDEFINED_TYPE: return createUndefinedType();
+            case TypeInfoModelPackage.TYPE_VARIABLE: return createTypeVariable();
+            case TypeInfoModelPackage.GENERIC_TYPE: return createGenericType();
+            case TypeInfoModelPackage.TYPE_VARIABLE_REFERENCE: return createTypeVariableReference();
+            case TypeInfoModelPackage.RTYPE: return createRType();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
         }
