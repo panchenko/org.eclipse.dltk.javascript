@@ -69,7 +69,8 @@ public class SimpleJSDocParser {
 	private JSDocTag parseTag(int offset) {
 		final int tagStart = index - 1;
 		while (index < end
-				&& (buffer[index] == '.' || Character.isLetter(buffer[index]))) {
+				&& (buffer[index] == '.' || buffer[index] == '-' || Character
+						.isLetter(buffer[index]))) {
 			++index;
 		}
 		if (index == tagStart + 1) {
