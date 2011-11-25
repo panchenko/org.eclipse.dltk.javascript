@@ -251,7 +251,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 
 		public Type copy() {
-			return (Type) copy((EObject) genericType);
+			return (Type) copy(genericType);
 		}
 
 		@Override
@@ -263,8 +263,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				final EClass eClass;
 				if (eObject == genericType) {
 					// TODO (alex) extension point
-					copyEObject = (EObject) TypeInfoModelFactory.eINSTANCE
-							.createType();
+					copyEObject = TypeInfoModelFactory.eINSTANCE.createType();
 					eClass = copyEObject.eClass();
 				} else if (eObject instanceof TypeVariableReference) {
 					final IRType source = parameters
@@ -274,7 +273,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 							.createRType();
 					result.setRuntimeType(source != null ? source : JSTypeSet
 							.any());
-					return (EObject) result;
+					return result;
 				} else {
 					copyEObject = createCopy(eObject);
 					eClass = eObject.eClass();
@@ -525,14 +524,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				final String typeName = URI.decode(uri.fragment());
 				final Type type = resolveTypeProxy(typeName);
 				if (type == null) {
-					return (EObject) createUnknown(typeName);
-				} else if (type instanceof EObject) {
-					return (EObject) type;
+					return createUnknown(typeName);
 				} else {
-					JavaScriptPlugin.error("proxy resolved to "
-							+ type.getClass().getName()
-							+ " which is not EObject");
-					return (EObject) createUnknown(typeName);
+					return type;
 				}
 			}
 			return super.getEObject(uri, loadOnDemand);
@@ -552,14 +546,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		private Resource typesResource = null;
 
 		public void addToResource(final Type type) {
-			final EObject object = (EObject) type;
+			final EObject object = type;
 			if (object.eResource() == null) {
 				add(type);
 			}
 		}
 
 		protected synchronized void add(Type type) {
-			getResource().getContents().add((EObject) type);
+			getResource().getContents().add(type);
 		}
 
 	}
@@ -816,7 +810,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			invariantContextRS);
 
 	protected static boolean isProxy(Type type) {
-		return type instanceof EObject && ((EObject) type).eIsProxy();
+		return ((EObject) type).eIsProxy();
 	}
 
 	private IValueTypeFactory factory = new ValueTypeFactoryImpl(this);
