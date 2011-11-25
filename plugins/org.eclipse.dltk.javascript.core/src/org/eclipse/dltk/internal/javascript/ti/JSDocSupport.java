@@ -575,14 +575,14 @@ public class JSDocSupport implements IModelBuilder {
 		return new JSDocTypeParser();
 	}
 
-	protected String cutBraces(String typeName) {
+	public static String cutBraces(String typeName) {
 		if (isBraced(typeName)) {
 			typeName = typeName.substring(1, typeName.length() - 1);
 		}
 		return typeName;
 	}
 
-	private boolean isBraced(String typeName) {
+	private static boolean isBraced(String typeName) {
 		final int length = typeName.length();
 		return length > 2 && typeName.charAt(0) == '{'
 				&& typeName.charAt(length - 1) == '}';
