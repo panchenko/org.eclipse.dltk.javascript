@@ -81,25 +81,22 @@ public class JSDocValidatorFactory {
 					}
 				}
 				final Type t = ((SimpleType) type).getTarget();
-				if (t.getKind() == TypeKind.UNKNOWN
-						|| t.getKind() == TypeKind.UNRESOLVED) {
-					queue.add(new TagAndType(t, tag, context
-							.currentCollection()));
-				} else {
-					checkDeprecatedType(t, tag);
-				}
+				checkType(t, tag);
 			} else if (type instanceof ClassType) {
 				final Type t = ((ClassType) type).getTarget();
 				if (t == null) {
 					return;
 				}
-				if (t.getKind() == TypeKind.UNKNOWN
-						|| t.getKind() == TypeKind.UNRESOLVED) {
-					queue.add(new TagAndType(t, tag, context
-							.currentCollection()));
-				} else {
-					checkDeprecatedType(t, tag);
-				}
+				checkType(t, tag);
+			}
+		}
+
+		public void checkType(Type type, ISourceNode tag) {
+			if (type.getKind() == TypeKind.UNKNOWN
+					|| type.getKind() == TypeKind.UNRESOLVED) {
+				queue.add(new TagAndType(type, tag, context.currentCollection()));
+			} else {
+				checkDeprecatedType(type, tag);
 			}
 		}
 
