@@ -37,16 +37,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class JSDocValidatorFactory {
 
-	public static class TypeChecker implements ITypeChecker {
-
-		private List<TagAndType> queue = new ArrayList<JSDocValidatorFactory.TagAndType>();
-		private final TypeInferencer2 context;
-		private final JSProblemReporter reporter;
-
-		public TypeChecker(TypeInferencer2 context, JSProblemReporter reporter) {
-			this.context = context;
-			this.reporter = reporter;
-		}
+	public static abstract class AbstractTypeChecker implements ITypeChecker {
 
 		public void checkType(JSType type, ISourceNode tag) {
 			if (type == null) {
@@ -91,6 +82,22 @@ public class JSDocValidatorFactory {
 			}
 		}
 
+		public abstract void checkType(Type type, ISourceNode tag);
+
+	}
+
+	public static class TypeChecker extends AbstractTypeChecker {
+
+		private List<TagAndType> queue = new ArrayList<JSDocValidatorFactory.TagAndType>();
+		private final TypeInferencer2 context;
+		private final JSProblemReporter reporter;
+
+		public TypeChecker(TypeInferencer2 context, JSProblemReporter reporter) {
+			this.context = context;
+			this.reporter = reporter;
+		}
+
+		@Override
 		public void checkType(Type type, ISourceNode tag) {
 			if (type.getKind() == TypeKind.UNKNOWN
 					|| type.getKind() == TypeKind.UNRESOLVED) {
