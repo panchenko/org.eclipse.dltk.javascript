@@ -77,7 +77,8 @@ public class JavascriptDocScanner extends JavaScriptScriptCommentScanner {
 			}
 
 			public boolean isWordPart(char c) {
-				return Character.isJavaIdentifierPart(c);
+				return c == '.' || c == '-'
+						|| Character.isJavaIdentifierPart(c);
 			}
 		};
 	}
