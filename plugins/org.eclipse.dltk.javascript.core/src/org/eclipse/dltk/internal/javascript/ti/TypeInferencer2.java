@@ -50,6 +50,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
@@ -262,8 +263,21 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				final EObject copyEObject;
 				final EClass eClass;
 				if (eObject == genericType) {
-					// TODO (alex) extension point
-					copyEObject = TypeInfoModelFactory.eINSTANCE.createType();
+					final EClass genericClass = genericType.eClass();
+					final String parametererizedType = EcoreUtil.getAnnotation(
+							genericClass, TypeInfoModelPackage.eNS_URI,
+							"parameterizedType");
+					if (parametererizedType != null) {
+						final EClass parametererizedClass = (EClass) genericClass
+								.getEPackage().getEClassifier(
+										parametererizedType);
+						copyEObject = EcoreUtil.create(parametererizedClass);
+					} else {
+						copyEObject = TypeInfoModelFactory.eINSTANCE
+								.createType();
+					}
+					copyEObject.eAdapters().add(
+							new GenericTypeReference(genericType));
 					eClass = copyEObject.eClass();
 				} else if (eObject instanceof TypeVariableReference) {
 					final IRType source = parameters
