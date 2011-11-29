@@ -855,7 +855,11 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			}
 			return ref(target);
 		} else if (type instanceof ClassType) {
-			return classType(((ClassType) type).getTarget());
+			Type target = ((ClassType) type).getTarget();
+			if (target != null && target.isProxy() && context != null) {
+				target = context.resolveType(target);
+			}
+			return classType(target);
 		} else if (type instanceof ArrayType) {
 			final JSType itemType = ((ArrayType) type).getItemType();
 			return new ArrayTypeKey(context, normalize(context, itemType));
