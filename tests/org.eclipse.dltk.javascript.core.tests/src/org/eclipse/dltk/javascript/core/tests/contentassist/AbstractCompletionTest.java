@@ -16,10 +16,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
@@ -29,10 +27,13 @@ import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 
+@SuppressWarnings("restriction")
 public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 
 	protected ICompletionEngine createEngine(List<CompletionProposal> results,
@@ -45,7 +46,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 				if (engine instanceof JSCompletionEngine) {
 					engine.setRequestor(new TestCompletionRequestor(results));
 					((JSCompletionEngine) engine).setUseEngine(useEngine);
-					return (JSCompletionEngine) engine;
+					return engine;
 				}
 			}
 		}
@@ -114,53 +115,52 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return TypeInfoModelLoader.getInstance().getType(typeName);
 	}
 
-	private static List<String> loadMembers(final String typeName) {
+	private static List<String> loadMembers(final String typeName,
+			MemberPredicate predicate) {
 		final List<String> names = new ArrayList<String>();
-		final Set<Type> types = new HashSet<Type>();
-		Type type = getType(typeName);
-		while (type != null && types.add(type)) {
-			for (Member member : type.getMembers()) {
-				if (!member.isStatic() && !names.contains(member.getName()))
-					names.add(member.getName());
-			}
-			type = type.getSuperType();
+		final Type type = getType(typeName);
+		for (Member member : new TypeMemberQuery(type, predicate)) {
+			if (predicate.evaluate(member) && !names.contains(member.getName()))
+				names.add(member.getName());
 		}
 		return Collections.unmodifiableList(names);
 	}
 
 	private static final Map<String, List<String>> members = new HashMap<String, List<String>>();
 
-	private static List<String> getMembers(String typeName) {
-		List<String> m = members.get(typeName);
+	protected static List<String> getMembers(String typeName,
+			MemberPredicate predicate) {
+		final String key = typeName + "/" + predicate.name();
+		List<String> m = members.get(key);
 		if (m == null) {
-			m = loadMembers(typeName);
-			members.put(typeName, m);
+			m = loadMembers(typeName, predicate);
+			members.put(key, m);
 		}
 		return m;
 	}
 
 	protected static List<String> getMethodsOfObject() {
-		return getMembers(ITypeNames.OBJECT);
+		return getMembers(ITypeNames.OBJECT, MemberPredicate.NON_STATIC);
 	}
 
 	protected static List<String> getMethodsOfArray() {
-		return getMembers(ITypeNames.ARRAY);
+		return getMembers(ITypeNames.ARRAY, MemberPredicate.NON_STATIC);
 	}
 
 	protected static List<String> getMethodsOfFunction() {
-		return getMembers(ITypeNames.FUNCTION);
+		return getMembers(ITypeNames.FUNCTION, MemberPredicate.NON_STATIC);
 	}
 
 	protected static List<String> getMethodsOfNumber() {
-		return getMembers(ITypeNames.NUMBER);
+		return getMembers(ITypeNames.NUMBER, MemberPredicate.NON_STATIC);
 	}
 
 	protected static List<String> getMethodsOfString() {
-		return getMembers(ITypeNames.STRING);
+		return getMembers(ITypeNames.STRING, MemberPredicate.NON_STATIC);
 	}
 
 	protected static List<String> getMethodsOfXML() {
-		return getMembers(ITypeNames.XML);
+		return getMembers(ITypeNames.XML, MemberPredicate.NON_STATIC);
 	}
 
 	protected static String[] concat(List<String> values, String... addition) {

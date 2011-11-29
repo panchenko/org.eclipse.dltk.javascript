@@ -1,6 +1,8 @@
 package org.eclipse.dltk.javascript.core.tests.contentassist;
 
 import static org.eclipse.dltk.core.tests.TestSupport.notYetImplemented;
+import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
+import static org.eclipse.dltk.javascript.typeinfo.MemberPredicate.STATIC;
 
 import java.util.LinkedList;
 
@@ -9,8 +11,6 @@ import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
 
 public class CodeCompletion extends AbstractCompletionTest {
-
-	private static final String[] STRINGS = new String[0];
 
 	private static final String ARGUMENTS = "arguments";
 
@@ -447,7 +447,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void test49() {
 		IModuleSource module = createModule("test49.js");
 		int position = lastPositionInFile("name.", module);
-		basicTest(module, position, getMethodsOfString().toArray(STRINGS));
+		basicTest(module, position, concat(getMethodsOfString()));
 		// basicTest(module, 105, names);
 	}
 
@@ -461,14 +461,14 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void test51() {
 		IModuleSource module = createModule("test51.js");
 		int position = lastPositionInFile("test.", module);
-		basicTest(module, position, getMethodsOfFunction().toArray(STRINGS));
+		basicTest(module, position, concat(getMethodsOfFunction()));
 		// basicTest(module, 105, names);
 	}
 
 	public void test52() {
 		IModuleSource module = createModule("test52.js");
 		int position = lastPositionInFile("x.", module);
-		basicTest(module, position, getMethodsOfFunction().toArray(STRINGS));
+		basicTest(module, position, concat(getMethodsOfFunction()));
 		// basicTest(module, 105, names);
 	}
 
@@ -496,7 +496,7 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void testArrayInitializer() {
 		IModuleSource module = createModule("test-array-intializer.js");
 		int position = lastPositionInFile("].", module);
-		basicTest(module, position, getMethodsOfArray().toArray(STRINGS));
+		basicTest(module, position, concat(getMethodsOfArray()));
 	}
 
 	public void testParamType() {
@@ -515,13 +515,13 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void testNewViaClassRef() {
 		IModuleSource module = createModule("test-new-via-class-ref.js");
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, getMethodsOfNumber().toArray(STRINGS));
+		basicTest(module, position, concat(getMethodsOfNumber()));
 	}
 
 	public void testXmlVar() {
 		IModuleSource module = createModule("test-xml-name.js");
 		int position = lastPositionInFile(".", module);
-		basicTest(module, position, getMethodsOfNumber().toArray(STRINGS));
+		basicTest(module, position, concat(getMethodsOfNumber()));
 	}
 
 	public void testObjectLiteral() {
@@ -535,4 +535,11 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile("DS", module);
 		basicTest(module, position, new String[] { "DataSource" });
 	}
+
+	public void testStaticInference() {
+		IModuleSource module = createModule("test-static.js");
+		int position = lastPositionInFile("num1.", module);
+		basicTest(module, position, concat(getMembers(NUMBER, STATIC)));
+	}
+
 }
