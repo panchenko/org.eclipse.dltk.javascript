@@ -164,7 +164,7 @@ public class JavaDoc2HTMLTextReader extends SubstitutionTextReader {
 
 	private int getTag(StringBuffer buffer) throws IOException {
 		int c = nextChar();
-		while (c == '.' || c != -1 && Character.isLetter((char) c)) {
+		while (c == '.' || c == '-' || c != -1 && Character.isLetter((char) c)) {
 			buffer.append((char) c);
 			c = nextChar();
 		}
