@@ -24,6 +24,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 
 public class MatchingPredicateFactory {
 
+	@SuppressWarnings("restriction")
 	static IMatchingPredicate<MatchingNode> create(ITypeInfoContext context,
 			SearchPattern pattern) {
 		if (pattern instanceof FieldPattern) {
