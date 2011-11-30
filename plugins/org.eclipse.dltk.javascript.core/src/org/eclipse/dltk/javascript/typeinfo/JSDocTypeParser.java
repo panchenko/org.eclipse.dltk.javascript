@@ -29,6 +29,12 @@ import org.eclipse.emf.common.util.EList;
 
 public class JSDocTypeParser extends JSDocTypeParserBase {
 
+	private JSDocTypeParserExtension extension;
+
+	public void setExtension(JSDocTypeParserExtension extension) {
+		this.extension = extension;
+	}
+
 	public JSType parse(String input) throws ParseException {
 		return parse(new ANTLRStringStream(input));
 	}
@@ -79,21 +85,27 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 		for (;;) {
 			int ch = input.LT(1);
 			if (ch == '<') {
-				final String baseType = input.substring(start,
-						input.index() - 1);
+				final int baseEnd = input.index();
+				final String baseType = input.substring(start, baseEnd - 1);
 				input.consume();
 				final List<JSType> typeParams = parseParams(input);
 				match(input, '>');
 				JSType type = createGenericType(baseType, typeParams);
+				if (extension != null) {
+					extension.reportType(type, start, baseEnd);
+				}
 				return checkIfArray(input, type);
 			} else if (ch == '.' && input.LT(2) == '<') {
-				final String baseType = input.substring(start,
-						input.index() - 1);
+				final int baseEnd = input.index();
+				final String baseType = input.substring(start, baseEnd - 1);
 				input.consume();
 				input.consume();
 				final List<JSType> typeParams = parseParams(input);
 				match(input, '>');
 				JSType type = createGenericType(baseType, typeParams);
+				if (extension != null) {
+					extension.reportType(type, start, baseEnd);
+				}
 				return checkIfArray(input, type);
 			} else if (ch == '('
 					&& ITypeNames.FUNCTION.equalsIgnoreCase(input.substring(
@@ -129,7 +141,12 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 
 	private JSType createType(CharStream input, final int start) {
 		final int end = input.index();
-		return createType(translate(input.substring(start, end - 1)));
+		final JSType type = createType(translate(input
+				.substring(start, end - 1)));
+		if (extension != null) {
+			extension.reportType(type, start, end);
+		}
+		return type;
 	}
 
 	/**

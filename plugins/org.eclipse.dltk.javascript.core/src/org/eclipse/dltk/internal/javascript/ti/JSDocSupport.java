@@ -571,7 +571,7 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	protected JSDocTypeParser createTypeParser() {
+	public JSDocTypeParser createTypeParser() {
 		return new JSDocTypeParser();
 	}
 
