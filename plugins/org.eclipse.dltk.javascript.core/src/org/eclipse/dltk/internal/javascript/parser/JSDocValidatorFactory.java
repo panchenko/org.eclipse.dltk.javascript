@@ -39,56 +39,70 @@ public class JSDocValidatorFactory {
 
 	public static abstract class AbstractTypeChecker implements ITypeChecker {
 
-		public void checkType(JSType type, ISourceNode tag) {
+		private int defaults = DEFAULT;
+
+		public int getDefaults() {
+			return defaults;
+		}
+
+		public void setDefaults(int defaults) {
+			this.defaults = defaults;
+		}
+
+		public void checkType(JSType type, ISourceNode node) {
+			checkType(type, node, getDefaults());
+		}
+
+		public void checkType(JSType type, ISourceNode tag, int flags) {
 			if (type == null) {
 				return;
 			}
 			if (type instanceof UnionType) {
 				for (JSType targetType : ((UnionType) type).getTargets()) {
-					checkType(targetType, tag);
+					checkType(targetType, tag, flags);
 				}
 			} else if (type instanceof RecordType) {
 				for (Member member : ((RecordType) type).getMembers()) {
-					checkType(member.getType(), tag);
+					checkType(member.getType(), tag, flags);
 				}
 			} else if (type instanceof FunctionType) {
 				final FunctionType func = (FunctionType) type;
-				checkType(((FunctionType) type).getReturnType(), tag);
+				checkType(((FunctionType) type).getReturnType(), tag, flags);
 				for (Parameter parameter : func.getParameters()) {
-					checkType(parameter.getType(), tag);
+					checkType(parameter.getType(), tag, flags);
 				}
 			} else if (type instanceof AnyType || type instanceof UndefinedType) {
 				// OK
 			} else if (type instanceof ArrayType) {
-				checkType(((ArrayType) type).getItemType(), tag);
+				checkType(((ArrayType) type).getItemType(), tag, flags);
 			} else if (type instanceof MapType) {
-				checkType(((MapType) type).getKeyType(), tag);
-				checkType(((MapType) type).getValueType(), tag);
+				checkType(((MapType) type).getKeyType(), tag, flags);
+				checkType(((MapType) type).getValueType(), tag, flags);
 			} else if (type instanceof SimpleType) {
 				if (type instanceof ParameterizedType) {
 					for (JSType param : ((ParameterizedType) type)
 							.getActualTypeArguments()) {
-						checkType(param, tag);
+						checkType(param, tag, flags);
 					}
 				}
 				final Type t = ((SimpleType) type).getTarget();
-				checkType(t, tag);
+				checkType(t, tag, flags);
 			} else if (type instanceof ClassType) {
 				final Type t = ((ClassType) type).getTarget();
 				if (t == null) {
 					return;
 				}
-				checkType(t, tag);
+				checkType(t, tag, flags);
 			}
 		}
 
-		public abstract void checkType(Type type, ISourceNode tag);
+		public abstract void checkType(Type type, ISourceNode tag, int flags);
 
 	}
 
 	public static class TypeChecker extends AbstractTypeChecker {
 
-		private List<TagAndType> queue = new ArrayList<JSDocValidatorFactory.TagAndType>();
+		private List<QueueItem> queue = new ArrayList<JSDocValidatorFactory.QueueItem>();
 		private final TypeInferencer2 context;
 		private final JSProblemReporter reporter;
 
@@ -98,28 +112,31 @@ public class JSDocValidatorFactory {
 		}
 
 		@Override
-		public void checkType(Type type, ISourceNode tag) {
+		public void checkType(Type type, ISourceNode tag, int flags) {
 			if (type.getKind() == TypeKind.UNKNOWN
 					|| type.getKind() == TypeKind.UNRESOLVED) {
-				queue.add(new TagAndType(type, tag, context.currentCollection()));
+				queue.add(new QueueItem(type, tag, context.currentCollection(),
+						flags));
 			} else {
 				checkDeprecatedType(type, tag);
 			}
 		}
 
 		public void validate() {
-			for (TagAndType item : queue) {
+			for (QueueItem item : queue) {
 				checkType(item.tag, context.resolveType(item.type),
-						item.collection);
+						item.collection, item.flags);
 			}
 		}
 
 		protected void checkType(ISourceNode tag, Type type,
-				IValueCollection collection) {
+				IValueCollection collection, int flags) {
 			Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED);
 			if (type.getKind() == TypeKind.UNKNOWN) {
-				if (collection != null
-						&& !collection.getChild(type.getName()).exists()) {
+				if ((flags & LOCAL_TYPES) != 0 && collection != null) {
+					if (collection.getChild(type.getName()).exists()) {
+						return;
+					}
 					// if it still is not found, test if it is a
 					// "package type"
 					// an try to resolve that to a existing child.
@@ -149,8 +166,8 @@ public class JSDocValidatorFactory {
 						if (child != null)
 							return;
 					}
-					reportUnknownType(tag, TypeUtil.getName(type));
 				}
+				reportUnknownType(tag, TypeUtil.getName(type));
 			} else {
 				checkDeprecatedType(type, tag);
 			}
@@ -194,17 +211,19 @@ public class JSDocValidatorFactory {
 		}
 	}
 
-	private static class TagAndType {
+	private static class QueueItem {
 
 		private final Type type;
 		private final ISourceNode tag;
 		private final IValueCollection collection;
+		private final int flags;
 
-		public TagAndType(Type type, ISourceNode tag,
-				IValueCollection collection) {
+		public QueueItem(Type type, ISourceNode tag,
+				IValueCollection collection, int flags) {
 			this.type = type;
 			this.tag = tag;
 			this.collection = collection;
+			this.flags = flags;
 		}
 
 	}
