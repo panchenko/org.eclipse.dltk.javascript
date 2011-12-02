@@ -104,6 +104,10 @@ public class JSDocTags {
 		return result != null ? result : Collections.<JSDocTag> emptyList();
 	}
 
+	public int size() {
+		return tags.size();
+	}
+
 	/**
 	 * Returns the number of tags with the specified name.
 	 * 
