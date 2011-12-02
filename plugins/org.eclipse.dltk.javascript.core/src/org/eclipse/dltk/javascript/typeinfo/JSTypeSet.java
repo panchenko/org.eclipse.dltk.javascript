@@ -310,6 +310,13 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		private final Type type;
 
+		public SimpleTypeKey(ITypeSystem typeSystem, Type type) {
+			super(typeSystem);
+			this.type = type;
+			if (DEBUG)
+				checkType(type);
+		}
+
 		public SimpleTypeKey(Type type) {
 			this.type = type;
 			if (DEBUG)
@@ -837,7 +844,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 				for (int i = 0; i < typeArguments.size(); ++i) {
 					parameters.add(normalize(context, typeArguments.get(i)));
 				}
-				return ref(context.parameterize(target, parameters));
+				return new SimpleTypeKey(context, context.parameterize(target,
+						parameters));
 			} else {
 				return ref(target);
 			}

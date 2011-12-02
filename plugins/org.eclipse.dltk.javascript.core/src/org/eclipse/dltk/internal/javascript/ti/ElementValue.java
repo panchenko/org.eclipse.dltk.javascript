@@ -52,6 +52,9 @@ public abstract class ElementValue implements IValue {
 
 	public static ElementValue findMember(ITypeSystem context, IRType type,
 			String name) {
+		if (type != null) {
+			context = type.activeTypeSystem(context);
+		}
 		return findMember(context, type, name, MemberPredicate.ALWAYS_TRUE);
 	}
 
