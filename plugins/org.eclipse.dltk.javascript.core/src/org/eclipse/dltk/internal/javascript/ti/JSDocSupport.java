@@ -78,7 +78,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	public void processMethod(FunctionStatement statement, IMethod method,
 			JSProblemReporter reporter, ITypeChecker typeChecker) {
-		Comment comment = getFunctionComment(statement);
+		Comment comment = getComment(statement);
 		if (comment == null) {
 			return;
 		}
@@ -150,14 +150,19 @@ public class JSDocSupport implements IModelBuilder {
 		return null;
 	}
 
+	@Deprecated
 	public static Comment getFunctionComment(FunctionStatement statement) {
+		return getComment(statement);
+	}
+
+	public static Comment getComment(JSNode statement) {
 		Comment documentation = statement.getDocumentation();
 		if (documentation != null) {
 			return documentation;
 		}
-		if (statement.getParent() instanceof BinaryOperation) {
-			final BinaryOperation binary = (BinaryOperation) statement
-					.getParent();
+		final ASTNode parent = statement.getParent();
+		if (parent instanceof BinaryOperation) {
+			final BinaryOperation binary = (BinaryOperation) parent;
 			if (binary.getOperation() == JSParser.ASSIGN
 					&& binary.getRightExpression() == statement) {
 				documentation = binary.getLeftExpression().getDocumentation();
@@ -165,18 +170,16 @@ public class JSDocSupport implements IModelBuilder {
 					return documentation;
 				}
 			}
-		} else if (statement.getParent() instanceof PropertyInitializer) {
-			final PropertyInitializer property = (PropertyInitializer) statement
-					.getParent();
+		} else if (parent instanceof PropertyInitializer) {
+			final PropertyInitializer property = (PropertyInitializer) parent;
 			if (property.getValue() == statement) {
 				documentation = property.getName().getDocumentation();
 				if (documentation != null) {
 					return documentation;
 				}
 			}
-		} else if (statement.getParent() instanceof VariableDeclaration) {
-			final VariableDeclaration variable = (VariableDeclaration) statement
-					.getParent();
+		} else if (parent instanceof VariableDeclaration) {
+			final VariableDeclaration variable = (VariableDeclaration) parent;
 			if (variable.getInitializer() == statement
 					&& variable.getParent() instanceof VariableStatement) {
 				return ((VariableStatement) variable.getParent())

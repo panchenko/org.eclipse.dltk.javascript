@@ -215,7 +215,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 					argument.sourceStart(), argument.sourceEnd()));
 			getParameters().add(parameter);
 		}
-		final Comment documentation = JSDocSupport.getFunctionComment(node);
+		final Comment documentation = JSDocSupport.getComment(node);
 		if (documentation != null) {
 			setDocRange(documentation.getRange());
 		}
