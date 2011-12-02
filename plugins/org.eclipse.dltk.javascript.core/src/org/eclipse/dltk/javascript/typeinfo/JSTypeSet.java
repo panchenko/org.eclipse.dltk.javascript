@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.eclipse.dltk.internal.javascript.ti.GenericTypeReference;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -353,7 +354,16 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 				return true;
 			} else if (type instanceof SimpleTypeKey) {
 				final Type other = ((SimpleTypeKey) type).getTarget();
-				return isAssignableFrom(this.type, other);
+				if (isAssignableFrom(this.type, other)) {
+					return true;
+				}
+				final Type genericType = GenericTypeReference
+						.dereference(this.type);
+				if (genericType != this.type) {
+					if (isAssignableFrom(genericType, other)) {
+						return true;
+					}
+				}
 			}
 			return false;
 		}
