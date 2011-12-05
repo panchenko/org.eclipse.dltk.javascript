@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.annotations.ConfigurationElement;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinfo.model.NamedElement;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelResourceSet;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.utils.LazyExtensionManager;
 import org.eclipse.dltk.utils.LazyExtensionManager.Descriptor;
@@ -30,8 +31,6 @@ import org.eclipse.dltk.utils.SimpleExtensionManager;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
@@ -214,8 +213,8 @@ public class TypeInfoManager {
 		return typeFactoryManager.getInstances();
 	}
 
-	public static ResourceSet loadModelResources() {
-		final ResourceSet resourceSet = new ResourceSetImpl();
+	public static TypeInfoModelResourceSet loadModelResources() {
+		final TypeInfoModelResourceSet resourceSet = new TypeInfoModelResourceSet();
 		for (IConfigurationElement element : getConfigurationElements()) {
 			if (MODEL_ELEMENT.equals(element.getName())) {
 				final String resource = trim(element

@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -32,35 +31,18 @@ public class TypeInfoModelLoader {
 		return instance;
 	}
 
-	private final ResourceSet resourceSet;
+	private final TypeInfoModelResourceSet resourceSet;
 
 	private TypeInfoModelLoader() {
 		resourceSet = TypeInfoManager.loadModelResources();
 	}
 
-	/**
-	 * Returns the copy of the resource list to avoid
-	 * ConcurrentModificationException.
-	 * 
-	 * @return
-	 */
 	private Resource[] getResources() {
-		final EList<Resource> resources = resourceSet.getResources();
-		return resources.toArray(new Resource[resources.size()]);
+		return resourceSet.resources();
 	}
 
 	public Type getType(String typeName) {
-		for (Resource resource : getResources()) {
-			for (EObject object : resource.getContents()) {
-				if (object instanceof Type) {
-					final Type type = (Type) object;
-					if (type.isVisible() && typeName.equals(type.getName())) {
-						return type;
-					}
-				}
-			}
-		}
-		return null;
+		return resourceSet.getType(typeName);
 	}
 
 	public String translateTypeName(String typeName) {
