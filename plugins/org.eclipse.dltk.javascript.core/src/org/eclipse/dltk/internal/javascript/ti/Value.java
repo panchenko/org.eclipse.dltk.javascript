@@ -36,6 +36,13 @@ public class Value extends ImmutableValue {
 		this.declaredType = declaredType;
 	}
 
+	@Override
+	public void addType(IRType type) {
+		if (type != null) {
+			this.types.add(type);
+		}
+	}
+
 	public void setKind(ReferenceKind kind) {
 		this.kind = kind;
 	}

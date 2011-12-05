@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
@@ -437,6 +438,13 @@ public abstract class ElementValue implements IValue {
 						children.put(name, arrayOpChild);
 						return arrayOpChild;
 					}
+				} else if (IValueReference.FUNCTION_OP.equals(name)) {
+					if (type instanceof IRFunctionType) {
+						child = new Value();
+						child.addType(((IRFunctionType) type).getReturnType());
+						children.put(name, child);
+						return child;
+					}
 				}
 				ElementValue eValue = ElementValue.findMember(context, type,
 						name);
@@ -677,6 +685,9 @@ public abstract class ElementValue implements IValue {
 	}
 
 	public final void setDeclaredType(IRType declaredType) {
+	}
+
+	public void addType(IRType type) {
 	}
 
 	public final void setKind(ReferenceKind kind) {

@@ -34,6 +34,8 @@ public interface IValue {
 
 	JSTypeSet getDeclaredTypes();
 
+	void addType(IRType type);
+
 	JSTypeSet getTypes();
 
 	Object getAttribute(String key, boolean includeReferences);

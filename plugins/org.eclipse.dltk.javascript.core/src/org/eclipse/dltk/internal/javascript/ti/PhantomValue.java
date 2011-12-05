@@ -45,6 +45,9 @@ public enum PhantomValue implements IValue {
 	public void setDeclaredType(IRType declaredType) {
 	}
 
+	public void addType(IRType type) {
+	}
+
 	public JSTypeSet getDeclaredTypes() {
 		return JSTypeSet.emptySet();
 	}

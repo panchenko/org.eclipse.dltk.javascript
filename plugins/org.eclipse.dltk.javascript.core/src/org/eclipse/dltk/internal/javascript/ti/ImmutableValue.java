@@ -313,6 +313,9 @@ public class ImmutableValue implements IValue, IValue2 {
 	public void setDeclaredType(IRType declaredType) {
 	}
 
+	public void addType(IRType type) {
+	}
+
 	public void setAttribute(String key, Object value) {
 	}
 
