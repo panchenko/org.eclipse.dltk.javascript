@@ -11,10 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text.hyperlink;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.IModelElement;
@@ -22,20 +18,16 @@ import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.ScriptModelUtil;
-import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.ui.actions.SelectionConverter;
 import org.eclipse.dltk.internal.ui.editor.EditorUtility;
 import org.eclipse.dltk.internal.ui.editor.ModelElementHyperlink;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.dltk.javascript.internal.ui.text.JSDocTypeUtil;
+import org.eclipse.dltk.javascript.internal.ui.text.TypeNameNode;
 import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
-import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
-import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
-import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParserExtension;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.actions.OpenAction;
@@ -97,34 +89,10 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 			}
 			TypeInferencer2 inferencer2 = new TypeInferencer2();
 			inferencer2.setModelElement(input);
-			final JSDocTypeParser typeParser = createTypeParser(inferencer2);
-			if (typeParser == null) {
-				return null;
-			}
-			final List<TypeRange> typeNames = new ArrayList<TypeRange>();
-			typeParser.setExtension(new JSDocTypeParserExtension() {
-				public void reportType(JSType type, int s, int e) {
-					if (type instanceof SimpleType) {
-						typeNames.add(new TypeRange(((SimpleType) type)
-								.getTarget().getName(), s, e));
-					}
-				}
-			});
-			try {
-				typeParser.parse(line.substring(start + 1, end));
-			} catch (ParseException e1) {
-				return null;
-			}
-			final int offsetInTypeExpression = offset - lineRegion.getOffset()
-					- start - 1;
-			TypeRange selection = null;
-			for (TypeRange range : typeNames) {
-				if (range.start <= offsetInTypeExpression
-						&& offsetInTypeExpression < range.end) {
-					selection = range;
-					break;
-				}
-			}
+			final int typeExpressionOffset = lineRegion.getOffset() + start + 1;
+			final TypeNameNode selection = JSDocTypeUtil.findName(
+					inferencer2, line.substring(start + 1, end), offset
+							- typeExpressionOffset);
 			if (selection == null) {
 				return null;
 			}
@@ -147,9 +115,8 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 						.filterElements(new Object[] { convert(input, type) });
 			}
 			if (elements != null && elements.length > 0) {
-				final IRegion region = new Region(lineRegion.getOffset()
-						+ start + 1 + selection.start, selection.end
-						- selection.start);
+				final IRegion region = new Region(typeExpressionOffset
+						+ selection.start, selection.end - selection.start);
 				final IHyperlink link;
 				if (elements.length == 1) {
 					link = new ModelElementHyperlink(region, elements[0],
@@ -162,27 +129,6 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 			}
 		} catch (BadLocationException e) {
 			JavaScriptUI.log(e);
-		}
-		return null;
-	}
-
-	private static class TypeRange {
-		final String type;
-		final int start;
-		final int end;
-
-		public TypeRange(String type, int start, int end) {
-			this.type = type;
-			this.start = start;
-			this.end = end;
-		}
-	}
-
-	private static JSDocTypeParser createTypeParser(TypeInferencer2 inferencer) {
-		for (IModelBuilder builder : inferencer.getModelBuilders()) {
-			if (builder instanceof JSDocSupport) {
-				return ((JSDocSupport) builder).createTypeParser();
-			}
 		}
 		return null;
 	}
