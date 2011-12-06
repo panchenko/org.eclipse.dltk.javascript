@@ -16,6 +16,7 @@ import org.eclipse.dltk.javascript.core.JSKeywordCategory;
 import org.eclipse.dltk.javascript.core.JSKeywordManager;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
+import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.templates.JSDocTemplateCompletionProcessor;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
@@ -25,6 +26,7 @@ import org.eclipse.dltk.ui.text.completion.ContentAssistInvocationContext;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposalComputer;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -47,98 +49,122 @@ public class JSDocCompletionProposalComputer implements
 			ContentAssistInvocationContext context, IProgressMonitor monitor) {
 		IDocument document = context.getDocument();
 		try {
-			IRegion line = document.getLineInformationOfOffset(context
+			final IRegion region = document.getLineInformationOfOffset(context
 					.getInvocationOffset());
-			String doc = document.get(line.getOffset(), line.getLength());
-			int invocationLineIndex = context.getInvocationOffset()
-					- line.getOffset();
-			int index = invocationLineIndex;
-			int prefixIndex = -1;
-			String prefix = null;
-			String tag = null;
-			boolean bracketFound = false;
-			boolean skipNoneIdentifiers = false;
-			while (--index > 0) {
-				char ch = doc.charAt(index);
-				if (!Character.isJavaIdentifierPart(ch)) {
-					if (skipNoneIdentifiers)
-						continue;
-					if (ch == '@') {
-						// tag found.
-						tag = doc.substring(index,
-								prefixIndex == -1 ? invocationLineIndex
-										: prefixIndex);
-						break;
-					}
-					if (prefixIndex != -1 || ch == '}')
+			final char[] line = document.get(region.getOffset(),
+					region.getLength()).toCharArray();
+			final int offsetInLine = context.getInvocationOffset()
+					- region.getOffset();
+			int index = 0;
+			index = skipSpaces(line, index, offsetInLine);
+			if (index < offsetInLine && line[index] == '/') {
+				++index;
+			}
+			while (index < offsetInLine && line[index] == '*') {
+				++index;
+			}
+			index = skipSpaces(line, index, offsetInLine);
+			if (!(index < offsetInLine && line[index] == '@')) {
+				return Collections.emptyList();
+			}
+			final int tagStart = index;
+			++index;
+			if (index < offsetInLine
+					&& Character.isJavaIdentifierStart(line[index])) {
+				++index;
+				while (index < offsetInLine
+						&& (Character.isJavaIdentifierPart(line[index])
+								|| line[index] == '.' || line[index] == '-')) {
+					++index;
+				}
+			}
+			if (index == offsetInLine) {
+				return completionOnTag(context, new String(line, tagStart,
+						index - tagStart));
+			}
+			final int tagEnd = index;
+			index = skipSpaces(line, index, offsetInLine);
+			int depth = 0;
+			int nameStart = index;
+			boolean breakOnSpace = false;
+			if (index < offsetInLine && line[index] == '{') {
+				++index;
+				depth = 1;
+				nameStart = index;
+			} else if (JSDocTag.TYPE.equals(new String(line, tagStart, tagEnd
+					- tagStart))) {
+				breakOnSpace = true;
+			} else {
+				return Collections.emptyList();
+			}
+			while (index < offsetInLine) {
+				if (line[index] == '}') {
+					if (--depth <= 0) {
 						return Collections.emptyList();
-					if (ch == '{') {
-						prefixIndex = index + 1;
-						prefix = doc
-								.substring(prefixIndex, invocationLineIndex);
-						bracketFound = true;
-						skipNoneIdentifiers = true;
-					} else {
-						prefix = doc.substring(index, invocationLineIndex);
-						prefixIndex = index;
 					}
-					continue;
-				} else {
-					skipNoneIdentifiers = false;
+				} else if (line[index] == '{') {
+					++depth;
+				} else if (line[index] == '<' || line[index] == '>'
+						|| line[index] == ',' || line[index] == '|') {
+					nameStart = index + 1;
+				} else if (breakOnSpace && Character.isWhitespace(line[index])) {
+					return Collections.emptyList();
 				}
+				++index;
 			}
-
-			if (prefixIndex == -1) {
-				if (tag != null) {
-					List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
-					final JSDocTemplateCompletionProcessor processor = new JSDocTemplateCompletionProcessor(
-							(ScriptContentAssistInvocationContext) context);
-					Collections.addAll(
-							proposals,
-							processor.computeCompletionProposals(
-									context.getViewer(),
-									context.getInvocationOffset()));
-					//
-					final Set<String> tags = new HashSet<String>();
-					Collections.addAll(tags, JSDocTag.getTags());
-					ISourceModule module = null; // TODO detect source module
-					Collections.addAll(tags, JSKeywordManager.getInstance()
-							.getKeywords(JSKeywordCategory.JS_DOC_TAG, module));
-					// TODO option to ignore @returns ?
-					tags.remove(JSDocTag.RETURNS);
-					// collect used tags, to show keywords only for missing ones
-					final Set<String> usedTags = new HashSet<String>();
-					for (ICompletionProposal proposal : proposals) {
-						if (proposal instanceof ScriptTemplateProposal) {
-							usedTags.add(((ScriptTemplateProposal) proposal)
-									.getTemplateName());
-						}
-					}
-
-					for (String jsdocTag : tags) {
-						if (CharOperation.prefixEquals(tag, jsdocTag)
-								&& !usedTags.contains(jsdocTag)) {
-							proposals
-									.add(new ScriptCompletionProposal(
-											jsdocTag + ' ',
-											context.getInvocationOffset()
-													- tag.length(),
-											tag.length(),
-											DLTKPluginImages
-													.get(DLTKPluginImages.IMG_OBJS_JAVADOCTAG),
-											jsdocTag, 90, true));
-						}
-					}
-					return proposals;
-				}
-			} else if (bracketFound || "@type".equals(tag)) {
-				return generateTypes(context, prefix);
+			if (index == offsetInLine) {
+				return completionOnType(context, new String(line, nameStart,
+						index - nameStart));
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (BadLocationException e) {
+			JavaScriptUI.log(e);
 		}
 		return Collections.emptyList();
+	}
+
+	private static int skipSpaces(final char[] line, int index, int offsetInLine) {
+		while (index < offsetInLine && Character.isWhitespace(line[index])) {
+			++index;
+		}
+		return index;
+	}
+
+	private List<ICompletionProposal> completionOnTag(
+			ContentAssistInvocationContext context, String tag) {
+		final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+		final JSDocTemplateCompletionProcessor processor = new JSDocTemplateCompletionProcessor(
+				(ScriptContentAssistInvocationContext) context);
+		Collections.addAll(proposals, processor.computeCompletionProposals(
+				context.getViewer(), context.getInvocationOffset()));
+		//
+		final Set<String> tags = new HashSet<String>();
+		Collections.addAll(tags, JSDocTag.getTags());
+		ISourceModule module = null; // TODO detect source module
+		Collections.addAll(
+				tags,
+				JSKeywordManager.getInstance().getKeywords(
+						JSKeywordCategory.JS_DOC_TAG, module));
+		// TODO option to ignore @returns ?
+		tags.remove(JSDocTag.RETURNS);
+		// collect used tags, to show keywords only for missing ones
+		final Set<String> usedTags = new HashSet<String>();
+		for (ICompletionProposal proposal : proposals) {
+			if (proposal instanceof ScriptTemplateProposal) {
+				usedTags.add(((ScriptTemplateProposal) proposal)
+						.getTemplateName());
+			}
+		}
+		for (String jsdocTag : tags) {
+			if (CharOperation.prefixEquals(tag, jsdocTag)
+					&& !usedTags.contains(jsdocTag)) {
+				proposals.add(new ScriptCompletionProposal(jsdocTag + ' ',
+						context.getInvocationOffset() - tag.length(), tag
+								.length(), DLTKPluginImages
+								.get(DLTKPluginImages.IMG_OBJS_JAVADOCTAG),
+						jsdocTag, 90, true));
+			}
+		}
+		return proposals;
 	}
 
 	/**
@@ -146,7 +172,7 @@ public class JSDocCompletionProposalComputer implements
 	 * @param prefix
 	 * @return
 	 */
-	private List<ICompletionProposal> generateTypes(
+	private List<ICompletionProposal> completionOnType(
 			ContentAssistInvocationContext context, String prefix) {
 		if (context instanceof ScriptContentAssistInvocationContext) {
 			final JSCompletionEngine engine = getCompletionEngine();
