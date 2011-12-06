@@ -68,7 +68,9 @@ public class TypeInfoModelLoader {
 			for (EObject object : resource.getContents()) {
 				if (object instanceof Type) {
 					final Type type = (Type) object;
-					if (CharOperation.prefixEquals(prefix, type.getName())) {
+					if (type.isVisible()
+							&& CharOperation.prefixEquals(prefix,
+									type.getName())) {
 						result.add(type.getName());
 					}
 				}
