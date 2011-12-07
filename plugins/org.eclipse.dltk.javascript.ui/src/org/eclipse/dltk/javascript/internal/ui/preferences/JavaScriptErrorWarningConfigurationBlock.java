@@ -250,7 +250,8 @@ public class JavaScriptErrorWarningConfigurationBlock extends
 	protected IPreferenceChangeRebuildPrompt getPreferenceChangeRebuildPrompt(
 			boolean workspaceSettings, Collection<PreferenceKey> changedOptions) {
 		return PreferenceChangeRebuildPrompt.create(workspaceSettings,
-				"Parser Settings Changed", "The parser settings have changed.");
+				"Error/Warning Settings Changed",
+				"The error/warning settings have changed.");
 	}
 
 	@Override
