@@ -288,8 +288,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 				input.getModelElement(),
 				createTokenStream(source),
 				reporter == null ? null : new Reporter(TextUtils
-						.createLineTracker(source), reporter,
-						new JavaScriptParserSeverityReporter()));
+						.createLineTracker(source), reporter));
 	}
 
 	/**
@@ -303,8 +302,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 
 	protected Script parse(IModelElement element, JSTokenStream stream,
 			ISourceLineTracker lineTracker, IProblemReporter reporter) {
-		return parse(element, stream, new Reporter(lineTracker, reporter,
-				new JavaScriptParserSeverityReporter()));
+		return parse(element, stream, new Reporter(lineTracker, reporter));
 	}
 
 	protected Script parse(IModelElement element, JSTokenStream stream,

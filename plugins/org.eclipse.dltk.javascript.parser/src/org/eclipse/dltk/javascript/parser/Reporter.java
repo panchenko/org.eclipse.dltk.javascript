@@ -37,19 +37,10 @@ public class Reporter extends LineTracker implements IProblemReporter,
 
 	private int problemCount;
 
-	private final ISeverityReporter severityReporter;
-
 	public Reporter(ISourceLineTracker lineTracker,
 			IProblemReporter problemReporter) {
-		this(lineTracker, problemReporter,
-				new JavaScriptParserSeverityReporter());
-	}
-
-	public Reporter(ISourceLineTracker lineTracker,
-			IProblemReporter problemReporter, ISeverityReporter severityReporter) {
 		super(lineTracker);
 		this.problemReporter = problemReporter;
-		this.severityReporter = severityReporter;
 		reset();
 	}
 
@@ -75,12 +66,6 @@ public class Reporter extends LineTracker implements IProblemReporter,
 		}
 		if (line > getNumberOfLines() && start >= 0 && start <= getLength()) {
 			line = getLineNumberOfOffset(start);
-		}
-
-		if (severityReporter != null) {
-			severity = severityReporter.getSeverity(id, severity);
-			if (severity == null)
-				return null;
 		}
 
 		return new DefaultProblem(message, id, null, severity, start, end, line);
@@ -178,15 +163,8 @@ public class Reporter extends LineTracker implements IProblemReporter,
 		if (isSuppressed(id)) {
 			return;
 		}
-		ProblemSeverity sev = severity;
-		if (severityReporter != null) {
-			sev = severityReporter.getSeverity(id, sev);
-			if (sev == null || sev == ProblemSeverity.IGNORE)
-				return;
-		}
-
-		reportProblem(new DefaultProblem(message, id, null, sev, start, end,
-				getLineNumberOfOffset(start)));
+		reportProblem(new DefaultProblem(message, id, null, severity, start,
+				end, getLineNumberOfOffset(start)));
 	}
 
 	public int getProblemCount() {
