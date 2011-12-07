@@ -14,6 +14,9 @@ package org.eclipse.dltk.javascript.core;
 import static org.eclipse.dltk.javascript.core.JavaScriptPlugin.PLUGIN_ID;
 
 import org.eclipse.dltk.compiler.problem.DefaultProblemFactory;
+import org.eclipse.dltk.compiler.problem.DefaultProblemSeverityTranslator;
+import org.eclipse.dltk.compiler.problem.IProblemSeverityTranslator;
+import org.eclipse.dltk.core.IScriptProject;
 
 public class JSProblemFactory extends DefaultProblemFactory {
 
@@ -32,6 +35,12 @@ public class JSProblemFactory extends DefaultProblemFactory {
 	@Override
 	protected String getTaskMarkerType() {
 		return JS_TASK;
+	}
+
+	@Override
+	public IProblemSeverityTranslator createSeverityTranslator(
+			IScriptProject project) {
+		return new DefaultProblemSeverityTranslator(project);
 	}
 
 }
