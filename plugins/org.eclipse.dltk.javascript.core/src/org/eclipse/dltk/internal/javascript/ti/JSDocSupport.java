@@ -530,7 +530,8 @@ public class JSDocSupport implements IModelBuilder {
 				return translateTypeName(cutBraces(typeName), tag, reporter);
 			}
 		} else if (!requireBraces) {
-			reportProblem(reporter, JSDocProblem.MISSING_TYPE_NAME, tag);
+			reportProblem(reporter, JSDocProblem.WRONG_TYPE_SYNTAX,
+					"Missing type name", tag);
 		}
 		return null;
 	}

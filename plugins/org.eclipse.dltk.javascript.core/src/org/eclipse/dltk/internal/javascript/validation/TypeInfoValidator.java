@@ -915,8 +915,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 						if (expression instanceof NewExpression) {
 
 							reporter.reportProblem(
-									JavaScriptProblems.UNKNOWN_TYPE, NLS.bind(
-											ValidationMessages.UnknownType,
+									JavaScriptProblems.WRONG_TYPE_EXPRESSION,
+									NLS.bind(
+											ValidationMessages.UndefinedJavascriptType,
 											((NewExpression) expression)
 													.getObjectClass()
 													.toSourceString("")),
@@ -1829,7 +1830,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 				final String lazyName = ValueReferenceUtil
 						.getLazyName(reference);
 				if (lazyName != null) {
-					reportUnknownType(node, lazyName);
+					reportUnknownType(JavaScriptProblems.WRONG_TYPE_EXPRESSION,
+							ValidationMessages.UndefinedJavascriptType, node,
+							lazyName);
 				}
 			}
 		}
@@ -1868,15 +1871,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		public void reportUnknownType(ASTNode node, String name) {
-			reportUnknownType(JavaScriptProblems.UNKNOWN_TYPE, node, name);
+		public void reportUnknownType(IProblemIdentifier identifier,
+				String message, ASTNode node, String name) {
+			reporter.reportProblem(identifier, NLS.bind(message, name),
+					node.sourceStart(), node.sourceEnd());
 		}
 
 		public void reportUnknownType(IProblemIdentifier identifier,
 				ASTNode node, String name) {
-			reporter.reportProblem(identifier,
-					NLS.bind(ValidationMessages.UnknownType, name),
-					node.sourceStart(), node.sourceEnd());
+			reportUnknownType(identifier, ValidationMessages.UnknownType, node,
+					name);
 		}
 
 		private boolean stronglyTyped(IValueReference reference) {

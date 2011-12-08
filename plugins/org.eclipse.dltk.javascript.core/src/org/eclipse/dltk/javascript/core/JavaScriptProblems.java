@@ -21,7 +21,16 @@ import org.eclipse.dltk.javascript.parser.JSParserProblemGroup;
 public enum JavaScriptProblems implements IProblemIdentifier,
 		IProblemIdentifierExtension2, IProblemIdentifierExtension3 {
 
-	UNKNOWN_TYPE, DEPRECATED_TYPE,
+	/**
+	 * Unknown type specified in JSDoc
+	 */
+	UNKNOWN_TYPE,
+
+	/**
+	 * Wrong type expression specified in javascript code, e.g.
+	 * <code>new a.b.c.d()</code>
+	 */
+	WRONG_TYPE_EXPRESSION, DEPRECATED_TYPE,
 
 	UNDEFINED_METHOD, WRONG_PARAMETERS, WRONG_PARAMETERS_UNTYPED, DEPRECATED_METHOD,
 	/**

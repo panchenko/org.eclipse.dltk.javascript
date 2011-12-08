@@ -16,6 +16,7 @@ import org.eclipse.osgi.util.NLS;
 public class ValidationMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.dltk.internal.javascript.validation.ValidationMessages"; //$NON-NLS-1$
 	public static String UnknownType;
+	public static String UndefinedJavascriptType;
 	public static String DeprecatedType;
 
 	public static String UndefinedMethodInScript;
