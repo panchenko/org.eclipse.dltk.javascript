@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.codeassist.RelevanceConstants;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
@@ -242,7 +243,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 		public void report(String name, Element element) {
 			if (element instanceof Member && processed.add(name)) {
-				reportMember((Member) element, name);
+				reportMember((Member) element, name, false);
 			}
 		}
 
@@ -339,14 +340,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			}
 			if (members != null) {
 				for (Member member : members) {
-					reportMember(member, member.getName());
+					reportMember(member, member.getName(), true);
 				}
 			}
 			for (Member member : typeQuery.ignoreDuplicates(processed)) {
 				if (member.isVisible()
 						&& CharOperation.prefixEquals(prefix, member.getName(),
 								false)) {
-					reportMember(member, member.getName());
+					reportMember(member, member.getName(),
+							typeQuery.contains(member.getDeclaringType()));
 				}
 			}
 		}
@@ -354,13 +356,17 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		/**
 		 * @param member
 		 */
-		private void reportMember(Member member, String memberName) {
+		private void reportMember(Member member, String memberName,
+				boolean important) {
 			boolean isFunction = member instanceof Method;
 			CompletionProposal proposal = CompletionProposal.create(
 					isFunction ? CompletionProposal.METHOD_REF
 							: CompletionProposal.FIELD_REF, position);
 
 			int relevance = computeBaseRelevance();
+			if (important) {
+				relevance += RelevanceConstants.R_NON_INHERITED;
+			}
 			// relevance += computeRelevanceForInterestingProposal();
 			relevance += computeRelevanceForCaseMatching(prefix, memberName);
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);

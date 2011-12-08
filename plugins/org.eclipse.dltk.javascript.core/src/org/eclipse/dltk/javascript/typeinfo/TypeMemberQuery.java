@@ -275,4 +275,13 @@ public class TypeMemberQuery implements Iterable<Member> {
 		return null;
 	}
 
+	public boolean contains(Type type) {
+		for (QueueItem item : types) {
+			if (type == item.type) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
