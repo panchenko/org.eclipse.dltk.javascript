@@ -532,6 +532,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	static abstract class TypeResourceSet extends ResourceSetImpl {
 
+		public TypeResourceSet() {
+			TypeInfoModelLoader.getInstance().initializeURIMap(this);
+		}
+
 		@Override
 		public EObject getEObject(URI uri, boolean loadOnDemand) {
 			if (TypeUtil.isTypeProxy(uri)) {
