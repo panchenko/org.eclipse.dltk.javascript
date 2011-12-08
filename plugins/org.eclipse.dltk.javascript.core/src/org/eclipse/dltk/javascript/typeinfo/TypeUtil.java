@@ -196,9 +196,13 @@ public class TypeUtil {
 	 * @return
 	 */
 	public static Type createProxy(String typeName) {
+		return createProxy(createProxyURI(typeName));
+	}
+
+	public static Type createProxy(URI uri) {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
-		type.setName(typeName);
-		((InternalEObject) type).eSetProxyURI(createProxyURI(typeName));
+		type.setName(uri.fragment());
+		((InternalEObject) type).eSetProxyURI(uri);
 		return type;
 	}
 
