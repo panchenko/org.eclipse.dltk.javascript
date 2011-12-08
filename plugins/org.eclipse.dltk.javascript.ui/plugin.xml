@@ -838,6 +838,9 @@
          name="JSDoc problems"
          priority="140">
       <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNKNOWN_TYPE"
+            label="Unknown javascript type"/>
+      <problem
             id="org.eclipse.dltk.internal.javascript.ti.JSDocProblem#DUPLICATE_TAG"
             label="Duplicate tag">
       </problem>
@@ -858,10 +861,6 @@
             label="Missing parameter annotation">
       </problem>
       <problem
-            id="org.eclipse.dltk.internal.javascript.ti.JSDocProblem#MISSING_TYPE_NAME"
-            label="Missing type name">
-      </problem>
-      <problem
             id="org.eclipse.dltk.internal.javascript.ti.JSDocProblem#WRONG_TYPE_SYNTAX"
             label="Syntax error in type specification">
       </problem>
@@ -871,14 +870,14 @@
       <!--defaultEntry namespace="org.eclipse.dltk.javascript.core.JavaScriptProblems"/-->
       <!--defaultEntry namespace="org.eclipse.dltk.javascript.parser.JavaScriptParserProblems"/-->
       <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_TYPE_EXPRESSION"
+            label="Undefined javascript type"/>
+      <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_PARAMETERS"
             label="Wrong number of parameters to javascript function call"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_JAVA_PARAMETERS"
             label="Wrong number of parameters to java method call"/>
-      <problem
-            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNKNOWN_TYPE"
-            label="Unknown javascript type"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#UNDEFINED_METHOD"
             label="Undefined javascript function call"/>
