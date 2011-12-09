@@ -181,6 +181,9 @@ public class JSDocCompletionProposalComputer implements
 						.getSourceModule();
 				final JavaScriptCompletionProposalCollector collector = new JavaScriptCompletionProposalCollector(
 						module);
+				collector.setAttribute(TypeMode.JSDOC, Boolean.TRUE);
+				collector
+						.setInvocationContext((ScriptContentAssistInvocationContext) context);
 				engine.setRequestor(collector);
 				engine.completeTypes(module, TypeMode.JSDOC, prefix.trim(),
 						context.getInvocationOffset());

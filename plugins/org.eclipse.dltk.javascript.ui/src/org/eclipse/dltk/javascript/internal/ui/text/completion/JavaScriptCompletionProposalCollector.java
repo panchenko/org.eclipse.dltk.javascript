@@ -16,6 +16,7 @@ import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
+import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -59,7 +60,8 @@ public class JavaScriptCompletionProposalCollector extends
 	@Override
 	protected IScriptCompletionProposal createTypeProposal(
 			CompletionProposal typeProposal) {
-		if (typeProposal.getExtraInfo() instanceof GenericType) {
+		if (getAttribute(TypeMode.JSDOC) != null
+				&& typeProposal.getExtraInfo() instanceof GenericType) {
 			return new GenericTypeCompletionProposal(typeProposal,
 					getInvocationContext());
 		}
