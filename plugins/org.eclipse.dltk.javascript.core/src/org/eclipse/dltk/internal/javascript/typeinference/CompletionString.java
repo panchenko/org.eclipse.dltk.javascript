@@ -116,6 +116,11 @@ public class CompletionString {
 					break;
 				}
 			}
+			// for now only support {}
+			if (c == '}' && inBrackStack.isEmpty() && i >= 1
+					&& id.charAt(i - 1) == '{') {
+				return "{}.";
+			}
 			if (c != '.'
 					&& c != '@'
 					&& inBrackStack.isEmpty()

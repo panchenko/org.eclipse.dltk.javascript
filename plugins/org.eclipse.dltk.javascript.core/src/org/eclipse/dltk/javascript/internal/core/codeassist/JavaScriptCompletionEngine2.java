@@ -45,6 +45,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
@@ -164,6 +165,10 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				item = item.getChild(IValueReference.FUNCTION_OP);
 				if (!exists(item))
 					break;
+			} else if (path.isObject(i)) {
+				item = item.getChild(ITypeNames.OBJECT).getChild(
+						IValueReference.FUNCTION_OP);
+				break;
 			} else {
 				assert path.isArray(i);
 				item = item.getChild(IValueReference.ARRAY_OP);

@@ -17,7 +17,7 @@ import java.util.List;
 public class CompletionPath {
 
 	public static enum SegmentType {
-		SIMPLE, ARRAY, FUNCTION
+		SIMPLE, ARRAY, FUNCTION, OBJECT
 	}
 
 	private static class Segment {
@@ -29,6 +29,9 @@ public class CompletionPath {
 			this.type = type;
 		}
 
+		public String toString() {
+			return "Segment[type:" + type.toString() + ",name:" + name + "]";
+		}
 	}
 
 	private final Segment[] segments;
@@ -45,6 +48,9 @@ public class CompletionPath {
 			} else if (token.equals("()")) {
 				token = null;
 				type = SegmentType.FUNCTION;
+			} else if (token.equals("{}")) {
+				token = null;
+				type = SegmentType.OBJECT;
 			}
 			s.add(new Segment(token, type));
 		}
@@ -79,6 +85,10 @@ public class CompletionPath {
 		return segments[index].type == SegmentType.FUNCTION;
 	}
 
+	public boolean isObject(int index) {
+		return segments[index].type == SegmentType.OBJECT;
+	}
+
 	public String lastSegment() {
 		return !isEmpty() ? segments[segments.length - 1].name : null;
 	}
@@ -100,5 +110,4 @@ public class CompletionPath {
 		}
 		return sb.toString();
 	}
-
 }
