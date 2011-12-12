@@ -80,6 +80,14 @@ public class JSDocTypeParserTests extends TestCase {
 		assertRef("Number", type.getMembers().get(1).getType());
 		assertTrue(((RecordMember) type.getMembers().get(1)).isOptional());
 	}
+	
+	public void testRecordTypeWithLiteralQuotedProperties() {
+		final RecordType type = (RecordType) parse("{'a-string':String,anumber:Number=}");
+		assertEquals(1, type.getMembers().size());
+		assertEquals("anumber", type.getMembers().get(0).getName());
+		assertRef("Number", type.getMembers().get(0).getType());
+		assertTrue(((RecordMember) type.getMembers().get(0)).isOptional());
+	}
 
 	public void testFunctionType1() {
 		final FunctionType type = (FunctionType) parse("function():String");
