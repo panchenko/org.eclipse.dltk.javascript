@@ -19,6 +19,30 @@
       </editor>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            targetID="#JavascriptRulerContext"
+            id="org.eclipse.dltk.javascript.ui.JavascriptEditorPopupActions">
+         <action
+               label="%AddTask.label"
+               helpContextId="org.eclipse.ui.AddTask_action_context"
+               tooltip="%AddTask.tooltip"
+               class="org.eclipse.ui.texteditor.TaskRulerAction"
+               menubarPath="add"
+               id="org.eclipse.ui.texteditor.TaskRulerAction">
+         </action>
+         <action
+               label="%AddBookmark.label"
+               helpContextId="org.eclipse.ui.bookmark_action_context"
+               tooltip="%AddBookmark.tooltip"
+               class="org.eclipse.ui.texteditor.BookmarkRulerAction"
+               menubarPath="add"
+               id="org.eclipse.ui.texteditor.BookmarkRulerAction">
+         </action>
+       </viewerContribution>
+   </extension>
+
   <extension point="org.eclipse.ui.editorActions">
     <editorContribution
       targetID="org.eclipse.dltk.javascript.ui.editor.JavascriptEditor"
