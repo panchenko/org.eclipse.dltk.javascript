@@ -63,8 +63,8 @@ public class JavaScriptFileHyperlink implements IHyperlink {
 				fileName = getFileName(linkText);
 				lineNumber = getLineNumber(linkText);
 			} catch (CoreException e1) {
-				ErrorDialog.openError(DLTKDebugUIPlugin
-						.getActiveWorkbenchShell(),
+				ErrorDialog.openError(
+						DLTKDebugUIPlugin.getActiveWorkbenchShell(),
 						ConsoleMessages.TclFileHyperlink_Error,
 						ConsoleMessages.TclFileHyperlink_Error, e1.getStatus());
 				return;
@@ -88,8 +88,8 @@ public class JavaScriptFileHyperlink implements IHyperlink {
 					IDocument document = provider.getDocument(input);
 					try {
 						IRegion line = document.getLineInformation(lineNumber);
-						textEditor.selectAndReveal(line.getOffset(), line
-								.getLength());
+						textEditor.selectAndReveal(line.getOffset(),
+								line.getLength());
 					} catch (BadLocationException e) {
 
 					}
@@ -103,8 +103,7 @@ public class JavaScriptFileHyperlink implements IHyperlink {
 							DLTKDebugUIPlugin.getActiveWorkbenchShell(),
 							ConsoleMessages.TclFileHyperlink_Information_1,
 							MessageFormat
-									.format(
-											ConsoleMessages.TclFileHyperlink_Source_not_found_for__0__2,
+									.format(ConsoleMessages.TclFileHyperlink_Source_not_found_for__0__2,
 											new String[] { fileName }));
 		} catch (CoreException e) {
 			DLTKDebugUIPlugin
@@ -126,17 +125,12 @@ public class JavaScriptFileHyperlink implements IHyperlink {
 	}
 
 	public IEditorInput getEditorInput(Object item) {
-		try {
-			return EditorUtility.getEditorInput(item);
-		} catch (CoreException e) {
-			DLTKDebugUIPlugin.log(e);
-			return null;
-		}
+		return EditorUtility.getEditorInput(item);
 	}
 
 	protected Object getSourceModule(String fileName) throws CoreException {
-		IFile f = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(
-				new Path(fileName));
+		IFile f = ResourcesPlugin.getWorkspace().getRoot()
+				.getFileForLocation(new Path(fileName));
 		return f;
 	}
 
