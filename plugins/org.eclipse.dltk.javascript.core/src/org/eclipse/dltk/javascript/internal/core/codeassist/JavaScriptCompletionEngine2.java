@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.dltk.codeassist.RelevanceConstants;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
@@ -369,9 +368,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 							: CompletionProposal.FIELD_REF, position);
 
 			int relevance = computeBaseRelevance();
-			if (important) {
-				relevance += RelevanceConstants.R_NON_INHERITED;
-			}
+			// if (important) {
+			// relevance += RelevanceConstants.R_NON_INHERITED;
+			// }
 			// relevance += computeRelevanceForInterestingProposal();
 			relevance += computeRelevanceForCaseMatching(prefix, memberName);
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
