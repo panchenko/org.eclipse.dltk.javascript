@@ -124,10 +124,6 @@ public class JavaScriptFileHyperlink implements IHyperlink {
 		}
 	}
 
-	public IEditorInput getEditorInput(Object item) {
-		return EditorUtility.getEditorInput(item);
-	}
-
 	protected Object getSourceModule(String fileName) throws CoreException {
 		IFile f = ResourcesPlugin.getWorkspace().getRoot()
 				.getFileForLocation(new Path(fileName));
