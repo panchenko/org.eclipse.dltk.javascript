@@ -578,8 +578,8 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
-		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
-				.getID());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION,
+				problems.get(0).getID());
 	}
 
 	public void testGenericAnyWtihNoneGenericCall() {
@@ -1849,7 +1849,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(
-				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE_PARAMETERIZATION,
 				problems.get(0).getID());
 
 	}
@@ -1868,7 +1868,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(
-				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
+				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE_PARAMETERIZATION,
 				problems.get(0).getID());
 	}
 

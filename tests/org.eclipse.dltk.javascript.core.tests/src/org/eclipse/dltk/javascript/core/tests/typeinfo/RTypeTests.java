@@ -15,6 +15,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -31,8 +32,8 @@ public class RTypeTests extends TestCase implements ITypeNames {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(EcoreUtil.generateUUID());
 		type.setSuperType(superType);
-		assertTrue(JSTypeSet.ref(superType).isAssignableFrom(
-				JSTypeSet.ref(type)));
+		assertEquals(TypeCompatibility.TRUE, JSTypeSet.ref(superType)
+				.isAssignableFrom(JSTypeSet.ref(type)));
 	}
 
 	public void testAssignableTrait() {
@@ -40,7 +41,8 @@ public class RTypeTests extends TestCase implements ITypeNames {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(EcoreUtil.generateUUID());
 		type.getTraits().add(trait);
-		assertTrue(JSTypeSet.ref(trait).isAssignableFrom(JSTypeSet.ref(type)));
+		assertEquals(TypeCompatibility.TRUE, JSTypeSet.ref(trait)
+				.isAssignableFrom(JSTypeSet.ref(type)));
 	}
 
 }
