@@ -846,7 +846,10 @@
             label="Function not always returning a value"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE"
-            label="Function returns a different type then it declares"/>
+            label="Function returns a different type than it declares"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE_PARAMETERIZATION"
+            label="Function returns a type with different parameterization than it declares"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#EQUAL_AS_ASSIGN"
             label="Assignment (=) when equality (==) test"/>
@@ -898,7 +901,10 @@
             label="Undefined javascript type"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_PARAMETERS"
-            label="Wrong number of parameters to javascript function call"/>
+            label="Wrong parameters in javascript function call"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_PARAMETERS_PARAMETERIZATION"
+            label="Wrong generic parameterization in javascript function call"/>
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_JAVA_PARAMETERS"
             label="Wrong number of parameters to java method call"/>
