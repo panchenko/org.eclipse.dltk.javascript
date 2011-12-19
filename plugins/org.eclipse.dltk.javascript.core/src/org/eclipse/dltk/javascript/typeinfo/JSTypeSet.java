@@ -85,6 +85,11 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		@Override
+		public IRType toRType() {
+			return none();
+		}
+
+		@Override
 		public Type[] toArray() {
 			return new Type[0];
 		}
@@ -182,6 +187,11 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		@Override
 		public IRType getFirst() {
+			return type;
+		}
+
+		@Override
+		public IRType toRType() {
 			return type;
 		}
 
@@ -995,6 +1005,17 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		@Override
+		public IRType toRType() {
+			if (types.isEmpty()) {
+				return none();
+			} else if (types.size() == 1) {
+				return types.iterator().next();
+			} else {
+				return union(types);
+			}
+		}
+
+		@Override
 		public Type[] toArray() {
 			final LinkedHashSet<Type> result = new LinkedHashSet<Type>();
 			for (IRType type : types) {
@@ -1061,6 +1082,16 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		return new JSTypeSetImpl();
 	}
 
+	public static JSTypeSet create(IRType type) {
+		if (type == null || type == none()) {
+			return emptySet();
+		} else {
+			final JSTypeSet set = new JSTypeSetImpl();
+			set.add(type);
+			return set;
+		}
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof JSTypeSet) {
@@ -1075,6 +1106,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 	// public abstract void add(Type type);
 
 	public abstract IRType getFirst();
+
+	public abstract IRType toRType();
 
 	public abstract Type[] toArray();
 

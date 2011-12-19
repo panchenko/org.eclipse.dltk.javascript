@@ -17,8 +17,10 @@ import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.STRING;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -117,11 +119,23 @@ import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
+import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.dltk.javascript.typeinfo.model.util.TypeInfoModelSwitch;
+import org.eclipse.emf.ecore.EObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -364,14 +378,179 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitCallExpression(CallExpression node) {
 		final IValueReference reference = visit(node.getExpression());
-		for (ASTNode argument : node.getArguments()) {
-			visit(argument);
+		final List<ASTNode> args = node.getArguments();
+		final IValueReference[] arguments = new IValueReference[args.size()];
+		for (int i = 0; i < args.size(); ++i) {
+			arguments[i] = visit(args.get(i));
 		}
 		if (reference != null) {
+			final List<Method> methods = JavaScriptValidations.extractElements(
+					reference, Method.class);
+			if (methods != null && methods.size() == 1
+					&& methods.get(0) instanceof GenericMethod) {
+				final GenericMethod method = (GenericMethod) methods.get(0);
+				final JSTypeSet type = evaluateGenericCall(method, arguments);
+				if (type != null) {
+					return new ConstantValue(type);
+				}
+			}
 			return reference.getChild(IValueReference.FUNCTION_OP);
 		} else {
 			return null;
 		}
+	}
+
+	protected JSTypeSet evaluateGenericCall(GenericMethod method,
+			IValueReference[] arguments) {
+		final JSTypeSet[] argTypes = new JSTypeSet[arguments.length];
+		for (int i = 0; i < arguments.length; ++i) {
+			argTypes[i] = arguments[i].getDeclaredTypes();
+			if (argTypes[i].isEmpty()) {
+				argTypes[i] = arguments[i].getTypes();
+			}
+		}
+		final boolean genericParams[] = new boolean[method.getParameters()
+				.size()];
+		for (int i = 0; i < method.getParameters().size(); ++i) {
+			genericParams[i] = isGenericType(method.getParameters().get(i)
+					.getType());
+		}
+		final Map<TypeVariable, JSTypeSet> captures = new HashMap<TypeVariable, JSTypeSet>();
+		for (TypeVariable variable : method.getTypeParameters()) {
+			captures.put(variable, JSTypeSet.create());
+		}
+		for (int i = 0; i < argTypes.length; ++i) {
+			final int index = i < method.getParameters().size() ? i : method
+					.getParameters().size() - 1;
+			final Parameter parameter = method.getParameters().get(index);
+			if (genericParams[index]) {
+				final Capture capture = capture(parameter.getType(),
+						argTypes[i]);
+				if (capture != null) {
+					final JSTypeSet captured = captures.get(capture.variable);
+					if (captured != null) {
+						captured.addAll(capture.types);
+					}
+				}
+			} else {
+				// TODO (alex) check parameter compatibility
+			}
+		}
+		if (method.getType() != null) {
+			return evaluateReturnType(method.getType(), captures);
+		} else {
+			return null;
+		}
+	}
+
+	private JSTypeSet evaluateReturnType(JSType type,
+			Map<TypeVariable, JSTypeSet> captures) {
+		if (type instanceof TypeVariableReference) {
+			final TypeVariable variable = ((TypeVariableReference) type)
+					.getVariable();
+			return normalizeCapture(captures.get(variable));
+		} else if (type instanceof ArrayType) {
+			final JSType itemType = ((ArrayType) type).getItemType();
+			return JSTypeSet.singleton(JSTypeSet.arrayOf(evaluateReturnType(
+					itemType, captures).toRType()));
+		} else if (type instanceof ParameterizedType) {
+			List<IRType> params = new ArrayList<IRType>();
+			final ParameterizedType parameterized = (ParameterizedType) type;
+			for (JSType param : parameterized.getActualTypeArguments()) {
+				params.add(evaluateReturnType(param, captures).toRType());
+			}
+			return JSTypeSet.singleton(JSTypeSet.ref(getContext().parameterize(
+					parameterized.getTarget(), params)));
+		} else if (type instanceof SimpleType) {
+			return JSTypeSet.create(JSTypeSet.normalize(getContext(), type));
+		} else {
+			return JSTypeSet.emptySet();
+		}
+	}
+
+	private JSTypeSet normalizeCapture(JSTypeSet types) {
+		return types;
+	}
+
+	private static class Capture {
+		final TypeVariable variable;
+		final JSTypeSet types;
+
+		public Capture(TypeVariable variable, JSTypeSet types) {
+			this.variable = variable;
+			this.types = types;
+		}
+	}
+
+	private Capture capture(JSType paramType, JSTypeSet argTypes) {
+		if (paramType instanceof TypeVariableReference) {
+			return new Capture(
+					((TypeVariableReference) paramType).getVariable(), argTypes);
+		} else {
+			// TODO alex other type expressions
+			return null;
+		}
+	}
+
+	private static final TypeInfoModelSwitch<Boolean> GENERIC_TYPE_EXPRESSION = new TypeInfoModelSwitch<Boolean>() {
+		@Override
+		public Boolean doSwitch(EObject theEObject) {
+			return theEObject != null ? super.doSwitch(theEObject) : null;
+		}
+
+		@Override
+		public Boolean caseJSType(JSType object) {
+			return Boolean.FALSE;
+		}
+
+		@Override
+		public Boolean caseTypeVariableReference(TypeVariableReference object) {
+			return Boolean.TRUE;
+		}
+
+		@Override
+		public Boolean caseArrayType(ArrayType object) {
+			return doSwitch(object.getItemType());
+		}
+
+		@Override
+		public Boolean caseMapType(MapType object) {
+			final Boolean result = doSwitch(object.getKeyType());
+			if (result == Boolean.TRUE) {
+				return result;
+			}
+			return doSwitch(object.getValueType());
+		}
+
+		@Override
+		public Boolean caseUnionType(UnionType object) {
+			for (JSType type : object.getTargets()) {
+				final Boolean result = doSwitch(type);
+				if (result == Boolean.TRUE) {
+					return result;
+				}
+			}
+			return Boolean.FALSE;
+		}
+
+		@Override
+		public Boolean caseFunctionType(FunctionType object) {
+			for (Parameter parameter : object.getParameters()) {
+				final Boolean result = doSwitch(parameter.getType());
+				if (result == Boolean.TRUE) {
+					return result;
+				}
+			}
+			return doSwitch(object.getReturnType());
+		}
+	};
+
+	private boolean isGenericType(JSType type) {
+		if (type != null) {
+			final Boolean result = GENERIC_TYPE_EXPRESSION.doSwitch(type);
+			return result != null && result.booleanValue();
+		}
+		return false;
 	}
 
 	@Override

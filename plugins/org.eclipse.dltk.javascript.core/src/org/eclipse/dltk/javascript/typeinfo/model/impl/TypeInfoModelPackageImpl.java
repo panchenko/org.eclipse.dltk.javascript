@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.36 2011/11/22 15:52:22 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.37 2011/12/19 09:15:02 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -22,6 +22,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
@@ -147,6 +148,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EClass rTypeEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass genericMethodEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -563,6 +571,24 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      */
     public EAttribute getRType_RuntimeType() {
         return (EAttribute)rTypeEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getGenericMethod() {
+        return genericMethodEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getGenericMethod_TypeParameters() {
+        return (EReference)genericMethodEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -1111,6 +1137,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         rTypeEClass = createEClass(RTYPE);
         createEAttribute(rTypeEClass, RTYPE__RUNTIME_TYPE);
 
+        genericMethodEClass = createEClass(GENERIC_METHOD);
+        createEReference(genericMethodEClass, GENERIC_METHOD__TYPE_PARAMETERS);
+
         // Create enums
         typeKindEEnum = createEEnum(TYPE_KIND);
         parameterKindEEnum = createEEnum(PARAMETER_KIND);
@@ -1174,6 +1203,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         genericTypeEClass.getESuperTypes().add(this.getType());
         typeVariableReferenceEClass.getESuperTypes().add(this.getJSType());
         rTypeEClass.getESuperTypes().add(this.getJSType());
+        genericMethodEClass.getESuperTypes().add(this.getMethod());
 
         // Initialize classes and features; add operations and parameters
         initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -1288,6 +1318,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         initEClass(rTypeEClass, RType.class, "RType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEAttribute(getRType_RuntimeType(), this.getIRType(), "runtimeType", null, 0, 1, RType.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+        initEClass(genericMethodEClass, GenericMethod.class, "GenericMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getGenericMethod_TypeParameters(), this.getTypeVariable(), null, "typeParameters", null, 0, -1, GenericMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         // Initialize enums and add enum literals
         initEEnum(typeKindEEnum, TypeKind.class, "TypeKind"); //$NON-NLS-1$

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.30 2011/11/22 15:52:21 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.31 2011/12/19 09:15:03 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1763,6 +1763,142 @@ public interface TypeInfoModelPackage extends EPackage {
     int RTYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.GenericMethodImpl <em>Generic Method</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.GenericMethodImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getGenericMethod()
+     * @generated
+     */
+    int GENERIC_METHOD = 28;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__NAME = METHOD__NAME;
+
+    /**
+     * The feature id for the '<em><b>Deprecated</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__DEPRECATED = METHOD__DEPRECATED;
+
+    /**
+     * The feature id for the '<em><b>Description</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__DESCRIPTION = METHOD__DESCRIPTION;
+
+    /**
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__VISIBLE = METHOD__VISIBLE;
+
+    /**
+     * The feature id for the '<em><b>Attributes</b></em>' map.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__ATTRIBUTES = METHOD__ATTRIBUTES;
+
+    /**
+     * The feature id for the '<em><b>Hide Allowed</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__HIDE_ALLOWED = METHOD__HIDE_ALLOWED;
+
+    /**
+     * The feature id for the '<em><b>Type</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__TYPE = METHOD__TYPE;
+
+    /**
+     * The feature id for the '<em><b>Direct Type</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__DIRECT_TYPE = METHOD__DIRECT_TYPE;
+
+    /**
+     * The feature id for the '<em><b>Static</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__STATIC = METHOD__STATIC;
+
+    /**
+     * The feature id for the '<em><b>Declaring Type</b></em>' container reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__DECLARING_TYPE = METHOD__DECLARING_TYPE;
+
+    /**
+     * The feature id for the '<em><b>Visibility</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__VISIBILITY = METHOD__VISIBILITY;
+
+    /**
+     * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__PARAMETERS = METHOD__PARAMETERS;
+
+    /**
+     * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__TYPE_PARAMETERS = METHOD_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Generic Method</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD_FEATURE_COUNT = METHOD_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1770,7 +1906,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 28;
+	int TYPE_KIND = 29;
 
 
 	/**
@@ -1781,7 +1917,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 29;
+	int PARAMETER_KIND = 30;
 
 
 	/**
@@ -1792,7 +1928,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
      * @generated
      */
-    int VISIBILITY = 30;
+    int VISIBILITY = 31;
 
 
     /**
@@ -1803,7 +1939,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getIRType()
      * @generated
      */
-    int IR_TYPE = 31;
+    int IR_TYPE = 32;
 
 
     /**
@@ -2057,6 +2193,27 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EAttribute getRType_RuntimeType();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.GenericMethod <em>Generic Method</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Generic Method</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.GenericMethod
+     * @generated
+     */
+    EClass getGenericMethod();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.GenericMethod#getTypeParameters <em>Type Parameters</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Type Parameters</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.GenericMethod#getTypeParameters()
+     * @see #getGenericMethod()
+     * @generated
+     */
+    EReference getGenericMethod_TypeParameters();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType <em>Map Type</em>}'.
@@ -2795,6 +2952,24 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EAttribute RTYPE__RUNTIME_TYPE = eINSTANCE.getRType_RuntimeType();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.GenericMethodImpl <em>Generic Method</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.GenericMethodImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getGenericMethod()
+         * @generated
+         */
+        EClass GENERIC_METHOD = eINSTANCE.getGenericMethod();
+
+        /**
+         * The meta object literal for the '<em><b>Type Parameters</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference GENERIC_METHOD__TYPE_PARAMETERS = eINSTANCE.getGenericMethod_TypeParameters();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.

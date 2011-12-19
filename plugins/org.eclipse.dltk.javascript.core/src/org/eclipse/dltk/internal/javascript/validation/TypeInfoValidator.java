@@ -30,6 +30,7 @@ import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChecker;
+import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
@@ -80,6 +81,7 @@ import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -659,7 +661,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		@Override
 		public IValueReference visitCallExpression(CallExpression node) {
-			final ASTNode expression = node.getExpression();
+			final Expression expression = node.getExpression();
 			modes.put(expression, VisitorMode.CALL);
 
 			final IValueReference reference = visit(expression);
@@ -685,17 +687,30 @@ public class TypeInfoValidator implements IBuildParticipant {
 					return null;
 				}
 			}
-			final List<ASTNode> callArgs = node.getArguments();
-			IValueReference[] arguments = new IValueReference[callArgs.size()];
+			final List<ASTNode> args = node.getArguments();
+			final IValueReference[] arguments = new IValueReference[args.size()];
+			for (int i = 0, size = args.size(); i < size; ++i) {
+				arguments[i] = visit(args.get(i));
+			}
 			final List<Method> methods = JavaScriptValidations.extractElements(
 					reference, Method.class);
-			pushExpressionValidator(new CallExpressionValidator(
-					peekFunctionScope(), node, reference, arguments, methods,
-					this));
-			for (int i = 0, size = callArgs.size(); i < size; ++i) {
-				arguments[i] = visit(callArgs.get(i));
+			if (methods != null && methods.size() == 1
+					&& methods.get(0) instanceof GenericMethod) {
+				final GenericMethod method = (GenericMethod) methods.get(0);
+				if (!validateParameterCount(method, args)) {
+					final Expression methodNode = expression instanceof PropertyExpression ? ((PropertyExpression) expression)
+							.getProperty() : expression;
+					reportMethodParameterError(methodNode, arguments, method);
+					return null;
+				}
+				final JSTypeSet result = evaluateGenericCall(method, arguments);
+				return result != null ? new ConstantValue(result) : null;
+			} else {
+				pushExpressionValidator(new CallExpressionValidator(
+						peekFunctionScope(), node, reference, arguments,
+						methods, this));
+				return reference.getChild(IValueReference.FUNCTION_OP);
 			}
-			return reference.getChild(IValueReference.FUNCTION_OP);
 		}
 
 		private void pushExpressionValidator(
@@ -730,7 +745,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 				methods = JavaScriptValidations.extractElements(reference,
 						Method.class);
 			if (methods != null) {
-				final List<ASTNode> callArgs = node.getArguments();
 				Method method = JavaScriptValidations.selectMethod(
 						getContext(), methods, arguments);
 				if (method == null) {
@@ -758,7 +772,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (method.isDeprecated()) {
 					reportDeprecatedMethod(methodNode, reference, method);
 				}
-				if (!validateParameterCount(method, callArgs)) {
+				if (!validateParameterCount(method, node.getArguments())) {
 					reportMethodParameterError(methodNode, arguments, method);
 					return;
 				}
@@ -1308,8 +1322,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 		 * 
 		 * @return
 		 */
-		private boolean validateParameterCount(Method method,
-				List<ASTNode> callArgs) {
+		private boolean validateParameterCount(Method method, List<?> callArgs) {
 			final EList<Parameter> params = method.getParameters();
 			if (params.size() == callArgs.size()) {
 				return true;
