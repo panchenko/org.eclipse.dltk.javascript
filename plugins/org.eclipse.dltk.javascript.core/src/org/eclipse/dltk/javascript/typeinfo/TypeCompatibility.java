@@ -11,12 +11,18 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-public interface IRType {
+public enum TypeCompatibility {
+	TRUE, UNPARAMETERIZED, FALSE;
 
-	String getName();
+	public boolean ok() {
+		return this == TRUE;
+	}
 
-	TypeCompatibility isAssignableFrom(IRType type);
+	public static TypeCompatibility valueOf(boolean value) {
+		return value ? TRUE : FALSE;
+	}
 
-	ITypeSystem activeTypeSystem(ITypeSystem fallback);
-
+	public boolean after(TypeCompatibility value) {
+		return ordinal() > value.ordinal();
+	}
 }

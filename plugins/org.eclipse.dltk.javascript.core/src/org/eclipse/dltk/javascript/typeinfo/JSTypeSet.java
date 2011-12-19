@@ -285,19 +285,19 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			}
 		}
 
-		public boolean isAssignableFrom(IRType type) {
+		public TypeCompatibility isAssignableFrom(IRType type) {
 			if (type == UNDEFINED_TYPE || type == ANY_TYPE) {
-				return true;
+				return TypeCompatibility.TRUE;
 			} else if (type == NONE_TYPE) {
-				return false;
+				return TypeCompatibility.FALSE;
 			} else if (type instanceof UnionTypeKey) {
 				for (IRType part : ((UnionTypeKey) type).targets) {
-					if (isAssignableFrom(part)) {
-						return true;
+					if (isAssignableFrom(part).ok()) {
+						return TypeCompatibility.TRUE;
 					}
 				}
 			}
-			return false;
+			return TypeCompatibility.FALSE;
 		}
 
 		protected boolean isAssignableFrom(Type dest, Type src) {
@@ -357,25 +357,25 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		@Override
-		public boolean isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type)) {
-				return true;
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			if (super.isAssignableFrom(type).ok()) {
+				return TypeCompatibility.TRUE;
 			} else if (ITypeNames.OBJECT.equals(getName())) {
-				return true;
+				return TypeCompatibility.TRUE;
 			} else if (type instanceof SimpleTypeKey) {
 				final Type other = ((SimpleTypeKey) type).getTarget();
 				if (isAssignableFrom(this.type, other)) {
-					return true;
+					return TypeCompatibility.TRUE;
 				}
 				final Type genericType = GenericTypeReference
 						.dereference(this.type);
 				if (genericType != this.type) {
 					if (isAssignableFrom(genericType, other)) {
-						return true;
+						return TypeCompatibility.TRUE;
 					}
 				}
 			}
-			return false;
+			return TypeCompatibility.FALSE;
 		}
 	}
 
@@ -438,17 +438,18 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return false;
 		}
 
-		public boolean isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type)) {
-				return true;
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			if (super.isAssignableFrom(type).ok()) {
+				return TypeCompatibility.TRUE;
 			} else if (type instanceof ClassTypeKey) {
 				if (this.type == null) {
-					return true;
+					return TypeCompatibility.TRUE;
 				}
 				final Type other = ((ClassTypeKey) type).getTarget();
-				return other == null || isAssignableFrom(this.type, other);
+				return TypeCompatibility.valueOf(other == null
+						|| isAssignableFrom(this.type, other));
 			}
-			return false;
+			return TypeCompatibility.FALSE;
 		}
 
 	}
@@ -487,15 +488,17 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return false;
 		}
 
-		public boolean isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type)) {
-				return true;
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			if (super.isAssignableFrom(type).ok()) {
+				return TypeCompatibility.TRUE;
 			}
 			if (type instanceof ArrayTypeKey) {
-				return itemType
+				final TypeCompatibility compatibility = itemType
 						.isAssignableFrom(((ArrayTypeKey) type).itemType);
+				return compatibility == TypeCompatibility.TRUE ? compatibility
+						: TypeCompatibility.UNPARAMETERIZED;
 			} else {
-				return false;
+				return TypeCompatibility.FALSE;
 			}
 		}
 
@@ -536,15 +539,15 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return false;
 		}
 
-		public boolean isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type)) {
-				return true;
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			if (super.isAssignableFrom(type).ok()) {
+				return TypeCompatibility.TRUE;
 			}
 			if (type instanceof MapTypeKey) {
 				return valueType
 						.isAssignableFrom(((MapTypeKey) type).valueType);
 			}
-			return false;
+			return TypeCompatibility.FALSE;
 		}
 
 		public IRType getKeyType() {
@@ -566,8 +569,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		@Override
-		public boolean isAssignableFrom(IRType type) {
-			return true;
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			return TypeCompatibility.TRUE;
 		}
 
 	}
@@ -581,8 +584,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		@Override
-		public boolean isAssignableFrom(IRType type) {
-			return true;
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			return TypeCompatibility.TRUE;
 		}
 
 	}
@@ -596,8 +599,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return ITypeNames.UNDEFINED;
 		}
 
-		public boolean isAssignableFrom(IRType type) {
-			return type == this;
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			return TypeCompatibility.valueOf(type == this);
 		}
 
 	}
@@ -617,13 +620,13 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return sb.toString();
 		}
 
-		public boolean isAssignableFrom(IRType type) {
+		public TypeCompatibility isAssignableFrom(IRType type) {
 			for (IRType target : targets) {
-				if (target.isAssignableFrom(type)) {
-					return true;
+				if (target.isAssignableFrom(type).ok()) {
+					return TypeCompatibility.TRUE;
 				}
 			}
-			return false;
+			return TypeCompatibility.FALSE;
 		}
 
 		public Set<IRType> getTargets() {
@@ -737,9 +740,9 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return members.values();
 		}
 
-		public boolean isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type)) {
-				return true;
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			if (super.isAssignableFrom(type).ok()) {
+				return TypeCompatibility.TRUE;
 			}
 			if (type instanceof RecordTypeKey) {
 				final Map<String, IRRecordMember> others = ((RecordTypeKey) type).members;
@@ -747,23 +750,23 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 						.entrySet()) {
 					final IRRecordMember member = members.get(entry.getKey());
 					if (member == null) {
-						return false;
+						return TypeCompatibility.FALSE;
 					}
-					if (!member.getType().isAssignableFrom(
-							entry.getValue().getType())) {
-						return false;
+					if (!member.getType()
+							.isAssignableFrom(entry.getValue().getType()).ok()) {
+						return TypeCompatibility.FALSE;
 					}
 				}
 				for (Map.Entry<String, IRRecordMember> entry : members
 						.entrySet()) {
 					if (!entry.getValue().isOptional()
 							&& !others.containsKey(entry.getKey())) {
-						return false;
+						return TypeCompatibility.FALSE;
 					}
 				}
-				return true;
+				return TypeCompatibility.TRUE;
 			}
-			return false;
+			return TypeCompatibility.FALSE;
 		}
 
 		@Override
@@ -798,16 +801,17 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return ITypeNames.FUNCTION;
 		}
 
-		public boolean isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type)) {
-				return true;
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			if (super.isAssignableFrom(type).ok()) {
+				return TypeCompatibility.TRUE;
 			} else if (type instanceof FunctionTypeKey) {
-				return true;
+				return TypeCompatibility.TRUE;
 			} else if (type instanceof SimpleTypeKey) {
 				// TODO (alex) convert when creating type
-				return ITypeNames.FUNCTION.equals(type.getName());
+				return TypeCompatibility.valueOf(ITypeNames.FUNCTION
+						.equals(type.getName()));
 			} else {
-				return false;
+				return TypeCompatibility.FALSE;
 			}
 		}
 

@@ -79,6 +79,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
@@ -226,19 +227,23 @@ public class TypeInfoValidator implements IBuildParticipant {
 				IRType type = JavaScriptValidations
 						.typeOf(element.returnValueReference);
 
-				if (type != null && methodType != null
-						&& !methodType.isAssignableFrom(type)) {
-					ReturnStatement node = element.node;
-					visitor.getProblemReporter()
-							.reportProblem(
-									JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
-									NLS.bind(
-											ValidationMessages.DeclarationMismatchWithActualReturnType,
-											new String[] {
-													jsMethod.getName(),
-													TypeUtil.getName(methodType),
-													TypeUtil.getName(type) }),
-									node.sourceStart(), node.sourceEnd());
+				if (type != null && methodType != null) {
+					final TypeCompatibility compatibility = methodType
+							.isAssignableFrom(type);
+					if (compatibility != TypeCompatibility.TRUE) {
+						final ReturnStatement node = element.node;
+						visitor.getProblemReporter()
+								.reportProblem(
+										compatibility == TypeCompatibility.FALSE ? JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE
+												: JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE_PARAMETERIZATION,
+										NLS.bind(
+												ValidationMessages.DeclarationMismatchWithActualReturnType,
+												new String[] {
+														jsMethod.getName(),
+														TypeUtil.getName(methodType),
+														TypeUtil.getName(type) }),
+										node.sourceStart(), node.sourceEnd());
+					}
 				}
 
 				if (firstType == null && type != null) {
@@ -252,8 +257,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					IRType nextType = JavaScriptValidations
 							.typeOf(next.returnValueReference);
 					if (nextType != null
-							&& (!nextType.isAssignableFrom(firstType) && !firstType
-									.isAssignableFrom(nextType))) {
+							&& (!nextType.isAssignableFrom(firstType).ok() && !firstType
+									.isAssignableFrom(nextType).ok())) {
 						visitor.getProblemReporter()
 								.reportProblem(
 										JavaScriptProblems.RETURN_INCONSISTENT,
@@ -799,7 +804,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 				final List<IRParameter> parameters = RModelBuilder.convert(
 						getContext(), method.getParameters());
-				if (!validateParameters(parameters, arguments)) {
+				final TypeCompatibility compatibility = validateParameters(
+						parameters, arguments);
+				if (compatibility != TypeCompatibility.TRUE) {
 					String name = method.getName();
 					if (name == null) {
 						Identifier identifier = PropertyExpressionUtils
@@ -808,7 +815,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 							name = identifier.getName();
 					}
 					reporter.reportProblem(
-							JavaScriptProblems.WRONG_PARAMETERS,
+							compatibility == TypeCompatibility.FALSE ? JavaScriptProblems.WRONG_PARAMETERS
+									: JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION,
 							NLS.bind(
 									ValidationMessages.MethodNotApplicableInScript,
 									new String[] {
@@ -838,7 +846,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 										.sourceStart(), methodNode.sourceEnd());
 					}
 					List<IRParameter> parameters = method.getParameters();
-					if (!validateParameters(parameters, arguments)) {
+					final TypeCompatibility compatibility = validateParameters(
+							parameters, arguments);
+					if (compatibility != TypeCompatibility.TRUE) {
 						String name = method.getName();
 						if (name == null) {
 							Identifier identifier = PropertyExpressionUtils
@@ -846,9 +856,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 							if (identifier != null)
 								name = identifier.getName();
 						}
+						final IProblemIdentifier problemId;
+						if (method.isTyped()) {
+							if (compatibility == TypeCompatibility.FALSE) {
+								problemId = JavaScriptProblems.WRONG_PARAMETERS;
+							} else {
+								problemId = JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION;
+							}
+						} else {
+							problemId = JavaScriptProblems.WRONG_PARAMETERS_UNTYPED;
+						}
 						reporter.reportProblem(
-								method.isTyped() ? JavaScriptProblems.WRONG_PARAMETERS
-										: JavaScriptProblems.WRONG_PARAMETERS_UNTYPED,
+								problemId,
 								NLS.bind(
 										ValidationMessages.MethodNotApplicableInScript,
 										new String[] {
@@ -1056,18 +1075,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		private boolean validateParameters(List<IRParameter> parameters,
-				IValueReference[] arguments) {
+		private TypeCompatibility validateParameters(
+				List<IRParameter> parameters, IValueReference[] arguments) {
 			if (arguments.length > parameters.size()
 					&& !(parameters.size() > 0 && parameters.get(
 							parameters.size() - 1).getKind() == ParameterKind.VARARGS))
-				return false;
+				return TypeCompatibility.FALSE;
 			int testTypesSize = parameters.size();
 			if (parameters.size() > arguments.length) {
 				for (int i = arguments.length; i < parameters.size(); i++) {
 					final IRParameter p = parameters.get(i);
 					if (!p.isOptional() && !p.isVarargs())
-						return false;
+						return TypeCompatibility.FALSE;
 				}
 				testTypesSize = arguments.length;
 			} else if (parameters.size() < arguments.length) {
@@ -1075,6 +1094,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				testTypesSize = parameters.size() - 1;
 			}
 
+			TypeCompatibility result = TypeCompatibility.TRUE;
 			for (int i = 0; i < testTypesSize; i++) {
 				IValueReference argument = arguments[i];
 				IRParameter parameter = parameters.get(i);
@@ -1089,17 +1109,29 @@ public class TypeInfoValidator implements IBuildParticipant {
 							if (member.getType() != null) {
 								IValueReference child = argument
 										.getChild(member.getName());
-								if (!testArgumentType(member.getType(), child))
-									return false;
+								final TypeCompatibility pResult = testArgumentType(
+										member.getType(), child);
+								if (pResult.after(result)) {
+									if (pResult == TypeCompatibility.FALSE) {
+										return pResult;
+									}
+									result = pResult;
+								}
 							}
 						} else if (!member.isOptional()) {
-							return false;
+							return TypeCompatibility.FALSE;
 						}
 					}
 
 				} else {
-					if (!testArgumentType(parameter.getType(), argument))
-						return false;
+					final TypeCompatibility pResult = testArgumentType(
+							parameter.getType(), argument);
+					if (pResult.after(result)) {
+						if (pResult == TypeCompatibility.FALSE) {
+							return pResult;
+						}
+						result = pResult;
+					}
 				}
 			}
 			// test var args
@@ -1109,12 +1141,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 				for (int i = varargsParameter; i < arguments.length; i++) {
 					IValueReference argument = arguments[i];
-					if (!testArgumentType(paramType, argument))
-						return false;
+					final TypeCompatibility pResult = testArgumentType(
+							paramType, argument);
+					if (pResult.after(result)) {
+						if (pResult == TypeCompatibility.FALSE) {
+							return pResult;
+						}
+						result = pResult;
+					}
 				}
 
 			}
-			return true;
+			return result;
 		}
 
 		/**
@@ -1122,12 +1160,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 		 * @param argument
 		 * @return
 		 */
-		private boolean testArgumentType(IRType paramType,
+		private TypeCompatibility testArgumentType(IRType paramType,
 				IValueReference argument) {
 			if (argument != null && paramType != null) {
 				if (paramType instanceof IRRecordType) {
-					return testObjectPropertyType(argument,
-							(IRRecordType) paramType) == null;
+					return TypeCompatibility.valueOf(testObjectPropertyType(
+							argument, (IRRecordType) paramType) == null);
 				}
 
 				IRType argumentType = argument.getDeclaredType();
@@ -1138,7 +1176,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					return paramType.isAssignableFrom(argumentType);
 				}
 			}
-			return true;
+			return TypeCompatibility.TRUE;
 		}
 
 		/**
@@ -1152,7 +1190,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				IRType referenceType = JavaScriptValidations.typeOf(child);
 				if (!child.exists()
 						|| !(referenceType != null && member.getType() != null && member
-								.getType().isAssignableFrom(referenceType))) {
+								.getType().isAssignableFrom(referenceType).ok())) {
 					Set<String> children = reference.getDirectChildren();
 					if (children.size() == 0)
 						return "{}";

@@ -28,6 +28,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -138,7 +139,7 @@ public class JavaScriptValidations {
 		Method argCountMatches = null;
 		for (Method method : methods) {
 			if (method.getParameters().size() == arguments.length) {
-				boolean match = true;
+				TypeCompatibility match = TypeCompatibility.TRUE;
 				EList<Parameter> parameters = method.getParameters();
 				for (int i = 0; i < parameters.size(); i++) {
 					JSType parameterType = parameters.get(i).getType();
@@ -149,10 +150,10 @@ public class JavaScriptValidations {
 						continue;
 					match = JSTypeSet.normalize(context, parameterType)
 							.isAssignableFrom(argumentType);
-					if (!match)
+					if (match == TypeCompatibility.FALSE)
 						break;
 				}
-				if (match) {
+				if (match == TypeCompatibility.TRUE) {
 					argCountMatches = method;
 					break;
 				}
