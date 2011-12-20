@@ -366,13 +366,23 @@ public class JSDocSupport implements IModelBuilder {
 							paramName);
 					continue;
 				}
-				final IParameter parameter = method.getParameter(paramName);
+				IParameter parameter = method.getParameter(paramName);
 				if (parameter != null) {
 					if (!pp.optional && st.hasMoreTokens()
 							&& st.nextToken().equals("optional")) {
 						pp.optional = true;
 					}
 					updateParameter(tag, parameter, pp, reporter, typeChecker);
+				} else if (pp.varargs) {
+					/*
+					 * create virtual parameter for varargs as most of the time
+					 * passed values are accessed via "arguments" object and
+					 * parameter declaration in code is not required.
+					 */
+					parameter = method.createParameter();
+					parameter.setName(paramName);
+					updateParameter(tag, parameter, pp, reporter, typeChecker);
+					method.getParameters().add(parameter);
 				} else {
 					++problemCount;
 					reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM, tag,
