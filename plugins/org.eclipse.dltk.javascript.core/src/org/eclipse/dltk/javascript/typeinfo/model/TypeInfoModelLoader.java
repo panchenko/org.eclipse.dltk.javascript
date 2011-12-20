@@ -42,7 +42,11 @@ public class TypeInfoModelLoader {
 	}
 
 	public Type getType(String typeName) {
-		return resourceSet.getType(typeName);
+		return getType(typeName, false);
+	}
+
+	public Type getType(String typeName, boolean all) {
+		return resourceSet.getType(typeName, all);
 	}
 
 	public String translateTypeName(String typeName) {

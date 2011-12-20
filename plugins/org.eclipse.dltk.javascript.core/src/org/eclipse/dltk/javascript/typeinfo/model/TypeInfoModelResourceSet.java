@@ -24,7 +24,7 @@ public class TypeInfoModelResourceSet extends ResourceSetImpl {
 	public EObject getEObject(URI uri, boolean loadOnDemand) {
 		if (TypeUtil.isTypeProxy(uri)) {
 			final String typeName = URI.decode(uri.fragment());
-			final Type type = getType(typeName);
+			final Type type = getType(typeName, true);
 			if (type != null) {
 				return type;
 			}
@@ -44,12 +44,13 @@ public class TypeInfoModelResourceSet extends ResourceSetImpl {
 		return resources.toArray(new Resource[resources.size()]);
 	}
 
-	Type getType(String typeName) {
+	Type getType(String typeName, boolean all) {
 		for (Resource resource : resources()) {
 			for (EObject object : resource.getContents()) {
 				if (object instanceof Type) {
 					final Type type = (Type) object;
-					if (type.isVisible() && typeName.equals(type.getName())) {
+					if ((all || type.isVisible())
+							&& typeName.equals(type.getName())) {
 						return type;
 					}
 				}
