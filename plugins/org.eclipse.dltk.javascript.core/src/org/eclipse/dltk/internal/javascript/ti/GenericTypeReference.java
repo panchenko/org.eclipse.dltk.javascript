@@ -11,16 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 
 public class GenericTypeReference extends AdapterImpl {
 
-	private final GenericType genericType;
+	private final Type genericType;
 
-	public GenericTypeReference(GenericType genericType) {
+	public GenericTypeReference(Type genericType) {
 		this.genericType = genericType;
 	}
 
