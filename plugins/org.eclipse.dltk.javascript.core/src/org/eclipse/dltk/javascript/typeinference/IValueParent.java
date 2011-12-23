@@ -22,11 +22,11 @@ public interface IValueParent {
 	boolean hasChild(String name);
 
 	/**
-	 * Finds the child with the specified name.
+	 * Returns the handle of the child with the specified name. Not null,
+	 * however the handle might reference to not existing child.
 	 * 
 	 * @param name
-	 * @return the child found or <code>null</code> if there is no child with
-	 *         such name
+	 * @return the handle of the child with specified name.
 	 */
 	IValueReference getChild(String name);
 
