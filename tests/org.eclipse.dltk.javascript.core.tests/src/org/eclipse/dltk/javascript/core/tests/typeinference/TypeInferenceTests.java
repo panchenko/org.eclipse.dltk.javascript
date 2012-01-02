@@ -1128,5 +1128,18 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IRType type = JavaScriptValidations.typeOf(child);
 		assertEquals(JSTypeSet.arrayOf(JSTypeSet.ref(ITypeNames.STRING)), type);
 	}
+	
+	public void testArrayInRecordTypeVariableLookup() {
+		StringList code = new StringList();
+		code.add("/** @type {{layout_id:String,panels:Array<{foundset:String, index:Number, selectedTab:Number, view:Number}>}} */");
+		code.add("var vInfoObject = null;");
+		code.add("var panel = vInfoObject.panels[0];");
+		code.add("var fs =  panel.foundset;");
+		IValueCollection collection = inference(code.toString());
+		IValueReference child = collection.getChild("fs");
+		IRType type = JavaScriptValidations.typeOf(child);
+		assertEquals(JSTypeSet.ref(ITypeNames.STRING), type);
+	}
+
 
 }
