@@ -61,6 +61,12 @@ public abstract class ElementValue implements IValue {
 
 	public static ElementValue findMember(ITypeSystem context, IRType type,
 			String name, MemberPredicate predicate) {
+		if (IValueReference.ARRAY_OP.equals(name)) {
+			IRType arrayType = TypeUtil.extractArrayItemType(type);
+			if (arrayType != null) {
+				return new TypeValue(context, arrayType);
+			}
+		}
 		final Type t = TypeUtil.extractType(context, type);
 		if (t != null) {
 			final List<Member> selection = findMembers(t, name, predicate);
