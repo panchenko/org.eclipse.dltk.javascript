@@ -244,18 +244,19 @@ public class ImmutableValue implements IValue, IValue2 {
 	}
 
 	protected IValue findMember(String name, boolean resolve) {
-
 		IValue value = null;
 		if (elementValues != null)
 			value = elementValues.get(name);
-		if (value == null) {
+		if (value == null && (declaredType != null || !types.isEmpty())) {
 			final ITypeSystem typeSystem = getTypeSystem();
-			value = ElementValue.findMember(typeSystem, declaredType, name);
-			if (value != null) {
-				if (elementValues == null)
-					elementValues = new HashMap<String, IValue>(4, 0.9f);
-				elementValues.put(name, value);
-				return value;
+			if (declaredType != null) {
+				value = ElementValue.findMember(typeSystem, declaredType, name);
+				if (value != null) {
+					if (elementValues == null)
+						elementValues = new HashMap<String, IValue>(4, 0.9f);
+					elementValues.put(name, value);
+					return value;
+				}
 			}
 			for (IRType type : types) {
 				value = ElementValue.findMember(typeSystem, type, name);
