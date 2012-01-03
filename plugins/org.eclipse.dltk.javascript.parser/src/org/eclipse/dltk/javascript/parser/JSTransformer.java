@@ -174,7 +174,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	private ASTNode transformNode(Tree node, ASTNode parent) {
-		checkRecursionDepth();
 		parents.push(parent);
 		try {
 			checkRecursionDepth();
