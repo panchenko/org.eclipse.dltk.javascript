@@ -666,9 +666,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		testKeyword(node.getFunctionKeyword());
 		for (Argument argument : node.getArguments()) {
 			visit(argument.getIdentifier());
-			if (argument.getColonPosition() != -1) {
-				testChar(':', argument.getColonPosition());
-			}
 			if (argument.getCommaPosition() != -1) {
 				testChar(',', argument.getCommaPosition());
 			}
