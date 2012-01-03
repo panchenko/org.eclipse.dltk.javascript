@@ -17,7 +17,6 @@ import org.eclipse.dltk.ast.ASTVisitor;
 public class Argument extends JSNode implements ISourceable {
 
 	private Identifier identifier;
-	private int colonPosition = -1;
 	private int commaPosition = -1;
 
 	public Argument(ASTNode parent) {
@@ -34,14 +33,6 @@ public class Argument extends JSNode implements ISourceable {
 
 	public void setIdentifier(Identifier identifier) {
 		this.identifier = identifier;
-	}
-
-	public int getColonPosition() {
-		return colonPosition;
-	}
-
-	public void setColonPosition(int colonPosition) {
-		this.colonPosition = colonPosition;
 	}
 
 	/**
