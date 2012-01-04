@@ -1314,21 +1314,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (argument == null) {
 					sb.append("null");
 				} else if (parameter != null
-						&& parameter.getType() instanceof RecordType) {
-					Set<String> directChildren = argument.getDirectChildren();
-					sb.append('{');
-					for (String childName : directChildren) {
-						if (sb.length() > 1)
-							sb.append(", ");
-						sb.append(childName);
-						IRType type = JavaScriptValidations.typeOf(argument
-								.getChild(childName));
-						if (type != null) {
-							sb.append(':');
-							sb.append(type.getName());
-						}
-					}
-					sb.append('}');
+						&& parameter.getType() instanceof IRRecordType) {
+					describeRecordType(sb, argument,
+							(IRRecordType) parameter.getType());
 				} else if (argument.getDeclaredType() != null) {
 					sb.append(argument.getDeclaredType().getName());
 				} else {
@@ -1341,6 +1329,49 @@ public class TypeInfoValidator implements IBuildParticipant {
 				}
 			}
 			return sb.toString();
+		}
+
+		private void describeRecordType(StringBuilder sb,
+				IValueReference argument, IRRecordType paramType) {
+			Set<String> directChildren = argument.getDirectChildren();
+			sb.append('{');
+			boolean appendComma = false;
+			for (String childName : directChildren) {
+				if (appendComma)
+					sb.append(", ");
+				appendComma = true;
+				sb.append(childName);
+
+				IRType memberType = null;
+				if (paramType != null) {
+					for (IRRecordMember member : paramType.getMembers()) {
+						if (member.getName().equals(childName)) {
+							memberType = member.getType();
+							break;
+						}
+					}
+				}
+				if (memberType instanceof IRRecordType) {
+					sb.append(": ");
+					describeRecordType(sb, argument.getChild(childName),
+							(IRRecordType) memberType);
+				} else {
+					IValueReference child = argument.getChild(childName);
+					IRType type = JavaScriptValidations.typeOf(child);
+					if (type != null) {
+						if (paramType != null
+								&& type.getName().equals(ITypeNames.OBJECT)
+								&& !child.getDirectChildren().isEmpty()) {
+							sb.append(": ");
+							describeRecordType(sb, child, null);
+						} else {
+							sb.append(':');
+							sb.append(type.getName());
+						}
+					}
+				}
+			}
+			sb.append('}');
 		}
 
 		private <E extends Member> E extractElement(IValueReference reference,
