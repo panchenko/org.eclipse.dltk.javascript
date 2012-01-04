@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.parser.tests;
 import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 
 public class FunctionDeclarationTests extends AbstractJSParserTest {
 
@@ -76,6 +77,23 @@ public class FunctionDeclarationTests extends AbstractJSParserTest {
 		final FunctionStatement func = uniqueResult(ASTUtil.select(script,
 				FunctionStatement.class));
 		assertTrue(func.isInlineBlock());
+	}
+
+	public void testScopeDeclarations() {
+		Script script = parse("function test() { var x=1; function y() {} }");
+		assertFalse(reporter.hasErrors());
+		assertEquals(1, script.getDeclarations().size());
+		final FunctionStatement func = ASTUtil.select(script,
+				FunctionStatement.class).get(0);
+		assertEquals("test", func.getFunctionName());
+		assertSame(func, script.getDeclarations().get(0));
+		assertEquals(2, func.getDeclarations().size());
+		assertEquals("x",
+				((VariableDeclaration) func.getDeclarations().get(0))
+						.getVariableName());
+		assertEquals("y",
+				((FunctionStatement) func.getDeclarations().get(1))
+						.getFunctionName());
 	}
 
 }
