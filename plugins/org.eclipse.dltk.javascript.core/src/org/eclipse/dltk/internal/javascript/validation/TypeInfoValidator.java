@@ -1192,7 +1192,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				IValueReference child = reference.getChild(member.getName());
 				IRType referenceType = JavaScriptValidations.typeOf(child);
 				if (!child.exists()
-						|| !(referenceType != null && member.getType() != null && member
+						|| (referenceType != null && member.getType() != null && !member
 								.getType().isAssignableFrom(referenceType).ok())) {
 					Set<String> children = reference.getDirectChildren();
 					if (children.size() == 0)
