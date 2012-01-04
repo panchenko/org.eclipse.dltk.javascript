@@ -1988,5 +1988,12 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testArrayLookupWithUnknowVariables() {
+		final StringList code = new StringList();
+		code.add("var vAvailableLicenses = exampleForms.nothere[exampleForms.nothere2].nothere.nothere;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 2, problems.size());
+	}
 
 }
