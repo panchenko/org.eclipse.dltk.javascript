@@ -44,7 +44,6 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
-import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
@@ -1020,18 +1019,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		private boolean isArrayLookup(ASTNode expression) {
-			ASTNode walker = expression;
-			while (walker != null) {
-				if (walker instanceof GetArrayItemExpression)
-					return true;
-				if (walker instanceof PropertyExpression) {
-					if (((PropertyExpression) walker).getObject() instanceof GetArrayItemExpression)
-						return true;
-				}
-				if (walker instanceof JSNode) {
-					walker = ((JSNode) walker).getParent();
-				} else
-					return false;
+			if (expression instanceof GetArrayItemExpression)
+				return true;
+			if (expression instanceof PropertyExpression) {
+				return isArrayLookup(((PropertyExpression) expression)
+						.getObject());
 			}
 			return false;
 		}
