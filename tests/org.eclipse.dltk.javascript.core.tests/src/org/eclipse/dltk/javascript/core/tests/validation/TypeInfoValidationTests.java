@@ -1952,4 +1952,16 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
+	
+	public void testRecordTypeParamCalledWithAnNullButDeclaredArgumentValue() {
+		final StringList code = new StringList();
+		code.add("/** @type {Object<{icon:String,color:String}>} */");
+		code.add("var statusCodes = { ok: {icon: 'media:///check.png', color: null}, fail: {icon: 'media:///16forbidden.png', color: 'red'}, maybe: {icon: 'media:///check_orange.png', color: 'orange'}}");
+		code.add("/** @param {{code: {icon:String,color:String}=, text: String|XML=, toolTip: String=}} object */");
+		code.add("function onLoad(object) {");
+		code.add("onLoad({code:statusCodes.ok});"); 
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
