@@ -1964,4 +1964,29 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testRecordTypeParamWithCompletelyDifferentArgumentRecordType() {
+		final StringList code = new StringList();
+		code.add("/** @type {Object<{icon:String,color:String}>} */");
+		code.add("var statusCodes = { ok: {icon: 'media:///check.png', color: null}, fail: {icon: 'media:///16forbidden.png', color: 'red'}, maybe: {icon: 'media:///check_orange.png', color: 'orange'}}");
+		code.add("/** @param {{code: {icon:String,color:String}=, text: String|XML=, toolTip: String=}} object */");
+		code.add("function onLoad(object) {");
+		code.add("onLoad(statusCodes.ok);"); 
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
+
+	public void testRecordTypeParamWithPartiallyDifferentArgumentRecordType() {
+		final StringList code = new StringList();
+		code.add("/** @type {Object<{icon:String,color:String}>} */");
+		code.add("var statusCodes = { ok: {icon: 'media:///check.png', color: null}, fail: {icon: 'media:///16forbidden.png', color: 'red'}, maybe: {icon: 'media:///check_orange.png', color: 'orange'}}");
+		code.add("/** @param {{code: {icon:String,color:String}=, text: String|XML=, toolTip: String=}} object */");
+		code.add("function onLoad(object) {");
+		code.add("onLoad({code:statusCodes.ok,notinparamtype:1});"); 
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 }
