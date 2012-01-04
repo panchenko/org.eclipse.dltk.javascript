@@ -22,7 +22,7 @@ import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
 public class FunctionStatement extends Expression implements ISourceableBlock,
-		Documentable {
+		Documentable, JSDeclaration, JSScope {
 
 	private Keyword functionKeyword;
 	private Identifier name;
@@ -33,6 +33,7 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 	private int colonPosition = -1;
 	private Comment documentation;
 	private final boolean declaration;
+	private List<JSDeclaration> declarations;
 
 	public FunctionStatement(ASTNode parent, boolean declaration) {
 		super(parent);
@@ -75,6 +76,10 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 
 	public void setName(Identifier name) {
 		this.name = name;
+	}
+
+	public Identifier getIdentifier() {
+		return name;
 	}
 
 	public String getFunctionName() {
@@ -217,5 +222,17 @@ public class FunctionStatement extends Expression implements ISourceableBlock,
 			}
 		}
 		return false;
+	}
+
+	public void addDeclaration(JSDeclaration declaration) {
+		if (declarations == null) {
+			declarations = new ArrayList<JSDeclaration>();
+		}
+		declarations.add(declaration);
+	}
+
+	public List<JSDeclaration> getDeclarations() {
+		return declarations != null ? declarations : Collections
+				.<JSDeclaration> emptyList();
 	}
 }

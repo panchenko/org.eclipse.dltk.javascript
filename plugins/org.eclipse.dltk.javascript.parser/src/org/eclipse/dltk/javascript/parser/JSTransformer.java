@@ -118,7 +118,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	private final boolean ignoreUnknown;
 	private final Map<Integer, Comment> documentationMap = new HashMap<Integer, Comment>();
 	private Reporter reporter;
-	private SymbolTable scope = new SymbolTable();
+	private SymbolTable scope;
 
 	private static final int MAX_RECURSION_DEPTH = 512;
 
@@ -151,6 +151,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		if (tree == null)
 			return new Script();
 		final Script script = new Script();
+		scope = new SymbolTable(script);
 		addComments(script);
 		if (tree.getType() != 0) {
 			script.addStatement(transformStatementNode(tree, script));
@@ -203,9 +204,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	private int getTokenOffset(int tokenIndex) {
-		Assert.isTrue(tokenOffsets != null);
-		Assert.isTrue(tokenIndex >= -1 && tokenIndex < tokenOffsets.length);
-
 		return tokenOffsets[tokenIndex];
 	}
 
@@ -721,7 +719,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		fn.setLP(getTokenOffset(JSParser.LPAREN, node.getTokenStartIndex() + 1,
 				argsNode.getTokenStartIndex()));
-		final SymbolTable functionScope = new SymbolTable();
+		final SymbolTable functionScope = new SymbolTable(fn);
 		for (int i = 0, childCount = argsNode.getChildCount(); i < childCount; ++i) {
 			final Tree argNode = argsNode.getChild(i);
 			Argument argument = transformArgument(argNode, fn);
@@ -744,8 +742,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 				node.getChild(index).getTokenStartIndex()));
 		final Identifier nameNode = fn.getName();
 		if (fn.isDeclaration() && nameNode != null) {
-			final SymbolKind replaced = scope.add(fn.getName().getName(),
-					SymbolKind.FUNCTION);
+			final SymbolKind replaced = scope.add(nameNode.getName(),
+					SymbolKind.FUNCTION, fn);
 			if (replaced != null && reporter != null) {
 				if (replaced == SymbolKind.FUNCTION) {
 					reporter.setFormattedMessage(
@@ -1057,7 +1055,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 								.getTokenStartIndex()));
 			}
 			final SymbolKind replaced = scope.add(
-					declaration.getVariableName(), kind);
+					declaration.getVariableName(), kind, declaration);
 			if (replaced != null && reporter != null) {
 				final Identifier identifier = declaration.getIdentifier();
 				reporter.setRange(identifier.sourceStart(),

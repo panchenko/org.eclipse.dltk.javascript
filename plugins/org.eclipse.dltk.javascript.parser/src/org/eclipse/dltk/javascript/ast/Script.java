@@ -19,10 +19,12 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
-public class Script extends ASTNode implements ISourceable, IModuleDeclaration {
+public class Script extends ASTNode implements ISourceable, IModuleDeclaration,
+		JSScope {
 
 	private final List<Comment> comments = new ArrayList<Comment>();
 	private final List<Statement> statements = new ArrayList<Statement>();
+	private final List<JSDeclaration> declarations = new ArrayList<JSDeclaration>();
 
 	public String toSourceString(String indentationString) {
 
@@ -74,5 +76,13 @@ public class Script extends ASTNode implements ISourceable, IModuleDeclaration {
 			}
 			visitor.endvisit(this);
 		}
+	}
+
+	public void addDeclaration(JSDeclaration declaration) {
+		this.declarations.add(declaration);
+	}
+
+	public List<JSDeclaration> getDeclarations() {
+		return declarations;
 	}
 }

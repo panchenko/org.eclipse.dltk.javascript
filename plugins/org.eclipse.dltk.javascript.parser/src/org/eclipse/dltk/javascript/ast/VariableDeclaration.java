@@ -15,7 +15,8 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
-public class VariableDeclaration extends JSNode implements ISourceable {
+public class VariableDeclaration extends JSNode implements ISourceable,
+		JSDeclaration {
 
 	private Identifier identifier;
 	private int colonPosition = -1;

@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.ast.JSDeclaration;
+import org.eclipse.dltk.javascript.ast.JSScope;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 
 public class SymbolTable {
@@ -23,11 +25,24 @@ public class SymbolTable {
 
 	private final Set<String> labels = new HashSet<String>();
 
+	private final JSScope scope;
+
+	public SymbolTable(JSScope scope) {
+		this.scope = scope;
+	}
+
 	public SymbolKind canAdd(String name) {
 		return symbols.get(name);
 	}
 
 	public SymbolKind add(String name, SymbolKind kind) {
+		return add(name, kind, null);
+	}
+
+	public SymbolKind add(String name, SymbolKind kind, JSDeclaration node) {
+		if (node != null) {
+			scope.addDeclaration(node);
+		}
 		SymbolKind prev = symbols.get(name);
 		if (prev != null) {
 			return prev;
