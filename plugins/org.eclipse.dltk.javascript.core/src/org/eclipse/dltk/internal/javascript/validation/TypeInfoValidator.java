@@ -1104,11 +1104,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (parameter.getType() instanceof IRRecordType
 						&& argument != null
 						&& !(argument.getDeclaredType() instanceof IRRecordType)) {
+					boolean oneHit = false;
 					Set<String> argumentsChildren = argument
 							.getDirectChildren();
 					for (IRRecordMember member : ((IRRecordType) parameter
 							.getType()).getMembers()) {
 						if (argumentsChildren.contains(member.getName())) {
+							oneHit = true;
 							if (member.getType() != null) {
 								IValueReference child = argument
 										.getChild(member.getName());
@@ -1125,7 +1127,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 							return TypeCompatibility.FALSE;
 						}
 					}
-
+					if (!oneHit)
+						return TypeCompatibility.FALSE;
 				} else {
 					final TypeCompatibility pResult = testArgumentType(
 							parameter.getType(), argument);
