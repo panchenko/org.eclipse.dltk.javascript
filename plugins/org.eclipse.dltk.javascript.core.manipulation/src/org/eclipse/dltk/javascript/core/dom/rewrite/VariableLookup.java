@@ -157,7 +157,7 @@ public abstract class VariableLookup extends DomSwitch<Boolean> {
 	}
 	public static Set<String> getVisibleNames(Node node) {
 		final Set<String> result = new HashSet<String>();
-		final Boolean[] reportDecls = new Boolean[]{true};
+		final boolean[] reportDecls = new boolean[]{true};
 		VariableLookup lookup = new VariableLookup() {
 			@Override
 			protected void reportDeclaration(Identifier decl) {
