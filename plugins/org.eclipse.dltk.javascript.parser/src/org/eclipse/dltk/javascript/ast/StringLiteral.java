@@ -49,18 +49,7 @@ public class StringLiteral extends Expression implements Documentable {
 	 * @return
 	 */
 	public String getValue() {
-		if (text != null) {
-			final int len = text.length();
-			if (len >= 2) {
-				final char ch0 = text.charAt(0);
-				if (ch0 == '"' || ch0 == '\'') {
-					if (text.charAt(len - 1) == ch0) {
-						return text.substring(1, len - 1);
-					}
-				}
-			}
-		}
-		return text;
+		return text != null ? valueOf(text) : null;
 	}
 
 	public void setText(String text) {
@@ -84,6 +73,19 @@ public class StringLiteral extends Expression implements Documentable {
 
 	public void setDocumentation(Comment documentation) {
 		this.documentation = documentation;
+	}
+
+	public static String valueOf(String text) {
+		final int len = text.length();
+		if (len >= 2) {
+			final char ch0 = text.charAt(0);
+			if (ch0 == '"' || ch0 == '\'') {
+				if (text.charAt(len - 1) == ch0) {
+					return text.substring(1, len - 1);
+				}
+			}
+		}
+		return text;
 	}
 
 }
