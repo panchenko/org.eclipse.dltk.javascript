@@ -1091,7 +1091,8 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			}
 		}
 		if (!commas.isEmpty()
-				&& commas.size() >= initializer.getInitializers().size()) {
+				&& commas.size() >= initializer.getInitializers().size()
+				&& reporter != null) {
 			reporter.setMessage(JavaScriptParserProblems.TRAILING_COMMA_OBJECT_INITIALIZER);
 			final int comma = commas.get(commas.size() - 1);
 			reporter.setRange(comma, comma + 1);
