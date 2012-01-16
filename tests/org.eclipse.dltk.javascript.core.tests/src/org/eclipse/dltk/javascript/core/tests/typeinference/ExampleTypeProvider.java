@@ -48,7 +48,16 @@ public class ExampleTypeProvider implements ITypeProvider {
 	}
 
 	public Type getType(ITypeInfoContext context, TypeMode mode, String typeName) {
-		if (TYPE_SERVICE.equals(typeName)) {
+		if (typeName.equals("Continuation"))
+		{
+			Type type = TypeInfoModelFactory.eINSTANCE.createType();
+			type.setName(typeName);
+			type.setKind(TypeKind.JAVASCRIPT);
+			type.setSuperType(context.getKnownType("Function", mode));
+			context.markInvariant(type);
+			return type;
+		}
+		else if (TYPE_SERVICE.equals(typeName)) {
 			Type type = TypeInfoModelFactory.eINSTANCE.createType();
 			type.setName(typeName);
 			type.setKind(TypeKind.JAVA);

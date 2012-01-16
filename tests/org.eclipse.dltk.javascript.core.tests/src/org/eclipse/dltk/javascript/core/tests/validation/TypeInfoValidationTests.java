@@ -1995,5 +1995,21 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 2, problems.size());
 	}
+	
+	public void testContinationAsFunctionCall() {
+		final StringList code = new StringList();
+		code.add("var c = new Continuation();");
+		code.add("c();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testObjectAsFunctionCall() {
+		final StringList code = new StringList();
+		code.add("var c = new Object();");
+		code.add("c();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+	}
 
 }
