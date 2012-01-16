@@ -89,7 +89,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
-import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -914,14 +913,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					} else {
 						IRType referenceType = JavaScriptValidations
 								.typeOf(reference);
-						if (referenceType instanceof SimpleType) {
-							Type t = ((SimpleType) referenceType).getTarget();
-							while (t != null) {
-								if (t.getName().equals(ITypeNames.FUNCTION)) {
-									return;
-								}
-								t = t.getSuperType();
-							}
+						if (functionTypeRef.isAssignableFrom(referenceType) == TypeCompatibility.TRUE) {
+							return;
 						}
 						if (expression instanceof NewExpression) {
 							if (reference.getKind() == ReferenceKind.TYPE) {
