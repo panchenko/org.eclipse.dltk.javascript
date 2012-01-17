@@ -1452,17 +1452,22 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	@Override
 	protected ASTNode visitNew(Tree node) {
-
-		NewExpression expression = new NewExpression(getParent());
-
+		final NewExpression expression = new NewExpression(getParent());
 		expression.setNewKeyword(createKeyword(node, Keywords.NEW));
-
-		expression.setObjectClass(transformExpression(node.getChild(0),
-				expression));
-
+		final Tree expressionTree = node.getChild(0);
+		if (expressionTree != null) {
+			expression.setObjectClass(transformExpression(expressionTree,
+					expression));
+		} else {
+			final ErrorExpression error = new ErrorExpression(expression,
+					Util.EMPTY_STRING);
+			final int pos = expression.getNewKeyword().sourceEnd();
+			error.setStart(pos);
+			error.setEnd(pos);
+			expression.setObjectClass(error);
+		}
 		expression.setStart(getTokenOffset(node.getTokenStartIndex()));
 		expression.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-
 		return expression;
 	}
 
