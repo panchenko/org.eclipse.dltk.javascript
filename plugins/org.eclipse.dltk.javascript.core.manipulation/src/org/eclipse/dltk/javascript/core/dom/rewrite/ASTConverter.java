@@ -118,9 +118,11 @@ public class ASTConverter extends ASTVisitor<Node> {
 		if (node == null)
 			return null;
 		Node res = super.visit(node);
-		if (res.getBegin() == -1)
-			res.setBegin(node.sourceStart());
-		res.setEnd(node.sourceEnd());
+		if (res != null) {
+			if (res.getBegin() == -1)
+				res.setBegin(node.sourceStart());
+			res.setEnd(node.sourceEnd());
+		}
 		return res;
 	}
 
