@@ -342,6 +342,7 @@ public class Generator extends DomSwitch<StringBuilder> {
 			generate(decl);
 			first = false;
 		}
+		sb.append(';'); // TODO (alex) conditionally add semicolons for other statements;
 		return sb;
 	}
 	@Override
