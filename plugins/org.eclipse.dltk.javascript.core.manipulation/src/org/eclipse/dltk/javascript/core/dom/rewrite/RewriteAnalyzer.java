@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.core.dom.Statement;
 import org.eclipse.dltk.javascript.core.dom.TryStatement;
 import org.eclipse.dltk.javascript.core.dom.UnaryExpression;
 import org.eclipse.dltk.javascript.core.dom.UnaryOperator;
+import org.eclipse.dltk.javascript.core.dom.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.dom.util.DomSwitch;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -280,22 +281,49 @@ public class RewriteAnalyzer extends DomSwitch<Boolean> {
 		}
 		return -1;
 	}
+
+	private static abstract class NodeSeparator {
+		public abstract void appendTo(Generator gen);
+	}
+
+	static NodeSeparator NEWLINE = new NodeSeparator() {
+		@Override
+		public void appendTo(Generator gen) {
+			gen.newLine();
+		}
+	};
+
+	static NodeSeparator COMMA = new NodeSeparator() {
+		@Override
+		public void appendTo(Generator gen) {
+			gen.append(",");
+		}
+	};
+
+	static NodeSeparator COMMA_NEWLINE = new NodeSeparator() {
+		@Override
+		public void appendTo(Generator gen) {
+			gen.append(",");
+			gen.newLine();
+		}
+	};	
+
 	public String generateElement(Node node,boolean first,boolean last,int pos) {
 		Generator gen = new Generator(cd, text, pos, lineDelimiter);
+		final NodeSeparator separator;
 		if (node instanceof Statement) {
-			if (!first && last)
-				gen.newLine();
-			gen.generate(node);
-			if (!last)
-				gen.newLine();
-			generated.add(node);
-			return gen.toString();
+			separator = NEWLINE;
+		} else if (node instanceof VariableDeclaration
+				&& ((VariableDeclaration) node).getInitializer() != null) {
+			separator = COMMA_NEWLINE;
+		} else {
+			separator = COMMA;
 		}
 		if (!first && last)
-			gen.append(",");
+			separator.appendTo(gen);
 		gen.generate(node);
 		if (!last)
-			gen.append(",");
+			separator.appendTo(gen);
 		generated.add(node);
 		return gen.toString();
 	}
