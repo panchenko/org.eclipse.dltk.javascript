@@ -27,6 +27,16 @@ public class NodeFinder extends ASTVisitor {
 	final int start;
 	final int end;
 
+	public NodeFinder(int position) {
+		this(position, position);
+	}
+
+	public NodeFinder(int s, int e) {
+		this.start = s;
+		this.end = e;
+	}
+
+	@Deprecated
 	public NodeFinder(String content, int s, int e) {
 		this.start = s;
 		this.end = e;
@@ -81,11 +91,12 @@ public class NodeFinder extends ASTVisitor {
 		}
 	}
 
-	public void locate(Script script) {
+	public NodeFinder locate(Script script) {
 		if (!traverse(script)) {
 			before = null;
 			after = null;
 		}
+		return this;
 	}
 
 	public ASTNode getNode() {

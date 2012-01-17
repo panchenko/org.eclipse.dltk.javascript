@@ -81,8 +81,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		inferencer2.setModelElement(cu.getModelElement());
 
 		final Script script = JavaScriptParserUtil.parse(cu, null);
-		final NodeFinder nodeFinder = new NodeFinder(content, position,
-				position);
+		final NodeFinder nodeFinder = new NodeFinder(position, position);
 		nodeFinder.locate(script);
 		if (nodeFinder.getNode() instanceof StringLiteral) {
 			// don't complete inside string literals
@@ -417,7 +416,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					proposalKind, position);
 
 			int relevance = computeBaseRelevance();
-			relevance += computeRelevanceForInterestingProposal();
+			// relevance += computeRelevanceForInterestingProposal();
 			relevance += computeRelevanceForCaseMatching(prefix,
 					reference.getName());
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);

@@ -111,7 +111,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		}
 		final Script script = JavaScriptParserUtil.parse(module, null);
 
-		NodeFinder finder = new NodeFinder(content, position, i + 1);
+		NodeFinder finder = new NodeFinder(position, i + 1);
 		finder.locate(script);
 		ASTNode node = finder.getNode();
 		if (node != null) {
