@@ -42,7 +42,8 @@ public class XmlLiteralTokenTests extends AbstractJSParserTest {
 	}
 
 	protected List<Token> tokenize(final String code) {
-		final JSTokenStream stream = JavaScriptParser.createTokenStream(code);
+		final JSTokenStream stream = new JavaScriptParser()
+				.createTokenStream(code);
 		new TestParser().parse(null, stream, TextUtils.createLineTracker(code),
 				reporter);
 		return stream.getTokens();
