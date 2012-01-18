@@ -25,7 +25,7 @@ public class ANTLRTokenStreamComparer {
 
 	private static List<String> getTokens(String source, List<String> comments) {
 
-		JSTokenStream stream = JavaScriptParser.createTokenStream(source);
+		JSTokenStream stream = new JavaScriptParser().createTokenStream(source);
 
 		List<String> list = new ArrayList<String>();
 

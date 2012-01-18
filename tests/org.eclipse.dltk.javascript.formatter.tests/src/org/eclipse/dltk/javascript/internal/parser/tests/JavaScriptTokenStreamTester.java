@@ -37,7 +37,7 @@ public class JavaScriptTokenStreamTester extends AbstractTester {
 
 		String source = getScriptContent(resourceName, charset);
 
-		JSTokenStream stream = JavaScriptParser.createTokenStream(source);
+		JSTokenStream stream = new JavaScriptParser().createTokenStream(source);
 
 		List<Token> tokens = stream.getTokens();
 

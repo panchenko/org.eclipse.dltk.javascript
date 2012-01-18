@@ -18,14 +18,13 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.javascript.ast.ISourceable;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.formatter.tests.JavaScriptFormatterTestsPlugin;
-import org.eclipse.dltk.javascript.parser.JSParser;
+import org.eclipse.dltk.javascript.parser.JSParser.program_return;
 import org.eclipse.dltk.javascript.parser.JSTokenStream;
 import org.eclipse.dltk.javascript.parser.JSTransformer;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
@@ -60,10 +59,9 @@ public class ANTLRParserTester {
 			throws IOException, RecognitionException {
 		InputStream resource = JavaScriptFormatterTestsPlugin.getDefault()
 				.getBundle().getResource(fullResourceName).openStream();
-		JSTokenStream stream = JavaScriptParser.createTokenStream(resource,
-				encoding);
-		JSParser parser = new JSParser(stream);
-		ParserRuleReturnScope root = parser.program();
+		final JavaScriptParser parser = new JavaScriptParser();
+		JSTokenStream stream = parser.createTokenStream(resource, encoding);
+		program_return root = parser.createTreeParser(stream, null).program();
 
 		final StringBuffer source = new StringBuffer();
 		List<Token> tokens = stream.getTokens();
@@ -71,7 +69,7 @@ public class ANTLRParserTester {
 			source.append(token.getText());
 		}
 
-		Script result = new JSTransformer(tokens).transform(root);
+		Script result = new JSTransformer(tokens).transformScript(root);
 		Assert.assertNotNull(result);
 
 		String formatted = ((ISourceable) result).toSourceString("");
@@ -84,8 +82,7 @@ public class ANTLRParserTester {
 		// System.out.println(formatted);
 		// System.out.println("-------------------------------------------");
 
-		Script script = new JavaScriptParser().parse(
-				new ModuleSource(formatted), null);
+		Script script = parser.parse(new ModuleSource(formatted), null);
 
 		Assert.assertNotNull(script);
 		Assert.assertTrue(script.toSourceString("").length() != 0);
