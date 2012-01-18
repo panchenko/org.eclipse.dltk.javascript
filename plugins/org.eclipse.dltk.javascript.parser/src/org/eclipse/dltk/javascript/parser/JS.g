@@ -239,7 +239,7 @@ final static boolean isIdentifierKeyword(int token)
   		|| token == NAMESPACE; 
 }
 
-private final boolean areRegularExpressionsEnabled()
+protected final boolean areRegularExpressionsEnabled()
 {
 	if (lastCodeToken == null)
 	{
@@ -276,9 +276,8 @@ private final boolean areRegularExpressionsEnabled()
 	}
 }
 
-private final boolean isXmlStartEnabled() {
-  // TODO
-  return ((JSTokenSource)this).getMode() == JSTokenSource.MODE_JS && areRegularExpressionsEnabled();
+protected boolean isXmlStartEnabled() {
+	return false;
 }
 
 protected void readFirstXml() throws RecognitionException {
@@ -335,6 +334,10 @@ public Token nextToken()
 
 @parser::members
 {
+protected boolean isXmlEnabled() {
+	return false;
+}
+
 protected void reportFailure(Throwable t) {
 }
 
@@ -833,7 +836,7 @@ literal
 	| numericLiteral
 	| StringLiteral
 	| RegularExpressionLiteral
-	| xmlLiteral
+	| { isXmlEnabled() }?=> xmlLiteral
 	;
 
 xmlLiteral
@@ -1086,8 +1089,8 @@ leftHandSideExpression
     arguments     -> ^( CALL $leftHandSideExpression arguments )
     | LBRACK expression RBRACK  -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression )
     | DOT r=rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT $r? )
-    | DOTDOT r=rightHandSideExpression -> ^(ALLCHILDREN $leftHandSideExpression $r)
-    | COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpression expression)
+    | { isXmlEnabled() }?=> DOTDOT r=rightHandSideExpression -> ^(ALLCHILDREN $leftHandSideExpression $r)
+    | { isXmlEnabled() }?=> COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpression expression)
   )*
   ;
   catch [RecognitionException e] { reportRuleError(e); }
@@ -1102,8 +1105,8 @@ newExpressionTail
   (
     LBRACK expression RBRACK  -> ^( BYINDEX[$LBRACK] $newExpressionTail expression )
     | DOT r=rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT $r? )
-    | DOTDOT r=rightHandSideExpression -> ^(ALLCHILDREN $newExpressionTail $r)
-    | COLONCOLON expression -> ^(LOCALNAME $newExpressionTail expression)
+    | { isXmlEnabled() }?=> DOTDOT r=rightHandSideExpression -> ^(ALLCHILDREN $newExpressionTail $r)
+    | { isXmlEnabled() }?=> COLONCOLON expression -> ^(LOCALNAME $newExpressionTail expression)
   )*
   (
     arguments     -> ^( CALL $newExpressionTail arguments )
@@ -1113,8 +1116,8 @@ newExpressionTail
 rightHandSideExpression
   : parenExpression 
   | identifier
-  | xmlAttribute
-  | MUL
+  | { isXmlEnabled() }?=> xmlAttribute
+  | { isXmlEnabled() }?=> MUL
 ; 
 
 // $>
@@ -1161,7 +1164,7 @@ unaryOperator
 // $>
 
 namespaceStatement
-  : DEFAULT WXML NAMESPACE ASSIGN expression semic
+  : { isXmlEnabled() }?=> DEFAULT WXML NAMESPACE ASSIGN expression semic
     -> ^(DEFAULT_XML_NAMESPACE DEFAULT WXML ASSIGN expression)
   ;
 
@@ -1791,5 +1794,10 @@ options
 	;
 
 // $>
+
+standaloneExpression
+@init { pushState(JSParserRule.EXPRESSION); }
+	: expression EOF!
+	;
 
 // $>

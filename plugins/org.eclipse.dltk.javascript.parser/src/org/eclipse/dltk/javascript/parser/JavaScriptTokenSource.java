@@ -23,6 +23,13 @@ public class JavaScriptTokenSource extends JavaScriptLexer implements
 		super(input);
 	}
 
+	@Override
+	protected boolean isXmlStartEnabled() {
+		// TODO
+		return ((JSTokenSource) this).getMode() == JSTokenSource.MODE_JS
+				&& areRegularExpressionsEnabled();
+	}
+
 	private int xmlMode = MODE_JS;
 
 	public int getMode() {

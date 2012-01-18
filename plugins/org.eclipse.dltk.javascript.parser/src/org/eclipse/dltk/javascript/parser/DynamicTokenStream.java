@@ -39,7 +39,7 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 
 	private static final boolean DEBUG = false;
 
-	private final JSTokenSource tokenSource;
+	private final JavaScriptTokenSource tokenSource;
 
 	/**
 	 * Record every single token pulled from the source so we can reproduce
@@ -67,14 +67,14 @@ public class DynamicTokenStream implements TokenStream, JSTokenStream {
 	private int p = 0;
 	private boolean pValid = false;
 
-	public DynamicTokenStream(JSTokenSource tokenSource) {
+	public DynamicTokenStream(JavaScriptTokenSource tokenSource) {
 		tokens = new ArrayList<Token>(500);
 		offsets = new IntList(500);
 		modes = new IntList(500);
 		this.tokenSource = tokenSource;
 	}
 
-	public DynamicTokenStream(JSTokenSource tokenSource, int channel) {
+	public DynamicTokenStream(JavaScriptTokenSource tokenSource, int channel) {
 		this(tokenSource);
 		this.channel = channel;
 	}

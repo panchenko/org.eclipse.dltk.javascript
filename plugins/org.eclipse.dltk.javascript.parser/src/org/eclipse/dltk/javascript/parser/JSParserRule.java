@@ -12,5 +12,5 @@
 package org.eclipse.dltk.javascript.parser;
 
 public enum JSParserRule {
-	PROGRAM, FUNCTION_BODY, LEFT_HAND_SIDE_EXPRESSION
+	PROGRAM, EXPRESSION, FUNCTION_BODY, LEFT_HAND_SIDE_EXPRESSION
 }

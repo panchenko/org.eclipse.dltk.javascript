@@ -27,7 +27,4 @@ public interface JSTokenSource extends TokenSource {
 	 * Set the input cursor to the character position indicated by index.
 	 **/
 	void seek(int index);
-
-	void setReporter(Reporter reporter);
-
 }

@@ -20,7 +20,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Stack;
 
-import org.antlr.runtime.RuleReturnScope;
+import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -107,6 +107,7 @@ import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
+import org.eclipse.dltk.javascript.parser.JSParser.program_return;
 import org.eclipse.dltk.utils.IntList;
 
 public class JSTransformer extends JSVisitor<ASTNode> {
@@ -132,6 +133,10 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		this(NodeTransformerManager.NO_TRANSFORMERS, tokens, false);
 	}
 
+	public JSTransformer(List<Token> tokens, boolean ignoreUnknown) {
+		this(NodeTransformerManager.NO_TRANSFORMERS, tokens, ignoreUnknown);
+	}
+
 	public JSTransformer(NodeTransformer[] transformers, List<Token> tokens,
 			boolean ignoreUnknown) {
 		Assert.isNotNull(tokens);
@@ -145,7 +150,7 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		this.reporter = reporter;
 	}
 
-	public Script transform(RuleReturnScope root) {
+	public Script transformScript(program_return root) {
 		Assert.isNotNull(root);
 		final Tree tree = (Tree) root.getTree();
 		if (tree == null)
@@ -164,6 +169,15 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		script.setStart(0);
 		script.setEnd(tokenOffsets[tokenOffsets.length - 1]);
 		return script;
+	}
+
+	public ASTNode transform(ParserRuleReturnScope root) {
+		Assert.isNotNull(root);
+		final Tree tree = (Tree) root.getTree();
+		if (tree == null)
+			return null;
+		scope = null;
+		return transformExpression(tree, null);
 	}
 
 	private ASTNode getParent() {
@@ -204,7 +218,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	}
 
 	private int getTokenOffset(int tokenIndex) {
-		return tokenOffsets[tokenIndex];
+		try {
+			return tokenOffsets[tokenIndex];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return -1;
+		}
 	}
 
 	private void setRangeByToken(ASTNode node, int tokenIndex) {

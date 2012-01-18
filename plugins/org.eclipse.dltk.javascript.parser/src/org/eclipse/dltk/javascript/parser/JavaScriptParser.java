@@ -23,7 +23,6 @@ import org.antlr.runtime.MismatchedSetException;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.NoViableAltException;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.RuleReturnScope;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenStream;
 import org.eclipse.core.runtime.Assert;
@@ -36,21 +35,43 @@ import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.internal.parser.JSCommonTokenStream;
 import org.eclipse.dltk.javascript.internal.parser.NodeTransformerManager;
+import org.eclipse.dltk.javascript.parser.JSParser.program_return;
+import org.eclipse.dltk.javascript.parser.JSParser.standaloneExpression_return;
 import org.eclipse.dltk.utils.TextUtils;
 
 public class JavaScriptParser extends AbstractSourceParser {
+
+	private boolean xmlEnabled = true;
+
+	public boolean isXmlEnabled() {
+		return xmlEnabled;
+	}
+
+	public void setXmlEnabled(boolean xmlEnabled) {
+		this.xmlEnabled = xmlEnabled;
+	}
 
 	public static final String PARSER_ID = "org.eclipse.dltk.javascript.NewParser";
 
 	private static class JSInternalParser extends JSParser {
 
 		private final Reporter reporter;
+		private final boolean xmlEnabled;
 
-		public JSInternalParser(TokenStream input, Reporter reporter) {
+		public JSInternalParser(TokenStream input, Reporter reporter,
+				boolean xmlEnabled) {
 			super(input);
 			this.reporter = reporter;
+			this.xmlEnabled = xmlEnabled;
+		}
+
+		@Override
+		protected boolean isXmlEnabled() {
+			return xmlEnabled;
 		}
 
 		@Override
@@ -243,6 +264,8 @@ public class JavaScriptParser extends AbstractSourceParser {
 
 		@Override
 		protected void reportReservedKeyword(Token token) {
+			if (reporter == null)
+				return;
 			final ISourceRange range = convert(token);
 			reporter.setFormattedMessage(
 					JavaScriptParserProblems.RESERVED_KEYWORD, token.getText());
@@ -300,6 +323,44 @@ public class JavaScriptParser extends AbstractSourceParser {
 				TextUtils.createLineTracker(source), reporter);
 	}
 
+	/**
+	 * Parse the specified string as JavaScript expression. Returns the
+	 * expression node or <code>null</code> on unrecoverable errors.
+	 * {@link org.eclipse.dltk.javascript.ast.ErrorExpression} could be also
+	 * returned.
+	 * 
+	 * @param source
+	 * @param _reporter
+	 * @return
+	 */
+	public Expression expression(String source, IProblemReporter _reporter) {
+		try {
+			final Reporter reporter = new Reporter(
+					TextUtils.createLineTracker(source), _reporter);
+			final JSTokenStream stream = createTokenStream(source);
+			stream.setReporter(reporter);
+			final JSParser parser = createTreeParser(stream, reporter);
+			final standaloneExpression_return root = parser
+					.standaloneExpression();
+			final JSTransformer transformer = new JSTransformer(
+					stream.getTokens(), parser.peekState().hasErrors());
+			transformer.setReporter(reporter);
+			return (Expression) transformer.transform(root);
+		} catch (Exception e) {
+			if (DLTKCore.DEBUG)
+				e.printStackTrace();
+			if (_reporter != null) {
+				_reporter.reportProblem(new JSProblem(e));
+			}
+			return null;
+		}
+	}
+
+	public JSParser createTreeParser(final JSTokenStream stream,
+			final Reporter reporter) {
+		return new JSInternalParser(stream, reporter, xmlEnabled);
+	}
+
 	protected Script parse(IModelElement element, JSTokenStream stream,
 			ISourceLineTracker lineTracker, IProblemReporter reporter) {
 		return parse(element, stream, new Reporter(lineTracker, reporter));
@@ -309,14 +370,14 @@ public class JavaScriptParser extends AbstractSourceParser {
 			Reporter reporter) {
 		try {
 			stream.setReporter(reporter);
-			JSInternalParser parser = new JSInternalParser(stream, reporter);
-			RuleReturnScope root = parser.program();
+			JSParser parser = createTreeParser(stream, reporter);
+			final program_return root = parser.program();
 			final NodeTransformer[] transformers = NodeTransformerManager
 					.createTransformers(element, reporter);
 			JSTransformer transformer = new JSTransformer(transformers,
 					stream.getTokens(), parser.peekState().hasErrors());
 			transformer.setReporter(reporter);
-			return transformer.transform(root);
+			return transformer.transformScript(root);
 		} catch (Exception e) {
 			if (DLTKCore.DEBUG)
 				e.printStackTrace();
@@ -328,14 +389,14 @@ public class JavaScriptParser extends AbstractSourceParser {
 		}
 	}
 
-	public static JSTokenStream createTokenStream(char[] source) {
+	public JSTokenStream createTokenStream(char[] source) {
 		CharStream charStream = new ANTLRStringStream(source, source.length);
-		return new DynamicTokenStream(new JavaScriptTokenSource(charStream));
+		return createTokenStream(charStream);
 	}
 
-	public static JSTokenStream createTokenStream(String source) {
+	public JSTokenStream createTokenStream(String source) {
 		CharStream charStream = new ANTLRStringStream(source);
-		return new DynamicTokenStream(new JavaScriptTokenSource(charStream));
+		return createTokenStream(charStream);
 	}
 
 	/**
@@ -344,10 +405,17 @@ public class JavaScriptParser extends AbstractSourceParser {
 	 * @return
 	 * @throws IOException
 	 */
-	public static JSTokenStream createTokenStream(InputStream input,
-			String encoding) throws IOException {
+	public JSTokenStream createTokenStream(InputStream input, String encoding)
+			throws IOException {
 		CharStream charStream = new ANTLRInputStream(input, encoding);
-		return new DynamicTokenStream(new JavaScriptTokenSource(charStream));
+		return createTokenStream(charStream);
 	}
 
+	private JSTokenStream createTokenStream(CharStream charStream) {
+		if (xmlEnabled) {
+			return new DynamicTokenStream(new JavaScriptTokenSource(charStream));
+		} else {
+			return new JSCommonTokenStream(new JavaScriptLexer(charStream));
+		}
+	}
 }
