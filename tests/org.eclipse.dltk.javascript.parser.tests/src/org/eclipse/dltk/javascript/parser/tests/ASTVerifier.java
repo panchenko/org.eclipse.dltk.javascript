@@ -501,7 +501,7 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	@Override
 	public Boolean visitThisExpression(ThisExpression node) {
 
-		testKeyword(node.getThisKeyword());
+		testString(Keywords.THIS, node.sourceStart(), node.sourceEnd());
 
 		return true;
 	}
