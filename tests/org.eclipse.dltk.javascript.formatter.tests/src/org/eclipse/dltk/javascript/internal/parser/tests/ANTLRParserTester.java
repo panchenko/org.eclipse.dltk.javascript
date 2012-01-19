@@ -63,7 +63,7 @@ public class ANTLRParserTester {
 		JSTokenStream stream = parser.createTokenStream(resource, encoding);
 		program_return root = parser.createTreeParser(stream, null).program();
 
-		final StringBuffer source = new StringBuffer();
+		final StringBuilder source = new StringBuilder();
 		List<Token> tokens = stream.getTokens();
 		for (Token token : tokens) {
 			source.append(token.getText());
