@@ -313,12 +313,6 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 	}
 
 	@Override
-	public E visitTypeOfExpression(TypeOfExpression node) {
-		visit(node.getExpression());
-		return null;
-	}
-
-	@Override
 	public E visitUnaryOperation(UnaryOperation node) {
 		visit(node.getExpression());
 		return null;

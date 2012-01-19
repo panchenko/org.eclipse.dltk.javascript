@@ -215,11 +215,6 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 				return visitor.visitTryStatement((TryStatement) node);
 			}
 		});
-		HANDLERS.put(TypeOfExpression.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitTypeOfExpression((TypeOfExpression) node);
-			}
-		});
 		HANDLERS.put(UnaryOperation.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 				return visitor.visitUnaryOperation((UnaryOperation) node);
@@ -432,8 +427,6 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 	public abstract E visitThrowStatement(ThrowStatement node);
 
 	public abstract E visitTryStatement(TryStatement node);
-
-	public abstract E visitTypeOfExpression(TypeOfExpression node);
 
 	public abstract E visitUnaryOperation(UnaryOperation node);
 

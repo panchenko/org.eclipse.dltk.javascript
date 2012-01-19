@@ -91,7 +91,6 @@ import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
-import org.eclipse.dltk.javascript.ast.TypeOfExpression;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
@@ -1767,22 +1766,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	protected ASTNode visitNull(Tree node) {
 
 		NullExpression expression = new NullExpression(getParent());
-
-		expression.setStart(getTokenOffset(node.getTokenStartIndex()));
-		expression.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-
-		return expression;
-	}
-
-	@Override
-	protected ASTNode visitTypeOf(Tree node) {
-
-		TypeOfExpression expression = new TypeOfExpression(getParent());
-
-		expression.setTypeOfKeyword(createKeyword(node, Keywords.TYPEOF));
-
-		expression.setExpression(transformExpression(node.getChild(0),
-				expression));
 
 		expression.setStart(getTokenOffset(node.getTokenStartIndex()));
 		expression.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
