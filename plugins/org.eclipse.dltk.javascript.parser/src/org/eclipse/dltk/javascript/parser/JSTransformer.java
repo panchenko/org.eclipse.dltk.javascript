@@ -1677,8 +1677,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 		ThisExpression expression = new ThisExpression(getParent());
 
-		expression.setThisKeyword(createKeyword(node, Keywords.THIS));
-
 		expression.setStart(getTokenOffset(node.getTokenStartIndex()));
 		expression.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 

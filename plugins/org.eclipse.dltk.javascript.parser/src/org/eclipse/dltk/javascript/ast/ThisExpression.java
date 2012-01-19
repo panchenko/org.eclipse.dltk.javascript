@@ -18,8 +18,6 @@ import org.eclipse.dltk.ast.ASTVisitor;
 
 public class ThisExpression extends Expression {
 
-	private Keyword thisKeyword;
-
 	public ThisExpression(ASTNode parent) {
 		super(parent);
 	}
@@ -30,18 +28,8 @@ public class ThisExpression extends Expression {
 	@Override
 	public void traverse(ASTVisitor visitor) throws Exception {
 		if (visitor.visit(this)) {
-			if (thisKeyword != null)
-				thisKeyword.traverse(visitor);
 			visitor.endvisit(this);
 		}
-	}
-
-	public Keyword getThisKeyword() {
-		return this.thisKeyword;
-	}
-
-	public void setThisKeyword(Keyword keyword) {
-		this.thisKeyword = keyword;
 	}
 
 	@Override
