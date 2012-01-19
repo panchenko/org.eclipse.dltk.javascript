@@ -102,12 +102,6 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 	}
 
 	@Override
-	public E visitDeleteStatement(DeleteStatement node) {
-		visit(node.getExpression());
-		return null;
-	}
-
-	@Override
 	public E visitDoWhileStatement(DoWhileStatement node) {
 		final E result = visit(node.getBody());
 		visitCondition(node.getCondition());

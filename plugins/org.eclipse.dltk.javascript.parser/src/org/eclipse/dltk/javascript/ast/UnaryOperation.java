@@ -71,6 +71,10 @@ public class UnaryOperation extends Expression {
 		return operation == JSParser.PINC || operation == JSParser.PDEC;
 	}
 
+	public boolean isTextOperator() {
+		return operation == JSParser.DELETE;
+	}
+
 	@Override
 	public String toSourceString(String indentationString) {
 
@@ -79,10 +83,13 @@ public class UnaryOperation extends Expression {
 		Assert.isTrue(operationPos > 0);
 		Assert.isTrue(operation > 0);
 
-		StringBuffer buffer = new StringBuffer();
+		final StringBuilder buffer = new StringBuilder();
 
 		if (!isPostfix()) {
 			buffer.append(getOperationText());
+			if (isTextOperator()) {
+				buffer.append(" ");
+			}
 		}
 
 		buffer.append(expression.toSourceString(indentationString));

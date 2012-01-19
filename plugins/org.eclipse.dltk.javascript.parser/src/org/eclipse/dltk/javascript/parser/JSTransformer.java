@@ -46,7 +46,6 @@ import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
 import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
-import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.Documentable;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
@@ -1703,22 +1702,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 			statement.setStatement(transformStatementNode(node.getChild(1),
 					statement));
 		}
-
-		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
-		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
-
-		return statement;
-	}
-
-	@Override
-	protected ASTNode visitDelete(Tree node) {
-
-		DeleteStatement statement = new DeleteStatement(getParent());
-
-		statement.setDeleteKeyword(createKeyword(node, Keywords.DELETE));
-
-		statement
-				.setExpression(transformExpression(node.getChild(0), statement));
 
 		statement.setStart(getTokenOffset(node.getTokenStartIndex()));
 		statement.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));

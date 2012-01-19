@@ -91,11 +91,6 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 				return visitor.visitDecimalLiteral((DecimalLiteral) node);
 			}
 		});
-		HANDLERS.put(DeleteStatement.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitDeleteStatement((DeleteStatement) node);
-			}
-		});
 		HANDLERS.put(DoWhileStatement.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 				return visitor.visitDoWhileStatement((DoWhileStatement) node);
@@ -359,8 +354,6 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 	public final E visitDefaultClause(DefaultClause node) {
 		return null;
 	}
-
-	public abstract E visitDeleteStatement(DeleteStatement node);
 
 	public abstract E visitDoWhileStatement(DoWhileStatement node);
 
