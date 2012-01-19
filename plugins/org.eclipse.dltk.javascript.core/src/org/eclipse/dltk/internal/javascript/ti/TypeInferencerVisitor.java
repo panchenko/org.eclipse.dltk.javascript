@@ -79,7 +79,6 @@ import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
-import org.eclipse.dltk.javascript.ast.TypeOfExpression;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
@@ -1220,12 +1219,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	@Override
-	public IValueReference visitTypeOfExpression(TypeOfExpression node) {
-		visit(node.getExpression());
-		return context.getFactory().createString(peekContext());
-	}
-
-	@Override
 	public IValueReference visitUnaryOperation(UnaryOperation node) {
 		if (node.getOperation() == JSParser.NOT) {
 			visit(node.getExpression());
@@ -1236,6 +1229,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				value.delete();
 			}
 			return context.getFactory().createBoolean(peekContext());
+		} else if (node.getOperation() == JSParser.TYPEOF) {
+			visit(node.getExpression());
+			return context.getFactory().createString(peekContext());
 		} else {
 			return visit(node.getExpression());
 		}
