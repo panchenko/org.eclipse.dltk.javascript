@@ -20,7 +20,6 @@ import org.eclipse.dltk.javascript.ast.ConstStatement;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
-import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.EmptyStatement;
@@ -352,16 +351,6 @@ public class ASTConverter extends ASTVisitor<Node> {
 	}
 
 	@Override
-	public Node visitDeleteStatement(DeleteStatement node) {
-		UnaryExpression expr = DOM_FACTORY.createUnaryExpression();
-		expr.setBegin(node.sourceStart());
-		expr.setEnd(node.sourceEnd());
-		expr.setOperation(UnaryOperator.DELETE);
-		expr.setArgument((Expression) visit(node.getExpression()));
-		return expr;
-	}
-
-	@Override
 	public Node visitDoWhileStatement(DoWhileStatement node) {
 		DoStatement res = DOM_FACTORY.createDoStatement();
 		res.setBody((Statement) visit(node.getBody()));
@@ -683,7 +672,7 @@ public class ASTConverter extends ASTVisitor<Node> {
 	@Override
 	public Node visitUnaryOperation(UnaryOperation node) {
 		UnaryExpression res = DOM_FACTORY.createUnaryExpression();
-		UnaryOperator r = null;
+		final UnaryOperator r;
 		switch (node.getOperation()) {
 		case JSParser.INV:
 			r = UnaryOperator.BW_NOT;
