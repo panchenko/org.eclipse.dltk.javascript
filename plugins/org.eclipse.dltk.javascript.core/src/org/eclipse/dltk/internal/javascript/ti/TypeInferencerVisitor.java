@@ -47,7 +47,6 @@ import org.eclipse.dltk.javascript.ast.ConstStatement;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
-import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.EmptyStatement;
@@ -654,15 +653,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	@Override
-	public IValueReference visitDeleteStatement(DeleteStatement node) {
-		IValueReference value = visit(node.getExpression());
-		if (value != null) {
-			value.delete();
-		}
-		return context.getFactory().createBoolean(peekContext());
-	}
-
-	@Override
 	public IValueReference visitDoWhileStatement(DoWhileStatement node) {
 		visit(node.getCondition());
 		visit(node.getBody());
@@ -1240,8 +1230,15 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (node.getOperation() == JSParser.NOT) {
 			visit(node.getExpression());
 			return context.getFactory().createBoolean(peekContext());
+		} else if (node.getOperation() == JSParser.DELETE) {
+			final IValueReference value = visit(node.getExpression());
+			if (value != null) {
+				value.delete();
+			}
+			return context.getFactory().createBoolean(peekContext());
+		} else {
+			return visit(node.getExpression());
 		}
-		return visit(node.getExpression());
 	}
 
 	@Override
