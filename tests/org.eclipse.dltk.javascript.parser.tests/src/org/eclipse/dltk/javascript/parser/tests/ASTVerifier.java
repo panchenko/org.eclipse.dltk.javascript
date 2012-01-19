@@ -68,7 +68,6 @@ import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
-import org.eclipse.dltk.javascript.ast.TypeOfExpression;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
@@ -542,15 +541,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 			testKeyword(node.getFinally().getFinallyKeyword());
 			visit(node.getFinally().getStatement());
 		}
-
-		return true;
-	}
-
-	@Override
-	public Boolean visitTypeOfExpression(TypeOfExpression node) {
-
-		visit(node.getExpression());
-		testKeyword(node.getTypeOfKeyword());
 
 		return true;
 	}
