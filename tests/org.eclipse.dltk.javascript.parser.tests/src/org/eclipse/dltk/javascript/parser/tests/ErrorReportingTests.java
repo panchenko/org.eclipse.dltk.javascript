@@ -22,69 +22,76 @@ import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 
 public class ErrorReportingTests extends AbstractJSParserTest {
 
-    public void test1() {
-        parseRaw("a.");
-        assertTrue(reporter.hasErrors());
-        final List<IProblem> errors = reporter.getErrors();
-        assertEquals(1, errors.size());
-        assertEquals("missing name after . operator", errors.get(0).getMessage());
-    }
+	public void test1() {
+		parseRaw("a.");
+		assertTrue(reporter.hasErrors());
+		final List<IProblem> errors = reporter.getErrors();
+		assertEquals(1, errors.size());
+		assertEquals("missing name after . operator", errors.get(0)
+				.getMessage());
+	}
 
-    public void testNotFinishedComment() {
-        StringList code = new StringList();
-        code.add("function a() {}");
-        code.add("/* not finished comment");
-        code.add("function b() {}");
-        Script script = parseRaw(code.toString());
-        assertTrue(reporter.hasErrors());
-        assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
-    }
+	public void testNotFinishedComment() {
+		StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("/* not finished comment");
+		code.add("function b() {}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
 
-    public void testMisplacedDiv() {
-        StringList code = new StringList();
-        code.add("function a() {}");
-        code.add("/");
-        code.add("function b() {}");
-        Script script = parseRaw(code.toString());
-        assertTrue(reporter.hasErrors());
-        assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
-    }
+	public void testMisplacedDiv() {
+		StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("/");
+		code.add("function b() {}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
 
-    public void testMisplacedMul() {
-        StringList code = new StringList();
-        code.add("function a() {}");
-        code.add("***");
-        code.add("function b() {}");
-        Script script = parseRaw(code.toString());
-        assertTrue(reporter.hasErrors());
-        assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
-    }
+	public void testMisplacedMul() {
+		StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("***");
+		code.add("function b() {}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
 
-    public void testNotFinishedStringLiteral() {
-        StringList code = new StringList();
-        code.add("function a() {}");
-        code.add("\"");
-        code.add("function b() {}");
-        Script script = parseRaw(code.toString());
-        assertTrue(reporter.hasErrors());
-        assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
-    }
+	public void testNotFinishedStringLiteral() {
+		StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("\"");
+		code.add("function b() {}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
 
-    public void testNotFinishedCall() {
-        StringList code = new StringList();
-        code.add("function test(event) {");
-        code.add("application.output(e");
-        code.add("}");
-        Script script = parseRaw(code.toString());
-        assertTrue(reporter.hasErrors());
-        assertEquals(JavaScriptParserProblems.SYNTAX_ERROR, getProblemId());
-        assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
-    }
+	public void testNotFinishedCall() {
+		StringList code = new StringList();
+		code.add("function test(event) {");
+		code.add("application.output(e");
+		code.add("}");
+		Script script = parseRaw(code.toString());
+		assertTrue(reporter.hasErrors());
+		assertEquals(JavaScriptParserProblems.SYNTAX_ERROR, getProblemId());
+		assertTrue(ASTUtil.select(script, FunctionStatement.class).size() > 0);
+	}
 
-    public void testNoArrayIndex() {
-        parseRaw("var x = a[]");
-        assertTrue(reporter.hasErrors());
-        assertEquals(1, reporter.getProblems().size());
-    }
+	public void testNoArrayIndex() {
+		parseRaw("var x = a[]");
+		assertTrue(reporter.hasErrors());
+		assertEquals(1, reporter.getProblems().size());
+	}
+
+	public void testEmptyParentheses() {
+		parseRaw("var x = x * ()");
+		assertTrue(reporter.hasErrors());
+		assertEquals(1, reporter.getProblems().size());
+	}
 
 }
