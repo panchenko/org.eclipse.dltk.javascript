@@ -1128,7 +1128,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IRType type = JavaScriptValidations.typeOf(child);
 		assertEquals(JSTypeSet.arrayOf(JSTypeSet.ref(ITypeNames.STRING)), type);
 	}
-	
+
 	public void testArrayInRecordTypeVariableLookup() {
 		StringList code = new StringList();
 		code.add("/** @type {{layout_id:String,panels:Array<{foundset:String, index:Number, selectedTab:Number, view:Number}>}} */");
@@ -1141,5 +1141,13 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(JSTypeSet.ref(ITypeNames.STRING), type);
 	}
 
+	public void testDeleteOperator() {
+		List<String> lines = new StringList();
+		lines.add("var point = {x:1, y:2}");
+		lines.add("var result = delete point.x");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference len = collection.getChild("result");
+		assertEquals(getTypes(BOOLEAN), len.getTypes());
+	}
 
 }
