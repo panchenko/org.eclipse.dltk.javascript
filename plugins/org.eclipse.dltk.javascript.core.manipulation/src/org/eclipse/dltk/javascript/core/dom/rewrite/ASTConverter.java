@@ -54,7 +54,6 @@ import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
-import org.eclipse.dltk.javascript.ast.TypeOfExpression;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
@@ -658,14 +657,6 @@ public class ASTConverter extends ASTVisitor<Node> {
 			fcr.setEnd(fc.sourceEnd());
 			res.setFinallyClause(fcr);
 		}
-		return res;
-	}
-
-	@Override
-	public Node visitTypeOfExpression(TypeOfExpression node) {
-		UnaryExpression res = DOM_FACTORY.createUnaryExpression();
-		res.setOperation(UnaryOperator.TYPEOF);
-		res.setArgument((Expression) visit(node.getExpression()));
 		return res;
 	}
 
