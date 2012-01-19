@@ -16,7 +16,8 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class GetAllChildrenExpression extends Expression {
+public class GetAllChildrenExpression extends Expression implements
+		IXMLExpression {
 
 	private Expression object;
 	private Expression property;

@@ -16,7 +16,8 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class GetLocalNameExpression extends Expression {
+public class GetLocalNameExpression extends Expression implements
+		IXMLExpression {
 
 	private Expression namespace;
 	private Expression localName;

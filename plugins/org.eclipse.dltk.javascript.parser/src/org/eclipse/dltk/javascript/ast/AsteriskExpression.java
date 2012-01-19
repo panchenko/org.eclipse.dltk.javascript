@@ -15,7 +15,7 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class AsteriskExpression extends Expression {
+public class AsteriskExpression extends Expression implements IXMLExpression {
 
 	public AsteriskExpression(ASTNode parent) {
 		super(parent);

@@ -19,7 +19,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
-public class XmlLiteral extends Expression {
+public class XmlLiteral extends Expression implements IXMLExpression {
 
 	private List<XmlFragment> fragments = null;
 

@@ -15,8 +15,12 @@ package org.eclipse.dltk.javascript.ast;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class XmlAttributeIdentifier extends Expression {
-
+public class XmlAttributeIdentifier extends Expression implements
+		IXMLExpression {
+	/**
+	 * @see Identifier
+	 * @see AsteriskExpression
+	 */
 	private Expression expression;
 
 	public XmlAttributeIdentifier(ASTNode parent) {
@@ -51,9 +55,8 @@ public class XmlAttributeIdentifier extends Expression {
 	}
 
 	public String getAttributeName() {
-		if (expression instanceof Identifier)
-		{
-			return '@' + ((Identifier)expression).getName();
+		if (expression instanceof Identifier) {
+			return '@' + ((Identifier) expression).getName();
 		}
 		return null;
 	}
