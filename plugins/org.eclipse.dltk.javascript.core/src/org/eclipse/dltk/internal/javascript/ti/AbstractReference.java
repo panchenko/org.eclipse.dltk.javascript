@@ -223,7 +223,25 @@ public abstract class AbstractReference implements IValueReference,
 						addValue(value);
 					}
 				} else {
-					resolved = finalResolve;
+					boolean resolvedToType = false;
+					// if not already in the final resolve, try to look if it
+					// did already resolve up the chain
+					// to a value that already resolved to a type, if that is
+					// the case then this lazy reference is
+					// most likely just never going to hit on something known.
+					if (!finalResolve) {
+						IValueReference parent = reference.getParent();
+						while (parent instanceof IValueProvider) {
+							value = ((IValueProvider) parent).getValue();
+							if (value != null) {
+								resolvedToType = !value.getTypes().isEmpty()
+										|| !value.getDeclaredTypes().isEmpty();
+								break;
+							}
+							parent = parent.getParent();
+						}
+					}
+					resolved = finalResolve || resolvedToType;
 				}
 			}
 		}
