@@ -34,7 +34,6 @@ import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
 import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
-import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.EmptyStatement;
@@ -116,7 +115,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterBreakNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterCaseNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterCatchClauseNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterContinueNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterDeleteStatementNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterElseIfNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterElseKeywordNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterElseNode;
@@ -521,22 +519,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			@Override
 			public IFormatterNode visitDecimalLiteral(DecimalLiteral node) {
 				return addChild(new FormatterStringNode(document, node));
-			}
-
-			@Override
-			public IFormatterNode visitDeleteStatement(DeleteStatement node) {
-				FormatterDeleteStatementNode formatterNode = new FormatterDeleteStatementNode(
-						document);
-
-				formatterNode.setBegin(createTextNode(document,
-						node.getDeleteKeyword()));
-
-				push(formatterNode);
-
-				visit(node.getExpression());
-
-				checkedPop(formatterNode, node.getExpression().sourceEnd());
-				return formatterNode;
 			}
 
 			@Override
@@ -1470,8 +1452,10 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 							node.getOperationPosition(),
 							node.getOperationPosition()
 									+ node.getOperationText().length()));
-					skipSpaces(formatterNode, node.getExpression()
-							.sourceStart());
+					if (!node.isTextOperator()) {
+						skipSpaces(formatterNode, node.getExpression()
+								.sourceStart());
+					}
 				}
 
 				visit(node.getExpression());
