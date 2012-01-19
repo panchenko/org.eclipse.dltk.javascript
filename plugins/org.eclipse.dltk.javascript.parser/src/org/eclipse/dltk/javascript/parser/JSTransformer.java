@@ -1382,16 +1382,23 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 	@Override
 	protected ASTNode visitParenthesizedExpression(Tree node) {
 
-		ParenthesizedExpression expression = new ParenthesizedExpression(
+		final ParenthesizedExpression expression = new ParenthesizedExpression(
 				getParent());
-
-		expression.setExpression(transformExpression(node.getChild(0),
-				expression));
-
 		expression.setLP(getTokenOffset(node.getTokenStartIndex()));
-		expression.setRP(getTokenOffset(node.getChild(1).getTokenStartIndex()));
-
 		expression.setStart(expression.getLP());
+
+		if (node.getChildCount() == 2) {
+			expression.setExpression(transformExpression(node.getChild(0),
+					expression));
+			expression.setRP(getTokenOffset(node.getChild(1)
+					.getTokenStartIndex()));
+		} else {
+			expression.setExpression(new ErrorExpression(expression,
+					Util.EMPTY_STRING));
+			expression.setRP(getTokenOffset(node.getChild(0)
+					.getTokenStartIndex()));
+		}
+
 		expression.setEnd(getTokenOffset(node.getTokenStopIndex() + 1));
 
 		return expression;
