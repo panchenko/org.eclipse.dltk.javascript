@@ -73,7 +73,6 @@ import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
-import org.eclipse.dltk.javascript.ast.TypeOfExpression;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
@@ -129,7 +128,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterScriptNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterStringNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterSwitchNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterThrowNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterTypeofNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVariableDeclarationNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVoidExpressionNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVoidOperatorNode;
@@ -1418,23 +1416,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 						new FinallyBracesConfiguration(document));
 
 				checkedPop(formatterNode, node.sourceEnd());
-			}
-
-			@Override
-			public IFormatterNode visitTypeOfExpression(TypeOfExpression node) {
-				FormatterTypeofNode formatterNode = new FormatterTypeofNode(
-						document);
-
-				formatterNode.setBegin(createTextNode(document,
-						node.getTypeOfKeyword()));
-
-				push(formatterNode);
-
-				visit(node.getExpression());
-
-				checkedPop(formatterNode, node.sourceEnd());
-
-				return formatterNode;
 			}
 
 			@Override
