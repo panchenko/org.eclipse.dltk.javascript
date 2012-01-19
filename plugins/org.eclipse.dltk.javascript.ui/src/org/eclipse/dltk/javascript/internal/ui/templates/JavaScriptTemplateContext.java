@@ -104,6 +104,7 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 					}
 			} else if (in) {
 				if (c == '}') {
+					// TODO better handling for ${cursor}...
 					String variableValue = content.substring(pos, a + 1);
 					String variableKey = prefix + r++;
 					bf.append(variableKey);
