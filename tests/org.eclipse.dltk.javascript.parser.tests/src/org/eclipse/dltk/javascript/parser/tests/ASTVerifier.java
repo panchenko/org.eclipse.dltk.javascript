@@ -33,7 +33,6 @@ import org.eclipse.dltk.javascript.ast.ContinueStatement;
 import org.eclipse.dltk.javascript.ast.DecimalLiteral;
 import org.eclipse.dltk.javascript.ast.DefaultClause;
 import org.eclipse.dltk.javascript.ast.DefaultXmlNamespaceStatement;
-import org.eclipse.dltk.javascript.ast.DeleteStatement;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.EmptyExpression;
 import org.eclipse.dltk.javascript.ast.EmptyStatement;
@@ -238,15 +237,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 	public Boolean visitDecimalLiteral(DecimalLiteral node) {
 
 		testString(node.getText(), node.sourceStart(), node.sourceEnd());
-
-		return true;
-	}
-
-	@Override
-	public Boolean visitDeleteStatement(DeleteStatement node) {
-
-		testKeyword(node.getDeleteKeyword());
-		visit(node.getExpression());
 
 		return true;
 	}
