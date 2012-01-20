@@ -276,7 +276,19 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 
 	@Override
 	public E visitSwitchStatement(SwitchStatement node) {
-		// TODO Auto-generated method stub
+		if (node.getCondition() != null)
+			visit(node.getCondition());
+		for (SwitchComponent component : node.getCaseClauses()) {
+			if (component instanceof CaseClause) {
+				final CaseClause caseClause = (CaseClause) component;
+				if (caseClause.getCondition() != null) {
+					visit(caseClause.getCondition());
+				}
+			}
+			for (Statement statement : component.getStatements()) {
+				visit(statement);
+			}
+		}
 		return null;
 	}
 
@@ -297,7 +309,8 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 	public E visitTryStatement(TryStatement node) {
 		visit(node.getBody());
 		for (CatchClause catchClause : node.getCatches()) {
-			// TODO
+			if (catchClause.getFilterExpression() != null)
+				visit(catchClause.getFilterExpression());
 			final Statement catchStatement = catchClause.getStatement();
 			if (catchStatement != null) {
 				visit(catchStatement);
