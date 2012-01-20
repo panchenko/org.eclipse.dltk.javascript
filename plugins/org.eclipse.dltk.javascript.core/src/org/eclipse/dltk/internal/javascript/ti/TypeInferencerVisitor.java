@@ -83,7 +83,6 @@ import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.VoidExpression;
-import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
@@ -1232,6 +1231,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		} else if (node.getOperation() == JSParser.TYPEOF) {
 			visit(node.getExpression());
 			return context.getFactory().createString(peekContext());
+		} else if (node.getOperation() == JSParser.VOID) {
+			visit(node.getExpression());
+			return null;
 		} else {
 			return visit(node.getExpression());
 		}
@@ -1249,12 +1251,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitVoidExpression(VoidExpression node) {
-		visit(node.getExpression());
-		return null;
-	}
-
-	@Override
-	public IValueReference visitVoidOperator(VoidOperator node) {
 		visit(node.getExpression());
 		return null;
 	}
