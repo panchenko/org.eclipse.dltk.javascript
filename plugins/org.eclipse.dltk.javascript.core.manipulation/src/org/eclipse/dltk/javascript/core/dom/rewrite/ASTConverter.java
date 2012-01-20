@@ -58,7 +58,6 @@ import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.VoidExpression;
-import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
@@ -735,14 +734,6 @@ public class ASTConverter extends ASTVisitor<Node> {
 		ExpressionStatement res = DOM_FACTORY.createExpressionStatement();
 		res.setExpression((Expression) visit(node.getExpression()));
 		res.setBegin(res.getExpression().getBegin());
-		return res;
-	}
-
-	@Override
-	public Node visitVoidOperator(VoidOperator node) {
-		UnaryExpression res = DOM_FACTORY.createUnaryExpression();
-		res.setOperation(UnaryOperator.VOID);
-		res.setArgument((Expression) visit(node.getExpression()));
 		return res;
 	}
 
