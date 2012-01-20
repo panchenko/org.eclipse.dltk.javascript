@@ -95,7 +95,6 @@ import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.VoidExpression;
-import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
@@ -1824,21 +1823,6 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		bool.setEnd(getTokenOffset(node.getTokenStartIndex() + 1));
 
 		return bool;
-	}
-
-	@Override
-	protected ASTNode visitVoid(Tree node) {
-		VoidOperator expression = new VoidOperator(getParent());
-
-		expression.setVoidKeyword(createKeyword(node, Keywords.VOID));
-
-		expression.setExpression(transformExpression(node.getChild(0),
-				expression));
-
-		expression.setStart(expression.getVoidKeyword().sourceStart());
-		expression.setEnd(expression.getExpression().sourceEnd());
-
-		return expression;
 	}
 
 	@Override

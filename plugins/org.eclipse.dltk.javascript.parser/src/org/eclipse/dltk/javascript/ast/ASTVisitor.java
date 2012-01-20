@@ -240,11 +240,6 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 				return visitor.visitWithStatement((WithStatement) node);
 			}
 		});
-		HANDLERS.put(VoidOperator.class, new Handler() {
-			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
-				return visitor.visitVoidOperator((VoidOperator) node);
-			}
-		});
 		HANDLERS.put(XmlLiteral.class, new Handler() {
 			public <E> E handle(ASTVisitor<E> visitor, ASTNode node) {
 				return visitor.visitXmlLiteral((XmlLiteral) node);
@@ -438,8 +433,6 @@ public abstract class ASTVisitor<E> implements INodeVisitor<E> {
 	}
 
 	public abstract E visitVoidExpression(VoidExpression node);
-
-	public abstract E visitVoidOperator(VoidOperator node);
 
 	public abstract E visitYieldOperator(YieldOperator node);
 

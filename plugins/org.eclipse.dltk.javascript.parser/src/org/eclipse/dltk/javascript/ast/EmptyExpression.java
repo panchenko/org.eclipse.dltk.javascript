@@ -16,6 +16,10 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
+/**
+ * This class is used to represented missing items in the array literal AND
+ * omitted parts of the "for(;;)" loop statement.
+ */
 public class EmptyExpression extends Expression {
 
 	public EmptyExpression(ASTNode parent) {

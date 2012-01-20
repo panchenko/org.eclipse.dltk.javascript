@@ -126,6 +126,7 @@ public abstract class JSVisitor<E> {
 		case JSParser.INV:
 		case JSParser.DELETE:
 		case JSParser.TYPEOF:
+		case JSParser.VOID:
 			return visitUnaryOperation(node);
 
 		case JSParser.RETURN:
@@ -202,9 +203,6 @@ public abstract class JSVisitor<E> {
 
 		case JSParser.LABELLED:
 			return visitLabelled(node);
-
-		case JSParser.VOID:
-			return visitVoid(node);
 
 		case JSParser.GETTER:
 			return visitGet(node);
@@ -361,8 +359,6 @@ public abstract class JSVisitor<E> {
 	protected abstract E visitNull(Tree node);
 
 	protected abstract E visitConst(Tree node);
-
-	protected abstract E visitVoid(Tree node);
 
 	protected abstract E visitEmptyStatement(Tree node);
 

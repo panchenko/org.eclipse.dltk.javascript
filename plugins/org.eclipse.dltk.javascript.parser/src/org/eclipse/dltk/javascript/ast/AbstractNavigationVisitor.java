@@ -331,12 +331,6 @@ public class AbstractNavigationVisitor<E> extends ASTVisitor<E> {
 	}
 
 	@Override
-	public E visitVoidOperator(VoidOperator node) {
-		visit(node.getExpression());
-		return null;
-	}
-
-	@Override
 	public E visitWhileStatement(WhileStatement node) {
 		visitCondition(node.getCondition());
 		return visit(node.getBody());
