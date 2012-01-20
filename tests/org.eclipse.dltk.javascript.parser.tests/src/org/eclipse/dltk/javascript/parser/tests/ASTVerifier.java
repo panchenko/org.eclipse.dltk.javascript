@@ -72,7 +72,6 @@ import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.VoidExpression;
-import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
@@ -685,14 +684,6 @@ public class ASTVerifier extends ASTVisitor<Boolean> {
 		testChar(Keywords.SEMI, initSC);
 		testChar(Keywords.LP, lp);
 		testChar(Keywords.RP, rp);
-
-		return true;
-	}
-
-	@Override
-	public Boolean visitVoidOperator(VoidOperator node) {
-		visit(node.getExpression());
-		testKeyword(node.getVoidKeyword());
 
 		return true;
 	}
