@@ -20,6 +20,10 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
+/**
+ * This class extends expression only to allow usage as initial expression in
+ * "for(;;)" loop statement. It should be solved differently.
+ */
 public class VariableStatement extends Expression implements
 		IVariableStatement, Documentable {
 
