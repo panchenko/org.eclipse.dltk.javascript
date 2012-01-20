@@ -77,7 +77,6 @@ import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
 import org.eclipse.dltk.javascript.ast.VoidExpression;
-import org.eclipse.dltk.javascript.ast.VoidOperator;
 import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.ast.WithStatement;
 import org.eclipse.dltk.javascript.ast.XmlAttributeIdentifier;
@@ -130,7 +129,6 @@ import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterSwitchNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterThrowNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVariableDeclarationNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVoidExpressionNode;
-import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterVoidOperatorNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FormatterYieldOperatorNode;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionArgumentsParensConfiguration;
 import org.eclipse.dltk.javascript.formatter.internal.nodes.FunctionArgumentsPunctuationConfiguration;
@@ -1578,23 +1576,6 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 				for (int i = 0; i < nodes.size(); i++) {
 					visit(nodes.get(i));
 				}
-			}
-
-			@Override
-			public IFormatterNode visitVoidOperator(VoidOperator node) {
-				FormatterVoidOperatorNode formatterNode = new FormatterVoidOperatorNode(
-						document);
-
-				formatterNode.setBegin(createTextNode(document,
-						node.getVoidKeyword()));
-
-				push(formatterNode);
-
-				visit(node.getExpression());
-
-				checkedPop(formatterNode, node.sourceEnd());
-
-				return formatterNode;
 			}
 
 			@Override
