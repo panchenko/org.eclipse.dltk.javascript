@@ -15,7 +15,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class BooleanLiteral extends Expression {
+public class BooleanLiteral extends Literal {
 
 	private final String text;
 
@@ -34,6 +34,7 @@ public class BooleanLiteral extends Expression {
 		}
 	}
 
+	@Override
 	public String getText() {
 		return this.text;
 	}

@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class DecimalLiteral extends Expression {
+public class DecimalLiteral extends Literal {
 
 	private String text;
 
@@ -34,6 +34,7 @@ public class DecimalLiteral extends Expression {
 		}
 	}
 
+	@Override
 	public String getText() {
 		return this.text;
 	}

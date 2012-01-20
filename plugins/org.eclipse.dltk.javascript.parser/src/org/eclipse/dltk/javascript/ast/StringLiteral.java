@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class StringLiteral extends Expression implements Documentable {
+public class StringLiteral extends Literal implements Documentable {
 
 	private String text;
 
@@ -39,6 +39,7 @@ public class StringLiteral extends Expression implements Documentable {
 	 * 
 	 * @return
 	 */
+	@Override
 	public String getText() {
 		return this.text;
 	}

@@ -16,12 +16,13 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 
-public class NullExpression extends Expression {
+public class NullExpression extends Literal {
 
 	public NullExpression(ASTNode parent) {
 		super(parent);
 	}
 
+	@Override
 	public String getText() {
 		return Keywords.NULL;
 	}
