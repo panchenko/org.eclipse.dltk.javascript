@@ -206,6 +206,13 @@ public class JSDocSupport implements IModelBuilder {
 		if (tags.get(JSDocTag.PRIVATE) != null) {
 			member.setPrivate(true);
 			validateSingleTag(tags, JSDocTag.PRIVATE, reporter);
+			if (reporter != null && tags.count(JSDocTag.PROTECTED) > 0) {
+				final List<JSDocTag> t = tags.list(JSDocTag.PROTECTED);
+				for (JSDocTag tag : t) {
+					reportProblem(reporter, JSDocProblem.IGNORED_TAG, tag,
+							tag.name(), JSDocTag.PRIVATE);
+				}
+			}
 		}
 	}
 
