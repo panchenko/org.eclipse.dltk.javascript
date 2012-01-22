@@ -569,8 +569,12 @@ fragment USP // Unicode Space Separator (rest of Unicode category Zs)
 	| '\u3000'  // IDEOGRAPHIC SPACE
 	;
 
+fragment UnicodeFormatCategory // Unicode Category "Cf" - Other, format
+	: '\uFEFF' // ZERO WIDTH NO-BREAK SPACE
+	;
+
 WhiteSpace
-	: ( TAB | VT | FF | SP | NBSP | USP )+ { $channel = HIDDEN; }
+	: ( TAB | VT | FF | SP | NBSP | USP | UnicodeFormatCategory )+ { $channel = HIDDEN; }
 	;
 
 // $>
