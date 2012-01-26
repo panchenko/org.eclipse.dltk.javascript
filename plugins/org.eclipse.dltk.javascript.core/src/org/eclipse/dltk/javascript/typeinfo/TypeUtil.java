@@ -207,6 +207,8 @@ public class TypeUtil {
 	}
 
 	public static URI createProxyURI(String typeName) {
+		if (typeName == null)
+			throw new NullPointerException("Type name is null");
 		return URI.createGenericURI(PROXY_SCHEME, PROXY_OPAQUE_PART,
 				URI.encodeFragment(typeName, false));
 	}
