@@ -445,6 +445,11 @@
   </ref:Type>
   <ref:TypeAlias source="string" target="String"/>
   <ref:Type name="XML" kind="PREDEFINED">
+    <members xsi:type="ref:Property" name="ignoreComments" directType="Boolean" static="true"/>
+    <members xsi:type="ref:Property" name="ignoreProcessingInstructions" directType="Boolean" static="true"/>
+    <members xsi:type="ref:Property" name="ignoreWhitespace" directType="Boolean" static="true"/>
+    <members xsi:type="ref:Property" name="prettyIndent" directType="Number" static="true"/>
+    <members xsi:type="ref:Property" name="prettyPrinting" directType="Boolean" static="true"/>
     <members xsi:type="ref:Method" name="addNamespace" directType="XML" description="The addNamespace method adds a namespace declaration to the in scope namespaces for this XML object and returns this XML object.">
       <parameters name="namespace"/>
     </members>
@@ -476,9 +481,6 @@
       <parameters name="prop" kind="OPTIONAL"/>
     </members>
     <members xsi:type="ref:Method" name="hasSimpleContent" directType="Boolean" description="The hasSimpleContent method returns a Boolean value indicating whether this XML object contains simple content. An XML object is considered to contain simple content if it represents a text node, represents an attribute node or if it represents an XML element that has no child elements. XML objects representing comments and processing instructions do not have simple content. The existence of attributes, comments, processing instructions and text nodes within an XML object is not significant in determining if it has simple content."/>
-    <members xsi:type="ref:Property" name="ignoreComments" directType="Boolean"/>
-    <members xsi:type="ref:Property" name="ignoreProcessingInstructions" directType="Boolean"/>
-    <members xsi:type="ref:Property" name="ignoreWhitespace" directType="Boolean"/>
     <members xsi:type="ref:Method" name="inScopeNamespaces" directType="Array" description="The inScopeNamespaces method returns an Array of Namespace objects representing the namespaces in scope for this XML object in the context of its parent. If the parent of this XML object is modified, the associated namespace declarations may change. The set of namespaces returned by this method may be a super set of the namespaces used by this value."/>
     <members xsi:type="ref:Method" name="insertChildAfter" directType="XML" description="The insertChildAfter method inserts the given child2 after the given child1 in this XML object and returns this XML object. If child1 is null, the insertChildAfter method inserts child2 before all children of this XML object (i.e., after none of them). If child1 does not exist in this XML object, it returns without modifying this XML object.">
       <parameters name="child1"/>
@@ -501,8 +503,6 @@
     <members xsi:type="ref:Method" name="prependChild" directType="XML" description="The prependChild method inserts the given child into this object prior to its existing XML properties and returns this XML object.">
       <parameters name="value"/>
     </members>
-    <members xsi:type="ref:Property" name="prettyIndent" directType="Number"/>
-    <members xsi:type="ref:Property" name="prettyPrinting" directType="Boolean"/>
     <members xsi:type="ref:Method" name="processingInstructions" directType="XMLList" description="When the processingInstructions method is called with one parameter name, it returns an XMLList containing all the children of this XML object that are processing-instructions with the given name. When the processingInstructions method is called with no parameters, it returns an XMLList containing all the children of this XML object that are processing-instructions regardless of their name">
       <parameters name="name" kind="OPTIONAL"/>
     </members>
