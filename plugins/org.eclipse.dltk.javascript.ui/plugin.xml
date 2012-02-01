@@ -950,5 +950,19 @@
          nature="org.eclipse.dltk.javascript.core.nature">
    </saveParticipant>
 </extension>
+<extension
+      point="org.eclipse.ui.ide.markerResolution">
+   <markerResolutionGenerator
+         class="org.eclipse.dltk.javascript.internal.ui.quickfix.JSProblemMarkerResolutionGenerator"
+         markerType="org.eclipse.dltk.javascript.core.jsproblem">
+   </markerResolutionGenerator>
+</extension>
+<extension
+      point="org.eclipse.dltk.ui.correctionProcessor">
+   <correctionProcessor
+         class="org.eclipse.dltk.javascript.internal.ui.quickfix.JSScriptCorrectionProcessor"
+         nature="org.eclipse.dltk.javascript.core.nature">
+   </correctionProcessor>
+</extension>
 
 </plugin>
