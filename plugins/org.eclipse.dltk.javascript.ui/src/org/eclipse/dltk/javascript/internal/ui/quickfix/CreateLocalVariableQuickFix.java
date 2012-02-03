@@ -71,6 +71,7 @@ public class CreateLocalVariableQuickFix extends TextFileEditResolution {
 
 		final Identifier found = getIdentifier(file, offset);
 		if (found != null) {
+			boolean inFunctionCreated = false;
 			ASTNode parent = found.getParent();
 			while (parent instanceof JSNode) {
 				if (parent instanceof FunctionStatement) {
@@ -91,10 +92,14 @@ public class CreateLocalVariableQuickFix extends TextFileEditResolution {
 					}
 					textEdit.addChild(new InsertEdit(statement.sourceStart(),
 							"var " + found.getName() + ";" + ident));
+					inFunctionCreated = true;
 					break;
 
 				}
 				parent = ((JSNode) parent).getParent();
+			}
+			if (!inFunctionCreated) {
+				textEdit.addChild(new InsertEdit(found.sourceStart(), "var "));
 			}
 		}
 		return textEdit;
