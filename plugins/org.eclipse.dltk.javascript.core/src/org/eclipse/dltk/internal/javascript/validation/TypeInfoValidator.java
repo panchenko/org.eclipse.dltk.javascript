@@ -906,7 +906,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 									&& isIdentifier(expression)
 									&& !reference.exists()) {
 							reporter.reportProblem(
-									JavaScriptProblems.UNDEFINED_METHOD,
+										JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT,
 									NLS.bind(
 											ValidationMessages.UndefinedMethodInScript,
 												reference.getName()),
@@ -914,7 +914,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 											.sourceEnd());
 							} else {
 								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT,
+										JavaScriptProblems.UNDEFINED_METHOD,
 										NLS.bind(
 												ValidationMessages.UndefinedMethodOnObject,
 												reference.getName(), reference
@@ -968,7 +968,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 									&& isIdentifier(expression)
 									&& !reference.exists()) {
 								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD,
+										JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT,
 										NLS.bind(
 												ValidationMessages.UndefinedMethodInScript,
 												reference.getName()),
@@ -976,7 +976,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 												.sourceEnd());
 							} else {
 								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT,
+										JavaScriptProblems.UNDEFINED_METHOD,
 									NLS.bind(
 												ValidationMessages.UndefinedMethodOnObject,
 												reference.getName(), reference
