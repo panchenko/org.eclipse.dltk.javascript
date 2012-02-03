@@ -902,13 +902,27 @@ public class TypeInfoValidator implements IBuildParticipant {
 									methodNode.sourceStart(), methodNode
 											.sourceEnd());
 						} else if (!reference.exists()) {
+							if (reference.getParent() == null
+									&& isIdentifier(expression)
+									&& !reference.exists()) {
 							reporter.reportProblem(
 									JavaScriptProblems.UNDEFINED_METHOD,
 									NLS.bind(
 											ValidationMessages.UndefinedMethodInScript,
-											reference.getName()), methodNode
-											.sourceStart(), methodNode
+												reference.getName()),
+										methodNode.sourceStart(), methodNode
 											.sourceEnd());
+							} else {
+								reporter.reportProblem(
+										JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT,
+										NLS.bind(
+												ValidationMessages.UndefinedMethodOnObject,
+												reference.getName(), reference
+														.getParent().getName()),
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
+
+							}
 						}
 					} else {
 						IRType referenceType = JavaScriptValidations
@@ -950,16 +964,28 @@ public class TypeInfoValidator implements IBuildParticipant {
 											.sourceEnd());
 
 						} else {
-							reporter.reportProblem(
-									reference.getParent() == null
-											&& isIdentifier(expression)
-											&& !reference.exists() ? JavaScriptProblems.UNDECLARED_VARIABLE
-											: JavaScriptProblems.UNDEFINED_METHOD,
+							if (reference.getParent() == null
+									&& isIdentifier(expression)
+									&& !reference.exists()) {
+								reporter.reportProblem(
+										JavaScriptProblems.UNDEFINED_METHOD,
+										NLS.bind(
+												ValidationMessages.UndefinedMethodInScript,
+												reference.getName()),
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
+							} else {
+								reporter.reportProblem(
+										JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT,
 									NLS.bind(
-											ValidationMessages.UndefinedMethodInScript,
-											reference.getName()), methodNode
+												ValidationMessages.UndefinedMethodOnObject,
+												reference.getName(), reference
+														.getParent().getName()),
+										methodNode
 											.sourceStart(), methodNode
 											.sourceEnd());
+
+							}
 						}
 					}
 				}
