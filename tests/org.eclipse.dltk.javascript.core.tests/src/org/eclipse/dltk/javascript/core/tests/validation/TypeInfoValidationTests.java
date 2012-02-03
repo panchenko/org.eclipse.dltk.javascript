@@ -375,6 +375,28 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 	}
 
+	
+	public void testLazyVariableWithAssignment() {
+		StringList code = new StringList();
+		code.add("function Node1() {");
+		code.add("myVar = 10;");
+		code.add("}");
+		code.add("var myVar = 10;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testLazyVariableWithAssignmentAndAddition() {
+		StringList code = new StringList();
+		code.add("function Node1() {");
+		code.add("myVar += 10;");
+		code.add("}");
+		code.add("var myVar = 10;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	
 	public void testLazyJSObject() {
 		StringList code = new StringList();
 		code.add("var x = new function x(){");
