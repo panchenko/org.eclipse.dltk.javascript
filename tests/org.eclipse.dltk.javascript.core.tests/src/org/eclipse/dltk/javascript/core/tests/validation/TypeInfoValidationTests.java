@@ -66,7 +66,17 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testUnknownJavaScriptFunctionCall() {
 		final List<IProblem> problems = validate("var x = longString()");
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT, problems.get(0)
+				.getID());
+	}
+	
+	public void testUnknownJavaScriptFunctionCallOnObject() {
+		StringList code = new StringList();
+		code.add("var x = new Object();");
+		code.add("x.longString();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
 				.getID());
 	}
 
@@ -908,7 +918,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("b: function() {}}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.UNDECLARED_VARIABLE, problems.get(0)
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT, problems.get(0)
 				.getID());
 	}
 
