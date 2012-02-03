@@ -902,17 +902,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 									methodNode.sourceStart(), methodNode
 											.sourceEnd());
 						} else if (!reference.exists()) {
-							if (reference.getParent() == null
-									&& isIdentifier(expression)
-									&& !reference.exists()) {
-							reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT,
-									NLS.bind(
-											ValidationMessages.UndefinedMethodInScript,
-												reference.getName()),
-										methodNode.sourceStart(), methodNode
-											.sourceEnd());
-							} else {
 								reporter.reportProblem(
 										JavaScriptProblems.UNDEFINED_METHOD,
 										NLS.bind(
@@ -921,8 +910,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 														.getParent().getName()),
 										methodNode.sourceStart(), methodNode
 												.sourceEnd());
-
-							}
 						}
 					} else {
 						IRType referenceType = JavaScriptValidations
@@ -965,8 +952,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 						} else {
 							if (reference.getParent() == null
-									&& isIdentifier(expression)
-									&& !reference.exists()) {
+									|| (isIdentifier(expression) && !reference
+											.exists())) {
 								reporter.reportProblem(
 										JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT,
 										NLS.bind(
