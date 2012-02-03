@@ -902,14 +902,14 @@ public class TypeInfoValidator implements IBuildParticipant {
 									methodNode.sourceStart(), methodNode
 											.sourceEnd());
 						} else if (!reference.exists()) {
-								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD,
-										NLS.bind(
-												ValidationMessages.UndefinedMethodOnObject,
-												reference.getName(), reference
-														.getParent().getName()),
-										methodNode.sourceStart(), methodNode
-												.sourceEnd());
+							reporter.reportProblem(
+									JavaScriptProblems.UNDEFINED_METHOD,
+									NLS.bind(
+											ValidationMessages.UndefinedMethodOnObject,
+											reference.getName(), reference
+													.getParent().getName()),
+									methodNode.sourceStart(), methodNode
+											.sourceEnd());
 						}
 					} else {
 						IRType referenceType = JavaScriptValidations
@@ -951,27 +951,35 @@ public class TypeInfoValidator implements IBuildParticipant {
 											.sourceEnd());
 
 						} else {
-							if (reference.getParent() == null
-									|| (isIdentifier(expression) && !reference
-											.exists())) {
-								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_FUNCTION,
-										NLS.bind(
-												ValidationMessages.UndefinedMethodInScript,
-												reference.getName()),
-										methodNode.sourceStart(), methodNode
-												.sourceEnd());
+							if (reference.getParent() == null) {
+								if (isIdentifier(expression)
+										&& !reference.exists()) {
+									reporter.reportProblem(
+											JavaScriptProblems.UNDEFINED_FUNCTION,
+											NLS.bind(
+													ValidationMessages.UndefinedMethodInScript,
+													reference.getName()),
+											methodNode.sourceStart(),
+											methodNode.sourceEnd());
+								} else {
+									reporter.reportProblem(
+											JavaScriptProblems.WRONG_FUNCTION,
+											isIdentifier(expression) ? NLS
+													.bind(ValidationMessages.WrongFunction,
+															reference.getName())
+													: ValidationMessages.WrongFunctionExpression,
+											methodNode.sourceStart(),
+											methodNode.sourceEnd());
+								}
 							} else {
 								reporter.reportProblem(
 										JavaScriptProblems.UNDEFINED_METHOD,
-									NLS.bind(
+										NLS.bind(
 												ValidationMessages.UndefinedMethodOnObject,
 												reference.getName(), reference
 														.getParent().getName()),
-										methodNode
-											.sourceStart(), methodNode
-											.sourceEnd());
-
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
 							}
 						}
 					}

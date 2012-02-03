@@ -47,6 +47,11 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	 */
 	UNDEFINED_METHOD,
 
+	/**
+	 * Call to something which is not known be a function.
+	 */
+	WRONG_FUNCTION,
+
 	WRONG_PARAMETERS, WRONG_PARAMETERS_PARAMETERIZATION, WRONG_PARAMETERS_UNTYPED, DEPRECATED_METHOD,
 
 	/**
