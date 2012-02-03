@@ -32,7 +32,23 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	 */
 	WRONG_TYPE_EXPRESSION, DEPRECATED_TYPE,
 
-	UNDEFINED_METHOD, UNDEFINED_METHOD_IN_SCRIPT, WRONG_PARAMETERS, WRONG_PARAMETERS_PARAMETERIZATION, WRONG_PARAMETERS_UNTYPED, DEPRECATED_METHOD,
+	/**
+	 * @since 3.0
+	 */
+	UNDECLARED_VARIABLE,
+
+	/**
+	 * Undefined standalone function
+	 */
+	UNDEFINED_FUNCTION(UNDECLARED_VARIABLE),
+
+	/**
+	 * Undefined object/class method
+	 */
+	UNDEFINED_METHOD,
+
+	WRONG_PARAMETERS, WRONG_PARAMETERS_PARAMETERIZATION, WRONG_PARAMETERS_UNTYPED, DEPRECATED_METHOD,
+
 	/**
 	 * @since 3.0
 	 */
@@ -118,10 +134,6 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	/**
 	 * @since 3.0
 	 */
-	UNDECLARED_VARIABLE,
-	/**
-	 * @since 3.0
-	 */
 	VAR_HIDES_FUNCTION(JSParserProblemGroup.DECLARATION_HIDES_OTHER),
 
 	EQUAL_AS_ASSIGN, INVALID_ASSIGN_LEFT,
@@ -149,18 +161,18 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 
 	FUNCTION_HIDES_FUNCTION(JSParserProblemGroup.DECLARATION_HIDES_OTHER);
 
-	JavaScriptProblems() {
+	private JavaScriptProblems() {
 		this(null);
 	}
 
-	JavaScriptProblems(JSParserProblemGroup group) {
-		this.group = group;
+	private JavaScriptProblems(IProblemIdentifier primary) {
+		this.primary = primary;
 	}
 
-	private final JSParserProblemGroup group;
+	private final IProblemIdentifier primary;
 
 	public IProblemIdentifier getPrimeIdentifier() {
-		return group;
+		return primary;
 	}
 
 	public boolean belongsTo(IProblemCategory category) {

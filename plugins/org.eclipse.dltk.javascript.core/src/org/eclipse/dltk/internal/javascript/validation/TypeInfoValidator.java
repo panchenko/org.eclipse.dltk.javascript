@@ -955,7 +955,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 									|| (isIdentifier(expression) && !reference
 											.exists())) {
 								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT,
+										JavaScriptProblems.UNDEFINED_FUNCTION,
 										NLS.bind(
 												ValidationMessages.UndefinedMethodInScript,
 												reference.getName()),

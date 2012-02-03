@@ -60,6 +60,8 @@ import org.eclipse.dltk.javascript.ast.GetArrayItemExpression;
 import org.eclipse.dltk.javascript.ast.GetLocalNameExpression;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.IfStatement;
+import org.eclipse.dltk.javascript.ast.JSDeclaration;
+import org.eclipse.dltk.javascript.ast.JSScope;
 import org.eclipse.dltk.javascript.ast.LabelledStatement;
 import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.NullExpression;
@@ -794,6 +796,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	}
 
 	public void visitFunctionBody(FunctionStatement node) {
+		handleDeclarations(node);
 		visit(node.getBody());
 	}
 
@@ -1154,7 +1157,18 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitScript(Script node) {
+		handleDeclarations(node);
 		return visit(node.getStatements());
+	}
+
+	private void handleDeclarations(JSScope scope) {
+		for (JSDeclaration declaration : scope.getDeclarations()) {
+			if (declaration instanceof FunctionStatement) {
+
+			} else if (declaration instanceof VariableDeclaration) {
+
+			}
+		}
 	}
 
 	@Override
