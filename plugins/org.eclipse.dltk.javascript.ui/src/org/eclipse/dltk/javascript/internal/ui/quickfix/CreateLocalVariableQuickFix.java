@@ -91,6 +91,7 @@ public class CreateLocalVariableQuickFix extends TextFileEditResolution {
 					}
 					textEdit.addChild(new InsertEdit(statement.sourceStart(),
 							"var " + found.getName() + ";" + ident));
+					break;
 
 				}
 				parent = ((JSNode) parent).getParent();
