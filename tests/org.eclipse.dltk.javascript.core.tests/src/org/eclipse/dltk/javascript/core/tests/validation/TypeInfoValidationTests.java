@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.tests.Skip;
 import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
@@ -375,8 +376,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 	}
 
-	
+	@Skip
 	public void testLazyVariableWithAssignment() {
+		// TODO uncomment when correct scopes support is implemented
 		StringList code = new StringList();
 		code.add("function Node1() {");
 		code.add("myVar = 10;");
