@@ -7,6 +7,8 @@ import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
+import org.eclipse.dltk.javascript.ast.BinaryOperation;
+import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.JSNode;
@@ -71,35 +73,50 @@ public class CreateLocalVariableQuickFix extends TextFileEditResolution {
 
 		final Identifier found = getIdentifier(file, offset);
 		if (found != null) {
-			boolean inFunctionCreated = false;
+			String extraLine = "\n";
 			ASTNode parent = found.getParent();
+			ASTNode node = null;
 			while (parent instanceof JSNode) {
 				if (parent instanceof FunctionStatement) {
-					String ident = "";
-					Statement statement = ((FunctionStatement) parent)
-							.getBody().getStatements().get(0);
-					try {
-						ISourceModule sourceModule = DLTKCore
-								.createSourceModuleFrom(getScriptFile());
-						String functionString = sourceModule.getBuffer()
-								.getText(
-										parent.sourceStart(),
-										statement.sourceStart()
-												- parent.sourceStart());
-						int lastNewLine = functionString.lastIndexOf('\n');
-						ident = functionString.substring(lastNewLine);
-					} catch (ModelException e) {
-					}
-					textEdit.addChild(new InsertEdit(statement.sourceStart(),
-							"var " + found.getName() + ";" + ident));
-					inFunctionCreated = true;
+					node = ((FunctionStatement) parent).getBody()
+							.getStatements().get(0);
+					extraLine = "";
 					break;
 
+				} else if (parent instanceof BinaryOperation
+						&& ((BinaryOperation) parent).isAssignment()
+						&& ((BinaryOperation) parent).getLeftExpression() == found) {
+					textEdit.addChild(new InsertEdit(found.sourceStart(),
+							"var "));
+					node = null;
+					break;
 				}
 				parent = ((JSNode) parent).getParent();
+				if (!(parent instanceof Script))
+					node = parent;
 			}
-			if (!inFunctionCreated) {
-				textEdit.addChild(new InsertEdit(found.sourceStart(), "var "));
+			if (node != null) {
+				Comment documentation = ((JSNode) node).getDocumentation();
+
+				String ident = "";
+				int sourceStart = node.sourceStart();
+				if (documentation != null)
+					sourceStart = documentation.sourceStart();
+				try {
+					ISourceModule sourceModule = DLTKCore
+							.createSourceModuleFrom(getScriptFile());
+					String functionString = sourceModule.getBuffer().getText(
+							parent.sourceStart(),
+							sourceStart - parent.sourceStart());
+					int lastNewLine = functionString.lastIndexOf('\n');
+					if (lastNewLine != -1)
+						ident = functionString.substring(lastNewLine);
+					else
+						ident = "\n";
+				} catch (ModelException e) {
+				}
+				textEdit.addChild(new InsertEdit(sourceStart, "var "
+						+ found.getName() + ";" + extraLine + ident));
 			}
 		}
 		return textEdit;
