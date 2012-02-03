@@ -35,26 +35,30 @@ public class JSScriptCorrectionProcessor implements IScriptCorrectionProcessor {
 			context.addResolution(new CreateLocalVariableQuickFix(
 					(IFile) annotation.getSourceModule().getResource(), context
 							.getInvocationContext().getOffset()), annotation);
-			context.addResolution(new CreateTopLevelVariable((IFile) annotation
-					.getSourceModule().getResource(), context
-					.getInvocationContext().getOffset()), annotation);
+			CreateTopLevelVariable resolution = new CreateTopLevelVariable(
+					(IFile) annotation.getSourceModule().getResource(), context
+							.getInvocationContext().getOffset());
+			if (resolution.isValid()) {
+				context.addResolution(resolution, annotation);
+			}
 
 		} else {
-			String id = ProblemCategoryManager.getInstance().getID(
+			String[] id = ProblemCategoryManager.getInstance().getID(
 					JavaScriptNature.NATURE_ID, JSDocTag.SUPPRESS_WARNINGS,
 					annotation.getId());
-			if (id != null) {
-				context.addResolution(new GenerateSuppressWarningsResolution(
+			for (int i = 0; i < id.length; i++) {
+				GenerateSuppressWarningsResolution resolution = new GenerateSuppressWarningsResolution(
 						(IFile) annotation.getSourceModule().getResource(),
-						context.getInvocationContext().getOffset(), id),
-						annotation);
+						context.getInvocationContext().getOffset(), id[i]);
+				if (resolution.isValid()) {
+					context.addResolution(resolution, annotation);
+				}
 			}
 		}
 	}
 
 	public void computeQuickAssistProposals(IMarker marker,
 			IScriptCorrectionContext context) {
-		System.err.println(marker);
 	}
 
 }

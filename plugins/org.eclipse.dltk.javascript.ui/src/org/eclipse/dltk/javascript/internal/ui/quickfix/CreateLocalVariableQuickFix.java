@@ -100,7 +100,7 @@ public class CreateLocalVariableQuickFix extends TextFileEditResolution {
 				if (node instanceof Identifier) {
 					ISourceRange range = ((Identifier) node).getRange();
 					if (range.getOffset() <= offset
-							&& (range.getOffset() + range.getLength()) > offset) {
+							&& (range.getOffset() + range.getLength()) >= offset) {
 						found[0] = (Identifier) node;
 						return false;
 					}

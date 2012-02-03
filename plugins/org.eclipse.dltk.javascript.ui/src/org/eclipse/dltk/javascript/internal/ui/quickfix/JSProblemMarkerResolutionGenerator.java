@@ -1,5 +1,7 @@
 package org.eclipse.dltk.javascript.internal.ui.quickfix;
 
+import java.util.ArrayList;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.dltk.compiler.problem.DefaultProblemIdentifier;
@@ -19,23 +21,39 @@ public class JSProblemMarkerResolutionGenerator implements
 		IProblemIdentifier problemId = DefaultProblemIdentifier
 				.getProblemId(marker);
 		if (problemId == JavaScriptProblems.UNDECLARED_VARIABLE) {
-			return new IMarkerResolution[] {
-					new CreateLocalVariableQuickFix(
-							(IFile) marker.getResource(), marker.getAttribute(
-									IMarker.CHAR_START, -1)),
-					new CreateTopLevelVariable((IFile) marker.getResource(),
-							marker.getAttribute(IMarker.CHAR_START, -1)) };
+			CreateTopLevelVariable createTopLevelVariable = new CreateTopLevelVariable(
+					(IFile) marker.getResource(), marker.getAttribute(
+							IMarker.CHAR_START, -1));
+			if (createTopLevelVariable.isValid()) {
+				return new IMarkerResolution[] {
+						new CreateLocalVariableQuickFix(
+								(IFile) marker.getResource(),
+								marker.getAttribute(IMarker.CHAR_START, -1)),
+						createTopLevelVariable };
+			} else {
+				return new IMarkerResolution[] { new CreateLocalVariableQuickFix(
+						(IFile) marker.getResource(), marker.getAttribute(
+								IMarker.CHAR_START, -1)) };
+			}
 		} else {
-			String id = ProblemCategoryManager.getInstance().getID(
+			String[] ids = ProblemCategoryManager.getInstance().getID(
 					JavaScriptNature.NATURE_ID, JSDocTag.SUPPRESS_WARNINGS,
 					problemId);
-			if (id != null) {
-				return new IMarkerResolution[] { new GenerateSuppressWarningsResolution(
-						(IFile) marker.getResource(), marker.getAttribute(
-								IMarker.CHAR_START, -1), id) };
+			if (ids.length > 0) {
+				ArrayList<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
+				for (int i = 0; i < ids.length; i++) {
+
+					GenerateSuppressWarningsResolution resolution = new GenerateSuppressWarningsResolution(
+							(IFile) marker.getResource(), marker.getAttribute(
+									IMarker.CHAR_START, -1), ids[i]);
+					if (resolution.isValid()) {
+						resolutions.add(resolution);
+					}
+				}
+				return resolutions.toArray(new IMarkerResolution[resolutions
+						.size()]);
 			}
 		}
 		return NONE;
 	}
-
 }

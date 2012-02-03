@@ -9,6 +9,7 @@ import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.JSNode;
+import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
 
@@ -75,28 +76,45 @@ public class CreateTopLevelVariable extends TextFileEditResolution {
 		Identifier identifier = CreateLocalVariableQuickFix.getIdentifier(
 				getScriptFile(), getProblemStartIdx());
 		if (identifier != null) {
-			FunctionStatement fs = null;
+			JSNode topLevel = null;
 			ASTNode parent = identifier.getParent();
 			while (parent instanceof JSNode) {
 
-				if (parent instanceof FunctionStatement) {
-					fs = (FunctionStatement) parent;
+				if (!(parent instanceof Script)) {
+					topLevel = (JSNode) parent;
 				}
 				parent = ((JSNode) parent).getParent();
 			}
 			// this is the last Function Statement found
-			if (fs != null) {
+			if (topLevel != null) {
 				int startindex = -1;
-				if (fs.getDocumentation() != null) {
-					startindex = fs.getDocumentation().getRange().getOffset();
+				if (topLevel.getDocumentation() != null) {
+					startindex = topLevel.getDocumentation().getRange()
+							.getOffset();
 				} else {
-					startindex = fs.sourceStart();
+					startindex = topLevel.sourceStart();
 				}
 				edit.addChild(new InsertEdit(startindex, "var "
 						+ identifier.getName() + ";\n\n"));
 			}
 		}
 		return edit;
+	}
+
+	public boolean isValid() {
+		Identifier identifier = CreateLocalVariableQuickFix.getIdentifier(
+				getScriptFile(), getProblemStartIdx());
+		if (identifier != null) {
+			ASTNode parent = identifier.getParent();
+			while (parent instanceof JSNode) {
+
+				if (parent instanceof FunctionStatement) {
+					return true;
+				}
+				parent = ((JSNode) parent).getParent();
+			}
+		}
+		return false;
 	}
 
 }

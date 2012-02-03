@@ -119,4 +119,8 @@ public class GenerateSuppressWarningsResolution extends TextFileEditResolution {
 	private String getAnnotation() {
 		return "@SuppressWarnings(" + type + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
+
+	public boolean isValid() {
+		return getFunctionStatement(getScriptFile(), getProblemStartIdx()) != null;
+	}
 }
