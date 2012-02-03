@@ -66,7 +66,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testUnknownJavaScriptFunctionCall() {
 		final List<IProblem> problems = validate("var x = longString()");
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT, problems.get(0)
+		assertEquals(JavaScriptProblems.UNDEFINED_FUNCTION, problems.get(0)
 				.getID());
 	}
 	
@@ -915,10 +915,11 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		StringList code = new StringList();
 		code.add("var object = {");
 		code.add("a: function c() {b();},");
-		code.add("b: function() {}}");
+		code.add("b: function() {}");
+		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(1, problems.size());
-		assertEquals(JavaScriptProblems.UNDEFINED_METHOD_IN_SCRIPT, problems.get(0)
+		assertEquals(JavaScriptProblems.UNDEFINED_FUNCTION, problems.get(0)
 				.getID());
 	}
 
@@ -1962,26 +1963,26 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
-	
+
 	public void testRecordTypeParamCalledWithAnNullButDeclaredArgumentValue() {
 		final StringList code = new StringList();
 		code.add("/** @type {Object<{icon:String,color:String}>} */");
 		code.add("var statusCodes = { ok: {icon: 'media:///check.png', color: null}, fail: {icon: 'media:///16forbidden.png', color: 'red'}, maybe: {icon: 'media:///check_orange.png', color: 'orange'}}");
 		code.add("/** @param {{code: {icon:String,color:String}=, text: String|XML=, toolTip: String=}} object */");
 		code.add("function onLoad(object) {");
-		code.add("onLoad({code:statusCodes.ok});"); 
+		code.add("onLoad({code:statusCodes.ok});");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testRecordTypeParamWithCompletelyDifferentArgumentRecordType() {
 		final StringList code = new StringList();
 		code.add("/** @type {Object<{icon:String,color:String}>} */");
 		code.add("var statusCodes = { ok: {icon: 'media:///check.png', color: null}, fail: {icon: 'media:///16forbidden.png', color: 'red'}, maybe: {icon: 'media:///check_orange.png', color: 'orange'}}");
 		code.add("/** @param {{code: {icon:String,color:String}=, text: String|XML=, toolTip: String=}} object */");
 		code.add("function onLoad(object) {");
-		code.add("onLoad(statusCodes.ok);"); 
+		code.add("onLoad(statusCodes.ok);");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
@@ -1993,19 +1994,19 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var statusCodes = { ok: {icon: 'media:///check.png', color: null}, fail: {icon: 'media:///16forbidden.png', color: 'red'}, maybe: {icon: 'media:///check_orange.png', color: 'orange'}}");
 		code.add("/** @param {{code: {icon:String,color:String}=, text: String|XML=, toolTip: String=}} object */");
 		code.add("function onLoad(object) {");
-		code.add("onLoad({code:statusCodes.ok,notinparamtype:1});"); 
+		code.add("onLoad({code:statusCodes.ok,notinparamtype:1});");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testArrayLookupWithUnknowVariables() {
 		final StringList code = new StringList();
 		code.add("var vAvailableLicenses = exampleForms.nothere[exampleForms.nothere2].nothere.nothere;");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 2, problems.size());
 	}
-	
+
 	public void testContinationAsFunctionCall() {
 		final StringList code = new StringList();
 		code.add("var c = new Continuation();");
@@ -2013,7 +2014,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testObjectAsFunctionCall() {
 		final StringList code = new StringList();
 		code.add("var c = new Object();");
