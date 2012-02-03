@@ -11,6 +11,7 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
@@ -33,31 +34,23 @@ public class CreateLocalVariableQuickFix extends TextFileEditResolution {
 			ASTNode parent = identifier.getParent();
 			while (parent instanceof JSNode) {
 				if (parent instanceof FunctionStatement) {
+					Statement statement = ((FunctionStatement) parent)
+							.getBody().getStatements().get(0);
 					ISourceModule sourceModule = DLTKCore
 							.createSourceModuleFrom(getScriptFile());
 					try {
 						String functionString = sourceModule.getBuffer()
 								.getText(
 										parent.sourceStart(),
-										identifier.sourceStart()
+										statement.sourceStart()
 												- parent.sourceStart());
-						// get 5 lines
-						int index = functionString.lastIndexOf('\n');
-						int counter = 0;
-						while (index != -1) {
-							if (++counter == 5)
-								break;
-							index = functionString.lastIndexOf('\n', index - 1);
-						}
-						if (index != -1)
-							functionString = functionString.substring(index);
 						StringBuilder sb = new StringBuilder(
 								functionString.length() + 50);
 						sb.append("<html><body>");
 						sb.append(functionString.replace("\n", "<br>"));
-						sb.append("<b>var </b>");
+						sb.append("<b>var ");
 						sb.append(identifier.getName());
-						sb.append("</body></html>");
+						sb.append(";</b></body></html>");
 						return sb.toString();
 					} catch (ModelException e) {
 					}
@@ -78,7 +71,30 @@ public class CreateLocalVariableQuickFix extends TextFileEditResolution {
 
 		final Identifier found = getIdentifier(file, offset);
 		if (found != null) {
-			textEdit.addChild(new InsertEdit(found.sourceStart(), "var "));
+			ASTNode parent = found.getParent();
+			while (parent instanceof JSNode) {
+				if (parent instanceof FunctionStatement) {
+					String ident = "";
+					Statement statement = ((FunctionStatement) parent)
+							.getBody().getStatements().get(0);
+					try {
+						ISourceModule sourceModule = DLTKCore
+								.createSourceModuleFrom(getScriptFile());
+						String functionString = sourceModule.getBuffer()
+								.getText(
+										parent.sourceStart(),
+										statement.sourceStart()
+												- parent.sourceStart());
+						int lastNewLine = functionString.lastIndexOf('\n');
+						ident = functionString.substring(lastNewLine);
+					} catch (ModelException e) {
+					}
+					textEdit.addChild(new InsertEdit(statement.sourceStart(),
+							"var " + found.getName() + ";" + ident));
+
+				}
+				parent = ((JSNode) parent).getParent();
+			}
 		}
 		return textEdit;
 	}
