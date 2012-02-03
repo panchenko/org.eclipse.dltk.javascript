@@ -12,19 +12,18 @@
 package org.eclipse.dltk.javascript.internal.ui.text;
 
 import static org.eclipse.dltk.javascript.internal.ui.text.JavascriptColorConstants.JS_DEPRECATED;
-import static org.eclipse.dltk.ui.PreferenceConstants.EDITOR_SEMANTIC_HIGHLIGHTING_ENABLED_SUFFIX;
 
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.ast.Script;
-import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.ui.editor.highlighting.AbortSemanticHighlightingException;
 import org.eclipse.dltk.ui.editor.highlighting.ISemanticHighlighter;
 import org.eclipse.dltk.ui.editor.highlighting.ISemanticHighlightingRequestor;
 
 @SuppressWarnings("restriction")
-public class JavaScriptDeprecationHighlighter implements ISemanticHighlighter {
+public class JavaScriptDeprecationHighlighter extends
+		AbstractJavaScriptHighlighter implements ISemanticHighlighter {
 
 	public String[] getHighlightingKeys() {
 		return new String[] { JS_DEPRECATED };
@@ -32,13 +31,7 @@ public class JavaScriptDeprecationHighlighter implements ISemanticHighlighter {
 
 	public void process(IModuleSource code,
 			ISemanticHighlightingRequestor requestor) {
-		if (!JavaScriptUI
-				.getDefault()
-				.getPreferenceStore()
-				.getBoolean(
-						JS_DEPRECATED
-								+ EDITOR_SEMANTIC_HIGHLIGHTING_ENABLED_SUFFIX)) {
-			// TODO (alex) simplify enablement check
+		if (!isSemanticHighlightingEnabled(JS_DEPRECATED)) {
 			return;
 		}
 		final Script script = JavaScriptParserUtil.parse(code, null);
@@ -52,5 +45,4 @@ public class JavaScriptDeprecationHighlighter implements ISemanticHighlighter {
 		inferencer.setVisitor(visitor);
 		inferencer.doInferencing(script);
 	}
-
 }

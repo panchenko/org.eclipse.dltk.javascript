@@ -21,6 +21,11 @@ public final class JavascriptColorConstants {
 	public static final String JS_STRING = DLTKColorConstants.DLTK_STRING; //$NON-NLS-1$
 
 	/**
+	 * The color key for property names in object literals.
+	 */
+	public static final String JS_PROPERTY = "JS_PROPERTY";
+
+	/**
 	 * The color key for Javascript comments.
 	 */
 	public static final String JS_SINGLE_LINE_COMMENT = DLTKColorConstants.DLTK_SINGLE_LINE_COMMENT;

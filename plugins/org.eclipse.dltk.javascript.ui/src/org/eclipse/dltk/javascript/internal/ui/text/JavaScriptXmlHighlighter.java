@@ -5,13 +5,18 @@ import java.util.List;
 
 import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.GetMethod;
+import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Keyword;
 import org.eclipse.dltk.javascript.ast.Method;
+import org.eclipse.dltk.javascript.ast.ObjectInitializer;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.RegExpLiteral;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.SetMethod;
+import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.ast.XmlFragment;
 import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
@@ -20,17 +25,19 @@ import org.eclipse.dltk.ui.editor.highlighting.AbortSemanticHighlightingExceptio
 import org.eclipse.dltk.ui.editor.highlighting.ISemanticHighlighter;
 import org.eclipse.dltk.ui.editor.highlighting.ISemanticHighlightingRequestor;
 
-public class JavaScriptXmlHighlighter implements ISemanticHighlighter {
+public class JavaScriptXmlHighlighter extends AbstractJavaScriptHighlighter
+		implements ISemanticHighlighter {
 
 	private static final String HL_XML_TAG = JavascriptColorConstants.JS_XML_TAG_NAME;
 	private static final String HL_XML_ATTRIBUTE = JavascriptColorConstants.JS_XML_ATTR_NAME;
 	private static final String HL_XML_COMMENT = JavascriptColorConstants.JS_XML_COMMENT_NAME;
 	private static final String HL_KEYWORD = JavascriptColorConstants.JS_KEYWORD;
 	private static final String HL_REGEXP = JavascriptColorConstants.JS_REGEXP;
+	private static final String HL_PROPERTY = JavascriptColorConstants.JS_PROPERTY;
 
 	public String[] getHighlightingKeys() {
 		return new String[] { HL_XML_TAG, HL_XML_ATTRIBUTE, HL_XML_COMMENT,
-				HL_KEYWORD, HL_REGEXP };
+				HL_KEYWORD, HL_REGEXP, HL_PROPERTY };
 	}
 
 	public void process(IModuleSource code,
@@ -86,6 +93,20 @@ public class JavaScriptXmlHighlighter implements ISemanticHighlighter {
 				RegExpLiteral.class)) {
 			requestor.addPosition(regExp.sourceStart(), regExp.sourceEnd(),
 					HL_REGEXP);
+		}
+		if (isSemanticHighlightingEnabled(HL_PROPERTY)) {
+			for (ObjectInitializer object : ASTUtil.select(declaration,
+					ObjectInitializer.class)) {
+				for (PropertyInitializer property : object
+						.getPropertyInitializers()) {
+					final Expression name = property.getName();
+					if (name instanceof Identifier
+							|| name instanceof StringLiteral) {
+						requestor.addPosition(name.sourceStart(),
+								name.sourceEnd(), HL_PROPERTY);
+					}
+				}
+			}
 		}
 	}
 

@@ -51,6 +51,9 @@ public class JavaScriptColoringPreferences implements
 		requestor.addPreference(JavascriptColorConstants.JS_STRING,
 				PreferencesMessages.DLTKEditorPreferencePage_strings, new RGB(
 						42, 0, 255));
+		requestor.addPreference(JavascriptColorConstants.JS_PROPERTY,
+				"Property names", new RGB(42, 0, 255), EnablementStyle.ON,
+				FontStyle.ITALIC);
 		requestor.addPreference(JavascriptColorConstants.JS_NUMBER,
 				PreferencesMessages.DLTKEditorPreferencePage_numbers, new RGB(
 						128, 0, 0));

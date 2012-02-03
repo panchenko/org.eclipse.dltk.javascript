@@ -1,29 +1,28 @@
-dojo.provide("dojo.math");
-
 /**
  * This function solves everything
  */
-function doEverything()
-{
-   // TODO implement
+function doEverything() {
+	var person = { name: "Alex" }
+	var point = { x: 50, y: 75}
+	// TODO implement
 }
 
-dojo.math.degToRad = function(/* float */x) {
-	//	summary
-	//	Converts degrees to radians.
-	return (x*Math.PI) / 180; 	//	float
-}
-dojo.math.radToDeg = function(/* float */x) { 
-	//	summary
-	//	Converts radians to degrees.
-	return (x*180) / Math.PI; 	//	float
+/**
+ * @param {String} s
+ * @return {Boolean}
+ */
+function isNumeric(s) {
+	return /^\d+$/.test(s)
 }
 
-dojo.math.factorial = function(/* integer */n){
-	//	summary
-	//	Returns n!
-	if(n<1){ return 0; }
+/**
+ * Returns n!
+ * @param {Number} n
+ * @return {Number}
+ */
+var factorial = function(n) {
+	if (n < 1) { return 0; }
 	var retVal = 1;
-	for(var i=1;i<=n;i++){ retVal *= i; }
+	for (var i=1;i<=n;i++){ retVal *= i; }
 	return retVal;	//	integer
 }
