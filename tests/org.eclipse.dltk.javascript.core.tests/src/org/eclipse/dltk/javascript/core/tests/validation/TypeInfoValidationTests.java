@@ -2046,5 +2046,22 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
 	}
+	
+	public void testArrayWithJavaScriptType() {
+		final StringList code = new StringList();
+		code.add("function CustomType() {");
+		code.add("	this.myvar = 10;");
+		code.add("}");
+
+		code.add("function test(){");
+		code.add("	/** @type {Array<CustomType>} */");
+		code.add("	var myarray = [];");
+		code.add("	var x = myarray[0].myvar;");
+		code.add("	var item = myarray[0];");
+		code.add("	item.myvar;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
 }
