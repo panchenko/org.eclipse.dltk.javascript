@@ -1013,7 +1013,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 						&& reference.getDirectChildren().isEmpty()) {
 					return true;
 				} else if (kind == ReferenceKind.PROPERTY
-						&& reference.getDeclaredType() == null) {
+						&& reference.getDeclaredType() == null
+						&& reference.getDirectChildren().isEmpty()) {
 					return true;
 				}
 				reference = reference.getParent();
