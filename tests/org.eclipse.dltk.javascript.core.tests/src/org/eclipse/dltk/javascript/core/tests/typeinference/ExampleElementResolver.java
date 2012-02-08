@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.CharOperation;
-import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.IScriptFolder;
 import org.eclipse.dltk.core.ISourceModule;
@@ -46,24 +46,13 @@ public class ExampleElementResolver implements IElementResolver {
 		} else if ("GLOBALS".equals(name)) {
 			Property property = TypeInfoModelFactory.eINSTANCE.createProperty();
 			property.setName(name);
-			final ISourceModule module = context.getSource().getSourceModule();
-			if (module != null) {
-				final IScriptFolder folder = (IScriptFolder) module
-						.getAncestor(IModelElement.SCRIPT_FOLDER);
-				final ISourceModule globals = folder
-						.getSourceModule("globals.js");
-				if (globals.exists()) {
-					final Script script = new JavaScriptParser().parse(
-							(IModuleSource) globals, null);
-					if (script != null) {
-						TypeInferencer2 inferencer = new TypeInferencer2();
-						inferencer.setModelElement(globals);
-						inferencer.doInferencing(script);
-						property.setAttribute(MEMBER_VALUE,
-								inferencer.getCollection());
-					}
-
-				}
+			final Script script = new JavaScriptParser().parse(new ModuleSource("/** @return {Array<String>}*/function test() { return new Array();}"), null);
+			if (script != null) {
+				TypeInferencer2 inferencer = new TypeInferencer2();
+//				inferencer.setModelElement(globals);
+				inferencer.doInferencing(script);
+				property.setAttribute(MEMBER_VALUE,
+						inferencer.getCollection());
 			}
 			return property;
 		} else if ("GLOBALSLAZY".equals(name)) {

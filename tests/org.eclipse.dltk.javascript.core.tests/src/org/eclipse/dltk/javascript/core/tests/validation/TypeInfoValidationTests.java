@@ -2064,4 +2064,11 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testPropertyWithDirectJavascriptChildrenNoType() {
+		List<String> lines = new StringList();
+		lines.add("var array = GLOBALS.test();");
+		lines.add("array.push('string');");
+		final List<IProblem> problems = validate(lines.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
