@@ -814,6 +814,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return;
 		}
 		final IRType rt = JSTypeSet.normalize(getContext(), type);
+		setIRType(value, rt, lazyEnabled);
+	}
+
+	/**
+	 * @param value
+	 * @param type
+	 * @param lazyEnabled
+	 * @param rt
+	 */
+	private void setIRType(IValueReference value, final IRType rt,
+			boolean lazyEnabled) {
 		if (rt instanceof IRSimpleType) {
 			final Type t = ((IRSimpleType) rt).getTarget();
 			if (t.getKind() != TypeKind.UNKNOWN) {
@@ -822,7 +833,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					for (IMemberEvaluator evaluator : TypeInfoManager
 							.getMemberEvaluators()) {
 						final IValueCollection collection = evaluator.valueOf(
-								context, ((SimpleType) type).getTarget());
+								context, t);
 						if (collection != null) {
 							if (collection instanceof IValueProvider) {
 								((IValueProvider) value).getValue().addValue(
@@ -833,7 +844,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					}
 				}
 			} else if (lazyEnabled) {
-				value.addValue(new LazyTypeReference(context, type.getName(),
+				value.addValue(new LazyTypeReference(context, t.getName(),
 						peekContext()), false);
 			}
 		} else {
@@ -865,7 +876,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					arrayType = TypeUtil.extractArrayItemType(types.getFirst());
 			}
 			if (arrayType != null && child.getDeclaredType() == null) {
-				child.setDeclaredType(arrayType);
+				setIRType(child, arrayType, true);
 			}
 			if (node.getIndex() instanceof StringLiteral) {
 				IValueReference namedChild = extractNamedChild(array,

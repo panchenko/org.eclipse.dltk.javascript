@@ -31,6 +31,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
+import org.eclipse.dltk.javascript.typeinfo.IRNoneType;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
@@ -48,6 +49,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public abstract class ElementValue implements IValue {
 
@@ -63,7 +65,12 @@ public abstract class ElementValue implements IValue {
 			String name, MemberPredicate predicate) {
 		if (IValueReference.ARRAY_OP.equals(name)) {
 			IRType arrayType = TypeUtil.extractArrayItemType(type);
-			if (arrayType != null) {
+			// only give back this a a TypeValue if it is a known and not a
+			// NoneType
+			if (arrayType != null
+					&& TypeUtil.kind(arrayType) != TypeKind.UNKNOWN
+					&& !(arrayType instanceof IRNoneType)
+					) {
 				return new TypeValue(context, arrayType);
 			}
 		}
