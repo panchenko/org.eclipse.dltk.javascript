@@ -190,6 +190,7 @@ public abstract class AbstractReference implements IValueReference,
 		private final IValueReference reference;
 		private boolean resolved = false;
 		private boolean finalResolve;
+		private boolean typeResolved;
 
 		public LazyReferenceValue(IValueReference value) {
 			this.reference = value;
@@ -229,7 +230,8 @@ public abstract class AbstractReference implements IValueReference,
 					// to a value that already resolved to a type, if that is
 					// the case then this lazy reference is
 					// most likely just never going to hit on something known.
-					if (!finalResolve) {
+					if (!finalResolve && !typeResolved) {
+						typeResolved = true;
 						IValueReference parent = reference.getParent();
 						while (parent instanceof IValueProvider) {
 							value = ((IValueProvider) parent).getValue();
