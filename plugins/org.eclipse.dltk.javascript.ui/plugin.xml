@@ -932,6 +932,9 @@
       <problem
             id="org.eclipse.dltk.javascript.core.JavaScriptProblems#INSTANCE_PROPERTY"
             label="Static reference to none static property"/>
+      <problem
+            id="org.eclipse.dltk.javascript.core.JavaScriptProblems#WRONG_FUNCTION"
+            label="Call to something which is not known to be a function"/>
    </section>
 </extension>
 
