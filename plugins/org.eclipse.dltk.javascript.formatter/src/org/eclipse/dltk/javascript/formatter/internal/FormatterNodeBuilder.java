@@ -1128,9 +1128,23 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			public IFormatterNode visitParenthesizedExpression(
 					ParenthesizedExpression node) {
 
+				// if XML expression
+				final IParensConfiguration conf = node.getParent() instanceof PropertyExpression ? new IParensConfiguration() {
+					public boolean getSpaceBeforeLeftParen() {
+						return false;
+					}
+
+					public boolean getSpaceAfterLeftParen() {
+						return false;
+					}
+
+					public boolean getSpaceBeforeRightParen() {
+						return false;
+					}
+				}
+						: new ExpressionParensConfiguration(document);
 				return processParens(node.getLP(), node.getRP(),
-						node.getExpression(),
-						new ExpressionParensConfiguration(document));
+						node.getExpression(), conf);
 			}
 
 			@Override
