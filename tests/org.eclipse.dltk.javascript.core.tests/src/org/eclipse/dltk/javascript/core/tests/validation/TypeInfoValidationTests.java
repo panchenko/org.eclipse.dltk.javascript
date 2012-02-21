@@ -70,7 +70,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDEFINED_FUNCTION, problems.get(0)
 				.getID());
 	}
-	
+
 	public void testUnknownJavaScriptFunctionCallOnObject() {
 		StringList code = new StringList();
 		code.add("var x = new Object();");
@@ -387,7 +387,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testLazyVariableWithAssignmentAndAddition() {
 		StringList code = new StringList();
 		code.add("function Node1() {");
@@ -398,7 +398,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
-	
 	public void testLazyJSObject() {
 		StringList code = new StringList();
 		code.add("var x = new function x(){");
@@ -2045,8 +2044,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("c();");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_FUNCTION, problems.get(0).getID());
 	}
-	
+
 	public void testArrayWithJavaScriptType() {
 		final StringList code = new StringList();
 		code.add("function CustomType() {");
