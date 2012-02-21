@@ -35,6 +35,7 @@ public class AllTests {
 		suite.addTest(SwitchTest.suite());
 		suite.addTest(TryCatchTest.suite());
 		suite.addTest(SpacesTest.suite());
+		suite.addTest(NewLinesTest.suite());
 		suite.addTest(StringsTest.suite());
 		suite.addTest(BlockTest.suite());
 		suite.addTest(ForStatementTest.suite());
