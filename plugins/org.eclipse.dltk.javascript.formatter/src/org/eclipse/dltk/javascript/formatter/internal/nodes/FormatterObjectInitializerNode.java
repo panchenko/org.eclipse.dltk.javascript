@@ -8,17 +8,26 @@
  *
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *     NumberFour AG - keep line breaks after object initializer (Alex Panchenko)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
+import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.formatter.IFormatterDocument;
+import org.eclipse.dltk.formatter.IFormatterWriter;
 
 public class FormatterObjectInitializerNode extends BracesNode {
 
 	public FormatterObjectInitializerNode(IFormatterDocument document,
 			IBracesConfiguration configuration) {
 		super(document, configuration);
+	}
+
+	@Override
+	public void accept(IFormatterContext context, IFormatterWriter visitor)
+			throws Exception {
+		super.accept(context, visitor);
+		visitor.skipNextLineBreaks(context, false);
 	}
 
 }
