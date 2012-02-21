@@ -66,4 +66,9 @@ public class LineBreakFormatterNode implements IFormatterContainerNode,
 		return target;
 	}
 
+	@Override
+	public String toString() {
+		return "\n<linebreak>" + target.toString();
+	}
+
 }
