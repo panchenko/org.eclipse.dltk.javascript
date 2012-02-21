@@ -43,3 +43,19 @@ function test3 () {
 function XMLRPC_request (type, value) {
 	xml = <{type}>value</{type}>;
 }
+==== parenthesis
+function test()
+{
+if (HTML.body.div. ( @id == "warnings" ) .length() > 0)
+{
+return null;
+}
+return(a+b)*(c+d);
+}
+==
+function test () {
+	if (HTML.body.div.(@id == "warnings").length() > 0) {
+		return null;
+	}
+	return (a + b) * (c + d);
+}
