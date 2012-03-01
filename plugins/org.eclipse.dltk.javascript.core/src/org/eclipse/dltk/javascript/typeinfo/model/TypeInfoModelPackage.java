@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.31 2011/12/19 09:15:03 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.32 2012/03/01 13:03:06 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -308,13 +308,13 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE__SUPER_TYPE = ELEMENT_FEATURE_COUNT + 2;
 
     /**
-     * The feature id for the '<em><b>Constructor</b></em>' containment reference.
+     * The feature id for the '<em><b>Static Constructor</b></em>' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int TYPE__CONSTRUCTOR = ELEMENT_FEATURE_COUNT + 3;
+    int TYPE__STATIC_CONSTRUCTOR = ELEMENT_FEATURE_COUNT + 3;
 
     /**
      * The feature id for the '<em><b>Traits</b></em>' reference list.
@@ -1662,13 +1662,13 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_TYPE__SUPER_TYPE = TYPE__SUPER_TYPE;
 
     /**
-     * The feature id for the '<em><b>Constructor</b></em>' containment reference.
+     * The feature id for the '<em><b>Static Constructor</b></em>' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int GENERIC_TYPE__CONSTRUCTOR = TYPE__CONSTRUCTOR;
+    int GENERIC_TYPE__STATIC_CONSTRUCTOR = TYPE__STATIC_CONSTRUCTOR;
 
     /**
      * The feature id for the '<em><b>Traits</b></em>' reference list.
@@ -2460,15 +2460,15 @@ public interface TypeInfoModelPackage extends EPackage {
     EReference getType_SuperType();
 
     /**
-     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructor <em>Constructor</em>}'.
+     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getStaticConstructor <em>Static Constructor</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the containment reference '<em>Constructor</em>'.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructor()
+     * @return the meta object for the containment reference '<em>Static Constructor</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getStaticConstructor()
      * @see #getType()
      * @generated
      */
-    EReference getType_Constructor();
+    EReference getType_StaticConstructor();
 
     /**
      * Returns the meta object for the reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits <em>Traits</em>}'.
@@ -3174,12 +3174,12 @@ public interface TypeInfoModelPackage extends EPackage {
         EReference TYPE__SUPER_TYPE = eINSTANCE.getType_SuperType();
 
         /**
-         * The meta object literal for the '<em><b>Constructor</b></em>' containment reference feature.
+         * The meta object literal for the '<em><b>Static Constructor</b></em>' containment reference feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EReference TYPE__CONSTRUCTOR = eINSTANCE.getType_Constructor();
+        EReference TYPE__STATIC_CONSTRUCTOR = eINSTANCE.getType_StaticConstructor();
 
         /**
          * The meta object literal for the '<em><b>Traits</b></em>' reference list feature.

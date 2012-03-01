@@ -4,9 +4,9 @@
   	<members xsi:type="ref:Property" name="prototype" directType="Error" static="true" description="Allows the addition of properties to a Error object."/>
   	<members xsi:type="ref:Property" name="name" directType="String" description="Error name."/>
   	<members xsi:type="ref:Property" name="message" directType="String" description="Error message."/>
-    <constructor name="Error">
+    <staticConstructor name="Error">
       <parameters name="message" kind="OPTIONAL" directType="Object"/>
-    </constructor>
+    </staticConstructor>
   </ref:Type>
   <ref:Type name="EvalError" kind="PREDEFINED" superType="Error">
   </ref:Type>
@@ -15,9 +15,9 @@
   <ref:Type name="ReferenceError" kind="PREDEFINED" superType="Error">
   </ref:Type>
   <ref:Type name="SyntaxError" kind="PREDEFINED" superType="Error">
-    <constructor name="SyntaxError">
+    <staticConstructor name="SyntaxError">
       <parameters name="message" kind="OPTIONAL" directType="Object"/>
-    </constructor>
+    </staticConstructor>
   </ref:Type>
   <ref:Type name="TypeError" kind="PREDEFINED" superType="Error">
   </ref:Type>
@@ -136,9 +136,9 @@
   </ref:Type>
   <ref:GenericType name="Array" kind="PREDEFINED" superType="Object" description="Arrays are list-like objects that come with a several built-in methods to perform traversal and mutation operations.">
   	<typeParameters name="E"/>
-    <constructor name="Array">
+    <staticConstructor name="Array">
       <parameters name="item" kind="VARARGS" directType="Object"/>
-    </constructor>
+    </staticConstructor>
   	<members xsi:type="ref:Property" name="prototype" directType="Array" static="true" description="Allows the addition of properties to a Array object."/>
     <members xsi:type="ref:Method" name="concat" description="Joins two or more arrays and returns the result.">
       <parameters name="[array1,arrayN]" kind="VARARGS"/>
@@ -213,9 +213,9 @@
     </members>
   </ref:GenericType>
   <ref:Type name="Boolean" kind="PREDEFINED" superType="Object">
-    <constructor name="Boolean">
+    <staticConstructor name="Boolean">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>
-    </constructor>
+    </staticConstructor>
   	<members xsi:type="ref:Property" name="prototype" directType="Boolean" static="true" description="Allows the addition of properties to a Boolean object."/>
   </ref:Type>
   <ref:TypeAlias source="boolean" target="Boolean"/>
@@ -329,9 +329,9 @@
     <members xsi:type="ref:Method" name="toUTCString" directType="String" description="Converts a Date object, according to universal time, to a string."/>
   </ref:Type>
   <ref:Type name="Number" kind="PREDEFINED" superType="Object">
-    <constructor name="Number">
+    <staticConstructor name="Number">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>
-    </constructor>
+    </staticConstructor>
   	<members xsi:type="ref:Property" name="MAX_VALUE" directType="Number" static="true" description="The largest representable number."/>
   	<members xsi:type="ref:Property" name="MIN_VALUE" directType="Number" static="true" description="The smallest representable number."/>
   	<members xsi:type="ref:Property" name="NaN" directType="Number" static="true" description="Special 'not a number' value."/>
@@ -355,9 +355,9 @@
   </ref:Type>
   <ref:TypeAlias source="number" target="Number"/>
   <ref:Type name="String" kind="PREDEFINED" description="String is a global object that may be used to construct String  instances." superType="Object">
-    <constructor name="String">
+    <staticConstructor name="String">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>
-    </constructor>
+    </staticConstructor>
   	<members xsi:type="ref:Property" name="prototype" directType="String" static="true" description="Allows the addition of properties to a String object."/>
   	<members xsi:type="ref:Method" name="fromCharCode" directType="String" static="true" description="Returns a string created by using the specified sequence of Unicode values.">
   	    <parameters name="[num1,numN]" kind="VARARGS"/>

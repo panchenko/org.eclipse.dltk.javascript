@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.17 2011/11/25 11:52:52 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.18 2012/03/01 13:03:06 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -43,7 +43,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getMembers <em>Members</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getKind <em>Kind</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getSuperType <em>Super Type</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructor <em>Constructor</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getStaticConstructor <em>Static Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getTraits <em>Traits</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isExtensible <em>Extensible</em>}</li>
  * </ul>
@@ -93,14 +93,14 @@ public class TypeImpl extends ElementImpl implements Type {
     protected Type superType;
 
     /**
-     * The cached value of the '{@link #getConstructor() <em>Constructor</em>}' containment reference.
+     * The cached value of the '{@link #getStaticConstructor() <em>Static Constructor</em>}' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getConstructor()
+     * @see #getStaticConstructor()
      * @generated
      * @ordered
      */
-    protected Constructor constructor;
+    protected Constructor staticConstructor;
 
     /**
      * The cached value of the '{@link #getTraits() <em>Traits</em>}' reference list.
@@ -238,8 +238,8 @@ public class TypeImpl extends ElementImpl implements Type {
      * <!-- end-user-doc -->
      * @generated
      */
-    public Constructor getConstructor() {
-        return constructor;
+    public Constructor getStaticConstructor() {
+        return staticConstructor;
     }
 
     /**
@@ -247,11 +247,11 @@ public class TypeImpl extends ElementImpl implements Type {
      * <!-- end-user-doc -->
      * @generated
      */
-    public NotificationChain basicSetConstructor(Constructor newConstructor, NotificationChain msgs) {
-        Constructor oldConstructor = constructor;
-        constructor = newConstructor;
+    public NotificationChain basicSetStaticConstructor(Constructor newStaticConstructor, NotificationChain msgs) {
+        Constructor oldStaticConstructor = staticConstructor;
+        staticConstructor = newStaticConstructor;
         if (eNotificationRequired()) {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__CONSTRUCTOR, oldConstructor, newConstructor);
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR, oldStaticConstructor, newStaticConstructor);
             if (msgs == null) msgs = notification; else msgs.add(notification);
         }
         return msgs;
@@ -262,18 +262,18 @@ public class TypeImpl extends ElementImpl implements Type {
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setConstructor(Constructor newConstructor) {
-        if (newConstructor != constructor) {
+    public void setStaticConstructor(Constructor newStaticConstructor) {
+        if (newStaticConstructor != staticConstructor) {
             NotificationChain msgs = null;
-            if (constructor != null)
-                msgs = ((InternalEObject)constructor).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.TYPE__CONSTRUCTOR, null, msgs);
-            if (newConstructor != null)
-                msgs = ((InternalEObject)newConstructor).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.TYPE__CONSTRUCTOR, null, msgs);
-            msgs = basicSetConstructor(newConstructor, msgs);
+            if (staticConstructor != null)
+                msgs = ((InternalEObject)staticConstructor).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR, null, msgs);
+            if (newStaticConstructor != null)
+                msgs = ((InternalEObject)newStaticConstructor).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR, null, msgs);
+            msgs = basicSetStaticConstructor(newStaticConstructor, msgs);
             if (msgs != null) msgs.dispatch();
         }
         else if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__CONSTRUCTOR, newConstructor, newConstructor));
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR, newStaticConstructor, newStaticConstructor));
     }
 
     /**
@@ -343,8 +343,8 @@ public class TypeImpl extends ElementImpl implements Type {
         switch (featureID) {
             case TypeInfoModelPackage.TYPE__MEMBERS:
                 return ((InternalEList<?>)getMembers()).basicRemove(otherEnd, msgs);
-            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
-                return basicSetConstructor(null, msgs);
+            case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
+                return basicSetStaticConstructor(null, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
@@ -364,8 +364,8 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 if (resolve) return getSuperType();
                 return basicGetSuperType();
-            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
-                return getConstructor();
+            case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
+                return getStaticConstructor();
             case TypeInfoModelPackage.TYPE__TRAITS:
                 return getTraits();
             case TypeInfoModelPackage.TYPE__EXTENSIBLE:
@@ -393,8 +393,8 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 setSuperType((Type)newValue);
                 return;
-            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
-                setConstructor((Constructor)newValue);
+            case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
+                setStaticConstructor((Constructor)newValue);
                 return;
             case TypeInfoModelPackage.TYPE__TRAITS:
                 getTraits().clear();
@@ -424,8 +424,8 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 setSuperType((Type)null);
                 return;
-            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
-                setConstructor((Constructor)null);
+            case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
+                setStaticConstructor((Constructor)null);
                 return;
             case TypeInfoModelPackage.TYPE__TRAITS:
                 getTraits().clear();
@@ -451,8 +451,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return kind != KIND_EDEFAULT;
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 return superType != null;
-            case TypeInfoModelPackage.TYPE__CONSTRUCTOR:
-                return constructor != null;
+            case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
+                return staticConstructor != null;
             case TypeInfoModelPackage.TYPE__TRAITS:
                 return traits != null && !traits.isEmpty();
             case TypeInfoModelPackage.TYPE__EXTENSIBLE:

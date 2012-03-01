@@ -51,7 +51,7 @@ public class ConstructorImpl extends MethodImpl implements Constructor {
 	@Override
 	public Type getDeclaringType() {
 		if (eContainerFeatureID() != EOPPOSITE_FEATURE_BASE
-				- TypeInfoModelPackage.TYPE__CONSTRUCTOR)
+				- TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR)
 			return null;
 		return (Type) eContainer();
 	}

@@ -35,7 +35,7 @@
         eType="#//Member" containment="true" resolveProxies="false" eOpposite="#//Member/declaringType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//TypeKind"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//Type"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="constructor" eType="#//Constructor"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="staticConstructor" eType="#//Constructor"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="traits" upperBound="-1"
         eType="#//Type"/>

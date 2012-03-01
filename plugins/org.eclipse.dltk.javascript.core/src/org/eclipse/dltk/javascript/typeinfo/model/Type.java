@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.11 2011/07/01 12:30:11 apanchenk Exp $
+ * $Id: Type.java,v 1.12 2012/03/01 13:03:06 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -26,7 +26,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType <em>Super Type</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructor <em>Constructor</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getStaticConstructor <em>Static Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits <em>Traits</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible <em>Extensible</em>}</li>
  * </ul>
@@ -111,30 +111,30 @@ public interface Type extends Element {
     void setSuperType(Type value);
 
     /**
-     * Returns the value of the '<em><b>Constructor</b></em>' containment reference.
+     * Returns the value of the '<em><b>Static Constructor</b></em>' containment reference.
      * <!-- begin-user-doc -->
      * <p>
-     * If the meaning of the '<em>Constructor</em>' containment reference isn't clear,
+     * If the meaning of the '<em>Static Constructor</em>' containment reference isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Constructor</em>' containment reference.
-     * @see #setConstructor(Constructor)
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Constructor()
+     * @return the value of the '<em>Static Constructor</em>' containment reference.
+     * @see #setStaticConstructor(Constructor)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_StaticConstructor()
      * @model containment="true"
      * @generated
      */
-    Constructor getConstructor();
+    Constructor getStaticConstructor();
 
     /**
-     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructor <em>Constructor</em>}' containment reference.
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getStaticConstructor <em>Static Constructor</em>}' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Constructor</em>' containment reference.
-     * @see #getConstructor()
+     * @param value the new value of the '<em>Static Constructor</em>' containment reference.
+     * @see #getStaticConstructor()
      * @generated
      */
-    void setConstructor(Constructor value);
+    void setStaticConstructor(Constructor value);
 
     /**
      * Returns the value of the '<em><b>Traits</b></em>' reference list.

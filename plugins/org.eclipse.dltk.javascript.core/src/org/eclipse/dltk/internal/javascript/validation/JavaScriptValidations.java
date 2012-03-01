@@ -87,7 +87,7 @@ public class JavaScriptValidations {
 			Class<E> elementType) {
 		return elementType.isInstance(value) || elementType == Method.class
 				&& value instanceof Type
-				&& ((Type) value).getConstructor() != null;
+				&& ((Type) value).getStaticConstructor() != null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -96,7 +96,7 @@ public class JavaScriptValidations {
 		if (elementType.isInstance(value))
 			return (E) value;
 		else
-			return (E) ((Type) value).getConstructor();
+			return (E) ((Type) value).getStaticConstructor();
 	}
 
 	/**
