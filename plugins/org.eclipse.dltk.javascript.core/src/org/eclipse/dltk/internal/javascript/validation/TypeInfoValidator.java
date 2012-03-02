@@ -71,7 +71,6 @@ import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
-import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
@@ -80,6 +79,7 @@ import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -124,7 +124,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 	}
 
 	private static abstract class ExpressionValidator {
-		abstract void call();
+		abstract void call(ValidationVisitor visitor);
 
 		public ExpressionValidator() {
 		}
@@ -144,23 +144,20 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private final FunctionScope scope;
 		private final CallExpression node;
 		private final IValueReference reference;
-		private final ValidationVisitor visitor;
 		private final IValueReference[] arguments;
 		private final List<Method> methods;
 
 		public CallExpressionValidator(FunctionScope scope,
 				CallExpression node, IValueReference reference,
-				IValueReference[] arguments, List<Method> methods,
-				ValidationVisitor visitor) {
+				IValueReference[] arguments, List<Method> methods) {
 			this.scope = scope;
 			this.node = node;
 			this.reference = reference;
 			this.arguments = arguments;
 			this.methods = methods;
-			this.visitor = visitor;
 		}
 
-		public void call() {
+		public void call(ValidationVisitor visitor) {
 			visitor.validateCallExpression(scope, node, reference, arguments,
 					methods);
 		}
@@ -186,17 +183,14 @@ public class TypeInfoValidator implements IBuildParticipant {
 	private static class TestReturnStatement extends ExpressionValidator {
 
 		private final List<ReturnNode> lst;
-		private final ValidationVisitor visitor;
 		private final IRMethod jsMethod;
 
-		public TestReturnStatement(IRMethod jsMethod, List<ReturnNode> lst,
-				ValidationVisitor visitor) {
+		public TestReturnStatement(IRMethod jsMethod, List<ReturnNode> lst) {
 			this.jsMethod = jsMethod;
 			this.lst = lst;
-			this.visitor = visitor;
 		}
 
-		public void call() {
+		public void call(ValidationVisitor visitor) {
 			IRType firstType = null;
 			for (ReturnNode element : lst) {
 				if (element.returnValueReference == null)
@@ -280,18 +274,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private final FunctionScope scope;
 		private final Expression identifer;
 		private final IValueReference reference;
-		private final ValidationVisitor visitor;
 
 		public NotExistingIdentiferValidator(FunctionScope scope,
-				Expression identifer, IValueReference reference,
-				ValidationVisitor visitor) {
+				Expression identifer, IValueReference reference) {
 			this.scope = scope;
 			this.identifer = identifer;
 			this.reference = reference;
-			this.visitor = visitor;
 		}
 
-		public void call() {
+		public void call(ValidationVisitor visitor) {
 			visitor.validate(scope, identifer, reference);
 		}
 	}
@@ -300,22 +291,24 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private final FunctionScope scope;
 		private final NewExpression node;
 		private final IValueReference reference;
-		final IValueCollection collection;
-		private final ValidationVisitor validator;
+		private final IValueReference typeReference;
+		private final IValueReference[] arguments;
+		private final IValueCollection collection;
 
 		public NewExpressionValidator(FunctionScope scope, NewExpression node,
-				IValueReference reference, IValueCollection collection,
-				ValidationVisitor validator) {
+				IValueReference reference, IValueReference typeReference,
+				IValueReference[] arguments, IValueCollection collection) {
 			this.scope = scope;
 			this.node = node;
 			this.reference = reference;
+			this.typeReference = typeReference;
+			this.arguments = arguments;
 			this.collection = collection;
-			this.validator = validator;
 		}
 
-		public void call() {
-			validator.checkExpressionType(scope, collection,
-					node.getObjectClass(), reference);
+		public void call(ValidationVisitor visitor) {
+			visitor.validateNewExpression(scope, collection,
+					node.getObjectClass(), reference, typeReference, arguments);
 		}
 
 	}
@@ -324,20 +317,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private final FunctionScope scope;
 		private final PropertyExpression node;
 		private final IValueReference reference;
-		private final ValidationVisitor visitor;
 		private final boolean exists;
 
 		public PropertyExpressionHolder(FunctionScope scope,
 				PropertyExpression node, IValueReference reference,
-				ValidationVisitor visitor, boolean exists) {
+				boolean exists) {
 			this.scope = scope;
 			this.node = node;
 			this.reference = reference;
-			this.visitor = visitor;
 			this.exists = exists;
 		}
 
-		public void call() {
+		public void call(ValidationVisitor visitor) {
 			visitor.validateProperty(scope, node, reference, exists);
 		}
 	}
@@ -418,17 +409,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 		@Override
 		public void done() {
 			super.done();
-			for (ExpressionValidator call : expressionValidators
-					.toArray(new ExpressionValidator[expressionValidators
-							.size()])) {
-				final ISuppressWarningsState suppressWarnings = reporter
-						.getSuppressWarnings();
-				try {
+			final ISuppressWarningsState suppressWarnings = reporter
+					.getSuppressWarnings();
+			try {
+				for (ExpressionValidator call : expressionValidators
+						.toArray(new ExpressionValidator[expressionValidators
+								.size()])) {
 					reporter.restoreSuppressWarnings(call.getSuppressed());
-					call.call();
-				} finally {
-					reporter.restoreSuppressWarnings(suppressWarnings);
+					call.call(this);
 				}
+			} finally {
+				reporter.restoreSuppressWarnings(suppressWarnings);
 			}
 			for (IValueReference variable : variables) {
 				if (variable.getAttribute(IReferenceAttributes.ACCESS) == null) {
@@ -455,10 +446,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		@Override
 		public IValueReference visitNewExpression(NewExpression node) {
-			IValueReference reference = super.visitNewExpression(node);
+			final VisitNewResult result = visitNew(node);
 			pushExpressionValidator(new NewExpressionValidator(
-					peekFunctionScope(), node, reference, peekContext(), this));
-			return reference;
+					peekFunctionScope(), node, result.getValue(),
+					result.getTypeValue(), result.getArguments(), peekContext()));
+			return result.getValue();
 		}
 
 		private final Stack<FunctionScope> functionScopes = new Stack<FunctionScope>();
@@ -499,7 +491,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (!scope.returnNodes.isEmpty()) {
 					// method.setType(context.resolveTypeRef(method.getType()));
 					pushExpressionValidator(new TestReturnStatement(method,
-							scope.returnNodes, this));
+							scope.returnNodes));
 				} else if (!scope.throwsException && method.getType() != null) {
 					final ReferenceLocation location = method.getLocation();
 					reporter.reportProblem(
@@ -700,7 +692,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (methods != null && methods.size() == 1
 					&& methods.get(0) instanceof GenericMethod) {
 				final GenericMethod method = (GenericMethod) methods.get(0);
-				if (!validateParameterCount(method, args)) {
+				if (!JavaScriptValidations.checkParameterCount(method,
+						args.size())) {
 					final Expression methodNode = expression instanceof PropertyExpression ? ((PropertyExpression) expression)
 							.getProperty() : expression;
 					reportMethodParameterError(methodNode, arguments, method);
@@ -711,7 +704,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			} else {
 				pushExpressionValidator(new CallExpressionValidator(
 						peekFunctionScope(), node, reference, arguments,
-						methods, this));
+						methods));
 				return reference.getChild(IValueReference.FUNCTION_OP);
 			}
 		}
@@ -749,7 +742,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 						Method.class);
 			if (methods != null) {
 				Method method = JavaScriptValidations.selectMethod(
-						getContext(), methods, arguments);
+						getContext(), methods, arguments, true);
 				if (method == null) {
 					final IRType type = JavaScriptValidations.typeOf(reference
 							.getParent());
@@ -775,7 +768,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 				if (method.isDeprecated()) {
 					reportDeprecatedMethod(methodNode, reference, method);
 				}
-				if (!validateParameterCount(method, node.getArguments())) {
+				if (!JavaScriptValidations.checkParameterCount(method, node
+						.getArguments().size())) {
 					reportMethodParameterError(methodNode, arguments, method);
 					return;
 				}
@@ -1396,32 +1390,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return elements != null ? elements.get(0) : null;
 		}
 
-		/**
-		 * Validates the parameter count, returns <code>true</code> if correct.
-		 * 
-		 * @param method
-		 * @param callArgs
-		 * 
-		 * @return
-		 */
-		private boolean validateParameterCount(Method method, List<?> callArgs) {
-			final EList<Parameter> params = method.getParameters();
-			if (params.size() == callArgs.size()) {
-				return true;
-			}
-			if (params.size() < callArgs.size()
-					&& !params.isEmpty()
-					&& params.get(params.size() - 1).getKind() == ParameterKind.VARARGS) {
-				return true;
-			}
-			if (params.size() > callArgs.size()
-					&& (params.get(callArgs.size()).getKind() == ParameterKind.OPTIONAL || params
-							.get(callArgs.size()).getKind() == ParameterKind.VARARGS)) {
-				return true;
-			}
-			return false;
-		}
-
 		@Override
 		public IValueReference visitPropertyExpression(PropertyExpression node) {
 			final IValueReference result = super.visitPropertyExpression(node);
@@ -1431,8 +1399,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 			if (currentMode() != VisitorMode.CALL) {
 				pushExpressionValidator(new PropertyExpressionHolder(
-						peekFunctionScope(), node, result, this,
-						result.exists()));
+						peekFunctionScope(), node, result, result.exists()));
 			}
 			return result;
 		}
@@ -1538,7 +1505,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 						&& !(node.getParent() instanceof CallExpression && ((CallExpression) node
 								.getParent()).getExpression() == node)) {
 					pushExpressionValidator(new NotExistingIdentiferValidator(
-							peekFunctionScope(), node, result, this));
+							peekFunctionScope(), node, result));
 				} else {
 					testPrivate(node, result);
 					if (result.exists()
@@ -1903,24 +1870,85 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		protected void checkExpressionType(FunctionScope scope,
+		private Type extractClassType(IValueReference typeReference) {
+			IRType type = typeReference.getDeclaredType();
+			if (type == null) {
+				final JSTypeSet types = typeReference.getTypes();
+				if (types.size() > 0) {
+					type = types.getFirst();
+				}
+			}
+			if (type != null && type instanceof IRClassType) {
+				return ((IRClassType) type).getTarget();
+			} else {
+				return null;
+			}
+		}
+
+		/**
+		 * Lazy validation of the {@link NewExpression}.
+		 */
+		protected void validateNewExpression(FunctionScope scope,
 				IValueCollection collection, Expression node,
-				IValueReference reference) {
-			if (reference.getParent() == null && isIdentifier(node)
-					&& !reference.exists()) {
-				scope.add(path(node, reference));
-				final Identifier identifier = getIdentifier(node);
+				IValueReference reference, IValueReference typeReference,
+				IValueReference[] arguments) {
+			final Identifier identifier = getIdentifier(node);
+			final Expression problemNode = identifier != null ? identifier
+					: node;
+			if (typeReference.getParent() == null && isIdentifier(node)
+					&& !typeReference.exists()) {
+				scope.add(path(node, typeReference));
 				reportUnknownType(JavaScriptProblems.UNDECLARED_VARIABLE,
-						identifier != null ? identifier : node,
-						identifier != null ? identifier.getName() : "?");
+						problemNode, identifier != null ? identifier.getName()
+								: "?");
 				return;
 			}
-			JSTypeSet types = reference.getTypes();
-			if (types.size() > 0) {
-				checkTypeReference(node, types.getFirst(), collection);
-			} else if (reference.getDeclaredType() != null) {
-				checkTypeReference(node, reference.getDeclaredType(),
-						collection);
+			final Type type = extractClassType(typeReference);
+			if (type != null) {
+				if (type.getKind() != TypeKind.UNKNOWN) {
+					checkTypeReference(node, type);
+					if (!type.getConstructors().isEmpty()) {
+						final Constructor constructor = JavaScriptValidations
+								.selectMethod(getContext(),
+										type.getConstructors(), arguments,
+										false);
+						if (constructor == null) {
+							reporter.reportProblem(
+									JavaScriptProblems.WRONG_PARAMETERS,
+									NLS.bind(
+											"The constructor {0}({1}) is undefined",
+											new String[] {
+													typeReference.getName(),
+													describeArgTypes(arguments) }),
+									problemNode.sourceStart(), problemNode
+											.sourceEnd());
+							return;
+						}
+						if (constructor.isDeprecated()) {
+							reportDeprecatedMethod(problemNode, typeReference,
+									constructor);
+						}
+						final List<IRParameter> parameters = RModelBuilder
+								.convert(getContext(),
+										constructor.getParameters());
+						final TypeCompatibility compatibility = validateParameters(
+								parameters, arguments);
+						if (compatibility != TypeCompatibility.TRUE) {
+							reporter.reportProblem(
+									compatibility == TypeCompatibility.FALSE ? JavaScriptProblems.WRONG_PARAMETERS
+											: JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION,
+									NLS.bind(
+											"The constructor {0}({1}) is not applicable for the arguments ({2})",
+											new String[] {
+													typeReference.getName(),
+													describeParamTypes(parameters),
+													describeArgTypes(arguments,
+															parameters) }),
+									problemNode.sourceStart(), problemNode
+											.sourceEnd());
+						}
+					}
+				}
 			} else {
 				final String lazyName = ValueReferenceUtil
 						.getLazyName(reference);
@@ -1941,28 +1969,19 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (type == null) {
 				return;
 			}
-			if (type instanceof IRSimpleType) {
-				final Type t = ((IRSimpleType) type).getTarget();
-				if (t.getKind() != TypeKind.UNKNOWN) {
-					if (t.isDeprecated()) {
-						reporter.reportProblem(
-								JavaScriptProblems.DEPRECATED_TYPE, NLS.bind(
-										ValidationMessages.DeprecatedType,
-										TypeUtil.getName(type)), node
-										.sourceStart(), node.sourceEnd());
-					}
-				}
-			} else if (type instanceof IRClassType) {
+			if (type instanceof IRClassType) {
 				final Type t = ((IRClassType) type).getTarget();
 				if (t != null && t.getKind() != TypeKind.UNKNOWN) {
-					if (t.isDeprecated()) {
-						reporter.reportProblem(
-								JavaScriptProblems.DEPRECATED_TYPE, NLS.bind(
-										ValidationMessages.DeprecatedType,
-										TypeUtil.getName(type)), node
-										.sourceStart(), node.sourceEnd());
-					}
+					checkTypeReference(node, t);
 				}
+			}
+		}
+
+		private void checkTypeReference(ASTNode node, final Type t) {
+			if (t.isDeprecated()) {
+				reporter.reportProblem(JavaScriptProblems.DEPRECATED_TYPE, NLS
+						.bind(ValidationMessages.DeprecatedType, t.getName()),
+						node.sourceStart(), node.sourceEnd());
 			}
 		}
 

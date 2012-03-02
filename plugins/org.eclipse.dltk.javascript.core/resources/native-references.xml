@@ -220,6 +220,23 @@
   </ref:Type>
   <ref:TypeAlias source="boolean" target="Boolean"/>
   <ref:Type name="Date" kind="PREDEFINED" description="Creates Date instances which let you work with dates and times." superType="Object">
+  	<staticConstructor name="Date" directType="String"/>
+  	<constructors name="Date"/>
+  	<constructors name="Date">
+      <parameters name="milliseconds" directType="Number"/>
+  	</constructors>
+  	<constructors name="Date">
+      <parameters name="dateString" directType="String"/>
+  	</constructors>
+  	<constructors name="Date">
+      <parameters name="year" directType="Number"/>
+      <parameters name="month" directType="Number"/>
+      <parameters name="day" directType="Number"/>
+      <parameters name="hour" directType="Number" kind="OPTIONAL"/>
+      <parameters name="minute" directType="Number" kind="OPTIONAL"/>
+      <parameters name="second" directType="Number" kind="OPTIONAL"/>
+      <parameters name="millisecond" directType="Number" kind="OPTIONAL"/>
+  	</constructors>
     <members xsi:type="ref:Property" name="prototype" directType="Date" static="true" description="Allows the addition of properties to a Date object."/>
     <members xsi:type="ref:Method" name="parse" directType="Number" description="Parses a string representation of a date, and returns the number of milliseconds since midnight Jan 1, 1970" static="true">
       <parameters name="dateString" directType="String"/>
@@ -355,6 +372,9 @@
   </ref:Type>
   <ref:TypeAlias source="number" target="Number"/>
   <ref:Type name="String" kind="PREDEFINED" description="String is a global object that may be used to construct String  instances." superType="Object">
+    <constructors name="String">
+      <parameters name="thing" kind="OPTIONAL" directType="Object"/>
+    </constructors>
     <staticConstructor name="String">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>
     </staticConstructor>

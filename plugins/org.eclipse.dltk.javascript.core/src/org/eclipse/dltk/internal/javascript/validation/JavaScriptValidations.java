@@ -33,6 +33,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.emf.common.util.EList;
 
@@ -131,38 +132,43 @@ public class JavaScriptValidations {
 	 * @param arguments
 	 * @return
 	 */
-	public static Method selectMethod(ITypeSystem context,
-			List<Method> methods, IValueReference[] arguments) {
+	public static <METHOD extends Method> METHOD selectMethod(
+			ITypeSystem context, List<METHOD> methods,
+			IValueReference[] arguments, boolean fallback) {
 		if (methods.size() == 1) {
 			return methods.get(0);
 		}
-		Method argCountMatches = null;
-		for (Method method : methods) {
-			if (method.getParameters().size() == arguments.length) {
-				TypeCompatibility match = TypeCompatibility.TRUE;
-				EList<Parameter> parameters = method.getParameters();
-				for (int i = 0; i < parameters.size(); i++) {
-					JSType parameterType = parameters.get(i).getType();
-					if (parameterType == null)
-						continue;
-					IRType argumentType = typeOf(arguments[i]);
-					if (argumentType == null)
-						continue;
-					match = JSTypeSet.normalize(context, parameterType)
-							.isAssignableFrom(argumentType);
-					if (match == TypeCompatibility.FALSE)
-						break;
+		List<METHOD> matches = null;
+		for (METHOD method : methods) {
+			if (checkParameterCount(method, arguments.length)) {
+				if (matches == null) {
+					matches = new ArrayList<METHOD>(4);
 				}
-				if (match == TypeCompatibility.TRUE) {
-					argCountMatches = method;
-					break;
-				}
+				matches.add(method);
 			}
 		}
-		if (argCountMatches != null) {
-			return argCountMatches;
+		if (matches != null) {
+			if (matches.size() == 1) {
+				return matches.get(0);
+			}
+			OUTER: for (METHOD method : matches) {
+				final EList<Parameter> parameters = method.getParameters();
+				for (int i = 0; i < Math.min(parameters.size(),
+						arguments.length); i++) {
+					final JSType parameterType = parameters.get(i).getType();
+					if (parameterType == null)
+						continue;
+					final IRType argumentType = typeOf(arguments[i]);
+					if (argumentType == null)
+						continue;
+					if (JSTypeSet.normalize(context, parameterType)
+							.isAssignableFrom(argumentType) == TypeCompatibility.FALSE)
+						continue OUTER;
+				}
+				return method;
+			}
 		}
-		return methods.get(0);
+		return fallback ? methods.get(0) : null;
 	}
 
 	@Deprecated
@@ -181,5 +187,29 @@ public class JavaScriptValidations {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Checks the parameter count, returns <code>true</code> if correct.
+	 * 
+	 * @param method
+	 * @param argCount
+	 * 
+	 * @return
+	 */
+	static boolean checkParameterCount(Method method, int argCount) {
+		final EList<Parameter> params = method.getParameters();
+		if (params.size() == argCount) {
+			return true;
+		} else if (params.size() < argCount) {
+			return !params.isEmpty()
+					&& params.get(params.size() - 1).getKind() == ParameterKind.VARARGS;
+		} else if (params.size() > argCount) {
+			final ParameterKind last = params.get(argCount).getKind();
+			return last == ParameterKind.OPTIONAL
+					|| last == ParameterKind.VARARGS;
+		} else {
+			return false;
+		}
 	}
 }

@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.18 2012/03/01 13:03:06 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.19 2012/03/02 19:40:32 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -46,6 +47,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getStaticConstructor <em>Static Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getTraits <em>Traits</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isExtensible <em>Extensible</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructors <em>Constructors</em>}</li>
  * </ul>
  * </p>
  *
@@ -131,6 +133,16 @@ public class TypeImpl extends ElementImpl implements Type {
      * @ordered
      */
     protected boolean extensible = EXTENSIBLE_EDEFAULT;
+
+    /**
+     * The cached value of the '{@link #getConstructors() <em>Constructors</em>}' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getConstructors()
+     * @generated
+     * @ordered
+     */
+    protected EList<Constructor> constructors;
 
     /**
      * <!-- begin-user-doc -->
@@ -310,6 +322,18 @@ public class TypeImpl extends ElementImpl implements Type {
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EList<Constructor> getConstructors() {
+        if (constructors == null) {
+            constructors = new EObjectContainmentEList<Constructor>(Constructor.class, this, TypeInfoModelPackage.TYPE__CONSTRUCTORS);
+        }
+        return constructors;
+    }
+
+    /**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -345,6 +369,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return ((InternalEList<?>)getMembers()).basicRemove(otherEnd, msgs);
             case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
                 return basicSetStaticConstructor(null, msgs);
+            case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
+                return ((InternalEList<?>)getConstructors()).basicRemove(otherEnd, msgs);
         }
         return super.eInverseRemove(otherEnd, featureID, msgs);
     }
@@ -370,6 +396,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return getTraits();
             case TypeInfoModelPackage.TYPE__EXTENSIBLE:
                 return isExtensible();
+            case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
+                return getConstructors();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -403,6 +431,10 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__EXTENSIBLE:
                 setExtensible((Boolean)newValue);
                 return;
+            case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
+                getConstructors().clear();
+                getConstructors().addAll((Collection<? extends Constructor>)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -433,6 +465,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__EXTENSIBLE:
                 setExtensible(EXTENSIBLE_EDEFAULT);
                 return;
+            case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
+                getConstructors().clear();
+                return;
         }
         super.eUnset(featureID);
     }
@@ -457,6 +492,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return traits != null && !traits.isEmpty();
             case TypeInfoModelPackage.TYPE__EXTENSIBLE:
                 return extensible != EXTENSIBLE_EDEFAULT;
+            case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
+                return constructors != null && !constructors.isEmpty();
         }
         return super.eIsSet(featureID);
     }

@@ -981,28 +981,49 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 	}
 
-	@Override
-	public IValueReference visitNewExpression(NewExpression node) {
+	public static class VisitNewResult {
+		IValueReference typeValue;
+		IValueReference[] arguments;
+		IValueReference value;
+
+		public IValueReference getValue() {
+			return value;
+		}
+
+		public IValueReference getTypeValue() {
+			return typeValue;
+		}
+
+		public IValueReference[] getArguments() {
+			return arguments;
+		}
+	}
+
+	protected VisitNewResult visitNew(NewExpression node) {
+		final VisitNewResult result = new VisitNewResult();
 		Expression objectClass = node.getObjectClass();
 		if (objectClass instanceof CallExpression) {
 			final CallExpression call = (CallExpression) objectClass;
+			result.arguments = new IValueReference[call.getArguments().size()];
+			int index = 0;
 			for (ASTNode argument : call.getArguments()) {
-				visit(argument);
+				result.arguments[index++] = visit(argument);
 			}
 			objectClass = call.getExpression();
+		} else {
+			result.arguments = new IValueReference[0];
 		}
-		IValueReference visit = visit(objectClass);
+		result.typeValue = visit(objectClass);
 
-		IValueReference result = null;
-		if (visit != null) {
-			if (visit.getKind() == ReferenceKind.FUNCTION) {
-				Object fs = visit
+		if (result.typeValue != null) {
+			if (result.typeValue.getKind() == ReferenceKind.FUNCTION) {
+				Object fs = result.typeValue
 						.getAttribute(IReferenceAttributes.FUNCTION_SCOPE);
 				if (fs instanceof IValueCollection
 						&& ((IValueCollection) fs).getThis() != null) {
-					result = new AnonymousNewValue();
-					result.setValue(((IValueCollection) fs).getThis());
-					result.setKind(ReferenceKind.TYPE);
+					result.value = new AnonymousNewValue();
+					result.value.setValue(((IValueCollection) fs).getThis());
+					result.value.setKind(ReferenceKind.TYPE);
 					String className = PropertyExpressionUtils
 							.getPath(objectClass);
 					if (className != null) {
@@ -1010,54 +1031,59 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						type.setSuperType(context.getKnownType(OBJECT, null));
 						type.setKind(TypeKind.JAVASCRIPT);
 						type.setName(className);
-						result.setDeclaredType(JSTypeSet.ref(type));
+						result.value.setDeclaredType(JSTypeSet.ref(type));
 					} else {
-						result.setDeclaredType(JSTypeSet.ref(OBJECT));
+						result.value.setDeclaredType(JSTypeSet.ref(OBJECT));
 					}
 				}
-			} else if (visit.exists()) {
-				for (IRType type : visit.getDeclaredTypes()) {
+			} else if (result.typeValue.exists()) {
+				for (IRType type : result.typeValue.getDeclaredTypes()) {
 					if (type instanceof IRClassType) {
-						result = new AnonymousNewValue();
-						result.setKind(ReferenceKind.TYPE);
-						result.setDeclaredType(((IRClassType) type)
+						result.value = new AnonymousNewValue();
+						result.value.setKind(ReferenceKind.TYPE);
+						result.value.setDeclaredType(((IRClassType) type)
 								.toItemType());
 						return result;
 					}
 				}
-				for (IRType type : visit.getTypes()) {
+				for (IRType type : result.typeValue.getTypes()) {
 					if (type instanceof IRClassType) {
-						result = new AnonymousNewValue();
-						result.setKind(ReferenceKind.TYPE);
-						result.setDeclaredType(((IRClassType) type)
+						result.value = new AnonymousNewValue();
+						result.value.setKind(ReferenceKind.TYPE);
+						result.value.setDeclaredType(((IRClassType) type)
 								.toItemType());
 						return result;
 					}
 				}
 			}
 		}
-		if (result == null) {
+		if (result.value == null) {
 			final String className = PropertyExpressionUtils
 					.getPath(objectClass);
 			IValueCollection contextValueCollection = peekContext();
 			if (className != null) {
 				Type knownType = context.getKnownType(className, TypeMode.CODE);
 				if (knownType != null) {
-					result = new AnonymousNewValue();
-					result.setValue(context.getFactory().create(
+					result.value = new AnonymousNewValue();
+					result.value.setValue(context.getFactory().create(
 							contextValueCollection, JSTypeSet.ref(knownType)));
-					result.setKind(ReferenceKind.TYPE);
+					result.value.setKind(ReferenceKind.TYPE);
 				} else {
-					result = new LazyTypeReference(context, className,
+					result.value = new LazyTypeReference(context, className,
 							contextValueCollection);
 				}
 			} else {
-				result = new AnonymousNewValue();
-				result.setValue(context.getFactory().createObject(
+				result.value = new AnonymousNewValue();
+				result.value.setValue(context.getFactory().createObject(
 						contextValueCollection));
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public IValueReference visitNewExpression(NewExpression node) {
+		return visitNew(node).getValue();
 	}
 
 	@Override

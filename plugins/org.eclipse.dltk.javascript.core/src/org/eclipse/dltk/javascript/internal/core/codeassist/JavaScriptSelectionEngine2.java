@@ -191,7 +191,8 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 							arguments = new IValueReference[0];
 						}
 						final Method method = JavaScriptValidations
-								.selectMethod(inferencer2, methods, arguments);
+								.selectMethod(inferencer2, methods, arguments,
+										true);
 						return convert(m, Collections.singletonList(method));
 					}
 				} else if (kind == ReferenceKind.TYPE) {

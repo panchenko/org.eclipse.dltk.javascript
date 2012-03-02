@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.32 2012/03/01 13:03:06 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.33 2012/03/02 19:40:32 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -335,13 +335,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE__EXTENSIBLE = ELEMENT_FEATURE_COUNT + 5;
 
     /**
+     * The feature id for the '<em><b>Constructors</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE__CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 6;
+
+    /**
      * The number of structural features of the '<em>Type</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 6;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 7;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
@@ -1689,6 +1698,15 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_TYPE__EXTENSIBLE = TYPE__EXTENSIBLE;
 
     /**
+     * The feature id for the '<em><b>Constructors</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__CONSTRUCTORS = TYPE__CONSTRUCTORS;
+
+    /**
      * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2493,6 +2511,17 @@ public interface TypeInfoModelPackage extends EPackage {
     EAttribute getType_Extensible();
 
     /**
+     * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructors <em>Constructors</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Constructors</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructors()
+     * @see #getType()
+     * @generated
+     */
+    EReference getType_Constructors();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Constructor <em>Constructor</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3196,6 +3225,14 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EAttribute TYPE__EXTENSIBLE = eINSTANCE.getType_Extensible();
+
+        /**
+         * The meta object literal for the '<em><b>Constructors</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference TYPE__CONSTRUCTORS = eINSTANCE.getType_Constructors();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ConstructorImpl <em>Constructor</em>}' class.

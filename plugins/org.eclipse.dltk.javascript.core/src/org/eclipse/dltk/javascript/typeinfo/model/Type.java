@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.12 2012/03/01 13:03:06 apanchenk Exp $
+ * $Id: Type.java,v 1.13 2012/03/02 19:40:32 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -29,6 +29,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getStaticConstructor <em>Static Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits <em>Traits</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible <em>Extensible</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructors <em>Constructors</em>}</li>
  * </ul>
  * </p>
  *
@@ -177,6 +178,22 @@ public interface Type extends Element {
      * @generated
      */
     void setExtensible(boolean value);
+
+    /**
+     * Returns the value of the '<em><b>Constructors</b></em>' containment reference list.
+     * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Constructor}.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Constructors</em>' containment reference list isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Constructors</em>' containment reference list.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Constructors()
+     * @model containment="true"
+     * @generated
+     */
+    EList<Constructor> getConstructors();
 
     /**
      * <!-- begin-user-doc -->
