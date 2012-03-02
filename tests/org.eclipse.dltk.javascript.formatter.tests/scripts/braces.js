@@ -63,3 +63,24 @@ if (x) {
 	print("hello");
 }
 ====
+==== braces-if-same-line with comments
+==> formatter.braces.blocks = same.line
+if(x) { // test
+print("hello");
+}
+==
+if (x) { // test
+	print("hello");
+}
+====
+==== braces-if-next-line with comments
+==> formatter.braces.blocks = next.line
+if(x) { // test
+print("hello");
+}
+==
+if (x)
+{ // test
+	print("hello");
+}
+====
