@@ -12,10 +12,13 @@
 
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.formatter.IFormatterContext;
 import org.eclipse.dltk.formatter.IFormatterDocument;
 import org.eclipse.dltk.formatter.IFormatterNode;
+import org.eclipse.dltk.formatter.IFormatterTextNode;
 import org.eclipse.dltk.formatter.IFormatterWriter;
 import org.eclipse.dltk.javascript.formatter.JavaScriptFormatterConstants;
 
@@ -50,8 +53,25 @@ public class BracesNode extends FormatterBlockWithBeginEndNode {
 				nodes[i].accept(context, visitor);
 			}
 		}
+		// special support for comments on the same line as the start brace
+		// if a formatter node is found before any other node (or textnodes that don't contain new lines)
+		// skip the printAfterOpenBrace but just put an empty space.
+		boolean printAfterOpenBrace = true;
+		List<IFormatterNode> children = getChildren();
+		for (IFormatterNode formatterNode : children) {
+			if (formatterNode instanceof FormatterCommentNode) {
+				printAfterOpenBrace = false;
+			}
+			else if (formatterNode instanceof IFormatterTextNode) {
+				if (((IFormatterTextNode) formatterNode).getText().indexOf('\n') == -1) {
+					continue;
+				}
+			}
+			break;
+		}
 
-		printAfterOpenBrace(context, visitor);
+		if (printAfterOpenBrace) printAfterOpenBrace(context, visitor);
+		else visitor.writeText(context, JSLiterals.SPACE);
 
 		// print body
 		final boolean indenting = isIndenting();
