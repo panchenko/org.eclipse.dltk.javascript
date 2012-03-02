@@ -88,6 +88,23 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
+	public void testDeprecatedTypeInNew() {
+		final List<IProblem> problems = validate("var x = new ExampleService2();");
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_TYPE, problems.get(0)
+				.getID());
+	}
+
+	public void testDeprecatedTypeInInstanceOf() {
+		final StringList code = new StringList();
+		code.add("var x = null;");
+		code.add("var valid = x instanceof ExampleService2;");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_TYPE, problems.get(0)
+				.getID());
+	}
+
 	public void testValidMethodCall() {
 		StringList code = new StringList();
 		code.add("/** @type ExampleService */");
@@ -2071,4 +2088,26 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(lines.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+
+	public void testConstructorWrongArgCount() {
+		final List<IProblem> problems = validate("var s = new String(1,2,3)");
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+
+	public void testConstructorMismatchedOverload() {
+		final List<IProblem> problems = validate("var d = new Date(true)");
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+
+	public void testConstructorMismatchedArgs() {
+		final List<IProblem> problems = validate("var d = new Date('','','')");
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+
 }
