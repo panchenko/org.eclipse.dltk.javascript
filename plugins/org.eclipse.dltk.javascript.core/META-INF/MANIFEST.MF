@@ -25,6 +25,7 @@ Export-Package: org.eclipse.dltk.internal.javascript.parser,
  org.eclipse.dltk.javascript.typeinfo,
  org.eclipse.dltk.javascript.typeinfo.model,
  org.eclipse.dltk.javascript.typeinfo.model.impl,
- org.eclipse.dltk.javascript.typeinfo.model.util;x-internal:=true
+ org.eclipse.dltk.javascript.typeinfo.model.util;x-internal:=true,
+ org.eclipse.dltk.javascript.validation
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

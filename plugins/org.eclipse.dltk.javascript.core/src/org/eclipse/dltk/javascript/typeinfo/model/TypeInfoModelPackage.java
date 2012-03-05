@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.33 2012/03/02 19:40:32 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.34 2012/03/05 17:56:47 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -344,13 +344,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE__CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 6;
 
     /**
+     * The feature id for the '<em><b>Instantiable</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE__INSTANTIABLE = ELEMENT_FEATURE_COUNT + 7;
+
+    /**
      * The number of structural features of the '<em>Type</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 7;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 8;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
@@ -1707,6 +1716,15 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_TYPE__CONSTRUCTORS = TYPE__CONSTRUCTORS;
 
     /**
+     * The feature id for the '<em><b>Instantiable</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__INSTANTIABLE = TYPE__INSTANTIABLE;
+
+    /**
      * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2522,6 +2540,17 @@ public interface TypeInfoModelPackage extends EPackage {
     EReference getType_Constructors();
 
     /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInstantiable <em>Instantiable</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Instantiable</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#isInstantiable()
+     * @see #getType()
+     * @generated
+     */
+    EAttribute getType_Instantiable();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Constructor <em>Constructor</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3233,6 +3262,14 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference TYPE__CONSTRUCTORS = eINSTANCE.getType_Constructors();
+
+        /**
+         * The meta object literal for the '<em><b>Instantiable</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute TYPE__INSTANTIABLE = eINSTANCE.getType_Instantiable();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ConstructorImpl <em>Constructor</em>}' class.

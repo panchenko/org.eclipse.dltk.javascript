@@ -33,6 +33,11 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	WRONG_TYPE_EXPRESSION, DEPRECATED_TYPE,
 
 	/**
+	 * Non-instantiable type
+	 */
+	NON_INSTANTIABLE_TYPE,
+
+	/**
 	 * @since 3.0
 	 */
 	UNDECLARED_VARIABLE,

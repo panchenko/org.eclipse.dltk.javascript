@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.19 2012/03/02 19:40:32 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.20 2012/03/05 17:56:47 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -48,6 +48,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getTraits <em>Traits</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isExtensible <em>Extensible</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructors <em>Constructors</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInstantiable <em>Instantiable</em>}</li>
  * </ul>
  * </p>
  *
@@ -143,6 +144,26 @@ public class TypeImpl extends ElementImpl implements Type {
      * @ordered
      */
     protected EList<Constructor> constructors;
+
+    /**
+     * The default value of the '{@link #isInstantiable() <em>Instantiable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isInstantiable()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean INSTANTIABLE_EDEFAULT = true;
+
+    /**
+     * The cached value of the '{@link #isInstantiable() <em>Instantiable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isInstantiable()
+     * @generated
+     * @ordered
+     */
+    protected boolean instantiable = INSTANTIABLE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -334,6 +355,27 @@ public class TypeImpl extends ElementImpl implements Type {
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public boolean isInstantiable() {
+        return instantiable;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setInstantiable(boolean newInstantiable) {
+        boolean oldInstantiable = instantiable;
+        instantiable = newInstantiable;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__INSTANTIABLE, oldInstantiable, instantiable));
+    }
+
+    /**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -398,6 +440,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return isExtensible();
             case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
                 return getConstructors();
+            case TypeInfoModelPackage.TYPE__INSTANTIABLE:
+                return isInstantiable();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -435,6 +479,9 @@ public class TypeImpl extends ElementImpl implements Type {
                 getConstructors().clear();
                 getConstructors().addAll((Collection<? extends Constructor>)newValue);
                 return;
+            case TypeInfoModelPackage.TYPE__INSTANTIABLE:
+                setInstantiable((Boolean)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -468,6 +515,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
                 getConstructors().clear();
                 return;
+            case TypeInfoModelPackage.TYPE__INSTANTIABLE:
+                setInstantiable(INSTANTIABLE_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -494,6 +544,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return extensible != EXTENSIBLE_EDEFAULT;
             case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
                 return constructors != null && !constructors.isEmpty();
+            case TypeInfoModelPackage.TYPE__INSTANTIABLE:
+                return instantiable != INSTANTIABLE_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }

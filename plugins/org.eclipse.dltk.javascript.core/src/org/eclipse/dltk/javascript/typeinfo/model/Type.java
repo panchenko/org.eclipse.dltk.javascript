@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.13 2012/03/02 19:40:32 apanchenk Exp $
+ * $Id: Type.java,v 1.14 2012/03/05 17:56:47 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -30,6 +30,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits <em>Traits</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible <em>Extensible</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructors <em>Constructors</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInstantiable <em>Instantiable</em>}</li>
  * </ul>
  * </p>
  *
@@ -194,6 +195,33 @@ public interface Type extends Element {
      * @generated
      */
     EList<Constructor> getConstructors();
+
+    /**
+     * Returns the value of the '<em><b>Instantiable</b></em>' attribute.
+     * The default value is <code>"true"</code>.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Instantiable</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Instantiable</em>' attribute.
+     * @see #setInstantiable(boolean)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Instantiable()
+     * @model default="true"
+     * @generated
+     */
+    boolean isInstantiable();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInstantiable <em>Instantiable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Instantiable</em>' attribute.
+     * @see #isInstantiable()
+     * @generated
+     */
+    void setInstantiable(boolean value);
 
     /**
      * <!-- begin-user-doc -->

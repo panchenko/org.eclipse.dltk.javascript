@@ -69,7 +69,7 @@
     	<parameters name="str" directType="String"/>
     </members>
   </ref:Type>
-  <ref:Type name="Math" kind="PREDEFINED">
+  <ref:Type name="Math" kind="PREDEFINED" instantiable="false">
     <members xsi:type="ref:Property" name="E" directType="Number" description="Euler's constant and the base of natural logarithms, approximately 2.718." static="true"/>
     <members xsi:type="ref:Property" name="LN2" directType="Number" description="Natural logarithm of 2, approximately 0.693." static="true"/>
     <members xsi:type="ref:Property" name="LN10" directType="Number" description="Natural logarithm of 10, approximately 2.302." static="true"/>

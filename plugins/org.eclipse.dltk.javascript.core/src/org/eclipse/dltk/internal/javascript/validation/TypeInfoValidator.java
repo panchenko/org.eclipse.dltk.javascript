@@ -94,6 +94,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.validation.IValidatorExtension;
+import org.eclipse.dltk.javascript.validation.IValidatorExtension.ValidationStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
@@ -406,7 +408,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 			variables.clear();
 			functionScopes.clear();
 			functionScopes.add(new FunctionScope());
+			final List<IValidatorExtension> extensions = createExtensions(IValidatorExtension.class);
+			if (!extensions.isEmpty()) {
+				this.extensions = extensions
+						.toArray(new IValidatorExtension[extensions.size()]);
+			} else {
+				this.extensions = null;
+			}
 		}
+
+		private IValidatorExtension[] extensions;
 
 		@Override
 		public void done() {
@@ -1916,6 +1927,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			final Type type = extractClassType(typeReference);
 			if (type != null) {
 				if (type.getKind() != TypeKind.UNKNOWN) {
+					validateInstantiability(node, type);
 					checkTypeReference(node, type);
 					if (!type.getConstructors().isEmpty()) {
 						final Constructor constructor = JavaScriptValidations
@@ -1992,6 +2004,36 @@ public class TypeInfoValidator implements IBuildParticipant {
 				reporter.reportProblem(JavaScriptProblems.DEPRECATED_TYPE, NLS
 						.bind(ValidationMessages.DeprecatedType, t.getName()),
 						node.sourceStart(), node.sourceEnd());
+			}
+		}
+
+		private void validateInstantiability(ASTNode node, final Type t) {
+			if (extensions != null) {
+				for (IValidatorExtension extension : extensions) {
+					final IProblemIdentifier result = extension
+							.canInstantiate(t);
+					if (result != null) {
+						if (result instanceof ValidationStatus) {
+							final ValidationStatus status = (ValidationStatus) result;
+							reporter.reportProblem(status.identifier(),
+									status.message(), node.sourceStart(),
+									node.sourceEnd());
+						} else {
+							reporter.reportProblem(result, NLS.bind(
+									ValidationMessages.NonInstantiableType,
+									t.getName()), node.sourceStart(), node
+									.sourceEnd());
+						}
+						return;
+					}
+				}
+			}
+			if (!t.isInstantiable()) {
+				reporter.reportProblem(
+						JavaScriptProblems.NON_INSTANTIABLE_TYPE,
+						NLS.bind(ValidationMessages.NonInstantiableType,
+								t.getName()), node.sourceStart(),
+						node.sourceEnd());
 			}
 		}
 
