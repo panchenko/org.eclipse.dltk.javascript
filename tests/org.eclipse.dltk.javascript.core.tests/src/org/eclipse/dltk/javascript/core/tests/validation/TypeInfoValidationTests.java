@@ -2110,4 +2110,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
+	public void testConstructorOverrides() {
+		List<IProblem> problems;
+		problems = validate("var d = new Date()");
+		assertEquals(problems.toString(), 0, problems.size());
+		problems = validate("var d = new Date('')");
+		assertEquals(problems.toString(), 0, problems.size());
+		problems = validate("var d = new Date(123456789)");
+		assertEquals(problems.toString(), 0, problems.size());
+		problems = validate("var d = new Date(2012,1,1)");
+		assertEquals(problems.toString(), 0, problems.size());
+		problems = validate("var d = new Date(1,2,3,4,5,6,7)");
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 }
