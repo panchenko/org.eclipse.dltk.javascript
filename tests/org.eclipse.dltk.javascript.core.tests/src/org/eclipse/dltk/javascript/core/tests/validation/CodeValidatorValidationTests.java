@@ -144,12 +144,39 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 
 	}
 
-	public void testUnusedVariable() {
+	public void testUnusedTopLevelVariable() {
 		enable(JavaScriptProblems.UNUSED_VARIABLE);
 		StringList code = new StringList();
 		code.add("var x = 1");
 		code.add("x = 2");
 		code.add("x = 3");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(0, problemIds.size());
+	}
+
+	public void testUnusedTopLevelPrivateVariable() {
+		enable(JavaScriptProblems.UNUSED_VARIABLE);
+		StringList code = new StringList();
+		code.add("/** @private */");
+		code.add("var x = 1");
+		code.add("x = 2");
+		code.add("x = 3");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(1, problemIds.size());
+		assertTrue(problemIds.toString(),
+				problemIds.contains(JavaScriptProblems.UNUSED_VARIABLE));
+	}
+
+	public void testUnusedVariable() {
+		enable(JavaScriptProblems.UNUSED_VARIABLE);
+		StringList code = new StringList();
+		code.add("function test() {");
+		code.add("var x = 1");
+		code.add("x = 2");
+		code.add("x = 3");
+		code.add("}");
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(1, problemIds.size());
