@@ -34,6 +34,8 @@ import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
+import org.eclipse.dltk.internal.javascript.ti.JSVariable;
+import org.eclipse.dltk.internal.javascript.ti.TopValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
@@ -1546,7 +1548,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 			validateHidesByVariable(context, declaration);
 			final IValueReference variable = super.createVariable(context,
 					declaration);
-			variables.add(variable);
+			boolean add = true;
+			if (context instanceof TopValueCollection) {
+				JSVariable jsVar = (JSVariable) variable
+						.getAttribute(IReferenceAttributes.VARIABLE);
+				if (jsVar != null && !jsVar.isPrivate())
+					add = false;
+			}
+			if (add)
+				variables.add(variable);
 			return variable;
 		}
 
