@@ -34,8 +34,6 @@ import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
-import org.eclipse.dltk.internal.javascript.ti.JSVariable;
-import org.eclipse.dltk.internal.javascript.ti.TopValueCollection;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.Argument;
@@ -1551,7 +1549,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return null;
 		}
 
-		private final Set<IValueReference> variables = new HashSet<IValueReference>();
+		private final List<IValueReference> variables = new ArrayList<IValueReference>();
 
 		@Override
 		protected IValueReference createVariable(IValueCollection context,
@@ -1559,16 +1557,30 @@ public class TypeInfoValidator implements IBuildParticipant {
 			validateHidesByVariable(context, declaration);
 			final IValueReference variable = super.createVariable(context,
 					declaration);
-			boolean add = true;
-			if (context instanceof TopValueCollection) {
-				JSVariable jsVar = (JSVariable) variable
-						.getAttribute(IReferenceAttributes.VARIABLE);
-				if (jsVar != null && !jsVar.isPrivate())
-					add = false;
-			}
-			if (add)
+			if (context.getParent() != null
+					|| canValidateUnusedVariable(context, variable)
+					|| isPrivate(variable)) {
 				variables.add(variable);
+			}
 			return variable;
+		}
+
+		private boolean canValidateUnusedVariable(IValueCollection collection,
+				IValueReference reference) {
+			if (extensions != null) {
+				for (IValidatorExtension extension : extensions) {
+					if (extension.canValidateUnusedVariable(collection,
+							reference)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private static boolean isPrivate(IValueReference reference) {
+			return ((IVariable) reference
+					.getAttribute(IReferenceAttributes.VARIABLE)).isPrivate();
 		}
 
 		private void checkAssign(IValueReference reference, ASTNode node) {
