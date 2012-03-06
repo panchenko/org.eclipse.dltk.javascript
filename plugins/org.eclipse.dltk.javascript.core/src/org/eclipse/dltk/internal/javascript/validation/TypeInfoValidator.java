@@ -1927,8 +1927,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 			final Type type = extractClassType(typeReference);
 			if (type != null) {
 				if (type.getKind() != TypeKind.UNKNOWN) {
-					validateInstantiability(node, type);
-					checkTypeReference(node, type);
+					validateInstantiability(problemNode, type, typeReference);
+					checkTypeReference(problemNode, type);
 					if (!type.getConstructors().isEmpty()) {
 						final Constructor constructor = JavaScriptValidations
 								.selectMethod(getContext(),
@@ -2007,11 +2007,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		private void validateInstantiability(ASTNode node, final Type t) {
+		private void validateInstantiability(ASTNode node, final Type type,
+				IValueReference typeReference) {
 			if (extensions != null) {
 				for (IValidatorExtension extension : extensions) {
-					final IProblemIdentifier result = extension
-							.canInstantiate(t);
+					final IProblemIdentifier result = extension.canInstantiate(
+							type, typeReference);
 					if (result != null) {
 						if (result instanceof ValidationStatus) {
 							final ValidationStatus status = (ValidationStatus) result;
@@ -2021,18 +2022,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 						} else {
 							reporter.reportProblem(result, NLS.bind(
 									ValidationMessages.NonInstantiableType,
-									t.getName()), node.sourceStart(), node
+									type.getName()), node.sourceStart(), node
 									.sourceEnd());
 						}
 						return;
 					}
 				}
 			}
-			if (!t.isInstantiable()) {
+			if (!type.isInstantiable()) {
 				reporter.reportProblem(
 						JavaScriptProblems.NON_INSTANTIABLE_TYPE,
 						NLS.bind(ValidationMessages.NonInstantiableType,
-								t.getName()), node.sourceStart(),
+								type.getName()), node.sourceStart(),
 						node.sourceEnd());
 			}
 		}

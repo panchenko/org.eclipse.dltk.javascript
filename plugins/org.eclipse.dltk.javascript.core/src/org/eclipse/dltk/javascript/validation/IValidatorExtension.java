@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.validation;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 /**
@@ -52,6 +53,6 @@ public interface IValidatorExtension {
 
 	}
 
-	IProblemIdentifier canInstantiate(Type type);
+	IProblemIdentifier canInstantiate(Type type, IValueReference typeReference);
 
 }
