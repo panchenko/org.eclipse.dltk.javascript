@@ -128,8 +128,11 @@ public class TypeUtil {
 			return ((IRClassType) type).getTarget();
 		} else if (type instanceof IRArrayType) {
 			final IRArrayType arrayType = (IRArrayType) type;
-			final ITypeSystem typeSystem = arrayType.activeTypeSystem(context);
-			return typeSystem.parameterize(TypeInfoModelLoader.getInstance()
+			final ITypeSystem saved = arrayType.activeTypeSystem();
+			if (saved != null) {
+				context = saved;
+			}
+			return context.parameterize(TypeInfoModelLoader.getInstance()
 					.getType(ITypeNames.ARRAY), Collections
 					.singletonList(arrayType.getItemType()));
 		} else if (type instanceof IRMapType) {

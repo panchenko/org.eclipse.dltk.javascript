@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -30,6 +31,7 @@ import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
@@ -821,6 +823,20 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return target;
 		}
 
+		public <T> T getAttribute(AttributeKey<T> key) {
+			// TODO (alex) review
+			return null;
+		}
+
+		public <T> void pushAttribute(AttributeKey<T> key, T value) {
+			// TODO (alex) review
+		}
+
+		public <T> T popAttribute(AttributeKey<T> key) {
+			// TODO (alex) review
+			return null;
+		}
+
 	}
 
 	static final ConcurrentHashMap<String, InvariantTypeResourceSet> invariantContextRS = new ConcurrentHashMap<String, InvariantTypeResourceSet>();
@@ -968,6 +984,39 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			} else {
 				return target;
 			}
+		}
+
+		public <T> T getAttribute(AttributeKey<T> key) {
+			final TypeInferencer2 current = current();
+			return current != null ? current.getAttribute(key) : null;
+		}
+	}
+
+	private final Map<AttributeKey<?>, List<Object>> attributes = new HashMap<AttributeKey<?>, List<Object>>();
+
+	@SuppressWarnings("unchecked")
+	public <T> T getAttribute(AttributeKey<T> key) {
+		final List<Object> values = attributes.get(key);
+		return values != null && !values.isEmpty() ? (T) values.get(values
+				.size() - 1) : null;
+	}
+
+	public <T> void pushAttribute(AttributeKey<T> key, T value) {
+		List<Object> values = attributes.get(key);
+		if (values == null) {
+			values = new ArrayList<Object>(4);
+			attributes.put(key, values);
+		}
+		values.add(value);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T popAttribute(AttributeKey<T> key) {
+		final List<Object> values = attributes.get(key);
+		if (values != null && !values.isEmpty()) {
+			return (T) values.remove(values.size() - 1);
+		} else {
+			return null;
 		}
 	}
 

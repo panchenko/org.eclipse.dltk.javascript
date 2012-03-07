@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.34 2012/03/05 17:56:47 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.35 2012/03/07 18:41:10 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -353,13 +353,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE__INSTANTIABLE = ELEMENT_FEATURE_COUNT + 7;
 
     /**
+     * The feature id for the '<em><b>Inherit Constructors</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE__INHERIT_CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 8;
+
+    /**
      * The number of structural features of the '<em>Type</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 8;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 9;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
@@ -1725,6 +1734,15 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_TYPE__INSTANTIABLE = TYPE__INSTANTIABLE;
 
     /**
+     * The feature id for the '<em><b>Inherit Constructors</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__INHERIT_CONSTRUCTORS = TYPE__INHERIT_CONSTRUCTORS;
+
+    /**
      * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2551,6 +2569,17 @@ public interface TypeInfoModelPackage extends EPackage {
     EAttribute getType_Instantiable();
 
     /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritConstructors <em>Inherit Constructors</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Inherit Constructors</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritConstructors()
+     * @see #getType()
+     * @generated
+     */
+    EAttribute getType_InheritConstructors();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Constructor <em>Constructor</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3270,6 +3299,14 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EAttribute TYPE__INSTANTIABLE = eINSTANCE.getType_Instantiable();
+
+        /**
+         * The meta object literal for the '<em><b>Inherit Constructors</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute TYPE__INHERIT_CONSTRUCTORS = eINSTANCE.getType_InheritConstructors();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ConstructorImpl <em>Constructor</em>}' class.

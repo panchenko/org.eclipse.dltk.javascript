@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.14 2012/03/05 17:56:47 apanchenk Exp $
+ * $Id: Type.java,v 1.15 2012/03/07 18:41:10 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -31,6 +31,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible <em>Extensible</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructors <em>Constructors</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInstantiable <em>Instantiable</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritConstructors <em>Inherit Constructors</em>}</li>
  * </ul>
  * </p>
  *
@@ -222,6 +223,21 @@ public interface Type extends Element {
      * @generated
      */
     void setInstantiable(boolean value);
+
+    /**
+     * Returns the value of the '<em><b>Inherit Constructors</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Inherit Constructors</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Inherit Constructors</em>' attribute.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_InheritConstructors()
+     * @model transient="true" changeable="false" volatile="true" derived="true"
+     * @generated
+     */
+    boolean isInheritConstructors();
 
     /**
      * <!-- begin-user-doc -->

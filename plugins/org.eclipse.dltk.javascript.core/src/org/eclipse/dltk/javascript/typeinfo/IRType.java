@@ -17,6 +17,6 @@ public interface IRType {
 
 	TypeCompatibility isAssignableFrom(IRType type);
 
-	ITypeSystem activeTypeSystem(ITypeSystem fallback);
+	ITypeSystem activeTypeSystem();
 
 }

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.validation;
 
-import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.IValidationStatus;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -22,39 +22,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
  */
 public interface IValidatorExtension {
 
-	public class ValidationStatus implements IProblemIdentifier {
-		private final IProblemIdentifier identifier;
-		private final String message;
-
-		public ValidationStatus(IProblemIdentifier identifier, String message) {
-			this.identifier = identifier;
-			this.message = message;
-		}
-
-		public IProblemIdentifier identifier() {
-			return identifier;
-		}
-
-		public String message() {
-			return message;
-		}
-
-		public String contributor() {
-			return identifier.contributor();
-		}
-
-		public String name() {
-			return identifier.name();
-		}
-
-		@Override
-		public String toString() {
-			return identifier + " " + message;
-		}
-
-	}
-
-	IProblemIdentifier canInstantiate(Type type, IValueReference typeReference);
+	IValidationStatus canInstantiate(Type type, IValueReference typeReference);
 
 	boolean canValidateUnusedVariable(IValueCollection collection,
 			IValueReference reference);

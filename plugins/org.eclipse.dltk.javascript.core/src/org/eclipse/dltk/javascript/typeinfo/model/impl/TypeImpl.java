@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.20 2012/03/05 17:56:47 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.21 2012/03/07 18:41:11 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -49,6 +49,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isExtensible <em>Extensible</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructors <em>Constructors</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInstantiable <em>Instantiable</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInheritConstructors <em>Inherit Constructors</em>}</li>
  * </ul>
  * </p>
  *
@@ -164,6 +165,16 @@ public class TypeImpl extends ElementImpl implements Type {
      * @ordered
      */
     protected boolean instantiable = INSTANTIABLE_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #isInheritConstructors() <em>Inherit Constructors</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isInheritConstructors()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean INHERIT_CONSTRUCTORS_EDEFAULT = false;
 
     /**
      * <!-- begin-user-doc -->
@@ -380,6 +391,15 @@ public class TypeImpl extends ElementImpl implements Type {
 	 * 
 	 * @generated NOT
 	 */
+    public boolean isInheritConstructors() {
+		return false;
+    }
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
     public boolean isProxy() {
 		return eIsProxy();
     }
@@ -442,6 +462,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return getConstructors();
             case TypeInfoModelPackage.TYPE__INSTANTIABLE:
                 return isInstantiable();
+            case TypeInfoModelPackage.TYPE__INHERIT_CONSTRUCTORS:
+                return isInheritConstructors();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -546,6 +568,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return constructors != null && !constructors.isEmpty();
             case TypeInfoModelPackage.TYPE__INSTANTIABLE:
                 return instantiable != INSTANTIABLE_EDEFAULT;
+            case TypeInfoModelPackage.TYPE__INHERIT_CONSTRUCTORS:
+                return isInheritConstructors() != INHERIT_CONSTRUCTORS_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }

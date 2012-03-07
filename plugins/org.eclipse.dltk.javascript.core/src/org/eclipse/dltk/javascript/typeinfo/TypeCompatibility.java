@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-public enum TypeCompatibility {
+import org.eclipse.dltk.compiler.problem.IValidationStatus;
+
+public enum TypeCompatibility implements IValidationStatus {
 	TRUE, UNPARAMETERIZED, FALSE;
 
 	public boolean ok() {

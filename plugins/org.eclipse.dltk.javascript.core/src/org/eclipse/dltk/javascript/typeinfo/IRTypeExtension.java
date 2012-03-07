@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 NumberFour AG
+ * Copyright (c) 2012 NumberFour AG
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,18 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import org.eclipse.dltk.annotations.ConfigurationElement;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.compiler.problem.IValidationStatus;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 
-/**
- * Factory to create runtime type instance for the specified model object
- */
-@ConfigurationElement("runtimeTypeFactory")
-public interface IRTypeFactory {
+public interface IRTypeExtension extends IRType {
 
-	IRType create(Type type);
-
-	IRType create(ITypeSystem typeSystem, JSType type);
+	IValidationStatus isAssignableFrom(IValueReference argument);
 
 }

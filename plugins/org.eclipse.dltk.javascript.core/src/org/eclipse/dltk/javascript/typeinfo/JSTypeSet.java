@@ -275,8 +275,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			this.typeSystem = typeSystem;
 		}
 
-		public ITypeSystem activeTypeSystem(ITypeSystem fallback) {
-			return typeSystem != null ? typeSystem : fallback;
+		public ITypeSystem activeTypeSystem() {
+			return typeSystem;
 		}
 
 		protected final void checkType(Type type) {
@@ -921,7 +921,14 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		} else if (type == null) {
 			return null;
 		} else {
-			throw new IllegalArgumentException(type.getClass().getName());
+			for (IRTypeFactory factory : TypeInfoManager.getRTypeFactories()) {
+				final IRType runtimeType = factory.create(context, type);
+				if (runtimeType != null) {
+					return runtimeType;
+				}
+			}
+			throw new IllegalArgumentException("Unsupported type "
+					+ type.getClass().getName());
 		}
 	}
 

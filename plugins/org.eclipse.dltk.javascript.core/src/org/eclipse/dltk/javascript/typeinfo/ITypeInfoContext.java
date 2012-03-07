@@ -105,4 +105,23 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * @return
 	 */
 	String getContext();
+
+	/**
+	 * Adds value for the specified attribute.
+	 * 
+	 * Current value of the attribute can be retrieved with
+	 * {@link ITypeSystem#getAttribute(AttributeKey)}.
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	<T> void pushAttribute(AttributeKey<T> key, T value);
+
+	/**
+	 * Removes last added value for the specified attribute.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	<T> T popAttribute(AttributeKey<T> key);
 }

@@ -56,7 +56,10 @@ public abstract class ElementValue implements IValue {
 	public static ElementValue findMember(ITypeSystem context, IRType type,
 			String name) {
 		if (type != null) {
-			context = type.activeTypeSystem(context);
+			final ITypeSystem saved = type.activeTypeSystem();
+			if (saved != null) {
+				context = saved;
+			}
 		}
 		return findMember(context, type, name, MemberPredicate.ALWAYS_TRUE);
 	}
@@ -69,8 +72,7 @@ public abstract class ElementValue implements IValue {
 			// NoneType
 			if (arrayType != null
 					&& TypeUtil.kind(arrayType) != TypeKind.UNKNOWN
-					&& !(arrayType instanceof IRNoneType)
-					) {
+					&& !(arrayType instanceof IRNoneType)) {
 				return new TypeValue(context, arrayType);
 			}
 		}

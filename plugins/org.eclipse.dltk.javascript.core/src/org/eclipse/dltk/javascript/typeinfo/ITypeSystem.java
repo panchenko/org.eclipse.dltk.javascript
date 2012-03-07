@@ -39,4 +39,12 @@ public interface ITypeSystem {
 
 	Type parameterize(Type target, List<IRType> parameters);
 
+	/**
+	 * Returns current value for the specified attribute.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	<T> T getAttribute(AttributeKey<T> key);
+
 }
