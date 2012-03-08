@@ -1985,7 +1985,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 			final Type type = extractClassType(typeReference);
 			if (type != null) {
 				if (type.getKind() != TypeKind.UNKNOWN) {
-					validateInstantiability(problemNode, type, typeReference);
+					if (!validateInstantiability(problemNode, type,
+							typeReference)) {
+						return;
+					}
 					checkTypeReference(problemNode, type);
 					final List<Constructor> constructors = findConstructors(type);
 					if (!constructors.isEmpty()) {
@@ -2086,7 +2089,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		private void validateInstantiability(ASTNode node, final Type type,
+		/**
+		 * Validates instantiability of the specified type. Returns
+		 * <code>true</code> if type could be instantiated and
+		 * <code>false</code> otherwise.
+		 * 
+		 * @param node
+		 * @param type
+		 * @param typeReference
+		 * @return
+		 */
+		private boolean validateInstantiability(ASTNode node, final Type type,
 				IValueReference typeReference) {
 			if (extensions != null) {
 				for (IValidatorExtension extension : extensions) {
@@ -2106,6 +2119,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 							}
 							reporter.reportProblem(status.identifier(),
 									status.message(), start, end);
+							return false;
 						} else if (result instanceof IProblemIdentifier) {
 							reporter.reportProblem(
 									(IProblemIdentifier) result,
@@ -2113,8 +2127,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 											ValidationMessages.NonInstantiableType,
 											type.getName()),
 									node.sourceStart(), node.sourceEnd());
+							return false;
+						} else {
+							reporter.reportProblem(
+									JavaScriptProblems.NON_INSTANTIABLE_TYPE,
+									NLS.bind(
+											ValidationMessages.NonInstantiableType,
+											type.getName())
+											+ ": " + result,
+									node.sourceStart(), node.sourceEnd());
+							return false;
 						}
-						return;
 					}
 				}
 			}
@@ -2124,7 +2147,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 						NLS.bind(ValidationMessages.NonInstantiableType,
 								type.getName()), node.sourceStart(),
 						node.sourceEnd());
+				return false;
 			}
+			return true;
 		}
 
 		public void reportUnknownType(IProblemIdentifier identifier,
