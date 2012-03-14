@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.ui.text.completion.AbstractScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.IScriptCompletionProposal;
+import org.eclipse.dltk.ui.text.completion.LazyScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ProposalContextInformation;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposal;
 import org.eclipse.dltk.ui.text.completion.ScriptCompletionProposalCollector;
@@ -45,12 +46,27 @@ public class JavaScriptCompletionProposalCollector extends
 		super(module);
 	}
 
+	/**
+	 * Checks if the specified proposal has ProposalInfo set.
+	 * 
+	 * @param proposal
+	 * @return
+	 */
+	private boolean hasProposalInfo(AbstractScriptCompletionProposal proposal) {
+		if (proposal instanceof LazyScriptCompletionProposal) {
+			// lazy objects are supposed to create ProposalInfo on demand.
+			return true;
+		} else {
+			return proposal.getProposalInfo() != null;
+		}
+	}
+
 	@Override
 	protected IScriptCompletionProposal createScriptCompletionProposal(
 			CompletionProposal proposal) {
 		AbstractScriptCompletionProposal outProposal = (AbstractScriptCompletionProposal) super
 				.createScriptCompletionProposal(proposal);
-		if (proposal.getExtraInfo() != null) {
+		if (!hasProposalInfo(outProposal) && proposal.getExtraInfo() != null) {
 			outProposal.setProposalInfo(new JavaScriptProposalInfo(proposal
 					.getExtraInfo()));
 		}
@@ -73,6 +89,10 @@ public class JavaScriptCompletionProposalCollector extends
 			CompletionProposal methodProposal) {
 		AbstractScriptCompletionProposal methodReferenceProposal = (AbstractScriptCompletionProposal) super
 				.createMethodReferenceProposal(methodProposal);
+		if (methodProposal.getExtraInfo() != null) {
+			methodReferenceProposal.setProposalInfo(new JavaScriptProposalInfo(
+					methodProposal.getExtraInfo()));
+		}
 		StringBuilder sb = null;
 		if (methodProposal.getExtraInfo() instanceof Method) {
 			Method method = (Method) methodProposal.getExtraInfo();
