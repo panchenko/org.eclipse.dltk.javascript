@@ -1993,7 +1993,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 						return;
 					}
 					checkTypeReference(problemNode, type);
-					final List<Constructor> constructors = findConstructors(type);
+					final List<Constructor> constructors = TypeUtil.findConstructors(type);
 					if (!constructors.isEmpty()) {
 						final ITypeInferenceContext typeSystem = getContext();
 						final Constructor constructor = JavaScriptValidations
@@ -2047,24 +2047,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 							lazyName);
 				}
 			}
-		}
-
-		private List<Constructor> findConstructors(Type type) {
-			final Set<Type> types = new HashSet<Type>();
-			while (types.add(type)) {
-				final List<Constructor> constructors = type.getConstructors();
-				if (!constructors.isEmpty()) {
-					return constructors;
-				}
-				if (!type.isInheritConstructors()) {
-					break;
-				}
-				type = type.getSuperType();
-				if (type == null) {
-					break;
-				}
-			}
-			return Collections.emptyList();
 		}
 
 		/**

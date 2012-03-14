@@ -12,10 +12,14 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
+import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -307,6 +311,24 @@ public class TypeUtil {
 			}
 		}
 		return null;
+	}
+
+	public static List<Constructor> findConstructors(Type type) {
+		final Set<Type> types = new HashSet<Type>();
+		while (types.add(type)) {
+			final List<Constructor> constructors = type.getConstructors();
+			if (!constructors.isEmpty()) {
+				return constructors;
+			}
+			if (!type.isInheritConstructors()) {
+				break;
+			}
+			type = type.getSuperType();
+			if (type == null) {
+				break;
+			}
+		}
+		return Collections.emptyList();
 	}
 
 }
