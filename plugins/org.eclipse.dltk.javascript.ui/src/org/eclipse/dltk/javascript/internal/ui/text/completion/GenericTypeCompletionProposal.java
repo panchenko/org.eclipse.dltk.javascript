@@ -67,7 +67,7 @@ public class GenericTypeCompletionProposal extends
 	}
 
 	@Override
-	protected char getExitTigger() {
+	protected char getExitTrigger() {
 		return '>';
 	}
 
