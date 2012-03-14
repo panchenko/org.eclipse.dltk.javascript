@@ -461,9 +461,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 		@Override
 		public IValueReference visitNewExpression(NewExpression node) {
 			final VisitNewResult result = visitNew(node);
-			pushExpressionValidator(new NewExpressionValidator(
-					peekFunctionScope(), node, result.getValue(),
-					result.getTypeValue(), result.getArguments(), peekContext()));
+			if (result.getTypeValue() != null) {
+				pushExpressionValidator(new NewExpressionValidator(
+						peekFunctionScope(), node, result.getValue(),
+						result.getTypeValue(), result.getArguments(),
+						peekContext()));
+			}
 			return result.getValue();
 		}
 
