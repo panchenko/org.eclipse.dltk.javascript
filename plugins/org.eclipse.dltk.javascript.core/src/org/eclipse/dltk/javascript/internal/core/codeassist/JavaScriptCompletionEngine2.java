@@ -370,7 +370,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			// if (important) {
 			// relevance += RelevanceConstants.R_NON_INHERITED;
 			// }
-			// relevance += computeRelevanceForInterestingProposal();
+			relevance += computeRelevanceForInterestingProposal();
 			relevance += computeRelevanceForCaseMatching(prefix, memberName);
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
 			proposal.setRelevance(relevance);
@@ -416,7 +416,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					proposalKind, position);
 
 			int relevance = computeBaseRelevance();
-			// relevance += computeRelevanceForInterestingProposal();
+			relevance += computeRelevanceForInterestingProposal();
 			relevance += computeRelevanceForCaseMatching(prefix,
 					reference.getName());
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
@@ -457,7 +457,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			CompletionProposal proposal = CompletionProposal.create(
 					CompletionProposal.TYPE_REF, position);
 			int relevance = computeBaseRelevance();
-			// relevance += computeRelevanceForInterestingProposal();
+			relevance += computeRelevanceForInterestingProposal();
 			relevance += computeRelevanceForCaseMatching(prefix, type.getName());
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
 			proposal.setRelevance(relevance);
