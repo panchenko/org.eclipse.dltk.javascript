@@ -13,9 +13,10 @@ package org.eclipse.dltk.javascript.parser.jsdoc;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
-public class JSDocTags {
+public class JSDocTags implements Iterable<JSDocTag> {
 
 	private final List<JSDocTag> tags = new ArrayList<JSDocTag>();
 
@@ -170,6 +171,10 @@ public class JSDocTags {
 		}
 		sb.append(']');
 		return sb.toString();
+	}
+
+	public Iterator<JSDocTag> iterator() {
+		return tags.iterator();
 	}
 
 }
