@@ -12,13 +12,22 @@
 package org.eclipse.dltk.javascript.parser.jsdoc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.dltk.javascript.internal.jsdoc.ArrayIterator;
+
 public class JSDocTags implements Iterable<JSDocTag> {
 
-	private final List<JSDocTag> tags = new ArrayList<JSDocTag>();
+	public static final JSDocTags EMPTY = new JSDocTags(new JSDocTag[0]);
+
+	private final JSDocTag[] tags;
+
+	public JSDocTags(JSDocTag[] tags) {
+		this.tags = tags;
+	}
 
 	/**
 	 * Returns all the jsdoc tags.
@@ -27,7 +36,7 @@ public class JSDocTags implements Iterable<JSDocTag> {
 	 * @return
 	 */
 	public List<JSDocTag> list() {
-		return Collections.unmodifiableList(tags);
+		return Arrays.asList(tags);
 	}
 
 	/**
@@ -106,15 +115,15 @@ public class JSDocTags implements Iterable<JSDocTag> {
 	}
 
 	public int size() {
-		return tags.size();
+		return tags.length;
 	}
 
 	public boolean isEmpty() {
-		return tags.isEmpty();
+		return tags.length == 0;
 	}
 
 	public JSDocTag get(int index) {
-		return tags.get(index);
+		return tags[index];
 	}
 
 	/**
@@ -152,10 +161,6 @@ public class JSDocTags implements Iterable<JSDocTag> {
 		return result;
 	}
 
-	public void add(JSDocTag tag) {
-		tags.add(tag);
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -174,7 +179,7 @@ public class JSDocTags implements Iterable<JSDocTag> {
 	}
 
 	public Iterator<JSDocTag> iterator() {
-		return tags.iterator();
+		return new ArrayIterator<JSDocTag>(tags);
 	}
 
 }

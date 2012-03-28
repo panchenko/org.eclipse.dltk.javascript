@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser.jsdoc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.utils.IntList;
 
@@ -29,7 +32,7 @@ public class SimpleJSDocParser {
 	private final IntList ends = new IntList();
 
 	public JSDocTags parse(String content, int offset) {
-		final JSDocTags tags = new JSDocTags();
+		List<JSDocTag> tags = null;
 		index = MultiLineComment.JSDOC_PREFIX.length();
 		buffer = content.toCharArray();
 		end = buffer.length;
@@ -53,6 +56,9 @@ public class SimpleJSDocParser {
 			case '@':
 				final JSDocTag tag = parseTag(offset);
 				if (tag != null) {
+					if (tags == null) {
+						tags = new ArrayList<JSDocTag>();
+					}
 					tags.add(tag);
 				} else {
 					skipEndOfLine();
@@ -63,7 +69,11 @@ public class SimpleJSDocParser {
 				continue;
 			}
 		}
-		return tags;
+		if (tags != null) {
+			return new JSDocTags(tags.toArray(new JSDocTag[tags.size()]));
+		} else {
+			return JSDocTags.EMPTY;
+		}
 	}
 
 	private JSDocTag parseTag(int offset) {
