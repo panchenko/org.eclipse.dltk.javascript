@@ -108,6 +108,14 @@ public class JSDocTags {
 		return tags.size();
 	}
 
+	public boolean isEmpty() {
+		return tags.isEmpty();
+	}
+
+	public JSDocTag get(int index) {
+		return tags.get(index);
+	}
+
 	/**
 	 * Returns the number of tags with the specified name.
 	 * 
