@@ -55,17 +55,17 @@ public abstract class ElementValue implements IValue {
 
 	public static ElementValue findMember(ITypeSystem context, IRType type,
 			String name) {
+		return findMember(context, type, name, MemberPredicate.ALWAYS_TRUE);
+	}
+
+	public static ElementValue findMember(ITypeSystem context, IRType type,
+			String name, MemberPredicate predicate) {
 		if (type != null) {
 			final ITypeSystem saved = type.activeTypeSystem();
 			if (saved != null) {
 				context = saved;
 			}
 		}
-		return findMember(context, type, name, MemberPredicate.ALWAYS_TRUE);
-	}
-
-	public static ElementValue findMember(ITypeSystem context, IRType type,
-			String name, MemberPredicate predicate) {
 		if (IValueReference.ARRAY_OP.equals(name)) {
 			IRType arrayType = TypeUtil.extractArrayItemType(type);
 			// only give back this a a TypeValue if it is a known and not a
@@ -229,7 +229,7 @@ public abstract class ElementValue implements IValue {
 			}
 			for (IRType type : types) {
 				IValue child = findMember(context, type, name,
-						MemberPredicate.ALWAYS_TRUE);
+						MemberPredicate.STATIC);
 				if (child != null)
 					return child;
 			}
@@ -376,8 +376,10 @@ public abstract class ElementValue implements IValue {
 						return child;
 					}
 				}
-				ElementValue eValue = ElementValue.findMember(context,
-						JSTypeSet.normalize(context, property.getType()), name);
+				final IRType propType = JSTypeSet.normalize(context,
+						property.getType());
+				final ElementValue eValue = ElementValue.findMember(context,
+						propType, name, RTypeUtil.memberPredicateFor(propType));
 				if (eValue != null) {
 					child = eValue.resolveValue();
 					children.put(name, child);
