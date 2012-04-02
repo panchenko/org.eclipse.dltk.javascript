@@ -30,36 +30,30 @@ public abstract class AbstractReference implements IValueReference,
 
 	public void setValue(IValueReference value) {
 		IValue val = createValue();
-		if (val != null) {
-			if (value != null) {
-				IValue src = ((IValueProvider) value).getValue();
-				if (src == PhantomValue.VALUE) {
-					val.addReference(src);
-					return;
-				}
-				if (src == null) {
-					src = new LazyReferenceValue(value);
-					val.addReference(src);
-					return;
-				}
-				val.clear();
-				if (src instanceof Value
-						&& ((IValueProvider) value).isReference()
-						|| value.isParentOf(this)) {
-					val.addReference(src);
-				} else {
-					val.addValue(src);
-				}
+		if (val != null && value != null) {
+			IValue src = ((IValueProvider) value).getValue();
+			if (src == PhantomValue.VALUE) {
+				val.addReference(src);
+				return;
+			}
+			if (src == null) {
+				src = new LazyReferenceValue(value);
+				val.addReference(src);
+				return;
+			}
+			val.clear();
+			if (src instanceof Value && ((IValueProvider) value).isReference()
+					|| value.isParentOf(this)) {
+				val.addReference(src);
+			} else {
+				val.addValue(src);
 			}
 		}
 	}
 
 	public void addValue(IValueReference value, boolean copy) {
-		if (value == null) {
-			return;
-		}
 		IValue val = createValue();
-		if (val != null) {
+		if (val != null && value != null) {
 			IValue src = ((IValueProvider) value).getValue();
 			if (src == PhantomValue.VALUE) {
 				val.addReference(src);
