@@ -297,7 +297,37 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+	
+	public void testPropertyNullAssignment() {
+		StringList code = new StringList();
+		code.add("var x = { }");
+		code.add("x.noname = null");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
+	public void testPropertyAssignmentInIfBranch() {
+		StringList code = new StringList();
+		code.add("var condition = false;");
+		code.add("if (condition) {");
+		code.add("var x = { }");
+		code.add("x.noname = true");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testPropertyNullAssignmentInIfBranch() {
+		StringList code = new StringList();
+		code.add("var condition = false;");
+		code.add("if (condition) {");
+		code.add("var x = { }");
+		code.add("x.noname = null");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
 	public void testMethodAsPropertyAccess() {
 		StringList code = new StringList();
 		code.add("/** @type ExampleService */");
