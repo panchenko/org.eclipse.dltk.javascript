@@ -10,8 +10,12 @@ import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class CreateTopLevelVariable extends TextFileEditResolution {
 
@@ -21,6 +25,24 @@ public class CreateTopLevelVariable extends TextFileEditResolution {
 
 	public String getLabel() {
 		return "Creates a top level variable in the file";
+	}
+
+	@Override
+	public Image getImage() {
+		Image image = JavaScriptUI.getDefault().getImageRegistry()
+				.get("toplevelvariable");
+		if (image == null) {
+			ImageDescriptor imageDescriptor = AbstractUIPlugin
+					.imageDescriptorFromPlugin(
+							"org.eclipse.dltk.javascript.ui",
+							"icons/obj16/field_public_obj.gif");
+			if (imageDescriptor != null) {
+				image = imageDescriptor.createImage();
+				JavaScriptUI.getDefault().getImageRegistry()
+						.put("toplevelvariable", image);
+			}
+		}
+		return image;
 	}
 
 	public String getDescription() {

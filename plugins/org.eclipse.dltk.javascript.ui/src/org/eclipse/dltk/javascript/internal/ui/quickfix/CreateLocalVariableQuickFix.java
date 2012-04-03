@@ -14,9 +14,13 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.Statement;
+import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class CreateLocalVariableQuickFix extends TextFileEditResolution {
 
@@ -26,6 +30,24 @@ public class CreateLocalVariableQuickFix extends TextFileEditResolution {
 
 	public String getLabel() {
 		return "Create local variable";
+	}
+
+	@Override
+	public Image getImage() {
+		Image image = JavaScriptUI.getDefault().getImageRegistry()
+				.get("localvariable");
+		if (image == null) {
+			ImageDescriptor imageDescriptor = AbstractUIPlugin
+					.imageDescriptorFromPlugin(
+							"org.eclipse.dltk.javascript.ui",
+							"icons/obj16/localvariable_obj.gif");
+			if (imageDescriptor != null) {
+				image = imageDescriptor.createImage();
+				JavaScriptUI.getDefault().getImageRegistry()
+						.put("localvariable", image);
+			}
+		}
+		return image;
 	}
 
 	public String getDescription() {

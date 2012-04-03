@@ -10,9 +10,13 @@ import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.JSNode;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class GenerateSuppressWarningsResolution extends TextFileEditResolution {
 
@@ -35,6 +39,24 @@ public class GenerateSuppressWarningsResolution extends TextFileEditResolution {
 							getProblemStartIdx()).getFunctionName() + "'";
 		}
 		return "Add SuppressWarnings(" + type + ")";
+	}
+
+	@Override
+	public Image getImage() {
+		Image image = JavaScriptUI.getDefault().getImageRegistry()
+				.get("supresswarnings");
+		if (image == null) {
+			ImageDescriptor imageDescriptor = AbstractUIPlugin
+					.imageDescriptorFromPlugin(
+							"org.eclipse.dltk.javascript.ui",
+							"icons/obj16/supresswarnings.gif");
+			if (imageDescriptor != null) {
+				image = imageDescriptor.createImage();
+				JavaScriptUI.getDefault().getImageRegistry()
+						.put("supresswarnings", image);
+			}
+		}
+		return image;
 	}
 
 	protected MultiTextEdit getTextEdit(final IFile scriptFile,
