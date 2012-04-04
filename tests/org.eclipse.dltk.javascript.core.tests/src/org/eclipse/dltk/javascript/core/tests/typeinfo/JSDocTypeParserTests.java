@@ -22,6 +22,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 
 public class JSDocTypeParserTests extends TestCase {
 
@@ -30,6 +31,16 @@ public class JSDocTypeParserTests extends TestCase {
 			return new JSDocTypeParser().parse(expression);
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	private ParseException parseError(String expression) {
+		try {
+			new JSDocTypeParser().parse(expression);
+			fail("parse(" + expression + ") is expected to fail");
+			return null;// fail() never returns
+		} catch (ParseException e) {
+			return e;
 		}
 	}
 
@@ -47,9 +58,35 @@ public class JSDocTypeParserTests extends TestCase {
 		assertRef("String", type);
 	}
 
+	public void testSimpleParentheses() {
+		JSType type = parse("(string)");
+		assertRef("String", type);
+	}
+
+	public void testParenthesesError() {
+		final String expression = "(string";
+		final ParseException exception = parseError(expression);
+		assertEquals(") expected", exception.getMessage());
+		assertEquals(expression.length(), exception.getErrorOffset());
+	}
+
 	public void testArray() {
 		JSType type = parse("Array.<String>");
 		assertRef("String", ((ArrayType) type).getItemType());
+	}
+
+	public void testUnionType() {
+		UnionType type = (UnionType) parse("String|Number");
+		assertEquals(2, type.getTargets().size());
+		assertRef("String", type.getTargets().get(0));
+		assertRef("Number", type.getTargets().get(1));
+	}
+
+	public void testUnionParenthesesType() {
+		UnionType type = (UnionType) parse("(String|Number)");
+		assertEquals(2, type.getTargets().size());
+		assertRef("String", type.getTargets().get(0));
+		assertRef("Number", type.getTargets().get(1));
 	}
 
 	public void testRecordType() {
@@ -80,7 +117,7 @@ public class JSDocTypeParserTests extends TestCase {
 		assertRef("Number", type.getMembers().get(1).getType());
 		assertTrue(((RecordMember) type.getMembers().get(1)).isOptional());
 	}
-	
+
 	public void testRecordTypeWithLiteralQuotedProperties() {
 		final RecordType type = (RecordType) parse("{'a-string':String,anumber:Number=}");
 		assertEquals(1, type.getMembers().size());
