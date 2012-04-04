@@ -42,6 +42,10 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 	protected JSType parse(CharStream input) throws ParseException {
 		skipSpaces(input);
 		final List<JSType> types = new ArrayList<JSType>();
+		final boolean inParenthese = input.LT(1) == '(';
+		if (inParenthese) {
+			input.consume();
+		}
 		for (;;) {
 			final JSType type = parseType(input);
 			if (type != null) {
@@ -53,6 +57,9 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				}
 			}
 			break;
+		}
+		if (inParenthese) {
+			match(input, ')');
 		}
 		if (types.size() == 1) {
 			return types.get(0);
