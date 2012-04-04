@@ -20,6 +20,7 @@ import org.antlr.runtime.CharStream;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -252,6 +253,10 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				final Parameter parameter = TypeInfoModelFactory.eINSTANCE
 						.createParameter();
 				parameter.setType(type);
+				if (input.LT(1) == '=') {
+					parameter.setKind(ParameterKind.OPTIONAL);
+					input.consume();
+				}
 				parameters.add(parameter);
 				skipSpaces(input);
 				if (input.LT(1) == ',') {
