@@ -14,7 +14,6 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -64,6 +63,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -413,22 +413,13 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 	private void validateTypeInfo(Type type) {
 		final Resource resource = ((EObject) type).eResource();
 		if (resource != null) {
-			final URI u = resource.getURI();
-			if (u != null && (u.isFile() || u.isPlatform())) {
-				return;
-			}
-			boolean validResource = resource == invariantRS.getResource()
-					|| TypeInfoModelLoader.getInstance().hasResource(resource);
-			if (!validResource) {
-				Iterator<InvariantTypeResourceSet> iterator = invariantContextRS
-						.values().iterator();
-				while (iterator.hasNext()) {
-					validResource = iterator.next().getResource() == resource;
-					if (validResource)
-						break;
+			final ResourceSet resourceSet = resource.getResourceSet();
+			if (resourceSet != null) {
+				if (!(resourceSet instanceof InvariantTypeResourceSet)) {
+					Assert.isLegal(!(resourceSet instanceof TypeResourceSet),
+							"Type " + type.getName()
+									+ " has invalid resource: " + resource);
 				}
-				Assert.isTrue(validResource, "Type " + type.getName()
-						+ " has invalid resource: " + resource);
 			}
 		}
 		// TODO check that member referenced types are contained or proxy
