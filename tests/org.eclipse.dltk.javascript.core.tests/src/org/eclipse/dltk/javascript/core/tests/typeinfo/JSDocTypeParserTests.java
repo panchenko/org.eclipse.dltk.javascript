@@ -19,6 +19,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
@@ -30,6 +31,12 @@ public class JSDocTypeParserTests extends TestCase {
 		try {
 			return new JSDocTypeParser().parse(expression);
 		} catch (ParseException e) {
+			System.out.println(expression);
+			final StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < e.getErrorOffset(); ++i)
+				sb.append(' ');
+			sb.append("^^^ ").append(e.getMessage());
+			System.out.println(sb.toString());
 			throw new RuntimeException(e);
 		}
 	}
@@ -143,6 +150,16 @@ public class JSDocTypeParserTests extends TestCase {
 		final FunctionType type = (FunctionType) parse("function( String ) : Number");
 		assertEquals(1, type.getParameters().size());
 		assertRef("String", type.getParameters().get(0).getType());
+		assertRef("Number", type.getReturnType());
+	}
+
+	public void testFunctionTypeVarArgs() {
+		final FunctionType type = (FunctionType) parse("function(string, ...[number]): number");
+		assertEquals(2, type.getParameters().size());
+		assertRef("String", type.getParameters().get(0).getType());
+		assertRef("Number", type.getParameters().get(1).getType());
+		assertEquals(ParameterKind.VARARGS, type.getParameters().get(1)
+				.getKind());
 		assertRef("Number", type.getReturnType());
 	}
 
