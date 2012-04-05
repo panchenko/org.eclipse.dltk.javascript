@@ -116,9 +116,8 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				}
 				return checkIfArray(input, type);
 			} else if (ch == '('
-					&& ITypeNames.FUNCTION.equalsIgnoreCase(input.substring(
-							start, input.index() - 1))) {
-				// TODO (alex) lower case "function" only?
+					&& "function".equals(input.substring(start,
+							input.index() - 1))) {
 				input.consume();
 				final FunctionType functionType = TypeInfoModelFactory.eINSTANCE
 						.createFunctionType();
@@ -139,7 +138,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				return checkIfArray(input, array);
 			} else if (ch == CharStream.EOF || Character.isWhitespace(ch)
 					|| ch == '|' || ch == ',' || ch == '=' || ch == '}'
-					|| ch == '>' || ch == ')') {
+					|| ch == '>' || ch == ')' || ch == ']') {
 				return input.index() > start ? createType(input, start) : null;
 			} else {
 				input.consume();
@@ -247,13 +246,30 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 			EList<Parameter> parameters) throws ParseException {
 		for (;;) {
 			// TODO support parameter names (at least "this")
-			// TODO support parameter modifiers (optional, varargs)
+			skipSpaces(input);
+			boolean varargs = false;
+			boolean squareBracket = false;
+			if (input.LT(1) == '.' && input.LT(2) == '.' && input.LT(3) == '.') {
+				input.consume();
+				input.consume();
+				input.consume();
+				varargs = true;
+				if (input.LT(1) == '[') {
+					input.consume();
+					squareBracket = true;
+				}
+			}
 			final JSType type = parse(input);
 			if (type != null) {
 				final Parameter parameter = TypeInfoModelFactory.eINSTANCE
 						.createParameter();
 				parameter.setType(type);
-				if (input.LT(1) == '=') {
+				if (varargs) {
+					parameter.setKind(ParameterKind.VARARGS);
+					if (squareBracket) {
+						match(input, ']');
+					}
+				} else if (input.LT(1) == '=') {
 					parameter.setKind(ParameterKind.OPTIONAL);
 					input.consume();
 				}
