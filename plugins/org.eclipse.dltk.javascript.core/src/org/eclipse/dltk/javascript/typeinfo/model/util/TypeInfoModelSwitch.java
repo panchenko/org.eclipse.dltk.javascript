@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelSwitch.java,v 1.18 2011/12/19 09:15:03 apanchenk Exp $
+ * $Id: TypeInfoModelSwitch.java,v 1.19 2012/04/09 13:54:27 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -348,6 +348,12 @@ public class TypeInfoModelSwitch<T> {
                 if (result == null) result = defaultCase(theEObject);
                 return result;
             }
+            case TypeInfoModelPackage.JS_CUSTOM_TYPE: {
+                JSCustomType jsCustomType = (JSCustomType)theEObject;
+                T result = caseJSCustomType(jsCustomType);
+                if (result == null) result = defaultCase(theEObject);
+                return result;
+            }
             default: return defaultCase(theEObject);
         }
     }
@@ -649,6 +655,21 @@ public class TypeInfoModelSwitch<T> {
      * @generated
      */
     public T caseGenericMethod(GenericMethod object) {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>JS Custom Type</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>JS Custom Type</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseJSCustomType(JSCustomType object) {
         return null;
     }
 

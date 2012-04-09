@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelAdapterFactory.java,v 1.18 2011/12/19 09:15:03 apanchenk Exp $
+ * $Id: TypeInfoModelAdapterFactory.java,v 1.19 2012/04/09 13:54:27 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.util;
 
@@ -194,6 +194,10 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
             @Override
             public Adapter caseGenericMethod(GenericMethod object) {
                 return createGenericMethodAdapter();
+            }
+            @Override
+            public Adapter caseJSCustomType(JSCustomType object) {
+                return createJSCustomTypeAdapter();
             }
             @Override
             public Adapter defaultCase(EObject object) {
@@ -394,6 +398,20 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createGenericMethodAdapter() {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.JSCustomType <em>JS Custom Type</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.JSCustomType
+     * @generated
+     */
+    public Adapter createJSCustomTypeAdapter() {
         return null;
     }
 

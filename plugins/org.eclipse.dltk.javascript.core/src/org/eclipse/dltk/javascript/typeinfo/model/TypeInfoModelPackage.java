@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.35 2012/03/07 18:41:10 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.36 2012/04/09 13:54:27 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1953,6 +1953,25 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_METHOD_FEATURE_COUNT = METHOD_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.JSCustomType <em>JS Custom Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.JSCustomType
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getJSCustomType()
+     * @generated
+     */
+    int JS_CUSTOM_TYPE = 29;
+
+    /**
+     * The number of structural features of the '<em>JS Custom Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int JS_CUSTOM_TYPE_FEATURE_COUNT = 0;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1960,7 +1979,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 29;
+	int TYPE_KIND = 30;
 
 
 	/**
@@ -1971,7 +1990,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 30;
+	int PARAMETER_KIND = 31;
 
 
 	/**
@@ -1982,7 +2001,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
      * @generated
      */
-    int VISIBILITY = 31;
+    int VISIBILITY = 32;
 
 
     /**
@@ -1993,7 +2012,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getIRType()
      * @generated
      */
-    int IR_TYPE = 32;
+    int IR_TYPE = 33;
 
 
     /**
@@ -2268,6 +2287,16 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getGenericMethod_TypeParameters();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.JSCustomType <em>JS Custom Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>JS Custom Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.JSCustomType
+     * @generated
+     */
+    EClass getJSCustomType();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType <em>Map Type</em>}'.
@@ -3057,6 +3086,16 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference GENERIC_METHOD__TYPE_PARAMETERS = eINSTANCE.getGenericMethod_TypeParameters();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.JSCustomType <em>JS Custom Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.JSCustomType
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getJSCustomType()
+         * @generated
+         */
+        EClass JS_CUSTOM_TYPE = eINSTANCE.getJSCustomType();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.

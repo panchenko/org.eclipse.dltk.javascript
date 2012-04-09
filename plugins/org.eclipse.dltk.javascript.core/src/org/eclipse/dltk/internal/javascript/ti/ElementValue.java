@@ -21,12 +21,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
@@ -39,10 +41,12 @@ import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
+import org.eclipse.dltk.javascript.typeinfo.model.JSCustomType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -56,6 +60,39 @@ public abstract class ElementValue implements IValue {
 	public static ElementValue findMember(ITypeSystem context, IRType type,
 			String name) {
 		return findMember(context, type, name, MemberPredicate.ALWAYS_TRUE);
+	}
+
+	private static class NestedTypeSystem implements ITypeSystem {
+
+		private final ITypeSystem origin;
+		private final Type ownerType;
+
+		public NestedTypeSystem(ITypeSystem origin, Type ownerType) {
+			super();
+			this.origin = origin;
+			this.ownerType = ownerType;
+		}
+
+		public Type resolveType(Type type) {
+			return origin.resolveType(type);
+		}
+
+		public IValue valueOf(Member member) {
+			return origin.valueOf(member);
+		}
+
+		public Type parameterize(Type target, List<IRType> parameters) {
+			return origin.parameterize(target, parameters);
+		}
+
+		@SuppressWarnings("unchecked")
+		public <T> T getAttribute(AttributeKey<T> key) {
+			if (TypeInfoValidator.MEMBER_OWNER == key) {
+				return (T) ownerType;
+			} else {
+				return origin.getAttribute(key);
+			}
+		}
 	}
 
 	public static ElementValue findMember(ITypeSystem context, IRType type,
@@ -83,7 +120,13 @@ public abstract class ElementValue implements IValue {
 				if (selection.size() == 1) {
 					final Member selected = selection.get(0);
 					if (selected instanceof Property) {
-						return new PropertyValue(context, (Property) selected);
+						if (selected.getType() instanceof JSCustomType) {
+							return new PropertyValue(new NestedTypeSystem(
+									context, t), (Property) selected);
+						} else {
+							return new PropertyValue(context,
+									(Property) selected);
+						}
 					} else if (selected instanceof Method) {
 						return new MethodValue(context, (Method) selected);
 					}
@@ -328,6 +371,25 @@ public abstract class ElementValue implements IValue {
 		}
 	};
 
+	static final IRType NOT_INITIALIZED = new IRType() {
+
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			return TypeCompatibility.FALSE;
+		}
+
+		public String getName() {
+			return "NOT_INITIALIZED";
+		}
+
+		public ITypeSystem activeTypeSystem() {
+			return null;
+		}
+
+		public String toString() {
+			return getName();
+		}
+	};
+
 	private static class PropertyValue extends ElementValue implements IValue {
 
 		private final Property property;
@@ -376,8 +438,7 @@ public abstract class ElementValue implements IValue {
 						return child;
 					}
 				}
-				final IRType propType = JSTypeSet.normalize(context,
-						property.getType());
+				final IRType propType = getDeclaredType();
 				final ElementValue eValue = ElementValue.findMember(context,
 						propType, name, RTypeUtil.memberPredicateFor(propType));
 				if (eValue != null) {
@@ -388,17 +449,27 @@ public abstract class ElementValue implements IValue {
 			return child;
 		}
 
+		private IRType declaredType = NOT_INITIALIZED;
+
 		public IRType getDeclaredType() {
-			return JSTypeSet.normalize(context, property.getType());
+			if (declaredType == NOT_INITIALIZED) {
+				declaredType = JSTypeSet.normalize(context, property.getType());
+			}
+			return declaredType;
 		}
 
+		private JSTypeSet declaredTypes = null;
+
 		public JSTypeSet getDeclaredTypes() {
-			if (property.getType() != null) {
-				return JSTypeSet.singleton(JSTypeSet.normalize(context,
-						property.getType()));
-			} else {
-				return JSTypeSet.emptySet();
+			if (declaredTypes == null) {
+				final IRType type = getDeclaredType();
+				if (type != null) {
+					declaredTypes = JSTypeSet.singleton(type);
+				} else {
+					declaredTypes = JSTypeSet.emptySet();
+				}
 			}
+			return declaredTypes;
 		}
 
 		@Override
