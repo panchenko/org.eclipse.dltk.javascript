@@ -23,6 +23,7 @@ import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKLanguageManager;
+import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
@@ -112,11 +113,11 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	}
 
 	private static Type getType(String typeName) {
-		return TypeInfoModelLoader.getInstance().getType(typeName);
+		return TypeInfoModelLoader.getInstance().getType(typeName, true);
 	}
 
 	private static List<String> loadMembers(final String typeName,
-			MemberPredicate predicate) {
+			Predicate<Member> predicate) {
 		final List<String> names = new ArrayList<String>();
 		final Type type = getType(typeName);
 		for (Member member : new TypeMemberQuery(type, predicate)) {
@@ -126,11 +127,36 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		return Collections.unmodifiableList(names);
 	}
 
-	private static final Map<String, List<String>> members = new HashMap<String, List<String>>();
+	private static final class Key {
+		private final String name;
+		private final Object predicate;
 
-	protected static List<String> getMembers(String typeName,
-			MemberPredicate predicate) {
-		final String key = typeName + "/" + predicate.name();
+		public Key(String name, Object predicate) {
+			this.name = name;
+			this.predicate = predicate;
+		}
+
+		@Override
+		public int hashCode() {
+			return name.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Key) {
+				final Key other = (Key) obj;
+				return name.equals(other.name)
+						&& predicate.equals(other.predicate);
+			}
+			return false;
+		}
+	}
+
+	private static final Map<Key, List<String>> members = new HashMap<Key, List<String>>();
+
+	public static List<String> getMembers(String typeName,
+			Predicate<Member> predicate) {
+		final Key key = new Key(typeName, predicate);
 		List<String> m = members.get(key);
 		if (m == null) {
 			m = loadMembers(typeName, predicate);
