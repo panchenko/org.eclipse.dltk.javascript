@@ -42,9 +42,11 @@ import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
+import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
@@ -298,53 +300,12 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		public void reportValueTypeMembers(ITypeInferenceContext context,
 				IValueReference valueRef) {
 			final TypeMemberQuery typeQuery = new TypeMemberQuery();
-			List<Member> members = null;
-			for (IRType type : valueRef.getDeclaredTypes()) {
-				if (type instanceof IRClassType) {
-					final Type t = ((IRClassType) type).getTarget();
-					if (t != null) {
-						typeQuery.add(t, MemberPredicate.STATIC);
-					}
-				} else if (type instanceof IRRecordType) {
-					if (members == null) {
-						members = new ArrayList<Member>();
-					}
-					for (IRRecordMember member : ((IRRecordType) type)
-							.getMembers()) {
-						members.add(member.getMember());
-					}
-				} else {
-					final Type t = TypeUtil.extractType(context, type);
-					if (t != null) {
-						typeQuery.add(t, MemberPredicate.NON_STATIC);
-					}
-				}
-			}
-			for (IRType type : valueRef.getTypes()) {
-				if (type instanceof IRClassType) {
-					final Type t = ((IRClassType) type).getTarget();
-					if (t != null) {
-						typeQuery.add(t, MemberPredicate.STATIC);
-					}
-				} else if (type instanceof IRRecordType) {
-					if (members == null) {
-						members = new ArrayList<Member>();
-					}
-					for (IRRecordMember member : ((IRRecordType) type)
-							.getMembers()) {
-						members.add(member.getMember());
-					}
-				} else {
-					final Type t = TypeUtil.extractType(context, type);
-					if (t != null) {
-						typeQuery.add(t, MemberPredicate.NON_STATIC);
-					}
-				}
-			}
-			if (members != null) {
-				for (Member member : members) {
-					reportMember(member, member.getName(), true);
-				}
+			final List<Member> members = new ArrayList<Member>();
+			collectTypes(context, valueRef.getDeclaredTypes(), typeQuery,
+					members);
+			collectTypes(context, valueRef.getTypes(), typeQuery, members);
+			for (Member member : members) {
+				reportMember(member, member.getName(), true);
 			}
 			for (Member member : typeQuery.ignoreDuplicates(processed)) {
 				if (member.isVisible()
@@ -352,6 +313,36 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 								false)) {
 					reportMember(member, member.getName(),
 							typeQuery.contains(member.getDeclaringType()));
+				}
+			}
+		}
+
+		protected void collectTypes(final ITypeInferenceContext context,
+				final JSTypeSet types, final TypeMemberQuery typeQuery,
+				final List<Member> members) {
+			for (IRType type : types) {
+				if (type instanceof IRClassType) {
+					final Type t = ((IRClassType) type).getTarget();
+					if (t != null) {
+						typeQuery.add(t, t.memberPredicateFor(type,
+								MemberPredicate.STATIC));
+					}
+				} else if (type instanceof IRSimpleType) {
+					final Type t = ((IRSimpleType) type).getTarget();
+					if (t != null) {
+						typeQuery.add(t, t.memberPredicateFor(type,
+								MemberPredicate.NON_STATIC));
+					}
+				} else if (type instanceof IRRecordType) {
+					for (IRRecordMember member : ((IRRecordType) type)
+							.getMembers()) {
+						members.add(member.getMember());
+					}
+				} else {
+					final Type t = TypeUtil.extractType(context, type);
+					if (t != null) {
+						typeQuery.add(t, MemberPredicate.NON_STATIC);
+					}
 				}
 			}
 		}

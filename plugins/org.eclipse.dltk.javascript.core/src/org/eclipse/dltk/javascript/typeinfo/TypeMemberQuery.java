@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -31,9 +32,9 @@ public class TypeMemberQuery implements Iterable<Member> {
 
 	private static class QueueItem {
 		final Type type;
-		final MemberPredicate predicate;
+		final Predicate<Member> predicate;
 
-		public QueueItem(Type type, MemberPredicate predicate) {
+		public QueueItem(Type type, Predicate<Member> predicate) {
 			this.type = type;
 			this.predicate = predicate;
 		}
@@ -69,7 +70,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 		add(type);
 	}
 
-	public TypeMemberQuery(Type type, MemberPredicate predicate) {
+	public TypeMemberQuery(Type type, Predicate<Member> predicate) {
 		add(type, predicate);
 	}
 
@@ -77,7 +78,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 		add(type, MemberPredicate.ALWAYS_TRUE);
 	}
 
-	public void add(Type type, MemberPredicate predicate) {
+	public void add(Type type, Predicate<Member> predicate) {
 		types.add(new QueueItem(type, predicate));
 	}
 

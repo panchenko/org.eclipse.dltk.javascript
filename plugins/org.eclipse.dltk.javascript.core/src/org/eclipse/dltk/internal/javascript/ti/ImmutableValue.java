@@ -250,8 +250,8 @@ public class ImmutableValue implements IValue, IValue2 {
 		if (value == null && (declaredType != null || !types.isEmpty())) {
 			final ITypeSystem typeSystem = getTypeSystem();
 			if (declaredType != null) {
-				value = ElementValue.findMember(typeSystem, declaredType, name,
-						RTypeUtil.memberPredicateFor(declaredType));
+				value = ElementValue.findMemberA(typeSystem, declaredType,
+						name);
 				if (value != null) {
 					if (elementValues == null)
 						elementValues = new HashMap<String, IValue>(4, 0.9f);
@@ -260,8 +260,7 @@ public class ImmutableValue implements IValue, IValue2 {
 				}
 			}
 			for (IRType type : types) {
-				value = ElementValue.findMember(typeSystem, type, name,
-						RTypeUtil.memberPredicateFor(type));
+				value = ElementValue.findMemberA(typeSystem, type, name);
 				if (value != null) {
 					if (elementValues == null)
 						elementValues = new HashMap<String, IValue>(4, 0.9f);

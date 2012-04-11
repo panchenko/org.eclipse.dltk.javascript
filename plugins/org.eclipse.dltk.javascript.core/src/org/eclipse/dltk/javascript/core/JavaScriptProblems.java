@@ -102,10 +102,14 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	 */
 	HIDDEN_PROPERTY,
 	/**
+	 * TODO (alex) UNUSED
+	 * 
 	 * @since 3.0
 	 */
 	INSTANCE_PROPERTY,
 	/**
+	 * TODO (alex) UNUSED
+	 * 
 	 * @since 3.0
 	 */
 	STATIC_PROPERTY,

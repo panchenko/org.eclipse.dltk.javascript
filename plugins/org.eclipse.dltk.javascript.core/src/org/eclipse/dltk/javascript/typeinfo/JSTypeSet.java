@@ -379,9 +379,9 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 	}
 
-	private static class ClassTypeKey extends TypeKey implements IRClassType {
+	public static class ClassTypeKey extends TypeKey implements IRClassType {
 
-		private final Type type;
+		protected final Type type;
 
 		public ClassTypeKey(Type type) {
 			this.type = type;
@@ -951,7 +951,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		return ref(type);
 	}
 
-	public static IRType classType(Type type) {
+	public static IRClassType classType(Type type) {
 		return new ClassTypeKey(type);
 	}
 

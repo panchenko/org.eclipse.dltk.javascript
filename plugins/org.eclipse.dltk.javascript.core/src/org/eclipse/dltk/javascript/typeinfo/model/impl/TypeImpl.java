@@ -9,12 +9,14 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.21 2012/03/07 18:41:11 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.22 2012/04/11 13:36:38 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Collection;
 
+import org.eclipse.dltk.core.Predicate;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -595,6 +597,11 @@ public class TypeImpl extends ElementImpl implements Type {
 	@Override
 	public EObject eResolveProxy(InternalEObject proxy) {
 		return TypeUtil.resolve(proxy, this);
+	}
+
+	public Predicate<Member> memberPredicateFor(IRType type,
+			Predicate<Member> predicate) {
+		return predicate;
 	}
 
 } //TypeImpl

@@ -9,10 +9,12 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.15 2012/03/07 18:41:10 apanchenk Exp $
+ * $Id: Type.java,v 1.16 2012/04/11 13:36:38 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import org.eclipse.dltk.core.Predicate;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -246,5 +248,7 @@ public interface Type extends Element {
      * @generated
      */
     boolean isProxy();
+
+    Predicate<Member> memberPredicateFor(IRType type, Predicate<Member> predicate);
 
 } // Type

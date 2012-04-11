@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
@@ -36,6 +37,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRNoneType;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
+import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
@@ -95,8 +97,28 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
+	static ElementValue findMemberA(ITypeSystem context, IRType type,
+			String name) {
+		final Predicate<Member> predicate;
+		if (type instanceof IRClassType) {
+			final Type target = ((IRClassType) type).getTarget();
+			predicate = target != null ? target.memberPredicateFor(type,
+					MemberPredicate.STATIC) : MemberPredicate.STATIC;
+		} else if (type instanceof IRSimpleType) {
+			final Type target = ((IRSimpleType) type).getTarget();
+			predicate = target != null ? target.memberPredicateFor(type,
+					MemberPredicate.NON_STATIC) : MemberPredicate.NON_STATIC;
+		} else if (type instanceof IRUnionType) {
+			// TODO (alex) use different predicate for each option
+			predicate = MemberPredicate.ALWAYS_TRUE;
+		} else {
+			predicate = MemberPredicate.NON_STATIC;
+		}
+		return findMember(context, type, name, predicate);
+	}
+
 	public static ElementValue findMember(ITypeSystem context, IRType type,
-			String name, MemberPredicate predicate) {
+			String name, Predicate<Member> predicate) {
 		if (type != null) {
 			final ITypeSystem saved = type.activeTypeSystem();
 			if (saved != null) {
@@ -152,7 +174,7 @@ public abstract class ElementValue implements IValue {
 	}
 
 	public static List<Member> findMembers(Type type, String name,
-			MemberPredicate predicate) {
+			Predicate<Member> predicate) {
 		final List<Member> selection = new ArrayList<Member>(4);
 		for (Member member : new TypeMemberQuery(type, predicate)
 				.ignoreDuplicates()) {
@@ -439,8 +461,8 @@ public abstract class ElementValue implements IValue {
 					}
 				}
 				final IRType propType = getDeclaredType();
-				final ElementValue eValue = ElementValue.findMember(context,
-						propType, name, RTypeUtil.memberPredicateFor(propType));
+				final ElementValue eValue = ElementValue.findMemberA(context,
+						propType, name);
 				if (eValue != null) {
 					child = eValue.resolveValue();
 					children.put(name, child);

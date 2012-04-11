@@ -1740,8 +1740,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				return;
 			}
 			final Expression propName = propertyExpression.getProperty();
-			final Member member = extractElement(result, Member.class,
-					JavaScriptValidations.isStatic(result.getParent()));
+			final Member member = extractElement(result, Member.class, null);
 			if (member != null) {
 				if (member.isDeprecated()) {
 					final Property parentProperty = extractElement(
@@ -1777,26 +1776,28 @@ public class TypeInfoValidator implements IBuildParticipant {
 						reportHiddenProperty((Property) member,
 								member.getDeclaringType(), propName);
 					}
-				} else if (JavaScriptValidations.isStatic(result.getParent())
-						&& !member.isStatic()) {
-					IRType type = JavaScriptValidations.typeOf(result
-							.getParent());
-					reporter.reportProblem(
-							JavaScriptProblems.INSTANCE_PROPERTY,
-							NLS.bind(
-									ValidationMessages.StaticReferenceToNoneStaticProperty,
-									result.getName(), TypeUtil.getName(type)),
-							propName.sourceStart(), propName.sourceEnd());
-				} else if (!JavaScriptValidations.isStatic(result.getParent())
-						&& member.isStatic()) {
-					IRType type = JavaScriptValidations.typeOf(result
-							.getParent());
-					reporter.reportProblem(
-							JavaScriptProblems.STATIC_PROPERTY,
-							NLS.bind(
-									ValidationMessages.ReferenceToStaticProperty,
-									result.getName(), type.getName()), propName
-									.sourceStart(), propName.sourceEnd());
+					// } else if
+					// (JavaScriptValidations.isStatic(result.getParent())
+					// && !member.isStatic()) {
+					// IRType type = JavaScriptValidations.typeOf(result
+					// .getParent());
+					// reporter.reportProblem(
+					// JavaScriptProblems.INSTANCE_PROPERTY,
+					// NLS.bind(
+					// ValidationMessages.StaticReferenceToNoneStaticProperty,
+					// result.getName(), TypeUtil.getName(type)),
+					// propName.sourceStart(), propName.sourceEnd());
+					// } else if
+					// (!JavaScriptValidations.isStatic(result.getParent())
+					// && member.isStatic()) {
+					// IRType type = JavaScriptValidations.typeOf(result
+					// .getParent());
+					// reporter.reportProblem(
+					// JavaScriptProblems.STATIC_PROPERTY,
+					// NLS.bind(
+					// ValidationMessages.ReferenceToStaticProperty,
+					// result.getName(), type.getName()), propName
+					// .sourceStart(), propName.sourceEnd());
 				}
 			} else if ((!exists && !result.exists())
 					&& !isArrayLookup(propertyExpression)) {
@@ -1993,7 +1994,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 						return;
 					}
 					checkTypeReference(problemNode, type);
-					final List<Constructor> constructors = TypeUtil.findConstructors(type);
+					final List<Constructor> constructors = TypeUtil
+							.findConstructors(type);
 					if (!constructors.isEmpty()) {
 						final ITypeInferenceContext typeSystem = getContext();
 						final Constructor constructor = JavaScriptValidations
