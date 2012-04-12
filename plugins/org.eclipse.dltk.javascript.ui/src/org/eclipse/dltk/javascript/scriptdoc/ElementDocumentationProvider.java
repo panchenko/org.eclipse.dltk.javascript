@@ -19,6 +19,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -117,6 +118,11 @@ public class ElementDocumentationProvider implements
 				if (parameter.getType() != null) {
 					sb.append(':');
 					sb.append(parameter.getType().getName());
+					if (parameter.getKind() == ParameterKind.VARARGS) {
+						sb.append("...");
+					}
+				} else if (parameter.getKind() == ParameterKind.VARARGS) {
+					sb.append("...");
 				}
 				++paramCount;
 			}
