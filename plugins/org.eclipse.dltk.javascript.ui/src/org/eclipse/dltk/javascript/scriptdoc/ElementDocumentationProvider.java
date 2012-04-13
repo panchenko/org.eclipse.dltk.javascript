@@ -94,8 +94,7 @@ public class ElementDocumentationProvider implements
 					sb.append(member.getDeclaringType().getName());
 					sb.append('.');
 				} else {
-					appendDeclaringTypePath(sb,
-							(EObject) member.getDeclaringType());
+					appendDeclaringTypePath(sb, member.getDeclaringType());
 				}
 			}
 		}
