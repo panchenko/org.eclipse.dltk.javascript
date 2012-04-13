@@ -14,6 +14,7 @@ import java.io.Reader;
 import org.eclipse.dltk.core.IMember;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.IResolvableMember;
+import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProvider;
 
 public class ScriptDocumentationProvider implements
@@ -29,8 +30,7 @@ public class ScriptDocumentationProvider implements
 				return ScriptdocContentAccess.getHTMLContentReader(element,
 						lookIntoParents, lookIntoExternal);
 			} catch (ModelException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JavaScriptUI.log(e);
 			}
 			return null;
 		}
