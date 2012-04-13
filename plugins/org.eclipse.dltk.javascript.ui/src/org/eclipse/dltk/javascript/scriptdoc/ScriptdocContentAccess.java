@@ -41,11 +41,6 @@ class BufferJavaDocCommentReader extends JavaDocCommentReader {
 	}
 
 	@Override
-	protected int getLength() {
-		return fBuffer.getLength();
-	}
-
-	@Override
 	protected char getChar(int index) {
 		return fBuffer.getChar(index);
 	}
@@ -66,11 +61,6 @@ class StringJavaDocCommentReader extends JavaDocCommentReader {
 	public StringJavaDocCommentReader(String buf) {
 		super(0, buf.length());
 		fBuffer = buf;
-	}
-
-	@Override
-	protected int getLength() {
-		return fBuffer.length();
 	}
 
 	@Override

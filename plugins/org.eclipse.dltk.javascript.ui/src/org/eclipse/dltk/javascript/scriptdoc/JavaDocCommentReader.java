@@ -10,6 +10,7 @@
 package org.eclipse.dltk.javascript.scriptdoc;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import org.eclipse.dltk.corext.documentation.SingleCharReader;
 
@@ -70,15 +71,22 @@ public abstract class JavaDocCommentReader extends SingleCharReader {
 	public boolean containsOnlyInheritDoc() {
 		final int length = getLength();
 		char[] content = new char[length];
+		final int real;
 		try {
-			read(content, 0, length);
+			real = read(content, 0, length);
 		} catch (IOException e) {
 			return false;
 		}
-		return new String(content).trim().equals("{@inheritDoc}"); //$NON-NLS-1$
+		if (real == -1) {
+			return false;
+		}
+		final String str = new String(content, 0, real).trim();
+		return str.equals("{@inheritDoc}") || Pattern.matches("@SuppressWarnings\\([^\\)]+\\)", str); //$NON-NLS-1$
 	}
 
-	protected abstract int getLength();
+	private final int getLength() {
+		return fEndPos - fStartPos;
+	}
 
 	protected abstract char getChar(int index);
 
