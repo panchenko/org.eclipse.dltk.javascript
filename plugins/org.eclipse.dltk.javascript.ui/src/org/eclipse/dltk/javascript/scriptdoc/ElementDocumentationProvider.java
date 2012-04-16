@@ -23,11 +23,17 @@ import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
+import org.eclipse.dltk.ui.DLTKPluginImages;
+import org.eclipse.dltk.ui.ScriptElementImageProvider;
 import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProvider;
 import org.eclipse.dltk.ui.documentation.IScriptDocumentationProviderExtension2;
 import org.eclipse.dltk.ui.documentation.TextDocumentationResponse;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DecorationOverlayIcon;
+import org.eclipse.jface.viewers.IDecoration;
 
 /**
  * @since 3.0
@@ -51,6 +57,7 @@ public class ElementDocumentationProvider implements
 			// && jsElement.getDescription().length() != 0) {
 			return new TextDocumentationResponse(element,
 					getElementTitle(jsElement),
+					getElementImageDescriptor(jsElement),
 					jsElement.getDescription() != null ? jsElement
 							.getDescription() : "");
 			// }
@@ -132,6 +139,45 @@ public class ElementDocumentationProvider implements
 			}
 		}
 		return sb.toString();
+	}
+
+	private ImageDescriptor getElementImageDescriptor(Element element) {
+		ImageDescriptor descriptor = ElementLabelProviderRegistry
+				.getImageDescriptor(element);
+		if (descriptor != null) {
+			return descriptor;
+		}
+		if (element instanceof Type) {
+			return decorateImageDescriptor(
+					ScriptElementImageProvider.getTypeImageDescriptor(0, false),
+					element);
+		} else if (element instanceof Member) {
+			final int flags = ((Member) element).getVisibility().getFlags();
+			if (element instanceof Property) {
+				return decorateImageDescriptor(
+						ScriptElementImageProvider
+								.getFieldImageDescriptor(flags),
+						element);
+			} else if (element instanceof Method) {
+				return decorateImageDescriptor(
+						ScriptElementImageProvider
+								.getMethodImageDescriptor(flags),
+						element);
+			}
+		}
+		return null;
+	}
+
+	protected ImageDescriptor decorateImageDescriptor(
+			ImageDescriptor descriptor, Element element) {
+		if (element.isDeprecated()) {
+			return new DecorationOverlayIcon(descriptor.createImage(),
+					DLTKPluginImages.DESC_OVR_DEPRECATED, IDecoration.UNDERLAY);
+		} else if (element instanceof Member && ((Member) element).isStatic()) {
+			return new DecorationOverlayIcon(descriptor.createImage(),
+					DLTKPluginImages.DESC_OVR_STATIC, IDecoration.TOP_RIGHT);
+		}
+		return descriptor;
 	}
 
 }
