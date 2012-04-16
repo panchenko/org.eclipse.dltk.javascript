@@ -16,6 +16,7 @@ import static org.eclipse.dltk.javascript.typeinfo.TypeUtil.ref;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -578,6 +579,23 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("name");
 		assertTrue(name.exists());
 		assertTrue(name.getTypes().isEmpty());
+	}
+
+	public void testExampleTypeWithCollection() {
+		List<String> lines = new StringList();
+		lines.add("/** @type ExampleService2 */");
+		lines.add("var a;");
+		lines.add("/** @type " + ExampleTypeProvider.TYPE_WITH_COLLECTION+ " */");
+		lines.add("var b = a.execute();");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference name = collection.getChild("b");
+		assertTrue(name.exists());
+		assertEquals( ExampleTypeProvider.TYPE_WITH_COLLECTION,name.getDeclaredType().getName());
+		Set<String> directChildren = name.getDirectChildren();
+		assertEquals(1,directChildren.size());
+		
+		assertTrue(name.getChild("service").exists());
+		assertTrue(name.getChild("test").exists());
 	}
 
 	public void testGenericArrayTypeMethod() {

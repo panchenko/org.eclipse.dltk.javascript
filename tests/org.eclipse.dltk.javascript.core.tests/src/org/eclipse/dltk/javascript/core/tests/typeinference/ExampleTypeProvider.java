@@ -17,6 +17,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.CharOperation;
+import org.eclipse.dltk.compiler.env.ModuleSource;
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
+import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
@@ -40,6 +44,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 	private static final String TYPE_SERVICE2 = "ExampleService2";
 
 	static final String TYPE_EXAMPLE_FORMS = "ExampleForms";
+	
+	static final String TYPE_WITH_COLLECTION = "ExampleTypeWithCollection";
 
 	static final String TYPE_GENERIC_ARRAY_METHOD = "ExampleArrayMethod";
 
@@ -169,6 +175,24 @@ public class ExampleTypeProvider implements ITypeProvider {
 			prop2.setDeprecated(true);
 			type.getMembers().add(prop2);
 
+			return type;
+		} else if (TYPE_WITH_COLLECTION.equals(typeName)) {
+			Type type = TypeInfoModelFactory.eINSTANCE.createType();
+			type.setName(typeName);
+			type.setKind(TypeKind.JAVA);
+
+			Property prop1 = TypeInfoModelFactory.eINSTANCE.createProperty();
+			prop1.setName("service");
+			prop1.setType(context.getTypeRef(TYPE_SERVICE));
+			type.getMembers().add(prop1);
+
+			final Script script = new JavaScriptParser().parse(new ModuleSource("/** @return {Array<String>}*/function test() { return new Array();}"), null);
+			if (script != null) {
+				TypeInferencer2 inferencer = new TypeInferencer2();
+				inferencer.doInferencing(script);
+				type.setAttribute(ExampleElementResolver.MEMBER_VALUE,
+						inferencer.getCollection());
+			}
 			return type;
 		} else if (TYPE_GENERIC_ARRAY_METHOD.equals(typeName)) {
 			Type type = TypeInfoModelFactory.eINSTANCE.createType();
