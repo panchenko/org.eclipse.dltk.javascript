@@ -599,11 +599,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 		}
 		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
-		final IRVariable rvar = RModelBuilder.create(getContext(), variable);
-		reference.setAttribute(IReferenceAttributes.R_VARIABLE, rvar);
-		if (rvar.getType() != null) {
-			reference.setDeclaredType(rvar.getType());
-		}
+
 
 		reference.setKind(inFunction() ? ReferenceKind.LOCAL
 				: ReferenceKind.GLOBAL);
@@ -611,7 +607,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				declaration.sourceStart(), declaration.sourceEnd(),
 				identifier.sourceStart(), identifier.sourceEnd()));
 		initializeVariable(reference, declaration, variable);
-		// setTypeImpl(reference, variable.getType());
+
+		// declared type setting must be done after the initialize else the
+		// IMemberEvaluator.valueOf() call will be reverted for types that do
+		// return a collection
+		final IRVariable rvar = RModelBuilder.create(getContext(), variable);
+		reference.setAttribute(IReferenceAttributes.R_VARIABLE, rvar);
+		if (rvar.getType() != null) {
+			setIRType(reference, rvar.getType(), false);
+		}
+
 		return reference;
 	}
 
