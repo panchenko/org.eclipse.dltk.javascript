@@ -39,7 +39,9 @@ import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -97,6 +99,18 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 
 	}
 
+	private static boolean isStringLiteralInObjectLiteral(ASTNode node) {
+		if (node instanceof StringLiteral) {
+			final StringLiteral literal = (StringLiteral) node;
+			if (literal.getParent() instanceof PropertyInitializer) {
+				final PropertyInitializer initializer = (PropertyInitializer) literal
+						.getParent();
+				return initializer.getName() == literal;
+			}
+		}
+		return false;
+	}
+
 	public IModelElement[] select(IModuleSource module, int position, int i) {
 		if (!(module.getModelElement() instanceof ISourceModule) || i == -1) {
 			return null;
@@ -118,7 +132,8 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 			if (DEBUG) {
 				System.out.println(node.getClass().getName() + "=" + node); //$NON-NLS-1$
 			}
-			if (node instanceof Identifier) {
+			if (node instanceof Identifier
+					|| isStringLiteralInObjectLiteral(node)) {
 				final TypeInferencer2 inferencer2 = new TypeInferencer2();
 				final SelectionVisitor visitor = new SelectionVisitor(
 						inferencer2, node);
