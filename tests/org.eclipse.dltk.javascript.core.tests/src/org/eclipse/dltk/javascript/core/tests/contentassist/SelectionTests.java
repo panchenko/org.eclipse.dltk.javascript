@@ -38,7 +38,9 @@ import org.eclipse.dltk.core.search.SearchRequestor;
 import org.eclipse.dltk.core.tests.Skip;
 import org.eclipse.dltk.core.tests.model.AbstractModelTests;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptSelectionEngine2;
 
+@SuppressWarnings("restriction")
 public class SelectionTests extends AbstractModelTests {
 
 	private static final String PRJ_NAME = "selection";
@@ -74,8 +76,14 @@ public class SelectionTests extends AbstractModelTests {
 	}
 
 	private ISelectionEngine getEngine() {
-		return DLTKLanguageManager
-				.getSelectionEngine(JavaScriptNature.NATURE_ID);
+		for (ISelectionEngine engine : DLTKLanguageManager
+				.getSelectionEngines(JavaScriptNature.NATURE_ID)) {
+			if (engine instanceof JavaScriptSelectionEngine2) {
+				return engine;
+			}
+		}
+		throw new IllegalStateException(
+				JavaScriptSelectionEngine2.class.getName() + " not found");
 	}
 
 	public IModelElement[] select(IModuleSource module, final int position) {
