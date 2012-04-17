@@ -11,15 +11,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.validation;
 
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.FlowValidation;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
-import org.eclipse.dltk.javascript.parser.JSProblem;
 
 public class FlowValidationTests extends AbstractValidationTest {
 
@@ -54,6 +55,19 @@ public class FlowValidationTests extends AbstractValidationTest {
 				.toString()));
 		assertEquals(1, problemIds.size());
 		assertTrue(problemIds.contains(JavaScriptProblems.UNREACHABLE_CODE));
+	}
+
+	public void testCodeAfterBreak() {
+		StringList code = new StringList();
+		code.add("function x() {");
+		code.add("  for (;;) {");
+		code.add("    var q = 0");
+		code.add("    break;");
+		code.add("  }");
+		code.add("  return true;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testUnreachableCodeAfterContinue() {
