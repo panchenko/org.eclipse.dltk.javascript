@@ -19,6 +19,10 @@ import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
 import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
+import org.eclipse.dltk.javascript.ast.DoWhileStatement;
+import org.eclipse.dltk.javascript.ast.ForEachInStatement;
+import org.eclipse.dltk.javascript.ast.ForInStatement;
+import org.eclipse.dltk.javascript.ast.ForStatement;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.IfStatement;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
@@ -28,6 +32,7 @@ import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
+import org.eclipse.dltk.javascript.ast.WhileStatement;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.osgi.util.NLS;
@@ -134,6 +139,38 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		}
 
 		return status;
+	}
+
+	private static FlowStatus clearBreak(final FlowStatus status) {
+		if (status != null) {
+			status.isBreak = false;
+		}
+		return status;
+	}
+
+	@Override
+	public FlowStatus visitForStatement(ForStatement node) {
+		return clearBreak(super.visitForStatement(node));
+	}
+
+	@Override
+	public FlowStatus visitForInStatement(ForInStatement node) {
+		return clearBreak(super.visitForInStatement(node));
+	}
+
+	@Override
+	public FlowStatus visitForEachInStatement(ForEachInStatement node) {
+		return clearBreak(super.visitForEachInStatement(node));
+	}
+
+	@Override
+	public FlowStatus visitWhileStatement(WhileStatement node) {
+		return clearBreak(super.visitWhileStatement(node));
+	}
+
+	@Override
+	public FlowStatus visitDoWhileStatement(DoWhileStatement node) {
+		return clearBreak(super.visitDoWhileStatement(node));
 	}
 
 	@Override
