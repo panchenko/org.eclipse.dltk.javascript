@@ -75,6 +75,13 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 	}
 
 	protected JSType parseType(CharStream input) throws ParseException {
+		if (input.LT(1) == '?') {
+			// Nullable type
+			input.consume();
+		} else if (input.LT(1) == '!') {
+			// Non-nullable type
+			input.consume();
+		}
 		if (input.LT(1) == '{') {
 			input.consume();
 			final RecordType recordType = parseRecordType(input);
