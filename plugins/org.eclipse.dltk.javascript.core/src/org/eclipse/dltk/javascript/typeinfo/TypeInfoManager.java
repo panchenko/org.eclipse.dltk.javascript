@@ -271,7 +271,7 @@ public class TypeInfoManager {
 	 * Resource implementation which provides human readable fragments for
 	 * {@link TypeVariable} references.
 	 */
-	private static class TypeInfoXMIResource extends XMIResourceImpl {
+	public static class TypeInfoXMIResource extends XMIResourceImpl {
 
 		public TypeInfoXMIResource() {
 			super();
