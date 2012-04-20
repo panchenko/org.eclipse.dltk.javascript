@@ -56,6 +56,7 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * 
 	 * @param type
 	 */
+	@Deprecated
 	void markInvariant(Type type);
 
 	/**
@@ -65,6 +66,7 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * @param type
 	 * @param context
 	 */
+	@Deprecated
 	void markInvariant(Type type, String context);
 
 	/**
@@ -74,14 +76,17 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * @param context
 	 * @return
 	 */
+	@Deprecated
 	Type getInvariantType(String typeName, String context);
 
+	@Deprecated
 	public interface ITypeInfoInvariantCache {
 		void reset();
 
 		void reset(String context);
 	}
 
+	@Deprecated
 	ITypeInfoInvariantCache INVARIANTS = new TypeInfoInvariantCacheImpl();
 
 	/**
@@ -104,6 +109,7 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	String getContext();
 
 	/**
