@@ -24,6 +24,7 @@ import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
+import org.eclipse.dltk.javascript.typeinfo.TypeCache;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -44,7 +45,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 	private static final String TYPE_SERVICE2 = "ExampleService2";
 
 	static final String TYPE_EXAMPLE_FORMS = "ExampleForms";
-	
+
 	static final String TYPE_WITH_COLLECTION = "ExampleTypeWithCollection";
 
 	static final String TYPE_GENERIC_ARRAY_METHOD = "ExampleArrayMethod";
@@ -53,95 +54,109 @@ public class ExampleTypeProvider implements ITypeProvider {
 		return true;
 	}
 
-	public Type getType(ITypeInfoContext context, TypeMode mode, String typeName) {
-		if (typeName.equals("Continuation"))
-		{
-			Type type = TypeInfoModelFactory.eINSTANCE.createType();
-			type.setName(typeName);
-			type.setKind(TypeKind.JAVASCRIPT);
-			type.setSuperType(context.getKnownType("Function", mode));
-			context.markInvariant(type);
-			return type;
+	private static final TypeCache CACHE = new TypeCache("dltk",
+			"javascript.examples") {
+		@Override
+		protected CacheEntry createType(String typeName) {
+			if ("Continuation".equals(typeName)) {
+				Type type = TypeInfoModelFactory.eINSTANCE.createType();
+				type.setName(typeName);
+				type.setKind(TypeKind.JAVASCRIPT);
+				type.setSuperType(getType(ITypeNames.FUNCTION));
+				return addType(CACHE_BUCKET, type);
+			} else if (TYPE_SERVICE.equals(typeName)) {
+				Type type = TypeInfoModelFactory.eINSTANCE.createType();
+				type.setName(typeName);
+				type.setKind(TypeKind.JAVA);
+
+				Method method1 = TypeInfoModelFactory.eINSTANCE.createMethod();
+				method1.setName("execute");
+				method1.setType(getTypeRef(TYPE_RESPONSE));
+				type.getMembers().add(method1);
+
+				Method method2 = TypeInfoModelFactory.eINSTANCE.createMethod();
+				method2.setName("executeCompatible");
+				method2.setType(getTypeRef(TYPE_RESPONSE));
+				method2.setDeprecated(true);
+				type.getMembers().add(method2);
+
+				Property prop1 = TypeInfoModelFactory.eINSTANCE
+						.createProperty();
+				prop1.setName("name");
+				prop1.setType(getTypeRef(ITypeNames.STRING));
+				type.getMembers().add(prop1);
+
+				Property prop2 = TypeInfoModelFactory.eINSTANCE
+						.createProperty();
+				prop2.setName("nameCompatible");
+				prop2.setType(getTypeRef(ITypeNames.STRING));
+				prop2.setDeprecated(true);
+				type.getMembers().add(prop2);
+
+				{
+					Method method5 = TypeInfoModelFactory.eINSTANCE
+							.createMethod();
+					method5.setName("run");
+					method5.setDescription("description for run(language,code)");
+					Parameter p = TypeInfoModelFactory.eINSTANCE
+							.createParameter();
+					p.setName("language");
+					p.setType(getTypeRef(ITypeNames.STRING));
+					method5.getParameters().add(p);
+					p = TypeInfoModelFactory.eINSTANCE.createParameter();
+					p.setName("code");
+					p.setType(getTypeRef(ITypeNames.STRING));
+					method5.getParameters().add(p);
+					type.getMembers().add(method5);
+				}
+				{
+					Method method3 = TypeInfoModelFactory.eINSTANCE
+							.createMethod();
+					method3.setName("run");
+					method3.setDescription("description for run()");
+					type.getMembers().add(method3);
+				}
+				{
+					Method method4 = TypeInfoModelFactory.eINSTANCE
+							.createMethod();
+					method4.setName("run");
+					method4.setDescription("description for run(code)");
+					Parameter p = TypeInfoModelFactory.eINSTANCE
+							.createParameter();
+					p.setName("code");
+					p.setType(getTypeRef(ITypeNames.STRING));
+					method4.getParameters().add(p);
+					type.getMembers().add(method4);
+				}
+				return addType(CACHE_BUCKET, type);
+			} else if (TYPE_RESPONSE.equals(typeName)) {
+				Type type = TypeInfoModelFactory.eINSTANCE.createType();
+				type.setName(typeName);
+				type.setKind(TypeKind.JAVA);
+
+				Property prop1 = TypeInfoModelFactory.eINSTANCE
+						.createProperty();
+				prop1.setName("status");
+				prop1.setType(getTypeRef(ITypeNames.NUMBER));
+				type.getMembers().add(prop1);
+
+				Property prop2 = TypeInfoModelFactory.eINSTANCE
+						.createProperty();
+				prop2.setName("service");
+				prop2.setType(getTypeRef(TYPE_SERVICE));
+				type.getMembers().add(prop2);
+				return addType(CACHE_BUCKET, type);
+			} else
+				return null;
 		}
-		else if (TYPE_SERVICE.equals(typeName)) {
-			Type type = TypeInfoModelFactory.eINSTANCE.createType();
-			type.setName(typeName);
-			type.setKind(TypeKind.JAVA);
+	};
 
-			Method method1 = TypeInfoModelFactory.eINSTANCE.createMethod();
-			method1.setName("execute");
-			method1.setType(context.getTypeRef(TYPE_RESPONSE));
-			type.getMembers().add(method1);
+	private static final String CACHE_BUCKET = "tests";
 
-			Method method2 = TypeInfoModelFactory.eINSTANCE.createMethod();
-			method2.setName("executeCompatible");
-			method2.setType(context.getTypeRef(TYPE_RESPONSE));
-			method2.setDeprecated(true);
-			type.getMembers().add(method2);
-
-			Property prop1 = TypeInfoModelFactory.eINSTANCE.createProperty();
-			prop1.setName("name");
-			prop1.setType(context.getTypeRef(ITypeNames.STRING));
-			type.getMembers().add(prop1);
-
-			Property prop2 = TypeInfoModelFactory.eINSTANCE.createProperty();
-			prop2.setName("nameCompatible");
-			prop2.setType(context.getTypeRef(ITypeNames.STRING));
-			prop2.setDeprecated(true);
-			type.getMembers().add(prop2);
-
-			{
-				Method method5 = TypeInfoModelFactory.eINSTANCE.createMethod();
-				method5.setName("run");
-				method5.setDescription("description for run(language,code)");
-				Parameter p = TypeInfoModelFactory.eINSTANCE.createParameter();
-				p.setName("language");
-				p.setType(context.getTypeRef(ITypeNames.STRING));
-				method5.getParameters().add(p);
-				p = TypeInfoModelFactory.eINSTANCE.createParameter();
-				p.setName("code");
-				p.setType(context.getTypeRef(ITypeNames.STRING));
-				method5.getParameters().add(p);
-				type.getMembers().add(method5);
-			}
-			{
-				Method method3 = TypeInfoModelFactory.eINSTANCE.createMethod();
-				method3.setName("run");
-				method3.setDescription("description for run()");
-				type.getMembers().add(method3);
-			}
-			{
-				Method method4 = TypeInfoModelFactory.eINSTANCE.createMethod();
-				method4.setName("run");
-				method4.setDescription("description for run(code)");
-				Parameter p = TypeInfoModelFactory.eINSTANCE.createParameter();
-				p.setName("code");
-				p.setType(context.getTypeRef(ITypeNames.STRING));
-				method4.getParameters().add(p);
-				type.getMembers().add(method4);
-			}
-
-			context.markInvariant(type);
-
-			return type;
-		} else if (TYPE_RESPONSE.equals(typeName)) {
-			Type type = TypeInfoModelFactory.eINSTANCE.createType();
-			type.setName(typeName);
-			type.setKind(TypeKind.JAVA);
-
-			Property prop1 = TypeInfoModelFactory.eINSTANCE.createProperty();
-			prop1.setName("status");
-			prop1.setType(context.getTypeRef(ITypeNames.NUMBER));
-			type.getMembers().add(prop1);
-
-			Property prop2 = TypeInfoModelFactory.eINSTANCE.createProperty();
-			prop2.setName("service");
-			prop2.setType(context.getTypeRef(TYPE_SERVICE));
-			type.getMembers().add(prop2);
-
-			context.markInvariant(type);
-
-			return type;
+	public Type getType(ITypeInfoContext context, TypeMode mode, String typeName) {
+		final Type cached = CACHE.findType(typeName);
+		if (cached != null) {
+			return cached;
 		} else if (TYPE_SERVICE2.equals(typeName)) {
 			Type type = TypeInfoModelFactory.eINSTANCE.createType();
 			type.setName(typeName);
@@ -186,7 +201,10 @@ public class ExampleTypeProvider implements ITypeProvider {
 			prop1.setType(context.getTypeRef(TYPE_SERVICE));
 			type.getMembers().add(prop1);
 
-			final Script script = new JavaScriptParser().parse(new ModuleSource("/** @return {Array<String>}*/function test() { return new Array();}"), null);
+			final Script script = new JavaScriptParser()
+					.parse(new ModuleSource(
+							"/** @return {Array<String>}*/function test() { return new Array();}"),
+							null);
 			if (script != null) {
 				TypeInferencer2 inferencer = new TypeInferencer2();
 				inferencer.doInferencing(script);
