@@ -328,8 +328,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	public Set<String> listTypes(TypeMode mode, String prefix) {
 		Set<String> result = new HashSet<String>();
-		Set<String> typeNames = TypeInfoModelLoader.getInstance().listTypes(
-				prefix);
+		final TypeInfoModelLoader loader = TypeInfoModelLoader.getInstance();
+		Set<String> typeNames = mode == TypeMode.CODE ? loader
+				.listTypeLiterals(prefix) : loader.listTypes(prefix);
 		if (typeNames != null) {
 			result.addAll(typeNames);
 		}

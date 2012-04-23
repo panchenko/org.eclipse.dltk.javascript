@@ -83,6 +83,23 @@ public class TypeInfoModelLoader {
 		return result;
 	}
 
+	public Set<String> listTypeLiterals(String prefix) {
+		Set<String> result = new HashSet<String>();
+		for (Resource resource : getResources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof TypeLiteral) {
+					final Type type = ((TypeLiteral) object).getTarget();
+					if (type != null
+							&& CharOperation.prefixEquals(prefix,
+									type.getName())) {
+						result.add(type.getName());
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * @since 3.0
 	 */
