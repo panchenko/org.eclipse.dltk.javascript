@@ -101,6 +101,23 @@ public class TypeInfoModelLoader {
 	}
 
 	/**
+	 * @since 4.0
+	 */
+	public Type getTypeLiteral(String name) {
+		for (Resource resource : getResources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof TypeLiteral) {
+					final Type type = ((TypeLiteral) object).getTarget();
+					if (type != null && name.equals(type.getName())) {
+						return type;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * @since 3.0
 	 */
 	public Set<Member> listMembers(String prefix) {

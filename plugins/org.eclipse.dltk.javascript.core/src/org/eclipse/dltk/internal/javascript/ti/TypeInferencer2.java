@@ -502,7 +502,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			}
 		}
 		if (queryPredefined) {
-			Type type = TypeInfoModelLoader.getInstance().getType(typeName);
+			final TypeInfoModelLoader loader = TypeInfoModelLoader
+					.getInstance();
+			final Type type;
+			if (mode == TypeMode.CODE) {
+				type = loader.getTypeLiteral(typeName);
+			} else {
+				type = loader.getType(typeName);
+			}
 			if (type != null) {
 				return type;
 			}

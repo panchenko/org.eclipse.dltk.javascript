@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.36 2012/04/09 13:54:27 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.37 2012/04/23 06:18:12 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1972,6 +1972,34 @@ public interface TypeInfoModelPackage extends EPackage {
     int JS_CUSTOM_TYPE_FEATURE_COUNT = 0;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeLiteralImpl <em>Type Literal</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeLiteralImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeLiteral()
+     * @generated
+     */
+    int TYPE_LITERAL = 30;
+
+    /**
+     * The feature id for the '<em><b>Target</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_LITERAL__TARGET = 0;
+
+    /**
+     * The number of structural features of the '<em>Type Literal</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_LITERAL_FEATURE_COUNT = 1;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1979,7 +2007,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 30;
+	int TYPE_KIND = 31;
 
 
 	/**
@@ -1990,7 +2018,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 31;
+	int PARAMETER_KIND = 32;
 
 
 	/**
@@ -2001,7 +2029,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
      * @generated
      */
-    int VISIBILITY = 32;
+    int VISIBILITY = 33;
 
 
     /**
@@ -2012,7 +2040,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getIRType()
      * @generated
      */
-    int IR_TYPE = 33;
+    int IR_TYPE = 34;
 
 
     /**
@@ -2297,6 +2325,27 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EClass getJSCustomType();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral <em>Type Literal</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Type Literal</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral
+     * @generated
+     */
+    EClass getTypeLiteral();
+
+    /**
+     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral#getTarget <em>Target</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Target</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral#getTarget()
+     * @see #getTypeLiteral()
+     * @generated
+     */
+    EReference getTypeLiteral_Target();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType <em>Map Type</em>}'.
@@ -3096,6 +3145,24 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EClass JS_CUSTOM_TYPE = eINSTANCE.getJSCustomType();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeLiteralImpl <em>Type Literal</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeLiteralImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeLiteral()
+         * @generated
+         */
+        EClass TYPE_LITERAL = eINSTANCE.getTypeLiteral();
+
+        /**
+         * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference TYPE_LITERAL__TARGET = eINSTANCE.getTypeLiteral_Target();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.
