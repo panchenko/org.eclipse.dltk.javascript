@@ -604,4 +604,24 @@
     <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a String value for this object."/>
     <members xsi:type="ref:Method" name="valueOf" directType="XMLList" description="The valueOf method returns this QName object"/>
  </ref:Type>
+	<ref:TypeLiteral target="Error"/>
+	<ref:TypeLiteral target="EvalError"/>
+	<ref:TypeLiteral target="RangeError"/>
+	<ref:TypeLiteral target="ReferenceError"/>
+	<ref:TypeLiteral target="SyntaxError"/>
+	<ref:TypeLiteral target="TypeError"/>
+	<ref:TypeLiteral target="URIError"/>
+	<ref:TypeLiteral target="Function"/>
+	<ref:TypeLiteral target="Object"/>
+	<ref:TypeLiteral target="RegExp"/>
+	<ref:TypeLiteral target="Math"/>
+	<ref:TypeLiteral target="Boolean"/>
+	<ref:TypeLiteral target="Date"/>
+	<ref:TypeLiteral target="Number"/>
+	<ref:TypeLiteral target="String"/>
+	<ref:TypeLiteral target="Array"/>
+	<ref:TypeLiteral target="XML"/>
+	<ref:TypeLiteral target="XMLList"/>
+	<ref:TypeLiteral target="Namespace"/>
+	<ref:TypeLiteral target="QName"/>
 </xmi:XMI>

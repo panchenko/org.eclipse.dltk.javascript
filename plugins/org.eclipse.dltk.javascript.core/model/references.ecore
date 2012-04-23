@@ -165,4 +165,8 @@
         eType="#//TypeVariable" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JSCustomType" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeLiteral">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"
+        resolveProxies="false"/>
+  </eClassifiers>
 </ecore:EPackage>
