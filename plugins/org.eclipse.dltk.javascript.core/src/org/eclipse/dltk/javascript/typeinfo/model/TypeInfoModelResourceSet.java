@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -24,7 +28,7 @@ public class TypeInfoModelResourceSet extends ResourceSetImpl {
 	public EObject getEObject(URI uri, boolean loadOnDemand) {
 		if (TypeUtil.isTypeProxy(uri)) {
 			final String typeName = URI.decode(uri.fragment());
-			final Type type = getType(typeName, true);
+			final Type type = resolveType(typeName);
 			if (type != null) {
 				return type;
 			}
@@ -33,18 +37,22 @@ public class TypeInfoModelResourceSet extends ResourceSetImpl {
 		return super.getEObject(uri, loadOnDemand);
 	}
 
+	protected Type resolveType(final String typeName) {
+		return getType(typeName, true);
+	}
+
 	/**
 	 * Returns the copy of the resource list to avoid
 	 * ConcurrentModificationException.
 	 * 
 	 * @return
 	 */
-	Resource[] resources() {
+	protected Resource[] resources() {
 		final EList<Resource> resources = getResources();
 		return resources.toArray(new Resource[resources.size()]);
 	}
 
-	Type getType(String typeName, boolean all) {
+	public Type getType(String typeName, boolean all) {
 		for (Resource resource : resources()) {
 			for (EObject object : resource.getContents()) {
 				if (object instanceof Type) {
@@ -57,5 +65,53 @@ public class TypeInfoModelResourceSet extends ResourceSetImpl {
 			}
 		}
 		return null;
+	}
+
+	public Type getTypeLiteral(String name) {
+		for (Resource resource : resources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof TypeLiteral) {
+					final Type type = ((TypeLiteral) object).getTarget();
+					if (type != null && name.equals(type.getName())) {
+						return type;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public Set<String> listTypes(String prefix) {
+		Set<String> result = new HashSet<String>();
+		for (Resource resource : resources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof Type) {
+					final Type type = (Type) object;
+					if (type.isVisible()
+							&& CharOperation.prefixEquals(prefix,
+									type.getName())) {
+						result.add(type.getName());
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	public Set<String> listTypeLiterals(String prefix) {
+		Set<String> result = new HashSet<String>();
+		for (Resource resource : resources()) {
+			for (EObject object : resource.getContents()) {
+				if (object instanceof TypeLiteral) {
+					final Type type = ((TypeLiteral) object).getTarget();
+					if (type != null
+							&& CharOperation.prefixEquals(prefix,
+									type.getName())) {
+						result.add(type.getName());
+					}
+				}
+			}
+		}
+		return result;
 	}
 }
