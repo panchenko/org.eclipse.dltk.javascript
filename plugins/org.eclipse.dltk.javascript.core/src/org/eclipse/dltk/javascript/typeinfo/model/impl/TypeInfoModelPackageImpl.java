@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.43 2012/04/23 06:18:12 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.44 2012/04/23 17:42:11 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -630,8 +630,17 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getTypeLiteral_Name() {
+        return (EAttribute)typeLiteralEClass.getEStructuralFeatures().get(0);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EReference getTypeLiteral_Target() {
-        return (EReference)typeLiteralEClass.getEStructuralFeatures().get(0);
+        return (EReference)typeLiteralEClass.getEStructuralFeatures().get(1);
     }
 
     /**
@@ -1216,6 +1225,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         jsCustomTypeEClass = createEClass(JS_CUSTOM_TYPE);
 
         typeLiteralEClass = createEClass(TYPE_LITERAL);
+        createEAttribute(typeLiteralEClass, TYPE_LITERAL__NAME);
         createEReference(typeLiteralEClass, TYPE_LITERAL__TARGET);
 
         // Create enums
@@ -1406,6 +1416,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEClass(jsCustomTypeEClass, JSCustomType.class, "JSCustomType", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
         initEClass(typeLiteralEClass, TypeLiteral.class, "TypeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEAttribute(getTypeLiteral_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getTypeLiteral_Target(), this.getType(), null, "target", null, 0, 1, TypeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         // Initialize enums and add enum literals

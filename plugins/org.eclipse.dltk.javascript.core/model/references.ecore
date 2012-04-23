@@ -166,6 +166,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JSCustomType" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="TypeLiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"
         resolveProxies="false"/>
   </eClassifiers>

@@ -71,8 +71,13 @@ public class TypeInfoModelResourceSet extends ResourceSetImpl {
 		for (Resource resource : resources()) {
 			for (EObject object : resource.getContents()) {
 				if (object instanceof TypeLiteral) {
-					final Type type = ((TypeLiteral) object).getTarget();
-					if (type != null && name.equals(type.getName())) {
+					final TypeLiteral literal = (TypeLiteral) object;
+					final Type type = literal.getTarget();
+					if (type == null)
+						continue;
+					final String n = literal.getName() != null ? literal
+							.getName() : type.getName();
+					if (name.equals(n)) {
 						return type;
 					}
 				}
@@ -103,15 +108,19 @@ public class TypeInfoModelResourceSet extends ResourceSetImpl {
 		for (Resource resource : resources()) {
 			for (EObject object : resource.getContents()) {
 				if (object instanceof TypeLiteral) {
-					final Type type = ((TypeLiteral) object).getTarget();
-					if (type != null
-							&& CharOperation.prefixEquals(prefix,
-									type.getName())) {
-						result.add(type.getName());
+					final TypeLiteral literal = (TypeLiteral) object;
+					final Type type = literal.getTarget();
+					if (type == null)
+						continue;
+					final String name = literal.getName() != null ? literal
+							.getName() : type.getName();
+					if (CharOperation.prefixEquals(prefix, name)) {
+						result.add(name);
 					}
 				}
 			}
 		}
 		return result;
 	}
+
 }

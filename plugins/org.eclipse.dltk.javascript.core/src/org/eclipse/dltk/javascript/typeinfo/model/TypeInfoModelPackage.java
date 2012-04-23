@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.37 2012/04/23 06:18:12 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.38 2012/04/23 17:42:12 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -1982,13 +1982,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE_LITERAL = 30;
 
     /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_LITERAL__NAME = 0;
+
+    /**
      * The feature id for the '<em><b>Target</b></em>' reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int TYPE_LITERAL__TARGET = 0;
+    int TYPE_LITERAL__TARGET = 1;
 
     /**
      * The number of structural features of the '<em>Type Literal</em>' class.
@@ -1997,7 +2006,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE_LITERAL_FEATURE_COUNT = 1;
+    int TYPE_LITERAL_FEATURE_COUNT = 2;
 
     /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
@@ -2335,6 +2344,17 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EClass getTypeLiteral();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral#getName <em>Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Name</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral#getName()
+     * @see #getTypeLiteral()
+     * @generated
+     */
+    EAttribute getTypeLiteral_Name();
 
     /**
      * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral#getTarget <em>Target</em>}'.
@@ -3155,6 +3175,14 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EClass TYPE_LITERAL = eINSTANCE.getTypeLiteral();
+
+        /**
+         * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute TYPE_LITERAL__NAME = eINSTANCE.getTypeLiteral_Name();
 
         /**
          * The meta object literal for the '<em><b>Target</b></em>' reference feature.

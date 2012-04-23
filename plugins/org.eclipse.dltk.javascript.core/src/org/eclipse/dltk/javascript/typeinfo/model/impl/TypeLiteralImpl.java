@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeLiteralImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeLiteralImpl#getTarget <em>Target</em>}</li>
  * </ul>
  * </p>
@@ -36,6 +37,24 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * @generated
  */
 public class TypeLiteralImpl extends EObjectImpl implements TypeLiteral {
+    /**
+     * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
+    protected static final String NAME_EDEFAULT = null;
+    /**
+     * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
+    protected String name = NAME_EDEFAULT;
     /**
      * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
      * <!-- begin-user-doc -->
@@ -70,6 +89,27 @@ public class TypeLiteralImpl extends EObjectImpl implements TypeLiteral {
      * <!-- end-user-doc -->
      * @generated
      */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setName(String newName) {
+        String oldName = name;
+        name = newName;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE_LITERAL__NAME, oldName, name));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public Type getTarget() {
         return target;
     }
@@ -94,6 +134,8 @@ public class TypeLiteralImpl extends EObjectImpl implements TypeLiteral {
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
+            case TypeInfoModelPackage.TYPE_LITERAL__NAME:
+                return getName();
             case TypeInfoModelPackage.TYPE_LITERAL__TARGET:
                 return getTarget();
         }
@@ -108,6 +150,9 @@ public class TypeLiteralImpl extends EObjectImpl implements TypeLiteral {
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
+            case TypeInfoModelPackage.TYPE_LITERAL__NAME:
+                setName((String)newValue);
+                return;
             case TypeInfoModelPackage.TYPE_LITERAL__TARGET:
                 setTarget((Type)newValue);
                 return;
@@ -123,6 +168,9 @@ public class TypeLiteralImpl extends EObjectImpl implements TypeLiteral {
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
+            case TypeInfoModelPackage.TYPE_LITERAL__NAME:
+                setName(NAME_EDEFAULT);
+                return;
             case TypeInfoModelPackage.TYPE_LITERAL__TARGET:
                 setTarget((Type)null);
                 return;
@@ -138,10 +186,28 @@ public class TypeLiteralImpl extends EObjectImpl implements TypeLiteral {
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
+            case TypeInfoModelPackage.TYPE_LITERAL__NAME:
+                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
             case TypeInfoModelPackage.TYPE_LITERAL__TARGET:
                 return target != null;
         }
         return super.eIsSet(featureID);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public String toString() {
+        if (eIsProxy()) return super.toString();
+
+        StringBuffer result = new StringBuffer(super.toString());
+        result.append(" (name: "); //$NON-NLS-1$
+        result.append(name);
+        result.append(')');
+        return result.toString();
     }
 
 } //TypeLiteralImpl
