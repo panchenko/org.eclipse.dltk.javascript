@@ -30,15 +30,37 @@ public class FlowStatus {
 		}
 	}
 
+	public void addCase(FlowStatus value) {
+		if (value != null) {
+			isBreak |= value.isBreak;
+			returnThrow |= value.returnThrow;
+			returnValue |= value.returnValue;
+			returnWithoutValue |= value.returnWithoutValue;
+		}
+	}
+
 	public boolean isTerminated() {
 		return isBreak || isReturned();
 	}
 
-	private boolean isAnyReturn() {
+	public boolean isAnyReturn() {
 		return returnThrow || returnValue || returnWithoutValue;
 	}
 
 	public boolean isReturned() {
 		return isAnyReturn() && !noReturn;
+	}
+
+	public void addBranch(FlowStatus branch) {
+		if (branch != null) {
+			if (noReturn != branch.noReturn)
+				noReturn = true;
+			if (returnValue != branch.returnValue)
+				returnValue = true;
+			if (returnWithoutValue != branch.returnWithoutValue)
+				returnWithoutValue = true;
+		} else {
+			noReturn = true;
+		}
 	}
 }

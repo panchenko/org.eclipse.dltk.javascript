@@ -12,6 +12,9 @@
 
 package org.eclipse.dltk.internal.javascript.validation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
@@ -86,12 +89,23 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 
 	@Override
 	public FlowStatus visitStatementBlock(StatementBlock node) {
+		return visitStatements(node.getStatements(), false);
+	}
+
+	private FlowStatus visitStatements(final List<Statement> statements,
+			boolean isSwitch) {
 		FlowStatus status = new FlowStatus();
 		status.noReturn = true;
 		int startRange = Integer.MAX_VALUE;
 		int endRange = -1;
-		for (Statement statement : node.getStatements()) {
+		boolean firstBreak = true;
+		for (Statement statement : statements) {
 			if (status.isTerminated()) {
+				if (isSwitch && statement instanceof BreakStatement
+						&& firstBreak && status.isReturned()) {
+					firstBreak = false;
+					continue;
+				}
 				if (startRange > statement.sourceStart())
 					startRange = statement.sourceStart();
 				if (endRange < statement.sourceEnd())
@@ -125,18 +139,7 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 			}
 		}
 		if (node.getElseStatement() != null) {
-			FlowStatus elseFlow = visit(node.getElseStatement());
-			if (elseFlow != null) {
-				if (status.noReturn != elseFlow.noReturn)
-					status.noReturn = true;
-				if (status.returnValue != elseFlow.returnValue)
-					status.returnValue = true;
-				if (status.returnWithoutValue != elseFlow.returnWithoutValue)
-					status.returnWithoutValue = true;
-			} else {
-				status.noReturn = true;
-			}
-
+			status.addBranch(visit(node.getElseStatement()));
 		} else {
 			status.noReturn = true;
 		}
@@ -245,9 +248,8 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 
 	@Override
 	public FlowStatus visitSwitchStatement(SwitchStatement node) {
-		final FlowStatus status = new FlowStatus();
-		boolean defaultClause = false;
-		boolean noReturnValueInCase = false;
+		final List<FlowStatus> statuses = new ArrayList<FlowStatus>();
+		FlowStatus defaultClause = null;
 		if (node.getCondition() != null)
 			visit(node.getCondition());
 		for (SwitchComponent component : node.getCaseClauses()) {
@@ -257,16 +259,31 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 					visit(caseClause.getCondition());
 				}
 			}
-			defaultClause = component instanceof DefaultClause;
-			for (Statement statement : component.getStatements()) {
-				status.add(visit(statement));
-				if (status.isReturned())
-					break;
+			final FlowStatus s = visitStatements(component.getStatements(),
+					true);
+			if (component instanceof DefaultClause) {
+				defaultClause = s;
+			} else {
+				statuses.add(s);
 			}
-			noReturnValueInCase = noReturnValueInCase || status.noReturn;
 		}
-		if ((status.isReturned() && !defaultClause) || noReturnValueInCase)
-			status.noReturn = true;
+		if (defaultClause == null) {
+			defaultClause = new FlowStatus();
+			defaultClause.noReturn = true;
+		}
+		boolean noReturn = false;
+		final FlowStatus status = new FlowStatus();
+		for (FlowStatus s : statuses) {
+			status.addCase(s);
+			if (s.isReturned()) {
+				noReturn |= status.noReturn;
+				status.noReturn = false;
+			} else if (s.isBreak || s.isAnyReturn()) {
+				status.noReturn |= s.noReturn;
+			}
+		}
+		status.addBranch(defaultClause);
+		status.noReturn |= noReturn;
 		return status;
 	}
 }
