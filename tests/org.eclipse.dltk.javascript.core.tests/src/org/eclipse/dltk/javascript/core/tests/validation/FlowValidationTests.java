@@ -233,4 +233,68 @@ public class FlowValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNREACHABLE_CODE, problemIds.iterator()
 				.next());
 	}
+	
+	public void testSwitchCaseWithDefaultReturn() throws Exception {
+		StringList code = new StringList();
+		code.add("function q() {");
+		code.add("  var x = new Array()");
+		code.add("  switch(x.length) {");
+		code.add("  case 1: return 'test1';break;");
+		code.add("  case 2: return 'test2';break;");
+		code.add("  default: return 'test3';break;");
+		code.add("  }");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 0, problemIds.size());
+	}
+	
+	public void testSwitchCaseWithDefaultReturnAndOptionalReturn() throws Exception {
+		StringList code = new StringList();
+		code.add("function q() {");
+		code.add("  var x = new Array()");
+		code.add("  switch(x.length) {");
+		code.add("  case 1: if (x.length> 0) return 'test1';break;");
+		code.add("  case 2: return 'test2';break;");
+		code.add("  default: return 'test3';break;");
+		code.add("  }");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 1, problemIds.size());
+		assertTrue(problemIds
+				.contains(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE));
+	}
+	
+	public void testSwitchCase() throws Exception {
+		StringList code = new StringList();
+		code.add("function q() {");
+		code.add("  var x = new Array()");
+		code.add("  switch(x.length) {");
+		code.add("  case 1: return 'test1';break;");
+		code.add("  case 2: return 'test2';break;");
+		code.add("  }");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 1, problemIds.size());
+		assertTrue(problemIds
+				.contains(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE));
+	}
+
+	
+	public void testSwitchCaseWithDefaultReturnAndNoAllCaseReturn() throws Exception {
+		StringList code = new StringList();
+		code.add("function q() {");
+		code.add("  var x = new Array()");
+		code.add("  switch(x.length) {");
+		code.add("  case 1: return 'test1';break;");
+		code.add("  case 2: break;");
+		code.add("  default: return 'test3';break;");
+		code.add("  }");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 1, problemIds.size());
+	}
 }
