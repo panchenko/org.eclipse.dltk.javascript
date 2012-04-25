@@ -6,7 +6,7 @@ import org.eclipse.dltk.core.IMethod;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.internal.javascript.core.manipulation.Messages;
-import org.eclipse.dltk.javascript.ast.Keywords;
+import org.eclipse.dltk.javascript.core.JavaScriptLanguageUtil;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 public class Checks {
@@ -36,19 +36,11 @@ public class Checks {
     public static RefactoringStatus validateIdentifier(String newName) {
         if ("".equals(newName)) //$NON-NLS-1$
             return RefactoringStatus.createFatalErrorStatus(RefactoringCoreMessages.Checks_Choose_name);
-        if (isIdentifier(newName))
+        if (JavaScriptLanguageUtil.isValidIdentifier(newName))
             return new RefactoringStatus();
         else
             return RefactoringStatus.createFatalErrorStatus(Messages.format(
                     RefactoringCoreMessages.Checks_illegal_identifier,
                     newName));
-    }
-
-    public static boolean isIdentifier(String str) {
-        // TODO: add proper checking
-        for (int i = 1; i < str.length(); i++)
-            if (!Character.isJavaIdentifierPart(str.charAt(i)))
-                return false;
-        return str.length() > 0 && Character.isJavaIdentifierStart(str.charAt(0)) && !Keywords.isKeyword(str);
     }
 }
