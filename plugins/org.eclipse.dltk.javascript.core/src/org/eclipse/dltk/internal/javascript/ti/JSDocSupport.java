@@ -34,6 +34,7 @@ import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.ast.VariableStatement;
+import org.eclipse.dltk.javascript.core.JavaScriptLanguageUtil;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSProblemIdentifier;
@@ -327,6 +328,13 @@ public class JSDocSupport implements IModelBuilder {
 								defaultValueSeperatorIndex);
 					}
 				}
+				if (!pp.varargs && paramName.endsWith(DOTS)) {
+					// just in case, so next condition doesn't use ".." as
+					// property name.
+					pp.varargs = true;
+					paramName = paramName.substring(0, paramName.length()
+							- DOTS.length());
+				}
 				String propertyName = null;
 				int propertiesObjectIndex = paramName.indexOf('.');
 				if (propertiesObjectIndex != -1) {
@@ -334,37 +342,42 @@ public class JSDocSupport implements IModelBuilder {
 					// = Parameters With Properties =
 					propertyName = paramName
 							.substring(propertiesObjectIndex + 1);
-					String objectName = paramName.substring(0,
-							propertiesObjectIndex);
-					RecordType propertiesType = objectPropertiesTypes
-							.get(objectName);
-					if (propertiesType == null) {
-						propertiesType = TypeInfoModelFactory.eINSTANCE
-								.createRecordType();
-						propertiesType.setTypeName('{' + objectName + '}');
-						objectPropertiesTypes.put(objectName, propertiesType);
-						final IParameter param = method
-								.getParameter(objectName);
-						if (param != null) {
-							param.setType(propertiesType);
-						} else {
-							++problemCount;
-							reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM,
-									tag, objectName);
+					if (JavaScriptLanguageUtil.isValidIdentifier(propertyName)) {
+						String objectName = paramName.substring(0,
+								propertiesObjectIndex);
+						RecordType propertiesType = objectPropertiesTypes
+								.get(objectName);
+						if (propertiesType == null) {
+							propertiesType = TypeInfoModelFactory.eINSTANCE
+									.createRecordType();
+							propertiesType.setTypeName('{' + objectName + '}');
+							objectPropertiesTypes.put(objectName,
+									propertiesType);
+							final IParameter param = method
+									.getParameter(objectName);
+							if (param != null) {
+								param.setType(propertiesType);
+							} else {
+								++problemCount;
+								reportProblem(reporter,
+										JSDocProblem.UNKNOWN_PARAM, tag,
+										objectName);
+							}
 						}
+						final RecordProperty property = TypeInfoModelFactory.eINSTANCE
+								.createRecordProperty();
+						property.setName(propertyName);
+						if (pp.type != null) {
+							JSType type = translateTypeName(pp.type, tag,
+									reporter);
+							if (typeChecker != null)
+								typeChecker.checkType(type, tag);
+							property.setType(type);
+						}
+						property.setOptional(pp.optional);
+						propertiesType.getMembers().add(property);
+						continue;
 					}
-					final RecordProperty property = TypeInfoModelFactory.eINSTANCE
-							.createRecordProperty();
-					property.setName(propertyName);
-					if (pp.type != null) {
-						JSType type = translateTypeName(pp.type, tag, reporter);
-						if (typeChecker != null)
-							typeChecker.checkType(type, tag);
-						property.setType(type);
-					}
-					property.setOptional(pp.optional);
-					propertiesType.getMembers().add(property);
-					continue;
 				}
 				if (method.getParameter(paramName) != null
 						&& !processedParams.add(paramName)) {
