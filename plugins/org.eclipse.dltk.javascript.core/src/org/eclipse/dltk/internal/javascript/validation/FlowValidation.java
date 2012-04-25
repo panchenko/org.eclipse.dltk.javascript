@@ -17,8 +17,10 @@ import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
 import org.eclipse.dltk.javascript.ast.BreakStatement;
+import org.eclipse.dltk.javascript.ast.CaseClause;
 import org.eclipse.dltk.javascript.ast.CatchClause;
 import org.eclipse.dltk.javascript.ast.ContinueStatement;
+import org.eclipse.dltk.javascript.ast.DefaultClause;
 import org.eclipse.dltk.javascript.ast.DoWhileStatement;
 import org.eclipse.dltk.javascript.ast.ForEachInStatement;
 import org.eclipse.dltk.javascript.ast.ForInStatement;
@@ -29,6 +31,7 @@ import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.Statement;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
+import org.eclipse.dltk.javascript.ast.SwitchComponent;
 import org.eclipse.dltk.javascript.ast.SwitchStatement;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.TryStatement;
@@ -242,7 +245,28 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 
 	@Override
 	public FlowStatus visitSwitchStatement(SwitchStatement node) {
-		// TODO Auto-generated method stub
-		return super.visitSwitchStatement(node);
+		final FlowStatus status = new FlowStatus();
+		boolean defaultClause = false;
+		boolean noReturnValueInCase = false;
+		if (node.getCondition() != null)
+			visit(node.getCondition());
+		for (SwitchComponent component : node.getCaseClauses()) {
+			if (component instanceof CaseClause) {
+				final CaseClause caseClause = (CaseClause) component;
+				if (caseClause.getCondition() != null) {
+					visit(caseClause.getCondition());
+				}
+			}
+			defaultClause = component instanceof DefaultClause;
+			for (Statement statement : component.getStatements()) {
+				status.add(visit(statement));
+				if (status.isReturned())
+					break;
+			}
+			noReturnValueInCase = noReturnValueInCase || status.noReturn;
+		}
+		if ((status.isReturned() && !defaultClause) || noReturnValueInCase)
+			status.noReturn = true;
+		return status;
 	}
 }
