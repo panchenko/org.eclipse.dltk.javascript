@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.validation;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -233,7 +234,7 @@ public class FlowValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNREACHABLE_CODE, problemIds.iterator()
 				.next());
 	}
-	
+
 	public void testSwitchCaseWithDefaultReturn() throws Exception {
 		StringList code = new StringList();
 		code.add("function q() {");
@@ -248,8 +249,9 @@ public class FlowValidationTests extends AbstractValidationTest {
 				.toString()));
 		assertEquals(problemIds.toString(), 0, problemIds.size());
 	}
-	
-	public void testSwitchCaseWithDefaultReturnAndOptionalReturn() throws Exception {
+
+	public void testSwitchCaseWithDefaultReturnAndOptionalReturn()
+			throws Exception {
 		StringList code = new StringList();
 		code.add("function q() {");
 		code.add("  var x = new Array()");
@@ -262,10 +264,12 @@ public class FlowValidationTests extends AbstractValidationTest {
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(problemIds.toString(), 1, problemIds.size());
-		assertTrue(problemIds
-				.contains(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE));
+		assertEquals(
+				Collections
+						.singleton(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE),
+				problemIds);
 	}
-	
+
 	public void testSwitchCase() throws Exception {
 		StringList code = new StringList();
 		code.add("function q() {");
@@ -278,12 +282,14 @@ public class FlowValidationTests extends AbstractValidationTest {
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(problemIds.toString(), 1, problemIds.size());
-		assertTrue(problemIds
-				.contains(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE));
+		assertEquals(
+				Collections
+						.singleton(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE),
+				problemIds);
 	}
 
-	
-	public void testSwitchCaseWithDefaultReturnAndNoAllCaseReturn() throws Exception {
+	public void testSwitchCaseWithDefaultReturnAndNoAllCaseReturn()
+			throws Exception {
 		StringList code = new StringList();
 		code.add("function q() {");
 		code.add("  var x = new Array()");
@@ -296,5 +302,63 @@ public class FlowValidationTests extends AbstractValidationTest {
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(problemIds.toString(), 1, problemIds.size());
+		assertEquals(
+				Collections
+						.singleton(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE),
+				problemIds);
+	}
+
+	public void testSwitchCaseWithEmptyDefault() {
+		StringList code = new StringList();
+		code.add("function a() {");
+		code.add("var x = new Array()");
+		code.add("  switch (x.length) {");
+		code.add("  case 0:");
+		code.add("    return 0;");
+		code.add("  default:");
+		code.add("  }");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(
+				Collections
+						.singleton(JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE),
+				problemIds);
+	}
+
+	public void testSwitchCaseFallThrough() {
+		StringList code = new StringList();
+		code.add("function a() {");
+		code.add("var x = new Array()");
+		code.add("  switch (x.length) {");
+		code.add("  case 0:");
+		code.add("  case 1:");
+		code.add("    return 0;");
+		code.add("  default:");
+		code.add("    return -1;");
+		code.add("  }");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 0, problemIds.size());
+	}
+
+	public void testUnreachableCodeInSwitchCase() {
+		StringList code = new StringList();
+		code.add("function a() {");
+		code.add("var x = new Array()");
+		code.add("  switch (x.length) {");
+		code.add("  case 1:");
+		code.add("    return 0;");
+		code.add("    return 1;");
+		code.add("  default:");
+		code.add("    return -1;");
+		code.add("  }");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(
+				Collections.singleton(JavaScriptProblems.UNREACHABLE_CODE),
+				problemIds);
 	}
 }
