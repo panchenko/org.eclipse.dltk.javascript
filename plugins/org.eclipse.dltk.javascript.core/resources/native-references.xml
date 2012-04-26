@@ -226,12 +226,15 @@
       <parameters name="milliseconds" directType="Number"/>
   	</constructors>
   	<constructors name="Date">
+      <parameters name="date" directType="Date"/>
+  	</constructors>
+  	<constructors name="Date">
       <parameters name="dateString" directType="String"/>
   	</constructors>
   	<constructors name="Date">
       <parameters name="year" directType="Number"/>
       <parameters name="month" directType="Number"/>
-      <parameters name="day" directType="Number"/>
+      <parameters name="day" directType="Number" kind="OPTIONAL"/>
       <parameters name="hour" directType="Number" kind="OPTIONAL"/>
       <parameters name="minute" directType="Number" kind="OPTIONAL"/>
       <parameters name="second" directType="Number" kind="OPTIONAL"/>
