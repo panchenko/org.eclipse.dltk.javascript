@@ -263,10 +263,10 @@ public class RModelBuilder {
 						.normalize(context, parameter.getType()) : JSTypeSet
 						.any();
 				final ParameterKind kind;
-				if (parameter.isOptional()) {
-					kind = ParameterKind.OPTIONAL;
-				} else if (parameter.isVarargs()) {
+				if (parameter.isVarargs()) {
 					kind = ParameterKind.VARARGS;
+				} else if (parameter.isOptional()) {
+					kind = ParameterKind.OPTIONAL;
 				} else {
 					kind = ParameterKind.NORMAL;
 				}
