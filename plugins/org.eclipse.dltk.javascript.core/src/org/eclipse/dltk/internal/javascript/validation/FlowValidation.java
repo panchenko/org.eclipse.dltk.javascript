@@ -284,6 +284,8 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 		}
 		status.addBranch(defaultClause);
 		status.noReturn |= noReturn;
+		// TODO in a case statement a labeled break?
+		status.isBreak = false;
 		return status;
 	}
 }
