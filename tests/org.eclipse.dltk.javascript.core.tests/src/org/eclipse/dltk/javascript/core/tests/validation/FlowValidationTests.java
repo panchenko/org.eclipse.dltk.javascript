@@ -361,4 +361,30 @@ public class FlowValidationTests extends AbstractValidationTest {
 				Collections.singleton(JavaScriptProblems.UNREACHABLE_CODE),
 				problemIds);
 	}
-}
+	
+	public void testIfAndSwitchWithNoReturns() throws Exception {
+		StringList code = new StringList();
+		code.add("function criteria_tree_node_text() {");
+		code.add("var is_group = 1;");
+		code.add("var filter_operator = '=';");
+		code.add("if (is_group == 1)");
+		code.add(" return '<html><body></body></html>';");
+		code.add("else {");
+		code.add(" var _retText = '<html><body><b></b> ';");
+		code.add(" switch (filter_operator) {");
+		code.add("  case '=': _retText += 'equals';break;");
+		code.add("  case '<': _retText += 'is less than';break;");
+		code.add("  case '<=': _retText += 'is less than equals';break;");
+		code.add("  case '>': _retText += 'is greater than';break;");
+		code.add("  case '>=': _retText += 'is greater than equals';break;");
+		code.add("  case 'CONTAINS': _retText += 'contains';break;");
+		code.add("  }");
+		code.add(" _retText += ' <b>'+ filter_value + '</b></body></html>';");
+		code.add(" return _retText;");
+		code.add(" }");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 0, problemIds.size());
+	}
+	}
