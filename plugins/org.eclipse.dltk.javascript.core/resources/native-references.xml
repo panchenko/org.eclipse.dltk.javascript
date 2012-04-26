@@ -193,8 +193,11 @@
     <members xsi:type="ref:Method" name="some" directType="Boolean" description="Tests whether some element in the array passes the test implemented by the provided function.">
       <parameters name="callback" directType="Function"/>
     </members>
-    <members xsi:type="ref:Method" name="sort" directType="Array" description="Sorts the elements of an array.">
+    <members xsi:type="ref:Method" name="sort" description="Sorts the elements of an array.">
       <parameters name="sortByFunction" directType="Function" kind="OPTIONAL"/>
+      <type xsi:type="ref:ArrayType">
+        <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
+      </type>
     </members>
     <members xsi:type="ref:Method" name="splice" description="Removes and adds new elements to an array. Returns the removed elements as an Array">
       <parameters name="index" directType="Number"/>
