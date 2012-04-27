@@ -385,12 +385,17 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (reference != null) {
 			final List<Method> methods = JavaScriptValidations.extractElements(
 					reference, Method.class);
-			if (methods != null && methods.size() == 1
-					&& methods.get(0) instanceof GenericMethod) {
-				final GenericMethod method = (GenericMethod) methods.get(0);
-				final JSTypeSet type = evaluateGenericCall(method, arguments);
-				if (type != null) {
-					return new ConstantValue(type);
+			if (methods != null && methods.size() == 1) {
+				if (methods.get(0) instanceof GenericMethod) {
+					final GenericMethod method = (GenericMethod) methods.get(0);
+					final JSTypeSet type = evaluateGenericCall(method,
+							arguments);
+					if (type != null) {
+						return new ConstantValue(type);
+					}
+				} else {
+					return new ConstantValue(JSTypeSet.normalize(getContext(),
+							methods.get(0).getType()));
 				}
 			}
 			return reference.getChild(IValueReference.FUNCTION_OP);
@@ -599,7 +604,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 		}
 		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
-
 
 		reference.setKind(inFunction() ? ReferenceKind.LOCAL
 				: ReferenceKind.GLOBAL);
