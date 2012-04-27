@@ -585,15 +585,17 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		List<String> lines = new StringList();
 		lines.add("/** @type ExampleService2 */");
 		lines.add("var a;");
-		lines.add("/** @type " + ExampleTypeProvider.TYPE_WITH_COLLECTION+ " */");
+		lines.add("/** @type " + ExampleTypeProvider.TYPE_WITH_COLLECTION
+				+ " */");
 		lines.add("var b = a.execute();");
 		IValueCollection collection = inference(lines.toString());
 		IValueReference name = collection.getChild("b");
 		assertTrue(name.exists());
-		assertEquals( ExampleTypeProvider.TYPE_WITH_COLLECTION,name.getDeclaredType().getName());
+		assertEquals(ExampleTypeProvider.TYPE_WITH_COLLECTION, name
+				.getDeclaredType().getName());
 		Set<String> directChildren = name.getDirectChildren();
-		assertEquals(1,directChildren.size());
-		
+		assertEquals(1, directChildren.size());
+
 		assertTrue(name.getChild("service").exists());
 		assertTrue(name.getChild("test").exists());
 	}
@@ -1166,6 +1168,14 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference len = collection.getChild("result");
 		assertEquals(getTypes(BOOLEAN), len.getTypes());
+	}
+
+	public void testDateAsFunction() {
+		List<String> lines = new StringList();
+		lines.add("var d = Date()");
+		IValueCollection collection = inference(lines.toString());
+		IValueReference len = collection.getChild("d");
+		assertEquals(getTypes(STRING), len.getTypes());
 	}
 
 }
