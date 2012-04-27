@@ -28,6 +28,16 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.utils.CompoundIterator;
 
+/**
+ * Returns all the members defined by the specified type(s) and all it's super
+ * types and implemented traits.
+ * 
+ * Types are visited in the breadth-first order (current type, super type,
+ * traits), so the overridden methods are visited first. By default overridden
+ * methods are returned multiple times, if you want to skip duplicates and have
+ * only the actual implementations then use the {@link Iterable} returned by
+ * {@link #ignoreDuplicates()}.
+ */
 public class TypeMemberQuery implements Iterable<Member> {
 
 	private static class QueueItem {
@@ -63,21 +73,39 @@ public class TypeMemberQuery implements Iterable<Member> {
 
 	private final List<QueueItem> types = new ArrayList<QueueItem>();
 
+	/**
+	 * Creates empty query
+	 */
 	public TypeMemberQuery() {
 	}
 
+	/**
+	 * Creates query for all the members of the specified type.
+	 */
 	public TypeMemberQuery(Type type) {
 		add(type);
 	}
 
+	/**
+	 * Creates query for the members of the specified type matching the
+	 * specified predicate.
+	 * 
+	 * @see MemberPredicate
+	 */
 	public TypeMemberQuery(Type type, Predicate<Member> predicate) {
 		add(type, predicate);
 	}
 
+	/**
+	 * Adds the specified type to this query
+	 */
 	public void add(Type type) {
 		add(type, MemberPredicate.ALWAYS_TRUE);
 	}
 
+	/**
+	 * Adds the specified type with the specified predicate to this query.
+	 */
 	public void add(Type type, Predicate<Member> predicate) {
 		types.add(new QueueItem(type, predicate));
 	}
@@ -267,6 +295,10 @@ public class TypeMemberQuery implements Iterable<Member> {
 		};
 	}
 
+	/**
+	 * Finds the member with the specified name. Returns the member found or
+	 * <code>null</code> otherwise.
+	 */
 	public Member findMember(String memberName) {
 		for (Member member : this) {
 			if (memberName.equals(member.getName())) {
@@ -276,6 +308,9 @@ public class TypeMemberQuery implements Iterable<Member> {
 		return null;
 	}
 
+	/**
+	 * Checks if this query contains the specified type.
+	 */
 	public boolean contains(Type type) {
 		for (QueueItem item : types) {
 			if (type == item.type) {
