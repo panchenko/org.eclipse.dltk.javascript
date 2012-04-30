@@ -187,7 +187,10 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 	public void testUnusedVariableSuppressed() {
 		enable(JavaScriptProblems.UNUSED_VARIABLE);
 		StringList code = new StringList();
-		code.add("/** @SuppressWarnings(unused) */");
+		code.add("/**");
+		code.add(" * @SuppressWarnings(unused)");
+		code.add(" * @private");
+		code.add(" */");
 		code.add("var x = 1");
 		code.add("x = 2");
 		code.add("x = 3");
@@ -199,6 +202,7 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 	public void testVariableUsedInFunction() {
 		enable(JavaScriptProblems.UNUSED_VARIABLE);
 		StringList code = new StringList();
+		code.add("/** @private */");
 		code.add("var x = 1");
 		code.add("function q() { return x; }");
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
@@ -209,11 +213,23 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 	public void testVariableUsedInNot() {
 		enable(JavaScriptProblems.UNUSED_VARIABLE);
 		StringList code = new StringList();
+		code.add("/** @private */");
 		code.add("var x = 1");
 		code.add("function q() { return !x; }");
 		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
 				.toString()));
 		assertEquals(problemIds.toString(), 0, problemIds.size());
+	}
+
+	public void testVariableUnusedWithIncrement() {
+		enable(JavaScriptProblems.UNUSED_VARIABLE);
+		StringList code = new StringList();
+		code.add("/** @private */");
+		code.add("var x = 0");
+		code.add("function q() { ++x; }");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(problemIds.toString(), 1, problemIds.size());
 	}
 
 }
