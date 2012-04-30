@@ -54,6 +54,7 @@ import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
+import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
@@ -1544,12 +1545,23 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return kind.isVariable() || kind == ReferenceKind.FUNCTION;
 		}
 
+		private static boolean isAccess(Identifier node) {
+			final ASTNode parent = node.getParent();
+			if (parent instanceof BinaryOperation) {
+				return !((BinaryOperation) parent).isAssignmentTo(node);
+			} else if (parent instanceof UnaryOperation) {
+				final int op = ((UnaryOperation) parent).getOperation();
+				return op != JSParser.INC && op != JSParser.DEC
+						&& op != JSParser.PINC && op != JSParser.PDEC;
+			} else {
+				return true;
+			}
+		}
+
 		@Override
 		public IValueReference visitIdentifier(Identifier node) {
 			final IValueReference result = super.visitIdentifier(node);
-			if (!(node.getParent() instanceof BinaryOperation && ((BinaryOperation) node
-					.getParent()).isAssignmentTo(node))
-					&& isVarOrFunction(result)
+			if (isAccess(node) && isVarOrFunction(result)
 					&& getSource().equals(result.getLocation().getSource())) {
 				if (result.getAttribute(IReferenceAttributes.ACCESS) == null) {
 					result.setAttribute(IReferenceAttributes.ACCESS,
@@ -1628,8 +1640,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		private static boolean isPrivate(IValueReference reference) {
-			return ((IVariable) reference
-					.getAttribute(IReferenceAttributes.VARIABLE)).isPrivate();
+			return ((IRVariable) reference
+					.getAttribute(IReferenceAttributes.R_VARIABLE)).isPrivate();
 		}
 
 		private void checkAssign(IValueReference reference, ASTNode node) {
