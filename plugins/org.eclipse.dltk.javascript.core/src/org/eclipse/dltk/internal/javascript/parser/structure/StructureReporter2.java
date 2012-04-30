@@ -177,8 +177,8 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 		if (method.isDeprecated()) {
 			methodInfo.modifiers |= JSModifiers.DEPRECATED;
 		}
-		if (method.isPrivate()) {
-			methodInfo.modifiers |= JSModifiers.PRIVATE;
+		if (method.getVisibility() != null) {
+			methodInfo.modifiers |= method.getVisibility().getFlags();
 		}
 
 		final List<IParameter> parameters = method.getParameters();
@@ -295,8 +295,8 @@ public class StructureReporter2 extends TypeInferencerVisitor {
 			if (variable.isDeprecated()) {
 				fieldInfo.modifiers |= JSModifiers.DEPRECATED;
 			}
-			if (variable.isPrivate()) {
-				fieldInfo.modifiers |= JSModifiers.PRIVATE;
+			if (variable.getVisibility() != null) {
+				fieldInfo.modifiers |= variable.getVisibility().getFlags();
 			}
 			fieldInfo.type = TypeUtil.getName(variable.getType());
 		}

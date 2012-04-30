@@ -245,6 +245,8 @@ public enum Visibility implements Enumerator {
 		switch (this) {
 		case PUBLIC:
 			return JSModifiers.PUBLIC;
+		case PROTECTED:
+			return JSModifiers.PROTECTED;
 		case PRIVATE:
 			return JSModifiers.PRIVATE;
 		default:

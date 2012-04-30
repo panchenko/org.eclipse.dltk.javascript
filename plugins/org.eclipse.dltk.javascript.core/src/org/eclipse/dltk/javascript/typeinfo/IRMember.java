@@ -11,9 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
+
 public interface IRMember extends IRElement {
 
 	boolean isDeprecated();
+
+	Visibility getVisibility();
 
 	boolean isPrivate();
 

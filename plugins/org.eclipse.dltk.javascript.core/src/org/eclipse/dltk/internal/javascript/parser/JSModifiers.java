@@ -20,6 +20,7 @@ public class JSModifiers {
 	public static final int DEPRECATED = 1 << Modifiers.USER_MODIFIER;
 
 	public static final int PUBLIC = Modifiers.AccPublic;
+	public static final int PROTECTED = Modifiers.AccProtected;
 	public static final int PRIVATE = Modifiers.AccPrivate;
 
 	public static final int USER_MODIFIER = Modifiers.USER_MODIFIER + 2;

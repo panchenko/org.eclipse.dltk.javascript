@@ -22,6 +22,7 @@ import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
 @ConfigurationElement("builder")
 public interface IModelBuilder {
@@ -57,19 +58,19 @@ public interface IModelBuilder {
 		boolean isDeprecated();
 
 		/**
-		 * @since 3.0
+		 * @since 4.0
 		 */
-		void setPrivate(boolean priv);
+		Visibility getVisibility();
+
+		/**
+		 * @since 4.0
+		 */
+		void setVisibility(Visibility visibility);
 
 		/**
 		 * @since 3.0
 		 */
 		boolean isPrivate();
-
-		/**
-		 * @since 3.0
-		 */
-		void setProtected(boolean b);
 
 		/**
 		 * @since 3.0

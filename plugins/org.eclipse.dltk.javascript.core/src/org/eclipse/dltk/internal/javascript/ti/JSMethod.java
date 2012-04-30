@@ -35,6 +35,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
 @SuppressWarnings("serial")
 public class JSMethod extends ArrayList<IParameter> implements IMethod {
@@ -42,8 +43,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	private String name;
 	private JSType type;
 	private boolean deprecated;
-	private boolean priv;
-	private boolean prot;
+	private Visibility visibility;
 	private boolean constructor;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 	private ISourceRange docRange;
@@ -103,22 +103,21 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		this.deprecated = deprecated;
 	}
 
-	public void setPrivate(boolean priv) {
-		this.priv = priv;
+	public Visibility getVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(Visibility visibility) {
+		this.visibility = visibility;
 	}
 
 	public boolean isPrivate() {
-		return priv;
-	}
-
-	public void setProtected(boolean prot) {
-		this.prot = prot;
+		return visibility == Visibility.PRIVATE;
 	}
 
 	public boolean isProtected() {
-		return prot;
+		return visibility == Visibility.PROTECTED;
 	}
-
 
 	public boolean isConstructor() {
 		return constructor;

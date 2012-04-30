@@ -12,6 +12,7 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -51,6 +52,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 import org.eclipse.osgi.util.NLS;
 
 /**
@@ -94,8 +96,7 @@ public class JSDocSupport implements IModelBuilder {
 		}
 		parseParams(method, tags, reporter, typeChecker);
 		parseDeprecation(method, tags, reporter);
-		parsePrivate(method, tags, reporter);
-		parseProtected(method, tags, reporter);
+		parseAccessModifiers(method, tags, reporter);
 		parseConstructor(method, tags, reporter);
 		parseThrows(method, tags, reporter, typeChecker);
 		parseSuppressWarnings(method, tags, reporter);
@@ -198,34 +199,38 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	/**
-	 * @param method
-	 * @param tags
-	 */
-	private void parsePrivate(IMember member, final JSDocTags tags,
+	private static final String[] ACCESS_MODIFIERS = { JSDocTag.PUBLIC,
+			JSDocTag.PROTECTED, JSDocTag.PRIVATE };
+
+	public void parseAccessModifiers(IMember member, JSDocTags tags,
 			JSProblemReporter reporter) {
-		if (tags.get(JSDocTag.PRIVATE) != null) {
-			member.setPrivate(true);
-			validateSingleTag(tags, JSDocTag.PRIVATE, reporter);
-			if (reporter != null && tags.count(JSDocTag.PROTECTED) > 0) {
-				final List<JSDocTag> t = tags.list(JSDocTag.PROTECTED);
-				for (JSDocTag tag : t) {
-					reportProblem(reporter, JSDocProblem.IGNORED_TAG, tag,
-							tag.name(), JSDocTag.PRIVATE);
+		for (String tagName : ACCESS_MODIFIERS) {
+			final JSDocTag tag = tags.get(tagName);
+			if (tag != null) {
+				member.setVisibility(visibilityOf(tag.name()));
+				if (tags.count(ACCESS_MODIFIERS) != 1) {
+					final List<JSDocTag> all = new ArrayList<JSDocTag>(
+							tags.list(ACCESS_MODIFIERS));
+					all.remove(tag);
+					for (JSDocTag t : all) {
+						reportProblem(reporter, JSDocProblem.IGNORED_TAG, t,
+								t.name(), tag.name());
+					}
 				}
+				break;
 			}
 		}
 	}
 
-	/**
-	 * @param method
-	 * @param tags
-	 */
-	private void parseProtected(IMember member, final JSDocTags tags,
-			JSProblemReporter reporter) {
-		if (tags.get(JSDocTag.PROTECTED) != null) {
-			member.setProtected(true);
-			validateSingleTag(tags, JSDocTag.PROTECTED, reporter);
+	private Visibility visibilityOf(String tag) {
+		if (JSDocTag.PUBLIC.equals(tag)) {
+			return Visibility.PUBLIC;
+		} else if (JSDocTag.PROTECTED.equals(tag)) {
+			return Visibility.PROTECTED;
+		} else if (JSDocTag.PRIVATE.equals(tag)) {
+			return Visibility.PRIVATE;
+		} else {
+			return null;
 		}
 	}
 
@@ -261,8 +266,7 @@ public class JSDocSupport implements IModelBuilder {
 			parseType(variable, tags, TYPE_TAGS, reporter, typeChecker);
 		}
 		parseDeprecation(variable, tags, reporter);
-		parsePrivate(variable, tags, reporter);
-		parseProtected(variable, tags, reporter);
+		parseAccessModifiers(variable, tags, reporter);
 		parseSuppressWarnings(variable, tags, reporter);
 	}
 

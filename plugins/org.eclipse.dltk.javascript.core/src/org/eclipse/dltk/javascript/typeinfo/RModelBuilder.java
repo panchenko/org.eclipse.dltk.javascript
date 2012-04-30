@@ -25,6 +25,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
 public class RModelBuilder {
 
@@ -75,28 +76,30 @@ public class RModelBuilder {
 
 	private static class RMember extends RElement implements IRMember {
 		final boolean _deprecated;
-		final boolean _private;
-		final boolean _protected;
+		final Visibility visibility;
 
 		public RMember(String name, IRType type, ReferenceLocation location,
 				Set<IProblemCategory> suppressedWarnings, boolean _deprecated,
-				boolean _private, boolean _protected) {
+				Visibility visibility) {
 			super(name, type, location, suppressedWarnings);
 			this._deprecated = _deprecated;
-			this._private = _private;
-			this._protected = _protected;
+			this.visibility = visibility;
 		}
 
 		public boolean isDeprecated() {
 			return _deprecated;
 		}
 
+		public Visibility getVisibility() {
+			return visibility;
+		}
+
 		public boolean isPrivate() {
-			return _private;
+			return visibility == Visibility.PRIVATE;
 		}
 
 		public boolean isProtected() {
-			return _protected;
+			return visibility == Visibility.PROTECTED;
 		}
 
 	}
@@ -108,10 +111,10 @@ public class RModelBuilder {
 
 		public RMethod(String name, IRType type, ReferenceLocation location,
 				Set<IProblemCategory> suppressedWarnings, boolean _deprecated,
-				boolean _private, boolean _protected, boolean _constructor,
+				Visibility visibility, boolean _constructor,
 				List<IRParameter> parameters) {
 			super(name, type, location, suppressedWarnings, _deprecated,
-					_private, _protected);
+					visibility);
 			this._constructor = _constructor;
 			this.parameters = parameters;
 		}
@@ -212,9 +215,9 @@ public class RModelBuilder {
 
 		public RVariable(String name, IRType type, ReferenceLocation location,
 				Set<IProblemCategory> suppressedWarnings, boolean _deprecated,
-				boolean _private, boolean _protected) {
+				Visibility visibility) {
 			super(name, type, location, suppressedWarnings, _deprecated,
-					_private, _protected);
+					visibility);
 		}
 
 	}
@@ -223,16 +226,15 @@ public class RModelBuilder {
 		return new RMethod(method.getName(), JSTypeSet.normalize(context,
 				method.getType()), method.getLocation(),
 				method.getSuppressedWarnings(), method.isDeprecated(),
-				method.isPrivate(), method.isProtected(),
-				method.isConstructor(), convertParams0(context,
-						method.getParameters()));
+				method.getVisibility(), method.isConstructor(), convertParams0(
+						context, method.getParameters()));
 	}
 
 	public static IRVariable create(ITypeSystem context, IVariable variable) {
 		return new RVariable(variable.getName(), JSTypeSet.normalize(context,
 				variable.getType()), variable.getLocation(),
 				variable.getSuppressedWarnings(), variable.isDeprecated(),
-				variable.isPrivate(), variable.isProtected());
+				variable.getVisibility());
 	}
 
 	public static List<IRParameter> convert(ITypeSystem context,
