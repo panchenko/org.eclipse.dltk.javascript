@@ -17,8 +17,8 @@ public class JSDocTag implements ISourceNode {
 
 	public static String[] getTags() {
 		return new String[] { PARAM, RETURN, RETURNS, THROWS, TYPE, DEPRECATED,
-				CONSTRUCTOR, PRIVATE, PROTECTED, AUTHOR, VERSION, SEE, SINCE,
-				EXAMPLE, SUPPRESS_WARNINGS };
+				CONSTRUCTOR, PRIVATE, PROTECTED, PUBLIC, AUTHOR, VERSION, SEE,
+				SINCE, EXAMPLE, SUPPRESS_WARNINGS };
 	}
 
 	public static final String PARAM = "@param"; //$NON-NLS-1$
@@ -29,6 +29,7 @@ public class JSDocTag implements ISourceNode {
 	public static final String DEPRECATED = "@deprecated"; //$NON-NLS-1$
 
 	public static final String CONSTRUCTOR = "@constructor";
+	public static final String PUBLIC = "@public";
 	public static final String PROTECTED = "@protected";
 	public static final String PRIVATE = "@private";
 
