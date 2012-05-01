@@ -13,8 +13,10 @@ package org.eclipse.dltk.javascript.validation;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
+import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
@@ -30,5 +32,11 @@ public interface IValidatorExtension {
 			IValueReference reference);
 
 	IValidationStatus validateAccessibility(ASTNode node, Member member);
+
+	IValidationStatus validateAccessibility(Expression expression,
+			IValueReference reference);
+
+	IValidationStatus validateAccessibility(Expression expression,
+			IValueReference reference, IRMember member);
 
 }

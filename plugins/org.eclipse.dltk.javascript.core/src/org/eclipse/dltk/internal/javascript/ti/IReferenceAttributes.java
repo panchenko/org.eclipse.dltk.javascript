@@ -21,7 +21,9 @@ public interface IReferenceAttributes {
 	String VARIABLE = "VARIABLE"; //$NON-NLS-1$s
 	String R_VARIABLE = "R_VARIABLE"; //$NON-NLS-1$s
 	String HIDE_ALLOWED = "HIDE_ALLOWED";
+	@Deprecated
 	String PRIVATE = "PRIVATE";
+	@Deprecated
 	String SUPER_SCOPE = "SUPER_SCOPE";
 
 	String RESOLVING = "RESOLVING";
