@@ -17,6 +17,14 @@ package org.eclipse.dltk.javascript.typeinfo;
  */
 public interface ITypeInferenceExtensionFactory {
 
+	/**
+	 * @param context
+	 * @param visitor
+	 * @param extensionClass
+	 *            e.g.
+	 *            {@link org.eclipse.dltk.javascript.validation.IValidatorExtension}
+	 * @return
+	 */
 	Object createExtension(ITypeInfoContext context,
 			ITypeInferencerVisitor visitor, Class<?> extensionClass);
 
