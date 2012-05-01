@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
@@ -126,6 +127,8 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 	}
 
 	public void testPrivateFunctionAccessedAsVariable() {
+		if (TestSupport.notYetImplemented(this))
+			return;
 		StringList code = new StringList();
 		code.add("function test1() {");
 		code.add(" /** @private */");
