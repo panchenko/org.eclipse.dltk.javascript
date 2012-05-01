@@ -97,6 +97,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 import org.eclipse.dltk.javascript.validation.IValidatorExtension;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
@@ -782,6 +783,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 						}
 					}
 					return;
+				}
+				if (method.getVisibility() != Visibility.PUBLIC) {
+					if (!validateAccessibility(methodNode, method)) {
+						return;
+					}
 				}
 				if (method.isDeprecated()) {
 					reportDeprecatedMethod(methodNode, reference, method);
@@ -1810,6 +1816,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					// ValidationMessages.ReferenceToStaticProperty,
 					// result.getName(), type.getName()), propName
 					// .sourceStart(), propName.sourceEnd());
+				} else if (member.getVisibility() != Visibility.PUBLIC) {
+					validateAccessibility(propName, member);
 				}
 			} else if ((!exists && !result.exists())
 					&& !isArrayLookup(propertyExpression)) {
@@ -2147,6 +2155,56 @@ public class TypeInfoValidator implements IBuildParticipant {
 								type.getName()), node.sourceStart(),
 						node.sourceEnd());
 				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * Tests if the member is accessible. Returns <code>true</code> if
+		 * access is allowed and <code>false</code> otherwise.
+		 * 
+		 * @param node
+		 * @param member
+		 * @return
+		 */
+		private boolean validateAccessibility(ASTNode node, Member member) {
+			if (extensions != null) {
+				for (IValidatorExtension extension : extensions) {
+					final IValidationStatus result = extension
+							.validateAccessibility(node, member);
+					if (result != null) {
+						if (result instanceof ValidationStatus) {
+							final ValidationStatus status = (ValidationStatus) result;
+							final int start;
+							final int end;
+							if (status.hasRange()) {
+								start = status.start();
+								end = status.end();
+							} else {
+								start = node.sourceStart();
+								end = node.sourceEnd();
+							}
+							reporter.reportProblem(status.identifier(),
+									status.message(), start, end);
+						} else if (result instanceof IProblemIdentifier) {
+							reporter.reportProblem(
+									(IProblemIdentifier) result,
+									NLS.bind(
+											ValidationMessages.InaccessibleMember,
+											member.getName()), node
+											.sourceStart(), node.sourceEnd());
+						} else {
+							reporter.reportProblem(
+									JavaScriptProblems.INACCESSIBLE_MEMBER,
+									NLS.bind(
+											ValidationMessages.InaccessibleMember,
+											member.getName())
+											+ ": " + result,
+									node.sourceStart(), node.sourceEnd());
+						}
+						return false;
+					}
+				}
 			}
 			return true;
 		}

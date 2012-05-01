@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.validation;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 /**
@@ -26,5 +28,7 @@ public interface IValidatorExtension {
 
 	boolean canValidateUnusedVariable(IValueCollection collection,
 			IValueReference reference);
+
+	IValidationStatus validateAccessibility(ASTNode node, Member member);
 
 }

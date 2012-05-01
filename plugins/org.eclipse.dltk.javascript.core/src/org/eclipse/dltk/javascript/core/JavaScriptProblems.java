@@ -71,6 +71,12 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	 * @since 3.0
 	 */
 	STATIC_METHOD,
+
+	/**
+	 * @since 4.0
+	 */
+	INACCESSIBLE_MEMBER,
+
 	/**
 	 * @since 3.0
 	 */

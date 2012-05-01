@@ -71,6 +71,8 @@ public class ValidationMessages extends NLS {
 	public static String ReturnTypeInconsistentWithPreviousReturn;
 	public static String NonInstantiableType;
 
+	public static String InaccessibleMember;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, ValidationMessages.class);
