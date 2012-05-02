@@ -200,8 +200,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				kind |= K_NUMBER;
 			} else if (astNode instanceof NullExpression) {
 				// ignore
-			} else if (astNode instanceof Identifier) {
-				IValueReference child = visit(astNode);
+			} else {
+				final IValueReference child = visit(astNode);
 				if (child.exists()) {
 					if (isNumber(child))
 						kind |= K_NUMBER;
@@ -211,9 +211,6 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						kind |= K_OTHER;
 				} else
 					kind |= K_OTHER;
-			} else {
-				kind |= K_OTHER;
-				visit(astNode);
 			}
 		}
 		if (kind == K_STRING) {
@@ -293,10 +290,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	private boolean isNumber(IValueReference ref) {
 		if (ref != null) {
-			final Type numType = context.getType(NUMBER);
+			final IRType numType = JSTypeSet.ref(NUMBER);
 			if (ref.getTypes().contains(numType))
 				return true;
-			// FIXME (alex) different types in .equals() call
 			if (numType.equals(ref.getDeclaredType()))
 				return true;
 		}
@@ -305,10 +301,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	private boolean isString(IValueReference ref) {
 		if (ref != null) {
-			final Type strType = context.getType(STRING);
+			final IRType strType = JSTypeSet.ref(STRING);
 			if (ref.getTypes().contains(strType))
 				return true;
-			// FIXME (alex) different types in .equals() call
 			if (strType.equals(ref.getDeclaredType()))
 				return true;
 		}
