@@ -33,9 +33,17 @@ public interface IValidatorExtension {
 
 	IValidationStatus validateAccessibility(ASTNode node, Member member);
 
-	IValidationStatus validateAccessibility(Expression expression,
-			IValueReference reference);
-
+	/**
+	 * Tests if the specified member is accessible.
+	 * 
+	 * @param expression
+	 *            AST node
+	 * @param reference
+	 *            evaluated value reference
+	 * @param member
+	 *            runtime variable/function reference if already evaluated or
+	 *            <code>null</code> if not evaluated yet
+	 */
 	IValidationStatus validateAccessibility(Expression expression,
 			IValueReference reference, IRMember member);
 

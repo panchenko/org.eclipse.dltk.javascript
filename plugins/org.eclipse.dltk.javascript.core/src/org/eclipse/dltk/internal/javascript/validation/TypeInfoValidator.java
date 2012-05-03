@@ -1496,7 +1496,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 							expr.sourceEnd());
 					return false;
 				} else
-					testPrivate(expr, reference);
+					validateAccessibility(expr, reference, null);
 
 			} else if (expr instanceof PropertyExpression
 					&& validate(scope, ((PropertyExpression) expr).getObject(),
@@ -1517,36 +1517,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 				return false;
 			}
 			return true;
-		}
-
-		/**
-		 * @param expr
-		 * @param reference
-		 */
-		public void testPrivate(Expression expr, IValueReference reference) {
-			validateAccessibility(expr, reference);
-			// if (reference.getAttribute(IReferenceAttributes.PRIVATE) ==
-			// Boolean.TRUE) {
-			// Object attribute = reference
-			// .getAttribute(IReferenceAttributes.R_VARIABLE);
-			// if (attribute instanceof IRVariable) {
-			// final IRVariable variable = (IRVariable) attribute;
-			// reporter.reportProblem(JavaScriptProblems.PRIVATE_VARIABLE,
-			// NLS.bind(ValidationMessages.PrivateVariable,
-			// variable.getName()), expr.sourceStart(),
-			// expr.sourceEnd());
-			// } else {
-			// attribute = reference.getAttribute(R_METHOD);
-			// if (attribute instanceof IRMethod) {
-			// IRMethod method = (IRMethod) attribute;
-			// reporter.reportProblem(
-			// JavaScriptProblems.PRIVATE_FUNCTION, NLS.bind(
-			// ValidationMessages.PrivateFunction,
-			// method.getName()), expr.sourceStart(),
-			// expr.sourceEnd());
-			// }
-			// }
-			// }
 		}
 
 		private static boolean isVarOrFunction(IValueReference reference) {
@@ -1588,7 +1558,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					pushExpressionValidator(new NotExistingIdentiferValidator(
 							peekFunctionScope(), node, result));
 				} else {
-					testPrivate(node, result);
+					validateAccessibility(node, result, null);
 					if (result.exists()
 							&& node.getParent() instanceof BinaryOperation
 							&& ((BinaryOperation) node.getParent())
@@ -1906,23 +1876,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 		}
 
-		/**
-		 * @param expression
-		 * @param result
-		 * @param method
-		 * @return
-		 */
-		@Deprecated
-		public boolean testVisibility(Expression expression,
-				IValueReference result, IRMember method) {
-			return (method.isPrivate() || (method.isProtected()
-					&& result.getParent() != null && result.getParent()
-					.getAttribute(IReferenceAttributes.SUPER_SCOPE) == null))
-					&& (result.getParent() != null || result
-							.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
-					&& !isThisCall(expression);
-		}
-
 		private boolean shouldBeDefined(PropertyExpression propertyExpression) {
 			if (propertyExpression.getParent() instanceof BinaryOperation) {
 				final BinaryOperation bo = (BinaryOperation) propertyExpression
@@ -2193,7 +2146,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return true;
 		}
 
-		/** member access */
+		/**
+		 * Tests if the specified member is accessible.
+		 * 
+		 * @param expression
+		 *            AST node
+		 * @param reference
+		 *            evaluated value reference
+		 * @param member
+		 *            runtime variable/function reference if already evaluated
+		 *            or <code>null</code> if not evaluated yet
+		 */
 		private void validateAccessibility(Expression expression,
 				IValueReference reference, IRMember member) {
 			if (extensions != null) {
@@ -2206,24 +2169,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 								JavaScriptProblems.INACCESSIBLE_MEMBER,
 								ValidationMessages.InaccessibleMember,
 								member.getName());
-						return;
-					}
-				}
-			}
-		}
-
-		/** top level identifiers? */
-		private void validateAccessibility(Expression expression,
-				IValueReference reference) {
-			if (extensions != null) {
-				for (IValidatorExtension extension : extensions) {
-					final IValidationStatus result = extension
-							.validateAccessibility(expression, reference);
-					if (result != null) {
-						reportValidationStatus(result, expression,
-								JavaScriptProblems.INACCESSIBLE_MEMBER,
-								ValidationMessages.InaccessibleMember,
-								reference.getName());
 						return;
 					}
 				}
