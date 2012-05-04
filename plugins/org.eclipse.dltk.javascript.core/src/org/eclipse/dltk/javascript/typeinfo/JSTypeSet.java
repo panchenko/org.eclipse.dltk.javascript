@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.eclipse.dltk.internal.javascript.ti.GenericTypeReference;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -367,15 +366,36 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 				if (isAssignableFrom(this.type, other)) {
 					return TypeCompatibility.TRUE;
 				}
-				final Type genericType = GenericTypeReference
-						.dereference(this.type);
-				if (genericType != this.type) {
-					if (isAssignableFrom(genericType, other)) {
+				final OriginReference origin = OriginReference.of(this.type);
+				if (origin != null) {
+					if (isAssignableFrom(origin.genericType, other)) {
 						return TypeCompatibility.TRUE;
+					}
+					final OriginReference otherOrigin = OriginReference
+							.of(other);
+					if (otherOrigin != null) {
+						if (isAssignableFrom(origin.genericType,
+								otherOrigin.genericType)
+								&& isAssignableFrom(origin.parameterTypes,
+										otherOrigin.parameterTypes)) {
+							return TypeCompatibility.TRUE;
+						}
 					}
 				}
 			}
 			return TypeCompatibility.FALSE;
+		}
+
+		private boolean isAssignableFrom(IRType[] dest, IRType[] src) {
+			if (dest.length == src.length) {
+				for (int i = 0; i < dest.length; ++i) {
+					if (dest[i].isAssignableFrom(src[i]) != TypeCompatibility.TRUE) {
+						return false;
+					}
+				}
+				return true;
+			}
+			return false;
 		}
 	}
 

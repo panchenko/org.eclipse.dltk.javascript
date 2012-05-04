@@ -39,6 +39,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.OriginReference;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
@@ -55,6 +56,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -231,6 +233,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			type = parameterizer.copy();
 			parameterizer.copyReferences();
 			type.setName(name);
+			type.eAdapters()
+					.add(new OriginReference(genericType,
+							parameterizer.actualParameters));
 			types.put(name, type);
 			typeRS.addToResource(type);
 			return type;
@@ -243,13 +248,25 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 		final GenericType genericType;
 		final Map<TypeVariable, IRType> parameters = new HashMap<TypeVariable, IRType>();
+		final IRType[] actualParameters;
 
 		public Parameterizer(GenericType genericType, List<IRType> parameters) {
 			super(false);
 			this.genericType = genericType;
-			for (int i = 0; i < genericType.getTypeParameters().size(); ++i) {
-				this.parameters.put(genericType.getTypeParameters().get(i),
-						i < parameters.size() ? parameters.get(i) : null);
+			final EList<TypeVariable> variables = genericType
+					.getTypeParameters();
+			this.actualParameters = new IRType[variables.size()];
+			for (int i = 0; i < variables.size(); ++i) {
+				final TypeVariable variable = variables.get(i);
+				IRType variableType = null;
+				if (i < parameters.size()) {
+					variableType = parameters.get(i);
+				}
+				if (variableType == null) {
+					variableType = JSTypeSet.any();
+				}
+				actualParameters[i] = variableType;
+				this.parameters.put(variable, variableType);
 			}
 		}
 
@@ -278,8 +295,6 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 						copyEObject = TypeInfoModelFactory.eINSTANCE
 								.createType();
 					}
-					copyEObject.eAdapters().add(
-							new GenericTypeReference(genericType));
 					eClass = copyEObject.eClass();
 				} else if (eObject instanceof TypeVariableReference) {
 					final IRType source = parameters
@@ -287,8 +302,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 									.getVariable());
 					final RType result = TypeInfoModelFactory.eINSTANCE
 							.createRType();
-					result.setRuntimeType(source != null ? source : JSTypeSet
-							.any());
+					result.setRuntimeType(source);
 					return result;
 				} else {
 					copyEObject = createCopy(eObject);

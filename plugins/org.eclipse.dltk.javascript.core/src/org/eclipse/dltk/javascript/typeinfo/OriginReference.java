@@ -9,27 +9,42 @@
  * Contributors:
  *     NumberFour AG - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.internal.javascript.ti;
+package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 
-public class GenericTypeReference extends AdapterImpl {
+public class OriginReference extends AdapterImpl {
 
-	private final Type genericType;
+	public final Type genericType;
+	protected final IRType[] parameterTypes;
 
-	public GenericTypeReference(Type genericType) {
+	public OriginReference(Type genericType) {
+		this(genericType, new IRType[0]);
+	}
+
+	public OriginReference(Type genericType, IRType[] parameterTypes) {
 		this.genericType = genericType;
+		this.parameterTypes = parameterTypes;
 	}
 
 	public static Type dereference(Type type) {
 		for (Adapter adapter : type.eAdapters()) {
-			if (adapter instanceof GenericTypeReference) {
-				return ((GenericTypeReference) adapter).genericType;
+			if (adapter instanceof OriginReference) {
+				return ((OriginReference) adapter).genericType;
 			}
 		}
 		return type;
+	}
+
+	public static OriginReference of(Type type) {
+		for (Adapter adapter : type.eAdapters()) {
+			if (adapter instanceof OriginReference) {
+				return (OriginReference) adapter;
+			}
+		}
+		return null;
 	}
 
 }
