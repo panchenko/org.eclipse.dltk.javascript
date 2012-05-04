@@ -202,7 +202,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				// ignore
 			} else {
 				final IValueReference child = visit(astNode);
-				if (child.exists()) {
+				if (child != null && child.exists()) {
 					if (isNumber(child))
 						kind |= K_NUMBER;
 					else if (isString(child))
