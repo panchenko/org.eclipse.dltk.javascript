@@ -22,6 +22,7 @@ import org.eclipse.dltk.javascript.core.tests.typeinfo.JSDocSupportTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.JSDocTypeParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.RTypeTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeInfoModelTests;
+import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeMemberQueryTest;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeQueryTests;
 import org.eclipse.dltk.javascript.core.tests.validation.CodeValidationTests;
 import org.eclipse.dltk.javascript.core.tests.validation.CodeValidatorValidationTests;
@@ -37,6 +38,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"Test for org.eclipse.dltk.javascript.core");
 		// $JUnit-BEGIN$
+        suite.addTestSuite(TypeMemberQueryTest.class);
 		suite.addTestSuite(BuildChangeTests.class);
 		suite.addTestSuite(TypeInfoModelTests.class);
 		suite.addTestSuite(TypeQueryTests.class);
