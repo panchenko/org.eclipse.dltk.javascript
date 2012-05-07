@@ -22,6 +22,9 @@ import java.util.Stack;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.utils.CompoundIterator;
 
+/**
+ * Returns all the supertypes/traits of the specified type(s).
+ */
 public class TypeQuery {
 
 	protected final List<Type> types = new ArrayList<Type>();
@@ -142,6 +145,10 @@ public class TypeQuery {
 
 	}
 
+	/**
+	 * Returns this type and all its supertypes/traits. Types are returned in
+	 * the breadth-first order (current type, supertype, traits).
+	 */
 	public List<Type> getHierarchy() {
 		final List<Type> result = new ArrayList<Type>();
 		for (Iterator<Type> i = new TypeIterator(); i.hasNext();) {
