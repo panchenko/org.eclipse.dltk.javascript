@@ -226,8 +226,33 @@ public class TypeMemberQuery implements Iterable<Member> {
 		}
 	}
 
+	private static class MemberKey {
+		final String name;
+		final boolean isStatic;
+
+		public MemberKey(Member member) {
+			this.name = member.getName();
+			this.isStatic = member.isStatic();
+		}
+
+		@Override
+		public int hashCode() {
+			return name.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof MemberKey) {
+				final MemberKey other = (MemberKey) obj;
+				return name.equals(other.name) && isStatic == other.isStatic;
+			}
+			return false;
+		}
+	}
+
 	private static class MethodKey {
 		final String name;
+		final boolean isStatic;
 		final String signature;
 
 		/**
@@ -235,6 +260,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 		 */
 		public MethodKey(Method method) {
 			this.name = method.getName();
+			this.isStatic = method.isStatic();
 			StringBuilder sb = new StringBuilder();
 			for (Parameter parameter : method.getParameters()) {
 				final JSType paramType = parameter.getType();
@@ -255,7 +281,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 		public boolean equals(Object obj) {
 			if (obj instanceof MethodKey) {
 				final MethodKey other = (MethodKey) obj;
-				return name.equals(other.name)
+				return name.equals(other.name) && isStatic == other.isStatic
 						&& signature.equals(other.signature);
 			}
 			return false;
@@ -266,7 +292,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 					&& member.getDeclaringType().getKind() == TypeKind.JAVA) {
 				return new MethodKey((Method) member);
 			} else {
-				return member.getName();
+				return new MemberKey(member);
 			}
 		}
 
