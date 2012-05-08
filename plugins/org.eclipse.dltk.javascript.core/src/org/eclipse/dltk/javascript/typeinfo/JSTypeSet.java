@@ -316,7 +316,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 	}
 
-	private static class SimpleTypeKey extends TypeKey implements IRSimpleType {
+	public static class SimpleTypeKey extends TypeKey implements IRSimpleType {
 
 		private final Type type;
 
