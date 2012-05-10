@@ -1598,7 +1598,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			final IValueReference variable = super.createVariable(context,
 					declaration);
 			if (context.getParent() != null
-					|| canValidateUnusedVariable(context, variable)) {
+					|| (canValidateUnusedVariable(context, variable) && isPrivate(variable))) {
 				variables.add(variable);
 			}
 			return variable;
@@ -1608,13 +1608,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 				IValueReference reference) {
 			if (extensions != null) {
 				for (IValidatorExtension extension : extensions) {
-					if (extension.canValidateUnusedVariable(collection,
+					if (!extension.canValidateUnusedVariable(collection,
 							reference)) {
-						return true;
+						return false;
 					}
 				}
 			}
-			return false;
+			return true;
 		}
 
 		private static boolean isPrivate(IValueReference reference) {
