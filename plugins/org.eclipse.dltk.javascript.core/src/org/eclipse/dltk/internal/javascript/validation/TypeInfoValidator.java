@@ -1598,8 +1598,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			final IValueReference variable = super.createVariable(context,
 					declaration);
 			if (context.getParent() != null
-					|| canValidateUnusedVariable(context, variable)
-					|| isPrivate(variable)) {
+					|| canValidateUnusedVariable(context, variable)) {
 				variables.add(variable);
 			}
 			return variable;
