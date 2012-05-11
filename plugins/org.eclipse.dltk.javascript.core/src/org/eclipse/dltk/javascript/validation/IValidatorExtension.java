@@ -26,10 +26,14 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
  */
 public interface IValidatorExtension {
 
+	enum UnusedVariableValidation {
+		TRUE, FALSE
+	}
+
 	IValidationStatus canInstantiate(Type type, IValueReference typeReference);
 
-	boolean canValidateUnusedVariable(IValueCollection collection,
-			IValueReference reference);
+	UnusedVariableValidation canValidateUnusedVariable(
+			IValueCollection collection, IValueReference reference);
 
 	IValidationStatus validateAccessibility(ASTNode node, Member member);
 
