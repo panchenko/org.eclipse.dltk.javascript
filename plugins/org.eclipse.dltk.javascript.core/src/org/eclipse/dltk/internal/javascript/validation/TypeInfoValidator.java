@@ -52,6 +52,7 @@ import org.eclipse.dltk.javascript.ast.NewExpression;
 import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
@@ -1525,13 +1526,21 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		private static boolean isAccess(Identifier node) {
-			final ASTNode parent = node.getParent();
+			return isAccess(node, node.getParent());
+		}
+
+		private static boolean isAccess(Identifier node, final ASTNode parent) {
 			if (parent instanceof BinaryOperation) {
 				return !((BinaryOperation) parent).isAssignmentTo(node);
+			} else if (parent instanceof StatementBlock
+					|| parent instanceof Script) {
+				return false;
 			} else if (parent instanceof UnaryOperation) {
-				final int op = ((UnaryOperation) parent).getOperation();
+				final UnaryOperation operation = (UnaryOperation) parent;
+				final int op = operation.getOperation();
 				return op != JSParser.INC && op != JSParser.DEC
-						&& op != JSParser.PINC && op != JSParser.PDEC;
+						&& op != JSParser.PINC && op != JSParser.PDEC
+						|| isAccess(node, operation.getParent());
 			} else {
 				return true;
 			}
