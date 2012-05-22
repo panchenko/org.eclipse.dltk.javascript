@@ -24,6 +24,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
+import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
 import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.ScriptElementImageProvider;
 import org.eclipse.dltk.ui.documentation.IDocumentationResponse;
@@ -92,7 +93,12 @@ public class ElementDocumentationProvider implements
 	 * @param element
 	 * @return
 	 */
-	private String getElementTitle(Element element) {
+	protected String getElementTitle(Element element) {
+		final String label = ElementLabelProviderRegistry.getLabel(element,
+				Mode.TITLE);
+		if (label != null) {
+			return label;
+		}
 		final StringBuilder sb = new StringBuilder();
 		if (element instanceof Member) {
 			final Member member = (Member) element;
@@ -141,7 +147,7 @@ public class ElementDocumentationProvider implements
 		return sb.toString();
 	}
 
-	private ImageDescriptor getElementImageDescriptor(Element element) {
+	protected ImageDescriptor getElementImageDescriptor(Element element) {
 		ImageDescriptor descriptor = ElementLabelProviderRegistry
 				.getImageDescriptor(element);
 		if (descriptor != null) {

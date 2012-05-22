@@ -16,7 +16,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 public interface IElementLabelProvider {
 	public enum Mode {
-		PROPOSAL
+		PROPOSAL, TITLE
 	}
 
 	String getLabel(Element element, Mode mode);
