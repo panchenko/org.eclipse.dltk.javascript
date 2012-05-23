@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009 xored software, Inc.  
+ * Copyright (c) 2009, 2012 xored software, Inc., NumberFour AG  
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,8 +8,8 @@
  *
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *     NumberFour AG - new option to control space before parens of anonymous function (Alex Panchenko)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.formatter.internal.nodes;
 
 import org.eclipse.core.runtime.Assert;
@@ -22,18 +22,26 @@ public class ParensNode extends FormatterBlockWithBeginEndNode {
 
 	private final IParensConfiguration configuration;
 	private final boolean indenting;
+	private final boolean insertSpaceBefore;
 
 	public ParensNode(IFormatterDocument document,
 			IParensConfiguration configuration) {
-		this(document, configuration, false);
+		this(document, configuration, false, false);
 	}
 
 	public ParensNode(IFormatterDocument document,
 			IParensConfiguration configuration, boolean indenting) {
+		this(document, configuration, indenting, false);
+	}
+
+	public ParensNode(IFormatterDocument document,
+			IParensConfiguration configuration, boolean indenting,
+			boolean insertSpaceBefore) {
 		super(document);
 		Assert.isNotNull(configuration);
 		this.configuration = configuration;
 		this.indenting = indenting;
+		this.insertSpaceBefore = insertSpaceBefore;
 	}
 
 	@Override
@@ -45,7 +53,8 @@ public class ParensNode extends FormatterBlockWithBeginEndNode {
 	public void accept(IFormatterContext context, IFormatterWriter visitor)
 			throws Exception {
 
-		writeSpace(context, visitor, configuration.getSpaceBeforeLeftParen());
+		writeSpace(context, visitor, configuration.getSpaceBeforeLeftParen()
+				|| insertSpaceBefore);
 		if (getBegin() != null) {
 			IFormatterNode[] nodes = getBegin();
 			for (int i = 0; i < nodes.length; i++) {

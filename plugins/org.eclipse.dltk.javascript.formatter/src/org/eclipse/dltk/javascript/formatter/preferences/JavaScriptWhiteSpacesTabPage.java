@@ -138,7 +138,9 @@ public class JavaScriptWhiteSpacesTabPage extends FormatterModifyTabPage {
 						pair(JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_RP_FUNCTION_ARGUMENTS,
 								Messages.JavaScriptWhiteSpacesTabPage_InsertSpaceBeforeRP_name),
 						pair(JavaScriptFormatterConstants.INSERT_SPACE_BETWEEN_PARENS_FUNCTION_NO_ARGUMENTS,
-								Messages.JavaScriptWhiteSpacesTabPage_InsertSpaceBetweenParensIfNoArguments_name));
+								Messages.JavaScriptWhiteSpacesTabPage_InsertSpaceBetweenParensIfNoArguments_name),
+						pair(JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_PARENS_ANONYMOUS_FUNCTION,
+								Messages.JavaScriptWhiteSpacesTabPage_InsertSpaceBeforeParensAnonymousFunction));
 
 		container
 				.add(Messages.JavaScriptWhiteSpacesTabPage_ControlStatements,

@@ -58,6 +58,7 @@ public class Messages extends NLS {
 
 	public static String JavaScriptWhiteSpacesTabPage_Function_name;
 	public static String JavaScriptWhiteSpacesTabPage_InsertSpaceBetweenParensIfNoArguments_name;
+	public static String JavaScriptWhiteSpacesTabPage_InsertSpaceBeforeParensAnonymousFunction;
 
 	public static String JavaScriptWhiteSpacesTabPage_IfElse_name;
 	public static String JavaScriptWhiteSpacesTabPage_For_name;

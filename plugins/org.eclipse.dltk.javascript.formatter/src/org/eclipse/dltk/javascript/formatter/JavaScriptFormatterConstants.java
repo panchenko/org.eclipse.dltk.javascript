@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009 xored software, Inc.  
+ * Copyright (c) 2009, 2012 xored software, Inc., NumberFour AG  
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,8 +8,8 @@
  *
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *     NumberFour AG - new option to control space before parens of anonymous function (Alex Panchenko)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.formatter;
 
 import java.util.ArrayList;
@@ -146,6 +146,7 @@ public final class JavaScriptFormatterConstants {
 	public static final String INSERT_SPACE_AFTER_LP_FUNCTION_ARGUMENTS = "formatter.insertspace.after.lp.function";
 	public static final String INSERT_SPACE_BEFORE_RP_FUNCTION_ARGUMENTS = "formatter.insertspace.before.rp.function";
 	public static final String INSERT_SPACE_BETWEEN_PARENS_FUNCTION_NO_ARGUMENTS = "formatter.insertspace.between.parents.empty";
+	public static final String INSERT_SPACE_BEFORE_PARENS_ANONYMOUS_FUNCTION = "formatter.insertspace.before.parens.anonymous.function";
 
 	// CATCH spaces
 	public static final String INSERT_SPACE_BEFORE_LP_CATCH = "formatter.insertspace.before.lp.catch";
@@ -245,6 +246,8 @@ public final class JavaScriptFormatterConstants {
 		registerBooleanOption(INSERT_SPACE_BEFORE_RP_FUNCTION_ARGUMENTS, false);
 		registerBooleanOption(
 				INSERT_SPACE_BETWEEN_PARENS_FUNCTION_NO_ARGUMENTS, false);
+		registerBooleanOption(INSERT_SPACE_BEFORE_PARENS_ANONYMOUS_FUNCTION,
+				false);
 
 		// CATCH spaces
 		registerBooleanOption(INSERT_SPACE_BEFORE_LP_CATCH, true);

@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2009, 2012 xored software, Inc., NumberFour AG and others
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html  
+ *
+ * Contributors:
+ *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *     NumberFour AG - miscellaneous improvements (Alex Panchenko)
+ *******************************************************************************/
 package org.eclipse.dltk.javascript.formatter.internal;
 
 import java.util.ArrayList;
@@ -674,7 +686,13 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 					parensConf = new FunctionArgumentsParensConfiguration(
 							document);
 				}
-				final ParensNode parens = new ParensNode(document, parensConf);
+				final ParensNode parens = new ParensNode(
+						document,
+						parensConf,
+						false,
+						node.getName() == null
+								&& document
+										.getBoolean(JavaScriptFormatterConstants.INSERT_SPACE_BEFORE_PARENS_ANONYMOUS_FUNCTION));
 				parens.setBegin(createCharNode(document, node.getLP()));
 				push(parens);
 				if (!node.getArguments().isEmpty()) {
