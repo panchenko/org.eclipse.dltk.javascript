@@ -175,6 +175,20 @@ import org.eclipse.dltk.utils.IntList;
 
 public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 
+	private static class XmlParensConfiguration implements IParensConfiguration {
+		public boolean getSpaceBeforeLeftParen() {
+			return false;
+		}
+
+		public boolean getSpaceAfterLeftParen() {
+			return false;
+		}
+
+		public boolean getSpaceBeforeRightParen() {
+			return false;
+		}
+	}
+
 	protected final IFormatterDocument document;
 
 	public FormatterNodeBuilder(IFormatterDocument document) {
@@ -1145,24 +1159,16 @@ public class FormatterNodeBuilder extends AbstractFormatterNodeBuilder {
 			@Override
 			public IFormatterNode visitParenthesizedExpression(
 					ParenthesizedExpression node) {
-
-				// if XML expression
-				final IParensConfiguration conf = node.getParent() instanceof PropertyExpression ? new IParensConfiguration() {
-					public boolean getSpaceBeforeLeftParen() {
-						return false;
-					}
-
-					public boolean getSpaceAfterLeftParen() {
-						return false;
-					}
-
-					public boolean getSpaceBeforeRightParen() {
-						return false;
-					}
-				}
+				final IParensConfiguration conf = isInXml(node) ? new XmlParensConfiguration()
 						: new ExpressionParensConfiguration(document);
 				return processParens(node.getLP(), node.getRP(),
 						node.getExpression(), conf);
+			}
+
+			private boolean isInXml(ParenthesizedExpression node) {
+				return node.getParent() instanceof PropertyExpression
+						&& ((PropertyExpression) node.getParent())
+								.getProperty() == node;
 			}
 
 			@Override
