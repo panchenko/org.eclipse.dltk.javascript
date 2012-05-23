@@ -613,7 +613,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IRVariable rvar = RModelBuilder.create(getContext(), variable);
 		reference.setAttribute(IReferenceAttributes.R_VARIABLE, rvar);
 		if (rvar.getType() != null) {
-			setIRType(reference, rvar.getType(), false);
+			setIRType(reference, rvar.getType(), true);
 		}
 
 		return reference;
