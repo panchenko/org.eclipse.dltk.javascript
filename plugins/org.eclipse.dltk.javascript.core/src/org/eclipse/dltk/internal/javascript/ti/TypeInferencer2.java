@@ -433,7 +433,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				if (!(resourceSet instanceof InvariantTypeResourceSet)) {
 					Assert.isLegal(!(resourceSet instanceof TypeResourceSet),
 							"Type " + type.getName()
-									+ " has invalid resource: " + resource);
+									+ " has invalid resource: " + resource
+									+ " (" + resourceSet.getClass() + ")");
 				}
 			}
 		}
