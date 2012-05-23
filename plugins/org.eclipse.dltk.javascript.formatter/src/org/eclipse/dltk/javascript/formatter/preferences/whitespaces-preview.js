@@ -3,7 +3,7 @@ function q (a, b) {
 	return (a + b) * (a + b);
 }
 
-function shutdown () {
+var shutdown = function () {
 	alter("Shutdown")
 }
 

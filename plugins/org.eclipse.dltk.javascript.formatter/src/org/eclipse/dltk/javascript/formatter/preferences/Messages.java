@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009 xored software, Inc.  
+ * Copyright (c) 2009, 2012 xored software, Inc., NumberFour AG
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,8 +8,8 @@
  *
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Vladimir Belov)
+ *     NumberFour AG - dynamically show checkboxes only for the selected category (Alex Panchenko)
  *******************************************************************************/
-
 package org.eclipse.dltk.javascript.formatter.preferences;
 
 import org.eclipse.osgi.util.NLS;
@@ -48,6 +48,9 @@ public class Messages extends NLS {
 	public static String JavaScriptWhiteSpacesTabPage_name;
 
 	public static String JavaScriptWhileSpacesTabPage_InsertSpaces_name;
+
+	public static String JavaScriptWhiteSpacesTabPage_ControlStatements;
+	public static String JavaScriptWhiteSpacesTabPage_Expressions;
 
 	public static String JavaScriptWhiteSpacesTabPage_InsertSpaceBeforeLP_name;
 	public static String JavaScriptWhiteSpacesTabPage_InsertSpaceAfterLP_name;
