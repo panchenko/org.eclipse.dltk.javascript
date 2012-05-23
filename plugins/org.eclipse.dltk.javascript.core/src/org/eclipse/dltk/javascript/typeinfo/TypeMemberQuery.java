@@ -66,7 +66,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 
 		@Override
 		public String toString() {
-			return predicate + ":" + type;
+			return predicate + ":" + type.getName();
 		}
 
 	}
@@ -344,6 +344,11 @@ public class TypeMemberQuery implements Iterable<Member> {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + types;
 	}
 
 }
