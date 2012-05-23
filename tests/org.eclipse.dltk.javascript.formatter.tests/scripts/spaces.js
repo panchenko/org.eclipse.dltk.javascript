@@ -6,6 +6,10 @@ b = '   1000   ';
 a = "   aaaa   ";
 b = '   1000   ';
 throw 'Cannot x/0'
+==== var-parenthesis-method-call
+var  s  =  (  "A"  )  .  toLowerCase();
+==
+var s = ("A").toLowerCase();
 ==> formatter.insertspace.before.lp.if = true
 ==> formatter.insertspace.after.lp.if = true
 ==> formatter.insertspace.before.rp.if = true
