@@ -30,6 +30,8 @@ import org.eclipse.emf.common.util.EList;
 
 public class JSDocTypeParser extends JSDocTypeParserBase {
 
+	public static final String FUNCTION = "function";
+
 	private JSDocTypeParserExtension extension;
 
 	public void setExtension(JSDocTypeParserExtension extension) {
@@ -123,8 +125,8 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				}
 				return checkIfArray(input, type);
 			} else if (ch == '('
-					&& "function".equals(input.substring(start,
-							input.index() - 1))) {
+					&& FUNCTION
+							.equals(input.substring(start, input.index() - 1))) {
 				input.consume();
 				final FunctionType functionType = TypeInfoModelFactory.eINSTANCE
 						.createFunctionType();

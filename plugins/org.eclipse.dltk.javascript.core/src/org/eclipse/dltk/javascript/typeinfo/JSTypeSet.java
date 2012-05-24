@@ -29,6 +29,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.RType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
@@ -817,8 +818,28 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		public String getName() {
-			// TODO (alex) generate function signature
-			return ITypeNames.FUNCTION;
+			final StringBuilder sb = new StringBuilder();
+			sb.append(JSDocTypeParser.FUNCTION);
+			sb.append('(');
+			int index = 0;
+			for (IRParameter parameter : parameters) {
+				if (++index != 1) {
+					sb.append(", ");
+				}
+				if (parameter.getKind() == ParameterKind.VARARGS) {
+					sb.append("...");
+				}
+				sb.append(parameter.getType());
+				if (parameter.getKind() == ParameterKind.OPTIONAL) {
+					sb.append("=");
+				}
+			}
+			sb.append(')');
+			if (returnType != null) {
+				sb.append(':');
+				sb.append(returnType);
+			}
+			return sb.toString();
 		}
 
 		public TypeCompatibility isAssignableFrom(IRType type) {
