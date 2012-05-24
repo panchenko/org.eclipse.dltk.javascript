@@ -86,4 +86,14 @@ public class SimpleJSDocParserTests extends TestCase {
 		assertEquals(JSDocTag.SUPPRESS_WARNINGS, tags.get(0).name());
 		assertEquals("(all)", tags.get(0).value());
 	}
+
+	public void testTagWithNumbers() {
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @web2.0");
+		code.add(" */");
+		List<JSDocTag> tags = parse(code.toString());
+		assertEquals(1, tags.size());
+		assertEquals("@web2.0", tags.get(0).name());
+	}
 }
