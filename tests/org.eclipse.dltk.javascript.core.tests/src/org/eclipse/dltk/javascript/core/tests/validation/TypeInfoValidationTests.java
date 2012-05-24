@@ -297,7 +297,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testPropertyNullAssignment() {
 		StringList code = new StringList();
 		code.add("var x = { }");
@@ -327,7 +327,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testMethodAsPropertyAccess() {
 		StringList code = new StringList();
 		code.add("/** @type ExampleService */");
@@ -2152,6 +2152,56 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 		problems = validate("var d = new Date(1,2,3,4,5,6,7)");
 		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testFunctionTypeCall() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @type {function(String)}");
+		code.add("*/");
+		code.add("var func;");
+		code.add("func('A')");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testFunctionTypeCallError() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @type {function(String)}");
+		code.add("*/");
+		code.add("var func;");
+		code.add("func(1)");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+
+	public void testFunctionTypeCallParam() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String)} func");
+		code.add("*/");
+		code.add("function test(func) {");
+		code.add("  func('A')");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testFunctionTypeCallParamError() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @param {function(String)} func");
+		code.add("*/");
+		code.add("function test(func) {");
+		code.add("  func(1)");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
 	}
 
 }
