@@ -73,6 +73,7 @@ import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IRAnyType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
@@ -783,145 +784,120 @@ public class TypeInfoValidator implements IBuildParticipant {
 							// configurable)
 						}
 					}
-					return;
+				} else {
+					validateCallExpressionMethod(node, reference, arguments,
+							methodNode, method);
 				}
-				if (method.getVisibility() != Visibility.PUBLIC) {
-					if (!validateAccessibility(methodNode, method)) {
-						return;
-					}
-				}
-				if (method.isDeprecated()) {
-					reportDeprecatedMethod(methodNode, reference, method);
-				}
-				if (!JavaScriptValidations.checkParameterCount(method, node
-						.getArguments().size())) {
-					reportMethodParameterError(methodNode, arguments, method);
-					return;
-				}
-				if (JavaScriptValidations.isStatic(reference.getParent())
-						&& !method.isStatic()) {
-					IRType type = JavaScriptValidations.typeOf(reference
-							.getParent());
-					reporter.reportProblem(
-							JavaScriptProblems.INSTANCE_METHOD,
-							NLS.bind(
-									ValidationMessages.StaticReferenceToNoneStaticMethod,
-									reference.getName(), TypeUtil.getName(type)),
-							methodNode.sourceStart(), methodNode.sourceEnd());
-				} else if (reference.getParent() != null
-						&& !JavaScriptValidations.isStatic(reference
-								.getParent()) && method.isStatic()) {
-					IRType type = JavaScriptValidations.typeOf(reference
-							.getParent());
-					reporter.reportProblem(JavaScriptProblems.STATIC_METHOD,
-							NLS.bind(
-									ValidationMessages.ReferenceToStaticMethod,
-									reference.getName(), type.getName()),
-							methodNode.sourceStart(), methodNode.sourceEnd());
-				}
-				final List<IRParameter> parameters = RModelBuilder.convert(
-						getContext(), method.getParameters());
-				final TypeCompatibility compatibility = validateParameters(
-						parameters, arguments, methodNode);
-				if (compatibility != TypeCompatibility.TRUE) {
-					String name = method.getName();
-					if (name == null) {
-						Identifier identifier = PropertyExpressionUtils
-								.getIdentifier(methodNode);
-						if (identifier != null)
-							name = identifier.getName();
-					}
-					reporter.reportProblem(
-							compatibility == TypeCompatibility.FALSE ? JavaScriptProblems.WRONG_PARAMETERS
-									: JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION,
-							NLS.bind(
-									ValidationMessages.MethodNotApplicableInScript,
-									new String[] {
-											name,
-											describeParamTypes(parameters),
-											describeArgTypes(arguments,
-													parameters) }), methodNode
-									.sourceStart(), methodNode.sourceEnd());
-				}
+				return;
+			}
+			final Object attrRMethod = reference.getAttribute(R_METHOD, true);
+			if (attrRMethod instanceof IRMethod) {
+				validateCallExpressionRMethod(node, reference, arguments,
+						methodNode, (IRMethod) attrRMethod);
+				return;
+			}
+			final IRType expressionType = JavaScriptValidations
+					.typeOf(reference);
+			if (expressionType != null
+					&& expressionType instanceof IRFunctionType) {
+				validateCallExpressionRMethod(node, reference, arguments,
+						methodNode, new RMethodFunctionWrapper(
+								(IRFunctionType) expressionType));
+				return;
+			}
+			if (!isArrayLookup(expression) && !isUntypedParameter(reference)) {
+				scope.add(path);
 
-			} else {
-				Object attribute = reference.getAttribute(R_METHOD, true);
-				if (attribute instanceof IRMethod) {
-					IRMethod method = (IRMethod) attribute;
-					if (method.isDeprecated()) {
+				final IRType type = JavaScriptValidations.typeOf(reference
+						.getParent());
+				if (type != null) {
+					if (TypeUtil.kind(type) == TypeKind.JAVA) {
 						reporter.reportProblem(
-								JavaScriptProblems.DEPRECATED_FUNCTION,
-								NLS.bind(ValidationMessages.DeprecatedFunction,
-										reference.getName()), methodNode
-										.sourceStart(), methodNode.sourceEnd());
-					}
-					validateAccessibility(expression, reference, method);
-					// if (testVisibility(expression, reference, method)) {
-					// reporter.reportProblem(
-					// JavaScriptProblems.PRIVATE_FUNCTION, NLS.bind(
-					// ValidationMessages.PrivateFunction,
-					// reference.getName()), methodNode
-					// .sourceStart(), methodNode.sourceEnd());
-					// }
-					List<IRParameter> parameters = method.getParameters();
-					final TypeCompatibility compatibility = validateParameters(
-							parameters, arguments, methodNode);
-					if (compatibility != TypeCompatibility.TRUE) {
-						String name = method.getName();
-						if (name == null) {
-							Identifier identifier = PropertyExpressionUtils
-									.getIdentifier(methodNode);
-							if (identifier != null)
-								name = identifier.getName();
-						}
-						final IProblemIdentifier problemId;
-						if (method.isTyped()) {
-							if (compatibility == TypeCompatibility.FALSE) {
-								problemId = JavaScriptProblems.WRONG_PARAMETERS;
-							} else {
-								problemId = JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION;
-							}
-						} else {
-							problemId = JavaScriptProblems.WRONG_PARAMETERS_UNTYPED;
-						}
+								JavaScriptProblems.UNDEFINED_JAVA_METHOD,
+								NLS.bind(ValidationMessages.UndefinedMethod,
+										reference.getName(), type.getName()),
+								methodNode.sourceStart(), methodNode
+										.sourceEnd());
+					} else if (JavaScriptValidations.isStatic(reference
+							.getParent())
+							&& hasInstanceMethod(type, reference.getName())) {
 						reporter.reportProblem(
-								problemId,
+								JavaScriptProblems.INSTANCE_METHOD,
 								NLS.bind(
-										ValidationMessages.MethodNotApplicableInScript,
-										new String[] {
-												name,
-												describeParamTypes(parameters),
-												describeArgTypes(arguments,
-														parameters) }),
+										ValidationMessages.StaticReferenceToNoneStaticMethod,
+										reference.getName(), type.getName()),
+								methodNode.sourceStart(), methodNode
+										.sourceEnd());
+					} else if (!reference.exists()) {
+						reporter.reportProblem(
+								JavaScriptProblems.UNDEFINED_METHOD,
+								NLS.bind(
+										ValidationMessages.UndefinedMethodOnObject,
+										reference.getName(), reference
+												.getParent().getName()),
 								methodNode.sourceStart(), methodNode
 										.sourceEnd());
 					}
-				} else if (!isArrayLookup(expression)
-						&& !isUntypedParameter(reference)) {
-					scope.add(path);
+				} else {
+					IRType referenceType = JavaScriptValidations
+							.typeOf(reference);
+					if (functionTypeRef.isAssignableFrom(referenceType) == TypeCompatibility.TRUE) {
+						return;
+					}
+					if (expression instanceof NewExpression) {
+						if (reference.getKind() == ReferenceKind.TYPE) {
+							return;
+						}
+						IRType newType = JavaScriptValidations
+								.typeOf(reference);
+						if (newType != null) {
+							return;
+						}
 
-					final IRType type = JavaScriptValidations.typeOf(reference
-							.getParent());
-					if (type != null) {
-						if (TypeUtil.kind(type) == TypeKind.JAVA) {
-							reporter.reportProblem(
-									JavaScriptProblems.UNDEFINED_JAVA_METHOD,
-									NLS.bind(
-											ValidationMessages.UndefinedMethod,
-											reference.getName(), type.getName()),
-									methodNode.sourceStart(), methodNode
-											.sourceEnd());
-						} else if (JavaScriptValidations.isStatic(reference
-								.getParent())
-								&& hasInstanceMethod(type, reference.getName())) {
-							reporter.reportProblem(
-									JavaScriptProblems.INSTANCE_METHOD,
-									NLS.bind(
-											ValidationMessages.StaticReferenceToNoneStaticMethod,
-											reference.getName(), type.getName()),
-									methodNode.sourceStart(), methodNode
-											.sourceEnd());
-						} else if (!reference.exists()) {
+					}
+					IValueReference parent = reference;
+					while (parent != null) {
+						if (parent.getName() == IValueReference.ARRAY_OP) {
+							// ignore array lookup function calls
+							// like: array[1](),
+							// those are dynamic.
+							return;
+						}
+						parent = parent.getParent();
+					}
+					if (expression instanceof NewExpression) {
+
+						reporter.reportProblem(
+								JavaScriptProblems.WRONG_TYPE_EXPRESSION,
+								NLS.bind(
+										ValidationMessages.UndefinedJavascriptType,
+										((NewExpression) expression)
+												.getObjectClass()
+												.toSourceString("")),
+								methodNode.sourceStart(), methodNode
+										.sourceEnd());
+
+					} else {
+						if (reference.getParent() == null) {
+							if (isIdentifier(expression) && !reference.exists()) {
+								reporter.reportProblem(
+										JavaScriptProblems.UNDEFINED_FUNCTION,
+										NLS.bind(
+												ValidationMessages.UndefinedMethodInScript,
+												reference.getName()),
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
+							} else {
+								reporter.reportProblem(
+										JavaScriptProblems.WRONG_FUNCTION,
+										isIdentifier(expression) ? NLS
+												.bind(ValidationMessages.WrongFunction,
+														reference.getName())
+												: ValidationMessages.WrongFunctionExpression,
+										methodNode.sourceStart(), methodNode
+												.sourceEnd());
+							}
+						} else {
 							reporter.reportProblem(
 									JavaScriptProblems.UNDEFINED_METHOD,
 									NLS.bind(
@@ -931,81 +907,116 @@ public class TypeInfoValidator implements IBuildParticipant {
 									methodNode.sourceStart(), methodNode
 											.sourceEnd());
 						}
-					} else {
-						IRType referenceType = JavaScriptValidations
-								.typeOf(reference);
-						if (functionTypeRef.isAssignableFrom(referenceType) == TypeCompatibility.TRUE) {
-							return;
-						}
-						if (expression instanceof NewExpression) {
-							if (reference.getKind() == ReferenceKind.TYPE) {
-								return;
-							}
-							IRType newType = JavaScriptValidations
-									.typeOf(reference);
-							if (newType != null) {
-								return;
-							}
-
-						}
-						IValueReference parent = reference;
-						while (parent != null) {
-							if (parent.getName() == IValueReference.ARRAY_OP) {
-								// ignore array lookup function calls
-								// like: array[1](),
-								// those are dynamic.
-								return;
-							}
-							parent = parent.getParent();
-						}
-						if (expression instanceof NewExpression) {
-
-							reporter.reportProblem(
-									JavaScriptProblems.WRONG_TYPE_EXPRESSION,
-									NLS.bind(
-											ValidationMessages.UndefinedJavascriptType,
-											((NewExpression) expression)
-													.getObjectClass()
-													.toSourceString("")),
-									methodNode.sourceStart(), methodNode
-											.sourceEnd());
-
-						} else {
-							if (reference.getParent() == null) {
-								if (isIdentifier(expression)
-										&& !reference.exists()) {
-									reporter.reportProblem(
-											JavaScriptProblems.UNDEFINED_FUNCTION,
-											NLS.bind(
-													ValidationMessages.UndefinedMethodInScript,
-													reference.getName()),
-											methodNode.sourceStart(),
-											methodNode.sourceEnd());
-								} else {
-									reporter.reportProblem(
-											JavaScriptProblems.WRONG_FUNCTION,
-											isIdentifier(expression) ? NLS
-													.bind(ValidationMessages.WrongFunction,
-															reference.getName())
-													: ValidationMessages.WrongFunctionExpression,
-											methodNode.sourceStart(),
-											methodNode.sourceEnd());
-								}
-							} else {
-								reporter.reportProblem(
-										JavaScriptProblems.UNDEFINED_METHOD,
-										NLS.bind(
-												ValidationMessages.UndefinedMethodOnObject,
-												reference.getName(), reference
-														.getParent().getName()),
-										methodNode.sourceStart(), methodNode
-												.sourceEnd());
-							}
-						}
 					}
 				}
 			}
 			return;
+		}
+
+		private void validateCallExpressionRMethod(CallExpression node,
+				final IValueReference reference, IValueReference[] arguments,
+				final Expression methodNode, IRMethod method) {
+			if (method.isDeprecated()) {
+				reporter.reportProblem(JavaScriptProblems.DEPRECATED_FUNCTION,
+						NLS.bind(ValidationMessages.DeprecatedFunction,
+								reference.getName()), methodNode.sourceStart(),
+						methodNode.sourceEnd());
+			}
+			validateAccessibility(node.getExpression(), reference, method);
+			// if (testVisibility(expression, reference, method)) {
+			// reporter.reportProblem(
+			// JavaScriptProblems.PRIVATE_FUNCTION, NLS.bind(
+			// ValidationMessages.PrivateFunction,
+			// reference.getName()), methodNode
+			// .sourceStart(), methodNode.sourceEnd());
+			// }
+			List<IRParameter> parameters = method.getParameters();
+			final TypeCompatibility compatibility = validateParameters(
+					parameters, arguments, methodNode);
+			if (compatibility != TypeCompatibility.TRUE) {
+				String name = method.getName();
+				if (name == null) {
+					Identifier identifier = PropertyExpressionUtils
+							.getIdentifier(methodNode);
+					if (identifier != null)
+						name = identifier.getName();
+				}
+				final IProblemIdentifier problemId;
+				if (method.isTyped()) {
+					if (compatibility == TypeCompatibility.FALSE) {
+						problemId = JavaScriptProblems.WRONG_PARAMETERS;
+					} else {
+						problemId = JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION;
+					}
+				} else {
+					problemId = JavaScriptProblems.WRONG_PARAMETERS_UNTYPED;
+				}
+				reporter.reportProblem(problemId, NLS.bind(
+						ValidationMessages.MethodNotApplicableInScript,
+						new String[] { name, describeParamTypes(parameters),
+								describeArgTypes(arguments, parameters) }),
+						methodNode.sourceStart(), methodNode.sourceEnd());
+			}
+		}
+
+		private void validateCallExpressionMethod(CallExpression node,
+				final IValueReference reference, IValueReference[] arguments,
+				final Expression methodNode, Method method) {
+			if (method.getVisibility() != Visibility.PUBLIC) {
+				if (!validateAccessibility(methodNode, method)) {
+					return;
+				}
+			}
+			if (method.isDeprecated()) {
+				reportDeprecatedMethod(methodNode, reference, method);
+			}
+			if (!JavaScriptValidations.checkParameterCount(method, node
+					.getArguments().size())) {
+				reportMethodParameterError(methodNode, arguments, method);
+				return;
+			}
+			if (JavaScriptValidations.isStatic(reference.getParent())
+					&& !method.isStatic()) {
+				IRType type = JavaScriptValidations.typeOf(reference
+						.getParent());
+				reporter.reportProblem(
+						JavaScriptProblems.INSTANCE_METHOD,
+						NLS.bind(
+								ValidationMessages.StaticReferenceToNoneStaticMethod,
+								reference.getName(), TypeUtil.getName(type)),
+						methodNode.sourceStart(), methodNode.sourceEnd());
+			} else if (reference.getParent() != null
+					&& !JavaScriptValidations.isStatic(reference.getParent())
+					&& method.isStatic()) {
+				IRType type = JavaScriptValidations.typeOf(reference
+						.getParent());
+				reporter.reportProblem(JavaScriptProblems.STATIC_METHOD, NLS
+						.bind(ValidationMessages.ReferenceToStaticMethod,
+								reference.getName(), type.getName()),
+						methodNode.sourceStart(), methodNode.sourceEnd());
+			}
+			final List<IRParameter> parameters = RModelBuilder.convert(
+					getContext(), method.getParameters());
+			final TypeCompatibility compatibility = validateParameters(
+					parameters, arguments, methodNode);
+			if (compatibility != TypeCompatibility.TRUE) {
+				String name = method.getName();
+				if (name == null) {
+					Identifier identifier = PropertyExpressionUtils
+							.getIdentifier(methodNode);
+					if (identifier != null)
+						name = identifier.getName();
+				}
+				reporter.reportProblem(
+						compatibility == TypeCompatibility.FALSE ? JavaScriptProblems.WRONG_PARAMETERS
+								: JavaScriptProblems.WRONG_PARAMETERS_PARAMETERIZATION,
+						NLS.bind(
+								ValidationMessages.MethodNotApplicableInScript,
+								new String[] { name,
+										describeParamTypes(parameters),
+										describeArgTypes(arguments, parameters) }),
+						methodNode.sourceStart(), methodNode.sourceEnd());
+			}
 		}
 
 		/**
