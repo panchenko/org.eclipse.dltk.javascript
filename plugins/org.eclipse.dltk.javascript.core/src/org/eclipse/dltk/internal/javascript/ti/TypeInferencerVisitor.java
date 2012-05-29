@@ -105,6 +105,7 @@ import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilderExtension;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
@@ -234,6 +235,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final IValueReference left = visit(node.getLeftExpression());
 		final int op = node.getOperation();
 		if (JSParser.ASSIGN == op) {
+			if (left != null) {
+				for (IModelBuilder modelBuilder : context.getModelBuilders()) {
+					if (modelBuilder instanceof IModelBuilderExtension) {
+						((IModelBuilderExtension) modelBuilder).processAssignment(
+								node.getLeftExpression(), left);
+					}
+				}
+			}
 			if (left != null && left.exists()) {
 				left.setAttribute(IReferenceAttributes.RESOLVING, Boolean.TRUE);
 				final IValueReference r;
