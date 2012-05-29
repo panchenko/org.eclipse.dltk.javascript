@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 
 public class CodeCompletion extends AbstractCompletionTest {
 
@@ -454,7 +456,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void test50() {
 		IModuleSource module = createModule("test50.js");
 		int position = lastPositionInFile("Function.", module);
-		basicTest(module, position, new String[] { "prototype" });
+		basicTest(module, position,
+				concat(getMembers(ITypeNames.FUNCTION, MemberPredicate.STATIC)));
 		// basicTest(module, 105, names);
 	}
 
