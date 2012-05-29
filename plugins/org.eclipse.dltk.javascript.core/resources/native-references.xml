@@ -30,11 +30,11 @@
   	<members xsi:type="ref:Property" name="length" directType="Number"  description="Specifies the number of arguments expected by the function."/>
   	<members xsi:type="ref:Method" name="apply" directType="Object" description="Applies the method of another object in the context of a different object (the calling object); arguments can be passed as an Array object." >
     	<parameters name="thisArg"/>
-    	<parameters name="[argsArray]" directType="Array"/>
+    	<parameters name="argsArray" directType="Array" kind="OPTIONAL"/>
     </members>
   	<members xsi:type="ref:Method" name="call" directType="Boolean" description="Calls (executes) a method of another object in the context of a different object (the calling object); arguments can be passed as they are." >
     	<parameters name="thisArg"/>
-    	<parameters name="[arg1,argN]" kind="VARARGS"/>
+    	<parameters name="arg" kind="VARARGS"/>
     </members>
   </ref:Type>
   <ref:TypeAlias source="object" target="Object"/>
@@ -110,10 +110,10 @@
     	<parameters name="x"/>
     </members>
     <members xsi:type="ref:Method" name="max" directType="Number" description="Returns the largest of zero or more numbers." static="true">
-    	<parameters name="[value1,valueN]" kind="VARARGS" directType="Number"/>
+    	<parameters name="value" kind="VARARGS" directType="Number"/>
     </members>
     <members xsi:type="ref:Method" name="min" directType="Number" description="Returns the smallest of zero or more numbers." static="true">
-    	<parameters name="[value1,valueN]" kind="VARARGS" directType="Number"/>
+    	<parameters name="value" kind="VARARGS" directType="Number"/>
     </members>
     <members xsi:type="ref:Method" name="pow" directType="Number" description="Returns base to the exponent power, that is, baseexponent." static="true">
     	<parameters name="base" directType="Number"/>
@@ -141,7 +141,7 @@
     </staticConstructor>
   	<members xsi:type="ref:Property" name="prototype" directType="Array" static="true" description="Allows the addition of properties to a Array object."/>
     <members xsi:type="ref:Method" name="concat" description="Joins two or more arrays and returns the result.">
-      <parameters name="[array1,arrayN]" kind="VARARGS"/>
+      <parameters name="array" kind="VARARGS"/>
       <type xsi:type="ref:ArrayType">
         <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
       </type>
@@ -202,7 +202,7 @@
     <members xsi:type="ref:Method" name="splice" description="Removes and adds new elements to an array. Returns the removed elements as an Array">
       <parameters name="index" directType="Number"/>
       <parameters name="howmany" directType="Number"/>
-      <parameters name="[element1,elementN]" kind="VARARGS"/>
+      <parameters name="element" kind="VARARGS"/>
       <type xsi:type="ref:ArrayType">
         <itemType xsi:type="ref:TypeVariableReference" variable="@ROOT/Array/E"/>
       </type>
@@ -386,7 +386,7 @@
     </staticConstructor>
   	<members xsi:type="ref:Property" name="prototype" directType="String" static="true" description="Allows the addition of properties to a String object."/>
   	<members xsi:type="ref:Method" name="fromCharCode" directType="String" static="true" description="Returns a string created by using the specified sequence of Unicode values.">
-  	    <parameters name="[num1,numN]" kind="VARARGS"/>
+  	    <parameters name="num" kind="VARARGS"/>
     </members>
     <members xsi:type="ref:Method" name="anchor" directType="String" description="Creates an HTML anchor.">
       <parameters name="anchorname" directType="String"/>
