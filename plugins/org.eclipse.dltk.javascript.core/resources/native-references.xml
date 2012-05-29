@@ -50,6 +50,56 @@
     <members xsi:type="ref:Method" name="isPrototypeOf" description="Returns a boolean indication whether the specified object is in the prototype chain of the object this method is called upon.">
     	<parameters name="object" directType="Object"/>
     </members>
+    <members xsi:type="ref:Method" name="getPrototypeOf" directType="Object" description="Returns the prototype of the specified object." static="true">
+    	<parameters name="object" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="getOwnPropertyDescriptor" directType="Object" description="Returns a property descriptor for an own property (that is, one directly present on an object, not present by dint of being along an object's prototype chain) of a given object." static="true">
+    	<parameters name="object" directType="Object"/>
+    	<parameters name="prop" directType="String"/>
+    </members>
+    <members xsi:type="ref:Method" name="getOwnPropertyNames" directType="Object" description="Returns an array of all properties (enumerable or not) found upon a given object." static="true">
+    	<parameters name="object" directType="Object"/>
+		<type xsi:type="ref:ArrayType">
+			<itemType xsi:type="ref:SimpleType" target="String"/>
+		</type>
+    </members>
+    <members xsi:type="ref:Method" name="create" directType="Object" description="Creates a new object with the specified prototype object and properties." static="true">
+    	<parameters name="object" directType="Object"/>
+    	<parameters name="properties" directType="Object" kind="OPTIONAL"/>
+    </members>
+    <members xsi:type="ref:Method" name="defineProperty" directType="Object" description="Defines a new property directly on an object, or modifies an existing property on an object, and returns the object." static="true">
+    	<parameters name="object" directType="Object"/>
+    	<parameters name="prop" directType="String"/>
+    	<parameters name="descriptor" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="defineProperties" directType="Object" description="Defines new or modifies existing properties directly on an object, returning the object." static="true">
+    	<parameters name="object" directType="Object"/>
+    	<parameters name="properties" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="seal" description="Seals an object, preventing new properties from being added to it and marking all existing properties as non-configurable. Values of present properties can still be changed as long as they are writable." static="true">
+    	<parameters name="object" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="freeze" directType="Object" description="Freezes an object: that is, prevents new properties from being added to it; prevents existing properties from being removed; and prevents existing properties, or their enumerability, configurability, or writability, from being changed. In essence the object is made effectively immutable. The method returns the object being frozen." static="true">
+    	<parameters name="object" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="preventExtensions" directType="Object" description="Prevents new properties from ever being added to an object (i.e. prevents future extensions to the object)." static="true">
+    	<parameters name="object" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="isSealed" directType="Boolean" description="Determine if an object is sealed." static="true">
+    	<parameters name="object" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="isFrozen" directType="Boolean" description="Determine if an object is frozen." static="true">
+    	<parameters name="object" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="isExtensible" directType="Boolean" description="Determines if an object is extensible (whether it can have new properties added to it)." static="true">
+    	<parameters name="object" directType="Object"/>
+    </members>
+    <members xsi:type="ref:Method" name="keys" description="Returns an array of all own enumerable properties found upon a given object, in the same order as that provided by a for-in loop (the difference being that a for-in loop enumerates properties in the prototype chain as well)." static="true">
+    	<parameters name="object" directType="Object"/>
+		<type xsi:type="ref:ArrayType">
+			<itemType xsi:type="ref:SimpleType" target="String"/><!-- String or Number -->
+		</type>
+    </members>
     <members xsi:type="ref:Method" name="propertyIsEnumerable" description="Returns a boolean indicating if the internal ECMAScript DontEnum attribute is set.">
     	<parameters name="prop" directType="String"/>
     </members>
