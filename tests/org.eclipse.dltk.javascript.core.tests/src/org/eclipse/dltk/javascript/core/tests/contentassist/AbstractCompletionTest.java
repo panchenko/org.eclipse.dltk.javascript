@@ -121,7 +121,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 		final List<String> names = new ArrayList<String>();
 		final Type type = getType(typeName);
 		for (Member member : new TypeMemberQuery(type, predicate)) {
-			if (predicate.evaluate(member) && !names.contains(member.getName()))
+			if (!names.contains(member.getName()))
 				names.add(member.getName());
 		}
 		return Collections.unmodifiableList(names);
