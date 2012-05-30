@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Type.java,v 1.16 2012/04/11 13:36:38 apanchenk Exp $
+ * $Id: Type.java,v 1.17 2012/05/30 15:20:08 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -34,6 +34,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructors <em>Constructors</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInstantiable <em>Instantiable</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritConstructors <em>Inherit Constructors</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritStaticMembers <em>Inherit Static Members</em>}</li>
  * </ul>
  * </p>
  *
@@ -240,6 +241,21 @@ public interface Type extends Element {
      * @generated
      */
     boolean isInheritConstructors();
+
+    /**
+     * Returns the value of the '<em><b>Inherit Static Members</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Inherit Static Members</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Inherit Static Members</em>' attribute.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_InheritStaticMembers()
+     * @model transient="true" changeable="false" volatile="true" derived="true"
+     * @generated
+     */
+    boolean isInheritStaticMembers();
 
     /**
      * <!-- begin-user-doc -->

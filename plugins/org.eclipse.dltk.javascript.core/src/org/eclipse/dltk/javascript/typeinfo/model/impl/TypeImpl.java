@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeImpl.java,v 1.22 2012/04/11 13:36:38 apanchenk Exp $
+ * $Id: TypeImpl.java,v 1.23 2012/05/30 15:20:08 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -52,6 +52,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructors <em>Constructors</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInstantiable <em>Instantiable</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInheritConstructors <em>Inherit Constructors</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInheritStaticMembers <em>Inherit Static Members</em>}</li>
  * </ul>
  * </p>
  *
@@ -177,6 +178,16 @@ public class TypeImpl extends ElementImpl implements Type {
      * @ordered
      */
     protected static final boolean INHERIT_CONSTRUCTORS_EDEFAULT = false;
+
+    /**
+     * The default value of the '{@link #isInheritStaticMembers() <em>Inherit Static Members</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isInheritStaticMembers()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean INHERIT_STATIC_MEMBERS_EDEFAULT = false;
 
     /**
      * <!-- begin-user-doc -->
@@ -402,6 +413,15 @@ public class TypeImpl extends ElementImpl implements Type {
 	 * 
 	 * @generated NOT
 	 */
+	public boolean isInheritStaticMembers() {
+		return getKind() == TypeKind.JAVA;
+	}
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
     public boolean isProxy() {
 		return eIsProxy();
     }
@@ -466,6 +486,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return isInstantiable();
             case TypeInfoModelPackage.TYPE__INHERIT_CONSTRUCTORS:
                 return isInheritConstructors();
+            case TypeInfoModelPackage.TYPE__INHERIT_STATIC_MEMBERS:
+                return isInheritStaticMembers();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -572,6 +594,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return instantiable != INSTANTIABLE_EDEFAULT;
             case TypeInfoModelPackage.TYPE__INHERIT_CONSTRUCTORS:
                 return isInheritConstructors() != INHERIT_CONSTRUCTORS_EDEFAULT;
+            case TypeInfoModelPackage.TYPE__INHERIT_STATIC_MEMBERS:
+                return isInheritStaticMembers() != INHERIT_STATIC_MEMBERS_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }

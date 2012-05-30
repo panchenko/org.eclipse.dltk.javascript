@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.44 2012/04/23 17:42:11 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.45 2012/05/30 15:20:08 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -909,6 +909,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getType_InheritStaticMembers() {
+        return (EAttribute)typeEClass.getEStructuralFeatures().get(9);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getConstructor() {
         return constructorEClass;
     }
@@ -1145,6 +1154,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         createEReference(typeEClass, TYPE__CONSTRUCTORS);
         createEAttribute(typeEClass, TYPE__INSTANTIABLE);
         createEAttribute(typeEClass, TYPE__INHERIT_CONSTRUCTORS);
+        createEAttribute(typeEClass, TYPE__INHERIT_STATIC_MEMBERS);
 
         typeAliasEClass = createEClass(TYPE_ALIAS);
         createEAttribute(typeAliasEClass, TYPE_ALIAS__SOURCE);
@@ -1325,6 +1335,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEReference(getType_Constructors(), this.getConstructor(), null, "constructors", null, 0, -1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEAttribute(getType_Instantiable(), ecorePackage.getEBoolean(), "instantiable", "true", 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
         initEAttribute(getType_InheritConstructors(), ecorePackage.getEBoolean(), "inheritConstructors", null, 0, 1, Type.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEAttribute(getType_InheritStaticMembers(), ecorePackage.getEBoolean(), "inheritStaticMembers", null, 0, 1, Type.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         addEOperation(typeEClass, ecorePackage.getEBoolean(), "isProxy", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 

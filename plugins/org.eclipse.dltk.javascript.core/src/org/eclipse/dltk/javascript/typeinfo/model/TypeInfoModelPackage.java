@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.38 2012/04/23 17:42:12 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.39 2012/05/30 15:20:08 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -362,13 +362,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE__INHERIT_CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 8;
 
     /**
+     * The feature id for the '<em><b>Inherit Static Members</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE__INHERIT_STATIC_MEMBERS = ELEMENT_FEATURE_COUNT + 9;
+
+    /**
      * The number of structural features of the '<em>Type</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 9;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 10;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
@@ -1743,6 +1752,15 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_TYPE__INHERIT_CONSTRUCTORS = TYPE__INHERIT_CONSTRUCTORS;
 
     /**
+     * The feature id for the '<em><b>Inherit Static Members</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__INHERIT_STATIC_MEMBERS = TYPE__INHERIT_STATIC_MEMBERS;
+
+    /**
      * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2678,6 +2696,17 @@ public interface TypeInfoModelPackage extends EPackage {
     EAttribute getType_InheritConstructors();
 
     /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritStaticMembers <em>Inherit Static Members</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Inherit Static Members</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritStaticMembers()
+     * @see #getType()
+     * @generated
+     */
+    EAttribute getType_InheritStaticMembers();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Constructor <em>Constructor</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3441,6 +3470,14 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EAttribute TYPE__INHERIT_CONSTRUCTORS = eINSTANCE.getType_InheritConstructors();
+
+        /**
+         * The meta object literal for the '<em><b>Inherit Static Members</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute TYPE__INHERIT_STATIC_MEMBERS = eINSTANCE.getType_InheritStaticMembers();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ConstructorImpl <em>Constructor</em>}' class.

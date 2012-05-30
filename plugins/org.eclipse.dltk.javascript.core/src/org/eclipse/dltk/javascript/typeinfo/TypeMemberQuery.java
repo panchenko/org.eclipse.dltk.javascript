@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -107,6 +108,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 	 * Adds the specified type with the specified predicate to this query.
 	 */
 	public void add(Type type, Predicate<Member> predicate) {
+		Assert.isNotNull(type);
 		types.add(new QueueItem(type, predicate));
 	}
 
@@ -165,14 +167,35 @@ public class TypeMemberQuery implements Iterable<Member> {
 	private class MemberIterator extends CompoundIterator<Member> {
 
 		private final TypeIterator typeIterator;
+		private final Set<Type> entrypoints = new HashSet<Type>();
 
 		public MemberIterator() {
+			for (QueueItem item : types) {
+				entrypoints.add(item.type);
+			}
 			typeIterator = new TypeIterator();
 			current = Collections.<Member> emptyList().iterator();
 		}
 
-		protected Collection<Member> filter(Collection<Member> members) {
-			return members;
+		private Collection<Member> filter(Collection<Member> members) {
+			final List<Member> result = new ArrayList<Member>();
+			for (Member member : members) {
+				if (isValid(member)) {
+					result.add(member);
+				}
+			}
+			return result;
+		}
+
+		protected boolean isValid(Member member) {
+			if (member.isStatic()) {
+				final Type owner = member.getDeclaringType();
+				return owner != null
+						&& (owner.isInheritStaticMembers() || entrypoints
+								.contains(owner));
+			} else {
+				return true;
+			}
 		}
 
 		@Override
@@ -215,14 +238,9 @@ public class TypeMemberQuery implements Iterable<Member> {
 		}
 
 		@Override
-		protected Collection<Member> filter(Collection<Member> members) {
-			final List<Member> result = new ArrayList<Member>();
-			for (Member member : members) {
-				if (processed.add(MethodKey.createKey(member))) {
-					result.add(member);
-				}
-			}
-			return result;
+		protected boolean isValid(Member member) {
+			return super.isValid(member)
+					&& processed.add(MethodKey.createKey(member));
 		}
 	}
 
