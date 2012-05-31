@@ -32,7 +32,7 @@
     	<parameters name="thisArg"/>
     	<parameters name="argsArray" directType="Array" kind="OPTIONAL"/>
     </members>
-  	<members xsi:type="ref:Method" name="call" directType="Boolean" description="Calls (executes) a method of another object in the context of a different object (the calling object); arguments can be passed as they are." >
+  	<members xsi:type="ref:Method" name="call" directType="Object" description="Calls (executes) a method of another object in the context of a different object (the calling object); arguments can be passed as they are." >
     	<parameters name="thisArg"/>
     	<parameters name="arg" kind="VARARGS"/>
     </members>
