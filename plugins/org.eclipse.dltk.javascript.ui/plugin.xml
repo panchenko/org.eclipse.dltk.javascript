@@ -968,4 +968,11 @@
    </correctionProcessor>
 </extension>
 
+ <extension point="org.eclipse.ui.ide.markerSupport">
+   <markerTypeCategory name="%JavaScriptProblemMarkerCategory.name">
+      <markerTypeReference id="org.eclipse.dltk.javascript.core.jsproblem" />
+      <markerTypeReference id="org.eclipse.dltk.javascript.core.jsdocproblem" />      
+   </markerTypeCategory>
+ </extension>
+
 </plugin>
