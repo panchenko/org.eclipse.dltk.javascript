@@ -240,6 +240,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 		@Override
 		protected boolean isValid(Member member) {
 			return super.isValid(member)
+					&& !processed.contains(member.getName()) // JS member
 					&& processed.add(MethodKey.createKey(member));
 		}
 	}
