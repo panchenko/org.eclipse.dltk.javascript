@@ -30,4 +30,12 @@ public interface IValueParent {
 	 */
 	IValueReference getChild(String name);
 
+	/**
+	 * Creates the local child with the specified name.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	IValueReference createChild(String name);
+
 }

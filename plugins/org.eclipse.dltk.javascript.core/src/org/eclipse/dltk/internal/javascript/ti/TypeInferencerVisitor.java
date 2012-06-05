@@ -238,8 +238,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (left != null) {
 				for (IModelBuilder modelBuilder : context.getModelBuilders()) {
 					if (modelBuilder instanceof IModelBuilderExtension) {
-						((IModelBuilderExtension) modelBuilder).processAssignment(
-								node.getLeftExpression(), left);
+						((IModelBuilderExtension) modelBuilder)
+								.processAssignment(node.getLeftExpression(),
+										left);
 					}
 				}
 			}
@@ -417,6 +418,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				argTypes[i] = arguments[i].getTypes();
 			}
 		}
+		// TODO (alex) can be pre-evaluated in GenericParameter objects.
 		final boolean genericParams[] = new boolean[method.getParameters()
 				.size()];
 		for (int i = 0; i < method.getParameters().size(); ++i) {
@@ -1409,7 +1411,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						NamedNodeMap attributes = item.getAttributes();
 						for (int a = 0; a < attributes.getLength(); a++) {
 							Node attribute = attributes.item(a);
-							xmlValue.createChild("@" + attribute.getNodeName());
+							xmlValue.createChild("@" + attribute.getNodeName(),
+									0);
 						}
 						createXmlChilds(xmlType, xmlValue, item.getChildNodes());
 					} else {
@@ -1436,13 +1439,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					continue;
 				}
 			}
-			IValue nodeValue = xmlValue.createChild(item.getNodeName());
+			IValue nodeValue = xmlValue.createChild(item.getNodeName(), 0);
 			nodeValue.setDeclaredType(xmlType);
 			NamedNodeMap attributes = item.getAttributes();
 			if (attributes != null) {
 				for (int a = 0; a < attributes.getLength(); a++) {
 					Node attribute = attributes.item(a);
-					nodeValue.createChild("@" + attribute.getNodeName());
+					nodeValue.createChild("@" + attribute.getNodeName(), 0);
 				}
 			}
 			createXmlChilds(xmlType, nodeValue, item.getChildNodes());

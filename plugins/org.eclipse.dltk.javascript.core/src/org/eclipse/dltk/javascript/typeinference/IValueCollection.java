@@ -11,20 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinference;
 
-
 public interface IValueCollection extends IValueParent {
 
 	boolean isScope();
 
 	IValueCollection getParent();
-
-	/**
-	 * Creates the local child with the specified name.
-	 * 
-	 * @param name
-	 * @return
-	 */
-	IValueReference createChild(String name);
 
 	IValueReference getReturnValue();
 

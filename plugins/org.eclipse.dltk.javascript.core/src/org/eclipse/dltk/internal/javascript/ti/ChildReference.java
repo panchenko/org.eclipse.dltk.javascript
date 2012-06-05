@@ -68,7 +68,7 @@ public class ChildReference extends AbstractReference {
 		}
 		IValue parentValue = parent.createValue();
 		if (parentValue != null) {
-			return parentValue.createChild(name);
+			return parentValue.createChild(name, 0);
 		} else {
 			return null;
 		}

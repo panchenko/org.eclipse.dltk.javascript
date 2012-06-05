@@ -101,7 +101,7 @@ public abstract class ValueCollection implements IValueCollection,
 		while (!coll.isScope()) {
 			coll = coll.getParent();
 		}
-		IValue childValue = getValue().createChild(name);
+		IValue childValue = getValue().createChild(name, 0);
 		if (coll != this) {
 			getValue().putChild(name, childValue);
 		}

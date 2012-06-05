@@ -41,6 +41,10 @@ public enum PhantomValueReference implements IValueReference, IValueProvider {
 		return this;
 	}
 
+	public IValueReference createChild(String name) {
+		return this;
+	}
+
 	public IValueReference getParent() {
 		return null;
 	}

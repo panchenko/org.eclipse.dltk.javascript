@@ -25,7 +25,7 @@ public class PackagesValue extends Value {
 	}
 
 	@Override
-	public IValue createChild(String name) {
+	public IValue createChild(String name, int flags) {
 		Value child = createChildImpl(name);
 		putDirectChild(name, child);
 		return child;

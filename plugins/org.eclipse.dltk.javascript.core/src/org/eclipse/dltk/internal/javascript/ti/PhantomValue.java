@@ -34,7 +34,7 @@ public enum PhantomValue implements IValue {
 		return this;
 	}
 
-	public IValue createChild(String name) {
+	public IValue createChild(String name, int flags) {
 		return this;
 	}
 

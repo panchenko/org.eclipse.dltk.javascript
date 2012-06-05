@@ -20,13 +20,15 @@ import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 
 public interface IValue {
 
+	int CREATE = 1;
+
 	boolean hasChild(String name);
 
 	Set<String> getDirectChildren();
 
 	IValue getChild(String name, boolean resolve);
 
-	IValue createChild(String name);
+	IValue createChild(String name, int flags);
 
 	IRType getDeclaredType();
 

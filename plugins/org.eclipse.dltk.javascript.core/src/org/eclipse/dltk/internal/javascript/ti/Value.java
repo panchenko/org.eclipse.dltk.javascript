@@ -85,21 +85,24 @@ public class Value extends ImmutableValue {
 
 		public void process(ImmutableValue value, Set<IValue> result) {
 			if (result.isEmpty() && !value.hasReferences()) {
-				result.add(value.createChild(childName));
+				result.add(value.createChild(childName, 0));
 			}
 		}
 
 	}
 
-	public IValue createChild(String name) {
+	@Override
+	public IValue createChild(String name, int flags) {
 		IValue child = children.get(name);
 		if (child == null) {
 			child = inherited.get(name);
 			if (child == null) {
-				// creating new child, so ignore external elements
-				child = findMember(name, false);
-				if (child != null) {
-					return child;
+				if ((flags & CREATE) == 0) {
+					// creating new child, so ignore external elements
+					child = findMember(name, false);
+					if (child != null) {
+						return child;
+					}
 				}
 				if (hasReferences()) {
 					Set<IValue> result = new HashSet<IValue>();
@@ -156,7 +159,7 @@ public class Value extends ImmutableValue {
 						IValueReference.FUNCTION_OP, false);
 				if (returnType != null) {
 					final JSTypeSet myReturnTypes = createChild(
-							IValueReference.FUNCTION_OP).getTypes();
+							IValueReference.FUNCTION_OP, 0).getTypes();
 					myReturnTypes.addAll(returnType.getTypes());
 					myReturnTypes.addAll(returnType.getDeclaredTypes());
 				}
@@ -192,7 +195,7 @@ public class Value extends ImmutableValue {
 			}
 			for (Map.Entry<String, ImmutableValue> entry : src.children
 					.entrySet()) {
-				IValue child = createChild(entry.getKey());
+				IValue child = createChild(entry.getKey(), 0);
 				if (child instanceof Value) {
 					((Value) child).addValueRecursive(entry.getValue(),
 							processing, depth + 1);

@@ -250,8 +250,8 @@ public class ImmutableValue implements IValue, IValue2 {
 		if (value == null && (declaredType != null || !types.isEmpty())) {
 			final ITypeSystem typeSystem = getTypeSystem();
 			if (declaredType != null) {
-				value = ElementValue.findMemberA(typeSystem, declaredType,
-						name);
+				value = ElementValue
+						.findMemberA(typeSystem, declaredType, name);
 				if (value != null) {
 					if (elementValues == null)
 						elementValues = new HashMap<String, IValue>(4, 0.9f);
@@ -298,7 +298,7 @@ public class ImmutableValue implements IValue, IValue2 {
 		return children.containsKey(name) || inherited.containsKey(name);
 	}
 
-	public IValue createChild(String name) {
+	public IValue createChild(String name, int flags) {
 		return null;
 	}
 

@@ -773,7 +773,7 @@ public abstract class ElementValue implements IValue {
 		return false;
 	}
 
-	public final IValue createChild(String name) {
+	public final IValue createChild(String name, int flags) {
 		return getChild(name, true);
 		// throw new UnsupportedOperationException();
 	}

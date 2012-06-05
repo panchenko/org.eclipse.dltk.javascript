@@ -34,7 +34,7 @@ public class PackageOrClassValue extends Value {
 	}
 
 	@Override
-	public IValue createChild(String childName) {
+	public IValue createChild(String childName, int flags) {
 		Value child = createChildImpl(childName);
 		putDirectChild(childName, child);
 		return child;

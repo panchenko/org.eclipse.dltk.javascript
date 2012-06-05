@@ -162,6 +162,11 @@ public abstract class AbstractReference implements IValueReference,
 		return new ChildReference(this, name);
 	}
 
+	public IValueReference createChild(String name) {
+		createValue().createChild(name, IValue.CREATE);
+		return getChild(name);
+	}
+
 	public boolean hasChild(String name) {
 		IValue value = getValue();
 		return value != null && value.getChild(name, true) != null;
