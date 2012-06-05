@@ -660,7 +660,18 @@
     <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a String value for this object."/>
     <members xsi:type="ref:Method" name="valueOf" directType="XMLList" description="The valueOf method returns this QName object"/>
  </ref:Type>
-	<ref:TypeLiteral target="Error"/>
+ <ref:Type name="JSON" kind="PREDEFINED">
+    <members xsi:type="ref:Method" name="parse" directType="Object" description="Parse a string as JSON, optionally transforming the value produced by parsing." static="true">
+      <parameters name="text" directType="String"/>
+      <parameters name="reviver" kind="OPTIONAL"/>
+    </members>
+    <members xsi:type="ref:Method" name="stringify" directType="String" description="Convert a value to JSON, optionally replacing values if a replacer function is specified, or optionally including only the specified properties if a replacer array is specified. The optional space causes the resulting string to be pretty-printed." static="true">
+      <parameters name="value"/>
+      <parameters name="replacer" kind="OPTIONAL"/>
+      <parameters name="space" kind="OPTIONAL"/>
+    </members>
+ </ref:Type>
+ 	<ref:TypeLiteral target="Error"/>
 	<ref:TypeLiteral target="EvalError"/>
 	<ref:TypeLiteral target="RangeError"/>
 	<ref:TypeLiteral target="ReferenceError"/>
@@ -680,4 +691,5 @@
 	<ref:TypeLiteral target="XMLList"/>
 	<ref:TypeLiteral target="Namespace"/>
 	<ref:TypeLiteral target="QName"/>
+	<ref:TypeLiteral target="JSON"/>
 </xmi:XMI>
