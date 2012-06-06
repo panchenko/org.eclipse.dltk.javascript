@@ -2203,5 +2203,60 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
+	
+	public void testTypedArrayReturnValue() {
+		List<String> lines = new StringList();
+		lines.add("function SomeCustomType() {");
+		lines.add("	this.someExistingMethod = function() {}");
+		lines.add("}");
+
+		lines.add("/** ");
+		lines.add("* @return {Array<SomeCustomType>}");
+		lines.add("*/");
+		lines.add("function getTypedArray() {");
+		lines.add("	/** @type {Array<SomeCustomType>} */");
+		lines.add("	var array = new Array();");
+		lines.add("	array[0] = new SomeCustomType();");
+		lines.add("	array[0].someExistingMethod();");
+		lines.add("	return array;");
+		lines.add("}");
+
+		lines.add("function test() {");
+		lines.add("	/** @type {Array<SomeCustomType>} */");
+		lines.add("	var typedArray = getTypedArray();  ");
+		lines.add("	for each(var item in typedArray) {");
+		lines.add("	    item.someExistingMethod(); ");
+		lines.add("	}");
+		lines.add("}");
+		final List<IProblem> problems = validate(lines.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+	
+	public void testTypedArrayReturnValueWithoutTypeDeclare() {
+		List<String> lines = new StringList();
+		lines.add("function SomeCustomType() {");
+		lines.add("	this.someExistingMethod = function() {}");
+		lines.add("}");
+
+		lines.add("/** ");
+		lines.add("* @return {Array<SomeCustomType>}");
+		lines.add("*/");
+		lines.add("function getTypedArray() {");
+		lines.add("	/** @type {Array<SomeCustomType>} */");
+		lines.add("	var array = new Array();");
+		lines.add("	array[0] = new SomeCustomType();");
+		lines.add("	array[0].someExistingMethod();");
+		lines.add("	return array;");
+		lines.add("}");
+
+		lines.add("function test() {");
+		lines.add("	var typedArray = getTypedArray();  ");
+		lines.add("	for each(var item in typedArray) {");
+		lines.add("	    item.someExistingMethod(); ");
+		lines.add("	}");
+		lines.add("}");
+		final List<IProblem> problems = validate(lines.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 
 }
