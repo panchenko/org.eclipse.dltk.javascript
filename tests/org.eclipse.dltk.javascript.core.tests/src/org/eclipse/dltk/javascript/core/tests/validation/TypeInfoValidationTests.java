@@ -2203,7 +2203,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
 				.getID());
 	}
-	
+
 	public void testTypedArrayReturnValue() {
 		List<String> lines = new StringList();
 		lines.add("function SomeCustomType() {");
@@ -2231,8 +2231,10 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(lines.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testTypedArrayReturnValueWithoutTypeDeclare() {
+		if (notYetImplemented())
+			return;
 		List<String> lines = new StringList();
 		lines.add("function SomeCustomType() {");
 		lines.add("	this.someExistingMethod = function() {}");
