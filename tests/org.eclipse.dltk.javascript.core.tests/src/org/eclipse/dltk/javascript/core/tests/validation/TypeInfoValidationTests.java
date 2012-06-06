@@ -2233,8 +2233,6 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	}
 
 	public void testTypedArrayReturnValueWithoutTypeDeclare() {
-		if (notYetImplemented())
-			return;
 		List<String> lines = new StringList();
 		lines.add("function SomeCustomType() {");
 		lines.add("	this.someExistingMethod = function() {}");
