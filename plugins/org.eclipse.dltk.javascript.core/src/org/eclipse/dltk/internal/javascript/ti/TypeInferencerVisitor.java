@@ -693,11 +693,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			if (type instanceof IRArrayType
 					&& JavaScriptValidations.typeOf(itemReference) == null) {
 				final IRType itemType = ((IRArrayType) type).getItemType();
-				itemReference.setDeclaredType(itemType);
+				setIRType(itemReference, itemType, true);
 			} else if (type instanceof IRMapType
 					&& JavaScriptValidations.typeOf(itemReference) == null) {
 				final IRType itemType = ((IRMapType) type).getValueType();
-				itemReference.setDeclaredType(itemType);
+				setIRType(itemReference, itemType, true);
 			} else if (ITypeNames.XMLLIST.equals(type.getName())) {
 				itemReference.setDeclaredType(JSTypeSet.ref(context
 						.getType(ITypeNames.XML)));
