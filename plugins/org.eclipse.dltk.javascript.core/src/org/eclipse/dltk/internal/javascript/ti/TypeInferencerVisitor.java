@@ -106,9 +106,11 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilderExtension;
+import org.eclipse.dltk.javascript.typeinfo.IRAnyType;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
+import org.eclipse.dltk.javascript.typeinfo.IRNoneType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
@@ -688,8 +690,27 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	public IValueReference visitForEachInStatement(ForEachInStatement node) {
 		IValueReference itemReference = visit(node.getItem());
 		IValueReference iteratorReference = visit(node.getIterator());
-		IRType type = JavaScriptValidations.typeOf(iteratorReference);
-		if (type != null) {
+		JSTypeSet typeSet = JavaScriptValidations.getTypes(iteratorReference);
+		if (!typeSet.isEmpty()) {
+			IRType type = null;
+			// try to get the best type, just take the first one, and if the the
+			// latter just have Any or None types skip those.
+			for (IRType irType : typeSet) {
+				if (type == null) {
+					type = irType;
+				} else if (irType instanceof IRArrayType) {
+					IRType itemType = ((IRArrayType) irType).getItemType();
+					if (!(itemType instanceof IRNoneType || itemType instanceof IRAnyType)) {
+						type = irType;
+					}
+				} else if (irType instanceof IRMapType) {
+					IRType itemType = ((IRMapType) irType).getValueType();
+					if (!(itemType instanceof IRNoneType || itemType instanceof IRAnyType)) {
+						type = irType;
+					}
+				}
+			}
+
 			if (type instanceof IRArrayType
 					&& JavaScriptValidations.typeOf(itemReference) == null) {
 				final IRType itemType = ((IRArrayType) type).getItemType();

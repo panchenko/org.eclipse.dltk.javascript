@@ -79,6 +79,21 @@ public class JavaScriptValidations {
 		return null;
 	}
 
+	public static JSTypeSet getTypes(IValueReference reference) {
+		if (reference != null) {
+			JSTypeSet set = JSTypeSet.create();
+			if (reference.getDeclaredType() != null) {
+				set.add(reference.getDeclaredType());
+			}
+			JSTypeSet declaredTypes = reference.getDeclaredTypes();
+			set.addAll(declaredTypes);
+			JSTypeSet types = reference.getTypes();
+			set.addAll(types);
+			return set;
+		}
+		return JSTypeSet.emptySet();
+	}
+
 	protected static Reporter createReporter(IBuildContext context) {
 		return new Reporter(context.getLineTracker(),
 				context.getProblemReporter());
