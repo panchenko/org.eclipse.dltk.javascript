@@ -268,7 +268,7 @@ public class ScriptdocContentAccess {
 				possibleDocEnd, possibleDocEnd + range.getLength(), member);
 		final String sm = buf.getText(possibleDocStart, possibleDocEnd
 				- possibleDocStart);
-		int start = sm.indexOf(JAVADOC_BEGIN);
+		int start = sm.lastIndexOf(JAVADOC_BEGIN);
 		if (start == -1) {
 			return null;
 		}
