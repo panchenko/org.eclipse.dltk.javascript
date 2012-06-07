@@ -427,7 +427,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		public String getName() {
 			final String rawName = getRawName();
-			return rawName != null ? "Class<" + rawName + ">" : "Class";
+			return rawName != null ? JSDocTypeParser.CLASS + "<" + rawName
+					+ ">" : JSDocTypeParser.CLASS;
 		}
 
 		public Type getTarget() {

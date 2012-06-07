@@ -23,6 +23,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
@@ -31,6 +32,7 @@ import org.eclipse.emf.common.util.EList;
 public class JSDocTypeParser extends JSDocTypeParserBase {
 
 	public static final String FUNCTION = "function";
+	public static final String CLASS = "Class";
 
 	private JSDocTypeParserExtension extension;
 
@@ -186,6 +188,8 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 	protected JSType createType(String typeName) {
 		if (ITypeNames.UNDEFINED.equals(typeName)) {
 			return TypeInfoModelFactory.eINSTANCE.createUndefinedType();
+		} else if (CLASS.equals(typeName)) {
+			return TypeInfoModelFactory.eINSTANCE.createClassType();
 		} else {
 			return TypeUtil.ref(typeName);
 		}
@@ -202,6 +206,11 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 			} else {
 				return createArray(createType(ITypeNames.OBJECT));
 			}
+		} else if (CLASS.equals(baseType) && typeParams.size() >= 1) {
+			final JSType typeParam = typeParams.get(0);
+			return TypeUtil
+					.classType(typeParam instanceof SimpleType ? ((SimpleType) typeParam)
+							.getTarget() : null);
 		} else if (ITypeNames.OBJECT.equals(baseType)) {
 			if (typeParams.size() == 1) {
 				return TypeUtil.mapOf(null, typeParams.get(0));

@@ -11,6 +11,7 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
@@ -129,7 +130,8 @@ public class ClassTypeImpl extends EObjectImpl implements ClassType {
 	 */
 	public String getName() {
 		final String rawName = getRawName();
-		return rawName != null ? "Class<" + rawName + ">" : "Class";
+		return rawName != null ? JSDocTypeParser.CLASS + "<" + rawName + ">"
+				: JSDocTypeParser.CLASS;
     }
 
     /**
