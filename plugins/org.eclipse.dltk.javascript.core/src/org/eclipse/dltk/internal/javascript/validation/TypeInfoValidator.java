@@ -798,12 +798,25 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 			final IRType expressionType = JavaScriptValidations
 					.typeOf(reference);
-			if (expressionType != null
-					&& expressionType instanceof IRFunctionType) {
-				validateCallExpressionRMethod(node, reference, arguments,
-						methodNode, new RMethodFunctionWrapper(
-								(IRFunctionType) expressionType));
-				return;
+			if (expressionType != null) {
+				if (expressionType instanceof IRFunctionType) {
+					validateCallExpressionRMethod(node, reference, arguments,
+							methodNode, new RMethodFunctionWrapper(
+									(IRFunctionType) expressionType));
+					return;
+				} else if (expressionType instanceof IRClassType) {
+					final Type target = ((IRClassType) expressionType)
+							.getTarget();
+					if (target != null) {
+						final Constructor constructor = target
+								.getStaticConstructor();
+						if (constructor != null) {
+							validateCallExpressionMethod(node, reference,
+									arguments, methodNode, constructor);
+							return;
+						}
+					}
+				}
 			}
 			if (!isArrayLookup(expression) && !isUntypedParameter(reference)) {
 				scope.add(path);
