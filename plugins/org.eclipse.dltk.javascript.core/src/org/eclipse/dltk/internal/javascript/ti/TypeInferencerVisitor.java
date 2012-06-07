@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.BOOLEAN;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.STRING;
@@ -189,40 +190,32 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						.equals(srcType.getName()));
 	}
 
-	private static final int K_NUMBER = 1;
-	private static final int K_STRING = 2;
-	private static final int K_OTHER = 4;
-
 	@Override
 	public IValueReference visitArrayInitializer(ArrayInitializer node) {
-		int kind = 0;
+		final JSTypeSet types = JSTypeSet.create();
 		for (ASTNode astNode : node.getItems()) {
 			if (astNode instanceof StringLiteral) {
-				kind |= K_STRING;
+				types.add(JSTypeSet.ref(STRING));
 			} else if (astNode instanceof DecimalLiteral) {
-				kind |= K_NUMBER;
-			} else if (astNode instanceof NullExpression) {
+				types.add(JSTypeSet.ref(NUMBER));
+			} else if (astNode instanceof BooleanLiteral) {
+				types.add(JSTypeSet.ref(BOOLEAN));
+			} else if (astNode instanceof NullExpression
+					|| astNode instanceof EmptyExpression) {
 				// ignore
 			} else {
 				final IValueReference child = visit(astNode);
 				if (child != null && child.exists()) {
-					if (isNumber(child))
-						kind |= K_NUMBER;
-					else if (isString(child))
-						kind |= K_STRING;
-					else
-						kind |= K_OTHER;
-				} else
-					kind |= K_OTHER;
+					types.addAll(JavaScriptValidations.getTypes(child));
+				}
+				// TODO (alex) else add(Obect) ?
 			}
 		}
-		if (kind == K_STRING) {
+		if (types.size() == 1) {
 			return context.getFactory().create(peekContext(),
-					JSTypeSet.arrayOf(JSTypeSet.ref(STRING)));
-		} else if (kind == K_NUMBER) {
-			return context.getFactory().create(peekContext(),
-					JSTypeSet.arrayOf(JSTypeSet.ref(NUMBER)));
+					JSTypeSet.arrayOf(types.getFirst()));
 		} else {
+			// TODO (alex) if not empty then evaluate common base type.
 			return context.getFactory().createArray(peekContext());
 		}
 	}
