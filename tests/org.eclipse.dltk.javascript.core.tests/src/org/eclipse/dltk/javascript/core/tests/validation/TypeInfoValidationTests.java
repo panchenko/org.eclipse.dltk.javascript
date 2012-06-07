@@ -2259,4 +2259,28 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testDeclaredClassAsFunction() {
+		final StringList code = new StringList();
+		code.add("/** @type {Class<String>} */");
+		code.add("var STRING;");
+		code.add("function testStr() {");
+		code.add("  return STRING('');");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testDeclaredClassAsFunctionError() {
+		final StringList code = new StringList();
+		code.add("/** @type {Class<String>} */");
+		code.add("var STRING;");
+		code.add("function testStr() {");
+		code.add("  return STRING(1,2,3);");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+	}
+
 }
