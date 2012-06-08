@@ -187,20 +187,28 @@ public class FlowValidation extends AbstractNavigationVisitor<FlowStatus>
 			final FlowStatus result = super.visitFunctionStatement(node);
 			if (scope.contains(FlowEndKind.RETURNS_VALUE)
 					&& (scope.contains(FlowEndKind.RETURNS) || result.noReturn)) {
-				reporter.setMessage(
-						JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE,
-						node.getName() != null ? NLS.bind(
-								"function {0} does not always return a value",
-								node.getName().getName())
-								: "anonymous function does not always return a value");
-				reporter.setRange(node.getBody().getRC(), node.getBody()
-						.getRC() + 1);
-				reporter.report();
+				reportInconsistentReturn(node);
 			}
 			return result;
 		} finally {
 			scope = savedScope;
 		}
+	}
+
+	protected void reportInconsistentReturn(FunctionStatement node) {
+		reportInconsistentReturn(reporter, node);
+	}
+
+	public static void reportInconsistentReturn(final Reporter reporter,
+			FunctionStatement node) {
+		reporter.setMessage(
+				JavaScriptProblems.FUNCTION_NOT_ALWAYS_RETURN_VALUE,
+				node.getName() != null ? NLS.bind(
+						"function {0} does not always return a value", node
+								.getName().getName())
+						: "anonymous function does not always return a value");
+		reporter.setRange(node.getBody().getRC(), node.getBody().getRC() + 1);
+		reporter.report();
 	}
 
 	@Override

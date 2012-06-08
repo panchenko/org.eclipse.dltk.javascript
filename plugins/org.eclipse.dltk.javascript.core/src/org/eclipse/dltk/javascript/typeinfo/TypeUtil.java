@@ -331,4 +331,15 @@ public class TypeUtil {
 		return Collections.emptyList();
 	}
 
+	public static boolean isUndefined(IRType type) {
+		if (type == JSTypeSet.undefined()) {
+			return true;
+		} else if (type instanceof IRUnionType) {
+			return ((IRUnionType) type).getTargets().contains(
+					JSTypeSet.undefined());
+		} else {
+			return false;
+		}
+	}
+
 }

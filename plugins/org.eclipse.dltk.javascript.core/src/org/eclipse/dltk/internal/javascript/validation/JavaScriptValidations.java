@@ -39,6 +39,9 @@ import org.eclipse.emf.common.util.EList;
 
 public class JavaScriptValidations {
 
+	static final String ATTR_INCONSISTENT_RETURNS = JavaScriptValidations.class
+			.getName() + ".INCONSISTENT_RETURNS";
+
 	public static Script parse(IBuildContext context) {
 		final IModuleDeclaration savedAST = (IModuleDeclaration) context
 				.get(IBuildContext.ATTR_MODULE_DECLARATION);

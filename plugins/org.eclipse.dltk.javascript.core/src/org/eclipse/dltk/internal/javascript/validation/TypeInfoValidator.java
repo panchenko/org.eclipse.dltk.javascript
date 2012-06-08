@@ -62,6 +62,7 @@ import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
+import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -115,8 +116,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 		inferencer.setModelElement(context.getSourceModule());
 		final JSProblemReporter reporter = JavaScriptValidations
 				.createReporter(context);
+		@SuppressWarnings("unchecked")
+		final Set<FunctionStatement> inconsistentReturns = (Set<FunctionStatement>) context
+				.get(JavaScriptValidations.ATTR_INCONSISTENT_RETURNS);
 		final ValidationVisitor visitor = new ValidationVisitor(inferencer,
-				reporter);
+				reporter, inconsistentReturns);
 		inferencer.setVisitor(visitor);
 		final TypeChecker typeChecker = new TypeChecker(inferencer, reporter);
 		visitor.setTypeChecker(typeChecker);
@@ -383,11 +387,14 @@ public class TypeInfoValidator implements IBuildParticipant {
 	public static class ValidationVisitor extends TypeInferencerVisitor {
 
 		private final List<ExpressionValidator> expressionValidators = new ArrayList<ExpressionValidator>();
+		private final Set<FunctionStatement> inconsistentReturns;
 
 		public ValidationVisitor(ITypeInferenceContext context,
-				JSProblemReporter reporter) {
+				JSProblemReporter reporter,
+				Set<FunctionStatement> inconsistentReturns) {
 			super(context);
 			this.reporter = reporter;
+			this.inconsistentReturns = inconsistentReturns;
 		}
 
 		private final Map<ASTNode, VisitorMode> modes = new IdentityHashMap<ASTNode, VisitorMode>();
@@ -427,6 +434,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 		@Override
 		public void done() {
 			super.done();
+			if (inconsistentReturns != null && !inconsistentReturns.isEmpty()
+					&& reporter instanceof Reporter) {
+				final Reporter r = (Reporter) reporter;
+				for (FunctionStatement statement : inconsistentReturns) {
+					FlowValidation.reportInconsistentReturn(r, statement);
+				}
+			}
 			final ISuppressWarningsState suppressWarnings = reporter
 					.getSuppressWarnings();
 			try {
@@ -506,14 +520,20 @@ public class TypeInfoValidator implements IBuildParticipant {
 			functionScopes.push(new FunctionScope());
 		}
 
-		public void leaveFunctionScope(IRMethod method) {
+		public void leaveFunctionScope(IRMethod method,
+				FunctionStatement function) {
 			final FunctionScope scope = functionScopes.pop();
 			if (method != null) {
+				if (inconsistentReturns != null && method.getType() != null
+						&& TypeUtil.isUndefined(method.getType())) {
+					inconsistentReturns.remove(function);
+				}
 				if (!scope.returnNodes.isEmpty()) {
 					// method.setType(context.resolveTypeRef(method.getType()));
 					pushExpressionValidator(new TestReturnStatement(method,
 							scope.returnNodes));
-				} else if (!scope.throwsException && method.getType() != null) {
+				} else if (!scope.throwsException && method.getType() != null
+						&& !TypeUtil.isUndefined(method.getType())) {
 					final ReferenceLocation location = method.getLocation();
 					reporter.reportProblem(
 							JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
@@ -533,7 +553,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			enterFunctionScope();
 			IValueReference reference = super.visitFunctionStatement(node);
 			final IRMethod method = (IRMethod) reference.getAttribute(R_METHOD);
-			leaveFunctionScope(method);
+			leaveFunctionScope(method, node);
 
 			return reference;
 		}
