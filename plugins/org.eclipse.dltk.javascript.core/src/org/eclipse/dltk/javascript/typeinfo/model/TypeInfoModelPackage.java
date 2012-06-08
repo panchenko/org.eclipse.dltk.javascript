@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.39 2012/05/30 15:20:08 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.40 2012/06/08 14:34:53 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -663,13 +663,22 @@ public interface TypeInfoModelPackage extends EPackage {
 	int METHOD__PARAMETERS = MEMBER_FEATURE_COUNT + 0;
 
     /**
+     * The feature id for the '<em><b>Abstract</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int METHOD__ABSTRACT = MEMBER_FEATURE_COUNT + 1;
+
+    /**
      * The number of structural features of the '<em>Method</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int METHOD_FEATURE_COUNT = MEMBER_FEATURE_COUNT + 1;
+	int METHOD_FEATURE_COUNT = MEMBER_FEATURE_COUNT + 2;
 
     /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl <em>Parameter</em>}' class.
@@ -833,6 +842,15 @@ public interface TypeInfoModelPackage extends EPackage {
      * @ordered
      */
     int CONSTRUCTOR__PARAMETERS = METHOD__PARAMETERS;
+
+    /**
+     * The feature id for the '<em><b>Abstract</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CONSTRUCTOR__ABSTRACT = METHOD__ABSTRACT;
 
     /**
      * The number of structural features of the '<em>Constructor</em>' class.
@@ -1953,6 +1971,15 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_METHOD__PARAMETERS = METHOD__PARAMETERS;
 
     /**
+     * The feature id for the '<em><b>Abstract</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_METHOD__ABSTRACT = METHOD__ABSTRACT;
+
+    /**
      * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2813,6 +2840,17 @@ public interface TypeInfoModelPackage extends EPackage {
 	EReference getMethod_Parameters();
 
 	/**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Method#isAbstract <em>Abstract</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Abstract</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Method#isAbstract()
+     * @see #getMethod()
+     * @generated
+     */
+    EAttribute getMethod_Abstract();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Parameter <em>Parameter</em>}'.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3568,6 +3606,14 @@ public interface TypeInfoModelPackage extends EPackage {
 		EReference METHOD__PARAMETERS = eINSTANCE.getMethod_Parameters();
 
 		/**
+         * The meta object literal for the '<em><b>Abstract</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute METHOD__ABSTRACT = eINSTANCE.getMethod_Abstract();
+
+        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ParameterImpl <em>Parameter</em>}' class.
          * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->

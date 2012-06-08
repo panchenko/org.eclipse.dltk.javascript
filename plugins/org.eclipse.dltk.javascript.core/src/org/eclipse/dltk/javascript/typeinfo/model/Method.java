@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: Method.java,v 1.3 2011/11/16 11:57:43 apanchenk Exp $
+ * $Id: Method.java,v 1.4 2012/06/08 14:34:53 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Method#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Method#isAbstract <em>Abstract</em>}</li>
  * </ul>
  * </p>
  *
@@ -47,6 +48,32 @@ public interface Method extends Member {
      * @generated
      */
 	EList<Parameter> getParameters();
+
+    /**
+     * Returns the value of the '<em><b>Abstract</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Abstract</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Abstract</em>' attribute.
+     * @see #setAbstract(boolean)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getMethod_Abstract()
+     * @model
+     * @generated
+     */
+    boolean isAbstract();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Method#isAbstract <em>Abstract</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Abstract</em>' attribute.
+     * @see #isAbstract()
+     * @generated
+     */
+    void setAbstract(boolean value);
 
     /**
      * <!-- begin-user-doc -->
