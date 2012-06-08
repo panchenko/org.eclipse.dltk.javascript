@@ -15,6 +15,7 @@ import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
@@ -129,7 +130,8 @@ public class JavaScriptCompletionProposalLabelProvider extends
 
 	@Override
 	protected String createFieldProposalLabel(CompletionProposal proposal) {
-		if (proposal.getExtraInfo() instanceof Property) {
+		final Object info = proposal.getExtraInfo();
+		if (info instanceof Property) {
 			final Property property = (Property) proposal.getExtraInfo();
 			final String label = getElementLabel(property);
 			if (label != null) {
@@ -145,6 +147,18 @@ public class JavaScriptCompletionProposalLabelProvider extends
 			if (TypeUtil.isDeclaringTypeVisible(property)) {
 				sb.append(" - ");
 				sb.append(property.getDeclaringType().getName());
+			}
+			return sb.toString();
+		} else if (proposal.getExtraInfo() instanceof IValueReference) {
+			final IValueReference reference = (IValueReference) proposal
+					.getExtraInfo();
+			final StringBuilder sb = new StringBuilder();
+			sb.append(proposal.getName());
+			if (reference.getKind() != ReferenceKind.PREDEFINED) {
+				final IRType declaredType = reference.getDeclaredType();
+				if (declaredType != null) {
+					sb.append(": ").append(declaredType.getName());
+				}
 			}
 			return sb.toString();
 		}
