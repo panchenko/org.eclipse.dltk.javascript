@@ -107,19 +107,20 @@
     </buildParticipant>
     <buildParticipant
           class="org.eclipse.dltk.internal.javascript.validation.TypeInfoValidatorFactory"
-          id="org.eclipse.dltk.javascript.core.buildParticipant1"
+          id="org.eclipse.dltk.javascript.core.buildParticipant.typeinfo"
           name="TypeInfoValidator"
           nature="org.eclipse.dltk.javascript.core.nature">
+          <requires id="org.eclipse.dltk.javascript.core.buildParticipant.flow"/>
     </buildParticipant>
     <buildParticipant
           class="org.eclipse.dltk.internal.javascript.validation.CodeValidationFactory"
-          id="org.eclipse.dltk.javascript.core.buildParticipant2"
+          id="org.eclipse.dltk.javascript.core.buildParticipant.code"
           name="Code Validator"
           nature="org.eclipse.dltk.javascript.core.nature">
     </buildParticipant>
     <buildParticipant
           class="org.eclipse.dltk.internal.javascript.validation.FlowValidationFactory"
-          id="org.eclipse.dltk.javascript.core.buildParticipant3"
+          id="org.eclipse.dltk.javascript.core.buildParticipant.flow"
           name="Code Validator"
           nature="org.eclipse.dltk.javascript.core.nature">
     </buildParticipant>
