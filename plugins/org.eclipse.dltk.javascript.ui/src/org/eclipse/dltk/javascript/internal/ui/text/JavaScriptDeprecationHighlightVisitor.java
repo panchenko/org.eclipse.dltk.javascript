@@ -35,7 +35,7 @@ public class JavaScriptDeprecationHighlightVisitor extends ValidationVisitor
 
 	public JavaScriptDeprecationHighlightVisitor(ITypeInferenceContext context,
 			ISemanticHighlightingRequestor requestor) {
-		super(context, null);
+		super(context, null, null);
 		reporter = this;
 		this.requestor = requestor;
 	}
