@@ -158,6 +158,19 @@ public class JavaScriptCompletionProposalCollector extends
 	}
 
 	@Override
+	protected IScriptCompletionProposal createFieldProposal(
+			CompletionProposal proposal) {
+		final IScriptCompletionProposal fieldProposal = super
+				.createFieldProposal(proposal);
+		if (proposal.getExtraInfo() != null) {
+			((AbstractScriptCompletionProposal) fieldProposal)
+					.setProposalInfo(new JavaScriptProposalInfo(proposal
+							.getExtraInfo()));
+		}
+		return fieldProposal;
+	}
+
+	@Override
 	protected ScriptCompletionProposal createScriptCompletionProposal(
 			String completion, int replaceStart, int length, Image image,
 			String displayString, int i, boolean isInDoc) {
