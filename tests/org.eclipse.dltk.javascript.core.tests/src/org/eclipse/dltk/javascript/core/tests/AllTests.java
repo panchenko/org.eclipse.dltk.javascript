@@ -26,6 +26,7 @@ import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeMemberQueryTest;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeQueryTests;
 import org.eclipse.dltk.javascript.core.tests.validation.CodeValidationTests;
 import org.eclipse.dltk.javascript.core.tests.validation.CodeValidatorValidationTests;
+import org.eclipse.dltk.javascript.core.tests.validation.FlowTypeInfoValidationTests;
 import org.eclipse.dltk.javascript.core.tests.validation.FlowValidationTests;
 import org.eclipse.dltk.javascript.core.tests.validation.JSDocValidationTest;
 import org.eclipse.dltk.javascript.core.tests.validation.TypeInfoValidationTests;
@@ -38,7 +39,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite(
 				"Test for org.eclipse.dltk.javascript.core");
 		// $JUnit-BEGIN$
-        suite.addTestSuite(TypeMemberQueryTest.class);
+		suite.addTestSuite(TypeMemberQueryTest.class);
 		suite.addTestSuite(BuildChangeTests.class);
 		suite.addTestSuite(TypeInfoModelTests.class);
 		suite.addTestSuite(TypeQueryTests.class);
@@ -46,6 +47,7 @@ public class AllTests {
 		suite.addTestSuite(TypeInferenceTests.class);
 		suite.addTestSuite(StructureParserTests.class);
 		suite.addTestSuite(TypeInfoValidationTests.class);
+		suite.addTestSuite(FlowTypeInfoValidationTests.class);
 		suite.addTestSuite(JSDocTypeParserTests.class);
 		suite.addTestSuite(JSDocSupportTests.class);
 		suite.addTestSuite(JSLintModelTests.class);

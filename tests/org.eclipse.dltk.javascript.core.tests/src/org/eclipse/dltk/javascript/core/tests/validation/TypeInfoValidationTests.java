@@ -23,13 +23,10 @@ import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.Skip;
 import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
-import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
-import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
-import org.eclipse.dltk.javascript.core.tests.typeinference.TestTypeInferencer2;
 
-@SuppressWarnings({ "nls", "restriction" })
+@SuppressWarnings({ "nls" })
 public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	private boolean notYetImplemented() {
@@ -38,12 +35,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	@Override
 	protected IBuildParticipant createValidator() {
-		return new TypeInfoValidator() {
-			@Override
-			protected TypeInferencer2 createTypeInferencer() {
-				return new TestTypeInferencer2();
-			}
-		};
+		return new TestTypeInfoValidator();
 	}
 
 	public void testKnownType() {
@@ -877,6 +869,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				problems.get(0).getID());
 	}
 
+	public void testDeclaredtArrayTypeWithEmptyReturnUndefined() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {Array<String>|undefined} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("return;");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 	public void testDeclaredtArrayTypeWithNoReturn() {
 		List<String> code = new StringList();
 		code.add("/**");
@@ -889,6 +893,17 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(
 				JavaScriptProblems.DECLARATION_MISMATCH_ACTUAL_RETURN_TYPE,
 				problems.get(0).getID());
+	}
+
+	public void testDeclaredtArrayTypeWithNoReturnUndefined() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add("* @return {Array<String>|undefined} some result info");
+		code.add("*/");
+		code.add("function someFunction() {");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 	public void testDifferentReturnTypesThenDeclaredWithNull() {
