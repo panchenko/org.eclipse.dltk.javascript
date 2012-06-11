@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -129,6 +130,16 @@ public class TypeInfoModelLoader {
 	public void initializeURIMap(ResourceSet resourceSet) {
 		resourceSet.getURIConverter().getURIMap()
 				.putAll(this.resourceSet.getURIConverter().getURIMap());
+	}
+
+	/**
+	 * Returns the object with the specified URI or <code>null</code>.
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public EObject getEObject(URI uri) {
+		return resourceSet.getEObject(uri, false);
 	}
 
 }
