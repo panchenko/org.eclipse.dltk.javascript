@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +24,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
 public class TypeInfoModelResourceSet extends ResourceSetImpl {
+
+	public TypeInfoModelResourceSet() {
+		setURIResourceMap(new HashMap<URI, Resource>());
+	}
 
 	@Override
 	public EObject getEObject(URI uri, boolean loadOnDemand) {
