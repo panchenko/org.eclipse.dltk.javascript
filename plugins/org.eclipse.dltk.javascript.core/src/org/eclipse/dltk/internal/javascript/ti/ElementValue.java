@@ -150,7 +150,12 @@ public abstract class ElementValue implements IValue {
 									(Property) selected);
 						}
 					} else if (selected instanceof Method) {
-						return new MethodValue(context, (Method) selected);
+						if (selected.getType() instanceof JSCustomType) {
+							return new MethodValue(new NestedTypeSystem(
+									context, t), (Method) selected);
+						} else {
+							return new MethodValue(context, (Method) selected);
+						}
 					}
 				}
 				return new MemberValue(context,
@@ -744,6 +749,9 @@ public abstract class ElementValue implements IValue {
 	public Object getAttribute(String key, boolean includeReferences) {
 		if (IReferenceAttributes.ELEMENT.equals(key)) {
 			return getElements();
+		}
+		if (IReferenceAttributes.TYPE_SYSTEM.equals(key)) {
+			return context;
 		}
 		if (IReferenceAttributes.HIDE_ALLOWED.equals(key)) {
 			final Object elements = getElements();

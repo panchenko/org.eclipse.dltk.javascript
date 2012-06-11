@@ -116,6 +116,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
@@ -394,14 +395,29 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 						return new ConstantValue(type);
 					}
 				} else {
-					return new ConstantValue(JSTypeSet.normalize(getContext(),
-							methods.get(0).getType()));
+					final ITypeSystem typeSystem = getTypeSystemOf(reference);
+					final IRType type = JSTypeSet.normalize(typeSystem, methods
+							.get(0).getType());
+					if (type != null) {
+						return new ConstantValue(type);
+					} else {
+						return null;
+					}
 				}
 			}
 			return reference.getChild(IValueReference.FUNCTION_OP);
 		} else {
 			return null;
 		}
+	}
+
+	private ITypeSystem getTypeSystemOf(IValueReference reference) {
+		final Object value = reference
+				.getAttribute(IReferenceAttributes.TYPE_SYSTEM);
+		if (value != null) {
+			return (ITypeSystem) value;
+		}
+		return getContext();
 	}
 
 	protected JSTypeSet evaluateGenericCall(GenericMethod method,
