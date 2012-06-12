@@ -34,6 +34,7 @@ import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
@@ -55,6 +56,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -233,8 +235,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			type = parameterizer.copy();
 			parameterizer.copyReferences();
 			type.setName(name);
-			type.eAdapters()
-					.add(new OriginReference(genericType,
+			type.eAdapters().add(
+					new OriginReference(genericType,
 							parameterizer.actualParameters));
 			types.put(name, type);
 			typeRS.addToResource(type);
@@ -304,6 +306,17 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 							.createRType();
 					result.setRuntimeType(source);
 					return result;
+				} else if (eObject instanceof TypeVariableClassType) {
+					final IRType source = parameters
+							.get(((TypeVariableClassType) eObject)
+									.getVariable());
+					final RType result = TypeInfoModelFactory.eINSTANCE
+							.createRType();
+					result.setRuntimeType(JSTypeSet
+							.classType(source instanceof IRSimpleType ? ((IRSimpleType) source)
+									.getTarget() : null));
+					return result;
+
 				} else {
 					copyEObject = createCopy(eObject);
 					eClass = eObject.eClass();
@@ -334,7 +347,8 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		@Override
 		protected void copyReference(EReference eReference, EObject eObject,
 				EObject copyEObject) {
-			if (eObject instanceof TypeVariableReference)
+			if (eObject instanceof TypeVariableReference
+					|| eObject instanceof TypeVariableClassType)
 				return;
 			super.copyReference(eReference, eObject, copyEObject);
 		}

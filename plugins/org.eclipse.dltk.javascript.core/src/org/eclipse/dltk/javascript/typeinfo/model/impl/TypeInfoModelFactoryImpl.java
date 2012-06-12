@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelFactoryImpl.java,v 1.21 2012/04/23 06:18:12 apanchenk Exp $
+ * $Id: TypeInfoModelFactoryImpl.java,v 1.22 2012/06/12 10:40:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -113,6 +113,7 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
             case TypeInfoModelPackage.RTYPE: return createRType();
             case TypeInfoModelPackage.GENERIC_METHOD: return createGenericMethod();
             case TypeInfoModelPackage.TYPE_LITERAL: return createTypeLiteral();
+            case TypeInfoModelPackage.TYPE_VARIABLE_CLASS_TYPE: return createTypeVariableClassType();
             default:
                 throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -334,6 +335,16 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     public TypeLiteral createTypeLiteral() {
         TypeLiteralImpl typeLiteral = new TypeLiteralImpl();
         return typeLiteral;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public TypeVariableClassType createTypeVariableClassType() {
+        TypeVariableClassTypeImpl typeVariableClassType = new TypeVariableClassTypeImpl();
+        return typeVariableClassType;
     }
 
     /**

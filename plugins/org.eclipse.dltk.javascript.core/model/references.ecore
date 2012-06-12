@@ -174,4 +174,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Type"
         resolveProxies="false"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeVariableClassType" eSuperTypes="#//JSType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//TypeVariable"/>
+  </eClassifiers>
 </ecore:EPackage>

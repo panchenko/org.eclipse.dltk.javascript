@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackageImpl.java,v 1.46 2012/06/08 14:34:53 apanchenk Exp $
+ * $Id: TypeInfoModelPackageImpl.java,v 1.47 2012/06/12 10:40:31 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
@@ -46,6 +46,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.dltk.javascript.typeinfo.model.TypedElement;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
@@ -171,6 +172,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EClass typeLiteralEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass typeVariableClassTypeEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -641,6 +649,24 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      */
     public EReference getTypeLiteral_Target() {
         return (EReference)typeLiteralEClass.getEStructuralFeatures().get(1);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getTypeVariableClassType() {
+        return typeVariableClassTypeEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getTypeVariableClassType_Variable() {
+        return (EReference)typeVariableClassTypeEClass.getEStructuralFeatures().get(0);
     }
 
     /**
@@ -1248,6 +1274,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         createEAttribute(typeLiteralEClass, TYPE_LITERAL__NAME);
         createEReference(typeLiteralEClass, TYPE_LITERAL__TARGET);
 
+        typeVariableClassTypeEClass = createEClass(TYPE_VARIABLE_CLASS_TYPE);
+        createEReference(typeVariableClassTypeEClass, TYPE_VARIABLE_CLASS_TYPE__VARIABLE);
+
         // Create enums
         typeKindEEnum = createEEnum(TYPE_KIND);
         parameterKindEEnum = createEEnum(PARAMETER_KIND);
@@ -1312,6 +1341,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         typeVariableReferenceEClass.getESuperTypes().add(this.getJSType());
         rTypeEClass.getESuperTypes().add(this.getJSType());
         genericMethodEClass.getESuperTypes().add(this.getMethod());
+        typeVariableClassTypeEClass.getESuperTypes().add(this.getJSType());
 
         // Initialize classes and features; add operations and parameters
         initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -1440,6 +1470,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEClass(typeLiteralEClass, TypeLiteral.class, "TypeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEAttribute(getTypeLiteral_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getTypeLiteral_Target(), this.getType(), null, "target", null, 0, 1, TypeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+        initEClass(typeVariableClassTypeEClass, TypeVariableClassType.class, "TypeVariableClassType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEReference(getTypeVariableClassType_Variable(), this.getTypeVariable(), null, "variable", null, 0, 1, TypeVariableClassType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         // Initialize enums and add enum literals
         initEEnum(typeKindEEnum, TypeKind.class, "TypeKind"); //$NON-NLS-1$

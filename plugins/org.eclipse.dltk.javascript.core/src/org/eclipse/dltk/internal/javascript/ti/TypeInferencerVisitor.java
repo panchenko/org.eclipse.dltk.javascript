@@ -136,6 +136,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.util.TypeInfoModelSwitch;
@@ -507,6 +508,15 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		if (paramType instanceof TypeVariableReference) {
 			return new Capture(
 					((TypeVariableReference) paramType).getVariable(), argTypes);
+		} else if (paramType instanceof TypeVariableClassType) {
+			final JSTypeSet result = JSTypeSet.create();
+			for (IRType type : argTypes) {
+				if (type instanceof IRClassType) {
+					result.add(((IRClassType) type).toItemType());
+				}
+			}
+			return new Capture(
+					((TypeVariableClassType) paramType).getVariable(), result);
 		} else {
 			// TODO alex other type expressions
 			return null;
@@ -526,6 +536,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 		@Override
 		public Boolean caseTypeVariableReference(TypeVariableReference object) {
+			return Boolean.TRUE;
+		}
+
+		public Boolean caseTypeVariableClassType(TypeVariableClassType object) {
 			return Boolean.TRUE;
 		}
 

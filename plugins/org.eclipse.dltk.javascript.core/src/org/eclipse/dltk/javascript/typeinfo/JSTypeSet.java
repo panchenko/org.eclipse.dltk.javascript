@@ -37,6 +37,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
@@ -918,6 +919,9 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		} else if (type instanceof TypeVariableReference) {
 			// TODO (alex) shouldn't happen
 			return none();
+		} else if (type instanceof TypeVariableClassType) {
+			// shouldn't happen
+			return classType(null);
 		} else if (type instanceof SimpleType) {
 			final SimpleType ref = (SimpleType) type;
 			Type target = ref.getTarget();

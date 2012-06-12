@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *
- * $Id: TypeInfoModelPackage.java,v 1.40 2012/06/08 14:34:53 apanchenk Exp $
+ * $Id: TypeInfoModelPackage.java,v 1.41 2012/06/12 10:40:32 apanchenk Exp $
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
@@ -2054,6 +2054,34 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE_LITERAL_FEATURE_COUNT = 2;
 
     /**
+     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableClassTypeImpl <em>Type Variable Class Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableClassTypeImpl
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeVariableClassType()
+     * @generated
+     */
+    int TYPE_VARIABLE_CLASS_TYPE = 31;
+
+    /**
+     * The feature id for the '<em><b>Variable</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_VARIABLE_CLASS_TYPE__VARIABLE = JS_TYPE_FEATURE_COUNT + 0;
+
+    /**
+     * The number of structural features of the '<em>Type Variable Class Type</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE_VARIABLE_CLASS_TYPE_FEATURE_COUNT = JS_TYPE_FEATURE_COUNT + 1;
+
+    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeKind <em>Type Kind</em>}' enum.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2061,7 +2089,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 31;
+	int TYPE_KIND = 32;
 
 
 	/**
@@ -2072,7 +2100,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 32;
+	int PARAMETER_KIND = 33;
 
 
 	/**
@@ -2083,7 +2111,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
      * @generated
      */
-    int VISIBILITY = 33;
+    int VISIBILITY = 34;
 
 
     /**
@@ -2094,7 +2122,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getIRType()
      * @generated
      */
-    int IR_TYPE = 34;
+    int IR_TYPE = 35;
 
 
     /**
@@ -2411,6 +2439,27 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getTypeLiteral_Target();
+
+    /**
+     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType <em>Type Variable Class Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Type Variable Class Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType
+     * @generated
+     */
+    EClass getTypeVariableClassType();
+
+    /**
+     * Returns the meta object for the reference '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType#getVariable <em>Variable</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Variable</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType#getVariable()
+     * @see #getTypeVariableClassType()
+     * @generated
+     */
+    EReference getTypeVariableClassType_Variable();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.MapType <em>Map Type</em>}'.
@@ -3258,6 +3307,24 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference TYPE_LITERAL__TARGET = eINSTANCE.getTypeLiteral_Target();
+
+        /**
+         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableClassTypeImpl <em>Type Variable Class Type</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeVariableClassTypeImpl
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeVariableClassType()
+         * @generated
+         */
+        EClass TYPE_VARIABLE_CLASS_TYPE = eINSTANCE.getTypeVariableClassType();
+
+        /**
+         * The meta object literal for the '<em><b>Variable</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference TYPE_VARIABLE_CLASS_TYPE__VARIABLE = eINSTANCE.getTypeVariableClassType_Variable();
 
         /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.MapTypeImpl <em>Map Type</em>}' class.
