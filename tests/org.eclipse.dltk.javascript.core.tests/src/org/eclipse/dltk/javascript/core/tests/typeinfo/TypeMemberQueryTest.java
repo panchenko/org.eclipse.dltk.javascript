@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.core.tests.typeinfo;
 import static org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory.eINSTANCE;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -21,6 +22,7 @@ import junit.framework.TestCase;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class TypeMemberQueryTest extends TestCase {
@@ -42,4 +44,48 @@ public class TypeMemberQueryTest extends TestCase {
 		assertEquals(2, unique.size());
 	}
 
+	/**
+	 * Make sure that when using the ignoreDuplicates normal members takes
+	 * precedence over abstract ones
+	 */
+	public void testAbstractAndNormalMembers() {
+		final Type superClass = eINSTANCE.createType();
+		superClass.setName("SuperClass");
+		final Method normalMethod = eINSTANCE.createMethod();
+		normalMethod.setName("method");
+		{
+			final Parameter param = eINSTANCE.createParameter();
+			param.setName("normalMethodParam");
+			normalMethod.getParameters().add(param);
+		}
+		superClass.getMembers().add(normalMethod);
+
+		final Type middleClass = eINSTANCE.createType();
+		middleClass.setName("MiddleClass");
+		middleClass.setSuperType(superClass);
+
+		final Type trait = eINSTANCE.createType();
+		trait.setName("Trait");
+		final Method abstractMethod = eINSTANCE.createMethod();
+		abstractMethod.setName("method");
+		abstractMethod.setAbstract(true);
+		{
+			final Parameter param = eINSTANCE.createParameter();
+			param.setName("abstractMethodParam");
+			abstractMethod.getParameters().add(param);
+		}
+		trait.getMembers().add(abstractMethod);
+
+		final Type subClass = eINSTANCE.createType();
+		subClass.setName("SubClass");
+		subClass.setSuperType(middleClass);
+		subClass.getTraits().add(trait);
+
+		final Iterator<Member> it = new TypeMemberQuery(subClass)
+				.ignoreDuplicates().iterator();
+		assertTrue(it.hasNext());
+		final Member member = it.next();
+		assertFalse(it.hasNext());
+		assertSame(normalMethod, member);
+	}
 }
