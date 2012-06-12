@@ -34,7 +34,7 @@ import org.eclipse.dltk.utils.CompoundIterator;
  * types and implemented traits.
  * 
  * Types are visited in the breadth-first order (current type, super type,
- * traits), so the overridden methods are visited first. By default overridden
+ * traits), so the overriding methods are visited first. By default overridden
  * methods are returned multiple times, if you want to skip duplicates and have
  * only the actual implementations then use the {@link Iterable} returned by
  * {@link #ignoreDuplicates()}.
@@ -119,7 +119,6 @@ public class TypeMemberQuery implements Iterable<Member> {
 	private class TypeIterator extends CompoundIterator<QueueItem> {
 		private final Set<QueueItem> visited = new HashSet<QueueItem>();
 		private final List<QueueItem> queue = new ArrayList<QueueItem>();
-		private final List<QueueItem> skipQueue = new ArrayList<QueueItem>();
 
 		public TypeIterator() {
 			queue.addAll(types);
@@ -131,10 +130,6 @@ public class TypeMemberQuery implements Iterable<Member> {
 		}
 
 		protected boolean fetchNext() {
-			if (!skipQueue.isEmpty()) {
-				queue.addAll(skipQueue);
-				skipQueue.clear();
-			}
 			if (!queue.isEmpty()) {
 				final QueueItem[] copy = queue.toArray(new QueueItem[queue
 						.size()]);
@@ -227,21 +222,66 @@ public class TypeMemberQuery implements Iterable<Member> {
 		return new MemberIterator();
 	}
 
+	/**
+	 * Iterates over the members ignoring the duplicates, e.g. members with the
+	 * same name.
+	 * 
+	 * <p>
+	 * If there is an abstract and a normal method, both with the same name,
+	 * normal method is returned. If there are two normal methods (or two
+	 * abstract ones), the one that is closer to the given type in the
+	 * inheritance chain is returned. Otherwise it's unspecified which one of
+	 * the duplicated members is returned.
+	 * </p>
+	 */
 	private class IgnoreDuplicateMemberIterator extends MemberIterator {
 
 		private final Set<Object> processed = new HashSet<Object>();
+		private final Collection<String> ignored;
+		private List<Object> abstractMethods = new ArrayList<Object>();
 
 		public IgnoreDuplicateMemberIterator(Collection<String> ignoreMembers) {
-			if (ignoreMembers != null) {
-				processed.addAll(ignoreMembers);
-			}
+			this.ignored = ignoreMembers != null ? ignoreMembers : Collections
+					.<String> emptySet();
 		}
 
 		@Override
 		protected boolean isValid(Member member) {
-			return super.isValid(member)
-					&& !processed.contains(member.getName()) // JS member
-					&& processed.add(MethodKey.createKey(member));
+			if (super.isValid(member) && !ignored.contains(member.getName())) {
+				final Object key = MethodKey.createKey(member);
+				if (member instanceof Method && ((Method) member).isAbstract()) {
+					if (!processed.contains(key)) {
+						abstractMethods.add(key);
+						abstractMethods.add(member);
+					}
+					return false;
+				} else {
+					return processed.add(key);
+				}
+			} else {
+				return false;
+			}
+		}
+
+		@Override
+		protected boolean fetchNext() {
+			final boolean result = super.fetchNext();
+			if (!result) {
+				if (!abstractMethods.isEmpty()) {
+					final List<Member> queue = new ArrayList<Member>();
+					for (int i = 0; i < abstractMethods.size(); i += 2) {
+						if (processed.add(abstractMethods.get(i))) {
+							queue.add((Member) abstractMethods.get(i + 1));
+						}
+					}
+					abstractMethods.clear();
+					if (!queue.isEmpty()) {
+						current = queue.iterator();
+						return true;
+					}
+				}
+			}
+			return result;
 		}
 	}
 
