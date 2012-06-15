@@ -12,7 +12,9 @@
 package org.eclipse.dltk.javascript.ast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
@@ -84,5 +86,30 @@ public class Script extends ASTNode implements ISourceable, IModuleDeclaration,
 
 	public List<JSDeclaration> getDeclarations() {
 		return declarations;
+	}
+
+	private Map<String, Object> attributes;
+
+	/**
+	 * @since 4.1
+	 */
+	public Object getAttribute(String key) {
+		return attributes != null ? attributes.get(key) : null;
+	}
+
+	/**
+	 * @since 4.1
+	 */
+	public void setAttribute(String key, Object value) {
+		if (value != null) {
+			if (attributes == null) {
+				attributes = new HashMap<String, Object>();
+			}
+			attributes.put(key, value);
+		} else {
+			if (attributes != null) {
+				attributes.remove(key);
+			}
+		}
 	}
 }

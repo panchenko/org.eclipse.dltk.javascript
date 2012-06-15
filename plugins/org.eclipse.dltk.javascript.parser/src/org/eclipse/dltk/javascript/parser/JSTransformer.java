@@ -165,6 +165,11 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 		}
 		script.setStart(0);
 		script.setEnd(tokenOffsets[tokenOffsets.length - 1]);
+		for (NodeTransformer transformer : transformers) {
+			if (transformer instanceof NodeTransformerExtension) {
+				((NodeTransformerExtension) transformer).postConstruct(script);
+			}
+		}
 		return script;
 	}
 
