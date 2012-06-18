@@ -2128,11 +2128,15 @@ public class TypeInfoValidator implements IBuildParticipant {
 					final IValidationStatus result = extension.canInstantiate(
 							type, typeReference);
 					if (result != null) {
-						reportValidationStatus(result, node,
-								JavaScriptProblems.NON_INSTANTIABLE_TYPE,
-								ValidationMessages.NonInstantiableType,
-								type.getName());
-						return false;
+						if (result == ValidationStatus.OK) {
+							return true;
+						} else {
+							reportValidationStatus(result, node,
+									JavaScriptProblems.NON_INSTANTIABLE_TYPE,
+									ValidationMessages.NonInstantiableType,
+									type.getName());
+							return false;
+						}
 					}
 				}
 			}
