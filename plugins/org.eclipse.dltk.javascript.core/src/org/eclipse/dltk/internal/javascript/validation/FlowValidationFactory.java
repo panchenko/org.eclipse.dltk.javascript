@@ -28,20 +28,24 @@ public class FlowValidationFactory implements IBuildParticipantFactory {
 			throws CoreException {
 		return new FlowValidation() {
 
-			final Set<FunctionStatement> inconsistentReturns = new HashSet<FunctionStatement>();
+			private Set<FunctionStatement> inconsistentReturns;
 
 			@Override
 			public void build(IBuildContext context) throws CoreException {
 				super.build(context);
-				if (!inconsistentReturns.isEmpty()) {
+				if (inconsistentReturns != null) {
 					context.set(
 							JavaScriptValidations.ATTR_INCONSISTENT_RETURNS,
 							inconsistentReturns);
+					inconsistentReturns = null;
 				}
 			}
 
 			@Override
 			protected void reportInconsistentReturn(FunctionStatement node) {
+				if (inconsistentReturns == null) {
+					inconsistentReturns = new HashSet<FunctionStatement>();
+				}
 				inconsistentReturns.add(node);
 			}
 		};
