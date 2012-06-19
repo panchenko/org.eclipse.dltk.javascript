@@ -111,6 +111,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilderExtension;
 import org.eclipse.dltk.javascript.typeinfo.IRAnyType;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRNoneType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
@@ -125,6 +126,7 @@ import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
@@ -400,10 +402,28 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					final ITypeSystem typeSystem = getTypeSystemOf(reference);
 					final IRType type = JSTypeSet.normalize(typeSystem, methods
 							.get(0).getType());
-					if (type != null) {
-						return new ConstantValue(type);
-					} else {
-						return null;
+					return ConstantValue.valueOf(type);
+				}
+			} else {
+				final IRType expressionType = JavaScriptValidations
+						.typeOf(reference);
+				if (expressionType != null) {
+					if (expressionType instanceof IRFunctionType) {
+						return ConstantValue
+								.valueOf(((IRFunctionType) expressionType)
+										.getReturnType());
+					} else if (expressionType instanceof IRClassType) {
+						final Type target = ((IRClassType) expressionType)
+								.getTarget();
+						if (target != null) {
+							final Constructor constructor = target
+									.getStaticConstructor();
+							if (constructor != null) {
+								return new ConstantValue(
+										JSTypeSet.normalize(constructor
+												.getType()));
+							}
+						}
 					}
 				}
 			}
@@ -413,7 +433,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 	}
 
-	private ITypeSystem getTypeSystemOf(IValueReference reference) {
+	protected ITypeSystem getTypeSystemOf(IValueReference reference) {
 		final Object value = reference
 				.getAttribute(IReferenceAttributes.TYPE_SYSTEM);
 		if (value != null) {

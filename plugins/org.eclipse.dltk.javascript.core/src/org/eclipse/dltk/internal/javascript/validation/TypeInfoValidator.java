@@ -84,6 +84,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeExtension;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
@@ -730,24 +731,56 @@ public class TypeInfoValidator implements IBuildParticipant {
 			}
 			final List<Method> methods = JavaScriptValidations.extractElements(
 					reference, Method.class);
-			if (methods != null && methods.size() == 1
-					&& methods.get(0) instanceof GenericMethod) {
-				final GenericMethod method = (GenericMethod) methods.get(0);
-				if (!JavaScriptValidations.checkParameterCount(method,
-						args.size())) {
-					final Expression methodNode = expression instanceof PropertyExpression ? ((PropertyExpression) expression)
-							.getProperty() : expression;
-					reportMethodParameterError(methodNode, arguments, method);
-					return null;
+			if (methods != null && methods.size() == 1) {
+				final Method method = methods.get(0);
+				if (method instanceof GenericMethod) {
+					if (!JavaScriptValidations.checkParameterCount(method,
+							args.size())) {
+						final Expression methodNode = expression instanceof PropertyExpression ? ((PropertyExpression) expression)
+								.getProperty() : expression;
+						reportMethodParameterError(methodNode, arguments,
+								method);
+						return null;
+					}
+					final JSTypeSet result = evaluateGenericCall(
+							(GenericMethod) method, arguments);
+					return result != null ? new ConstantValue(result) : null;
+				} else {
+					pushExpressionValidator(new CallExpressionValidator(
+							peekFunctionScope(), node, reference, arguments,
+							methods));
+					final ITypeSystem typeSystem = getTypeSystemOf(reference);
+					final IRType type = JSTypeSet.normalize(typeSystem,
+							method.getType());
+					return ConstantValue.valueOf(type);
 				}
-				final JSTypeSet result = evaluateGenericCall(method, arguments);
-				return result != null ? new ConstantValue(result) : null;
 			} else {
 				pushExpressionValidator(new CallExpressionValidator(
 						peekFunctionScope(), node, reference, arguments,
 						methods));
-				return reference.getChild(IValueReference.FUNCTION_OP);
+				final IRType expressionType = JavaScriptValidations
+						.typeOf(reference);
+				if (expressionType != null) {
+					if (expressionType instanceof IRFunctionType) {
+						return ConstantValue
+								.valueOf(((IRFunctionType) expressionType)
+										.getReturnType());
+					} else if (expressionType instanceof IRClassType) {
+						final Type target = ((IRClassType) expressionType)
+								.getTarget();
+						if (target != null) {
+							final Constructor constructor = target
+									.getStaticConstructor();
+							if (constructor != null) {
+								return new ConstantValue(
+										JSTypeSet.normalize(constructor
+												.getType()));
+							}
+						}
+					}
+				}
 			}
+			return reference.getChild(IValueReference.FUNCTION_OP);
 		}
 
 		private void pushExpressionValidator(

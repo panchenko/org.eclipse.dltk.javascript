@@ -57,4 +57,8 @@ public class ConstantValue extends AbstractReference {
 		return getClass().getSimpleName() + value.getTypes();
 	}
 
+	public static IValueReference valueOf(IRType type) {
+		return type != null ? new ConstantValue(type) : null;
+	}
+
 }
