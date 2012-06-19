@@ -33,7 +33,9 @@ public abstract class AbstractReference implements IValueReference,
 		if (val != null && value != null) {
 			IValue src = ((IValueProvider) value).getValue();
 			if (src == PhantomValue.VALUE) {
-				val.addReference(src);
+				if (val.getDeclaredTypes().isEmpty()) {
+					val.addReference(src);
+				}
 				return;
 			}
 			if (src == null) {
@@ -56,7 +58,9 @@ public abstract class AbstractReference implements IValueReference,
 		if (val != null && value != null) {
 			IValue src = ((IValueProvider) value).getValue();
 			if (src == PhantomValue.VALUE) {
-				val.addReference(src);
+				if (val.getDeclaredTypes().isEmpty()) {
+					val.addReference(src);
+				}
 				return;
 			}
 			if (src == null) {
@@ -71,6 +75,14 @@ public abstract class AbstractReference implements IValueReference,
 			} else {
 				val.addValue(src);
 			}
+		}
+	}
+
+	public void removeReference(IValueReference reference) {
+		IValue value = getValue();
+		if (value != null && reference != null
+				&& reference instanceof IValueProvider) {
+			value.removeReference(((IValueProvider) reference).getValue());
 		}
 	}
 

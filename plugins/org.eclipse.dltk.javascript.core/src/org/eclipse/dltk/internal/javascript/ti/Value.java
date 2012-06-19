@@ -174,6 +174,11 @@ public class Value extends ImmutableValue {
 		references.add(src);
 	}
 
+	@Override
+	public void removeReference(IValue value) {
+		references.remove(value);
+	}
+
 	private void addValueRecursive(ImmutableValue src,
 			Map<ImmutableValue, ImmutableValue> processing, int depth) {
 		if (!processing.containsKey(src)) {

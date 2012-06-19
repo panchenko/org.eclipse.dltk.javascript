@@ -56,4 +56,6 @@ public interface IValueReference extends IValueParent {
 	boolean exists();
 
 	boolean isParentOf(IValueReference anotherReference);
+
+	void removeReference(IValueReference reference);
 }

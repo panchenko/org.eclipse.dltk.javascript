@@ -742,6 +742,9 @@ public abstract class ElementValue implements IValue {
 	public final void addReference(IValue src) {
 	}
 
+	public void removeReference(IValue value) {
+	}
+
 	public final Object getAttribute(String key) {
 		return getAttribute(key, false);
 	}

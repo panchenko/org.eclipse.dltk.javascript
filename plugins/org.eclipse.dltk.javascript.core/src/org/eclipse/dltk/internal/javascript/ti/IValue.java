@@ -59,6 +59,8 @@ public interface IValue {
 
 	void addReference(IValue src);
 
+	void removeReference(IValue value);
+
 	void clear();
 
 	void putChild(String name, IValue value);

@@ -90,6 +90,9 @@ public enum PhantomValue implements IValue {
 	public void addReference(IValue src) {
 	}
 
+	public void removeReference(IValue value) {
+	}
+
 	public void clear() {
 	}
 

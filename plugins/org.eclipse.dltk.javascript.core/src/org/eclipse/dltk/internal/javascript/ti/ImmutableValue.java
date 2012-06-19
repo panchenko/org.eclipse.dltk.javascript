@@ -333,6 +333,9 @@ public class ImmutableValue implements IValue, IValue2 {
 	public void addReference(IValue src) {
 	}
 
+	public void removeReference(IValue value) {
+	}
+
 	public void clear() {
 	}
 

@@ -100,6 +100,7 @@ import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
@@ -650,6 +651,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		reference.setAttribute(IReferenceAttributes.R_VARIABLE, rvar);
 		if (rvar.getType() != null) {
 			setIRType(reference, rvar.getType(), true);
+			// typed - make sure it wasn't initialized with the phantom value.
+			reference.removeReference(PhantomValueReference.REFERENCE);
 		}
 
 		return reference;

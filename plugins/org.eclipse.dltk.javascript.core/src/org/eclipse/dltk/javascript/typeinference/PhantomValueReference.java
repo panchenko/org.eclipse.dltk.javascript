@@ -133,4 +133,7 @@ public enum PhantomValueReference implements IValueReference, IValueProvider {
 		return getClass().getSimpleName();
 	}
 
+	public void removeReference(IValueReference reference) {
+	}
+
 }
