@@ -75,6 +75,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IRAnyType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
+import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
@@ -1881,34 +1882,39 @@ public class TypeInfoValidator implements IBuildParticipant {
 			} else if ((!exists && !result.exists())
 					&& !isArrayLookup(propertyExpression)) {
 				scope.add(path);
-				final IRType type = typeOf(result.getParent());
-				final TypeKind kind = TypeUtil.kind(type);
-				if (type != null && kind == TypeKind.JAVA) {
+				final IRType parentType = typeOf(result.getParent());
+				if (parentType instanceof IRMapType) {
+					return;
+				}
+				final TypeKind parentKind = TypeUtil.kind(parentType);
+				if (parentType != null && parentKind == TypeKind.JAVA) {
 					reporter.reportProblem(
 							JavaScriptProblems.UNDEFINED_JAVA_PROPERTY, NLS
 									.bind(ValidationMessages.UndefinedProperty,
-											result.getName(), type.getName()),
-							propName.sourceStart(), propName.sourceEnd());
-				} else if (type != null
-						&& shouldBeDefined(propertyExpression)
-						&& (kind == TypeKind.JAVASCRIPT || kind == TypeKind.PREDEFINED)) {
-					reporter.reportProblem(
-							JavaScriptProblems.UNDEFINED_PROPERTY,
-							NLS.bind(
-									ValidationMessages.UndefinedPropertyInScriptType,
-									result.getName(), type.getName()), propName
+											result.getName(),
+											parentType.getName()), propName
 									.sourceStart(), propName.sourceEnd());
 				} else if (shouldBeDefined(propertyExpression)) {
-					final String parentPath = PropertyExpressionUtils
-							.getPath(propertyExpression.getObject());
-					reporter.reportProblem(
-							JavaScriptProblems.UNDEFINED_PROPERTY,
-							NLS.bind(
-									ValidationMessages.UndefinedPropertyInScript,
-									result.getName(),
-									parentPath != null ? parentPath
-											: "javascript"), propName
-									.sourceStart(), propName.sourceEnd());
+					if (parentType != null
+							&& (parentKind == TypeKind.JAVASCRIPT || parentKind == TypeKind.PREDEFINED)) {
+						reporter.reportProblem(
+								JavaScriptProblems.UNDEFINED_PROPERTY,
+								NLS.bind(
+										ValidationMessages.UndefinedPropertyInScriptType,
+										result.getName(), parentType.getName()),
+								propName.sourceStart(), propName.sourceEnd());
+					} else {
+						final String parentPath = PropertyExpressionUtils
+								.getPath(propertyExpression.getObject());
+						reporter.reportProblem(
+								JavaScriptProblems.UNDEFINED_PROPERTY,
+								NLS.bind(
+										ValidationMessages.UndefinedPropertyInScript,
+										result.getName(),
+										parentPath != null ? parentPath
+												: "javascript"), propName
+										.sourceStart(), propName.sourceEnd());
+					}
 				}
 			} else {
 				IRVariable variable = (IRVariable) result
