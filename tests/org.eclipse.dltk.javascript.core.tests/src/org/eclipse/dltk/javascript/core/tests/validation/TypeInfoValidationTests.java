@@ -2298,4 +2298,28 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
+	public void testAnyTypePhantomValue() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add("  /** @type {*} */");
+		code.add("  var x;");
+		code.add("  return x.a() + x.b() + x.c;");
+		code.add("}");
+		{
+			final List<IProblem> problems = validate(code.toString());
+			assertEquals(problems.toString(), 0, problems.size());
+		}
+		code.remove(1);
+		{
+			final List<IProblem> problems = validate(code.toString());
+			assertEquals(problems.toString(), 3, problems.size());
+			assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+					.getID());
+			assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(1)
+					.getID());
+			assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(2)
+					.getID());
+		}
+	}
+
 }
