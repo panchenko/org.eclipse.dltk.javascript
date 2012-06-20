@@ -85,7 +85,9 @@ public class Value extends ImmutableValue {
 
 		public void process(ImmutableValue value, Set<IValue> result) {
 			if (result.isEmpty() && !value.hasReferences()) {
-				result.add(value.createChild(childName, 0));
+				IValue child = value.createChild(childName, 0);
+				if (child != null)
+					result.add(child);
 			}
 		}
 
