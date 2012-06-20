@@ -20,6 +20,7 @@ import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.templates.JSDocTemplateCompletionProcessor;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
+import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.templates.ScriptTemplateProposal;
 import org.eclipse.dltk.ui.text.completion.ContentAssistInvocationContext;
@@ -29,6 +30,9 @@ import org.eclipse.dltk.ui.text.completion.ScriptContentAssistInvocationContext;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITypedRegion;
+import org.eclipse.jface.text.Region;
+import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 
@@ -49,8 +53,8 @@ public class JSDocCompletionProposalComputer implements
 			ContentAssistInvocationContext context, IProgressMonitor monitor) {
 		IDocument document = context.getDocument();
 		try {
-			final IRegion region = document.getLineInformationOfOffset(context
-					.getInvocationOffset());
+			final IRegion region = getLineRegion(document,
+					context.getInvocationOffset());
 			final char[] line = document.get(region.getOffset(),
 					region.getLength()).toCharArray();
 			final int offsetInLine = context.getInvocationOffset()
@@ -120,6 +124,24 @@ public class JSDocCompletionProposalComputer implements
 			JavaScriptUI.log(e);
 		}
 		return Collections.emptyList();
+	}
+
+	private IRegion getLineRegion(IDocument document, int offset)
+			throws BadLocationException {
+		final IRegion region = document.getLineInformationOfOffset(offset);
+		final ITypedRegion partition = TextUtilities.getPartition(document,
+				IJavaScriptPartitions.JS_PARTITIONING, offset, false);
+		if (partition.getOffset() > region.getOffset()
+				|| partition.getOffset() + partition.getLength() < region
+						.getOffset() + region.getLength()) {
+			final int newOffset = Math.max(partition.getOffset(),
+					region.getOffset());
+			final int newEnd = Math.min(
+					partition.getOffset() + partition.getLength(),
+					region.getOffset() + region.getLength());
+			return new Region(newOffset, newEnd - newOffset);
+		}
+		return region;
 	}
 
 	private static int skipSpaces(final char[] line, int index, int offsetInLine) {
