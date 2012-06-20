@@ -148,6 +148,10 @@ public class ImmutableValue implements IValue, IValue2 {
 	}
 
 	public Object getAttribute(String key, boolean includeReferences) {
+		if (IReferenceAttributes.PHANTOM.equals(key)
+				&& declaredType == JSTypeSet.any()) {
+			return Boolean.TRUE;
+		}
 		Object attribute = null;
 		if (attributes != null) {
 			attribute = attributes.get(key);
@@ -244,6 +248,9 @@ public class ImmutableValue implements IValue, IValue2 {
 	}
 
 	protected IValue findMember(String name, boolean resolve) {
+		if (declaredType == JSTypeSet.any()) {
+			return PhantomValue.VALUE;
+		}
 		IValue value = null;
 		if (elementValues != null)
 			value = elementValues.get(name);
