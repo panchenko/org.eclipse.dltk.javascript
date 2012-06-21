@@ -41,7 +41,14 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 	}
 
 	public JSType parse(String input) throws ParseException {
-		return parse(new ANTLRStringStream(input));
+		final ANTLRStringStream stream = new ANTLRStringStream(input);
+		final JSType type = parse(stream);
+		if (stream.LT(1) != CharStream.EOF) {
+			throw new ParseException("Unexpected "
+					+ stream.substring(stream.index(), stream.size() - 1),
+					stream.index());
+		}
+		return type;
 	}
 
 	protected JSType parse(CharStream input) throws ParseException {
