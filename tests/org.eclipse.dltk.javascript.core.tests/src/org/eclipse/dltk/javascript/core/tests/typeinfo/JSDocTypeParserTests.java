@@ -77,6 +77,13 @@ public class JSDocTypeParserTests extends TestCase {
 		assertEquals(expression.length(), exception.getErrorOffset());
 	}
 
+	public void testUnexpectedContentError() {
+		final String expression = "string)))";
+		final ParseException exception = parseError(expression);
+		assertEquals("Unexpected )))", exception.getMessage());
+		assertEquals(expression.length() - 3, exception.getErrorOffset());
+	}
+
 	public void testArray() {
 		JSType type = parse("Array.<String>");
 		assertRef("String", ((ArrayType) type).getItemType());
