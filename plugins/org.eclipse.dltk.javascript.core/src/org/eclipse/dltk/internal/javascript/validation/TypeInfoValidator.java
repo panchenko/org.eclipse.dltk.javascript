@@ -1883,7 +1883,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 					&& !isArrayLookup(propertyExpression)) {
 				scope.add(path);
 				final IRType parentType = typeOf(result.getParent());
-				if (parentType instanceof IRMapType) {
+				if (parentType instanceof IRMapType
+						|| parentType instanceof IRAnyType) {
 					return;
 				}
 				final TypeKind parentKind = TypeUtil.kind(parentType);
