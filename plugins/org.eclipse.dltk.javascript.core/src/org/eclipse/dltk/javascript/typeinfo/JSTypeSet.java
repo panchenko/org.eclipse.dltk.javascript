@@ -264,7 +264,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 	private static final boolean DEBUG = false;
 
-	private static abstract class TypeKey implements IRType {
+	public static abstract class TypeKey implements IRType {
 
 		protected final ITypeSystem typeSystem;
 
@@ -314,6 +314,11 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		@Override
 		public final String toString() {
 			return getName();
+		}
+
+		protected TypeCompatibility testAssignableTo(IRType type) {
+			return type instanceof IRTypeExtension2 ? ((IRTypeExtension2) type)
+					.isAssignableTo(this) : TypeCompatibility.FALSE;
 		}
 
 	}
@@ -385,7 +390,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 					}
 				}
 			}
-			return TypeCompatibility.FALSE;
+			return testAssignableTo(type);
 		}
 
 		private boolean isAssignableFrom(IRType[] dest, IRType[] src) {
@@ -442,7 +447,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			} else if (ITypeNames.ARRAY.equals(type.getName())) {
 				return arrayOf(none());
 			} else {
-				return new SimpleTypeKey(type);
+				return type.createInstance();
 			}
 		}
 
