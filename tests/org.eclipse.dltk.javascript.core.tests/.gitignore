@@ -1,4 +1,4 @@
 .antlr-eclipse
-bin
-target
+/bin/
+/target/
 .amateras
