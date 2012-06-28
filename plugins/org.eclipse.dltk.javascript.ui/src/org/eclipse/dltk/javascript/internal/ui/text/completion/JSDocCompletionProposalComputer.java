@@ -161,7 +161,8 @@ public class JSDocCompletionProposalComputer implements
 		//
 		final Set<String> tags = new HashSet<String>();
 		Collections.addAll(tags, JSDocTag.getTags());
-		ISourceModule module = null; // TODO detect source module
+		ISourceModule module = context instanceof ScriptContentAssistInvocationContext ? ((ScriptContentAssistInvocationContext) context)
+				.getSourceModule() : null;
 		Collections.addAll(
 				tags,
 				JSKeywordManager.getInstance().getKeywords(
