@@ -92,7 +92,7 @@ public class JSDocSupport implements IModelBuilder {
 	public void processMethod(IMethod method, final JSDocTags tags,
 			JSProblemReporter reporter, ITypeChecker typeChecker) {
 		if (method.getType() == null) {
-			parseType(method, tags, RETURN_TAGS, reporter, typeChecker);
+			parseType(method, tags, JSDocTag.RETURN_TAGS, reporter, typeChecker);
 		}
 		parseParams(method, tags, reporter, typeChecker);
 		parseDeprecation(method, tags, reporter);
@@ -446,9 +446,6 @@ public class JSDocSupport implements IModelBuilder {
 		parameter.setOptional(pp.optional);
 		parameter.setVarargs(pp.varargs);
 	}
-
-	protected static final String[] RETURN_TAGS = { JSDocTag.RETURNS,
-			JSDocTag.RETURN, JSDocTag.TYPE };
 
 	public static final String[] TYPE_TAGS = { JSDocTag.TYPE };
 

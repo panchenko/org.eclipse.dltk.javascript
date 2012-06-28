@@ -41,6 +41,8 @@ public class JSDocTag implements ISourceNode {
 
 	public static final String SUPPRESS_WARNINGS = "@SuppressWarnings";
 
+	public static final String[] RETURN_TAGS = { RETURNS, RETURN, TYPE };
+
 	private final String tag;
 	private final String value;
 	private final int start;
