@@ -240,6 +240,14 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 							parameterizer.actualParameters));
 			types.put(name, type);
 			typeRS.addToResource(type);
+			final Type superType = target.getSuperType();
+			if (superType != null) {
+				if (superType instanceof GenericType) {
+					type.setSuperType(parameterize(superType, parameters));
+				} else {
+					type.setSuperType(superType);
+				}
+			}
 			return type;
 		}
 		return target;
@@ -350,6 +358,11 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			if (eObject instanceof TypeVariableReference
 					|| eObject instanceof TypeVariableClassType)
 				return;
+			if (eReference == TypeInfoModelPackage.Literals.TYPE__SUPER_TYPE
+					&& eObject == genericType) {
+				// superType is handled specially
+				return;
+			}
 			super.copyReference(eReference, eObject, copyEObject);
 		}
 	}
