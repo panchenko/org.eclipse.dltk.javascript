@@ -106,7 +106,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					+ (visitor != null ? visitor.getClass().getName()
 							: "Default") + " in "
 					+ Thread.currentThread().getName());
-		final TypeInferencer2 saved = CURRENT.get();
+		final ITypeSystem saved = CURRENT.get();
 		try {
 			CURRENT.set(this);
 			elements.clear();
@@ -983,18 +983,18 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return modelBuilders;
 	}
 
-	private static final ThreadLocal<TypeInferencer2> CURRENT = new ThreadLocal<TypeInferencer2>();
+	private static final ThreadLocal<ITypeSystem> CURRENT = new ThreadLocal<ITypeSystem>();
 
 	protected static final ITypeSystem DELEGATING_TYPE_SYSTEM = new DelagatingTypeSystem();
 
 	private static class DelagatingTypeSystem implements ITypeSystem {
 
-		private TypeInferencer2 current() {
+		private ITypeSystem current() {
 			return CURRENT.get();
 		}
 
 		public IValue valueOf(Member member) {
-			final TypeInferencer2 current = current();
+			final ITypeSystem current = current();
 			if (current != null) {
 				return current.valueOf(member);
 			} else {
@@ -1004,9 +1004,13 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 		public Type resolveType(Type type) {
 			if (type != null && type.isProxy()) {
-				final TypeInferencer2 current = current();
+				final ITypeSystem current = current();
 				if (current != null) {
-					return current.doResolveType(type);
+					if (current instanceof TypeInferencer2) {
+						return ((TypeInferencer2) current).doResolveType(type);
+					} else {
+						return current.resolveType(type);
+					}
 				} else {
 					final Type resolved = TypeInfoModelLoader.getInstance()
 							.getType(type.getName());
@@ -1019,7 +1023,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 
 		public Type parameterize(Type target, List<IRType> parameters) {
-			final TypeInferencer2 current = current();
+			final ITypeSystem current = current();
 			if (current != null) {
 				return current.parameterize(target, parameters);
 			} else {
@@ -1028,7 +1032,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 
 		public <T> T getAttribute(AttributeKey<T> key) {
-			final TypeInferencer2 current = current();
+			final ITypeSystem current = current();
 			return current != null ? current.getAttribute(key) : null;
 		}
 	}
@@ -1058,6 +1062,16 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return (T) values.remove(values.size() - 1);
 		} else {
 			return null;
+		}
+	}
+
+	public static void withTypeSystem(ITypeSystem typeSystem, Runnable runnable) {
+		final ITypeSystem saved = CURRENT.get();
+		try {
+			CURRENT.set(typeSystem);
+			runnable.run();
+		} finally {
+			CURRENT.set(saved);
 		}
 	}
 

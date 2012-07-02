@@ -72,7 +72,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		this.useEngine = useEngine;
 	}
 
-	public void complete(final IModuleSource cu, int position, int i) {
+	public void complete(final IModuleSource cu, final int position, int i) {
 		this.requestor.beginReporting();
 		String content = cu.getSourceContents();
 		if (position < 0 || position > content.length()) {
@@ -103,17 +103,22 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		} catch (PositionReachedException e) {
 			// e.printStackTrace();
 		}
-
-		final CompletionPath path = new CompletionPath(
-				calculator.getCompletion());
-		final Reporter reporter = new Reporter(path.lastSegment(), position);
-		if (calculator.isMember() && !path.isEmpty()
-				&& path.lastSegment() != null) {
-			doCompletionOnMember(inferencer2, visitor.getCollection(), path,
-					reporter);
-		} else {
-			doGlobalCompletion(inferencer2, visitor.getCollection(), reporter);
-		}
+		TypeInferencer2.withTypeSystem(inferencer2, new Runnable() {
+			public void run() {
+				final CompletionPath path = new CompletionPath(calculator
+						.getCompletion());
+				final Reporter reporter = new Reporter(path.lastSegment(),
+						position);
+				if (calculator.isMember() && !path.isEmpty()
+						&& path.lastSegment() != null) {
+					doCompletionOnMember(inferencer2, visitor.getCollection(),
+							path, reporter);
+				} else {
+					doGlobalCompletion(inferencer2, visitor.getCollection(),
+							reporter);
+				}
+			}
+		});
 		this.requestor.endReporting();
 	}
 
