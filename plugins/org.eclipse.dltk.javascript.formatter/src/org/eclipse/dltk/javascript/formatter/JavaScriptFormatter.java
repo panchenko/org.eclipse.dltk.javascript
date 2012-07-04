@@ -14,7 +14,6 @@ package org.eclipse.dltk.javascript.formatter;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.core.DLTKCore;
@@ -33,14 +32,12 @@ import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserProblems;
 import org.eclipse.dltk.ui.formatter.FormatterException;
 import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
-import org.eclipse.dltk.ui.formatter.IScriptFormatterExtension;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 
-public class JavaScriptFormatter extends AbstractScriptFormatter implements
-		IScriptFormatterExtension {
+public class JavaScriptFormatter extends AbstractScriptFormatter {
 
 	private final String lineDelimiter;
 
@@ -217,12 +214,6 @@ public class JavaScriptFormatter extends AbstractScriptFormatter implements
 		}
 
 		return document;
-	}
-
-	private IProject project;
-
-	public void initialize(IProject project) {
-		this.project = project;
 	}
 
 	private JavaScriptParser createParser() {
