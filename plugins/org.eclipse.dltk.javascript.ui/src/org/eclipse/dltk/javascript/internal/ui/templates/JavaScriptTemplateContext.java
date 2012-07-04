@@ -16,6 +16,7 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.ui.formatter.FormatterException;
+import org.eclipse.dltk.ui.formatter.FormatterSyntaxProblemException;
 import org.eclipse.dltk.ui.formatter.IScriptFormatter;
 import org.eclipse.dltk.ui.formatter.IScriptFormatterFactory;
 import org.eclipse.dltk.ui.formatter.ScriptFormatterManager;
@@ -72,6 +73,8 @@ public class JavaScriptTemplateContext extends ScriptTemplateContext {
 									document.get(), remeberedVariables),
 							template.isAutoInsertable());
 				}
+			} catch (FormatterSyntaxProblemException e) {
+				// ignore & & fall thru
 			} catch (FormatterException e) {
 				JavaScriptUI.log(e);
 			}
