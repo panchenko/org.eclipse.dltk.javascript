@@ -156,6 +156,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	}
 
 	public JSMethod() {
+		super(4);
 	}
 
 	/**
@@ -164,11 +165,13 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	 * @return
 	 */
 	public JSMethod(FunctionStatement node, ReferenceSource source) {
+		super(node.getArguments().size());
 		initialize(node, source, node.getName());
 	}
 
 	public JSMethod(FunctionStatement node, ReferenceSource source,
 			Expression name) {
+		super(node.getArguments().size());
 		initialize(node, source, name);
 	}
 
