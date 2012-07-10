@@ -174,6 +174,10 @@ public class JavaScriptCompletionProposalCollector extends
 	protected ScriptCompletionProposal createScriptCompletionProposal(
 			String completion, int replaceStart, int length, Image image,
 			String displayString, int i, boolean isInDoc) {
+		// PATCH JOHAN, do check for the JSDOC attribute and overwrite the
+		// isInDoc boolean if that is set.
+		if (getAttribute(TypeMode.JSDOC) instanceof Boolean)
+			isInDoc = ((Boolean) getAttribute(TypeMode.JSDOC)).booleanValue();
 		JavaScriptCompletionProposal javaScriptCompletionProposal = new JavaScriptCompletionProposal(
 				completion, replaceStart, length, image, displayString, i,
 				isInDoc);
