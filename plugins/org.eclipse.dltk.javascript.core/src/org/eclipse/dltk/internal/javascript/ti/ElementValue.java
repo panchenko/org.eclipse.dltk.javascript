@@ -210,7 +210,9 @@ public abstract class ElementValue implements IValue {
 
 	private static class TypeValue extends ElementValue implements IValue {
 
-		private Value arrayLookup;
+		private final Map<String, IValue> children = new HashMap<String, IValue>(
+				4, 0.9f);
+
 		private final JSTypeSet types;
 
 		public TypeValue(ITypeSystem context, IRType type) {
@@ -229,17 +231,26 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public IValue getChild(String name, boolean resolve) {
-			if (name.equals(IValueReference.ARRAY_OP)) {
-				if (arrayLookup == null)
-					arrayLookup = new Value();
-				return arrayLookup;
+			IValue value = children.get(name);
+			if (value == null) {
+				if (name.equals(IValueReference.ARRAY_OP)) {
+					value = new Value();
+				} else {
+					for (IRType type : types) {
+						value = findMember(context, type, name);
+						if (value != null) {
+							if (value instanceof ElementValue) {
+								value = ((ElementValue) value).resolveValue();
+							}
+							break;
+						}
+					}
+				}
+				if (value != null) {
+					children.put(name, value);
+				}
 			}
-			for (IRType type : types) {
-				IValue child = findMember(context, type, name);
-				if (child != null)
-					return child;
-			}
-			return null;
+			return value;
 		}
 
 		public IRType getDeclaredType() {
@@ -420,7 +431,8 @@ public abstract class ElementValue implements IValue {
 	private static class PropertyValue extends ElementValue implements IValue {
 
 		private final Property property;
-		private final Map<String, IValue> children = new HashMap<String, IValue>();
+		private final Map<String, IValue> children = new HashMap<String, IValue>(
+				4, 0.9f);
 
 		public PropertyValue(ITypeSystem context, Property property) {
 			super(context);

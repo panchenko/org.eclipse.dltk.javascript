@@ -271,6 +271,9 @@ public class ImmutableValue implements IValue, IValue2 {
 				if (value != null) {
 					if (elementValues == null)
 						elementValues = new HashMap<String, IValue>(4, 0.9f);
+					if (resolve && value instanceof ElementValue) {
+						value = ((ElementValue) value).resolveValue();
+					}
 					elementValues.put(name, value);
 					return value;
 				}
