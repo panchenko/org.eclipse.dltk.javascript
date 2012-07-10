@@ -16,7 +16,9 @@ import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -24,6 +26,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 
 public class Value extends ImmutableValue {
 
@@ -129,10 +132,33 @@ public class Value extends ImmutableValue {
 		types.clear();
 	}
 
+	@SuppressWarnings("serial")
+	static class DeepValueRecursionException extends RuntimeException {
+	}
+
+	private static final ThreadLocal<AtomicBoolean> recursionErrorReported = new ThreadLocal<AtomicBoolean>() {
+		protected AtomicBoolean initialValue() {
+			return new AtomicBoolean();
+		}
+	};
+
 	public void addValue(IValue src) {
 		if (src instanceof ImmutableValue) {
 			final IdentityHashMap<ImmutableValue, ImmutableValue> processing = new IdentityHashMap<ImmutableValue, ImmutableValue>();
-			addValueRecursive((ImmutableValue) src, processing, 0);
+			try {
+				addValueRecursive((ImmutableValue) src, processing, 0);
+			} catch (DeepValueRecursionException e) {
+				e.printStackTrace();
+				if (recursionErrorReported.get().compareAndSet(false, true)) {
+					String msg = "Deep recursion while copying the value";
+					final ReferenceSource source = TypeInferencer2
+							.getCurrentSource();
+					if (source != null) {
+						msg += " when processing " + source;
+					}
+					JavaScriptPlugin.error(msg, e);
+				}
+			}
 			// translate references, so they point to the new value
 			for (Map.Entry<ImmutableValue, ImmutableValue> entry : processing
 					.entrySet()) {
@@ -186,8 +212,7 @@ public class Value extends ImmutableValue {
 		if (!processing.containsKey(src)) {
 			processing.put(src, this);
 			if (depth > 8) {
-				// TODO logging?
-				return;
+				throw new DeepValueRecursionException();
 			}
 			if (src.declaredType != null) {
 				types.add(src.declaredType);

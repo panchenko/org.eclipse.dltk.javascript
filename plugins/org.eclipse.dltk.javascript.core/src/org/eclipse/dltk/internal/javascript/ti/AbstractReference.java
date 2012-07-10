@@ -68,7 +68,7 @@ public abstract class AbstractReference implements IValueReference,
 				val.addReference(src);
 				return;
 			}
-			if (!copy && src instanceof Value
+			if (!copy || src instanceof Value
 					&& ((IValueProvider) value).isReference()
 					|| value.isParentOf(this)) {
 				val.addReference(src);

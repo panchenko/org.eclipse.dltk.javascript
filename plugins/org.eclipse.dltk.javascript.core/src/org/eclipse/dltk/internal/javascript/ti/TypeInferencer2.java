@@ -1075,4 +1075,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 	}
 
+	public static ReferenceSource getCurrentSource() {
+		final ITypeSystem ts = CURRENT.get();
+		return ts instanceof TypeInferencer2 ? ((TypeInferencer2) ts)
+				.getSource() : null;
+	}
+
 }
