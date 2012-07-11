@@ -12,10 +12,10 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -28,6 +28,9 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+/**
+ * TypeCache abstract implementation
+ */
 public abstract class TypeCache {
 
 	private final URI baseURI;
@@ -44,48 +47,28 @@ public abstract class TypeCache {
 		this.resourceSet = new TypeCacheResourceSet(this);
 	}
 
-	public static class CacheEntry {
-		final String bucket;
-		final Type type;
-
-		CacheEntry(String bucket, Type type) {
-			this.bucket = bucket;
-			this.type = type;
-		}
-	}
-
-	private final Map<String, CacheEntry> map = new HashMap<String, CacheEntry>();
-
 	/**
-	 * Adds the specified type to the specified bucket within the cache. To be
-	 * called from {@link #createType(String)}.
+	 * Adds the specified type to the specified bucket within the cache.
+	 * Internal method to be called from {@link #createType(String)}.
 	 * 
 	 * @param bucket
 	 * @param type
 	 * @return
 	 */
-	protected CacheEntry addType(String bucket, Type type) {
-		if (bucket == null) {
-			bucket = "";
-		}
+	protected Type addType(String bucket, Type type) {
 		Assert.isLegal(type.eResource() == null);
 		Assert.isLegal(!type.eIsProxy());
-		final String name = type.getName();
-		synchronized (map) {
-			CacheEntry entry = map.get(name);
-			if (entry != null) {
-				if (!bucket.equals(entry.bucket)) {
-					throw new IllegalStateException(
-							"Type cache bucket changed for " + name);
-				}
-				return entry;
+		final TypeCacheResource resource = getResource(bucket, true);
+		synchronized (resource) {
+			final String name = type.getName();
+			final Type previous = resource.types.get(name);
+			if (previous != null) {
+				return previous;
 			}
-			entry = new CacheEntry(bucket, type);
-			map.put(name, entry);
-			resourceSet.getResource(getURI(bucket), true).getContents()
-					.add(type);
-			return entry;
+			resource.types.put(name, type);
+			resource.getContents().add(type);
 		}
+		return type;
 	}
 
 	static class ThreadState {
@@ -98,6 +81,13 @@ public abstract class TypeCache {
 		}
 	};
 
+	private TypeCacheResource getResource(String bucket, boolean loadOnDemand) {
+		synchronized (resourceSet) {
+			return (TypeCacheResource) resourceSet.getResource(getURI(bucket),
+					loadOnDemand);
+		}
+	}
+
 	/**
 	 * Finds the specified type in the cache. If type is not cached in the cache
 	 * yet, then the {@link #createType(String)} is called to create the entry.
@@ -105,23 +95,45 @@ public abstract class TypeCache {
 	 * @param typeName
 	 * @return
 	 */
-	public Type findType(String typeName) {
-		CacheEntry entry;
-		synchronized (map) {
-			entry = map.get(typeName);
-		}
-		if (entry != null) {
-			return entry.type;
+	public Type findType(String context, String typeName) {
+		final TypeCacheResource resource = getResource(context, false);
+		if (resource != null) {
+			synchronized (resource) {
+				final Type type = resource.types.get(typeName);
+				if (type != null) {
+					return type;
+				}
+			}
 		}
 		final ThreadState state = threads.get();
 		++state.activeOperations;
 		try {
-			entry = createType(typeName);
+			final String[] accessible = getAccessibleBuckets(context);
+			for (String ac : accessible) {
+				final TypeCacheResource ar = getResource(ac, false);
+				if (ar != null) {
+					synchronized (ar) {
+						final Type type = ar.types.get(typeName);
+						if (type != null) {
+							return type;
+						}
+					}
+				}
+			}
+			return createType(context, typeName);
 		} finally {
 			--state.activeOperations;
 		}
-		return entry != null ? entry.type : null;
-		// TODO (alex) cache negative result?
+	}
+
+	/**
+	 * Returns all the buckets accessible from the specified context.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	protected String[] getAccessibleBuckets(String context) {
+		return CharOperation.NO_STRINGS;
 	}
 
 	/**
@@ -133,7 +145,7 @@ public abstract class TypeCache {
 	 * @param typeName
 	 * @return
 	 */
-	protected abstract CacheEntry createType(String typeName);
+	protected abstract Type createType(String context, String typeName);
 
 	/**
 	 * For the internal usage within {@link #createType(String)}
@@ -141,26 +153,49 @@ public abstract class TypeCache {
 	 * @param typeName
 	 * @return
 	 */
-	protected Type getType(String typeName) {
-		final Type type = TypeInfoModelLoader.getInstance().getType(typeName);
+	protected final Type getType(String context, String typeName) {
+		return getType(context, typeName, false);
+	}
+
+	/**
+	 * For the internal usage within {@link #createType(String)}
+	 * 
+	 * @param typeName
+	 * @return
+	 */
+	private Type getType(String context, String typeName, boolean force) {
+		Type type = TypeInfoModelLoader.getInstance().getType(typeName);
 		if (type != null) {
 			return type;
 		}
-		CacheEntry entry;
-		synchronized (map) {
-			entry = map.get(typeName);
-		}
-		if (entry != null) {
-			return entry.type;
+		TypeCacheResource resource = getResource(context, false);
+		if (resource != null) {
+			synchronized (resource) {
+				type = resource.types.get(typeName);
+				if (type != null) {
+					return type;
+				}
+			}
 		}
 		final ThreadState state = threads.get();
-		if (state.activeOperations != 0) {
+		if (!force && state.activeOperations != 0) {
 			return TypeUtil.createProxy(typeName);
 		}
 		++state.activeOperations;
 		try {
-			entry = createType(typeName);
-			return entry != null ? entry.type : null;
+			final String[] accessible = getAccessibleBuckets(context);
+			for (String bucket : accessible) {
+				resource = getResource(bucket, false);
+				if (resource != null) {
+					synchronized (resource) {
+						type = resource.types.get(typeName);
+						if (type != null) {
+							return type;
+						}
+					}
+				}
+			}
+			return createType(context, typeName);
 		} finally {
 			--state.activeOperations;
 		}
@@ -172,10 +207,16 @@ public abstract class TypeCache {
 	 * @param typeName
 	 * @return
 	 */
-	protected SimpleType getTypeRef(String typeName) {
-		return TypeUtil.ref(getType(typeName));
+	protected SimpleType getTypeRef(String context, String typeName) {
+		return TypeUtil.ref(getType(context, typeName));
 	}
 
+	/**
+	 * Returns the resource URI for the specified cache bucket.
+	 * 
+	 * @param bucket
+	 * @return
+	 */
 	private URI getURI(String bucket) {
 		if (bucket == null || bucket.length() == 0) {
 			return baseURI;
@@ -186,14 +227,54 @@ public abstract class TypeCache {
 	}
 
 	/**
+	 * Tests if one URI is a prefix of another.
+	 * 
+	 * @param base
+	 * @param uri
+	 * @return
+	 */
+	private static boolean isPrefixOf(URI base, URI uri) {
+		int segmentCount;
+		if (uri.isHierarchical() && base.scheme().equals(uri.scheme())
+				&& base.authority().equals(uri.authority())
+				&& (segmentCount = base.segmentCount()) <= uri.segmentCount()) {
+			for (int i = 0; i < segmentCount; ++i) {
+				if (!base.segment(i).equals(uri.segment(i)))
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the cache bucket of the specified resource.
+	 * 
+	 * @param resourceContext
+	 * @return
+	 */
+	private String getContextOf(Resource resourceContext) {
+		final URI uri = resourceContext.getURI();
+		if (uri != null && isPrefixOf(baseURI, uri)) {
+			if (baseURI.segmentCount() == uri.segmentCount()) {
+				return "";
+			} else {
+				return uri.segment(baseURI.segmentCount());
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Clears the cache
 	 */
 	public void clear() {
-		synchronized (map) {
-			map.clear();
+		synchronized (resourceSet) {
 			final EList<Resource> resources = resourceSet.getResources();
 			for (Resource resource : resources) {
-				resource.unload();
+				synchronized (resource) {
+					resource.unload();
+				}
 			}
 			resources.clear();
 		}
@@ -205,20 +286,12 @@ public abstract class TypeCache {
 	 * @param bucket
 	 */
 	public void clear(String bucket) {
-		if (bucket == null) {
-			bucket = "";
+		final TypeCacheResource resource;
+		synchronized (resourceSet) {
+			resource = getResource(bucket, false);
 		}
-		synchronized (map) {
-			for (Iterator<Map.Entry<String, CacheEntry>> i = map.entrySet()
-					.iterator(); i.hasNext();) {
-				final Map.Entry<String, CacheEntry> entry = i.next();
-				if (bucket.equals(entry.getValue().bucket)) {
-					i.remove();
-				}
-			}
-			final Resource resource = resourceSet.getResource(getURI(bucket),
-					false);
-			if (resource != null) {
+		if (resource != null) {
+			synchronized (resource) {
 				resource.unload();
 			}
 		}
@@ -251,7 +324,8 @@ public abstract class TypeCache {
 				Resource resourceContext) {
 			final URI uri = proxy.eProxyURI();
 			if (TypeUtil.isTypeProxy(uri)) {
-				return cache.getType(URI.decode(uri.fragment()));
+				return cache.getType(cache.getContextOf(resourceContext),
+						URI.decode(uri.fragment()), true);
 			} else {
 				return EcoreUtil.resolve(proxy, this);
 			}
@@ -264,10 +338,18 @@ public abstract class TypeCache {
 			super(uri);
 		}
 
+		final Map<String, Type> types = new HashMap<String, Type>();
+
 		@Override
 		public String toString() {
 			return getClass().getSimpleName() + '@'
 					+ Integer.toHexString(hashCode()) + "@" + uri;
+		}
+
+		@Override
+		protected void doUnload() {
+			types.clear();
+			super.doUnload();
 		}
 
 	}

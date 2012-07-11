@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.ast.ASTNode;
@@ -36,7 +35,6 @@ import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
-import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
@@ -409,10 +407,6 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return source != null ? source.getModelElement() : null;
 	}
 
-	public String getContext() {
-		return null;
-	}
-
 	private enum TypeResolveMode {
 		SIMPLE, PROXY, UNKNOWN
 	}
@@ -425,11 +419,6 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			if (!allowUnknown && type.getKind() == TypeKind.UNKNOWN) {
 				return null;
 			}
-			return type;
-		}
-		type = invariantRS.getCachedType(typeName);
-		if (type != null) {
-			types.put(typeName, type);
 			return type;
 		}
 		type = loadType(typeName, mode, queryProviders, queryPredefined);
@@ -457,59 +446,13 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		if (resource != null) {
 			final ResourceSet resourceSet = resource.getResourceSet();
 			if (resourceSet != null) {
-				if (!(resourceSet instanceof InvariantTypeResourceSet)) {
-					Assert.isLegal(!(resourceSet instanceof TypeResourceSet),
-							"Type " + type.getName()
-									+ " has invalid resource: " + resource
-									+ " (" + resourceSet.getClass() + ")");
-				}
+				Assert.isLegal(!(resourceSet instanceof TypeResourceSet),
+						"Type " + type.getName() + " has invalid resource: "
+								+ resource + " (" + resourceSet.getClass()
+								+ ")");
 			}
 		}
 		// TODO check that member referenced types are contained or proxy
-	}
-
-	public void markInvariant(Type type) {
-		if (((EObject) type).eResource() != null) {
-			return;
-		}
-		invariantRS.add(type);
-	}
-
-	public void markInvariant(Type type, String context) {
-		if (((EObject) type).eResource() != null) {
-			return;
-		}
-		if (context == null) {
-			markInvariant(type);
-		} else {
-			Assert.isLegal(((EObject) type).eContainer() == null);
-			Assert.isLegal(((EObject) type).eResource() == null);
-			InvariantTypeResourceSet invariantTypeResourceSet = invariantContextRS
-					.get(context);
-			if (invariantTypeResourceSet == null) {
-				invariantTypeResourceSet = new InvariantTypeResourceSet(
-						context, invariantRS, invariantContextRS);
-				InvariantTypeResourceSet set = invariantContextRS.putIfAbsent(
-						context, invariantTypeResourceSet);
-				if (set != null) {
-					invariantTypeResourceSet = set;
-				}
-			}
-			invariantTypeResourceSet.add(type);
-		}
-	}
-
-	public Type getInvariantType(String typeName, String context) {
-		if (context == null) {
-			return invariantRS.getCachedType(typeName);
-		} else {
-			InvariantTypeResourceSet invariantTypeResourceSet = invariantContextRS
-					.get(context);
-			if (invariantTypeResourceSet != null) {
-				return invariantTypeResourceSet.getCachedType(typeName);
-			}
-		}
-		return null;
 	}
 
 	protected static Type createUnknown(String typeName) {
@@ -530,13 +473,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		if (queryProviders
 				&& activeTypeRequests.put(typeName, Boolean.FALSE) == null) {
 			try {
-				Type type = invariantRS.getCachedType(typeName);
-				if (type != null) {
-					return type;
-				}
 				for (ITypeProvider provider : getTypeProviders()) {
-					type = provider.getType(this, mode, typeName);
-					if (type != null && !isProxy(type)) {
+					final Type type = provider.getType(this, mode, typeName);
+					if (type != null && !type.eIsProxy()) {
 						return type;
 					}
 				}
@@ -625,268 +564,6 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return getType(typeName, null, true, false, false, false);
 		}
 	};
-
-	static class InvariantTypeResourceSet extends TypeResourceSet implements
-			ITypeInfoContext {
-
-		private final String context;
-		private final InvariantTypeResourceSet staticInvariants;
-		private final ConcurrentMap<String, InvariantTypeResourceSet> contextInvariants;
-
-		public InvariantTypeResourceSet(
-				ConcurrentMap<String, InvariantTypeResourceSet> contextInvariants) {
-			this(null, null, contextInvariants);
-		}
-
-		public InvariantTypeResourceSet(
-				String context,
-				InvariantTypeResourceSet staticInvariants,
-				ConcurrentMap<String, InvariantTypeResourceSet> contextInvariants) {
-			this.context = context;
-			this.staticInvariants = staticInvariants;
-			this.contextInvariants = contextInvariants;
-		}
-
-		private final Set<String> activeTypeRequests = new HashSet<String>();
-		private final Map<String, Type> types = new ConcurrentHashMap<String, Type>();
-
-		private boolean canQueryTypeProviders() {
-			synchronized (activeTypeRequests) {
-				return activeTypeRequests.isEmpty();
-			}
-		}
-
-		public String getContext() {
-			return context;
-		}
-
-		private Type getType(String typeName, TypeMode mode,
-				boolean queryProviders, boolean queryPredefined,
-				boolean allowProxy, boolean allowUnknown) {
-			Type type = types.get(typeName);
-			if (type != null) {
-				return type;
-			}
-			type = loadType(typeName, mode, queryProviders, queryPredefined);
-			if (type != null) {
-				// TODO validateTypeInfo(type);
-				addToResource(type);
-				return type;
-			}
-			if (allowProxy) {
-				type = TypeUtil.createProxy(typeName);
-				return type;
-			}
-			if (allowUnknown) {
-				type = createUnknown(typeName);
-				addToResource(type);
-				return type;
-			}
-			return null;
-		}
-
-		public SimpleType getTypeRef(String typeName) {
-			return TypeUtil.ref(getType(typeName));
-		}
-
-		private ITypeProvider[] typeProviders = null;
-
-		public ITypeProvider[] getTypeProviders() {
-			if (typeProviders == null) {
-				typeProviders = TypeInfoManager.createTypeProviders(this);
-			}
-			return typeProviders;
-		}
-
-		private Type loadType(String typeName, TypeMode mode,
-				boolean queryProviders, boolean queryPredefined) {
-			if (queryProviders) {
-				synchronized (activeTypeRequests) {
-					while (!activeTypeRequests.add(typeName)) {
-						try {
-							activeTypeRequests.wait();
-						} catch (InterruptedException e) {
-						}
-					}
-				}
-				try {
-					Type type = types.get(typeName);
-					if (type != null) {
-						return type;
-					}
-					for (ITypeProvider provider : getTypeProviders()) {
-						type = provider.getType(this, mode, typeName);
-						if (type != null && !isProxy(type)) {
-							return type;
-						}
-					}
-				} finally {
-					synchronized (activeTypeRequests) {
-						activeTypeRequests.remove(typeName);
-						activeTypeRequests.notifyAll();
-					}
-				}
-			}
-			if (queryPredefined) {
-				Type type = TypeInfoModelLoader.getInstance().getType(typeName);
-				if (type != null) {
-					return type;
-				}
-			}
-			return null;
-		}
-
-		@Override
-		protected Type resolveTypeProxy(String typeName) {
-			if (staticInvariants != null) {
-				Type cachedType = staticInvariants.getCachedType(typeName);
-				if (cachedType != null)
-					return cachedType;
-			}
-			return getType(typeName, null, true, false, false, false);
-		}
-
-		public Type getType(String typeName) {
-			if (typeName == null || typeName.length() == 0) {
-				return null;
-			}
-			final boolean queryProviders = canQueryTypeProviders();
-			return getType(typeName, null, queryProviders, true,
-					!queryProviders, true);
-		}
-
-		public Type getKnownType(String typeName, TypeMode mode) {
-			if (typeName == null || typeName.length() == 0) {
-				return null;
-			}
-			final boolean queryProviders = canQueryTypeProviders();
-			return getType(typeName, null, queryProviders, true,
-					!queryProviders, false);
-		}
-
-		public Type resolveType(Type type) {
-			if (type != null && type.isProxy()) {
-				final String typeName = URI.decode(((InternalEObject) type)
-						.eProxyURI().fragment());
-				final Type resolved = getType(typeName, null, true, true,
-						false, true);
-				if (resolved != null) {
-					return resolved;
-				}
-			}
-			return type;
-		}
-
-		public void markInvariant(Type type) {
-			if (((EObject) type).eResource() != null) {
-				return;
-			}
-			// context == null, this is a static one
-			if (staticInvariants == null)
-				add(type);
-			else
-				staticInvariants.add(type);
-		}
-
-		public void markInvariant(Type type, String context) {
-			if (((EObject) type).eResource() != null) {
-				return;
-			}
-			if (context.equals(this.context)) {
-				add(type);
-			} else {
-				InvariantTypeResourceSet invariantTypeResourceSet = this.contextInvariants
-						.get(context);
-				if (invariantTypeResourceSet == null) {
-					invariantTypeResourceSet = new InvariantTypeResourceSet(
-							context, invariantRS, invariantContextRS);
-					InvariantTypeResourceSet set = invariantContextRS
-							.putIfAbsent(context, invariantTypeResourceSet);
-					if (set != null) {
-						invariantTypeResourceSet = set;
-					}
-				}
-				invariantTypeResourceSet.add(type);
-			}
-		}
-
-		public Type getInvariantType(String typeName, String context) {
-			if (context == null) {
-				if (staticInvariants == null) {
-					return getCachedType(typeName);
-				} else {
-					return staticInvariants.getCachedType(typeName);
-				}
-			} else if (context.equals(this.context)) {
-				return getCachedType(typeName);
-			} else {
-				InvariantTypeResourceSet invariantTypeResourceSet = invariantContextRS
-						.get(context);
-				if (invariantTypeResourceSet != null) {
-					return invariantTypeResourceSet.getCachedType(typeName);
-				}
-			}
-			return null;
-		}
-
-		public IModelElement getModelElement() {
-			return null;
-		}
-
-		public ReferenceSource getSource() {
-			return ReferenceSource.UNKNOWN;
-		}
-
-		@Override
-		public void add(Type type) {
-			super.add(type);
-			types.put(type.getName(), type);
-		}
-
-		public Type getCachedType(String typeName) {
-			return types.get(typeName);
-		}
-
-		public void reset() {
-			types.clear();
-			synchronized (this) {
-				getResource().getContents().clear();
-			}
-		}
-
-		public IValue valueOf(Member member) {
-			// TODO (alex) review
-			return null;
-		}
-
-		public Type parameterize(Type target, List<IRType> parameters) {
-			// TODO (alex) review
-			return target;
-		}
-
-		public <T> T getAttribute(AttributeKey<T> key) {
-			// TODO (alex) review
-			return null;
-		}
-
-		public <T> void pushAttribute(AttributeKey<T> key, T value) {
-			// TODO (alex) review
-		}
-
-		public <T> T popAttribute(AttributeKey<T> key) {
-			// TODO (alex) review
-			return null;
-		}
-
-	}
-
-	static final ConcurrentHashMap<String, InvariantTypeResourceSet> invariantContextRS = new ConcurrentHashMap<String, InvariantTypeResourceSet>();
-	static final InvariantTypeResourceSet invariantRS = new InvariantTypeResourceSet(
-			invariantContextRS);
-
-	protected static boolean isProxy(Type type) {
-		return ((EObject) type).eIsProxy();
-	}
 
 	private IValueTypeFactory factory = new ValueTypeFactoryImpl(this);
 

@@ -57,12 +57,12 @@ public class ExampleTypeProvider implements ITypeProvider {
 	private static final TypeCache CACHE = new TypeCache("dltk",
 			"javascript.examples") {
 		@Override
-		protected CacheEntry createType(String typeName) {
+		protected Type createType(String context, String typeName) {
 			if ("Continuation".equals(typeName)) {
 				Type type = TypeInfoModelFactory.eINSTANCE.createType();
 				type.setName(typeName);
 				type.setKind(TypeKind.JAVASCRIPT);
-				type.setSuperType(getType(ITypeNames.FUNCTION));
+				type.setSuperType(getType(context, ITypeNames.FUNCTION));
 				return addType(CACHE_BUCKET, type);
 			} else if (TYPE_SERVICE.equals(typeName)) {
 				Type type = TypeInfoModelFactory.eINSTANCE.createType();
@@ -71,25 +71,25 @@ public class ExampleTypeProvider implements ITypeProvider {
 
 				Method method1 = TypeInfoModelFactory.eINSTANCE.createMethod();
 				method1.setName("execute");
-				method1.setType(getTypeRef(TYPE_RESPONSE));
+				method1.setType(getTypeRef(context, TYPE_RESPONSE));
 				type.getMembers().add(method1);
 
 				Method method2 = TypeInfoModelFactory.eINSTANCE.createMethod();
 				method2.setName("executeCompatible");
-				method2.setType(getTypeRef(TYPE_RESPONSE));
+				method2.setType(getTypeRef(context, TYPE_RESPONSE));
 				method2.setDeprecated(true);
 				type.getMembers().add(method2);
 
 				Property prop1 = TypeInfoModelFactory.eINSTANCE
 						.createProperty();
 				prop1.setName("name");
-				prop1.setType(getTypeRef(ITypeNames.STRING));
+				prop1.setType(getTypeRef(context, ITypeNames.STRING));
 				type.getMembers().add(prop1);
 
 				Property prop2 = TypeInfoModelFactory.eINSTANCE
 						.createProperty();
 				prop2.setName("nameCompatible");
-				prop2.setType(getTypeRef(ITypeNames.STRING));
+				prop2.setType(getTypeRef(context, ITypeNames.STRING));
 				prop2.setDeprecated(true);
 				type.getMembers().add(prop2);
 
@@ -101,11 +101,11 @@ public class ExampleTypeProvider implements ITypeProvider {
 					Parameter p = TypeInfoModelFactory.eINSTANCE
 							.createParameter();
 					p.setName("language");
-					p.setType(getTypeRef(ITypeNames.STRING));
+					p.setType(getTypeRef(context, ITypeNames.STRING));
 					method5.getParameters().add(p);
 					p = TypeInfoModelFactory.eINSTANCE.createParameter();
 					p.setName("code");
-					p.setType(getTypeRef(ITypeNames.STRING));
+					p.setType(getTypeRef(context, ITypeNames.STRING));
 					method5.getParameters().add(p);
 					type.getMembers().add(method5);
 				}
@@ -124,7 +124,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 					Parameter p = TypeInfoModelFactory.eINSTANCE
 							.createParameter();
 					p.setName("code");
-					p.setType(getTypeRef(ITypeNames.STRING));
+					p.setType(getTypeRef(context, ITypeNames.STRING));
 					method4.getParameters().add(p);
 					type.getMembers().add(method4);
 				}
@@ -137,13 +137,13 @@ public class ExampleTypeProvider implements ITypeProvider {
 				Property prop1 = TypeInfoModelFactory.eINSTANCE
 						.createProperty();
 				prop1.setName("status");
-				prop1.setType(getTypeRef(ITypeNames.NUMBER));
+				prop1.setType(getTypeRef(context, ITypeNames.NUMBER));
 				type.getMembers().add(prop1);
 
 				Property prop2 = TypeInfoModelFactory.eINSTANCE
 						.createProperty();
 				prop2.setName("service");
-				prop2.setType(getTypeRef(TYPE_SERVICE));
+				prop2.setType(getTypeRef(context, TYPE_SERVICE));
 				type.getMembers().add(prop2);
 				return addType(CACHE_BUCKET, type);
 			} else
@@ -154,7 +154,7 @@ public class ExampleTypeProvider implements ITypeProvider {
 	private static final String CACHE_BUCKET = "tests";
 
 	public Type getType(ITypeInfoContext context, TypeMode mode, String typeName) {
-		final Type cached = CACHE.findType(typeName);
+		final Type cached = CACHE.findType("", typeName);
 		if (cached != null) {
 			return cached;
 		} else if (TYPE_SERVICE2.equals(typeName)) {

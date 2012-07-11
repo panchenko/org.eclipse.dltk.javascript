@@ -12,7 +12,6 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.core.IModelElement;
-import org.eclipse.dltk.internal.javascript.ti.TypeInfoInvariantCacheImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -51,45 +50,6 @@ public interface ITypeInfoContext extends ITypeSystem {
 	Type getKnownType(String typeName, TypeMode mode);
 
 	/**
-	 * Mark the specified type as invariant - not depending on the current
-	 * context, so the type can be widely cached.
-	 * 
-	 * @param type
-	 */
-	@Deprecated
-	void markInvariant(Type type);
-
-	/**
-	 * Mark the specified type as invariant for a specific context, so the type
-	 * can be widely cached.
-	 * 
-	 * @param type
-	 * @param context
-	 */
-	@Deprecated
-	void markInvariant(Type type, String context);
-
-	/**
-	 * Get a type from an invariant cache.
-	 * 
-	 * @param typeName
-	 * @param context
-	 * @return
-	 */
-	@Deprecated
-	Type getInvariantType(String typeName, String context);
-
-	@Deprecated
-	public interface ITypeInfoInvariantCache {
-		void reset();
-
-		void reset(String context);
-	}
-
-	@Deprecated
-	ITypeInfoInvariantCache INVARIANTS = new TypeInfoInvariantCacheImpl();
-
-	/**
 	 * Returns the model element being processed or <code>null</code>
 	 * 
 	 * @return
@@ -102,15 +62,6 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * @return
 	 */
 	ReferenceSource getSource();
-
-	/**
-	 * Returns the context name of this TypeInfoContext, by default this return
-	 * null.
-	 * 
-	 * @return
-	 */
-	@Deprecated
-	String getContext();
 
 	/**
 	 * Adds value for the specified attribute.
