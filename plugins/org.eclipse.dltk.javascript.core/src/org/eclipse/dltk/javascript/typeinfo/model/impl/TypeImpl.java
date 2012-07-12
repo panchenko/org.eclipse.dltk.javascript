@@ -633,4 +633,8 @@ public class TypeImpl extends ElementImpl implements Type {
 		return new SimpleTypeKey(this);
 	}
 
+	public Member[] getAdditionalMembers() {
+		return null;
+	}
+
 } //TypeImpl

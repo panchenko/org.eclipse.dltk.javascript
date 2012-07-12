@@ -28,6 +28,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.utils.CompoundIterator;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * Returns all the members defined by the specified type(s) and all it's super
@@ -197,17 +198,37 @@ public class TypeMemberQuery implements Iterable<Member> {
 		protected boolean fetchNext() {
 			while (typeIterator.hasNext()) {
 				final QueueItem item = typeIterator.next();
+				final EList<Member> members = item.type.getMembers();
+				final Member[] additionalMembers = item.type
+						.getAdditionalMembers();
 				if (item.predicate == MemberPredicate.ALWAYS_TRUE) {
-					current = filter(item.type.getMembers()).iterator();
+					if (additionalMembers != null
+							&& additionalMembers.length != 0) {
+						final List<Member> concat = new ArrayList<Member>(
+								members.size() + additionalMembers.length);
+						concat.addAll(members);
+						Collections.addAll(concat, additionalMembers);
+						current = filter(concat).iterator();
+					} else {
+						current = filter(members).iterator();
+					}
 				} else {
 					final List<Member> filtered = new ArrayList<Member>(
-							item.type.getMembers().size());
-					for (Member member : item.type.getMembers()) {
-						if (item.predicate.evaluate(member)) {
+							members.size());
+					for (Member member : members) {
+						if (item.predicate.evaluate(member) && isValid(member)) {
 							filtered.add(member);
 						}
 					}
-					current = filter(filtered).iterator();
+					if (additionalMembers != null) {
+						for (Member member : additionalMembers) {
+							if (item.predicate.evaluate(member)
+									&& isValid(member)) {
+								filtered.add(member);
+							}
+						}
+					}
+					current = filtered.iterator();
 				}
 				if (current.hasNext()) {
 					return true;

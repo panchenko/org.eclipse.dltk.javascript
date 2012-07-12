@@ -272,4 +272,12 @@ public interface Type extends Element {
 	 */
 	IRType createInstance();
 
+	/**
+	 * Returns array of additional type members, e.g. defined in partial types.
+	 * Can return <code>null</code> if there are no additional members.
+	 * 
+	 * @return
+	 */
+	Member[] getAdditionalMembers();
+
 } // Type
