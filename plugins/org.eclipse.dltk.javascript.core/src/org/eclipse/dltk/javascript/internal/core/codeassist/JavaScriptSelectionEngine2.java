@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.Path;
 import org.eclipse.dltk.ast.ASTNode;
@@ -42,6 +43,7 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -111,7 +113,8 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 		return false;
 	}
 
-	public IModelElement[] select(IModuleSource module, int position, int i) {
+	public IModelElement[] select(final IModuleSource module, int position,
+			int i) {
 		if (!(module.getModelElement() instanceof ISourceModule) || i == -1) {
 			return null;
 		}
@@ -151,90 +154,105 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					}
 					return null;
 				}
-				final ReferenceKind kind = value.getKind();
-				if (DEBUG) {
-					System.out.println(value + "," + kind); //$NON-NLS-1$
-				}
-				ISourceModule m = (ISourceModule) module.getModelElement();
-				if (kind == ReferenceKind.ARGUMENT
-						|| kind == ReferenceKind.LOCAL) {
-					final ReferenceLocation location = value.getLocation();
-					if (DEBUG) {
-						System.out.println(location);
-					}
-					if (location == ReferenceLocation.UNKNOWN) {
-						return null;
-					}
-					final IModelElement result = locateModelElement(location);
-					if (result != null
-							&& (result.getElementType() == IModelElement.FIELD || result
-									.getElementType() == IModelElement.METHOD)) {
-						return new IModelElement[] { result };
-					}
-					final IRType type = JavaScriptValidations.typeOf(value);
-					return new IModelElement[] { new LocalVariable(m,
-							value.getName(), location.getDeclarationStart(),
-							location.getDeclarationEnd(),
-							location.getNameStart(), location.getNameEnd() - 1,
-							type == null ? null : type.getName()) };
-				} else if (kind == ReferenceKind.FUNCTION
-						|| kind == ReferenceKind.GLOBAL
-						|| kind == ReferenceKind.FIELD) {
-					final ReferenceLocation location = value.getLocation();
-					if (DEBUG) {
-						System.out.println(location);
-					}
-					if (location == ReferenceLocation.UNKNOWN) {
-						return null;
-					}
-					final IModelElement result = locateModelElement(location);
-					if (result != null) {
-						return new IModelElement[] { result };
-					}
-				} else if (kind == ReferenceKind.PROPERTY) {
-					final Collection<Property> properties = JavaScriptValidations
-							.extractElements(value, Property.class);
-					if (properties != null) {
-						return convert(m, properties);
-					}
-				} else if (kind == ReferenceKind.METHOD) {
-					final List<Method> methods = JavaScriptValidations
-							.extractElements(value, Method.class);
-					if (methods != null) {
-						IValueReference[] arguments = visitor.getArguments();
-						if (arguments == null) {
-							arguments = new IValueReference[0];
-						}
-						final Method method = JavaScriptValidations
-								.selectMethod(inferencer2, methods, arguments,
-										true);
-						return convert(m, Collections.singletonList(method));
-					}
-				} else if (kind == ReferenceKind.TYPE) {
-					final LinkedHashSet<Type> t = new LinkedHashSet<Type>();
-					JSTypeSet types = value.getDeclaredTypes();
-					if (types != null) {
-						Collections.addAll(t, types.toArray());
-					}
-					types = value.getTypes();
-					if (types != null) {
-						Collections.addAll(t, types.toArray());
-					}
-					if (!t.isEmpty()) {
-						return convert(m, t);
-					}
-				}
-				final ReferenceLocation location = value.getLocation();
-				if (location != ReferenceLocation.UNKNOWN
-						&& location.getSourceModule() != null) {
-					return new IModelElement[] { new UnresolvedElement(
-							location.getSourceModule(), value.getName(),
-							location.getNameStart(), location.getNameEnd() - 1) };
+				try {
+					return TypeInferencer2.withTypeSystem(inferencer2,
+							new Callable<IModelElement[]>() {
+								public IModelElement[] call() throws Exception {
+									return toModelElements(inferencer2,
+											visitor, module, value);
+								}
+							});
+				} catch (Exception e) {
+					// Shouldn't happen, but declared for Callable.call()
+					JavaScriptPlugin.error(e);
 				}
 			}
 		}
 
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private IModelElement[] toModelElements(TypeInferencer2 inferencer2,
+			SelectionVisitor visitor, IModuleSource module,
+			IValueReference value) {
+		final ReferenceKind kind = value.getKind();
+		if (DEBUG) {
+			System.out.println(value + "," + kind); //$NON-NLS-1$
+		}
+		ISourceModule m = (ISourceModule) module.getModelElement();
+		if (kind == ReferenceKind.ARGUMENT || kind == ReferenceKind.LOCAL) {
+			final ReferenceLocation location = value.getLocation();
+			if (DEBUG) {
+				System.out.println(location);
+			}
+			if (location == ReferenceLocation.UNKNOWN) {
+				return null;
+			}
+			final IModelElement result = locateModelElement(location);
+			if (result != null
+					&& (result.getElementType() == IModelElement.FIELD || result
+							.getElementType() == IModelElement.METHOD)) {
+				return new IModelElement[] { result };
+			}
+			final IRType type = JavaScriptValidations.typeOf(value);
+			return new IModelElement[] { new LocalVariable(m, value.getName(),
+					location.getDeclarationStart(),
+					location.getDeclarationEnd(), location.getNameStart(),
+					location.getNameEnd() - 1, type == null ? null
+							: type.getName()) };
+		} else if (kind == ReferenceKind.FUNCTION
+				|| kind == ReferenceKind.GLOBAL || kind == ReferenceKind.FIELD) {
+			final ReferenceLocation location = value.getLocation();
+			if (DEBUG) {
+				System.out.println(location);
+			}
+			if (location == ReferenceLocation.UNKNOWN) {
+				return null;
+			}
+			final IModelElement result = locateModelElement(location);
+			if (result != null) {
+				return new IModelElement[] { result };
+			}
+		} else if (kind == ReferenceKind.PROPERTY) {
+			final Collection<Property> properties = JavaScriptValidations
+					.extractElements(value, Property.class);
+			if (properties != null) {
+				return convert(m, properties);
+			}
+		} else if (kind == ReferenceKind.METHOD) {
+			final List<Method> methods = JavaScriptValidations.extractElements(
+					value, Method.class);
+			if (methods != null) {
+				IValueReference[] arguments = visitor.getArguments();
+				if (arguments == null) {
+					arguments = new IValueReference[0];
+				}
+				final Method method = JavaScriptValidations.selectMethod(
+						inferencer2, methods, arguments, true);
+				return convert(m, Collections.singletonList(method));
+			}
+		} else if (kind == ReferenceKind.TYPE) {
+			final LinkedHashSet<Type> t = new LinkedHashSet<Type>();
+			JSTypeSet types = value.getDeclaredTypes();
+			if (types != null) {
+				Collections.addAll(t, types.toArray());
+			}
+			types = value.getTypes();
+			if (types != null) {
+				Collections.addAll(t, types.toArray());
+			}
+			if (!t.isEmpty()) {
+				return convert(m, t);
+			}
+		}
+		final ReferenceLocation location = value.getLocation();
+		if (location != ReferenceLocation.UNKNOWN
+				&& location.getSourceModule() != null) {
+			return new IModelElement[] { new UnresolvedElement(
+					location.getSourceModule(), value.getName(),
+					location.getNameStart(), location.getNameEnd() - 1) };
+		}
 		return null;
 	}
 

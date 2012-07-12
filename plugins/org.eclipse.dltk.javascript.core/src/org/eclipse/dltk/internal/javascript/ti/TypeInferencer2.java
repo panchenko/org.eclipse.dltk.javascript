@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.runtime.Assert;
@@ -747,6 +748,17 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		try {
 			CURRENT.set(typeSystem);
 			runnable.run();
+		} finally {
+			CURRENT.set(saved);
+		}
+	}
+
+	public static <V> V withTypeSystem(ITypeSystem typeSystem,
+			Callable<V> callable) throws Exception {
+		final ITypeSystem saved = CURRENT.get();
+		try {
+			CURRENT.set(typeSystem);
+			return callable.call();
 		} finally {
 			CURRENT.set(saved);
 		}
