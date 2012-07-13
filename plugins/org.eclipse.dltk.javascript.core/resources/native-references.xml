@@ -529,6 +529,9 @@
     <members xsi:type="ref:Property" name="ignoreWhitespace" directType="Boolean" static="true"/>
     <members xsi:type="ref:Property" name="prettyIndent" directType="Number" static="true"/>
     <members xsi:type="ref:Property" name="prettyPrinting" directType="Boolean" static="true"/>
+    <members xsi:type="ref:Method" name="defaultSettings" directType="Object" static="true"/>
+    <members xsi:type="ref:Method" name="settings" directType="Object" static="true"/>
+    <members xsi:type="ref:Method" name="setSettings" static="true"/>
     <members xsi:type="ref:Method" name="addNamespace" directType="XML" description="The addNamespace method adds a namespace declaration to the in scope namespaces for this XML object and returns this XML object.">
       <parameters name="namespace"/>
     </members>
