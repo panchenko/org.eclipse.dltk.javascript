@@ -771,7 +771,13 @@ identifier
 xmlAttribute
   : AT identifier -> ^(XmlAttribute AT identifier)
   | AT MUL -> ^(XmlAttribute AT MUL)
+  | AT LBRACK expression RBRACK -> ^(XmlAttribute LBRACK expression)
   ;
+
+propertySelector
+	: identifier
+	| MUL
+	;
 
 // $>
 
@@ -1091,10 +1097,11 @@ leftHandSideExpression
   )
   (
     arguments     -> ^( CALL $leftHandSideExpression arguments )
-    | LBRACK expression RBRACK  -> ^( BYINDEX[$LBRACK] $leftHandSideExpression expression )
+    | lb1=LBRACK expression RBRACK  -> ^( BYINDEX[$lb1] $leftHandSideExpression expression )
     | DOT r=rightHandSideExpression -> ^( BYFIELD $leftHandSideExpression DOT $r? )
-    | { isXmlEnabled() }?=> DOTDOT r=rightHandSideExpression -> ^(ALLCHILDREN $leftHandSideExpression $r)
-    | { isXmlEnabled() }?=> COLONCOLON expression -> ^(LOCALNAME $leftHandSideExpression expression)
+    | { isXmlEnabled() }?=> DOTDOT r2=rightHandSideExpression2 -> ^(ALLCHILDREN $leftHandSideExpression $r2)
+    | { isXmlEnabled() }?=> COLONCOLON LBRACK expression RBRACK -> ^(LOCALNAME $leftHandSideExpression expression)
+    | { isXmlEnabled() }?=> COLONCOLON ps=propertySelector -> ^(LOCALNAME $leftHandSideExpression $ps?)
   )*
   ;
   catch [RecognitionException e] { reportRuleError(e); }
@@ -1107,10 +1114,11 @@ newExpressionTail
     memberExpression    -> memberExpression
   )
   (
-    LBRACK expression RBRACK  -> ^( BYINDEX[$LBRACK] $newExpressionTail expression )
+    lb1=LBRACK expression RBRACK  -> ^( BYINDEX[$lb1] $newExpressionTail expression )
     | DOT r=rightHandSideExpression -> ^( BYFIELD $newExpressionTail DOT $r? )
-    | { isXmlEnabled() }?=> DOTDOT r=rightHandSideExpression -> ^(ALLCHILDREN $newExpressionTail $r)
-    | { isXmlEnabled() }?=> COLONCOLON expression -> ^(LOCALNAME $newExpressionTail expression)
+    | { isXmlEnabled() }?=> DOTDOT r2=rightHandSideExpression2 -> ^(ALLCHILDREN $newExpressionTail $r2)
+    | { isXmlEnabled() }?=> COLONCOLON LBRACK expression RBRACK -> ^(LOCALNAME $newExpressionTail expression)
+    | { isXmlEnabled() }?=> COLONCOLON ps=propertySelector -> ^(LOCALNAME $newExpressionTail $ps?)
   )*
   (
     arguments     -> ^( CALL $newExpressionTail arguments )
@@ -1123,6 +1131,12 @@ rightHandSideExpression
   | { isXmlEnabled() }?=> xmlAttribute
   | { isXmlEnabled() }?=> MUL
 ; 
+
+rightHandSideExpression2
+  : identifier
+  | { isXmlEnabled() }?=> xmlAttribute
+  | { isXmlEnabled() }?=> MUL
+;
 
 // $>
 

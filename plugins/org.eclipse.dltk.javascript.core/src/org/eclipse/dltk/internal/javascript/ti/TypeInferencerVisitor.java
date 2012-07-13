@@ -1233,6 +1233,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				} else {
 					nameStr = ((XmlAttributeIdentifier) name)
 							.getAttributeName();
+					if (nameStr == null) {
+						// TODO (alex) .@[expression] syntax
+						return null;
+					}
 					IValueReference child = parent.getChild(nameStr);
 					if (child != null && child.getDeclaredType() == null) {
 						child.setDeclaredType(JSTypeSet.ref(ITypeNames.XML));

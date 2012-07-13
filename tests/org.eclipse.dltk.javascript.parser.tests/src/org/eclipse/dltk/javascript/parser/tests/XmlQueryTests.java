@@ -34,4 +34,34 @@ public class XmlQueryTests extends AbstractJSParserTest {
 		assertFalse(reporter.hasErrors());
 	}
 
+	public void testXmlDotParenExpression() {
+		parse("var x = xml.(1)");
+		assertFalse(reporter.hasErrors());
+	}
+
+	public void testXmlDotDotParenExpression_error() {
+		parse("var x = xml..(1)");
+		assertTrue(reporter.hasErrors());
+	}
+
+	public void testXmlAttributeBracketExpression() {
+		parse("var x = xml.@[1]");
+		assertFalse(reporter.hasErrors());
+	}
+
+	public void testXmlColonColonNumber_error() {
+		parse("var x = xml..1");
+		assertTrue(reporter.hasErrors());
+	}
+
+	public void testXmlColonColonBracketExpression() {
+		parse("var x = xml::[1]");
+		assertFalse(reporter.hasErrors());
+	}
+
+	public void testXmlColonColonAttribute() {
+		parse("var x = xml..@name");
+		assertFalse(reporter.hasErrors());
+	}
+
 }
