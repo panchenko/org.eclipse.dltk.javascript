@@ -549,6 +549,16 @@
 		</scriptCompletionProposalComputer>		
 	</extension>
  <extension
+	point="org.eclipse.dltk.ui.scriptCompletionProposalComputer"
+	id="JavaScriptTemplateCompletionProposalComputer">
+	<scriptCompletionProposalComputer 
+		class="org.eclipse.dltk.javascript.internal.ui.text.completion.JavaScriptTemplateCompletionProposalComputer"
+		categoryId="org.eclipse.dltk.ui.templateProposalCategory"
+		toolkitId="org.eclipse.dltk.javascript.core.nature">
+		<partition type="__dftl_partition_content_type"/>
+	</scriptCompletionProposalComputer>
+ </extension>
+ <extension
        id="JSDocCompletionProposalComputer"
        name="JSDoc Proposals"
        point="org.eclipse.dltk.ui.scriptCompletionProposalComputer">

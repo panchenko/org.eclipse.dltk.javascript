@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.core.DLTKCore;
-import org.eclipse.dltk.javascript.internal.ui.templates.JavaScriptTemplateCompletionProcessor;
 import org.eclipse.dltk.javascript.internal.ui.text.Symbols;
 import org.eclipse.dltk.javascript.scriptdoc.JavaHeuristicScanner;
 import org.eclipse.dltk.ui.text.completion.ContentAssistInvocationContext;
@@ -34,7 +33,7 @@ public class JavaScriptTypeCompletionProposalComputer extends
 	@Override
 	protected TemplateCompletionProcessor createTemplateProposalComputer(
 			ScriptContentAssistInvocationContext context) {
-		return new JavaScriptTemplateCompletionProcessor(context);
+		return null;
 	}
 
 	@Override
