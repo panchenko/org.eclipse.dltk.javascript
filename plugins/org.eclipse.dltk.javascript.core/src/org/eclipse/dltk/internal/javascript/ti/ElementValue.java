@@ -399,7 +399,7 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
-	protected static final IAssignProtection READONLY_PROPERTY = new IAssignProtection() {
+	public static final IAssignProtection READONLY_PROPERTY = new IAssignProtection() {
 		public IProblemIdentifier problemId() {
 			return JavaScriptProblems.PROPERTY_READONLY;
 		}
@@ -514,7 +514,12 @@ public abstract class ElementValue implements IValue {
 		@Override
 		public Object getAttribute(String key, boolean includeReferences) {
 			if (IAssignProtection.ATTRIBUTE.equals(key)) {
-				return property.isReadOnly() ? READONLY_PROPERTY : null;
+				final Type declaringType = property.getDeclaringType();
+				if (declaringType != null) {
+					return declaringType.getReadOnlyStatus(property);
+				} else {
+					return property.isReadOnly() ? READONLY_PROPERTY : null;
+				}
 			}
 			return super.getAttribute(key, includeReferences);
 		}

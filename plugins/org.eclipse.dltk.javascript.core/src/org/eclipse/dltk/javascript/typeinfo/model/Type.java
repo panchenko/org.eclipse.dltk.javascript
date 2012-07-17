@@ -14,6 +14,7 @@
 package org.eclipse.dltk.javascript.typeinfo.model;
 
 import org.eclipse.dltk.core.Predicate;
+import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.emf.common.util.EList;
 
@@ -279,5 +280,7 @@ public interface Type extends Element {
 	 * @return
 	 */
 	Member[] getAdditionalMembers();
+
+	IAssignProtection getReadOnlyStatus(Property property);
 
 } // Type

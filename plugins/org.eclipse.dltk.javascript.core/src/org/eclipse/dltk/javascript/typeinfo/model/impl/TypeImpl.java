@@ -16,11 +16,14 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 import java.util.Collection;
 
 import org.eclipse.dltk.core.Predicate;
+import org.eclipse.dltk.internal.javascript.ti.ElementValue;
+import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet.SimpleTypeKey;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -635,6 +638,10 @@ public class TypeImpl extends ElementImpl implements Type {
 
 	public Member[] getAdditionalMembers() {
 		return null;
+	}
+
+	public IAssignProtection getReadOnlyStatus(Property property) {
+		return property.isReadOnly() ? ElementValue.READONLY_PROPERTY : null;
 	}
 
 } //TypeImpl

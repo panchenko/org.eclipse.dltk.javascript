@@ -64,6 +64,7 @@ import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
+import org.eclipse.dltk.javascript.typeinference.IAssignProtection2;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
@@ -1714,8 +1715,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 			final Object value = reference
 					.getAttribute(IAssignProtection.ATTRIBUTE);
 			if (value != null) {
-				final IAssignProtection assign = value instanceof IAssignProtection ? (IAssignProtection) value
-						: PROTECT_CONST;
+				final IAssignProtection assign;
+				if (value instanceof IAssignProtection2) {
+					if (((IAssignProtection2) value).isReadOnly(reference)) {
+						assign = (IAssignProtection) value;
+					} else {
+						return;
+					}
+				} else {
+					assign = value instanceof IAssignProtection ? (IAssignProtection) value
+							: PROTECT_CONST;
+				}
 				reporter.reportProblem(assign.problemId(),
 						assign.problemMessage(), node.sourceStart(),
 						node.sourceEnd());
