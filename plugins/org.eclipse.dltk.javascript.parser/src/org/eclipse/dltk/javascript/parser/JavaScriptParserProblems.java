@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
+import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifierExtension2;
 import org.eclipse.dltk.utils.EnumNLS;
@@ -68,6 +69,16 @@ public enum JavaScriptParserProblems implements IProblemIdentifier,
 
 	public String contributor() {
 		return JavaScriptParserPlugin.PLUGIN_ID;
+	}
+
+	/**
+	 * Checks if the specified problem is a syntax error, so AST is not fully
+	 * correct.
+	 */
+	public static boolean isSyntaxError(IProblem problem) {
+		return problem.getID() == LEXER_ERROR
+				|| problem.getID() == SYNTAX_ERROR
+				|| problem.getID() == INTERNAL_ERROR;
 	}
 
 }

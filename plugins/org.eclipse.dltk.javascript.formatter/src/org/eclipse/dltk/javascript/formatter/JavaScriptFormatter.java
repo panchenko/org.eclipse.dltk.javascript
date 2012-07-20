@@ -67,18 +67,12 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		public boolean hasErrors() {
 			if (!problems.isEmpty()) {
 				for (final IProblem problem : problems) {
-					if (problem.isError() && isCritical(problem)) {
+					if (JavaScriptParserProblems.isSyntaxError(problem)) {
 						return true;
 					}
 				}
 			}
 			return false;
-		}
-
-		private boolean isCritical(IProblem problem) {
-			return problem.getID() == JavaScriptParserProblems.LEXER_ERROR
-					|| problem.getID() == JavaScriptParserProblems.SYNTAX_ERROR
-					|| problem.getID() == JavaScriptParserProblems.INTERNAL_ERROR;
 		}
 	}
 
@@ -130,8 +124,8 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 			if (!errors.isEmpty()) {
 				if (errors.size() == 1 && errors.get(0) instanceof JSProblem) {
 					final JSProblem problem = (JSProblem) errors.get(0);
-					throw new FormatterSyntaxProblemException(problem
-							.getMessage(), problem.getCause());
+					throw new FormatterSyntaxProblemException(
+							problem.getMessage(), problem.getCause());
 				}
 				IProblem first = null;
 				for (IProblem problem : errors) {
@@ -144,8 +138,8 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 					}
 				}
 				if (first != null) {
-					throw new FormatterSyntaxProblemException(first
-							.getMessage());
+					throw new FormatterSyntaxProblemException(
+							first.getMessage());
 				} else {
 					final StringBuilder sb = new StringBuilder();
 					for (IProblem problem : errors) {
@@ -181,12 +175,10 @@ public class JavaScriptFormatter extends AbstractScriptFormatter {
 		JavaScriptFormatterWriter writer = new JavaScriptFormatterWriter(
 				document, lineDelimiter, createIndentGenerator());
 
-		writer
-				.setWrapLength(getInt(JavaScriptFormatterConstants.WRAP_COMMENTS_LENGTH));
+		writer.setWrapLength(getInt(JavaScriptFormatterConstants.WRAP_COMMENTS_LENGTH));
 		writer.setLinesPreserve(1);// FIXME
 		writer.setPreserveSpaces(false);
-		writer
-				.setKeepLines(getBoolean(JavaScriptFormatterConstants.KEEP_LINES));
+		writer.setKeepLines(getBoolean(JavaScriptFormatterConstants.KEEP_LINES));
 
 		try {
 			root.accept(context, writer);
