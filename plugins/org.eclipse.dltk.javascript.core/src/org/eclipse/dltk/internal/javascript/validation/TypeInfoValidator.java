@@ -879,6 +879,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 				final IRType type = JavaScriptValidations.typeOf(reference
 						.getParent());
 				if (type != null) {
+					if (type instanceof IRAnyType) {
+						return;
+					}
 					if (TypeUtil.kind(type) == TypeKind.JAVA) {
 						reporter.reportProblem(
 								JavaScriptProblems.UNDEFINED_JAVA_METHOD,
