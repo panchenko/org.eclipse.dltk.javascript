@@ -18,6 +18,7 @@ import java.util.Stack;
 
 import org.eclipse.dltk.compiler.problem.DefaultProblem;
 import org.eclipse.dltk.compiler.problem.IProblem;
+import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
@@ -176,6 +177,23 @@ public class Reporter extends LineTracker implements IProblemReporter,
 	}
 
 	@SuppressWarnings("serial")
+	private static class SnapshotProblemCategory extends
+			HashSet<IProblemIdentifier> implements IProblemCategory {
+
+		public SnapshotProblemCategory(SuppressWarningsSet warningsSet) {
+			super(warningsSet);
+		}
+
+		public String name() {
+			return "<snapshot>";
+		}
+
+		public Collection<IProblemIdentifier> contents() {
+			return this;
+		}
+	}
+
+	@SuppressWarnings("serial")
 	private static class SuppressWarningsSet extends
 			HashSet<IProblemIdentifier> implements ISuppressWarningsState {
 
@@ -184,6 +202,15 @@ public class Reporter extends LineTracker implements IProblemReporter,
 
 		public SuppressWarningsSet(Collection<IProblemIdentifier> set) {
 			super(set);
+		}
+
+		private SnapshotProblemCategory snapshot;
+
+		public IProblemCategory asCategory() {
+			if (snapshot == null || !snapshot.equals(this)) {
+				snapshot = new SnapshotProblemCategory(this);
+			}
+			return snapshot;
 		}
 	}
 

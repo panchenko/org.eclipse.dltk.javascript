@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
+import org.eclipse.dltk.compiler.problem.IProblemCategory;
+
 /**
  * Represents the current state of suppress warnings directives in the
  * {@link JSProblemReporter}.
@@ -21,5 +23,10 @@ package org.eclipse.dltk.javascript.parser;
  * @since 4.0
  */
 public interface ISuppressWarningsState {
+
+	/**
+	 * Creates snapshot of the current state.
+	 */
+	IProblemCategory asCategory();
 
 }

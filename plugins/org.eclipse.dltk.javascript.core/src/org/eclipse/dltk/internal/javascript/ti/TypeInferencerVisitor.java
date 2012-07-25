@@ -95,6 +95,7 @@ import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
@@ -653,6 +654,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			for (IModelBuilder extension : this.context.getModelBuilders()) {
 				extension.processVariable(declaration, variable, reporter,
 						getTypeChecker());
+			}
+		}
+		if (reporter != null) {
+			final ISuppressWarningsState state = reporter.getSuppressWarnings();
+			if (state != null) {
+				variable.addSuppressedWarning(state.asCategory());
 			}
 		}
 		reference.setAttribute(IReferenceAttributes.VARIABLE, variable);
