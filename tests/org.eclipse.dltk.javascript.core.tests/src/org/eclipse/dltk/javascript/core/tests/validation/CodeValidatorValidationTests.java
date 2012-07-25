@@ -187,6 +187,22 @@ public class CodeValidatorValidationTests extends AbstractValidationTest {
 				problemIds.contains(JavaScriptProblems.UNUSED_VARIABLE));
 	}
 
+	
+	public void testUnusedVariableInFunctionSuppressed() {
+		enable(JavaScriptProblems.UNUSED_VARIABLE);
+		StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @SuppressWarnings(unused)");
+		code.add(" */");		
+		code.add("function test() {");
+		code.add("var x = 1");
+		code.add("x = 2");
+		code.add("x = 3");
+		code.add("}");
+		final Set<IProblemIdentifier> problemIds = extractIds(validate(code
+				.toString()));
+		assertEquals(0, problemIds.size());
+	}
 	public void testUnusedVariableSuppressed() {
 		enable(JavaScriptProblems.UNUSED_VARIABLE);
 		StringList code = new StringList();
