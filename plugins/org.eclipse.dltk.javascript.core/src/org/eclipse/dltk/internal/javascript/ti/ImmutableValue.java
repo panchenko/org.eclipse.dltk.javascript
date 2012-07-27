@@ -83,10 +83,14 @@ public class ImmutableValue implements IValue, IValue2 {
 		}
 	}
 
-	private static final Handler<JSTypeSet> GET_TYPES = new Handler<JSTypeSet>() {
+	private static final Handler<JSTypeSet> GET_TYPES = new Handler2<JSTypeSet>() {
 		public void process(ImmutableValue value, JSTypeSet result) {
 			result.addAll(value.types);
 		}
+
+		public void processOther(IValue value, JSTypeSet result) {
+			result.addAll(value.getTypes());
+		};
 	};
 	private static final Handler<JSTypeSet> GET_DECLARED_TYPES = new Handler<JSTypeSet>() {
 		public void process(ImmutableValue value, JSTypeSet result) {
@@ -225,6 +229,10 @@ public class ImmutableValue implements IValue, IValue2 {
 		public void processOther(IValue value, Set<IValue> result) {
 			if (value == PhantomValue.VALUE) {
 				result.add(value);
+			} else {
+				IValue childValue = value.getChild(childName, true);
+				if (childValue != null)
+					result.add(childValue);
 			}
 		}
 	}

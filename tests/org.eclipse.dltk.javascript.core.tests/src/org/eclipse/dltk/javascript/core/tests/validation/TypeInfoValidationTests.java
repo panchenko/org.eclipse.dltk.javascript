@@ -25,6 +25,8 @@ import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
+import org.eclipse.dltk.javascript.typeinference.IValueCollection;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
 
 @SuppressWarnings({ "nls" })
 public class TypeInfoValidationTests extends AbstractValidationTest {
@@ -2320,6 +2322,19 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 			assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(2)
 					.getID());
 		}
+	}
+	
+	public void testAssignmentWithBranch() {
+		final StringList code = new StringList();
+		code.add("function test() {");
+		code.add(" var service;");
+		code.add(" if (test) {");
+		code.add("  service = exampleForms.service");
+		code.add("  var name = service.name;");
+		code.add(" }");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
 	}
 
 }
