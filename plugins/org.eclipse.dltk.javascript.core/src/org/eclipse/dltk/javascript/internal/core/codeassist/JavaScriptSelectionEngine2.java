@@ -20,6 +20,7 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.Path;
 import org.eclipse.dltk.ast.ASTNode;
+import org.eclipse.dltk.ast.utils.ASTUtil;
 import org.eclipse.dltk.codeassist.ScriptSelectionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.DLTKCore;
@@ -36,15 +37,21 @@ import org.eclipse.dltk.core.ScriptModelUtil;
 import org.eclipse.dltk.core.model.LocalVariable;
 import org.eclipse.dltk.core.model.UnresolvedElement;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
+import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
+import org.eclipse.dltk.internal.javascript.ti.JSDocSupport.ParameterNode;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
+import org.eclipse.dltk.javascript.ast.Argument;
+import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Identifier;
+import org.eclipse.dltk.javascript.ast.MultiLineComment;
 import org.eclipse.dltk.javascript.ast.PropertyInitializer;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
@@ -165,6 +172,38 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				} catch (Exception e) {
 					// Shouldn't happen, but declared for Callable.call()
 					JavaScriptPlugin.error(e);
+				}
+			} else if (node instanceof MultiLineComment) {
+				final MultiLineComment comment = (MultiLineComment) node;
+				if (comment.isDocumentation()) {
+					final JSDocTag tag = JSDocSupport.parse(comment).getTagAt(
+							position);
+					if (tag != null && JSDocTag.PARAM.equals(tag.name())) {
+						final ParameterNode paramNode = JSDocSupport
+								.parseParameter(tag);
+						if (paramNode != null
+								&& paramNode.offset <= position
+								&& paramNode.offset + paramNode.name.length() >= position) {
+							for (FunctionStatement function : ASTUtil.select(
+									script, FunctionStatement.class)) {
+								if (function.getDocumentation() == comment
+										|| JSDocSupport.getComment(function) == comment) {
+									final Argument argument = function
+											.getArgument(paramNode.name);
+									if (argument != null) {
+										return new IModelElement[] { new LocalVariable(
+												module.getModelElement(),
+												paramNode.name,
+												argument.start(),
+												argument.end(),
+												argument.start(),
+												argument.end() - 1, null) };
+									}
+									break;
+								}
+							}
+						}
+					}
 				}
 			}
 		}

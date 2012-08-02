@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
+import org.eclipse.dltk.javascript.ast.Comment;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.ISemicolonStatement;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -83,6 +84,12 @@ public class NodeFinder extends ASTVisitor {
 	private boolean traverse(Script script) {
 		after = null;
 		before = null;
+		for (Comment comment : script.getComments()) {
+			if (comment.start() <= end && comment.end() >= start) {
+				before = comment;
+				return true;
+			}
+		}
 		try {
 			script.traverse(this);
 			return true;

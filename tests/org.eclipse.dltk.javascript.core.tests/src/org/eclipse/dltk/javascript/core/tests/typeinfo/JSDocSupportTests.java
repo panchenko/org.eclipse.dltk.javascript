@@ -22,6 +22,7 @@ import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.javascript.ti.JSMethod;
+import org.eclipse.dltk.internal.javascript.ti.JSDocSupport.TagTokenizer;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.tests.AbstractJSParserTest;
@@ -104,4 +105,43 @@ public class JSDocSupportTests extends AbstractJSParserTest {
 		Collections.addAll(warningIds, "w1", "w2");
 		assertEquals(warningIds, parseSuppressWarnings(code));
 	}
+
+	public void testTagTokenizer() {
+		final TagTokenizer tokenizer = new TagTokenizer("A B C");
+		assertTrue(tokenizer.hasMoreTokens());
+		assertEquals("A", tokenizer.nextToken());
+		assertTrue(tokenizer.hasMoreTokens());
+		assertEquals("B", tokenizer.nextToken());
+		assertTrue(tokenizer.hasMoreTokens());
+		assertEquals("C", tokenizer.nextToken());
+		assertFalse(tokenizer.hasMoreTokens());
+	}
+
+	public void testTagTokenizerParam() {
+		final TagTokenizer tokenizer = new TagTokenizer("{String} name");
+		assertTrue(tokenizer.hasMoreTokens());
+		assertEquals("{String}", tokenizer.nextToken());
+		assertTrue(tokenizer.hasMoreTokens());
+		assertEquals("name", tokenizer.nextToken());
+		assertFalse(tokenizer.hasMoreTokens());
+	}
+
+	public void testTagTokenizerParamRecord() {
+		final TagTokenizer tokenizer = new TagTokenizer(
+				"{{name:String, email:String}} contact");
+		assertTrue(tokenizer.hasMoreTokens());
+		assertEquals("{{name:String, email:String}}", tokenizer.nextToken());
+		assertTrue(tokenizer.hasMoreTokens());
+		assertEquals("contact", tokenizer.nextToken());
+		assertFalse(tokenizer.hasMoreTokens());
+	}
+
+	public void testTagTokenizerRecordType() {
+		final TagTokenizer tokenizer = new TagTokenizer(
+				"{{name:String, email:String}}");
+		assertTrue(tokenizer.hasMoreTokens());
+		assertEquals("{{name:String, email:String}}", tokenizer.nextToken());
+		assertFalse(tokenizer.hasMoreTokens());
+	}
+
 }

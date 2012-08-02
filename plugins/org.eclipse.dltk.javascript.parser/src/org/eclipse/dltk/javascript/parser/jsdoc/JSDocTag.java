@@ -46,11 +46,13 @@ public class JSDocTag implements ISourceNode {
 	private final String tag;
 	private final String value;
 	private final int start;
+	private final int valueStart;
 	private final int end;
 
-	public JSDocTag(String tag, String value, int start, int end) {
+	public JSDocTag(String tag, String value, int start, int valueStart, int end) {
 		this.tag = tag;
 		this.value = value;
+		this.valueStart = valueStart;
 		this.start = start;
 		this.end = end;
 	}
@@ -65,6 +67,10 @@ public class JSDocTag implements ISourceNode {
 
 	public int start() {
 		return start;
+	}
+
+	public int valueStart() {
+		return valueStart;
 	}
 
 	public int end() {

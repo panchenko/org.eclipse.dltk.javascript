@@ -57,6 +57,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 		final boolean inParenthese = input.LT(1) == '(';
 		if (inParenthese) {
 			input.consume();
+			skipSpaces(input);
 		}
 		for (;;) {
 			final JSType type = parseType(input);
@@ -65,6 +66,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				skipSpaces(input);
 				if (input.LT(1) == '|') {
 					input.consume();
+					skipSpaces(input);
 					continue;
 				}
 			}
@@ -380,6 +382,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				skipSpaces(input);
 				if (input.LT(1) == ',') {
 					input.consume();
+					skipSpaces(input);
 					continue;
 				}
 			}

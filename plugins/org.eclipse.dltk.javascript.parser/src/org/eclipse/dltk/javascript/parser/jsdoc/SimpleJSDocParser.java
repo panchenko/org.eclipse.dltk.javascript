@@ -90,10 +90,11 @@ public class SimpleJSDocParser {
 			return null;
 		}
 		final String tag = new String(buffer, tagStart, index - tagStart);
-		final int valueStart = index;
+		final int nameEnd = index;
 		value.setLength(0);
 		ends.clear();
 		skipSpaces();
+		final int valueStart = index;
 		boolean lineStart = false;
 		VALUE_LOOP: while (index < end) {
 			char c = readChar();
@@ -146,7 +147,8 @@ public class SimpleJSDocParser {
 			ends.setSize(len);
 		}
 		return new JSDocTag(tag, value.toString(), offset + tagStart, offset
-				+ (ends.isEmpty() ? valueStart : ends.get(ends.size() - 1)));
+				+ (ends.isEmpty() ? nameEnd : valueStart), offset
+				+ (ends.isEmpty() ? nameEnd : ends.get(ends.size() - 1)));
 	}
 
 	private boolean skipAll(char expected) {

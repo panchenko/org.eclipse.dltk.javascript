@@ -182,4 +182,13 @@ public class JSDocTags implements Iterable<JSDocTag> {
 		return new ArrayIterator<JSDocTag>(tags);
 	}
 
+	public JSDocTag getTagAt(int offset) {
+		for (JSDocTag tag : tags) {
+			if (tag.start() <= offset && tag.end() >= offset) {
+				return tag;
+			}
+		}
+		return null;
+	}
+
 }

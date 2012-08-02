@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
@@ -302,7 +302,7 @@ public class JSDocSupport implements IModelBuilder {
 		final ParamInfo pp = new ParamInfo();
 		for (JSDocTag tag : paramTags) {
 			pp.clear();
-			final Tokenizer st = new Tokenizer(tag.value());
+			final TagTokenizer st = new TagTokenizer(tag);
 			if (st.hasMoreTokens()) {
 				final String token = st.peek();
 				if (isBraced(token)) {
@@ -449,29 +449,42 @@ public class JSDocSupport implements IModelBuilder {
 
 	public static final String[] TYPE_TAGS = { JSDocTag.TYPE };
 
-	private static class Tokenizer {
+	public static class TagTokenizer {
+		private final String content;
+		private final int end;
+		private int position;
+		private int tokenStart;
 
-		private final StringTokenizer st;
-
-		public Tokenizer(String content) {
-			st = new StringTokenizer(content);
+		public TagTokenizer(JSDocTag tag) {
+			this(tag.value());
 		}
 
-		private boolean hasCurrent = false;
+		public TagTokenizer(String content) {
+			this.content = content;
+			this.end = content.length();
+			this.position = skipDelimiters(0);
+		}
+
+		/**
+		 * The token loaded by {@link #peek()} if not <code>null</code>.
+		 */
 		private String current;
 
+		/**
+		 * Checks if there are more tokens available from this tokenizer.
+		 */
 		public boolean hasMoreTokens() {
-			if (hasCurrent) {
-				return true;
-			}
-			return st.hasMoreTokens();
+			return current != null || position < end;
 		}
 
+		/**
+		 * Returns the next token without removing it from this tokenizer or
+		 * <code>null</code> if there are no more tokens.
+		 */
 		public String peek() {
-			if (!hasCurrent) {
-				if (st.hasMoreElements()) {
-					hasCurrent = true;
-					current = getNextToken();
+			if (current == null) {
+				if (position < end) {
+					current = fetchNextToken();
 				} else {
 					return null;
 				}
@@ -480,36 +493,55 @@ public class JSDocSupport implements IModelBuilder {
 		}
 
 		/**
-		 * @return
+		 * Returns the next token from this tokenizer.
+		 * 
+		 * @throws NoSuchElementException
+		 *             if no more tokens available.
 		 */
-		private String getNextToken() {
-			String token = st.nextToken();
-			while (!isClosed(token) && st.hasMoreTokens()) {
-				token += st.nextToken();
+		public String nextToken() {
+			if (current != null) {
+				final String token = current;
+				current = null;
+				return token;
 			}
+			return fetchNextToken();
+		}
+
+		/**
+		 * Returns the starting position of the last fetched token.
+		 */
+		public int getTokenStart() {
+			return tokenStart;
+		}
+
+		private int skipDelimiters(int pos) {
+			while (pos < end && Character.isWhitespace(content.charAt(pos))) {
+				++pos;
+			}
+			return pos;
+		}
+
+		private String fetchNextToken() {
+			if (position == end) {
+				throw new NoSuchElementException();
+			}
+			tokenStart = position;
+			int braceCount = 0;
+			while (position < end) {
+				if (Character.isWhitespace(content.charAt(position))
+						&& braceCount == 0) {
+					break;
+				} else if (content.charAt(position) == '{') {
+					++braceCount;
+				} else if (content.charAt(position) == '}') {
+					--braceCount;
+				}
+				++position;
+			}
+			final String token = content.substring(tokenStart, position);
+			position = skipDelimiters(position);
 			return token;
 		}
-
-		private boolean isClosed(String str) {
-			int open = 0;
-			for (int i = 0; i < str.length(); i++) {
-				char ch = str.charAt(i);
-				if (ch == '{')
-					open++;
-				else if (ch == '}')
-					open--;
-			}
-			return open == 0;
-		}
-
-		public String nextToken() {
-			if (hasCurrent) {
-				hasCurrent = false;
-				return current;
-			}
-			return getNextToken();
-		}
-
 	}
 
 	/**
@@ -554,7 +586,7 @@ public class JSDocSupport implements IModelBuilder {
 
 	public JSType parseType(JSDocTag tag, boolean requireBraces,
 			JSProblemReporter reporter) {
-		final Tokenizer st = new Tokenizer(tag.value());
+		final TagTokenizer st = new TagTokenizer(tag);
 		if (st.hasMoreTokens()) {
 			final String typeName = st.nextToken();
 			if (!requireBraces || isBraced(typeName)) {
@@ -720,4 +752,45 @@ public class JSDocSupport implements IModelBuilder {
 				JavaScriptNature.NATURE_ID, JSDocTag.SUPPRESS_WARNINGS,
 				categoryId);
 	}
+
+	public static class ParameterNode {
+		public final String name;
+		public final int offset;
+
+		public ParameterNode(String name, int offset) {
+			this.name = name;
+			this.offset = offset;
+		}
+	}
+
+	public static ParameterNode parseParameter(JSDocTag tag) {
+		final TagTokenizer tokenizer = new TagTokenizer(tag);
+		if (!tokenizer.hasMoreTokens()) {
+			return null;
+		}
+		String token = tokenizer.nextToken();
+		if (JSDocSupport.isBraced(token)) { // skip type name
+			if (!tokenizer.hasMoreTokens()) {
+				return null;
+			}
+			token = tokenizer.nextToken();
+		}
+		int tokenStart = tag.valueStart() + tokenizer.getTokenStart();
+		// optional parameter
+		if (token.startsWith("[") && token.endsWith("]")) {
+			token = token.substring(1, token.length() - 1);
+			++tokenStart;
+			// default value separator
+			int separator = token.indexOf('=');
+			if (separator != -1) {
+				token = token.substring(0, separator);
+			}
+		}
+		int propertyIndex = token.indexOf('.');
+		if (propertyIndex != -1) {
+			token = token.substring(0, propertyIndex);
+		}
+		return new ParameterNode(token, tokenStart);
+	}
+
 }

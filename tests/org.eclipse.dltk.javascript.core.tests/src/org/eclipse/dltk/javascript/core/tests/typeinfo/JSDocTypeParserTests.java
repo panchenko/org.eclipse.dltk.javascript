@@ -66,7 +66,7 @@ public class JSDocTypeParserTests extends TestCase {
 	}
 
 	public void testSimpleParentheses() {
-		JSType type = parse("(string)");
+		JSType type = parse("( string )");
 		assertRef("String", type);
 	}
 
@@ -97,14 +97,14 @@ public class JSDocTypeParserTests extends TestCase {
 	}
 
 	public void testUnionParenthesesType() {
-		UnionType type = (UnionType) parse("(String|Number)");
+		UnionType type = (UnionType) parse("(String | Number)");
 		assertEquals(2, type.getTargets().size());
 		assertRef("String", type.getTargets().get(0));
 		assertRef("Number", type.getTargets().get(1));
 	}
 
 	public void testRecordType() {
-		final RecordType type = (RecordType) parse("{astring:String,anumber:Number}");
+		final RecordType type = (RecordType) parse("{ astring : String , anumber : Number }");
 		assertEquals(2, type.getMembers().size());
 		assertEquals("astring", type.getMembers().get(0).getName());
 		assertRef("String", type.getMembers().get(0).getType());
@@ -113,7 +113,7 @@ public class JSDocTypeParserTests extends TestCase {
 	}
 
 	public void testRecordTypeWithOptionalBrackets() {
-		final RecordType type = (RecordType) parse("{astring:String,[anumber]:Number}");
+		final RecordType type = (RecordType) parse("{astring:String, [anumber]:Number}");
 		assertEquals(2, type.getMembers().size());
 		assertEquals("astring", type.getMembers().get(0).getName());
 		assertRef("String", type.getMembers().get(0).getType());
@@ -133,7 +133,7 @@ public class JSDocTypeParserTests extends TestCase {
 	}
 
 	public void testRecordTypeWithLiteralQuotedProperties() {
-		final RecordType type = (RecordType) parse("{'a-string':String,anumber:Number=}");
+		final RecordType type = (RecordType) parse("{'a-string':String, anumber:Number=}");
 		assertEquals(1, type.getMembers().size());
 		assertEquals("anumber", type.getMembers().get(0).getName());
 		assertRef("Number", type.getMembers().get(0).getType());
