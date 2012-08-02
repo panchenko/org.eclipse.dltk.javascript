@@ -85,7 +85,7 @@ public class NodeFinder extends ASTVisitor {
 		after = null;
 		before = null;
 		for (Comment comment : script.getComments()) {
-			if (comment.start() <= end && comment.end() >= start) {
+			if (comment.start() < end && comment.end() >= start) {
 				before = comment;
 				return true;
 			}
