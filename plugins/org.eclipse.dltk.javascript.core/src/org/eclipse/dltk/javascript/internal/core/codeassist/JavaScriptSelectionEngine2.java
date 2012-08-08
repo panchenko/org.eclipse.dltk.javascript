@@ -185,7 +185,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 								&& paramNode.offset <= position
 								&& paramNode.offset + paramNode.name.length() >= position) {
 							for (FunctionStatement function : ASTUtil.select(
-									script, FunctionStatement.class)) {
+									script, FunctionStatement.class, true)) {
 								if (function.getDocumentation() == comment
 										|| JSDocSupport.getComment(function) == comment) {
 									final Argument argument = function
