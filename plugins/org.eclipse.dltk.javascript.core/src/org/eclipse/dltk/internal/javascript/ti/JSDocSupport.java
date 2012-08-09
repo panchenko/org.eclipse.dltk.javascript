@@ -407,6 +407,7 @@ public class JSDocSupport implements IModelBuilder {
 					parameter.setName(paramName);
 					updateParameter(tag, parameter, pp, reporter, typeChecker);
 					method.getParameters().add(parameter);
+					processedParams.add(paramName);
 				} else {
 					++problemCount;
 					reportProblem(reporter, JSDocProblem.UNKNOWN_PARAM, tag,

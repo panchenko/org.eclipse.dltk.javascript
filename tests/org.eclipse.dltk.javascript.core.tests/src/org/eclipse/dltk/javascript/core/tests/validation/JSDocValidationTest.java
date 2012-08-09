@@ -132,4 +132,15 @@ public class JSDocValidationTest extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+
+	public void testSkippedVarArgsParameter() {
+		List<String> code = new StringList();
+		code.add("/**");
+		code.add(" * @param {Object...} var_args");
+		code.add(" */");
+		code.add("var f = function(){}");
+		code.add("f();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
