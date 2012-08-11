@@ -49,9 +49,11 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.JSCustomType;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
@@ -142,7 +144,7 @@ public abstract class ElementValue implements IValue {
 				if (selection.size() == 1) {
 					final Member selected = selection.get(0);
 					if (selected instanceof Property) {
-						if (selected.getType() instanceof JSCustomType) {
+						if (isCustomType(selected.getType())) {
 							return new PropertyValue(new NestedTypeSystem(
 									context, t), (Property) selected);
 						} else {
@@ -150,7 +152,7 @@ public abstract class ElementValue implements IValue {
 									(Property) selected);
 						}
 					} else if (selected instanceof Method) {
-						if (selected.getType() instanceof JSCustomType) {
+						if (isCustomType(selected.getType())) {
 							return new MethodValue(new NestedTypeSystem(
 									context, t), (Method) selected);
 						} else {
@@ -176,6 +178,25 @@ public abstract class ElementValue implements IValue {
 			}
 		}
 		return null;
+	}
+
+	private static boolean isCustomType(JSType type) {
+		if (type == null) {
+			return false;
+		} else if (type instanceof JSCustomType) {
+			return true;
+		}
+		if (type instanceof ArrayType) {
+			return isCustomType(((ArrayType) type).getItemType());
+		} else if (type instanceof ParameterizedType) {
+			final ParameterizedType parameterized = (ParameterizedType) type;
+			for (JSType p : parameterized.getActualTypeArguments()) {
+				if (isCustomType(p)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public static List<Member> findMembers(Type type, String name,
