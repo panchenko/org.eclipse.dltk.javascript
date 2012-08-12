@@ -20,6 +20,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Stack;
 
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.ParserRuleReturnScope;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
@@ -210,12 +211,15 @@ public class JSTransformer extends JSVisitor<ASTNode> {
 
 	private static int[] prepareOffsetMap(List<Token> tokens) {
 		final int[] offsets = new int[tokens.size() + 1];
-		int offset = 0;
 		for (int i = 0; i < tokens.size(); i++) {
-			offsets[i] = offset;
-			offset += tokens.get(i).getText().length();
+			offsets[i] = ((CommonToken) tokens.get(i)).getStartIndex();
 		}
-		offsets[tokens.size()] = offset;
+		if (tokens.isEmpty()) {
+			offsets[0] = 0;
+		} else {
+			offsets[tokens.size()] = ((CommonToken) tokens
+					.get(tokens.size() - 1)).getStopIndex() + 1;
+		}
 		return offsets;
 	}
 
