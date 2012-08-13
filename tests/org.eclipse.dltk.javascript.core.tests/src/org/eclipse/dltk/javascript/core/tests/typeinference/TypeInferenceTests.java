@@ -701,31 +701,19 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(1, strClz.getTypes().size());
 		IRType type = strClz.getTypes().getFirst();
 		assertEquals("Class<java.lang.String>", type.getName());
+		final Type stringType = ((IRClassType) type).getTarget();
 
-		boolean valueOfFound = false;
-		for (Member member : extractType(type).getMembers()) {
-			valueOfFound = member.getName().equals("valueOf");
-			if (valueOfFound) {
-				assertEquals(true, member.isStatic());
-				break;
-			}
-		}
-		assertEquals(true, valueOfFound);
+		final Member valueOf = stringType.findDirectMember("valueOf");
+		assertNotNull(valueOf);
+		assertEquals(true, valueOf.isStatic());
 
 		IValueReference str = collection.getChild("x");
 		assertEquals(1, str.getTypes().size());
-		assertEquals(extractType(type), extractType(str.getTypes().getFirst()));
+		assertEquals(stringType, extractType(str.getTypes().getFirst()));
 
-		boolean toStringFound = false;
-		for (Member member : extractType(type).getMembers()) {
-			toStringFound = member.getName().equals("toString");
-			if (toStringFound) {
-				assertEquals(false, member.isStatic());
-				break;
-			}
-		}
-		assertEquals(true, toStringFound);
-
+		final Member toString = stringType.findDirectMember("toString");
+		assertNotNull(toString);
+		assertEquals(false, toString.isStatic());
 	}
 
 	public void testJavaClzIntegrationWithJavaPrefix() {
@@ -737,33 +725,19 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(1, strClz.getTypes().size());
 		IRType type = strClz.getTypes().getFirst();
 		assertEquals("Class<java.lang.String>", type.getName());
+		final Type stringType = ((IRClassType) type).getTarget();
 
-		boolean valueOfFound = false;
-		for (Member member : extractType(type).getMembers()) {
-			valueOfFound = member.getName().equals("valueOf");
-			if (valueOfFound) {
-				assertEquals(true, member.isStatic());
-				break;
-			}
-
-		}
-		assertEquals(true, valueOfFound);
+		final Member valueOf = stringType.findDirectMember("valueOf");
+		assertNotNull(valueOf);
+		assertEquals(true, valueOf.isStatic());
 
 		IValueReference str = collection.getChild("x");
 		assertEquals(1, str.getTypes().size());
-		assertEquals(extractType(type), extractType(str.getTypes().getFirst()));
+		assertEquals(stringType, extractType(str.getTypes().getFirst()));
 
-		boolean toStringFound = false;
-		for (Member member : extractType(type).getMembers()) {
-			toStringFound = member.getName().equals("toString");
-			if (toStringFound) {
-				assertEquals(false, member.isStatic());
-				break;
-			}
-
-		}
-		assertEquals(true, toStringFound);
-
+		final Member toString = stringType.findDirectMember("toString");
+		assertNotNull(toString);
+		assertEquals(false, toString.isStatic());
 	}
 
 	public void testJavaIntegrationWithJavaPrefix() {

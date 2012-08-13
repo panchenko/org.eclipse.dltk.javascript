@@ -644,4 +644,13 @@ public class TypeImpl extends ElementImpl implements Type {
 		return property.isReadOnly() ? ElementValue.READONLY_PROPERTY : null;
 	}
 
+	public Member findDirectMember(String name) {
+		for (Member member : getMembers()) {
+			if (name.equals(member.getName())) {
+				return member;
+			}
+		}
+		return null;
+	}
+
 } //TypeImpl

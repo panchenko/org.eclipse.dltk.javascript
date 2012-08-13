@@ -283,4 +283,6 @@ public interface Type extends Element {
 
 	IAssignProtection getReadOnlyStatus(Property property);
 
+	Member findDirectMember(String name);
+
 } // Type
