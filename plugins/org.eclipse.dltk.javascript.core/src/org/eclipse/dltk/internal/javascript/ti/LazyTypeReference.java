@@ -98,6 +98,14 @@ public class LazyTypeReference extends AbstractReference {
 									.getValue());
 						else
 							addValue(src);
+						// also set it as a declared type, because
+						// LazyTypeReference is used to evaluate jsdoc type
+						// tags, which should be set as a declared type.
+						Type type = TypeInfoModelFactory.eINSTANCE.createType();
+						type.setSuperType(context.getKnownType(OBJECT, null));
+						type.setKind(TypeKind.JAVASCRIPT);
+						type.setName(className);
+						setDeclaredType(JSTypeSet.ref(type));
 					}
 					setKind(ReferenceKind.TYPE);
 					resolved = true;
