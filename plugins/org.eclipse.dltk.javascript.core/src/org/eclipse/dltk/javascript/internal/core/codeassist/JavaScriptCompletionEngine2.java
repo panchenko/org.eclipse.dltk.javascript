@@ -11,9 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
@@ -305,7 +304,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		public void reportValueTypeMembers(ITypeInferenceContext context,
 				IValueReference valueRef) {
 			final TypeMemberQuery typeQuery = new TypeMemberQuery();
-			final List<Member> members = new ArrayList<Member>();
+			final Set<Member> members = new HashSet<Member>();
 			collectTypes(context, valueRef.getDeclaredTypes(), typeQuery,
 					members);
 			collectTypes(context, valueRef.getTypes(), typeQuery, members);
@@ -324,7 +323,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 		protected void collectTypes(final ITypeInferenceContext context,
 				final JSTypeSet types, final TypeMemberQuery typeQuery,
-				final List<Member> members) {
+				final Collection<Member> members) {
 			for (IRType type : types) {
 				if (type instanceof IRClassType) {
 					final Type t = ((IRClassType) type).getTarget();

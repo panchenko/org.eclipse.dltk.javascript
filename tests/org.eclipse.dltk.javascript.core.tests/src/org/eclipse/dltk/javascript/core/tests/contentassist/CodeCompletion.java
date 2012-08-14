@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
+import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 
@@ -543,6 +544,17 @@ public class CodeCompletion extends AbstractCompletionTest {
 		IModuleSource module = createModule("test-static.js");
 		int position = lastPositionInFile("num1.", module);
 		basicTest(module, position, concat(getMembers(NUMBER, STATIC)));
+	}
+
+	public void testArrayOfRecords() {
+		final StringList code = new StringList();
+		code.add("/** @type {Array<{x:Number,y:Number}>} */");
+		code.add("var points");
+		code.add("points[0].");
+		final IModuleSource module = new TestModule(code.toString());
+		String[] names = new String[] { "x", "y" };
+		int position = lastPositionInFile(".", module);
+		basicTest(module, position, names);
 	}
 
 }
