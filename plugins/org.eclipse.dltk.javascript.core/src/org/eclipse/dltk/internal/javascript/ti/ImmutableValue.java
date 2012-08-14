@@ -205,7 +205,7 @@ public class ImmutableValue implements IValue, IValue2 {
 				result.add(child);
 			} else {
 				final ITypeSystem typeSystem = value.getTypeSystem();
-				IValue member = ElementValue.findMember(typeSystem,
+				IValue member = ElementValue.findMemberA(typeSystem,
 						value.declaredType, childName);
 				if (member != null) {
 					result.add(member);
@@ -217,7 +217,7 @@ public class ImmutableValue implements IValue, IValue2 {
 					valueTypes = value.getTypes();
 				}
 				for (IRType type : valueTypes) {
-					member = ElementValue.findMember(typeSystem, type,
+					member = ElementValue.findMemberA(typeSystem, type,
 							childName);
 					if (member != null) {
 						result.add(member);

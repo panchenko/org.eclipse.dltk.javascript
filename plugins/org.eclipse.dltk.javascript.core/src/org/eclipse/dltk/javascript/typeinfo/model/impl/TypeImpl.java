@@ -15,11 +15,11 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Collection;
 
-import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet.SimpleTypeKey;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -52,7 +52,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getSuperType <em>Super Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getStaticConstructor <em>Static Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getTraits <em>Traits</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isExtensible <em>Extensible</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructors <em>Constructors</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInstantiable <em>Instantiable</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInheritConstructors <em>Inherit Constructors</em>}</li>
@@ -122,26 +121,6 @@ public class TypeImpl extends ElementImpl implements Type {
      * @ordered
      */
     protected EList<Type> traits;
-
-    /**
-     * The default value of the '{@link #isExtensible() <em>Extensible</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #isExtensible()
-     * @generated
-     * @ordered
-     */
-    protected static final boolean EXTENSIBLE_EDEFAULT = false;
-
-    /**
-     * The cached value of the '{@link #isExtensible() <em>Extensible</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #isExtensible()
-     * @generated
-     * @ordered
-     */
-    protected boolean extensible = EXTENSIBLE_EDEFAULT;
 
     /**
      * The cached value of the '{@link #getConstructors() <em>Constructors</em>}' containment reference list.
@@ -354,27 +333,6 @@ public class TypeImpl extends ElementImpl implements Type {
      * <!-- end-user-doc -->
      * @generated
      */
-    public boolean isExtensible() {
-        return extensible;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setExtensible(boolean newExtensible) {
-        boolean oldExtensible = extensible;
-        extensible = newExtensible;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__EXTENSIBLE, oldExtensible, extensible));
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
     public EList<Constructor> getConstructors() {
         if (constructors == null) {
             constructors = new EObjectContainmentEList<Constructor>(Constructor.class, this, TypeInfoModelPackage.TYPE__CONSTRUCTORS);
@@ -482,8 +440,6 @@ public class TypeImpl extends ElementImpl implements Type {
                 return getStaticConstructor();
             case TypeInfoModelPackage.TYPE__TRAITS:
                 return getTraits();
-            case TypeInfoModelPackage.TYPE__EXTENSIBLE:
-                return isExtensible();
             case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
                 return getConstructors();
             case TypeInfoModelPackage.TYPE__INSTANTIABLE:
@@ -522,9 +478,6 @@ public class TypeImpl extends ElementImpl implements Type {
                 getTraits().clear();
                 getTraits().addAll((Collection<? extends Type>)newValue);
                 return;
-            case TypeInfoModelPackage.TYPE__EXTENSIBLE:
-                setExtensible((Boolean)newValue);
-                return;
             case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
                 getConstructors().clear();
                 getConstructors().addAll((Collection<? extends Constructor>)newValue);
@@ -559,9 +512,6 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__TRAITS:
                 getTraits().clear();
                 return;
-            case TypeInfoModelPackage.TYPE__EXTENSIBLE:
-                setExtensible(EXTENSIBLE_EDEFAULT);
-                return;
             case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
                 getConstructors().clear();
                 return;
@@ -590,8 +540,6 @@ public class TypeImpl extends ElementImpl implements Type {
                 return staticConstructor != null;
             case TypeInfoModelPackage.TYPE__TRAITS:
                 return traits != null && !traits.isEmpty();
-            case TypeInfoModelPackage.TYPE__EXTENSIBLE:
-                return extensible != EXTENSIBLE_EDEFAULT;
             case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
                 return constructors != null && !constructors.isEmpty();
             case TypeInfoModelPackage.TYPE__INSTANTIABLE:
@@ -627,8 +575,8 @@ public class TypeImpl extends ElementImpl implements Type {
 		return TypeUtil.resolve(proxy, this);
 	}
 
-	public Predicate<Member> memberPredicateFor(IRType type,
-			Predicate<Member> predicate) {
+	public MemberPredicate memberPredicateFor(IRType type,
+			MemberPredicate predicate) {
 		return predicate;
 	}
 
@@ -651,6 +599,11 @@ public class TypeImpl extends ElementImpl implements Type {
 			}
 		}
 		return null;
+	}
+
+	public boolean hasPrototype() {
+		final TypeKind kind = getKind();
+		return kind == TypeKind.PREDEFINED || kind == TypeKind.JAVASCRIPT;
 	}
 
 } //TypeImpl

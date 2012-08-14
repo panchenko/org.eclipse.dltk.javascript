@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -78,9 +79,7 @@ public class TypeUtil {
 	public static ArrayType arrayOf(JSType itemType) {
 		final ArrayType arrayType = TypeInfoModelFactory.eINSTANCE
 				.createArrayType();
-		arrayType.setItemType(itemType != null ? itemType
-				: ref(TypeInfoModelLoader.getInstance().getType(
-						ITypeNames.OBJECT)));
+		arrayType.setItemType(itemType != null ? itemType : ref(Types.OBJECT));
 		return arrayType;
 	}
 
@@ -90,11 +89,8 @@ public class TypeUtil {
 
 	public static MapType mapOf(JSType keyType, JSType valueType) {
 		final MapType mapType = TypeInfoModelFactory.eINSTANCE.createMapType();
-		mapType.setKeyType(keyType != null ? keyType : ref(TypeInfoModelLoader
-				.getInstance().getType(ITypeNames.STRING)));
-		mapType.setValueType(valueType != null ? valueType
-				: ref(TypeInfoModelLoader.getInstance().getType(
-						ITypeNames.OBJECT)));
+		mapType.setKeyType(keyType != null ? keyType : ref(Types.STRING));
+		mapType.setValueType(valueType != null ? valueType : ref(Types.OBJECT));
 		return mapType;
 	}
 
@@ -115,11 +111,11 @@ public class TypeUtil {
 		} else if (type instanceof ClassType) {
 			return ((ClassType) type).getTarget();
 		} else if (type instanceof ArrayType) {
-			return TypeInfoModelLoader.getInstance().getType(ITypeNames.ARRAY);
+			return Types.ARRAY;
 		} else if (type instanceof MapType) {
-			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
+			return Types.OBJECT;
 		} else if (type instanceof AnyType) {
-			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
+			return Types.OBJECT;
 		} else {
 			return null;
 		}
@@ -128,21 +124,18 @@ public class TypeUtil {
 	public static Type extractType(ITypeSystem context, IRType type) {
 		if (type instanceof IRSimpleType) {
 			return ((IRSimpleType) type).getTarget();
-		} else if (type instanceof IRClassType) {
-			return ((IRClassType) type).getTarget();
 		} else if (type instanceof IRArrayType) {
 			final IRArrayType arrayType = (IRArrayType) type;
 			final ITypeSystem saved = arrayType.activeTypeSystem();
 			if (saved != null) {
 				context = saved;
 			}
-			return context.parameterize(TypeInfoModelLoader.getInstance()
-					.getType(ITypeNames.ARRAY), Collections
-					.singletonList(arrayType.getItemType()));
+			return context.parameterize(Types.ARRAY,
+					Collections.singletonList(arrayType.getItemType()));
 		} else if (type instanceof IRMapType) {
-			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
+			return Types.OBJECT;
 		} else if (type instanceof IRAnyType) {
-			return TypeInfoModelLoader.getInstance().getType(ITypeNames.OBJECT);
+			return Types.OBJECT;
 		} else {
 			return null;
 		}

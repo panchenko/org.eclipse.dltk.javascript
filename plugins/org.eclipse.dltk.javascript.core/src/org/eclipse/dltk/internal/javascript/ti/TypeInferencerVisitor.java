@@ -11,10 +11,11 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.BOOLEAN;
-import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
-import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
-import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.STRING;
+import static org.eclipse.dltk.javascript.core.Types.BOOLEAN;
+import static org.eclipse.dltk.javascript.core.Types.FUNCTION;
+import static org.eclipse.dltk.javascript.core.Types.NUMBER;
+import static org.eclipse.dltk.javascript.core.Types.OBJECT;
+import static org.eclipse.dltk.javascript.core.Types.STRING;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -827,8 +828,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		result.setLocation(method.getLocation());
 		result.setKind(ReferenceKind.FUNCTION);
-		result.setDeclaredType(JSTypeSet.ref(context
-				.getType(ITypeNames.FUNCTION)));
+		result.setDeclaredType(JSTypeSet.ref(FUNCTION));
 		result.setAttribute(IReferenceAttributes.METHOD, method);
 		result.setAttribute(IReferenceAttributes.R_METHOD,
 				RModelBuilder.create(getContext(), method));
@@ -1117,7 +1117,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							.getPath(objectClass);
 					if (className != null) {
 						Type type = TypeInfoModelFactory.eINSTANCE.createType();
-						type.setSuperType(context.getKnownType(OBJECT, null));
+						type.setSuperType(OBJECT);
 						type.setKind(TypeKind.JAVASCRIPT);
 						type.setName(className);
 						result.value.setDeclaredType(JSTypeSet.ref(type));

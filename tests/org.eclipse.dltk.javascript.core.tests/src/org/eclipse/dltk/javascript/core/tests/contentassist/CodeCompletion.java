@@ -2,7 +2,7 @@ package org.eclipse.dltk.javascript.core.tests.contentassist;
 
 import static org.eclipse.dltk.core.tests.TestSupport.notYetImplemented;
 import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
-import static org.eclipse.dltk.javascript.typeinfo.MemberPredicate.STATIC;
+import static org.eclipse.dltk.javascript.typeinfo.MemberPredicates.STATIC;
 
 import java.util.LinkedList;
 
@@ -11,7 +11,6 @@ import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
-import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 
 public class CodeCompletion extends AbstractCompletionTest {
 
@@ -457,22 +456,25 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void test50() {
 		IModuleSource module = createModule("test50.js");
 		int position = lastPositionInFile("Function.", module);
-		basicTest(module, position,
-				concat(getMembers(ITypeNames.FUNCTION, MemberPredicate.STATIC)));
+		basicTest(
+				module,
+				position,
+				concat(getMembers(ITypeNames.FUNCTION, STATIC),
+						getMembersOfFunction()));
 		// basicTest(module, 105, names);
 	}
 
 	public void test51() {
 		IModuleSource module = createModule("test51.js");
 		int position = lastPositionInFile("test.", module);
-		basicTest(module, position, concat(getMethodsOfFunction()));
+		basicTest(module, position, concat(getMembersOfFunction()));
 		// basicTest(module, 105, names);
 	}
 
 	public void test52() {
 		IModuleSource module = createModule("test52.js");
 		int position = lastPositionInFile("x.", module);
-		basicTest(module, position, concat(getMethodsOfFunction()));
+		basicTest(module, position, concat(getMembersOfFunction()));
 		// basicTest(module, 105, names);
 	}
 
@@ -543,7 +545,8 @@ public class CodeCompletion extends AbstractCompletionTest {
 	public void testStaticInference() {
 		IModuleSource module = createModule("test-static.js");
 		int position = lastPositionInFile("num1.", module);
-		basicTest(module, position, concat(getMembers(NUMBER, STATIC)));
+		basicTest(module, position,
+				concat(getMembers(NUMBER, STATIC), getMembersOfFunction()));
 	}
 
 	public void testArrayOfRecords() {

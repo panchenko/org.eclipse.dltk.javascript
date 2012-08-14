@@ -25,8 +25,6 @@ import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
-import org.eclipse.dltk.javascript.typeinference.IValueCollection;
-import org.eclipse.dltk.javascript.typeinference.IValueReference;
 
 @SuppressWarnings({ "nls" })
 public class TypeInfoValidationTests extends AbstractValidationTest {
@@ -2323,7 +2321,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 					.getID());
 		}
 	}
-	
+
 	public void testAssignmentWithBranch() {
 		final StringList code = new StringList();
 		code.add("function test() {");
@@ -2333,6 +2331,13 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("  var name = service.name;");
 		code.add(" }");
 		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testPrototype() {
+		final StringList code = new StringList();
+		code.add("String.prototype.foo = function() {}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}

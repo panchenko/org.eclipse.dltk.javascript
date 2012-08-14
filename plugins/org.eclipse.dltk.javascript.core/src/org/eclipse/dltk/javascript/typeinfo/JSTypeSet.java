@@ -321,6 +321,9 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 					.isAssignableTo(this) : TypeCompatibility.FALSE;
 		}
 
+		public boolean isExtensible() {
+			return false;
+		}
 	}
 
 	public static class SimpleTypeKey extends TypeKey implements IRSimpleType {
@@ -329,12 +332,14 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		public SimpleTypeKey(ITypeSystem typeSystem, Type type) {
 			super(typeSystem);
+			assert type != null;
 			this.type = type;
 			if (DEBUG)
 				checkType(type);
 		}
 
 		public SimpleTypeKey(Type type) {
+			assert type != null;
 			this.type = type;
 			if (DEBUG)
 				checkType(type);
@@ -355,11 +360,14 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (obj instanceof SimpleTypeKey) {
-				final SimpleTypeKey other = (SimpleTypeKey) obj;
-				return type.equals(other.type);
-			}
-			return false;
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			final SimpleTypeKey other = (SimpleTypeKey) obj;
+			return type.equals(other.type);
 		}
 
 		@Override
@@ -567,6 +575,11 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return false;
 		}
 
+		@Override
+		public boolean isExtensible() {
+			return true;
+		}
+
 		public TypeCompatibility isAssignableFrom(IRType type) {
 			if (super.isAssignableFrom(type).ok()) {
 				return TypeCompatibility.TRUE;
@@ -601,6 +614,10 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return TypeCompatibility.TRUE;
 		}
 
+		@Override
+		public boolean isExtensible() {
+			return true;
+		}
 	}
 
 	private static final IRType NONE_TYPE = new NoneTypeKey();

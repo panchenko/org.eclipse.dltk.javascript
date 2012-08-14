@@ -13,9 +13,9 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
-import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -31,7 +31,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType <em>Super Type</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getStaticConstructor <em>Static Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits <em>Traits</em>}</li>
- *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible <em>Extensible</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructors <em>Constructors</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInstantiable <em>Instantiable</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritConstructors <em>Inherit Constructors</em>}</li>
@@ -160,32 +159,6 @@ public interface Type extends Element {
     EList<Type> getTraits();
 
     /**
-     * Returns the value of the '<em><b>Extensible</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Extensible</em>' attribute isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @return the value of the '<em>Extensible</em>' attribute.
-     * @see #setExtensible(boolean)
-     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_Extensible()
-     * @model
-     * @generated
-     */
-    boolean isExtensible();
-
-    /**
-     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible <em>Extensible</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Extensible</em>' attribute.
-     * @see #isExtensible()
-     * @generated
-     */
-    void setExtensible(boolean value);
-
-    /**
      * Returns the value of the '<em><b>Constructors</b></em>' containment reference list.
      * The list contents are of type {@link org.eclipse.dltk.javascript.typeinfo.model.Constructor}.
      * <!-- begin-user-doc -->
@@ -266,7 +239,7 @@ public interface Type extends Element {
      */
     boolean isProxy();
 
-    Predicate<Member> memberPredicateFor(IRType type, Predicate<Member> predicate);
+	MemberPredicate memberPredicateFor(IRType type, MemberPredicate predicate);
 
 	/**
 	 * Creates instance of this type.
@@ -284,5 +257,7 @@ public interface Type extends Element {
 	IAssignProtection getReadOnlyStatus(Property property);
 
 	Member findDirectMember(String name);
+
+	boolean hasPrototype();
 
 } // Type

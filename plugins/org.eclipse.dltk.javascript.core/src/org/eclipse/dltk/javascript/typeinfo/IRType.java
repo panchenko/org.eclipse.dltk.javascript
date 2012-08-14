@@ -21,10 +21,26 @@ package org.eclipse.dltk.javascript.typeinfo;
  */
 public interface IRType {
 
+	/**
+	 * Returns the name of this type expression.
+	 */
 	String getName();
 
+	/**
+	 * Checks if this type expression is compatible with the specified one.
+	 */
 	TypeCompatibility isAssignableFrom(IRType type);
 
+	/**
+	 * Returns the {@link ITypeSystem} this type expression belongs to, or null.
+	 * 
+	 * @return
+	 */
 	ITypeSystem activeTypeSystem();
+
+	/**
+	 * Answers if additional members could be added to this type expression.
+	 */
+	boolean isExtensible();
 
 }

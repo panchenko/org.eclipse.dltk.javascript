@@ -58,6 +58,7 @@ import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -76,7 +77,6 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IRAnyType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
-import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
@@ -88,7 +88,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
@@ -101,7 +101,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 import org.eclipse.dltk.javascript.validation.IValidatorExtension;
@@ -694,9 +693,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return super.visitThrowStatement(node);
 		}
 
-		private final IRType functionTypeRef = JSTypeSet
-				.ref(TypeInfoModelLoader.getInstance().getType(
-						ITypeNames.FUNCTION));
+		private final IRType functionTypeRef = JSTypeSet.ref(Types.FUNCTION);
 
 		@Override
 		public IValueReference visitCallExpression(CallExpression node) {
@@ -1132,7 +1129,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 
 		private boolean hasInstanceMethod(IRType type, String name) {
 			return ElementValue.findMember(getContext(), type, name,
-					MemberPredicate.NON_STATIC) != null;
+					MemberPredicates.NON_STATIC) != null;
 		}
 
 		private boolean isArrayLookup(ASTNode expression) {
@@ -1896,8 +1893,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					&& !isArrayLookup(propertyExpression)) {
 				scope.add(path);
 				final IRType parentType = typeOf(result.getParent());
-				if (parentType instanceof IRMapType
-						|| parentType instanceof IRAnyType) {
+				if (parentType != null && parentType.isExtensible()) {
 					return;
 				}
 				final TypeKind parentKind = TypeUtil.kind(parentType);

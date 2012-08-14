@@ -34,7 +34,7 @@ public class StandardTypeMemberTests extends AbstractCompletionTest {
 	}
 
 	public void testFunction() {
-		assertEquals(11, getMethodsOfFunction().size());
+		assertEquals(11, getMembersOfFunction().size());
 	}
 
 

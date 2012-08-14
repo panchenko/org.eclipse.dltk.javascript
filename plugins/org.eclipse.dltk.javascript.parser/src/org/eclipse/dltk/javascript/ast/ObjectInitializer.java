@@ -124,8 +124,6 @@ public class ObjectInitializer extends Expression {
 		Assert.isTrue(sourceEnd() > 0);
 		Assert.isTrue(LC >= 0);
 		Assert.isTrue(RC > 0);
-		Assert.isTrue(initializers.size() == 0
-				|| commas.size() == initializers.size() - 1);
 
 		StringBuffer buffer = new StringBuffer();
 

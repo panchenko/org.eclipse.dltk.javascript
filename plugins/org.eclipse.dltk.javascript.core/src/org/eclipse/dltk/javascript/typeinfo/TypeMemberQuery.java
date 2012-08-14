@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -44,9 +43,9 @@ public class TypeMemberQuery implements Iterable<Member> {
 
 	private static class QueueItem {
 		final Type type;
-		final Predicate<Member> predicate;
+		final MemberPredicate predicate;
 
-		public QueueItem(Type type, Predicate<Member> predicate) {
+		public QueueItem(Type type, MemberPredicate predicate) {
 			this.type = type;
 			this.predicate = predicate;
 		}
@@ -92,9 +91,9 @@ public class TypeMemberQuery implements Iterable<Member> {
 	 * Creates query for the members of the specified type matching the
 	 * specified predicate.
 	 * 
-	 * @see MemberPredicate
+	 * @see MemberPredicates
 	 */
-	public TypeMemberQuery(Type type, Predicate<Member> predicate) {
+	public TypeMemberQuery(Type type, MemberPredicate predicate) {
 		add(type, predicate);
 	}
 
@@ -102,13 +101,13 @@ public class TypeMemberQuery implements Iterable<Member> {
 	 * Adds the specified type to this query
 	 */
 	public void add(Type type) {
-		add(type, MemberPredicate.ALWAYS_TRUE);
+		add(type, MemberPredicates.ALWAYS_TRUE);
 	}
 
 	/**
 	 * Adds the specified type with the specified predicate to this query.
 	 */
-	public void add(Type type, Predicate<Member> predicate) {
+	public void add(Type type, MemberPredicate predicate) {
 		Assert.isNotNull(type);
 		types.add(new QueueItem(type, predicate));
 	}
@@ -201,7 +200,7 @@ public class TypeMemberQuery implements Iterable<Member> {
 				final EList<Member> members = item.type.getMembers();
 				final Member[] additionalMembers = item.type
 						.getAdditionalMembers();
-				if (item.predicate == MemberPredicate.ALWAYS_TRUE) {
+				if (item.predicate == MemberPredicates.ALWAYS_TRUE) {
 					if (additionalMembers != null
 							&& additionalMembers.length != 0) {
 						final List<Member> concat = new ArrayList<Member>(

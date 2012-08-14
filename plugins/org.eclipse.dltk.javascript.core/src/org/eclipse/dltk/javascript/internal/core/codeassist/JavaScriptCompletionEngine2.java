@@ -31,6 +31,7 @@ import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueParent;
@@ -47,6 +48,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
@@ -328,14 +330,24 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				if (type instanceof IRClassType) {
 					final Type t = ((IRClassType) type).getTarget();
 					if (t != null) {
-						typeQuery.add(t, t.memberPredicateFor(type,
-								MemberPredicate.STATIC));
+						final MemberPredicate predicate = t.memberPredicateFor(
+								type, MemberPredicates.STATIC);
+						typeQuery.add(t, predicate);
+						if (t.hasPrototype()
+								&& predicate
+										.isCompatibleWith(MemberPredicates.STATIC)) {
+							typeQuery.add(Types.FUNCTION,
+									MemberPredicates.NON_STATIC);
+						}
+					} else {
+						typeQuery.add(Types.FUNCTION,
+								MemberPredicates.NON_STATIC);
 					}
 				} else if (type instanceof IRSimpleType) {
 					final Type t = ((IRSimpleType) type).getTarget();
 					if (t != null) {
 						typeQuery.add(t, t.memberPredicateFor(type,
-								MemberPredicate.NON_STATIC));
+								MemberPredicates.NON_STATIC));
 					}
 				} else if (type instanceof IRRecordType) {
 					for (IRRecordMember member : ((IRRecordType) type)
@@ -345,7 +357,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				} else {
 					final Type t = TypeUtil.extractType(context, type);
 					if (t != null) {
-						typeQuery.add(t, MemberPredicate.NON_STATIC);
+						typeQuery.add(t, MemberPredicates.NON_STATIC);
 					}
 				}
 			}

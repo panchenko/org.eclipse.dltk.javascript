@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ref="http://www.eclipse.org/dltk/javascript/typeinfo.ecore">
   <ref:Type name="Error" kind="PREDEFINED">
-  	<members xsi:type="ref:Property" name="prototype" directType="Error" static="true" description="Allows the addition of properties to a Error object."/>
   	<members xsi:type="ref:Property" name="name" directType="String" description="Error name."/>
   	<members xsi:type="ref:Property" name="message" directType="String" description="Error message."/>
     <staticConstructor name="Error">
@@ -25,7 +24,6 @@
   </ref:Type>
   <ref:TypeAlias source="function" target="Function"/>
   <ref:Type name="Function" kind="PREDEFINED" superType="Object">
-  	<members xsi:type="ref:Property" name="prototype" directType="Function" static="true" description="Allows the addition of properties to the Function object."/>
   	<members xsi:type="ref:Property" name="prototype" directType="Object" static="false" description="Allows the addition of properties to the instance of the object created by the constructor function."/>
   	<members xsi:type="ref:Property" name="length" directType="Number"  description="Specifies the number of arguments expected by the function."/>
   	<members xsi:type="ref:Method" name="apply" directType="Object" description="Applies the method of another object in the context of a different object (the calling object); arguments can be passed as an Array object." >
@@ -39,7 +37,6 @@
   </ref:Type>
   <ref:TypeAlias source="object" target="Object"/>
   <ref:Type name="Object" kind="PREDEFINED">
-  	<members xsi:type="ref:Property" name="prototype" directType="Object" static="true" description="Allows the addition of properties to a Object object."/>
   	<members xsi:type="ref:Property" name="constructor" directType="Object" description="Returns a reference to the Object function that created the instance's prototype."/>
     <members xsi:type="ref:Method" name="toString" directType="String" description="Returns a string representing the specified object."/>
     <members xsi:type="ref:Method" name="toLocaleString" description="Returns a string representing the object. This method is meant to be overriden by derived objects for locale-specific purposes."/>
@@ -106,7 +103,6 @@
   </ref:Type>
   <ref:TypeAlias source="regexp" target="RegExp"/>
   <ref:Type name="RegExp" kind="PREDEFINED" superType="Object">
-  	<members xsi:type="ref:Property" name="prototype" directType="RegExp" static="true" description="Allows the addition of properties to a RegExp object."/>
     <members xsi:type="ref:Property" name="global" directType="Boolean" description="Whether to test the regular expression against all possible matches in a string, or only against the first." />
     <members xsi:type="ref:Property" name="ignoreCase" directType="Boolean" description="Whether to ignore case while attempting a match in a string." />
     <members xsi:type="ref:Property" name="lastIndex" directType="Number" description="The index at which to start the next match." />
@@ -189,7 +185,6 @@
     <staticConstructor name="Array">
       <parameters name="item" kind="VARARGS" directType="Object"/>
     </staticConstructor>
-  	<members xsi:type="ref:Property" name="prototype" directType="Array" static="true" description="Allows the addition of properties to a Array object."/>
     <members xsi:type="ref:Method" name="concat" description="Joins two or more arrays and returns the result.">
       <parameters name="array" kind="VARARGS"/>
       <type xsi:type="ref:ArrayType">
@@ -269,7 +264,6 @@
     <staticConstructor name="Boolean">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>
     </staticConstructor>
-  	<members xsi:type="ref:Property" name="prototype" directType="Boolean" static="true" description="Allows the addition of properties to a Boolean object."/>
   </ref:Type>
   <ref:TypeAlias source="boolean" target="Boolean"/>
   <ref:Type name="Date" kind="PREDEFINED" description="Creates Date instances which let you work with dates and times." superType="Object">
@@ -293,7 +287,6 @@
       <parameters name="second" directType="Number" kind="OPTIONAL"/>
       <parameters name="millisecond" directType="Number" kind="OPTIONAL"/>
   	</constructors>
-    <members xsi:type="ref:Property" name="prototype" directType="Date" static="true" description="Allows the addition of properties to a Date object."/>
     <members xsi:type="ref:Method" name="parse" directType="Number" description="Parses a string representation of a date, and returns the number of milliseconds since midnight Jan 1, 1970" static="true">
       <parameters name="dateString" directType="String"/>
     </members>
@@ -410,7 +403,6 @@
   	<members xsi:type="ref:Property" name="NaN" directType="Number" static="true" description="Special 'not a number' value."/>
   	<members xsi:type="ref:Property" name="NEGATIVE_INFINITY" directType="Number" static="true" description="Special value representing negative infinity; returned on overflow."/>
   	<members xsi:type="ref:Property" name="POSITIVE_INFINITY" directType="Number" static="true" description="Special value representing infinity; returned on overflow."/>
-  	<members xsi:type="ref:Property" name="prototype" directType="Number" static="true" description="The prototype object of the Number constructor can be modified to affect all Number instances"/>
     <members xsi:type="ref:Method" name="toExponential" directType="String" description="Converts the value of the object into an exponential notation.">
       <parameters name="numberOfDecimals"/>
     </members>
@@ -434,7 +426,6 @@
     <staticConstructor name="String">
       <parameters name="value" kind="OPTIONAL" directType="Object"/>
     </staticConstructor>
-  	<members xsi:type="ref:Property" name="prototype" directType="String" static="true" description="Allows the addition of properties to a String object."/>
   	<members xsi:type="ref:Method" name="fromCharCode" directType="String" static="true" description="Returns a string created by using the specified sequence of Unicode values.">
   	    <parameters name="num" kind="VARARGS"/>
     </members>

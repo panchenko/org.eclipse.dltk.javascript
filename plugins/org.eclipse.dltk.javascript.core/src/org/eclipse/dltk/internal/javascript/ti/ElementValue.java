@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.FUNCTION;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,10 +19,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -42,7 +40,9 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.JSTypeSet.SimpleTypeKey;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
@@ -56,14 +56,13 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public abstract class ElementValue implements IValue {
 
 	public static ElementValue findMember(ITypeSystem context, IRType type,
 			String name) {
-		return findMember(context, type, name, MemberPredicate.ALWAYS_TRUE);
+		return findMember(context, type, name, MemberPredicates.ALWAYS_TRUE);
 	}
 
 	private static class NestedTypeSystem implements ITypeSystem {
@@ -99,28 +98,48 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
+	private static class PrototypeType extends SimpleTypeKey {
+		public PrototypeType(ITypeSystem typeSystem, Type type) {
+			super(typeSystem, type);
+		}
+
+		public PrototypeType(Type type) {
+			super(type != null ? type : Types.OBJECT);
+		}
+
+		@Override
+		public String getName() {
+			return "prototype<" + getTarget().getName() + ">";
+		}
+
+		@Override
+		public boolean isExtensible() {
+			return true;
+		}
+	}
+
 	static ElementValue findMemberA(ITypeSystem context, IRType type,
 			String name) {
-		final Predicate<Member> predicate;
+		final MemberPredicate predicate;
 		if (type instanceof IRClassType) {
 			final Type target = ((IRClassType) type).getTarget();
 			predicate = target != null ? target.memberPredicateFor(type,
-					MemberPredicate.STATIC) : MemberPredicate.STATIC;
+					MemberPredicates.STATIC) : MemberPredicates.STATIC;
 		} else if (type instanceof IRSimpleType) {
 			final Type target = ((IRSimpleType) type).getTarget();
 			predicate = target != null ? target.memberPredicateFor(type,
-					MemberPredicate.NON_STATIC) : MemberPredicate.NON_STATIC;
+					MemberPredicates.NON_STATIC) : MemberPredicates.NON_STATIC;
 		} else if (type instanceof IRUnionType) {
 			// TODO (alex) use different predicate for each option
-			predicate = MemberPredicate.ALWAYS_TRUE;
+			predicate = MemberPredicates.ALWAYS_TRUE;
 		} else {
-			predicate = MemberPredicate.NON_STATIC;
+			predicate = MemberPredicates.NON_STATIC;
 		}
 		return findMember(context, type, name, predicate);
 	}
 
 	public static ElementValue findMember(ITypeSystem context, IRType type,
-			String name, Predicate<Member> predicate) {
+			String name, MemberPredicate predicate) {
 		if (type != null) {
 			final ITypeSystem saved = type.activeTypeSystem();
 			if (saved != null) {
@@ -137,31 +156,38 @@ public abstract class ElementValue implements IValue {
 				return new TypeValue(context, arrayType);
 			}
 		}
-		final Type t = TypeUtil.extractType(context, type);
-		if (t != null) {
-			final List<Member> selection = findMembers(t, name, predicate);
-			if (!selection.isEmpty()) {
-				if (selection.size() == 1) {
-					final Member selected = selection.get(0);
-					if (selected instanceof Property) {
-						if (isCustomType(selected.getType())) {
-							return new PropertyValue(new NestedTypeSystem(
-									context, t), (Property) selected);
-						} else {
-							return new PropertyValue(context,
-									(Property) selected);
-						}
-					} else if (selected instanceof Method) {
-						if (isCustomType(selected.getType())) {
-							return new MethodValue(new NestedTypeSystem(
-									context, t), (Method) selected);
-						} else {
-							return new MethodValue(context, (Method) selected);
-						}
+		if (type instanceof IRClassType) {
+			final Type t = ((IRClassType) type).getTarget();
+			if (t != null) {
+				final List<Member> selection = findMembers(t, name, predicate);
+				if (!selection.isEmpty()) {
+					if (selection.size() == 1) {
+						return createElement(context, t, selection.get(0));
 					}
+					return new MemberValue(context,
+							selection.toArray(new Member[selection.size()]));
 				}
-				return new MemberValue(context,
-						selection.toArray(new Member[selection.size()]));
+			}
+			if ((t == null || t.hasPrototype())
+					&& predicate.isCompatibleWith(MemberPredicates.STATIC)) {
+				final List<Member> selection = findMembers(Types.FUNCTION,
+						name, MemberPredicates.NON_STATIC);
+				if (!selection.isEmpty()) {
+					if (selection.size() == 1) {
+						final Member selected = selection.get(0);
+						if ("prototype".equals(selected.getName())
+								&& selected instanceof Property) {
+							final Type target = ((IRClassType) type)
+									.getTarget();
+							return new PrototypePropertyValue(context,
+									(Property) selected, new PrototypeType(
+											target));
+						}
+						return createElement(context, Types.FUNCTION, selected);
+					}
+					return new MemberValue(context,
+							selection.toArray(new Member[selection.size()]));
+				}
 			}
 		} else if (type instanceof IRUnionType) {
 			for (IRType unionTarget : ((IRUnionType) type).getTargets()) {
@@ -176,8 +202,41 @@ public abstract class ElementValue implements IValue {
 				return new RTypeValue(context, member.getType(),
 						member.getMember());
 			}
+		} else {
+			final Type t = TypeUtil.extractType(context, type);
+			if (t != null) {
+				final List<Member> selection = findMembers(t, name, predicate);
+				if (!selection.isEmpty()) {
+					if (selection.size() == 1) {
+						return createElement(context, t, selection.get(0));
+					}
+					return new MemberValue(context,
+							selection.toArray(new Member[selection.size()]));
+				}
+			}
 		}
 		return null;
+	}
+
+	private static ElementValue createElement(ITypeSystem context,
+			final Type type, final Member member) {
+		if (member instanceof Property) {
+			if (isCustomType(member.getType())) {
+				return new PropertyValue(new NestedTypeSystem(context, type),
+						(Property) member);
+			} else {
+				return new PropertyValue(context, (Property) member);
+			}
+		} else if (member instanceof Method) {
+			if (isCustomType(member.getType())) {
+				return new MethodValue(new NestedTypeSystem(context, type),
+						(Method) member);
+			} else {
+				return new MethodValue(context, (Method) member);
+			}
+		} else {
+			return null;
+		}
 	}
 
 	private static boolean isCustomType(JSType type) {
@@ -200,7 +259,7 @@ public abstract class ElementValue implements IValue {
 	}
 
 	public static List<Member> findMembers(Type type, String name,
-			Predicate<Member> predicate) {
+			MemberPredicate predicate) {
 		final List<Member> selection = new ArrayList<Member>(4);
 		for (Member member : new TypeMemberQuery(type, predicate)
 				.ignoreDuplicates()) {
@@ -258,7 +317,7 @@ public abstract class ElementValue implements IValue {
 					value = new Value();
 				} else {
 					for (IRType type : types) {
-						value = findMember(context, type, name);
+						value = findMemberA(context, type, name);
 						if (value != null) {
 							if (value instanceof ElementValue) {
 								value = ((ElementValue) value).resolveValue();
@@ -331,7 +390,7 @@ public abstract class ElementValue implements IValue {
 			}
 			for (IRType type : types) {
 				IValue child = findMember(context, type, name,
-						MemberPredicate.STATIC);
+						MemberPredicates.STATIC);
 				if (child != null)
 					return child;
 			}
@@ -397,7 +456,7 @@ public abstract class ElementValue implements IValue {
 					return functionOperator;
 				}
 			}
-			final ElementValue child = ElementValue.findMember(context,
+			final ElementValue child = ElementValue.findMemberA(context,
 					getDeclaredType(), name);
 			if (child != null) {
 				return child;
@@ -406,8 +465,7 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public IRType getDeclaredType() {
-			return JSTypeSet.ref(TypeInfoModelLoader.getInstance().getType(
-					FUNCTION));
+			return JSTypeSet.ref(Types.FUNCTION);
 		}
 
 		public JSTypeSet getDeclaredTypes() {
@@ -446,6 +504,10 @@ public abstract class ElementValue implements IValue {
 
 		public String toString() {
 			return getName();
+		}
+
+		public boolean isExtensible() {
+			return false;
 		}
 	};
 
@@ -551,6 +613,21 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
+	private static class PrototypePropertyValue extends PropertyValue {
+		private final IRType valueType;
+
+		public PrototypePropertyValue(ITypeSystem context, Property property,
+				IRType valueType) {
+			super(context, property);
+			this.valueType = valueType;
+		}
+
+		@Override
+		public IRType getDeclaredType() {
+			return valueType;
+		}
+	}
+
 	private static class RTypeValue extends ElementValue implements IValue {
 
 		private final IRType type;
@@ -599,7 +676,7 @@ public abstract class ElementValue implements IValue {
 						return child;
 					}
 				}
-				ElementValue eValue = ElementValue.findMember(context, type,
+				ElementValue eValue = ElementValue.findMemberA(context, type,
 						name);
 				if (eValue != null) {
 					child = eValue.resolveValue();
@@ -691,7 +768,7 @@ public abstract class ElementValue implements IValue {
 
 			IRType type = getDeclaredType();
 			if (type != null) {
-				final ElementValue child = ElementValue.findMember(context,
+				final ElementValue child = ElementValue.findMemberA(context,
 						type, name);
 				if (child != null) {
 					return child;
@@ -708,8 +785,7 @@ public abstract class ElementValue implements IValue {
 						return JSTypeSet.normalize(context, property.getType());
 					}
 				} else if (member instanceof Method) {
-					return JSTypeSet.ref(TypeInfoModelLoader.getInstance()
-							.getType(FUNCTION));
+					return JSTypeSet.ref(Types.FUNCTION);
 				}
 			}
 			return null;
@@ -731,8 +807,7 @@ public abstract class ElementValue implements IValue {
 					if (types == null) {
 						types = JSTypeSet.create();
 					}
-					types.add(JSTypeSet.ref(TypeInfoModelLoader.getInstance()
-							.getType(FUNCTION)));
+					types.add(JSTypeSet.ref(Types.FUNCTION));
 				}
 			}
 			if (types != null) {

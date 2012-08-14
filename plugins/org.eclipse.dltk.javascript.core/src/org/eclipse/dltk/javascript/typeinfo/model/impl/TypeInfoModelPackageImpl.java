@@ -899,17 +899,8 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getType_Extensible() {
-        return (EAttribute)typeEClass.getEStructuralFeatures().get(5);
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
     public EReference getType_Constructors() {
-        return (EReference)typeEClass.getEStructuralFeatures().get(6);
+        return (EReference)typeEClass.getEStructuralFeatures().get(5);
     }
 
     /**
@@ -918,7 +909,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     public EAttribute getType_Instantiable() {
-        return (EAttribute)typeEClass.getEStructuralFeatures().get(7);
+        return (EAttribute)typeEClass.getEStructuralFeatures().get(6);
     }
 
     /**
@@ -927,7 +918,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     public EAttribute getType_InheritConstructors() {
-        return (EAttribute)typeEClass.getEStructuralFeatures().get(8);
+        return (EAttribute)typeEClass.getEStructuralFeatures().get(7);
     }
 
     /**
@@ -936,7 +927,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     public EAttribute getType_InheritStaticMembers() {
-        return (EAttribute)typeEClass.getEStructuralFeatures().get(9);
+        return (EAttribute)typeEClass.getEStructuralFeatures().get(8);
     }
 
     /**
@@ -1185,7 +1176,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         createEReference(typeEClass, TYPE__SUPER_TYPE);
         createEReference(typeEClass, TYPE__STATIC_CONSTRUCTOR);
         createEReference(typeEClass, TYPE__TRAITS);
-        createEAttribute(typeEClass, TYPE__EXTENSIBLE);
         createEReference(typeEClass, TYPE__CONSTRUCTORS);
         createEAttribute(typeEClass, TYPE__INSTANTIABLE);
         createEAttribute(typeEClass, TYPE__INHERIT_CONSTRUCTORS);
@@ -1371,7 +1361,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEReference(getType_SuperType(), this.getType(), null, "superType", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getType_StaticConstructor(), this.getConstructor(), null, "staticConstructor", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getType_Traits(), this.getType(), null, "traits", null, 0, -1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-        initEAttribute(getType_Extensible(), ecorePackage.getEBoolean(), "extensible", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getType_Constructors(), this.getConstructor(), null, "constructors", null, 0, -1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEAttribute(getType_Instantiable(), ecorePackage.getEBoolean(), "instantiable", "true", 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
         initEAttribute(getType_InheritConstructors(), ecorePackage.getEBoolean(), "inheritConstructors", null, 0, 1, Type.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

@@ -326,22 +326,13 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE__TRAITS = ELEMENT_FEATURE_COUNT + 4;
 
     /**
-     * The feature id for the '<em><b>Extensible</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int TYPE__EXTENSIBLE = ELEMENT_FEATURE_COUNT + 5;
-
-    /**
      * The feature id for the '<em><b>Constructors</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int TYPE__CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 6;
+    int TYPE__CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 5;
 
     /**
      * The feature id for the '<em><b>Instantiable</b></em>' attribute.
@@ -350,7 +341,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE__INSTANTIABLE = ELEMENT_FEATURE_COUNT + 7;
+    int TYPE__INSTANTIABLE = ELEMENT_FEATURE_COUNT + 6;
 
     /**
      * The feature id for the '<em><b>Inherit Constructors</b></em>' attribute.
@@ -359,7 +350,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE__INHERIT_CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 8;
+    int TYPE__INHERIT_CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 7;
 
     /**
      * The feature id for the '<em><b>Inherit Static Members</b></em>' attribute.
@@ -368,7 +359,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE__INHERIT_STATIC_MEMBERS = ELEMENT_FEATURE_COUNT + 9;
+    int TYPE__INHERIT_STATIC_MEMBERS = ELEMENT_FEATURE_COUNT + 8;
 
     /**
      * The number of structural features of the '<em>Type</em>' class.
@@ -377,7 +368,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 10;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 9;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
@@ -1734,15 +1725,6 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_TYPE__TRAITS = TYPE__TRAITS;
 
     /**
-     * The feature id for the '<em><b>Extensible</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int GENERIC_TYPE__EXTENSIBLE = TYPE__EXTENSIBLE;
-
-    /**
      * The feature id for the '<em><b>Constructors</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2728,17 +2710,6 @@ public interface TypeInfoModelPackage extends EPackage {
     EReference getType_Traits();
 
     /**
-     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible <em>Extensible</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Extensible</em>'.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#isExtensible()
-     * @see #getType()
-     * @generated
-     */
-    EAttribute getType_Extensible();
-
-    /**
      * Returns the meta object for the containment reference list '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructors <em>Constructors</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3543,14 +3514,6 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference TYPE__TRAITS = eINSTANCE.getType_Traits();
-
-        /**
-         * The meta object literal for the '<em><b>Extensible</b></em>' attribute feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EAttribute TYPE__EXTENSIBLE = eINSTANCE.getType_Extensible();
 
         /**
          * The meta object literal for the '<em><b>Constructors</b></em>' containment reference list feature.

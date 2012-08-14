@@ -23,12 +23,12 @@ import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKLanguageManager;
-import org.eclipse.dltk.core.Predicate;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
-import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -117,7 +117,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	}
 
 	private static List<String> loadMembers(final String typeName,
-			Predicate<Member> predicate) {
+			MemberPredicate predicate) {
 		final List<String> names = new ArrayList<String>();
 		final Type type = getType(typeName);
 		for (Member member : new TypeMemberQuery(type, predicate)) {
@@ -155,7 +155,7 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	private static final Map<Key, List<String>> members = new HashMap<Key, List<String>>();
 
 	public static List<String> getMembers(String typeName,
-			Predicate<Member> predicate) {
+			MemberPredicate predicate) {
 		final Key key = new Key(typeName, predicate);
 		List<String> m = members.get(key);
 		if (m == null) {
@@ -166,36 +166,44 @@ public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 	}
 
 	protected static List<String> getMethodsOfObject() {
-		return getMembers(ITypeNames.OBJECT, MemberPredicate.NON_STATIC);
+		return getMembers(ITypeNames.OBJECT, MemberPredicates.NON_STATIC);
 	}
 
 	protected static List<String> getMethodsOfArray() {
-		return getMembers(ITypeNames.ARRAY, MemberPredicate.NON_STATIC);
+		return getMembers(ITypeNames.ARRAY, MemberPredicates.NON_STATIC);
 	}
 
-	protected static List<String> getMethodsOfFunction() {
-		return getMembers(ITypeNames.FUNCTION, MemberPredicate.NON_STATIC);
+	protected static List<String> getMembersOfFunction() {
+		return getMembers(ITypeNames.FUNCTION, MemberPredicates.NON_STATIC);
 	}
 
 	protected static List<String> getMethodsOfNumber() {
-		return getMembers(ITypeNames.NUMBER, MemberPredicate.NON_STATIC);
+		return getMembers(ITypeNames.NUMBER, MemberPredicates.NON_STATIC);
 	}
 
 	protected static List<String> getMethodsOfString() {
-		return getMembers(ITypeNames.STRING, MemberPredicate.NON_STATIC);
+		return getMembers(ITypeNames.STRING, MemberPredicates.NON_STATIC);
 	}
 
 	protected static List<String> getMethodsOfXML() {
-		return getMembers(ITypeNames.XML, MemberPredicate.NON_STATIC);
+		return getMembers(ITypeNames.XML, MemberPredicates.NON_STATIC);
 	}
 
 	protected static String[] concat(List<String> values, String... addition) {
 		List<String> result = new ArrayList<String>(values.size()
 				+ addition.length);
 		result.addAll(values);
-		for (String value : addition) {
-			result.add(value);
-		}
+		Collections.addAll(result, addition);
+		return result.toArray(new String[result.size()]);
+	}
+
+	protected static String[] concat(List<String> a, List<String> b,
+			String... addition) {
+		List<String> result = new ArrayList<String>(a.size() + b.size()
+				+ addition.length);
+		result.addAll(a);
+		result.addAll(b);
+		Collections.addAll(result, addition);
 		return result.toArray(new String[result.size()]);
 	}
 
