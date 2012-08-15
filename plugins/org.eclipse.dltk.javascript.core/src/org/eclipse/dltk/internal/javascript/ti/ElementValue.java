@@ -411,6 +411,14 @@ public abstract class ElementValue implements IValue {
 		}
 
 		@Override
+		public Object getAttribute(String key, boolean includeReferences) {
+			if (IAssignProtection.ATTRIBUTE.equals(key)) {
+				return UNASSIGNABLE_CLASS;
+			}
+			return super.getAttribute(key, includeReferences);
+		}
+
+		@Override
 		public String toString() {
 			return getClass().getSimpleName() + types;
 		}
@@ -473,6 +481,15 @@ public abstract class ElementValue implements IValue {
 		}
 
 		@Override
+		public Object getAttribute(String key, boolean includeReferences) {
+			if (IAssignProtection.ATTRIBUTE.equals(key)
+					&& method.getDeclaringType() == null) {
+				return UNASSIGNABLE_METHOD;
+			}
+			return super.getAttribute(key, includeReferences);
+		}
+
+		@Override
 		public String toString() {
 			return getClass().getSimpleName() + '<' + method + '>';
 		}
@@ -485,6 +502,26 @@ public abstract class ElementValue implements IValue {
 
 		public String problemMessage() {
 			return ValidationMessages.AssignmentToReadonlyProperty;
+		}
+	};
+
+	static final IAssignProtection UNASSIGNABLE_METHOD = new IAssignProtection() {
+		public IProblemIdentifier problemId() {
+			return JavaScriptProblems.UNASSIGNABLE_ELEMENT;
+		}
+
+		public String problemMessage() {
+			return ValidationMessages.UnassignableMethod;
+		}
+	};
+
+	static final IAssignProtection UNASSIGNABLE_CLASS = new IAssignProtection() {
+		public IProblemIdentifier problemId() {
+			return JavaScriptProblems.UNASSIGNABLE_ELEMENT;
+		}
+
+		public String problemMessage() {
+			return ValidationMessages.UnassignableClass;
 		}
 	};
 
@@ -825,6 +862,9 @@ public abstract class ElementValue implements IValue {
 						if (((Property) member).isReadOnly()) {
 							return READONLY_PROPERTY;
 						}
+					} else if (member instanceof Method
+							&& member.getDeclaringType() == null) {
+						return UNASSIGNABLE_METHOD;
 					}
 				}
 				return null;

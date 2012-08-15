@@ -1729,6 +1729,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 				reporter.reportProblem(assign.problemId(),
 						assign.problemMessage(), node.sourceStart(),
 						node.sourceEnd());
+			} else if (reference.getKind() == ReferenceKind.FUNCTION) {
+				reporter.reportProblem(JavaScriptProblems.UNASSIGNABLE_ELEMENT,
+						ValidationMessages.UnassignableFunction,
+						node.sourceStart(), node.sourceEnd());
 			}
 		}
 

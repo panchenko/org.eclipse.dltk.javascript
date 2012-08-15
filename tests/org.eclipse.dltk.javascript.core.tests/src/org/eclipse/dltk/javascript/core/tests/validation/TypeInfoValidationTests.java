@@ -23,10 +23,11 @@ import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.Skip;
 import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
 
-@SuppressWarnings({ "nls" })
+@SuppressWarnings({ "nls", "restriction" })
 public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	private boolean notYetImplemented() {
@@ -2340,6 +2341,40 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("String.prototype.foo = function() {}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testAssignToClass() {
+		final StringList code = new StringList();
+		code.add("String = 1");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNASSIGNABLE_ELEMENT, problems.get(0)
+				.getID());
+		assertEquals(ValidationMessages.UnassignableClass, problems.get(0)
+				.getMessage());
+	}
+
+	public void testAssignToGlobalFunction() {
+		final StringList code = new StringList();
+		code.add("parseInt = 1");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNASSIGNABLE_ELEMENT, problems.get(0)
+				.getID());
+		assertEquals(ValidationMessages.UnassignableMethod, problems.get(0)
+				.getMessage());
+	}
+
+	public void testAssignToFunction() {
+		final StringList code = new StringList();
+		code.add("function a() {}");
+		code.add("a = 1");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNASSIGNABLE_ELEMENT, problems.get(0)
+				.getID());
+		assertEquals(ValidationMessages.UnassignableFunction, problems.get(0)
+				.getMessage());
 	}
 
 }

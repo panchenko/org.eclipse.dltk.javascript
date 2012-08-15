@@ -72,6 +72,9 @@ public class ValidationMessages extends NLS {
 	public static String NonInstantiableType;
 
 	public static String InaccessibleMember;
+	public static String UnassignableMethod;
+	public static String UnassignableClass;
+	public static String UnassignableFunction;
 
 	static {
 		// initialize resource bundle
