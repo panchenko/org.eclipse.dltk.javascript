@@ -14,19 +14,15 @@ package org.eclipse.dltk.javascript.core.tests.typeinfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.TypeQuery;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-
-import junit.framework.TestCase;
 
 public class TypeQueryTests extends TestCase implements ITypeNames {
-
-	private static Type getType(String typeName) {
-		return TypeInfoModelLoader.getInstance().getType(typeName);
-	}
 
 	private List<Type> toList(final Iterable<Type> iterable) {
 		final List<Type> types = new ArrayList<Type>();
@@ -38,40 +34,40 @@ public class TypeQueryTests extends TestCase implements ITypeNames {
 
 	public void testHierarchy() {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
-		type.getTraits().add(getType(STRING));
-		type.getTraits().add(getType(NUMBER));
+		type.getTraits().add(Types.STRING);
+		type.getTraits().add(Types.NUMBER);
 		final TypeQuery query = new TypeQuery(type);
 		final List<Type> all = query.getHierarchy();
 		assertEquals(4, all.size());
 		assertSame(type, all.get(0));
-		assertSame(getType(STRING), all.get(1));
-		assertSame(getType(NUMBER), all.get(2));
-		assertSame(getType(OBJECT), all.get(3));
+		assertSame(Types.STRING, all.get(1));
+		assertSame(Types.NUMBER, all.get(2));
+		assertSame(Types.OBJECT, all.get(3));
 	}
 
 	public void testTraits() {
 		final Type base = TypeInfoModelFactory.eINSTANCE.createType();
-		base.getTraits().add(getType(STRING));
-		base.getTraits().add(getType(NUMBER));
+		base.getTraits().add(Types.STRING);
+		base.getTraits().add(Types.NUMBER);
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setSuperType(base);
-		type.getTraits().add(getType(NUMBER));
+		type.getTraits().add(Types.NUMBER);
 		final List<Type> traits = toList(new TypeQuery(type).getAllTraits());
 		assertEquals(2, traits.size());
-		assertSame(getType(NUMBER), traits.get(0));
-		assertSame(getType(STRING), traits.get(1));
+		assertSame(Types.NUMBER, traits.get(0));
+		assertSame(Types.STRING, traits.get(1));
 	}
 
 	public void testTraits2() {
 		final Type base = TypeInfoModelFactory.eINSTANCE.createType();
-		base.getTraits().add(getType(STRING));
-		base.getTraits().add(getType(NUMBER));
+		base.getTraits().add(Types.STRING);
+		base.getTraits().add(Types.NUMBER);
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setSuperType(base);
 		final List<Type> traits = toList(new TypeQuery(type).getAllTraits());
 		assertEquals(2, traits.size());
-		assertSame(getType(STRING), traits.get(0));
-		assertSame(getType(NUMBER), traits.get(1));
+		assertSame(Types.STRING, traits.get(0));
+		assertSame(Types.NUMBER, traits.get(1));
 	}
 
 }

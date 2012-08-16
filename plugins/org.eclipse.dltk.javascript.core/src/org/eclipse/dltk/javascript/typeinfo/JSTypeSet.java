@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -203,8 +204,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			} else if (type instanceof ClassTypeKey) {
 				return new Type[] { ((ClassTypeKey) type).getTarget() };
 			} else if (type instanceof AnyTypeKey) {
-				return new Type[] { TypeInfoModelLoader.getInstance().getType(
-						ITypeNames.OBJECT) };
+				return new Type[] { Types.OBJECT };
 			} else {
 				return new Type[0];
 			}
@@ -1101,8 +1101,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 				if (type instanceof SimpleTypeKey) {
 					result.add(((SimpleTypeKey) type).getTarget());
 				} else if (type instanceof AnyTypeKey) {
-					result.add(TypeInfoModelLoader.getInstance().getType(
-							ITypeNames.OBJECT));
+					result.add(Types.OBJECT);
 				}
 			}
 			return result.toArray(new Type[result.size()]);

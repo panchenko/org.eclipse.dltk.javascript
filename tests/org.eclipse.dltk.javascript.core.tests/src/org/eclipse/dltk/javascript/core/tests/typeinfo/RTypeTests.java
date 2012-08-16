@@ -13,22 +13,18 @@ package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
 import junit.framework.TestCase;
 
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class RTypeTests extends TestCase implements ITypeNames {
 
-	private static Type getType(String typeName) {
-		return TypeInfoModelLoader.getInstance().getType(typeName);
-	}
-
 	public void testAssignableSuperType() {
-		final Type superType = getType(STRING);
+		final Type superType = Types.STRING;
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(EcoreUtil.generateUUID());
 		type.setSuperType(superType);
@@ -37,7 +33,7 @@ public class RTypeTests extends TestCase implements ITypeNames {
 	}
 
 	public void testAssignableTrait() {
-		final Type trait = getType(STRING);
+		final Type trait = Types.STRING;
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(EcoreUtil.generateUUID());
 		type.getTraits().add(trait);

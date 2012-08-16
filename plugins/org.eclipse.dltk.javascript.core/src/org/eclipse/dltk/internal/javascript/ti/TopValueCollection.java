@@ -14,14 +14,13 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class TopValueCollection extends ValueCollection {
@@ -60,8 +59,7 @@ public class TopValueCollection extends ValueCollection {
 				if (name.equals(IValueReference.ARRAY_OP)) {
 					// special case ARRAY_OP is an instance of an Array not
 					// the Array type/class itself.
-					value = ElementValue.createFor(TypeInfoModelLoader
-							.getInstance().getType(ITypeNames.ARRAY), context);
+					value = ElementValue.createFor(Types.ARRAY, context);
 					memberCache.put(name, value);
 					return value;
 				}
