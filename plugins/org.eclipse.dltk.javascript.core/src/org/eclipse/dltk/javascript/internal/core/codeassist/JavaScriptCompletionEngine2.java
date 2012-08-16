@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
+import static org.eclipse.dltk.javascript.ast.Keywords.THIS;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -160,7 +162,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		for (int i = 0; i < path.segmentCount() - 1; ++i) {
 			if (path.isName(i)) {
 				final String segment = path.segment(i);
-				if ("this".equals(segment) && item instanceof IValueCollection) {
+				if (THIS.equals(segment) && item instanceof IValueCollection) {
 					item = ((IValueCollection) item).getThis();
 				} else {
 					item = item.getChild(segment);
@@ -184,7 +186,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		if (item != null && exists(item)) {
-			reportItems(context, reporter, item, true);
+			final int segmentCount = path.segmentCount();
+			final boolean testPrivate = !(segmentCount >= 2
+					&& path.isName(segmentCount - 2) && THIS.equals(path
+					.segment(segmentCount - 2)));
+			reportItems(context, reporter, item, testPrivate);
 		}
 	}
 
