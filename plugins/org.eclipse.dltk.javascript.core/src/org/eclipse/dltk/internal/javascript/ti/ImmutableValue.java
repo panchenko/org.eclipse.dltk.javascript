@@ -3,6 +3,7 @@ package org.eclipse.dltk.internal.javascript.ti;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -291,25 +292,46 @@ public class ImmutableValue implements IValue, IValue2 {
 	}
 
 	public IValue getChild(String name, boolean resolve) {
-		if (hasReferences()) {
+		// first always try the value itself.
+		// if found that this will always be the child to return
+		IValue child = children.get(name);
+		if (child == null) {
+			child = inherited.get(name);
+			if (child == null) {
+				child = findMember(name, resolve);
+			}
+		}
+		// if it didn't find a child in it self and it has references.
+		// search of them.
+		if (child == null && hasReferences()) {
 			Set<IValue> result = new HashSet<IValue>();
 			execute(this, new GetChildHandler(name), result,
 					new HashSet<IValue>());
 			if (!result.isEmpty()) {
+				if (result.size() > 1) {
+					// try to return the best match? (or should we combine
+					// them??)
+					Iterator<IValue> iterator = result.iterator();
+					IValue first = iterator.next();
+					while (iterator.hasNext()) {
+						IValue next = iterator.next();
+						if (next.getDeclaredTypes().size() > first
+								.getDeclaredTypes().size()) {
+							first = next;
+							continue;
+						}
+						if (next.getTypes().size() > first.getTypes().size()) {
+							first = next;
+						}
+					}
+					return first;
+				}
 				return result.iterator().next();
 			} else {
 				return findMember(name, resolve);
 			}
-		} else {
-			IValue child = children.get(name);
-			if (child == null) {
-				child = inherited.get(name);
-				if (child == null) {
-					child = findMember(name, resolve);
-				}
-			}
-			return child;
 		}
+		return child;
 	}
 
 	public boolean hasChild(String name) {

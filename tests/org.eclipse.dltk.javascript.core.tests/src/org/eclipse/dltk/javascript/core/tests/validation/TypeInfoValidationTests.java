@@ -2376,5 +2376,31 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(ValidationMessages.UnassignableFunction, problems.get(0)
 				.getMessage());
 	}
-
+	
+	// This test will not always fail!, this is because sometimes it can map on String other times it maps on Number (ImmutableValue.getChild())
+	public void testDoubleReferences() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add(" * @return {Array<Number>}");
+		code.add(" */");
+		code.add("function test2() {");
+		code.add(" /** @type {Array<Number>} */");
+		code.add(" var array = new Array();");
+		code.add(" return array");
+		code.add("}");
+		code.add("function test() {");
+		code.add(" var z = 1;");
+		code.add(" if (x) {");
+		code.add("  /** @type {Array<String>} */");
+		code.add("  var x = test2();");
+		code.add("  var y = x[0];");
+		code.add("  y.bold();");
+		code.add(" }");
+		code.add(" else {");
+		code.add("  z = z + 2;");
+		code.add(" }");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
