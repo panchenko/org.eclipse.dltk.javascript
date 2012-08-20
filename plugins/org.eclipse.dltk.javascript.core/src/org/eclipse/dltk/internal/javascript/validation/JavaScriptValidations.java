@@ -14,11 +14,14 @@ package org.eclipse.dltk.internal.javascript.validation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.core.builder.IBuildContext;
+import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
@@ -63,6 +66,29 @@ public class JavaScriptValidations {
 				context.getProblemReporter());
 		context.set(IBuildContext.ATTR_MODULE_DECLARATION, script);
 		return script;
+	}
+
+	static final String ATTR_BINDINGS = JavaScriptValidations.class.getName()
+			+ ".BINDINGS";
+
+	/**
+	 * Returns bindings prepared by {@link TypeInfoValidator}, which is supposed
+	 * to be executed before. Is supposed to be called only from
+	 * {@link IBuildParticipant} which has dependency on
+	 * {@link TypeInfoValidator}.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static Map<ASTNode, IValueReference> getBindings(
+			IBuildContext context) {
+		@SuppressWarnings("unchecked")
+		Map<ASTNode, IValueReference> bindings = (Map<ASTNode, IValueReference>) context
+				.get(ATTR_BINDINGS);
+		if (bindings == null) {
+			bindings = Collections.emptyMap();
+		}
+		return bindings;
 	}
 
 	public static IRType typeOf(IValueReference reference) {

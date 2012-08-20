@@ -17,6 +17,7 @@ import static org.eclipse.dltk.internal.javascript.validation.JavaScriptValidati
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.eclipse.dltk.compiler.problem.ValidationMultiStatus;
 import org.eclipse.dltk.compiler.problem.ValidationStatus;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.core.builder.IBuildContext;
+import org.eclipse.dltk.core.builder.IBuildContextExtension;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChecker;
 import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
@@ -121,13 +123,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 		@SuppressWarnings("unchecked")
 		final Set<FunctionStatement> inconsistentReturns = (Set<FunctionStatement>) context
 				.get(JavaScriptValidations.ATTR_INCONSISTENT_RETURNS);
+		final boolean hasDependents = context instanceof IBuildContextExtension
+				&& ((IBuildContextExtension) context).getDependents(this) != null;
 		final ValidationVisitor visitor = new ValidationVisitor(inferencer,
-				reporter, inconsistentReturns);
+				reporter, inconsistentReturns, hasDependents);
 		inferencer.setVisitor(visitor);
 		final TypeChecker typeChecker = new TypeChecker(inferencer, reporter);
 		visitor.setTypeChecker(typeChecker);
 		inferencer.doInferencing(script);
 		typeChecker.validate();
+		if (hasDependents) {
+			context.set(JavaScriptValidations.ATTR_BINDINGS, visitor.bindings);
+		}
 	}
 
 	protected TypeInferencer2 createTypeInferencer() {
@@ -394,20 +401,35 @@ public class TypeInfoValidator implements IBuildParticipant {
 		public ValidationVisitor(ITypeInferenceContext context,
 				JSProblemReporter reporter,
 				Set<FunctionStatement> inconsistentReturns) {
+			this(context, reporter, inconsistentReturns, false);
+		}
+
+		public ValidationVisitor(ITypeInferenceContext context,
+				JSProblemReporter reporter,
+				Set<FunctionStatement> inconsistentReturns,
+				boolean hasDependents) {
 			super(context);
 			this.reporter = reporter;
 			this.inconsistentReturns = inconsistentReturns;
+			this.bindings = hasDependents ? new HashMap<ASTNode, IValueReference>()
+					: null;
 		}
 
 		private final Map<ASTNode, VisitorMode> modes = new IdentityHashMap<ASTNode, VisitorMode>();
 
 		private final Stack<ASTNode> visitStack = new Stack<ASTNode>();
 
+		final Map<ASTNode, IValueReference> bindings;
+
 		@Override
 		public IValueReference visit(ASTNode node) {
 			visitStack.push(node);
 			try {
-				return super.visit(node);
+				final IValueReference value = super.visit(node);
+				if (bindings != null && value != null) {
+					bindings.put(node, value);
+				}
+				return value;
 			} finally {
 				visitStack.pop();
 			}
