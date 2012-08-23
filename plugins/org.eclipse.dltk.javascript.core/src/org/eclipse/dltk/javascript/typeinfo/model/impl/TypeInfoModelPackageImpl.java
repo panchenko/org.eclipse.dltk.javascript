@@ -1480,6 +1480,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEEnum(visibilityEEnum, Visibility.class, "Visibility"); //$NON-NLS-1$
         addEEnumLiteral(visibilityEEnum, Visibility.PUBLIC);
         addEEnumLiteral(visibilityEEnum, Visibility.PROTECTED);
+        addEEnumLiteral(visibilityEEnum, Visibility.INTERNAL);
         addEEnumLiteral(visibilityEEnum, Visibility.PRIVATE);
 
         // Initialize data types

@@ -146,6 +146,7 @@
   <eClassifiers xsi:type="ecore:EEnum" name="Visibility">
     <eLiterals name="PUBLIC"/>
     <eLiterals name="PROTECTED" value="50"/>
+    <eLiterals name="INTERNAL" value="75"/>
     <eLiterals name="PRIVATE" value="100"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypeVariable" eSuperTypes="#//NamedElement"/>

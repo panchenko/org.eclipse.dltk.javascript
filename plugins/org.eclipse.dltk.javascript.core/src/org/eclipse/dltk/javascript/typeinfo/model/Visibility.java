@@ -45,7 +45,15 @@ public enum Visibility implements Enumerator {
      * @generated
      * @ordered
      */
-    PROTECTED(50, "PROTECTED", "PROTECTED"), //$NON-NLS-1$ //$NON-NLS-2$
+    PROTECTED(50, "PROTECTED", "PROTECTED"), /**
+     * The '<em><b>INTERNAL</b></em>' literal object.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #INTERNAL_VALUE
+     * @generated
+     * @ordered
+     */
+    INTERNAL(75, "INTERNAL", "INTERNAL"), //$NON-NLS-1$ //$NON-NLS-2$
 
     /**
      * The '<em><b>PRIVATE</b></em>' literal object.
@@ -88,6 +96,21 @@ public enum Visibility implements Enumerator {
     public static final int PROTECTED_VALUE = 50;
 
     /**
+     * The '<em><b>INTERNAL</b></em>' literal value.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of '<em><b>INTERNAL</b></em>' literal object isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @see #INTERNAL
+     * @model
+     * @generated
+     * @ordered
+     */
+    public static final int INTERNAL_VALUE = 75;
+
+    /**
      * The '<em><b>PRIVATE</b></em>' literal value.
      * <!-- begin-user-doc -->
      * <p>
@@ -112,6 +135,7 @@ public enum Visibility implements Enumerator {
         new Visibility[] {
             PUBLIC,
             PROTECTED,
+            INTERNAL,
             PRIVATE,
         };
 
@@ -165,6 +189,7 @@ public enum Visibility implements Enumerator {
         switch (value) {
             case PUBLIC_VALUE: return PUBLIC;
             case PROTECTED_VALUE: return PROTECTED;
+            case INTERNAL_VALUE: return INTERNAL;
             case PRIVATE_VALUE: return PRIVATE;
         }
         return null;
