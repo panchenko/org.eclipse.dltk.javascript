@@ -199,19 +199,55 @@ public class JSDocSupport implements IModelBuilder {
 		}
 	}
 
-	private static final String[] ACCESS_MODIFIERS = { JSDocTag.PUBLIC,
-			JSDocTag.PROTECTED, JSDocTag.PRIVATE };
+	public static class NamedValue<T> {
+		public final String name;
+		public final T value;
+
+		private NamedValue(String name, T value) {
+			this.name = name;
+			this.value = value;
+		}
+
+		public static <T> NamedValue<T> of(String name, T value) {
+			return new NamedValue<T>(name, value);
+		}
+	}
+
+	protected static final List<NamedValue<Visibility>> STANDARD_ACCESS_MODIFIERS;
+
+	static {
+		final List<NamedValue<Visibility>> modifiers = new ArrayList<NamedValue<Visibility>>(
+				3);
+		modifiers.add(NamedValue.of(JSDocTag.PUBLIC, Visibility.PUBLIC));
+		modifiers.add(NamedValue.of(JSDocTag.PROTECTED, Visibility.PROTECTED));
+		modifiers.add(NamedValue.of(JSDocTag.PRIVATE, Visibility.PRIVATE));
+		STANDARD_ACCESS_MODIFIERS = modifiers;
+	}
+
+	protected List<NamedValue<Visibility>> getSupportedAccessModifiers() {
+		return STANDARD_ACCESS_MODIFIERS;
+	}
 
 	public void parseAccessModifiers(IMember member, JSDocTags tags,
 			JSProblemReporter reporter) {
-		for (String tagName : ACCESS_MODIFIERS) {
-			final JSDocTag tag = tags.get(tagName);
+		final List<NamedValue<Visibility>> accessModifiers = getSupportedAccessModifiers();
+		for (int i = 0; i < accessModifiers.size(); ++i) {
+			final NamedValue<Visibility> pair = accessModifiers.get(i);
+			final JSDocTag tag = tags.get(pair.name);
 			if (tag != null) {
-				member.setVisibility(visibilityOf(tag.name()));
-				if (tags.count(ACCESS_MODIFIERS) != 1) {
-					final List<JSDocTag> all = new ArrayList<JSDocTag>(
-							tags.list(ACCESS_MODIFIERS));
+				member.setVisibility(pair.value);
+				int extraTags = tags.count(pair.name) - 1;
+				for (int j = i + 1; extraTags == 0
+						&& j < accessModifiers.size(); ++j) {
+					extraTags += tags.count(accessModifiers.get(j).name);
+				}
+				if (extraTags > 0) {
+					final List<JSDocTag> all = new ArrayList<JSDocTag>();
+					all.addAll(tags.list(pair.name));
 					all.remove(tag);
+					for (int j = i + 1; j < accessModifiers.size(); ++j) {
+						all.addAll(tags.list(accessModifiers.get(j).name));
+					}
 					for (JSDocTag t : all) {
 						reportProblem(reporter, JSDocProblem.IGNORED_TAG, t,
 								t.name(), tag.name());
@@ -219,18 +255,6 @@ public class JSDocSupport implements IModelBuilder {
 				}
 				break;
 			}
-		}
-	}
-
-	private Visibility visibilityOf(String tag) {
-		if (JSDocTag.PUBLIC.equals(tag)) {
-			return Visibility.PUBLIC;
-		} else if (JSDocTag.PROTECTED.equals(tag)) {
-			return Visibility.PROTECTED;
-		} else if (JSDocTag.PRIVATE.equals(tag)) {
-			return Visibility.PRIVATE;
-		} else {
-			return null;
 		}
 	}
 
