@@ -96,4 +96,18 @@ public class JSDocTag implements ISourceNode {
 	public String toString() {
 		return value != null && value.length() != 0 ? tag + " " + value : tag;
 	}
+
+	/**
+	 * Returns the last tag of two.
+	 */
+	public static JSDocTag last(JSDocTag first, JSDocTag second) {
+		return first.start > second.start ? first : second;
+	}
+
+	/**
+	 * Returns the first tag of two.
+	 */
+	public static JSDocTag first(JSDocTag first, JSDocTag second) {
+		return first.start < second.start ? first : second;
+	}
 }

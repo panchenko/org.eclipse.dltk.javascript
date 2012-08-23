@@ -6,9 +6,12 @@ import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.IValidationStatus;
+import org.eclipse.dltk.compiler.problem.ValidationStatus;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
+import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -17,6 +20,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
+import org.eclipse.dltk.javascript.typeinfo.ITypeCheckerExtension;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -33,6 +37,8 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
+import org.eclipse.dltk.javascript.validation.IValidatorExtension;
+import org.eclipse.dltk.javascript.validation.IValidatorExtension2;
 import org.eclipse.osgi.util.NLS;
 
 public class JSDocValidatorFactory {
@@ -100,9 +106,10 @@ public class JSDocValidatorFactory {
 
 	}
 
-	public static class TypeChecker extends AbstractTypeChecker {
+	public static class TypeChecker extends AbstractTypeChecker implements
+			ITypeCheckerExtension {
 
-		private List<QueueItem> queue = new ArrayList<JSDocValidatorFactory.QueueItem>();
+		private final List<QueueItem> queue = new ArrayList<QueueItem>();
 		private final TypeInferencer2 context;
 		private final JSProblemReporter reporter;
 
@@ -179,6 +186,25 @@ public class JSDocValidatorFactory {
 						JavaScriptProblems.DEPRECATED_TYPE,
 						NLS.bind(ValidationMessages.DeprecatedType,
 								TypeUtil.getName(type)), tag.start(), tag.end());
+			} else if (extensions != null) {
+				for (IValidatorExtension extension : extensions) {
+					if (extension instanceof IValidatorExtension2) {
+						final IValidationStatus status = ((IValidatorExtension2) extension)
+								.validateAccessibility(type, tag);
+						if (status != null) {
+							if (status == ValidationStatus.OK) {
+								return;
+							} else {
+								JavaScriptValidations.reportValidationStatus(
+										reporter, status, tag,
+										JavaScriptProblems.INACCESSIBLE_TYPE,
+										ValidationMessages.InaccessibleType,
+										type.getName());
+								return;
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -209,14 +235,20 @@ public class JSDocValidatorFactory {
 			reporter.reportProblem(identifier,
 					NLS.bind(ValidationMessages.UnknownType, name), start, end);
 		}
+
+		private IValidatorExtension[] extensions;
+
+		public void setExtensions(IValidatorExtension[] extensions) {
+			this.extensions = extensions;
+		}
 	}
 
 	private static class QueueItem {
 
-		private final Type type;
-		private final ISourceNode tag;
-		private final IValueCollection collection;
-		private final int flags;
+		final Type type;
+		final ISourceNode tag;
+		final IValueCollection collection;
+		final int flags;
 
 		public QueueItem(Type type, ISourceNode tag,
 				IValueCollection collection, int flags) {

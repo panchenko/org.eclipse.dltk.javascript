@@ -87,6 +87,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRTypeExtension;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
+import org.eclipse.dltk.javascript.typeinfo.ITypeCheckerExtension;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
@@ -450,6 +451,11 @@ public class TypeInfoValidator implements IBuildParticipant {
 						.toArray(new IValidatorExtension[extensions.size()]);
 			} else {
 				this.extensions = null;
+			}
+			if (typeChecker != null
+					&& typeChecker instanceof ITypeCheckerExtension) {
+				((ITypeCheckerExtension) typeChecker)
+						.setExtensions(this.extensions);
 			}
 		}
 
@@ -2206,7 +2212,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 						if (result == ValidationStatus.OK) {
 							return true;
 						} else {
-							reportValidationStatus(result, node,
+							JavaScriptValidations.reportValidationStatus(
+									reporter, result, node,
 									JavaScriptProblems.NON_INSTANTIABLE_TYPE,
 									ValidationMessages.NonInstantiableType,
 									type.getName());
@@ -2226,33 +2233,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return true;
 		}
 
-		private void reportValidationStatus(final IValidationStatus result,
-				ASTNode node, final JavaScriptProblems defaultProblemId,
-				final String defaultMessage, final String name) {
-			if (result instanceof ValidationStatus) {
-				final ValidationStatus status = (ValidationStatus) result;
-				final int start;
-				final int end;
-				if (status.hasRange()) {
-					start = status.start();
-					end = status.end();
-				} else {
-					start = node.sourceStart();
-					end = node.sourceEnd();
-				}
-				reporter.reportProblem(status.identifier(), status.message(),
-						start, end);
-			} else if (result instanceof IProblemIdentifier) {
-				reporter.reportProblem((IProblemIdentifier) result,
-						NLS.bind(defaultMessage, name), node.sourceStart(),
-						node.sourceEnd());
-			} else {
-				reporter.reportProblem(defaultProblemId,
-						NLS.bind(defaultMessage, name) + ": " + result,
-						node.sourceStart(), node.sourceEnd());
-			}
-		}
-
 		/**
 		 * Tests if the member is accessible. Returns <code>true</code> if
 		 * access is allowed and <code>false</code> otherwise.
@@ -2267,11 +2247,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 					final IValidationStatus result = extension
 							.validateAccessibility(node, member);
 					if (result != null) {
-						reportValidationStatus(result, node,
-								JavaScriptProblems.INACCESSIBLE_MEMBER,
-								ValidationMessages.InaccessibleMember,
-								member.getName());
-						return false;
+						if (result == ValidationStatus.OK) {
+							return true;
+						} else {
+							JavaScriptValidations.reportValidationStatus(
+									reporter, result, node,
+									JavaScriptProblems.INACCESSIBLE_MEMBER,
+									ValidationMessages.InaccessibleMember,
+									member.getName());
+							return false;
+						}
 					}
 				}
 			}
@@ -2297,11 +2282,16 @@ public class TypeInfoValidator implements IBuildParticipant {
 							.validateAccessibility(expression, reference,
 									member);
 					if (result != null) {
-						reportValidationStatus(result, expression,
-								JavaScriptProblems.INACCESSIBLE_MEMBER,
-								ValidationMessages.InaccessibleMember,
-								member.getName());
-						return;
+						if (result == ValidationStatus.OK) {
+							return;
+						} else {
+							JavaScriptValidations.reportValidationStatus(
+									reporter, result, expression,
+									JavaScriptProblems.INACCESSIBLE_MEMBER,
+									ValidationMessages.InaccessibleMember,
+									member.getName());
+							return;
+						}
 					}
 				}
 			}

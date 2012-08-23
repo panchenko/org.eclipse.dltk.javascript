@@ -18,12 +18,18 @@ import java.util.Map;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
+import org.eclipse.dltk.compiler.problem.IValidationStatus;
+import org.eclipse.dltk.compiler.problem.ValidationStatus;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -39,6 +45,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.osgi.util.NLS;
 
 public class JavaScriptValidations {
 
@@ -254,6 +261,36 @@ public class JavaScriptValidations {
 					|| last == ParameterKind.VARARGS;
 		} else {
 			return false;
+		}
+	}
+
+	public static void reportValidationStatus(JSProblemReporter reporter,
+			final IValidationStatus result, ISourceNode node,
+			final JavaScriptProblems defaultProblemId,
+			final String defaultMessage, final String name) {
+		if (result instanceof ValidationStatus) {
+			final ValidationStatus status = (ValidationStatus) result;
+			final int start;
+			final int end;
+			if (status.hasRange()) {
+				start = status.start();
+				end = status.end();
+			} else {
+				start = node.start();
+				end = node.end();
+			}
+			reporter.reportProblem(status.identifier(), status.message(),
+					start, end);
+		} else if (result instanceof IProblemIdentifier) {
+			reporter.reportProblem((IProblemIdentifier) result,
+					NLS.bind(defaultMessage, name), node.start(),
+					node.end());
+		} else if (result == ValidationStatus.OK) {
+			return;
+		} else {
+			reporter.reportProblem(defaultProblemId,
+					NLS.bind(defaultMessage, name) + ": " + result,
+					node.start(), node.end());
 		}
 	}
 }
