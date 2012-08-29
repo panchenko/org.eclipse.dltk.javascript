@@ -18,7 +18,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 public class OriginReference extends AdapterImpl {
 
 	public final Type genericType;
-	protected final IRType[] parameterTypes;
+	public final IRType[] parameterTypes;
 
 	public OriginReference(Type genericType) {
 		this(genericType, new IRType[0]);
