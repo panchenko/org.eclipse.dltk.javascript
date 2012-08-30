@@ -8,6 +8,14 @@ public class JSVariable extends JSElement implements IVariable {
 	private boolean deprecated;
 	private Visibility visibility;
 
+	public JSVariable() {
+		super();
+	}
+
+	public JSVariable(String name) {
+		super(name);
+	}
+
 	public void setDeprecated(boolean deprecated) {
 		this.deprecated = deprecated;
 	}

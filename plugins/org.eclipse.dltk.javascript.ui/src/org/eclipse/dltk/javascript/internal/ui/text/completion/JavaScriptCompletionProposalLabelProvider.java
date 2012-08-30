@@ -17,9 +17,9 @@ import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.IRMethod;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IMethod;
+import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
-import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
@@ -28,6 +28,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 import org.eclipse.dltk.javascript.ui.typeinfo.ElementLabelProviderRegistry;
 import org.eclipse.dltk.javascript.ui.typeinfo.IElementLabelProvider.Mode;
 import org.eclipse.dltk.ui.DLTKPluginImages;
@@ -181,15 +182,15 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	 * @return
 	 */
 	private ImageDescriptor extraImageFromProposal(CompletionProposal proposal) {
-		if (proposal.getExtraInfo() instanceof SelfCompletingReference) {
-			SelfCompletingReference cm = (SelfCompletingReference) proposal
-					.getExtraInfo();
+		final Object extraInfo = proposal.getExtraInfo();
+		if (extraInfo instanceof SelfCompletingReference) {
+			SelfCompletingReference cm = (SelfCompletingReference) extraInfo;
 			URL imageUrl = cm.getImageURL();
 			if (imageUrl != null)
 				return decorateImageDescriptor(
 						ImageDescriptor.createFromURL(imageUrl), proposal);
-		} else if (proposal.getExtraInfo() instanceof Element) {
-			final Element element = (Element) proposal.getExtraInfo();
+		} else if (extraInfo instanceof Element) {
+			final Element element = (Element) extraInfo;
 			final ImageDescriptor descriptor = ElementLabelProviderRegistry
 					.getImageDescriptor(element);
 			if (descriptor != null) {
@@ -208,6 +209,22 @@ public class JavaScriptCompletionProposalLabelProvider extends
 									.getMethodImageDescriptor(flags),
 							proposal);
 				}
+			}
+		} else if (extraInfo instanceof IValueReference) {
+			final IValueReference reference = (IValueReference) extraInfo;
+			final IMethod method = (IMethod) reference
+					.getAttribute(IReferenceAttributes.METHOD);
+			if (method != null) {
+				return decorateImageDescriptor(
+						ScriptElementImageProvider.getMethodImageDescriptor(Visibility
+								.getFlags(method.getVisibility())), proposal);
+			}
+			final IVariable variable = (IVariable) reference
+					.getAttribute(IReferenceAttributes.VARIABLE);
+			if (variable != null) {
+				return decorateImageDescriptor(
+						ScriptElementImageProvider.getFieldImageDescriptor(Visibility
+								.getFlags(variable.getVisibility())), proposal);
 			}
 		}
 		return null;
@@ -303,12 +320,12 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		} else if (proposal.getExtraInfo() instanceof IValueReference) {
 			final IValueReference reference = (IValueReference) proposal
 					.getExtraInfo();
-			final IRMethod method = (IRMethod) reference
-					.getAttribute(IReferenceAttributes.R_METHOD);
+			final IMethod method = (IMethod) reference
+					.getAttribute(IReferenceAttributes.METHOD);
 			if (method != null)
 				return method.isDeprecated();
-			final IRVariable variable = (IRVariable) reference
-					.getAttribute(IReferenceAttributes.R_VARIABLE);
+			final IVariable variable = (IVariable) reference
+					.getAttribute(IReferenceAttributes.VARIABLE);
 			return variable != null && variable.isDeprecated();
 		}
 		return false;

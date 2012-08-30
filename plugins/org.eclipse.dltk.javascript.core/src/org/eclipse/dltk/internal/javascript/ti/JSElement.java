@@ -26,6 +26,13 @@ public class JSElement implements IElement {
 	private JSType type;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 
+	public JSElement() {
+	}
+
+	public JSElement(String name) {
+		this.name = name;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -63,6 +70,5 @@ public class JSElement implements IElement {
 		}
 		suppressedWarnings.add(warningCategoryId);
 	}
-
 
 }

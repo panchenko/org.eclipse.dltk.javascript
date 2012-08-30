@@ -279,4 +279,9 @@ public enum Visibility implements Enumerator {
 		}
 	}
 
+	public static int getFlags(Visibility visibility) {
+		return visibility != null ? visibility.getFlags()
+				: Modifiers.AccDefault;
+	}
+
 } //Visibility
