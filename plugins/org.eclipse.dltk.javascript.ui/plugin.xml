@@ -376,6 +376,12 @@
            id="org.eclipse.dltk.javascript.ui.editor.MarkOccurrencesPreference"
            name="Mark Occurrences">
      </page>
+     <page
+           category="org.eclipse.dltk.javascript.ui.EditorPreferences"
+           class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptEditorAssistancePreferencePage"
+           id="org.eclipse.dltk.javascript.ui.editor.assistance"
+           name="%JavaScriptEditorAssistancePreferencePage.name">
+     </page>
        <page
              category="org.eclipse.dltk.javascript.ui.javascript"
              class="org.eclipse.dltk.javascript.internal.ui.preferences.JavaScriptErrorWarningPreferencePage"
