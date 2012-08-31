@@ -895,6 +895,18 @@ public class TypeInfoValidator implements IBuildParticipant {
 							return;
 						}
 					}
+				} else if (expressionType != JSTypeSet.any()
+						&& expressionType != JSTypeSet.none()
+						&& !JSTypeSet.ref(Types.FUNCTION)
+								.isAssignableFrom(expressionType).ok()) {
+					reporter.reportProblem(
+							JavaScriptProblems.WRONG_FUNCTION,
+							isIdentifier(expression) ? NLS.bind(
+									ValidationMessages.WrongFunction,
+									reference.getName())
+									: ValidationMessages.WrongFunctionExpression,
+							methodNode.sourceStart(), methodNode.sourceEnd());
+					return;
 				}
 			}
 			if (!isArrayLookup(expression) && !isUntypedParameter(reference)) {

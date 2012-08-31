@@ -754,7 +754,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		code.add("var y = object.test;");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
-		assertEquals(1, problems.size());
+		assertEquals(problems.toString(), 1, problems.size());
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(0)
 				.getID());
 	}
@@ -2110,6 +2110,15 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.WRONG_FUNCTION, problems.get(0).getID());
 	}
 
+	public void testPropertyAsFunctionCall() {
+		final StringList code = new StringList();
+		code.add("var s = '';");
+		code.add("s.length();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_FUNCTION, problems.get(0).getID());
+	}
+
 	public void testArrayWithJavaScriptType() {
 		final StringList code = new StringList();
 		code.add("function CustomType() {");
@@ -2376,8 +2385,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(ValidationMessages.UnassignableFunction, problems.get(0)
 				.getMessage());
 	}
-	
-	// This test will not always fail!, this is because sometimes it can map on String other times it maps on Number (ImmutableValue.getChild())
+
+	// This test will not always fail!, this is because sometimes it can map on
+	// String other times it maps on Number (ImmutableValue.getChild())
 	public void testDoubleReferences() {
 		final StringList code = new StringList();
 		code.add("/**");
