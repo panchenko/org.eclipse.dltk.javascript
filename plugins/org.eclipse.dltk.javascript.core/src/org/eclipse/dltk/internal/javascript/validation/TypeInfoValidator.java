@@ -55,7 +55,6 @@ import org.eclipse.dltk.javascript.ast.PropertyExpression;
 import org.eclipse.dltk.javascript.ast.ReturnStatement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StatementBlock;
-import org.eclipse.dltk.javascript.ast.ThisExpression;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
@@ -1147,12 +1146,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 				reference = reference.getParent();
 			}
 			return false;
-		}
-
-		private boolean isThisCall(Expression expression) {
-			return expression instanceof PropertyExpression
-					&& ((PropertyExpression) expression).getObject() instanceof ThisExpression
-					&& ((PropertyExpression) expression).getProperty() instanceof Identifier;
 		}
 
 		private boolean hasInstanceMethod(IRType type, String name) {
