@@ -227,6 +227,15 @@ public class ExampleTypeProvider implements ITypeProvider {
 			method1.setType(TypeUtil.arrayOf(TypeUtil.ref(ITypeNames.STRING)));
 			type.getMembers().add(method1);
 			return type;
+		} else if ("WithUntypedProperty".equals(typeName)) {
+			final Type type = TypeInfoModelFactory.eINSTANCE.createType();
+			type.setName(typeName);
+			final Property untyped = TypeInfoModelFactory.eINSTANCE
+					.createProperty();
+			untyped.setName("untyped");
+			untyped.setDeprecated(true);
+			type.getMembers().add(untyped);
+			return type;
 		} else if (typeName.startsWith("Packages.")) {
 			String name = typeName.substring("Packages.".length());
 			try {

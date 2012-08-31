@@ -633,6 +633,11 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return TypeCompatibility.TRUE;
 		}
 
+		@Override
+		public boolean isExtensible() {
+			return true;
+		}
+
 	}
 
 	private static final IRType UNDEFINED_TYPE = new UndefinedTypeKey();

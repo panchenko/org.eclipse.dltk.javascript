@@ -527,6 +527,9 @@ public class TypeInfoValidator implements IBuildParticipant {
 					expression = ((PropertyExpression) expression).getObject();
 				} else if (expression instanceof CallExpression) {
 					expression = ((CallExpression) expression).getExpression();
+				} else if (expression instanceof GetArrayItemExpression) {
+					expression = ((GetArrayItemExpression) expression)
+							.getArray();
 				} else {
 					break;
 				}
@@ -1150,7 +1153,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 						&& reference.getDeclaredType() == null
 						&& reference.getDirectChildren().isEmpty()) {
 					return true;
-				} else if (kind == ReferenceKind.PROPERTY
+				} else if (EXPERIMENTAL && kind == ReferenceKind.PROPERTY
 						&& reference.getDeclaredType() == null
 						&& reference.getDirectChildren().isEmpty()) {
 					return true;
@@ -1165,10 +1168,12 @@ public class TypeInfoValidator implements IBuildParticipant {
 					MemberPredicates.NON_STATIC) != null;
 		}
 
+		private static final boolean EXPERIMENTAL = false;
+
 		private boolean isArrayLookup(ASTNode expression) {
-			if (expression instanceof GetArrayItemExpression)
+			if (EXPERIMENTAL && expression instanceof GetArrayItemExpression)
 				return true;
-			if (expression instanceof PropertyExpression) {
+			if (EXPERIMENTAL && expression instanceof PropertyExpression) {
 				return isArrayLookup(((PropertyExpression) expression)
 						.getObject());
 			}

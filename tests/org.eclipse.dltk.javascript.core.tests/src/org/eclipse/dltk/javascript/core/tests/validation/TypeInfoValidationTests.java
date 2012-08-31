@@ -194,6 +194,17 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
+	public void testDeprecatedUntypedPropertyAccess() {
+		StringList code = new StringList();
+		code.add("/** @type {WithUntypedProperty} */");
+		code.add("var x");
+		code.add("var name = x.untyped");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.DEPRECATED_PROPERTY, problems.get(0)
+				.getID());
+	}
+
 	public void testDeprecatedTopLevelProperty() {
 		StringList code = new StringList();
 		code.add("myExampleForms.service");
@@ -749,9 +760,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 	public void testArrayLookupWithoutAssign() {
 		List<String> code = new StringList();
 		code.add("function test() {");
-		code.add("var object = new Array();");
-		code.add("var x = object['test'].length;");
-		code.add("var y = object.test;");
+		code.add("  var object = new Array();");
+		code.add("  var x = object['test'].length;");
+		code.add("  var y = object.test;");
 		code.add("}");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 1, problems.size());
@@ -2088,7 +2099,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 
 	public void testArrayLookupWithUnknowVariables() {
 		final StringList code = new StringList();
-		code.add("var vAvailableLicenses = exampleForms.nothere[exampleForms.nothere2].nothere.nothere;");
+		code.add("var vAvailableLicenses = exampleForms.nothere[exampleForms.nothere2].nothere3.nothere4;");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 2, problems.size());
 	}
@@ -2413,4 +2424,26 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+
+	public void testArrayAccess1() {
+		final StringList code = new StringList();
+		code.add("var strings = ['A','B','C'];");
+		code.add("strings[0].aaa();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+				.getID());
+	}
+
+	public void testArrayAccess2() {
+		final StringList code = new StringList();
+		code.add("/** @type {Array<String>} */");
+		code.add("var strings;");
+		code.add("strings[0].aaa();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+				.getID());
+	}
+
 }
