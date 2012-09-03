@@ -168,7 +168,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="typeParameters" upperBound="-1"
         eType="#//TypeVariable" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="JSCustomType" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JSCustomType" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Marker interface for the context-aware type expressions (JSType subtypes), like &quot;This&quot;. If type expression implementes it, then the current type owner is made available when evaluating the corresponding IRType instance."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypeLiteral">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         iD="true"/>

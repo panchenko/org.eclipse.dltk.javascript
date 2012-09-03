@@ -18,6 +18,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>JS Custom Type</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Marker interface for the context-aware type expressions (JSType subtypes), like "This". If type expression implementes it, then the current type owner is made available when evaluating the corresponding IRType instance.
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getJSCustomType()
  * @model interface="true" abstract="true"
