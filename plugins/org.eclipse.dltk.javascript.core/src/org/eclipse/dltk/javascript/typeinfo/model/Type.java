@@ -15,7 +15,9 @@ package org.eclipse.dltk.javascript.typeinfo.model;
 
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.MetaType;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -35,6 +37,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInstantiable <em>Instantiable</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritConstructors <em>Inherit Constructors</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#isInheritStaticMembers <em>Inherit Static Members</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMetaType <em>Meta Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -232,6 +235,32 @@ public interface Type extends Element {
     boolean isInheritStaticMembers();
 
     /**
+     * Returns the value of the '<em><b>Meta Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Meta Type</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Meta Type</em>' attribute.
+     * @see #setMetaType(MetaType)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_MetaType()
+     * @model dataType="org.eclipse.dltk.javascript.typeinfo.model.MetaType"
+     * @generated
+     */
+    MetaType getMetaType();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMetaType <em>Meta Type</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Meta Type</em>' attribute.
+     * @see #getMetaType()
+     * @generated
+     */
+    void setMetaType(MetaType value);
+
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @model kind="operation"
@@ -245,6 +274,14 @@ public interface Type extends Element {
 	 * Creates instance of this type.
 	 */
 	IRType createInstance();
+
+	/**
+	 * Creates instance of this type.
+	 * 
+	 * @param typeSystem
+	 *            the context for the operation, possible <code>null</code>
+	 */
+	IRType createInstance(ITypeSystem typeSystem);
 
 	/**
 	 * Returns array of additional type members, e.g. defined in partial types.

@@ -362,13 +362,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE__INHERIT_STATIC_MEMBERS = ELEMENT_FEATURE_COUNT + 8;
 
     /**
+     * The feature id for the '<em><b>Meta Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE__META_TYPE = ELEMENT_FEATURE_COUNT + 9;
+
+    /**
      * The number of structural features of the '<em>Type</em>' class.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 9;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 10;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
@@ -1761,6 +1770,15 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_TYPE__INHERIT_STATIC_MEMBERS = TYPE__INHERIT_STATIC_MEMBERS;
 
     /**
+     * The feature id for the '<em><b>Meta Type</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__META_TYPE = TYPE__META_TYPE;
+
+    /**
      * The feature id for the '<em><b>Type Parameters</b></em>' containment reference list.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2105,6 +2123,17 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     int IR_TYPE = 35;
+
+
+    /**
+     * The meta object id for the '<em>Meta Type</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.MetaType
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMetaType()
+     * @generated
+     */
+    int META_TYPE = 36;
 
 
     /**
@@ -2754,6 +2783,17 @@ public interface TypeInfoModelPackage extends EPackage {
     EAttribute getType_InheritStaticMembers();
 
     /**
+     * Returns the meta object for the attribute '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMetaType <em>Meta Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Meta Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getMetaType()
+     * @see #getType()
+     * @generated
+     */
+    EAttribute getType_MetaType();
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.Constructor <em>Constructor</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2986,6 +3026,17 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EDataType getIRType();
+
+    /**
+     * Returns the meta object for data type '{@link org.eclipse.dltk.javascript.typeinfo.MetaType <em>Meta Type</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for data type '<em>Meta Type</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.MetaType
+     * @model instanceClass="org.eclipse.dltk.javascript.typeinfo.MetaType"
+     * @generated
+     */
+    EDataType getMetaType();
 
     /**
      * Returns the factory that creates the instances of the model.
@@ -3548,6 +3599,14 @@ public interface TypeInfoModelPackage extends EPackage {
         EAttribute TYPE__INHERIT_STATIC_MEMBERS = eINSTANCE.getType_InheritStaticMembers();
 
         /**
+         * The meta object literal for the '<em><b>Meta Type</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute TYPE__META_TYPE = eINSTANCE.getType_MetaType();
+
+        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.ConstructorImpl <em>Constructor</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -3744,6 +3803,16 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EDataType IR_TYPE = eINSTANCE.getIRType();
+
+        /**
+         * The meta object literal for the '<em>Meta Type</em>' data type.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.MetaType
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMetaType()
+         * @generated
+         */
+        EDataType META_TYPE = eINSTANCE.getMetaType();
 
 	}
 

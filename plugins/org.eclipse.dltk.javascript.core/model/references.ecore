@@ -47,6 +47,7 @@
         changeable="false" volatile="true" transient="true" derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="inheritStaticMembers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metaType" eType="#//MetaType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypeAlias">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
@@ -177,4 +178,5 @@
   <eClassifiers xsi:type="ecore:EClass" name="TypeVariableClassType" eSuperTypes="#//JSType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//TypeVariable"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="MetaType" instanceClassName="org.eclipse.dltk.javascript.typeinfo.MetaType"/>
 </ecore:EPackage>

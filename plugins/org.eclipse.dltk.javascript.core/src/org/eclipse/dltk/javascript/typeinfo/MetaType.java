@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 NumberFour AG
+ * Copyright (c) 2012 NumberFour AG
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,25 +12,25 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.annotations.ConfigurationElement;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
-/**
- * Factory to create runtime type instance for the specified model object
- */
-@ConfigurationElement("runtimeTypeFactory")
-public interface IRTypeFactory {
+@ConfigurationElement("metaType")
+public interface MetaType {
 
 	/**
-	 * Converts the specified {@link Type} to the corresponding {@link IRType}.
-	 * This method is deprecated, use {@link MetaType} instead.
-	 * 
-	 * @param type
-	 * @return
+	 * Returns the unique id of this meta type.
 	 */
-	@Deprecated
-	IRType create(Type type);
+	String getId();
 
-	IRType create(ITypeSystem typeSystem, JSType type);
+	/**
+	 * Creates the corresponding {@link IRType} for the specified {@link Type}
+	 * instance.
+	 * 
+	 * @param typeSystem
+	 *            the context for the operation, possible <code>null</code>
+	 * @param type
+	 *            the type to wrap
+	 */
+	IRType toRType(ITypeSystem typeSystem, Type type);
 
 }

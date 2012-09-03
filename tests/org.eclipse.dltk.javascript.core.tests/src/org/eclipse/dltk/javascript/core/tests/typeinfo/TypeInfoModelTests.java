@@ -16,6 +16,7 @@ import junit.framework.TestCase;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.compiler.problem.ProblemCollector;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
+import org.eclipse.dltk.javascript.typeinfo.DefaultMetaType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -41,6 +42,17 @@ public class TypeInfoModelTests extends TestCase implements ITypeNames {
 		// load parser classes
 		final JavaScriptParser parser = new JavaScriptParser();
 		parser.parse(new ModuleSource("x=1"), new ProblemCollector());
+	}
+
+	public void testMetaTypes() {
+		assertEquals(DefaultMetaType.DEFAULT,
+				TypeInfoManager.getMetaType(DefaultMetaType.DEFAULT.getId()));
+		assertEquals(MetaTypes.ONE,
+				TypeInfoManager.getMetaType(MetaTypes.ONE.getId()));
+		assertEquals(MetaTypes.TWO,
+				TypeInfoManager.getMetaType(MetaTypes.TWO.getId()));
+		assertEquals(TestMetaType.INSTANCE,
+				TypeInfoManager.getMetaType(TestMetaType.INSTANCE.getId()));
 	}
 
 }

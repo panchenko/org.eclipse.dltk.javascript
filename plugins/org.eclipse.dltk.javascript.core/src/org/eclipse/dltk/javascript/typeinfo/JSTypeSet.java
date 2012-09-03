@@ -938,8 +938,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 				for (int i = 0; i < typeArguments.size(); ++i) {
 					parameters.add(normalize(context, typeArguments.get(i)));
 				}
-				return new SimpleTypeKey(context, context.parameterize(target,
-						parameters));
+				return context.parameterize(target, parameters).createInstance(
+						context);
 			} else {
 				return ref(target);
 			}
@@ -1006,16 +1006,10 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 	}
 
 	public static IRType ref(Type type) {
-		for (IRTypeFactory factory : TypeInfoManager.getRTypeFactories()) {
-			final IRType runtimeType = factory.create(type);
-			if (runtimeType != null) {
-				return runtimeType;
-			}
-		}
 		if (ITypeNames.ARRAY.equals(type.getName())) {
 			return arrayOf(none());
 		} else {
-			return new SimpleTypeKey(type);
+			return type.createInstance();
 		}
 	}
 

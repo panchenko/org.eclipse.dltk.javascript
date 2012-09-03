@@ -16,6 +16,7 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 import java.util.Map;
 
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.MetaType;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
@@ -319,6 +320,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EDataType irTypeEDataType = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EDataType metaTypeEDataType = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with
@@ -935,6 +943,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getType_MetaType() {
+        return (EAttribute)typeEClass.getEStructuralFeatures().get(9);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getConstructor() {
         return constructorEClass;
     }
@@ -1130,6 +1147,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
     /**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EDataType getMetaType() {
+        return metaTypeEDataType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -1180,6 +1206,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         createEAttribute(typeEClass, TYPE__INSTANTIABLE);
         createEAttribute(typeEClass, TYPE__INHERIT_CONSTRUCTORS);
         createEAttribute(typeEClass, TYPE__INHERIT_STATIC_MEMBERS);
+        createEAttribute(typeEClass, TYPE__META_TYPE);
 
         typeAliasEClass = createEClass(TYPE_ALIAS);
         createEAttribute(typeAliasEClass, TYPE_ALIAS__SOURCE);
@@ -1274,6 +1301,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         // Create data types
         irTypeEDataType = createEDataType(IR_TYPE);
+        metaTypeEDataType = createEDataType(META_TYPE);
     }
 
 	/**
@@ -1365,6 +1393,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEAttribute(getType_Instantiable(), ecorePackage.getEBoolean(), "instantiable", "true", 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
         initEAttribute(getType_InheritConstructors(), ecorePackage.getEBoolean(), "inheritConstructors", null, 0, 1, Type.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEAttribute(getType_InheritStaticMembers(), ecorePackage.getEBoolean(), "inheritStaticMembers", null, 0, 1, Type.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEAttribute(getType_MetaType(), this.getMetaType(), "metaType", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
         addEOperation(typeEClass, ecorePackage.getEBoolean(), "isProxy", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -1485,6 +1514,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         // Initialize data types
         initEDataType(irTypeEDataType, IRType.class, "IRType", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEDataType(metaTypeEDataType, MetaType.class, "MetaType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
         // Create resource
         createResource(eNS_URI);

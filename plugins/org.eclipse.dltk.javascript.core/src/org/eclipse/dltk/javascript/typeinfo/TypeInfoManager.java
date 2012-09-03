@@ -14,8 +14,10 @@ package org.eclipse.dltk.javascript.typeinfo;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -33,6 +35,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.osgi.util.NLS;
 
 public class TypeInfoManager {
 
@@ -337,4 +340,25 @@ public class TypeInfoManager {
 		}
 	}
 
+	private static final SimpleExtensionManager<MetaType> metaTypeManager = createManager(MetaType.class);
+
+	private static final Set<String> reportedMetaTypeIds = new HashSet<String>();
+
+	public static MetaType getMetaType(String initialValue) {
+		if (initialValue != null) {
+			for (MetaType metaType : metaTypeManager.getInstances()) {
+				if (initialValue.equals(metaType.getId())) {
+					return metaType;
+				}
+			}
+			synchronized (reportedMetaTypeIds) {
+				if (reportedMetaTypeIds.size() < 16
+						&& reportedMetaTypeIds.add(initialValue)) {
+					JavaScriptPlugin.error(NLS.bind("MetaType {0} not found",
+							initialValue));
+				}
+			}
+		}
+		return DefaultMetaType.DEFAULT;
+	}
 }

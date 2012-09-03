@@ -15,18 +15,22 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Map;
 
-import org.eclipse.dltk.javascript.typeinfo.model.*;
+import org.eclipse.dltk.javascript.typeinfo.MetaType;
+import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
-import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.RType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
@@ -35,6 +39,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeAlias;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
@@ -133,6 +141,8 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
                 return createParameterKindFromString(eDataType, initialValue);
             case TypeInfoModelPackage.VISIBILITY:
                 return createVisibilityFromString(eDataType, initialValue);
+            case TypeInfoModelPackage.META_TYPE:
+                return createMetaTypeFromString(eDataType, initialValue);
             default:
                 throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -152,6 +162,8 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
                 return convertParameterKindToString(eDataType, instanceValue);
             case TypeInfoModelPackage.VISIBILITY:
                 return convertVisibilityToString(eDataType, instanceValue);
+            case TypeInfoModelPackage.META_TYPE:
+                return convertMetaTypeToString(eDataType, instanceValue);
             default:
                 throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -466,6 +478,26 @@ public class TypeInfoModelFactoryImpl extends EFactoryImpl implements TypeInfoMo
     public String convertVisibilityToString(EDataType eDataType, Object instanceValue) {
         return instanceValue == null ? null : instanceValue.toString();
     }
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public MetaType createMetaTypeFromString(EDataType eDataType, String initialValue) {
+		return TypeInfoManager.getMetaType(initialValue);
+    }
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+	public String convertMetaTypeToString(EDataType eDataType,
+			Object instanceValue) {
+		return instanceValue instanceof MetaType ? ((MetaType) instanceValue)
+				.getId() : null;
+	}
 
     /**
      * <!-- begin-user-doc -->

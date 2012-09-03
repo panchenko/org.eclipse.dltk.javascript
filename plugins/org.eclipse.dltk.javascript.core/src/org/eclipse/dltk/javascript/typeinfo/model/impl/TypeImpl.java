@@ -17,9 +17,12 @@ import java.util.Collection;
 
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
+import org.eclipse.dltk.javascript.typeinfo.DefaultMetaType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet.SimpleTypeKey;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.typeinfo.MetaType;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -56,6 +59,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInstantiable <em>Instantiable</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInheritConstructors <em>Inherit Constructors</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#isInheritStaticMembers <em>Inherit Static Members</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getMetaType <em>Meta Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -171,6 +175,26 @@ public class TypeImpl extends ElementImpl implements Type {
      * @ordered
      */
     protected static final boolean INHERIT_STATIC_MEMBERS_EDEFAULT = false;
+
+    /**
+     * The default value of the '{@link #getMetaType() <em>Meta Type</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getMetaType()
+     * @generated NOT
+     * @ordered
+     */
+    protected static final MetaType META_TYPE_EDEFAULT = DefaultMetaType.DEFAULT;
+
+    /**
+     * The cached value of the '{@link #getMetaType() <em>Meta Type</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getMetaType()
+     * @generated
+     * @ordered
+     */
+    protected MetaType metaType = META_TYPE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -380,6 +404,27 @@ public class TypeImpl extends ElementImpl implements Type {
 	}
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public MetaType getMetaType() {
+        return metaType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setMetaType(MetaType newMetaType) {
+        MetaType oldMetaType = metaType;
+        metaType = newMetaType;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__META_TYPE, oldMetaType, metaType));
+    }
+
+    /**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -448,6 +493,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return isInheritConstructors();
             case TypeInfoModelPackage.TYPE__INHERIT_STATIC_MEMBERS:
                 return isInheritStaticMembers();
+            case TypeInfoModelPackage.TYPE__META_TYPE:
+                return getMetaType();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -485,6 +532,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__INSTANTIABLE:
                 setInstantiable((Boolean)newValue);
                 return;
+            case TypeInfoModelPackage.TYPE__META_TYPE:
+                setMetaType((MetaType)newValue);
+                return;
         }
         super.eSet(featureID, newValue);
     }
@@ -518,6 +568,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__INSTANTIABLE:
                 setInstantiable(INSTANTIABLE_EDEFAULT);
                 return;
+            case TypeInfoModelPackage.TYPE__META_TYPE:
+                setMetaType(META_TYPE_EDEFAULT);
+                return;
         }
         super.eUnset(featureID);
     }
@@ -548,6 +601,8 @@ public class TypeImpl extends ElementImpl implements Type {
                 return isInheritConstructors() != INHERIT_CONSTRUCTORS_EDEFAULT;
             case TypeInfoModelPackage.TYPE__INHERIT_STATIC_MEMBERS:
                 return isInheritStaticMembers() != INHERIT_STATIC_MEMBERS_EDEFAULT;
+            case TypeInfoModelPackage.TYPE__META_TYPE:
+                return META_TYPE_EDEFAULT == null ? metaType != null : !META_TYPE_EDEFAULT.equals(metaType);
         }
         return super.eIsSet(featureID);
     }
@@ -580,8 +635,16 @@ public class TypeImpl extends ElementImpl implements Type {
 		return predicate;
 	}
 
-	public IRType createInstance() {
-		return new SimpleTypeKey(this);
+	public final IRType createInstance() {
+		return createInstance(null);
+	}
+
+	public IRType createInstance(ITypeSystem typeSystem) {
+		if (metaType != null) {
+			return metaType.toRType(typeSystem, this);
+		} else {
+			return new SimpleTypeKey(typeSystem, this);
+		}
 	}
 
 	public Member[] getAdditionalMembers() {

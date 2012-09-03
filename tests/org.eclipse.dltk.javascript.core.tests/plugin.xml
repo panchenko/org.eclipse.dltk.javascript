@@ -5,5 +5,8 @@
     	<provider class="org.eclipse.dltk.javascript.core.tests.typeinference.ExampleTypeProvider"/>
     	<resolver class="org.eclipse.dltk.javascript.core.tests.typeinference.ExampleElementResolver"/>
     	<evaluator class="org.eclipse.dltk.javascript.core.tests.typeinference.ExampleMemberEvaluator"/>
+    	<metaType class="org.eclipse.dltk.javascript.typeinfo.MetaTypeFactory:org.eclipse.dltk.javascript.core.tests.typeinfo.TestMetaType"/>
+    	<metaType class="org.eclipse.dltk.javascript.typeinfo.MetaTypeFactory:org.eclipse.dltk.javascript.core.tests.typeinfo.MetaTypes.ONE"/>
+    	<metaType class="org.eclipse.dltk.javascript.typeinfo.MetaTypeFactory:org.eclipse.dltk.javascript.core.tests.typeinfo.MetaTypes.TWO"/>
 	</extension>
 </plugin>
