@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Marker interface for the context-aware type expressions (JSType subtypes), like "This". If type expression implementes it, then the current type owner is made available when evaluating the corresponding IRType instance.
+ * Marker interface for the context-aware type expressions (JSType subtypes), like "This". If type expression implements it, then the current type owner is made available when evaluating the corresponding IRType instance.
  * <!-- end-model-doc -->
  *
  *
