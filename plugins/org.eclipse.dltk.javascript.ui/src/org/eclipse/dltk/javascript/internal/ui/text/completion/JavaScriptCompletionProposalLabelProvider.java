@@ -9,10 +9,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
-import java.net.URL;
-
 import org.eclipse.dltk.core.CompletionProposal;
-import org.eclipse.dltk.internal.javascript.reference.resolvers.SelfCompletingReference;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
@@ -78,11 +75,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		String returnType = null;
 		String source = null;
 		final Object info = methodProposal.getExtraInfo();
-		if (info instanceof SelfCompletingReference) {
-			SelfCompletingReference cm = (SelfCompletingReference) info;
-			// methodProposal.setParameterNames(cm.getParameterNames());
-			returnType = cm.getReturnType();
-		} else if (info instanceof Method) {
+		if (info instanceof Method) {
 			final Method method = (Method) info;
 			final String label = getElementLabel(method);
 			if (label != null) {
@@ -183,13 +176,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	 */
 	private ImageDescriptor extraImageFromProposal(CompletionProposal proposal) {
 		final Object extraInfo = proposal.getExtraInfo();
-		if (extraInfo instanceof SelfCompletingReference) {
-			SelfCompletingReference cm = (SelfCompletingReference) extraInfo;
-			URL imageUrl = cm.getImageURL();
-			if (imageUrl != null)
-				return decorateImageDescriptor(
-						ImageDescriptor.createFromURL(imageUrl), proposal);
-		} else if (extraInfo instanceof Element) {
+		if (extraInfo instanceof Element) {
 			final Element element = (Element) extraInfo;
 			final ImageDescriptor descriptor = ElementLabelProviderRegistry
 					.getImageDescriptor(element);

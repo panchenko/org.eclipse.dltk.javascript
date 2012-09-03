@@ -8,7 +8,6 @@ import org.eclipse.dltk.debug.core.model.IScriptValue;
 import org.eclipse.dltk.debug.ui.ScriptDebugModelPresentation;
 import org.eclipse.dltk.internal.debug.core.model.ScriptValue;
 import org.eclipse.dltk.internal.debug.ui.ScriptDebugHover;
-import org.eclipse.dltk.internal.javascript.typeinference.FakeField;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
@@ -29,9 +28,9 @@ public class JavaScriptDebugHover extends ScriptDebugHover {
 	}
 
 	protected String getFieldProperty(IField field) {
-		if (field instanceof FakeField) {
-			return ((FakeField) field).getSnippet();
-		}
+		// if (field instanceof FakeField) {
+		// return ((FakeField) field).getSnippet();
+		// }
 		return super.getFieldProperty(field);
 	}
 

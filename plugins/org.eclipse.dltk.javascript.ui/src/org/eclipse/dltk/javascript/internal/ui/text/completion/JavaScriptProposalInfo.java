@@ -13,8 +13,6 @@ package org.eclipse.dltk.javascript.internal.ui.text.completion;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.core.IMember;
@@ -23,7 +21,6 @@ import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ModelException;
-import org.eclipse.dltk.internal.javascript.typeinference.IReference;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.scriptdoc.ScriptDocumentationProvider;
@@ -46,18 +43,7 @@ public class JavaScriptProposalInfo extends ProposalInfo {
 
 	@Override
 	public String getInfo(IProgressMonitor monitor) {
-		if (ref instanceof IReference) {
-			List<IModelElement> ms = new ArrayList<IModelElement>();
-			((IReference) ref).addModelElements(ms);
-			if (ms.size() > 0) {
-				Reader contentReader = new ScriptDocumentationProvider()
-						.getInfo((IMember) ms.get(0), true, true);
-				if (contentReader != null) {
-					String string = getString(contentReader);
-					return string;
-				}
-			}
-		} else if (ref instanceof IMember) {
+		if (ref instanceof IMember) {
 			Reader contentReader = new ScriptDocumentationProvider().getInfo(
 					(IMember) ref, true, true);
 			if (contentReader != null) {

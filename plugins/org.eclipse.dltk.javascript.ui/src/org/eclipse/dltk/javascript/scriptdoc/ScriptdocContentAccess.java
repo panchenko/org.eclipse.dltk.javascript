@@ -9,9 +9,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.scriptdoc;
 
-import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,7 +26,6 @@ import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.ISourceReference;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.SourceRange;
-import org.eclipse.dltk.internal.javascript.typeinference.IProposalHolder;
 import org.eclipse.dltk.javascript.ast.MultiLineComment;
 
 class BufferJavaDocCommentReader extends JavaDocCommentReader {
@@ -358,19 +355,6 @@ public class ScriptdocContentAccess {
 					}
 					if (!reader.containsOnlyInheritDoc()) {
 						reader.reset();
-
-						if (member instanceof IProposalHolder
-								&& ((IProposalHolder) member).getProposalInfo() != null) {
-							String proposalInfo = ((IProposalHolder) member)
-									.getProposalInfo();
-							try {
-								return new StringReader("<p>" + proposalInfo
-										+ "</p>" + reader.getString());
-							} catch (IOException ex) {
-								ex.printStackTrace();
-							}
-						}
-
 						return reader;
 					}
 				}
@@ -426,11 +410,6 @@ public class ScriptdocContentAccess {
 			// String s= member.getAttachedJavadoc(null);
 			// if (s != null)
 			// return new StringReader(s);
-		}
-		if (member instanceof IProposalHolder
-				&& ((IProposalHolder) member).getProposalInfo() != null) {
-			return new StringReader(
-					((IProposalHolder) member).getProposalInfo());
 		}
 		return null;
 	}
