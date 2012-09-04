@@ -134,7 +134,7 @@ public class TypeUtil {
 					Collections.singletonList(arrayType.getItemType()));
 		} else if (type instanceof IRMapType) {
 			return Types.OBJECT;
-		} else if (type instanceof IRAnyType) {
+		} else if (type == RTypes.any()) {
 			return Types.OBJECT;
 		} else {
 			return null;
@@ -325,11 +325,11 @@ public class TypeUtil {
 	}
 
 	public static boolean isUndefined(IRType type) {
-		if (type == JSTypeSet.undefined()) {
+		if (type == RTypes.undefined()) {
 			return true;
 		} else if (type instanceof IRUnionType) {
 			return ((IRUnionType) type).getTargets().contains(
-					JSTypeSet.undefined());
+					RTypes.undefined());
 		} else {
 			return false;
 		}

@@ -75,7 +75,6 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
-import org.eclipse.dltk.javascript.typeinfo.IRAnyType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
@@ -92,6 +91,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
@@ -898,8 +898,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 							return;
 						}
 					}
-				} else if (expressionType != JSTypeSet.any()
-						&& expressionType != JSTypeSet.none()
+				} else if (expressionType != RTypes.any()
+						&& expressionType != RTypes.none()
 						&& !JSTypeSet.ref(Types.FUNCTION)
 								.isAssignableFrom(expressionType).ok()) {
 					reporter.reportProblem(
@@ -918,7 +918,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				final IRType type = JavaScriptValidations.typeOf(reference
 						.getParent());
 				if (type != null) {
-					if (type instanceof IRAnyType) {
+					if (type == RTypes.any()) {
 						return;
 					}
 					if (TypeUtil.kind(type) == TypeKind.JAVA) {
@@ -1146,7 +1146,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 				final ReferenceKind kind = reference.getKind();
 				if (kind == ReferenceKind.ARGUMENT) {
 					final IRType type = reference.getDeclaredType();
-					if (type == null || type instanceof IRAnyType) {
+					if (type == null || type == RTypes.any()) {
 						return true;
 					}
 				} else if (kind == ReferenceKind.THIS

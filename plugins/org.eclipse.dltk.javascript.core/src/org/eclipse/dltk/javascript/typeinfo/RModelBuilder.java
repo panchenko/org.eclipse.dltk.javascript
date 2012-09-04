@@ -133,7 +133,7 @@ public class RModelBuilder {
 			}
 			for (int i = 0; i < parameters.size(); ++i) {
 				final IRParameter parameter = parameters.get(i);
-				if (parameter.getType() != JSTypeSet.any()
+				if (parameter.getType() != RTypes.any()
 						|| parameter.getKind() != ParameterKind.NORMAL) {
 					return true;
 				}
@@ -245,7 +245,7 @@ public class RModelBuilder {
 			final List<IRParameter> params = new ArrayList<IRParameter>();
 			for (Parameter parameter : parameters) {
 				final IRType paramType = parameter.getType() != null ? JSTypeSet
-						.normalize(context, parameter.getType()) : JSTypeSet
+						.normalize(context, parameter.getType()) : RTypes
 						.any();
 				params.add(new RParameter(parameter.getName(), paramType,
 						parameter.getKind()));
@@ -262,7 +262,7 @@ public class RModelBuilder {
 			final List<IRParameter> params = new ArrayList<IRParameter>();
 			for (IParameter parameter : parameters) {
 				final IRType paramType = parameter.getType() != null ? JSTypeSet
-						.normalize(context, parameter.getType()) : JSTypeSet
+						.normalize(context, parameter.getType()) : RTypes
 						.any();
 				final ParameterKind kind;
 				if (parameter.isVarargs()) {

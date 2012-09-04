@@ -88,7 +88,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		@Override
 		public IRType toRType() {
-			return none();
+			return RTypes.none();
 		}
 
 		@Override
@@ -118,11 +118,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		@Override
 		public boolean contains(IRType type) {
-			return false;
-		}
-
-		@Override
-		public boolean contains(Type type) {
 			return false;
 		}
 
@@ -203,7 +198,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 				return new Type[] { ((SimpleTypeKey) type).getTarget() };
 			} else if (type instanceof ClassTypeKey) {
 				return new Type[] { ((ClassTypeKey) type).getTarget() };
-			} else if (type instanceof AnyTypeKey) {
+			} else if (type == RTypes.any()) {
 				return new Type[] { Types.OBJECT };
 			} else {
 				return new Type[0];
@@ -233,12 +228,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		@Override
 		public boolean contains(IRType type) {
 			return this.type.equals(type);
-		}
-
-		@Override
-		public boolean contains(Type type) {
-			return this.type instanceof SimpleTypeKey
-					&& ((SimpleTypeKey) this.type).getTarget().equals(type);
 		}
 
 		@Override
@@ -287,9 +276,9 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		public TypeCompatibility isAssignableFrom(IRType type) {
-			if (type == UNDEFINED_TYPE || type == ANY_TYPE) {
+			if (type == RTypes.undefined() || type == RTypes.any()) {
 				return TypeCompatibility.TRUE;
-			} else if (type == NONE_TYPE) {
+			} else if (type == RTypes.none()) {
 				return TypeCompatibility.FALSE;
 			} else if (type instanceof UnionTypeKey) {
 				for (IRType part : ((UnionTypeKey) type).targets) {
@@ -451,9 +440,9 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		public IRType toItemType() {
 			if (type == null) {
-				return any();
+				return RTypes.any();
 			} else if (ITypeNames.ARRAY.equals(type.getName())) {
-				return arrayOf(none());
+				return arrayOf(RTypes.none());
 			} else {
 				return type.createInstance();
 			}
@@ -601,59 +590,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 	}
 
-	private static final IRType ANY_TYPE = new AnyTypeKey();
 
-	private static class AnyTypeKey extends TypeKey implements IRAnyType {
-
-		public String getName() {
-			return "Any";
-		}
-
-		@Override
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			return TypeCompatibility.TRUE;
-		}
-
-		@Override
-		public boolean isExtensible() {
-			return true;
-		}
-	}
-
-	private static final IRType NONE_TYPE = new NoneTypeKey();
-
-	private static class NoneTypeKey extends TypeKey implements IRNoneType {
-
-		public String getName() {
-			return "None";
-		}
-
-		@Override
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			return TypeCompatibility.TRUE;
-		}
-
-		@Override
-		public boolean isExtensible() {
-			return true;
-		}
-
-	}
-
-	private static final IRType UNDEFINED_TYPE = new UndefinedTypeKey();
-
-	private static class UndefinedTypeKey extends TypeKey implements
-			IRUndefinedType {
-
-		public String getName() {
-			return ITypeNames.UNDEFINED;
-		}
-
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			return TypeCompatibility.valueOf(type == this);
-		}
-
-	}
 
 	private static class UnionTypeKey extends TypeKey implements IRUnionType {
 
@@ -757,7 +694,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		public RecordTypeKey(ITypeSystem context, List<Member> members) {
 			for (Member member : members) {
 				final IRType memberType = member.getType() != null ? normalize(
-						context, member.getType()) : ANY_TYPE;
+						context, member.getType()) : RTypes.any();
 				this.members
 						.put(member.getName(),
 								new RRecordMember(member.getName(), memberType,
@@ -773,7 +710,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 					sb.append(',');
 				}
 				sb.append(member.getName());
-				if (!(member.getType() instanceof IRAnyType)) {
+				if (member.getType() != RTypes.any()) {
 					sb.append(':');
 					sb.append(member.getType().getName());
 				}
@@ -928,7 +865,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			final ParameterizedType parameterized = (ParameterizedType) type;
 			Type target = parameterized.getTarget();
 			if (target == null) {
-				return any();
+				return RTypes.any();
 			}
 			if (context != null) {
 				final EList<JSType> typeArguments = parameterized
@@ -945,7 +882,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			}
 		} else if (type instanceof TypeVariableReference) {
 			// TODO (alex) shouldn't happen
-			return none();
+			return RTypes.none();
 		} else if (type instanceof TypeVariableClassType) {
 			// shouldn't happen
 			return classType(null);
@@ -953,7 +890,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			final SimpleType ref = (SimpleType) type;
 			Type target = ref.getTarget();
 			if (target == null) {
-				return any();
+				return RTypes.any();
 			}
 			if (target.isProxy() && context != null) {
 				target = context.resolveType(target);
@@ -973,9 +910,9 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			return mapOf(normalize(context, mapType.getKeyType()),
 					normalize(context, mapType.getValueType()));
 		} else if (type instanceof AnyType) {
-			return ANY_TYPE;
+			return RTypes.any();
 		} else if (type instanceof UndefinedType) {
-			return UNDEFINED_TYPE;
+			return RTypes.undefined();
 		} else if (type instanceof UnionType) {
 			final UnionTypeKey union = new UnionTypeKey();
 			for (JSType t : ((UnionType) type).getTargets()) {
@@ -1007,7 +944,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 	public static IRType ref(Type type) {
 		if (ITypeNames.ARRAY.equals(type.getName())) {
-			return arrayOf(none());
+			return arrayOf(RTypes.none());
 		} else {
 			return type.createInstance();
 		}
@@ -1030,16 +967,25 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		return new MapTypeKey(keyType, valueType);
 	}
 
+	/**
+	 * @deprecated Use {@link RTypes#any()} instead
+	 */
 	public static IRType any() {
-		return ANY_TYPE;
+		return RTypes.any();
 	}
 
+	/**
+	 * @deprecated Use {@link RTypes#none()} instead
+	 */
 	public static IRType none() {
-		return NONE_TYPE;
+		return RTypes.none();
 	}
 
+	/**
+	 * @deprecated Use {@link RTypes#undefined()} instead
+	 */
 	public static IRType undefined() {
-		return UNDEFINED_TYPE;
+		return RTypes.undefined();
 	}
 
 	public static IRType union(List<IRType> targets) {
@@ -1085,7 +1031,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		@Override
 		public IRType toRType() {
 			if (types.isEmpty()) {
-				return none();
+				return RTypes.none();
 			} else if (types.size() == 1) {
 				return types.iterator().next();
 			} else {
@@ -1099,7 +1045,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			for (IRType type : types) {
 				if (type instanceof SimpleTypeKey) {
 					result.add(((SimpleTypeKey) type).getTarget());
-				} else if (type instanceof AnyTypeKey) {
+				} else if (type == RTypes.any()) {
 					result.add(Types.OBJECT);
 				}
 			}
@@ -1134,11 +1080,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 		@Override
-		public boolean contains(Type type) {
-			return types.contains(ref(type));
-		}
-
-		@Override
 		public boolean containsAll(JSTypeSet types) {
 			for (IRType type : types) {
 				if (!contains(type)) {
@@ -1160,7 +1101,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 	}
 
 	public static JSTypeSet create(IRType type) {
-		if (type == null || type == none()) {
+		if (type == null || type == RTypes.none()) {
 			return emptySet();
 		} else {
 			final JSTypeSet set = new JSTypeSetImpl();
@@ -1180,8 +1121,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 	public abstract void add(IRType type);
 
-	// public abstract void add(Type type);
-
 	public abstract IRType getFirst();
 
 	public abstract IRType toRType();
@@ -1197,8 +1136,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 	public abstract void clear();
 
 	public abstract boolean contains(IRType type);
-
-	public abstract boolean contains(Type type);
 
 	public abstract boolean containsAll(JSTypeSet types);
 

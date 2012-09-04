@@ -40,6 +40,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.OriginReference;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
@@ -272,7 +273,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					variableType = parameters.get(i);
 				}
 				if (variableType == null) {
-					variableType = JSTypeSet.any();
+					variableType = RTypes.any();
 				}
 				actualParameters[i] = variableType;
 				this.parameters.put(variable, variableType);

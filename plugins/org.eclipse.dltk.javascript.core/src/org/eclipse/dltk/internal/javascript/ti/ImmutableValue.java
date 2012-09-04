@@ -12,6 +12,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 
 public class ImmutableValue implements IValue, IValue2 {
 
@@ -154,7 +155,7 @@ public class ImmutableValue implements IValue, IValue2 {
 
 	public Object getAttribute(String key, boolean includeReferences) {
 		if (IReferenceAttributes.PHANTOM.equals(key)
-				&& declaredType == JSTypeSet.any()) {
+				&& declaredType == RTypes.any()) {
 			return Boolean.TRUE;
 		}
 		Object attribute = null;
@@ -257,7 +258,7 @@ public class ImmutableValue implements IValue, IValue2 {
 	}
 
 	protected IValue findMember(String name, boolean resolve) {
-		if (declaredType == JSTypeSet.any()) {
+		if (declaredType == RTypes.any()) {
 			return PhantomValue.VALUE;
 		}
 		IValue value = null;

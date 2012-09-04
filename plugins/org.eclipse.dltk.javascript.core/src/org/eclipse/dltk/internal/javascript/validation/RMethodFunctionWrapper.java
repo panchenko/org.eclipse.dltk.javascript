@@ -17,11 +17,11 @@ import java.util.Set;
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
-import org.eclipse.dltk.javascript.typeinfo.IRAnyType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
@@ -87,7 +87,7 @@ public class RMethodFunctionWrapper implements IRMethod {
 
 	private static boolean isVarArgAny(IRParameter parameter) {
 		return parameter.getKind() == ParameterKind.VARARGS
-				&& parameter.getType() instanceof IRAnyType;
+				&& parameter.getType() == RTypes.any();
 	}
 
 	public boolean isConstructor() {

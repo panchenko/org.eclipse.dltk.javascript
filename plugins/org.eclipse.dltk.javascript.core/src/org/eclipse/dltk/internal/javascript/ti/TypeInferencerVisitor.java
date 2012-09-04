@@ -110,12 +110,10 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilderExtension;
-import org.eclipse.dltk.javascript.typeinfo.IRAnyType;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
-import org.eclipse.dltk.javascript.typeinfo.IRNoneType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
@@ -123,6 +121,7 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
@@ -754,12 +753,14 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					type = irType;
 				} else if (irType instanceof IRArrayType) {
 					IRType itemType = ((IRArrayType) irType).getItemType();
-					if (!(itemType instanceof IRNoneType || itemType instanceof IRAnyType)) {
+					if (itemType != RTypes.none()
+							&& itemType != RTypes.any()) {
 						type = irType;
 					}
 				} else if (irType instanceof IRMapType) {
 					IRType itemType = ((IRMapType) irType).getValueType();
-					if (!(itemType instanceof IRNoneType || itemType instanceof IRAnyType)) {
+					if (itemType != RTypes.none()
+							&& itemType != RTypes.any()) {
 						type = irType;
 					}
 				}

@@ -11,13 +11,18 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+
 /**
  * "Runtime" type expression hierarchy, used when evaluating the code. The
- * instances are created based on EMF-backed
- * {@link org.eclipse.dltk.javascript.typeinfo.model.JSType} type expressions
- * used only for declarations, resolving all
- * {@link org.eclipse.dltk.javascript.typeinfo.model.Type} proxies along the
- * way.
+ * instances are created based on EMF-backed {@link JSType} type expressions
+ * (which are used only for declarations).
+ * <p>
+ * The rationale for these classes is having an easy and efficient way to
+ * compare type expressions and a standard way for resolving {@link Type}
+ * proxies.
+ * </p>
  */
 public interface IRType {
 
