@@ -109,6 +109,7 @@ public class JSDocCompletionProposalComputer implements
 				} else if (line[index] == '{') {
 					++depth;
 				} else if (line[index] == '<' || line[index] == '>'
+						|| line[index] == '(' || line[index] == ':'
 						|| line[index] == ',' || line[index] == '|') {
 					nameStart = index + 1;
 				} else if (breakOnSpace && Character.isWhitespace(line[index])) {
