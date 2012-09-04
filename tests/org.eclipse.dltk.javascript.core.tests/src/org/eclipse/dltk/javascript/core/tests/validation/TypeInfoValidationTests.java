@@ -2097,6 +2097,19 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testUnionParamTypeCompatibility() {
+		final StringList code = new StringList();
+		code.add("/** @param {{name:String}} person */");
+		code.add("function test(person) {}");
+		code.add("");
+		code.add("/** @param {function(String)|String} obj */");
+		code.add("function y(obj) {");
+		code.add("  test({ name: obj });");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 	public void testArrayLookupWithUnknowVariables() {
 		final StringList code = new StringList();
 		code.add("var vAvailableLicenses = exampleForms.nothere[exampleForms.nothere2].nothere3.nothere4;");
