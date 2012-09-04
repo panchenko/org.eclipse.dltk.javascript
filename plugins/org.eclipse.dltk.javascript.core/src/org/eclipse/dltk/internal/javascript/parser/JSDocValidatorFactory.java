@@ -119,6 +119,31 @@ public class JSDocValidatorFactory {
 		}
 
 		@Override
+		public void checkType(JSType type, ISourceNode tag, int flags) {
+			if (extensions != null) {
+				for (IValidatorExtension extension : extensions) {
+					if (extension instanceof IValidatorExtension2) {
+						final IValidationStatus status = ((IValidatorExtension2) extension)
+								.validateTypeExpression(type);
+						if (status != null) {
+							if (status == ValidationStatus.OK) {
+								break;
+							} else {
+								JavaScriptValidations.reportValidationStatus(
+										reporter, status, tag,
+										JavaScriptProblems.INACCESSIBLE_TYPE,
+										ValidationMessages.InaccessibleType,
+										type.getName());
+								return;
+							}
+						}
+					}
+				}
+			}
+			super.checkType(type, tag, flags);
+		}
+
+		@Override
 		public void checkType(Type type, ISourceNode tag, int flags) {
 			if (type.getKind() == TypeKind.UNKNOWN
 					|| type.getKind() == TypeKind.UNRESOLVED) {

@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.validation;
 
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
 import org.eclipse.dltk.core.ISourceNode;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IValidatorExtension2 extends IValidatorExtension {
@@ -25,5 +26,13 @@ public interface IValidatorExtension2 extends IValidatorExtension {
 	 * @return
 	 */
 	IValidationStatus validateAccessibility(Type type, ISourceNode node);
+
+	/**
+	 * Validates the semantics/accessibility of the specified type expression.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	IValidationStatus validateTypeExpression(JSType type);
 
 }
