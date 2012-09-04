@@ -518,8 +518,12 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 				return TypeCompatibility.TRUE;
 			}
 			if (type instanceof ArrayTypeKey) {
+				final IRType ortherItem = ((ArrayTypeKey) type).itemType;
+				if (ortherItem == RTypes.EMPTY_ARRAY_ITEM_TYPE) {
+					return TypeCompatibility.TRUE;
+				}
 				final TypeCompatibility compatibility = itemType
-						.isAssignableFrom(((ArrayTypeKey) type).itemType);
+						.isAssignableFrom(ortherItem);
 				return compatibility == TypeCompatibility.TRUE ? compatibility
 						: TypeCompatibility.UNPARAMETERIZED;
 			} else {
@@ -589,8 +593,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		}
 
 	}
-
-
 
 	private static class UnionTypeKey extends TypeKey implements IRUnionType {
 

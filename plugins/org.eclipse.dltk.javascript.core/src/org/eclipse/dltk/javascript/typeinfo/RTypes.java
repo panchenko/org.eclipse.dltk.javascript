@@ -87,4 +87,27 @@ public class RTypes {
 		return NONE_TYPE;
 	}
 
+	/**
+	 * Returns the instance of the <b>empty array literal</b>.
+	 */
+	public static IRArrayType arrayOf() {
+		return JSTypeSet.arrayOf(EMPTY_ARRAY_ITEM_TYPE);
+	}
+
+	static final IRType EMPTY_ARRAY_ITEM_TYPE = new TypeKey() {
+		public String getName() {
+			return "empty";
+		}
+
+		@Override
+		public TypeCompatibility isAssignableFrom(IRType type) {
+			return TypeCompatibility.TRUE;
+		}
+
+		@Override
+		public boolean isExtensible() {
+			return true;
+		}
+	};
+
 }

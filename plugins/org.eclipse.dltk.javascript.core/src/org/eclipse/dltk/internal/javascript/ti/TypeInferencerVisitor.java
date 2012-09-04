@@ -198,6 +198,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	@Override
 	public IValueReference visitArrayInitializer(ArrayInitializer node) {
+		if (node.getItems().isEmpty()) {
+			return new ConstantValue(RTypes.arrayOf());
+		}
 		final JSTypeSet types = JSTypeSet.create();
 		for (ASTNode astNode : node.getItems()) {
 			if (astNode instanceof StringLiteral) {
@@ -217,7 +220,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 				// TODO (alex) else add(Obect) ?
 			}
 		}
-		if (types.size() == 1) {
+		if (types.isEmpty()) {
+			return new ConstantValue(RTypes.arrayOf());
+		} else if (types.size() == 1) {
 			return context.getFactory().create(peekContext(),
 					JSTypeSet.arrayOf(types.getFirst()));
 		} else {
@@ -753,14 +758,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 					type = irType;
 				} else if (irType instanceof IRArrayType) {
 					IRType itemType = ((IRArrayType) irType).getItemType();
-					if (itemType != RTypes.none()
-							&& itemType != RTypes.any()) {
+					if (itemType != RTypes.none() && itemType != RTypes.any()) {
 						type = irType;
 					}
 				} else if (irType instanceof IRMapType) {
 					IRType itemType = ((IRMapType) irType).getValueType();
-					if (itemType != RTypes.none()
-							&& itemType != RTypes.any()) {
+					if (itemType != RTypes.none() && itemType != RTypes.any()) {
 						type = irType;
 					}
 				}

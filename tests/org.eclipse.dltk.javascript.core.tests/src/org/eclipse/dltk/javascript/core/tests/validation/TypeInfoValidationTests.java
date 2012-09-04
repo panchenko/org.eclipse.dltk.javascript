@@ -2446,4 +2446,13 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 				.getID());
 	}
 
+	public void testEmptyArrayLiteralCompatibility() {
+		final StringList code = new StringList();
+		code.add("/** @param {Array<String>} ss */");
+		code.add("function test(ss) {}");
+		code.add("test([]);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 }
