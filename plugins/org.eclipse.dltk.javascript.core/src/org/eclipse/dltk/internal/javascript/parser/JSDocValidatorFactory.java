@@ -215,7 +215,7 @@ public class JSDocValidatorFactory {
 				for (IValidatorExtension extension : extensions) {
 					if (extension instanceof IValidatorExtension2) {
 						final IValidationStatus status = ((IValidatorExtension2) extension)
-								.validateAccessibility(type, tag);
+								.validateAccessibility(type);
 						if (status != null) {
 							if (status == ValidationStatus.OK) {
 								return;

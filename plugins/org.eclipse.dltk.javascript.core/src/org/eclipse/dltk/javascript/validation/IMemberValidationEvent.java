@@ -11,26 +11,25 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.validation;
 
-import org.eclipse.dltk.compiler.problem.IValidationStatus;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
 
-public interface IValidatorExtension2 extends IValidatorExtension {
-
-	/**
-	 * Validates accessibility of the specified type.
-	 * 
-	 * @param type
-	 * @return
-	 */
-	IValidationStatus validateAccessibility(Type type);
+/**
+ * Lightweight object used as the parameter of the
+ * {@link IValidatorExtension#validateAccessibility(IMemberValidationEvent)}
+ * method.
+ */
+public interface IMemberValidationEvent {
 
 	/**
-	 * Validates the semantics/accessibility of the specified type expression.
-	 * 
-	 * @param type
-	 * @return
+	 * Returns the reference being validated, not-null.
 	 */
-	IValidationStatus validateTypeExpression(JSType type);
+	public IValueReference getReference();
+
+	/**
+	 * Returns the {@link IRMember} attached to this reference or
+	 * <code>null</code> if not available.
+	 */
+	public IRMember getRMember();
 
 }

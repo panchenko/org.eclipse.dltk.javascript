@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.internal.core.codeassist;
 
+import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.dltk.ast.ASTNode;
@@ -20,6 +21,7 @@ import org.eclipse.dltk.internal.javascript.ti.TypeInferencerVisitor;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.validation.IValidatorExtension;
 
 public class CompletionVisitor extends TypeInferencerVisitor {
 
@@ -90,6 +92,10 @@ public class CompletionVisitor extends TypeInferencerVisitor {
 			return savedCollection;
 		}
 		return super.getCollection();
+	}
+
+	public List<IValidatorExtension> createValidatorExtensions() {
+		return createExtensions(IValidatorExtension.class);
 	}
 
 }

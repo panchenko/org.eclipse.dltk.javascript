@@ -19,7 +19,4 @@ public interface IRMember extends IRElement {
 
 	Visibility getVisibility();
 
-	boolean isPrivate();
-
-	boolean isProtected();
 }

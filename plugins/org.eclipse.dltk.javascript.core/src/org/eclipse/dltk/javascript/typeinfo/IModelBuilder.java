@@ -67,15 +67,6 @@ public interface IModelBuilder {
 		 */
 		void setVisibility(Visibility visibility);
 
-		/**
-		 * @since 3.0
-		 */
-		boolean isPrivate();
-
-		/**
-		 * @since 3.0
-		 */
-		boolean isProtected();
 	}
 
 	public interface IParameter extends IElement {

@@ -1032,14 +1032,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 								reference.getName()), methodNode.sourceStart(),
 						methodNode.sourceEnd());
 			}
-			validateAccessibility(node.getExpression(), reference, method);
-			// if (testVisibility(expression, reference, method)) {
-			// reporter.reportProblem(
-			// JavaScriptProblems.PRIVATE_FUNCTION, NLS.bind(
-			// ValidationMessages.PrivateFunction,
-			// reference.getName()), methodNode
-			// .sourceStart(), methodNode.sourceEnd());
-			// }
+			validateAccessibility(methodNode, reference, method);
 			List<IRParameter> parameters = method.getParameters();
 			final TypeCompatibility compatibility = validateParameters(
 					parameters, arguments, methodNode);
@@ -1745,8 +1738,10 @@ public class TypeInfoValidator implements IBuildParticipant {
 		}
 
 		private static boolean isPrivate(IValueReference reference) {
-			return ((IRVariable) reference
-					.getAttribute(IReferenceAttributes.R_VARIABLE)).isPrivate();
+			final IVariable variable = (IVariable) reference
+					.getAttribute(IReferenceAttributes.VARIABLE);
+			return variable != null
+					&& variable.getVisibility() == Visibility.PRIVATE;
 		}
 
 		private void checkAssign(IValueReference reference, ASTNode node) {
@@ -1979,15 +1974,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 										variable.getName()), propName
 										.sourceStart(), propName.sourceEnd());
 					}
-					validateAccessibility(propertyExpression, result, variable);
-					// if (testVisibility(propertyExpression, result, variable))
-					// {
-					// reporter.reportProblem(
-					// JavaScriptProblems.PRIVATE_VARIABLE, NLS.bind(
-					// ValidationMessages.PrivateVariable,
-					// variable.getName()), propName
-					// .sourceStart(), propName.sourceEnd());
-					// }
+					validateAccessibility(propName, result, variable);
 					return;
 				} else {
 					IRMethod method = (IRMethod) result.getAttribute(R_METHOD);
@@ -2001,18 +1988,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 											.sourceStart(), propName
 											.sourceEnd());
 						}
-						validateAccessibility(propertyExpression, result,
-								method);
-						// if (testVisibility(propertyExpression, result,
-						// method)) {
-						// reporter.reportProblem(
-						// JavaScriptProblems.PRIVATE_FUNCTION,
-						// NLS.bind(
-						// ValidationMessages.PrivateFunction,
-						// method.getName()), propName
-						// .sourceStart(), propName
-						// .sourceEnd());
-						// }
+						validateAccessibility(propName, result, method);
 						return;
 
 					}
@@ -2255,7 +2231,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			if (extensions != null) {
 				for (IValidatorExtension extension : extensions) {
 					final IValidationStatus result = extension
-							.validateAccessibility(node, member);
+							.validateAccessibility(member);
 					if (result != null) {
 						if (result == ValidationStatus.OK) {
 							return true;
@@ -2273,6 +2249,8 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return true;
 		}
 
+		private MemberValidationEvent memberValidationEvent;
+
 		/**
 		 * Tests if the specified member is accessible.
 		 * 
@@ -2287,10 +2265,13 @@ public class TypeInfoValidator implements IBuildParticipant {
 		private void validateAccessibility(Expression expression,
 				IValueReference reference, IRMember member) {
 			if (extensions != null) {
+				if (memberValidationEvent == null) {
+					memberValidationEvent = new MemberValidationEvent();
+				}
+				memberValidationEvent.set(reference, member);
 				for (IValidatorExtension extension : extensions) {
 					final IValidationStatus result = extension
-							.validateAccessibility(expression, reference,
-									member);
+							.validateAccessibility(memberValidationEvent);
 					if (result != null) {
 						if (result == ValidationStatus.OK) {
 							return;

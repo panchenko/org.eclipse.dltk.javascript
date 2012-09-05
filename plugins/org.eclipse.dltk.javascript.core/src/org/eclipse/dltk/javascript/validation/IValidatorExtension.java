@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.validation;
 
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
-import org.eclipse.dltk.javascript.ast.Expression;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IRMember;
@@ -35,20 +33,23 @@ public interface IValidatorExtension {
 	UnusedVariableValidation canValidateUnusedVariable(
 			IValueCollection collection, IValueReference reference);
 
-	IValidationStatus validateAccessibility(ASTNode node, Member member);
+	/**
+	 * @param member
+	 *            model of the accessed member, not <code>null</code>.
+	 * @return
+	 */
+	IValidationStatus validateAccessibility(Member member);
 
 	/**
 	 * Tests if the specified member is accessible.
 	 * 
-	 * @param expression
-	 *            AST node
-	 * @param reference
-	 *            evaluated value reference
-	 * @param member
-	 *            runtime variable/function reference if already evaluated or
-	 *            <code>null</code> if not evaluated yet
+	 * @param event
+	 *            Event object containing {@link IValueReference} and
+	 *            {@link IRMember} attached to it. It is a transient object that
+	 *            is only valid for the duration of a single
+	 *            validateAccessibility method. An object should not be
+	 *            referenced once the method call is complete.
 	 */
-	IValidationStatus validateAccessibility(Expression expression,
-			IValueReference reference, IRMember member);
+	IValidationStatus validateAccessibility(IMemberValidationEvent event);
 
 }

@@ -93,15 +93,6 @@ public class RModelBuilder {
 		public Visibility getVisibility() {
 			return visibility;
 		}
-
-		public boolean isPrivate() {
-			return visibility == Visibility.PRIVATE;
-		}
-
-		public boolean isProtected() {
-			return visibility == Visibility.PROTECTED;
-		}
-
 	}
 
 	private static class RMethod extends RMember implements IRMethod {
@@ -245,8 +236,7 @@ public class RModelBuilder {
 			final List<IRParameter> params = new ArrayList<IRParameter>();
 			for (Parameter parameter : parameters) {
 				final IRType paramType = parameter.getType() != null ? JSTypeSet
-						.normalize(context, parameter.getType()) : RTypes
-						.any();
+						.normalize(context, parameter.getType()) : RTypes.any();
 				params.add(new RParameter(parameter.getName(), paramType,
 						parameter.getKind()));
 			}
@@ -262,8 +252,7 @@ public class RModelBuilder {
 			final List<IRParameter> params = new ArrayList<IRParameter>();
 			for (IParameter parameter : parameters) {
 				final IRType paramType = parameter.getType() != null ? JSTypeSet
-						.normalize(context, parameter.getType()) : RTypes
-						.any();
+						.normalize(context, parameter.getType()) : RTypes.any();
 				final ParameterKind kind;
 				if (parameter.isVarargs()) {
 					kind = ParameterKind.VARARGS;

@@ -111,14 +111,6 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		this.visibility = visibility;
 	}
 
-	public boolean isPrivate() {
-		return visibility == Visibility.PRIVATE;
-	}
-
-	public boolean isProtected() {
-		return visibility == Visibility.PROTECTED;
-	}
-
 	public boolean isConstructor() {
 		return constructor;
 	}

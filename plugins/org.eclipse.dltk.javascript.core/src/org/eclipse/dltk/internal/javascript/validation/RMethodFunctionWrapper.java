@@ -41,14 +41,6 @@ public class RMethodFunctionWrapper implements IRMethod {
 		return Visibility.PUBLIC;
 	}
 
-	public boolean isPrivate() {
-		return false;
-	}
-
-	public boolean isProtected() {
-		return false;
-	}
-
 	public String getName() {
 		return null;
 	}

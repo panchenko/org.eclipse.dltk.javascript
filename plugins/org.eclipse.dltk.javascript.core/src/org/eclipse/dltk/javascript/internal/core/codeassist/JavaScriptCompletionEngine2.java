@@ -14,25 +14,31 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 import static org.eclipse.dltk.javascript.ast.Keywords.THIS;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
+import org.eclipse.dltk.compiler.problem.IValidationStatus;
+import org.eclipse.dltk.compiler.problem.ValidationStatus;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IAccessRule;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
-import org.eclipse.dltk.internal.javascript.ti.IValueProvider;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
+import org.eclipse.dltk.internal.javascript.validation.MemberValidationEvent;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -46,7 +52,6 @@ import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
-import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
@@ -61,6 +66,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.validation.IValidatorExtension;
 
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
@@ -111,7 +117,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				final CompletionPath path = new CompletionPath(calculator
 						.getCompletion());
 				final Reporter reporter = new Reporter(path.lastSegment(),
-						position);
+						position, visitor.createValidatorExtensions());
 				if (calculator.isMember() && !path.isEmpty()
 						&& path.lastSegment() != null) {
 					doCompletionOnMember(inferencer2, visitor.getCollection(),
@@ -129,7 +135,8 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			String prefix, int offset) {
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		inferencer2.setModelElement(module);
-		doCompletionOnType(inferencer2, mode, new Reporter(prefix, offset));
+		doCompletionOnType(inferencer2, mode, new Reporter(prefix, offset,
+				Collections.<IValidatorExtension> emptyList()));
 	}
 
 	private void doCompletionOnType(ITypeInferenceContext context,
@@ -186,24 +193,20 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		if (item != null && exists(item)) {
-			final int segmentCount = path.segmentCount();
-			final boolean testPrivate = !(segmentCount >= 2
-					&& path.isName(segmentCount - 2) && THIS.equals(path
-					.segment(segmentCount - 2)));
-			reportItems(context, reporter, item, testPrivate);
+			reportItems(context, reporter, item);
 		}
 	}
 
 	protected void reportItems(ITypeInferenceContext context,
-			Reporter reporter, IValueParent item, boolean testPrivate) {
-		reporter.report(context, item, testPrivate);
+			Reporter reporter, IValueParent item) {
+		reporter.report(context, item);
 		if (item instanceof IValueCollection) {
 			IValueCollection coll = (IValueCollection) item;
 			for (;;) {
 				coll = coll.getParent();
 				if (coll == null)
 					break;
-				reporter.report(context, coll, testPrivate);
+				reporter.report(context, coll);
 			}
 		} else if (item instanceof IValueReference) {
 			reporter.reportValueTypeMembers(context, (IValueReference) item);
@@ -238,11 +241,22 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		final Set<String> processed = new HashSet<String>();
 		final boolean camelCase = DLTKCore.ENABLED.equals(DLTKCore
 				.getOption(DLTKCore.CODEASSIST_CAMEL_CASE_MATCH));
+		final boolean visibilityCheck = DLTKCore.ENABLED.equals(Platform
+				.getPreferencesService().getString(JavaScriptPlugin.PLUGIN_ID,
+						DLTKCore.CODEASSIST_VISIBILITY_CHECK, null, null));
+		final IValidatorExtension[] extensions;
 
-		public Reporter(String prefix, int position) {
+		public Reporter(String prefix, int position,
+				List<IValidatorExtension> extensions) {
 			this.prefixStr = prefix != null ? prefix : "";
 			this.prefix = prefixStr.toCharArray();
 			this.position = position;
+			if (!extensions.isEmpty()) {
+				this.extensions = extensions
+						.toArray(new IValidatorExtension[extensions.size()]);
+			} else {
+				this.extensions = null;
+			}
 			setSourceRange(position - this.prefix.length, position);
 		}
 
@@ -273,36 +287,34 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					&& CharOperation.camelCaseMatch(prefix, name.toCharArray());
 		}
 
-		public void report(ITypeInferenceContext context, IValueParent item,
-				boolean testPrivate) {
-			boolean superScope = false;
-			if (item instanceof IValueProvider) {
-				superScope = ((IValueProvider) item).getValue().getAttribute(
-						IReferenceAttributes.SUPER_SCOPE, false) == Boolean.TRUE;
-			}
+		private MemberValidationEvent memberValidationEvent;
+
+		public void report(ITypeInferenceContext context, IValueParent item) {
 			final Set<String> deleted = item.getDeletedChildren();
-			for (String childName : item.getDirectChildren()) {
+			CHILDREN: for (String childName : item.getDirectChildren()) {
 				if (childName.equals(IValueReference.FUNCTION_OP))
 					continue;
 				if (!deleted.contains(childName) && matches(childName)
 						&& processed.add(childName)) {
 					IValueReference child = item.getChild(childName);
 					if (child.exists()) {
-						if (testPrivate) {
-							IRMethod method = (IRMethod) child
-									.getAttribute(IReferenceAttributes.R_METHOD);
-							IRVariable variable = (IRVariable) child
-									.getAttribute(IReferenceAttributes.R_VARIABLE);
-							if ((method != null && (method.isPrivate() || (method
-									.isProtected() && !superScope)))
-									|| (variable != null && (variable
-											.isPrivate() || (variable
-											.isProtected() && !superScope)))) {
-								continue;
+						if (visibilityCheck && extensions != null) {
+							if (memberValidationEvent == null) {
+								memberValidationEvent = new MemberValidationEvent();
 							}
-						} else if (child
-								.getAttribute(IReferenceAttributes.PRIVATE) == Boolean.TRUE)
-							continue;
+							memberValidationEvent.set(child, null);
+							for (IValidatorExtension extension : extensions) {
+								final IValidationStatus status = extension
+										.validateAccessibility(memberValidationEvent);
+								if (status != null) {
+									if (status == ValidationStatus.OK) {
+										break;
+									} else {
+										continue CHILDREN;
+									}
+								}
+							}
+						}
 						reportReference(child);
 					}
 				}
@@ -374,6 +386,19 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		 */
 		private void reportMember(Member member, String memberName,
 				boolean important) {
+			if (visibilityCheck && extensions != null) {
+				for (IValidatorExtension extension : extensions) {
+					final IValidationStatus status = extension
+							.validateAccessibility(member);
+					if (status != null) {
+						if (status == ValidationStatus.OK) {
+							break;
+						} else {
+							return;
+						}
+					}
+				}
+			}
 			boolean isFunction = member instanceof Method;
 			CompletionProposal proposal = CompletionProposal.create(
 					isFunction ? CompletionProposal.METHOD_REF
@@ -491,7 +516,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 */
 	private void doGlobalCompletion(ITypeInferenceContext context,
 			IValueCollection collection, Reporter reporter) {
-		reportItems(context, reporter, collection, false);
+		reportItems(context, reporter, collection);
 		if (useEngine) {
 			doCompletionOnType(context, TypeMode.CODE, reporter);
 			doCompletionOnKeyword(reporter.getPrefix(), reporter.getPosition());

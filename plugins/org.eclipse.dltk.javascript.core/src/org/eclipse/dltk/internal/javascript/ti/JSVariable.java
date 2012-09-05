@@ -32,12 +32,4 @@ public class JSVariable extends JSElement implements IVariable {
 		this.visibility = visibility;
 	}
 
-	public boolean isPrivate() {
-		return visibility == Visibility.PRIVATE;
-	}
-
-	public boolean isProtected() {
-		return visibility == Visibility.PROTECTED;
-	}
-
 }
