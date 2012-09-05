@@ -96,6 +96,14 @@ public abstract class ElementValue implements IValue {
 				return origin.getAttribute(key);
 			}
 		}
+
+		public Object getValue(Object key) {
+			return origin.getValue(key);
+		}
+
+		public void setValue(Object key, Object value) {
+			origin.setValue(key, value);
+		}
 	}
 
 	private static class PrototypeType extends SimpleTypeKey {
@@ -202,6 +210,25 @@ public abstract class ElementValue implements IValue {
 				return new RTypeValue(context, member.getType(),
 						member.getMember());
 			}
+		} else if (type instanceof IRFunctionType) {
+			if (FunctionMethod.apply.test(name)) {
+				return getFunctionMethod(context, (IRFunctionType) type,
+						FunctionMethod.apply);
+			} else if (FunctionMethod.call.test(name)) {
+				return getFunctionMethod(context, (IRFunctionType) type,
+						FunctionMethod.call);
+			} else {
+				final List<Member> selection = findMembers(Types.FUNCTION,
+						name, predicate);
+				if (!selection.isEmpty()) {
+					if (selection.size() == 1) {
+						return createElement(context, Types.FUNCTION,
+								selection.get(0));
+					}
+					return new MemberValue(context,
+							selection.toArray(new Member[selection.size()]));
+				}
+			}
 		} else {
 			final Type t = TypeUtil.extractType(context, type);
 			if (t != null) {
@@ -216,6 +243,46 @@ public abstract class ElementValue implements IValue {
 			}
 		}
 		return null;
+	}
+
+	private static ElementValue getFunctionMethod(ITypeSystem context,
+			IRFunctionType type, FunctionMethod method) {
+		if (context != null) {
+			final FunctionMethodKey key = new FunctionMethodKey(type, method);
+			ElementValue value = (ElementValue) context.getValue(key);
+			if (value == null) {
+				value = new FunctionTypeMethodValue(context, type, method);
+				context.setValue(key, value);
+			}
+			return value;
+		} else {
+			return new FunctionTypeMethodValue(context, type, method);
+		}
+	}
+
+	private static class FunctionMethodKey extends
+			AttributeKey<FunctionTypeMethodValue> {
+		private final IRFunctionType type;
+		private final FunctionMethod method;
+
+		public FunctionMethodKey(IRFunctionType type, FunctionMethod method) {
+			this.type = type;
+			this.method = method;
+		}
+
+		@Override
+		public int hashCode() {
+			return type.hashCode() ^ method.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof FunctionMethodKey) {
+				final FunctionMethodKey other = (FunctionMethodKey) obj;
+				return type.equals(other.type) && method == other.method;
+			}
+			return false;
+		}
 	}
 
 	private static ElementValue createElement(ITypeSystem context,
@@ -288,7 +355,7 @@ public abstract class ElementValue implements IValue {
 				.classType(type)));
 	}
 
-	private static class TypeValue extends ElementValue implements IValue {
+	static class TypeValue extends ElementValue implements IValue {
 
 		private final Map<String, IValue> children = new HashMap<String, IValue>(
 				4, 0.9f);

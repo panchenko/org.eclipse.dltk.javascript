@@ -48,7 +48,6 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
-import org.eclipse.dltk.javascript.typeinfo.model.RType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -310,21 +309,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					final IRType source = parameters
 							.get(((TypeVariableReference) eObject)
 									.getVariable());
-					final RType result = TypeInfoModelFactory.eINSTANCE
-							.createRType();
-					result.setRuntimeType(source);
-					return result;
+					return TypeUtil.createRType(source);
 				} else if (eObject instanceof TypeVariableClassType) {
 					final IRType source = parameters
 							.get(((TypeVariableClassType) eObject)
 									.getVariable());
-					final RType result = TypeInfoModelFactory.eINSTANCE
-							.createRType();
-					result.setRuntimeType(JSTypeSet
-							.classType(source instanceof IRSimpleType ? ((IRSimpleType) source)
-									.getTarget() : null));
-					return result;
-
+					return TypeUtil
+							.createRType(JSTypeSet
+									.classType(source instanceof IRSimpleType ? ((IRSimpleType) source)
+											.getTarget() : null));
 				} else {
 					copyEObject = createCopy(eObject);
 					eClass = eObject.eClass();
@@ -714,6 +707,18 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			final ITypeSystem current = current();
 			return current != null ? current.getAttribute(key) : null;
 		}
+
+		public Object getValue(Object key) {
+			final ITypeSystem current = current();
+			return current != null ? current.getValue(key) : null;
+		}
+
+		public void setValue(Object key, Object value) {
+			final ITypeSystem current = current();
+			if (current != null) {
+				current.setValue(key, value);
+			}
+		}
 	}
 
 	private final Map<AttributeKey<?>, List<Object>> attributes = new HashMap<AttributeKey<?>, List<Object>>();
@@ -742,6 +747,21 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		} else {
 			return null;
 		}
+	}
+
+	private Map<Object, Object> values;
+
+	public Object getValue(Object key) {
+		assert key != null;
+		return values != null ? values.get(key) : null;
+	}
+
+	public void setValue(Object key, Object value) {
+		assert key != null;
+		if (values == null) {
+			values = new HashMap<Object, Object>();
+		}
+		values.put(key, value);
 	}
 
 	public static void withTypeSystem(ITypeSystem typeSystem, Runnable runnable) {

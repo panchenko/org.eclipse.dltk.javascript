@@ -47,4 +47,20 @@ public interface ITypeSystem {
 	 */
 	<T> T getAttribute(AttributeKey<T> key);
 
+	/**
+	 * Returns the value for the specified key or <code>null</code>.
+	 * <p>
+	 * This method exist only to be used as temporary storage.
+	 * </p>
+	 */
+	Object getValue(Object key);
+
+	/**
+	 * Saves the value for the specified key.
+	 * <p>
+	 * This method exist only to be used as temporary storage.
+	 * </p>
+	 */
+	void setValue(Object key, Object value);
+
 }

@@ -29,6 +29,7 @@ import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IAccessRule;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.internal.javascript.ti.FunctionMethod;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
@@ -46,6 +47,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueParent;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
@@ -372,6 +374,24 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 							.getMembers()) {
 						members.add(member.getMember());
 					}
+				} else if (type instanceof IRFunctionType) {
+					final IRFunctionType functionType = (IRFunctionType) type;
+					members.add(FunctionMethod.apply.create(functionType));
+					members.add(FunctionMethod.call.create(functionType));
+					typeQuery.add(Types.FUNCTION, new MemberPredicate() {
+						public boolean isCompatibleWith(
+								MemberPredicate predicate) {
+							return MemberPredicates.NON_STATIC == predicate;
+						}
+
+						public boolean evaluate(Member member) {
+							return MemberPredicates.NON_STATIC.evaluate(member)
+									&& !FunctionMethod.apply.test(member
+											.getName())
+									&& !FunctionMethod.call.test(member
+											.getName());
+						}
+					});
 				} else {
 					final Type t = TypeUtil.extractType(context, type);
 					if (t != null) {

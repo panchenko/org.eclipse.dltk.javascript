@@ -2468,4 +2468,38 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testFunctionTypeMethods() {
+		final StringList code = new StringList();
+		code.add("/** @type {function(String, Number):Date} **/");
+		code.add("var f;");
+		code.add("f.apply({}, []).getFullYear();");
+		code.add("f.apply({}, [\"aaa\", 222]).getFullYear();");
+		code.add("f.call([], \"bbb\", 333).getFullYear();");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testFunctionTypeMethodsErrors() {
+		final StringList code = new StringList();
+		code.add("/** @type {function(Number):Date} **/");
+		code.add("var f;");
+		code.add("f.call({}, 111, 222);");
+		code.add("f.call({});");
+		code.add("f.call({}, 111).iDoNotExist();");
+		code.add("f.apply({}, {});");
+		code.add("f.apply({}, []).iAmUndefined;");
+
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 5, problems.size());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(0)
+				.getID());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(1)
+				.getID());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(2)
+				.getID());
+		assertEquals(JavaScriptProblems.WRONG_PARAMETERS, problems.get(3)
+				.getID());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(4)
+				.getID());
+	}
 }

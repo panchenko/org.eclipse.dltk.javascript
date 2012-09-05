@@ -25,6 +25,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
+import org.eclipse.dltk.javascript.typeinfo.model.RType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -333,6 +334,19 @@ public class TypeUtil {
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Creates EMF-based type expression, equivalent to the specified
+	 * {@link IRType}.
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static JSType createRType(IRType type) {
+		final RType result = TypeInfoModelFactory.eINSTANCE.createRType();
+		result.setRuntimeType(type);
+		return result;
 	}
 
 }

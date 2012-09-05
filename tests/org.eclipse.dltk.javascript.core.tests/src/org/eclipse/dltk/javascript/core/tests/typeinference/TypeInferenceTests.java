@@ -1152,4 +1152,24 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(getTypes(STRING), len.getTypes());
 	}
 
+	public void testFunctionTypeMethodCaching() {
+		final StringList code = new StringList();
+		code.add("/** @type {function(Number,Number):Date} */");
+		code.add("var f;");
+		code.add("var fcall = f.call;");
+		code.add("fcall({}, 1, 2);");
+		code.add("");
+		code.add("/** @type {function(Number,Number):Date} */");
+		code.add("var g;");
+		code.add("var gcall = g.call;");
+		code.add("gcall({}, 3, 4);");
+		final IValueCollection collection = inference(code.toString());
+		final Member fcall = (Member) collection.getChild("fcall")
+				.getAttribute(IReferenceAttributes.ELEMENT);
+		assertNotNull(fcall);
+		final Member gcall = (Member) collection.getChild("gcall")
+				.getAttribute(IReferenceAttributes.ELEMENT);
+		assertNotNull(gcall);
+		assertSame(fcall, fcall);
+	}
 }
