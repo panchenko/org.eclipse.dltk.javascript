@@ -34,6 +34,10 @@
     	<parameters name="thisArg"/>
     	<parameters name="arg" kind="VARARGS"/>
     </members>
+  	<members xsi:type="ref:Method" name="bind" directType="Function" description="Creates a new function that, when called, itself calls this function in the context of the provided this value, with a given sequence of arguments preceding any provided when the new function was called.">
+    	<parameters name="thisArg" directType="Object"/>
+    	<parameters name="arg" kind="VARARGS"/>
+    </members>
   </ref:Type>
   <ref:TypeAlias source="object" target="Object"/>
   <ref:Type name="Object" kind="PREDEFINED">
