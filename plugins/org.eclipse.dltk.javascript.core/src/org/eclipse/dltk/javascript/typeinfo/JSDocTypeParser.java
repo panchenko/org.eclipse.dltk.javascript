@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
+import org.eclipse.dltk.internal.javascript.ti.JSDocProblem;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -26,6 +27,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
 
@@ -208,7 +210,8 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 		return TypeUtil.arrayOf(itemType);
 	}
 
-	protected JSType createGenericType(String baseType, List<JSType> typeParams) {
+	protected JSType createGenericType(String baseType, List<JSType> typeParams)
+			throws ParseException {
 		if (ITypeNames.ARRAY.equals(baseType)) {
 			if (typeParams.size() >= 1) {
 				return createArray(typeParams.get(0));
@@ -217,9 +220,12 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 			}
 		} else if (CLASS.equals(baseType) && typeParams.size() >= 1) {
 			final JSType typeParam = typeParams.get(0);
-			return TypeUtil
-					.classType(typeParam instanceof SimpleType ? ((SimpleType) typeParam)
-							.getTarget() : null);
+			if (typeParam.eClass() != TypeInfoModelPackage.Literals.SIMPLE_TYPE) {
+				throw new JSDocParseException(
+						JSDocProblem.WRONG_TYPE_PARAMETERIZATION, CLASS,
+						typeParam.eClass().getName());
+			}
+			return TypeUtil.classType(((SimpleType) typeParam).getTarget());
 		} else if (ITypeNames.OBJECT.equals(baseType)) {
 			if (typeParams.size() == 1) {
 				return TypeUtil.mapOf(null, typeParams.get(0));

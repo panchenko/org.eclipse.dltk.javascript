@@ -15,8 +15,12 @@ import java.text.ParseException;
 
 import junit.framework.TestCase;
 
+import org.eclipse.dltk.internal.javascript.ti.JSDocProblem;
+import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.typeinfo.JSDocParseException;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
+import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
@@ -82,6 +86,27 @@ public class JSDocTypeParserTests extends TestCase {
 		final ParseException exception = parseError(expression);
 		assertEquals("Unexpected )))", exception.getMessage());
 		assertEquals(expression.length() - 3, exception.getErrorOffset());
+	}
+
+	public void testClassOfNumber() {
+		final String expression = "Class<Number>";
+		final ClassType type = (ClassType) parse(expression);
+		assertSame(Types.NUMBER, type.getTarget());
+	}
+
+	public void testClassOfSomething() {
+		final String expression = "Class<Something>";
+		final ClassType type = (ClassType) parse(expression);
+		assertEquals("Something", type.getTarget().getName());
+	}
+
+	public void testWrongClassParameterization() {
+		final String expression = "Class<Array<Number>>";
+		final JSDocParseException exception = (JSDocParseException) parseError(expression);
+		assertEquals(JSDocProblem.WRONG_TYPE_PARAMETERIZATION,
+				exception.problemId);
+		assertEquals("Class cannot be parameterized with ArrayType",
+				exception.getMessage());
 	}
 
 	public void testArray() {

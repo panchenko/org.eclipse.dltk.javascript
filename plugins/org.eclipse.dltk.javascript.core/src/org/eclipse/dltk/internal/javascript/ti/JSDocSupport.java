@@ -47,6 +47,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.javascript.typeinfo.JSDocParseException;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
@@ -651,12 +652,20 @@ public class JSDocSupport implements IModelBuilder {
 		JSDocTypeParser parser = createTypeParser();
 		try {
 			return parser.parse(typeName);
+		} catch (JSDocParseException e) {
+			if (reporter != null) {
+				reporter.reportProblem(e.problemId, e.getMessage(),
+						tag.start(), tag.end());
+			}
+			return null;
 		} catch (ParseException e) {
 			if (reporter != null) {
-				reporter.reportProblem(
-						JSDocProblem.WRONG_TYPE_SYNTAX,
-						e.getMessage() + " after "
-								+ typeName.substring(0, e.getErrorOffset()),
+				String message = e.getMessage();
+				if (e.getErrorOffset() >= 0) {
+					message += " after "
+							+ typeName.substring(0, e.getErrorOffset());
+				}
+				reporter.reportProblem(JSDocProblem.WRONG_TYPE_SYNTAX, message,
 						tag.start(), tag.end());
 			}
 			return null;
