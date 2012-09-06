@@ -36,6 +36,24 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 	public static final String FUNCTION = "function";
 	public static final String CLASS = "Class";
 
+	private final char[] extensionChars;
+
+	public JSDocTypeParser() {
+		this(null);
+	}
+
+	/**
+	 * Creates this type parser specifying the characters which potentially
+	 * could lead the syntax extensions. If such a character occurs in the type
+	 * name, then {@link #parseExtension(CharStream, int)} is called and can
+	 * continue the parsing.
+	 * 
+	 * @param extensionChars
+	 */
+	protected JSDocTypeParser(char[] extensionChars) {
+		this.extensionChars = extensionChars;
+	}
+
 	private JSDocTypeParserExtension extension;
 
 	public void setExtension(JSDocTypeParserExtension extension) {
@@ -114,6 +132,21 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 		final int start = input.index();
 		for (;;) {
 			int ch = input.LT(1);
+			if (extensionChars != null) {
+				for (int i = 0; i < extensionChars.length; ++i) {
+					if (extensionChars[i] == ch) {
+						final JSType result = parseExtension(input, start);
+						if (result != null) {
+							if (extension != null) {
+								extension.reportType(result, start,
+										input.index());
+							}
+							return result;
+						}
+						break;
+					}
+				}
+			}
 			if (ch == '<') {
 				final int baseEnd = input.index();
 				final String baseType = input.substring(start, baseEnd - 1);
@@ -166,6 +199,23 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 				input.consume();
 			}
 		}
+	}
+
+	/**
+	 * Parses the syntax extension, returns the parsed type or <code>null</code>
+	 * if parsing should continue in the normal way. This method is called if
+	 * current character (<code>input.LT(1)</code>) is equal to one of the
+	 * characters passed to the constructor.
+	 * 
+	 * @param input
+	 *            the character stream, <code>input.LT(1)</code>
+	 * @param start
+	 * @return
+	 * @throws ParseException
+	 */
+	protected JSType parseExtension(CharStream input, int start)
+			throws ParseException {
+		return null;
 	}
 
 	private JSType createType(CharStream input, final int start) {
