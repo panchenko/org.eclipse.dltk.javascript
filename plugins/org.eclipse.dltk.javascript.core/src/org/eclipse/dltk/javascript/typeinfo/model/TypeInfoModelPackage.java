@@ -2137,6 +2137,17 @@ public interface TypeInfoModelPackage extends EPackage {
 
 
     /**
+     * The meta object id for the '<em>IType System</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.dltk.javascript.typeinfo.ITypeSystem
+     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getITypeSystem()
+     * @generated
+     */
+    int ITYPE_SYSTEM = 37;
+
+
+    /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.NamedElement <em>Named Element</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3039,6 +3050,17 @@ public interface TypeInfoModelPackage extends EPackage {
     EDataType getMetaType();
 
     /**
+     * Returns the meta object for data type '{@link org.eclipse.dltk.javascript.typeinfo.ITypeSystem <em>IType System</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for data type '<em>IType System</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.ITypeSystem
+     * @model instanceClass="org.eclipse.dltk.javascript.typeinfo.ITypeSystem" serializeable="false"
+     * @generated
+     */
+    EDataType getITypeSystem();
+
+    /**
      * Returns the factory that creates the instances of the model.
      * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3813,6 +3835,16 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EDataType META_TYPE = eINSTANCE.getMetaType();
+
+        /**
+         * The meta object literal for the '<em>IType System</em>' data type.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.eclipse.dltk.javascript.typeinfo.ITypeSystem
+         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getITypeSystem()
+         * @generated
+         */
+        EDataType ITYPE_SYSTEM = eINSTANCE.getITypeSystem();
 
 	}
 

@@ -863,6 +863,17 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 	}
 
 	public static IRType normalize(ITypeSystem context, JSType type) {
+		if (type == null) {
+			return null;
+		}
+		try {
+			final IRType result = type.toRType(context);
+			if (result != null) {
+				return result;
+			}
+		} catch (UnsupportedOperationException e) {
+			// fall thru
+		}
 		if (type instanceof ParameterizedType) {
 			final ParameterizedType parameterized = (ParameterizedType) type;
 			Type target = parameterized.getTarget();
@@ -930,8 +941,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 					funcType.getReturnType()));
 		} else if (type instanceof RType) {
 			return ((RType) type).getRuntimeType();
-		} else if (type == null) {
-			return null;
 		} else {
 			for (IRTypeFactory factory : TypeInfoManager.getRTypeFactories()) {
 				final IRType runtimeType = factory.create(context, type);

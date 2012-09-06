@@ -11,6 +11,8 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -132,6 +134,16 @@ public class ClassTypeImpl extends EObjectImpl implements ClassType {
 		final String rawName = getRawName();
 		return rawName != null ? JSDocTypeParser.CLASS + "<" + rawName + ">"
 				: JSDocTypeParser.CLASS;
+    }
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public IRType toRType(ITypeSystem typeSystem) {
+        // TODO: implement this method
+		return null;
     }
 
     /**

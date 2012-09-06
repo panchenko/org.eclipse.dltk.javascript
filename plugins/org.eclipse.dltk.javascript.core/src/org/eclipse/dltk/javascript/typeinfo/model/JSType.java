@@ -11,6 +11,8 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model;
 
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.emf.ecore.EObject;
 
 
@@ -33,4 +35,16 @@ public interface JSType extends EObject {
      * @generated
      */
     String getName();
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * <!-- begin-model-doc -->
+     * Creates the corresponding {@link IRType} instance for this type expression.
+     * <!-- end-model-doc -->
+     * @model dataType="org.eclipse.dltk.javascript.typeinfo.model.IRType" typeSystemDataType="org.eclipse.dltk.javascript.typeinfo.model.ITypeSystem"
+     * @generated
+     */
+    IRType toRType(ITypeSystem typeSystem);
+
 } // JSType

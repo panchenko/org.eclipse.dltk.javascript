@@ -13,6 +13,8 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import java.util.Collection;
 
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
@@ -98,6 +100,16 @@ public class UnionTypeImpl extends EObjectImpl implements UnionType {
 			return "";
 		}
 	}
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public IRType toRType(ITypeSystem typeSystem) {
+        // TODO: implement this method
+		return null;
+    }
 
     /**
      * <!-- begin-user-doc -->

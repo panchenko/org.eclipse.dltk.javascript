@@ -16,6 +16,7 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 import java.util.Map;
 
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.MetaType;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -327,6 +328,13 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EDataType metaTypeEDataType = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EDataType iTypeSystemEDataType = null;
 
     /**
      * Creates an instance of the model <b>Package</b>, registered with
@@ -1156,6 +1164,15 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
     /**
      * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EDataType getITypeSystem() {
+        return iTypeSystemEDataType;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
      * @generated
      */
@@ -1302,6 +1319,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         // Create data types
         irTypeEDataType = createEDataType(IR_TYPE);
         metaTypeEDataType = createEDataType(META_TYPE);
+        iTypeSystemEDataType = createEDataType(ITYPE_SYSTEM);
     }
 
 	/**
@@ -1429,6 +1447,9 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         addEOperation(jsTypeEClass, ecorePackage.getEString(), "getName", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+        op = addEOperation(jsTypeEClass, this.getIRType(), "toRType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+        addEParameter(op, this.getITypeSystem(), "typeSystem", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
         initEClass(functionTypeEClass, FunctionType.class, "FunctionType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getFunctionType_ReturnType(), this.getJSType(), null, "returnType", null, 0, 1, FunctionType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getFunctionType_Parameters(), this.getParameter(), null, "parameters", null, 0, -1, FunctionType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -1515,6 +1536,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         // Initialize data types
         initEDataType(irTypeEDataType, IRType.class, "IRType", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEDataType(metaTypeEDataType, MetaType.class, "MetaType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+        initEDataType(iTypeSystemEDataType, ITypeSystem.class, "ITypeSystem", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
         // Create resource
         createResource(eNS_URI);

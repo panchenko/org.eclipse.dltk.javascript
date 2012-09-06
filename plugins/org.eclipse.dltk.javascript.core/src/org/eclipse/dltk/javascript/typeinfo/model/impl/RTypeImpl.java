@@ -12,6 +12,7 @@
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.model.RType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.emf.common.notify.Notification;
@@ -101,6 +102,15 @@ public class RTypeImpl extends EObjectImpl implements RType {
 	public String getName() {
 		return runtimeType != null ? runtimeType.getName() : null;
 	}
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public IRType toRType(ITypeSystem typeSystem) {
+		return runtimeType;
+    }
 
     /**
      * <!-- begin-user-doc -->

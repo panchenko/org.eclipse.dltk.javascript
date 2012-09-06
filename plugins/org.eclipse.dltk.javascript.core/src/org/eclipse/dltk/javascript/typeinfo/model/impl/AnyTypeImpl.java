@@ -11,6 +11,9 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.emf.ecore.EClass;
@@ -52,6 +55,15 @@ public class AnyTypeImpl extends EObjectImpl implements AnyType {
 	 */
     public String getName() {
 		return "Any";
+    }
+
+    /**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public IRType toRType(ITypeSystem typeSystem) {
+		return RTypes.any();
     }
 
 } //AnyTypeImpl

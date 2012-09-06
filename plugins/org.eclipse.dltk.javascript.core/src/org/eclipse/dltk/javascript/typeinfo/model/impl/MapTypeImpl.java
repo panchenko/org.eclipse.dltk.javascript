@@ -11,7 +11,9 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
@@ -178,6 +180,17 @@ public class MapTypeImpl extends EObjectImpl implements MapType {
 		return valueType != null ? ITypeNames.OBJECT + '<'
 				+ valueType.getName() + '>' : ITypeNames.OBJECT;
 	}
+    
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+    public IRType toRType(ITypeSystem typeSystem) {
+        // TODO: implement this method
+		return null;
+    }
+
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
