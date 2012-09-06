@@ -19,14 +19,18 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
+import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class Value extends ImmutableValue {
 
@@ -173,8 +177,10 @@ public class Value extends ImmutableValue {
 				}
 			}
 		} else {
-			if (src.getDeclaredType() != null) {
-				types.add(src.getDeclaredType());
+			// ElementValue is handled in this branch.
+			final IRType srcType = src.getDeclaredType();
+			if (srcType != null) {
+				types.add(srcType);
 			}
 			types.addAll(src.getTypes());
 			if (src.getKind() == ReferenceKind.METHOD) {
@@ -191,7 +197,29 @@ public class Value extends ImmutableValue {
 					myReturnTypes.addAll(returnType.getTypes());
 					myReturnTypes.addAll(returnType.getDeclaredTypes());
 				}
+			} else if (src.getKind() == ReferenceKind.PROPERTY
+					&& !isPrimitiveValue(srcType)) {
+				/*
+				 * to optimize memory usage remember *static non-primitive
+				 * properties* only
+				 */
+				final Object element = src.getAttribute(
+						IReferenceAttributes.ELEMENT, false);
+				if (element != null && element instanceof Property
+						&& ((Property) element).isStatic()) {
+					setAttribute(IReferenceAttributes.ELEMENT, element);
+				}
 			}
+		}
+	}
+
+	private static boolean isPrimitiveValue(IRType type) {
+		if (type instanceof IRSimpleType) {
+			final Type target = ((IRSimpleType) type).getTarget();
+			return target == Types.BOOLEAN || target == Types.STRING
+					|| target == Types.NUMBER;
+		} else {
+			return false;
 		}
 	}
 
