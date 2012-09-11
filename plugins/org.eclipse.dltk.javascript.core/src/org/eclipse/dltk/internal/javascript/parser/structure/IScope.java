@@ -4,9 +4,7 @@ import org.eclipse.dltk.javascript.ast.Identifier;
 
 public interface IScope extends IStructureNode {
 
-	IScope getParent();
-
-	void add(IStructureNode child);
+	void addChild(IStructureNode child);
 
 	void addLocalReference(Identifier node, IDeclaration resolved);
 

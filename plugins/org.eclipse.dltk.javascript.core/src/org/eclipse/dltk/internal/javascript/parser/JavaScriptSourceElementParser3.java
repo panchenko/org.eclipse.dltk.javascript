@@ -15,6 +15,10 @@ import org.eclipse.dltk.compiler.ISourceElementRequestor;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.core.ISourceElementParser;
+import org.eclipse.dltk.internal.javascript.parser.structure.IScope;
+import org.eclipse.dltk.internal.javascript.parser.structure.IStructureNode;
+import org.eclipse.dltk.internal.javascript.parser.structure.ObjectDeclaration;
+import org.eclipse.dltk.internal.javascript.parser.structure.ScriptScope;
 import org.eclipse.dltk.internal.javascript.parser.structure.StructureReporter3;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParserUtil;
@@ -36,11 +40,37 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 		final Script script = parse(module);
 		final StructureReporter3 reporter = new StructureReporter3();
 		fRequestor.enterModule();
-		reporter.visit(script);
+		final IStructureNode node = reporter.visit(script);
 		fRequestor.exitModule(script.sourceEnd());
+		if (DEBUG) {
+			System.out.println(module.getSourceContents().trim());
+			System.out.println("--");
+			print(node, true, 0);
+			System.out.println("----");
+		}
+	}
+
+	private void print(IStructureNode node, boolean printable, int level) {
+		if (node instanceof IScope || node instanceof ObjectDeclaration) {
+			final int nextLevel = node instanceof ScriptScope ? level
+					: level + 1;
+			for (IStructureNode child : node.getChildren()) {
+				for (int i = 0; i < nextLevel; ++i) {
+					System.out.print('\t');
+				}
+				System.out.println(child);
+				print(child, true, nextLevel);
+			}
+		} else {
+			for (IStructureNode child : node.getChildren()) {
+				print(child, false, level);
+			}
+		}
 	}
 
 	protected Script parse(IModuleSource module) {
 		return JavaScriptParserUtil.parse(module, fReporter);
 	}
+
+	private static final boolean DEBUG = true;
 }

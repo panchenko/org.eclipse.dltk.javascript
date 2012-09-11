@@ -3,12 +3,12 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 import java.util.Collections;
 import java.util.List;
 
-public class Variable extends StructureNode implements IDeclaration {
+public class PropertyDeclaration extends StructureNode implements IDeclaration {
 
 	private final String name;
 	private IStructureNode value;
 
-	public Variable(IScope parent, String name) {
+	public PropertyDeclaration(IScope parent, String name) {
 		super(parent);
 		this.name = name;
 	}
@@ -25,7 +25,6 @@ public class Variable extends StructureNode implements IDeclaration {
 		this.value = value;
 	}
 
-	@Override
 	public List<IStructureNode> getChildren() {
 		return value != null ? Collections.singletonList(value) : Collections
 				.<IStructureNode> emptyList();
@@ -35,10 +34,11 @@ public class Variable extends StructureNode implements IDeclaration {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(name);
-		sb.append(":variable");
+		sb.append(":");
 		if (value != null) {
-			sb.append("=");
 			sb.append(value);
+		} else {
+			sb.append("<property>");
 		}
 		return sb.toString();
 	}

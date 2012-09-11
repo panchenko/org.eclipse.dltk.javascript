@@ -101,6 +101,11 @@ public class StructureParserTests extends TestCase {
 		assertEquals(new Root(new Method("hello").add(new Method("a"))), root);
 	}
 
+	public void testThisVariableUnnamedFunctionReferenceNestedVariable() {
+		Root root = parse("function hello() { this.a = function(){var b} }");
+		assertEquals(new Root(new Method("hello").add(new Method("a"))), root);
+	}
+
 	public void testThisVariableSameNamedFunctionReference() {
 		Root root = parse("function hello() { this.a = function a(){} }");
 		assertEquals(new Root(new Method("hello").add(new Method("a"))), root);

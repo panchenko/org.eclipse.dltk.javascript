@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
-public interface IDeclaration extends IScope {
+public interface IDeclaration extends IStructureNode {
 
 	String getName();
 
