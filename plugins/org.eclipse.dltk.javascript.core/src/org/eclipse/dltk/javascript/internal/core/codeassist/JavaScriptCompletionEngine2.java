@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.codeassist.ScriptCompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
@@ -36,6 +37,7 @@ import org.eclipse.dltk.internal.javascript.ti.PositionReachedException;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.javascript.typeinference.CompletionPath;
 import org.eclipse.dltk.internal.javascript.validation.MemberValidationEvent;
+import org.eclipse.dltk.javascript.ast.Identifier;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.StringLiteral;
 import org.eclipse.dltk.javascript.core.JavaScriptKeywords;
@@ -118,6 +120,13 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			public void run() {
 				final CompletionPath path = new CompletionPath(calculator
 						.getCompletion());
+				final ASTNode node = nodeFinder.getNode();
+				if (node instanceof Identifier) {
+					setSourceRange(node.start(), node.end());
+				} else {
+					setSourceRange(position - path.lastSegment().length(),
+							position);
+				}
 				final Reporter reporter = new Reporter(path.lastSegment(),
 						position, visitor.createValidatorExtensions());
 				if (calculator.isMember() && !path.isEmpty()
@@ -137,6 +146,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			String prefix, int offset) {
 		final TypeInferencer2 inferencer2 = new TypeInferencer2();
 		inferencer2.setModelElement(module);
+		setSourceRange(offset - prefix.length(), offset);
 		doCompletionOnType(inferencer2, mode, new Reporter(prefix, offset,
 				Collections.<IValidatorExtension> emptyList()));
 	}
@@ -259,7 +269,6 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			} else {
 				this.extensions = null;
 			}
-			setSourceRange(position - this.prefix.length, position);
 		}
 
 		public void ignore(String generatedIdentifier) {
