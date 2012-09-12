@@ -20,6 +20,19 @@ public class Scope extends StructureNode implements IScope {
 
 	public void addChild(IStructureNode child) {
 		children.add(child);
+		nested.remove(child);
+	}
+
+	private final List<IStructureNode> nested = new ArrayList<IStructureNode>();
+
+	public void addNested(IStructureNode node) {
+		if (!children.contains(node)) {
+			nested.add(node);
+		}
+	}
+
+	public List<IStructureNode> getNested() {
+		return nested;
 	}
 
 	@Override

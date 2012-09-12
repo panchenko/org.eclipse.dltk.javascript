@@ -1,10 +1,16 @@
 package org.eclipse.dltk.internal.javascript.parser.structure;
 
+import java.util.List;
+
 import org.eclipse.dltk.javascript.ast.Identifier;
 
 public interface IScope extends IStructureNode {
 
 	void addChild(IStructureNode child);
+
+	void addNested(IStructureNode node);
+
+	List<IStructureNode> getNested();
 
 	void addLocalReference(Identifier node, IDeclaration resolved);
 

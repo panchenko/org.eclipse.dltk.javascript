@@ -2,6 +2,7 @@ package org.eclipse.dltk.internal.javascript.parser.structure;
 
 import java.util.Stack;
 
+import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.javascript.ast.AbstractNavigationVisitor;
 
 public class StructureReporterBase extends
@@ -19,6 +20,17 @@ public class StructureReporterBase extends
 
 	protected IScope peek() {
 		return parents.peek();
+	}
+
+	@Override
+	public IStructureNode visit(ASTNode node) {
+		final IStructureNode value = super.visit(node);
+		if (value != null) {
+			if (!parents.isEmpty()) {
+				parents.peek().addNested(value);
+			}
+		}
+		return value;
 	}
 
 }

@@ -13,9 +13,13 @@ package org.eclipse.dltk.javascript.core.tests.structure;
 
 import junit.framework.TestCase;
 
+import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.env.ModuleSource;
 import org.eclipse.dltk.core.ISourceElementParser;
 import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.internal.javascript.parser.JavaScriptSourceElementParser3;
+import org.eclipse.dltk.javascript.ast.Script;
+import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 
 public class StructureParserTests extends TestCase {
 
@@ -24,10 +28,24 @@ public class StructureParserTests extends TestCase {
 	}
 
 	protected Root parse(String code) {
+		System.out.println(code.trim());
+		System.out.println("---");
+		final ISourceElementParser p = new JavaScriptSourceElementParser3() {
+			@Override
+			protected Script parse(IModuleSource module) {
+				final JavaScriptParser parser = new JavaScriptParser();
+				return parser.parse(module, fReporter);
+			}
+		};
+		p.setRequestor(new Recorder());
+		p.parseSourceModule(new ModuleSource(code));
 		Recorder rec = new Recorder();
 		ISourceElementParser parser = createParser();
 		parser.setRequestor(rec);
 		parser.parseSourceModule(new ModuleSource(code));
+		System.out.println("---");
+		System.out.println(rec.getRoot());
+		System.out.println("------");
 		return rec.getRoot();
 	}
 
@@ -172,6 +190,35 @@ public class StructureParserTests extends TestCase {
 		assertEquals(new Root(a), parse(code.toString()));
 		code.remove(0);
 		assertFalse(new Root(a).equals(parse(code.toString())));
+	}
+
+	public void testQQQ() {
+		{
+			final StringList code = new StringList();
+			code.add("function a(){");
+			code.add("  return {");
+			code.add("    color: 'red',");
+			code.add("    point: {");
+			code.add("      x: function(){},");
+			code.add("      y: function(){}");
+			code.add("    }");
+			code.add("  }");
+			code.add("}");
+			parse(code.toString());
+		}
+		{
+			final StringList code = new StringList();
+			code.add("a(");
+			code.add("  {");
+			code.add("    color: 'red',");
+			code.add("    point: {");
+			code.add("      x: function(){var xx = 1},");
+			code.add("      y: function(){var yy = 2}");
+			code.add("    }");
+			code.add("  }");
+			code.add(")");
+			parse(code.toString());
+		}
 	}
 
 }

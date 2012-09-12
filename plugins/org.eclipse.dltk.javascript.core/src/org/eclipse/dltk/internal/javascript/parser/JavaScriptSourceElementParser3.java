@@ -43,10 +43,7 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 		final IStructureNode node = reporter.visit(script);
 		fRequestor.exitModule(script.sourceEnd());
 		if (DEBUG) {
-			System.out.println(module.getSourceContents().trim());
-			System.out.println("--");
 			print(node, true, 0);
-			System.out.println("----");
 		}
 	}
 
@@ -60,6 +57,15 @@ public class JavaScriptSourceElementParser3 implements ISourceElementParser {
 				}
 				System.out.println(child);
 				print(child, true, nextLevel);
+			}
+			if (node instanceof IScope) {
+				for (IStructureNode child : ((IScope) node).getNested()) {
+					for (int i = 0; i < nextLevel; ++i) {
+						System.out.print('\t');
+					}
+					System.out.println(child);
+					print(child, true, nextLevel);
+				}
 			}
 		} else {
 			for (IStructureNode child : node.getChildren()) {
