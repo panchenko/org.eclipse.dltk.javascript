@@ -13,11 +13,16 @@ package org.eclipse.dltk.javascript.core.tests.contentassist;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.env.IModuleSource;
@@ -26,8 +31,9 @@ import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.internal.core.codeassist.JSCompletionEngine;
-import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
+import org.eclipse.dltk.javascript.internal.core.codeassist.JavaScriptCompletionEngine2;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -37,21 +43,76 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 @SuppressWarnings("restriction")
 public abstract class AbstractCompletionTest extends AbstractContentAssistTest {
 
-	protected ICompletionEngine createEngine(List<CompletionProposal> results,
-			boolean useEngine) {
+	/**
+	 * Returns classes of the allowed completion engine. Return empty collection
+	 * to allow all of them.
+	 */
+	protected Collection<Class<? extends ICompletionEngine>> getAllowedEngines() {
+		return Collections
+				.<Class<? extends ICompletionEngine>> singleton(JavaScriptCompletionEngine2.class);
+	}
 
+	/**
+	 * Creates the {@link ICompletionEngine} among the allowed ones. If multiple
+	 * engines are allowed then compound one is constructed.
+	 * 
+	 * @param results
+	 * @param allowGlobals
+	 * @return
+	 * @see #getAllowedEngines()
+	 */
+	protected ICompletionEngine createEngine(List<CompletionProposal> results,
+			boolean allowGlobals) {
 		final ICompletionEngine[] engines = DLTKLanguageManager
 				.getCompletionEngines(JavaScriptNature.NATURE_ID);
-		if (engines != null) {
-			for (ICompletionEngine engine : engines) {
+		if (engines == null) {
+			throw new IllegalStateException("No completion engines");
+		}
+		final Collection<Class<? extends ICompletionEngine>> allowedEngines = getAllowedEngines();
+		final List<ICompletionEngine> selection = new ArrayList<ICompletionEngine>();
+		for (ICompletionEngine engine : engines) {
+			if (isAllowed(engine, allowedEngines)) {
+				selection.add(engine);
 				if (engine instanceof JSCompletionEngine) {
-					engine.setRequestor(new TestCompletionRequestor(results));
-					((JSCompletionEngine) engine).setUseEngine(useEngine);
-					return engine;
+					((JSCompletionEngine) engine).setAllowGlobals(allowGlobals);
 				}
 			}
 		}
-		return null;
+		if (selection.isEmpty()) {
+			throw new IllegalStateException("No allowed completion engines");
+		}
+		final ICompletionEngine engine = selection.size() == 1 ? selection
+				.get(0) : new CompoundCompletionEngine(
+				selection.toArray(new ICompletionEngine[selection.size()]));
+		engine.setRequestor(new TestCompletionRequestor(results));
+		return engine;
+	}
+
+	private boolean isAllowed(ICompletionEngine engine,
+			Collection<Class<? extends ICompletionEngine>> allowedEngines) {
+		if (allowedEngines.isEmpty()) {
+			return true;
+		}
+		final Set<Class<?>> processedTypes = new HashSet<Class<?>>();
+		final Queue<Class<?>> queue = new LinkedList<Class<?>>();
+		queue.add(engine.getClass());
+		processedTypes.addAll(queue);
+		while (!queue.isEmpty()) {
+			final Class<?> clazz = queue.remove();
+			if (allowedEngines.contains(clazz)) {
+				return true;
+			}
+			final Class<?> superClass = clazz.getSuperclass();
+			if (superClass != null && processedTypes.add(superClass)) {
+				queue.add(superClass);
+			}
+			for (Class<?> intf : clazz.getInterfaces()) {
+				if (processedTypes.add(intf)) {
+					queue.add(intf);
+				}
+			}
+		}
+		return false;
 	}
 
 	private static boolean compareProposalNames(

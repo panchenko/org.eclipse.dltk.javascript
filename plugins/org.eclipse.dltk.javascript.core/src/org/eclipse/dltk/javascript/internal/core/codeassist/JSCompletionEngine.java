@@ -17,9 +17,9 @@ import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 
 public interface JSCompletionEngine extends ICompletionEngine {
 
-	boolean isUseEngine();
+	boolean isAllowGlobals();
 
-	void setUseEngine(boolean useEngine);
+	void setAllowGlobals(boolean value);
 
 	void completeTypes(ISourceModule module, TypeMode mode, String prefix,
 			int offset);

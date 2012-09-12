@@ -75,14 +75,14 @@ import org.eclipse.dltk.javascript.validation.IValidatorExtension;
 public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		implements JSCompletionEngine {
 
-	private boolean useEngine = true;
+	private boolean allowGlobals = true;
 
-	public boolean isUseEngine() {
-		return useEngine;
+	public boolean isAllowGlobals() {
+		return allowGlobals;
 	}
 
-	public void setUseEngine(boolean useEngine) {
-		this.useEngine = useEngine;
+	public void setAllowGlobals(boolean value) {
+		this.allowGlobals = value;
 	}
 
 	public void complete(final IModuleSource cu, final int position, int i) {
@@ -546,7 +546,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	private void doGlobalCompletion(ITypeInferenceContext context,
 			IValueCollection collection, Reporter reporter) {
 		reportItems(context, reporter, collection);
-		if (useEngine) {
+		if (allowGlobals) {
 			doCompletionOnType(context, TypeMode.CODE, reporter);
 			doCompletionOnKeyword(reporter.getPrefix(), reporter.getPosition());
 			reportGlobals(context, reporter);
