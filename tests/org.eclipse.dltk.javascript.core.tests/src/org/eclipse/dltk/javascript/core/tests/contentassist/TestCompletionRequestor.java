@@ -26,7 +26,11 @@ class TestCompletionRequestor extends CompletionRequestor {
 	@Override
 	public void accept(CompletionProposal proposal) {
 		if (!isIgnored(proposal.getKind())) {
-			results.add(proposal);
+			final int value = evaluateFilters(proposal);
+			if (value != CompletionProposalFilter.IGNORE
+					&& value != CompletionProposalFilter.DISCOURAGED) {
+				results.add(proposal);
+			}
 		}
 	}
 }
