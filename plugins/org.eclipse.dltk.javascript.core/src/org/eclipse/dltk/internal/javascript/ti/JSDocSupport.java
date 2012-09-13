@@ -50,10 +50,12 @@ import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.JSDocParseException;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
 /**
@@ -365,7 +367,7 @@ public class JSDocSupport implements IModelBuilder {
 							- DOTS.length());
 				}
 				String propertyName = null;
-				int propertiesObjectIndex = paramName.indexOf('.');
+				int propertiesObjectIndex = paramName.lastIndexOf('.');
 				if (propertiesObjectIndex != -1) {
 					// http://code.google.com/p/jsdoc-toolkit/wiki/TagParam
 					// = Parameters With Properties =
@@ -387,10 +389,29 @@ public class JSDocSupport implements IModelBuilder {
 							if (param != null) {
 								param.setType(propertiesType);
 							} else {
-								++problemCount;
-								reportProblem(reporter,
-										JSDocProblem.UNKNOWN_PARAM, tag,
-										objectName);
+								int index = objectName.lastIndexOf('.');
+								if (index == -1) {
+									++problemCount;
+									reportProblem(reporter,
+											JSDocProblem.UNKNOWN_PARAM, tag,
+											objectName);
+								} else {
+									RecordType parentRecordType = objectPropertiesTypes
+											.get(objectName.substring(0, index));
+									if (parentRecordType != null) {
+										String memberName = objectName
+												.substring(index + 1);
+										EList<Member> members = parentRecordType
+												.getMembers();
+										for (Member member : members) {
+											if (member.getName().equals(
+													memberName)) {
+												member.setType(propertiesType);
+												break;
+											}
+										}
+									}
+								}
 							}
 						}
 						final RecordProperty property = TypeInfoModelFactory.eINSTANCE

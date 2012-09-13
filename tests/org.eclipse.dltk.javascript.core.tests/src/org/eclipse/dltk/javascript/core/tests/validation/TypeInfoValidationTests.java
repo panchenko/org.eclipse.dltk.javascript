@@ -2502,4 +2502,23 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(4)
 				.getID());
 	}
+	
+	public void testMultiDimRecordType() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add("*	@param {Object} data");
+		code.add("* @param {Object} options");
+		code.add("* @param {Object} options.backgroundColor");
+		code.add("* @param {String} options.backgroundColor.fill");
+		code.add("*	@param {String} options.backgroundColor.stroke");
+		code.add("*	@param {Number} options.backgroundColor.strokeWidth");
+		code.add("*");
+		code.add("*/");
+		code.add("function draw(data, options) {");
+		code.add("var s = options.backgroundColor.fill;");
+		code.add("s.toUpperCase();");
+		code.add("}");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
