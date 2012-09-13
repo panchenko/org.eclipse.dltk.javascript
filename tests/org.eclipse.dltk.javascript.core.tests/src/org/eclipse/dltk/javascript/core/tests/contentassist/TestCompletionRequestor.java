@@ -25,6 +25,8 @@ class TestCompletionRequestor extends CompletionRequestor {
 
 	@Override
 	public void accept(CompletionProposal proposal) {
-		results.add(proposal);
+		if (!isIgnored(proposal.getKind())) {
+			results.add(proposal);
+		}
 	}
 }
