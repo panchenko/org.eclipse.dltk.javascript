@@ -81,7 +81,8 @@ public class RTypes {
 
 	/**
 	 * Returns the instance of the logical <b>None</b> type (which is used as a
-	 * placeholder if array item type is not known/specified).
+	 * placeholder if generic type parameters (e.g. array item type) are not
+	 * known/specified).
 	 */
 	public static IRType none() {
 		return NONE_TYPE;
