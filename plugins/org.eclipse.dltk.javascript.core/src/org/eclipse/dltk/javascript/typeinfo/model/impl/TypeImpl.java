@@ -16,6 +16,7 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 import java.util.Collection;
 
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinfo.DefaultMetaType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
@@ -665,8 +666,11 @@ public class TypeImpl extends ElementImpl implements Type {
 	}
 
 	public boolean hasPrototype() {
-		final TypeKind kind = getKind();
 		return kind == TypeKind.PREDEFINED || kind == TypeKind.JAVASCRIPT;
+	}
+
+	public Type getPrototypeType() {
+		return isInstantiable() ? Types.FUNCTION : Types.OBJECT;
 	}
 
 } //TypeImpl

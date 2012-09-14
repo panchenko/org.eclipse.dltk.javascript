@@ -297,4 +297,11 @@ public interface Type extends Element {
 
 	boolean hasPrototype();
 
+	/**
+	 * Returns the {@link Type} which members should be available via class
+	 * reference of this type. Typically for JavaScript objects it is
+	 * "Function".
+	 */
+	Type getPrototypeType();
+
 } // Type

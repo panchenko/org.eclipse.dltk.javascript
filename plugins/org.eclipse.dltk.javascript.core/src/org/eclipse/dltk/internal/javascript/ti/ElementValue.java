@@ -178,7 +178,8 @@ public abstract class ElementValue implements IValue {
 			}
 			if ((t == null || t.hasPrototype())
 					&& predicate.isCompatibleWith(MemberPredicates.STATIC)) {
-				final List<Member> selection = findMembers(Types.FUNCTION,
+				final List<Member> selection = findMembers(
+						t != null ? t.getPrototypeType() : Types.FUNCTION,
 						name, MemberPredicates.NON_STATIC);
 				if (!selection.isEmpty()) {
 					if (selection.size() == 1) {

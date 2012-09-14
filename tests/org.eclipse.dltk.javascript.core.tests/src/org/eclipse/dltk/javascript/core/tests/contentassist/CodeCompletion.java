@@ -11,6 +11,7 @@ import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 
 public class CodeCompletion extends AbstractCompletionTest {
 
@@ -547,6 +548,17 @@ public class CodeCompletion extends AbstractCompletionTest {
 		int position = lastPositionInFile("num1.", module);
 		basicTest(module, position,
 				concat(getMembers(NUMBER, STATIC), getMembersOfFunction()));
+	}
+
+	public void testStaticMath() {
+		IModuleSource module = new TestModule("Math.");
+		int position = lastPositionInFile(".", module);
+		basicTest(
+				module,
+				position,
+				concat(getMembers("Math", STATIC),
+						getMembers(ITypeNames.OBJECT,
+								MemberPredicates.NON_STATIC)));
 	}
 
 	public void testArrayOfRecords() {

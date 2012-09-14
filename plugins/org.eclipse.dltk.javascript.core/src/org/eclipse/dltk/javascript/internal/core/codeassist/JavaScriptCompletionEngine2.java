@@ -365,7 +365,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 						if (t.hasPrototype()
 								&& predicate
 										.isCompatibleWith(MemberPredicates.STATIC)) {
-							typeQuery.add(Types.FUNCTION,
+							typeQuery.add(t.getPrototypeType(),
 									MemberPredicates.NON_STATIC);
 						}
 					} else {
