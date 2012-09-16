@@ -163,8 +163,10 @@ public class JSDocValidatorFactory {
 
 		protected void checkType(ISourceNode tag, Type type,
 				IValueCollection collection, int flags) {
-			Assert.isTrue(type.getKind() != TypeKind.UNRESOLVED, "Type \""
-					+ type.getName() + "\" is a proxy");
+			if (type.eIsProxy()) {
+				Assert.isTrue(!type.eIsProxy(), "Type \"" + type.getName()
+						+ "\" is a proxy");
+			}
 			if (type.getKind() == TypeKind.UNKNOWN) {
 				if ((flags & LOCAL_TYPES) != 0 && collection != null) {
 					if (collection.getChild(type.getName()).exists()) {
