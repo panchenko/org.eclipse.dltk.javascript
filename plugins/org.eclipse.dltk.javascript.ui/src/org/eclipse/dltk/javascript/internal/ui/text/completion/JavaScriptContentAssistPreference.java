@@ -54,7 +54,7 @@ public class JavaScriptContentAssistPreference extends ContentAssistPreference {
 			return;
 		// String triggers= store.getString(AUTOACTIVATION_TRIGGERS_JAVADOC);
 		// if (triggers != null)
-		jdcp.setCompletionProposalAutoActivationCharacters("@".toCharArray());
+		jdcp.setCompletionProposalAutoActivationCharacters("@#".toCharArray());
 		// boolean enabled= store.getBoolean(CASE_SENSITIVITY);
 		// jdcp.restrictProposalsToMatchingCases(enabled);
 	}

@@ -26,6 +26,7 @@ import org.eclipse.dltk.compiler.CharOperation;
 import org.eclipse.dltk.compiler.env.IModuleSource;
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
 import org.eclipse.dltk.compiler.problem.ValidationStatus;
+import org.eclipse.dltk.core.CompletionContext;
 import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IAccessRule;
@@ -149,6 +150,58 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		setSourceRange(offset - prefix.length(), offset);
 		doCompletionOnType(mode, new Reporter(inferencer2, prefix, offset,
 				Collections.<IValidatorExtension> emptyList()));
+	}
+
+	public void completeGlobals(ISourceModule module, final String prefix,
+			final int offset, boolean jsdoc) {
+		final CompletionContext completionContext = new CompletionContext();
+		completionContext.setOffset(offset);
+		completionContext.setDoc(jsdoc);
+		requestor.acceptContext(completionContext);
+		setSourceRange(offset - prefix.length(), offset);
+		final TypeInferencer2 inferencer2 = new TypeInferencer2();
+		inferencer2.setModelElement(module);
+		final CompletionVisitor visitor = new CompletionVisitor(inferencer2,
+				Integer.MAX_VALUE);
+		inferencer2.setVisitor(visitor);
+		final Script script = JavaScriptParserUtil.parse(module, null);
+		try {
+			inferencer2.doInferencing(script);
+		} catch (PositionReachedException e) {
+			// e.printStackTrace();
+		}
+		ITypeSystem.CURRENT.runWith(inferencer2, new Runnable() {
+			public void run() {
+				final Reporter reporter = new Reporter(inferencer2, prefix,
+						offset, visitor.createValidatorExtensions());
+				doGlobalCompletion(visitor.getCollection(), reporter);
+			}
+		});
+	}
+
+	/**
+	 * Generate completion proposals for the matching members from the specified
+	 * {@link Iterable}.
+	 */
+	public void completeMembers(ISourceModule module, String prefix,
+			int offset, boolean jsdoc, Iterable<Member> memers) {
+		final CompletionContext completionContext = new CompletionContext();
+		completionContext.setOffset(offset);
+		completionContext.setDoc(jsdoc);
+		requestor.acceptContext(completionContext);
+		setSourceRange(offset - prefix.length(), offset);
+		final TypeInferencer2 inferencer2 = new TypeInferencer2();
+		inferencer2.setModelElement(module);
+		final CompletionVisitor visitor = new CompletionVisitor(inferencer2,
+				offset);
+		final Reporter reporter = new Reporter(inferencer2, prefix, offset,
+				visitor.createValidatorExtensions());
+		for (Member member : memers) {
+			final String name = member.getName();
+			if (reporter.matches(name)) {
+				reporter.report(name, member);
+			}
+		}
 	}
 
 	private void doCompletionOnType(TypeMode mode, Reporter reporter) {
@@ -342,9 +395,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				reportMember(member, member.getName(), true);
 			}
 			for (Member member : typeQuery.ignoreDuplicates(processed)) {
-				if (member.isVisible()
-						&& CharOperation.prefixEquals(prefix, member.getName(),
-								false)) {
+				if (member.isVisible() && matches(member.getName())) {
 					reportMember(member, member.getName(),
 							typeQuery.contains(member.getDeclaringType()));
 				}
@@ -461,7 +512,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
 			proposal.setRelevance(relevance);
 
-			proposal.setCompletion(memberName);
+			proposal.setCompletion(isFunction ? memberName + "()" : memberName);
 			proposal.setName(memberName);
 			proposal.setExtraInfo(member);
 			proposal.setReplaceRange(startPosition - offset, endPosition
@@ -521,7 +572,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			relevance += computeRelevanceForRestrictions(IAccessRule.K_ACCESSIBLE);
 			proposal.setRelevance(relevance);
 
-			proposal.setCompletion(reference.getName());
+			proposal.setCompletion(proposalKind == CompletionProposal.METHOD_REF ? reference
+					.getName() + "()"
+					: reference.getName());
 			proposal.setName(reference.getName());
 			proposal.setExtraInfo(reference);
 			proposal.setReplaceRange(startPosition - offset, endPosition
@@ -592,8 +645,13 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			Reporter reporter) {
 		reportItems(reporter, collection);
 		if (allowGlobals) {
-			doCompletionOnType(TypeMode.CODE, reporter);
-			doCompletionOnKeyword(reporter.getPrefix(), reporter.getPosition());
+			if (!requestor.isIgnored(CompletionProposal.TYPE_REF)) {
+				doCompletionOnType(TypeMode.CODE, reporter);
+			}
+			if (!requestor.isIgnored(CompletionProposal.KEYWORD)) {
+				doCompletionOnKeyword(reporter.getPrefix(),
+						reporter.getPosition());
+			}
 			reportGlobals(reporter);
 		}
 	}

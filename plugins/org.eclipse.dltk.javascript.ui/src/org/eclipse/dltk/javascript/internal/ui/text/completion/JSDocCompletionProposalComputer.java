@@ -10,8 +10,10 @@ import java.util.Set;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.compiler.CharOperation;
+import org.eclipse.dltk.core.CompletionProposal;
 import org.eclipse.dltk.core.DLTKLanguageManager;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.javascript.core.JSKeywordCategory;
 import org.eclipse.dltk.javascript.core.JSKeywordManager;
 import org.eclipse.dltk.javascript.core.JavaScriptNature;
@@ -20,6 +22,8 @@ import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
 import org.eclipse.dltk.javascript.internal.ui.templates.JSDocTemplateCompletionProcessor;
 import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 import org.eclipse.dltk.javascript.ui.text.IJavaScriptPartitions;
 import org.eclipse.dltk.ui.DLTKPluginImages;
 import org.eclipse.dltk.ui.templates.ScriptTemplateProposal;
@@ -87,7 +91,19 @@ public class JSDocCompletionProposalComputer implements
 						index - tagStart));
 			}
 			final int tagEnd = index;
+			final String tagName = new String(line, tagStart, tagEnd - tagStart);
 			index = skipSpaces(line, index, offsetInLine);
+			if (JSDocTag.SEE.equals(tagName)) {
+				int valueStart = index;
+				while (index < offsetInLine) {
+					if (Character.isWhitespace(line[index])) {
+						return Collections.emptyList();
+					}
+					++index;
+				}
+				return completionAfterSee(context, new String(line, valueStart,
+						index - valueStart));
+			}
 			int depth = 0;
 			int nameStart = index;
 			boolean breakOnSpace = false;
@@ -95,8 +111,7 @@ public class JSDocCompletionProposalComputer implements
 				++index;
 				depth = 1;
 				nameStart = index;
-			} else if (JSDocTag.TYPE.equals(new String(line, tagStart, tagEnd
-					- tagStart))) {
+			} else if (JSDocTag.TYPE.equals(tagName)) {
 				breakOnSpace = true;
 			} else {
 				return Collections.emptyList();
@@ -125,6 +140,58 @@ public class JSDocCompletionProposalComputer implements
 			JavaScriptUI.log(e);
 		}
 		return Collections.emptyList();
+	}
+
+	private static final char JSDOC_MEMBER_SEPARATOR = '#';
+
+	/**
+	 * @param context
+	 * @param prefix
+	 * @return
+	 */
+	private List<ICompletionProposal> completionAfterSee(
+			ContentAssistInvocationContext context, String prefix) {
+		if (!(context instanceof ScriptContentAssistInvocationContext)) {
+			return Collections.emptyList();
+		}
+		int pos = prefix.indexOf(JSDOC_MEMBER_SEPARATOR);
+		if (pos < 0) {
+			return completionOnType(context, prefix);
+		} else {
+			final JSCompletionEngine engine = getCompletionEngine();
+			if (engine == null) {
+				return Collections.emptyList();
+			}
+			final ISourceModule module = ((ScriptContentAssistInvocationContext) context)
+					.getSourceModule();
+			final JavaScriptCompletionProposalCollector collector = new JavaScriptCompletionProposalCollector(
+					module);
+			collector
+					.setInvocationContext((ScriptContentAssistInvocationContext) context);
+			engine.setRequestor(collector);
+			collector.setAttribute(TypeMode.JSDOC, Boolean.TRUE);
+			final String typeName = prefix.substring(0, pos);
+			if (typeName.length() != 0) {
+				final TypeInferencer2 inferencer2 = new TypeInferencer2();
+				inferencer2.setModelElement(module);
+				final Type type = inferencer2.getType(typeName);
+				if (type == null || type.getKind() == TypeKind.UNKNOWN) {
+					return Collections.emptyList();
+				}
+				engine.completeMembers(module, prefix.substring(pos + 1),
+						context.getInvocationOffset(), true, type.getMembers());
+				return Arrays.<ICompletionProposal> asList(collector
+						.getScriptCompletionProposals());
+			} else {
+				collector.setIgnored(CompletionProposal.KEYWORD, true);
+				collector.setIgnored(CompletionProposal.TYPE_REF, true);
+				engine.setAllowGlobals(false);
+				engine.completeGlobals(module, prefix.substring(1),
+						context.getInvocationOffset(), true);
+				return Arrays.<ICompletionProposal> asList(collector
+						.getScriptCompletionProposals());
+			}
+		}
 	}
 
 	private IRegion getLineRegion(IDocument document, int offset)
