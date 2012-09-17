@@ -37,6 +37,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -212,7 +213,7 @@ public class JavaScriptValidations {
 					final IRType argumentType = typeOf(arguments[i]);
 					if (argumentType == null)
 						continue;
-					if (JSTypeSet.normalize(context, parameterType)
+					if (RTypes.create(context, parameterType)
 							.isAssignableFrom(argumentType) == TypeCompatibility.FALSE)
 						continue OUTER;
 				}

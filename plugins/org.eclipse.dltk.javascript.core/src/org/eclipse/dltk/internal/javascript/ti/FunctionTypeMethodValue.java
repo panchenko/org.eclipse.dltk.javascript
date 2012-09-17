@@ -19,6 +19,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
 
 class FunctionTypeMethodValue extends ElementValue implements IValue {
@@ -67,7 +68,7 @@ class FunctionTypeMethodValue extends ElementValue implements IValue {
 	}
 
 	public IRType getDeclaredType() {
-		return JSTypeSet.ref(Types.FUNCTION);
+		return RTypes.simple(Types.FUNCTION);
 	}
 
 	public JSTypeSet getDeclaredTypes() {

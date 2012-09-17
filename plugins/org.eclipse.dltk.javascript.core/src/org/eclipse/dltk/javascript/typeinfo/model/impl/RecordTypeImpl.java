@@ -15,6 +15,7 @@ import java.util.Collection;
 
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
@@ -152,8 +153,7 @@ public class RecordTypeImpl extends EObjectImpl implements RecordType {
 	 * @generated NOT
 	 */
     public IRType toRType(ITypeSystem typeSystem) {
-        // TODO: implement this method
-		return null;
+		return RTypes.recordType(typeSystem, getMembers());
     }
 
     /**

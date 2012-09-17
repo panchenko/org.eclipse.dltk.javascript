@@ -12,40 +12,15 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import org.eclipse.dltk.javascript.core.Types;
-import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
-import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
-import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
-import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.MapType;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
-import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
-import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
-import org.eclipse.dltk.javascript.typeinfo.model.RType;
-import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
-import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
-import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
-import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
-import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
 
 public abstract class JSTypeSet implements Iterable<IRType> {
 
@@ -194,10 +169,10 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		@Override
 		public Type[] toArray() {
-			if (type instanceof SimpleTypeKey) {
-				return new Type[] { ((SimpleTypeKey) type).getTarget() };
-			} else if (type instanceof ClassTypeKey) {
-				return new Type[] { ((ClassTypeKey) type).getTarget() };
+			if (type instanceof IRSimpleType) {
+				return new Type[] { ((IRSimpleType) type).getTarget() };
+			} else if (type instanceof IRClassType) {
+				return new Type[] { ((IRClassType) type).getTarget() };
 			} else if (type == RTypes.any()) {
 				return new Type[] { Types.OBJECT };
 			} else {
@@ -251,731 +226,37 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		return new JSSingletonTypeSet(type);
 	}
 
-	private static final boolean DEBUG = false;
-
-	public static abstract class TypeKey implements IRType {
-
-		protected final ITypeSystem typeSystem;
-
-		protected TypeKey() {
-			this(null);
-		}
-
-		protected TypeKey(ITypeSystem typeSystem) {
-			this.typeSystem = typeSystem;
-		}
-
-		public ITypeSystem activeTypeSystem() {
-			return typeSystem;
-		}
-
-		protected final void checkType(Type type) {
-			if (type.isProxy()) {
-				System.out.println("PROXY " + type.getName());
-			}
-		}
-
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			if (type == RTypes.undefined() || type == RTypes.any()) {
-				return TypeCompatibility.TRUE;
-			} else if (type == RTypes.none()) {
-				return TypeCompatibility.FALSE;
-			} else if (type instanceof UnionTypeKey) {
-				for (IRType part : ((UnionTypeKey) type).targets) {
-					if (isAssignableFrom(part).ok()) {
-						return TypeCompatibility.TRUE;
-					}
-				}
-			}
-			return TypeCompatibility.FALSE;
-		}
-
-		protected boolean isAssignableFrom(Type dest, Type src) {
-			// TODO (alex) compare objects instead of names
-			final String localName = TypeUtil.getName(dest);
-			for (Type t : new TypeQuery(src).getHierarchy()) {
-				if (localName.equals(TypeUtil.getName(t)))
-					return true;
-			}
-			return false;
-		}
-
-		@Override
-		public final String toString() {
-			return getName();
-		}
-
-		protected TypeCompatibility testAssignableTo(IRType type) {
-			return type instanceof IRTypeExtension2 ? ((IRTypeExtension2) type)
-					.isAssignableTo(this) : TypeCompatibility.FALSE;
-		}
-
-		public boolean isExtensible() {
-			return false;
-		}
-	}
-
-	public static class SimpleTypeKey extends TypeKey implements IRSimpleType {
-
-		private final Type type;
-
-		public SimpleTypeKey(ITypeSystem typeSystem, Type type) {
-			super(typeSystem);
-			assert type != null;
-			this.type = type;
-			if (DEBUG)
-				checkType(type);
-		}
-
-		public SimpleTypeKey(Type type) {
-			assert type != null;
-			this.type = type;
-			if (DEBUG)
-				checkType(type);
-		}
-
-		public String getName() {
-			return type.getName();
-		}
-
-		public Type getTarget() {
-			return type;
-		}
-
-		@Override
-		public int hashCode() {
-			return type.hashCode();
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			final SimpleTypeKey other = (SimpleTypeKey) obj;
-			return type.equals(other.type);
-		}
-
-		@Override
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type).ok()) {
-				return TypeCompatibility.TRUE;
-			} else if (ITypeNames.OBJECT.equals(getName())) {
-				return TypeCompatibility.TRUE;
-			} else if (type instanceof SimpleTypeKey) {
-				final Type other = ((SimpleTypeKey) type).getTarget();
-				if (isAssignableFrom(this.type, other)) {
-					return TypeCompatibility.TRUE;
-				}
-				final OriginReference origin = OriginReference.of(this.type);
-				if (origin != null) {
-					if (isAssignableFrom(origin.genericType, other)) {
-						return TypeCompatibility.TRUE;
-					}
-					final OriginReference otherOrigin = OriginReference
-							.of(other);
-					if (otherOrigin != null) {
-						if (isAssignableFrom(origin.genericType,
-								otherOrigin.genericType)
-								&& isAssignableFrom(origin.parameterTypes,
-										otherOrigin.parameterTypes)) {
-							return TypeCompatibility.TRUE;
-						}
-					}
-				}
-			}
-			return testAssignableTo(type);
-		}
-
-		private boolean isAssignableFrom(IRType[] dest, IRType[] src) {
-			if (dest.length == src.length) {
-				for (int i = 0; i < dest.length; ++i) {
-					if (dest[i].isAssignableFrom(src[i]) != TypeCompatibility.TRUE) {
-						return false;
-					}
-				}
-				return true;
-			}
-			return false;
-		}
-	}
-
-	public static class ClassTypeKey extends TypeKey implements IRClassType {
-
-		protected final Type type;
-
-		public ClassTypeKey(Type type) {
-			this.type = type;
-			if (DEBUG)
-				if (type != null)
-					checkType(type);
-		}
-
-		public String getRawName() {
-			if (type != null) {
-				if (((EObject) type).eIsProxy()) {
-					final URI uri = ((InternalEObject) type).eProxyURI();
-					if (uri != null) {
-						return URI.decode(uri.fragment());
-					}
-				} else {
-					return type.getName();
-				}
-			}
-			return null;
-		}
-
-		public String getName() {
-			final String rawName = getRawName();
-			return rawName != null ? JSDocTypeParser.CLASS + "<" + rawName
-					+ ">" : JSDocTypeParser.CLASS;
-		}
-
-		public Type getTarget() {
-			return type;
-		}
-
-		public IRType toItemType() {
-			if (type == null) {
-				return RTypes.any();
-			} else if (ITypeNames.ARRAY.equals(type.getName())) {
-				return arrayOf(RTypes.none());
-			} else {
-				return type.createInstance();
-			}
-		}
-
-		@Override
-		public int hashCode() {
-			return type != null ? type.hashCode() : 31;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof ClassTypeKey) {
-				final ClassTypeKey other = (ClassTypeKey) obj;
-				return type != null ? type.equals(other.type)
-						: other.type == null;
-			}
-			return false;
-		}
-
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type).ok()) {
-				return TypeCompatibility.TRUE;
-			} else if (type instanceof ClassTypeKey) {
-				if (this.type == null) {
-					return TypeCompatibility.TRUE;
-				}
-				final Type other = ((ClassTypeKey) type).getTarget();
-				return TypeCompatibility.valueOf(other == null
-						|| isAssignableFrom(this.type, other));
-			}
-			return TypeCompatibility.FALSE;
-		}
-
-	}
-
-	private static class ArrayTypeKey extends TypeKey implements IRArrayType {
-
-		private final IRType itemType;
-
-		public ArrayTypeKey(ITypeSystem typeSystem, IRType itemType) {
-			super(typeSystem);
-			this.itemType = itemType;
-		}
-
-		public ArrayTypeKey(IRType itemType) {
-			this.itemType = itemType;
-		}
-
-		public String getName() {
-			return ITypeNames.ARRAY + '<' + itemType.getName() + '>';
-		}
-
-		public IRType getItemType() {
-			return itemType;
-		}
-
-		@Override
-		public int hashCode() {
-			return itemType.hashCode();
-		}
-
-		public boolean equals(Object obj) {
-			if (obj instanceof ArrayTypeKey) {
-				final ArrayTypeKey other = (ArrayTypeKey) obj;
-				return itemType.equals(other.itemType);
-			}
-			return false;
-		}
-
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type).ok()) {
-				return TypeCompatibility.TRUE;
-			}
-			if (type instanceof ArrayTypeKey) {
-				final IRType ortherItem = ((ArrayTypeKey) type).itemType;
-				if (ortherItem == RTypes.EMPTY_ARRAY_ITEM_TYPE) {
-					return TypeCompatibility.TRUE;
-				}
-				final TypeCompatibility compatibility = itemType
-						.isAssignableFrom(ortherItem);
-				return compatibility == TypeCompatibility.TRUE ? compatibility
-						: TypeCompatibility.UNPARAMETERIZED;
-			} else {
-				return TypeCompatibility.FALSE;
-			}
-		}
-
-	}
-
-	private static class MapTypeKey extends TypeKey implements IRMapType {
-
-		private final IRType valueType;
-		private final IRType keyType;
-
-		public MapTypeKey(IRType keyType, IRType valueType) {
-			this.keyType = keyType;
-			this.valueType = valueType;
-		}
-
-		public String getName() {
-			// if the key type is set but it is a String then just default to
-			// without it.
-			if (valueType != null && keyType != null
-					&& !ITypeNames.STRING.equals(keyType.getName())) {
-				return ITypeNames.OBJECT + '<' + keyType.getName() + ','
-						+ valueType.getName() + '>';
-			}
-			return valueType != null ? ITypeNames.OBJECT + '<'
-					+ valueType.getName() + '>' : ITypeNames.OBJECT;
-		}
-
-		@Override
-		public int hashCode() {
-			return valueType.hashCode();
-		}
-
-		public boolean equals(Object obj) {
-			if (obj instanceof MapTypeKey) {
-				final MapTypeKey other = (MapTypeKey) obj;
-				return valueType.equals(other.valueType);
-			}
-			return false;
-		}
-
-		@Override
-		public boolean isExtensible() {
-			return true;
-		}
-
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type).ok()) {
-				return TypeCompatibility.TRUE;
-			}
-			if (type instanceof MapTypeKey) {
-				return valueType
-						.isAssignableFrom(((MapTypeKey) type).valueType);
-			}
-			return TypeCompatibility.FALSE;
-		}
-
-		public IRType getKeyType() {
-			return keyType;
-		}
-
-		public IRType getValueType() {
-			return valueType;
-		}
-
-	}
-
-	private static class UnionTypeKey extends TypeKey implements IRUnionType {
-
-		final Set<IRType> targets = new LinkedHashSet<IRType>();
-
-		public String getName() {
-			final StringBuilder sb = new StringBuilder();
-			for (IRType type : targets) {
-				if (sb.length() != 0) {
-					sb.append('|');
-				}
-				sb.append(type.getName());
-			}
-			return sb.toString();
-		}
-
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			for (IRType target : targets) {
-				if (target.isAssignableFrom(type).ok()) {
-					return TypeCompatibility.TRUE;
-				}
-			}
-			return TypeCompatibility.FALSE;
-		}
-
-		public Set<IRType> getTargets() {
-			return Collections.unmodifiableSet(targets);
-		}
-
-		@Override
-		public int hashCode() {
-			return targets.hashCode();
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof UnionTypeKey) {
-				final UnionTypeKey other = (UnionTypeKey) obj;
-				return targets.equals(other.targets);
-			}
-			return false;
-		}
-
-	}
-
-	private static class RRecordMember implements IRRecordMember {
-
-		final String name;
-		final IRType type;
-		final boolean optional;
-		final Member member;
-
-		public RRecordMember(String name, IRType type, Member member) {
-			this.name = name;
-			this.type = type;
-			this.optional = member instanceof RecordMember
-					&& ((RecordMember) member).isOptional();
-			this.member = member;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public IRType getType() {
-			return type;
-		}
-
-		public boolean isOptional() {
-			return optional;
-		}
-
-		@Override
-		public String toString() {
-			return name + ":" + type;
-		}
-
-		@Override
-		public int hashCode() {
-			return name.hashCode();
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof RRecordMember) {
-				final RRecordMember other = (RRecordMember) obj;
-				return name.equals(other.name) && type.equals(other.type);
-			}
-			return false;
-		}
-
-		public Member getMember() {
-			return member;
-		}
-	}
-
-	private static class RecordTypeKey extends TypeKey implements IRRecordType {
-
-		private final Map<String, IRRecordMember> members = new LinkedHashMap<String, IRRecordMember>();
-
-		public RecordTypeKey(ITypeSystem context, List<Member> members) {
-			for (Member member : members) {
-				final IRType memberType = member.getType() != null ? normalize(
-						context, member.getType()) : RTypes.any();
-				this.members
-						.put(member.getName(),
-								new RRecordMember(member.getName(), memberType,
-										member));
-			}
-		}
-
-		public String getName() {
-			final StringBuilder sb = new StringBuilder();
-			sb.append('{');
-			for (IRRecordMember member : members.values()) {
-				if (sb.length() > 1) {
-					sb.append(',');
-				}
-				sb.append(member.getName());
-				if (member.getType() != RTypes.any()) {
-					sb.append(':');
-					sb.append(member.getType().getName());
-				}
-			}
-			sb.append('}');
-			return sb.toString();
-		}
-
-		public IRRecordMember getMember(String name) {
-			return members.get(name);
-		}
-
-		public Collection<IRRecordMember> getMembers() {
-			return members.values();
-		}
-
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type).ok()) {
-				return TypeCompatibility.TRUE;
-			}
-			if (type instanceof RecordTypeKey) {
-				final Map<String, IRRecordMember> others = ((RecordTypeKey) type).members;
-				for (Map.Entry<String, IRRecordMember> entry : others
-						.entrySet()) {
-					final IRRecordMember member = members.get(entry.getKey());
-					if (member == null) {
-						return TypeCompatibility.FALSE;
-					}
-					if (!member.getType()
-							.isAssignableFrom(entry.getValue().getType()).ok()) {
-						return TypeCompatibility.FALSE;
-					}
-				}
-				for (Map.Entry<String, IRRecordMember> entry : members
-						.entrySet()) {
-					if (!entry.getValue().isOptional()
-							&& !others.containsKey(entry.getKey())) {
-						return TypeCompatibility.FALSE;
-					}
-				}
-				return TypeCompatibility.TRUE;
-			}
-			return TypeCompatibility.FALSE;
-		}
-
-		@Override
-		public int hashCode() {
-			return members.hashCode();
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof RecordTypeKey) {
-				final RecordTypeKey other = (RecordTypeKey) obj;
-				return members.equals(other.members);
-			}
-			return false;
-		}
-
-	}
-
-	private static class FunctionTypeKey extends TypeKey implements
-			IRFunctionType {
-
-		private final List<IRParameter> parameters;
-		private final IRType returnType;
-
-		public FunctionTypeKey(List<IRParameter> parameters, IRType returnType) {
-			this.parameters = parameters;
-			this.returnType = returnType;
-		}
-
-		public String getName() {
-			final StringBuilder sb = new StringBuilder();
-			sb.append(JSDocTypeParser.FUNCTION);
-			sb.append('(');
-			int index = 0;
-			for (IRParameter parameter : parameters) {
-				if (++index != 1) {
-					sb.append(", ");
-				}
-				if (parameter.getKind() == ParameterKind.VARARGS) {
-					sb.append("...");
-				}
-				sb.append(parameter.getType());
-				if (parameter.getKind() == ParameterKind.OPTIONAL) {
-					sb.append("=");
-				}
-			}
-			sb.append(')');
-			if (returnType != null) {
-				sb.append(':');
-				sb.append(returnType);
-			}
-			return sb.toString();
-		}
-
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			if (super.isAssignableFrom(type).ok()) {
-				return TypeCompatibility.TRUE;
-			} else if (type instanceof FunctionTypeKey) {
-				return TypeCompatibility.TRUE;
-			} else if (type instanceof SimpleTypeKey) {
-				// TODO (alex) convert when creating type
-				return TypeCompatibility.valueOf(ITypeNames.FUNCTION
-						.equals(type.getName()));
-			} else {
-				return TypeCompatibility.FALSE;
-			}
-		}
-
-		public IRType getReturnType() {
-			return returnType;
-		}
-
-		public List<IRParameter> getParameters() {
-			return parameters;
-		}
-
-		@Override
-		public int hashCode() {
-			return parameters.hashCode();
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			FunctionTypeKey other = (FunctionTypeKey) obj;
-			if (!parameters.equals(other.parameters))
-				return false;
-			if (returnType == null) {
-				if (other.returnType != null)
-					return false;
-			} else if (!returnType.equals(other.returnType))
-				return false;
-			return true;
-		}
-
-	}
-
+	/**
+	 * @deprecated Use {@link RTypes#create(JSType)} instead
+	 */
 	public static IRType normalize(JSType type) {
-		return normalize(null, type);
+		return RTypes.create(type);
 	}
 
+	/**
+	 * @deprecated Use {@link RTypes#create(ITypeSystem,JSType)} instead
+	 */
 	public static IRType normalize(ITypeSystem context, JSType type) {
-		if (type == null) {
-			return null;
-		}
-		try {
-			final IRType result = type.toRType(context);
-			if (result != null) {
-				return result;
-			}
-		} catch (UnsupportedOperationException e) {
-			// fall thru
-		}
-		if (type instanceof ParameterizedType) {
-			final ParameterizedType parameterized = (ParameterizedType) type;
-			Type target = parameterized.getTarget();
-			if (target == null) {
-				return RTypes.any();
-			}
-			if (context != null) {
-				final EList<JSType> typeArguments = parameterized
-						.getActualTypeArguments();
-				final List<IRType> parameters = new ArrayList<IRType>(
-						typeArguments.size());
-				for (int i = 0; i < typeArguments.size(); ++i) {
-					parameters.add(normalize(context, typeArguments.get(i)));
-				}
-				return context.parameterize(target, parameters).createInstance(
-						context);
-			} else {
-				return ref(target);
-			}
-		} else if (type instanceof TypeVariableReference) {
-			// TODO (alex) shouldn't happen
-			return RTypes.none();
-		} else if (type instanceof TypeVariableClassType) {
-			// shouldn't happen
-			return classType(null);
-		} else if (type instanceof SimpleType) {
-			final SimpleType ref = (SimpleType) type;
-			Type target = ref.getTarget();
-			if (target == null) {
-				return RTypes.any();
-			}
-			if (target.isProxy() && context != null) {
-				target = context.resolveType(target);
-			}
-			return ref(target);
-		} else if (type instanceof ClassType) {
-			Type target = ((ClassType) type).getTarget();
-			if (target != null && target.isProxy() && context != null) {
-				target = context.resolveType(target);
-			}
-			return classType(target);
-		} else if (type instanceof ArrayType) {
-			final JSType itemType = ((ArrayType) type).getItemType();
-			return new ArrayTypeKey(context, normalize(context, itemType));
-		} else if (type instanceof MapType) {
-			final MapType mapType = (MapType) type;
-			return mapOf(normalize(context, mapType.getKeyType()),
-					normalize(context, mapType.getValueType()));
-		} else if (type instanceof AnyType) {
-			return RTypes.any();
-		} else if (type instanceof UndefinedType) {
-			return RTypes.undefined();
-		} else if (type instanceof UnionType) {
-			final UnionTypeKey union = new UnionTypeKey();
-			for (JSType t : ((UnionType) type).getTargets()) {
-				union.targets.add(normalize(context, t));
-			}
-			return union;
-		} else if (type instanceof RecordType) {
-			return new RecordTypeKey(context, ((RecordType) type).getMembers());
-		} else if (type instanceof FunctionType) {
-			final FunctionType funcType = (FunctionType) type;
-			return new FunctionTypeKey(RModelBuilder.convert(context,
-					funcType.getParameters()), normalize(context,
-					funcType.getReturnType()));
-		} else if (type instanceof RType) {
-			return ((RType) type).getRuntimeType();
-		} else {
-			for (IRTypeFactory factory : TypeInfoManager.getRTypeFactories()) {
-				final IRType runtimeType = factory.create(context, type);
-				if (runtimeType != null) {
-					return runtimeType;
-				}
-			}
-			throw new IllegalArgumentException("Unsupported type "
-					+ type.getClass().getName());
-		}
+		return RTypes.create(context, type);
 	}
 
+	/**
+	 * @deprecated Use {@link RTypes#simple(Type)} instead
+	 */
 	public static IRType ref(Type type) {
-		if (ITypeNames.ARRAY.equals(type.getName())) {
-			return arrayOf(RTypes.none());
-		} else {
-			return type.createInstance();
-		}
+		return RTypes.simple(type);
 	}
 
 	public static IRType ref(String name) {
 		final Type type = TypeInfoModelLoader.getInstance().getType(name);
-		return ref(type);
+		return RTypes.simple(type);
 	}
 
+	/**
+	 * @deprecated Use {@link RTypes#classType(Type)} instead
+	 */
 	public static IRClassType classType(Type type) {
-		return new ClassTypeKey(type);
-	}
-
-	public static ArrayTypeKey arrayOf(final IRType itemType) {
-		return new ArrayTypeKey(itemType);
-	}
-
-	public static MapTypeKey mapOf(final IRType keyType, final IRType valueType) {
-		return new MapTypeKey(keyType, valueType);
+		return RTypes.classType(type);
 	}
 
 	/**
@@ -997,17 +278,6 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 	 */
 	public static IRType undefined() {
 		return RTypes.undefined();
-	}
-
-	public static IRType union(List<IRType> targets) {
-		final UnionTypeKey union = new UnionTypeKey();
-		union.targets.addAll(targets);
-		return union;
-	}
-
-	public static IRType functionType(List<IRParameter> parameters,
-			IRType returnType) {
-		return new FunctionTypeKey(parameters, returnType);
 	}
 
 	private static class JSTypeSetImpl extends JSTypeSet {
@@ -1046,7 +316,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 			} else if (types.size() == 1) {
 				return types.iterator().next();
 			} else {
-				return union(types);
+				return RTypes.union(types);
 			}
 		}
 
@@ -1054,8 +324,8 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		public Type[] toArray() {
 			final LinkedHashSet<Type> result = new LinkedHashSet<Type>();
 			for (IRType type : types) {
-				if (type instanceof SimpleTypeKey) {
-					result.add(((SimpleTypeKey) type).getTarget());
+				if (type instanceof IRSimpleType) {
+					result.add(((IRSimpleType) type).getTarget());
 				} else if (type == RTypes.any()) {
 					result.add(Types.OBJECT);
 				}

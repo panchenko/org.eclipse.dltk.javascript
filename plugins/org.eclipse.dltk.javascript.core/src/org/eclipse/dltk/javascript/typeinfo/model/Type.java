@@ -18,6 +18,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MetaType;
+import org.eclipse.dltk.javascript.typeinfo.RSimpleType;
 import org.eclipse.emf.common.util.EList;
 
 /**
@@ -271,17 +272,18 @@ public interface Type extends Element {
 	MemberPredicate memberPredicateFor(IRType type, MemberPredicate predicate);
 
 	/**
-	 * Creates instance of this type.
-	 */
-	IRType createInstance();
-
-	/**
-	 * Creates instance of this type.
+	 * Creates instance of this type as result of the <code>new</code> operator.
 	 * 
 	 * @param typeSystem
 	 *            the context for the operation, possible <code>null</code>
 	 */
 	IRType createInstance(ITypeSystem typeSystem);
+
+	/**
+	 * Creates {@link IRType} instance for this type. Default implementation
+	 * just instantiates {@link RSimpleType}.
+	 */
+	IRType toRType(ITypeSystem typeSystem);
 
 	/**
 	 * Returns array of additional type members, e.g. defined in partial types.

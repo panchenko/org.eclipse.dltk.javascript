@@ -39,9 +39,9 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.JSTypeSet.SimpleTypeKey;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
+import org.eclipse.dltk.javascript.typeinfo.RSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
 import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
@@ -106,7 +106,7 @@ public abstract class ElementValue implements IValue {
 		}
 	}
 
-	private static class PrototypeType extends SimpleTypeKey {
+	private static class PrototypeType extends RSimpleType {
 		public PrototypeType(ITypeSystem typeSystem, Type type) {
 			super(typeSystem, type);
 		}
@@ -346,13 +346,13 @@ public abstract class ElementValue implements IValue {
 		} else {
 			final Type type = (Type) element;
 			return new TypeValue(context,
-					JSTypeSet.ref(context != null ? context.resolveType(type)
+					RTypes.simple(context != null ? context.resolveType(type)
 							: type));
 		}
 	}
 
 	public static ElementValue createClass(ITypeSystem context, Type type) {
-		return new ClassValue(context, JSTypeSet.singleton(JSTypeSet
+		return new ClassValue(context, JSTypeSet.singleton(RTypes
 				.classType(type)));
 	}
 
@@ -442,14 +442,13 @@ public abstract class ElementValue implements IValue {
 					final IRType type = types.getFirst();
 					if (type instanceof IRClassType) {
 						return new TypeValue(context,
-								JSTypeSet.singleton(((IRClassType) type)
-										.toItemType()));
+								((IRClassType) type).newItemType());
 					}
 				}
 				final JSTypeSet returnTypes = JSTypeSet.create();
 				for (IRType type : types) {
 					if (type instanceof IRClassType) {
-						returnTypes.add(((IRClassType) type).toItemType());
+						returnTypes.add(((IRClassType) type).newItemType());
 					} else {
 						returnTypes.add(type);
 					}
@@ -526,8 +525,8 @@ public abstract class ElementValue implements IValue {
 				if (method.getType() != null) {
 					if (functionOperator == null) {
 						functionOperator = new TypeValue(context,
-								JSTypeSet.singleton(JSTypeSet.normalize(
-										context, method.getType())));
+								JSTypeSet.singleton(RTypes.create(context,
+										method.getType())));
 					}
 					return functionOperator;
 				}
@@ -541,7 +540,7 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public IRType getDeclaredType() {
-			return JSTypeSet.ref(Types.FUNCTION);
+			return RTypes.simple(Types.FUNCTION);
 		}
 
 		public JSTypeSet getDeclaredTypes() {
@@ -680,7 +679,7 @@ public abstract class ElementValue implements IValue {
 
 		public IRType getDeclaredType() {
 			if (declaredType == NOT_INITIALIZED) {
-				declaredType = JSTypeSet.normalize(context, property.getType());
+				declaredType = RTypes.create(context, property.getType());
 			}
 			return declaredType;
 		}
@@ -858,8 +857,7 @@ public abstract class ElementValue implements IValue {
 							if (types == null) {
 								types = JSTypeSet.create();
 							}
-							types.add(JSTypeSet.normalize(context,
-									method.getType()));
+							types.add(RTypes.create(context, method.getType()));
 						}
 					}
 				}
@@ -887,10 +885,10 @@ public abstract class ElementValue implements IValue {
 				if (member instanceof Property) {
 					final Property property = (Property) member;
 					if (property.getType() != null) {
-						return JSTypeSet.normalize(context, property.getType());
+						return RTypes.create(context, property.getType());
 					}
 				} else if (member instanceof Method) {
-					return JSTypeSet.ref(Types.FUNCTION);
+					return RTypes.simple(Types.FUNCTION);
 				}
 			}
 			return null;
@@ -905,14 +903,13 @@ public abstract class ElementValue implements IValue {
 						if (types == null) {
 							types = JSTypeSet.create();
 						}
-						types.add(JSTypeSet.normalize(context,
-								property.getType()));
+						types.add(RTypes.create(context, property.getType()));
 					}
 				} else if (member instanceof Method) {
 					if (types == null) {
 						types = JSTypeSet.create();
 					}
-					types.add(JSTypeSet.ref(Types.FUNCTION));
+					types.add(RTypes.simple(Types.FUNCTION));
 				}
 			}
 			if (types != null) {

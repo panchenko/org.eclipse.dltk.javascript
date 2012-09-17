@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
@@ -126,8 +127,8 @@ public class ArrayTypeImpl extends EObjectImpl implements ArrayType {
 	 * @generated NOT
 	 */
     public IRType toRType(ITypeSystem typeSystem) {
-        // TODO: implement this method
-		return null;
+		return RTypes.arrayOf(typeSystem,
+				RTypes.create(typeSystem, itemType));
     }
 
     /**

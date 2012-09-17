@@ -11,14 +11,12 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.NUMBER;
-import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
-
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IFunctionValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
-import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 
 public class FunctionValueCollection extends ValueCollection implements
 		IFunctionValueCollection {
@@ -43,10 +41,10 @@ public class FunctionValueCollection extends ValueCollection implements
 		IValueReference arguments = createChild("arguments");
 		arguments.setKind(ReferenceKind.LOCAL);
 		IValueReference argumentsLength = arguments.getChild("length");
-		argumentsLength.setDeclaredType(JSTypeSet.ref(NUMBER));
+		argumentsLength.setDeclaredType(RTypes.simple(Types.NUMBER));
 		IValueReference argumentsArray = arguments
 				.getChild(IValueReference.ARRAY_OP);
-		argumentsArray.setDeclaredType(JSTypeSet.ref(OBJECT));
+		argumentsArray.setDeclaredType(RTypes.simple(Types.OBJECT));
 	}
 
 	private final boolean block;

@@ -4,7 +4,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueParent;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
-import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 
 public class XMLListValue extends AbstractReference {
 
@@ -25,7 +25,7 @@ public class XMLListValue extends AbstractReference {
 
 	public XMLListValue(IValueParent parent, ITypeInfoContext context) {
 		this.parent = parent;
-		value.setDeclaredType(JSTypeSet.ref(context.getType(ITypeNames.XML)));
+		value.setDeclaredType(RTypes.simple(context.getType(ITypeNames.XML)));
 	}
 
 	public IValueReference getParent() {

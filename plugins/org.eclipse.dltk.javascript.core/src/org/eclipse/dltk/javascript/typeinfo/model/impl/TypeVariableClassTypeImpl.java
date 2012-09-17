@@ -14,6 +14,7 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
@@ -120,8 +121,8 @@ public class TypeVariableClassTypeImpl extends EObjectImpl implements TypeVariab
 	 * @generated NOT
 	 */
     public IRType toRType(ITypeSystem typeSystem) {
-        // TODO: implement this method
-		return null;
+		// shouldn't happen
+		return RTypes.classType(null);
     }
 
     /**

@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -123,8 +124,14 @@ public class SimpleTypeImpl extends EObjectImpl implements SimpleType {
 	 * @generated NOT
 	 */
     public IRType toRType(ITypeSystem typeSystem) {
-		// TODO: implement this method
-		return null;
+		Type t = getTarget();
+		if (t == null) {
+			return RTypes.any();
+		}
+		if (t.isProxy() && typeSystem != null) {
+			t = typeSystem.resolveType(t);
+		}
+		return RTypes.simple(t);
     }
 
 	@Override

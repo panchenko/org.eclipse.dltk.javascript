@@ -21,9 +21,9 @@ import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinfo.DefaultMetaType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
-import org.eclipse.dltk.javascript.typeinfo.JSTypeSet.SimpleTypeKey;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MetaType;
+import org.eclipse.dltk.javascript.typeinfo.RSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -636,15 +636,15 @@ public class TypeImpl extends ElementImpl implements Type {
 		return predicate;
 	}
 
-	public final IRType createInstance() {
-		return createInstance(null);
+	public IRType createInstance(ITypeSystem typeSystem) {
+		return toRType(typeSystem);
 	}
 
-	public IRType createInstance(ITypeSystem typeSystem) {
+	public IRType toRType(ITypeSystem typeSystem) {
 		if (metaType != null) {
 			return metaType.toRType(typeSystem, this);
 		} else {
-			return new SimpleTypeKey(typeSystem, this);
+			return new RSimpleType(typeSystem, this);
 		}
 	}
 

@@ -11,10 +11,13 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
@@ -107,8 +110,14 @@ public class UnionTypeImpl extends EObjectImpl implements UnionType {
 	 * @generated NOT
 	 */
     public IRType toRType(ITypeSystem typeSystem) {
-        // TODO: implement this method
-		return null;
+		if (targets == null || targets.isEmpty()) {
+			return RTypes.none();
+		}
+		final List<IRType> targets = new ArrayList<IRType>(this.targets.size());
+		for (JSType type : this.targets) {
+			targets.add(RTypes.create(typeSystem, type));
+		}
+		return RTypes.union(targets);
     }
 
     /**

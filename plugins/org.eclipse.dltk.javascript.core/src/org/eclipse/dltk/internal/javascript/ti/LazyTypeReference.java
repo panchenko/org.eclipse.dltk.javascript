@@ -5,12 +5,13 @@ import static org.eclipse.dltk.javascript.typeinfo.ITypeNames.OBJECT;
 import java.util.StringTokenizer;
 
 import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
-import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -40,7 +41,7 @@ public class LazyTypeReference extends AbstractReference {
 				if (childType != null && childType instanceof IRClassType) {
 					final Type target = ((IRClassType) childType).getTarget();
 					if (target != null) {
-						setDeclaredType(JSTypeSet.ref(target));
+						setDeclaredType(RTypes.simple(target));
 						resolved = true;
 						return;
 					}
@@ -64,10 +65,10 @@ public class LazyTypeReference extends AbstractReference {
 				}
 				setKind(ReferenceKind.TYPE);
 				Type type = TypeInfoModelFactory.eINSTANCE.createType();
-				type.setSuperType(context.getKnownType(OBJECT, null));
+				type.setSuperType(Types.OBJECT);
 				type.setKind(TypeKind.JAVASCRIPT);
 				type.setName(className);
-				setDeclaredType(JSTypeSet.ref(type));
+				setDeclaredType(RTypes.simple(type));
 				resolved = true;
 			} else if (className.indexOf('.') != -1) {
 				StringTokenizer st = new StringTokenizer(className, ".");
@@ -105,7 +106,7 @@ public class LazyTypeReference extends AbstractReference {
 						type.setSuperType(context.getKnownType(OBJECT, null));
 						type.setKind(TypeKind.JAVASCRIPT);
 						type.setName(className);
-						setDeclaredType(JSTypeSet.ref(type));
+						setDeclaredType(RTypes.simple(type));
 					}
 					setKind(ReferenceKind.TYPE);
 					resolved = true;

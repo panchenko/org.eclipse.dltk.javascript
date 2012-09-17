@@ -11,7 +11,13 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import org.eclipse.dltk.javascript.typeinfo.JSTypeSet.TypeKey;
+import java.util.Collection;
+import java.util.List;
+
+import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 /**
  * Static utility methods pertaining to {@code IRType} instances.
@@ -21,7 +27,7 @@ public class RTypes {
 	private RTypes() {
 	}
 
-	private static final IRType UNDEFINED_TYPE = new TypeKey() {
+	private static final IRType UNDEFINED_TYPE = new RType() {
 		public String getName() {
 			return ITypeNames.UNDEFINED;
 		}
@@ -38,7 +44,7 @@ public class RTypes {
 		return UNDEFINED_TYPE;
 	}
 
-	private static final IRType ANY_TYPE = new TypeKey() {
+	private static final IRType ANY_TYPE = new RType() {
 		public String getName() {
 			return "Any";
 		}
@@ -63,7 +69,7 @@ public class RTypes {
 		return ANY_TYPE;
 	}
 
-	private static final IRType NONE_TYPE = new TypeKey() {
+	private static final IRType NONE_TYPE = new RType() {
 		public String getName() {
 			return "None";
 		}
@@ -92,10 +98,10 @@ public class RTypes {
 	 * Returns the instance of the <b>empty array literal</b>.
 	 */
 	public static IRArrayType arrayOf() {
-		return JSTypeSet.arrayOf(EMPTY_ARRAY_ITEM_TYPE);
+		return arrayOf(EMPTY_ARRAY_ITEM_TYPE);
 	}
 
-	static final IRType EMPTY_ARRAY_ITEM_TYPE = new TypeKey() {
+	static final IRType EMPTY_ARRAY_ITEM_TYPE = new RType() {
 		public String getName() {
 			return "empty";
 		}
@@ -110,5 +116,69 @@ public class RTypes {
 			return true;
 		}
 	};
+
+	public static IRType simple(Type type) {
+		if (Types.ARRAY == type) {
+			return arrayOf(none());
+		} else {
+			return type.toRType(null);
+		}
+	}
+
+	public static IRClassType classType(Type type) {
+		return new RClassType(type);
+	}
+
+	public static IRMapType mapOf(final IRType keyType, final IRType valueType) {
+		return new RMapType(keyType, valueType);
+	}
+
+	public static IRType recordType(ITypeSystem typeSystem,
+			Collection<Member> members) {
+		return new RRecordType(typeSystem, members);
+	}
+
+	public static IRType functionType(List<IRParameter> parameters,
+			IRType returnType) {
+		return new RFunctionType(parameters, returnType);
+	}
+
+	public static IRType union(Collection<IRType> targets) {
+		return new RUnionType(targets);
+	}
+
+	/**
+	 * Creates new instance of the array type with the specified itemType.
+	 */
+	public static IRArrayType arrayOf(final IRType itemType) {
+		return new RArrayType(itemType);
+	}
+
+	public static IRArrayType arrayOf(ITypeSystem typeSystem,
+			final IRType itemType) {
+		return new RArrayType(typeSystem, itemType);
+	}
+
+	public static IRType create(JSType type) {
+		return create(null, type);
+	}
+
+	public static IRType create(ITypeSystem context, JSType type) {
+		if (type == null) {
+			return null;
+		}
+		final IRType result = type.toRType(context);
+		if (result != null) {
+			return result;
+		}
+		for (IRTypeFactory factory : TypeInfoManager.getRTypeFactories()) {
+			final IRType runtimeType = factory.create(context, type);
+			if (runtimeType != null) {
+				return runtimeType;
+			}
+		}
+		throw new IllegalArgumentException("Unsupported type "
+				+ type.getClass().getName());
+	}
 
 }

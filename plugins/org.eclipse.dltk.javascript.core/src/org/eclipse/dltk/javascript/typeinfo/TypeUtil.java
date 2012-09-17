@@ -166,7 +166,7 @@ public class TypeUtil {
 		} else if (type != null && type.getName().equals(ITypeNames.XML)) {
 			return type;
 		} else if (type != null && type.getName().equals(ITypeNames.XMLLIST)) {
-			return JSTypeSet.ref(TypeInfoModelLoader.getInstance().getType(
+			return RTypes.simple(TypeInfoModelLoader.getInstance().getType(
 					ITypeNames.XML));
 		} else {
 			return null;

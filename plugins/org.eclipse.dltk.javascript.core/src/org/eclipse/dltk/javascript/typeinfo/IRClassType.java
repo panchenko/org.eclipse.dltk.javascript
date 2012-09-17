@@ -17,6 +17,15 @@ public interface IRClassType extends IRType {
 
 	Type getTarget();
 
+	/**
+	 * Returns the item of this class.
+	 */
 	IRType toItemType();
+
+	/**
+	 * Returns the item type when <code>new</code> operator is applied to this
+	 * class.
+	 */
+	IRType newItemType();
 
 }

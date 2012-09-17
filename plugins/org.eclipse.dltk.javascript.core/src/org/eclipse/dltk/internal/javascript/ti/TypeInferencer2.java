@@ -38,7 +38,6 @@ import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
-import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.OriginReference;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
@@ -315,7 +314,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 							.get(((TypeVariableClassType) eObject)
 									.getVariable());
 					return TypeUtil
-							.createRType(JSTypeSet
+							.createRType(RTypes
 									.classType(source instanceof IRSimpleType ? ((IRSimpleType) source)
 											.getTarget() : null));
 				} else {
@@ -602,7 +601,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				if (collection instanceof IValueProvider) {
 					IValue value = ((IValueProvider) collection).getValue();
 					if (member.getType() != null) {
-						value.setDeclaredType(JSTypeSet.normalize(this,
+						value.setDeclaredType(RTypes.create(this,
 								member.getType()));
 					}
 					if (value.getKind() == ReferenceKind.UNKNOWN) {

@@ -15,6 +15,8 @@ import java.util.Collection;
 
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.RModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -160,8 +162,9 @@ public class FunctionTypeImpl extends EObjectImpl implements FunctionType {
 	 * @generated NOT
 	 */
     public IRType toRType(ITypeSystem typeSystem) {
-        // TODO: implement this method
-		return null;
+		return RTypes.functionType(
+				RModelBuilder.convert(typeSystem, getParameters()),
+				RTypes.create(typeSystem, getReturnType()));
     }
 
 	protected void printParameters(StringBuilder sb) {

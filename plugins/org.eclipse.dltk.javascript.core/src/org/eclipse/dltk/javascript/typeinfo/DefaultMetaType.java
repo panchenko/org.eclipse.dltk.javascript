@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
-import org.eclipse.dltk.javascript.typeinfo.JSTypeSet.SimpleTypeKey;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public enum DefaultMetaType implements MetaType {
@@ -30,7 +29,7 @@ public enum DefaultMetaType implements MetaType {
 				return runtimeType;
 			}
 		}
-		return new SimpleTypeKey(type);
+		return new RSimpleType(type);
 	}
 
 }

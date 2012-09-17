@@ -18,6 +18,7 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -68,7 +69,7 @@ public class TypeReferencePredicate extends
 			result = matchName(ITypeNames.ARRAY);
 		}
 		// TODO (alex) review
-		for (Type t : JSTypeSet.singleton(JSTypeSet.normalize(context, type))
+		for (Type t : JSTypeSet.singleton(RTypes.create(context, type))
 				.toArray()) {
 			final MatchLevel m = matchName(t.getName());
 			if (result == null || m.compareTo(result) > 0) {

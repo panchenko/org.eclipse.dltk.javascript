@@ -723,7 +723,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 			return super.visitThrowStatement(node);
 		}
 
-		private final IRType functionTypeRef = JSTypeSet.ref(Types.FUNCTION);
+		private final IRType functionTypeRef = RTypes.simple(Types.FUNCTION);
 
 		@Override
 		public IValueReference visitCallExpression(CallExpression node) {
@@ -779,7 +779,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 							peekFunctionScope(), node, reference, arguments,
 							methods));
 					final ITypeSystem typeSystem = getTypeSystemOf(reference);
-					final IRType type = JSTypeSet.normalize(typeSystem,
+					final IRType type = RTypes.create(typeSystem,
 							method.getType());
 					return ConstantValue.valueOf(type);
 				}
@@ -802,7 +802,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 									.getStaticConstructor();
 							if (constructor != null) {
 								return new ConstantValue(
-										JSTypeSet.normalize(constructor
+										RTypes.create(constructor
 												.getType()));
 							}
 						}
@@ -900,7 +900,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 					}
 				} else if (expressionType != RTypes.any()
 						&& expressionType != RTypes.none()
-						&& !JSTypeSet.ref(Types.FUNCTION)
+						&& !RTypes.simple(Types.FUNCTION)
 								.isAssignableFrom(expressionType).ok()) {
 					reporter.reportProblem(
 							JavaScriptProblems.WRONG_FUNCTION,

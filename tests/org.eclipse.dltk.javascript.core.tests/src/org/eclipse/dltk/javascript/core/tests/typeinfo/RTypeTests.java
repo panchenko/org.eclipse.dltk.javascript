@@ -14,31 +14,90 @@ package org.eclipse.dltk.javascript.core.tests.typeinfo;
 import junit.framework.TestCase;
 
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
+import org.eclipse.dltk.javascript.typeinfo.IRMapType;
+import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
-import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
+import org.eclipse.dltk.javascript.typeinfo.model.MapType;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class RTypeTests extends TestCase implements ITypeNames {
 
+	private static final TypeInfoModelFactory TIMF = TypeInfoModelFactory.eINSTANCE;
+
 	public void testAssignableSuperType() {
 		final Type superType = Types.STRING;
-		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
+		final Type type = TIMF.createType();
 		type.setName(EcoreUtil.generateUUID());
 		type.setSuperType(superType);
-		assertEquals(TypeCompatibility.TRUE, JSTypeSet.ref(superType)
-				.isAssignableFrom(JSTypeSet.ref(type)));
+		assertEquals(TypeCompatibility.TRUE, RTypes.simple(superType)
+				.isAssignableFrom(RTypes.simple(type)));
 	}
 
 	public void testAssignableTrait() {
 		final Type trait = Types.STRING;
-		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
+		final Type type = TIMF.createType();
 		type.setName(EcoreUtil.generateUUID());
 		type.getTraits().add(trait);
-		assertEquals(TypeCompatibility.TRUE, JSTypeSet.ref(trait)
-				.isAssignableFrom(JSTypeSet.ref(type)));
+		assertEquals(TypeCompatibility.TRUE, RTypes.simple(trait)
+				.isAssignableFrom(RTypes.simple(type)));
+	}
+
+	public void testSimpleType() {
+		final IRType type = RTypes.create(TypeUtil.ref(Types.STRING));
+		assertSame(Types.STRING, ((IRSimpleType) type).getTarget());
+	}
+
+	public void testClassType() {
+		final IRType type = RTypes.create(TypeUtil.classType(Types.STRING));
+		assertSame(Types.STRING, ((IRClassType) type).getTarget());
+	}
+
+	public void testMapType() {
+		final MapType mapType = TIMF.createMapType();
+		mapType.setKeyType(TypeUtil.ref(Types.STRING));
+		mapType.setValueType(TypeUtil.ref(Types.NUMBER));
+		final IRMapType type = (IRMapType) RTypes.create(mapType);
+		assertEquals(RTypes.simple(Types.STRING), type.getKeyType());
+		assertEquals(RTypes.simple(Types.NUMBER), type.getValueType());
+	}
+
+	public void testUnionType() {
+		final UnionType unionType = TIMF.createUnionType();
+		unionType.getTargets().add(TypeUtil.ref(Types.STRING));
+		unionType.getTargets().add(TypeUtil.ref(Types.NUMBER));
+		final IRUnionType type = (IRUnionType) RTypes.create(unionType);
+		assertEquals(2, type.getTargets().size());
+		assertTrue(type.getTargets().contains(RTypes.simple(Types.STRING)));
+		assertTrue(type.getTargets().contains(RTypes.simple(Types.NUMBER)));
+	}
+
+	public void testFunctionType() {
+		final FunctionType functionType = TIMF.createFunctionType();
+		functionType.setReturnType(TypeUtil.ref(Types.STRING));
+		final Parameter parameter = TIMF.createParameter();
+		parameter.setName("num");
+		parameter.setType(TypeUtil.ref(Types.NUMBER));
+		functionType.getParameters().add(parameter);
+		final IRFunctionType type = (IRFunctionType) RTypes
+				.create(functionType);
+		assertEquals(RTypes.simple(Types.STRING), type.getReturnType());
+		assertEquals(1, type.getParameters().size());
+		assertEquals(RTypes.simple(Types.NUMBER), type.getParameters().get(0)
+				.getType());
+		assertEquals(TypeCompatibility.TRUE,
+				type.isAssignableFrom(RTypes.simple(Types.FUNCTION)));
 	}
 
 }

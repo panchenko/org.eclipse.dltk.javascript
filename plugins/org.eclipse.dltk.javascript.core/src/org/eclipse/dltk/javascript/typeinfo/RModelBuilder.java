@@ -214,7 +214,7 @@ public class RModelBuilder {
 	}
 
 	public static IRMethod create(ITypeSystem context, IMethod method) {
-		return new RMethod(method.getName(), JSTypeSet.normalize(context,
+		return new RMethod(method.getName(), RTypes.create(context,
 				method.getType()), method.getLocation(),
 				method.getSuppressedWarnings(), method.isDeprecated(),
 				method.getVisibility(), method.isConstructor(), convertParams0(
@@ -222,7 +222,7 @@ public class RModelBuilder {
 	}
 
 	public static IRVariable create(ITypeSystem context, IVariable variable) {
-		return new RVariable(variable.getName(), JSTypeSet.normalize(context,
+		return new RVariable(variable.getName(), RTypes.create(context,
 				variable.getType()), variable.getLocation(),
 				variable.getSuppressedWarnings(), variable.isDeprecated(),
 				variable.getVisibility());
@@ -235,8 +235,8 @@ public class RModelBuilder {
 		} else {
 			final List<IRParameter> params = new ArrayList<IRParameter>();
 			for (Parameter parameter : parameters) {
-				final IRType paramType = parameter.getType() != null ? JSTypeSet
-						.normalize(context, parameter.getType()) : RTypes.any();
+				final IRType paramType = parameter.getType() != null ? RTypes
+						.create(context, parameter.getType()) : RTypes.any();
 				params.add(new RParameter(parameter.getName(), paramType,
 						parameter.getKind()));
 			}
@@ -251,8 +251,8 @@ public class RModelBuilder {
 		} else {
 			final List<IRParameter> params = new ArrayList<IRParameter>();
 			for (IParameter parameter : parameters) {
-				final IRType paramType = parameter.getType() != null ? JSTypeSet
-						.normalize(context, parameter.getType()) : RTypes.any();
+				final IRType paramType = parameter.getType() != null ? RTypes
+						.create(context, parameter.getType()) : RTypes.any();
 				final ParameterKind kind;
 				if (parameter.isVarargs()) {
 					kind = ParameterKind.VARARGS;

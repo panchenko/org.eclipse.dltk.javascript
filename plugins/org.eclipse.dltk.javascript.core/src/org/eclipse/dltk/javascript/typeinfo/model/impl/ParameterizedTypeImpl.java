@@ -11,10 +11,16 @@
  */
 package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
+import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -178,6 +184,24 @@ public class ParameterizedTypeImpl extends SimpleTypeImpl implements Parameteriz
 			return sb.toString();
 		}
 		return super.getName();
+	}
+
+	@Override
+	public IRType toRType(ITypeSystem typeSystem) {
+		final Type t = getTarget();
+		if (t == null) {
+			return RTypes.any();
+		}
+		if (typeSystem != null) {
+			final EList<JSType> args = getActualTypeArguments();
+			final List<IRType> parameters = new ArrayList<IRType>(args.size());
+			for (int i = 0; i < args.size(); ++i) {
+				parameters.add(RTypes.create(typeSystem, args.get(i)));
+			}
+			return typeSystem.parameterize(t, parameters).toRType(typeSystem);
+		} else {
+			return RTypes.simple(t);
+		}
 	}
 
 } //GenericTypeImpl
