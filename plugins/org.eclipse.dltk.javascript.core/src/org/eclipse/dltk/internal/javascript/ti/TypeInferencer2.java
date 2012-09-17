@@ -308,7 +308,12 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					final IRType source = parameters
 							.get(((TypeVariableReference) eObject)
 									.getVariable());
-					return TypeUtil.createRType(source);
+					if (source != null) {
+						return TypeUtil.createRType(source);
+					}
+					// probably generic static method in generic class.
+					copyEObject = createCopy(eObject);
+					eClass = eObject.eClass();
 				} else if (eObject instanceof TypeVariableClassType) {
 					final IRType source = parameters
 							.get(((TypeVariableClassType) eObject)
