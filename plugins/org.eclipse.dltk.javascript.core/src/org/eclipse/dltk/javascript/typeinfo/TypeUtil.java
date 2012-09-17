@@ -341,9 +341,13 @@ public class TypeUtil {
 	 * {@link IRType}.
 	 * 
 	 * @param type
+	 *            nullable
 	 * @return
 	 */
 	public static JSType createRType(IRType type) {
+		if (type == null) {
+			return null;
+		}
 		final RType result = TypeInfoModelFactory.eINSTANCE.createRType();
 		result.setRuntimeType(type);
 		return result;
