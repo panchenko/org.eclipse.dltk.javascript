@@ -1,5 +1,7 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
+import static org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl.DELEGATING_TYPE_SYSTEM;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -350,7 +352,7 @@ public class ImmutableValue implements IValue, IValue2 {
 	}
 
 	protected ITypeSystem getTypeSystem() {
-		return TypeInferencer2.DELEGATING_TYPE_SYSTEM;
+		return DELEGATING_TYPE_SYSTEM;
 	}
 
 	public void setDeclaredType(IRType declaredType) {

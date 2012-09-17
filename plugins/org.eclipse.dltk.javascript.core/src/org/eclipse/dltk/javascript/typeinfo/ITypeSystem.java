@@ -12,12 +12,45 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.eclipse.dltk.internal.javascript.ti.IValue;
+import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface ITypeSystem {
+
+	ThreadTypeSystem CURRENT = new ThreadTypeSystemImpl();
+
+	interface ThreadTypeSystem {
+
+		/**
+		 * Returns {@link ITypeSystem} of the current thread or
+		 * <code>null</code>.
+		 */
+		ITypeSystem get();
+
+		/**
+		 * Returns the currently processing source or <code>null</code>.
+		 * 
+		 * @return
+		 */
+		ReferenceSource getCurrentSource();
+
+		/**
+		 * Executes the code temporary setting the specified type system as
+		 * current.
+		 */
+		void runWith(ITypeSystem typeSystem, Runnable runnable);
+
+		/**
+		 * Executes the code temporary setting the specified type system as
+		 * current.
+		 */
+		<V> V runWith(ITypeSystem typeSystem, Callable<V> callable)
+				throws Exception;
+	}
 
 	/**
 	 * Resolves the specified type if it's a proxy

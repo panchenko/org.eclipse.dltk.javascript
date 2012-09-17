@@ -57,6 +57,7 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
@@ -162,7 +163,7 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 					return null;
 				}
 				try {
-					return TypeInferencer2.withTypeSystem(inferencer2,
+					return ITypeSystem.CURRENT.runWith(inferencer2,
 							new Callable<IModelElement[]>() {
 								public IModelElement[] call() throws Exception {
 									return toModelElements(inferencer2,

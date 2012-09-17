@@ -57,6 +57,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
+import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
@@ -116,7 +117,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		} catch (PositionReachedException e) {
 			// e.printStackTrace();
 		}
-		TypeInferencer2.withTypeSystem(inferencer2, new Runnable() {
+		ITypeSystem.CURRENT.runWith(inferencer2, new Runnable() {
 			public void run() {
 				final CompletionPath path = new CompletionPath(calculator
 						.getCompletion());

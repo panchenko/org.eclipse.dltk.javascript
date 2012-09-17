@@ -33,8 +33,8 @@ import org.eclipse.dltk.compiler.problem.ValidationMultiStatus;
 import org.eclipse.dltk.compiler.problem.ValidationStatus;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.core.builder.IBuildContext;
-import org.eclipse.dltk.core.builder.IBuildContextExtension;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.builder.IBuildParticipantExtension4;
 import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChecker;
 import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
 import org.eclipse.dltk.internal.javascript.ti.ElementValue;
@@ -60,6 +60,7 @@ import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -109,7 +110,10 @@ import org.eclipse.dltk.javascript.validation.IValidatorExtension;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
-public class TypeInfoValidator implements IBuildParticipant {
+public class TypeInfoValidator implements IBuildParticipant,
+		IBuildParticipantExtension4 {
+
+	private boolean hasDependents;
 
 	public void build(IBuildContext context) throws CoreException {
 		final Script script = JavaScriptValidations.parse(context);
@@ -123,8 +127,6 @@ public class TypeInfoValidator implements IBuildParticipant {
 		@SuppressWarnings("unchecked")
 		final Set<FunctionStatement> inconsistentReturns = (Set<FunctionStatement>) context
 				.get(JavaScriptValidations.ATTR_INCONSISTENT_RETURNS);
-		final boolean hasDependents = context instanceof IBuildContextExtension
-				&& ((IBuildContextExtension) context).getDependents(this) != null;
 		final ValidationVisitor visitor = new ValidationVisitor(inferencer,
 				reporter, inconsistentReturns, hasDependents);
 		inferencer.setVisitor(visitor);
@@ -134,6 +136,17 @@ public class TypeInfoValidator implements IBuildParticipant {
 		typeChecker.validate();
 		if (hasDependents) {
 			context.set(JavaScriptValidations.ATTR_BINDINGS, visitor.bindings);
+			((ThreadTypeSystemImpl) ITypeSystem.CURRENT).set(inferencer);
+		}
+	}
+
+	public void notifyDependents(IBuildParticipant[] dependents) {
+		hasDependents = true;
+	}
+
+	public void afterBuild(IBuildContext context) {
+		if (hasDependents) {
+			((ThreadTypeSystemImpl) ITypeSystem.CURRENT).set(null);
 		}
 	}
 
@@ -802,8 +815,7 @@ public class TypeInfoValidator implements IBuildParticipant {
 									.getStaticConstructor();
 							if (constructor != null) {
 								return new ConstantValue(
-										RTypes.create(constructor
-												.getType()));
+										RTypes.create(constructor.getType()));
 							}
 						}
 					}

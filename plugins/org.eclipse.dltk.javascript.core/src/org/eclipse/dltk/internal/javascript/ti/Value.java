@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
+import static org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl.DELEGATING_TYPE_SYSTEM;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -36,7 +38,7 @@ public class Value extends ImmutableValue {
 
 	@Override
 	protected ITypeSystem getTypeSystem() {
-		return TypeInferencer2.DELEGATING_TYPE_SYSTEM;
+		return DELEGATING_TYPE_SYSTEM;
 	}
 
 	public void setDeclaredType(IRType declaredType) {
@@ -155,7 +157,7 @@ public class Value extends ImmutableValue {
 				e.printStackTrace();
 				if (recursionErrorReported.get().compareAndSet(false, true)) {
 					String msg = "Deep recursion while copying the value";
-					final ReferenceSource source = TypeInferencer2
+					final ReferenceSource source = ITypeSystem.CURRENT
 							.getCurrentSource();
 					if (source != null) {
 						msg += " when processing " + source;

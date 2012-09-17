@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.runtime.Assert;
@@ -25,6 +24,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
+import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
 import org.eclipse.dltk.javascript.parser.JSProblem;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
@@ -106,7 +106,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 					+ Thread.currentThread().getName());
 		final ITypeSystem saved = CURRENT.get();
 		try {
-			CURRENT.set(this);
+			((ThreadTypeSystemImpl) CURRENT).set(this);
 			elements.clear();
 			modelBuilders = null;
 			typeProviders = null;
@@ -124,7 +124,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		} catch (AssertionError e) {
 			log(e);
 		} finally {
-			CURRENT.set(saved);
+			((ThreadTypeSystemImpl) CURRENT).set(saved);
 		}
 		// return null;
 	}
@@ -182,7 +182,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 	}
 
-	protected Type doResolveType(Type type) {
+	public Type doResolveType(Type type) {
 		final String typeName = URI.decode(((InternalEObject) type).eProxyURI()
 				.fragment());
 		final Type resolved = getType(typeName, null, true, true, false, true);
@@ -654,72 +654,6 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return modelBuilders;
 	}
 
-	private static final ThreadLocal<ITypeSystem> CURRENT = new ThreadLocal<ITypeSystem>();
-
-	protected static final ITypeSystem DELEGATING_TYPE_SYSTEM = new DelagatingTypeSystem();
-
-	private static class DelagatingTypeSystem implements ITypeSystem {
-
-		private ITypeSystem current() {
-			return CURRENT.get();
-		}
-
-		public IValue valueOf(Member member) {
-			final ITypeSystem current = current();
-			if (current != null) {
-				return current.valueOf(member);
-			} else {
-				return null;
-			}
-		}
-
-		public Type resolveType(Type type) {
-			if (type != null && type.isProxy()) {
-				final ITypeSystem current = current();
-				if (current != null) {
-					if (current instanceof TypeInferencer2) {
-						return ((TypeInferencer2) current).doResolveType(type);
-					} else {
-						return current.resolveType(type);
-					}
-				} else {
-					final Type resolved = TypeInfoModelLoader.getInstance()
-							.getType(type.getName());
-					if (resolved != null) {
-						return resolved;
-					}
-				}
-			}
-			return type;
-		}
-
-		public Type parameterize(Type target, List<IRType> parameters) {
-			final ITypeSystem current = current();
-			if (current != null) {
-				return current.parameterize(target, parameters);
-			} else {
-				return target;
-			}
-		}
-
-		public <T> T getAttribute(AttributeKey<T> key) {
-			final ITypeSystem current = current();
-			return current != null ? current.getAttribute(key) : null;
-		}
-
-		public Object getValue(Object key) {
-			final ITypeSystem current = current();
-			return current != null ? current.getValue(key) : null;
-		}
-
-		public void setValue(Object key, Object value) {
-			final ITypeSystem current = current();
-			if (current != null) {
-				current.setValue(key, value);
-			}
-		}
-	}
-
 	private final Map<AttributeKey<?>, List<Object>> attributes = new HashMap<AttributeKey<?>, List<Object>>();
 
 	@SuppressWarnings("unchecked")
@@ -761,33 +695,6 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			values = new HashMap<Object, Object>();
 		}
 		values.put(key, value);
-	}
-
-	public static void withTypeSystem(ITypeSystem typeSystem, Runnable runnable) {
-		final ITypeSystem saved = CURRENT.get();
-		try {
-			CURRENT.set(typeSystem);
-			runnable.run();
-		} finally {
-			CURRENT.set(saved);
-		}
-	}
-
-	public static <V> V withTypeSystem(ITypeSystem typeSystem,
-			Callable<V> callable) throws Exception {
-		final ITypeSystem saved = CURRENT.get();
-		try {
-			CURRENT.set(typeSystem);
-			return callable.call();
-		} finally {
-			CURRENT.set(saved);
-		}
-	}
-
-	public static ReferenceSource getCurrentSource() {
-		final ITypeSystem ts = CURRENT.get();
-		return ts instanceof TypeInferencer2 ? ((TypeInferencer2) ts)
-				.getSource() : null;
 	}
 
 }
