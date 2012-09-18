@@ -20,6 +20,12 @@ import org.eclipse.dltk.javascript.ast.Script;
 
 public class JavaScriptParserUtil {
 
+	/**
+	 * The name of the attribute referencing {@link ISourceModule} from
+	 * {@link Script} attributes.
+	 */
+	public static final String ATTR_MODULE = ISourceModule.class.getName();
+
 	public static Script parse(ISourceModule module) {
 		return parse(module, null);
 	}

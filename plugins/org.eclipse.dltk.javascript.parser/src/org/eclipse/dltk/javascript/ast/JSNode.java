@@ -42,6 +42,37 @@ public abstract class JSNode extends ASTNode {
 		return this.parent;
 	}
 
+	/**
+	 * Returns the root Script node this node is contained in or
+	 * <code>null</code> if this node is not contained in any Script.
+	 */
+	public Script getScript() {
+		ASTNode current = parent;
+		for (;;) {
+			if (current instanceof Script) {
+				return (Script) current;
+			} else if (current instanceof JSNode) {
+				current = ((JSNode) current).parent;
+			} else {
+				return null;
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends JSNode> T getAncestor(Class<T> clazz) {
+		ASTNode current = this;
+		for (;;) {
+			if (clazz.isInstance(current)) {
+				return (T) current;
+			} else if (current instanceof JSNode) {
+				current = ((JSNode) current).parent;
+			} else {
+				return null;
+			}
+		}
+	}
+
 	public Comment getDocumentation() {
 		return null;
 	}

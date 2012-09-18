@@ -32,6 +32,7 @@ import org.eclipse.dltk.compiler.problem.IProblemReporter;
 import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.core.DLTKCore;
 import org.eclipse.dltk.core.IModelElement;
+import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceRange;
 import org.eclipse.dltk.core.SourceRange;
 import org.eclipse.dltk.core.builder.ISourceLineTracker;
@@ -377,7 +378,11 @@ public class JavaScriptParser extends AbstractSourceParser {
 			JSTransformer transformer = new JSTransformer(transformers,
 					stream.getTokens(), parser.peekState().hasErrors());
 			transformer.setReporter(reporter);
-			return transformer.transformScript(root);
+			final Script script = transformer.transformScript(root);
+			if (element != null && element instanceof ISourceModule) {
+				script.setAttribute(JavaScriptParserUtil.ATTR_MODULE, element);
+			}
+			return script;
 		} catch (Exception e) {
 			if (DLTKCore.DEBUG)
 				e.printStackTrace();

@@ -17,16 +17,24 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
 import org.eclipse.dltk.javascript.internal.parser.JSLiterals;
 
-public class Script extends ASTNode implements ISourceable, IModuleDeclaration,
+public class Script extends JSNode implements ISourceable, IModuleDeclaration,
 		JSScope {
 
 	private final List<Comment> comments = new ArrayList<Comment>();
 	private final List<Statement> statements = new ArrayList<Statement>();
 	private final List<JSDeclaration> declarations = new ArrayList<JSDeclaration>();
+
+	public Script() {
+		super(null);
+	}
+
+	@Override
+	public Script getScript() {
+		return this;
+	}
 
 	public String toSourceString(String indentationString) {
 
@@ -93,14 +101,14 @@ public class Script extends ASTNode implements ISourceable, IModuleDeclaration,
 	/**
 	 * @since 4.1
 	 */
-	public Object getAttribute(String key) {
+	public synchronized Object getAttribute(String key) {
 		return attributes != null ? attributes.get(key) : null;
 	}
 
 	/**
 	 * @since 4.1
 	 */
-	public void setAttribute(String key, Object value) {
+	public synchronized void setAttribute(String key, Object value) {
 		if (value != null) {
 			if (attributes == null) {
 				attributes = new HashMap<String, Object>();

@@ -24,8 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
@@ -34,6 +36,7 @@ import org.eclipse.dltk.compiler.problem.ValidationStatus;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.core.builder.IBuildContext;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
+import org.eclipse.dltk.core.builder.IBuildParticipantExtension;
 import org.eclipse.dltk.core.builder.IBuildParticipantExtension4;
 import org.eclipse.dltk.internal.javascript.parser.JSDocValidatorFactory.TypeChecker;
 import org.eclipse.dltk.internal.javascript.ti.ConstantValue;
@@ -58,6 +61,7 @@ import org.eclipse.dltk.javascript.ast.StatementBlock;
 import org.eclipse.dltk.javascript.ast.ThrowStatement;
 import org.eclipse.dltk.javascript.ast.UnaryOperation;
 import org.eclipse.dltk.javascript.ast.VariableDeclaration;
+import org.eclipse.dltk.javascript.core.JSBindings;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
@@ -111,9 +115,22 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
 public class TypeInfoValidator implements IBuildParticipant,
-		IBuildParticipantExtension4 {
+		IBuildParticipantExtension, IBuildParticipantExtension4 {
+
+	/**
+	 * Public identifier of this build participant.
+	 */
+	public static final String ID = "org.eclipse.dltk.javascript.core.buildParticipant.typeinfo";
 
 	private boolean hasDependents;
+
+	public boolean beginBuild(int buildType) {
+		return true;
+	}
+
+	public void notifyDependents(IBuildParticipant[] dependents) {
+		hasDependents = true;
+	}
 
 	public void build(IBuildContext context) throws CoreException {
 		final Script script = JavaScriptValidations.parse(context);
@@ -135,19 +152,76 @@ public class TypeInfoValidator implements IBuildParticipant,
 		inferencer.doInferencing(script);
 		typeChecker.validate();
 		if (hasDependents) {
-			context.set(JavaScriptValidations.ATTR_BINDINGS, visitor.bindings);
+			context.set(TypeInfoValidator.ATTR_BINDINGS, visitor.bindings);
+			saveCachedBindings(script, new ValidatorBindings(inferencer,
+					visitor.bindings));
 			((ThreadTypeSystemImpl) ITypeSystem.CURRENT).set(inferencer);
 		}
 	}
 
-	public void notifyDependents(IBuildParticipant[] dependents) {
-		hasDependents = true;
+	private static class ValidatorBindings extends JSBindings {
+		public ValidatorBindings(ITypeSystem typeSystem,
+				Map<ASTNode, IValueReference> nodeMap) {
+			super(typeSystem, nodeMap);
+		}
+
+		@Override
+		protected boolean isCacheable() {
+			return false;
+		}
 	}
 
 	public void afterBuild(IBuildContext context) {
 		if (hasDependents) {
 			((ThreadTypeSystemImpl) ITypeSystem.CURRENT).set(null);
 		}
+	}
+
+	public void endBuild(IProgressMonitor monitor) {
+		removeCachedBindings();
+	}
+
+	/**
+	 * The name of the {@link IBuildContext} attribute containing "bindings"
+	 * <code>(Map&lt;ASTNode,IValueReference&gt;)</code>
+	 */
+	public static final String ATTR_BINDINGS = TypeInfoValidator.class
+			.getName() + ".BINDINGS";
+
+	/**
+	 * Thread specific bindings, so methods from {@link JSBindings} called from
+	 * {@link IBuildParticipant} will return validation specific bindings.
+	 */
+	private static final ThreadLocal<WeakHashMap<Script, JSBindings>> CACHED_BINDINGS = new ThreadLocal<WeakHashMap<Script, JSBindings>>();
+
+	private static void saveCachedBindings(Script script, JSBindings bindings) {
+		WeakHashMap<Script, JSBindings> map = CACHED_BINDINGS.get();
+		if (map == null) {
+			map = new WeakHashMap<Script, JSBindings>();
+			CACHED_BINDINGS.set(map);
+		}
+		map.put(script, bindings);
+	}
+
+	private static void removeCachedBindings() {
+		final WeakHashMap<Script, JSBindings> map = CACHED_BINDINGS.get();
+		if (map != null) {
+			map.clear();
+		}
+	}
+
+	/**
+	 * Returns cached "bindings" for the specified script, if any.
+	 * 
+	 * @param script
+	 * @return
+	 */
+	public static JSBindings getCachedBindings(Script script) {
+		final WeakHashMap<Script, JSBindings> map = CACHED_BINDINGS.get();
+		if (map != null) {
+			return map.get(script);
+		}
+		return null;
 	}
 
 	protected TypeInferencer2 createTypeInferencer() {
