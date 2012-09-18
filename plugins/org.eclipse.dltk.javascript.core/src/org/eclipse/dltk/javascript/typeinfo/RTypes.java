@@ -27,7 +27,9 @@ public class RTypes {
 	private RTypes() {
 	}
 
-	private static final IRType UNDEFINED_TYPE = new RType() {
+	private static final IRType UNDEFINED_TYPE = new Undefined();
+
+	private static class Undefined extends RType {
 		public String getName() {
 			return ITypeNames.UNDEFINED;
 		}
@@ -35,7 +37,7 @@ public class RTypes {
 		public TypeCompatibility isAssignableFrom(IRType type) {
 			return TypeCompatibility.valueOf(type == this);
 		}
-	};
+	}
 
 	/**
 	 * Returns the instance of the special <b>undefined</b> type.
@@ -44,7 +46,9 @@ public class RTypes {
 		return UNDEFINED_TYPE;
 	}
 
-	private static final IRType ANY_TYPE = new RType() {
+	private static final IRType ANY_TYPE = new Any();
+
+	private static class Any extends RType {
 		public String getName() {
 			return "Any";
 		}
@@ -58,7 +62,7 @@ public class RTypes {
 		public boolean isExtensible() {
 			return true;
 		}
-	};
+	}
 
 	/**
 	 * Returns the instance of the logical <b>Any</b> type.
@@ -69,7 +73,9 @@ public class RTypes {
 		return ANY_TYPE;
 	}
 
-	private static final IRType NONE_TYPE = new RType() {
+	private static final IRType NONE_TYPE = new None();
+
+	private static class None extends RType {
 		public String getName() {
 			return "None";
 		}
@@ -83,7 +89,7 @@ public class RTypes {
 		public boolean isExtensible() {
 			return true;
 		}
-	};
+	}
 
 	/**
 	 * Returns the instance of the logical <b>None</b> type (which is used as a
@@ -101,7 +107,9 @@ public class RTypes {
 		return arrayOf(EMPTY_ARRAY_ITEM_TYPE);
 	}
 
-	static final IRType EMPTY_ARRAY_ITEM_TYPE = new RType() {
+	static final IRType EMPTY_ARRAY_ITEM_TYPE = new EmptyArrayItem();
+
+	private static class EmptyArrayItem extends RType {
 		public String getName() {
 			return "empty";
 		}
@@ -115,7 +123,7 @@ public class RTypes {
 		public boolean isExtensible() {
 			return true;
 		}
-	};
+	}
 
 	public static IRType simple(Type type) {
 		if (Types.ARRAY == type) {
