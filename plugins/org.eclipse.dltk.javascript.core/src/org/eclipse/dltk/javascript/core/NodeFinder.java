@@ -9,7 +9,7 @@
  * Contributors:
  *     xored software, Inc. - initial API and Implementation (Alex Panchenko)
  *******************************************************************************/
-package org.eclipse.dltk.javascript.internal.core.codeassist;
+package org.eclipse.dltk.javascript.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,8 +25,8 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.ast.Statement;
 
 public class NodeFinder extends ASTVisitor {
-	final int start;
-	final int end;
+	private final int start;
+	private final int end;
 
 	public NodeFinder(int position) {
 		this(position, position);
@@ -37,14 +37,8 @@ public class NodeFinder extends ASTVisitor {
 		this.end = e;
 	}
 
-	@Deprecated
-	public NodeFinder(String content, int s, int e) {
-		this.start = s;
-		this.end = e;
-	}
-
-	ASTNode before = null;
-	ASTNode after = null;
+	private ASTNode before = null;
+	private ASTNode after = null;
 
 	private static boolean isBlock(ASTNode node) {
 		return node instanceof Script || node instanceof FunctionStatement
@@ -107,7 +101,7 @@ public class NodeFinder extends ASTVisitor {
 	}
 
 	public ASTNode getNode() {
-		final List<ASTNode> nodes = new ArrayList<ASTNode>();
+		final List<ASTNode> nodes = new ArrayList<ASTNode>(2);
 		if (isValid(before)) {
 			nodes.add(before);
 		}
