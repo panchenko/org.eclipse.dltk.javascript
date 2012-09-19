@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.Types;
@@ -90,7 +89,7 @@ public abstract class ElementValue implements IValue {
 
 		@SuppressWarnings("unchecked")
 		public <T> T getAttribute(AttributeKey<T> key) {
-			if (TypeInfoValidator.MEMBER_OWNER == key) {
+			if (ITypeSystem.CURRENT_TYPE == key) {
 				return (T) ownerType;
 			} else {
 				return origin.getAttribute(key);

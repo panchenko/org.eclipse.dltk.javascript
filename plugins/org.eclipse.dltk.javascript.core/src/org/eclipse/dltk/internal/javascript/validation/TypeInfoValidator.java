@@ -78,7 +78,6 @@ import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
-import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
@@ -2205,11 +2204,12 @@ public class TypeInfoValidator implements IBuildParticipant,
 							reportDeprecatedMethod(problemNode, typeReference,
 									constructor);
 						}
-						typeSystem.pushAttribute(MEMBER_OWNER, type);
+						typeSystem
+								.pushAttribute(ITypeSystem.CURRENT_TYPE, type);
 						final List<IRParameter> parameters = RModelBuilder
 								.convert(typeSystem,
 										constructor.getParameters());
-						typeSystem.popAttribute(MEMBER_OWNER);
+						typeSystem.popAttribute(ITypeSystem.CURRENT_TYPE);
 						final TypeCompatibility compatibility = validateParameters(
 								parameters, arguments, problemNode);
 						if (compatibility != TypeCompatibility.TRUE) {
@@ -2414,8 +2414,6 @@ public class TypeInfoValidator implements IBuildParticipant,
 			return null;
 		}
 	}
-
-	public static final AttributeKey<Type> MEMBER_OWNER = new AttributeKey<Type>();
 
 	static final boolean DEBUG = false;
 

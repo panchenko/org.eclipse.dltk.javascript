@@ -21,8 +21,23 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface ITypeSystem {
 
+	/**
+	 * Access to the current typesystem and helper functions to execute the code
+	 * having the specified typesystem set as current.
+	 */
 	ThreadTypeSystem CURRENT = new ThreadTypeSystemImpl();
 
+	/**
+	 * The key of the attribute pointing to the current type.
+	 */
+	AttributeKey<Type> CURRENT_TYPE = new AttributeKey<Type>();
+
+	/**
+	 * Type for the utility functions accessible thru the
+	 * {@link ITypeSystem#CURRENT} static member.
+	 * 
+	 * @noimplement This interface is not intended to be implemented by clients.
+	 */
 	interface ThreadTypeSystem {
 
 		/**
