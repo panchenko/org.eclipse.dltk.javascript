@@ -16,12 +16,13 @@ import org.eclipse.dltk.core.ISourceNode;
 public class JSDocTag implements ISourceNode {
 
 	public static String[] getTags() {
-		return new String[] { PARAM, RETURN, RETURNS, THROWS, TYPE, DEPRECATED,
+		return new String[] { PARAM, THIS, RETURN, RETURNS, THROWS, TYPE, DEPRECATED,
 				CONSTRUCTOR, PRIVATE, PROTECTED, PUBLIC, AUTHOR, VERSION, SEE,
 				SINCE, EXAMPLE, SUPPRESS_WARNINGS };
 	}
 
 	public static final String PARAM = "@param"; //$NON-NLS-1$
+	public static final String THIS = "@this";
 	public static final String RETURN = "@return";
 	public static final String RETURNS = "@returns";
 	public static final String THROWS = "@throws";

@@ -64,23 +64,6 @@ public class FunctionValueCollection extends ValueCollection implements
 		return returnValue;
 	}
 
-	protected static class ThisValue extends AnonymousValue {
-		@Override
-		protected String getToStringPrefix() {
-			return "this";
-		}
-
-		@Override
-		public boolean isReference() {
-			return true;
-		}
-
-		@Override
-		public ReferenceKind getKind() {
-			return ReferenceKind.THIS;
-		}
-	}
-
 	private final IValueReference thisValue;
 
 	@Override

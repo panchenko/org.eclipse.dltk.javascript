@@ -812,8 +812,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitFunctionStatement(FunctionStatement node) {
 		final JSMethod method = generateJSMethod(node);
+		final ThisValue thisValue = new ThisValue();
+		thisValue.setDeclaredType(RTypes.create(this.getContext(),
+				method.getThisType()));
 		final IValueCollection function = new FunctionValueCollection(
-				peekContext(), method.getName(), node.isInlineBlock());
+				peekContext(), method.getName(), thisValue,
+				node.isInlineBlock());
 
 		for (IParameter parameter : method.getParameters()) {
 			final IValueReference refArg = function.createChild(parameter

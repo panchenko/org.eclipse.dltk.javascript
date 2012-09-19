@@ -98,6 +98,7 @@ public class JSDocSupport implements IModelBuilder {
 			parseType(method, tags, JSDocTag.RETURN_TAGS, reporter, typeChecker);
 		}
 		parseParams(method, tags, reporter, typeChecker);
+		parseThis(method, tags, reporter, typeChecker);
 		parseDeprecation(method, tags, reporter);
 		parseAccessModifiers(method, tags, reporter);
 		parseConstructor(method, tags, reporter);
@@ -295,6 +296,20 @@ public class JSDocSupport implements IModelBuilder {
 		parseDeprecation(variable, tags, reporter);
 		parseAccessModifiers(variable, tags, reporter);
 		parseSuppressWarnings(variable, tags, reporter);
+	}
+
+	private void parseThis(IMethod method, JSDocTags tags,
+			JSProblemReporter reporter, ITypeChecker typeChecker) {
+		final JSDocTag thisTag = tags.get(JSDocTag.THIS);
+		if (thisTag != null) {
+			final JSType type = parseType(thisTag, false, reporter);
+			if (type != null) {
+				if (typeChecker != null)
+					typeChecker.checkType(type, thisTag);
+				method.setThisType(type);
+			}
+			validateSingleTag(tags, JSDocTag.THIS, reporter);
+		}
 	}
 
 	private void parseDeprecation(IMember member, JSDocTags tags,

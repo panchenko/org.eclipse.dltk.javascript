@@ -6,6 +6,7 @@ import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
 import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
+import org.eclipse.dltk.internal.javascript.ti.JSDocProblem;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.core.tests.AbstractValidationTest;
@@ -142,5 +143,19 @@ public class JSDocValidationTest extends AbstractValidationTest {
 		code.add("f();");
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
+	}
+
+	public void testDuplicatedThisAnnotationError() {
+		final StringList code = new StringList();
+		code.add("/**");
+		code.add("* @this {String}");
+		code.add("* @this {Date}");
+		code.add("**/");
+		code.add("var g = function () {");
+		code.add("}");
+		code.add("g.apply('');");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 1, problems.size());
+		assertEquals(JSDocProblem.DUPLICATE_TAG, problems.get(0).getID());
 	}
 }

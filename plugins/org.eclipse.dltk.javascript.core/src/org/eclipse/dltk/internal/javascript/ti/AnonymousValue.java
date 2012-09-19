@@ -12,24 +12,13 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 
 public class AnonymousValue extends AbstractReference {
-
-	public AnonymousValue() {
-		this(false);
-	}
-
-	private final boolean isReference;
-
-	public AnonymousValue(boolean isReference) {
-		this.isReference = isReference;
-	}
 
 	private final Value value = new Value();
 
 	public boolean isReference() {
-		return isReference || getKind() == ReferenceKind.THIS;
+		return false;
 	}
 
 	@Override

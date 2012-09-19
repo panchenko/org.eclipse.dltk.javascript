@@ -1,21 +1,30 @@
+/*******************************************************************************
+ * Copyright (c) 2012 NumberFour AG
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     NumberFour AG - initial API and Implementation (Alex Panchenko)
+ *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
 import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
-import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 
-public class TopValueThis extends AnonymousValue {
+/**
+ * Value representing script global level "this" (which is window in browser
+ * environment).
+ */
+public class TopValueThis extends ThisValue {
 
 	private final TopValueCollection owner;
 
 	public TopValueThis(TopValueCollection collection) {
 		this.owner = collection;
-	}
-
-	@Override
-	public boolean isReference() {
-		return true;
 	}
 
 	public Set<String> getDirectChildren() {
@@ -32,11 +41,6 @@ public class TopValueThis extends AnonymousValue {
 
 	public IValueReference getChild(String name) {
 		return owner.getChild(name);
-	}
-
-	@Override
-	public ReferenceKind getKind() {
-		return ReferenceKind.THIS;
 	}
 
 }

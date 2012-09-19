@@ -47,6 +47,7 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 	private boolean constructor;
 	private ReferenceLocation location = ReferenceLocation.UNKNOWN;
 	private ISourceRange docRange;
+	private JSType thisType;
 
 	public IParameter createParameter() {
 		return new Parameter();
@@ -127,12 +128,24 @@ public class JSMethod extends ArrayList<IParameter> implements IMethod {
 		this.docRange = docRange;
 	}
 
+	public JSType getThisType() {
+		return this.thisType;
+	}
+
+	public void setThisType(JSType thisType) {
+		this.thisType = thisType;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(name);
 		sb.append('(');
 		boolean first = true;
+		if (thisType != null) {
+			sb.append("this:").append(thisType);
+			first = false;
+		}
 		for (IParameter parameter : this) {
 			if (!first) {
 				sb.append(',');

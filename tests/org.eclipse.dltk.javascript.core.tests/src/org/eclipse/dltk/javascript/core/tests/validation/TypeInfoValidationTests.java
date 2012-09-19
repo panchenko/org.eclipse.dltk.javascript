@@ -2521,4 +2521,39 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
+
+	public void testThisAnnotationError() {
+		final StringList code = new StringList();
+		code.add("/** @this {String} */");
+		code.add("var g = function () {");
+		code.add("this.length; // OK");
+		code.add("this.fixed(); // OK");
+		code.add("this.getDay(); // warning - undefined member");
+		code.add("this.myMethod(); // warning - undefined member");
+		code.add("this.ble; // warning - undefined member");
+		code.add("}");
+		code.add("g.apply('');");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 3, problems.size());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(0)
+				.getID());
+		assertEquals(JavaScriptProblems.UNDEFINED_METHOD, problems.get(1)
+				.getID());
+		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(2)
+				.getID());
+	}
+
+	public void testThisAnnotationValid() {
+		final StringList code = new StringList();
+		code.add("var g = function () {");
+		code.add("this.length;");
+		code.add("this.fixed();");
+		code.add("this.getDay();");
+		code.add("this.myMethod();");
+		code.add("this.ble;");
+		code.add("}");
+		code.add("g.apply('');");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
 }
