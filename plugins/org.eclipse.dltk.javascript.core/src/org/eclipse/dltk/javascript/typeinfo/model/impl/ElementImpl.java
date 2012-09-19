@@ -297,7 +297,8 @@ public abstract class ElementImpl extends EObjectImpl implements Element {
 	 * @generated NOT
 	 */
 	public Object getAttribute(String name) {
-		return getAttributes().get(name);
+		return eIsSet(TypeInfoModelPackage.ELEMENT__ATTRIBUTES) ? getAttributes()
+				.get(name) : null;
 	}
 
 	/**
