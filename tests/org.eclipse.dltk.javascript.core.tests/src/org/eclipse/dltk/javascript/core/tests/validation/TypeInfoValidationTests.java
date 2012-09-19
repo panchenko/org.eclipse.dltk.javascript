@@ -427,8 +427,9 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 1, problems.size());
 	}
 
-	@Skip
 	public void testLazyVariableWithAssignment() {
+		if (notYetImplemented())
+			return;
 		// TODO uncomment when correct scopes support is implemented
 		StringList code = new StringList();
 		code.add("function Node1() {");
@@ -2502,7 +2503,7 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(JavaScriptProblems.UNDEFINED_PROPERTY, problems.get(4)
 				.getID());
 	}
-	
+
 	public void testMultiDimRecordType() {
 		final StringList code = new StringList();
 		code.add("/**");
