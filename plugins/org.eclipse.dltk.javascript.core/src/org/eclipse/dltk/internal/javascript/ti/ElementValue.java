@@ -612,6 +612,10 @@ public abstract class ElementValue implements IValue {
 		public boolean isExtensible() {
 			return false;
 		}
+
+		public boolean isJavaScriptObject() {
+			return false;
+		}
 	};
 
 	private static class PropertyValue extends ElementValue implements IValue {

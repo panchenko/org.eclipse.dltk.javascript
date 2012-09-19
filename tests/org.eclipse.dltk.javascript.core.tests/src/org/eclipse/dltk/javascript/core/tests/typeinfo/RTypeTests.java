@@ -11,12 +11,18 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
+import static org.eclipse.dltk.javascript.typeinfo.RTypes.arrayOf;
+import static org.eclipse.dltk.javascript.typeinfo.RTypes.simple;
+
+import java.util.Collections;
+
 import junit.framework.TestCase;
 
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
+import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
@@ -35,6 +41,15 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 public class RTypeTests extends TestCase implements ITypeNames {
 
 	private static final TypeInfoModelFactory TIMF = TypeInfoModelFactory.eINSTANCE;
+
+	public void testAssignableJavaScriptObject() {
+		final IRType object = simple(Types.OBJECT);
+		assertEquals(TypeCompatibility.TRUE,
+				object.isAssignableFrom(arrayOf(simple(Types.STRING))));
+		assertEquals(TypeCompatibility.TRUE, object.isAssignableFrom(RTypes
+				.functionType(Collections.<IRParameter> emptyList(),
+						simple(Types.STRING))));
+	}
 
 	public void testAssignableSuperType() {
 		final Type superType = Types.STRING;

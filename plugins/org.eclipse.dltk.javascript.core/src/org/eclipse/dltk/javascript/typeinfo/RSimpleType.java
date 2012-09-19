@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class RSimpleType extends RType implements IRSimpleType {
 
@@ -62,8 +63,8 @@ public class RSimpleType extends RType implements IRSimpleType {
 	public TypeCompatibility isAssignableFrom(IRType type) {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;
-		} else if (Types.OBJECT == type) {
-			return TypeCompatibility.TRUE;
+		} else if (Types.OBJECT == this.type) {
+			return TypeCompatibility.valueOf(type.isJavaScriptObject());
 		} else if (type instanceof RSimpleType) {
 			final Type other = ((RSimpleType) type).getTarget();
 			if (isAssignableFrom(this.type, other)) {
@@ -98,5 +99,11 @@ public class RSimpleType extends RType implements IRSimpleType {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean isJavaScriptObject() {
+		final TypeKind kind = type.getKind();
+		return kind == TypeKind.PREDEFINED || kind == TypeKind.JAVASCRIPT;
 	}
 }

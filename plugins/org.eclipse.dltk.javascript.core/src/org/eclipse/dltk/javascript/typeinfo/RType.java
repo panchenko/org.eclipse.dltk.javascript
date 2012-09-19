@@ -78,4 +78,8 @@ public abstract class RType implements IRType {
 	public boolean isExtensible() {
 		return false;
 	}
+
+	public boolean isJavaScriptObject() {
+		return true;
+	}
 }

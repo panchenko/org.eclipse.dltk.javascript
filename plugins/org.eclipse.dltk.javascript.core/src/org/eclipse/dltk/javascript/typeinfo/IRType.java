@@ -51,4 +51,11 @@ public interface IRType {
 	 */
 	boolean isExtensible();
 
+	/**
+	 * Answers if this type expression extends JavaScript Object type. The only
+	 * possible way to have <code>false</code> here is {@link IRSimpleType}
+	 * pointing to foreign (java) type in Rhino environment.
+	 */
+	boolean isJavaScriptObject();
+
 }
