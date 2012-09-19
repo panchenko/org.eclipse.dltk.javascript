@@ -12,7 +12,9 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.javascript.ast.Keywords;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
 
 /**
  * Value representing "this" in function bodies.
@@ -20,7 +22,9 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 public class ThisValue extends AnonymousReferenceValue {
 	@Override
 	protected String getToStringPrefix() {
-		return "this";
+		final IRType declaredType = getDeclaredType();
+		return Keywords.THIS
+				+ (declaredType != null ? "(" + declaredType + ")" : "");
 	}
 
 	@Override
