@@ -22,6 +22,7 @@ import org.eclipse.dltk.javascript.ast.VariableDeclaration;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
 @ConfigurationElement("builder")
@@ -76,22 +77,23 @@ public interface IModelBuilder {
 		/**
 		 * @since 3.0
 		 */
-		void setOptional(boolean optional);
-
-		/**
-		 * @since 3.0
-		 */
 		boolean isOptional();
 
 		/**
 		 * @since 3.0
 		 */
-		void setVarargs(boolean varargs);
+		boolean isVarargs();
 
 		/**
-		 * @since 3.0
+		 * @since 5.0
 		 */
-		boolean isVarargs();
+		ParameterKind getKind();
+
+		/**
+		 * 
+		 * @since 5.0
+		 */
+		void setKind(ParameterKind kind);
 
 	}
 

@@ -51,6 +51,7 @@ import org.eclipse.dltk.javascript.typeinfo.JSDocParseException;
 import org.eclipse.dltk.javascript.typeinfo.JSDocTypeParser;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordProperty;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
@@ -505,8 +506,11 @@ public class JSDocSupport implements IModelBuilder {
 				typeChecker.checkType(type, tag);
 			parameter.setType(type);
 		}
-		parameter.setOptional(pp.optional);
-		parameter.setVarargs(pp.varargs);
+		if (pp.varargs) {
+			parameter.setKind(ParameterKind.VARARGS);
+		} else if (pp.optional) {
+			parameter.setKind(ParameterKind.OPTIONAL);
+		}
 	}
 
 	public static final String[] TYPE_TAGS = { JSDocTag.TYPE };

@@ -253,15 +253,8 @@ public class RModelBuilder {
 			for (IParameter parameter : parameters) {
 				final IRType paramType = parameter.getType() != null ? RTypes
 						.create(context, parameter.getType()) : RTypes.any();
-				final ParameterKind kind;
-				if (parameter.isVarargs()) {
-					kind = ParameterKind.VARARGS;
-				} else if (parameter.isOptional()) {
-					kind = ParameterKind.OPTIONAL;
-				} else {
-					kind = ParameterKind.NORMAL;
-				}
-				params.add(new RParameter(parameter.getName(), paramType, kind));
+				params.add(new RParameter(parameter.getName(), paramType,
+						parameter.getKind()));
 			}
 			return params;
 		}
