@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.codeassist.ICompletionEngine;
@@ -202,6 +203,22 @@ public class JSBindings implements Map<ASTNode, IValueReference> {
 
 	public IValueReference get(ASTNode node) {
 		return nodeMap.get(node);
+	}
+
+	/**
+	 * Executes the code temporary setting type system of this instance as
+	 * current.
+	 */
+	public void run(Runnable runnable) {
+		ITypeSystem.CURRENT.runWith(typeSystem, runnable);
+	}
+
+	/**
+	 * Executes the code temporary setting type system of this instance as
+	 * current.
+	 */
+	public <V> V run(Callable<V> callable) throws Exception {
+		return ITypeSystem.CURRENT.runWith(typeSystem, callable);
 	}
 
 	public int size() {
