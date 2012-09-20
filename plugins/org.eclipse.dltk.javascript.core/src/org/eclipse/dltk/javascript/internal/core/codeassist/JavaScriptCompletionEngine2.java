@@ -52,7 +52,6 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
-import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
@@ -68,7 +67,6 @@ import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
-import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -472,14 +470,27 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				if (paramCount > 0) {
 					final String[] params = new String[paramCount];
 					for (int i = 0; i < paramCount; ++i) {
-						Parameter parameter = method.getParameters().get(i);
-						if (parameter.getKind() == ParameterKind.OPTIONAL) {
-							params[i] = '[' + parameter.getName() + ']';
-						} else {
-							params[i] = parameter.getName();
-						}
+						params[i] = method.getParameters().get(i).getName();
 					}
 					proposal.setParameterNames(params);
+					if (method.getParameters().get(paramCount - 1).getKind() != ParameterKind.NORMAL) {
+						int requiredCount = method.getParameters().size();
+						while (requiredCount > 0
+								&& method.getParameters()
+										.get(requiredCount - 1).getKind() != ParameterKind.NORMAL) {
+							--requiredCount;
+						}
+						if (requiredCount == 0
+								&& method.getParameters().get(requiredCount)
+										.getKind() == ParameterKind.VARARGS) {
+							++requiredCount; // heuristic...
+						}
+						if (requiredCount != paramCount) {
+							proposal.setAttribute(
+									CompletionProposal.ATTR_REQUIRED_PARAM_COUNT,
+									requiredCount);
+						}
+					}
 				}
 			}
 			requestor.accept(proposal);
@@ -521,15 +532,28 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					if (paramCount > 0) {
 						final String[] params = new String[paramCount];
 						for (int i = 0; i < paramCount; ++i) {
-							IRParameter parameter = method.getParameters().get(
-									i);
-							if (parameter.isOptional()) {
-								params[i] = '[' + parameter.getName() + ']';
-							} else {
-								params[i] = parameter.getName();
-							}
+							params[i] = method.getParameters().get(i).getName();
 						}
 						proposal.setParameterNames(params);
+						if (method.getParameters().get(paramCount - 1)
+								.getKind() != ParameterKind.NORMAL) {
+							int requiredCount = method.getParameters().size();
+							while (requiredCount > 0
+									&& method.getParameters()
+											.get(requiredCount - 1).getKind() != ParameterKind.NORMAL) {
+								--requiredCount;
+							}
+							if (requiredCount == 0
+									&& method.getParameters()
+											.get(requiredCount).getKind() == ParameterKind.VARARGS) {
+								++requiredCount; // heuristic...
+							}
+							if (requiredCount != paramCount) {
+								proposal.setAttribute(
+										CompletionProposal.ATTR_REQUIRED_PARAM_COUNT,
+										requiredCount);
+							}
+						}
 					}
 				}
 			}
