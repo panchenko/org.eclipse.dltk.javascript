@@ -73,15 +73,31 @@ public class JSBindings implements Map<ASTNode, IValueReference> {
 		}
 	}
 
+	/**
+	 * Returns bindings for the specified {@link Script} or <code>null</code> if
+	 * not available.
+	 */
+	public static JSBindings of(Script script) {
+		final ISourceModule module = (ISourceModule) script
+				.getAttribute(JavaScriptParserUtil.ATTR_MODULE);
+		if (module != null) {
+			return JSBindings.get(module, script);
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns the {@link IValueReference} describing the specified node or
+	 * <code>null</code> if not available.
+	 */
 	public static IValueReference resolveBinding(ASTNode node) {
 		if (node instanceof JSNode) {
 			final JSNode jnode = (JSNode) node;
 			final Script script = jnode.getScript();
 			if (script != null) {
-				final ISourceModule module = (ISourceModule) script
-						.getAttribute(JavaScriptParserUtil.ATTR_MODULE);
-				if (module != null) {
-					final JSBindings bindings = JSBindings.get(module, script);
+				final JSBindings bindings = of(script);
+				if (bindings != null) {
 					return bindings.get(node);
 				}
 			}
