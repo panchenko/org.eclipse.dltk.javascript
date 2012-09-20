@@ -355,18 +355,6 @@ public class Keywords {
 	}
 
 	public static boolean isKeyword(String value) {
-
-		if (value == null || value.length() == 0)
-			return false;
-
-		if (map.containsValue(value.toLowerCase())) {
-			for (int i = 0; i < value.length(); i++) {
-				if (!Character.isLetter(value.charAt(i)))
-					return false;
-			}
-			return true;
-		}
-
-		return false;
+		return value != null && value.length() != 0 && map.containsValue(value);
 	}
 }
