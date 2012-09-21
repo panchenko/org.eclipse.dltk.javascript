@@ -14,6 +14,10 @@ package org.eclipse.dltk.javascript.typeinfo;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.RegistryFactory;
+import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -25,6 +29,27 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 public class RTypes {
 
 	private RTypes() {
+	}
+
+	private static IRType initRType(IRType defaultValue) {
+		final IExtensionRegistry registry = RegistryFactory.getRegistry();
+		if (registry != null) { // if running under OSGI
+			final String name = defaultValue.getClass().getSimpleName();
+			final IConfigurationElement[] elements = registry
+					.getConfigurationElementsFor(TypeInfoManager.EXT_POINT);
+			for (IConfigurationElement element : elements) {
+				if ("runtimeType".equals(element.getName())
+						&& name.equals(element.getAttribute("name"))) {
+					try {
+						return (IRType) element
+								.createExecutableExtension("class");
+					} catch (Exception e) {
+						JavaScriptPlugin.error(e);
+					}
+				}
+			}
+		}
+		return defaultValue;
 	}
 
 	private static final IRType UNDEFINED_TYPE = new Undefined();
@@ -46,7 +71,7 @@ public class RTypes {
 		return UNDEFINED_TYPE;
 	}
 
-	private static final IRType ANY_TYPE = new Any();
+	private static final IRType ANY_TYPE = initRType(new Any());
 
 	private static class Any extends RType {
 		public String getName() {

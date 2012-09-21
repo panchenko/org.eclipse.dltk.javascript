@@ -27,6 +27,7 @@
             <element ref="nodeHandler"/>
             <element ref="runtimeTypeFactory"/>
             <element ref="metaType"/>
+            <element ref="runtimeType"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -177,6 +178,28 @@
                <appInfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.dltk.javascript.typeinfo.IRTypeFactory"/>
                </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="runtimeType">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.dltk.javascript.typeinfo.IRType"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

@@ -39,7 +39,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class TypeInfoManager {
 
-	private static final String EXT_POINT = JavaScriptPlugin.PLUGIN_ID
+	public static final String EXT_POINT = JavaScriptPlugin.PLUGIN_ID
 			+ ".typeinfo";
 
 	private static final String MODEL_ELEMENT = "model";
