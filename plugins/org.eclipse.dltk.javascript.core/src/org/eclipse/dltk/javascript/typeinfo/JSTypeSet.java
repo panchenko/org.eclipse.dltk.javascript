@@ -247,6 +247,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 		return RTypes.simple(type);
 	}
 
+	@Deprecated
 	public static IRType ref(String name) {
 		final Type type = TypeInfoModelLoader.getInstance().getType(name);
 		return RTypes.simple(type);
@@ -406,6 +407,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 	public abstract IRType toRType();
 
+	@Deprecated
 	public abstract Type[] toArray();
 
 	public abstract int size();
