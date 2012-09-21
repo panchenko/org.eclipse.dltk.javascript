@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.Types;
+import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -193,7 +194,11 @@ public class RTypes {
 	}
 
 	public static IRType create(JSType type) {
-		return create(null, type);
+		ITypeSystem current = ITypeSystem.CURRENT.get();
+		if (current == null) {
+			current = ThreadTypeSystemImpl.DELEGATING_TYPE_SYSTEM;
+		}
+		return create(current, type);
 	}
 
 	public static IRType create(ITypeSystem context, JSType type) {
