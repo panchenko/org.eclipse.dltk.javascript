@@ -90,19 +90,23 @@ public class JavaScriptCompletionProposalCollector extends
 			CompletionProposal methodProposal) {
 		AbstractScriptCompletionProposal methodReferenceProposal = (AbstractScriptCompletionProposal) super
 				.createMethodReferenceProposal(methodProposal);
-		if (methodProposal.getExtraInfo() != null) {
+		final Object extraInfo = methodProposal.getExtraInfo();
+		if (extraInfo != null) {
 			methodReferenceProposal.setProposalInfo(new JavaScriptProposalInfo(
-					methodProposal.getExtraInfo()));
+					extraInfo));
 		}
 		StringBuilder sb = null;
-		if (methodProposal.getExtraInfo() instanceof Method) {
-			Method method = (Method) methodProposal.getExtraInfo();
-			EList<Parameter> parameters = method.getParameters();
+		final Integer paramLimit = (Integer) methodProposal
+				.getAttribute(ScriptCompletionProposalCollector.ATTR_PARAM_LIMIT);
+		if (extraInfo instanceof Method) {
+			final Method method = (Method) extraInfo;
+			final EList<Parameter> parameters = method.getParameters();
 			if (parameters.size() > 0) {
 				sb = new StringBuilder();
+				int index = 0;
 				for (Parameter parameter : parameters) {
 					if (sb.length() > 0)
-						sb.append(',');
+						sb.append(", ");
 					if (parameter.getKind() == ParameterKind.OPTIONAL)
 						sb.append('[');
 					if (parameter.getType() != null) {
@@ -117,18 +121,19 @@ public class JavaScriptCompletionProposalCollector extends
 						sb.append("...");
 					if (parameter.getKind() == ParameterKind.OPTIONAL)
 						sb.append(']');
-
+					if (paramLimit != null && ++index >= paramLimit.intValue())
+						break;
 				}
 			}
-		} else if (methodProposal.getExtraInfo() instanceof IValueReference) {
-			IRMethod method = (IRMethod) ((IValueReference) methodProposal
-					.getExtraInfo())
+		} else if (extraInfo instanceof IValueReference) {
+			final IRMethod method = (IRMethod) ((IValueReference) extraInfo)
 					.getAttribute(IReferenceAttributes.R_METHOD);
 			if (method != null && method.getParameterCount() > 0) {
 				sb = new StringBuilder();
+				int index = 0;
 				for (IRParameter parameter : method.getParameters()) {
 					if (sb.length() > 0)
-						sb.append(',');
+						sb.append(", ");
 					if (parameter.isOptional())
 						sb.append('[');
 					if (parameter.getType() != null) {
@@ -142,17 +147,21 @@ public class JavaScriptCompletionProposalCollector extends
 						sb.append("...");
 					if (parameter.isOptional())
 						sb.append(']');
+					if (paramLimit != null && ++index >= paramLimit.intValue())
+						break;
 				}
 			}
 		}
 		if (sb != null) {
-			ProposalContextInformation contextInformation = new JavaScriptProposalContextInformation(
+			final ProposalContextInformation contextInformation = new JavaScriptProposalContextInformation(
 					methodProposal, sb.toString());
-
-			contextInformation.setContextInformationPosition(methodProposal
-					.getReplaceStart()
-					+ methodProposal.getCompletion().length() + 1);
-			methodReferenceProposal.setContextInformation(contextInformation);
+			final int pos = methodProposal.getCompletion().indexOf('(');
+			if (pos >= 0) {
+				contextInformation.setContextInformationPosition(methodProposal
+						.getReplaceStart() + pos + 1);
+				methodReferenceProposal
+						.setContextInformation(contextInformation);
+			}
 		}
 
 		return methodReferenceProposal;
