@@ -177,33 +177,51 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				}
 			} else if (node instanceof MultiLineComment) {
 				final MultiLineComment comment = (MultiLineComment) node;
-				if (comment.isDocumentation()) {
-					final JSDocTag tag = JSDocSupport.parse(comment).getTagAt(
-							position);
-					if (tag != null && JSDocTag.PARAM.equals(tag.name())) {
-						final ParameterNode paramNode = JSDocSupport
-								.parseParameter(tag);
-						if (paramNode != null
-								&& paramNode.offset <= position
-								&& paramNode.offset + paramNode.name.length() >= position) {
-							for (FunctionStatement function : ASTUtil.select(
-									script, FunctionStatement.class, true)) {
-								if (function.getDocumentation() == comment
-										|| JSDocSupport.getComment(function) == comment) {
-									final Argument argument = function
-											.getArgument(paramNode.name);
-									if (argument != null) {
-										return new IModelElement[] { new LocalVariable(
-												module.getModelElement(),
-												paramNode.name,
-												argument.start(),
-												argument.end(),
-												argument.start(),
-												argument.end() - 1, null) };
-									}
-									break;
+				if (!comment.isDocumentation()) {
+					return null;
+				}
+				final JSDocTag tag = JSDocSupport.parse(comment).getTagAt(
+						position);
+				if (tag == null) {
+					return null;
+				}
+				if (JSDocTag.PARAM.equals(tag.name())) {
+					final ParameterNode paramNode = JSDocSupport
+							.parseParameter(tag);
+					if (paramNode != null
+							&& paramNode.offset <= position
+							&& paramNode.offset + paramNode.name.length() >= position) {
+						for (FunctionStatement function : ASTUtil.select(
+								script, FunctionStatement.class, true)) {
+							if (function.getDocumentation() == comment
+									|| JSDocSupport.getComment(function) == comment) {
+								final Argument argument = function
+										.getArgument(paramNode.name);
+								if (argument != null) {
+									return new IModelElement[] { new LocalVariable(
+											module.getModelElement(),
+											paramNode.name, argument.start(),
+											argument.end(), argument.start(),
+											argument.end() - 1, null) };
 								}
+								break;
 							}
+						}
+					}
+				} else if (JSDocTag.SEE.equals(tag.name())) {
+					if (position >= tag.valueStart() && position < tag.end()) {
+						final String expression = tag.value();
+						int pos = expression.indexOf('#');
+						if (pos < 0) {
+							// type
+						} else if (pos == 0) {
+							// local member
+						} else {
+							// type+member
+							final String typeName = tag.value().substring(0,
+									pos);
+							final String memberName = tag.value().substring(
+									pos + 1);
 						}
 					}
 				}
