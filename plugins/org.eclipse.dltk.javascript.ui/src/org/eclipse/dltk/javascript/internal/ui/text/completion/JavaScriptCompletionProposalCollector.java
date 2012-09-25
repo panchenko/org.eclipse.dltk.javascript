@@ -16,6 +16,8 @@ import org.eclipse.dltk.javascript.core.JavaScriptNature;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
+import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.Method;
@@ -110,7 +112,8 @@ public class JavaScriptCompletionProposalCollector extends
 					if (parameter.getKind() == ParameterKind.OPTIONAL)
 						sb.append('[');
 					if (parameter.getType() != null) {
-						sb.append(parameter.getType().getName());
+						IRType type = RTypes.create(parameter.getType());
+						sb.append(type.getName());
 						if (parameter.getKind() == ParameterKind.VARARGS)
 							sb.append("...");
 						sb.append(' ');
