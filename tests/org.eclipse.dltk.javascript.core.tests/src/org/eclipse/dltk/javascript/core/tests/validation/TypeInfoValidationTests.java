@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.core.builder.IBuildParticipant;
-import org.eclipse.dltk.core.tests.Skip;
 import org.eclipse.dltk.core.tests.TestSupport;
 import org.eclipse.dltk.core.tests.util.StringList;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
@@ -2557,8 +2556,10 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testJavaScriptDynamicArrayAcces() {
+		if (notYetImplemented())
+			return;
 		final StringList code = new StringList();
 		code.add("var x = new Array();");
 		code.add("x['test']();");
@@ -2567,8 +2568,10 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		final List<IProblem> problems = validate(code.toString());
 		assertEquals(problems.toString(), 0, problems.size());
 	}
-	
+
 	public void testJavaObjectDynamicArrayAcces() {
+		if (notYetImplemented())
+			return;
 		final StringList code = new StringList();
 		code.add("exampleForms['test']();");
 		final List<IProblem> problems = validate(code.toString());
