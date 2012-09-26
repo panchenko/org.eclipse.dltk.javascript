@@ -106,6 +106,7 @@ public class TypeUtil {
 		return genericType;
 	}
 
+	@Deprecated
 	public static Type extractType(JSType type) {
 		if (type instanceof SimpleType) {
 			return ((SimpleType) type).getTarget();
