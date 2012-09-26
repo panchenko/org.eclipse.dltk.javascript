@@ -55,7 +55,7 @@ public class RTypes {
 
 	private static final IRType UNDEFINED_TYPE = new Undefined();
 
-	private static class Undefined extends RType {
+	static class Undefined extends RType {
 		public String getName() {
 			return ITypeNames.UNDEFINED;
 		}
@@ -74,7 +74,7 @@ public class RTypes {
 
 	private static final IRType ANY_TYPE = initRType(new Any());
 
-	private static class Any extends RType {
+	static class Any extends RType {
 		public String getName() {
 			return "Any";
 		}
@@ -101,7 +101,7 @@ public class RTypes {
 
 	private static final IRType NONE_TYPE = new None();
 
-	private static class None extends RType {
+	static class None extends RType {
 		public String getName() {
 			return "None";
 		}
@@ -135,7 +135,7 @@ public class RTypes {
 
 	static final IRType EMPTY_ARRAY_ITEM_TYPE = new EmptyArrayItem();
 
-	private static class EmptyArrayItem extends RType {
+	static class EmptyArrayItem extends RType {
 		public String getName() {
 			return "empty";
 		}
