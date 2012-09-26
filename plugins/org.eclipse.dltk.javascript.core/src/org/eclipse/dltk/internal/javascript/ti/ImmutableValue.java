@@ -125,7 +125,7 @@ public class ImmutableValue implements IValue, IValue2 {
 		} else if (hasReferences()) {
 			final JSTypeSet result = JSTypeSet.create();
 			execute(this, GET_DECLARED_TYPES, result, new HashSet<IValue>());
-			return !result.isEmpty() ? result.toRType() : null;
+			return result.toRType();
 		} else {
 			return null;
 		}

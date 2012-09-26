@@ -63,7 +63,7 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		@Override
 		public IRType toRType() {
-			return RTypes.none();
+			return null;
 		}
 
 		@Override
@@ -307,15 +307,15 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 		@Override
 		public IRType getFirst() {
-			return types.iterator().next();
+			return types.get(0);
 		}
 
 		@Override
 		public IRType toRType() {
 			if (types.isEmpty()) {
-				return RTypes.none();
+				return null;
 			} else if (types.size() == 1) {
-				return types.iterator().next();
+				return types.get(0);
 			} else {
 				return RTypes.union(types);
 			}
@@ -403,8 +403,14 @@ public abstract class JSTypeSet implements Iterable<IRType> {
 
 	public abstract void add(IRType type);
 
+	@Deprecated
 	public abstract IRType getFirst();
 
+	/**
+	 * Returns this type set as {@link IRType}. If type set is empty then
+	 * <code>null</code> is returned, if type set contains single entry then
+	 * that entry is returned, otherwise union type is created and returned.
+	 */
 	public abstract IRType toRType();
 
 	@Deprecated
