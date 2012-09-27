@@ -505,7 +505,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			List<IRType> params = new ArrayList<IRType>();
 			final ParameterizedType parameterized = (ParameterizedType) type;
 			for (JSType param : parameterized.getActualTypeArguments()) {
-				params.add(evaluateReturnType(param, captures).toRType());
+				final IRType r = evaluateReturnType(param, captures).toRType();
+				params.add(r != null ? r : RTypes.none());
 			}
 			return JSTypeSet.singleton(RTypes.simple(getContext().parameterize(
 					parameterized.getTarget(), params)));

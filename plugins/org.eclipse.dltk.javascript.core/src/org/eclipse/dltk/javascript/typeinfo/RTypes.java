@@ -185,7 +185,7 @@ public class RTypes {
 	 * Creates new instance of the array type with the specified itemType.
 	 */
 	public static IRArrayType arrayOf(final IRType itemType) {
-		return new RArrayType(itemType);
+		return new RArrayType(itemType != null ? itemType : none());
 	}
 
 	public static IRArrayType arrayOf(ITypeSystem typeSystem,
