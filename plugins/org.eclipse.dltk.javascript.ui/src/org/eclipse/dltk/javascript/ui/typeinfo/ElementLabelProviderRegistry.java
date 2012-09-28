@@ -33,8 +33,18 @@ public class ElementLabelProviderRegistry {
 	}
 
 	public static String getLabel(Element element, Mode mode) {
+		return getLabel(element, mode, null);
+	}
+
+	public static String getLabel(Element element, Mode mode, Object context) {
 		for (IElementLabelProvider provider : manager) {
-			String label = provider.getLabel(element, mode);
+			final String label;
+			if (provider instanceof IElementLabelProviderExtension) {
+				label = ((IElementLabelProviderExtension) provider).getLabel(
+						element, mode, context);
+			} else {
+				label = provider.getLabel(element, mode);
+			}
 			if (label != null) {
 				return label;
 			}

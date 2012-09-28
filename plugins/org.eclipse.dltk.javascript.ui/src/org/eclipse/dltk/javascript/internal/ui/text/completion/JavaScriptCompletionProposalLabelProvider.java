@@ -43,7 +43,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 	public String createTypeProposalLabel(CompletionProposal typeProposal) {
 		if (typeProposal.getExtraInfo() instanceof Type) {
 			final Type type = (Type) typeProposal.getExtraInfo();
-			final String label = getElementLabel(type);
+			final String label = getElementLabel(type, typeProposal);
 			if (label != null) {
 				return label;
 			}
@@ -66,8 +66,10 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		return super.createTypeProposalLabel(typeProposal);
 	}
 
-	private static String getElementLabel(Element element) {
-		return ElementLabelProviderRegistry.getLabel(element, Mode.PROPOSAL);
+	private static String getElementLabel(Element element,
+			CompletionProposal proposal) {
+		return ElementLabelProviderRegistry.getLabel(element, Mode.PROPOSAL,
+				proposal);
 	}
 
 	@Override
@@ -77,7 +79,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		final Object info = methodProposal.getExtraInfo();
 		if (info instanceof Method) {
 			final Method method = (Method) info;
-			final String label = getElementLabel(method);
+			final String label = getElementLabel(method, methodProposal);
 			if (label != null) {
 				return label;
 			}
@@ -127,7 +129,7 @@ public class JavaScriptCompletionProposalLabelProvider extends
 		final Object info = proposal.getExtraInfo();
 		if (info instanceof Property) {
 			final Property property = (Property) proposal.getExtraInfo();
-			final String label = getElementLabel(property);
+			final String label = getElementLabel(property, proposal);
 			if (label != null) {
 				return label;
 			}
