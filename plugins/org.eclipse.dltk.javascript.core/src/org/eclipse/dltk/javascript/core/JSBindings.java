@@ -257,7 +257,7 @@ public class JSBindings implements Map<ASTNode, IValueReference> {
 		throw new UnsupportedOperationException();
 	}
 
-	private static class Views {
+	static class Views {
 		volatile Set<ASTNode> keySet;
 		volatile Collection<IValueReference> values;
 		volatile Set<Map.Entry<ASTNode, IValueReference>> entrySet;
@@ -266,7 +266,7 @@ public class JSBindings implements Map<ASTNode, IValueReference> {
 	private transient Views views;
 
 	private synchronized Views getViews() {
-		if (views != null) {
+		if (views == null) {
 			views = new Views();
 		}
 		return views;
