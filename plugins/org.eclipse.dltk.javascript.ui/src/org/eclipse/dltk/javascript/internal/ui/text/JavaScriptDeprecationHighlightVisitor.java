@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblem;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.compiler.problem.ProblemSeverity;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.internal.javascript.validation.TypeInfoValidator.ValidationVisitor;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
@@ -55,11 +54,6 @@ public class JavaScriptDeprecationHighlightVisitor extends ValidationVisitor
 		if (DEPRECATION.contains(identifier)) {
 			requestor.addPosition(start, end, JS_DEPRECATED);
 		}
-	}
-
-	public void reportProblem(ProblemSeverity severity,
-			IProblemIdentifier identifier, String message, int start, int end) {
-		reportProblem(identifier, message, start, end);
 	}
 
 	public int getProblemCount() {
