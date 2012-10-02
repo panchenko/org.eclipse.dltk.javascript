@@ -34,7 +34,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
         eType="#//Member" containment="true" resolveProxies="false" eOpposite="#//Member/declaringType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//TypeKind"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//Type"
+        volatile="true" transient="true" derived="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superTypeExpr" eType="#//SimpleType"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="staticConstructor" eType="#//Constructor"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="traits" upperBound="-1"
@@ -173,11 +176,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="GenericMethod" eSuperTypes="#//Method">
     <eStructuralFeatures xsi:type="ecore:EReference" name="typeParameters" upperBound="-1"
         eType="#//TypeVariable" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="JSCustomType" abstract="true" interface="true">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Marker interface for the context-aware type expressions (JSType subtypes), like &quot;This&quot;. If type expression implements it, then the current type owner is made available when evaluating the corresponding IRType instance."/>
-    </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TypeLiteral">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"

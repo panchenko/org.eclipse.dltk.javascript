@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import static org.eclipse.dltk.javascript.internal.core.TypeSystems.DELEGATING_TYPE_SYSTEM;
+
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 /**
@@ -55,16 +57,6 @@ public abstract class RType implements IRType {
 		return TypeCompatibility.FALSE;
 	}
 
-	protected boolean isAssignableFrom(Type dest, Type src) {
-		// TODO (alex) compare objects instead of names
-		final String localName = TypeUtil.getName(dest);
-		for (Type t : new TypeQuery(src).getHierarchy()) {
-			if (localName.equals(TypeUtil.getName(t)))
-				return true;
-		}
-		return false;
-	}
-
 	@Override
 	public final String toString() {
 		return getName();
@@ -82,4 +74,14 @@ public abstract class RType implements IRType {
 	public boolean isJavaScriptObject() {
 		return true;
 	}
+
+	public IRType transform(IRTypeTransformer function) {
+		return this;
+	}
+
+	protected final IRTypeDeclaration convert(Type type) {
+		return (typeSystem != null ? typeSystem : DELEGATING_TYPE_SYSTEM)
+				.convert(type);
+	}
+
 }

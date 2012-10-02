@@ -15,6 +15,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 
+/**
+ * This type is not used anymore for parameterized types.
+ */
+@Deprecated
 public class OriginReference extends AdapterImpl {
 
 	public final Type genericType;

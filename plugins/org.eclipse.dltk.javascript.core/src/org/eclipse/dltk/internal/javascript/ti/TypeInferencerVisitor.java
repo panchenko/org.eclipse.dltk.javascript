@@ -11,12 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import static org.eclipse.dltk.javascript.core.Types.BOOLEAN;
-import static org.eclipse.dltk.javascript.core.Types.FUNCTION;
-import static org.eclipse.dltk.javascript.core.Types.NUMBER;
-import static org.eclipse.dltk.javascript.core.Types.OBJECT;
-import static org.eclipse.dltk.javascript.core.Types.STRING;
-
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,6 +90,7 @@ import org.eclipse.dltk.javascript.ast.XmlLiteral;
 import org.eclipse.dltk.javascript.ast.XmlTextFragment;
 import org.eclipse.dltk.javascript.ast.YieldOperator;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
+import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.parser.ISuppressWarningsState;
 import org.eclipse.dltk.javascript.parser.JSParser;
 import org.eclipse.dltk.javascript.parser.PropertyExpressionUtils;
@@ -105,6 +100,7 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.PhantomValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IParameter;
@@ -112,10 +108,13 @@ import org.eclipse.dltk.javascript.typeinfo.IModelBuilder.IVariable;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilderExtension;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRConstructor;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
+import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRVariable;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
@@ -127,12 +126,10 @@ import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
-import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
-import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
@@ -204,11 +201,11 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		final JSTypeSet types = JSTypeSet.create();
 		for (ASTNode astNode : node.getItems()) {
 			if (astNode instanceof StringLiteral) {
-				types.add(RTypes.simple(STRING));
+				types.add(RTypes.STRING);
 			} else if (astNode instanceof DecimalLiteral) {
-				types.add(RTypes.simple(NUMBER));
+				types.add(RTypes.NUMBER);
 			} else if (astNode instanceof BooleanLiteral) {
-				types.add(RTypes.simple(BOOLEAN));
+				types.add(RTypes.BOOLEAN);
 			} else if (astNode instanceof NullExpression
 					|| astNode instanceof EmptyExpression) {
 				// ignore
@@ -306,10 +303,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	private boolean isNumber(IValueReference ref) {
 		if (ref != null) {
-			final IRType numType = RTypes.simple(NUMBER);
-			if (ref.getTypes().contains(numType))
+			if (ref.getTypes().contains(RTypes.NUMBER))
 				return true;
-			if (numType.equals(ref.getDeclaredType()))
+			if (RTypes.NUMBER.equals(ref.getDeclaredType()))
 				return true;
 		}
 		return false;
@@ -317,10 +313,9 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	private boolean isString(IValueReference ref) {
 		if (ref != null) {
-			final IRType strType = RTypes.simple(STRING);
-			if (ref.getTypes().contains(strType))
+			if (ref.getTypes().contains(RTypes.STRING))
 				return true;
-			if (strType.equals(ref.getDeclaredType()))
+			if (RTypes.STRING.equals(ref.getDeclaredType()))
 				return true;
 		}
 		return false;
@@ -394,21 +389,18 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			arguments[i] = visit(args.get(i));
 		}
 		if (reference != null) {
-			final List<Method> methods = JavaScriptValidations.extractElements(
-					reference, Method.class);
+			final List<IRMethod> methods = ValueReferenceUtil.extractElements(
+					reference, IRMethod.class);
 			if (methods != null && methods.size() == 1) {
-				if (methods.get(0) instanceof GenericMethod) {
-					final GenericMethod method = (GenericMethod) methods.get(0);
+				final IRMethod method = methods.get(0);
+				if (method.isGeneric()) {
 					final JSTypeSet type = evaluateGenericCall(method,
 							arguments);
 					if (type != null) {
 						return new ConstantValue(type);
 					}
 				} else {
-					final ITypeSystem typeSystem = getTypeSystemOf(reference);
-					final IRType type = RTypes.create(typeSystem, methods
-							.get(0).getType());
-					return ConstantValue.valueOf(type);
+					return ConstantValue.valueOf(method.getType());
 				}
 			} else {
 				final IRType expressionType = JavaScriptValidations
@@ -419,14 +411,13 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 								.valueOf(((IRFunctionType) expressionType)
 										.getReturnType());
 					} else if (expressionType instanceof IRClassType) {
-						final Type target = ((IRClassType) expressionType)
-								.getTarget();
+						final IRTypeDeclaration target = ((IRClassType) expressionType)
+								.getDeclaration();
 						if (target != null) {
-							final Constructor constructor = target
+							final IRConstructor constructor = target
 									.getStaticConstructor();
 							if (constructor != null) {
-								return new ConstantValue(
-										RTypes.create(constructor.getType()));
+								return new ConstantValue(constructor.getType());
 							}
 						}
 					}
@@ -447,8 +438,10 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		return getContext();
 	}
 
-	protected JSTypeSet evaluateGenericCall(GenericMethod method,
+	protected JSTypeSet evaluateGenericCall(IRMethod rMethod,
 			IValueReference[] arguments) {
+		assert rMethod.isGeneric();
+		final GenericMethod method = (GenericMethod) rMethod.getSource();
 		final JSTypeSet[] argTypes = new JSTypeSet[arguments.length];
 		for (int i = 0; i < arguments.length; ++i) {
 			argTypes[i] = arguments[i].getDeclaredTypes();
@@ -485,6 +478,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			}
 		}
 		if (method.getType() != null) {
+			// TODO (alex) optimize if return type is not parameterized
 			return evaluateReturnType(method.getType(), captures);
 		} else {
 			return null;
@@ -502,14 +496,16 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 			return JSTypeSet.singleton(RTypes.arrayOf(evaluateReturnType(
 					itemType, captures).toRType()));
 		} else if (type instanceof ParameterizedType) {
-			List<IRType> params = new ArrayList<IRType>();
 			final ParameterizedType parameterized = (ParameterizedType) type;
+			final List<IRType> params = new ArrayList<IRType>(parameterized
+					.getActualTypeArguments().size());
 			for (JSType param : parameterized.getActualTypeArguments()) {
-				final IRType r = evaluateReturnType(param, captures).toRType();
-				params.add(r != null ? r : RTypes.none());
+				params.add(evaluateReturnType(param, captures).toRType());
 			}
-			return JSTypeSet.singleton(RTypes.simple(getContext().parameterize(
-					parameterized.getTarget(), params)));
+			final IRTypeDeclaration declaration = getContext().parameterize(
+					parameterized.getTarget(), params);
+			return JSTypeSet
+					.singleton(RTypes.simple(getContext(), declaration));
 		} else if (type instanceof SimpleType) {
 			return JSTypeSet.create(RTypes.create(getContext(), type));
 		} else {
@@ -836,7 +832,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 		}
 		result.setLocation(method.getLocation());
 		result.setKind(ReferenceKind.FUNCTION);
-		result.setDeclaredType(RTypes.simple(FUNCTION));
+		result.setDeclaredType(RTypes.FUNCTION);
 		result.setAttribute(IReferenceAttributes.METHOD, method);
 		result.setAttribute(IReferenceAttributes.R_METHOD,
 				RModelBuilder.create(getContext(), method));
@@ -916,9 +912,8 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 
 	/**
 	 * @param value
-	 * @param type
-	 * @param lazyEnabled
 	 * @param rt
+	 * @param lazyEnabled
 	 */
 	private void setIRType(IValueReference value, final IRType rt,
 			boolean lazyEnabled) {
@@ -1125,12 +1120,12 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 							.getPath(objectClass);
 					if (className != null) {
 						Type type = TypeInfoModelFactory.eINSTANCE.createType();
-						type.setSuperType(OBJECT);
+						type.setSuperType(Types.OBJECT);
 						type.setKind(TypeKind.JAVASCRIPT);
 						type.setName(className);
 						result.value.setDeclaredType(RTypes.simple(type));
 					} else {
-						result.value.setDeclaredType(RTypes.simple(OBJECT));
+						result.value.setDeclaredType(RTypes.OBJECT);
 					}
 				}
 			} else if (result.typeValue.exists()) {
@@ -1191,7 +1186,7 @@ public class TypeInferencerVisitor extends TypeInferencerVisitorBase {
 	@Override
 	public IValueReference visitObjectInitializer(ObjectInitializer node) {
 		final IValueReference result = new AnonymousValue();
-		result.setDeclaredType(RTypes.simple(OBJECT));
+		result.setDeclaredType(RTypes.OBJECT);
 		for (ObjectInitializerPart part : node.getInitializers()) {
 			if (part instanceof PropertyInitializer) {
 				final PropertyInitializer pi = (PropertyInitializer) part;

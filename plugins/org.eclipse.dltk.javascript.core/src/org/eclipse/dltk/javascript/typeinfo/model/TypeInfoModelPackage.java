@@ -308,13 +308,22 @@ public interface TypeInfoModelPackage extends EPackage {
     int TYPE__SUPER_TYPE = ELEMENT_FEATURE_COUNT + 2;
 
     /**
+     * The feature id for the '<em><b>Super Type Expr</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int TYPE__SUPER_TYPE_EXPR = ELEMENT_FEATURE_COUNT + 3;
+
+    /**
      * The feature id for the '<em><b>Static Constructor</b></em>' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int TYPE__STATIC_CONSTRUCTOR = ELEMENT_FEATURE_COUNT + 3;
+    int TYPE__STATIC_CONSTRUCTOR = ELEMENT_FEATURE_COUNT + 4;
 
     /**
      * The feature id for the '<em><b>Traits</b></em>' reference list.
@@ -323,7 +332,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE__TRAITS = ELEMENT_FEATURE_COUNT + 4;
+    int TYPE__TRAITS = ELEMENT_FEATURE_COUNT + 5;
 
     /**
      * The feature id for the '<em><b>Constructors</b></em>' containment reference list.
@@ -332,7 +341,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE__CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 5;
+    int TYPE__CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 6;
 
     /**
      * The feature id for the '<em><b>Instantiable</b></em>' attribute.
@@ -341,7 +350,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE__INSTANTIABLE = ELEMENT_FEATURE_COUNT + 6;
+    int TYPE__INSTANTIABLE = ELEMENT_FEATURE_COUNT + 7;
 
     /**
      * The feature id for the '<em><b>Inherit Constructors</b></em>' attribute.
@@ -350,7 +359,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE__INHERIT_CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 7;
+    int TYPE__INHERIT_CONSTRUCTORS = ELEMENT_FEATURE_COUNT + 8;
 
     /**
      * The feature id for the '<em><b>Inherit Static Members</b></em>' attribute.
@@ -359,7 +368,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE__INHERIT_STATIC_MEMBERS = ELEMENT_FEATURE_COUNT + 8;
+    int TYPE__INHERIT_STATIC_MEMBERS = ELEMENT_FEATURE_COUNT + 9;
 
     /**
      * The feature id for the '<em><b>Meta Type</b></em>' attribute.
@@ -368,7 +377,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-    int TYPE__META_TYPE = ELEMENT_FEATURE_COUNT + 9;
+    int TYPE__META_TYPE = ELEMENT_FEATURE_COUNT + 10;
 
     /**
      * The number of structural features of the '<em>Type</em>' class.
@@ -377,7 +386,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      * @ordered
      */
-	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 10;
+	int TYPE_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 11;
 
 	/**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeAliasImpl <em>Type Alias</em>}' class.
@@ -1716,6 +1725,15 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_TYPE__SUPER_TYPE = TYPE__SUPER_TYPE;
 
     /**
+     * The feature id for the '<em><b>Super Type Expr</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int GENERIC_TYPE__SUPER_TYPE_EXPR = TYPE__SUPER_TYPE_EXPR;
+
+    /**
      * The feature id for the '<em><b>Static Constructor</b></em>' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1998,25 +2016,6 @@ public interface TypeInfoModelPackage extends EPackage {
     int GENERIC_METHOD_FEATURE_COUNT = METHOD_FEATURE_COUNT + 1;
 
     /**
-     * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.JSCustomType <em>JS Custom Type</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.dltk.javascript.typeinfo.model.JSCustomType
-     * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getJSCustomType()
-     * @generated
-     */
-    int JS_CUSTOM_TYPE = 29;
-
-    /**
-     * The number of structural features of the '<em>JS Custom Type</em>' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int JS_CUSTOM_TYPE_FEATURE_COUNT = 0;
-
-    /**
      * The meta object id for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeLiteralImpl <em>Type Literal</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2024,7 +2023,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeLiteral()
      * @generated
      */
-    int TYPE_LITERAL = 30;
+    int TYPE_LITERAL = 29;
 
     /**
      * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2061,7 +2060,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeVariableClassType()
      * @generated
      */
-    int TYPE_VARIABLE_CLASS_TYPE = 31;
+    int TYPE_VARIABLE_CLASS_TYPE = 30;
 
     /**
      * The feature id for the '<em><b>Variable</b></em>' reference.
@@ -2089,7 +2088,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getTypeKind()
      * @generated
      */
-	int TYPE_KIND = 32;
+	int TYPE_KIND = 31;
 
 
 	/**
@@ -2100,7 +2099,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getParameterKind()
      * @generated
      */
-	int PARAMETER_KIND = 33;
+	int PARAMETER_KIND = 32;
 
 
 	/**
@@ -2111,7 +2110,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getVisibility()
      * @generated
      */
-    int VISIBILITY = 34;
+    int VISIBILITY = 33;
 
 
     /**
@@ -2122,7 +2121,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getIRType()
      * @generated
      */
-    int IR_TYPE = 35;
+    int IR_TYPE = 34;
 
 
     /**
@@ -2133,7 +2132,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getMetaType()
      * @generated
      */
-    int META_TYPE = 36;
+    int META_TYPE = 35;
 
 
     /**
@@ -2144,7 +2143,7 @@ public interface TypeInfoModelPackage extends EPackage {
      * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getITypeSystem()
      * @generated
      */
-    int ITYPE_SYSTEM = 37;
+    int ITYPE_SYSTEM = 36;
 
 
     /**
@@ -2419,16 +2418,6 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getGenericMethod_TypeParameters();
-
-    /**
-     * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.JSCustomType <em>JS Custom Type</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for class '<em>JS Custom Type</em>'.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.JSCustomType
-     * @generated
-     */
-    EClass getJSCustomType();
 
     /**
      * Returns the meta object for class '{@link org.eclipse.dltk.javascript.typeinfo.model.TypeLiteral <em>Type Literal</em>}'.
@@ -2726,6 +2715,17 @@ public interface TypeInfoModelPackage extends EPackage {
      * @generated
      */
     EReference getType_SuperType();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperTypeExpr <em>Super Type Expr</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Super Type Expr</em>'.
+     * @see org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperTypeExpr()
+     * @see #getType()
+     * @generated
+     */
+    EReference getType_SuperTypeExpr();
 
     /**
      * Returns the meta object for the containment reference '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getStaticConstructor <em>Static Constructor</em>}'.
@@ -3317,16 +3317,6 @@ public interface TypeInfoModelPackage extends EPackage {
         EReference GENERIC_METHOD__TYPE_PARAMETERS = eINSTANCE.getGenericMethod_TypeParameters();
 
         /**
-         * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.JSCustomType <em>JS Custom Type</em>}' class.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @see org.eclipse.dltk.javascript.typeinfo.model.JSCustomType
-         * @see org.eclipse.dltk.javascript.typeinfo.model.impl.TypeInfoModelPackageImpl#getJSCustomType()
-         * @generated
-         */
-        EClass JS_CUSTOM_TYPE = eINSTANCE.getJSCustomType();
-
-        /**
          * The meta object literal for the '{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeLiteralImpl <em>Type Literal</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -3571,6 +3561,14 @@ public interface TypeInfoModelPackage extends EPackage {
          * @generated
          */
         EReference TYPE__SUPER_TYPE = eINSTANCE.getType_SuperType();
+
+        /**
+         * The meta object literal for the '<em><b>Super Type Expr</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference TYPE__SUPER_TYPE_EXPR = eINSTANCE.getType_SuperTypeExpr();
 
         /**
          * The meta object literal for the '<em><b>Static Constructor</b></em>' containment reference feature.

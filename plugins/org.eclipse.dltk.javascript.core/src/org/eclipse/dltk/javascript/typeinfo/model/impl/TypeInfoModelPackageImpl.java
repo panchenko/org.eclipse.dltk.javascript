@@ -26,7 +26,6 @@ import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
-import org.eclipse.dltk.javascript.typeinfo.model.JSCustomType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -160,13 +159,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * @generated
      */
     private EClass genericMethodEClass = null;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private EClass jsCustomTypeEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -636,15 +628,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-    public EClass getJSCustomType() {
-        return jsCustomTypeEClass;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
     public EClass getTypeLiteral() {
         return typeLiteralEClass;
     }
@@ -897,7 +880,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-    public EReference getType_StaticConstructor() {
+    public EReference getType_SuperTypeExpr() {
         return (EReference)typeEClass.getEStructuralFeatures().get(3);
     }
 
@@ -906,7 +889,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-    public EReference getType_Traits() {
+    public EReference getType_StaticConstructor() {
         return (EReference)typeEClass.getEStructuralFeatures().get(4);
     }
 
@@ -915,7 +898,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-    public EReference getType_Constructors() {
+    public EReference getType_Traits() {
         return (EReference)typeEClass.getEStructuralFeatures().get(5);
     }
 
@@ -924,8 +907,8 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getType_Instantiable() {
-        return (EAttribute)typeEClass.getEStructuralFeatures().get(6);
+    public EReference getType_Constructors() {
+        return (EReference)typeEClass.getEStructuralFeatures().get(6);
     }
 
     /**
@@ -933,7 +916,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getType_InheritConstructors() {
+    public EAttribute getType_Instantiable() {
         return (EAttribute)typeEClass.getEStructuralFeatures().get(7);
     }
 
@@ -942,7 +925,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getType_InheritStaticMembers() {
+    public EAttribute getType_InheritConstructors() {
         return (EAttribute)typeEClass.getEStructuralFeatures().get(8);
     }
 
@@ -951,8 +934,17 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getType_MetaType() {
+    public EAttribute getType_InheritStaticMembers() {
         return (EAttribute)typeEClass.getEStructuralFeatures().get(9);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getType_MetaType() {
+        return (EAttribute)typeEClass.getEStructuralFeatures().get(10);
     }
 
     /**
@@ -1217,6 +1209,7 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         createEReference(typeEClass, TYPE__MEMBERS);
         createEAttribute(typeEClass, TYPE__KIND);
         createEReference(typeEClass, TYPE__SUPER_TYPE);
+        createEReference(typeEClass, TYPE__SUPER_TYPE_EXPR);
         createEReference(typeEClass, TYPE__STATIC_CONSTRUCTOR);
         createEReference(typeEClass, TYPE__TRAITS);
         createEReference(typeEClass, TYPE__CONSTRUCTORS);
@@ -1301,8 +1294,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         genericMethodEClass = createEClass(GENERIC_METHOD);
         createEReference(genericMethodEClass, GENERIC_METHOD__TYPE_PARAMETERS);
-
-        jsCustomTypeEClass = createEClass(JS_CUSTOM_TYPE);
 
         typeLiteralEClass = createEClass(TYPE_LITERAL);
         createEAttribute(typeLiteralEClass, TYPE_LITERAL__NAME);
@@ -1404,7 +1395,8 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
         initEClass(typeEClass, Type.class, "Type", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getType_Members(), this.getMember(), this.getMember_DeclaringType(), "members", null, 0, -1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEAttribute(getType_Kind(), this.getTypeKind(), "kind", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-        initEReference(getType_SuperType(), this.getType(), null, "superType", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEReference(getType_SuperType(), this.getType(), null, "superType", null, 0, 1, Type.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        initEReference(getType_SuperTypeExpr(), this.getSimpleType(), null, "superTypeExpr", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getType_StaticConstructor(), this.getConstructor(), null, "staticConstructor", null, 0, 1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getType_Traits(), this.getType(), null, "traits", null, 0, -1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
         initEReference(getType_Constructors(), this.getConstructor(), null, "constructors", null, 0, -1, Type.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -1503,8 +1495,6 @@ public class TypeInfoModelPackageImpl extends EPackageImpl implements TypeInfoMo
 
         initEClass(genericMethodEClass, GenericMethod.class, "GenericMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEReference(getGenericMethod_TypeParameters(), this.getTypeVariable(), null, "typeParameters", null, 0, -1, GenericMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-        initEClass(jsCustomTypeEClass, JSCustomType.class, "JSCustomType", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
         initEClass(typeLiteralEClass, TypeLiteral.class, "TypeLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
         initEAttribute(getTypeLiteral_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypeLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

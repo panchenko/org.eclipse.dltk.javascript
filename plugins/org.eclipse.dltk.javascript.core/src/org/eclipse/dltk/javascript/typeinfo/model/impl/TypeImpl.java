@@ -23,11 +23,11 @@ import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MetaType;
-import org.eclipse.dltk.javascript.typeinfo.RSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
 import org.eclipse.dltk.javascript.typeinfo.model.Constructor;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
+import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -54,6 +54,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getMembers <em>Members</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getKind <em>Kind</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getSuperType <em>Super Type</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getSuperTypeExpr <em>Super Type Expr</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getStaticConstructor <em>Static Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getTraits <em>Traits</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.impl.TypeImpl#getConstructors <em>Constructors</em>}</li>
@@ -98,14 +99,14 @@ public class TypeImpl extends ElementImpl implements Type {
 	protected TypeKind kind = KIND_EDEFAULT;
 
 	/**
-     * The cached value of the '{@link #getSuperType() <em>Super Type</em>}' reference.
+     * The cached value of the '{@link #getSuperTypeExpr() <em>Super Type Expr</em>}' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getSuperType()
+     * @see #getSuperTypeExpr()
      * @generated
      * @ordered
      */
-    protected Type superType;
+    protected SimpleType superTypeExpr;
 
     /**
      * The cached value of the '{@link #getStaticConstructor() <em>Static Constructor</em>}' containment reference.
@@ -261,44 +262,67 @@ public class TypeImpl extends ElementImpl implements Type {
     }
 
 	/**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
     public Type getSuperType() {
-        if (superType != null && superType.eIsProxy()) {
-            InternalEObject oldSuperType = (InternalEObject)superType;
-            superType = (Type)eResolveProxy(oldSuperType);
-            if (superType != oldSuperType) {
-                if (eNotificationRequired())
-                    eNotify(new ENotificationImpl(this, Notification.RESOLVE, TypeInfoModelPackage.TYPE__SUPER_TYPE, oldSuperType, superType));
-            }
-        }
-        return superType;
+		return superTypeExpr != null ? superTypeExpr.getTarget() : null;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public Type basicGetSuperType() {
-        return superType;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
     public void setSuperType(Type newSuperType) {
-        Type oldSuperType = superType;
-        superType = newSuperType;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__SUPER_TYPE, oldSuperType, superType));
+		setSuperTypeExpr(TypeUtil.ref(newSuperType));
     }
 
 	/**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public SimpleType getSuperTypeExpr() {
+        return superTypeExpr;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public NotificationChain basicSetSuperTypeExpr(SimpleType newSuperTypeExpr, NotificationChain msgs) {
+        SimpleType oldSuperTypeExpr = superTypeExpr;
+        superTypeExpr = newSuperTypeExpr;
+        if (eNotificationRequired()) {
+            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__SUPER_TYPE_EXPR, oldSuperTypeExpr, newSuperTypeExpr);
+            if (msgs == null) msgs = notification; else msgs.add(notification);
+        }
+        return msgs;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setSuperTypeExpr(SimpleType newSuperTypeExpr) {
+        if (newSuperTypeExpr != superTypeExpr) {
+            NotificationChain msgs = null;
+            if (superTypeExpr != null)
+                msgs = ((InternalEObject)superTypeExpr).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.TYPE__SUPER_TYPE_EXPR, null, msgs);
+            if (newSuperTypeExpr != null)
+                msgs = ((InternalEObject)newSuperTypeExpr).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TypeInfoModelPackage.TYPE__SUPER_TYPE_EXPR, null, msgs);
+            msgs = basicSetSuperTypeExpr(newSuperTypeExpr, msgs);
+            if (msgs != null) msgs.dispatch();
+        }
+        else if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, TypeInfoModelPackage.TYPE__SUPER_TYPE_EXPR, newSuperTypeExpr, newSuperTypeExpr));
+    }
+
+    /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -459,6 +483,8 @@ public class TypeImpl extends ElementImpl implements Type {
         switch (featureID) {
             case TypeInfoModelPackage.TYPE__MEMBERS:
                 return ((InternalEList<?>)getMembers()).basicRemove(otherEnd, msgs);
+            case TypeInfoModelPackage.TYPE__SUPER_TYPE_EXPR:
+                return basicSetSuperTypeExpr(null, msgs);
             case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
                 return basicSetStaticConstructor(null, msgs);
             case TypeInfoModelPackage.TYPE__CONSTRUCTORS:
@@ -480,8 +506,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__KIND:
                 return getKind();
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
-                if (resolve) return getSuperType();
-                return basicGetSuperType();
+                return getSuperType();
+            case TypeInfoModelPackage.TYPE__SUPER_TYPE_EXPR:
+                return getSuperTypeExpr();
             case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
                 return getStaticConstructor();
             case TypeInfoModelPackage.TYPE__TRAITS:
@@ -518,6 +545,9 @@ public class TypeImpl extends ElementImpl implements Type {
                 return;
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 setSuperType((Type)newValue);
+                return;
+            case TypeInfoModelPackage.TYPE__SUPER_TYPE_EXPR:
+                setSuperTypeExpr((SimpleType)newValue);
                 return;
             case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
                 setStaticConstructor((Constructor)newValue);
@@ -557,6 +587,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
                 setSuperType((Type)null);
                 return;
+            case TypeInfoModelPackage.TYPE__SUPER_TYPE_EXPR:
+                setSuperTypeExpr((SimpleType)null);
+                return;
             case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
                 setStaticConstructor((Constructor)null);
                 return;
@@ -589,7 +622,9 @@ public class TypeImpl extends ElementImpl implements Type {
             case TypeInfoModelPackage.TYPE__KIND:
                 return kind != KIND_EDEFAULT;
             case TypeInfoModelPackage.TYPE__SUPER_TYPE:
-                return superType != null;
+                return getSuperType() != null;
+            case TypeInfoModelPackage.TYPE__SUPER_TYPE_EXPR:
+                return superTypeExpr != null;
             case TypeInfoModelPackage.TYPE__STATIC_CONSTRUCTOR:
                 return staticConstructor != null;
             case TypeInfoModelPackage.TYPE__TRAITS:
@@ -641,11 +676,8 @@ public class TypeImpl extends ElementImpl implements Type {
 	}
 
 	public IRType toRType(ITypeSystem typeSystem) {
-		if (metaType != null) {
-			return metaType.toRType(typeSystem, this);
-		} else {
-			return new RSimpleType(typeSystem, this);
-		}
+		return (metaType != null ? metaType : DefaultMetaType.DEFAULT).toRType(
+				typeSystem, this);
 	}
 
 	public Member[] getAdditionalMembers() {

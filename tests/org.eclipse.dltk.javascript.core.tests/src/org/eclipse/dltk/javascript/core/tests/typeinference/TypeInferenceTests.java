@@ -31,7 +31,10 @@ import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
+import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
@@ -65,8 +68,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 			final Type type = TypeInfoModelLoader.getInstance().getType(
 					isStatic ? name.substring(STATIC_PREFIX.length()) : name);
 			assertNotNull(type);
-			types.add(isStatic ? RTypes.classType(type) : RTypes
-					.simple(type));
+			types.add(isStatic ? RTypes.classType(type) : RTypes.simple(type));
 		}
 		return types;
 	}
@@ -170,12 +172,11 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		assertEquals(true, toString.exists());
 		assertEquals(1, toString.getTypes().size());
 		assertEquals("String", typename(toString.getTypes()));
-
 	}
 
 	protected String typename(JSTypeSet types) {
 		assertEquals(1, types.size());
-		return types.getFirst().getName();
+		return types.toRType().getName();
 	}
 
 	public void testNestedFunctionTypeWithoutDeclaration() throws Exception {
@@ -675,7 +676,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueReference name = collection.getChild("num");
 		assertEquals(getTypes(STATIC_PREFIX + NUMBER), name.getTypes());
 
-		assertEquals(NUMBER, ((IRClassType) name.getTypes().getFirst())
+		assertEquals(NUMBER, ((IRClassType) name.getTypes().toRType())
 				.getTarget().getName());
 
 		// TODO should a static reference getchild really return existing none
@@ -698,7 +699,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
-		IRType type = strClz.getTypes().getFirst();
+		IRType type = strClz.getTypes().toRType();
 		assertEquals("Class<java.lang.String>", type.getName());
 		final Type stringType = ((IRClassType) type).getTarget();
 
@@ -723,7 +724,7 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		IValueCollection collection = inference(lines.toString());
 		IValueReference strClz = collection.getChild("str");
 		assertEquals(1, strClz.getTypes().size());
-		IRType type = strClz.getTypes().getFirst();
+		IRType type = strClz.getTypes().toRType();
 		assertEquals("Class<java.lang.String>", type.getName());
 		final Type stringType = ((IRClassType) type).getTarget();
 
@@ -1165,11 +1166,11 @@ public class TypeInferenceTests extends TestCase implements ITypeNames {
 		code.add("var gcall = g.call;");
 		code.add("gcall({}, 3, 4);");
 		final IValueCollection collection = inference(code.toString());
-		final Member fcall = (Member) collection.getChild("fcall")
-				.getAttribute(IReferenceAttributes.ELEMENT);
+		final IRMethod fcall = ValueReferenceUtil.extractElement(
+				collection.getChild("fcall"), IRMethod.class);
 		assertNotNull(fcall);
-		final Member gcall = (Member) collection.getChild("gcall")
-				.getAttribute(IReferenceAttributes.ELEMENT);
+		final IRMember gcall = ValueReferenceUtil.extractElement(
+				collection.getChild("gcall"), IRMethod.class);
 		assertNotNull(gcall);
 		assertSame(fcall, fcall);
 	}

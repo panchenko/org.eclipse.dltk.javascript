@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinference;
 
+import static org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory.eINSTANCE;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,10 +26,14 @@ import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
+import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericMethod;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
+import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 
 @SuppressWarnings({ "nls", "restriction" })
 public class ExampleElementResolver implements IElementResolver {
@@ -107,6 +113,17 @@ public class ExampleElementResolver implements IElementResolver {
 					.getTypeRef(ExampleTypeProvider.TYPE_GENERIC_ARRAY_METHOD));
 			property.setName(name);
 			return property;
+		} else if ("exampleCopy".equals(name)) {
+			final GenericMethod method = eINSTANCE.createGenericMethod();
+			final TypeVariable variable = eINSTANCE.createTypeVariable();
+			variable.setName("T");
+			method.getTypeParameters().add(variable);
+			method.setType(TypeUtil.reference(variable));
+			final Parameter param = eINSTANCE.createParameter();
+			param.setName("value");
+			param.setType(TypeUtil.reference(variable));
+			method.getParameters().add(param);
+			return method;
 		}
 		return null;
 	}

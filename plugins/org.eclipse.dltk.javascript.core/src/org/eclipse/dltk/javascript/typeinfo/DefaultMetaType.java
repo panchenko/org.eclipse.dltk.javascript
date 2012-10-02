@@ -29,7 +29,7 @@ public enum DefaultMetaType implements MetaType {
 				return runtimeType;
 			}
 		}
-		return new RSimpleType(type);
+		return new RSimpleType(typeSystem, type);
 	}
 
 }

@@ -25,6 +25,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRMapType;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
@@ -113,6 +114,17 @@ public class RTypeTests extends TestCase implements ITypeNames {
 				.getType());
 		assertEquals(TypeCompatibility.TRUE,
 				type.isAssignableFrom(RTypes.simple(Types.FUNCTION)));
+	}
+
+	public void testTypeDeclaration() {
+		final IRTypeDeclaration stringType = ((IRSimpleType) RTypes
+				.simple(Types.STRING)).getDeclaration();
+		assertEquals(Types.STRING.getMembers().size(), stringType.getMembers()
+				.size());
+		final IRTypeDeclaration objectType = stringType.getSuperType();
+		assertEquals(Types.OBJECT.getName(), objectType.getName());
+		assertEquals(Types.OBJECT.getMembers().size(), objectType.getMembers()
+				.size());
 	}
 
 }

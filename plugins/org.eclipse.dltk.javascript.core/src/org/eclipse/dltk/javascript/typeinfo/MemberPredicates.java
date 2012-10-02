@@ -18,9 +18,17 @@ public enum MemberPredicates implements MemberPredicate {
 		public boolean evaluate(Member member) {
 			return member.isStatic();
 		}
+
+		public boolean evaluate(IRMember member) {
+			return member.isStatic();
+		}
 	},
 	NON_STATIC {
 		public boolean evaluate(Member member) {
+			return !member.isStatic();
+		}
+
+		public boolean evaluate(IRMember member) {
 			return !member.isStatic();
 		}
 	},
@@ -28,9 +36,17 @@ public enum MemberPredicates implements MemberPredicate {
 		public boolean evaluate(Member member) {
 			return !member.isStatic();
 		}
+
+		public boolean evaluate(IRMember member) {
+			return !member.isStatic();
+		}
 	},
 	ALWAYS_TRUE {
 		public boolean evaluate(Member member) {
+			return true;
+		}
+
+		public boolean evaluate(IRMember member) {
 			return true;
 		}
 	};

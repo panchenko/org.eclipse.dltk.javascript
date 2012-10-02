@@ -72,6 +72,7 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * @param key
 	 * @param value
 	 */
+	@Deprecated
 	<T> void pushAttribute(AttributeKey<T> key, T value);
 
 	/**
@@ -80,5 +81,6 @@ public interface ITypeInfoContext extends ITypeSystem {
 	 * @param key
 	 * @return
 	 */
+	@Deprecated
 	<T> T popAttribute(AttributeKey<T> key);
 }

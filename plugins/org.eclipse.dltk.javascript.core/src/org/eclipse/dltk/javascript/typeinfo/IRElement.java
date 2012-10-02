@@ -15,18 +15,21 @@ import java.util.Set;
 
 import org.eclipse.dltk.compiler.problem.IProblemCategory;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
-import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 
 public interface IRElement {
 
 	String getName();
 
-	IRType getType();
-
-	ReferenceLocation getLocation();
-
 	Set<IProblemCategory> getSuppressedWarnings();
 
 	boolean isSuppressed(IProblemIdentifier problemIdentifier);
+
+	boolean isDeprecated();
+
+	/**
+	 * Returns the declaration object used to construct this "runtime/resolved"
+	 * element.
+	 */
+	Object getSource();
 
 }

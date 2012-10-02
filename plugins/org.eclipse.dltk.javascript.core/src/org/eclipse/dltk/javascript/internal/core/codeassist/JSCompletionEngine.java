@@ -13,8 +13,8 @@ package org.eclipse.dltk.javascript.internal.core.codeassist;
 
 import org.eclipse.dltk.codeassist.ICompletionEngine;
 import org.eclipse.dltk.core.ISourceModule;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
 public interface JSCompletionEngine extends ICompletionEngine {
 
@@ -29,5 +29,5 @@ public interface JSCompletionEngine extends ICompletionEngine {
 			boolean jsdoc);
 
 	void completeMembers(ISourceModule module, String prefix, int offset,
-			boolean jsdoc, Iterable<Member> memers);
+			boolean jsdoc, Iterable<IRMember> memers);
 }

@@ -13,12 +13,16 @@ package org.eclipse.dltk.javascript.typeinfo;
 
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
-public interface IRRecordMember {
+public interface IRRecordMember extends IRMember {
 	String getName();
 
 	IRType getType();
 
 	boolean isOptional();
 
+	@Deprecated
 	Member getMember();
+
+	// override return type
+	Member getSource();
 }

@@ -11,40 +11,62 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.annotations.NonNull;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
 public class RSimpleType extends RType implements IRSimpleType {
 
-	private final Type type;
+	@NonNull
+	private final Type target;
+	@NonNull
+	private final IRTypeDeclaration declaration;
 
-	public RSimpleType(ITypeSystem typeSystem, Type type) {
+	protected RSimpleType(ITypeSystem typeSystem, Type target) {
 		super(typeSystem);
-		assert type != null;
-		this.type = type;
+		assert target != null;
+		this.target = target;
 		if (DEBUG)
-			checkType(type);
+			checkType(target);
+		this.declaration = convert(target);
 	}
 
-	public RSimpleType(Type type) {
-		assert type != null;
-		this.type = type;
+	protected RSimpleType(Type type) {
+		this(null, type);
+	}
+
+	protected RSimpleType(ITypeSystem typeSystem, IRTypeDeclaration declaration) {
+		super(typeSystem);
+		assert declaration != null;
+		this.target = declaration.getSource();
 		if (DEBUG)
-			checkType(type);
+			checkType(target);
+		this.declaration = declaration;
+	}
+
+	protected RSimpleType(IRTypeDeclaration declaration) {
+		this.target = declaration.getSource();
+		if (DEBUG)
+			checkType(target);
+		this.declaration = declaration;
 	}
 
 	public String getName() {
-		return type.getName();
+		return declaration.getName();
 	}
 
 	public Type getTarget() {
-		return type;
+		return target;
+	}
+
+	public IRTypeDeclaration getDeclaration() {
+		return declaration;
 	}
 
 	@Override
 	public int hashCode() {
-		return type.hashCode();
+		return target.hashCode();
 	}
 
 	@Override
@@ -56,54 +78,36 @@ public class RSimpleType extends RType implements IRSimpleType {
 		if (getClass() != obj.getClass())
 			return false;
 		final RSimpleType other = (RSimpleType) obj;
-		return type.equals(other.type);
+		return target.equals(other.target);
 	}
 
 	@Override
 	public TypeCompatibility isAssignableFrom(IRType type) {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;
-		} else if (Types.OBJECT == this.type) {
+		} else if (Types.OBJECT == this.target) {
 			return TypeCompatibility.valueOf(type.isJavaScriptObject());
 		} else if (type instanceof RSimpleType) {
-			final Type other = ((RSimpleType) type).getTarget();
-			if (isAssignableFrom(this.type, other)) {
-				return TypeCompatibility.TRUE;
-			}
-			final OriginReference origin = OriginReference.of(this.type);
-			if (origin != null) {
-				if (isAssignableFrom(origin.genericType, other)) {
-					return TypeCompatibility.TRUE;
-				}
-				final OriginReference otherOrigin = OriginReference.of(other);
-				if (otherOrigin != null) {
-					if (isAssignableFrom(origin.genericType,
-							otherOrigin.genericType)
-							&& isAssignableFrom(origin.parameterTypes,
-									otherOrigin.parameterTypes)) {
-						return TypeCompatibility.TRUE;
-					}
-				}
-			}
+			final IRTypeDeclaration other = ((RSimpleType) type)
+					.getDeclaration();
+			return declaration.isAssignableFrom(other);
 		}
 		return testAssignableTo(type);
 	}
 
-	private boolean isAssignableFrom(IRType[] dest, IRType[] src) {
-		if (dest.length == src.length) {
-			for (int i = 0; i < dest.length; ++i) {
-				if (dest[i].isAssignableFrom(src[i]) != TypeCompatibility.TRUE) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
+	@Override
+	public boolean isJavaScriptObject() {
+		final TypeKind kind = target.getKind();
+		return kind == TypeKind.PREDEFINED || kind == TypeKind.JAVASCRIPT;
 	}
 
 	@Override
-	public boolean isJavaScriptObject() {
-		final TypeKind kind = type.getKind();
-		return kind == TypeKind.PREDEFINED || kind == TypeKind.JAVASCRIPT;
+	public IRType transform(IRTypeTransformer function) {
+		final IRTypeDeclaration value = function.transform(declaration);
+		if (value != declaration) {
+			return new RSimpleType(value);
+		} else {
+			return this;
+		}
 	}
 }

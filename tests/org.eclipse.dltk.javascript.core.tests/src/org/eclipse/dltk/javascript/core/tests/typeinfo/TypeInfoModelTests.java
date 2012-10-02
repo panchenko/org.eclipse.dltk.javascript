@@ -20,6 +20,7 @@ import org.eclipse.dltk.javascript.typeinfo.DefaultMetaType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
@@ -53,6 +54,11 @@ public class TypeInfoModelTests extends TestCase implements ITypeNames {
 				TypeInfoManager.getMetaType(MetaTypes.TWO.getId()));
 		assertEquals(TestMetaType.INSTANCE,
 				TypeInfoManager.getMetaType(TestMetaType.INSTANCE.getId()));
+	}
+
+	public void testDefaultMetaTypes() {
+		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
+		assertSame(DefaultMetaType.DEFAULT, type.getMetaType());
 	}
 
 }

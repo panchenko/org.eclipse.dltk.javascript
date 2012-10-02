@@ -63,4 +63,14 @@ class RArrayType extends RType implements IRArrayType {
 		}
 	}
 
+	@Override
+	public IRType transform(IRTypeTransformer function) {
+		final IRType value = function.transform(itemType);
+		if (value != itemType) {
+			return new RArrayType(value);
+		} else {
+			return this;
+		}
+	}
+
 }

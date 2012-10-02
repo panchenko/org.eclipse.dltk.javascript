@@ -21,6 +21,7 @@ import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
@@ -82,7 +83,27 @@ public class RMethodFunctionWrapper implements IRMethod {
 				&& parameter.getType() == RTypes.any();
 	}
 
-	public boolean isConstructor() {
+	public Object getSource() {
+		return functionType;
+	}
+
+	public IRTypeDeclaration getDeclaringType() {
+		return null;
+	}
+
+	public boolean isStatic() {
+		return false;
+	}
+
+	public boolean isAbstract() {
+		return false;
+	}
+
+	public boolean isVisible() {
+		return true;
+	}
+
+	public boolean isGeneric() {
 		return false;
 	}
 

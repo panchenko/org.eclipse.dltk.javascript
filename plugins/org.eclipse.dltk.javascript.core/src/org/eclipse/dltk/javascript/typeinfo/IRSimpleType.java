@@ -11,10 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.annotations.NonNull;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IRSimpleType extends IRType {
 
+	@NonNull
 	Type getTarget();
+
+	@NonNull
+	IRTypeDeclaration getDeclaration();
 
 }

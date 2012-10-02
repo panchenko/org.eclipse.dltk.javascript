@@ -52,22 +52,22 @@ import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRElement;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.IRMethod;
-import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.ITypeNames;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
-import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
+import org.eclipse.dltk.javascript.typeinfo.RTypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
-import org.eclipse.dltk.javascript.typeinfo.model.Element;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
-import org.eclipse.dltk.javascript.typeinfo.model.Method;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
@@ -184,7 +184,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 	 * {@link Iterable}.
 	 */
 	public void completeMembers(ISourceModule module, String prefix,
-			int offset, boolean jsdoc, Iterable<Member> memers) {
+			int offset, boolean jsdoc, Iterable<IRMember> memers) {
 		final CompletionContext completionContext = new CompletionContext();
 		completionContext.setOffset(offset);
 		completionContext.setDoc(jsdoc);
@@ -196,7 +196,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 				offset);
 		final Reporter reporter = new Reporter(inferencer2, prefix, offset,
 				visitor.createValidatorExtensions());
-		for (Member member : memers) {
+		for (IRMember member : memers) {
 			final String name = member.getName();
 			if (reporter.matches(name)) {
 				reporter.report(name, member);
@@ -282,7 +282,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		final Set<String> globals = context.listGlobals(reporter.getPrefix());
 		for (String global : globals) {
 			if (reporter.canReport(global)) {
-				Member element = context.resolve(global);
+				IRMember element = context.resolve(global);
 				if (element != null && element.isVisible()) {
 					reporter.report(global, element);
 				}
@@ -336,9 +336,9 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			return position;
 		}
 
-		public void report(String name, Element element) {
-			if (element instanceof Member && processed.add(name)) {
-				reportMember((Member) element, name, false);
+		public void report(String name, IRElement element) {
+			if (element instanceof IRMember && processed.add(name)) {
+				reportMember((IRMember) element, name, false);
 			}
 		}
 
@@ -346,7 +346,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 			return matches(name) && !processed.contains(name);
 		}
 
-		private boolean matches(String name) {
+		boolean matches(String name) {
 			return CharOperation.prefixEquals(prefix, name, false) || camelCase
 					&& CharOperation.camelCaseMatch(prefix, name.toCharArray());
 		}
@@ -386,15 +386,15 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		public void reportValueTypeMembers(IValueReference valueRef) {
-			final TypeMemberQuery typeQuery = new TypeMemberQuery();
-			final Set<Member> members = new HashSet<Member>();
+			final RTypeMemberQuery typeQuery = new RTypeMemberQuery();
+			final Set<IRMember> members = new HashSet<IRMember>();
 			collectTypes(valueRef.getDeclaredTypes(), typeQuery, members,
 					valueRef);
 			collectTypes(valueRef.getTypes(), typeQuery, members, valueRef);
-			for (Member member : members) {
+			for (IRMember member : members) {
 				reportMember(member, member.getName(), true);
 			}
-			for (Member member : typeQuery.ignoreDuplicates(processed)) {
+			for (IRMember member : typeQuery.ignoreDuplicates(processed)) {
 				if (member.isVisible() && matches(member.getName())) {
 					reportMember(member, member.getName(),
 							typeQuery.contains(member.getDeclaringType()));
@@ -403,66 +403,78 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		}
 
 		protected void collectTypes(final JSTypeSet types,
-				final TypeMemberQuery typeQuery,
-				final Collection<Member> members, IValueReference valueRef) {
+				final RTypeMemberQuery typeQuery,
+				final Collection<IRMember> members, IValueReference valueRef) {
 			for (IRType type : types) {
 				if (type instanceof IRClassType) {
-					final Type t = ((IRClassType) type).getTarget();
+					final IRTypeDeclaration t = ((IRClassType) type)
+							.getDeclaration();
 					if (t != null) {
-						final MemberPredicate predicate = t.memberPredicateFor(
-								type, MemberPredicates.STATIC);
+						final MemberPredicate predicate = t.getSource()
+								.memberPredicateFor(type,
+										MemberPredicates.STATIC);
 						typeQuery.add(t, predicate);
-						if (t.hasPrototype()
+						if (t.getSource().hasPrototype()
 								&& predicate
 										.isCompatibleWith(MemberPredicates.STATIC)) {
-							Type prototypeType = t.getPrototypeType();
+							Type prototypeType = t.getSource()
+									.getPrototypeType();
 							if (prototypeType == Types.FUNCTION
-									&& !canInstantiate(t, valueRef)) {
+									&& !canInstantiate(t.getSource(), valueRef)) {
 								prototypeType = Types.OBJECT;
 							}
-							typeQuery.add(prototypeType,
+							typeQuery.add(context.convert(prototypeType),
 									MemberPredicates.NON_STATIC);
 						}
 					} else {
-						typeQuery.add(Types.FUNCTION,
+						typeQuery.add(context.convert(Types.FUNCTION),
 								MemberPredicates.NON_STATIC);
 					}
 				} else if (type instanceof IRSimpleType) {
-					final Type t = ((IRSimpleType) type).getTarget();
+					final IRTypeDeclaration t = ((IRSimpleType) type)
+							.getDeclaration();
 					if (t != null) {
-						typeQuery.add(t, t.memberPredicateFor(type,
-								MemberPredicates.NON_STATIC));
+						typeQuery.add(
+								t,
+								t.getSource().memberPredicateFor(type,
+										MemberPredicates.NON_STATIC));
 					}
 				} else if (type instanceof IRRecordType) {
-					for (IRRecordMember member : ((IRRecordType) type)
-							.getMembers()) {
-						members.add(member.getMember());
-					}
+					members.addAll(((IRRecordType) type).getMembers());
 				} else if (type instanceof IRFunctionType) {
 					final IRFunctionType functionType = (IRFunctionType) type;
 					members.add(FunctionMethod.apply.create(functionType));
 					members.add(FunctionMethod.call.create(functionType));
-					typeQuery.add(Types.FUNCTION, new MemberPredicate() {
-						public boolean isCompatibleWith(
-								MemberPredicate predicate) {
-							return MemberPredicates.NON_STATIC == predicate;
-						}
+					typeQuery.add(context.convert(Types.FUNCTION),
+							new MemberPredicate() {
+								public boolean isCompatibleWith(
+										MemberPredicate predicate) {
+									return MemberPredicates.NON_STATIC == predicate;
+								}
 
-						public boolean evaluate(Member member) {
-							return MemberPredicates.NON_STATIC.evaluate(member)
-									&& !FunctionMethod.apply.test(member
-											.getName())
-									&& !FunctionMethod.call.test(member
-											.getName());
-						}
-					});
+								public boolean evaluate(Member member) {
+									return MemberPredicates.NON_STATIC
+											.evaluate(member)
+											&& !FunctionMethod.apply
+													.test(member.getName())
+											&& !FunctionMethod.call.test(member
+													.getName());
+								}
+
+								public boolean evaluate(IRMember member) {
+									return member.getSource() instanceof Member
+											&& evaluate((Member) member
+													.getSource());
+								}
+							});
 				} else if (type instanceof IRArrayType) {
 					final IRArrayType arrayType = (IRArrayType) type;
 					typeQuery
 							.add(context.parameterize(Types.ARRAY, Collections
 									.singletonList(arrayType.getItemType())));
 				} else if (type.isJavaScriptObject()) {
-					typeQuery.add(Types.OBJECT, MemberPredicates.NON_STATIC);
+					typeQuery.add(context.convert(Types.OBJECT),
+							MemberPredicates.NON_STATIC);
 				}
 			}
 		}
@@ -483,12 +495,14 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 		/**
 		 * @param member
 		 */
-		private void reportMember(Member member, String memberName,
+		private void reportMember(IRMember member, String memberName,
 				boolean important) {
-			if (visibilityCheck && extensions != null) {
+			if (visibilityCheck && extensions != null
+					&& member.getSource() instanceof Member) {
+				final Member source = (Member) member.getSource();
 				for (IValidatorExtension extension : extensions) {
 					final IValidationStatus status = extension
-							.validateAccessibility(member);
+							.validateAccessibility(source);
 					if (status != null) {
 						if (status == ValidationStatus.OK) {
 							break;
@@ -498,7 +512,7 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 					}
 				}
 			}
-			boolean isFunction = member instanceof Method;
+			boolean isFunction = member instanceof IRMethod;
 			CompletionProposal proposal = CompletionProposal.create(
 					isFunction ? CompletionProposal.METHOD_REF
 							: CompletionProposal.FIELD_REF, position);
@@ -514,11 +528,11 @@ public class JavaScriptCompletionEngine2 extends ScriptCompletionEngine
 
 			proposal.setCompletion(isFunction ? memberName + "()" : memberName);
 			proposal.setName(memberName);
-			proposal.setExtraInfo(member);
+			proposal.setExtraInfo(member.getSource());
 			proposal.setReplaceRange(startPosition - offset, endPosition
 					- offset);
 			if (isFunction) {
-				Method method = (Method) member;
+				final IRMethod method = (IRMethod) member;
 				int paramCount = method.getParameters().size();
 				if (paramCount > 0) {
 					final String[] params = new String[paramCount];

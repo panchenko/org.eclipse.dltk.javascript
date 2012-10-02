@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.annotations.Internal;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.core.IModelElement;
 import org.eclipse.dltk.javascript.ast.Script;
@@ -34,43 +36,30 @@ import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IElementResolver;
 import org.eclipse.dltk.javascript.typeinfo.IMemberEvaluator;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
-import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
-import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
-import org.eclipse.dltk.javascript.typeinfo.OriginReference;
-import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
-import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableClassType;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
-public class TypeInferencer2 implements ITypeInferenceContext {
+public class TypeInferencer2 extends TypeSystemImpl implements
+		ITypeInferenceContext {
 
 	private TypeInferencerVisitor visitor;
 	private ReferenceSource source;
@@ -150,7 +139,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return visitor.peekContext();
 	}
 
-	private final Map<String, Type> types = new ConcurrentHashMap<String, Type>();
+	private final ConcurrentMap<String, Type> types = new ConcurrentHashMap<String, Type>();
 
 	public Type getType(String typeName) {
 		if (typeName == null || typeName.length() == 0) {
@@ -174,14 +163,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 				false);
 	}
 
-	public Type resolveType(Type type) {
-		if (type != null && type.isProxy()) {
-			return doResolveType(type);
-		} else {
-			return type;
-		}
-	}
-
+	@Override
 	public Type doResolveType(Type type) {
 		final String typeName = URI.decode(((InternalEObject) type).eProxyURI()
 				.fragment());
@@ -190,178 +172,6 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return resolved;
 		}
 		return type;
-	}
-
-	private String buildParameterizedTypeName(final GenericType genericType,
-			List<IRType> parameters) {
-		final StringBuilder parameterizedName = new StringBuilder();
-		parameterizedName.append(genericType.getName());
-		parameterizedName.append("<");
-		for (int i = 0; i < genericType.getTypeParameters().size(); ++i) {
-			if (i > 0) {
-				parameterizedName.append(",");
-			}
-			if (i < parameters.size()) {
-				parameterizedName.append(parameters.get(i).getName());
-			} else {
-				parameterizedName.append("*");
-			}
-		}
-		parameterizedName.append(">");
-		final String name = parameterizedName.toString();
-		return name;
-	}
-
-	public Type parameterize(Type target, List<IRType> parameters) {
-		target = resolveType(target);
-		if (target instanceof GenericType) {
-			final GenericType genericType = (GenericType) target;
-			final String name = buildParameterizedTypeName(genericType,
-					parameters);
-			Type type = types.get(name);
-			if (type != null) {
-				if (DEBUG) {
-					System.out.println("Returning " + name);
-				}
-				return type;
-			}
-			if (DEBUG) {
-				System.out.println("Creating " + name);
-			}
-			final Parameterizer parameterizer = new Parameterizer(genericType,
-					parameters);
-			type = parameterizer.copy();
-			parameterizer.copyReferences();
-			type.setName(name);
-			type.eAdapters().add(
-					new OriginReference(genericType,
-							parameterizer.actualParameters));
-			types.put(name, type);
-			typeRS.addToResource(type);
-			final Type superType = target.getSuperType();
-			if (superType != null) {
-				if (superType instanceof GenericType) {
-					type.setSuperType(parameterize(superType, parameters));
-				} else {
-					type.setSuperType(superType);
-				}
-			}
-			return type;
-		}
-		return target;
-	}
-
-	@SuppressWarnings("serial")
-	private static class Parameterizer extends EcoreUtil.Copier {
-
-		final GenericType genericType;
-		final Map<TypeVariable, IRType> parameters = new HashMap<TypeVariable, IRType>();
-		final IRType[] actualParameters;
-
-		public Parameterizer(GenericType genericType, List<IRType> parameters) {
-			super(false);
-			this.genericType = genericType;
-			final EList<TypeVariable> variables = genericType
-					.getTypeParameters();
-			this.actualParameters = new IRType[variables.size()];
-			for (int i = 0; i < variables.size(); ++i) {
-				final TypeVariable variable = variables.get(i);
-				IRType variableType = null;
-				if (i < parameters.size()) {
-					variableType = parameters.get(i);
-				}
-				if (variableType == null) {
-					variableType = RTypes.any();
-				}
-				actualParameters[i] = variableType;
-				this.parameters.put(variable, variableType);
-			}
-		}
-
-		public Type copy() {
-			return (Type) copy(genericType);
-		}
-
-		@Override
-		public EObject copy(EObject eObject) {
-			if (eObject == null) {
-				return null;
-			} else {
-				final EObject copyEObject;
-				final EClass eClass;
-				if (eObject == genericType) {
-					final EClass genericClass = genericType.eClass();
-					final String parametererizedType = EcoreUtil.getAnnotation(
-							genericClass, TypeInfoModelPackage.eNS_URI,
-							"parameterizedType");
-					if (parametererizedType != null) {
-						final EClass parametererizedClass = (EClass) genericClass
-								.getEPackage().getEClassifier(
-										parametererizedType);
-						copyEObject = EcoreUtil.create(parametererizedClass);
-					} else {
-						copyEObject = TypeInfoModelFactory.eINSTANCE
-								.createType();
-					}
-					eClass = copyEObject.eClass();
-				} else if (eObject instanceof TypeVariableReference) {
-					final IRType source = parameters
-							.get(((TypeVariableReference) eObject)
-									.getVariable());
-					if (source != null) {
-						return TypeUtil.createRType(source);
-					}
-					// probably generic static method in generic class.
-					copyEObject = createCopy(eObject);
-					eClass = eObject.eClass();
-				} else if (eObject instanceof TypeVariableClassType) {
-					final IRType source = parameters
-							.get(((TypeVariableClassType) eObject)
-									.getVariable());
-					return TypeUtil
-							.createRType(RTypes
-									.classType(source instanceof IRSimpleType ? ((IRSimpleType) source)
-											.getTarget() : null));
-				} else {
-					copyEObject = createCopy(eObject);
-					eClass = eObject.eClass();
-				}
-				put(eObject, copyEObject);
-				for (int i = 0, size = eClass.getFeatureCount(); i < size; ++i) {
-					EStructuralFeature eStructuralFeature = eClass
-							.getEStructuralFeature(i);
-					if (eStructuralFeature.isChangeable()
-							&& !eStructuralFeature.isDerived()) {
-						if (eStructuralFeature instanceof EAttribute) {
-							copyAttribute((EAttribute) eStructuralFeature,
-									eObject, copyEObject);
-						} else {
-							EReference eReference = (EReference) eStructuralFeature;
-							if (eReference.isContainment()) {
-								copyContainment(eReference, eObject,
-										copyEObject);
-							}
-						}
-					}
-				}
-				copyProxyURI(eObject, copyEObject);
-				return copyEObject;
-			}
-		}
-
-		@Override
-		protected void copyReference(EReference eReference, EObject eObject,
-				EObject copyEObject) {
-			if (eObject instanceof TypeVariableReference
-					|| eObject instanceof TypeVariableClassType)
-				return;
-			if (eReference == TypeInfoModelPackage.Literals.TYPE__SUPER_TYPE
-					&& eObject == genericType) {
-				// superType is handled specially
-				return;
-			}
-			super.copyReference(eReference, eObject, copyEObject);
-		}
 	}
 
 	public Set<String> listTypes(TypeMode mode, String prefix) {
@@ -410,9 +220,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		SIMPLE, PROXY, UNKNOWN
 	}
 
-	private Type getType(String typeName, TypeMode mode,
-			boolean queryProviders, boolean queryPredefined,
-			boolean allowProxy, boolean allowUnknown) {
+	@Internal
+	Type getType(String typeName, TypeMode mode, boolean queryProviders,
+			boolean queryPredefined, boolean allowProxy, boolean allowUnknown) {
 		Type type = types.get(typeName);
 		if (type != null) {
 			if (!allowUnknown && type.getKind() == TypeKind.UNKNOWN) {
@@ -428,14 +238,10 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return type;
 		}
 		if (allowProxy) {
-			type = TypeUtil.createProxy(typeName);
-			return type;
+			return TypeUtil.createProxy(typeName);
 		}
 		if (allowUnknown) {
-			type = createUnknown(typeName);
-			typeRS.addToResource(type);
-			types.put(typeName, type);
-			return type;
+			return createUnknown(typeName);
 		}
 		return null;
 	}
@@ -454,11 +260,18 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		// TODO check that member referenced types are contained or proxy
 	}
 
-	protected static Type createUnknown(String typeName) {
+	@Internal
+	Type createUnknown(String typeName) {
 		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
 		type.setName(typeName);
 		type.setKind(TypeKind.UNKNOWN);
-		return type;
+		final Type previous = types.putIfAbsent(typeName, type);
+		if (previous != null) {
+			return previous;
+		} else {
+			typeRS.addToResource(type);
+			return type;
+		}
 	}
 
 	private final Map<String, Boolean> activeTypeRequests = new HashMap<String, Boolean>();
@@ -511,7 +324,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		return TypeInfoManager.createTypeProviders(this);
 	}
 
-	static abstract class TypeResourceSet extends ResourceSetImpl {
+	private class TypeResourceSet extends ResourceSetImpl {
 
 		public TypeResourceSet() {
 			TypeInfoModelLoader.getInstance().initializeURIMap(this);
@@ -531,7 +344,9 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 			return super.getEObject(uri, loadOnDemand);
 		}
 
-		protected abstract Type resolveTypeProxy(String typeName);
+		protected Type resolveTypeProxy(String typeName) {
+			return getType(typeName, null, true, false, false, false);
+		}
 
 		public synchronized Resource getResource() {
 			if (typesResource == null) {
@@ -557,12 +372,7 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	}
 
-	private final TypeResourceSet typeRS = new TypeResourceSet() {
-		@Override
-		protected Type resolveTypeProxy(String typeName) {
-			return getType(typeName, null, true, false, false, false);
-		}
-	};
+	private final TypeResourceSet typeRS = new TypeResourceSet();
 
 	private IValueTypeFactory factory = new ValueTypeFactoryImpl(this);
 
@@ -572,42 +382,50 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 
 	private boolean resolve = true;
 
-	private Map<String, Member> elements = new HashMap<String, Member>();
+	private Map<String, IRMember> elements = new HashMap<String, IRMember>();
 
-	public Member resolve(String name) {
+	public IRMember resolve(String name) {
 		if (name == null)
 			return null;
-		Member element = elements.get(name);
-		if (element != null) {
-			return element;
+		{
+			final IRMember element = elements.get(name);
+			if (element != null) {
+				return element;
+			}
 		}
-		element = TypeInfoModelLoader.getInstance().getMember(name);
+		Member element = TypeInfoModelLoader.getInstance().getMember(name);
 		if (element != null) {
-			elements.put(name, element);
-			return element;
+			final IRMember r = convertMember(element, null);
+			elements.put(name, r);
+			return r;
 		}
 		if (resolve) {
 			for (IElementResolver resolver : TypeInfoManager
 					.getElementResolvers()) {
 				element = resolver.resolveElement(this, name);
 				if (element != null) {
-					elements.put(name, element);
-					return element;
+					final IRMember r = convertMember(element, null);
+					elements.put(name, r);
+					return r;
 				}
 			}
 		}
 		return null;
 	}
 
-	public IValue valueOf(Member member) {
+	@Override
+	public IValue valueOf(IRMember member) {
+		if (!(member.getSource() instanceof Member)) {
+			return null;
+		}
+		final Member source = (Member) member.getSource();
 		for (IMemberEvaluator evaluator : TypeInfoManager.getMemberEvaluators()) {
-			final IValueCollection collection = evaluator.valueOf(this, member);
+			final IValueCollection collection = evaluator.valueOf(this, source);
 			if (collection != null) {
 				if (collection instanceof IValueProvider) {
 					IValue value = ((IValueProvider) collection).getValue();
 					if (member.getType() != null) {
-						value.setDeclaredType(RTypes.create(this,
-								member.getType()));
+						value.setDeclaredType(member.getType());
 					}
 					if (value.getKind() == ReferenceKind.UNKNOWN) {
 						if (member instanceof Property) {
@@ -687,19 +505,15 @@ public class TypeInferencer2 implements ITypeInferenceContext {
 		}
 	}
 
-	private Map<Object, Object> values;
-
-	public Object getValue(Object key) {
-		assert key != null;
-		return values != null ? values.get(key) : null;
-	}
-
-	public void setValue(Object key, Object value) {
-		assert key != null;
-		if (values == null) {
-			values = new HashMap<Object, Object>();
+	@Override
+	public String toString() {
+		final TypeInferencerVisitor v = visitor;
+		String className = getClass().getSimpleName();
+		if (className.length() == 0) {
+			className = getClass().getName();
 		}
-		values.put(key, value);
+		return className + "(" + source + ","
+				+ (v != null ? v.getClass().getSimpleName() : null) + ")";
 	}
 
 }

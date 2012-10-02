@@ -24,6 +24,8 @@ public interface IRMethod extends IRMember {
 	 */
 	boolean isTyped();
 
-	boolean isConstructor();
+	boolean isAbstract();
+
+	boolean isGeneric();
 
 }

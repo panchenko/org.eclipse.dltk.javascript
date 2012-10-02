@@ -23,7 +23,9 @@ import org.eclipse.dltk.javascript.core.tests.typeinfo.JSDocTypeParserTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.RTypeTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeInfoModelTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeMemberQueryTest;
+import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeParameterizerTests;
 import org.eclipse.dltk.javascript.core.tests.typeinfo.TypeQueryTests;
+import org.eclipse.dltk.javascript.core.tests.typeinfo.RTypeDeclarationTests;
 import org.eclipse.dltk.javascript.core.tests.validation.CodeValidationTests;
 import org.eclipse.dltk.javascript.core.tests.validation.CodeValidatorValidationTests;
 import org.eclipse.dltk.javascript.core.tests.validation.FlowTypeInfoValidationTests;
@@ -59,6 +61,8 @@ public class AllTests {
 		suite.addTestSuite(CodeCompletion.class);
 		suite.addTestSuite(XMLCompletionTests.class);
 		suite.addTestSuite(CompletionStringParsing.class);
+		suite.addTestSuite(TypeParameterizerTests.class);
+		suite.addTestSuite(RTypeDeclarationTests.class);
 		suite.addTest(SearchDeclarationTests.suite());
 		suite.addTest(SearchReferenceTests.suite());
 		suite.addTest(SearchTypeReferenceTests.suite());

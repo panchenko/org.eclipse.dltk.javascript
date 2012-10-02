@@ -16,5 +16,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.Member;
 public interface MemberPredicate {
 	boolean evaluate(Member member);
 
+	boolean evaluate(IRMember member);
+
 	boolean isCompatibleWith(MemberPredicate predicate);
 }

@@ -15,8 +15,14 @@ import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
 public interface IRMember extends IRElement {
 
-	boolean isDeprecated();
+	IRType getType();
 
 	Visibility getVisibility();
+
+	IRTypeDeclaration getDeclaringType();
+
+	boolean isStatic();
+
+	boolean isVisible();
 
 }

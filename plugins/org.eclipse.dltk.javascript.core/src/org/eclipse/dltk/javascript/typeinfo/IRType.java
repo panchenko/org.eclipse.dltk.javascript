@@ -58,4 +58,9 @@ public interface IRType {
 	 */
 	boolean isJavaScriptObject();
 
+	/**
+	 * Transforms the type using the specified function.
+	 */
+	IRType transform(IRTypeTransformer function);
+
 }

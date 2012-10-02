@@ -56,7 +56,9 @@ import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinference.ValueReferenceUtil;
 import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
+import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
@@ -256,22 +258,25 @@ public class JavaScriptSelectionEngine2 extends ScriptSelectionEngine {
 				return new IModelElement[] { result };
 			}
 		} else if (kind == ReferenceKind.PROPERTY) {
-			final Collection<Property> properties = JavaScriptValidations
+			final Collection<Property> properties = ValueReferenceUtil
 					.extractElements(value, Property.class);
 			if (properties != null) {
 				return convert(m, properties);
 			}
 		} else if (kind == ReferenceKind.METHOD) {
-			final List<Method> methods = JavaScriptValidations.extractElements(
-					value, Method.class);
+			final List<IRMethod> methods = ValueReferenceUtil.extractElements(
+					value, IRMethod.class);
 			if (methods != null) {
 				IValueReference[] arguments = visitor.getArguments();
 				if (arguments == null) {
 					arguments = new IValueReference[0];
 				}
-				final Method method = JavaScriptValidations.selectMethod(
-						inferencer2, methods, arguments, true);
-				return convert(m, Collections.singletonList(method));
+				final IRMethod method = JavaScriptValidations.selectMethod(
+						methods, arguments, true);
+				if (method.getSource() instanceof Method) {
+					return convert(m, Collections.singletonList((Method) method
+							.getSource()));
+				}
 			}
 		} else if (kind == ReferenceKind.TYPE) {
 			final LinkedHashSet<Type> t = new LinkedHashSet<Type>();

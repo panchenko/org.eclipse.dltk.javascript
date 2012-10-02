@@ -12,7 +12,6 @@
 package org.eclipse.dltk.internal.javascript.validation;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.dltk.ast.parser.IModuleDeclaration;
@@ -23,7 +22,6 @@ import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.core.SourceParserUtil;
 import org.eclipse.dltk.core.builder.IBuildContext;
-import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.javascript.ast.Script;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -31,18 +29,12 @@ import org.eclipse.dltk.javascript.parser.JavaScriptParser;
 import org.eclipse.dltk.javascript.parser.Reporter;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRMethod;
+import org.eclipse.dltk.javascript.typeinfo.IRParameter;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
-import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
-import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
-import org.eclipse.dltk.javascript.typeinfo.model.Method;
-import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
 import org.eclipse.dltk.javascript.typeinfo.model.ParameterKind;
-import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.osgi.util.NLS;
 
 public class JavaScriptValidations {
@@ -110,57 +102,13 @@ public class JavaScriptValidations {
 				context.getProblemReporter());
 	}
 
-	private static <E extends Member> boolean canConvert(Object value,
-			Class<E> elementType) {
-		return elementType.isInstance(value) || elementType == Method.class
-				&& value instanceof Type
-				&& ((Type) value).getStaticConstructor() != null;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <E extends Member> E convert(Object value,
-			Class<E> elementType) {
-		if (elementType.isInstance(value))
-			return (E) value;
-		else
-			return (E) ((Type) value).getStaticConstructor();
-	}
-
-	/**
-	 * @param reference
-	 * @param elementType
-	 * @return
-	 */
-	public static <E extends Member> List<E> extractElements(
-			IValueReference reference, Class<E> elementType) {
-		final Object value = reference
-				.getAttribute(IReferenceAttributes.ELEMENT);
-		if (canConvert(value, elementType)) {
-			return Collections.singletonList(convert(value, elementType));
-		} else if (value instanceof Object[]) {
-			final Object[] elements = (Object[]) value;
-			List<E> result = null;
-			for (Object element : elements) {
-				if (canConvert(element, elementType)) {
-					if (result == null) {
-						result = new ArrayList<E>(elements.length);
-					}
-					result.add(convert(element, elementType));
-				}
-			}
-			return result;
-		}
-		return null;
-	}
-
 	/**
 	 * @param methods
 	 * @param arguments
 	 * @return
 	 */
-	public static <METHOD extends Method> METHOD selectMethod(
-			ITypeSystem context, List<METHOD> methods,
-			IValueReference[] arguments, boolean fallback) {
+	public static <METHOD extends IRMethod> METHOD selectMethod(
+			List<METHOD> methods, IValueReference[] arguments, boolean fallback) {
 		if (methods.size() == 1) {
 			return methods.get(0);
 		}
@@ -178,17 +126,16 @@ public class JavaScriptValidations {
 				return matches.get(0);
 			}
 			OUTER: for (METHOD method : matches) {
-				final EList<Parameter> parameters = method.getParameters();
+				final List<IRParameter> parameters = method.getParameters();
 				for (int i = 0; i < Math.min(parameters.size(),
 						arguments.length); i++) {
-					final JSType parameterType = parameters.get(i).getType();
+					final IRType parameterType = parameters.get(i).getType();
 					if (parameterType == null)
 						continue;
 					final IRType argumentType = typeOf(arguments[i]);
 					if (argumentType == null)
 						continue;
-					if (RTypes.create(context, parameterType).isAssignableFrom(
-							argumentType) == TypeCompatibility.FALSE)
+					if (parameterType.isAssignableFrom(argumentType) == TypeCompatibility.FALSE)
 						continue OUTER;
 				}
 				return method;
@@ -223,8 +170,8 @@ public class JavaScriptValidations {
 	 * 
 	 * @return
 	 */
-	static boolean checkParameterCount(Method method, int argCount) {
-		final EList<Parameter> params = method.getParameters();
+	static boolean checkParameterCount(IRMethod method, int argCount) {
+		final List<IRParameter> params = method.getParameters();
 		if (params.size() == argCount) {
 			return true;
 		} else if (params.size() < argCount) {

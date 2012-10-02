@@ -32,6 +32,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getMembers <em>Members</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getKind <em>Kind</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperType <em>Super Type</em>}</li>
+ *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperTypeExpr <em>Super Type Expr</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getStaticConstructor <em>Static Constructor</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getTraits <em>Traits</em>}</li>
  *   <li>{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getConstructors <em>Constructors</em>}</li>
@@ -105,7 +106,7 @@ public interface Type extends Element {
      * @return the value of the '<em>Super Type</em>' reference.
      * @see #setSuperType(Type)
      * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_SuperType()
-     * @model
+     * @model resolveProxies="false" transient="true" volatile="true" derived="true"
      * @generated
      */
     Type getSuperType();
@@ -119,6 +120,32 @@ public interface Type extends Element {
      * @generated
      */
     void setSuperType(Type value);
+
+    /**
+     * Returns the value of the '<em><b>Super Type Expr</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Super Type Expr</em>' containment reference isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Super Type Expr</em>' containment reference.
+     * @see #setSuperTypeExpr(SimpleType)
+     * @see org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage#getType_SuperTypeExpr()
+     * @model containment="true"
+     * @generated
+     */
+    SimpleType getSuperTypeExpr();
+
+    /**
+     * Sets the value of the '{@link org.eclipse.dltk.javascript.typeinfo.model.Type#getSuperTypeExpr <em>Super Type Expr</em>}' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Super Type Expr</em>' containment reference.
+     * @see #getSuperTypeExpr()
+     * @generated
+     */
+    void setSuperTypeExpr(SimpleType value);
 
     /**
      * Returns the value of the '<em><b>Static Constructor</b></em>' containment reference.

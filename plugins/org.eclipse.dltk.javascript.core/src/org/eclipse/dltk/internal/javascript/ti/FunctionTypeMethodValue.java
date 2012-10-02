@@ -11,23 +11,22 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IAssignProtection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
+import org.eclipse.dltk.javascript.typeinfo.IRMethod;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
-import org.eclipse.dltk.javascript.typeinfo.model.Method;
 
 class FunctionTypeMethodValue extends ElementValue implements IValue {
 
 	private TypeValue functionOperator;
 	private final IRFunctionType functionType;
 	private final FunctionMethod functionMethod;
-	private final Method method;
+	private final IRMethod method;
 
 	public FunctionTypeMethodValue(ITypeSystem context,
 			IRFunctionType functionType, FunctionMethod functionMethod) {
@@ -38,7 +37,7 @@ class FunctionTypeMethodValue extends ElementValue implements IValue {
 	}
 
 	@Override
-	protected Method getElements() {
+	protected IRMethod getElements() {
 		return method;
 	}
 
@@ -68,7 +67,7 @@ class FunctionTypeMethodValue extends ElementValue implements IValue {
 	}
 
 	public IRType getDeclaredType() {
-		return RTypes.simple(Types.FUNCTION);
+		return RTypes.FUNCTION;
 	}
 
 	public JSTypeSet getDeclaredTypes() {

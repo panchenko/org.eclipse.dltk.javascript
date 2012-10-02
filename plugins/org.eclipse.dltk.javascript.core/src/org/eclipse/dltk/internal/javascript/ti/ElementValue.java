@@ -29,31 +29,27 @@ import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
 import org.eclipse.dltk.javascript.typeinfo.AttributeKey;
 import org.eclipse.dltk.javascript.typeinfo.IRArrayType;
 import org.eclipse.dltk.javascript.typeinfo.IRClassType;
+import org.eclipse.dltk.javascript.typeinfo.IRElement;
 import org.eclipse.dltk.javascript.typeinfo.IRFunctionType;
 import org.eclipse.dltk.javascript.typeinfo.IRMapType;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
+import org.eclipse.dltk.javascript.typeinfo.IRMethod;
+import org.eclipse.dltk.javascript.typeinfo.IRProperty;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordMember;
 import org.eclipse.dltk.javascript.typeinfo.IRRecordType;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
+import org.eclipse.dltk.javascript.typeinfo.IRTypeDeclaration;
 import org.eclipse.dltk.javascript.typeinfo.IRUnionType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicate;
 import org.eclipse.dltk.javascript.typeinfo.MemberPredicates;
 import org.eclipse.dltk.javascript.typeinfo.RSimpleType;
+import org.eclipse.dltk.javascript.typeinfo.RTypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
-import org.eclipse.dltk.javascript.typeinfo.TypeCompatibility;
-import org.eclipse.dltk.javascript.typeinfo.TypeMemberQuery;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
-import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.Element;
-import org.eclipse.dltk.javascript.typeinfo.model.JSCustomType;
-import org.eclipse.dltk.javascript.typeinfo.model.JSType;
-import org.eclipse.dltk.javascript.typeinfo.model.MapType;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
-import org.eclipse.dltk.javascript.typeinfo.model.Method;
-import org.eclipse.dltk.javascript.typeinfo.model.ParameterizedType;
-import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
@@ -64,54 +60,14 @@ public abstract class ElementValue implements IValue {
 		return findMember(context, type, name, MemberPredicates.ALWAYS_TRUE);
 	}
 
-	private static class NestedTypeSystem implements ITypeSystem {
-
-		private final ITypeSystem origin;
-		private final Type ownerType;
-
-		public NestedTypeSystem(ITypeSystem origin, Type ownerType) {
-			super();
-			this.origin = origin;
-			this.ownerType = ownerType;
-		}
-
-		public Type resolveType(Type type) {
-			return origin.resolveType(type);
-		}
-
-		public IValue valueOf(Member member) {
-			return origin.valueOf(member);
-		}
-
-		public Type parameterize(Type target, List<IRType> parameters) {
-			return origin.parameterize(target, parameters);
-		}
-
-		@SuppressWarnings("unchecked")
-		public <T> T getAttribute(AttributeKey<T> key) {
-			if (ITypeSystem.CURRENT_TYPE == key) {
-				return (T) ownerType;
-			} else {
-				return origin.getAttribute(key);
-			}
-		}
-
-		public Object getValue(Object key) {
-			return origin.getValue(key);
-		}
-
-		public void setValue(Object key, Object value) {
-			origin.setValue(key, value);
-		}
-	}
-
 	private static class PrototypeType extends RSimpleType {
+		public PrototypeType(ITypeSystem typeSystem,
+				IRTypeDeclaration declaration) {
+			super(typeSystem, declaration);
+		}
+
 		public PrototypeType(ITypeSystem typeSystem, Type type) {
 			super(typeSystem, type);
-		}
-
-		public PrototypeType(Type type) {
-			super(type != null ? type : Types.OBJECT);
 		}
 
 		@Override
@@ -164,37 +120,44 @@ public abstract class ElementValue implements IValue {
 			}
 		}
 		if (type instanceof IRClassType) {
-			final Type t = ((IRClassType) type).getTarget();
+			final IRTypeDeclaration t = ((IRClassType) type).getDeclaration();
 			if (t != null) {
-				final List<Member> selection = findMembers(t, name, predicate);
+				final List<IRMember> selection = findMembers(t, name, predicate);
 				if (!selection.isEmpty()) {
 					if (selection.size() == 1) {
 						return createElement(context, t, selection.get(0));
 					}
 					return new MemberValue(context,
-							selection.toArray(new Member[selection.size()]));
+							selection.toArray(new IRMember[selection.size()]));
 				}
 			}
-			if ((t == null || t.hasPrototype())
+			if ((t == null || t.getSource().hasPrototype())
 					&& predicate.isCompatibleWith(MemberPredicates.STATIC)) {
-				final List<Member> selection = findMembers(
-						t != null ? t.getPrototypeType() : Types.FUNCTION,
-						name, MemberPredicates.NON_STATIC);
+				final List<IRMember> selection = findMembers(
+						context.convert(t != null ? t.getSource()
+								.getPrototypeType() : Types.FUNCTION), name,
+						MemberPredicates.NON_STATIC);
 				if (!selection.isEmpty()) {
 					if (selection.size() == 1) {
-						final Member selected = selection.get(0);
+						final IRMember selected = selection.get(0);
 						if ("prototype".equals(selected.getName())
-								&& selected instanceof Property) {
-							final Type target = ((IRClassType) type)
-									.getTarget();
-							return new PrototypePropertyValue(context,
-									(Property) selected, new PrototypeType(
-											target));
+								&& selected instanceof IRProperty) {
+							if (t != null) {
+								return new PrototypePropertyValue(context,
+										(IRProperty) selected,
+										new PrototypeType(context, t));
+							} else {
+								return new PrototypePropertyValue(
+										context,
+										(IRProperty) selected,
+										new PrototypeType(context, Types.OBJECT));
+							}
 						}
-						return createElement(context, Types.FUNCTION, selected);
+						return createElement(context,
+								RTypes.FUNCTION.getDeclaration(), selected);
 					}
 					return new MemberValue(context,
-							selection.toArray(new Member[selection.size()]));
+							selection.toArray(new IRMember[selection.size()]));
 				}
 			}
 		} else if (type instanceof IRUnionType) {
@@ -207,8 +170,7 @@ public abstract class ElementValue implements IValue {
 		} else if (type instanceof IRRecordType) {
 			final IRRecordMember member = ((IRRecordType) type).getMember(name);
 			if (member != null) {
-				return new RTypeValue(context, member.getType(),
-						member.getMember());
+				return new RTypeValue(context, member.getType(), member);
 			}
 		} else if (type instanceof IRFunctionType) {
 			if (FunctionMethod.apply.test(name)) {
@@ -218,27 +180,29 @@ public abstract class ElementValue implements IValue {
 				return getFunctionMethod(context, (IRFunctionType) type,
 						FunctionMethod.call);
 			} else {
-				final List<Member> selection = findMembers(Types.FUNCTION,
-						name, predicate);
+				final IRTypeDeclaration function = RTypes.FUNCTION
+						.getDeclaration();
+				final List<IRMember> selection = findMembers(function, name,
+						predicate);
 				if (!selection.isEmpty()) {
 					if (selection.size() == 1) {
-						return createElement(context, Types.FUNCTION,
+						return createElement(context, function,
 								selection.get(0));
 					}
 					return new MemberValue(context,
-							selection.toArray(new Member[selection.size()]));
+							selection.toArray(new IRMember[selection.size()]));
 				}
 			}
 		} else {
-			final Type t = TypeUtil.extractType(context, type);
+			final IRTypeDeclaration t = TypeUtil.extractType(context, type);
 			if (t != null) {
-				final List<Member> selection = findMembers(t, name, predicate);
+				final List<IRMember> selection = findMembers(t, name, predicate);
 				if (!selection.isEmpty()) {
 					if (selection.size() == 1) {
 						return createElement(context, t, selection.get(0));
 					}
 					return new MemberValue(context,
-							selection.toArray(new Member[selection.size()]));
+							selection.toArray(new IRMember[selection.size()]));
 				}
 			}
 		}
@@ -286,49 +250,30 @@ public abstract class ElementValue implements IValue {
 	}
 
 	private static ElementValue createElement(ITypeSystem context,
-			final Type type, final Member member) {
-		if (member instanceof Property) {
-			if (isCustomType(member.getType())) {
-				return new PropertyValue(new NestedTypeSystem(context, type),
-						(Property) member);
+			final IRTypeDeclaration type, final IRMember member) {
+		if (member instanceof IRProperty) {
+			if (TypeSystemImpl.isContextualizable(member.getType())) {
+				return new PropertyValue(context, context.contextualize(
+						(IRProperty) member, type));
 			} else {
-				return new PropertyValue(context, (Property) member);
+				return new PropertyValue(context, (IRProperty) member);
 			}
-		} else if (member instanceof Method) {
-			if (isCustomType(member.getType())) {
-				return new MethodValue(new NestedTypeSystem(context, type),
-						(Method) member);
+		} else if (member instanceof IRMethod) {
+			if (TypeSystemImpl.isContextualizable(member.getType())) {
+				return new MethodValue(context, context.contextualize(
+						(IRMethod) member, type));
 			} else {
-				return new MethodValue(context, (Method) member);
+				return new MethodValue(context, (IRMethod) member);
 			}
 		} else {
 			return null;
 		}
 	}
 
-	private static boolean isCustomType(JSType type) {
-		if (type == null) {
-			return false;
-		} else if (type instanceof JSCustomType) {
-			return true;
-		}
-		if (type instanceof ArrayType) {
-			return isCustomType(((ArrayType) type).getItemType());
-		} else if (type instanceof ParameterizedType) {
-			final ParameterizedType parameterized = (ParameterizedType) type;
-			for (JSType p : parameterized.getActualTypeArguments()) {
-				if (isCustomType(p)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	public static List<Member> findMembers(Type type, String name,
-			MemberPredicate predicate) {
-		final List<Member> selection = new ArrayList<Member>(4);
-		for (Member member : new TypeMemberQuery(type, predicate)
+	public static List<IRMember> findMembers(IRTypeDeclaration type,
+			String name, MemberPredicate predicate) {
+		final List<IRMember> selection = new ArrayList<IRMember>(4);
+		for (IRMember member : new RTypeMemberQuery(type, predicate)
 				.ignoreDuplicates()) {
 			if (name.equals(member.getName())) {
 				selection.add(member);
@@ -337,22 +282,20 @@ public abstract class ElementValue implements IValue {
 		return selection;
 	}
 
-	public static ElementValue createFor(Element element, ITypeSystem context) {
-		if (element instanceof Method) {
-			return new MethodValue(context, (Method) element);
-		} else if (element instanceof Property) {
-			return new PropertyValue(context, (Property) element);
+	public static ElementValue createFor(IRElement element, ITypeSystem context) {
+		if (element instanceof IRMethod) {
+			return new MethodValue(context, (IRMethod) element);
+		} else if (element instanceof IRProperty) {
+			return new PropertyValue(context, (IRProperty) element);
 		} else {
-			final Type type = (Type) element;
-			return new TypeValue(context,
-					RTypes.simple(context != null ? context.resolveType(type)
-							: type));
+			final IRTypeDeclaration type = (IRTypeDeclaration) element;
+			return new TypeValue(context, RTypes.simple(type));
 		}
 	}
 
 	public static ElementValue createClass(ITypeSystem context, Type type) {
-		return new ClassValue(context, JSTypeSet.singleton(RTypes
-				.classType(type)));
+		return new ClassValue(context, JSTypeSet.singleton(RTypes.classType(
+				context, type)));
 	}
 
 	static class TypeValue extends ElementValue implements IValue {
@@ -493,15 +436,15 @@ public abstract class ElementValue implements IValue {
 	private static class MethodValue extends ElementValue implements IValue {
 
 		private TypeValue functionOperator;
-		private final Method method;
+		private final IRMethod method;
 
-		public MethodValue(ITypeSystem context, Method method) {
+		public MethodValue(ITypeSystem context, IRMethod method) {
 			super(context);
 			this.method = method;
 		}
 
 		@Override
-		protected Method getElements() {
+		protected IRMethod getElements() {
 			return method;
 		}
 
@@ -524,8 +467,7 @@ public abstract class ElementValue implements IValue {
 				if (method.getType() != null) {
 					if (functionOperator == null) {
 						functionOperator = new TypeValue(context,
-								JSTypeSet.singleton(RTypes.create(context,
-										method.getType())));
+								JSTypeSet.singleton(method.getType()));
 					}
 					return functionOperator;
 				}
@@ -539,7 +481,7 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public IRType getDeclaredType() {
-			return RTypes.simple(Types.FUNCTION);
+			return RTypes.FUNCTION;
 		}
 
 		public JSTypeSet getDeclaredTypes() {
@@ -591,46 +533,19 @@ public abstract class ElementValue implements IValue {
 		}
 	};
 
-	static final IRType NOT_INITIALIZED = new IRType() {
-
-		public TypeCompatibility isAssignableFrom(IRType type) {
-			return TypeCompatibility.FALSE;
-		}
-
-		public String getName() {
-			return "NOT_INITIALIZED";
-		}
-
-		public ITypeSystem activeTypeSystem() {
-			return null;
-		}
-
-		public String toString() {
-			return getName();
-		}
-
-		public boolean isExtensible() {
-			return false;
-		}
-
-		public boolean isJavaScriptObject() {
-			return false;
-		}
-	};
-
 	private static class PropertyValue extends ElementValue implements IValue {
 
-		private final Property property;
+		private final IRProperty property;
 		private final Map<String, IValue> children = new HashMap<String, IValue>(
 				4, 0.9f);
 
-		public PropertyValue(ITypeSystem context, Property property) {
+		public PropertyValue(ITypeSystem context, IRProperty property) {
 			super(context);
 			this.property = property;
 		}
 
 		@Override
-		protected Property getElements() {
+		protected IRProperty getElements() {
 			return property;
 		}
 
@@ -653,13 +568,15 @@ public abstract class ElementValue implements IValue {
 			if (child == null) {
 				if (name.equals(IValueReference.ARRAY_OP)
 						&& property.getType() != null) {
-					Type arrayType = null;
-					if (property.getType() instanceof ArrayType) {
-						arrayType = TypeUtil.extractType(((ArrayType) property
-								.getType()).getItemType());
-					} else if (property.getType() instanceof MapType) {
-						arrayType = TypeUtil.extractType(((MapType) property
-								.getType()).getValueType());
+					IRTypeDeclaration arrayType = null;
+					if (property.getType() instanceof IRArrayType) {
+						arrayType = TypeUtil.extractType(context,
+								((IRArrayType) property.getType())
+										.getItemType());
+					} else if (property.getType() instanceof IRMapType) {
+						arrayType = TypeUtil
+								.extractType(context, ((IRMapType) property
+										.getType()).getValueType());
 					}
 					if (arrayType != null) {
 						child = createFor(arrayType, context);
@@ -678,13 +595,8 @@ public abstract class ElementValue implements IValue {
 			return child;
 		}
 
-		private IRType declaredType = NOT_INITIALIZED;
-
 		public IRType getDeclaredType() {
-			if (declaredType == NOT_INITIALIZED) {
-				declaredType = RTypes.create(context, property.getType());
-			}
-			return declaredType;
+			return property.getType();
 		}
 
 		private JSTypeSet declaredTypes = null;
@@ -704,7 +616,8 @@ public abstract class ElementValue implements IValue {
 		@Override
 		public Object getAttribute(String key, boolean includeReferences) {
 			if (IAssignProtection.ATTRIBUTE.equals(key)) {
-				final Type declaringType = property.getDeclaringType();
+				final IRTypeDeclaration declaringType = property
+						.getDeclaringType();
 				if (declaringType != null) {
 					return declaringType.getReadOnlyStatus(property);
 				} else {
@@ -723,7 +636,7 @@ public abstract class ElementValue implements IValue {
 	private static class PrototypePropertyValue extends PropertyValue {
 		private final IRType valueType;
 
-		public PrototypePropertyValue(ITypeSystem context, Property property,
+		public PrototypePropertyValue(ITypeSystem context, IRProperty property,
 				IRType valueType) {
 			super(context, property);
 			this.valueType = valueType;
@@ -739,16 +652,16 @@ public abstract class ElementValue implements IValue {
 
 		private final IRType type;
 		private final Map<String, IValue> children = new HashMap<String, IValue>();
-		private final Member element;
+		private final IRMember element;
 
-		public RTypeValue(ITypeSystem context, IRType type, Member element) {
+		public RTypeValue(ITypeSystem context, IRType type, IRMember element) {
 			super(context);
 			this.type = type;
 			this.element = element;
 		}
 
 		@Override
-		protected Member getElements() {
+		protected IRMember getElements() {
 			return element;
 		}
 
@@ -761,7 +674,7 @@ public abstract class ElementValue implements IValue {
 			IValue child = children.get(name);
 			if (child == null) {
 				if (name.equals(IValueReference.ARRAY_OP)) {
-					Type arrayType = null;
+					IRTypeDeclaration arrayType = null;
 					if (type instanceof IRArrayType) {
 						arrayType = TypeUtil.extractType(context,
 								((IRArrayType) type).getItemType());
@@ -814,15 +727,15 @@ public abstract class ElementValue implements IValue {
 	private static class MemberValue extends ElementValue implements IValue {
 
 		private TypeValue functionOperator;
-		private final Member[] members;
+		private final IRMember[] members;
 
-		public MemberValue(ITypeSystem context, Member[] members) {
+		public MemberValue(ITypeSystem context, IRMember[] members) {
 			super(context);
 			this.members = members;
 		}
 
 		@Override
-		protected Member[] getElements() {
+		protected IRMember[] getElements() {
 			return members;
 		}
 
@@ -843,8 +756,8 @@ public abstract class ElementValue implements IValue {
 
 		@Override
 		public ReferenceKind getKind() {
-			for (Member member : members) {
-				if (member instanceof Method)
+			for (IRMember member : members) {
+				if (member instanceof IRMethod)
 					return ReferenceKind.METHOD;
 			}
 			return ReferenceKind.PROPERTY;
@@ -853,14 +766,14 @@ public abstract class ElementValue implements IValue {
 		public IValue getChild(String name, boolean resolve) {
 			if (IValueReference.FUNCTION_OP.equals(name)) {
 				JSTypeSet types = null;
-				for (Member member : members) {
-					if (member instanceof Method) {
-						final Method method = (Method) member;
+				for (IRMember member : members) {
+					if (member instanceof IRMethod) {
+						final IRMethod method = (IRMethod) member;
 						if (method.getType() != null) {
 							if (types == null) {
 								types = JSTypeSet.create();
 							}
-							types.add(RTypes.create(context, method.getType()));
+							types.add(method.getType());
 						}
 					}
 				}
@@ -884,14 +797,14 @@ public abstract class ElementValue implements IValue {
 		}
 
 		public IRType getDeclaredType() {
-			for (Member member : members) {
-				if (member instanceof Property) {
-					final Property property = (Property) member;
+			for (IRMember member : members) {
+				if (member instanceof IRProperty) {
+					final IRProperty property = (IRProperty) member;
 					if (property.getType() != null) {
-						return RTypes.create(context, property.getType());
+						return property.getType();
 					}
-				} else if (member instanceof Method) {
-					return RTypes.simple(Types.FUNCTION);
+				} else if (member instanceof IRMethod) {
+					return RTypes.FUNCTION;
 				}
 			}
 			return null;
@@ -899,20 +812,20 @@ public abstract class ElementValue implements IValue {
 
 		public JSTypeSet getDeclaredTypes() {
 			JSTypeSet types = null;
-			for (Member member : members) {
-				if (member instanceof Property) {
-					final Property property = (Property) member;
+			for (IRMember member : members) {
+				if (member instanceof IRProperty) {
+					final IRProperty property = (IRProperty) member;
 					if (property.getType() != null) {
 						if (types == null) {
 							types = JSTypeSet.create();
 						}
-						types.add(RTypes.create(context, property.getType()));
+						types.add(property.getType());
 					}
-				} else if (member instanceof Method) {
+				} else if (member instanceof IRMethod) {
 					if (types == null) {
 						types = JSTypeSet.create();
 					}
-					types.add(RTypes.simple(Types.FUNCTION));
+					types.add(RTypes.FUNCTION);
 				}
 			}
 			if (types != null) {
@@ -925,12 +838,12 @@ public abstract class ElementValue implements IValue {
 		@Override
 		public Object getAttribute(String key, boolean includeReferences) {
 			if (IAssignProtection.ATTRIBUTE.equals(key)) {
-				for (Member member : members) {
-					if (member instanceof Property) {
-						if (((Property) member).isReadOnly()) {
+				for (IRMember member : members) {
+					if (member instanceof IRProperty) {
+						if (((IRProperty) member).isReadOnly()) {
 							return READONLY_PROPERTY;
 						}
-					} else if (member instanceof Method
+					} else if (member instanceof IRMethod
 							&& member.getDeclaringType() == null) {
 						return UNASSIGNABLE_METHOD;
 					}
@@ -979,9 +892,13 @@ public abstract class ElementValue implements IValue {
 		}
 		if (IReferenceAttributes.HIDE_ALLOWED.equals(key)) {
 			final Object elements = getElements();
-			if (elements instanceof Element) {
-				return ((Element) elements).isHideAllowed() ? Boolean.TRUE
-						: null;
+			if (elements instanceof IRElement) {
+				final Object source = ((IRElement) elements).getSource();
+				if (source instanceof Element) {
+					if (((Element) source).isHideAllowed()) {
+						return Boolean.TRUE;
+					}
+				}
 			}
 		}
 		return null;

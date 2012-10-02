@@ -11,11 +11,16 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public interface IRClassType extends IRType {
 
+	@Nullable
 	Type getTarget();
+
+	@Nullable
+	IRTypeDeclaration getDeclaration();
 
 	/**
 	 * Returns the item of this class.

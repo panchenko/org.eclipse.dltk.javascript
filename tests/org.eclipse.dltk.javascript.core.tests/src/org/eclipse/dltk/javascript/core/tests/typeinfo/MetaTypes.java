@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.core.tests.typeinfo;
 
+import org.eclipse.dltk.javascript.typeinfo.DefaultMetaType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.MetaType;
-import org.eclipse.dltk.javascript.typeinfo.RSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public enum MetaTypes implements MetaType {
@@ -28,7 +28,7 @@ public enum MetaTypes implements MetaType {
 
 	@Override
 	public IRType toRType(ITypeSystem typeSystem, Type type) {
-		return new RSimpleType(type);
+		return DefaultMetaType.DEFAULT.toRType(typeSystem, type);
 	}
 
 }

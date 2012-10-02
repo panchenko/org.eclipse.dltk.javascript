@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import static org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory.eINSTANCE;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.dltk.annotations.NonNull;
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
@@ -29,9 +33,10 @@ import org.eclipse.dltk.javascript.typeinfo.model.RType;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordType;
 import org.eclipse.dltk.javascript.typeinfo.model.SimpleType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
-import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelFactory;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariableReference;
 import org.eclipse.dltk.javascript.typeinfo.model.UndefinedType;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -41,24 +46,24 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class TypeUtil {
-	public static SimpleType ref(Type type) {
-		if (type != null) {
-			final SimpleType ref = TypeInfoModelFactory.eINSTANCE
-					.createSimpleType();
-			ref.setTarget(type);
-			return ref;
+	@Nullable
+	public static SimpleType ref(@Nullable Type type) {
+		if (type == null) {
+			return null;
 		}
-		return null;
+		final SimpleType ref = eINSTANCE.createSimpleType();
+		ref.setTarget(type);
+		return ref;
 	}
 
-	public static ClassType classType(Type type) {
-		if (type != null) {
-			final ClassType ref = TypeInfoModelFactory.eINSTANCE
-					.createClassType();
-			ref.setTarget(type);
-			return ref;
+	@Nullable
+	public static ClassType classType(@Nullable Type type) {
+		if (type == null) {
+			return null;
 		}
-		return null;
+		final ClassType ref = eINSTANCE.createClassType();
+		ref.setTarget(type);
+		return ref;
 	}
 
 	public static JSType ref(String typeName) {
@@ -78,8 +83,7 @@ public class TypeUtil {
 	}
 
 	public static ArrayType arrayOf(JSType itemType) {
-		final ArrayType arrayType = TypeInfoModelFactory.eINSTANCE
-				.createArrayType();
+		final ArrayType arrayType = eINSTANCE.createArrayType();
 		arrayType.setItemType(itemType != null ? itemType : ref(Types.OBJECT));
 		return arrayType;
 	}
@@ -89,7 +93,7 @@ public class TypeUtil {
 	}
 
 	public static MapType mapOf(JSType keyType, JSType valueType) {
-		final MapType mapType = TypeInfoModelFactory.eINSTANCE.createMapType();
+		final MapType mapType = eINSTANCE.createMapType();
 		mapType.setKeyType(keyType != null ? keyType : ref(Types.STRING));
 		mapType.setValueType(valueType != null ? valueType : ref(Types.OBJECT));
 		return mapType;
@@ -97,7 +101,7 @@ public class TypeUtil {
 
 	public static ParameterizedType genericType(String baseType,
 			JSType... typeParameters) {
-		final ParameterizedType genericType = TypeInfoModelFactory.eINSTANCE
+		final ParameterizedType genericType = eINSTANCE
 				.createParameterizedType();
 		genericType.setTarget(type(baseType));
 		for (JSType typeParameter : typeParameters) {
@@ -123,9 +127,10 @@ public class TypeUtil {
 		}
 	}
 
-	public static Type extractType(ITypeSystem context, IRType type) {
+	@Deprecated
+	public static IRTypeDeclaration extractType(ITypeSystem context, IRType type) {
 		if (type instanceof IRSimpleType) {
-			return ((IRSimpleType) type).getTarget();
+			return ((IRSimpleType) type).getDeclaration();
 		} else if (type instanceof IRArrayType) {
 			final IRArrayType arrayType = (IRArrayType) type;
 			final ITypeSystem saved = arrayType.activeTypeSystem();
@@ -135,9 +140,9 @@ public class TypeUtil {
 			return context.parameterize(Types.ARRAY,
 					Collections.singletonList(arrayType.getItemType()));
 		} else if (type instanceof IRMapType) {
-			return Types.OBJECT;
+			return context.convert(Types.OBJECT);
 		} else if (type == RTypes.any()) {
-			return Types.OBJECT;
+			return context.convert(Types.OBJECT);
 		} else {
 			return null;
 		}
@@ -202,7 +207,7 @@ public class TypeUtil {
 	}
 
 	public static Type createProxy(URI uri) {
-		final Type type = TypeInfoModelFactory.eINSTANCE.createType();
+		final Type type = eINSTANCE.createType();
 		type.setName(uri.fragment());
 		((InternalEObject) type).eSetProxyURI(uri);
 		return type;
@@ -220,7 +225,7 @@ public class TypeUtil {
 	 * @return
 	 */
 	public static Type createProxy(Type type) {
-		final Type result = TypeInfoModelFactory.eINSTANCE.createType();
+		final Type result = eINSTANCE.createType();
 		if (type.isProxy()) {
 			((InternalEObject) result).eSetProxyURI(((InternalEObject) type)
 					.eProxyURI());
@@ -242,15 +247,19 @@ public class TypeUtil {
 	}
 
 	public static EObject resolve(InternalEObject proxy, EObject objectContext) {
-		final Resource resource = objectContext.eResource();
-		if (resource != null) {
-			final ResourceSet resourceSet = resource.getResourceSet();
-			if (resourceSet instanceof TypeInfoResourceSet) {
-				return ((TypeInfoResourceSet) resourceSet).resolve(proxy,
-						objectContext, resource);
+		if (proxy.eIsProxy()) {
+			final Resource resource = objectContext.eResource();
+			if (resource != null) {
+				final ResourceSet resourceSet = resource.getResourceSet();
+				if (resourceSet instanceof TypeInfoResourceSet) {
+					return ((TypeInfoResourceSet) resourceSet).resolve(proxy,
+							objectContext, resource);
+				}
 			}
+			return EcoreUtil.resolve(proxy, objectContext);
+		} else {
+			return proxy;
 		}
-		return EcoreUtil.resolve(proxy, objectContext);
 	}
 
 	/**
@@ -326,6 +335,24 @@ public class TypeUtil {
 		return Collections.emptyList();
 	}
 
+	public static List<IRConstructor> findConstructors(IRTypeDeclaration type) {
+		final Set<IRTypeDeclaration> types = new HashSet<IRTypeDeclaration>();
+		while (types.add(type)) {
+			final List<IRConstructor> constructors = type.getConstructors();
+			if (!constructors.isEmpty()) {
+				return constructors;
+			}
+			if (!type.getSource().isInheritConstructors()) {
+				break;
+			}
+			type = type.getSuperType();
+			if (type == null) {
+				break;
+			}
+		}
+		return Collections.emptyList();
+	}
+
 	public static boolean isUndefined(IRType type) {
 		if (type == RTypes.undefined()) {
 			return true;
@@ -345,13 +372,26 @@ public class TypeUtil {
 	 *            nullable
 	 * @return
 	 */
+	@Deprecated
 	public static JSType createRType(IRType type) {
 		if (type == null) {
 			return null;
 		}
-		final RType result = TypeInfoModelFactory.eINSTANCE.createRType();
+		final RType result = eINSTANCE.createRType();
 		result.setRuntimeType(type);
 		return result;
+	}
+
+	/**
+	 * Creates {@link TypeVariableReference} referencing the specified
+	 * {@link TypeVariable}.
+	 */
+	@NonNull
+	public static TypeVariableReference reference(@NonNull TypeVariable variable) {
+		final TypeVariableReference reference = eINSTANCE
+				.createTypeVariableReference();
+		reference.setVariable(variable);
+		return reference;
 	}
 
 }

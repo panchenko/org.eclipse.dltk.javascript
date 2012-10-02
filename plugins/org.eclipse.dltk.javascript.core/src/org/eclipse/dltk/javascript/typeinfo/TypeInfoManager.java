@@ -244,8 +244,8 @@ public class TypeInfoManager {
 			}
 		}
 		/*
-		 * iterate over copy, as it's possible that additional resources would
-		 * appear while loading
+		 * iterate over copy, as it's possible that additional resources will
+		 * appear while loading.
 		 */
 		for (Resource r : new ArrayList<Resource>(resourceSet.getResources())) {
 			if (!r.isLoaded()) {

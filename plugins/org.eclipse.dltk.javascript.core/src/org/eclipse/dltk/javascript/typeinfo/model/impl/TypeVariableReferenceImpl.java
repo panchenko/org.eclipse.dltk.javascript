@@ -13,6 +13,7 @@ package org.eclipse.dltk.javascript.typeinfo.model.impl;
 
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
+import org.eclipse.dltk.javascript.typeinfo.RTypeVariable;
 import org.eclipse.dltk.javascript.typeinfo.RTypes;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
@@ -119,7 +120,15 @@ public class TypeVariableReferenceImpl extends EObjectImpl implements TypeVariab
 	 * @generated NOT
 	 */
     public IRType toRType(ITypeSystem typeSystem) {
-		// shouldn't happen
+		if (variable != null) {
+			if (typeSystem != null) {
+				final IRType value = typeSystem.getTypeVariable(variable);
+				if (value != null) {
+					return value;
+				}
+			}
+			return new RTypeVariable(variable);
+		}
 		return RTypes.none();
     }
 

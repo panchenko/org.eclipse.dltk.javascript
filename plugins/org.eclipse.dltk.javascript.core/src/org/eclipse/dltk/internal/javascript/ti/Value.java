@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import static org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl.DELEGATING_TYPE_SYSTEM;
+import static org.eclipse.dltk.javascript.internal.core.TypeSystems.DELEGATING_TYPE_SYSTEM;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,12 +26,12 @@ import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
 import org.eclipse.dltk.javascript.typeinference.ReferenceLocation;
+import org.eclipse.dltk.javascript.typeinfo.IRProperty;
 import org.eclipse.dltk.javascript.typeinfo.IRSimpleType;
 import org.eclipse.dltk.javascript.typeinfo.IRType;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.JSTypeSet;
 import org.eclipse.dltk.javascript.typeinfo.ReferenceSource;
-import org.eclipse.dltk.javascript.typeinfo.model.Property;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 
 public class Value extends ImmutableValue {
@@ -207,8 +207,8 @@ public class Value extends ImmutableValue {
 				 */
 				final Object element = src.getAttribute(
 						IReferenceAttributes.ELEMENT, false);
-				if (element != null && element instanceof Property
-						&& ((Property) element).isStatic()) {
+				if (element != null && element instanceof IRProperty
+						&& ((IRProperty) element).isStatic()) {
 					setAttribute(IReferenceAttributes.ELEMENT, element);
 				}
 			}

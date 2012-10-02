@@ -196,10 +196,6 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
                 return createGenericMethodAdapter();
             }
             @Override
-            public Adapter caseJSCustomType(JSCustomType object) {
-                return createJSCustomTypeAdapter();
-            }
-            @Override
             public Adapter caseTypeLiteral(TypeLiteral object) {
                 return createTypeLiteralAdapter();
             }
@@ -406,20 +402,6 @@ public class TypeInfoModelAdapterFactory extends AdapterFactoryImpl {
      * @generated
      */
     public Adapter createGenericMethodAdapter() {
-        return null;
-    }
-
-    /**
-     * Creates a new adapter for an object of class '{@link org.eclipse.dltk.javascript.typeinfo.model.JSCustomType <em>JS Custom Type</em>}'.
-     * <!-- begin-user-doc -->
-     * This default implementation returns null so that we can easily ignore cases;
-     * it's useful to ignore a case when inheritance will catch all the cases anyway.
-     * <!-- end-user-doc -->
-     * @return the new adapter.
-     * @see org.eclipse.dltk.javascript.typeinfo.model.JSCustomType
-     * @generated
-     */
-    public Adapter createJSCustomTypeAdapter() {
         return null;
     }
 

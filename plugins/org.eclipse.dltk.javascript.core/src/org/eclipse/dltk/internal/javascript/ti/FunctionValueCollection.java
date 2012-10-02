@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.dltk.internal.javascript.ti;
 
-import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IFunctionValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
@@ -41,10 +40,10 @@ public class FunctionValueCollection extends ValueCollection implements
 		IValueReference arguments = createChild("arguments");
 		arguments.setKind(ReferenceKind.LOCAL);
 		IValueReference argumentsLength = arguments.getChild("length");
-		argumentsLength.setDeclaredType(RTypes.simple(Types.NUMBER));
+		argumentsLength.setDeclaredType(RTypes.NUMBER);
 		IValueReference argumentsArray = arguments
 				.getChild(IValueReference.ARRAY_OP);
-		argumentsArray.setDeclaredType(RTypes.simple(Types.OBJECT));
+		argumentsArray.setDeclaredType(RTypes.OBJECT);
 	}
 
 	private final boolean block;

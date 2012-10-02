@@ -264,8 +264,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 			property.setName(field.getName());
 			Class<?> fieldType = field.getType();
 			if (fieldType != null)
-				property.setType(TypeUtil.ref(context.getKnownType("Packages."
-						+ fieldType.getName(), null)));
+				property.setType(TypeUtil.ref(context.getType("Packages."
+						+ fieldType.getName())));
 			if (Modifier.isStatic(field.getModifiers())) {
 				property.setStatic(true);
 			}
@@ -277,8 +277,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 			m.setName(method.getName());
 			Class<?> methodType = method.getReturnType();
 			if (methodType != null)
-				m.setType(TypeUtil.ref(context.getKnownType("Packages."
-						+ methodType.getName(), null)));
+				m.setType(TypeUtil.ref(context.getType("Packages."
+						+ methodType.getName())));
 
 			EList<Parameter> parameters = m.getParameters();
 			Class<?>[] parameterTypes = method.getParameterTypes();
@@ -287,8 +287,8 @@ public class ExampleTypeProvider implements ITypeProvider {
 						.createParameter();
 				parameter.setName(parameterTypes[i].getSimpleName() + " arg"
 						+ i);
-				parameter.setType(TypeUtil.ref(context.getKnownType("Packages."
-						+ parameterTypes[i].getName(), null)));
+				parameter.setType(TypeUtil.ref(context.getType("Packages."
+						+ parameterTypes[i].getName())));
 				parameters.add(parameter);
 			}
 			if (Modifier.isStatic(method.getModifiers())) {

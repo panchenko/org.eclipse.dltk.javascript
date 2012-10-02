@@ -15,16 +15,17 @@ import java.util.Set;
 
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinfo.IModelBuilder;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.ITypeInfoContext;
 import org.eclipse.dltk.javascript.typeinfo.ITypeProvider;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
 
 public interface ITypeInferenceContext extends ITypeInfoContext {
 
+	@Deprecated
 	IValueTypeFactory getFactory();
 
-	Member resolve(String name);
+	IRMember resolve(String name);
 
 	Set<String> listGlobals(String prefix);
 

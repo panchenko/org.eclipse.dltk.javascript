@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.dltk.javascript.core.JavaScriptPlugin;
 import org.eclipse.dltk.javascript.core.Types;
-import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
+import org.eclipse.dltk.javascript.internal.core.TypeSystems;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -151,6 +152,23 @@ public class RTypes {
 		}
 	}
 
+	public static IRType simple(ITypeSystem typeSystem, Type type) {
+		if (Types.ARRAY == type) {
+			return arrayOf(typeSystem, none());
+		} else {
+			return type.toRType(typeSystem);
+		}
+	}
+
+	public static IRType simple(IRTypeDeclaration declaration) {
+		return new RSimpleType(declaration);
+	}
+
+	public static IRType simple(ITypeSystem typeSystem,
+			IRTypeDeclaration declaration) {
+		return new RSimpleType(typeSystem, declaration);
+	}
+
 	public static IRType simple(Type type) {
 		if (Types.ARRAY == type) {
 			return arrayOf(none());
@@ -163,8 +181,21 @@ public class RTypes {
 		return new RClassType(type);
 	}
 
+	public static IRClassType classType(ITypeSystem typeSystem, Type type) {
+		return new RClassType(typeSystem, type);
+	}
+
+	public static IRType classType(IRTypeDeclaration declaration) {
+		return new RClassType(declaration);
+	}
+
 	public static IRMapType mapOf(final IRType keyType, final IRType valueType) {
 		return new RMapType(keyType, valueType);
+	}
+
+	public static IRMapType mapOf(ITypeSystem typeSystem, final IRType keyType,
+			final IRType valueType) {
+		return new RMapType(typeSystem, keyType, valueType);
 	}
 
 	public static IRType recordType(ITypeSystem typeSystem,
@@ -196,27 +227,48 @@ public class RTypes {
 	public static IRType create(JSType type) {
 		ITypeSystem current = ITypeSystem.CURRENT.get();
 		if (current == null) {
-			current = ThreadTypeSystemImpl.DELEGATING_TYPE_SYSTEM;
+			current = TypeSystems.DELEGATING_TYPE_SYSTEM;
 		}
 		return create(current, type);
 	}
 
-	public static IRType create(ITypeSystem context, JSType type) {
+	public static IRType create(ITypeSystem typeSystem, JSType type) {
 		if (type == null) {
 			return null;
 		}
-		final IRType result = type.toRType(context);
+		final IRType result = type.toRType(typeSystem);
 		if (result != null) {
 			return result;
 		}
 		for (IRTypeFactory factory : TypeInfoManager.getRTypeFactories()) {
-			final IRType runtimeType = factory.create(context, type);
+			final IRType runtimeType = factory.create(typeSystem, type);
 			if (runtimeType != null) {
 				return runtimeType;
 			}
 		}
 		throw new IllegalArgumentException("Unsupported type "
 				+ type.getClass().getName());
+	}
+
+	public static final IRSimpleType FUNCTION = (IRSimpleType) simple(
+			TypeSystems.GLOABL, Types.FUNCTION);
+
+	public static final IRType STRING = simple(TypeSystems.GLOABL, Types.STRING);
+
+	public static final IRType NUMBER = simple(TypeSystems.GLOABL, Types.NUMBER);
+
+	public static final IRType BOOLEAN = simple(TypeSystems.GLOABL,
+			Types.BOOLEAN);
+
+	public static final IRType OBJECT = simple(TypeSystems.GLOABL, Types.OBJECT);
+
+	public static List<IRType> convert(ITypeSystem typeSystem, List<JSType> args) {
+		final int size = args.size();
+		final List<IRType> parameters = new ArrayList<IRType>(size);
+		for (int i = 0; i < size; ++i) {
+			parameters.add(create(typeSystem, args.get(i)));
+		}
+		return parameters;
 	}
 
 }

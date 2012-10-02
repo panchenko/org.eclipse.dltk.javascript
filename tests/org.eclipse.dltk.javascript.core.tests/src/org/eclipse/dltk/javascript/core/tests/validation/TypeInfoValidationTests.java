@@ -2578,4 +2578,18 @@ public class TypeInfoValidationTests extends AbstractValidationTest {
 		assertEquals(problems.toString(), 0, problems.size());
 	}
 
+	public void testCopy() {
+		final StringList code = new StringList();
+		code.add("/** @param {String} value */");
+		code.add("function testStr(value) {}");
+		code.add("/** @param {Number} value */");
+		code.add("function testNum(value) {}");
+		code.add("var s = exampleCopy('str');");
+		code.add("testStr(s);");
+		code.add("var n = exampleCopy(1);");
+		code.add("testNum(n);");
+		final List<IProblem> problems = validate(code.toString());
+		assertEquals(problems.toString(), 0, problems.size());
+	}
+
 }

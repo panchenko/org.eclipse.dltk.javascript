@@ -11,8 +11,14 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import java.util.Collections;
+import java.util.Set;
+
+import org.eclipse.dltk.compiler.problem.IProblemCategory;
+import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.RecordMember;
+import org.eclipse.dltk.javascript.typeinfo.model.Visibility;
 
 class RRecordMember implements IRRecordMember {
 
@@ -62,5 +68,37 @@ class RRecordMember implements IRRecordMember {
 
 	public Member getMember() {
 		return member;
+	}
+
+	public Visibility getVisibility() {
+		return Visibility.PUBLIC;
+	}
+
+	public IRTypeDeclaration getDeclaringType() {
+		return null;
+	}
+
+	public boolean isStatic() {
+		return false;
+	}
+
+	public boolean isVisible() {
+		return true;
+	}
+
+	public Set<IProblemCategory> getSuppressedWarnings() {
+		return Collections.emptySet();
+	}
+
+	public boolean isSuppressed(IProblemIdentifier problemIdentifier) {
+		return false;
+	}
+
+	public boolean isDeprecated() {
+		return false;
+	}
+
+	public Member getSource() {
+		return getMember();
 	}
 }

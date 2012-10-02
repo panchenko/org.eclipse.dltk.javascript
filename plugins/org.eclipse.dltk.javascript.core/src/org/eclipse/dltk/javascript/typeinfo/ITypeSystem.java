@@ -16,8 +16,8 @@ import java.util.concurrent.Callable;
 
 import org.eclipse.dltk.internal.javascript.ti.IValue;
 import org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
+import org.eclipse.dltk.javascript.typeinfo.model.TypeVariable;
 
 public interface ITypeSystem {
 
@@ -26,11 +26,6 @@ public interface ITypeSystem {
 	 * having the specified typesystem set as current.
 	 */
 	ThreadTypeSystem CURRENT = new ThreadTypeSystemImpl();
-
-	/**
-	 * The key of the attribute pointing to the current type.
-	 */
-	AttributeKey<Type> CURRENT_TYPE = new AttributeKey<Type>();
 
 	/**
 	 * Type for the utility functions accessible thru the
@@ -83,9 +78,35 @@ public interface ITypeSystem {
 	 * @param member
 	 * @return
 	 */
-	IValue valueOf(Member member);
+	IValue valueOf(IRMember member);
 
-	Type parameterize(Type target, List<IRType> parameters);
+	/**
+	 * Convert type model to the runtime representation.
+	 */
+	IRTypeDeclaration convert(Type type);
+
+	/**
+	 * Creates a copy of the specified element replacing contextualizable type
+	 * expressions with the specified type.
+	 */
+	<E extends IRMember> E contextualize(E member, IRTypeDeclaration type);
+
+	/**
+	 * Contextualizes the specified type by replacing contextualizable type
+	 * expressions with the specified contextType.
+	 */
+	IRType contextualize(IRType type, IRTypeDeclaration contextType);
+
+	/**
+	 * Parameterizes the specified generic type with the specified parameters.
+	 */
+	IRTypeDeclaration parameterize(Type target, List<IRType> parameters);
+
+	/**
+	 * Returns current value of the specified type variable (if some type is
+	 * being parameterized at the moment) or <code>null</code>.
+	 */
+	IRType getTypeVariable(TypeVariable variable);
 
 	/**
 	 * Returns current value for the specified attribute.
@@ -93,6 +114,7 @@ public interface ITypeSystem {
 	 * @param key
 	 * @return
 	 */
+	@Deprecated
 	<T> T getAttribute(AttributeKey<T> key);
 
 	/**

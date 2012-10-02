@@ -17,9 +17,9 @@ import java.util.Map;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
+import org.eclipse.dltk.javascript.typeinfo.IRMember;
 import org.eclipse.dltk.javascript.typeinfo.ITypeSystem;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
-import org.eclipse.dltk.javascript.typeinfo.model.Member;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeKind;
 
@@ -47,7 +47,7 @@ public class TopValueCollection extends ValueCollection {
 				IValue value = memberCache.get(name);
 				if (value != null)
 					return value;
-				final Member element = context.resolve(name);
+				final IRMember element = context.resolve(name);
 				if (element != null) {
 					value = context.valueOf(element);
 					if (value == null) {
@@ -59,7 +59,8 @@ public class TopValueCollection extends ValueCollection {
 				if (name.equals(IValueReference.ARRAY_OP)) {
 					// special case ARRAY_OP is an instance of an Array not
 					// the Array type/class itself.
-					value = ElementValue.createFor(Types.ARRAY, context);
+					value = ElementValue.createFor(
+							context.convert(Types.ARRAY), context);
 					memberCache.put(name, value);
 					return value;
 				}

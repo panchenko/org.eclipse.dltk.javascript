@@ -21,6 +21,12 @@ class RMapType extends RType implements IRMapType {
 		this.valueType = valueType;
 	}
 
+	public RMapType(ITypeSystem typeSystem, IRType keyType, IRType valueType) {
+		super(typeSystem);
+		this.keyType = keyType;
+		this.valueType = valueType;
+	}
+
 	public String getName() {
 		// if the key type is set but it is a String then just default to
 		// without it.

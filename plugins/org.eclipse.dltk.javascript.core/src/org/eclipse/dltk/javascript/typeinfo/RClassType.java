@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.javascript.core.Types;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
 import org.eclipse.emf.common.util.URI;
@@ -18,10 +19,31 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 public class RClassType extends RType implements IRClassType {
 
+	@Nullable
 	protected final Type type;
+	@Nullable
+	protected final IRTypeDeclaration declaration;
 
-	public RClassType(Type type) {
+	protected RClassType(ITypeSystem typeSystem, Type type) {
+		super(typeSystem);
 		this.type = type;
+		this.declaration = type != null ? convert(type) : null;
+		if (DEBUG)
+			if (type != null)
+				checkType(type);
+	}
+
+	protected RClassType(Type type) {
+		this.type = type;
+		this.declaration = type != null ? convert(type) : null;
+		if (DEBUG)
+			if (type != null)
+				checkType(type);
+	}
+
+	protected RClassType(@Nullable IRTypeDeclaration declaration) {
+		this.type = declaration != null ? declaration.getSource() : null;
+		this.declaration = declaration;
 		if (DEBUG)
 			if (type != null)
 				checkType(type);
@@ -49,6 +71,10 @@ public class RClassType extends RType implements IRClassType {
 
 	public Type getTarget() {
 		return type;
+	}
+
+	public IRTypeDeclaration getDeclaration() {
+		return declaration;
 	}
 
 	public IRType toItemType() {
@@ -89,14 +115,15 @@ public class RClassType extends RType implements IRClassType {
 		if (super.isAssignableFrom(type).ok()) {
 			return TypeCompatibility.TRUE;
 		} else if (type instanceof RClassType) {
-			if (this.type == null) {
+			if (this.declaration == null) {
 				return TypeCompatibility.TRUE;
 			}
-			final Type other = ((RClassType) type).getTarget();
-			return TypeCompatibility.valueOf(other == null
-					|| isAssignableFrom(this.type, other));
+			final IRTypeDeclaration other = ((RClassType) type).declaration;
+			if (other == null) {
+				return TypeCompatibility.TRUE;
+			}
+			return this.declaration.isAssignableFrom(other);
 		}
 		return TypeCompatibility.FALSE;
 	}
-
 }

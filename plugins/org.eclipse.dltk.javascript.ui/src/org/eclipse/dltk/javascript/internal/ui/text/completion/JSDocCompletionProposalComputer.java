@@ -158,8 +158,10 @@ public class JSDocCompletionProposalComputer implements
 				if (type == null || type.getKind() == TypeKind.UNKNOWN) {
 					return Collections.emptyList();
 				}
+				// TODO (alex) generate proposals directly, without engine
 				engine.completeMembers(module, prefix.substring(pos + 1),
-						context.getInvocationOffset(), true, type.getMembers());
+						context.getInvocationOffset(), true, inferencer2
+								.convert(type).getMembers());
 				return Arrays.<ICompletionProposal> asList(collector
 						.getScriptCompletionProposals());
 			} else {

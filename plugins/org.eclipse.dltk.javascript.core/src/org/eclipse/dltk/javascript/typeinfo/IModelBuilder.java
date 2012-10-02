@@ -72,8 +72,6 @@ public interface IModelBuilder {
 
 	public interface IParameter extends IElement {
 
-		ReferenceLocation getLocation();
-
 		/**
 		 * @since 3.0
 		 */

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.internal.javascript.ti.ITypeInferenceContext;
 import org.eclipse.dltk.javascript.ast.FunctionStatement;
@@ -30,12 +31,15 @@ public interface ITypeInferencerVisitor extends INodeVisitor<IValueReference> {
 
 	ITypeInferenceContext getContext();
 
+	@Nullable
 	JSProblemReporter getProblemReporter();
 
+	@Deprecated
 	ReferenceSource getSource();
 
 	void visitFunctionBody(FunctionStatement node);
 
+	@Deprecated
 	void setType(IValueReference value, JSType type, boolean lazyEnabled);
 
 	void suppressProblems(IProblemIdentifier... identifiers);

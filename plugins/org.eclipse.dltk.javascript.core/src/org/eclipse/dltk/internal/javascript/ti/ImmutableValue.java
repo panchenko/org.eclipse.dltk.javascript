@@ -1,6 +1,6 @@
 package org.eclipse.dltk.internal.javascript.ti;
 
-import static org.eclipse.dltk.javascript.internal.core.ThreadTypeSystemImpl.DELEGATING_TYPE_SYSTEM;
+import static org.eclipse.dltk.javascript.internal.core.TypeSystems.DELEGATING_TYPE_SYSTEM;
 
 import java.util.Collections;
 import java.util.HashMap;
