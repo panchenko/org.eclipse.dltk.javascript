@@ -68,7 +68,8 @@ import org.eclipse.osgi.util.NLS;
  */
 public class JSDocSupport implements IModelBuilder {
 
-	private static final String DOTS = "...";
+	public static final String PARAM_DOTS = "...";
+	public static final String PARAM_OPTIONAL = "=";
 
 	public String getFeatureId() {
 		return JSDocSupport.class.getName();
@@ -350,14 +351,16 @@ public class JSDocSupport implements IModelBuilder {
 				final String token = st.peek();
 				if (isBraced(token)) {
 					String type = cutBraces(token);
-					if (type.startsWith(DOTS)) {
+					if (type.startsWith(PARAM_DOTS)) {
 						pp.varargs = true;
-						type = type.substring(DOTS.length());
-					} else if (type.endsWith(DOTS)) {
+						type = type.substring(PARAM_DOTS.length());
+					} else if (type.endsWith(PARAM_DOTS)) {
 						pp.varargs = true;
-						type = type.substring(0, type.length() - DOTS.length());
-					} else if (type.endsWith("=")) {
-						type = type.substring(0, type.length() - 1);
+						type = type.substring(0,
+								type.length() - PARAM_DOTS.length());
+					} else if (type.endsWith(PARAM_OPTIONAL)) {
+						type = type.substring(0,
+								type.length() - PARAM_OPTIONAL.length());
 						pp.optional = true;
 					}
 					pp.type = type;
@@ -375,12 +378,12 @@ public class JSDocSupport implements IModelBuilder {
 								defaultValueSeperatorIndex);
 					}
 				}
-				if (!pp.varargs && paramName.endsWith(DOTS)) {
+				if (!pp.varargs && paramName.endsWith(PARAM_DOTS)) {
 					// just in case, so next condition doesn't use ".." as
 					// property name.
 					pp.varargs = true;
 					paramName = paramName.substring(0, paramName.length()
-							- DOTS.length());
+							- PARAM_DOTS.length());
 				}
 				String propertyName = null;
 				int propertiesObjectIndex = paramName.lastIndexOf('.');

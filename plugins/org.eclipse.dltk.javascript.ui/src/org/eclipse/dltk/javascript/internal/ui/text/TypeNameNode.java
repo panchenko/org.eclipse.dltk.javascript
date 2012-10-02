@@ -21,4 +21,8 @@ public class TypeNameNode {
 		this.start = start;
 		this.end = end;
 	}
+
+	public String value() {
+		return type;
+	}
 }

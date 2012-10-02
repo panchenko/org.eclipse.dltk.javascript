@@ -18,13 +18,16 @@ import org.eclipse.dltk.core.IModelElementVisitor;
 import org.eclipse.dltk.core.ISourceModule;
 import org.eclipse.dltk.core.ModelException;
 import org.eclipse.dltk.core.ScriptModelUtil;
+import org.eclipse.dltk.internal.javascript.ti.JSDocSupport;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
 import org.eclipse.dltk.internal.ui.actions.SelectionConverter;
 import org.eclipse.dltk.internal.ui.editor.EditorUtility;
 import org.eclipse.dltk.internal.ui.editor.ModelElementHyperlink;
 import org.eclipse.dltk.javascript.internal.ui.JavaScriptUI;
+import org.eclipse.dltk.javascript.internal.ui.text.JSDocTextUtils;
 import org.eclipse.dltk.javascript.internal.ui.text.JSDocTypeUtil;
 import org.eclipse.dltk.javascript.internal.ui.text.TypeNameNode;
+import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinfo.IElementConverter;
 import org.eclipse.dltk.javascript.typeinfo.TypeInfoManager;
 import org.eclipse.dltk.javascript.typeinfo.TypeMode;
@@ -61,18 +64,38 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 							.equals(contentType)) {
 				return null;
 			}
-			final int lineNumber = doc.getLineOfOffset(offset);
-			final IRegion lineRegion = doc.getLineInformation(lineNumber);
+			final IRegion lineRegion = JSDocTextUtils
+					.getLineRegion(doc, offset);
 			final String line = doc.get(lineRegion.getOffset(),
 					lineRegion.getLength());
-			final int start = line.lastIndexOf('{',
-					offset - lineRegion.getOffset());
+			final int offsetInLine = offset - lineRegion.getOffset();
+			int start = line.lastIndexOf('{', offsetInLine);
 			if (start < 0) {
 				return null;
 			}
-			final int end = line.indexOf('}', offset - lineRegion.getOffset());
+			++start;
+			int end = line.indexOf('}', offsetInLine);
 			if (end < 0) {
 				return null;
+			}
+			final TypeNameNode tagName = JSDocTextUtils.getTag(
+					line.toCharArray(), 0, start);
+			if (tagName != null && JSDocTag.PARAM.equals(tagName.value())) {
+				if (line.regionMatches(
+						end - JSDocSupport.PARAM_OPTIONAL.length(),
+						JSDocSupport.PARAM_OPTIONAL, 0,
+						JSDocSupport.PARAM_OPTIONAL.length())) {
+					end -= JSDocSupport.PARAM_OPTIONAL.length();
+				}
+				if (line.regionMatches(end - JSDocSupport.PARAM_DOTS.length(),
+						JSDocSupport.PARAM_DOTS, 0,
+						JSDocSupport.PARAM_DOTS.length())) {
+					end -= JSDocSupport.PARAM_DOTS.length();
+				}
+				if (line.regionMatches(start, JSDocSupport.PARAM_DOTS, 0,
+						JSDocSupport.PARAM_DOTS.length())) {
+					start += JSDocSupport.PARAM_DOTS.length();
+				}
 			}
 			final ITextEditor editor = (ITextEditor) getAdapter(ITextEditor.class);
 			if (editor == null) {
@@ -89,10 +112,9 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 			}
 			TypeInferencer2 inferencer2 = new TypeInferencer2();
 			inferencer2.setModelElement(input);
-			final int typeExpressionOffset = lineRegion.getOffset() + start + 1;
-			final TypeNameNode selection = JSDocTypeUtil.findName(
-					inferencer2, line.substring(start + 1, end), offset
-							- typeExpressionOffset);
+			final int typeExpressionOffset = lineRegion.getOffset() + start;
+			final TypeNameNode selection = JSDocTypeUtil.findName(inferencer2,
+					line.substring(start, end), offset - typeExpressionOffset);
 			if (selection == null) {
 				return null;
 			}
@@ -165,7 +187,7 @@ public class JSDocTypeHyperlinkDetector extends AbstractHyperlinkDetector {
 
 	@SuppressWarnings("serial")
 	private static class ModelElementFound extends RuntimeException {
-		private final IModelElement element;
+		final IModelElement element;
 
 		public ModelElementFound(IModelElement element) {
 			this.element = element;
