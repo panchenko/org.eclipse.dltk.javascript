@@ -18,6 +18,8 @@ import java.util.List;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.eclipse.dltk.internal.javascript.ti.JSDocProblem;
+import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
+import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Parameter;
@@ -30,6 +32,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelLoader;
 import org.eclipse.dltk.javascript.typeinfo.model.TypeInfoModelPackage;
 import org.eclipse.dltk.javascript.typeinfo.model.UnionType;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.osgi.util.NLS;
 
 public class JSDocTypeParser extends JSDocTypeParserBase {
 
@@ -263,12 +266,22 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 	protected JSType createGenericType(String baseType, List<JSType> typeParams)
 			throws ParseException {
 		if (ITypeNames.ARRAY.equals(baseType)) {
-			if (typeParams.size() >= 1) {
-				return createArray(typeParams.get(0));
-			} else {
-				return createArray(createType(ITypeNames.OBJECT));
+			if (typeParams.size() != 1) {
+				throw new JSDocParseException(
+						NLS.bind(
+								ValidationMessages.IncorrectNumberOfTypeArguments,
+								ITypeNames.ARRAY),
+						JavaScriptProblems.PARAMETERIZED_TYPE_INCORRECT_ARGUMENTS);
 			}
-		} else if (CLASS.equals(baseType) && typeParams.size() >= 1) {
+			return createArray(typeParams.get(0));
+		} else if (CLASS.equals(baseType)) {
+			if (typeParams.size() != 1) {
+				throw new JSDocParseException(
+						NLS.bind(
+								ValidationMessages.IncorrectNumberOfTypeArguments,
+								CLASS),
+						JavaScriptProblems.PARAMETERIZED_TYPE_INCORRECT_ARGUMENTS);
+			}
 			final JSType typeParam = typeParams.get(0);
 			if (typeParam.eClass() != TypeInfoModelPackage.Literals.SIMPLE_TYPE) {
 				throw new JSDocParseException(
@@ -277,12 +290,17 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 			}
 			return TypeUtil.classType(((SimpleType) typeParam).getTarget());
 		} else if (ITypeNames.OBJECT.equals(baseType)) {
-			if (typeParams.size() == 1) {
-				return TypeUtil.mapOf(null, typeParams.get(0));
-			} else if (typeParams.size() >= 2) {
+			if (typeParams.isEmpty() || typeParams.size() > 2) {
+				throw new JSDocParseException(
+						NLS.bind(
+								ValidationMessages.IncorrectNumberOfTypeArguments,
+								ITypeNames.OBJECT),
+						JavaScriptProblems.PARAMETERIZED_TYPE_INCORRECT_ARGUMENTS);
+			} else if (typeParams.size() == 2) {
 				return TypeUtil.mapOf(typeParams.get(0), typeParams.get(1));
 			} else {
-				return TypeUtil.mapOf(null, ITypeNames.OBJECT);
+				assert typeParams.size() == 1;
+				return TypeUtil.mapOf(null, typeParams.get(0));
 			}
 		} else {
 			return doCreateGenericType(baseType, typeParams);
@@ -290,7 +308,7 @@ public class JSDocTypeParser extends JSDocTypeParserBase {
 	}
 
 	protected JSType doCreateGenericType(String baseType,
-			List<JSType> typeParams) {
+			List<JSType> typeParams) throws ParseException {
 		if (!typeParams.isEmpty()) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(baseType);

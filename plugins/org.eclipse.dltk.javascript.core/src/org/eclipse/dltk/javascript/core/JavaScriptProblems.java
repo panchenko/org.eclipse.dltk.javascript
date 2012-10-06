@@ -78,9 +78,19 @@ public enum JavaScriptProblems implements IProblemIdentifier,
 	INACCESSIBLE_MEMBER,
 
 	/**
-	 * @since 4.1
+	 * @since 5.0
 	 */
 	INACCESSIBLE_TYPE,
+
+	/**
+	 * @since 5.0
+	 */
+	NOT_GENERIC_TYPE,
+
+	/**
+	 * @since 5.0
+	 */
+	PARAMETERIZED_TYPE_INCORRECT_ARGUMENTS,
 
 	/**
 	 * @since 3.0

@@ -1,17 +1,19 @@
 package org.eclipse.dltk.internal.javascript.parser;
 
+import static org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations.reportValidationStatus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.compiler.problem.IProblemIdentifier;
 import org.eclipse.dltk.compiler.problem.IValidationStatus;
 import org.eclipse.dltk.compiler.problem.ValidationStatus;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.internal.javascript.ti.IReferenceAttributes;
 import org.eclipse.dltk.internal.javascript.ti.TypeInferencer2;
-import org.eclipse.dltk.internal.javascript.validation.JavaScriptValidations;
 import org.eclipse.dltk.internal.javascript.validation.ValidationMessages;
 import org.eclipse.dltk.javascript.core.JavaScriptProblems;
 import org.eclipse.dltk.javascript.parser.JSProblemReporter;
@@ -19,6 +21,7 @@ import org.eclipse.dltk.javascript.parser.jsdoc.JSDocTag;
 import org.eclipse.dltk.javascript.typeinference.IValueCollection;
 import org.eclipse.dltk.javascript.typeinference.IValueReference;
 import org.eclipse.dltk.javascript.typeinference.ReferenceKind;
+import org.eclipse.dltk.javascript.typeinfo.ITypeCheck;
 import org.eclipse.dltk.javascript.typeinfo.ITypeChecker;
 import org.eclipse.dltk.javascript.typeinfo.ITypeCheckerExtension;
 import org.eclipse.dltk.javascript.typeinfo.TypeUtil;
@@ -26,6 +29,7 @@ import org.eclipse.dltk.javascript.typeinfo.model.AnyType;
 import org.eclipse.dltk.javascript.typeinfo.model.ArrayType;
 import org.eclipse.dltk.javascript.typeinfo.model.ClassType;
 import org.eclipse.dltk.javascript.typeinfo.model.FunctionType;
+import org.eclipse.dltk.javascript.typeinfo.model.GenericType;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.MapType;
 import org.eclipse.dltk.javascript.typeinfo.model.Member;
@@ -86,24 +90,56 @@ public class JSDocValidatorFactory {
 				checkType(((MapType) type).getValueType(), tag, flags);
 			} else if (type instanceof SimpleType) {
 				if (type instanceof ParameterizedType) {
-					for (JSType param : ((ParameterizedType) type)
-							.getActualTypeArguments()) {
+					final ParameterizedType parameterized = (ParameterizedType) type;
+					for (JSType param : parameterized.getActualTypeArguments()) {
 						checkType(param, tag, flags);
 					}
+					checkType(((SimpleType) type).getTarget(), tag, flags,
+							new ITypeCheck[] { new ParameterizedTypeCheck(
+									parameterized) });
+				} else {
+					checkType(((SimpleType) type).getTarget(), tag, flags, null);
 				}
-				final Type t = ((SimpleType) type).getTarget();
-				checkType(t, tag, flags);
 			} else if (type instanceof ClassType) {
 				final Type t = ((ClassType) type).getTarget();
 				if (t == null) {
 					return;
 				}
-				checkType(t, tag, flags);
+				checkType(t, tag, flags, null);
 			}
 		}
 
-		public abstract void checkType(Type type, ISourceNode tag, int flags);
+		public abstract void checkType(Type type, ISourceNode tag, int flags,
+				@Nullable ITypeCheck[] checks);
 
+	}
+
+	private static class ParameterizedTypeCheck implements ITypeCheck {
+		private final ParameterizedType parameterizedType;
+
+		public ParameterizedTypeCheck(ParameterizedType parameterizedType) {
+			this.parameterizedType = parameterizedType;
+		}
+
+		public IValidationStatus checkType(Type type) {
+			if (type instanceof GenericType) {
+				final GenericType genericType = (GenericType) type;
+				if (genericType.getTypeParameters().size() != parameterizedType
+						.getActualTypeArguments().size()) {
+					return new ValidationStatus(
+							JavaScriptProblems.PARAMETERIZED_TYPE_INCORRECT_ARGUMENTS,
+							NLS.bind(
+									ValidationMessages.IncorrectNumberOfTypeArguments,
+									type.getName()));
+				}
+				return null;
+			} else {
+				return new ValidationStatus(
+						JavaScriptProblems.NOT_GENERIC_TYPE, NLS.bind(
+								ValidationMessages.NotGenericType,
+								type.getName()));
+			}
+		}
 	}
 
 	public static class TypeChecker extends AbstractTypeChecker implements
@@ -125,17 +161,12 @@ public class JSDocValidatorFactory {
 					if (extension instanceof IValidatorExtension2) {
 						final IValidationStatus status = ((IValidatorExtension2) extension)
 								.validateTypeExpression(type);
-						if (status != null) {
-							if (status == ValidationStatus.OK) {
-								break;
-							} else {
-								JavaScriptValidations.reportValidationStatus(
-										reporter, status, tag,
-										JavaScriptProblems.INACCESSIBLE_TYPE,
-										ValidationMessages.InaccessibleType,
-										type.getName());
-								return;
-							}
+						if (status != null && status != ValidationStatus.OK) {
+							reportValidationStatus(reporter, status, tag,
+									JavaScriptProblems.INACCESSIBLE_TYPE,
+									ValidationMessages.InaccessibleType,
+									type.getName());
+							return;
 						}
 					}
 				}
@@ -144,25 +175,29 @@ public class JSDocValidatorFactory {
 		}
 
 		@Override
-		public void checkType(Type type, ISourceNode tag, int flags) {
+		public void checkType(Type type, ISourceNode tag, int flags,
+				@Nullable ITypeCheck[] checks) {
 			if (type.getKind() == TypeKind.UNKNOWN
 					|| type.getKind() == TypeKind.UNRESOLVED) {
 				queue.add(new QueueItem(type, tag, context.currentCollection(),
-						flags));
+						flags, checks));
 			} else {
 				checkDeprecatedType(type, tag);
+				if (checks != null) {
+					doChecks(type, tag, checks);
+				}
 			}
 		}
 
 		public void validate() {
 			for (QueueItem item : queue) {
-				checkType(item.tag, context.resolveType(item.type),
-						item.collection, item.flags);
+				doCheckType(context.resolveType(item.type), item.tag,
+						item.flags, item.checks, item.collection);
 			}
 		}
 
-		protected void checkType(ISourceNode tag, Type type,
-				IValueCollection collection, int flags) {
+		private void doCheckType(Type type, ISourceNode tag, int flags,
+				@Nullable ITypeCheck[] checks, IValueCollection collection) {
 			if (type.eIsProxy()) {
 				Assert.isTrue(!type.eIsProxy(), "Type \"" + type.getName()
 						+ "\" is a proxy");
@@ -205,6 +240,20 @@ public class JSDocValidatorFactory {
 				reportUnknownType(tag, TypeUtil.getName(type));
 			} else {
 				checkDeprecatedType(type, tag);
+				if (checks != null) {
+					doChecks(type, tag, checks);
+				}
+			}
+		}
+
+		private void doChecks(Type type, ISourceNode tag, ITypeCheck[] checks) {
+			for (ITypeCheck check : checks) {
+				final IValidationStatus status = check.checkType(type);
+				if (status != null && status != ValidationStatus.OK) {
+					reportValidationStatus(reporter, status, tag,
+							JavaScriptProblems.INACCESSIBLE_TYPE,
+							ValidationMessages.InaccessibleType, type.getName());
+				}
 			}
 		}
 
@@ -214,22 +263,18 @@ public class JSDocValidatorFactory {
 						JavaScriptProblems.DEPRECATED_TYPE,
 						NLS.bind(ValidationMessages.DeprecatedType,
 								TypeUtil.getName(type)), tag.start(), tag.end());
+				return;
 			} else if (extensions != null) {
 				for (IValidatorExtension extension : extensions) {
 					if (extension instanceof IValidatorExtension2) {
 						final IValidationStatus status = ((IValidatorExtension2) extension)
 								.validateAccessibility(type);
-						if (status != null) {
-							if (status == ValidationStatus.OK) {
-								return;
-							} else {
-								JavaScriptValidations.reportValidationStatus(
-										reporter, status, tag,
-										JavaScriptProblems.INACCESSIBLE_TYPE,
-										ValidationMessages.InaccessibleType,
-										type.getName());
-								return;
-							}
+						if (status != null && status != ValidationStatus.OK) {
+							reportValidationStatus(reporter, status, tag,
+									JavaScriptProblems.INACCESSIBLE_TYPE,
+									ValidationMessages.InaccessibleType,
+									type.getName());
+							return;
 						}
 					}
 				}
@@ -277,13 +322,17 @@ public class JSDocValidatorFactory {
 		final ISourceNode tag;
 		final IValueCollection collection;
 		final int flags;
+		@Nullable
+		final ITypeCheck[] checks;
 
 		public QueueItem(Type type, ISourceNode tag,
-				IValueCollection collection, int flags) {
+				IValueCollection collection, int flags,
+				@Nullable ITypeCheck[] checks) {
 			this.type = type;
 			this.tag = tag;
 			this.collection = collection;
 			this.flags = flags;
+			this.checks = checks;
 		}
 
 	}

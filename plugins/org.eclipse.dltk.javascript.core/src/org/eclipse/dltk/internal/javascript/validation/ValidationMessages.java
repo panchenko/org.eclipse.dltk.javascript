@@ -77,6 +77,9 @@ public class ValidationMessages extends NLS {
 	public static String UnassignableClass;
 	public static String UnassignableFunction;
 
+	public static String NotGenericType;
+	public static String IncorrectNumberOfTypeArguments;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, ValidationMessages.class);

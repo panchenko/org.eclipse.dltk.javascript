@@ -1,5 +1,6 @@
 package org.eclipse.dltk.javascript.typeinfo;
 
+import org.eclipse.dltk.annotations.Nullable;
 import org.eclipse.dltk.core.ISourceNode;
 import org.eclipse.dltk.javascript.typeinfo.model.JSType;
 import org.eclipse.dltk.javascript.typeinfo.model.Type;
@@ -34,6 +35,9 @@ public interface ITypeChecker {
 	 * @param type
 	 * @param node
 	 * @param flags
+	 * @param checks
+	 *            additional checks or <code>null</code> if not required
 	 */
-	public void checkType(Type type, ISourceNode node, int flags);
+	public void checkType(Type type, ISourceNode node, int flags,
+			@Nullable ITypeCheck[] checks);
 }
