@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.dltk.javascript.parser;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
 public class JavaScriptParserPlugin extends Plugin {
@@ -44,6 +46,37 @@ public class JavaScriptParserPlugin extends Plugin {
 	 */
 	public static JavaScriptParserPlugin getDefault() {
 		return plugin;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public static void error(String message) {
+		error(message, null);
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public static void error(Throwable e) {
+		error(e.getLocalizedMessage(), e);
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public static void error(String message, Throwable t) {
+		final Plugin p = plugin;
+		if (p != null) {
+			p.getLog()
+					.log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK,
+							message, t));
+		} else {
+			System.err.println(message);
+			if (t != null) {
+				t.printStackTrace();
+			}
+		}
 	}
 
 }

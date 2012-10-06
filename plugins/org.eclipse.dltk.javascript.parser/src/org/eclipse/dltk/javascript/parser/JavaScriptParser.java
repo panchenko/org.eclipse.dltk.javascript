@@ -384,8 +384,7 @@ public class JavaScriptParser extends AbstractSourceParser {
 			}
 			return script;
 		} catch (Exception e) {
-			if (DLTKCore.DEBUG)
-				e.printStackTrace();
+			JavaScriptParserPlugin.error(e);
 			if (reporter != null) {
 				reporter.reportProblem(new JSProblem(e));
 			}
