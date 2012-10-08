@@ -32,4 +32,8 @@ public enum DefaultMetaType implements MetaType {
 		return new RSimpleType(typeSystem, type);
 	}
 
+	public IRType toRType(ITypeSystem typeSystem, IRTypeDeclaration declaration) {
+		return new RSimpleType(typeSystem, declaration);
+	}
+
 }

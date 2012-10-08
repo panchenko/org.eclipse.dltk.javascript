@@ -161,12 +161,13 @@ public class RTypes {
 	}
 
 	public static IRType simple(IRTypeDeclaration declaration) {
-		return new RSimpleType(declaration);
+		return declaration.getSource().getMetaType().toRType(null, declaration);
 	}
 
 	public static IRType simple(ITypeSystem typeSystem,
 			IRTypeDeclaration declaration) {
-		return new RSimpleType(typeSystem, declaration);
+		return declaration.getSource().getMetaType()
+				.toRType(typeSystem, declaration);
 	}
 
 	public static IRType simple(Type type) {

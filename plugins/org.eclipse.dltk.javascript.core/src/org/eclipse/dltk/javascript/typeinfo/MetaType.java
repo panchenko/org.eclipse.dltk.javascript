@@ -33,4 +33,15 @@ public interface MetaType {
 	 */
 	IRType toRType(ITypeSystem typeSystem, Type type);
 
+	/**
+	 * Creates the corresponding {@link IRType} for the specified
+	 * {@link IRTypeDeclaration} instance.
+	 * 
+	 * @param typeSystem
+	 *            the context for the operation, possible <code>null</code>
+	 * @param type
+	 *            the type to wrap
+	 */
+	IRType toRType(ITypeSystem typeSystem, IRTypeDeclaration declaration);
+
 }
